@@ -1,0 +1,16 @@
+{
+  "name": "@aiera/components",
+  "version": "0.0.1",
+  "description": "Aiera Component Library",
+  "author": "Aiera, Inc.",
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "devDependencies": {
+    "typescript": "4.3.5"
+  }
+}
