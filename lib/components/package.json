@@ -8,6 +8,9 @@
     "access": "public"
   },
   "scripts": {
+    "docs:dev": "docz dev",
+    "docs:build": "docz build",
+    "docs:serve": "docz build && docz serve",
     "build": "tsc -p tsconfig.json",
     "build:watch": "tsc -p tsconfig.json --watch",
     "lint": "eslint src/**",
@@ -15,7 +18,8 @@
     "test": "echo \"Error: run tests from root\" && exit 1"
   },
   "devDependencies": {
-    "@types/react": "^17.0.14"
+    "@types/react": "^17.0.14",
+    "docz": "^2.3.1"
   },
   "dependencies": {
     "react": "17.0.2",
