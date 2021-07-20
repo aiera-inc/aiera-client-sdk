@@ -2,6 +2,8 @@
   "name": "aiera-client-sdk",
   "version": "0.0.1",
   "description": "The Aiera Client SDK",
+  "author": "Aiera, Inc.",
+  "license": "CC-BY-NC-ND-4.0",
   "main": "index.js",
   "scripts": {
     "build:watch:docs": "docz dev --typescript --port 3003",
@@ -13,14 +15,19 @@
     "lerna": "lerna",
     "lint": "lerna run lint",
     "lint:fix": "lerna run lint:fix",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "lerna run test",
+    "prepare": "husky install",
+    "pre-commit": "concurrently npm:lint npm:test"
   },
-  "author": "Aiera, Inc.",
-  "license": "CC-BY-NC-ND-4.0",
   "devDependencies": {
     "concurrently": "^6.2.0",
     "docz": "^2.3.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
+    "husky": "^7.0.0",
     "lerna": "4.0.0",
+    "lint-staged": "^11.0.1",
+    "prettier": "^2.3.2",
     "react": "17.0.2",
     "react-dom": "17.0.2"
   },

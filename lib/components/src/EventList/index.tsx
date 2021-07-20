@@ -1,21 +1,21 @@
-import { FC, ReactElement } from "react";
+import { FC, ReactElement } from 'react';
 
 interface Event {
-  id: string;
-  title: string;
-  ticker: string;
+    id: string;
+    title: string;
+    ticker: string;
 }
 
 interface Props {
-  events: Event[];
+    events: Event[];
 }
 
 export const EventList: FC<Props> = (props: Props): ReactElement => (
-  <ul>
-    {props.events.map((event) => (
-      <li key={event.id}>
-        {event.ticker} - {event.title}
-      </li>
-    ))}
-  </ul>
+    <ul>
+        {props.events.map((event) => (
+            <li key={event.id}>
+                {event.ticker} - {event.title}
+            </li>
+        ))}
+    </ul>
 );
