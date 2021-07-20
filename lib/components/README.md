@@ -1,8 +1,9 @@
+---
+name: "@aiera/components"
+route: /lib/components
+---
+
 # Aiera Component Library
 
-### Getting Started
-
-```
-yarn install
-yarn build
-```
+## Components
+- [EventList](./components/EventList)
