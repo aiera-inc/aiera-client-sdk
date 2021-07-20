@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Aiera Component Library",
   "author": "Aiera, Inc.",
-  "license": "CC-BY-NC-ND",
+  "license": "CC-BY-NC-ND-4.0",
   "publishConfig": {
     "access": "public"
   },
