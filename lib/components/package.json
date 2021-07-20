@@ -8,11 +8,12 @@
     "access": "public"
   },
   "scripts": {
-    "docs:dev": "docz dev",
-    "docs:build": "docz build",
-    "docs:serve": "docz build && docz serve",
-    "build": "tsc -p tsconfig.json",
-    "build:watch": "tsc -p tsconfig.json --watch",
+    "build:watch:docs": "docz dev --typescript --port 3003",
+    "build:docs": "docz build --typescript",
+    "build:lib": "tsc -p tsconfig.json",
+    "build:watch:lib": "tsc -p tsconfig.json --watch",
+    "build": "concurrently npm:build:*",
+    "build:watch": "concurrently npm:build:watch:*",
     "lint": "eslint src/**",
     "lint:fix": "eslint src/** --fix",
     "test": "echo \"Error: run tests from root\" && exit 1"
