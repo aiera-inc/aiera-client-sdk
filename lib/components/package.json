@@ -10,7 +10,7 @@
   "scripts": {
     "build:lib": "tsc -p tsconfig.json",
     "build:watch:lib": "tsc -p tsconfig.json --watch",
-    "build": "concurrently npm:build:*",
+    "build": "concurrently npm:build:lib",
     "build:watch": "concurrently npm:build:watch:*",
     "lint": "eslint src/**",
     "lint:fix": "eslint src/** --fix",
@@ -21,6 +21,7 @@
     "@testing-library/react": "^12.0.0",
     "@types/jest": "^26.0.24",
     "@types/react": "17.0.14",
+    "@types/react-dom": "^17.0.9",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
     "concurrently": "^6.2.0",
