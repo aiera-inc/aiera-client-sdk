@@ -1,14 +1,14 @@
-import { FC, ReactElement, MouseEvent } from 'react';
+import React, { FC, ReactElement, MouseEvent } from 'react';
 import { Event } from 'types';
 
 interface Props {
-    events: Event[];
+    events?: Event[];
     onSelectEvent?: (event: MouseEvent) => void;
 }
 
 export const EventList: FC<Props> = (props: Props): ReactElement => {
     const { events, onSelectEvent } = props;
-    return (
+    return events && events.length ? (
         <ul>
             {events.map((event) => (
                 <li onClick={onSelectEvent} key={event.id}>
@@ -16,5 +16,7 @@ export const EventList: FC<Props> = (props: Props): ReactElement => {
                 </li>
             ))}
         </ul>
+    ) : (
+        <span>No events.</span>
     );
 };
