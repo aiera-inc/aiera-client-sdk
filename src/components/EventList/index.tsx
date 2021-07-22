@@ -1,7 +1,7 @@
 import React, { FC, ReactElement, MouseEvent } from 'react';
 import { Event } from 'types';
 
-interface Props {
+export interface Props {
     events?: Event[];
     onSelectEvent?: (event: MouseEvent) => void;
 }
