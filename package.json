@@ -8,8 +8,6 @@
     "scripts": {
         "build": "yarn clean && concurrently npm:build:lib:* npm:build:docs",
         "build:watch": "concurrently npm:build:watch:* npm:test:watch",
-        "build:docs": "docz build --typescript",
-        "build:watch:docs": "docz dev --typescript --port 3003 | grep -i error",
         "build:lib:js": "etsc",
         "build:lib:css": "postcss --verbose 'src/**/*.css' --base src --dir build",
         "build:watch:lib:js": "nodemon -e ts,tsx,js,jsx,json --watch src/ --exec etsc",
@@ -35,7 +33,6 @@
         "@typescript-eslint/parser": "^4.28.4",
         "autoprefixer": "^10.3.1",
         "concurrently": "^6.2.0",
-        "docz": "^2.3.1",
         "esbuild-node-tsc": "^1.6.0",
         "eslint": "^7.31.0",
         "eslint-config-prettier": "^8.3.0",
