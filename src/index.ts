@@ -1,1 +1,2 @@
-export { EventList } from 'components/EventList';
+import 'css/styles.css';
+export * from 'components';
