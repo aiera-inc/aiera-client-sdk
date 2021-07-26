@@ -1,5 +1,6 @@
 import React, { FC, ReactElement, MouseEvent } from 'react';
 import { Event } from 'types';
+import './styles.css';
 
 export interface Props {
     events?: Event[];
