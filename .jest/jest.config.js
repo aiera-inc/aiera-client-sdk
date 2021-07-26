@@ -2,7 +2,7 @@
 module.exports = {
     // The root of your source code, typically /src
     // `<rootDir>` is a token Jest substitutes
-    roots: ['<rootDir>/build'],
+    roots: ['<rootDir>/../build'],
 
     // Jest transformations -- this adds support for TypeScript
     // using ts-jest
@@ -19,4 +19,8 @@ module.exports = {
     moduleFileExtensions: ['js', 'json'],
 
     testEnvironment: 'jsdom',
+
+    moduleNameMapper: {
+        '\\.(scss|sass|css)$': '<rootDir>/style.mock.js',
+    },
 };
