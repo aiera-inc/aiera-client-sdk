@@ -6,7 +6,7 @@
     "license": "CC-BY-NC-ND-4.0",
     "main": "index.js",
     "scripts": {
-        "build": "yarn clean && concurrently npm:build:lib:* npm:build:docs",
+        "build": "yarn clean && concurrently npm:build:lib:*",
         "build:watch": "concurrently npm:build:watch:* npm:test:watch",
         "build:lib:js": "etsc",
         "build:lib:css": "postcss --verbose 'src/**/*.css' --base src --dir build",
