@@ -1,12 +1,18 @@
 import React, { FC, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
-import { EventList } from 'components';
+import { Provider } from 'urql';
+import { getGQLClient } from 'gql';
+import { Auth } from 'modules';
+
+const client = getGQLClient();
 
 const App: FC = (): ReactElement => {
     return (
         <div>
             <div>Playground</div>
-            <EventList />
+            <Provider value={client}>
+                <Auth />
+            </Provider>
         </div>
     );
 };
