@@ -28,11 +28,6 @@ export function useUser(): GQLHook & UserHook {
         mutation($email: String, $password: String) {
             login(email: $email, password: $password) {
                 success
-                user {
-                    id
-                    firstName
-                    lastName
-                }
             }
         }
     `);
@@ -42,6 +37,9 @@ export function useUser(): GQLHook & UserHook {
         loading: fetching,
         error,
         refetch,
-        login,
+        login: (variables) =>
+            login(variables).then(() => {
+                refetch({ requestPolicy: 'cache-and-network' });
+            }),
     };
 }
