@@ -1,4 +1,6 @@
-import { createClient, Client } from 'urql';
+import { createClient, Client, fetchExchange } from 'urql';
+import { cacheExchange } from '@urql/exchange-graphcache';
+import { devtoolsExchange } from '@urql/devtools';
 
 export function getGQLClient(): Client {
     return createClient({
@@ -6,5 +8,6 @@ export function getGQLClient(): Client {
         fetchOptions: {
             credentials: 'include',
         },
+        exchanges: [devtoolsExchange, cacheExchange(), fetchExchange],
     });
 }
