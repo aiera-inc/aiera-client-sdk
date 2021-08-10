@@ -60,7 +60,7 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
     );
 };
 
-export const Auth: FC<never> = (): ReactElement => {
+export const Auth: FC<unknown> = (): ReactElement => {
     const { user, loading, error, login } = useUser();
     const [authForm, setAuthForm] = useState<AuthForm>({
         email: '',

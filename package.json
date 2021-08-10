@@ -23,7 +23,7 @@
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
         "ts": "node -r esbuild-register",
         "prepare": "husky install",
-        "pre-commit": "concurrently npm:lint npm:test"
+        "pre-commit": "concurrently npm:lint npm:test npm:build:lib:types"
     },
     "devDependencies": {
         "@testing-library/jest-dom": "^5.14.1",
