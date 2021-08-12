@@ -23,9 +23,13 @@
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
         "ts": "node -r esbuild-register",
         "prepare": "husky install",
-        "pre-commit": "concurrently npm:lint npm:test npm:build:lib:types"
+        "pre-commit": "concurrently npm:lint:fix npm:test npm:build:lib:types"
     },
     "devDependencies": {
+        "@graphql-codegen/cli": "^2.0.1",
+        "@graphql-codegen/typescript": "^2.0.0",
+        "@graphql-codegen/typescript-operations": "^2.0.1",
+        "@graphql-codegen/typescript-urql": "^3.0.0",
         "@testing-library/jest-dom": "^5.14.1",
         "@testing-library/react": "^12.0.0",
         "@types/jest": "^26.0.24",
