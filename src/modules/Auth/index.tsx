@@ -1,6 +1,7 @@
 import React, { FC, ReactElement, useState } from 'react';
-import { QueryError, User } from 'types';
-import { useUser } from 'hooks/user';
+import gql from 'graphql-tag';
+import { useMutation, useQuery } from 'urql';
+import { CurrentUserQuery, LoginMutation, LoginMutationVariables, QueryError } from 'types';
 import './styles.css';
 
 interface AuthForm {
@@ -9,7 +10,7 @@ interface AuthForm {
 }
 
 interface UIProps {
-    user?: Partial<User> | null;
+    user?: CurrentUserQuery['currentUser'] | null;
     loading: boolean;
     error?: QueryError;
     authForm: AuthForm;
@@ -60,27 +61,39 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
 };
 
 export const Auth: FC<unknown> = (): ReactElement => {
-    const { data, error, fetching, login } = useUser();
     const [authForm, setAuthForm] = useState<AuthForm>({
         email: '',
         password: '',
     });
 
-    const submit = () => {
-        const { email, password } = authForm;
-        if (email && password) {
-            void login({ email, password });
+    const [result] = useQuery<CurrentUserQuery>({
+        query: gql`
+            query CurrentUser {
+                currentUser {
+                    id
+                    firstName
+                    lastName
+                }
+            }
+        `,
+    });
+
+    const [_, login] = useMutation<LoginMutation, LoginMutationVariables>(gql`
+        mutation Login($email: String!, $password: String!) {
+            login(email: $email, password: $password) {
+                success
+            }
         }
-    };
+    `);
 
     return (
         <AuthUI
-            user={data?.currentUser}
-            loading={fetching}
-            error={error}
+            user={result.data?.currentUser}
+            loading={result.fetching}
+            error={result.error}
             authForm={authForm}
             setAuthForm={setAuthForm}
-            submit={submit}
+            submit={login}
         />
     );
 };
