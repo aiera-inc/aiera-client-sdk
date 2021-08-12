@@ -1,7 +1,8 @@
 import React, { FC, ReactElement, useState } from 'react';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from 'urql';
-import { CurrentUserQuery, LoginMutation, LoginMutationVariables, QueryError } from 'types';
+import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from 'types/generated';
+import { QueryError } from 'types';
 import './styles.css';
 
 interface AuthForm {

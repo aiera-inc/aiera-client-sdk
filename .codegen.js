@@ -3,7 +3,7 @@ module.exports = {
     documents: ['./src/**/*.tsx', './src/**/*.ts'],
     overwrite: true,
     generates: {
-        './src/types/graphql.ts': {
+        './src/types/generated.ts': {
             plugins: [
                 { add: { content: '/* eslint-disable @typescript-eslint/no-explicit-any */' } },
                 'typescript',

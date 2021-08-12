@@ -1,5 +1,5 @@
 import React, { FC, ReactElement, MouseEvent } from 'react';
-import { ScheduledAudioCall as Event } from 'types';
+import { ScheduledAudioCall as Event } from 'types/generated';
 import './styles.css';
 
 export interface Props {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { Equity, ScheduledAudioCall as Event } from 'types';
+import { Equity, ScheduledAudioCall as Event } from 'types/generated';
 import { EventList } from '.';
 
 describe('EventList', () => {
