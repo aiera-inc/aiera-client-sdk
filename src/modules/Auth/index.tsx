@@ -1,13 +1,13 @@
-import React, { FC, ReactElement, useState } from 'react';
+import React, { FC, ReactElement, useState, MouseEventHandler } from 'react';
 import gql from 'graphql-tag';
 import { useMutation, useQuery } from 'urql';
-import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from 'types/generated';
+import { CurrentUserQuery, LoginMutation, LoginMutationVariables, LogoutMutation } from 'types/generated';
 import { QueryError } from 'types';
 import './styles.css';
 
 interface AuthForm {
-    email?: string;
-    password?: string;
+    email: string;
+    password: string;
 }
 
 interface UIProps {
@@ -16,11 +16,12 @@ interface UIProps {
     error?: QueryError;
     authForm: AuthForm;
     setAuthForm: (authForm: AuthForm) => void;
-    submit: () => void;
+    login: MouseEventHandler;
+    logout: MouseEventHandler;
 }
 
 export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
-    const { user, loading, error, authForm, setAuthForm, submit } = props;
+    const { user, loading, error, authForm, setAuthForm, login, logout } = props;
 
     if (error) {
         return <div>Error occurred</div>;
@@ -47,7 +48,7 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
                         onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
                     />
                 </div>
-                <button type="submit" onClick={submit}>
+                <button type="submit" onClick={login}>
                     Login
                 </button>
             </div>
@@ -57,6 +58,9 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
     return (
         <div>
             {user.firstName} {user.lastName}
+            <div>
+                <button onClick={logout}>Logout</button>
+            </div>
         </div>
     );
 };
@@ -67,7 +71,7 @@ export const Auth: FC<unknown> = (): ReactElement => {
         password: '',
     });
 
-    const [result] = useQuery<CurrentUserQuery>({
+    const [result, refetch] = useQuery<CurrentUserQuery>({
         query: gql`
             query CurrentUser {
                 currentUser {
@@ -79,9 +83,17 @@ export const Auth: FC<unknown> = (): ReactElement => {
         `,
     });
 
-    const [_, login] = useMutation<LoginMutation, LoginMutationVariables>(gql`
+    const [_login, login] = useMutation<LoginMutation, LoginMutationVariables>(gql`
         mutation Login($email: String!, $password: String!) {
             login(email: $email, password: $password) {
+                success
+            }
+        }
+    `);
+
+    const [_logout, logout] = useMutation<LogoutMutation>(gql`
+        mutation Logout {
+            logout {
                 success
             }
         }
@@ -94,7 +106,8 @@ export const Auth: FC<unknown> = (): ReactElement => {
             error={result.error}
             authForm={authForm}
             setAuthForm={setAuthForm}
-            submit={login}
+            login={() => login(authForm).then(() => refetch({ requestPolicy: 'cache-and-network' }))}
+            logout={() => logout().then(() => refetch({ requestPolicy: 'cache-and-network' }))}
         />
     );
 };

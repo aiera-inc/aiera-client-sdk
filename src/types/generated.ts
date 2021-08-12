@@ -8050,6 +8050,13 @@ export type LoginMutation = {
     login?: Maybe<{ __typename?: 'Login'; success?: Maybe<boolean> }>;
 };
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never }>;
+
+export type LogoutMutation = {
+    __typename?: 'Mutations';
+    logout?: Maybe<{ __typename?: 'Logout'; success?: Maybe<boolean> }>;
+};
+
 export const CurrentUserDocument = gql`
     query CurrentUser {
         currentUser {
@@ -8066,3 +8073,11 @@ export const LoginDocument = gql`
         }
     }
 `;
+export const LogoutDocument = gql`
+    mutation Logout {
+        logout {
+            success
+        }
+    }
+`;
+
