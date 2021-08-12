@@ -4,13 +4,18 @@ module.exports = {
     overwrite: true,
     generates: {
         './src/types/graphql.ts': {
-            plugins: ['typescript', 'typescript-operations', 'typescript-urql'],
+            plugins: [
+                { add: { content: '/* eslint-disable @typescript-eslint/no-explicit-any */' } },
+                'typescript',
+                'typescript-operations',
+                'typescript-urql',
+            ],
             config: {
                 skipTypename: false,
                 withHooks: false,
                 withHOC: false,
                 withComponent: false,
             },
-        }
+        },
     },
 };

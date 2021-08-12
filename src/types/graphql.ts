@@ -6487,6 +6487,12 @@ export type StreamMatchTemplatesFilter = {
     templateIds?: Maybe<Array<Maybe<Scalars['ID']>>>;
 };
 
+export type StreamMatchTotalPerDayBucket = {
+    __typename?: 'StreamMatchTotalPerDayBucket';
+    bucket?: Maybe<Scalars['String']>;
+    total?: Maybe<Scalars['Int']>;
+};
+
 export type StreamMatches = {
     __typename?: 'StreamMatches';
     total?: Maybe<Scalars['Int']>;
@@ -6661,6 +6667,7 @@ export type StreamsMatchTotalPerDay = {
     date?: Maybe<Scalars['Date']>;
     total?: Maybe<Scalars['Int']>;
     sampleIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+    buckets?: Maybe<Array<Maybe<StreamMatchTotalPerDayBucket>>>;
     samples?: Maybe<Array<Maybe<StreamMatchAggTarget>>>;
 };
 
@@ -8059,4 +8066,3 @@ export const LoginDocument = gql`
         }
     }
 `;
-

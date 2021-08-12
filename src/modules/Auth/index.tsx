@@ -1,6 +1,5 @@
 import React, { FC, ReactElement, useState } from 'react';
-import { CombinedError } from 'urql';
-import { User } from 'types';
+import { QueryError, User } from 'types';
 import { useUser } from 'hooks/user';
 import './styles.css';
 
@@ -10,9 +9,9 @@ interface AuthForm {
 }
 
 interface UIProps {
-    user?: User;
+    user?: Partial<User> | null;
     loading: boolean;
-    error?: CombinedError;
+    error?: QueryError;
     authForm: AuthForm;
     setAuthForm: (authForm: AuthForm) => void;
     submit: () => void;
@@ -61,7 +60,7 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
 };
 
 export const Auth: FC<unknown> = (): ReactElement => {
-    const { user, loading, error, login } = useUser();
+    const { data, error, fetching, login } = useUser();
     const [authForm, setAuthForm] = useState<AuthForm>({
         email: '',
         password: '',
@@ -70,14 +69,14 @@ export const Auth: FC<unknown> = (): ReactElement => {
     const submit = () => {
         const { email, password } = authForm;
         if (email && password) {
-            login({ email, password });
+            void login({ email, password });
         }
     };
 
     return (
         <AuthUI
-            user={user}
-            loading={loading}
+            user={data?.currentUser}
+            loading={fetching}
             error={error}
             authForm={authForm}
             setAuthForm={setAuthForm}

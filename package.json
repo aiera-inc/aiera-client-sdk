@@ -12,8 +12,9 @@
         "build:lib:css": "postcss --verbose 'src/**/*.css' --base src --dir build",
         "build:watch:lib:js": "yarn ts src/dev/build.ts --watch",
         "build:watch:lib:css": "postcss --verbose --watch 'src/**/*.css' --base src --dir build",
-        "build:lib:types": "tsc",
-        "build:watch:lib:types": "tsc --watch --incremental --pretty --preserveWatchOutput",
+        "build:lib:types": "graphql-codegen -c .codegen.js && tsc",
+        "build:watch:lib:types:tsc": "tsc --watch --incremental --pretty --preserveWatchOutput",
+        "build:watch:lib:types:gql": "graphql-codegen -c .codegen.js --watch",
         "clean": "rimraf -rf build/*",
         "serve": "esbuild --tsconfig=tsconfig.bundle.json --bundle --servedir=build --outdir=build/bundle --serve build/dev/index.js",
         "lint": "eslint --no-error-on-unmatched-pattern 'src/**'",
@@ -23,9 +24,10 @@
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
         "ts": "node -r esbuild-register",
         "prepare": "husky install",
-        "pre-commit": "concurrently npm:lint:fix npm:test npm:build:lib:types"
+        "pre-commit": "yarn build:lib:types && concurrently npm:lint:fix npm:test"
     },
     "devDependencies": {
+        "@graphql-codegen/add": "^3.0.0",
         "@graphql-codegen/cli": "^2.0.1",
         "@graphql-codegen/typescript": "^2.0.0",
         "@graphql-codegen/typescript-operations": "^2.0.1",

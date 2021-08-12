@@ -1,19 +1,15 @@
 import { useMutation, useQuery } from 'urql';
-import { GQLHook, User } from 'types';
+import gql from 'graphql-tag';
+import { CurrentUserQuery, LoginMutation, LoginMutationVariables, Mutation, Query } from 'types';
 
-interface UserQueryData {
-    currentUser?: User;
-}
+type UserQuery = Query<CurrentUserQuery>;
+type UserLogin = Mutation<LoginMutation, LoginMutationVariables>;
+type UseUser = UserQuery & { login: UserLogin['mutate'] };
 
-interface UserHook {
-    user?: User;
-    login: (args: { email: string; password: string }) => void;
-}
-
-export function useUser(): GQLHook & UserHook {
-    const [result, refetch] = useQuery<UserQueryData>({
-        query: `
-            query {
+export function useUser(): UseUser {
+    const [result, refetch] = useQuery<CurrentUserQuery>({
+        query: gql`
+            query CurrentUser {
                 currentUser {
                     id
                     firstName
@@ -22,10 +18,9 @@ export function useUser(): GQLHook & UserHook {
             }
         `,
     });
-    const { data, fetching, error } = result;
 
-    const [_, login] = useMutation(`
-        mutation($email: String, $password: String) {
+    const [_, login] = useMutation<LoginMutation, LoginMutationVariables>(gql`
+        mutation Login($email: String!, $password: String!) {
             login(email: $email, password: $password) {
                 success
             }
@@ -33,13 +28,12 @@ export function useUser(): GQLHook & UserHook {
     `);
 
     return {
-        user: data?.currentUser,
-        loading: fetching,
-        error,
+        ...result,
         refetch,
-        login: (variables) =>
-            login(variables).then(() => {
+        login: (variables?: LoginMutationVariables) =>
+            login(variables).then((resp) => {
                 refetch({ requestPolicy: 'cache-and-network' });
+                return resp;
             }),
     };
 }
