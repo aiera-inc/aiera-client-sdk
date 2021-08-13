@@ -1,5 +1,5 @@
 import React, { FC, ReactElement, MouseEvent } from 'react';
-import { ScheduledAudioCall as Event } from 'types/generated';
+import { Event } from 'types/generated';
 import './styles.css';
 
 export interface Props {
@@ -13,7 +13,7 @@ export const EventList: FC<Props> = (props: Props): ReactElement => {
         <ul>
             {events.map((event) => (
                 <li onClick={onSelectEvent} key={event.id}>
-                    {event.equity?.localTicker} - {event.title}
+                    {event.title}
                 </li>
             ))}
         </ul>

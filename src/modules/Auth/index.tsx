@@ -1,8 +1,11 @@
-import React, { FC, ReactElement, useState, MouseEventHandler } from 'react';
-import gql from 'graphql-tag';
+import React, { FC, ReactElement, useState, FormEventHandler, MouseEventHandler } from 'react';
 import { useMutation, useQuery } from 'urql';
-import { CurrentUserQuery, LoginMutation, LoginMutationVariables, LogoutMutation } from 'types/generated';
+import gql from 'graphql-tag';
+
+import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from 'types/generated';
 import { QueryError } from 'types';
+import { useClient } from 'client';
+import { setAuth, clearAuth } from 'client/auth';
 import './styles.css';
 
 interface AuthForm {
@@ -16,16 +19,12 @@ interface UIProps {
     error?: QueryError;
     authForm: AuthForm;
     setAuthForm: (authForm: AuthForm) => void;
-    login: MouseEventHandler;
+    login: FormEventHandler;
     logout: MouseEventHandler;
 }
 
 export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
-    const { user, loading, error, authForm, setAuthForm, login, logout } = props;
-
-    if (error) {
-        return <div>Error occurred</div>;
-    }
+    const { user, loading, authForm, setAuthForm, login, logout } = props;
 
     if (loading) {
         return <div>Loading...</div>;
@@ -33,7 +32,7 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
 
     if (!user) {
         return (
-            <div>
+            <form action="#" onSubmit={login}>
                 <div>
                     <input
                         type="text"
@@ -48,10 +47,8 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
                         onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
                     />
                 </div>
-                <button type="submit" onClick={login}>
-                    Login
-                </button>
-            </div>
+                <button type="submit">Login</button>
+            </form>
         );
     }
 
@@ -66,10 +63,8 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
 };
 
 export const Auth: FC<unknown> = (): ReactElement => {
-    const [authForm, setAuthForm] = useState<AuthForm>({
-        email: '',
-        password: '',
-    });
+    const initialAuthform = { email: '', password: '' };
+    const [authForm, setAuthForm] = useState<AuthForm>(initialAuthform);
 
     const [result, refetch] = useQuery<CurrentUserQuery>({
         query: gql`
@@ -83,21 +78,31 @@ export const Auth: FC<unknown> = (): ReactElement => {
         `,
     });
 
-    const [_login, login] = useMutation<LoginMutation, LoginMutationVariables>(gql`
+    const [_, loginMutation] = useMutation<LoginMutation, LoginMutationVariables>(gql`
         mutation Login($email: String!, $password: String!) {
             login(email: $email, password: $password) {
-                success
+                accessToken
+                refreshToken
             }
         }
     `);
 
-    const [_logout, logout] = useMutation<LogoutMutation>(gql`
-        mutation Logout {
-            logout {
-                success
+    const { reset } = useClient();
+
+    const login = () =>
+        loginMutation(authForm).then((resp) => {
+            if (resp.data?.login) {
+                console.log('Calling setauth with ', resp.data.login);
+                setAuth(resp.data.login);
+                refetch({ requestPolicy: 'cache-and-network' });
             }
-        }
-    `);
+        });
+
+    const logout = () => {
+        clearAuth();
+        setAuthForm(initialAuthform);
+        reset();
+    };
 
     return (
         <AuthUI
@@ -106,8 +111,8 @@ export const Auth: FC<unknown> = (): ReactElement => {
             error={result.error}
             authForm={authForm}
             setAuthForm={setAuthForm}
-            login={() => login(authForm).then(() => refetch({ requestPolicy: 'cache-and-network' }))}
-            logout={() => logout().then(() => refetch({ requestPolicy: 'cache-and-network' }))}
+            login={login}
+            logout={logout}
         />
     );
 };

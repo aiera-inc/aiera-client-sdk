@@ -1,5 +1,5 @@
 module.exports = {
-    schema: 'https://graphql-dev.aiera.com/api/graphql',
+    schema: 'https://api-dev.aiera.com/graphql',
     documents: ['./src/**/*.tsx', './src/**/*.ts'],
     overwrite: true,
     generates: {

@@ -24,7 +24,7 @@
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
         "ts": "node -r esbuild-register",
         "prepare": "husky install",
-        "pre-commit": "yarn build:lib:types && concurrently npm:lint:fix npm:test"
+        "pre-commit": "yarn build:lib:types && concurrently lint-staged npm:test"
     },
     "devDependencies": {
         "@graphql-codegen/add": "^3.0.0",
@@ -63,8 +63,17 @@
     },
     "dependencies": {
         "@urql/devtools": "2.0.3",
+        "@urql/exchange-auth": "0.1.6",
         "@urql/exchange-graphcache": "4.2.1",
         "graphql": "15.5.1",
         "urql": "2.0.4"
+    },
+    "lint-staged": {
+        "*.ts": [
+            "eslint --fix"
+        ],
+        "*.tsx": [
+            "eslint --fix"
+        ]
     }
 }
