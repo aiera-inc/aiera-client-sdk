@@ -1,6 +1,8 @@
 import { makeOperation } from '@urql/core';
 import { AuthConfig } from '@urql/exchange-auth';
+import gql from 'graphql-tag';
 
+import { RefreshMutation } from 'types/generated';
 import storage from 'lib/storage';
 
 export type AuthTokens = {
@@ -30,16 +32,32 @@ export function clearAuth(): void {
 
 export const defaultAuthConfig: AuthConfig<AuthTokens> = {
     // eslint-disable-next-line @typescript-eslint/require-await
-    getAuth: async ({ authState }) => {
-        console.log('called getAuth with ', { authState });
+    getAuth: async ({ authState, mutate }) => {
         if (!authState) {
             return getAuth();
+        }
+
+        const result = await mutate<RefreshMutation>(
+            gql`
+                mutation Refresh {
+                    __typename
+                    refresh {
+                        __typename
+                        accessToken
+                        refreshToken
+                    }
+                }
+            `
+        );
+
+        if (result.data?.refresh) {
+            setAuth(result.data.refresh);
+            return result.data.refresh;
         }
         return null;
     },
 
     addAuthToOperation: ({ authState, operation }) => {
-        console.log('called addAuthtoOperation with ', { authState, operation });
         if (!authState || !authState.accessToken) {
             return operation;
         }
@@ -49,23 +67,31 @@ export const defaultAuthConfig: AuthConfig<AuthTokens> = {
                 ? operation.context.fetchOptions()
                 : operation.context.fetchOptions || {};
 
+        let isRefresh = false;
+        const definition = operation.query.definitions[0];
+        if (operation.kind === 'mutation' && definition.kind === 'OperationDefinition') {
+            isRefresh = definition.name?.value === 'Refresh';
+        }
+
         return makeOperation(operation.kind, operation, {
             ...operation.context,
             fetchOptions: {
                 ...fetchOptions,
                 headers: {
                     ...fetchOptions.headers,
-                    Authorization: `Bearer ${authState.accessToken}`,
+                    Authorization: `Bearer ${isRefresh ? authState.refreshToken : authState.accessToken}`,
                 },
             },
         });
     },
 
     didAuthError: ({ error }) => {
-        console.log(
-            'didError',
-            error.graphQLErrors.some((e) => e.extensions?.code === 'UNAUTHORIZED')
-        );
-        return error.graphQLErrors.some((e) => e.extensions?.code === 'UNAUTHORIZED');
+        if (error.graphQLErrors.some((e) => e.extensions?.code === 'UNAUTHORIZED')) {
+            return true;
+        } else if (error.response) {
+            const resp = error.response as Response;
+            return resp.status === 401;
+        }
+        return false;
     },
 };

@@ -92,7 +92,6 @@ export const Auth: FC<unknown> = (): ReactElement => {
     const login = () =>
         loginMutation(authForm).then((resp) => {
             if (resp.data?.login) {
-                console.log('Calling setauth with ', resp.data.login);
                 setAuth(resp.data.login);
                 refetch({ requestPolicy: 'cache-and-network' });
             }

@@ -145,6 +145,13 @@ export enum UserStatus {
     Deactivated = 'deactivated',
 }
 
+export type RefreshMutationVariables = Exact<{ [key: string]: never }>;
+
+export type RefreshMutation = {
+    __typename: 'Mutation';
+    refresh: { __typename: 'RefreshResponse'; accessToken: string; refreshToken: string };
+};
+
 export type CurrentUserQueryVariables = Exact<{ [key: string]: never }>;
 
 export type CurrentUserQuery = {
@@ -162,6 +169,16 @@ export type LoginMutation = {
     login: { __typename?: 'LoginResponse'; accessToken: string; refreshToken: string };
 };
 
+export const RefreshDocument = gql`
+    mutation Refresh {
+        __typename
+        refresh {
+            __typename
+            accessToken
+            refreshToken
+        }
+    }
+`;
 export const CurrentUserDocument = gql`
     query CurrentUser {
         currentUser {

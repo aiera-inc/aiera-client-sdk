@@ -9,7 +9,8 @@ const App: FC = (): ReactElement => {
             <div>Playground</div>
             <Provider
                 config={{
-                    url: 'https://api-dev.aiera.com/graphql',
+                    // url: 'https://api-dev.aiera.com/graphql',
+                    url: 'https://aiera-pub.ngrok.io/graphql',
                 }}
             >
                 <Auth />
