@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState, FormEventHandler, MouseEventHandler } from 'react';
+import React, { FC, ReactElement, useState, FormEvent, FormEventHandler, MouseEventHandler } from 'react';
 import { useMutation, useQuery } from 'urql';
 import gql from 'graphql-tag';
 
@@ -91,13 +91,15 @@ export const Auth: FC<unknown> = (): ReactElement => {
 
     const { reset } = useClient();
 
-    const login = () =>
-        loginMutation(authForm).then((resp) => {
+    const login = async (event: FormEvent) => {
+        event.preventDefault();
+        return loginMutation(authForm).then((resp) => {
             if (resp.data?.login) {
                 setAuth(resp.data.login);
                 refetch({ requestPolicy: 'cache-and-network' });
             }
         });
+    };
 
     const logout = () => {
         clearAuth();

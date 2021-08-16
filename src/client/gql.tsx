@@ -38,3 +38,5 @@ export const Provider: FC<Props> = ({ config, children }: Props): ReactElement =
 };
 
 export const useClient = (): ClientContext => useContext(Context);
+
+export const ResetProvider = Context.Provider;
