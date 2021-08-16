@@ -17,6 +17,7 @@ module.exports = {
 
     // Module file extensions for importing
     moduleFileExtensions: ['js', 'json'],
+    modulePaths: ['<rootDir>/../build'],
 
     testEnvironment: 'jsdom',
 

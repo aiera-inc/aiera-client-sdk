@@ -36,6 +36,7 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
                 <div>
                     <input
                         type="text"
+                        data-testid="auth-email"
                         value={authForm.email}
                         onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
                     />
@@ -43,6 +44,7 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
                 <div>
                     <input
                         type="password"
+                        data-testid="auth-password"
                         value={authForm.password}
                         onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
                     />
