@@ -1,4 +1,18 @@
-import React, { createContext, FC, ReactElement, ReactNode, useContext, useState } from 'react';
+/**
+ * To setup a GQL provider for your react app:
+ *
+ * ```typescript
+ * import { Provider } from 'client/gql';
+ *
+ * const App = () => (
+ *     <Provider config={{url: 'https://your.graphql.url'}}>
+ *         <App />
+ *     </Provider>
+ * );
+ * ```
+ * @module
+ */
+import React, { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
 import { Client, createClient, fetchExchange, Provider as UrqlProvider } from 'urql';
 import { devtoolsExchange } from '@urql/devtools';
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
@@ -6,6 +20,9 @@ import { cacheExchange } from '@urql/exchange-graphcache';
 
 import { defaultAuthConfig } from 'client/auth';
 
+/**
+ * @notExported
+ */
 interface Config {
     url: string;
     auth?: AuthConfig<unknown>;
@@ -18,16 +35,18 @@ function createGQLClient(config: Config): Client {
     });
 }
 
+/**
+ * @notExported
+ */
 interface ClientContext {
     reset: () => void;
 }
 const Context = createContext<ClientContext>({ reset: () => undefined });
 
-interface Props {
-    config: Config;
-    children: ReactNode;
-}
-export const Provider: FC<Props> = ({ config, children }: Props): ReactElement => {
+/**
+ * A React Provider to configure an app-level graphql client...
+ */
+export const Provider = ({ config, children }: { config: Config; children: ReactNode }): ReactElement => {
     const [client, setClient] = useState(createGQLClient(config));
     const reset = () => setClient(createGQLClient(config));
     return (
@@ -39,4 +58,7 @@ export const Provider: FC<Props> = ({ config, children }: Props): ReactElement =
 
 export const useClient = (): ClientContext => useContext(Context);
 
+/**
+ * @ignore
+ */
 export const ResetProvider = Context.Provider;

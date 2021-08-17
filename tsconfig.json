@@ -20,7 +20,7 @@
         // "tsBuildInfoFile": "./",               /* Specify file to store incremental compilation information */
         // "removeComments": true,                /* Do not emit comments to output. */
         // "noEmit": true,                        /* Do not emit outputs. */
-        "emitDeclarationOnly":true,
+        // "emitDeclarationOnly":true,
         // "importHelpers": true,                 /* Import emit helpers from 'tslib'. */
         // "downlevelIteration": true,            /* Provide full support for iterables in 'for-of', spread, and destructuring when targeting 'ES5' or 'ES3'. */
         // "isolatedModules": true,               /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
@@ -65,5 +65,11 @@
 
         /* Advanced Options */
         "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+    },
+    "typedocOptions": {
+        "name": "@aiera/client-sdk",
+        "entryPoints": ["src/client/gql.tsx", "src/client/auth.ts", "src/modules/Auth"],
+        "sort": ["source-order"],
+        "readme": "none"
     }
 }

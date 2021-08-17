@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, useState, FormEvent, FormEventHandler, MouseEventHandler } from 'react';
+import React, { ReactElement, useState, FormEvent, FormEventHandler, MouseEventHandler } from 'react';
 import { useMutation, useQuery } from 'urql';
 import gql from 'graphql-tag';
 
@@ -8,12 +8,18 @@ import { useClient } from 'client';
 import { setAuth, clearAuth } from 'client/auth';
 import './styles.css';
 
+/**
+ * @notExported
+ */
 interface AuthForm {
     email: string;
     password: string;
 }
 
-interface UIProps {
+/**
+ * @notExported
+ */
+interface AuthProps {
     user?: CurrentUserQuery['currentUser'] | null;
     loading: boolean;
     error?: QueryError;
@@ -23,7 +29,7 @@ interface UIProps {
     logout: MouseEventHandler;
 }
 
-export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
+export const AuthUI = (props: AuthProps): ReactElement => {
     const { user, loading, authForm, setAuthForm, login, logout } = props;
 
     if (loading) {
@@ -64,7 +70,7 @@ export const AuthUI: FC<UIProps> = (props: UIProps): ReactElement => {
     );
 };
 
-export const Auth: FC<unknown> = (): ReactElement => {
+export const Auth = (): ReactElement => {
     const initialAuthform = { email: '', password: '' };
     const [authForm, setAuthForm] = useState<AuthForm>(initialAuthform);
 
