@@ -63,15 +63,21 @@ describe('Auth', () => {
     });
 
     test('handles logged in state with user', () => {
-        const { reset } = renderWithClient(<Auth />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        currentUser: { id: 1, firstName: 'Test', lastName: 'User' },
-                    },
-                }),
-        });
-        screen.getByText('Test User');
+        const { reset } = renderWithClient(
+            <Auth>
+                <div>Hello World!</div>
+            </Auth>,
+            {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            currentUser: { id: 1, firstName: 'Test', lastName: 'User' },
+                        },
+                    }),
+            }
+        );
+        screen.getByText('Logged in as Test User');
+        screen.getByText('Hello World!');
         fireEvent.click(screen.getByText('Logout'));
         expect(clientAuth.clearAuth).toHaveBeenCalled();
         expect(reset).toHaveBeenCalled();

@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, FormEvent, FormEventHandler, MouseEventHandler } from 'react';
+import React, { ReactElement, ReactNode, useState, FormEvent, FormEventHandler, MouseEventHandler } from 'react';
 import { useMutation, useQuery } from 'urql';
 import gql from 'graphql-tag';
 
@@ -20,17 +20,18 @@ interface AuthForm {
  * @notExported
  */
 interface AuthProps {
-    user?: CurrentUserQuery['currentUser'] | null;
-    loading: boolean;
-    error?: QueryError;
     authForm: AuthForm;
-    setAuthForm: (authForm: AuthForm) => void;
+    children?: ReactNode;
+    error?: QueryError;
+    loading: boolean;
     login: FormEventHandler;
     logout: MouseEventHandler;
+    setAuthForm: (authForm: AuthForm) => void;
+    user?: CurrentUserQuery['currentUser'] | null;
 }
 
 export const AuthUI = (props: AuthProps): ReactElement => {
-    const { user, loading, authForm, setAuthForm, login, logout } = props;
+    const { children, user, loading, authForm, setAuthForm, login, logout } = props;
 
     if (loading) {
         return <div>Loading...</div>;
@@ -62,15 +63,16 @@ export const AuthUI = (props: AuthProps): ReactElement => {
 
     return (
         <div>
-            {user.firstName} {user.lastName}
-            <div>
-                <button onClick={logout}>Logout</button>
-            </div>
+            Logged in as {user.firstName} {user.lastName}
+            <button className="ml-2 px-1 rounded bg-blue-500 text-white" onClick={logout}>
+                Logout
+            </button>
+            {children && <div>{children}</div>}
         </div>
     );
 };
 
-export const Auth = (): ReactElement => {
+export const Auth = ({ children }: { children?: ReactNode }): ReactElement => {
     const initialAuthform = { email: '', password: '' };
     const [authForm, setAuthForm] = useState<AuthForm>(initialAuthform);
 
@@ -122,6 +124,8 @@ export const Auth = (): ReactElement => {
             setAuthForm={setAuthForm}
             login={login}
             logout={logout}
-        />
+        >
+            {children}
+        </AuthUI>
     );
 };
