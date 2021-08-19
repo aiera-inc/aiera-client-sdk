@@ -42,6 +42,7 @@ export const AuthUI = (props: AuthProps): ReactElement => {
             <form action="#" onSubmit={login}>
                 <div>
                     <input
+                        className="rounded border border-gray-400"
                         type="text"
                         data-testid="auth-email"
                         value={authForm.email}
@@ -50,13 +51,16 @@ export const AuthUI = (props: AuthProps): ReactElement => {
                 </div>
                 <div>
                     <input
+                        className="rounded border border-gray-400"
                         type="password"
                         data-testid="auth-password"
                         value={authForm.password}
                         onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button className="ml-2 px-1 rounded bg-blue-500 text-white" type="submit">
+                    Login
+                </button>
             </form>
         );
     }
