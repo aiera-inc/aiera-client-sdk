@@ -1,3 +1,7 @@
 *.css
 *.mdx
 *.html
+postcss.config.js
+.codegen.js
+tailwind.config.js
+templates/

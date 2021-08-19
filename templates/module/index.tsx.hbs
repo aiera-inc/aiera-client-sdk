@@ -1,0 +1,29 @@
+import React, { ReactElement, ReactNode } from 'react';
+import './styles.css';
+
+/**
+ * @notExported
+ */
+interface {{name}}UIProps {
+    children?: ReactNode;
+}
+
+export const {{name}}UI = (props: {{{name}}}UIProps): ReactElement => {
+    const { children } = props;
+    return <div>{children || '{{name}}UI'}</div>;
+};
+
+/**
+ * @notExported
+ */
+export interface {{name}}Props {
+    children?: ReactNode;
+}
+
+/**
+ * Renders {{name}}
+ */
+export const {{name}} = (props: {{{name}}}Props): ReactElement => {
+    const { children } = props;
+    return <{{name}}UI>{children}</{{name}}UI>;
+};
