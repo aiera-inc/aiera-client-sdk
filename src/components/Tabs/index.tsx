@@ -21,7 +21,7 @@ interface TabsProps<T> {
 export const Tabs = <T extends string | number>(props: TabsProps<T>): ReactElement => {
     const { onChange, options = [], value } = props;
     return (
-        <div className="flex Tab">
+        <div className="flex tab">
             {options.map((option) => (
                 <div
                     key={`tab-option-${option.value}`}
