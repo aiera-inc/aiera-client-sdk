@@ -7,7 +7,7 @@ describe('Tabs', () => {
     test('renders', () => {
         const onChange = jest.fn();
         render(
-            <Tabs
+            <Tabs<number>
                 onChange={onChange}
                 options={[
                     { value: 1, label: 'One' },
