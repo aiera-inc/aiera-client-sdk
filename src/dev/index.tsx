@@ -15,7 +15,9 @@ const App: FC = (): ReactElement => {
                 }}
             >
                 <Auth>
-                    <EventList />
+                    <div className="w-96 h-96">
+                        <EventList />
+                    </div>
                 </Auth>
             </Provider>
         </div>
