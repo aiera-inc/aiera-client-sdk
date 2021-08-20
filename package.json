@@ -73,6 +73,7 @@
         "@urql/devtools": "2.0.3",
         "@urql/exchange-auth": "0.1.6",
         "@urql/exchange-graphcache": "4.2.1",
+        "classnames": "2.3.1",
         "graphql": "15.5.1",
         "urql": "2.0.4"
     },
