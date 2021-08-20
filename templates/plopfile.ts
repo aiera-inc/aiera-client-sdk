@@ -1,48 +1,67 @@
+import fs from 'fs';
 import { NodePlopAPI } from 'node-plop';
 
 export default (plop: NodePlopAPI) => {
     plop.setGenerator('component', {
-        description: 'Create a new shared component',
+        description: 'Create a new component or module',
         prompts: [
+            {
+                type: 'list',
+                name: 'type',
+                choices: ['component', 'module'],
+                message: 'What type of component: ',
+            },
             {
                 type: 'input',
                 name: 'name',
-                message: 'Enter component name: ',
+                message: 'Enter component/module name: ',
             },
         ],
         actions: [
             {
                 type: 'addMany',
-                destination: '../src/components/{{name}}',
-                templateFiles: 'component/*.hbs',
+                destination: '../src/{{type}}s/{{name}}',
+                templateFiles: '{{type}}/*.hbs',
             },
             {
                 type: 'append',
                 template: "export { {{name}} } from './{{name}}';",
-                path: '../src/components/index.ts',
+                path: '../src/{{type}}s/index.ts',
             },
         ],
     });
 
-    plop.setGenerator('module', {
-        description: 'Create a new module',
+    plop.setGenerator('nested', {
+        description: 'Create a nested component for use in a single parent component or modules',
         prompts: [
+            {
+                type: 'list',
+                name: 'type',
+                choices: ['component', 'module'],
+                message: 'What type of component: ',
+            },
+            {
+                type: 'list',
+                name: 'under',
+                choices: (answers) => {
+                    return fs
+                        .readdirSync(`./src/${answers.type}s`, { withFileTypes: true })
+                        .map((dir) => (dir.isDirectory() ? dir.name : ''))
+                        .filter((f) => f);
+                },
+                message: 'Nest under: ',
+            },
             {
                 type: 'input',
                 name: 'name',
-                message: 'Enter module name: ',
+                message: 'Enter nested component name: ',
             },
         ],
         actions: [
             {
                 type: 'addMany',
-                destination: '../src/module/{{name}}',
-                templateFiles: 'module/*.hbs',
-            },
-            {
-                type: 'append',
-                template: "export { {{name}} } from './{{name}}';",
-                path: '../src/modules/index.ts',
+                destination: '../src/{{type}}/{{under}}/{{name}}',
+                templateFiles: '{{type}}/*.hbs',
             },
         ],
     });
