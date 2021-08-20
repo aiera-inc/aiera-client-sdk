@@ -60,7 +60,7 @@ export default (plop: NodePlopAPI) => {
         actions: [
             {
                 type: 'addMany',
-                destination: '../src/{{type}}/{{under}}/{{name}}',
+                destination: '../src/{{type}}s/{{under}}/{{name}}',
                 templateFiles: '{{type}}/*.hbs',
             },
         ],
