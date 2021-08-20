@@ -62,7 +62,7 @@ function proxy(fromPort: number, toPort: number, onReloadReq: (res: ServerRespon
             {
                 hostname: 'localhost',
                 port: toPort,
-                path: `/dev${req.url || ''}`,
+                path: req.url?.startsWith('/dev') ? req.url : `/dev${req.url || ''}`,
                 method: req.method,
                 headers: req.headers,
             },
