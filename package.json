@@ -6,7 +6,7 @@
     "license": "CC-BY-NC-ND-4.0",
     "main": "index.js",
     "scripts": {
-        "build": "npm run clean && concurrently -k npm:build:lib:*",
+        "build": "npm run clean && concurrently npm:build:lib:*",
         "build:watch": "npm run build:lib:css && concurrently -k npm:build:watch:* npm:test:watch",
         "build:docs": "typedoc",
         "build:watch:docs": "typedoc --watch --preserveWatchOutput --out build/dev/docs",
