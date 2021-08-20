@@ -13,18 +13,14 @@
         <div id="root"></div>
         <script src="/bundle/index.js"></script>
         <script>
-            let prevLength;
-            setInterval(() => {
-                fetch('/bundle/index.js').then((resp) => {
-                    if (resp.ok) {
-                        const length = resp.headers.get('content-length');
-                        if (prevLength && prevLength !== length) {
-                            window.location.reload();
-                        }
-                        prevLength = length;
-                    }
-                });
-            }, 2000);
+            function reload() {
+                fetch('/reload')
+                    .then(() => {
+                        window.location.reload();
+                    })
+                    .catch(reload);
+            }
+            reload();
         </script>
     </body>
 </html>
