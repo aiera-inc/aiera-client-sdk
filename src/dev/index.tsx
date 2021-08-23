@@ -1,8 +1,11 @@
 import React, { FC, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
+import Frame from 'react-frame-component';
+
 import 'css/styles.css';
 import { Provider } from 'client';
 import { Auth, EventList } from 'modules';
+import './index.css';
 
 const App: FC = (): ReactElement => {
     return (
@@ -15,9 +18,14 @@ const App: FC = (): ReactElement => {
                 }}
             >
                 <Auth>
-                    <div className="w-96 h-96">
-                        <EventList />
-                    </div>
+                    <Frame
+                        head={<link type="text/css" rel="stylesheet" href="/bundle/index.css" />}
+                        className="border border-black w-96 h-96 resize"
+                    >
+                        <div className="h-screen">
+                            <EventList />
+                        </div>
+                    </Frame>
                 </Auth>
             </Provider>
         </div>
