@@ -25,18 +25,32 @@ export interface FilterByProps<T> {
 export const FilterBy = <T extends string | number>(props: FilterByProps<T>): ReactElement => {
     const { onChange, options = [], value = [] } = props;
     return (
-        <div className="flex items-center border border-gray-300 px-2 rounded-md eventlist__filterby">
-            <div className="font-semibold">Filter By</div>
-            <div className="flex flex-1 justify-end">
+        <div className="flex items-center px-3 border border-gray-300 rounded-md eventlist__filterby">
+            <div className="text-sm font-semibold">Filter By</div>
+            <div className="flex justify-end flex-1">
                 {options.map((option) => (
                     <div
                         key={`filterby-option-${option.value}`}
-                        className={classNames('py-1', 'px-2', 'cursor-pointer', 'rounded-md', {
-                            'bg-gray-300': value?.includes(option.value),
-                            'font-semibold': value?.includes(option.value),
-                            eventlist__filterby__option: true,
-                            'eventlist__filterby__option--selected': value.includes(option.value),
-                        })}
+                        className={classNames(
+                            'my-2',
+                            'mx-1',
+                            'last:mx-0',
+                            'py-1',
+                            'px-2',
+                            'rounded-full',
+                            'text-sm',
+                            'cursor-pointer',
+                            'rounded-md',
+                            'text-gray-200',
+                            'border',
+                            {
+                                'bg-blue-600': value?.includes(option.value),
+                                'border-blue-600': value?.includes(option.value),
+                                'border-gray-200': !value?.includes(option.value),
+                                eventlist__filterby__option: true,
+                                'eventlist__filterby__option--selected': value.includes(option.value),
+                            }
+                        )}
                         onClick={(event) =>
                             onChange &&
                             onChange(event, {
