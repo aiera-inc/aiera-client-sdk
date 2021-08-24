@@ -112,7 +112,7 @@ export const EventList = (props: EventListProps): ReactElement => {
     const [eventListResult] = useQuery<EventListQuery>({
         query: gql`
             query EventList {
-                events(eventIds: []) {
+                events {
                     id
                     title
                     eventDate

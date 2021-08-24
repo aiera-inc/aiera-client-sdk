@@ -4,7 +4,7 @@
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
-    "main": "index.js",
+    "main": "build/index.js",
     "scripts": {
         "build": "npm run clean && concurrently npm:build:lib:*",
         "build:watch": "npm run build:lib:css && concurrently -k npm:build:watch:* npm:test:watch",
@@ -32,6 +32,10 @@
         "ts": "node -r esbuild-register",
         "prepare": "husky install",
         "pre-commit": "npm run build:lib:types && concurrently lint-staged npm:test"
+    },
+    "peerDependencies": {
+        "react": "17.0.2",
+        "react-dom": "17.0.2"
     },
     "devDependencies": {
         "@graphql-codegen/add": "^3.0.0",
@@ -80,6 +84,7 @@
         "@urql/exchange-graphcache": "4.2.1",
         "classnames": "2.3.1",
         "graphql": "15.5.1",
+        "graphql-tag": "2.12.5",
         "urql": "2.0.4"
     },
     "lint-staged": {

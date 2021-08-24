@@ -5,7 +5,6 @@ import Frame from 'react-frame-component';
 import 'css/styles.css';
 import { Provider } from 'client';
 import { Auth, EventList } from 'modules';
-import './index.css';
 
 const App: FC = (): ReactElement => {
     return (
