@@ -3,7 +3,7 @@ import React, { ReactNode } from 'react';
 import { render } from '@testing-library/react';
 import { never } from 'wonka';
 import { Provider } from 'urql';
-import { ResetProvider } from 'api';
+import { ResetProvider } from 'api/client';
 
 export type MockFn = ReturnType<typeof jest.fn>;
 export interface Client {

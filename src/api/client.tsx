@@ -2,7 +2,7 @@
  * To setup a GQL provider for your react app:
  *
  * ```typescript
- * import { Provider } from 'api';
+ * import { Provider } from 'api/client';
  *
  * const App = () => (
  *     <Provider config={{url: 'https://your.graphql.url'}}>
@@ -18,7 +18,7 @@ import { devtoolsExchange } from '@urql/devtools';
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
-import { defaultTokenAuthConfig } from 'api';
+import { defaultTokenAuthConfig } from 'api/auth';
 
 /**
  * @notExported
