@@ -4,14 +4,9 @@ import { useQuery } from 'urql';
 
 import { ChangeHandler } from 'types';
 import { Tabs } from 'components';
-import { EventListQuery } from 'types/generated';
+import { EventListQuery, EventListQueryVariables, EventType, EventView } from 'types/generated';
 import { FilterBy } from './FilterBy';
 import './styles.css';
-
-enum EventListType {
-    live,
-    recent,
-}
 
 enum FilterByType {
     transcript,
@@ -21,10 +16,10 @@ enum FilterByType {
 export interface EventListUIProps {
     events?: EventListQuery['events'];
     filterByTypes?: FilterByType[];
-    listType?: EventListType;
+    listType?: EventView;
     loading?: boolean;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
-    onSelectListType?: ChangeHandler<EventListType>;
+    onSelectListType?: ChangeHandler<EventView>;
     onSelectEvent?: (event: MouseEvent) => void;
 }
 
@@ -38,11 +33,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
             <div className="overflow-y-scroll h-full">
                 <div className="flex flex-col flex-grow p-2 eventlist__tabs">
                     <div>
-                        <Tabs<EventListType>
+                        <Tabs<EventView>
                             onChange={onSelectListType}
                             options={[
-                                { value: EventListType.live, label: 'Live & Upcoming' },
-                                { value: EventListType.recent, label: 'Recent Events' },
+                                { value: EventView.LiveAndUpcoming, label: 'Live & Upcoming' },
+                                { value: EventView.Recent, label: 'Recent Events' },
                             ]}
                             value={listType}
                         />
@@ -100,19 +95,19 @@ export interface EventListProps {
 
 interface EventListState {
     filterByTypes: FilterByType[];
-    listType: EventListType;
+    listType: EventView;
 }
 
 export const EventList = (props: EventListProps): ReactElement => {
     const { onSelectEvent } = props;
     const [state, setState] = useState<EventListState>({
         filterByTypes: [],
-        listType: EventListType.live,
+        listType: EventView.LiveAndUpcoming,
     });
-    const [eventListResult] = useQuery<EventListQuery>({
+    const [eventListResult] = useQuery<EventListQuery, EventListQueryVariables>({
         query: gql`
-            query EventList {
-                events {
+            query EventList($filter: EventFilter, $view: EventView) {
+                events(filter: $filter, view: $view) {
                     id
                     title
                     eventDate
@@ -120,6 +115,13 @@ export const EventList = (props: EventListProps): ReactElement => {
                 }
             }
         `,
+        variables: {
+            view: state.listType,
+            filter: {
+                hasTranscript: state.filterByTypes.includes(FilterByType.transcript),
+                eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
+            },
+        },
     });
     return (
         <EventListUI
