@@ -13,6 +13,12 @@ enum FilterByType {
     earningsOnly,
 }
 
+function getPrimary<T extends { isPrimary?: boolean }>(args?: T[]): T | undefined {
+    if (!args) return args;
+    const primary = args.find((t) => t.isPrimary);
+    return primary || args[0];
+}
+
 export interface EventListUIProps {
     events?: EventListQuery['events'];
     filterByTypes?: FilterByType[];
@@ -57,27 +63,35 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             <div>Loading...</div>
                         ) : events && events.length ? (
                             <ul>
-                                {events.map((event) => (
-                                    <li className="text-sm" onClick={onSelectEvent} key={event.id}>
-                                        <div className="flex flex-row">
-                                            <div className="flex items-center justify-center p-2">
-                                                <div className="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full" />
-                                            </div>
-                                            <div className="flex flex-col justify-center flex-1 p-2 ">
-                                                <div>
-                                                    <span className="pr-1 font-semibold">AMZN</span>
-                                                    <span className="text-gray-200">NYSE</span>
-                                                    <span className="text-gray-400"> • {event.eventType}</span>
+                                {events.map((event) => {
+                                    const primaryInstrument = getPrimary(event.primaryCompany?.instruments);
+                                    const primaryQuote = getPrimary(primaryInstrument?.quotes);
+                                    return (
+                                        <li className="text-sm" onClick={onSelectEvent} key={event.id}>
+                                            <div className="flex flex-row">
+                                                <div className="flex items-center justify-center p-2">
+                                                    <div className="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full" />
                                                 </div>
-                                                <div>{event.title}</div>
+                                                <div className="flex flex-col justify-center flex-1 p-2 ">
+                                                    <div>
+                                                        <span className="pr-1 font-semibold">
+                                                            {primaryQuote?.localTicker}
+                                                        </span>
+                                                        <span className="text-gray-300">
+                                                            {primaryQuote?.exchange?.shortName}
+                                                        </span>
+                                                        <span className="text-gray-400"> • {event.eventType}</span>
+                                                    </div>
+                                                    <div>{event.title}</div>
+                                                </div>
+                                                <div className="flex flex-col items-center justify-center text-xs">
+                                                    <div>March 3rd</div>
+                                                    <div>5:30 PM 2021</div>
+                                                </div>
                                             </div>
-                                            <div className="flex flex-col items-center justify-center text-xs">
-                                                <div>March 3rd</div>
-                                                <div>5:30 PM 2021</div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                ))}
+                                        </li>
+                                    );
+                                })}
                             </ul>
                         ) : (
                             <span>No events.</span>
@@ -112,6 +126,23 @@ export const EventList = (props: EventListProps): ReactElement => {
                     title
                     eventDate
                     eventType
+                    primaryCompany {
+                        id
+                        commonName
+                        instruments {
+                            id
+                            isPrimary
+                            quotes {
+                                id
+                                isPrimary
+                                localTicker
+                                exchange {
+                                    id
+                                    shortName
+                                }
+                            }
+                        }
+                    }
                 }
             }
         `,

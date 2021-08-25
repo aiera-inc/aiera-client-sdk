@@ -48,11 +48,34 @@ describe('EventList', () => {
             executeQuery: () =>
                 fromValue({
                     data: {
-                        events: [{ id: '1', title: 'Event Title', eventType: 'earnings', eventDate: '' }],
+                        events: [
+                            {
+                                id: '1',
+                                title: 'Event Title',
+                                eventType: 'earnings',
+                                eventDate: '',
+                                primaryCompany: {
+                                    instruments: [
+                                        {
+                                            isPrimary: true,
+                                            quotes: [
+                                                {
+                                                    isPrimary: true,
+                                                    localTicker: 'TICK',
+                                                    exchange: { shortName: 'EXCH' },
+                                                },
+                                            ],
+                                        },
+                                    ],
+                                },
+                            },
+                        ],
                     },
                 }),
         });
         screen.getByText('Event Title');
+        screen.getByText('TICK');
+        screen.getByText('EXCH');
         screen.getByText(/earnings$/);
     });
 });
