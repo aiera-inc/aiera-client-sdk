@@ -4,8 +4,7 @@ import gql from 'graphql-tag';
 
 import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from 'types/generated';
 import { QueryError } from 'types';
-import { useClient } from 'client';
-import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from 'client/auth';
+import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig, useClient } from 'api';
 import './styles.css';
 
 /**

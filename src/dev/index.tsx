@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import Frame from 'react-frame-component';
 
 import 'css/styles.css';
-import { Provider } from 'client';
+import { Provider } from 'api';
 import { Auth, EventList } from 'modules';
 
 const App: FC = (): ReactElement => {

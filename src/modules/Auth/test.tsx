@@ -3,7 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
 import { renderWithClient } from 'testUtils';
-import { AuthTokens, TokenAuthConfig } from 'client/auth';
+import { AuthTokens, TokenAuthConfig } from 'api';
 import { Auth, AuthUI } from '.';
 
 const email = 'test@example.com';

@@ -68,7 +68,7 @@
     },
     "typedocOptions": {
         "name": "@aiera/client-sdk",
-        "entryPoints": ["src/client/gql.tsx", "src/client/auth.ts", "src/modules/Auth"],
+        "entryPoints": ["src/api/client.tsx", "src/api/auth.ts", "src/modules/Auth"],
         "sort": ["source-order"],
         "readme": "none"
     }
