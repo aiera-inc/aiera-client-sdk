@@ -18,7 +18,7 @@ import { devtoolsExchange } from '@urql/devtools';
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
-import { defaultAuthConfig } from 'client/auth';
+import { defaultTokenAuthConfig } from 'client/auth';
 
 /**
  * @notExported
@@ -31,7 +31,12 @@ interface Config {
 function createGQLClient(config: Config): Client {
     return createClient({
         url: config.url,
-        exchanges: [devtoolsExchange, cacheExchange(), authExchange(config.auth || defaultAuthConfig), fetchExchange],
+        exchanges: [
+            devtoolsExchange,
+            cacheExchange(),
+            authExchange(config.auth || defaultTokenAuthConfig),
+            fetchExchange,
+        ],
     });
 }
 

@@ -19,7 +19,7 @@ const App: FC = (): ReactElement => {
                 <Auth>
                     <Frame
                         head={<link type="text/css" rel="stylesheet" href="/bundle/index.css" />}
-                        className="border border-black w-96 h-96 resize"
+                        className="border border-black resize w-96 h-96"
                     >
                         <div className="h-screen">
                             <EventList />

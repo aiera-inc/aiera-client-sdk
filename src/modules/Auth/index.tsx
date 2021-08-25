@@ -5,7 +5,7 @@ import gql from 'graphql-tag';
 import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from 'types/generated';
 import { QueryError } from 'types';
 import { useClient } from 'client';
-import { setAuth, clearAuth } from 'client/auth';
+import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from 'client/auth';
 import './styles.css';
 
 /**
@@ -51,14 +51,14 @@ export const AuthUI = (props: AuthProps): ReactElement => {
                 </div>
                 <div>
                     <input
-                        className="rounded border border-gray-400"
+                        className="border border-gray-400 rounded"
                         type="password"
                         data-testid="auth-password"
                         value={authForm.password}
                         onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
                     />
                 </div>
-                <button className="ml-2 px-1 rounded bg-blue-500 text-white" type="submit">
+                <button className="px-1 ml-2 text-white bg-blue-500 rounded" type="submit">
                     Login
                 </button>
             </form>
@@ -68,7 +68,7 @@ export const AuthUI = (props: AuthProps): ReactElement => {
     return (
         <div>
             Logged in as {user.firstName} {user.lastName}
-            <button className="ml-2 px-1 rounded bg-blue-500 text-white" onClick={logout}>
+            <button className="px-1 ml-2 text-white bg-blue-500 rounded" onClick={logout}>
                 Logout
             </button>
             {children && <div>{children}</div>}
@@ -76,7 +76,13 @@ export const AuthUI = (props: AuthProps): ReactElement => {
     );
 };
 
-export const Auth = ({ children }: { children?: ReactNode }): ReactElement => {
+export const Auth = ({
+    children,
+    config = defaultTokenAuthConfig,
+}: {
+    children?: ReactNode;
+    config?: TokenAuthConfig<AuthTokens>;
+}): ReactElement => {
     const initialAuthform = { email: '', password: '' };
     const [authForm, setAuthForm] = useState<AuthForm>(initialAuthform);
 
@@ -105,16 +111,16 @@ export const Auth = ({ children }: { children?: ReactNode }): ReactElement => {
 
     const login = async (event: FormEvent) => {
         event.preventDefault();
-        return loginMutation(authForm).then((resp) => {
+        return loginMutation(authForm).then(async (resp) => {
             if (resp.data?.login) {
-                setAuth(resp.data.login);
+                await config.writeAuth(resp.data.login);
                 refetch({ requestPolicy: 'cache-and-network' });
             }
         });
     };
 
-    const logout = () => {
-        clearAuth();
+    const logout = async () => {
+        await config.clearAuth();
         setAuthForm(initialAuthform);
         reset();
     };

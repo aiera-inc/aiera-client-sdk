@@ -3,15 +3,8 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
 import { renderWithClient } from 'testUtils';
+import { AuthTokens, TokenAuthConfig } from 'client/auth';
 import { Auth, AuthUI } from '.';
-
-// mocked dependencies
-import * as clientAuth from 'client/auth';
-jest.mock('client/auth', () => ({
-    ...jest.requireActual('client/auth'),
-    clearAuth: jest.fn(),
-    setAuth: jest.fn(),
-}));
 
 const email = 'test@example.com';
 const password = 'password';
@@ -57,14 +50,24 @@ describe('AuthUI', () => {
 });
 
 describe('Auth', () => {
+    function createMockAuth(): TokenAuthConfig<AuthTokens> {
+        return {
+            readAuth: jest.fn(),
+            writeAuth: jest.fn(),
+            clearAuth: jest.fn(),
+            getAuth: jest.fn(),
+            addAuthToOperation: jest.fn(),
+        };
+    }
     test('handles loading state', () => {
         renderWithClient(<Auth />);
         screen.getByText('Loading...');
     });
 
-    test('handles logged in state with user', () => {
+    test('handles logged in state with user', async () => {
+        const config = createMockAuth();
         const { reset } = renderWithClient(
-            <Auth>
+            <Auth config={config}>
                 <div>Hello World!</div>
             </Auth>,
             {
@@ -79,12 +82,15 @@ describe('Auth', () => {
         screen.getByText('Logged in as Test User');
         screen.getByText('Hello World!');
         fireEvent.click(screen.getByText('Logout'));
-        expect(clientAuth.clearAuth).toHaveBeenCalled();
-        expect(reset).toHaveBeenCalled();
+        await waitFor(() => {
+            expect(config.clearAuth).toHaveBeenCalled();
+            expect(reset).toHaveBeenCalled();
+        });
     });
 
     test('handles logging in when in logged out state', async () => {
-        const { client } = renderWithClient(<Auth />, {
+        const config = createMockAuth();
+        const { client } = renderWithClient(<Auth config={config} />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -109,7 +115,7 @@ describe('Auth', () => {
                 }),
                 expect.anything()
             );
-            expect(clientAuth.setAuth).toHaveBeenCalledWith({ accessToken, refreshToken });
+            expect(config.writeAuth).toHaveBeenCalledWith({ accessToken, refreshToken });
         });
     });
 });
