@@ -1,6 +1,7 @@
 import React, { ReactElement, MouseEvent, useState } from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'urql';
+import { DateTime } from 'luxon';
 
 import { ChangeHandler } from 'types';
 import { Tabs } from 'components';
@@ -66,6 +67,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                 {events.map((event) => {
                                     const primaryInstrument = getPrimary(event.primaryCompany?.instruments);
                                     const primaryQuote = getPrimary(primaryInstrument?.quotes);
+                                    const eventDate = DateTime.fromISO(event.eventDate);
                                     return (
                                         <li className="text-sm" onClick={onSelectEvent} key={event.id}>
                                             <div className="flex flex-row">
@@ -85,8 +87,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                     <div>{event.title}</div>
                                                 </div>
                                                 <div className="flex flex-col items-center justify-center text-xs">
-                                                    <div>March 3rd</div>
-                                                    <div>5:30 PM 2021</div>
+                                                    <div>{eventDate.toFormat('MMM dd')}</div>
+                                                    <div>{eventDate.toFormat('h:mma yyyy')}</div>
                                                 </div>
                                             </div>
                                         </li>

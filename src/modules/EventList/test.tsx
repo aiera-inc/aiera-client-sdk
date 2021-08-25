@@ -53,7 +53,7 @@ describe('EventList', () => {
                                 id: '1',
                                 title: 'Event Title',
                                 eventType: 'earnings',
-                                eventDate: '',
+                                eventDate: '2021-08-25T18:00:00+00:00',
                                 primaryCompany: {
                                     instruments: [
                                         {
@@ -76,6 +76,8 @@ describe('EventList', () => {
         screen.getByText('Event Title');
         screen.getByText('TICK');
         screen.getByText('EXCH');
+        screen.getByText('Aug 25');
+        screen.getByText('2:00PM 2021');
         screen.getByText(/earnings$/);
     });
 });
