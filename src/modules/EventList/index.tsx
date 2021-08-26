@@ -34,10 +34,10 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     const { events, filterByTypes, listType, loading, onSelectFilterBy, onSelectListType, onSelectEvent } = props;
     return (
         <div className="h-full pb-16 eventlist">
-            <div className="flex items-center h-16 p-3 bg-gray-200 eventlist__header">
+            <div className="flex items-center h-16 p-3 bg-gray-100 eventlist__header">
                 <input className="w-3/4 p-2 text-sm rounded-lg" placeholder="Search Events and Transcripts" />
             </div>
-            <div className="overflow-y-scroll h-full">
+            <div className="h-full overflow-y-scroll">
                 <div className="flex flex-col flex-grow p-2 eventlist__tabs">
                     <div>
                         <Tabs<EventView>
@@ -69,12 +69,12 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                     const primaryQuote = getPrimary(primaryInstrument?.quotes);
                                     const eventDate = DateTime.fromISO(event.eventDate);
                                     return (
-                                        <li className="text-sm" onClick={onSelectEvent} key={event.id}>
+                                        <li className="text-xs" onClick={onSelectEvent} key={event.id}>
                                             <div className="flex flex-row">
                                                 <div className="flex items-center justify-center p-2">
-                                                    <div className="flex items-center justify-center w-10 h-10 bg-gray-400 rounded-full" />
+                                                    <div className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full" />
                                                 </div>
-                                                <div className="flex flex-col justify-center flex-1 p-2 ">
+                                                <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
                                                     <div>
                                                         <span className="pr-1 font-semibold">
                                                             {primaryQuote?.localTicker}
@@ -84,12 +84,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         </span>
                                                         <span className="text-gray-400"> • {event.eventType}</span>
                                                     </div>
-                                                    <div>{event.title}</div>
+                                                    <div className="text-sm truncate whitespace-normal line-clamp-2">
+                                                        {event.title}
+                                                    </div>
                                                 </div>
-                                                <div className="flex flex-col items-center justify-center text-xs">
-                                                    <div>{eventDate.toFormat('MMM dd')}</div>
-                                                    <div>{eventDate.toFormat('h:mma yyyy')}</div>
-                                                </div>
+                                                {event.isLive && (
+                                                    <div className="font-semibold text-white bg-red-400">LIVE</div>
+                                                )}
+                                                {!event.isLive && (
+                                                    <div className="flex flex-col items-center justify-center text-xs pr-1">
+                                                        <div>{eventDate.toFormat('MMM dd')}</div>
+                                                        <div>{eventDate.toFormat('h:mma yyyy')}</div>
+                                                    </div>
+                                                )}
                                             </div>
                                         </li>
                                     );
@@ -128,6 +135,7 @@ export const EventList = (props: EventListProps): ReactElement => {
                     title
                     eventDate
                     eventType
+                    isLive
                     primaryCompany {
                         id
                         commonName

@@ -6,8 +6,8 @@ module.exports = {
     },
     variants: {
         extend: {
-            margin: ['first', 'last']
+            margin: ['first', 'last'],
         },
     },
-    plugins: [],
+    plugins: [require('@tailwindcss/line-clamp')],
 };

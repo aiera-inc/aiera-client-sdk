@@ -25,8 +25,8 @@ export const Tabs = <T extends string | number>(props: TabsProps<T>): ReactEleme
             {options.map((option) => (
                 <div
                     key={`tab-option-${option.value}`}
-                    className={classNames('py-2', 'px-3', 'text-sm', 'cursor-pointer', 'rounded-md', {
-                        'bg-gray-200': option.value === value,
+                    className={classNames('py-2', 'px-3', 'text-sm', 'cursor-pointer', 'rounded-lg', {
+                        'bg-gray-100': option.value === value,
                         'font-semibold': option.value === value,
                         tab__option: true,
                         'tab__option--selected': option.value === value,
