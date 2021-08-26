@@ -34,7 +34,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     const { events, filterByTypes, listType, loading, onSelectFilterBy, onSelectListType, onSelectEvent } = props;
     return (
         <div className="h-full pb-16 eventlist">
-            <div className="flex items-center h-16 p-3 bg-gray-100 eventlist__header">
+            <div className="flex items-center h-16 p-2 bg-gray-100 eventlist__header">
                 <input className="w-3/4 p-2 text-sm rounded-lg" placeholder="Search Events and Transcripts" />
             </div>
             <div className="h-full overflow-y-scroll">
@@ -88,15 +88,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         {event.title}
                                                     </div>
                                                 </div>
-                                                {event.isLive && (
-                                                    <div className="font-semibold text-white bg-red-400">LIVE</div>
-                                                )}
-                                                {!event.isLive && (
-                                                    <div className="flex flex-col items-center justify-center text-xs pr-1">
-                                                        <div>{eventDate.toFormat('MMM dd')}</div>
-                                                        <div>{eventDate.toFormat('h:mma yyyy')}</div>
-                                                    </div>
-                                                )}
+                                                <div className="flex flex-col items-center justify-center w-24 pr-1 text-xs">
+                                                    {event.isLive && (
+                                                        <div className="font-semibold text-white bg-red-500 px-2 rounded-md">
+                                                            LIVE
+                                                        </div>
+                                                    )}
+                                                    {!event.isLive && (
+                                                        <>
+                                                            <div>{eventDate.toFormat('MMM dd')}</div>
+                                                            <div>{eventDate.toFormat('h:mma yyyy')}</div>
+                                                        </>
+                                                    )}
+                                                </div>
                                             </div>
                                         </li>
                                     );
@@ -159,7 +163,7 @@ export const EventList = (props: EventListProps): ReactElement => {
         variables: {
             view: state.listType,
             filter: {
-                hasTranscript: state.filterByTypes.includes(FilterByType.transcript),
+                hasTranscript: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
                 eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
             },
         },
