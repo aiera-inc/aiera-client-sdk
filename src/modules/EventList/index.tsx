@@ -33,7 +33,7 @@ export interface EventListUIProps {
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const { events, filterByTypes, listType, loading, onSelectFilterBy, onSelectListType, onSelectEvent } = props;
     return (
-        <div className="h-full eventlist">
+        <div className="h-full pb-16 eventlist">
             <div className="flex items-center h-16 p-3 bg-gray-200 eventlist__header">
                 <input className="w-3/4 p-2 text-sm rounded-lg" placeholder="Search Events and Transcripts" />
             </div>
