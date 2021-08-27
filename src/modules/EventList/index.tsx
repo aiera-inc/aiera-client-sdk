@@ -1,4 +1,4 @@
-import React, { ReactElement, MouseEvent, useState } from 'react';
+import React, { ReactElement, FormEventHandler, MouseEvent, useState } from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'urql';
 import { DateTime } from 'luxon';
@@ -25,17 +25,34 @@ export interface EventListUIProps {
     filterByTypes?: FilterByType[];
     listType?: EventView;
     loading?: boolean;
+    onSearchChange?: FormEventHandler<HTMLInputElement>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
     onSelectEvent?: (event: MouseEvent) => void;
+    searchTerm?: string;
 }
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
-    const { events, filterByTypes, listType, loading, onSelectFilterBy, onSelectListType, onSelectEvent } = props;
+    const {
+        events,
+        filterByTypes,
+        listType,
+        loading,
+        onSearchChange,
+        onSelectFilterBy,
+        onSelectListType,
+        onSelectEvent,
+        searchTerm,
+    } = props;
     return (
         <div className="h-full pb-16 eventlist">
             <div className="flex items-center h-16 p-2 bg-gray-100 eventlist__header">
-                <input className="w-3/4 p-2 text-sm rounded-lg" placeholder="Search Events and Transcripts" />
+                <input
+                    className="w-3/4 p-2 text-sm rounded-lg"
+                    onChange={onSearchChange}
+                    placeholder="Search Events and Transcripts"
+                    value={searchTerm}
+                />
             </div>
             <div className="h-full overflow-y-scroll">
                 <div className="flex flex-col flex-grow p-2 eventlist__tabs">
@@ -90,7 +107,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                 </div>
                                                 <div className="flex flex-col items-center justify-center w-24 pr-1 text-xs">
                                                     {event.isLive && (
-                                                        <div className="font-semibold text-white bg-red-500 px-2 rounded-md">
+                                                        <div className="px-2 font-semibold text-white bg-red-500 rounded-md">
                                                             LIVE
                                                         </div>
                                                     )}
@@ -123,6 +140,7 @@ export interface EventListProps {
 interface EventListState {
     filterByTypes: FilterByType[];
     listType: EventView;
+    searchTerm: string;
 }
 
 export const EventList = (props: EventListProps): ReactElement => {
@@ -130,6 +148,7 @@ export const EventList = (props: EventListProps): ReactElement => {
     const [state, setState] = useState<EventListState>({
         filterByTypes: [],
         listType: EventView.LiveAndUpcoming,
+        searchTerm: '',
     });
     const [eventListResult] = useQuery<EventListQuery, EventListQueryVariables>({
         query: gql`
@@ -165,6 +184,7 @@ export const EventList = (props: EventListProps): ReactElement => {
             filter: {
                 hasTranscript: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
                 eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
+                title: state.searchTerm || undefined,
             },
         },
     });
@@ -174,9 +194,11 @@ export const EventList = (props: EventListProps): ReactElement => {
             filterByTypes={state.filterByTypes}
             listType={state.listType}
             loading={eventListResult.fetching}
+            onSearchChange={({ currentTarget: { value } }) => setState({ ...state, searchTerm: value })}
             onSelectFilterBy={(_, { value }) => setState({ ...state, filterByTypes: value })}
             onSelectListType={(_, { value }) => setState({ ...state, listType: value })}
             onSelectEvent={onSelectEvent}
+            searchTerm={state.searchTerm}
         />
     );
 };
