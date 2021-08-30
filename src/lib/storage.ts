@@ -1,20 +1,22 @@
 export interface Storage {
-    put(key: string, value: string): void;
-    get(key: string): string | null;
-    del(key: string): void;
+    put(key: string, value: string): Promise<void>;
+    get(key: string): Promise<string | null>;
+    del(key: string): Promise<void>;
 }
 
 const prefix = 'aiera:sdk';
 export const local: Storage = {
-    put(key: string, value: string): void {
+    async put(key: string, value: string): Promise<void> {
         localStorage.setItem(`${prefix}:${key}`, value);
+        return Promise.resolve();
     },
 
-    get(key: string): string | null {
-        return localStorage.getItem(`${prefix}:${key}`) || null;
+    async get(key: string): Promise<string | null> {
+        return Promise.resolve(localStorage.getItem(`${prefix}:${key}`) || null);
     },
 
-    del(key: string): void {
+    async del(key: string): Promise<void> {
         localStorage.removeItem(`${prefix}:${key}`);
+        return Promise.resolve();
     },
 };

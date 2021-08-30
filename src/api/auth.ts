@@ -47,8 +47,8 @@ export type AuthTokens = {
 export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig<AuthTokens> {
     const authConfig: TokenAuthConfig<AuthTokens> = {
         readAuth: async () => {
-            const accessToken = store.get('auth:accessToken');
-            const refreshToken = store.get('auth:refreshToken');
+            const accessToken = await store.get('auth:accessToken');
+            const refreshToken = await store.get('auth:refreshToken');
             if (accessToken && refreshToken) {
                 return Promise.resolve({ accessToken, refreshToken });
             }
@@ -57,14 +57,14 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
         },
 
         writeAuth: async (authState) => {
-            store.put('auth:accessToken', authState.accessToken);
-            store.put('auth:refreshToken', authState.refreshToken);
+            await store.put('auth:accessToken', authState.accessToken);
+            await store.put('auth:refreshToken', authState.refreshToken);
             return Promise.resolve();
         },
 
         clearAuth: async () => {
-            store.del('auth:accessToken');
-            store.del('auth:refreshToken');
+            await store.del('auth:accessToken');
+            await store.del('auth:refreshToken');
             return Promise.resolve();
         },
 
