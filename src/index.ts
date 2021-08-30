@@ -1,3 +1,4 @@
-import 'css/styles.css';
-export * from 'api';
-export * from 'modules';
+import './css/styles.css';
+export * from './lib';
+export * from './api';
+export * from './modules';

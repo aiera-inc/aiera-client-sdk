@@ -1,6 +1,8 @@
 import { SyntheticEvent } from 'react';
 import { CombinedError } from 'urql';
 
+export * from './generated';
+
 export type Nullable<T> = {
     [P in keyof T]?: T[P] | null;
 };

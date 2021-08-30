@@ -8,8 +8,8 @@ import { makeOperation } from '@urql/core';
 import { AuthConfig as UrqlAuthConfig } from '@urql/exchange-auth';
 import gql from 'graphql-tag';
 
-import { RefreshMutation } from 'types/generated';
-import { local as storage, Storage } from 'lib/storage';
+import { RefreshMutation } from '@aiera/client-sdk/types/generated';
+import { local as storage, Storage } from '@aiera/client-sdk/lib/storage';
 
 /**
  * For docs only

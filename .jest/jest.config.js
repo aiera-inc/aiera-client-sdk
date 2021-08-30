@@ -18,11 +18,12 @@ module.exports = {
     // Module file extensions for importing
     moduleFileExtensions: ['js', 'ts', 'tsx', 'json'],
     modulePaths: ['<rootDir>/../src'],
-    watchPathIgnorePatterns: ["<rootDir>/../build/dev/"],
+    watchPathIgnorePatterns: ['<rootDir>/../dist/', '<rootDir>/../src/dev/'],
 
     testEnvironment: 'jsdom',
 
     moduleNameMapper: {
         '\\.(scss|sass|css)$': '<rootDir>/style.mock.js',
+        '@aiera/client-sdk/(.*)': '<rootDir>/../src/$1',
     },
 };

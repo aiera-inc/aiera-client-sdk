@@ -1,7 +1,0 @@
-{
-    "extends": ["./tsconfig.json"],
-    "include": ["build/**/*"],
-    "compilerOptions": {
-        "baseUrl": "./build"
-    }
-}

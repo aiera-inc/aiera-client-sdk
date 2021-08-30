@@ -2,8 +2,8 @@ import React, { FormEvent } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
-import { renderWithClient } from 'testUtils';
-import { AuthTokens, TokenAuthConfig } from 'api/auth';
+import { renderWithClient } from '@aiera/client-sdk/testUtils';
+import { AuthTokens, TokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import { Auth, AuthUI } from '.';
 
 const email = 'test@example.com';

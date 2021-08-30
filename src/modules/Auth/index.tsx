@@ -2,9 +2,9 @@ import React, { ReactElement, ReactNode, useState, FormEvent, FormEventHandler, 
 import { useMutation, useQuery } from 'urql';
 import gql from 'graphql-tag';
 
-import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from 'types/generated';
-import { QueryError } from 'types';
-import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig, useClient } from 'api';
+import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from '@aiera/client-sdk/types/generated';
+import { QueryError } from '@aiera/client-sdk/types';
+import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig, useClient } from '@aiera/client-sdk/api';
 import './styles.css';
 
 /**

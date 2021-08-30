@@ -6,21 +6,29 @@
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <title>My App</title>
-        <link href="/bundle/index.css" rel="stylesheet" />
+        <link href="/index.css" rel="stylesheet" />
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
-        <script src="/bundle/index.js"></script>
+        <script src="/index.js"></script>
         <script>
-            function reload() {
-                fetch('/reload')
+            let start;
+            function watch() {
+                start = Date.now();
+                fetch('/watch')
                     .then(() => {
                         window.location.reload();
                     })
-                    .catch(reload);
+                    .catch(() => {
+                        if (Date.now() - start < 100) {
+                            window.location.reload();
+                        } else {
+                            setTimeout(watch, 0);
+                        }
+                    });
             }
-            reload();
+            watch();
         </script>
     </body>
 </html>

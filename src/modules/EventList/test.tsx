@@ -2,8 +2,8 @@ import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
-import { renderWithClient } from 'testUtils';
-import { Event } from 'types/generated';
+import { renderWithClient } from '@aiera/client-sdk/testUtils';
+import { Event } from '@aiera/client-sdk/types/generated';
 import { EventList, EventListUI } from '.';
 
 describe('EventListUI', () => {

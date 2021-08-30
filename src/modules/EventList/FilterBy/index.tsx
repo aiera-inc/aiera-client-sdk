@@ -1,6 +1,7 @@
 import React, { ReactElement, ReactNode } from 'react';
 import classNames from 'classnames';
-import { ChangeHandler } from 'types';
+
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface FilterOption<T> {

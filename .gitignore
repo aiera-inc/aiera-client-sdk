@@ -1,5 +1,6 @@
-build/
+/dist/
 node_modules/
-.vim/
-src/types/generated.ts
-docs/
+/.vim/
+/src/types/generated.ts
+/src/dev/docs
+/docs/

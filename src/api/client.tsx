@@ -18,7 +18,7 @@ import { devtoolsExchange } from '@urql/devtools';
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
-import { defaultTokenAuthConfig } from 'api/auth';
+import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 
 /**
  * @notExported

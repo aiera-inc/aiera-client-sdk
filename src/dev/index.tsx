@@ -2,9 +2,9 @@ import React, { FC, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 import Frame from 'react-frame-component';
 
-import 'css/styles.css';
-import { Provider } from 'api/client';
-import { Auth, EventList } from 'modules';
+import '@aiera/client-sdk/css/styles.css';
+import { Provider } from '@aiera/client-sdk/api/client';
+import { Auth, EventList } from '@aiera/client-sdk/modules';
 
 const App: FC = (): ReactElement => {
     return (
@@ -20,7 +20,7 @@ const App: FC = (): ReactElement => {
                     <Frame
                         width="370"
                         height="575"
-                        head={<link type="text/css" rel="stylesheet" href="/bundle/index.css" />}
+                        head={<link type="text/css" rel="stylesheet" href="/index.css" />}
                         className="border border-black resize"
                     >
                         <div className="h-screen">

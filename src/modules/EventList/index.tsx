@@ -3,9 +3,9 @@ import gql from 'graphql-tag';
 import { useQuery } from 'urql';
 import { DateTime } from 'luxon';
 
-import { ChangeHandler } from 'types';
-import { Tabs } from 'components';
-import { EventListQuery, EventListQueryVariables, EventType, EventView } from 'types/generated';
+import { ChangeHandler } from '@aiera/client-sdk/types';
+import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
+import { Tabs } from '@aiera/client-sdk/components';
 import { FilterBy } from './FilterBy';
 import './styles.css';
 
