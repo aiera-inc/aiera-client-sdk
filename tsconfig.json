@@ -70,7 +70,7 @@
     },
     "typedocOptions": {
         "name": "@aiera/client-sdk",
-        "entryPoints": ["src/api/client.tsx", "src/api/auth.ts", "src/modules/Auth"],
+        "entryPoints": ["src/api/client.tsx", "src/api/auth.ts", "src/modules/Auth", "src/modules/EventList"],
         "sort": ["source-order"],
         "readme": "none"
     }

@@ -1,4 +1,4 @@
-import React, { ReactElement, FormEventHandler, MouseEvent, useState } from 'react';
+import React, { ReactElement, FormEventHandler, useState } from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'urql';
 import { DateTime } from 'luxon';
@@ -20,6 +20,8 @@ function getPrimary<T extends { isPrimary?: boolean }>(args?: T[]): T | undefine
     return primary || args[0];
 }
 
+export type SelectEventHandler = ChangeHandler<{ ticker?: string }>;
+
 export interface EventListUIProps {
     events?: EventListQuery['events'];
     filterByTypes?: FilterByType[];
@@ -28,7 +30,7 @@ export interface EventListUIProps {
     onSearchChange?: FormEventHandler<HTMLInputElement>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
-    onSelectEvent?: (event: MouseEvent) => void;
+    onSelectEvent?: SelectEventHandler;
     searchTerm?: string;
 }
 
@@ -86,7 +88,14 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                     const primaryQuote = getPrimary(primaryInstrument?.quotes);
                                     const eventDate = DateTime.fromISO(event.eventDate);
                                     return (
-                                        <li className="text-xs" onClick={onSelectEvent} key={event.id}>
+                                        <li
+                                            className="text-xs"
+                                            onClick={(e) =>
+                                                onSelectEvent &&
+                                                onSelectEvent(e, { value: { ticker: primaryQuote?.localTicker } })
+                                            }
+                                            key={event.id}
+                                        >
                                             <div className="flex flex-row">
                                                 <div className="flex items-center justify-center p-2">
                                                     <div className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full" />
@@ -134,7 +143,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 };
 
 export interface EventListProps {
-    onSelectEvent?: (event: MouseEvent) => void;
+    onSelectEvent?: SelectEventHandler;
 }
 
 interface EventListState {

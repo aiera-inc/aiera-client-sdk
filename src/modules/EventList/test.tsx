@@ -19,9 +19,10 @@ describe('EventListUI', () => {
 
     test('renders an event list and selects and event on click', () => {
         const onSelectEvent = jest.fn();
-        render(<EventListUI events={[{ id: '1', title: 'Event Title' } as Event]} onSelectEvent={onSelectEvent} />);
+        const event = { id: '1', title: 'Event Title' } as Event;
+        render(<EventListUI events={[event]} onSelectEvent={onSelectEvent} />);
         fireEvent(screen.getByText('Event Title'), new MouseEvent('click', { bubbles: true }));
-        expect(onSelectEvent).toHaveBeenCalled();
+        expect(onSelectEvent).toHaveBeenCalledWith(expect.anything(), { value: { ticker: undefined } });
     });
 });
 
