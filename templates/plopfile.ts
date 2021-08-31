@@ -23,11 +23,11 @@ export default (plop: NodePlopAPI) => {
                 destination: '../src/{{type}}s/{{name}}',
                 templateFiles: '{{type}}/*.hbs',
             },
-            {
-                type: 'append',
-                template: "export { {{name}} } from './{{name}}';",
-                path: '../src/{{type}}s/index.ts',
-            },
+            // {
+            //     type: 'append',
+            //     template: "export { {{name}} } from './{{name}}';",
+            //     path: '../src/{{type}}s/index.ts',
+            // },
         ],
     });
 
