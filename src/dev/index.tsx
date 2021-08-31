@@ -4,7 +4,8 @@ import Frame from 'react-frame-component';
 
 import '@aiera/client-sdk/css/styles.css';
 import { Provider } from '@aiera/client-sdk/api/client';
-import { Auth, EventList } from '@aiera/client-sdk/modules';
+import { Auth } from '@aiera/client-sdk/modules/Auth';
+import { EventList } from '@aiera/client-sdk/modules/EventList';
 
 const App: FC = (): ReactElement => {
     return (

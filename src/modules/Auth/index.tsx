@@ -4,7 +4,8 @@ import gql from 'graphql-tag';
 
 import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from '@aiera/client-sdk/types/generated';
 import { QueryError } from '@aiera/client-sdk/types';
-import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig, useClient } from '@aiera/client-sdk/api';
+import { useClient } from '@aiera/client-sdk/api/client';
+import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import './styles.css';
 
 /**

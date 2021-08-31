@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
-import { Tabs } from '@aiera/client-sdk/components';
+import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { FilterBy } from './FilterBy';
 import './styles.css';
 
