@@ -63,7 +63,10 @@ describe('EventList', () => {
                                                 {
                                                     isPrimary: true,
                                                     localTicker: 'TICK',
-                                                    exchange: { shortName: 'EXCH' },
+                                                    exchange: {
+                                                        country: { countryCode: 'US' },
+                                                        shortName: 'EXCH',
+                                                    },
                                                 },
                                             ],
                                         },

@@ -6,6 +6,7 @@ import { DateTime } from 'luxon';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
+import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { FilterBy } from './FilterBy';
 import './styles.css';
@@ -13,12 +14,6 @@ import './styles.css';
 enum FilterByType {
     transcript,
     earningsOnly,
-}
-
-function getPrimary<T extends { isPrimary?: boolean }>(args?: T[]): T | undefined {
-    if (!args) return args;
-    const primary = args.find((t) => t.isPrimary);
-    return primary || args[0];
 }
 
 export type EventListEvent = EventListQuery['events'][0];
@@ -86,8 +81,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         ) : events && events.length ? (
                             <ul>
                                 {events.map((event) => {
-                                    const primaryInstrument = getPrimary(event.primaryCompany?.instruments);
-                                    const primaryQuote = getPrimary(primaryInstrument?.quotes);
+                                    const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                     const eventDate = DateTime.fromISO(event.eventDate);
                                     return (
                                         <li
@@ -187,6 +181,10 @@ export const EventList = (props: EventListProps): ReactElement => {
                                 exchange {
                                     id
                                     shortName
+                                    country {
+                                        id
+                                        countryCode
+                                    }
                                 }
                             }
                         }
