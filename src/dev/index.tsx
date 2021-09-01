@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, useState } from 'react';
 import ReactDOM from 'react-dom';
 import Frame from 'react-frame-component';
 
@@ -8,6 +8,7 @@ import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
 
 const App: FC = (): ReactElement => {
+    const [loaded, setLoaded] = useState<boolean>(false);
     return (
         <div>
             <div>Playground</div>
@@ -21,12 +22,16 @@ const App: FC = (): ReactElement => {
                     <Frame
                         width="370"
                         height="575"
-                        head={<link type="text/css" rel="stylesheet" href="/index.css" />}
+                        head={
+                            <link onLoad={() => setLoaded(true)} type="text/css" rel="stylesheet" href="/index.css" />
+                        }
                         className="border border-black resize"
                     >
-                        <div className="h-screen">
-                            <EventList />
-                        </div>
+                        {loaded && (
+                            <div className="h-screen">
+                                <EventList onSelectEvent={console.log} />
+                            </div>
+                        )}
                     </Frame>
                 </Auth>
             </Provider>

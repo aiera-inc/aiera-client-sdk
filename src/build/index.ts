@@ -1,4 +1,5 @@
 import minimatch from 'minimatch';
+import zlib from 'zlib';
 import { join } from 'path';
 import { copyFile, readFile } from 'fs/promises';
 import http, { IncomingMessage, ServerResponse } from 'http';
@@ -91,8 +92,16 @@ function reloadProxy(port: number, watcher: FSWatcher) {
         } else {
             req.pipe(
                 http.request({ port, path: req.url, method: req.method, headers: req.headers }, (proxyRes) => {
-                    res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
-                    proxyRes.pipe(res, { end: true });
+                    if (req.headers['accept-encoding']?.includes('gzip')) {
+                        res.writeHead(proxyRes.statusCode || 200, {
+                            ...proxyRes.headers,
+                            'Content-Encoding': 'gzip',
+                        });
+                        proxyRes.pipe(zlib.createGzip()).pipe(res, { end: true });
+                    } else {
+                        res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
+                        proxyRes.pipe(res, { end: true });
+                    }
                 }),
                 { end: true }
             );
