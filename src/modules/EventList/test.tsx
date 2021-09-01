@@ -22,7 +22,7 @@ describe('EventListUI', () => {
         const event = { id: '1', title: 'Event Title' } as Event;
         render(<EventListUI events={[event]} onSelectEvent={onSelectEvent} />);
         fireEvent(screen.getByText('Event Title'), new MouseEvent('click', { bubbles: true }));
-        expect(onSelectEvent).toHaveBeenCalledWith(expect.anything(), { value: { ticker: undefined } });
+        expect(onSelectEvent).toHaveBeenCalledWith(expect.anything(), { value: event });
     });
 });
 

@@ -17,7 +17,7 @@ export interface ChangeEvent<T = unknown> {
     /**
      * Shortcut to get the value from the input.
      */
-    value: T;
+    value?: T;
 }
 /**
  * Implements a consistent change handler interface for all inputs that
@@ -26,5 +26,13 @@ export interface ChangeEvent<T = unknown> {
  */
 export type ChangeHandler<T = unknown, E extends SyntheticEvent = SyntheticEvent> = (
     event: E,
-    change: ChangeEvent<T>
+    change: ChangeEvent<T | undefined>
 ) => void;
+
+/**
+ * Utility type for creating a set of functions to handle
+ * changes for multiple fields, like a form
+ */
+export type ChangeHandlers<T> = {
+    [key in keyof T]: ChangeHandler<T[key] | undefined>;
+};

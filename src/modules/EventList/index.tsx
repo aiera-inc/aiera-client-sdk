@@ -1,9 +1,10 @@
-import React, { ReactElement, FormEventHandler, useState } from 'react';
+import React, { ReactElement, FormEventHandler, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'urql';
 import { DateTime } from 'luxon';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
+import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { FilterBy } from './FilterBy';
@@ -20,17 +21,18 @@ function getPrimary<T extends { isPrimary?: boolean }>(args?: T[]): T | undefine
     return primary || args[0];
 }
 
-export type SelectEventHandler = ChangeHandler<{ ticker?: string }>;
+export type EventListEvent = EventListQuery['events'][0];
 
 export interface EventListUIProps {
-    events?: EventListQuery['events'];
+    event?: EventListEvent;
+    events?: EventListEvent[];
     filterByTypes?: FilterByType[];
     listType?: EventView;
     loading?: boolean;
     onSearchChange?: FormEventHandler<HTMLInputElement>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
-    onSelectEvent?: SelectEventHandler;
+    onSelectEvent?: ChangeHandler<EventListEvent>;
     searchTerm?: string;
 }
 
@@ -90,10 +92,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                     return (
                                         <li
                                             className="text-xs"
-                                            onClick={(e) =>
-                                                onSelectEvent &&
-                                                onSelectEvent(e, { value: { ticker: primaryQuote?.localTicker } })
-                                            }
+                                            onClick={(e) => onSelectEvent?.(e, { value: event })}
                                             key={event.id}
                                         >
                                             <div className="flex flex-row">
@@ -143,22 +142,29 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 };
 
 export interface EventListProps {
-    onSelectEvent?: SelectEventHandler;
+    onSelectEvent?: ChangeHandler<EventListEvent>;
 }
 
 interface EventListState {
+    event?: EventListEvent;
     filterByTypes: FilterByType[];
     listType: EventView;
     searchTerm: string;
 }
 
 export const EventList = (props: EventListProps): ReactElement => {
-    const { onSelectEvent } = props;
-    const [state, setState] = useState<EventListState>({
+    const { state, handlers, setState } = useChangeHandlers<EventListState>({
         filterByTypes: [],
         listType: EventView.LiveAndUpcoming,
         searchTerm: '',
     });
+    const onSelectEvent = useCallback<ChangeHandler<EventListEvent>>(
+        (event, change) => {
+            props.onSelectEvent?.(event, change);
+            setState({ ...state, event: change.value });
+        },
+        [state]
+    );
     const [eventListResult] = useQuery<EventListQuery, EventListQueryVariables>({
         query: gql`
             query EventList($filter: EventFilter, $view: EventView) {
@@ -197,15 +203,17 @@ export const EventList = (props: EventListProps): ReactElement => {
             },
         },
     });
+
     return (
         <EventListUI
+            event={state.event}
             events={eventListResult.data?.events}
             filterByTypes={state.filterByTypes}
             listType={state.listType}
             loading={eventListResult.fetching}
             onSearchChange={({ currentTarget: { value } }) => setState({ ...state, searchTerm: value })}
-            onSelectFilterBy={(_, { value }) => setState({ ...state, filterByTypes: value })}
-            onSelectListType={(_, { value }) => setState({ ...state, listType: value })}
+            onSelectFilterBy={handlers.filterByTypes}
+            onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}
             searchTerm={state.searchTerm}
         />
