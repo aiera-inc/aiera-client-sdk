@@ -1,12 +1,13 @@
-import React, { ReactElement, FormEventHandler, useCallback } from 'react';
+import React, { ReactElement, FormEventHandler, MouseEventHandler, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'urql';
 import { DateTime } from 'luxon';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
+import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { FilterBy } from './FilterBy';
 import './styles.css';
@@ -24,6 +25,7 @@ export interface EventListUIProps {
     filterByTypes?: FilterByType[];
     listType?: EventView;
     loading?: boolean;
+    onBackFromTranscript?: MouseEventHandler;
     onSearchChange?: FormEventHandler<HTMLInputElement>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
@@ -33,28 +35,33 @@ export interface EventListUIProps {
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
+        event,
         events,
         filterByTypes,
         listType,
         loading,
+        onBackFromTranscript,
         onSearchChange,
         onSelectFilterBy,
         onSelectListType,
         onSelectEvent,
         searchTerm,
     } = props;
+    if (event) {
+        return <Transcript eventId={event.id} onBack={onBackFromTranscript} />;
+    }
     return (
         <div className="h-full pb-16 eventlist">
-            <div className="flex items-center h-16 p-2 bg-gray-100 eventlist__header">
+            <div className="flex items-center p-3 shadow eventlist__header">
                 <input
-                    className="w-3/4 p-2 text-sm rounded-lg"
+                    className="w-3/4 p-2 text-sm rounded-lg border-gray-200 border"
                     onChange={onSearchChange}
                     placeholder="Search Events and Transcripts"
                     value={searchTerm}
                 />
             </div>
-            <div className="h-full overflow-y-scroll">
-                <div className="flex flex-col flex-grow p-2 eventlist__tabs">
+            <div className="p-3 h-full overflow-y-scroll">
+                <div className="flex flex-col flex-grow eventlist__tabs">
                     <div>
                         <Tabs<EventView>
                             onChange={onSelectListType}
@@ -65,7 +72,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             value={listType}
                         />
                     </div>
-                    <div className="sticky top-0 pt-2">
+                    <div className="sticky top-0 mt-3">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[
@@ -75,7 +82,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             value={filterByTypes}
                         />
                     </div>
-                    <div>
+                    <div className="mt-3">
                         {loading ? (
                             <div>Loading...</div>
                         ) : events && events.length ? (
@@ -90,7 +97,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                             key={event.id}
                                         >
                                             <div className="flex flex-row">
-                                                <div className="flex items-center justify-center p-2">
+                                                <div className="flex items-center justify-center">
                                                     <div className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full" />
                                                 </div>
                                                 <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
@@ -148,6 +155,7 @@ interface EventListState {
 
 export const EventList = (props: EventListProps): ReactElement => {
     const { state, handlers, setState } = useChangeHandlers<EventListState>({
+        event: undefined,
         filterByTypes: [],
         listType: EventView.LiveAndUpcoming,
         searchTerm: '',
@@ -155,7 +163,7 @@ export const EventList = (props: EventListProps): ReactElement => {
     const onSelectEvent = useCallback<ChangeHandler<EventListEvent>>(
         (event, change) => {
             props.onSelectEvent?.(event, change);
-            setState({ ...state, event: change.value });
+            handlers.event(event, change);
         },
         [state]
     );
@@ -209,6 +217,7 @@ export const EventList = (props: EventListProps): ReactElement => {
             filterByTypes={state.filterByTypes}
             listType={state.listType}
             loading={eventListResult.fetching}
+            onBackFromTranscript={(event) => onSelectEvent(event, { value: null })}
             onSearchChange={({ currentTarget: { value } }) => setState({ ...state, searchTerm: value })}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
