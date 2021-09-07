@@ -18,6 +18,7 @@ const defaultProps = {
     setAuthForm: () => undefined,
     login: () => undefined,
     logout: () => undefined,
+    showLogout: true,
 };
 
 describe('AuthUI', () => {
@@ -67,6 +68,30 @@ describe('Auth', () => {
     test('handles logged in state with user', async () => {
         const config = createMockAuth();
         const { reset } = renderWithClient(
+            <Auth config={config} showLogout>
+                <div>Hello World!</div>
+            </Auth>,
+            {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            currentUser: { id: 1, firstName: 'Test', lastName: 'User' },
+                        },
+                    }),
+            }
+        );
+        screen.queryByText('Logged in as Test User');
+        screen.getByText('Hello World!');
+        fireEvent.click(screen.getByText('Logout'));
+        await waitFor(() => {
+            expect(config.clearAuth).toHaveBeenCalled();
+            expect(reset).toHaveBeenCalled();
+        });
+    });
+
+    test('handles logged in state with user and showLogout false', () => {
+        const config = createMockAuth();
+        renderWithClient(
             <Auth config={config}>
                 <div>Hello World!</div>
             </Auth>,
@@ -79,13 +104,9 @@ describe('Auth', () => {
                     }),
             }
         );
-        screen.getByText('Logged in as Test User');
+        expect(screen.queryByText('Logged in as Test User')).toBeNull();
+        expect(screen.queryByText('Logout')).toBeNull();
         screen.getByText('Hello World!');
-        fireEvent.click(screen.getByText('Logout'));
-        await waitFor(() => {
-            expect(config.clearAuth).toHaveBeenCalled();
-            expect(reset).toHaveBeenCalled();
-        });
     });
 
     test('handles logging in when in logged out state', async () => {

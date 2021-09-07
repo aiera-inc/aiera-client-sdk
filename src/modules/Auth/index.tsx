@@ -27,11 +27,12 @@ interface AuthProps {
     login: FormEventHandler;
     logout: MouseEventHandler;
     setAuthForm: (authForm: AuthForm) => void;
+    showLogout: boolean;
     user?: CurrentUserQuery['currentUser'] | null;
 }
 
 export const AuthUI = (props: AuthProps): ReactElement => {
-    const { children, user, loading, authForm, setAuthForm, login, logout } = props;
+    const { children, user, loading, authForm, setAuthForm, login, logout, showLogout } = props;
 
     if (loading) {
         return <div>Loading...</div>;
@@ -67,10 +68,14 @@ export const AuthUI = (props: AuthProps): ReactElement => {
 
     return (
         <div>
-            Logged in as {user.firstName} {user.lastName}
-            <button className="px-1 ml-2 text-white bg-blue-500 rounded" onClick={logout}>
-                Logout
-            </button>
+            {(showLogout || !children) && (
+                <>
+                    Logged in as {user.firstName} {user.lastName}
+                    <button className="px-1 ml-2 text-white bg-blue-500 rounded" onClick={logout}>
+                        Logout
+                    </button>
+                </>
+            )}
             {children && <div>{children}</div>}
         </div>
     );
@@ -79,9 +84,11 @@ export const AuthUI = (props: AuthProps): ReactElement => {
 export const Auth = ({
     children,
     config = defaultTokenAuthConfig,
+    showLogout = false,
 }: {
     children?: ReactNode;
     config?: TokenAuthConfig<AuthTokens>;
+    showLogout?: boolean;
 }): ReactElement => {
     const initialAuthform = { email: '', password: '' };
     const [authForm, setAuthForm] = useState<AuthForm>(initialAuthform);
@@ -134,6 +141,7 @@ export const Auth = ({
             setAuthForm={setAuthForm}
             login={login}
             logout={logout}
+            showLogout={showLogout}
         >
             {children}
         </AuthUI>

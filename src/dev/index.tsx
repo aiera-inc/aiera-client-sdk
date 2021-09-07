@@ -18,7 +18,7 @@ const App: FC = (): ReactElement => {
                     // url: 'https://aiera-pub.ngrok.io/graphql',
                 }}
             >
-                <Auth>
+                <Auth showLogout>
                     <Frame
                         width="370"
                         height="575"
