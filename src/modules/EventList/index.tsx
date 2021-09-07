@@ -65,7 +65,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             value={listType}
                         />
                     </div>
-                    <div className="sticky top-0 pt-2 bg-white">
+                    <div className="sticky top-0 pt-2">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[

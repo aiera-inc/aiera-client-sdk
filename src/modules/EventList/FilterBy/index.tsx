@@ -26,7 +26,7 @@ export interface FilterByProps<T> {
 export const FilterBy = <T extends string | number>(props: FilterByProps<T>): ReactElement => {
     const { onChange, options = [], value = [] } = props;
     return (
-        <div className="flex items-center pl-3 pr-2 py-2 border border-gray-300 rounded-lg eventlist__filterby">
+        <div className="flex items-center pl-3 pr-2 py-2 bg-white border border-gray-300 rounded-lg eventlist__filterby">
             <div className="text-sm font-semibold">Filter By</div>
             <div className="flex justify-end flex-1">
                 {options.map((option) => (
