@@ -27,7 +27,7 @@ export interface ChangeEvent<T = unknown> {
  */
 export type ChangeHandler<T = unknown, E extends SyntheticEvent = SyntheticEvent> = (
     event: E,
-    change: ChangeEvent<T>
+    change: ChangeEvent<T | null>
 ) => void;
 
 /**
