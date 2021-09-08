@@ -6,13 +6,9 @@
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="theme-color" content="#000000" />
         <title>My App</title>
-        <link href="/index.css" rel="stylesheet" />
     </head>
     <body>
-        <noscript>You need to enable JavaScript to run this app.</noscript>
-        <div id="root"></div>
-        <script src="/index.js"></script>
-        <script>
+    <script>
             let start;
             function watch() {
                 start = Date.now();
@@ -30,5 +26,6 @@
             }
             watch();
         </script>
+        <iframe style="border: none; resize: both;" width="370" height="575" src="frame.html" />
     </body>
 </html>

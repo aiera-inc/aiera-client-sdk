@@ -69,12 +69,12 @@ export const AuthUI = (props: AuthProps): ReactElement => {
     return (
         <div>
             {(showLogout || !children) && (
-                <>
+                <div className="h-6">
                     Logged in as {user.firstName} {user.lastName}
                     <button className="px-1 ml-2 text-white bg-blue-500 rounded" onClick={logout}>
                         Logout
                     </button>
-                </>
+                </div>
             )}
             {children && <div>{children}</div>}
         </div>
