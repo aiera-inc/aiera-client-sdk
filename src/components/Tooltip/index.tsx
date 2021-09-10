@@ -1,22 +1,25 @@
-import React, { RefObject, SyntheticEvent, ReactElement, ReactNode, useRef, useState, useCallback } from 'react';
+import React, { RefObject, MouseEvent, ReactElement, ReactNode, useRef, useState, useCallback } from 'react';
+import { match } from 'ts-pattern';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks';
 import './styles.css';
 
 /** @notExported */
-type ToggleTooltip = (event?: SyntheticEvent) => void;
-/** @notExported */
-type TooltipRenderProps = (args: { showTooltip: ToggleTooltip; hideTooltip: ToggleTooltip }) => ReactNode;
+type TooltipRenderProps = (args: {
+    showTooltip: (event?: MouseEvent) => void;
+    hideTooltip: (event?: MouseEvent) => void;
+}) => ReactNode;
 
 /** @notExported */
 interface TooltipUIProps {
     children: TooltipProps['children'];
     content: TooltipProps['content'];
     targetRef: RefObject<HTMLDivElement>;
-    hideTooltip: ToggleTooltip;
-    onTargetClick: (event?: SyntheticEvent) => void;
-    onTargetMouseEnter: (event?: SyntheticEvent) => void;
-    onTargetMouseLeave: (event?: SyntheticEvent) => void;
-    showTooltip: ToggleTooltip;
+    hideTooltip: (event?: MouseEvent) => void;
+    onTargetClick: (event?: MouseEvent) => void;
+    onTargetMouseEnter: (event?: MouseEvent) => void;
+    onTargetMouseLeave: (event?: MouseEvent) => void;
+    position?: Position;
+    showTooltip: (event?: MouseEvent) => void;
     tooltipRef: RefObject<HTMLDivElement>;
     visible: boolean;
 }
@@ -29,12 +32,14 @@ export const TooltipUI = (props: TooltipUIProps): ReactElement => {
         onTargetClick,
         onTargetMouseEnter,
         onTargetMouseLeave,
+        position,
         showTooltip,
         targetRef,
         tooltipRef,
         visible,
     } = props;
 
+    const { top, left, bottom, right } = position || {};
     let target = children;
     if (typeof target === 'function') {
         const render = children as TooltipRenderProps;
@@ -49,8 +54,12 @@ export const TooltipUI = (props: TooltipUIProps): ReactElement => {
                 ref={targetRef}
             >
                 {target}
+                {visible && (
+                    <div className="fixed" style={{ top, left, bottom, right }} ref={tooltipRef}>
+                        {content}
+                    </div>
+                )}
             </div>
-            {visible && <div ref={tooltipRef}>{content}</div>}
         </>
     );
 };
@@ -168,7 +177,7 @@ export interface TooltipProps {
      *
      *
      */
-    position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right' | null;
+    position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
 
     /**
      * After determining the base position of the tooltip content using `anchor`,
@@ -183,38 +192,128 @@ export interface TooltipProps {
     yOffset?: number;
 }
 
+interface Position {
+    top?: number;
+    left?: number;
+    bottom?: number;
+    right?: number;
+}
+
+interface AnchorPoint {
+    x: number;
+    y: number;
+}
+
+interface AnchorType {
+    y: 'top' | 'bottom';
+    x: 'left' | 'right';
+}
+
+/**
+ * Calculate tooltip position based on position/grow options as well
+ * as anchor or mouse event position.
+ */
+function getTooltipPosition(
+    position: TooltipProps['position'],
+    grow: TooltipProps['grow'] = 'down-right',
+    event?: MouseEvent,
+    anchor?: HTMLElement | null
+): Position {
+    // Figure out the anchor point based on how the tooltip will grow.
+    // This decides *how* we position the tooltip, based on top/bottom/left/right
+    //
+    // Whenever we are growing `up`, we want to anchor using `bottom` positioning,
+    // otherwise we use `top`.
+    //
+    // Whenever we are growing `left`, we want to anchor using `right` positioning,
+    // otherwise we use `left`.
+    const anchorType: AnchorType = match<typeof grow, AnchorType>(grow)
+        .with('down-right', () => ({
+            y: 'top',
+            x: 'left',
+        }))
+        .with('up-right', () => ({
+            y: 'bottom',
+            x: 'left',
+        }))
+        .with('down-left', () => ({
+            y: 'top',
+            x: 'right',
+        }))
+        .with('up-left', () => ({
+            y: 'bottom',
+            x: 'right',
+        }))
+        .exhaustive();
+
+    // Get the appropriate x/y offset based on the anchor element (if position is set) or
+    // the mouse event.
+    //
+    // If using bottom/right position, we need to use the window height/width since the
+    // position of the anchor/event are all based on the top/left of the window.
+    let anchorPoint: AnchorPoint;
+    if (anchor && position) {
+        const rect = anchor.getBoundingClientRect();
+        anchorPoint = match(position)
+            .with('top-left', () => ({
+                y: anchorType.y === 'top' ? rect.top : window.innerHeight - rect.top,
+                x: anchorType.x === 'left' ? rect.left : window.innerWidth - rect.left,
+            }))
+            .with('bottom-left', () => ({
+                y: anchorType.y === 'top' ? rect.bottom : window.innerHeight - rect.bottom,
+                x: anchorType.x === 'left' ? rect.left : window.innerWidth - rect.left,
+            }))
+            .with('top-right', () => ({
+                y: anchorType.y === 'top' ? rect.top : window.innerHeight - rect.top,
+                x: anchorType.x === 'left' ? rect.right : window.innerWidth - rect.right,
+            }))
+            .with('bottom-right', () => ({
+                y: anchorType.y === 'top' ? rect.bottom : window.innerHeight - rect.bottom,
+                x: anchorType.x === 'left' ? rect.right : window.innerWidth - rect.right,
+            }))
+            .exhaustive();
+    } else {
+        const y = event?.clientY || 0;
+        const x = event?.clientX || 0;
+        anchorPoint = {
+            y: anchorType.y === 'top' ? y : window.innerHeight - y,
+            x: anchorType.x === 'left' ? x : window.innerWidth - x,
+        };
+    }
+
+    return {
+        [anchorType.x]: anchorPoint.x,
+        [anchorType.y]: anchorPoint.y,
+    };
+}
+
 interface TooltipState {
+    position?: Position;
     visible: boolean;
 }
 
 /**
- * A Tooltip component that will render children and any custom
- * content within the tooltip.
+ * ### A versatile tooltip component
+ * See [[ToolipProps]] for more documentation on how to control the Tooltip
  *
+ * @example
  * Example usage:
  * ```typescript
  * <Tooltip content={<div>Hello World!</div>}>
- *     {({ showTooltip, ref }) => {
- *         return (
- *             <button ref={ref as RefObject<HTMLButtonElement>} onClick={showTooltip}>
- *                 Button
- *             </button>
- *         );
- *     }}
+ *     <button openOn="click">
+ *         Button
+ *     </button>
  * </Tooltip>
  * ```
  */
 export const Tooltip = (props: TooltipProps): ReactElement => {
-    const { children, closeOn = 'hover', content, openOn = 'hover' } = props;
+    const { children, content, grow = 'down-right', openOn = 'hover', position } = props;
 
-    // Set up visible state and show/hide functions
-    const [state, setState] = useState<TooltipState>({ visible: false });
-    const showTooltip = useCallback(() => {
-        setState((s) => ({ ...s, visible: true }));
-    }, [state]);
-    const hideTooltip = useCallback(() => {
-        setState((s) => ({ ...s, visible: false }));
-    }, [state]);
+    // If no closeOn is provided, default to the same type as openOn
+    let { closeOn } = props;
+    if (closeOn === undefined) {
+        closeOn = openOn;
+    }
 
     // Set up a ref for the tooltip target and the content
     // so that we can track when click/hover events happen
@@ -232,16 +331,38 @@ export const Tooltip = (props: TooltipProps): ReactElement => {
         }, [closeOn])
     );
 
+    // Set up visible state and show/hide functions
+    const [state, setState] = useState<TooltipState>({ visible: false });
+    const showTooltip = useCallback(
+        (event?: MouseEvent) => {
+            setState((s) => ({
+                ...s,
+                position: getTooltipPosition(position, grow, event, targetRef?.current),
+                visible: true,
+            }));
+        },
+        [state, position, grow, targetRef]
+    );
+    const hideTooltip = useCallback(() => {
+        setState((s) => ({ ...s, visible: false }));
+    }, [state]);
+
     // Set up target handlers
-    const onTargetMouseEnter = useCallback(() => {
-        if (openOn === 'hover') showTooltip();
-    }, [openOn]);
+    const onTargetMouseEnter = useCallback(
+        (event?: MouseEvent) => {
+            if (openOn === 'hover') showTooltip(event);
+        },
+        [openOn]
+    );
     const onTargetMouseLeave = useCallback(() => {
         if (closeOn === 'hover') hideTooltip();
     }, [closeOn]);
-    const onTargetClick = useCallback(() => {
-        if (openOn === 'click') showTooltip();
-    }, [openOn]);
+    const onTargetClick = useCallback(
+        (event?: MouseEvent) => {
+            if (openOn === 'click') showTooltip(event);
+        },
+        [openOn]
+    );
 
     return (
         <TooltipUI
@@ -251,6 +372,7 @@ export const Tooltip = (props: TooltipProps): ReactElement => {
             onTargetClick={onTargetClick}
             onTargetMouseEnter={onTargetMouseEnter}
             onTargetMouseLeave={onTargetMouseLeave}
+            position={state.position}
             showTooltip={showTooltip}
             tooltipRef={tooltipRef}
             visible={state.visible}
