@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Tooltip, TooltipProps } from '.';
@@ -19,7 +19,7 @@ function renderTooltip(props: TooltipProps) {
 }
 
 describe('Tooltip', () => {
-    test('renders tooltip on hover', () => {
+    test('renders tooltip on hover', async () => {
         renderTooltip({
             closeOn: 'hover',
             children: targetContent,
@@ -28,12 +28,12 @@ describe('Tooltip', () => {
         });
 
         userEvent.hover(screen.getByText(targetContent));
-        screen.getByText(tooltipContent);
+        await waitFor(() => screen.getByText(tooltipContent));
         userEvent.unhover(screen.getByText(targetContent));
-        expect(screen.queryByText(tooltipContent)).toBeNull();
+        await waitFor(() => expect(screen.queryByText(tooltipContent)).toBeNull());
     });
 
-    test('renders tooltip on click', () => {
+    test('renders tooltip on click', async () => {
         renderTooltip({
             closeOn: 'click',
             children: targetContent,
@@ -42,12 +42,12 @@ describe('Tooltip', () => {
         });
 
         userEvent.click(screen.getByText(targetContent));
-        screen.getByText(tooltipContent);
+        await waitFor(() => screen.getByText(tooltipContent));
         userEvent.click(screen.getByText(containerContent));
-        expect(screen.queryByText(tooltipContent)).toBeNull();
+        await waitFor(() => expect(screen.queryByText(tooltipContent)).toBeNull());
     });
 
-    test('persists tooltip with closeOn = null', () => {
+    test('persists tooltip with closeOn = null', async () => {
         renderTooltip({
             children: targetContent,
             closeOn: null,
@@ -56,9 +56,10 @@ describe('Tooltip', () => {
         });
 
         userEvent.click(screen.getByText(targetContent));
-        screen.getByText(tooltipContent);
+        await waitFor(() => screen.getByText(tooltipContent));
         userEvent.click(screen.getByText(containerContent));
         screen.getByText(tooltipContent);
+        await waitFor(() => expect(screen.queryByText(tooltipContent)));
     });
 
     // default window.innerWidth = 1024
@@ -225,7 +226,7 @@ describe('Tooltip', () => {
         },
     ].forEach((testCase) => {
         testCase.growthTypes.forEach((growthType) => {
-            test(`Positions correctly when 'position="${testCase.position}"' and 'grow="${growthType.grow}"'`, () => {
+            test(`Positions correctly when 'position="${testCase.position}"' and 'grow="${growthType.grow}"'`, async () => {
                 renderTooltip({
                     children: targetContent,
                     content: tooltipContent,
@@ -240,7 +241,7 @@ describe('Tooltip', () => {
                 // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
                 target.getBoundingClientRect = jest.fn(() => targetBoundingRect);
                 userEvent.click(target);
-                const tooltip = screen.getByText(tooltipContent);
+                const tooltip = await waitFor(() => screen.getByText(tooltipContent));
                 expect(tooltip).toHaveStyle(growthType.expectedPosition);
             });
         });

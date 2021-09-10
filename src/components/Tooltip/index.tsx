@@ -92,6 +92,11 @@ export interface TooltipProps {
     children: TooltipRenderProps | ReactNode;
 
     /**
+     * Delay hiding the tooltip for [delay] millisenconds.
+     */
+    closeDelay?: number;
+
+    /**
      * Determines whether the component will automatically manage
      * closing the tooltip.
      *
@@ -108,12 +113,6 @@ export interface TooltipProps {
      * The tooltip content
      */
     content: ReactNode;
-
-    /**
-     * Delay showing the tooltip for [delay] millisenconds.
-     * Only used for `auto="click"` and `auto="hover"` modes.
-     */
-    delay?: number;
 
     /**
      * Force the tooltip content to match the width of the target element.
@@ -140,6 +139,11 @@ export interface TooltipProps {
      *                        corner of the tooltip content.
      */
     grow?: 'down-right' | 'down-left' | 'up-right' | 'up-left';
+
+    /**
+     * Delay showing the tooltip for [delay] millisenconds.
+     */
+    openDelay?: number;
 
     /**
      * Determines whether the component will automatically manage
@@ -310,7 +314,17 @@ interface TooltipState {
  * ```
  */
 export function Tooltip(props: TooltipProps): ReactElement {
-    const { children, content, grow = 'down-right', openOn = 'hover', position, xOffset = 0, yOffset = 0 } = props;
+    const {
+        children,
+        closeDelay = 0,
+        content,
+        grow = 'down-right',
+        openDelay = 0,
+        openOn = 'hover',
+        position,
+        xOffset = 0,
+        yOffset = 0,
+    } = props;
 
     // If no closeOn is provided, default to the same type as openOn
     let { closeOn } = props;
@@ -338,17 +352,23 @@ export function Tooltip(props: TooltipProps): ReactElement {
     const [state, setState] = useState<TooltipState>({ visible: false });
     const showTooltip = useCallback(
         (event?: MouseEvent) => {
-            setState((s) => ({
-                ...s,
-                position: getTooltipPosition(position, grow, xOffset, yOffset, event, targetRef?.current),
-                visible: true,
-            }));
+            setTimeout(
+                () =>
+                    setState((s) => ({
+                        ...s,
+                        position: getTooltipPosition(position, grow, xOffset, yOffset, event, targetRef?.current),
+                        visible: true,
+                    })),
+                openDelay
+            );
         },
-        [state, position, grow, targetRef, xOffset, yOffset]
+        [state, position, grow, openDelay, targetRef, xOffset, yOffset]
     );
     const hideTooltip = useCallback(() => {
-        setState((s) => ({ ...s, visible: false }));
-    }, [state]);
+        setTimeout(() => {
+            setState((s) => ({ ...s, visible: false }));
+        }, closeDelay);
+    }, [closeDelay, state]);
 
     // Set up target handlers
     const onTargetMouseEnter = useCallback(
