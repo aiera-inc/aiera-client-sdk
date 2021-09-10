@@ -89,6 +89,7 @@
         "graphql": "15.5.2",
         "graphql-tag": "2.12.5",
         "luxon": "2.0.2",
+        "ts-pattern": "3.2.5",
         "urql": "2.0.4"
     },
     "lint-staged": {
