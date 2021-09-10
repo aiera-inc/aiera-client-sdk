@@ -26,4 +26,6 @@ module.exports = {
         '\\.(scss|sass|css)$': '<rootDir>/style.mock.js',
         '@aiera/client-sdk/(.*)': '<rootDir>/../src/$1',
     },
+
+    setupFilesAfterEnv: ['<rootDir>/jest-setup.js']
 };
