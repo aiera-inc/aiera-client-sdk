@@ -24,7 +24,7 @@ interface TooltipUIProps {
     visible: boolean;
 }
 
-export const TooltipUI = (props: TooltipUIProps): ReactElement => {
+const TooltipUI = (props: TooltipUIProps): ReactElement => {
     const {
         children,
         content,
@@ -216,6 +216,8 @@ interface AnchorType {
 function getTooltipPosition(
     position: TooltipProps['position'],
     grow: TooltipProps['grow'] = 'down-right',
+    xOffset = 0,
+    yOffset = 0,
     event?: MouseEvent,
     anchor?: HTMLElement | null
 ): Position {
@@ -227,7 +229,7 @@ function getTooltipPosition(
     //
     // Whenever we are growing `left`, we want to anchor using `right` positioning,
     // otherwise we use `left`.
-    const anchorType: AnchorType = match<typeof grow, AnchorType>(grow)
+    const anchorType = match<typeof grow, AnchorType>(grow)
         .with('down-right', () => ({
             y: 'top',
             x: 'left',
@@ -282,8 +284,8 @@ function getTooltipPosition(
     }
 
     return {
-        [anchorType.x]: anchorPoint.x,
-        [anchorType.y]: anchorPoint.y,
+        [anchorType.x]: anchorPoint.x + xOffset,
+        [anchorType.y]: anchorPoint.y + yOffset,
     };
 }
 
@@ -294,9 +296,10 @@ interface TooltipState {
 
 /**
  * ### A versatile tooltip component
- * See [[ToolipProps]] for more documentation on how to control the Tooltip
+ * See {@link TooltipProps} for more documentation on how to control the Tooltip
  *
  * @example
+ *
  * Example usage:
  * ```typescript
  * <Tooltip content={<div>Hello World!</div>}>
@@ -306,8 +309,8 @@ interface TooltipState {
  * </Tooltip>
  * ```
  */
-export const Tooltip = (props: TooltipProps): ReactElement => {
-    const { children, content, grow = 'down-right', openOn = 'hover', position } = props;
+export function Tooltip(props: TooltipProps): ReactElement {
+    const { children, content, grow = 'down-right', openOn = 'hover', position, xOffset = 0, yOffset = 0 } = props;
 
     // If no closeOn is provided, default to the same type as openOn
     let { closeOn } = props;
@@ -337,11 +340,11 @@ export const Tooltip = (props: TooltipProps): ReactElement => {
         (event?: MouseEvent) => {
             setState((s) => ({
                 ...s,
-                position: getTooltipPosition(position, grow, event, targetRef?.current),
+                position: getTooltipPosition(position, grow, xOffset, yOffset, event, targetRef?.current),
                 visible: true,
             }));
         },
-        [state, position, grow, targetRef]
+        [state, position, grow, targetRef, xOffset, yOffset]
     );
     const hideTooltip = useCallback(() => {
         setState((s) => ({ ...s, visible: false }));
@@ -380,4 +383,4 @@ export const Tooltip = (props: TooltipProps): ReactElement => {
             {children}
         </TooltipUI>
     );
-};
+}

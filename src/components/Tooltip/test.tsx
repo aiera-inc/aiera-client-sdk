@@ -65,6 +65,8 @@ describe('Tooltip', () => {
     // default window.innerHeight = 768
     const innerWidth = 1024;
     const innerHeight = 768;
+    const xOffset = 10;
+    const yOffset = 20;
     const targetBoundingRect = {
         x: 100,
         left: 100,
@@ -80,33 +82,35 @@ describe('Tooltip', () => {
         {
             position: 'top-left',
             targetBoundingRect,
+            xOffset,
+            yOffset,
             growthTypes: [
                 {
                     grow: 'down-right',
                     expectedPosition: {
-                        top: `${targetBoundingRect.top}px`,
-                        left: `${targetBoundingRect.left}px`,
+                        top: `${targetBoundingRect.top + yOffset}px`,
+                        left: `${targetBoundingRect.left + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-right',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.top}px`,
-                        left: `${targetBoundingRect.left}px`,
+                        bottom: `${innerHeight - targetBoundingRect.top + yOffset}px`,
+                        left: `${targetBoundingRect.left + xOffset}px`,
                     },
                 },
                 {
                     grow: 'down-left',
                     expectedPosition: {
-                        top: `${targetBoundingRect.top}px`,
-                        right: `${innerWidth - targetBoundingRect.left}px`,
+                        top: `${targetBoundingRect.top + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.left + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-left',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.top}px`,
-                        right: `${innerWidth - targetBoundingRect.left}px`,
+                        bottom: `${innerHeight - targetBoundingRect.top + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.left + xOffset}px`,
                     },
                 },
             ],
@@ -114,33 +118,35 @@ describe('Tooltip', () => {
         {
             position: 'bottom-left',
             targetBoundingRect,
+            xOffset,
+            yOffset,
             growthTypes: [
                 {
                     grow: 'down-right',
                     expectedPosition: {
-                        top: `${targetBoundingRect.bottom}px`,
-                        left: `${targetBoundingRect.left}px`,
+                        top: `${targetBoundingRect.bottom + yOffset}px`,
+                        left: `${targetBoundingRect.left + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-right',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.bottom}px`,
-                        left: `${targetBoundingRect.left}px`,
+                        bottom: `${innerHeight - targetBoundingRect.bottom + yOffset}px`,
+                        left: `${targetBoundingRect.left + xOffset}px`,
                     },
                 },
                 {
                     grow: 'down-left',
                     expectedPosition: {
-                        top: `${targetBoundingRect.bottom}px`,
-                        right: `${innerWidth - targetBoundingRect.left}px`,
+                        top: `${targetBoundingRect.bottom + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.left + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-left',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.bottom}px`,
-                        right: `${innerWidth - targetBoundingRect.left}px`,
+                        bottom: `${innerHeight - targetBoundingRect.bottom + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.left + xOffset}px`,
                     },
                 },
             ],
@@ -148,33 +154,35 @@ describe('Tooltip', () => {
         {
             position: 'top-right',
             targetBoundingRect,
+            xOffset,
+            yOffset,
             growthTypes: [
                 {
                     grow: 'down-right',
                     expectedPosition: {
-                        top: `${targetBoundingRect.top}px`,
-                        left: `${targetBoundingRect.right}px`,
+                        top: `${targetBoundingRect.top + yOffset}px`,
+                        left: `${targetBoundingRect.right + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-right',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.top}px`,
-                        left: `${targetBoundingRect.right}px`,
+                        bottom: `${innerHeight - targetBoundingRect.top + yOffset}px`,
+                        left: `${targetBoundingRect.right + xOffset}px`,
                     },
                 },
                 {
                     grow: 'down-left',
                     expectedPosition: {
-                        top: `${targetBoundingRect.top}px`,
-                        right: `${innerWidth - targetBoundingRect.right}px`,
+                        top: `${targetBoundingRect.top + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.right + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-left',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.top}px`,
-                        right: `${innerWidth - targetBoundingRect.right}px`,
+                        bottom: `${innerHeight - targetBoundingRect.top + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.right + xOffset}px`,
                     },
                 },
             ],
@@ -182,33 +190,35 @@ describe('Tooltip', () => {
         {
             position: 'bottom-right',
             targetBoundingRect,
+            xOffset,
+            yOffset,
             growthTypes: [
                 {
                     grow: 'down-right',
                     expectedPosition: {
-                        top: `${targetBoundingRect.bottom}px`,
-                        left: `${targetBoundingRect.right}px`,
+                        top: `${targetBoundingRect.bottom + yOffset}px`,
+                        left: `${targetBoundingRect.right + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-right',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.bottom}px`,
-                        left: `${targetBoundingRect.right}px`,
+                        bottom: `${innerHeight - targetBoundingRect.bottom + yOffset}px`,
+                        left: `${targetBoundingRect.right + xOffset}px`,
                     },
                 },
                 {
                     grow: 'down-left',
                     expectedPosition: {
-                        top: `${targetBoundingRect.bottom}px`,
-                        right: `${innerWidth - targetBoundingRect.right}px`,
+                        top: `${targetBoundingRect.bottom + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.right + xOffset}px`,
                     },
                 },
                 {
                     grow: 'up-left',
                     expectedPosition: {
-                        bottom: `${innerHeight - targetBoundingRect.bottom}px`,
-                        right: `${innerWidth - targetBoundingRect.right}px`,
+                        bottom: `${innerHeight - targetBoundingRect.bottom + yOffset}px`,
+                        right: `${innerWidth - targetBoundingRect.right + xOffset}px`,
                     },
                 },
             ],
@@ -222,6 +232,8 @@ describe('Tooltip', () => {
                     openOn: 'click',
                     position: testCase.position as TooltipProps['position'],
                     grow: growthType.grow as TooltipProps['grow'],
+                    xOffset: testCase.xOffset,
+                    yOffset: testCase.yOffset,
                 });
 
                 const target = screen.getByText(targetContent);
