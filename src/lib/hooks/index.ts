@@ -1,4 +1,5 @@
 import { useCallback, useState, Dispatch, SetStateAction, useEffect, RefObject } from 'react';
+import { useCallback, useState, Dispatch, SetStateAction, useEffect, useRef, RefObject, DependencyList } from 'react';
 
 import { ChangeHandlers } from '@aiera/client-sdk/types';
 
@@ -95,4 +96,35 @@ export function useOutsideClickHandler(
             document.removeEventListener('mousedown', handler);
         };
     }, [...refs, outsideClickHandler]);
+}
+
+export function useTimedCallback<T extends (...args: unknown[]) => void>(
+    callback: T,
+    deps: DependencyList = [],
+    delay = 0,
+    existing: 'preserve' | 'cancel' = 'cancel'
+): [callback: T, ref: RefObject<number>] {
+    const ref = useRef<number | null>(null);
+
+    useEffect(() => {
+        return () => {
+            if (ref.current) {
+                window.clearTimeout(ref.current);
+            }
+        };
+    });
+
+    return [
+        useCallback(
+            ((...args: unknown[]) => {
+                if (ref.current && existing === 'cancel') {
+                    window.clearTimeout(ref.current);
+                    ref.current = null;
+                }
+                if (!ref.current) ref.current = window.setTimeout(() => callback(...args), delay);
+            }) as T,
+            deps.concat(delay)
+        ),
+        ref,
+    ];
 }
