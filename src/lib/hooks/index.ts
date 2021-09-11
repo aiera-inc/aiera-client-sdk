@@ -1,5 +1,14 @@
-import { useCallback, useState, Dispatch, SetStateAction, useEffect, RefObject } from 'react';
-import { useCallback, useState, Dispatch, SetStateAction, useEffect, useRef, RefObject, DependencyList } from 'react';
+import {
+    useCallback,
+    useState,
+    Dispatch,
+    SetStateAction,
+    useEffect,
+    useLayoutEffect,
+    useRef,
+    RefObject,
+    DependencyList,
+} from 'react';
 
 import { ChangeHandlers } from '@aiera/client-sdk/types';
 
@@ -23,8 +32,7 @@ import { ChangeHandlers } from '@aiera/client-sdk/types';
  * }
  * ```
  *
- * This is alpha stage, use only where it's easy to revert since the API may change
- * significantly.
+ * This is alpha stage, use only where it's easy to revert since the API may change significantly.
  *
  * @param initialState
  * @alpha
@@ -96,6 +104,26 @@ export function useOutsideClickHandler(
             document.removeEventListener('mousedown', handler);
         };
     }, [...refs, outsideClickHandler]);
+}
+
+export function useWindowSize(): { height: number; width: number } {
+    const [size, setSize] = useState({
+        height: window.innerHeight,
+        width: window.innerWidth,
+    });
+
+    const onResize = () =>
+        setSize({
+            height: window.innerHeight,
+            width: window.innerWidth,
+        });
+
+    useLayoutEffect(() => {
+        window.addEventListener('resize', onResize);
+        return () => window.removeEventListener('resize', onResize);
+    }, []);
+
+    return size;
 }
 
 export function useTimedCallback<T extends (...args: unknown[]) => void>(

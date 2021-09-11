@@ -1,8 +1,10 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { useCallback, useRef } from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
 
-import { useOutsideClickHandler, useTimedCallback } from '.';
+import { useOutsideClickHandler, useWindowSize, useTimedCallback } from '.';
 
 describe('useOutsideClickHandler', () => {
     test('fires the outside click handler only when clicking outside the target refs', () => {
@@ -32,6 +34,23 @@ describe('useOutsideClickHandler', () => {
         expect(outsideHandler).not.toHaveBeenCalled();
         userEvent.click(screen.getByText('outside'));
         expect(outsideHandler).toHaveBeenCalled();
+    });
+});
+
+describe('useWindowSize', () => {
+    test('it updates the window size', () => {
+        const { result } = renderHook(() => useWindowSize());
+        expect(result.current.width).toBe(1024);
+        expect(result.current.height).toBe(768);
+
+        // @ts-ignore
+        window.innerWidth = 100;
+        // @ts-ignore
+        window.innerHeight = 100;
+        fireEvent(window, new Event('resize'));
+
+        expect(result.current.width).toBe(100);
+        expect(result.current.height).toBe(100);
     });
 });
 
