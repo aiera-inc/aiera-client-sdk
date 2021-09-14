@@ -329,4 +329,21 @@ describe('Tooltip', () => {
             });
         });
     });
+
+    test('matches target width when matchWidth=true', async () => {
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'click',
+            position: 'bottom-left',
+            matchWidth: true,
+        });
+
+        const target = screen.getByText(targetContent);
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        target.getBoundingClientRect = jest.fn(() => targetBoundingRect);
+        userEvent.click(target);
+        const tooltip = await waitFor(() => screen.getByText(tooltipContent));
+        expect(tooltip).toHaveStyle({ width: '50px' });
+    });
 });

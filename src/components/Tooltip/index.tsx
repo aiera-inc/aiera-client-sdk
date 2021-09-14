@@ -39,7 +39,7 @@ const TooltipUI = (props: TooltipUIProps): ReactElement => {
         visible,
     } = props;
 
-    const { top, left, bottom, right } = position || {};
+    const { top, left, bottom, right, width } = position || {};
     let target = children;
     if (typeof target === 'function') {
         const render = children as TooltipRenderProps;
@@ -55,7 +55,7 @@ const TooltipUI = (props: TooltipUIProps): ReactElement => {
             >
                 {target}
                 {visible && (
-                    <div className="fixed" style={{ top, left, bottom, right }} ref={tooltipRef}>
+                    <div className="fixed" style={{ top, left, bottom, right, width }} ref={tooltipRef}>
                         {content}
                     </div>
                 )}
@@ -201,6 +201,7 @@ interface Position {
     left?: number;
     bottom?: number;
     right?: number;
+    width?: number;
 }
 
 interface AnchorPoint {
@@ -217,14 +218,23 @@ interface AnchorType {
  * Calculate tooltip position based on position/grow options as well
  * as anchor or mouse event position.
  */
-function getTooltipPosition(
-    position: TooltipProps['position'],
-    grow: TooltipProps['grow'] = 'down-right',
+function getTooltipPosition({
+    anchor,
+    event,
+    grow = 'down-right',
+    matchWidth = false,
+    position,
     xOffset = 0,
     yOffset = 0,
-    event?: MouseEvent,
-    anchor?: HTMLElement | null
-): Position {
+}: {
+    anchor?: HTMLElement | null;
+    event?: MouseEvent;
+    grow?: TooltipProps['grow'];
+    matchWidth?: boolean;
+    position: TooltipProps['position'];
+    xOffset?: number;
+    yOffset?: number;
+}): Position {
     // Figure out the anchor point based on how the tooltip will grow.
     // This decides *how* we position the tooltip, based on top/bottom/left/right
     //
@@ -258,8 +268,12 @@ function getTooltipPosition(
     // If using bottom/right position, we need to use the window height/width since the
     // position of the anchor/event are all based on the top/left of the window.
     let anchorPoint: AnchorPoint;
+    let width: number | undefined;
     if (anchor && position) {
         const rect = anchor.getBoundingClientRect();
+        if (matchWidth) {
+            width = rect.width;
+        }
         anchorPoint = match(position)
             .with('top-left', () => ({
                 y: anchorType.y === 'top' ? rect.top : window.innerHeight - rect.top,
@@ -288,6 +302,7 @@ function getTooltipPosition(
     }
 
     return {
+        width,
         [anchorType.x]: anchorPoint.x + xOffset,
         [anchorType.y]: anchorPoint.y + yOffset,
     };
@@ -319,6 +334,7 @@ export function Tooltip(props: TooltipProps): ReactElement {
         closeDelay = 0,
         content,
         grow = 'down-right',
+        matchWidth,
         openDelay = 0,
         openOn = 'hover',
         position,
@@ -357,10 +373,20 @@ export function Tooltip(props: TooltipProps): ReactElement {
                 (event.type === 'click' && openOn === 'click')
             ) {
                 cancelHide();
-                delayedShowTooltip(getTooltipPosition(position, grow, xOffset, yOffset, event, targetRef?.current));
+                delayedShowTooltip(
+                    getTooltipPosition({
+                        anchor: targetRef?.current,
+                        event,
+                        grow,
+                        matchWidth,
+                        position,
+                        xOffset,
+                        yOffset,
+                    })
+                );
             }
         },
-        [cancelHide, delayedShowTooltip, openOn, position, grow, targetRef?.current, xOffset, yOffset]
+        [cancelHide, delayedShowTooltip, openOn, matchWidth, position, grow, targetRef?.current, xOffset, yOffset]
     );
 
     const hideTooltip = useCallback(
