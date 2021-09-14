@@ -1,20 +1,11 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 
-import { renderWithClient } from 'testUtils';
-import { {{name}}, {{name}}UI } from '.';
-
-
-describe('{{name}}UI', () => {
-    test('renders UI', () => {
-    render(<{{name}}UI />);
-        screen.getByText('{{name}}UI');
-    });
-});
+import { {{name}} } from '.';
 
 describe('{{name}}', () => {
     test('renders', () => {
-        renderWithClient(<{{name}} />);
+        render(<{{name}} />);
         screen.getByText('{{name}}UI');
     });
 });
