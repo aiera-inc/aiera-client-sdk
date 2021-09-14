@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Tooltip, TooltipProps } from '.';
@@ -60,6 +60,89 @@ describe('Tooltip', () => {
         userEvent.click(screen.getByText(containerContent));
         screen.getByText(tooltipContent);
         await waitFor(() => expect(screen.queryByText(tooltipContent)));
+    });
+
+    test('delays tooltip show/hide', () => {
+        jest.useFakeTimers();
+
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openDelay: 500,
+            closeDelay: 500,
+        });
+
+        // Hover and make sure it doesnt show at 250ms
+        userEvent.hover(screen.getByText(targetContent));
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        expect(screen.queryByText(tooltipContent)).toBeNull();
+        // Make sure it is showing at 500ms
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        screen.getByText(tooltipContent);
+
+        // Unhover and make sure it's still showing after 150ms
+        userEvent.unhover(screen.getByText(targetContent));
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        screen.getByText(tooltipContent);
+
+        // Make sure it's no longer showing after 500ms
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        expect(screen.queryByText(tooltipContent)).toBeNull();
+
+        jest.runOnlyPendingTimers();
+        jest.useRealTimers();
+    });
+
+    test('delays for show/hide are properly cancelled', () => {
+        jest.useFakeTimers();
+
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openDelay: 500,
+            closeDelay: 500,
+        });
+
+        // Hover and then unhover should cancel it
+        userEvent.hover(screen.getByText(targetContent));
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        userEvent.unhover(screen.getByText(targetContent));
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        expect(screen.queryByText(tooltipContent)).toBeNull();
+
+        act(() => {
+            jest.runOnlyPendingTimers();
+        });
+
+        // Get the tooltip showing, unhover and hover again should keep it up
+        userEvent.hover(screen.getByText(targetContent));
+        act(() => {
+            jest.advanceTimersByTime(500);
+        });
+        screen.getByText(tooltipContent);
+        userEvent.unhover(screen.getByText(targetContent));
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        userEvent.hover(screen.getByText(targetContent));
+        act(() => {
+            jest.advanceTimersByTime(250);
+        });
+        screen.queryByText(tooltipContent);
+
+        jest.useRealTimers();
     });
 
     // default window.innerWidth = 1024

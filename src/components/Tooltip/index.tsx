@@ -1,6 +1,6 @@
 import React, { RefObject, MouseEvent, ReactElement, ReactNode, useRef, useState, useCallback } from 'react';
 import { match } from 'ts-pattern';
-import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks';
+import { useOutsideClickHandler, useDelayCallback } from '@aiera/client-sdk/lib/hooks';
 import './styles.css';
 
 /** @notExported */
@@ -337,6 +337,46 @@ export function Tooltip(props: TooltipProps): ReactElement {
     // inside or outside the tooltip elements.
     const tooltipRef = useRef<HTMLDivElement>(null);
     const targetRef = useRef<HTMLDivElement>(null);
+
+    // Set up visible state and show/hide functions that can be delayed
+    const [state, setState] = useState<TooltipState>({ visible: false });
+    const [delayedShowTooltip, cancelShow] = useDelayCallback((position: Position) => {
+        setState((s) => ({ ...s, position, visible: true }));
+    }, openDelay);
+    const [delayedHideTooltip, cancelHide] = useDelayCallback(
+        () => setState((s) => ({ ...s, visible: false })),
+        closeDelay
+    );
+
+    // The actual show/hide callbacks
+    const showTooltip = useCallback(
+        (event?: MouseEvent) => {
+            if (
+                !event ||
+                (event.type === 'mouseenter' && openOn === 'hover') ||
+                (event.type === 'click' && openOn === 'click')
+            ) {
+                cancelHide();
+                delayedShowTooltip(getTooltipPosition(position, grow, xOffset, yOffset, event, targetRef?.current));
+            }
+        },
+        [cancelHide, delayedShowTooltip, openOn, position, grow, targetRef?.current, xOffset, yOffset]
+    );
+
+    const hideTooltip = useCallback(
+        (event?: MouseEvent) => {
+            if (
+                !event ||
+                (event.type === 'mouseleave' && closeOn === 'hover') ||
+                (event.type === 'click' && closeOn === 'click')
+            ) {
+                cancelShow();
+                delayedHideTooltip();
+            }
+        },
+        [cancelShow, delayedHideTooltip, closeOn]
+    );
+
     // Setup an outside clickhandler to handle clicks
     // outside the tooltip target or content
     useOutsideClickHandler(
@@ -345,46 +385,7 @@ export function Tooltip(props: TooltipProps): ReactElement {
             if (closeOn && ['hover', 'click'].includes(closeOn)) {
                 hideTooltip();
             }
-        }, [closeOn])
-    );
-
-    // Set up visible state and show/hide functions
-    const [state, setState] = useState<TooltipState>({ visible: false });
-    const showTooltip = useCallback(
-        (event?: MouseEvent) => {
-            setTimeout(
-                () =>
-                    setState((s) => ({
-                        ...s,
-                        position: getTooltipPosition(position, grow, xOffset, yOffset, event, targetRef?.current),
-                        visible: true,
-                    })),
-                openDelay
-            );
-        },
-        [state, position, grow, openDelay, targetRef, xOffset, yOffset]
-    );
-    const hideTooltip = useCallback(() => {
-        setTimeout(() => {
-            setState((s) => ({ ...s, visible: false }));
-        }, closeDelay);
-    }, [closeDelay, state]);
-
-    // Set up target handlers
-    const onTargetMouseEnter = useCallback(
-        (event?: MouseEvent) => {
-            if (openOn === 'hover') showTooltip(event);
-        },
-        [openOn]
-    );
-    const onTargetMouseLeave = useCallback(() => {
-        if (closeOn === 'hover') hideTooltip();
-    }, [closeOn]);
-    const onTargetClick = useCallback(
-        (event?: MouseEvent) => {
-            if (openOn === 'click') showTooltip(event);
-        },
-        [openOn]
+        }, [closeOn, hideTooltip])
     );
 
     return (
@@ -392,9 +393,9 @@ export function Tooltip(props: TooltipProps): ReactElement {
             content={content}
             targetRef={targetRef}
             hideTooltip={hideTooltip}
-            onTargetClick={onTargetClick}
-            onTargetMouseEnter={onTargetMouseEnter}
-            onTargetMouseLeave={onTargetMouseLeave}
+            onTargetClick={showTooltip}
+            onTargetMouseEnter={showTooltip}
+            onTargetMouseLeave={hideTooltip}
             position={state.position}
             showTooltip={showTooltip}
             tooltipRef={tooltipRef}

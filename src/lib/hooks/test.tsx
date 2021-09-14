@@ -4,7 +4,7 @@ import { fireEvent, render, screen } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
 
-import { useOutsideClickHandler, useWindowSize, useTimedCallback } from '.';
+import { useOutsideClickHandler, useWindowSize, useDelayCallback } from '.';
 
 describe('useOutsideClickHandler', () => {
     test('fires the outside click handler only when clicking outside the target refs', () => {
@@ -54,7 +54,7 @@ describe('useWindowSize', () => {
     });
 });
 
-describe('useTimedCallback', () => {
+describe('useDelayCallback', () => {
     beforeEach(() => {
         jest.useFakeTimers();
     });
@@ -67,7 +67,7 @@ describe('useTimedCallback', () => {
     test('runs the callback', () => {
         const cb = jest.fn();
         const Component = () => {
-            const [timedCb] = useTimedCallback(cb);
+            const [timedCb] = useDelayCallback(cb);
             return <div data-testid="test" onClick={timedCb} />;
         };
 
@@ -78,10 +78,9 @@ describe('useTimedCallback', () => {
     });
 
     test('runs the callback only after delay', () => {
-        jest.useFakeTimers();
         const cb = jest.fn();
         const Component = () => {
-            const [timedCb] = useTimedCallback(cb, [], 500);
+            const [timedCb] = useDelayCallback(cb, 500, []);
             return <div data-testid="test" onClick={timedCb} />;
         };
 
@@ -94,10 +93,9 @@ describe('useTimedCallback', () => {
     });
 
     test('cancels existing timer on second call', () => {
-        jest.useFakeTimers();
         const cb = jest.fn();
         const Component = () => {
-            const [timedCb] = useTimedCallback(cb, [], 500, 'cancel');
+            const [timedCb] = useDelayCallback(cb, 500, [], 'cancel');
             return <div data-testid="test" onClick={timedCb} />;
         };
 
@@ -113,10 +111,9 @@ describe('useTimedCallback', () => {
     });
 
     test('preserves existing timer on second call', () => {
-        jest.useFakeTimers();
         const cb = jest.fn();
         const Component = () => {
-            const [timedCb] = useTimedCallback(cb, [], 500, 'preserve');
+            const [timedCb] = useDelayCallback(cb, 500, [], 'prefer');
             return <div data-testid="test" onClick={timedCb} />;
         };
 
@@ -127,5 +124,42 @@ describe('useTimedCallback', () => {
         userEvent.click(screen.getByTestId('test'));
         jest.advanceTimersByTime(250);
         expect(cb).toHaveBeenCalled();
+    });
+
+    test('returns a new callback by default', () => {
+        const cb1 = jest.fn();
+        const cb2 = jest.fn();
+        const Component = ({ cb }: { cb: () => void }) => {
+            const [timedCb] = useDelayCallback(cb, 500);
+            return <div data-testid="test" onClick={timedCb} />;
+        };
+
+        const { rerender } = render(<Component cb={cb1} />);
+        userEvent.click(screen.getByTestId('test'));
+        jest.advanceTimersByTime(500);
+        expect(cb1).toHaveBeenCalled();
+        rerender(<Component cb={cb2} />);
+        userEvent.click(screen.getByTestId('test'));
+        jest.advanceTimersByTime(500);
+        expect(cb2).toHaveBeenCalled();
+    });
+
+    test('memoizes the callback based on deps', () => {
+        const cb1 = jest.fn();
+        const cb2 = jest.fn();
+        const Component = ({ cb }: { cb: () => void }) => {
+            const [timedCb] = useDelayCallback(cb, 500, []);
+            return <div data-testid="test" onClick={timedCb} />;
+        };
+
+        const { rerender } = render(<Component cb={cb1} />);
+        userEvent.click(screen.getByTestId('test'));
+        jest.advanceTimersByTime(500);
+        expect(cb1).toHaveBeenCalled();
+        rerender(<Component cb={cb2} />);
+        userEvent.click(screen.getByTestId('test'));
+        jest.advanceTimersByTime(500);
+        expect(cb1).toHaveBeenCalledTimes(2);
+        expect(cb2).not.toHaveBeenCalled();
     });
 });
