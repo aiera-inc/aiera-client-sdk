@@ -46,21 +46,19 @@ const TooltipUI = (props: TooltipUIProps): ReactElement => {
         target = render({ hideTooltip, showTooltip });
     }
     return (
-        <>
-            <div
-                onClick={onTargetClick}
-                onMouseEnter={onTargetMouseEnter}
-                onMouseLeave={onTargetMouseLeave}
-                ref={targetRef}
-            >
-                {target}
-                {visible && (
-                    <div className="fixed" style={{ top, left, bottom, right, width }} ref={tooltipRef}>
-                        {content}
-                    </div>
-                )}
-            </div>
-        </>
+        <div
+            onClick={onTargetClick}
+            onMouseEnter={onTargetMouseEnter}
+            onMouseLeave={onTargetMouseLeave}
+            ref={targetRef}
+        >
+            {target}
+            {visible && (
+                <div className="fixed" style={{ top, left, bottom, right, width }} ref={tooltipRef}>
+                    {content}
+                </div>
+            )}
+        </div>
     );
 };
 
