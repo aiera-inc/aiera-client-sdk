@@ -1,13 +1,17 @@
-name: CI
+name: Build and test
 on: [push, pull_request]
 jobs:
   tests:
     runs-on: ubuntu-latest
     steps:
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "America/New_York"
       - uses: actions/checkout@v2
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
           node-version: 16.6.1
       - run: npm install
+      - run: npm build
       - run: npm test
