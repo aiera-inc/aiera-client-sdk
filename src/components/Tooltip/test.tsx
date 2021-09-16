@@ -346,4 +346,36 @@ describe('Tooltip', () => {
         const tooltip = await waitFor(() => screen.getByText(tooltipContent));
         expect(tooltip).toHaveStyle({ width: '50px' });
     });
+
+    test('puts up a modal to block the background if modal is true', async () => {
+        const { container } = renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'click',
+            position: 'bottom-left',
+            modal: true,
+        });
+
+        const target = screen.getByText(targetContent);
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        userEvent.click(target);
+        await waitFor(() => screen.getByText(tooltipContent));
+        expect(container.querySelector('.tooltip__modal')).toBeTruthy();
+    });
+
+    test('skips modal if modal is false', async () => {
+        const { container } = renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'click',
+            position: 'bottom-left',
+            modal: false,
+        });
+
+        const target = screen.getByText(targetContent);
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        userEvent.click(target);
+        await waitFor(() => screen.getByText(tooltipContent));
+        expect(container.querySelector('.tooltip__modal')).toBeFalsy();
+    });
 });

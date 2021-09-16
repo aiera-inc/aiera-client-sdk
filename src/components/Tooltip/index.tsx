@@ -15,6 +15,7 @@ interface TooltipUIProps {
     content: TooltipProps['content'];
     targetRef: RefObject<HTMLDivElement>;
     hideTooltip: (event?: MouseEvent) => void;
+    modal: boolean;
     onTargetClick: (event?: MouseEvent) => void;
     onTargetMouseEnter: (event?: MouseEvent) => void;
     onTargetMouseLeave: (event?: MouseEvent) => void;
@@ -24,11 +25,12 @@ interface TooltipUIProps {
     visible: boolean;
 }
 
-const TooltipUI = (props: TooltipUIProps): ReactElement => {
+function TooltipUI(props: TooltipUIProps): ReactElement {
     const {
         children,
         content,
         hideTooltip,
+        modal,
         onTargetClick,
         onTargetMouseEnter,
         onTargetMouseLeave,
@@ -46,21 +48,31 @@ const TooltipUI = (props: TooltipUIProps): ReactElement => {
         target = render({ hideTooltip, showTooltip });
     }
     return (
-        <div
-            onClick={onTargetClick}
-            onMouseEnter={onTargetMouseEnter}
-            onMouseLeave={onTargetMouseLeave}
-            ref={targetRef}
-        >
-            {target}
-            {visible && (
-                <div className="fixed" style={{ top, left, bottom, right, width }} ref={tooltipRef}>
-                    {content}
-                </div>
+        <>
+            {modal && visible && (
+                <div className="fixed z-10 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal" />
             )}
-        </div>
+            <div
+                className="tooltip"
+                onClick={onTargetClick}
+                onMouseEnter={onTargetMouseEnter}
+                onMouseLeave={onTargetMouseLeave}
+                ref={targetRef}
+            >
+                {target}
+                {visible && (
+                    <div
+                        className="fixed z-20 tooltip__content"
+                        style={{ top, left, bottom, right, width }}
+                        ref={tooltipRef}
+                    >
+                        {typeof content === 'function' ? content({ hideTooltip, showTooltip }) : content}
+                    </div>
+                )}
+            </div>
+        </>
     );
-};
+}
 
 /**
  *
@@ -110,7 +122,7 @@ export interface TooltipProps {
     /**
      * The tooltip content
      */
-    content: ReactNode;
+    content: ReactNode | TooltipRenderProps;
 
     /**
      * Force the tooltip content to match the width of the target element.
@@ -119,6 +131,11 @@ export interface TooltipProps {
      * content to automatically just match the input width.
      */
     matchWidth?: boolean;
+
+    /**
+     * Block all elements behind the tooltip so they can't be interacted with
+     */
+    modal?: boolean;
 
     /**
      * Which direction the tooltip content should grow.
@@ -333,6 +350,7 @@ export function Tooltip(props: TooltipProps): ReactElement {
         content,
         grow = 'down-right',
         matchWidth,
+        modal = false,
         openDelay = 0,
         openOn = 'hover',
         position,
@@ -357,10 +375,9 @@ export function Tooltip(props: TooltipProps): ReactElement {
     const [delayedShowTooltip, cancelShow] = useDelayCallback((position: Position) => {
         setState((s) => ({ ...s, position, visible: true }));
     }, openDelay);
-    const [delayedHideTooltip, cancelHide] = useDelayCallback(
-        () => setState((s) => ({ ...s, visible: false })),
-        closeDelay
-    );
+    const [delayedHideTooltip, cancelHide] = useDelayCallback(() => {
+        setState((s) => ({ ...s, visible: false }));
+    }, closeDelay);
 
     // The actual show/hide callbacks
     const showTooltip = useCallback(
@@ -417,6 +434,7 @@ export function Tooltip(props: TooltipProps): ReactElement {
             content={content}
             targetRef={targetRef}
             hideTooltip={hideTooltip}
+            modal={modal}
             onTargetClick={showTooltip}
             onTargetMouseEnter={showTooltip}
             onTargetMouseLeave={hideTooltip}
