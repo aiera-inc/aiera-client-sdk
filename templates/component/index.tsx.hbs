@@ -1,24 +1,20 @@
 import React, { ReactElement, ReactNode } from 'react';
 import './styles.css';
 
-/**
- * @notExported
- */
-interface {{name}}UIProps {
+interface {{name}}SharedProps {
     children?: ReactNode;
 }
+
+/** @notExported */
+interface {{name}}UIProps  extends {{name}}SharedProps {}
 
 export function {{name}}UI(props: {{{name}}}UIProps): ReactElement {
     const { children } = props;
     return <div>{children || '{{name}}UI'}</div>;
 };
 
-/**
- * @notExported
- */
-export interface {{name}}Props {
-    children?: ReactNode;
-}
+/** @notExported */
+export interface {{name}}Props extends {{name}}SharedProps {}
 
 /**
  * Renders {{name}}
