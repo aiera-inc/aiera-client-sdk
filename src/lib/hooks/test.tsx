@@ -162,4 +162,22 @@ describe('useDelayCallback', () => {
         expect(cb1).toHaveBeenCalledTimes(2);
         expect(cb2).not.toHaveBeenCalled();
     });
+
+    test('only cleans up timers on unmount', () => {
+        const cb = jest.fn();
+        const Component = () => {
+            const [timedCb] = useDelayCallback(cb);
+            return <div data-testid="test" onClick={timedCb} />;
+        };
+
+        const { rerender, unmount } = render(<Component />);
+        userEvent.click(screen.getByTestId('test'));
+        jest.advanceTimersByTime(1);
+        window.clearTimeout = jest.fn();
+        rerender(<Component />);
+        expect(cb).toHaveBeenCalled();
+        expect(window.clearTimeout).not.toHaveBeenCalled();
+        unmount();
+        expect(window.clearTimeout).toHaveBeenCalled();
+    });
 });

@@ -164,7 +164,7 @@ export function useDelayCallback<T extends (...args: any[]) => void>(
                 window.clearTimeout(ref.current);
             }
         };
-    });
+    }, []);
 
     const cancel = useCallback(() => {
         if (ref.current) {
