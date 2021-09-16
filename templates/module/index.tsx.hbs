@@ -8,7 +8,7 @@ interface {{name}}UIProps {
     children?: ReactNode;
 }
 
-export const {{name}}UI = (props: {{{name}}}UIProps): ReactElement => {
+export function {{name}}UI(props: {{{name}}}UIProps): ReactElement {
     const { children } = props;
     return <div>{children || '{{name}}UI'}</div>;
 };
@@ -23,7 +23,7 @@ export interface {{name}}Props {
 /**
  * Renders {{name}}
  */
-export const {{name}} = (props: {{{name}}}Props): ReactElement => {
+export function {{name}}(props: {{{name}}}Props): ReactElement {
     const { children } = props;
     return <{{name}}UI>{children}</{{name}}UI>;
 };
