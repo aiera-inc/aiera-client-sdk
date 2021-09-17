@@ -4,3 +4,4 @@ node_modules/
 /src/types/generated.ts
 /src/dev/docs
 /docs/
+.nvmrc
