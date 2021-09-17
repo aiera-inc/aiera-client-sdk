@@ -19,6 +19,7 @@ enum FilterByType {
 }
 
 export type EventListEvent = EventListQuery['events'][0];
+export type { CompanyFilterResult };
 
 export interface EventListUIProps {
     company?: CompanyFilterResult;
@@ -152,6 +153,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 
 export interface EventListProps {
     onSelectEvent?: ChangeHandler<EventListEvent>;
+    onSelectCompany?: ChangeHandler<CompanyFilterResult>;
 }
 
 interface EventListState {
@@ -174,6 +176,13 @@ export const EventList = (props: EventListProps): ReactElement => {
         (event, change) => {
             props.onSelectEvent?.(event, change);
             handlers.event(event, change);
+        },
+        [state]
+    );
+    const onSelectCompany = useCallback<ChangeHandler<CompanyFilterResult>>(
+        (event, change) => {
+            props.onSelectCompany?.(event, change);
+            handlers.company(event, change);
         },
         [state]
     );
@@ -230,7 +239,7 @@ export const EventList = (props: EventListProps): ReactElement => {
             listType={state.listType}
             loading={eventListResult.fetching}
             onBackFromTranscript={(event) => onSelectEvent(event, { value: null })}
-            onCompanyChange={handlers.company}
+            onCompanyChange={onSelectCompany}
             onSearchChange={({ currentTarget: { value } }) => setState({ ...state, searchTerm: value })}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
