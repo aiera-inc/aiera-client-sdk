@@ -6,6 +6,29 @@ import { fromValue } from 'wonka';
 import { renderWithClient } from 'testUtils';
 import { CompanyFilterButton } from '.';
 
+const company = {
+    id: '1',
+    commonName: 'Name',
+    instruments: [
+        {
+            id: '1',
+            isPrimary: true,
+            quotes: [
+                {
+                    id: '1',
+                    isPrimary: true,
+                    localTicker: 'TICK',
+                    exchange: {
+                        id: '1',
+                        country: { id: '1', countryCode: 'US' },
+                        shortName: 'EXCH',
+                    },
+                },
+            ],
+        },
+    ],
+};
+
 describe('CompanyFilterButton', () => {
     test('handles default state', () => {
         renderWithClient(<CompanyFilterButton />);
@@ -40,24 +63,6 @@ describe('CompanyFilterButton', () => {
     });
 
     test('renders companies', async () => {
-        const company = {
-            id: '1',
-            instruments: [
-                {
-                    isPrimary: true,
-                    quotes: [
-                        {
-                            isPrimary: true,
-                            localTicker: 'TICK',
-                            exchange: {
-                                country: { countryCode: 'US' },
-                                shortName: 'EXCH',
-                            },
-                        },
-                    ],
-                },
-            ],
-        };
         const onChange = jest.fn();
         renderWithClient(<CompanyFilterButton onChange={onChange} />, {
             executeQuery: () =>
@@ -76,5 +81,15 @@ describe('CompanyFilterButton', () => {
         expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: company });
         // Make sure the tooltip is hidden after the onchange
         await waitFor(() => expect(screen.queryByPlaceholderText('Search...')).toBeNull());
+    });
+
+    test('renders selected company', () => {
+        const onChange = jest.fn();
+        renderWithClient(<CompanyFilterButton onChange={onChange} value={company} />);
+        const button = screen.getByText('TICK');
+        screen.getByText('Name');
+        screen.getByText('X');
+        userEvent.click(button);
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: null });
     });
 });
