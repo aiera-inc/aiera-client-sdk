@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
 import { renderWithClient } from '@aiera/client-sdk/testUtils';
@@ -8,19 +8,19 @@ import { EventList, EventListUI } from '.';
 
 describe('EventListUI', () => {
     test('renders a loading state', () => {
-        render(<EventListUI loading />);
+        renderWithClient(<EventListUI loading />);
         screen.getByText('Loading...');
     });
 
     test('renders an empty state', () => {
-        render(<EventListUI />);
+        renderWithClient(<EventListUI />);
         screen.getByText('No events.');
     });
 
     test('renders an event list and selects and event on click', () => {
         const onSelectEvent = jest.fn();
         const event = { id: '1', title: 'Event Title' } as Event;
-        render(<EventListUI events={[event]} onSelectEvent={onSelectEvent} />);
+        renderWithClient(<EventListUI events={[event]} onSelectEvent={onSelectEvent} />);
         fireEvent(screen.getByText('Event Title'), new MouseEvent('click', { bubbles: true }));
         expect(onSelectEvent).toHaveBeenCalledWith(expect.anything(), { value: event });
     });

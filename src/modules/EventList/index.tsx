@@ -7,6 +7,7 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
+import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { FilterBy } from './FilterBy';
@@ -20,12 +21,14 @@ enum FilterByType {
 export type EventListEvent = EventListQuery['events'][0];
 
 export interface EventListUIProps {
+    company?: CompanyFilterResult;
     event?: EventListEvent;
     events?: EventListEvent[];
     filterByTypes?: FilterByType[];
     listType?: EventView;
     loading?: boolean;
     onBackFromTranscript?: MouseEventHandler;
+    onCompanyChange?: ChangeHandler<CompanyFilterResult>;
     onSearchChange?: FormEventHandler<HTMLInputElement>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
@@ -35,12 +38,14 @@ export interface EventListUIProps {
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
+        company,
         event,
         events,
         filterByTypes,
         listType,
         loading,
         onBackFromTranscript,
+        onCompanyChange,
         onSearchChange,
         onSelectFilterBy,
         onSelectListType,
@@ -59,6 +64,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     placeholder="Search Events and Transcripts"
                     value={searchTerm}
                 />
+                <div className="ml-2">
+                    <CompanyFilterButton onChange={onCompanyChange} value={company} />
+                </div>
             </div>
             <div className="p-3 h-full overflow-y-scroll">
                 <div className="flex flex-col flex-grow eventlist__tabs">
@@ -147,6 +155,7 @@ export interface EventListProps {
 }
 
 interface EventListState {
+    company?: CompanyFilterResult;
     event?: EventListEvent;
     filterByTypes: FilterByType[];
     listType: EventView;
@@ -155,6 +164,7 @@ interface EventListState {
 
 export const EventList = (props: EventListProps): ReactElement => {
     const { state, handlers, setState } = useChangeHandlers<EventListState>({
+        company: undefined,
         event: undefined,
         filterByTypes: [],
         listType: EventView.LiveAndUpcoming,
@@ -206,18 +216,21 @@ export const EventList = (props: EventListProps): ReactElement => {
                 hasTranscript: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
                 eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
                 title: state.searchTerm || undefined,
+                companyIds: state.company?.id ? [state.company.id] : undefined,
             },
         },
     });
 
     return (
         <EventListUI
+            company={state.company}
             event={state.event}
             events={eventListResult.data?.events}
             filterByTypes={state.filterByTypes}
             listType={state.listType}
             loading={eventListResult.fetching}
             onBackFromTranscript={(event) => onSelectEvent(event, { value: null })}
+            onCompanyChange={handlers.company}
             onSearchChange={({ currentTarget: { value } }) => setState({ ...state, searchTerm: value })}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
