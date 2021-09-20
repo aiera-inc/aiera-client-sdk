@@ -5,7 +5,8 @@ import { DateTime } from 'luxon';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
-import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { useMessageBus, useMessageListener, Message } from '@aiera/client-sdk/msg-bus';
+import { getPrimaryQuote, useCompanyResolver } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
@@ -151,10 +152,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     );
 };
 
-export interface EventListProps {
-    onSelectEvent?: ChangeHandler<EventListEvent>;
-    onSelectCompany?: ChangeHandler<CompanyFilterResult>;
-}
+export interface EventListProps {}
 
 interface EventListState {
     company?: CompanyFilterResult;
@@ -164,7 +162,7 @@ interface EventListState {
     searchTerm: string;
 }
 
-export const EventList = (props: EventListProps): ReactElement => {
+export const EventList = (_props: EventListProps): ReactElement => {
     const { state, handlers, setState } = useChangeHandlers<EventListState>({
         company: undefined,
         event: undefined,
@@ -172,20 +170,41 @@ export const EventList = (props: EventListProps): ReactElement => {
         listType: EventView.LiveAndUpcoming,
         searchTerm: '',
     });
+
+    const { bus } = useMessageBus();
+    const resolveCompany = useCompanyResolver();
+    useMessageListener(
+        'instrument-selected',
+        async (msg: Message<'instrument-selected'>) => {
+            if (msg.data.ticker) {
+                const companies = await resolveCompany(msg.data.ticker);
+                if (companies?.[0]) {
+                    const company = companies[0];
+                    setState((s) => ({ ...s, company }));
+                }
+            }
+        },
+        'in'
+    );
+
     const onSelectEvent = useCallback<ChangeHandler<EventListEvent>>(
         (event, change) => {
-            props.onSelectEvent?.(event, change);
+            const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
+            bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
             handlers.event(event, change);
         },
         [state]
     );
+
     const onSelectCompany = useCallback<ChangeHandler<CompanyFilterResult>>(
         (event, change) => {
-            props.onSelectCompany?.(event, change);
+            const primaryQuote = getPrimaryQuote(change.value);
+            bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
             handlers.company(event, change);
         },
         [state]
     );
+
     const [eventListResult] = useQuery<EventListQuery, EventListQueryVariables>({
         query: gql`
             query EventList($filter: EventFilter, $view: EventView) {

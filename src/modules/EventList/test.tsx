@@ -4,6 +4,7 @@ import { fromValue } from 'wonka';
 
 import { renderWithClient } from '@aiera/client-sdk/testUtils';
 import { Event } from '@aiera/client-sdk/types/generated';
+import { MessageBus, Provider } from '@aiera/client-sdk/msg-bus';
 import { EventList, EventListUI } from '.';
 
 describe('EventListUI', () => {
@@ -83,5 +84,20 @@ describe('EventList', () => {
         screen.getByText('Aug 25');
         screen.getByText('2:00PM 2021');
         screen.getByText(/earnings$/);
+    });
+
+    test('handles company selection via message bus', () => {
+        const bus = new MessageBus();
+        const TestComponent = () => {
+            return (
+                <Provider bus={bus}>
+                    <EventList />
+                </Provider>
+            );
+        };
+
+        const { client } = renderWithClient(<TestComponent />);
+        bus.emit('instrument-selected', { ticker: 'TICK' }, 'in');
+        expect(client.query).toHaveBeenCalled();
     });
 });
