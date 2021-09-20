@@ -3,13 +3,12 @@ import ReactDOM from 'react-dom';
 
 import '@aiera/client-sdk/css/styles.css';
 import { Provider as ClientProvider } from '@aiera/client-sdk/api/client';
-import { useNewMessageBus, Provider as MessageBusProvider } from '@aiera/client-sdk/msg-bus';
+import { useMessageListener, Provider as MessageBusProvider } from '@aiera/client-sdk/msg-bus';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
 
 const App: FC = (): ReactElement => {
-    const bus = useNewMessageBus();
-    bus.on(
+    const bus = useMessageListener(
         'instrument-selected',
         (msg) => {
             console.log(`Sending ${JSON.stringify(msg)} to platform`);

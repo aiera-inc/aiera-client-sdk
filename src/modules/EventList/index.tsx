@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
-import { useMessageBus, useMessageListener, Message } from '@aiera/client-sdk/msg-bus';
+import { useMessageListener, Message } from '@aiera/client-sdk/msg-bus';
 import { getPrimaryQuote, useCompanyResolver } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
@@ -171,9 +171,8 @@ export const EventList = (_props: EventListProps): ReactElement => {
         searchTerm: '',
     });
 
-    const { bus } = useMessageBus();
     const resolveCompany = useCompanyResolver();
-    useMessageListener(
+    const bus = useMessageListener(
         'instrument-selected',
         async (msg: Message<'instrument-selected'>) => {
             if (msg.data.ticker) {

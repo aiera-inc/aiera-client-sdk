@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useMemo, ReactNode, ReactElement } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode, ReactElement } from 'react';
 import type { InstrumentID } from '@finos/fdc3';
 import EventEmitter from 'eventemitter3';
 
@@ -80,10 +80,8 @@ export const Provider = ({ bus, children }: { bus: MessageBus; children: ReactNo
     return <Context.Provider value={{ bus }}>{children}</Context.Provider>;
 };
 
-export const useMessageBus = (): MessageBusContext => useContext(Context);
-export const useNewMessageBus = (): MessageBus => {
-    // Get a single instance of the MessageBus to use within the app
-    const bus = useMemo(() => new MessageBus(), []);
+export const useMessageBus = (): MessageBus => {
+    const { bus } = useContext(Context);
     // On unmount, remove all listeners
     useEffect(() => () => void bus.removeAllListeners(), []);
     return bus;
@@ -97,8 +95,8 @@ export function useMessageListener<E extends keyof MessageBusEvents>(
     type: E,
     listener: (msg: Message<E>) => void | Promise<void>,
     direction: Direction | 'out'
-): void {
-    const { bus } = useMessageBus();
+): MessageBus {
+    const bus = useMessageBus();
     useEffect(() => {
         // Wrap the listener to it returns void, so that async functions
         // can be passed in (as long as the return is ignored).
@@ -111,4 +109,5 @@ export function useMessageListener<E extends keyof MessageBusEvents>(
             bus.off(type, wrappedListener, direction);
         };
     }, []);
+    return bus;
 }
