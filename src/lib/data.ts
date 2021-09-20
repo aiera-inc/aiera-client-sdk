@@ -2,7 +2,11 @@
  * Utilities for working with data from GQL Query responses.
  * @module
  */
+import { useCallback } from 'react';
+import gql from 'graphql-tag';
+import { useClient } from 'urql';
 import { DeepPartial, Instrument, Maybe, Quote } from '@aiera/client-sdk/types';
+import { CompanyResolutionQuery, CompanyResolutionQueryVariables } from '@aiera/client-sdk/types/generated';
 
 /**
  * Utilities for working with quotes/instruments
@@ -37,4 +41,44 @@ export function getPrimaryQuote(
         .sort(sortByPrimary);
     const primaryQuote = quotes?.find((quote) => quote.exchange.country.countryCode === 'US');
     return primaryQuote || quotes?.[0];
+}
+
+export function useCompanyResolver(): (identifier: string) => Promise<CompanyResolutionQuery['companies'] | undefined> {
+    const client = useClient();
+    return useCallback(
+        async (identifier: string) => {
+            const result = await client
+                .query<CompanyResolutionQuery, CompanyResolutionQueryVariables>(
+                    gql`
+                        query CompanyResolution($identifier: String!) {
+                            companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
+                                id
+                                commonName
+                                instruments {
+                                    id
+                                    isPrimary
+                                    quotes {
+                                        id
+                                        isPrimary
+                                        localTicker
+                                        exchange {
+                                            id
+                                            shortName
+                                            country {
+                                                id
+                                                countryCode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    `,
+                    { identifier }
+                )
+                .toPromise();
+            return result?.data?.companies;
+        },
+        [client]
+    );
 }
