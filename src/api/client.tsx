@@ -40,9 +40,7 @@ function createGQLClient(config: Config): Client {
     });
 }
 
-/**
- * @notExported
- */
+/** @notExported */
 interface ClientContext {
     reset: () => void;
 }
