@@ -1,8 +1,7 @@
 import minimatch from 'minimatch';
-import zlib from 'zlib';
 import { join } from 'path';
-import { copyFile, readFile } from 'fs/promises';
-import http, { IncomingMessage, ServerResponse } from 'http';
+import { readFile } from 'fs/promises';
+import copy from 'cpy';
 import { build, BuildOptions, OnLoadResult, Plugin, serve } from 'esbuild';
 import yargs from 'yargs/yargs';
 import { globby } from 'globby';
@@ -10,14 +9,12 @@ import chokidar, { FSWatcher } from 'chokidar';
 import postcss from 'postcss';
 import postcssLoadConfig from 'postcss-load-config';
 
-const srcWatchPattern = 'src/**/*.{ts,tsx,css}';
-const ignorePatterns = ['src/dev/docs'];
-const srcPath = join(process.cwd(), '/src');
-
 interface Watchers {
-    pkg: FSWatcher;
     src: FSWatcher;
+    assets: FSWatcher;
 }
+
+const srcPath = join(process.cwd(), '/src');
 
 function postcssPlugin(): Plugin {
     const cache = new Map<string, { css: string; result: OnLoadResult }>();
@@ -50,9 +47,16 @@ function postcssPlugin(): Plugin {
     };
 }
 
-async function copyFiles() {
+async function copyAssets(watchers: Watchers | null) {
     console.log('Copying assets to dist');
-    return copyFile('package.json', 'dist/package.json');
+    if (watchers) {
+        watchers.assets.on('all', () => void copyAssets(null));
+    }
+    return await Promise.all([
+        copy('src/assets/**/*', 'dist/assets'),
+        copy('package.json', 'dist'),
+        watchers ? copy(['src/dev/*.html'], 'dist') : null,
+    ]);
 }
 
 const sharedConfig: BuildOptions = {
@@ -63,7 +67,7 @@ const sharedConfig: BuildOptions = {
 
 async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
     console.time('Built in');
-    const files = await globby(srcWatchPattern, { ignore: ignorePatterns });
+    const files = await globby('src/**/*.{ts,tsx,css}');
     const buildResult = await build({
         ...sharedConfig,
         entryPoints: files,
@@ -73,46 +77,17 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
     });
 
     if (watchers) {
-        Object.values(watchers).forEach((watcher: FSWatcher) => {
-            watcher.on('all', () => void buildAll(null, plugins));
-        });
+        watchers.src.on('all', () => void buildAll(null, plugins));
     }
 
-    await copyFiles();
     console.timeEnd('Built in');
     return buildResult;
 }
 
-function reloadProxy(port: number, watcher: FSWatcher) {
-    return http.createServer((req: IncomingMessage, res: ServerResponse) => {
-        if (req.url === '/watch') {
-            const onChange = () => res.end();
-            watcher.once('all', onChange);
-            res.on('close', () => watcher.off('all', onChange));
-        } else {
-            req.pipe(
-                http.request({ port, path: req.url, method: req.method, headers: req.headers }, (proxyRes) => {
-                    if (req.headers['accept-encoding']?.includes('gzip')) {
-                        res.writeHead(proxyRes.statusCode || 200, {
-                            ...proxyRes.headers,
-                            'Content-Encoding': 'gzip',
-                        });
-                        proxyRes.pipe(zlib.createGzip()).pipe(res, { end: true });
-                    } else {
-                        res.writeHead(proxyRes.statusCode || 200, proxyRes.headers);
-                        proxyRes.pipe(res, { end: true });
-                    }
-                }),
-                { end: true }
-            );
-        }
-    });
-}
-
-async function serveAll(port: number, watchers: Watchers, plugins: Plugin[]) {
+async function serveAll(port: number, plugins: Plugin[]) {
     const serveResult = await serve(
         {
-            port: port + 1,
+            port,
             servedir: 'src/dev',
             onRequest: ({ method, path, timeInMS }) => {
                 console.log(`${method} ${path} ${timeInMS}ms`);
@@ -122,14 +97,12 @@ async function serveAll(port: number, watchers: Watchers, plugins: Plugin[]) {
             ...sharedConfig,
             entryPoints: ['src/dev/index.tsx'],
             bundle: true,
-            outdir: 'src/dev',
+            outdir: 'src/dev/bundle',
             plugins,
             incremental: true,
             write: false,
         }
     );
-    const proxy = reloadProxy(port + 1, watchers.src);
-    proxy.listen(port);
     console.log(`Listening on ${serveResult.host}:${port}`);
     return serveResult;
 }
@@ -143,19 +116,21 @@ async function cli(args: Arguments) {
     const plugins: Plugin[] = [postcssPlugin()];
     if (args.watch) {
         const watchers: Watchers = {
-            pkg: chokidar.watch('package.json'),
-            src: chokidar.watch(srcWatchPattern, { ignoreInitial: true, ignored: ignorePatterns }),
+            src: chokidar.watch(['src/**/*.{ts,tsx,css}'], { ignoreInitial: true }),
+            assets: chokidar.watch(['package.json', 'src/**/*.{html,svg,png}'], { ignoreInitial: true }),
         };
-        await serveAll(args.port, watchers, plugins);
+        await serveAll(args.port, plugins);
         await buildAll(watchers, plugins);
+        await copyAssets(watchers);
     } else {
         await buildAll(null, plugins);
+        await copyAssets(null);
     }
 }
 
 void cli(
     yargs(process.argv.slice(2)).options({
-        port: { type: 'number', default: 8000 },
+        port: { type: 'number', default: 8001 },
         watch: { type: 'boolean', default: false },
     }).argv
 );

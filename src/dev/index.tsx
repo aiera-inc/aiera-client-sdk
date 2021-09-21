@@ -1,7 +1,6 @@
 import React, { FC, ReactElement } from 'react';
 import ReactDOM from 'react-dom';
 
-import '@aiera/client-sdk/css/styles.css';
 import { Provider as ClientProvider } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Provider as MessageBusProvider } from '@aiera/client-sdk/msg-bus';
 import { Auth } from '@aiera/client-sdk/modules/Auth';

@@ -9,22 +9,22 @@
     </head>
     <body>
     <script>
-            let start;
-            function watch() {
-                start = Date.now();
-                fetch('/watch')
-                    .then(() => {
-                        window.location.reload();
-                    })
-                    .catch(() => {
-                        if (Date.now() - start < 100) {
-                            window.location.reload();
-                        } else {
-                            setTimeout(watch, 0);
-                        }
-                    });
-            }
-            watch();
+            // let start;
+            // function watch() {
+            //     start = Date.now();
+            //     fetch('/watch')
+            //         .then(() => {
+            //             window.location.reload();
+            //         })
+            //         .catch(() => {
+            //             if (Date.now() - start < 100) {
+            //                 window.location.reload();
+            //             } else {
+            //                 setTimeout(watch, 0);
+            //             }
+            //         });
+            // }
+            // watch();
         </script>
         <iframe style="border: none; resize: both;" width="370" height="575" src="frame.html" />
     </body>
