@@ -9,6 +9,7 @@ jobs:
         with:
           timezoneLinux: "America/New_York"
       - uses: actions/checkout@v2
+      - uses: ouzi-dev/commit-status-updater@v1.1.0
       - name: Setup Node
         uses: actions/setup-node@v2
         with:
@@ -16,3 +17,6 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm test
+      - uses: ouzi-dev/commit-status-updater@v1.1.0
+        with:
+          status: "${{ job.status }}"
