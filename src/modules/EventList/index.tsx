@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
-import { useMessageListener, Message } from '@aiera/client-sdk/msg-bus';
+import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { getPrimaryQuote, useCompanyResolver } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';

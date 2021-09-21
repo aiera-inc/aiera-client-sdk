@@ -18,6 +18,7 @@ import { devtoolsExchange } from '@urql/devtools';
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 
 /**
@@ -49,9 +50,17 @@ const Context = createContext<ClientContext>({ reset: () => undefined });
 /**
  * A React Provider to configure an app-level graphql client...
  */
-export const Provider = ({ config, children }: { config: Config; children: ReactNode }): ReactElement => {
-    const [client, setClient] = useState(createGQLClient(config));
-    const reset = () => setClient(createGQLClient(config));
+export const Provider = ({
+    config = {},
+    children,
+}: {
+    config?: Partial<Config>;
+    children: ReactNode;
+}): ReactElement => {
+    const appConfig = useConfig();
+    const clientConfig = { url: config.url || appConfig.apiUrl, auth: config.auth };
+    const [client, setClient] = useState(createGQLClient(clientConfig));
+    const reset = () => setClient(createGQLClient(clientConfig));
     return (
         <Context.Provider value={{ reset }}>
             <UrqlProvider value={client}>{children}</UrqlProvider>

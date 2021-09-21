@@ -4,7 +4,7 @@ import { fromValue } from 'wonka';
 
 import { renderWithClient } from '@aiera/client-sdk/testUtils';
 import { Event } from '@aiera/client-sdk/types/generated';
-import { MessageBus, Provider } from '@aiera/client-sdk/msg-bus';
+import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { EventList, EventListUI } from '.';
 
 describe('EventListUI', () => {

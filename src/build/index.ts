@@ -59,10 +59,23 @@ async function copyAssets(watchers: Watchers | null) {
     ]);
 }
 
+function toCamelCase(snakeCase: string): string {
+    return snakeCase.toLowerCase().replace(/_[a-z]/g, (char) => `${char[1].toUpperCase()}`);
+}
+
+function getEnv(): { [key: string]: string } {
+    return Object.fromEntries(
+        Object.entries(process.env)
+            .filter(([key]) => key.startsWith('AIERA_SDK_'))
+            .map(([key, value]) => [`Env.${toCamelCase(key.replace('AIERA_SDK_', ''))}`, `"${value || ''}"`])
+    );
+}
+
 const sharedConfig: BuildOptions = {
     sourcemap: 'external',
     target: 'es6',
     tsconfig: 'tsconfig.json',
+    define: getEnv(),
 };
 
 async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
