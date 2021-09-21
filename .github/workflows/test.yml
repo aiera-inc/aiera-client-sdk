@@ -2,6 +2,7 @@ name: Build and test
 on: [push, pull_request]
 jobs:
   tests:
+    name: 'Build and test'
     runs-on: ubuntu-latest
     steps:
       - uses: szenius/set-timezone@v1.0
