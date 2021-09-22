@@ -24,6 +24,7 @@ module.exports = {
 
     moduleNameMapper: {
         '\\.(scss|sass|css)$': '<rootDir>/style.mock.js',
+        '\\.(svg|png)$': '<rootDir>/img.mock.js',
         '@aiera/client-sdk/(.*)': '<rootDir>/../src/$1',
     },
 

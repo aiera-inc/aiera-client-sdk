@@ -61,7 +61,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         <div className="h-full pb-16 eventlist">
             <div className="flex items-center p-3 shadow eventlist__header">
                 <input
-                    className="w-3/4 p-2 text-sm rounded-lg border-gray-200 border"
+                    className="flex-1 p-2 text-sm rounded-lg border-gray-200 border"
                     onChange={onSearchChange}
                     placeholder="Search Events and Transcripts"
                     value={searchTerm}

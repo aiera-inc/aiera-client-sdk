@@ -114,6 +114,10 @@ async function serveAll(port: number, plugins: Plugin[]) {
             plugins,
             incremental: true,
             write: false,
+            loader: {
+                '.svg': 'file',
+            },
+            publicPath: 'bundle',
         }
     );
     console.log(`Listening on ${serveResult.host}:${port}`);
