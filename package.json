@@ -24,6 +24,7 @@
         "new:nested:component": "plop --plopfile templates/plopfile.ts nested component",
         "new:module": "plop --plopfile templates/plopfile.ts component module",
         "new:nested:module": "plop --plopfile templates/plopfile.ts nested module",
+        "new:svg": "plop --plopfile templates/plopfile.ts svg",
         "new": "plop --plopfile templates/plopfile.ts",
         "start": "npm run build:watch",
         "test": "jest --config .jest/jest.config.js",

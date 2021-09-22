@@ -65,4 +65,22 @@ export default (plop: NodePlopAPI) => {
             },
         ],
     });
+
+    plop.setGenerator('svg', {
+        description: 'Create a new SVG component',
+        prompts: [
+            {
+                type: 'input',
+                name: 'name',
+                message: 'Enter SVG name: ',
+            },
+        ],
+        actions: [
+            {
+                type: 'add',
+                path: '../src/components/Svg/{{name}}.tsx',
+                templateFile: 'svg.tsx.hbs',
+            }
+        ],
+    });
 };
