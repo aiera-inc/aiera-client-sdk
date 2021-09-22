@@ -1,8 +1,10 @@
 import React, { ReactElement } from 'react';
 import classNames from 'classnames';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { Svg } from '.';
 import {{lowerCase name}} from '@aiera/client-sdk/assets/{{lowerCase name}}.svg';
 
 export function {{properCase name}}({ className }: { className?: string }): ReactElement {
-return <Svg alt="{{lowerCase name}}" className={classNames(className, 'Svg__{{lowerCase name}}')} src={ {{~lowerCase name~}} } />;
+    const config = useConfig();
+    return <Svg alt="{{lowerCase name}}" className={classNames(className, 'Svg__{{lowerCase name}}')} src={`${config.assetPath}${ {{~lowerCase name~}} }`} />;
 }

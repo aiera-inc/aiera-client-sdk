@@ -8,7 +8,7 @@ interface AppConfig {
 // Setup default values for env
 const Env: AppConfig = {
     apiUrl: '',
-    assetPath: '/assets',
+    assetPath: 'assets/',
 };
 
 // Leave these as Env.param instead of passing just Env,

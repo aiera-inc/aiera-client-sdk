@@ -17,7 +17,7 @@ const App: FC = (): ReactElement => {
     );
     return (
         <div>
-            <ConfigProvider config={{ apiUrl: 'https://api-dev.aiera.com/graphql' }}>
+            <ConfigProvider config={{ apiUrl: 'https://api-dev.aiera.com/graphql', assetPath: 'bundle/' }}>
                 <MessageBusProvider bus={bus}>
                     <ClientProvider>
                         <Auth showLogout>
