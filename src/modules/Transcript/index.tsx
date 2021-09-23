@@ -6,6 +6,8 @@ import { DateTime } from 'luxon';
 import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import './styles.css';
+import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 
 /**
  * @notExported
@@ -27,14 +29,24 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             <div className="relative p-3 shadow-header rounded-b-lg transcript__header">
                 <div className="flex items-center">
                     {onBack && (
-                        <button className="p-2 mr-2 font-semibold bg-gray-200 rounded-lg" onClick={onBack}>
-                            <span className="text-xs">{'< '}</span> Events
+                        <button
+                            className="flex h-9 items-center px-3 mr-2 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white"
+                            onClick={onBack}
+                        >
+                            <ArrowLeft className="z-1 relative mr-1.5" />
+                            Events
                         </button>
                     )}
-                    <input
-                        className="w-3/4 p-2 text-sm border border-gray-200 rounded-lg"
-                        placeholder="Search transcripts"
-                    />
+                    <div className="h-9 items-center w-full relative input__search">
+                        <input
+                            className="w-full inset-0 absolute p-2 text-sm border border-gray-200 rounded-lg"
+                            placeholder="Search transcripts"
+                        />
+                        <MagnifyingGlass className="z-1 relative" />
+                    </div>
+                    <div>
+                        <MagnifyingGlass className="z-1 relative" />
+                    </div>
                 </div>
                 <div className="flex flex-row mt-3">
                     <div className="flex flex-col justify-center flex-1 min-w-0">
