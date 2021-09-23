@@ -12,15 +12,27 @@ import postcssLoadConfig from 'postcss-load-config';
 interface Watchers {
     src: FSWatcher;
     assets: FSWatcher;
+    tailwind: FSWatcher;
 }
 
 const srcPath = join(process.cwd(), '/src');
 
-function postcssPlugin(): Plugin {
+function postcssPlugin(watcher: FSWatcher | null): Plugin {
     const cache = new Map<string, { css: string; result: OnLoadResult }>();
     return {
         name: 'postcss',
         setup: (build) => {
+            const clearCache = () => {
+                console.log('clearing cache');
+                cache.clear();
+            };
+            if (watcher) {
+                watcher.on('all', clearCache);
+                build.onEnd(() => {
+                    watcher.off('all', clearCache);
+                });
+            }
+
             build.onLoad({ filter: /\.css$/, namespace: 'file' }, async ({ path }) => {
                 if (minimatch(path, `${srcPath}/**/*.css`)) {
                     const { plugins, options } = await postcssLoadConfig();
@@ -91,6 +103,7 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
 
     if (watchers) {
         watchers.src.on('all', () => void buildAll(null, plugins));
+        watchers.tailwind.on('all', () => void buildAll(null, plugins));
     }
 
     console.timeEnd('Built in');
@@ -129,16 +142,19 @@ interface Arguments {
 }
 
 async function cli(args: Arguments) {
-    const plugins: Plugin[] = [postcssPlugin()];
     if (args.watch) {
+        const tailwindWatcher = chokidar.watch(['tailwind.config.js'], { ignoreInitial: true });
+        const plugins: Plugin[] = [postcssPlugin(tailwindWatcher)];
         const watchers: Watchers = {
             src: chokidar.watch(['src/**/*.{ts,tsx,css}'], { ignoreInitial: true }),
             assets: chokidar.watch(['package.json', 'src/**/*.{html,svg,png}'], { ignoreInitial: true }),
+            tailwind: tailwindWatcher,
         };
         await serveAll(args.port, plugins);
         await buildAll(watchers, plugins);
         await copyAssets(watchers);
     } else {
+        const plugins: Plugin[] = [postcssPlugin(null)];
         await buildAll(null, plugins);
         await copyAssets(null);
     }
