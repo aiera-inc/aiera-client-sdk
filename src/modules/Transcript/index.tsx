@@ -8,6 +8,7 @@ import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import './styles.css';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
+import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
 
 /**
  * @notExported
@@ -30,22 +31,24 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 <div className="flex items-center">
                     {onBack && (
                         <button
-                            className="flex h-9 items-center px-3 mr-2 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white"
+                            className="group flex h-9 items-center px-3 mr-2 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white"
                             onClick={onBack}
                         >
-                            <ArrowLeft className="z-1 relative mr-1.5" />
+                            <ArrowLeft className="fill-current text-white z-1 relative mr-1.5" />
                             Events
                         </button>
                     )}
-                    <div className="h-9 items-center w-full relative input__search">
+                    <div className="h-9 items-center w-full relative mr-2 input__search">
                         <input
-                            className="w-full inset-0 absolute p-2 text-sm border border-gray-200 rounded-lg"
+                            className="w-full inset-0 absolute pl-7 text-sm border border-gray-200 rounded-lg"
                             placeholder="Search transcripts"
                         />
-                        <MagnifyingGlass className="z-1 relative" />
+                        <div className="pointer-events-none h-9 w-8 justify-center items-center flex">
+                            <MagnifyingGlass className="z-1 relative" />
+                        </div>
                     </div>
-                    <div>
-                        <MagnifyingGlass className="z-1 relative" />
+                    <div className="h-9 items-center flex">
+                        <Gear className="z-1 relative" />
                     </div>
                 </div>
                 <div className="flex flex-row mt-3">
