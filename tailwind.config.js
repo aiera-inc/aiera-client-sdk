@@ -4,15 +4,17 @@ module.exports = {
     theme: {
         extend: {
             boxShadow: {
-                header: '0px 1px 2px rgba(0, 0, 0, 0.07), 0px 12px 24px rgba(0, 0, 0, 0.03)'
-            }
-        }
+                header: '0px 1px 2px rgba(0, 0, 0, 0.07), 0px 12px 24px rgba(0, 0, 0, 0.03)',
+            },
+        },
     },
     variants: {
         extend: {
+            backgroundColor: ['odd', 'active'],
+            fill: ['hover', 'focus', 'active'],
             margin: ['first', 'last'],
-            backgroundColor: ['odd']
-        }
+            textColor: ['active'],
+        },
     },
-    plugins: [require('@tailwindcss/line-clamp')]
+    plugins: [require('@tailwindcss/line-clamp')],
 };
