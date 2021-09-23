@@ -24,10 +24,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const eventDate = DateTime.fromISO(event?.eventDate);
     return (
         <div className="h-full pb-16 transcript">
-            <div className="relative p-3 shadow transcript__header">
+            <div className="relative p-3 shadow-header rounded-b-lg transcript__header">
                 <div className="flex items-center">
                     {onBack && (
-                        <button className="p-2 mr-2 font-semibold bg-gray-200 rounded-md" onClick={onBack}>
+                        <button className="p-2 mr-2 font-semibold bg-gray-200 rounded-lg" onClick={onBack}>
                             <span className="text-xs">{'< '}</span> Events
                         </button>
                     )}
@@ -39,10 +39,18 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 <div className="flex flex-row mt-3">
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                         <div className="text-xs">
-                            <span className="pr-1 font-semibold">{primaryQuote?.localTicker}</span>
-                            <span className="text-gray-300">{primaryQuote?.exchange?.shortName}</span>
-                            <span className="text-gray-400"> • {event?.eventType}</span>
-                            <span className="text-gray-400"> • {eventDate.toFormat('h:mma M/dd/yyyy')}</span>
+                            {primaryQuote?.localTicker && (
+                                <span className="pr-1 font-semibold">{primaryQuote?.localTicker}</span>
+                            )}
+                            {primaryQuote?.exchange?.shortName && (
+                                <span className="text-gray-400">{primaryQuote?.exchange?.shortName}</span>
+                            )}
+                            {event?.eventType && (
+                                <span className="text-gray-300 capitalize"> • {event?.eventType}</span>
+                            )}
+                            {eventDate && (
+                                <span className="text-gray-300"> • {eventDate.toFormat('h:mma M/dd/yyyy')}</span>
+                            )}
                         </div>
                         <div className="text-sm truncate whitespace-normal line-clamp-1">{event?.title}</div>
                     </div>
