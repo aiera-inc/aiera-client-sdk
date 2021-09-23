@@ -27,7 +27,7 @@
         "new:svg": "plop --plopfile templates/plopfile.ts svg",
         "new": "plop --plopfile templates/plopfile.ts",
         "start": "npm run build:watch",
-        "test": "jest --config .jest/jest.config.js",
+        "test": "jest --config .jest/jest.config.js --coverage",
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
         "ts": "node -r esbuild-register",
         "prepare": "node -e \"if(require('fs').existsSync('.git')){process.exit(1)}\" || husky install",
@@ -38,6 +38,9 @@
         "react-dom": "17.0.2"
     },
     "devDependencies": {
+        "@babel/preset-env": "^7.15.6",
+        "@babel/preset-react": "^7.14.5",
+        "@babel/preset-typescript": "^7.15.0",
         "@finos/fdc3": "^1.2.0",
         "@graphql-codegen/add": "^3.0.0",
         "@graphql-codegen/cli": "^2.0.1",
@@ -62,7 +65,6 @@
         "chokidar": "^3.5.2",
         "concurrently": "^6.2.0",
         "cpy": "^8.1.2",
-        "esbuild-jest": "^0.5.0",
         "esbuild-register": "^3.0.0",
         "eslint": "^7.31.0",
         "eslint-config-prettier": "^8.3.0",

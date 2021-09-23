@@ -1,14 +1,11 @@
 /* eslint-disable */
+const path = require('path');
 module.exports = {
     // The root of your source code, typically /src
     // `<rootDir>` is a token Jest substitutes
     roots: ['<rootDir>/../src'],
 
-    // Jest transformations -- this adds support for TypeScript
-    // using ts-jest
-    transform: {
-        '^.+\\.tsx?$': 'esbuild-jest',
-    },
+    transform: { '^.+\\.[jt]sx?$': ['babel-jest', { configFile: path.resolve(__dirname, 'babel.config.js') }] },
 
     // Test spec file resolution pattern
     // Matches parent folder `__tests__` and filename
