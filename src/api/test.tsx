@@ -1,7 +1,13 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
+import React from 'react';
 import gql from 'graphql-tag';
 import { GraphQLError } from 'graphql';
 import { makeOperation, CombinedError, OperationContext } from '@urql/core';
+
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+
+import { Provider, useClient } from './client';
 import { createTokenAuthConfig } from './auth';
 
 const tokens = {
@@ -154,5 +160,34 @@ describe('default auth', () => {
                 authState: null,
             })
         ).toBeFalsy();
+    });
+
+    test('provider resets the client on reset', () => {
+        const config = { url: 'http://domain.tld' };
+        let outerClient: unknown;
+        function TestComponent() {
+            const { client, reset } = useClient();
+            outerClient = client;
+            return <button data-testid="reset" onClick={reset} />;
+        }
+
+        const { rerender } = render(
+            <Provider config={config}>
+                <TestComponent />
+            </Provider>
+        );
+
+        const client1 = outerClient;
+        rerender(
+            <Provider config={config}>
+                <TestComponent />
+            </Provider>
+        );
+
+        const client2 = outerClient;
+        userEvent.click(screen.getByTestId('reset'));
+        const client3 = outerClient;
+        expect(client1).toBe(client2);
+        expect(client1).not.toBe(client3);
     });
 });

@@ -13,7 +13,14 @@
  * @module
  */
 import React, { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
-import { Client, createClient, fetchExchange, Exchange, Provider as UrqlProvider } from 'urql';
+import {
+    Client,
+    createClient,
+    useClient as useUrqlClient,
+    fetchExchange,
+    Exchange,
+    Provider as UrqlProvider,
+} from 'urql';
 import { devtoolsExchange } from '@urql/devtools';
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
@@ -70,7 +77,11 @@ export const Provider = ({
     );
 };
 
-export const useClient = (): ClientContext => useContext(Context);
+export const useClient = (): ClientContext & { client: Client } => {
+    const client = useUrqlClient();
+    const { reset } = useContext(Context);
+    return { client, reset };
+};
 
 /**
  * @ignore
