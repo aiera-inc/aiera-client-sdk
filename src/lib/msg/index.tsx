@@ -82,8 +82,6 @@ export const Provider = ({ bus, children }: { bus: MessageBus; children: ReactNo
 
 export const useMessageBus = (): MessageBus => {
     const { bus } = useContext(Context);
-    // On unmount, remove all listeners
-    useEffect(() => () => void bus.removeAllListeners(), []);
     return bus;
 };
 
