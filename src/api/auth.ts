@@ -126,7 +126,7 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
         },
 
         didAuthError: ({ error }) => {
-            if (error.graphQLErrors.some((e) => e.extensions?.code === 'UNAUTHORIZED')) {
+            if (error?.graphQLErrors?.some((e) => e.extensions?.code === 'UNAUTHORIZED')) {
                 return true;
             } else if (error.response) {
                 const resp = error.response as Response;
