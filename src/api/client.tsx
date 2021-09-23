@@ -13,7 +13,7 @@
  * @module
  */
 import React, { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
-import { Client, createClient, fetchExchange, Provider as UrqlProvider } from 'urql';
+import { Client, createClient, fetchExchange, Exchange, Provider as UrqlProvider } from 'urql';
 import { devtoolsExchange } from '@urql/devtools';
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
@@ -26,18 +26,20 @@ import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
  */
 interface Config {
     url: string;
-    auth?: AuthConfig<unknown>;
+    auth?: AuthConfig<unknown> | null;
+    fetch?: typeof window.fetch;
 }
 
-function createGQLClient(config: Config): Client {
+function createGQLClient({ url, fetch, auth = defaultTokenAuthConfig }: Config): Client {
+    const exchanges = [devtoolsExchange, cacheExchange(), auth ? authExchange(auth) : null, fetchExchange].filter(
+        (t) => t
+        // Cast needed because of the filter
+    ) as Exchange[];
+
     return createClient({
-        url: config.url,
-        exchanges: [
-            devtoolsExchange,
-            cacheExchange(),
-            authExchange(config.auth || defaultTokenAuthConfig),
-            fetchExchange,
-        ],
+        url,
+        fetch,
+        exchanges,
     });
 }
 
@@ -58,7 +60,7 @@ export const Provider = ({
     children: ReactNode;
 }): ReactElement => {
     const appConfig = useConfig();
-    const clientConfig = { url: config.url || appConfig.apiUrl, auth: config.auth };
+    const clientConfig = { ...config, url: config.url || appConfig.apiUrl };
     const [client, setClient] = useState(createGQLClient(clientConfig));
     const reset = () => setClient(createGQLClient(clientConfig));
     return (
