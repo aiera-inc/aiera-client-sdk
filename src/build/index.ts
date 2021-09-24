@@ -141,7 +141,12 @@ interface Arguments {
     watch: boolean;
 }
 
-async function cli(args: Arguments) {
+async function cli() {
+    const args: Arguments = await yargs(process.argv.slice(2)).options({
+        port: { type: 'number', default: 8001 },
+        watch: { type: 'boolean', default: false },
+    }).argv;
+
     if (args.watch) {
         const tailwindWatcher = chokidar.watch(['tailwind.config.js'], { ignoreInitial: true });
         const plugins: Plugin[] = [postcssPlugin(tailwindWatcher)];
@@ -160,9 +165,4 @@ async function cli(args: Arguments) {
     }
 }
 
-void cli(
-    yargs(process.argv.slice(2)).options({
-        port: { type: 'number', default: 8001 },
-        watch: { type: 'boolean', default: false },
-    }).argv
-);
+void cli();
