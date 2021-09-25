@@ -9,6 +9,7 @@ import './styles.css';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
+import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 
 /**
  * @notExported
@@ -26,32 +27,32 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const primaryQuote = getPrimaryQuote(event?.primaryCompany);
     const eventDate = DateTime.fromISO(event?.eventDate);
     return (
-        <div className="h-full pb-16 transcript">
+        <div className="h-full flex flex-col transcript">
             <div className="relative p-3 shadow-header rounded-b-lg transcript__header">
                 <div className="flex items-center">
                     {onBack && (
                         <button
-                            className="group flex h-9 items-center px-3 mr-2 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white"
+                            className="group flex h-9 items-center px-3 mr-3 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white"
                             onClick={onBack}
                         >
-                            <ArrowLeft className="fill-current text-white z-1 relative mr-1.5" />
+                            <ArrowLeft className="w-3.5 fill-current text-white z-1 relative mr-2" />
                             Events
                         </button>
                     )}
-                    <div className="h-9 items-center w-full relative mr-2 input__search">
+                    <div className="h-9 items-center w-full relative mr-3 input__search">
                         <input
-                            className="w-full inset-0 absolute pl-7 text-sm border border-gray-200 rounded-lg"
+                            className="w-full inset-0 absolute pl-8 text-sm border border-gray-200 rounded-lg"
                             placeholder="Search transcripts"
                         />
-                        <div className="pointer-events-none h-9 w-8 justify-center items-center flex">
-                            <MagnifyingGlass className="z-1 relative" />
+                        <div className="pointer-events-none h-9 w-9 justify-center items-center flex">
+                            <MagnifyingGlass className="z-1 relative w-4" />
                         </div>
                     </div>
-                    <div className="h-9 items-center flex">
-                        <Gear className="z-1 relative" />
+                    <div className="items-center flex">
+                        <Gear className="w-6" />
                     </div>
                 </div>
-                <div className="flex flex-row mt-3">
+                <div className="flex flex-row mt-3 items-center">
                     <div className="flex flex-col justify-center flex-1 min-w-0">
                         <div className="text-xs">
                             {primaryQuote?.localTicker && (
@@ -69,10 +70,12 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         </div>
                         <div className="text-sm truncate whitespace-normal line-clamp-1">{event?.title}</div>
                     </div>
+                    <div className="flex-shrink-0 h-6 w-6 bg-gray-100 rounded-xl flex items-center justify-center">
+                        <Chevron className="w-2.5" />
+                    </div>
                 </div>
             </div>
-
-            <div className="h-full overflow-y-scroll bg-gray-50">
+            <div className="overflow-y-scroll bg-gray-50">
                 {paragraphs.map(({ id, sentences, timestamp }) => (
                     <div key={id} className="p-3 pb-4">
                         {timestamp && (
