@@ -97,6 +97,7 @@
         "graphql": "15.5.3",
         "graphql-tag": "2.12.5",
         "luxon": "2.0.2",
+        "tailwindcss-interaction-variants": "^5.0.0",
         "ts-pattern": "3.2.5",
         "urql": "2.0.4"
     },

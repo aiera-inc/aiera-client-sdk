@@ -5,7 +5,7 @@ import { Svg } from '.';
 
 describe('Svg', () => {
     test('renders', () => {
-        render(<Svg alt="My SVG" src="my.svg" />);
+        render(<Svg alt="My SVG" type="gear" />);
         screen.getByText('My SVG');
     });
 });
