@@ -4,7 +4,6 @@ import classNames from 'classnames';
 export default function Gear({ className, alt = 'Gear' }: { className?: string; alt?: string }): ReactElement {
     return (
         <svg
-            alt={alt}
             className={classNames(className, 'Svg__gear')}
             width="100%"
             viewBox="0 0 20 20"

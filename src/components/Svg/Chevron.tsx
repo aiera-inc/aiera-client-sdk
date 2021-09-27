@@ -4,7 +4,6 @@ import classNames from 'classnames';
 export default function Chevron({ className, alt = 'Chevron' }: { className?: string; alt?: string }): ReactElement {
     return (
         <svg
-            alt={alt}
             className={classNames(className, 'Svg__chevron')}
             width="100%"
             viewBox="0 0 8 5"
