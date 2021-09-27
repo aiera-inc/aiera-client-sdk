@@ -11,10 +11,10 @@ module.exports = {
     variants: {
         extend: {
             backgroundColor: ['odd', 'active'],
-            fill: ['hover', 'focus', 'active'],
+            fill: ['hover', 'active', 'group-active'],
             margin: ['first', 'last'],
-            textColor: ['active'],
+            textColor: ['hover', 'active', 'group-active'],
         },
     },
-    plugins: [require('@tailwindcss/line-clamp')],
+    plugins: [require('@tailwindcss/line-clamp'), require('tailwindcss-interaction-variants')],
 };

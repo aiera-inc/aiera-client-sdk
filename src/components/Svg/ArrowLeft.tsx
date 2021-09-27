@@ -1,8 +1,27 @@
 import React, { ReactElement } from 'react';
 import classNames from 'classnames';
-import { Svg } from '.';
-import arrowLeft from '@aiera/client-sdk/assets/arrowLeft.svg';
 
-export function ArrowLeft({ className }: { className?: string }): ReactElement {
-    return <Svg alt="arrowLeft" className={classNames(className, 'Svg__arrowLeft')} src={arrowLeft} />;
+export default function ArrowLeft({
+    className,
+    alt = 'Arrow Left',
+}: {
+    className?: string;
+    alt?: string;
+}): ReactElement {
+    return (
+        <svg
+            className={classNames(className, 'Svg__arrowLeft')}
+            width="100%"
+            viewBox="0 0 12 10"
+            fill="black"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <title>{alt}</title>
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M5.70679 9.69471C5.51926 9.88218 5.26495 9.9875 4.99979 9.9875C4.73462 9.9875 4.48031 9.88218 4.29279 9.69471L0.292787 5.69471C0.105316 5.50718 0 5.25288 0 4.98771C0 4.72255 0.105316 4.46824 0.292787 4.28071L4.29279 0.280712C4.48139 0.0985542 4.73399 -0.00224062 4.99619 3.78025e-05C5.25838 0.00231622 5.5092 0.107485 5.6946 0.292894C5.88001 0.478302 5.98518 0.729114 5.98746 0.991311C5.98974 1.25351 5.88894 1.50611 5.70679 1.69471L3.41379 3.98771H10.9998C11.265 3.98771 11.5194 4.09307 11.7069 4.28061C11.8944 4.46814 11.9998 4.7225 11.9998 4.98771C11.9998 5.25293 11.8944 5.50728 11.7069 5.69482C11.5194 5.88235 11.265 5.98771 10.9998 5.98771H3.41379L5.70679 8.28071C5.89426 8.46824 5.99957 8.72255 5.99957 8.98771C5.99957 9.25288 5.89426 9.50718 5.70679 9.69471V9.69471Z"
+            />
+        </svg>
+    );
 }
