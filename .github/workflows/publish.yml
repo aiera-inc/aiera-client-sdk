@@ -1,0 +1,32 @@
+name: Publish
+on:
+  push
+    branches:
+      master
+  release:
+    types:
+      - created
+jobs:
+  tests:
+    name: 'Publish docs'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: szenius/set-timezone@v1.0
+        with:
+          timezoneLinux: "America/New_York"
+
+      - uses: actions/checkout@v2
+      - name: Setup Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16.6.1
+      - run: npm install
+      - run: npm run build
+      - run: npm test
+      - run: npm run build:docs
+      - run: cp -r .jest/coverage/lcov-report dist/docs/coverage
+
+      - uses: JamesIves/github-pages-deploy-action@4.1.5
+        with:
+          branch: gh-pages
+          folder: dist/docs

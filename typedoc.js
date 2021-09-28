@@ -25,7 +25,6 @@ const entryPoints = [
         }),
     ]),
 ];
-console.log(entryPoints);
 
 module.exports = {
     name: '@aiera/client-sdk',
