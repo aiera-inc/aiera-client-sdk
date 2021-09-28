@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 
-export default function Gear({ className, alt = 'Gear' }: { className?: string; alt?: string }): ReactElement {
+export function Gear({ className, alt = 'Gear' }: { className?: string; alt?: string }): ReactElement {
     return (
         <svg
-            className={classNames(className, 'Svg__gear')}
+            className={classNames(className, 'Svg', 'Svg__gear')}
             width="100%"
             viewBox="0 0 20 20"
             fill="none"

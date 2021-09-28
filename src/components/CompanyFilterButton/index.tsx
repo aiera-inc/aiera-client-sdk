@@ -7,7 +7,7 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
-import { Svg } from '@aiera/client-sdk/components/Svg';
+import { Building } from '@aiera/client-sdk/components/Svg/Building';
 import './styles.css';
 
 export type CompanyFilterResult = CompanyFilterQuery['companies'][0];
@@ -90,7 +90,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                 >
                     {!value && (
                         <div className="flex whitespace-nowrap">
-                            <Svg type="building" alt="building" className="mr-2" />
+                            <Building alt="building" className="mr-2" />
                             By Company
                         </div>
                     )}

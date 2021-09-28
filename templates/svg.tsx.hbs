@@ -1,16 +1,10 @@
 import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 
-export default function {{properCase name}}({ 
-    className, 
-    alt = '{{properCase name}}' 
-}: { 
-    className?: string;
-    alt?: string;
-}): ReactElement {
+export function {{properCase name}}({ className, alt = '{{properCase name}}' }: { className?: string; alt?: string; }): ReactElement {
     return (
         <svg 
-            className={classNames(className, 'Svg__{{lowerCase name}}')}
+            className={classNames(className, 'Svg', 'Svg__{{lowerCase name}}')}
             width="100%"
             xmlns="http://www.w3.org/2000/svg"
         >

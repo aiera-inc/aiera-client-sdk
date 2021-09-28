@@ -1,10 +1,10 @@
 import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 
-export default function Building({ className, alt = 'Building' }: { className?: string; alt?: string }): ReactElement {
+export function Building({ className, alt = 'Building' }: { className?: string; alt?: string }): ReactElement {
     return (
         <svg
-            className={classNames(className, 'Svg__building')}
+            className={classNames(className, 'Svg', 'Svg__building')}
             width="14"
             height="16"
             viewBox="0 0 14 16"

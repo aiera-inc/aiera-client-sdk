@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 
-export default function MagnifyingGlass({
+export function MagnifyingGlass({
     className,
     alt = 'Magnifying Glass',
 }: {
@@ -10,7 +10,7 @@ export default function MagnifyingGlass({
 }): ReactElement {
     return (
         <svg
-            className={classNames(className, 'Svg__magnifyingGlass')}
+            className={classNames(className, 'Svg', 'Svg__magnifyingGlass')}
             width="100%"
             viewBox="0 0 12 12"
             fill="none"
