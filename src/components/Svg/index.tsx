@@ -1,13 +1,17 @@
-import React, { ReactElement, Suspense } from 'react';
+import React, { ReactElement } from 'react';
 import classNames from 'classnames';
-import './styles.css';
+import arrowLeft from './ArrowLeft';
+import building from './Building';
+import chevron from './Chevron';
+import gear from './Gear';
+import magnifyingGlass from './MagnifyingGlass';
 
 export const SvgMap = {
-    arrowLeft: React.lazy(() => import('./ArrowLeft')),
-    building: React.lazy(() => import('./Building')),
-    chevron: React.lazy(() => import('./Chevron')),
-    gear: React.lazy(() => import('./Gear')),
-    magnifyingGlass: React.lazy(() => import('./MagnifyingGlass')),
+    arrowLeft,
+    building,
+    chevron,
+    gear,
+    magnifyingGlass,
 };
 
 /** @notExported */
@@ -24,9 +28,5 @@ export interface SvgProps {
 export function Svg(props: SvgProps): ReactElement {
     const { alt, className, type } = props;
     const SvgElement = SvgMap[type];
-    return (
-        <Suspense fallback={<div>loading</div>}>
-            <SvgElement className={classNames(className, 'Svg')} alt={alt} />
-        </Suspense>
-    );
+    return <SvgElement className={classNames(className, 'Svg')} alt={alt} />;
 }
