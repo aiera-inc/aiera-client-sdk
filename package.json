@@ -26,6 +26,7 @@
         "new:nested:module": "plop --plopfile templates/plopfile.ts nested module",
         "new:svg": "plop --plopfile templates/plopfile.ts svg",
         "new": "plop --plopfile templates/plopfile.ts",
+        "release": "hub release create -m v$npm_package_version -a dist/aiera-client-sdk-$npm_package_version.tgz v$npm_package_version",
         "start": "npm run build:watch",
         "test": "jest --config .jest/jest.config.js --coverage",
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
