@@ -17,40 +17,22 @@ interface Watchers {
 
 const srcPath = join(process.cwd(), '/src');
 
-function postcssPlugin(watcher: FSWatcher | null): Plugin {
-    const cache = new Map<string, { css: string; result: OnLoadResult }>();
+function postcssPlugin(): Plugin {
     return {
         name: 'postcss',
         setup: (build) => {
-            const clearCache = () => {
-                console.log('clearing cache');
-                cache.clear();
-            };
-            if (watcher) {
-                watcher.on('all', clearCache);
-                build.onEnd(() => {
-                    watcher.off('all', clearCache);
-                });
-            }
-
             build.onLoad({ filter: /\.css$/, namespace: 'file' }, async ({ path }) => {
                 if (minimatch(path, `${srcPath}/**/*.css`)) {
                     const { plugins, options } = await postcssLoadConfig();
                     const css = await readFile(path, 'utf-8');
-                    const prev = cache.get(path);
-                    let contents = prev?.result?.contents;
-                    if (!prev || prev.css !== css) {
-                        const res = await postcss(plugins).process(css, {
-                            ...options,
-                            from: path,
-                        });
-                        contents = res.css;
-                    }
+                    const res = await postcss(plugins).process(css, {
+                        ...options,
+                        from: path,
+                    });
                     const result: OnLoadResult = {
-                        contents,
+                        contents: res.css,
                         loader: 'css',
                     };
-                    cache.set(path, { css, result });
                     return result;
                 }
                 return null;
@@ -149,7 +131,7 @@ async function cli() {
 
     if (args.watch) {
         const tailwindWatcher = chokidar.watch(['tailwind.config.js'], { ignoreInitial: true });
-        const plugins: Plugin[] = [postcssPlugin(tailwindWatcher)];
+        const plugins: Plugin[] = [postcssPlugin()];
         const watchers: Watchers = {
             src: chokidar.watch(['src/**/*.{ts,tsx,css}'], { ignoreInitial: true }),
             assets: chokidar.watch(['package.json', 'src/**/*.{html,svg,png}'], { ignoreInitial: true }),
@@ -159,7 +141,7 @@ async function cli() {
         await buildAll(watchers, plugins);
         await copyAssets(watchers);
     } else {
-        const plugins: Plugin[] = [postcssPlugin(null)];
+        const plugins: Plugin[] = [postcssPlugin()];
         await buildAll(null, plugins);
         await copyAssets(null);
     }
