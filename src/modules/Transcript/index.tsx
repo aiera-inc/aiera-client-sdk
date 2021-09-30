@@ -33,7 +33,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 <div className="flex items-center">
                     {onBack && (
                         <button
-                            className="group flex h-9 items-center px-3 mr-3 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white"
+                            className="group flex h-9 items-center px-3 mr-3 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white text-base"
                             onClick={onBack}
                         >
                             <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />

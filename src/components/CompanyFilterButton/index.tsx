@@ -89,7 +89,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                     })}
                 >
                     {!value && (
-                        <div className="flex whitespace-nowrap">
+                        <div className="flex whitespace-nowrap text-base">
                             <Building alt="building" className="mr-2" />
                             By Company
                         </div>
