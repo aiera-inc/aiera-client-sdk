@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { ReactNode } from 'react';
+import { DocumentNode } from 'graphql';
 import { render } from '@testing-library/react';
 import { never } from 'wonka';
 import { Provider } from 'urql';
@@ -7,7 +8,7 @@ import { ResetProvider } from 'api/client';
 
 export type MockFn = ReturnType<typeof jest.fn>;
 export interface Client {
-    executeQuery: () => unknown;
+    executeQuery: (opts: { query: DocumentNode }) => unknown;
     executeMutation: () => unknown;
     executeSubscription: () => unknown;
     query: () => { toPromise: () => Promise<unknown> };

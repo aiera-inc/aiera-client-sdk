@@ -12,6 +12,7 @@ import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/comp
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { FilterBy } from './FilterBy';
+import { PlayButton } from './PlayButton';
 import './styles.css';
 
 enum FilterByType {
@@ -108,7 +109,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         >
                                             <div className="flex flex-row">
                                                 <div className="flex items-center justify-center">
-                                                    <div className="flex items-center justify-center w-10 h-10 bg-gray-300 rounded-full" />
+                                                    <div className="flex items-center justify-center w-9 h-9">
+                                                        <PlayButton id={event.id} url={event.audioRecordingUrl} />
+                                                    </div>
                                                 </div>
                                                 <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
                                                     <div>
@@ -213,6 +216,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
                     eventDate
                     eventType
                     isLive
+                    audioRecordingUrl
                     primaryCompany {
                         id
                         commonName

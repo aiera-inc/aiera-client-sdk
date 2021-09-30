@@ -1,11 +1,88 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
+import { DocumentNode } from 'graphql';
 import { fireEvent, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
 
 import { renderWithClient } from '@aiera/client-sdk/testUtils';
 import { Event } from '@aiera/client-sdk/types/generated';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { EventList, EventListUI } from '.';
+
+const eventList = [
+    {
+        id: '1',
+        title: 'Event Title',
+        eventType: 'earnings',
+        eventDate: '2021-08-25T18:00:00+00:00',
+        primaryCompany: {
+            instruments: [
+                {
+                    isPrimary: true,
+                    quotes: [
+                        {
+                            isPrimary: true,
+                            localTicker: 'TICK',
+                            exchange: {
+                                country: { countryCode: 'US' },
+                                shortName: 'EXCH',
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+    },
+];
+
+const eventTranscript = [
+    {
+        id: 1,
+        eventDate: '2021-08-25T18:00:00+00:00',
+        title: 'Event Title',
+        eventType: 'earnings',
+        primaryCompany: {
+            instruments: [
+                {
+                    isPrimary: true,
+                    quotes: [
+                        {
+                            isPrimary: true,
+                            localTicker: 'TICK',
+                            exchange: {
+                                country: { countryCode: 'US' },
+                                shortName: 'EXCH',
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+        transcripts: [
+            {
+                id: '1',
+                sections: [
+                    {
+                        id: '1',
+                        speakerTurns: [
+                            {
+                                id: '1',
+                                paragraphs: [
+                                    {
+                                        id: '1',
+                                        timestamp: '',
+                                        sentences: [{ id: '1', text: 'Transcript for 1' }],
+                                    },
+                                ],
+                            },
+                        ],
+                    },
+                ],
+            },
+        ],
+    },
+];
 
 describe('EventListUI', () => {
     test('renders a loading state', () => {
@@ -50,31 +127,7 @@ describe('EventList', () => {
             executeQuery: () =>
                 fromValue({
                     data: {
-                        events: [
-                            {
-                                id: '1',
-                                title: 'Event Title',
-                                eventType: 'earnings',
-                                eventDate: '2021-08-25T18:00:00+00:00',
-                                primaryCompany: {
-                                    instruments: [
-                                        {
-                                            isPrimary: true,
-                                            quotes: [
-                                                {
-                                                    isPrimary: true,
-                                                    localTicker: 'TICK',
-                                                    exchange: {
-                                                        country: { countryCode: 'US' },
-                                                        shortName: 'EXCH',
-                                                    },
-                                                },
-                                            ],
-                                        },
-                                    ],
-                                },
-                            },
-                        ],
+                        events: eventList,
                     },
                 }),
         });
@@ -99,5 +152,51 @@ describe('EventList', () => {
         const { client } = renderWithClient(<TestComponent />);
         bus.emit('instrument-selected', { ticker: 'TICK' }, 'in');
         expect(client.query).toHaveBeenCalled();
+    });
+
+    test('renders calendar when there is no audio url', () => {
+        renderWithClient(<EventList />, {
+            executeQuery: () =>
+                fromValue({
+                    data: {
+                        events: eventList,
+                    },
+                }),
+        });
+        screen.getByTitle('Calendar');
+    });
+
+    test('renders calendar when there is no audio url', () => {
+        renderWithClient(<EventList />, {
+            executeQuery: () =>
+                fromValue({
+                    data: {
+                        events: [{ ...eventList[0], audioRecordingUrl: 'mp3!' }],
+                    },
+                }),
+        });
+        screen.getByTitle('Play');
+    });
+
+    test('handles selecting an event', () => {
+        renderWithClient(<EventList />, {
+            executeQuery: ({ query }: { query: DocumentNode }) => {
+                // @ts-ignore
+                const queryName = query?.definitions[0]?.name as string;
+                return queryName === 'EventList'
+                    ? fromValue({
+                          data: {
+                              events: eventList,
+                          },
+                      })
+                    : fromValue({
+                          data: {
+                              events: eventTranscript,
+                          },
+                      });
+            },
+        });
+        userEvent.click(screen.getByText('Event Title'));
+        screen.getByText('Transcript for 1');
     });
 });
