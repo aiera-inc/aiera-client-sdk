@@ -7,7 +7,13 @@ import { Transcript, TranscriptUI } from '.';
 
 describe('TranscriptUI', () => {
     test('renders UI', () => {
-        render(<TranscriptUI paragraphs={[{ id: '1', sentences: [{ id: '1', text: 'TranscriptUI' }] }]} />);
+        render(
+            <TranscriptUI
+                toggleHeader={() => true}
+                headerExpanded={true}
+                paragraphs={[{ id: '1', sentences: [{ id: '1', text: 'TranscriptUI' }] }]}
+            />
+        );
         screen.getByText('TranscriptUI');
     });
 });

@@ -18,16 +18,21 @@ module.exports = {
         },
         extend: {
             boxShadow: {
-                header: '0px 1px 2px rgba(0, 0, 0, 0.07), 0px 12px 24px rgba(0, 0, 0, 0.03)',
+                header: '0px 1px 2px rgba(0, 0, 0, 0.08), 0px 12px 24px -18px rgba(0, 0, 0, 0.2)',
+                input: 'inset 0 0px 0px 1px #2463eb',
             },
         },
     },
     variants: {
         extend: {
+            boxShadow: ['hover', 'active', 'focus', 'focus-within'],
             backgroundColor: ['odd', 'active'],
-            fill: ['hover', 'active', 'group-active'],
+            border: ['focus', 'focus-within', 'hover', 'active'],
+            ringColor: ['focus', 'focus-within', 'hover', 'active'],
+            fill: ['hover', 'active', 'group-active', 'group-focus-within'],
+            stroke: ['hover', 'active', 'group-active', 'group-focus-within'],
             margin: ['first', 'last'],
-            textColor: ['hover', 'active', 'group-active'],
+            textColor: ['hover', 'active', 'group-active', 'group-focus-within'],
         },
     },
     plugins: [require('@tailwindcss/line-clamp'), require('tailwindcss-interaction-variants')],

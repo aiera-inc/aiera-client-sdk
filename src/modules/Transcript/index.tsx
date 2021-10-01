@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactElement, useState } from 'react';
+import React, { MouseEventHandler, ReactElement, useState, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { useQuery } from 'urql';
 import { DateTime } from 'luxon';
@@ -17,40 +17,48 @@ import './styles.css';
 type Event = TranscriptQuery['events'][0];
 type Paragraph = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0]['paragraphs'][0];
 interface TranscriptUIProps {
+    headerExpanded: boolean;
+    toggleHeader: () => void;
     event?: Event;
     onBack?: MouseEventHandler;
     paragraphs: Paragraph[];
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
-    const { event, onBack, paragraphs } = props;
+    const { event, onBack, paragraphs, toggleHeader, headerExpanded } = props;
     const primaryQuote = getPrimaryQuote(event?.primaryCompany);
     const eventDate = DateTime.fromISO(event?.eventDate);
-    const [showGear, setGear] = useState(false);
     return (
         <div className="h-full flex flex-col transcript">
-            <div className="relative p-3 shadow-header rounded-b-lg transcript__header">
+            <div
+                className={
+                    headerExpanded
+                        ? 'max-h-80 relative p-3 shadow-header rounded-b-lg transition-all transcript__header'
+                        : 'max-h-28 relative p-3 shadow-header rounded-b-lg transition-all transcript__header'
+                }
+            >
                 <div className="flex items-center">
                     {onBack && (
                         <button
-                            className="group flex h-9 items-center px-3 mr-3 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white text-base"
+                            className="group flex h-8 items-center px-3 mr-3 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white text-base"
                             onClick={onBack}
                         >
                             <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                             Events
                         </button>
                     )}
-                    <div className="h-9 items-center w-full relative mr-3 input__search">
+                    <div className="group h-8 items-center w-full relative mr-3 input__search">
                         <input
-                            className="w-full inset-0 absolute pl-8 text-sm border border-gray-200 rounded-lg"
+                            className="w-full inset-0 absolute pl-8 text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600"
                             placeholder="Search transcripts"
-                            onChange={() => setGear(true)}
                         />
-                        <div className="pointer-events-none h-9 w-9 justify-center items-center flex">
-                            <MagnifyingGlass className="z-1 relative w-4" />
+                        <div className="pointer-events-none h-8 w-8 justify-center items-center flex">
+                            <MagnifyingGlass className="group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4" />
                         </div>
                     </div>
-                    <div className="items-center flex">{showGear && <Gear className="w-6" />}</div>
+                    <div className="items-center flex">
+                        <Gear className="w-5" />
+                    </div>
                 </div>
                 <div className="flex flex-row mt-3 items-center">
                     <div className="flex flex-col justify-center flex-1 min-w-0">
@@ -68,12 +76,28 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 <span className="text-gray-300"> • {eventDate.toFormat('h:mma M/dd/yyyy')}</span>
                             )}
                         </div>
-                        <div className="text-sm truncate whitespace-normal line-clamp-1">{event?.title}</div>
+                        <div className={headerExpanded ? 'text-sm' : 'text-sm truncate whitespace-normal line-clamp-1'}>
+                            {event?.title}
+                        </div>
                     </div>
-                    <div className="flex-shrink-0 h-6 w-6 bg-gray-100 rounded-xl flex items-center justify-center">
-                        <Chevron className="w-2.5 opacity-30" />
-                    </div>
+                    <button
+                        onClick={toggleHeader}
+                        className={
+                            headerExpanded
+                                ? 'transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 bg-blue-600 rounded-xl flex items-center justify-center'
+                                : 'transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 bg-gray-100 rounded-xl flex items-center justify-center'
+                        }
+                    >
+                        <Chevron
+                            className={
+                                headerExpanded
+                                    ? 'transition-all mb-0.5 rotate-180 w-2 fill-current text-white'
+                                    : 'transition-all w-2 opacity-30'
+                            }
+                        />
+                    </button>
                 </div>
+                {headerExpanded && 'Event Extras'}
             </div>
             <div className="overflow-y-scroll bg-gray-50">
                 {paragraphs.map(({ id, sentences, timestamp }) => (
@@ -104,6 +128,8 @@ export interface TranscriptProps {
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
     const { eventId, onBack } = props;
+    const [headerExpanded, setHeaderState] = useState(false);
+    const toggleHeader = useCallback(() => setHeaderState(!headerExpanded), [headerExpanded]);
     const [result] = useQuery<TranscriptQuery, TranscriptQueryVariables>({
         query: gql`
             query Transcript($eventId: ID!) {
@@ -163,5 +189,13 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const paragraphs =
         event?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs) ||
         [];
-    return <TranscriptUI event={event} onBack={onBack} paragraphs={paragraphs} />;
+    return (
+        <TranscriptUI
+            event={event}
+            headerExpanded={headerExpanded}
+            toggleHeader={toggleHeader}
+            onBack={onBack}
+            paragraphs={paragraphs}
+        />
+    );
 };
