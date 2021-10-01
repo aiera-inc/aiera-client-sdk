@@ -8,8 +8,9 @@ export class AudioPlayer {
         this.audio = new Audio();
     }
 
-    async play({ id, url }: { id: string; url: string }): Promise<void> {
-        if (id) {
+    async play(opts?: { id: string; url: string }): Promise<void> {
+        if (opts) {
+            const { id, url } = opts;
             this.id = id;
             if (url !== this.audio.src) {
                 this.audio.src = url;
@@ -34,7 +35,10 @@ export class AudioPlayer {
         this.seek(Math.max(this.audio.currentTime - distance, 0));
     }
 
-    playing(id: string): boolean {
+    playing(id: string | null): boolean {
+        if (!id) {
+            return !!(this.id && this.audio.duration > 0 && !this.audio.paused);
+        }
         return id === this.id && this.audio.duration > 0 && !this.audio.paused;
     }
 }

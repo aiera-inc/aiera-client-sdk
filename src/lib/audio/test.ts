@@ -25,6 +25,8 @@ describe('audio library', () => {
 
     test('play()', () => {
         const player = getPlayer();
+        expect(player.playing(null)).toBeFalsy();
+        expect(player.playing('1')).toBeFalsy();
         void player.play({ id: '1', url: srcUrl });
         expect(player.audio.src).toBe(srcUrl);
         expect(play).toHaveBeenCalled();
@@ -34,6 +36,7 @@ describe('audio library', () => {
         player.audio.duration = 1;
         // @ts-ignore
         player.audio.paused = false;
+        expect(player.playing(null)).toBeTruthy();
         expect(player.playing('1')).toBeTruthy();
         expect(player.playing('2')).toBeFalsy();
     });
