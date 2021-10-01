@@ -2,6 +2,7 @@
 import React from 'react';
 import { DocumentNode } from 'graphql';
 import { fireEvent, screen } from '@testing-library/react';
+import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
 
@@ -163,10 +164,12 @@ describe('EventList', () => {
                     },
                 }),
         });
-        screen.getByTitle('Calendar');
+        const row = screen.getByText('Event Title').closest('li');
+        expect(row).toBeTruthy();
+        if (row) within(row).getByTitle('Calendar');
     });
 
-    test('renders calendar when there is no audio url', () => {
+    test('renders play when there is an audio url', () => {
         renderWithClient(<EventList />, {
             executeQuery: () =>
                 fromValue({
@@ -175,7 +178,9 @@ describe('EventList', () => {
                     },
                 }),
         });
-        screen.getByTitle('Play');
+        const row = screen.getByText('Event Title').closest('li');
+        expect(row).toBeTruthy();
+        if (row) within(row).getByTitle('Play');
     });
 
     test('handles selecting an event', () => {

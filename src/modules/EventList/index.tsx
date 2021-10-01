@@ -11,6 +11,7 @@ import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
+import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { FilterBy } from './FilterBy';
 import { PlayButton } from './PlayButton';
 import './styles.css';
@@ -59,7 +60,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         return <Transcript eventId={event.id} onBack={onBackFromTranscript} />;
     }
     return (
-        <div className="h-full pb-16 eventlist">
+        <div className="h-full flex flex-col eventlist">
             <div className="flex items-center p-3 shadow eventlist__header">
                 <input
                     className="flex-1 p-2 text-sm rounded-lg border-gray-200 border"
@@ -71,7 +72,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     <CompanyFilterButton onChange={onCompanyChange} value={company} />
                 </div>
             </div>
-            <div className="p-3 h-full overflow-y-scroll">
+            <div className="p-3 flex-1 overflow-y-scroll">
                 <div className="flex flex-col flex-grow eventlist__tabs">
                     <div>
                         <Tabs<EventView>
@@ -151,6 +152,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     </div>
                 </div>
             </div>
+            <Playbar />
         </div>
     );
 };
