@@ -4,10 +4,9 @@ import classNames from 'classnames';
 export function Gear({ className, alt = 'Gear' }: { className?: string; alt?: string }): ReactElement {
     return (
         <svg
-            className={classNames(className, 'Svg', 'Svg__gear')}
+            className={classNames(className, 'fill-current', 'Svg', 'Svg__gear')}
             width="100%"
             viewBox="0 0 20 20"
-            fill="none"
             xmlns="http://www.w3.org/2000/svg"
         >
             <title>{alt}</title>
