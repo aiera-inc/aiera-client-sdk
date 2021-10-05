@@ -8,14 +8,25 @@ export class AudioPlayer {
         this.audio = new Audio();
     }
 
-    async play(opts?: { id: string; url: string }): Promise<void> {
-        if (opts) {
+    init(opts?: { id: string; url: string }): void {
+        if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
             const { id, url } = opts;
             this.id = id;
             if (url !== this.audio.src) {
                 this.audio.src = url;
             }
+            this.audio.dispatchEvent(new Event('update'));
         }
+    }
+
+    clear(): void {
+        delete this.id;
+        this.audio.src = '';
+        this.audio.dispatchEvent(new Event('update'));
+    }
+
+    async play(opts?: { id: string; url: string }): Promise<void> {
+        this.init(opts);
         return this.audio.play();
     }
 
@@ -58,14 +69,17 @@ export function AudioPlayerProvider({
 export function useAudioPlayer(): AudioPlayer {
     const audioPlayer = useContext(AudioPlayerContext);
 
-    const [_currentTime, setCurrentTime] = useState(0);
+    const [_, update] = useState<Record<string, never> | null>(null);
     useEffect(() => {
-        function onTimeUpdate() {
-            setCurrentTime(audioPlayer.audio.currentTime);
+        function onUpdate() {
+            update({});
         }
-        audioPlayer.audio.addEventListener('timeupdate', onTimeUpdate);
+        audioPlayer.audio.addEventListener('timeupdate', onUpdate);
+        // Custom event we fire to trigger re-renders when something changes
+        audioPlayer.audio.addEventListener('update', onUpdate);
         return () => {
-            audioPlayer.audio.removeEventListener('timeupdate', onTimeUpdate);
+            audioPlayer.audio.removeEventListener('timeupdate', onUpdate);
+            audioPlayer.audio.removeEventListener('update', onUpdate);
         };
     }, []);
 

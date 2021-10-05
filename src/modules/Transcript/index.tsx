@@ -5,6 +5,7 @@ import { DateTime } from 'luxon';
 import classNames from 'classnames';
 
 import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
+import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
@@ -99,7 +100,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 </div>
                 {headerExpanded && 'Event Extras'}
             </div>
-            <div className="overflow-y-scroll bg-gray-50">
+            <div className="overflow-y-scroll flex-1 bg-gray-50">
                 {paragraphs.map(({ id, sentences, timestamp }) => (
                     <div key={id} className="p-3 pb-4">
                         {timestamp && (
@@ -111,6 +112,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     </div>
                 ))}
             </div>
+
+            <Playbar id={event?.id} url={event?.audioRecordingUrl || ''} />
         </div>
     );
 };
@@ -140,6 +143,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                     eventDate
                     eventType
                     isLive
+                    audioRecordingUrl
                     primaryCompany {
                         id
                         commonName

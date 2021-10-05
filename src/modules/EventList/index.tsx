@@ -37,6 +37,7 @@ export interface EventListUIProps {
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
     onSelectEvent?: ChangeHandler<EventListEvent>;
+    onSelectEventById?: ChangeHandler<string>;
     searchTerm?: string;
 }
 
@@ -54,6 +55,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         onSelectFilterBy,
         onSelectListType,
         onSelectEvent,
+        onSelectEventById,
         searchTerm,
     } = props;
     if (event) {
@@ -152,7 +154,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     </div>
                 </div>
             </div>
-            <Playbar />
+            <Playbar onClickCalendar={onSelectEventById} />
         </div>
     );
 };
@@ -254,6 +256,18 @@ export const EventList = (_props: EventListProps): ReactElement => {
         },
     });
 
+    const onSelectEventById = useCallback<ChangeHandler<string>>(
+        (event, change) => {
+            if (eventListResult.data?.events) {
+                const selectedEvent = eventListResult.data.events.find((event) => event.id === change.value);
+                if (selectedEvent) {
+                    onSelectEvent(event, { value: selectedEvent });
+                }
+            }
+        },
+        [eventListResult]
+    );
+
     return (
         <EventListUI
             company={state.company}
@@ -268,6 +282,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}
+            onSelectEventById={onSelectEventById}
             searchTerm={state.searchTerm}
         />
     );

@@ -1,5 +1,7 @@
-import React, { useCallback, ReactElement } from 'react';
+import React, { useCallback, useEffect, MouseEvent, ReactElement } from 'react';
 import classNames from 'classnames';
+
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
@@ -23,16 +25,20 @@ interface PlaybarSharedProps {}
 
 /** @notExported */
 interface PlaybarUIProps extends PlaybarSharedProps {
+    clear: () => void;
     currentTime: number;
     duration: number;
     isPlaying: boolean;
     fastForward: () => void;
+    fixed?: boolean;
+    onClickCalendar: (event: MouseEvent) => void;
     togglePlayback: () => void;
     rewind: () => void;
 }
 
 export function PlaybarUI(props: PlaybarUIProps): ReactElement {
-    const { currentTime, duration, isPlaying, fastForward, togglePlayback, rewind } = props;
+    const { clear, currentTime, duration, fixed, isPlaying, fastForward, onClickCalendar, togglePlayback, rewind } =
+        props;
     return (
         <div className="h-13 w-full flex items-center shadow p-3">
             <div
@@ -57,20 +63,40 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
             <div className="ml-2 mr-2 text-xs font-mono">{toDurationString(currentTime)}</div>
             <div className="flex-1 h-px bg-black"></div>
             <div className="ml-2 mr-2 text-xs font-mono">{toDurationString(duration)}</div>
-            <Calendar className="text-gray-800 bg-white w-5 mr-2" />
-            <Close className="text-gray-800 w-4" />
+            {!fixed && (
+                <>
+                    <div className="text-gray-800 bg-white cursor-pointer w-5 mr-2" onClick={onClickCalendar}>
+                        <Calendar />
+                    </div>
+                    <div className="text-gray-800 cursor-pointer w-4" onClick={clear}>
+                        <Close />
+                    </div>
+                </>
+            )}
         </div>
     );
 }
 
 /** @notExported */
-export interface PlaybarProps extends PlaybarSharedProps {}
+export interface PlaybarProps extends PlaybarSharedProps {
+    id?: string;
+    onClickCalendar?: ChangeHandler<string>;
+    url?: string;
+}
 
 /**
  * Renders Playbar
  */
-export function Playbar(_props: PlaybarProps): ReactElement {
+export function Playbar(props: PlaybarProps): ReactElement | null {
+    const { id, url } = props;
     const audioPlayer = useAudioPlayer();
+    useEffect(() => {
+        if (id) {
+            audioPlayer.init({ id, url: url || '' });
+        }
+    }, [id, url]);
+
+    const isActive = audioPlayer.id;
     const isPlaying = audioPlayer.playing(null);
     const togglePlayback = useCallback(() => {
         if (isPlaying) {
@@ -82,12 +108,22 @@ export function Playbar(_props: PlaybarProps): ReactElement {
 
     const fastForward = useCallback(() => audioPlayer.ff(15), []);
     const rewind = useCallback(() => audioPlayer.rewind(15), []);
+    const clear = useCallback(() => audioPlayer.clear(), []);
+    const onClickCalendar = useCallback(
+        (event: MouseEvent) => props.onClickCalendar?.(event, { value: audioPlayer.id }),
+        [audioPlayer.id]
+    );
+
+    if (!isActive) return null;
     return (
         <PlaybarUI
+            clear={clear}
             currentTime={audioPlayer.audio.currentTime}
             duration={audioPlayer.audio.duration}
             isPlaying={isPlaying}
             fastForward={fastForward}
+            fixed={!!(id && url)}
+            onClickCalendar={onClickCalendar}
             togglePlayback={togglePlayback}
             rewind={rewind}
         />
