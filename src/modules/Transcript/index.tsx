@@ -2,6 +2,7 @@ import React, { MouseEventHandler, ReactElement, useState, useCallback } from 'r
 import gql from 'graphql-tag';
 import { useQuery } from 'urql';
 import { DateTime } from 'luxon';
+import classNames from 'classnames';
 
 import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
@@ -31,11 +32,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     return (
         <div className="h-full flex flex-col transcript">
             <div
-                className={
-                    headerExpanded
-                        ? 'max-h-80 relative p-3 shadow-header rounded-b-lg transition-all transcript__header'
-                        : 'max-h-28 relative p-3 shadow-header rounded-b-lg transition-all transcript__header'
-                }
+                className={classNames(
+                    'relative p-3 shadow-header rounded-b-lg transition-all',
+                    headerExpanded ? 'max-h-80' : 'max-h-28',
+                    'transcript__header'
+                )}
             >
                 <div className="flex items-center">
                     {onBack && (
@@ -82,11 +83,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     </div>
                     <button
                         onClick={toggleHeader}
-                        className={
-                            headerExpanded
-                                ? 'transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 bg-blue-600 rounded-xl flex items-center justify-center'
-                                : 'transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 bg-gray-100 rounded-xl flex items-center justify-center'
-                        }
+                        className={classNames(
+                            'transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 rounded-xl flex items-center justify-center',
+                            headerExpanded ? 'bg-blue-600' : 'bg-gray-100'
+                        )}
                     >
                         <Chevron
                             className={
