@@ -40,29 +40,40 @@ export const AuthUI = (props: AuthProps): ReactElement => {
 
     if (!user) {
         return (
-            <form action="#" onSubmit={login}>
-                <div>
-                    <input
-                        className="rounded border border-gray-400"
-                        type="text"
-                        data-testid="auth-email"
-                        value={authForm.email}
-                        onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
-                    />
-                </div>
-                <div>
-                    <input
-                        className="border border-gray-400 rounded"
-                        type="password"
-                        data-testid="auth-password"
-                        value={authForm.password}
-                        onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
-                    />
-                </div>
-                <button className="px-1 ml-2 text-white bg-blue-500 rounded" type="submit">
-                    Login
-                </button>
-            </form>
+            <div className="flex flex-col items-center justify-center bg-white h-screen">
+                <h2>Aiera</h2>
+                <form className="flex flex-col items-center justify-center" action="#" onSubmit={login}>
+                    <div className="m-3">
+                        <label className="inline-block w-24 text-right mr-4" htmlFor="email">
+                            Email
+                        </label>
+                        <input
+                            id="email"
+                            className="rounded border border-gray-400"
+                            type="text"
+                            data-testid="auth-email"
+                            value={authForm.email}
+                            onChange={(e) => setAuthForm({ ...authForm, email: e.target.value })}
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <label className="inline-block w-24 text-right mr-4" htmlFor="password">
+                            Password
+                        </label>
+                        <input
+                            id="password"
+                            className="border border-gray-400 rounded"
+                            type="password"
+                            data-testid="auth-password"
+                            value={authForm.password}
+                            onChange={(e) => setAuthForm({ ...authForm, password: e.target.value })}
+                        />
+                    </div>
+                    <button className="px-1 ml-2 text-white bg-blue-500 rounded" type="submit">
+                        Login
+                    </button>
+                </form>
+            </div>
         );
     }
 
