@@ -6,6 +6,7 @@ import classNames from 'classnames';
 
 import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
+import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
@@ -24,10 +25,11 @@ interface TranscriptUIProps {
     event?: Event;
     onBack?: MouseEventHandler;
     paragraphs: Paragraph[];
+    onClickTranscript: (paragraph: Paragraph) => void;
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
-    const { event, onBack, paragraphs, toggleHeader, headerExpanded } = props;
+    const { event, onBack, paragraphs, onClickTranscript, toggleHeader, headerExpanded } = props;
     const primaryQuote = getPrimaryQuote(event?.primaryCompany);
     const eventDate = DateTime.fromISO(event?.eventDate);
     return (
@@ -101,16 +103,19 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 {headerExpanded && 'Event Extras'}
             </div>
             <div className="overflow-y-scroll flex-1 bg-gray-50">
-                {paragraphs.map(({ id, sentences, timestamp }) => (
-                    <div key={id} className="p-3 pb-4">
-                        {timestamp && (
-                            <div className="pb-2 font-semibold text-sm">
-                                {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
-                            </div>
-                        )}
-                        <div className="text-sm">{sentences.map(({ text }) => text).join(' ')}</div>
-                    </div>
-                ))}
+                {paragraphs.map((paragraph) => {
+                    const { id, sentences, timestamp } = paragraph;
+                    return (
+                        <div key={id} className="p-3 pb-4" onClick={() => onClickTranscript(paragraph)}>
+                            {timestamp && (
+                                <div className="pb-2 font-semibold text-sm">
+                                    {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
+                                </div>
+                            )}
+                            <div className="text-sm">{sentences.map(({ text }) => text).join(' ')}</div>
+                        </div>
+                    );
+                })}
             </div>
 
             <Playbar id={event?.id} url={event?.audioRecordingUrl || ''} />
@@ -167,6 +172,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                     }
                     transcripts {
                         id
+                        initialAudioOffsetMs
                         sections {
                             id
                             speakerTurns {
@@ -174,6 +180,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                                 paragraphs {
                                     id
                                     timestamp
+                                    syncMs
                                     sentences {
                                         id
                                         text
@@ -193,6 +200,10 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const paragraphs =
         event?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs) ||
         [];
+    const audioPlayer = useAudioPlayer(false);
+    const onClickTranscript = (paragraph: Paragraph) => {
+        audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
+    };
     return (
         <TranscriptUI
             event={event}
@@ -200,6 +211,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             toggleHeader={toggleHeader}
             onBack={onBack}
             paragraphs={paragraphs}
+            onClickTranscript={onClickTranscript}
         />
     );
 };

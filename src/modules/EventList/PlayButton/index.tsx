@@ -44,13 +44,14 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
 export interface PlayButtonProps extends PlayButtonSharedProps {
     id: string;
     url?: string | null;
+    offset?: number;
 }
 
 /**
  * Renders PlayButton
  */
 export function PlayButton(props: PlayButtonProps): ReactElement {
-    const { id, url } = props;
+    const { id, url, offset = 0 } = props;
     const audioPlayer = useAudioPlayer();
     const isPlaying = audioPlayer.playing(id);
     const togglePlayback = useCallback(
@@ -59,10 +60,10 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
             if (audioPlayer.playing(id)) {
                 audioPlayer.pause();
             } else if (url) {
-                void audioPlayer.play({ id, url });
+                void audioPlayer.play({ id, url, offset });
             }
         },
-        [isPlaying, id, url]
+        [isPlaying, id, url, offset]
     );
     return <PlayButtonUI hasAudio={!!url} isPlaying={audioPlayer.playing(id)} togglePlayback={togglePlayback} />;
 }

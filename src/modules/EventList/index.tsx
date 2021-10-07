@@ -104,6 +104,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                 {events.map((event) => {
                                     const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                     const eventDate = DateTime.fromISO(event.eventDate);
+                                    const audioOffset = (event.transcripts[0]?.initialAudioOffsetMs ?? 0) / 1000;
                                     return (
                                         <li
                                             className="text-xs"
@@ -113,7 +114,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                             <div className="flex flex-row">
                                                 <div className="flex items-center justify-center">
                                                     <div className="flex items-center justify-center w-9 h-9">
-                                                        <PlayButton id={event.id} url={event.audioRecordingUrl} />
+                                                        <PlayButton
+                                                            id={event.id}
+                                                            url={event.audioRecordingUrl}
+                                                            offset={audioOffset || 0}
+                                                        />
                                                     </div>
                                                 </div>
                                                 <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
@@ -221,6 +226,10 @@ export const EventList = (_props: EventListProps): ReactElement => {
                     eventType
                     isLive
                     audioRecordingUrl
+                    transcripts {
+                        id
+                        initialAudioOffsetMs
+                    }
                     primaryCompany {
                         id
                         commonName
