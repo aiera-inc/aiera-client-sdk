@@ -708,7 +708,38 @@
 <a name='L649'></a><a href='#L649'>649</a>
 <a name='L650'></a><a href='#L650'>650</a>
 <a name='L651'></a><a href='#L651'>651</a>
-<a name='L652'></a><a href='#L652'>652</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L652'></a><a href='#L652'>652</a>
+<a name='L653'></a><a href='#L653'>653</a>
+<a name='L654'></a><a href='#L654'>654</a>
+<a name='L655'></a><a href='#L655'>655</a>
+<a name='L656'></a><a href='#L656'>656</a>
+<a name='L657'></a><a href='#L657'>657</a>
+<a name='L658'></a><a href='#L658'>658</a>
+<a name='L659'></a><a href='#L659'>659</a>
+<a name='L660'></a><a href='#L660'>660</a>
+<a name='L661'></a><a href='#L661'>661</a>
+<a name='L662'></a><a href='#L662'>662</a>
+<a name='L663'></a><a href='#L663'>663</a>
+<a name='L664'></a><a href='#L664'>664</a>
+<a name='L665'></a><a href='#L665'>665</a>
+<a name='L666'></a><a href='#L666'>666</a>
+<a name='L667'></a><a href='#L667'>667</a>
+<a name='L668'></a><a href='#L668'>668</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1311,6 +1342,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1375,6 +1407,8 @@ export type Scalars = {
   Float: number;
   /** Date with time (isoformat) */
   DateTime: any;
+  /** A generic dictionary/object with string keys */
+  GenericObjectScalar: any;
   /** Time (isoformat) */
   Time: any;
 };
@@ -1697,12 +1731,19 @@ export type Mutation = {
   __typename?: 'Mutation';
   login: LoginResponse;
   refresh: RefreshResponse;
+  track: TrackResponse;
 };
 &nbsp;
 &nbsp;
 export type MutationLoginArgs = {
   email: Scalars['String'];
   password: Scalars['String'];
+};
+&nbsp;
+&nbsp;
+export type MutationTrackArgs = {
+  event: Scalars['String'];
+  properties: Scalars['GenericObjectScalar'];
 };
 &nbsp;
 export type MutationResponse = {
@@ -1781,6 +1822,12 @@ export enum SpacStatus {
   TargetRumored = 'target_rumored'
 }
 &nbsp;
+export type TrackResponse = MutationResponse &amp; {
+  __typename?: 'TrackResponse';
+  errors: Array&lt;Error&gt;;
+  success: Scalars['Boolean'];
+};
+&nbsp;
 export type User = {
   __typename?: 'User';
   email?: Maybe&lt;Scalars['String']&gt;;
@@ -1846,7 +1893,7 @@ export type TranscriptQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: any, eventType: EventType, isLive: boolean, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;any&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: any, eventType: EventType, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;any&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 &nbsp;
 export const RefreshDocument = gql`
@@ -1970,6 +2017,7 @@ export const TranscriptDocument = gql`
     eventDate
     eventType
     isLive
+    audioRecordingUrl
     primaryCompany {
       id
       commonName
@@ -2017,7 +2065,7 @@ export const TranscriptDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Oct 06 2021 14:00:38 GMT-0400 (Eastern Daylight Time)
+                at Thu Oct 07 2021 15:25:03 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

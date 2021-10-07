@@ -76,6 +76,21 @@
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="lib_hooks.html#useOutsideClickHandler" class="tsd-kind-icon">use<wbr>Outside<wbr>Click<wbr>Handler</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="lib_hooks.html#useWindowSize" class="tsd-kind-icon">use<wbr>Window<wbr>Size</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="lib_hooks.html#useDelayCallback" class="tsd-kind-icon">use<wbr>Delay<wbr>Callback</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="lib_hooks.html#useEventListener" class="tsd-kind-icon">use<wbr>Event<wbr>Listener</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="lib_hooks.html#useDrag" class="tsd-kind-icon">use<wbr>Drag</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Type aliases</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="lib_hooks.html#OnDragStart" class="tsd-kind-icon">On<wbr>Drag<wbr>Start</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="lib_hooks.html#OnDragEnd" class="tsd-kind-icon">On<wbr>Drag<wbr>End</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
+							<h3>Interfaces</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-interface tsd-parent-kind-module"><a href="../interfaces/lib_hooks.DragOptions.html" class="tsd-kind-icon">Drag<wbr>Options</a></li>
 							</ul>
 						</section>
 					</div>
@@ -93,7 +108,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/b9b3657/src/lib/hooks/index.ts#L40">src/lib/hooks/index.ts:40</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L40">src/lib/hooks/index.ts:40</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -158,7 +173,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/b9b3657/src/lib/hooks/index.ts#L86">src/lib/hooks/index.ts:86</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L86">src/lib/hooks/index.ts:86</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -233,7 +248,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/b9b3657/src/lib/hooks/index.ts#L112">src/lib/hooks/index.ts:112</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L112">src/lib/hooks/index.ts:112</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -263,7 +278,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/b9b3657/src/lib/hooks/index.ts#L152">src/lib/hooks/index.ts:152</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L152">src/lib/hooks/index.ts:152</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -319,6 +334,184 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="useEventListener" class="tsd-anchor"></a>
+					<h3>use<wbr>Event<wbr>Listener</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">use<wbr>Event<wbr>Listener&lt;T&gt;<span class="tsd-signature-symbol">(</span>eventName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">WindowEventMap</span>, handler<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span>, element<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">RefObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L197">src/lib/hooks/index.ts:197</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Handles automatically adding/removing event listeners from DOM elements.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>T<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">HTMLElement</span> = <span class="tsd-signature-type">HTMLDivElement</span></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>eventName: <span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">WindowEventMap</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The event to listen on</p>
+									</div>
+								</li>
+								<li>
+									<h5>handler: <span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The listener function, receives the event that was triggered</p>
+									</div>
+									<ul class="tsd-parameters">
+										<li class="tsd-parameter-signature">
+											<ul class="tsd-signatures tsd-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Event</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<h4 class="tsd-parameters-title">Parameters</h4>
+													<ul class="tsd-parameters">
+														<li>
+															<h5>event: <span class="tsd-signature-type">Event</span></h5>
+														</li>
+													</ul>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+												</li>
+											</ul>
+										</li>
+									</ul>
+								</li>
+								<li>
+									<h5><span class="tsd-flag ts-flagOptional">Optional</span> element: <span class="tsd-signature-type">RefObject</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">T</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="useDrag" class="tsd-anchor"></a>
+					<h3>use<wbr>Drag</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">use<wbr>Drag<span class="tsd-signature-symbol">(</span>dragOpts<span class="tsd-signature-symbol">: </span><a href="../interfaces/lib_hooks.DragOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">DragOptions</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L256">src/lib/hooks/index.ts:256</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Handles updating on mouse movement while dragging a target element.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>dragOpts: <a href="../interfaces/lib_hooks.DragOptions.html" class="tsd-signature-type" data-tsd-kind="Interface">DragOptions</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">]</span></h4>
+						</li>
+					</ul>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
+				<h2>Type aliases</h2>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="OnDragStart" class="tsd-anchor"></a>
+					<h3>On<wbr>Drag<wbr>Start</h3>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Drag<wbr>Start<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span>, setPosition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>pos<span class="tsd-signature-symbol">: </span><a href="../interfaces/Position.html" class="tsd-signature-type" data-tsd-kind="Interface">Position</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L240">src/lib/hooks/index.ts:240</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span>, setPosition<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">(</span>pos<span class="tsd-signature-symbol">: </span><a href="../interfaces/Position.html" class="tsd-signature-type" data-tsd-kind="Interface">Position</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>event: <span class="tsd-signature-type">MouseEvent</span></h5>
+											</li>
+											<li>
+												<h5>setPosition: <span class="tsd-signature-symbol">(</span>pos<span class="tsd-signature-symbol">: </span><a href="../interfaces/Position.html" class="tsd-signature-type" data-tsd-kind="Interface">Position</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></h5>
+												<ul class="tsd-parameters">
+													<li class="tsd-parameter-signature">
+														<ul class="tsd-signatures tsd-kind-type-literal">
+															<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>pos<span class="tsd-signature-symbol">: </span><a href="../interfaces/Position.html" class="tsd-signature-type" data-tsd-kind="Interface">Position</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+														</ul>
+														<ul class="tsd-descriptions">
+															<li class="tsd-description">
+																<h4 class="tsd-parameters-title">Parameters</h4>
+																<ul class="tsd-parameters">
+																	<li>
+																		<h5>pos: <a href="../interfaces/Position.html" class="tsd-signature-type" data-tsd-kind="Interface">Position</a></h5>
+																	</li>
+																</ul>
+																<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+															</li>
+														</ul>
+													</li>
+												</ul>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="OnDragEnd" class="tsd-anchor"></a>
+					<h3>On<wbr>Drag<wbr>End</h3>
+					<div class="tsd-signature tsd-kind-icon">On<wbr>Drag<wbr>End<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol"> =&gt; </span><span class="tsd-signature-type">void</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/f11d040/src/lib/hooks/index.ts#L241">src/lib/hooks/index.ts:241</a></li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter-signature">
+								<ul class="tsd-signatures tsd-kind-type-literal tsd-parent-kind-type-alias">
+									<li class="tsd-signature tsd-kind-icon"><span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MouseEvent</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+								</ul>
+								<ul class="tsd-descriptions">
+									<li class="tsd-description">
+										<h4 class="tsd-parameters-title">Parameters</h4>
+										<ul class="tsd-parameters">
+											<li>
+												<h5>event: <span class="tsd-signature-type">MouseEvent</span></h5>
+											</li>
+										</ul>
+										<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
 			</section>
 		</div>
 		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
@@ -327,80 +520,8 @@
 					<li class=" ">
 						<a href="../index.html">Modules</a>
 					</li>
-					<li class=" tsd-kind-module">
-						<a href="api_auth.html">api/auth</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="api_client.html">api/client</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_CompanyFilterButton.html">components/<wbr>Company<wbr>Filter<wbr>Button</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_ArrowLeft.html">components/<wbr>Svg/<wbr>Arrow<wbr>Left</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_Building.html">components/<wbr>Svg/<wbr>Building</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_Calendar.html">components/<wbr>Svg/<wbr>Calendar</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_Chevron.html">components/<wbr>Svg/<wbr>Chevron</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_Gear.html">components/<wbr>Svg/<wbr>Gear</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_MagnifyingGlass.html">components/<wbr>Svg/<wbr>Magnifying<wbr>Glass</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_Pause.html">components/<wbr>Svg/<wbr>Pause</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Svg_Play.html">components/<wbr>Svg/<wbr>Play</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Tabs.html">components/<wbr>Tabs</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="components_Tooltip.html">components/<wbr>Tooltip</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="lib_audio.html">lib/audio</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="lib_config.html">lib/config</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="lib_data.html">lib/data</a>
-					</li>
 					<li class="current tsd-kind-module">
 						<a href="lib_hooks.html">lib/hooks</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="lib_msg.html">lib/msg</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="lib_storage.html">lib/storage</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules_Auth.html">modules/<wbr>Auth</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules_EventList.html">modules/<wbr>Event<wbr>List</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="modules_Transcript.html">modules/<wbr>Transcript</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="types.html">types</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="types_generated.html">types/generated</a>
-					</li>
-					<li class=" tsd-kind-module">
-						<a href="types_svg.html">types/svg</a>
 					</li>
 				</ul>
 			</nav>
@@ -417,6 +538,21 @@
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="lib_hooks.html#useDelayCallback" class="tsd-kind-icon">use<wbr>Delay<wbr>Callback</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="lib_hooks.html#useEventListener" class="tsd-kind-icon">use<wbr>Event<wbr>Listener</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="lib_hooks.html#OnDragStart" class="tsd-kind-icon">On<wbr>Drag<wbr>Start</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="lib_hooks.html#OnDragEnd" class="tsd-kind-icon">On<wbr>Drag<wbr>End</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/lib_hooks.DragOptions.html" class="tsd-kind-icon">Drag<wbr>Options</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="lib_hooks.html#useDrag" class="tsd-kind-icon">use<wbr>Drag</a>
 					</li>
 				</ul>
 			</nav>
