@@ -2,8 +2,8 @@ import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObj
 import classNames from 'classnames';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
-import { useDrag } from '@aiera/client-sdk/lib/hooks';
+import { AudioPlayer, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { OnDragStart, OnDragEnd, useDrag, useWindowSize } from '@aiera/client-sdk/lib/hooks';
 import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
@@ -107,11 +107,30 @@ export interface PlaybarProps extends PlaybarSharedProps {
     url?: string;
 }
 
-/**
- * Renders Playbar
- */
-export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { id, url } = props;
+function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject<HTMLDivElement>, number] {
+    const knobRef = useRef<HTMLDivElement>(null);
+    // Rerender on resize to make sure the knob stays positioned correctly
+    useWindowSize();
+    const knobTrackWidth = knobRef.current?.parentElement?.getBoundingClientRect().width || 0;
+    const [isDragging, dragXOffset] = useDrag({
+        dragTarget: knobRef,
+        onDragStart: useCallback<OnDragStart>(
+            (_event, setPosition) => {
+                setPosition({ x: knobRef.current?.offsetLeft || 0, y: 0 });
+            },
+            [knobRef.current]
+        ),
+        onDragEnd: useCallback<OnDragEnd>(() => {
+            audioPlayer.seek(((knobRef.current?.offsetLeft || 0) / knobTrackWidth) * audioPlayer.audio.duration);
+        }, [knobRef.current, knobTrackWidth]),
+    });
+
+    const audioOffset = (audioPlayer.audio.currentTime / audioPlayer.audio.duration) * knobTrackWidth || 0;
+    const knobLeft = Math.min(knobTrackWidth, Math.max(0, isDragging ? dragXOffset : audioOffset));
+    return [knobRef, knobLeft];
+}
+
+function usePlayer(id?: string, url?: string) {
     const audioPlayer = useAudioPlayer();
     useEffect(() => {
         if (id) {
@@ -132,23 +151,31 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
     const fastForward = useCallback(() => audioPlayer.ff(15), []);
     const rewind = useCallback(() => audioPlayer.rewind(15), []);
     const clear = useCallback(() => audioPlayer.clear(), []);
+
+    return {
+        audioPlayer,
+        isActive,
+        isPlaying,
+        togglePlayback,
+        fastForward,
+        rewind,
+        clear,
+    };
+}
+
+/**
+ * Renders Playbar
+ */
+export function Playbar(props: PlaybarProps): ReactElement | null {
+    const { id, url } = props;
+
+    const { audioPlayer, isActive, isPlaying, togglePlayback, fastForward, rewind, clear } = usePlayer(id, url);
+    const [knobRef, knobLeft] = usePlaybarDrag(audioPlayer);
+
     const onClickCalendar = useCallback(
         (event: MouseEvent) => props.onClickCalendar?.(event, { value: audioPlayer.id }),
         [audioPlayer.id]
     );
-
-    const knobRef = useRef<HTMLDivElement>(null);
-    const knobTrackWidth = knobRef.current?.parentElement?.getBoundingClientRect().width || 0;
-    const getInitialOffset = useCallback(() => {
-        return { x: knobRef.current?.offsetLeft || 0, y: 0 };
-    }, []);
-    const onDragEnd = useCallback(() => {
-        audioPlayer.seek(((knobRef.current?.offsetLeft || 0) / knobTrackWidth) * audioPlayer.audio.duration);
-    }, [knobTrackWidth]);
-    const [isDragging, dragXOffset] = useDrag(knobRef, getInitialOffset, undefined, onDragEnd);
-
-    const audioOffset = (audioPlayer.audio.currentTime / audioPlayer.audio.duration) * knobTrackWidth;
-    const knobLeft = Math.min(knobTrackWidth, Math.max(0, isDragging ? dragXOffset : audioOffset));
 
     if (!isActive) return null;
     return (

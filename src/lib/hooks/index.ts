@@ -188,49 +188,111 @@ export function useDelayCallback<T extends (...args: any[]) => void>(
     ];
 }
 
-export function useDrag(
-    targetRef: RefObject<HTMLElement>,
-    getInitialOffset: (event: MouseEvent) => { x: number; y: number },
-    onDragStart?: (event: MouseEvent) => void,
-    onDragEnd?: (event: MouseEvent) => void
-): [boolean, number, number] {
+/**
+ * Handles automatically adding/removing event listeners from DOM elements.
+ * @param eventName  - The event to listen on
+ * @param handler    - The listener function, receives the event that was triggered
+ * @param evement    - Ref to the DOM element, or window if none provided
+ */
+export function useEventListener<T extends HTMLElement = HTMLDivElement>(
+    eventName: keyof WindowEventMap,
+    handler: (event: Event) => void,
+    element?: RefObject<T>
+): void {
+    // Create a ref that stores handler
+    const savedHandler = useRef<(event: Event) => void>();
+
+    useEffect(() => {
+        // Define the listening target
+        const targetElement: T | Window = element?.current || window;
+        if (!(targetElement && targetElement.addEventListener)) {
+            return;
+        }
+
+        // Update saved handler if necessary
+        if (savedHandler.current !== handler) {
+            savedHandler.current = handler;
+        }
+
+        // Create event listener that calls handler function stored in ref
+        const eventListener = (event: Event) => {
+            // eslint-disable-next-line no-extra-boolean-cast
+            if (!!savedHandler?.current) {
+                savedHandler.current(event);
+            }
+        };
+
+        targetElement.addEventListener(eventName, eventListener);
+
+        // Remove event listener on cleanup
+        return () => {
+            targetElement.removeEventListener(eventName, eventListener);
+        };
+    }, [eventName, element, handler]);
+}
+
+/** @notExported */
+interface Position {
+    x: number;
+    y: number;
+}
+
+export type OnDragStart = (event: MouseEvent, setPosition: (pos: Position) => void) => void;
+export type OnDragEnd = (event: MouseEvent) => void;
+export interface DragOptions {
+    dragTarget: RefObject<HTMLElement>;
+    onDragStart?: OnDragStart;
+    onDragEnd?: OnDragEnd;
+}
+
+/**
+ * Handles updating on mouse movement while dragging a target element.
+ * @param options
+ *      - dragTarget  - The target element that can be dragged
+ *      - onDragStart - Called when the element is clicked, is passed the event and
+ *                      function that takes in {x, y} to set the initial position.
+ *      - onDragEnd   - Called on mouseup and is passed the event
+ */
+export function useDrag(dragOpts: DragOptions): [boolean, number, number] {
+    const { dragTarget, onDragStart, onDragEnd } = dragOpts;
     const [isDragging, setIsDragging] = useState(false);
-    const [xOffset, setXOffset] = useState(0);
-    const [yOffset, setYOffset] = useState(0);
+    const [initialPos, setPosition] = useState<Position>({ x: 0, y: 0 });
+    const [movePos, setMovement] = useState<Position>({ x: 0, y: 0 });
 
     useEffect(() => {
         function onMouseDown(event: MouseEvent) {
-            onDragStart?.(event);
-            const { x, y } = getInitialOffset(event);
-            setXOffset(x);
-            setYOffset(y);
+            onDragStart?.(event, setPosition);
             setIsDragging(true);
         }
         function onMouseMove(event: MouseEvent) {
             if (isDragging) {
-                setXOffset((prevOffset) => prevOffset + event.movementX);
-                setYOffset((prevOffset) => prevOffset + event.movementY);
+                setMovement((prevMovement) => ({
+                    x: prevMovement.x + event.movementX,
+                    y: prevMovement.y + event.movementY,
+                }));
             }
         }
         function onMouseUp(event: MouseEvent) {
             if (isDragging) {
                 onDragEnd?.(event);
                 setIsDragging(false);
+                setPosition({ x: 0, y: 0 });
+                setMovement({ x: 0, y: 0 });
             }
         }
-        if (targetRef.current) {
-            targetRef.current.addEventListener('mousedown', onMouseDown);
+        if (dragTarget.current) {
+            dragTarget.current.addEventListener('mousedown', onMouseDown);
             document.addEventListener('mousemove', onMouseMove);
             document.addEventListener('mouseup', onMouseUp);
         }
         return () => {
-            if (targetRef.current) {
-                targetRef.current.removeEventListener('mousedown', onMouseDown);
+            if (dragTarget.current) {
+                dragTarget.current.removeEventListener('mousedown', onMouseDown);
                 document.removeEventListener('mousemove', onMouseMove);
                 document.removeEventListener('mouseup', onMouseUp);
             }
         };
-    }, [targetRef.current, isDragging]);
+    }, [dragTarget.current, isDragging]);
 
-    return [isDragging, xOffset, yOffset];
+    return [isDragging, initialPos.x + movePos.x, initialPos.y + movePos.y];
 }
