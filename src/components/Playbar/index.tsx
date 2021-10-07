@@ -1,8 +1,9 @@
-import React, { useCallback, useEffect, MouseEvent, ReactElement } from 'react';
+import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject } from 'react';
 import classNames from 'classnames';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { useDrag } from '@aiera/client-sdk/lib/hooks';
 import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
@@ -31,14 +32,27 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     isPlaying: boolean;
     fastForward: () => void;
     fixed?: boolean;
+    knobLeft?: number;
+    knobRef: RefObject<HTMLDivElement>;
     onClickCalendar: (event: MouseEvent) => void;
     togglePlayback: () => void;
     rewind: () => void;
 }
 
 export function PlaybarUI(props: PlaybarUIProps): ReactElement {
-    const { clear, currentTime, duration, fixed, isPlaying, fastForward, onClickCalendar, togglePlayback, rewind } =
-        props;
+    const {
+        clear,
+        currentTime,
+        duration,
+        fixed,
+        isPlaying,
+        fastForward,
+        knobLeft = 0,
+        knobRef,
+        onClickCalendar,
+        togglePlayback,
+        rewind,
+    } = props;
     return (
         <div className="h-13 w-full flex items-center shadow p-3">
             <div
@@ -61,7 +75,16 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 <Forward15 />
             </div>
             <div className="ml-2 mr-2 text-xs font-mono">{toDurationString(currentTime)}</div>
-            <div className="flex-1 h-px bg-black"></div>
+            <div className="flex flex-1 relative items-center">
+                <div className="flex-1 h-1 bg-gray-200 rounded-full">
+                    <div className="h-1 bg-yellow-500 rounded-full" style={{ width: knobLeft }} />
+                </div>
+                <div
+                    className="absolute rounded-md h-4 w-2 bg-white border border-gray-200"
+                    style={{ left: knobLeft }}
+                    ref={knobRef}
+                />
+            </div>
             <div className="ml-2 mr-2 text-xs font-mono">{toDurationString(duration)}</div>
             {!fixed && (
                 <>
@@ -114,6 +137,19 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
         [audioPlayer.id]
     );
 
+    const knobRef = useRef<HTMLDivElement>(null);
+    const knobTrackWidth = knobRef.current?.parentElement?.getBoundingClientRect().width || 0;
+    const getInitialOffset = useCallback(() => {
+        return { x: knobRef.current?.offsetLeft || 0, y: 0 };
+    }, []);
+    const onDragEnd = useCallback(() => {
+        audioPlayer.seek(((knobRef.current?.offsetLeft || 0) / knobTrackWidth) * audioPlayer.audio.duration);
+    }, [knobTrackWidth]);
+    const [isDragging, dragXOffset] = useDrag(knobRef, getInitialOffset, undefined, onDragEnd);
+
+    const audioOffset = (audioPlayer.audio.currentTime / audioPlayer.audio.duration) * knobTrackWidth;
+    const knobLeft = Math.min(knobTrackWidth, Math.max(0, isDragging ? dragXOffset : audioOffset));
+
     if (!isActive) return null;
     return (
         <PlaybarUI
@@ -123,6 +159,8 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             isPlaying={isPlaying}
             fastForward={fastForward}
             fixed={!!(id && url)}
+            knobLeft={knobLeft}
+            knobRef={knobRef}
             onClickCalendar={onClickCalendar}
             togglePlayback={togglePlayback}
             rewind={rewind}
