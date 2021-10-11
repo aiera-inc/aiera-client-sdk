@@ -1,15 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 import { DocumentNode } from 'graphql';
-import { fireEvent, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
 
 import { renderWithClient } from '@aiera/client-sdk/testUtils';
-import { Event } from '@aiera/client-sdk/types/generated';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
-import { EventList, EventListUI } from '.';
+import { EventList } from '.';
 
 const eventList = [
     {
@@ -85,26 +84,6 @@ const eventTranscript = [
     },
 ];
 
-describe('EventListUI', () => {
-    test('renders a loading state', () => {
-        renderWithClient(<EventListUI loading />);
-        screen.getByText('Loading...');
-    });
-
-    test('renders an empty state', () => {
-        renderWithClient(<EventListUI />);
-        screen.getByText('No events.');
-    });
-
-    test('renders an event list and selects and event on click', () => {
-        const onSelectEvent = jest.fn();
-        const event = { id: '1', title: 'Event Title' } as Event;
-        renderWithClient(<EventListUI events={[event]} onSelectEvent={onSelectEvent} />);
-        fireEvent(screen.getByText('Event Title'), new MouseEvent('click', { bubbles: true }));
-        expect(onSelectEvent).toHaveBeenCalledWith(expect.anything(), { value: event });
-    });
-});
-
 describe('EventList', () => {
     test('handles loading state', () => {
         renderWithClient(<EventList />);
@@ -120,7 +99,7 @@ describe('EventList', () => {
                     },
                 }),
         });
-        screen.getByText('No events.');
+        screen.getByText('There are no events.');
     });
 
     test('handles event list', () => {

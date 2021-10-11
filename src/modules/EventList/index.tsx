@@ -1,10 +1,11 @@
 import React, { ReactElement, FormEventHandler, MouseEventHandler, useCallback } from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from 'urql';
+import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
+import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { getPrimaryQuote, useCompanyResolver } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks';
@@ -27,7 +28,7 @@ export type { CompanyFilterResult };
 export interface EventListUIProps {
     company?: CompanyFilterResult;
     event?: EventListEvent;
-    events?: EventListEvent[];
+    eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypes?: FilterByType[];
     listType?: EventView;
     loading?: boolean;
@@ -45,10 +46,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
         company,
         event,
-        events,
+        eventsQuery,
         filterByTypes,
         listType,
-        loading,
         onBackFromTranscript,
         onCompanyChange,
         onSearchChange,
@@ -58,9 +58,12 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         onSelectEventById,
         searchTerm,
     } = props;
+
     if (event) {
         return <Transcript eventId={event.id} onBack={onBackFromTranscript} />;
     }
+
+    const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
         <div className="h-full flex flex-col eventlist">
             <div className="flex items-center p-3 shadow eventlist__header">
@@ -74,7 +77,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     <CompanyFilterButton onChange={onCompanyChange} value={company} />
                 </div>
             </div>
-            <div className="p-3 flex-1 overflow-y-scroll">
+            <div className="flex flex-col flex-1 p-3 overflow-y-scroll">
                 <div className="flex flex-col flex-grow eventlist__tabs">
                     <div>
                         <Tabs<EventView>
@@ -96,66 +99,68 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             value={filterByTypes}
                         />
                     </div>
-                    <div className="mt-3">
-                        {loading ? (
-                            <div>Loading...</div>
-                        ) : events && events.length ? (
-                            <ul>
-                                {events.map((event) => {
-                                    const primaryQuote = getPrimaryQuote(event.primaryCompany);
-                                    const eventDate = DateTime.fromISO(event.eventDate);
-                                    const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
-                                    return (
-                                        <li
-                                            className="text-xs"
-                                            onClick={(e) => onSelectEvent?.(e, { value: event })}
-                                            key={event.id}
-                                        >
-                                            <div className="flex flex-row">
-                                                <div className="flex items-center justify-center">
-                                                    <div className="flex items-center justify-center w-9 h-9">
-                                                        <PlayButton
-                                                            id={event.id}
-                                                            url={event.audioRecordingUrl}
-                                                            offset={audioOffset || 0}
-                                                        />
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
-                                                    <div>
-                                                        <span className="pr-1 font-semibold">
-                                                            {primaryQuote?.localTicker}
-                                                        </span>
-                                                        <span className="text-gray-300">
-                                                            {primaryQuote?.exchange?.shortName}
-                                                        </span>
-                                                        <span className="text-gray-400"> • {event.eventType}</span>
-                                                    </div>
-                                                    <div className="text-sm truncate whitespace-normal line-clamp-2">
-                                                        {event.title}
-                                                    </div>
-                                                </div>
-                                                <div className="flex flex-col items-center justify-center w-24 pr-1 text-xs">
-                                                    {event.isLive && (
-                                                        <div className="px-2 font-semibold text-white bg-red-500 rounded-md">
-                                                            LIVE
+                    <div className="flex flex-col items-center justify-center flex-1 mt-3">
+                        {match(eventsQuery)
+                            .with({ status: 'loading' }, () => wrapMsg('Loading...'))
+                            .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
+                            .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
+                            .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
+                            .with({ status: 'success' }, ({ data: { events } }) => (
+                                <ul>
+                                    {events.map((event) => {
+                                        const primaryQuote = getPrimaryQuote(event.primaryCompany);
+                                        const eventDate = DateTime.fromISO(event.eventDate);
+                                        const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
+                                        return (
+                                            <li
+                                                className="text-xs"
+                                                onClick={(e) => onSelectEvent?.(e, { value: event })}
+                                                key={event.id}
+                                            >
+                                                <div className="flex flex-row">
+                                                    <div className="flex items-center justify-center">
+                                                        <div className="flex items-center justify-center w-9 h-9">
+                                                            <PlayButton
+                                                                id={event.id}
+                                                                url={event.audioRecordingUrl}
+                                                                offset={audioOffset || 0}
+                                                            />
                                                         </div>
-                                                    )}
-                                                    {!event.isLive && (
-                                                        <>
-                                                            <div>{eventDate.toFormat('MMM dd')}</div>
-                                                            <div>{eventDate.toFormat('h:mma yyyy')}</div>
-                                                        </>
-                                                    )}
+                                                    </div>
+                                                    <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
+                                                        <div>
+                                                            <span className="pr-1 font-semibold">
+                                                                {primaryQuote?.localTicker}
+                                                            </span>
+                                                            <span className="text-gray-300">
+                                                                {primaryQuote?.exchange?.shortName}
+                                                            </span>
+                                                            <span className="text-gray-400"> • {event.eventType}</span>
+                                                        </div>
+                                                        <div className="text-sm truncate whitespace-normal line-clamp-2">
+                                                            {event.title}
+                                                        </div>
+                                                    </div>
+                                                    <div className="flex flex-col items-center justify-center w-24 pr-1 text-xs">
+                                                        {event.isLive && (
+                                                            <div className="px-2 font-semibold text-white bg-red-500 rounded-md">
+                                                                LIVE
+                                                            </div>
+                                                        )}
+                                                        {!event.isLive && (
+                                                            <>
+                                                                <div>{eventDate.toFormat('MMM dd')}</div>
+                                                                <div>{eventDate.toFormat('h:mma yyyy')}</div>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        </li>
-                                    );
-                                })}
-                            </ul>
-                        ) : (
-                            <span>No events.</span>
-                        )}
+                                            </li>
+                                        );
+                                    })}
+                                </ul>
+                            ))
+                            .exhaustive()}
                     </div>
                 </div>
             </div>
@@ -216,7 +221,8 @@ export const EventList = (_props: EventListProps): ReactElement => {
         [state]
     );
 
-    const [eventListResult] = useQuery<EventListQuery, EventListQueryVariables>({
+    const eventsQuery = useQuery<EventListQuery, EventListQueryVariables>({
+        isEmpty: ({ events }) => events.length === 0,
         query: gql`
             query EventList($filter: EventFilter, $view: EventView) {
                 events(filter: $filter, view: $view) {
@@ -264,24 +270,23 @@ export const EventList = (_props: EventListProps): ReactElement => {
 
     const onSelectEventById = useCallback<ChangeHandler<string>>(
         (event, change) => {
-            if (eventListResult.data?.events) {
-                const selectedEvent = eventListResult.data.events.find((event) => event.id === change.value);
+            if (eventsQuery.status === 'success') {
+                const selectedEvent = eventsQuery.data.events.find((event) => event.id === change.value);
                 if (selectedEvent) {
                     onSelectEvent(event, { value: selectedEvent });
                 }
             }
         },
-        [eventListResult]
+        [eventsQuery.status]
     );
 
     return (
         <EventListUI
             company={state.company}
             event={state.event}
-            events={eventListResult.data?.events}
+            eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}
             listType={state.listType}
-            loading={eventListResult.fetching}
             onBackFromTranscript={(event) => onSelectEvent(event, { value: null })}
             onCompanyChange={onSelectCompany}
             onSearchChange={({ currentTarget: { value } }) => setState({ ...state, searchTerm: value })}
