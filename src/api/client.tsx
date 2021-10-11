@@ -12,7 +12,7 @@
  * ```
  * @module
  */
-import React, { createContext, ReactElement, ReactNode, useContext, useState } from 'react';
+import React, { createContext, ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
 import {
     Client,
     createClient,
@@ -138,21 +138,23 @@ export function useQuery<Data, Variables>(
 ): QueryResult<Data, Variables> {
     const { isEmpty } = args;
     const [state, refetch] = urqlUseQuery<Data, Variables>(args);
-    if (state.fetching) {
-        return { status: 'loading', state, refetch };
-    }
+    return useMemo(() => {
+        if (state.fetching) {
+            return { status: 'loading', state, refetch };
+        }
 
-    if (state.error) {
-        return { status: 'error', state, error: state.error, refetch };
-    }
+        if (state.error) {
+            return { status: 'error', state, error: state.error, refetch };
+        }
 
-    if (args.pause) {
-        return { status: 'paused', state, refetch };
-    }
+        if (args.pause) {
+            return { status: 'paused', state, refetch };
+        }
 
-    if (isEmpty && state.data && isEmpty(state.data)) {
-        return { status: 'empty', state, data: state.data, refetch };
-    }
+        if (isEmpty && state.data && isEmpty(state.data)) {
+            return { status: 'empty', state, data: state.data, refetch };
+        }
 
-    return { status: 'success', state, data: state.data as Data, refetch };
+        return { status: 'success', state, data: state.data as Data, refetch };
+    }, [state, refetch]);
 }
