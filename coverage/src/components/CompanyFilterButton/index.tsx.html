@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">96.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>25/26</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">93.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>14/15</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">96% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>19/19</span>
+                <span class='fraction'>24/25</span>
             </div>
         
             
@@ -231,7 +231,15 @@
 <a name='L172'></a><a href='#L172'>172</a>
 <a name='L173'></a><a href='#L173'>173</a>
 <a name='L174'></a><a href='#L174'>174</a>
-<a name='L175'></a><a href='#L175'>175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a>
+<a name='L178'></a><a href='#L178'>178</a>
+<a name='L179'></a><a href='#L179'>179</a>
+<a name='L180'></a><a href='#L180'>180</a>
+<a name='L181'></a><a href='#L181'>181</a>
+<a name='L182'></a><a href='#L182'>182</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -262,8 +270,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">12x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -277,6 +284,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -284,6 +298,8 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -358,6 +374,7 @@
 <span class="cline-any cline-yes">38x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">38x</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -395,9 +412,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">38x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">38x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -407,11 +421,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { FormEvent, ReactElement, useCallback, useState } from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from 'urql';
+import { match } from 'ts-pattern';
 import classNames from 'classnames';
 &nbsp;
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
+import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Building } from '@aiera/client-sdk/components/Svg/Building';
@@ -427,50 +442,58 @@ interface CompanyFilterButtonSharedProps {
 &nbsp;
 /** @notExported */
 interface CompanyFilterButtonUIProps extends CompanyFilterButtonSharedProps {
-    companies: CompanyFilterQuery['companies'];
+    companiesQuery: QueryResult&lt;CompanyFilterQuery, CompanyFilterQueryVariables&gt;;
     companiesLoading?: boolean;
     hideTooltip?: () =&gt; void;
     onSearchChange: (event: FormEvent&lt;HTMLInputElement&gt;) =&gt; void;
 }
 &nbsp;
 function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
-    const { companies, companiesLoading, hideTooltip, onChange, onSearchChange } = props;
+    const { companiesQuery, hideTooltip, onChange, onSearchChange } = props;
+    const wrapMsg = (msg: string) =&gt; &lt;div className="flex flex-1 items-center justify-center text-gray-600"&gt;{msg}&lt;/div&gt;;
     return (
-        &lt;div className="shadow-md bg-white rounded-lg w-80"&gt;
+        &lt;div className="shadow-md bg-white rounded-lg w-80 overflow-hidden"&gt;
             &lt;div className="p-3 w-full"&gt;
                 &lt;input
+                    autoFocus
                     className="p-2 w-full text-sm rounded-md border border-gray-200"
                     placeholder="Search..."
                     onChange={onSearchChange}
                 /&gt;
             &lt;/div&gt;
-            &lt;div className="max-h-52 overflow-y-scroll"&gt;
-                {companiesLoading &amp;&amp; 'Loading...'}
-                {!companiesLoading &amp;&amp;
-                    !!companies.length &amp;&amp;
-                    companies.map((company) =&gt; {
-                        const primaryQuote = getPrimaryQuote(company);
-                        return (
-                            &lt;div
-                                className="flex items-center odd:bg-gray-100 h-12 text-gray-900 tracking-wide"
-                                key={company.id}
-                                onClick={(event) =&gt; {
-                                    event.stopPropagation();
-                                    onChange?.(event, { value: company });
-                                    hideTooltip?.();
-                                }}
-                            &gt;
-                                &lt;div className="pl-4 truncate flex-1"&gt;{company.commonName}&lt;/div&gt;
-                                &lt;div className="w-20 pl-3 truncate font-semibold text-right text-sm"&gt;
-                                    {primaryQuote?.localTicker}
-                                &lt;/div&gt;
-                                &lt;div className="w-20 pl-3 pr-4 truncate text-gray-300 text-sm"&gt;
-                                    {primaryQuote?.exchange?.shortName}
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        );
-                    })}
-                {!companiesLoading &amp;&amp; !companies.length &amp;&amp; 'No results.'}
+            &lt;div className="flex flex-col max-h-52 min-h-[80px] overflow-y-scroll"&gt;
+                {match(companiesQuery)
+                    .with({ status: 'loading' }, () =&gt; wrapMsg('Loading...'))
+                    .with({ status: 'paused' }, () =&gt; wrapMsg('Type to search...'))
+                    .with({ status: 'error' }, <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >wrapMsg('There was an error searching.'))</span>
+                    .with({ status: 'empty' }, () =&gt; wrapMsg('No results.'))
+                    .with({ status: 'success' }, ({ data: { companies } }) =&gt; (
+                        &lt;div className="flex-1"&gt;
+                            {companies.map((company) =&gt; {
+                                const primaryQuote = getPrimaryQuote(company);
+                                return (
+                                    &lt;div
+                                        className="flex items-center h-12 odd:bg-gray-100 text-gray-900 tracking-wide"
+                                        key={company.id}
+                                        onClick={(event) =&gt; {
+                                            event.stopPropagation();
+                                            onChange?.(event, { value: company });
+                                            hideTooltip?.();
+                                        }}
+                                    &gt;
+                                        &lt;div className="pl-4 truncate flex-1"&gt;{company.commonName}&lt;/div&gt;
+                                        &lt;div className="w-20 pl-3 truncate font-semibold text-right text-sm"&gt;
+                                            {primaryQuote?.localTicker}
+                                        &lt;/div&gt;
+                                        &lt;div className="w-20 pl-3 pr-4 truncate text-gray-300 text-sm"&gt;
+                                            {primaryQuote?.exchange?.shortName}
+                                        &lt;/div&gt;
+                                    &lt;/div&gt;
+                                );
+                            })}
+                        &lt;/div&gt;
+                    ))
+                    .exhaustive()}
             &lt;/div&gt;
         &lt;/div&gt;
     );
@@ -496,7 +519,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                     })}
                 &gt;
                     {!value &amp;&amp; (
-                        &lt;div className="flex whitespace-nowrap text-base"&gt;
+                        &lt;div className="flex items-center whitespace-nowrap text-base"&gt;
                             &lt;Building alt="building" className="mr-2" /&gt;
                             By Company
                         &lt;/div&gt;
@@ -531,7 +554,8 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
 &nbsp;
     const [searchTerm, setSearchTerm] = useState&lt;string&gt;('');
 &nbsp;
-    const [companyResults] = useQuery&lt;CompanyFilterQuery, CompanyFilterQueryVariables&gt;({
+    const companiesQuery = useQuery&lt;CompanyFilterQuery, CompanyFilterQueryVariables&gt;({
+        isEmpty: ({ companies }) =&gt; companies.length === 0,
         query: gql`
             query CompanyFilter($searchTerm: String) {
                 companies(filter: { searchTerm: $searchTerm }) {
@@ -567,12 +591,9 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
         setSearchTerm(event.currentTarget.value);
     }, []);
 &nbsp;
-    const companies = companyResults.data?.companies || [];
-&nbsp;
     return (
         &lt;CompanyFilterButtonUI
-            companies={companies}
-            companiesLoading={companyResults.fetching}
+            companiesQuery={companiesQuery}
             onChange={onChange}
             onSearchChange={onSearchChange}
             value={value}
@@ -586,7 +607,7 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 11 2021 09:55:27 GMT-0400 (Eastern Daylight Time)
+                at Mon Oct 11 2021 12:09:02 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
