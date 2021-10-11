@@ -20,8 +20,14 @@ import {
     fetchExchange,
     Exchange,
     Provider as UrqlProvider,
+    useQuery as urqlUseQuery,
+    CombinedError,
+    UseQueryState,
+    UseQueryResponse,
+    UseQueryArgs,
 } from 'urql';
 import { devtoolsExchange } from '@urql/devtools';
+
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
@@ -87,3 +93,66 @@ export const useClient = (): ClientContext & { client: Client } => {
  * @ignore
  */
 export const ResetProvider = Context.Provider;
+
+export interface BaseQueryResult<Data, Variables> {
+    state: UseQueryState<Data, Variables>;
+    refetch: UseQueryResponse<Data, Variables>[1];
+}
+
+export interface LoadingQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
+    status: 'loading';
+}
+
+export interface ErrorQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
+    status: 'error';
+    error: CombinedError;
+}
+
+export interface PausedQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
+    status: 'paused';
+}
+
+export interface EmptyQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
+    status: 'empty';
+    data: Data;
+}
+
+export interface SuccessQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
+    status: 'success';
+    data: Data;
+}
+
+export interface QueryResultEmptyCheck<Data> {
+    isEmpty?: (data: Data) => boolean;
+}
+
+export type QueryResult<Data, Variables> =
+    | LoadingQueryResult<Data, Variables>
+    | ErrorQueryResult<Data, Variables>
+    | PausedQueryResult<Data, Variables>
+    | EmptyQueryResult<Data, Variables>
+    | SuccessQueryResult<Data, Variables>;
+
+export function useQuery<Data, Variables>(
+    args: UseQueryArgs<Variables, Data> & QueryResultEmptyCheck<Data>
+): QueryResult<Data, Variables> {
+    const { isEmpty } = args;
+    const [state, refetch] = urqlUseQuery<Data, Variables>(args);
+    if (state.fetching) {
+        return { status: 'loading', state, refetch };
+    }
+
+    if (state.error) {
+        return { status: 'error', state, error: state.error, refetch };
+    }
+
+    if (args.pause) {
+        return { status: 'paused', state, refetch };
+    }
+
+    if (isEmpty && state.data && isEmpty(state.data)) {
+        return { status: 'empty', state, data: state.data, refetch };
+    }
+
+    return { status: 'success', state, data: state.data as Data, refetch };
+}
