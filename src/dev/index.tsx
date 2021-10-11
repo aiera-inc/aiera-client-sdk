@@ -6,6 +6,7 @@ import { useMessageListener, Provider as MessageBusProvider } from '@aiera/clien
 import { Provider as ConfigProvider } from '@aiera/client-sdk/lib/config';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
+import '@aiera/client-sdk/css/styles.css';
 
 const App: FC = (): ReactElement => {
     const bus = useMessageListener(
