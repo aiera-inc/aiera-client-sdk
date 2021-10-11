@@ -11,6 +11,11 @@ module.exports = {
                 'typescript-urql',
             ],
             config: {
+                defaultScalarType: 'unknown',
+                scalars: {
+                    Time: 'string',
+                    DateTime: 'string',
+                },
                 skipTypename: false,
                 withHooks: false,
                 withHOC: false,

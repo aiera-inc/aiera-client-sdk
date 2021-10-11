@@ -104,7 +104,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                 {events.map((event) => {
                                     const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                     const eventDate = DateTime.fromISO(event.eventDate);
-                                    const audioOffset = (event.transcripts[0]?.initialAudioOffsetMs ?? 0) / 1000;
+                                    const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
                                     return (
                                         <li
                                             className="text-xs"
@@ -226,10 +226,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
                     eventType
                     isLive
                     audioRecordingUrl
-                    transcripts {
-                        id
-                        initialAudioOffsetMs
-                    }
+                    audioRecordingOffsetMs
                     primaryCompany {
                         id
                         commonName

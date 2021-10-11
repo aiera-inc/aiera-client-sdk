@@ -23,11 +23,21 @@ describe('audio library', () => {
         window.HTMLMediaElement.prototype.pause = pause;
     });
 
+    test('duration', () => {
+        const player = getPlayer();
+        player.init({ id: '1', url: 'url', offset: 10 });
+        // @ts-ignore
+        player.audio.duration = 100;
+        player.rawSeek(5);
+        expect(player.rawDuration).toBe(100);
+        expect(player.displayDuration).toBe(90);
+    });
+
     test('play()', () => {
         const player = getPlayer();
         expect(player.playing(null)).toBeFalsy();
         expect(player.playing('1')).toBeFalsy();
-        void player.play({ id: '1', url: srcUrl });
+        void player.play({ id: '1', url: srcUrl, offset: 0 });
         expect(player.audio.src).toBe(srcUrl);
         expect(play).toHaveBeenCalled();
 
@@ -49,29 +59,46 @@ describe('audio library', () => {
 
     test('seek()', () => {
         const player = getPlayer();
-        player.seek(5);
+        player.init({ id: '1', url: 'url', offset: 10 });
+        player.rawSeek(5);
         expect(player.audio.currentTime).toBe(5);
+        expect(player.rawCurrentTime).toBe(5);
+        expect(player.displayCurrentTime).toBe(0);
+        player.displaySeek(5);
+        expect(player.audio.currentTime).toBe(15);
+        expect(player.rawCurrentTime).toBe(15);
+        expect(player.displayCurrentTime).toBe(5);
+        player.rawSeek(15);
+        expect(player.audio.currentTime).toBe(15);
+        expect(player.rawCurrentTime).toBe(15);
+        expect(player.displayCurrentTime).toBe(5);
     });
 
     test('ff()', () => {
         const player = getPlayer();
+        player.init({ id: '1', url: 'url', offset: 10 });
         // @ts-ignore
         player.audio.duration = 100;
-        player.seek(5);
+        player.rawSeek(15);
         player.ff(15);
-        expect(player.audio.currentTime).toBe(20);
+        expect(player.rawCurrentTime).toBe(30);
+        expect(player.displayCurrentTime).toBe(20);
         player.ff(100);
-        expect(player.audio.currentTime).toBe(100);
+        expect(player.rawCurrentTime).toBe(100);
+        expect(player.displayCurrentTime).toBe(90);
     });
 
     test('rewind()', () => {
         const player = getPlayer();
+        player.init({ id: '1', url: 'url', offset: 10 });
         // @ts-ignore
         player.audio.duration = 100;
-        player.seek(20);
+        player.rawSeek(30);
         player.rewind(15);
-        expect(player.audio.currentTime).toBe(5);
+        expect(player.rawCurrentTime).toBe(15);
+        expect(player.displayCurrentTime).toBe(5);
         player.rewind(100);
-        expect(player.audio.currentTime).toBe(0);
+        expect(player.displayCurrentTime).toBe(0);
+        expect(player.rawCurrentTime).toBe(10);
     });
 });

@@ -46,11 +46,11 @@ export class AudioPlayer {
     }
 
     ff(distance: number): void {
-        this.rawSeek(Math.min(this.audio.currentTime + distance, this.audio.duration));
+        this.rawSeek(Math.min(this.rawCurrentTime + distance, this.rawDuration));
     }
 
     rewind(distance: number): void {
-        this.rawSeek(Math.max(this.audio.currentTime - distance, 0));
+        this.rawSeek(Math.max(this.rawCurrentTime - distance, this.offset));
     }
 
     playing(id: string | null): boolean {
@@ -73,7 +73,7 @@ export class AudioPlayer {
     }
 
     get displayCurrentTime(): number {
-        return Math.max(this.rawCurrentTime - this.offset);
+        return Math.max(0, this.rawCurrentTime - this.offset);
     }
 }
 

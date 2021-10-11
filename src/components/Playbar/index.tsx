@@ -35,6 +35,7 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     knobLeft?: number;
     knobRef: RefObject<HTMLDivElement>;
     onClickCalendar: (event: MouseEvent) => void;
+    onClickTrack: (event: MouseEvent) => void;
     togglePlayback: () => void;
     rewind: () => void;
 }
@@ -50,6 +51,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         knobLeft = 0,
         knobRef,
         onClickCalendar,
+        onClickTrack,
         togglePlayback,
         rewind,
     } = props;
@@ -57,7 +59,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         <div className="h-13 w-full flex items-center shadow p-3">
             <div
                 className={classNames(
-                    'flex items-center justify-center w-9 h-9 rounded-full border border-blue-700 cursor-pointer',
+                    'flex items-center justify-center w-[34px] h-[34px] rounded-full border border-blue-700 cursor-pointer',
                     {
                         'text-blue-700': !isPlaying,
                         'text-white': isPlaying,
@@ -68,24 +70,24 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
             >
                 <div>{isPlaying ? <Pause className="w-3" /> : <Play className="ml-1 w-4" />}</div>
             </div>
-            <div className="ml-2 w-5 text-gray-800 cursor-pointer" onClick={rewind}>
+            <div className="ml-2 w-[18px] text-gray-800 cursor-pointer" onClick={rewind}>
                 <Back15 />
             </div>
-            <div className="ml-2 w-5 text-gray-800 cursor-pointer" onClick={fastForward}>
+            <div className="ml-2 w-[18px] text-gray-800 cursor-pointer" onClick={fastForward}>
                 <Forward15 />
             </div>
-            <div className="ml-2 mr-2 text-xs font-mono">{toDurationString(currentTime)}</div>
+            <div className="ml-2 w-12 text-xs select-none">{toDurationString(currentTime)}</div>
             <div className="flex flex-1 relative items-center">
-                <div className="flex-1 h-1 bg-gray-200 rounded-full">
-                    <div className="h-1 bg-yellow-500 rounded-full" style={{ width: knobLeft }} />
+                <div className="flex-1 h-[6px] bg-gray-200 rounded-full" onClick={onClickTrack}>
+                    <div className="h-[6px] bg-yellow-500 rounded-l-full" style={{ width: knobLeft }} />
                 </div>
                 <div
-                    className="absolute rounded-md h-4 w-2 bg-white border border-gray-200"
+                    className="absolute rounded-md h-5 w-2 bg-white border border-gray-200"
                     style={{ left: knobLeft }}
                     ref={knobRef}
                 />
             </div>
-            <div className="ml-2 mr-2 text-xs font-mono">{toDurationString(duration)}</div>
+            <div className="ml-2 w-12 text-xs select-none">{toDurationString(duration)}</div>
             {!fixed && (
                 <>
                     <div className="text-gray-800 bg-white cursor-pointer w-5 mr-2" onClick={onClickCalendar}>
@@ -100,34 +102,40 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     );
 }
 
-function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject<HTMLDivElement>, number] {
+function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject<HTMLDivElement>, number, (event: MouseEvent) => void] {
     const knobRef = useRef<HTMLDivElement>(null);
     // Rerender on resize to make sure the knob stays positioned correctly
     useWindowSize();
     const knobTrackWidth = knobRef.current?.parentElement?.getBoundingClientRect().width || 0;
     const knobWidth = knobRef.current?.getBoundingClientRect().width || 0;
     const trackWidth = Math.max(0, knobTrackWidth - knobWidth);
-    let mouseKnobOffset = 0;
     const [isDragging, dragXOffset] = useDrag({
         dragTarget: knobRef,
         onDragStart: useCallback<OnDragStart>(
-            (event, setPosition) => {
-                const knobClientX = knobRef.current?.getBoundingClientRect().x || 0;
-                const knobOffset = knobRef.current?.offsetLeft || 0;
-                mouseKnobOffset = Math.max(0, event.clientX - knobClientX);
-                setPosition({ x: knobOffset, y: 0 });
+            (_event, setPosition) => {
+                setPosition({ x: knobRef.current?.offsetLeft || 0, y: 0 });
             },
             [knobRef.current]
         ),
         onDragEnd: useCallback<OnDragEnd>(() => {
-            const leftOffset = (knobRef.current?.offsetLeft || 0) - mouseKnobOffset;
+            const leftOffset = Math.max(0, knobRef.current?.offsetLeft || 0);
             audioPlayer.displaySeek((leftOffset / trackWidth) * audioPlayer.displayDuration);
-        }, [knobRef.current, knobTrackWidth]),
+        }, [knobRef.current, trackWidth]),
     });
 
-    const audioOffset = (audioPlayer.displayCurrentTime / audioPlayer.displayDuration) * knobTrackWidth || 0;
+    const onClickTrack = useCallback(
+        (event: MouseEvent) => {
+            const trackElem = knobRef.current?.parentElement;
+            const trackXOffset = trackElem?.getBoundingClientRect().left || 0;
+            const leftOffset = Math.max(0, event.clientX - trackXOffset) - knobWidth / 2;
+            audioPlayer.displaySeek((leftOffset / trackWidth) * audioPlayer.displayDuration);
+        },
+        [knobRef.current, trackWidth]
+    );
+
+    const audioOffset = (audioPlayer.displayCurrentTime / audioPlayer.displayDuration) * trackWidth || 0;
     const knobLeft = Math.min(trackWidth, Math.max(0, isDragging ? dragXOffset : audioOffset));
-    return [knobRef, knobLeft];
+    return [knobRef, knobLeft, onClickTrack];
 }
 
 function usePlayer(id?: string, url?: string, offset = 0) {
@@ -178,7 +186,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
     const { id, url, offset = 0 } = props;
 
     const { audioPlayer, isActive, isPlaying, togglePlayback, fastForward, rewind, clear } = usePlayer(id, url, offset);
-    const [knobRef, knobLeft] = usePlaybarDrag(audioPlayer);
+    const [knobRef, knobLeft, onClickTrack] = usePlaybarDrag(audioPlayer);
 
     const onClickCalendar = useCallback(
         (event: MouseEvent) => props.onClickCalendar?.(event, { value: audioPlayer.id }),
@@ -196,6 +204,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             fixed={!!(id && url)}
             knobLeft={knobLeft}
             knobRef={knobRef}
+            onClickTrack={onClickTrack}
             onClickCalendar={onClickCalendar}
             togglePlayback={togglePlayback}
             rewind={rewind}

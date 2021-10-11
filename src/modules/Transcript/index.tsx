@@ -25,13 +25,13 @@ interface TranscriptUIProps {
     event?: Event;
     onBack?: MouseEventHandler;
     paragraphs: Paragraph[];
-    onClickTranscript: (paragraph: Paragraph) => void;
+    onClickTranscript?: (paragraph: Paragraph) => void;
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const { event, onBack, paragraphs, onClickTranscript, toggleHeader, headerExpanded } = props;
     const primaryQuote = getPrimaryQuote(event?.primaryCompany);
-    const eventDate = DateTime.fromISO(event?.eventDate);
+    const eventDate = event && DateTime.fromISO(event.eventDate);
     return (
         <div className="h-full flex flex-col transcript">
             <div
@@ -103,10 +103,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 {headerExpanded && 'Event Extras'}
             </div>
             <div className="overflow-y-scroll flex-1 bg-gray-50">
-                {paragraphs.map((paragraph) => {
+                {paragraphs.map((paragraph: Paragraph) => {
                     const { id, sentences, timestamp } = paragraph;
                     return (
-                        <div key={id} className="p-3 pb-4" onClick={() => onClickTranscript(paragraph)}>
+                        <div key={id} className="p-3 pb-4" onClick={() => onClickTranscript?.(paragraph)}>
                             {timestamp && (
                                 <div className="pb-2 font-semibold text-sm">
                                     {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
@@ -118,7 +118,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 })}
             </div>
 
-            <Playbar id={event?.id} url={event?.audioRecordingUrl || ''} />
+            <Playbar
+                id={event?.id}
+                url={event?.audioRecordingUrl || ''}
+                offset={(event?.audioRecordingOffsetMs || 0) / 1000}
+            />
         </div>
     );
 };
@@ -149,6 +153,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                     eventType
                     isLive
                     audioRecordingUrl
+                    audioRecordingOffsetMs
                     primaryCompany {
                         id
                         commonName
@@ -172,7 +177,6 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                     }
                     transcripts {
                         id
-                        initialAudioOffsetMs
                         sections {
                             id
                             speakerTurns {
