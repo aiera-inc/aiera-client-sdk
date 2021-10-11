@@ -1,10 +1,11 @@
 import React, { FormEvent, ReactElement, useCallback, useState } from 'react';
 import gql from 'graphql-tag';
-import { useQuery } from 'urql';
+import { match } from 'ts-pattern';
 import classNames from 'classnames';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
+import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Building } from '@aiera/client-sdk/components/Svg/Building';
@@ -20,50 +21,58 @@ interface CompanyFilterButtonSharedProps {
 
 /** @notExported */
 interface CompanyFilterButtonUIProps extends CompanyFilterButtonSharedProps {
-    companies: CompanyFilterQuery['companies'];
+    companiesQuery: QueryResult<CompanyFilterQuery, CompanyFilterQueryVariables>;
     companiesLoading?: boolean;
     hideTooltip?: () => void;
     onSearchChange: (event: FormEvent<HTMLInputElement>) => void;
 }
 
 function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
-    const { companies, companiesLoading, hideTooltip, onChange, onSearchChange } = props;
+    const { companiesQuery, hideTooltip, onChange, onSearchChange } = props;
+    const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
-        <div className="shadow-md bg-white rounded-lg w-80">
+        <div className="shadow-md bg-white rounded-lg w-80 overflow-hidden">
             <div className="p-3 w-full">
                 <input
+                    autoFocus
                     className="p-2 w-full text-sm rounded-md border border-gray-200"
                     placeholder="Search..."
                     onChange={onSearchChange}
                 />
             </div>
-            <div className="max-h-52 overflow-y-scroll">
-                {companiesLoading && 'Loading...'}
-                {!companiesLoading &&
-                    !!companies.length &&
-                    companies.map((company) => {
-                        const primaryQuote = getPrimaryQuote(company);
-                        return (
-                            <div
-                                className="flex items-center odd:bg-gray-100 h-12 text-gray-900 tracking-wide"
-                                key={company.id}
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                    onChange?.(event, { value: company });
-                                    hideTooltip?.();
-                                }}
-                            >
-                                <div className="pl-4 truncate flex-1">{company.commonName}</div>
-                                <div className="w-20 pl-3 truncate font-semibold text-right text-sm">
-                                    {primaryQuote?.localTicker}
-                                </div>
-                                <div className="w-20 pl-3 pr-4 truncate text-gray-300 text-sm">
-                                    {primaryQuote?.exchange?.shortName}
-                                </div>
-                            </div>
-                        );
-                    })}
-                {!companiesLoading && !companies.length && 'No results.'}
+            <div className="flex flex-col max-h-52 min-h-[80px] overflow-y-scroll">
+                {match(companiesQuery)
+                    .with({ status: 'loading' }, () => wrapMsg('Loading...'))
+                    .with({ status: 'paused' }, () => wrapMsg('Type to search...'))
+                    .with({ status: 'error' }, () => wrapMsg('There was an error searching.'))
+                    .with({ status: 'empty' }, () => wrapMsg('No results.'))
+                    .with({ status: 'success' }, ({ data: { companies } }) => (
+                        <div className="flex-1">
+                            {companies.map((company) => {
+                                const primaryQuote = getPrimaryQuote(company);
+                                return (
+                                    <div
+                                        className="flex items-center h-12 odd:bg-gray-100 text-gray-900 tracking-wide"
+                                        key={company.id}
+                                        onClick={(event) => {
+                                            event.stopPropagation();
+                                            onChange?.(event, { value: company });
+                                            hideTooltip?.();
+                                        }}
+                                    >
+                                        <div className="pl-4 truncate flex-1">{company.commonName}</div>
+                                        <div className="w-20 pl-3 truncate font-semibold text-right text-sm">
+                                            {primaryQuote?.localTicker}
+                                        </div>
+                                        <div className="w-20 pl-3 pr-4 truncate text-gray-300 text-sm">
+                                            {primaryQuote?.exchange?.shortName}
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    ))
+                    .exhaustive()}
             </div>
         </div>
     );
@@ -89,7 +98,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                     })}
                 >
                     {!value && (
-                        <div className="flex whitespace-nowrap text-base">
+                        <div className="flex items-center whitespace-nowrap text-base">
                             <Building alt="building" className="mr-2" />
                             By Company
                         </div>
@@ -124,7 +133,8 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
 
     const [searchTerm, setSearchTerm] = useState<string>('');
 
-    const [companyResults] = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
+    const companiesQuery = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
+        isEmpty: ({ companies }) => companies.length === 0,
         query: gql`
             query CompanyFilter($searchTerm: String) {
                 companies(filter: { searchTerm: $searchTerm }) {
@@ -160,12 +170,9 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
         setSearchTerm(event.currentTarget.value);
     }, []);
 
-    const companies = companyResults.data?.companies || [];
-
     return (
         <CompanyFilterButtonUI
-            companies={companies}
-            companiesLoading={companyResults.fetching}
+            companiesQuery={companiesQuery}
             onChange={onChange}
             onSearchChange={onSearchChange}
             value={value}
