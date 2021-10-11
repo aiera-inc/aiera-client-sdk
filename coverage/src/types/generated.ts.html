@@ -724,7 +724,10 @@
 <a name='L665'></a><a href='#L665'>665</a>
 <a name='L666'></a><a href='#L666'>666</a>
 <a name='L667'></a><a href='#L667'>667</a>
-<a name='L668'></a><a href='#L668'>668</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L668'></a><a href='#L668'>668</a>
+<a name='L669'></a><a href='#L669'>669</a>
+<a name='L670'></a><a href='#L670'>670</a>
+<a name='L671'></a><a href='#L671'>671</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1341,7 +1344,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1406,11 +1412,11 @@ export type Scalars = {
   Int: number;
   Float: number;
   /** Date with time (isoformat) */
-  DateTime: any;
+  DateTime: string;
   /** A generic dictionary/object with string keys */
-  GenericObjectScalar: any;
+  GenericObjectScalar: unknown;
   /** Time (isoformat) */
-  Time: any;
+  Time: string;
 };
 &nbsp;
 export type AssetClass = {
@@ -1516,6 +1522,7 @@ export type Error = {
 &nbsp;
 export type Event = {
   __typename?: 'Event';
+  audioRecordingOffsetMs: Scalars['Int'];
   audioRecordingUrl?: Maybe&lt;Scalars['String']&gt;;
   audioStreamUri?: Maybe&lt;Scalars['String']&gt;;
   broadcastUrl?: Maybe&lt;Scalars['String']&gt;;
@@ -1561,7 +1568,6 @@ export type EventGroup = {
 export type EventTranscript = {
   __typename?: 'EventTranscript';
   id: Scalars['ID'];
-  initialAudioOffsetMs?: Maybe&lt;Scalars['Int']&gt;;
   /** @deprecated This is a short-term workaround intended for internal use */
   latestParagraphs: Array&lt;EventTranscriptParagraph&gt;;
   sections: Array&lt;EventTranscriptSection&gt;;
@@ -1886,14 +1892,14 @@ export type EventListQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type EventListQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: any, eventType: EventType, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt; }&gt; };
+export type EventListQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, audioRecordingOffsetMs: number, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 export type TranscriptQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: any, eventType: EventType, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;any&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, audioRecordingOffsetMs: number, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;string&gt;, syncMs?: Maybe&lt;number&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 &nbsp;
 export const RefreshDocument = gql`
@@ -1984,6 +1990,7 @@ export const EventListDocument = gql`
     eventType
     isLive
     audioRecordingUrl
+    audioRecordingOffsetMs
     primaryCompany {
       id
       commonName
@@ -2018,6 +2025,7 @@ export const TranscriptDocument = gql`
     eventType
     isLive
     audioRecordingUrl
+    audioRecordingOffsetMs
     primaryCompany {
       id
       commonName
@@ -2048,6 +2056,7 @@ export const TranscriptDocument = gql`
           paragraphs {
             id
             timestamp
+            syncMs
             sentences {
               id
               text
@@ -2065,7 +2074,7 @@ export const TranscriptDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Oct 07 2021 15:25:03 GMT-0400 (Eastern Daylight Time)
+                at Mon Oct 11 2021 09:55:27 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
