@@ -28,6 +28,24 @@ interface TranscriptUIProps {
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const { eventQuery, onBack, onClickTranscript, toggleHeader, headerExpanded } = props;
 
+    const renderExpandButton = () => (
+        <button
+            onClick={toggleHeader}
+            className={classNames(
+                'transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 rounded-xl flex items-center justify-center',
+                headerExpanded ? 'bg-blue-600' : 'bg-gray-100'
+            )}
+        >
+            <Chevron
+                className={
+                    headerExpanded
+                        ? 'transition-all mb-0.5 rotate-180 w-2 fill-current text-white'
+                        : 'transition-all w-2 opacity-30'
+                }
+            />
+        </button>
+    );
+
     return (
         <div className="h-full flex flex-col transcript">
             <div
@@ -61,6 +79,24 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     </div>
                 </div>
                 {match(eventQuery)
+                    .with({ status: 'loading' }, () => {
+                        return (
+                            <div className="flex flex-row mt-3 items-center">
+                                <div className="animate-pulse flex-1">
+                                    <div className="flex">
+                                        <div className="rounded-md bg-gray-500 h-[10px] m-1 w-7" />
+                                        <div className="rounded-md bg-gray-400 h-[10px] m-1 w-10" />
+                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
+                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
+                                    </div>
+                                    <div className="flex">
+                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 flex-1" />
+                                    </div>
+                                </div>
+                                {renderExpandButton()}
+                            </div>
+                        );
+                    })
                     .with({ status: 'success' }, ({ data }) => {
                         const event = data.events[0];
                         const primaryQuote = getPrimaryQuote(event.primaryCompany);
@@ -98,21 +134,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             {event?.title}
                                         </div>
                                     </div>
-                                    <button
-                                        onClick={toggleHeader}
-                                        className={classNames(
-                                            'transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 rounded-xl flex items-center justify-center',
-                                            headerExpanded ? 'bg-blue-600' : 'bg-gray-100'
-                                        )}
-                                    >
-                                        <Chevron
-                                            className={
-                                                headerExpanded
-                                                    ? 'transition-all mb-0.5 rotate-180 w-2 fill-current text-white'
-                                                    : 'transition-all w-2 opacity-30'
-                                            }
-                                        />
-                                    </button>
+                                    {renderExpandButton()}
                                 </div>
                                 {headerExpanded && 'Event Extras'}
                             </>
@@ -122,6 +144,17 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             </div>
             <div className="overflow-y-scroll flex-1 bg-gray-50">
                 {match(eventQuery)
+                    .with({ status: 'loading' }, () =>
+                        new Array(5).fill(0).map((_, idx) => (
+                            <div key={idx} className="animate-pulse p-2">
+                                <div className="rounded-md bg-gray-300 h-3 m-1 w-10" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1 ml-14" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1 mr-20" />
+                            </div>
+                        ))
+                    )
                     .with({ status: 'success' }, ({ data: { events } }) =>
                         events[0]?.transcripts[0]?.sections
                             .flatMap((section) => section.speakerTurns)
@@ -233,7 +266,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             eventId,
         },
     });
-    // event?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs) ||
+
     const audioPlayer = useAudioPlayer(false);
     const onClickTranscript = (paragraph: Paragraph) => {
         audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);

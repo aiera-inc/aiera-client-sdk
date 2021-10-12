@@ -86,8 +86,8 @@ const eventTranscript = [
 
 describe('EventList', () => {
     test('handles loading state', () => {
-        renderWithClient(<EventList />);
-        screen.getByText('Loading...');
+        const { rendered } = renderWithClient(<EventList />);
+        expect(rendered.container.querySelector('.EventList__loading')).not.toBeNull();
     });
 
     test('handles empty state', () => {

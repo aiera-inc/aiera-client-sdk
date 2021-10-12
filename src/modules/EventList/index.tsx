@@ -66,7 +66,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
         <div className="h-full flex flex-col eventlist">
-            <div className="flex items-center p-3 shadow eventlist__header">
+            <div className="flex items-center p-3 eventlist__header">
                 <input
                     className="flex-1 p-2 text-sm rounded-lg border-gray-200 border"
                     onChange={onSearchChange}
@@ -77,7 +77,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     <CompanyFilterButton onChange={onCompanyChange} value={company} />
                 </div>
             </div>
-            <div className="flex flex-col flex-1 p-3 overflow-y-scroll">
+            <div className="flex flex-col flex-1 p-3 pb-2 pt-0 overflow-y-scroll">
                 <div className="flex flex-col flex-grow eventlist__tabs">
                     <div>
                         <Tabs<EventView>
@@ -89,7 +89,10 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             value={listType}
                         />
                     </div>
-                    <div className="sticky top-0 mt-3">
+                    <div className="sticky top-0 pt-2 bg-white">
+                        <hr className="-mr-3 -ml-3 mb-3 drop-shadow" />
+                    </div>
+                    <div className="sticky top-4">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[
@@ -101,7 +104,29 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     </div>
                     <div className="flex flex-col items-center justify-center flex-1 mt-3">
                         {match(eventsQuery)
-                            .with({ status: 'loading' }, () => wrapMsg('Loading...'))
+                            .with({ status: 'loading' }, () => (
+                                <ul className="w-full EventList__loading">
+                                    {new Array(15).fill(0).map((_, idx) => (
+                                        <li key={idx} className="p-2 animate-pulse">
+                                            <div className="flex items-center">
+                                                <div className="rounded-full bg-gray-300 w-9 h-9" />
+                                                <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
+                                                    <div className="flex">
+                                                        <div className="rounded-full bg-gray-500 h-[10px] mr-2 w-7" />
+                                                        <div className="rounded-full bg-gray-400 h-[10px] mr-2 w-12" />
+                                                        <div className="rounded-full bg-gray-300 h-[10px] mr-2 w-20" />
+                                                    </div>
+                                                    <div className="mt-2 rounded-full bg-gray-300 h-[10px] w-full" />
+                                                </div>
+                                                <div className="flex flex-col items-center justify-center">
+                                                    <div className="rounded-full bg-gray-300 h-[10px] w-8" />
+                                                    <div className="mt-2 rounded-full bg-gray-300 h-[10px] w-10" />
+                                                </div>
+                                            </div>
+                                        </li>
+                                    ))}
+                                </ul>
+                            ))
                             .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
@@ -161,6 +186,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                 </ul>
                             ))
                             .exhaustive()}
+                        <div className="flex-1" />
                     </div>
                 </div>
             </div>
