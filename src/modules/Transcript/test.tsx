@@ -1,22 +1,9 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
 import { renderWithClient } from '@aiera/client-sdk/testUtils';
-import { Transcript, TranscriptUI } from '.';
-
-describe('TranscriptUI', () => {
-    test('renders UI', () => {
-        render(
-            <TranscriptUI
-                toggleHeader={() => true}
-                headerExpanded={true}
-                paragraphs={[{ id: '1', sentences: [{ id: '1', text: 'TranscriptUI' }] }]}
-            />
-        );
-        screen.getByText('TranscriptUI');
-    });
-});
+import { Transcript } from '.';
 
 describe('Transcript', () => {
     test('renders', () => {

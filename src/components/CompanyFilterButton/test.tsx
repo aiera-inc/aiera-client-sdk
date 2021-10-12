@@ -88,7 +88,7 @@ describe('CompanyFilterButton', () => {
         renderWithClient(<CompanyFilterButton onChange={onChange} value={company} />);
         const button = screen.getByText('TICK');
         screen.getByText('Name');
-        screen.getByText('X');
+        screen.getByTitle('Close');
         userEvent.click(button);
         expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: null });
     });

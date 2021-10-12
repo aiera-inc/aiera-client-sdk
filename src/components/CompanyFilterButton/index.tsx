@@ -9,6 +9,7 @@ import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Building } from '@aiera/client-sdk/components/Svg/Building';
+import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import './styles.css';
 
 export type CompanyFilterResult = CompanyFilterQuery['companies'][0];
@@ -52,7 +53,7 @@ function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
                                 const primaryQuote = getPrimaryQuote(company);
                                 return (
                                     <div
-                                        className="flex items-center h-12 odd:bg-gray-100 text-gray-900 tracking-wide"
+                                        className="flex items-center h-12 odd:bg-gray-100 text-gray-900 tracking-wide cursor-pointer"
                                         key={company.id}
                                         onClick={(event) => {
                                             event.stopPropagation();
@@ -92,7 +93,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                 yOffset={5}
             >
                 <button
-                    className={classNames('p-2 rounded-lg', {
+                    className={classNames('relative flex items-center w-32 p-2 rounded-lg pr-2', {
                         'bg-gray-200': !value,
                         'bg-blue-800': !!value,
                     })}
@@ -105,7 +106,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                     )}
                     {value && (
                         <div
-                            className="flex text-sm"
+                            className="flex flex-1 items-center text-sm pr-3 min-w-0"
                             onClick={(event) => {
                                 event.stopPropagation();
                                 onChange?.(event, { value: null });
@@ -113,7 +114,9 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                         >
                             <div className="text-white font-bold mr-2">{getPrimaryQuote(value)?.localTicker}</div>
                             <div className="text-white truncate">{value.commonName}</div>
-                            <div className="font-bold rounded-full bg-white">X</div>
+                            <div className="absolute w-4 right-2 text-white">
+                                <Close />
+                            </div>
                         </div>
                     )}
                 </button>

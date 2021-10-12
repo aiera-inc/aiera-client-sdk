@@ -90,7 +90,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
             <div className="ml-2 w-12 text-xs select-none">{toDurationString(duration)}</div>
             {!fixed && (
                 <>
-                    <div className="text-gray-800 bg-white cursor-pointer w-5 mr-2" onClick={onClickCalendar}>
+                    <div className="text-gray-800 bg-white cursor-pointer w-[18px] ml-1 mr-2" onClick={onClickCalendar}>
                         <Calendar />
                     </div>
                     <div className="text-gray-800 cursor-pointer w-4" onClick={clear}>
