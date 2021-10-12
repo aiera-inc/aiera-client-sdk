@@ -40,7 +40,7 @@ export const AuthUI = (props: AuthProps): ReactElement => {
 
     if (!user) {
         return (
-            <div className="flex flex-col items-center justify-center bg-white h-screen">
+            <div className="flex flex-col items-center justify-center bg-white h-full">
                 <h2>Aiera</h2>
                 <form className="flex flex-col items-center justify-center" action="#" onSubmit={login}>
                     <div className="m-3">
@@ -78,7 +78,7 @@ export const AuthUI = (props: AuthProps): ReactElement => {
     }
 
     return (
-        <div>
+        <div className="h-full">
             {(showLogout || !children) && (
                 <div className="h-6">
                     Logged in as {user.firstName} {user.lastName}
@@ -87,7 +87,7 @@ export const AuthUI = (props: AuthProps): ReactElement => {
                     </button>
                 </div>
             )}
-            {children && <div>{children}</div>}
+            {children && <div className="h-full">{children}</div>}
         </div>
     );
 };
