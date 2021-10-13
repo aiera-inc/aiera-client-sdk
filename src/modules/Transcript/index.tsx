@@ -179,10 +179,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 .with({ status: 'success' }, ({ data: { events } }) => {
                     const event = events[0];
                     return (
-                        event?.audioRecordingUrl && (
+                        (event?.audioRecordingUrl || event?.isLive) && (
                             <Playbar
                                 id={event?.id}
-                                url={event?.audioRecordingUrl || ''}
+                                url={
+                                    event.isLive
+                                        ? `https://storage.media.aiera.com/${event.id}`
+                                        : event.audioRecordingUrl || ''
+                                }
                                 offset={(event?.audioRecordingOffsetMs || 0) / 1000}
                             />
                         )

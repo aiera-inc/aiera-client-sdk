@@ -1,36 +1,76 @@
 import React, { createContext, useContext, useEffect, useState, ReactElement, ReactNode } from 'react';
+import { MediaPlayer, MediaPlayerClass } from 'dashjs';
 
 export class AudioPlayer {
     id?: string;
+    url?: string;
     offset = 0;
     audio: HTMLAudioElement;
+    dash: MediaPlayerClass;
+    usingDash = false;
 
     constructor() {
         this.audio = new Audio();
+        this.dash = MediaPlayer().create();
+        this.dash.updateSettings({
+            streaming: {
+                lowLatencyEnabled: true,
+                delay: {
+                    liveDelay: 1.5,
+                },
+                liveCatchup: {
+                    enabled: true,
+                    playbackBufferMin: 0.5,
+                    mode: 'liveCatchupModeLoLP',
+                    minDrift: 0.05,
+                    playbackRate: 0.2,
+                    latencyThreshold: 30,
+                },
+            },
+        });
+        this.dash.on(MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, this.triggerUpdate);
     }
 
     init(opts?: { id: string; url: string; offset: number }): void {
         if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
             const { id, url } = opts;
             this.id = id;
-            if (url !== this.audio.src) {
+            if (url !== this.url) {
+                if (this.usingDash) {
+                    this.dash.reset();
+                    this.usingDash = false;
+                }
+                this.url = url;
                 this.audio.src = url;
             }
-            this.audio.dispatchEvent(new Event('update'));
+            this.triggerUpdate();
         }
         this.offset = opts?.offset || 0;
     }
 
     clear(): void {
         delete this.id;
+        delete this.url;
+        this.dash.reset();
+        this.usingDash = false;
         this.audio.src = '';
-        this.audio.dispatchEvent(new Event('update'));
+        this.triggerUpdate();
     }
+
+    triggerUpdate = (): void => {
+        this.audio.dispatchEvent(new Event('update'));
+    };
 
     async play(opts?: { id: string; url: string; offset: number }): Promise<void> {
         this.init(opts);
         if (this.rawDuration === 0) this.rawSeek(this.offset);
-        return this.audio.play();
+        try {
+            return await this.audio.play();
+        } catch {
+            this.dash.initialize(this.audio, this.url);
+            this.usingDash = true;
+            this.dash.play();
+        }
     }
 
     pause(): void {
@@ -61,7 +101,7 @@ export class AudioPlayer {
     }
 
     get rawDuration(): number {
-        return this.audio.duration || 0;
+        return this.usingDash ? this.dash.duration() : this.audio.duration || 0;
     }
 
     get rawCurrentTime(): number {

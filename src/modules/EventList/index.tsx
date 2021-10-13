@@ -147,7 +147,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         <div className="flex items-center justify-center w-9 h-9">
                                                             <PlayButton
                                                                 id={event.id}
-                                                                url={event.audioRecordingUrl}
+                                                                url={
+                                                                    event.isLive
+                                                                        ? `https://storage.media.aiera.com/${event.id}`
+                                                                        : event.audioRecordingUrl
+                                                                }
                                                                 offset={audioOffset || 0}
                                                             />
                                                         </div>
