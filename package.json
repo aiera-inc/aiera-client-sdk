@@ -97,6 +97,7 @@
         "@urql/exchange-auth": "0.1.6",
         "@urql/exchange-graphcache": "4.3.3",
         "classnames": "2.3.1",
+        "dashjs": "4.1.0",
         "eventemitter3": "4.0.7",
         "graphql": "15.5.3",
         "graphql-tag": "2.12.5",
