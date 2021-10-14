@@ -23,6 +23,10 @@ describe('audio library', () => {
         window.HTMLMediaElement.prototype.pause = pause;
     });
 
+    afterEach(() => {
+        jest.useRealTimers();
+    });
+
     test('duration', () => {
         const player = getPlayer();
         player.init({ id: '1', url: 'url', offset: 10 });

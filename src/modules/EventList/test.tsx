@@ -85,6 +85,15 @@ const eventTranscript = [
 ];
 
 describe('EventList', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.useRealTimers();
+        jest.clearAllTimers();
+    });
+
     test('handles loading state', () => {
         const { rendered } = renderWithClient(<EventList />);
         expect(rendered.container.querySelector('.EventList__loading')).not.toBeNull();
