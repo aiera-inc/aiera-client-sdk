@@ -296,3 +296,26 @@ export function useDrag(dragOpts: DragOptions): [boolean, number, number] {
 
     return [isDragging, initialPos.x + movePos.x, initialPos.y + movePos.y];
 }
+
+export function useInterval(callback: () => void, delay: number | null): void {
+    const savedCallback = useRef(callback);
+
+    // Remember the latest callback if it changes.
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    // Set up the interval.
+    useEffect(() => {
+        // Don't schedule if no delay is specified.
+        if (delay === null) {
+            return;
+        }
+
+        const id = window.setInterval(() => savedCallback.current(), delay);
+
+        return () => window.clearInterval(id);
+    }, [delay]);
+}
+
+export default useInterval;
