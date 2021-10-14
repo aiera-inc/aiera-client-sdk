@@ -4,12 +4,21 @@ import { MediaPlayer, MediaPlayerClass } from 'dashjs';
 export class AudioPlayer {
     id?: string;
     url?: string;
+    errorInfo: {
+        timeout?: number;
+        lastPosition?: number;
+        error: boolean;
+    };
     offset = 0;
     audio: HTMLAudioElement;
     dash: MediaPlayerClass;
     usingDash = false;
 
     constructor() {
+        this.errorInfo = {
+            lastPosition: 0,
+            error: false,
+        };
         this.audio = new Audio();
         this.dash = MediaPlayer().create();
         this.dash.updateSettings({
@@ -51,8 +60,14 @@ export class AudioPlayer {
     clear(): void {
         delete this.id;
         delete this.url;
-        this.dash.reset();
-        this.usingDash = false;
+        window.clearTimeout(this.errorInfo.timeout);
+        delete this.errorInfo.timeout;
+        this.errorInfo.error = false;
+        this.errorInfo.lastPosition = 0;
+        if (this.usingDash) {
+            this.dash.reset();
+            this.usingDash = false;
+        }
         this.audio.src = '';
         this.triggerUpdate();
     }
@@ -63,7 +78,20 @@ export class AudioPlayer {
 
     async play(opts?: { id: string; url: string; offset: number }): Promise<void> {
         this.init(opts);
-        if (this.rawDuration === 0) this.rawSeek(this.offset);
+        if (this.rawCurrentTime === 0) this.rawSeek(this.offset);
+
+        // If after 2 seconds we still haven't started actually playing, set an error state.
+        // Using this instead of audio.on('error') because errors do happen that don't affect
+        // playback, so instead we just check if playback is actually happening;
+        this.errorInfo.error = false;
+        this.errorInfo.lastPosition = this.rawCurrentTime;
+        this.errorInfo.timeout = window.setTimeout(() => {
+            if (this.rawCurrentTime === this.errorInfo.lastPosition) {
+                this.errorInfo.error = true;
+                this.triggerUpdate();
+            }
+        }, 2000);
+
         try {
             return await this.audio.play();
         } catch {
@@ -74,6 +102,7 @@ export class AudioPlayer {
     }
 
     pause(): void {
+        window.clearTimeout(this.errorInfo.timeout);
         this.audio.pause();
     }
 
@@ -101,7 +130,7 @@ export class AudioPlayer {
     }
 
     get rawDuration(): number {
-        return this.usingDash ? this.dash.duration() : this.audio.duration || 0;
+        return (this.usingDash ? this.dash.duration() : this.audio.duration) || 0;
     }
 
     get rawCurrentTime(): number {
@@ -114,6 +143,10 @@ export class AudioPlayer {
 
     get displayCurrentTime(): number {
         return Math.max(0, this.rawCurrentTime - this.offset);
+    }
+
+    get error(): boolean {
+        return this.errorInfo.error;
     }
 }
 

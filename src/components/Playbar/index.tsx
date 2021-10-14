@@ -29,6 +29,7 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     clear: () => void;
     currentTime: number;
     duration: number;
+    error: boolean;
     isPlaying: boolean;
     fastForward: () => void;
     fixed?: boolean;
@@ -45,6 +46,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         clear,
         currentTime,
         duration,
+        error,
         fixed,
         isPlaying,
         fastForward,
@@ -56,7 +58,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         rewind,
     } = props;
     return (
-        <div className="h-13 w-full flex items-center shadow p-3">
+        <div className="relative h-13 w-full flex items-center shadow p-3">
             <div
                 className={classNames(
                     'flex items-center justify-center w-[34px] h-[34px] rounded-full border border-blue-700 cursor-pointer',
@@ -97,6 +99,13 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         <Close />
                     </div>
                 </>
+            )}
+            {error && (
+                <div className="absolute w-full left-0 bottom-0">
+                    <div className="flex-1 text-center text-red-700 text-xs mb-1">
+                        There was an error playing audio.
+                    </div>
+                </div>
             )}
         </div>
     );
@@ -199,6 +208,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             clear={clear}
             currentTime={audioPlayer.displayCurrentTime}
             duration={audioPlayer.displayDuration}
+            error={audioPlayer.error}
             isPlaying={isPlaying}
             fastForward={fastForward}
             fixed={!!(id && url)}

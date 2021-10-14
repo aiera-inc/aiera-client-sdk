@@ -101,4 +101,54 @@ describe('audio library', () => {
         expect(player.displayCurrentTime).toBe(0);
         expect(player.rawCurrentTime).toBe(10);
     });
+
+    test('handles errors', () => {
+        function reset(player: AudioPlayer) {
+            // @ts-ignore
+            player.audio.duration = 100;
+            player.audio.currentTime = 0;
+            player.clear();
+            expect(player.errorInfo.error).toBeFalsy();
+            expect(player.errorInfo.timeout).toBeFalsy();
+            expect(player.errorInfo.lastPosition).toBe(0);
+        }
+
+        jest.useFakeTimers();
+        const player = getPlayer();
+
+        reset(player);
+        void player.play({ id: '1', url: srcUrl, offset: 0 });
+        expect(player.errorInfo.timeout).toBeTruthy();
+
+        // Go forward more than 2s without adjusting currentTime
+        // and make sure it has an error
+        jest.advanceTimersByTime(2500);
+        expect(player.errorInfo.error).toBeTruthy();
+
+        // Make sure it goes back to clean slate on playing
+        void player.play({ id: '2', url: 'other url', offset: 0 });
+        expect(player.errorInfo.error).toBeFalsy();
+        expect(player.errorInfo.timeout).toBeTruthy();
+        expect(player.errorInfo.lastPosition).toBe(0);
+
+        reset(player);
+        void player.play({ id: '2', url: 'other url', offset: 0 });
+        expect(player.errorInfo.timeout).toBeTruthy();
+
+        // Pause should clear the timeout and not set the error,
+        // even if we never actually incremented currentTime (no audio played)
+        jest.advanceTimersByTime(1500);
+        player.pause();
+        jest.advanceTimersByTime(1000);
+        expect(player.errorInfo.error).toBeFalsy();
+
+        reset(player);
+        void player.play({ id: '3', url: 'other url 2', offset: 0 });
+
+        // Go forward more than 2s with an adjusted currentTime
+        // and make sure it doesnt have an error
+        player.audio.currentTime = 2.5;
+        jest.advanceTimersByTime(2500);
+        expect(player.errorInfo.error).toBeFalsy();
+    });
 });
