@@ -226,7 +226,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
                 const companies = await resolveCompany(msg.data.ticker);
                 if (companies?.[0]) {
                     const company = companies[0];
-                    setState((s) => ({ ...s, company }));
+                    setState((s) => ({ ...s, company, event: undefined }));
                 }
             }
         },
