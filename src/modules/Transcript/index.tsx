@@ -331,6 +331,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                 }
             }
         `,
+        requestPolicy: 'cache-and-network',
         variables: {
             eventId,
         },
