@@ -297,7 +297,16 @@ export function useDrag(dragOpts: DragOptions): [boolean, number, number] {
     return [isDragging, initialPos.x + movePos.x, initialPos.y + movePos.y];
 }
 
-export function useInterval(callback: () => void, delay: number | null): void {
+/**
+ * A hook that will run a callback function on a given interval. If the interval
+ * changes, the existing callback is cancelled and a new one is setup with the
+ * new interval.
+ *
+ * @param callback - The callback to run.
+ * @param interval - The interval to run it on. If null it will cancel any existing
+ *                   callback and no longer run.
+ */
+export function useInterval(callback: () => void, interval: number | null): void {
     const savedCallback = useRef(callback);
 
     // Remember the latest callback if it changes.
@@ -308,14 +317,35 @@ export function useInterval(callback: () => void, delay: number | null): void {
     // Set up the interval.
     useEffect(() => {
         // Don't schedule if no delay is specified.
-        if (delay === null) {
+        if (interval === null) {
             return;
         }
 
-        const id = window.setInterval(() => savedCallback.current(), delay);
+        const id = window.setInterval(() => savedCallback.current(), interval);
 
         return () => window.clearInterval(id);
-    }, [delay]);
+    }, [interval]);
 }
 
-export default useInterval;
+/**
+ * Very simple implementation of autoscroll based on the length of some array
+ * changing. Anytime the length changes, this will autoscroll to the bottom.
+ *
+ * @param   length - the length of the array of items being rendered in the scroll container
+ * @param   skip   - set to true to skip auto scrolling altogether
+ *
+ * @returns A React ref object that should be set on the scroll container
+ */
+export function useAutoScroll<T extends HTMLElement>(length: number, skip = false): RefObject<T> {
+    const element = useRef<T>(null);
+    const prevLengthRef = useRef(length);
+    const prevLength = prevLengthRef.current;
+    useLayoutEffect(() => {
+        prevLengthRef.current = length;
+        if (!skip && prevLength < length && element.current) {
+            element.current.scrollTo({ top: element.current.scrollHeight + 10000, behavior: 'smooth' });
+        }
+    }, [length, skip]);
+
+    return element;
+}

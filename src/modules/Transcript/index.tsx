@@ -1,14 +1,20 @@
-import React, { MouseEventHandler, ReactElement, useState, useCallback } from 'react';
+import React, { MouseEventHandler, ReactElement, RefObject, useMemo, useEffect, useState, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';
 
-import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
+import {
+    LatestParagraphsQuery,
+    LatestParagraphsQueryVariables,
+    TranscriptQuery,
+    TranscriptQueryVariables,
+} from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
-import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { useInterval, useAutoScroll } from '@aiera/client-sdk/lib/hooks';
+import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
@@ -21,12 +27,14 @@ interface TranscriptUIProps {
     headerExpanded: boolean;
     toggleHeader: () => void;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
+    paragraphs: Paragraph[];
     onBack?: MouseEventHandler;
     onClickTranscript?: (paragraph: Paragraph) => void;
+    scrollRef: RefObject<HTMLDivElement>;
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
-    const { eventQuery, onBack, onClickTranscript, toggleHeader, headerExpanded } = props;
+    const { eventQuery, onBack, onClickTranscript, paragraphs, toggleHeader, headerExpanded, scrollRef } = props;
 
     const renderExpandButton = () => (
         <button
@@ -142,7 +150,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     })
                     .otherwise(() => null)}
             </div>
-            <div className="overflow-y-scroll flex-1 bg-gray-50">
+            <div className="overflow-y-scroll flex-1 bg-gray-50" ref={scrollRef}>
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
                         new Array(5).fill(0).map((_, idx) => (
@@ -155,23 +163,20 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             </div>
                         ))
                     )
-                    .with({ status: 'success' }, ({ data: { events } }) =>
-                        events[0]?.transcripts[0]?.sections
-                            .flatMap((section) => section.speakerTurns)
-                            .flatMap((turn) => turn.paragraphs)
-                            .map((paragraph) => {
-                                const { id, sentences, timestamp } = paragraph;
-                                return (
-                                    <div key={id} className="p-3 pb-4" onClick={() => onClickTranscript?.(paragraph)}>
-                                        {timestamp && (
-                                            <div className="pb-2 font-semibold text-sm">
-                                                {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
-                                            </div>
-                                        )}
-                                        <div className="text-sm">{sentences.map(({ text }) => text).join(' ')}</div>
-                                    </div>
-                                );
-                            })
+                    .with({ status: 'success' }, () =>
+                        paragraphs.map((paragraph) => {
+                            const { id, sentences, timestamp } = paragraph;
+                            return (
+                                <div key={id} className="p-3 pb-4" onClick={() => onClickTranscript?.(paragraph)}>
+                                    {timestamp && (
+                                        <div className="pb-2 font-semibold text-sm">
+                                            {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
+                                        </div>
+                                    )}
+                                    <div className="text-sm">{sentences.map(({ text }) => text).join(' ')}</div>
+                                </div>
+                            );
+                        })
                     )
                     .otherwise(() => null)}
             </div>
@@ -197,6 +202,67 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     );
 };
 
+function useLatestTranscripts(
+    eventId: string,
+    eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>
+): Paragraph[] {
+    const latestParagraphsQuery = useQuery<LatestParagraphsQuery, LatestParagraphsQueryVariables>({
+        query: gql`
+            query LatestParagraphs($eventId: ID!) {
+                events(filter: { eventIds: [$eventId] }) {
+                    id
+                    transcripts {
+                        id
+                        latestParagraphs {
+                            id
+                            timestamp
+                            syncMs
+                            sentences {
+                                id
+                                text
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        requestPolicy: 'network-only',
+        pause: true,
+        variables: {
+            eventId,
+        },
+    });
+
+    useInterval(() => {
+        if (eventQuery.state.data?.events[0]?.isLive) {
+            latestParagraphsQuery.refetch();
+        }
+    }, 2000);
+
+    const [latestParagraphs, setLatestParagraphs] = useState<Paragraph[]>([]);
+    useEffect(() => {
+        if (latestParagraphsQuery.state.data) {
+            setLatestParagraphs((prev) => [
+                ...prev,
+                ...(latestParagraphsQuery.state.data?.events[0]?.transcripts[0]?.latestParagraphs || []),
+            ]);
+        }
+    }, [latestParagraphsQuery.state.data]);
+
+    return useMemo<Paragraph[]>(() => {
+        const paragraphs = new Map<string, Paragraph>();
+        eventQuery.state.data?.events[0]?.transcripts[0]?.sections
+            .flatMap((section) => section.speakerTurns)
+            .flatMap((turn) => turn.paragraphs)
+            .forEach((p) => paragraphs.set(p.id, p));
+        latestParagraphs.forEach((p) => paragraphs.set(p.id, p));
+
+        return [...paragraphs.values()].sort((p1, p2) =>
+            p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)
+        );
+    }, [eventQuery.state.data?.events[0]?.transcripts, latestParagraphs]);
+}
+
 /**
  * @notExported
  */
@@ -216,7 +282,6 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         query: gql`
             query Transcript($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
-                    id
                     id
                     title
                     eventDate
@@ -276,13 +341,18 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
     };
 
+    const paragraphs = useLatestTranscripts(eventId, eventQuery);
+    const scrollRef = useAutoScroll<HTMLDivElement>(paragraphs.length, !eventQuery.state.data?.events[0]?.isLive);
+
     return (
         <TranscriptUI
             eventQuery={eventQuery}
+            paragraphs={paragraphs}
             headerExpanded={headerExpanded}
             toggleHeader={toggleHeader}
             onBack={onBack}
             onClickTranscript={onClickTranscript}
+            scrollRef={scrollRef}
         />
     );
 };
