@@ -8,7 +8,8 @@ import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { getPrimaryQuote, useCompanyResolver } from '@aiera/client-sdk/lib/data';
-import { useChangeHandlers, useInterval } from '@aiera/client-sdk/lib/hooks';
+import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';

@@ -13,7 +13,8 @@ import {
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
-import { useInterval, useAutoScroll } from '@aiera/client-sdk/lib/hooks';
+import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
+import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';

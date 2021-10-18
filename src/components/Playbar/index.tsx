@@ -3,7 +3,8 @@ import classNames from 'classnames';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { AudioPlayer, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
-import { OnDragStart, OnDragEnd, useDrag, useWindowSize } from '@aiera/client-sdk/lib/hooks';
+import { OnDragStart, OnDragEnd, useDrag } from '@aiera/client-sdk/lib/hooks/useDrag';
+import { useWindowSize } from '@aiera/client-sdk/lib/hooks/useWindowSize';
 import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';

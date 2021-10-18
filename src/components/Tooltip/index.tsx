@@ -1,6 +1,7 @@
 import React, { RefObject, MouseEvent, ReactElement, ReactNode, useRef, useState, useCallback } from 'react';
 import { match } from 'ts-pattern';
-import { useOutsideClickHandler, useDelayCallback } from '@aiera/client-sdk/lib/hooks';
+import { useDelayCallback } from '@aiera/client-sdk/lib/hooks/useDelayCallback';
+import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import './styles.css';
 
 /** @notExported */
