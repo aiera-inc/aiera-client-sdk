@@ -32,7 +32,7 @@ function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
     const { companiesQuery, hideTooltip, onChange, onSearchChange } = props;
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
-        <div className="shadow-md bg-white rounded-lg w-80 overflow-hidden">
+        <div className="shadow-md bg-white rounded-lg w-72 overflow-hidden">
             <div className="p-3 w-full">
                 <input
                     autoFocus
@@ -53,7 +53,7 @@ function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
                                 const primaryQuote = getPrimaryQuote(company);
                                 return (
                                     <div
-                                        className="flex items-center h-12 odd:bg-gray-100 text-gray-900 tracking-wide cursor-pointer"
+                                        className="flex items-center h-10 odd:bg-gray-100 text-gray-900 tracking-wide cursor-pointer"
                                         key={company.id}
                                         onClick={(event) => {
                                             event.stopPropagation();
@@ -61,7 +61,7 @@ function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
                                             hideTooltip?.();
                                         }}
                                     >
-                                        <div className="pl-4 truncate flex-1">{company.commonName}</div>
+                                        <div className="pl-4 truncate flex-1 text-md">{company.commonName}</div>
                                         <div className="w-20 pl-3 truncate font-semibold text-right text-sm">
                                             {primaryQuote?.localTicker}
                                         </div>
@@ -89,11 +89,10 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                 modal
                 openOn="click"
                 position="bottom-right"
-                xOffset={5}
                 yOffset={5}
             >
                 <button
-                    className={classNames('relative flex items-center w-32 p-2 rounded-lg pr-2', {
+                    className={classNames('relative flex items-center p-2 rounded-lg w-[120px]', {
                         'bg-gray-200': !value,
                         'bg-blue-800': !!value,
                     })}
@@ -112,8 +111,8 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                                 onChange?.(event, { value: null });
                             }}
                         >
-                            <div className="text-white font-bold mr-2">{getPrimaryQuote(value)?.localTicker}</div>
-                            <div className="text-white truncate">{value.commonName}</div>
+                            <div className="text-white font-bold mr-4">{getPrimaryQuote(value)?.localTicker}</div>
+                            <div className="text-white truncate pr-1">{value.commonName}</div>
                             <div className="absolute w-4 right-2 text-white">
                                 <Close />
                             </div>
