@@ -113,6 +113,11 @@ export class AudioPlayer {
             return await this.audio.play();
         } catch {
             this.dash.initialize(this.audio, this.url);
+            this.dash.updateSettings({
+                streaming: {
+                    delay: { liveDelay: 1.5 },
+                },
+            });
             this.usingDash = true;
             this.dash.play();
         }
