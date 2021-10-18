@@ -126,7 +126,17 @@
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
 <a name='L69'></a><a href='#L69'>69</a>
-<a name='L70'></a><a href='#L70'>70</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -159,6 +169,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">16x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -223,7 +243,7 @@ export interface FilterByProps&lt;T&gt; {
 export const FilterBy = &lt;T extends string | number&gt;(props: FilterByProps&lt;T&gt;): ReactElement =&gt; {
     const { onChange, options = <span class="branch-0 cbranch-no" title="branch not covered" >[],</span> value = <span class="branch-0 cbranch-no" title="branch not covered" >[] </span>} = props;
     return (
-        &lt;div className="flex items-center pl-3 pr-2 py-2 bg-white rounded-lg shadow-md eventlist__filterby"&gt;
+        &lt;div className="flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow eventlist__filterby"&gt;
             &lt;div className="text-sm font-semibold"&gt;Filter By&lt;/div&gt;
             &lt;div className="flex justify-end flex-1"&gt;
                 {options.map((option) =&gt; (
@@ -232,18 +252,28 @@ export const FilterBy = &lt;T extends string | number&gt;(props: FilterByProps&l
                         className={classNames(
                             'mx-1',
                             'last:mx-0',
-                            'py-1',
-                            'px-3',
+                            'py-0.5',
+                            'px-2',
                             'rounded-full',
                             'text-sm',
                             'cursor-pointer',
                             'rounded-md',
-                            'text-gray-200',
                             'border',
                             {
-                                'bg-blue-600': value?.includes(option.value),
-                                'border-blue-600': value?.includes(option.value),
+                                'bg-blue-100': value?.includes(option.value),
+                                'border-blue-300': value?.includes(option.value),
                                 'border-gray-200': !value?.includes(option.value),
+                                'text-blue-600': value?.includes(option.value),
+                                'text-gray-400': !value?.includes(option.value),
+                                'hover:border-gray-300': !value?.includes(option.value),
+                                'hover:text-gray-500': !value?.includes(option.value),
+                                'hover:bg-blue-200': value?.includes(option.value),
+                                'hover:border-blue-500': value?.includes(option.value),
+                                'active:bg-white': value?.includes(option.value),
+                                'active:border-blue-500': value?.includes(option.value),
+                                'active:bg-gray-200': !value?.includes(option.value),
+                                'active:border-gray-400': !value?.includes(option.value),
+                                'active:text-gray-700': !value?.includes(option.value),
                                 eventlist__filterby__option: true,
                                 'eventlist__filterby__option--selected': value.includes(option.value),
                             }
@@ -271,7 +301,7 @@ export const FilterBy = &lt;T extends string | number&gt;(props: FilterByProps&l
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 18 2021 16:01:54 GMT-0400 (Eastern Daylight Time)
+                at Mon Oct 18 2021 17:05:42 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>
