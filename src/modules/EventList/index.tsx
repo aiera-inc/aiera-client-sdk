@@ -131,7 +131,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'success' }, ({ data: { events } }) => (
-                                <ul>
+                                <ul className="w-full">
                                     {events.map((event) => {
                                         const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                         const eventDate = DateTime.fromISO(event.eventDate);
