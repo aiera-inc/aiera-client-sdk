@@ -59,7 +59,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         <div className="h-full flex flex-col transcript">
             <div
                 className={classNames(
-                    'relative p-3 shadow-header rounded-b-lg transition-all',
+                    'relative p-3 shadow-3xl rounded-b-lg transition-all',
                     headerExpanded ? 'max-h-80' : 'max-h-28',
                     'transcript__header'
                 )}

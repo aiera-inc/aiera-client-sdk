@@ -67,33 +67,30 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
         <div className="h-full flex flex-col eventlist">
-            <div className="flex items-center p-3 eventlist__header">
-                <input
-                    className="flex-1 p-2 text-sm rounded-lg border-gray-200 border"
-                    onChange={onSearchChange}
-                    placeholder="Search Events and Transcripts"
-                    value={searchTerm}
-                />
-                <div className="ml-2">
-                    <CompanyFilterButton onChange={onCompanyChange} value={company} />
+            <div className="flex flex-col p-3 shadow-3xl eventlist__header">
+                <div className="flex items-center mb-2">
+                    <input
+                        className="flex-1 p-2 text-sm rounded-lg border-gray-200 border"
+                        onChange={onSearchChange}
+                        placeholder="Search Events and Transcripts"
+                        value={searchTerm}
+                    />
+                    <div className="ml-2">
+                        <CompanyFilterButton onChange={onCompanyChange} value={company} />
+                    </div>
                 </div>
+                <Tabs<EventView>
+                    onChange={onSelectListType}
+                    options={[
+                        { value: EventView.LiveAndUpcoming, label: 'Live & Upcoming' },
+                        { value: EventView.Recent, label: 'Recent Events' },
+                    ]}
+                    value={listType}
+                />
             </div>
             <div className="flex flex-col flex-1 p-3 pb-2 pt-0 overflow-y-scroll">
                 <div className="flex flex-col flex-grow eventlist__tabs">
-                    <div>
-                        <Tabs<EventView>
-                            onChange={onSelectListType}
-                            options={[
-                                { value: EventView.LiveAndUpcoming, label: 'Live & Upcoming' },
-                                { value: EventView.Recent, label: 'Recent Events' },
-                            ]}
-                            value={listType}
-                        />
-                    </div>
-                    <div className="sticky top-0 pt-2 bg-white">
-                        <hr className="-mr-3 -ml-3 mb-3 drop-shadow" />
-                    </div>
-                    <div className="sticky top-4">
+                    <div className="sticky top-3 mb-2">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[

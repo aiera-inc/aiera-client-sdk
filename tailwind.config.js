@@ -16,9 +16,12 @@ module.exports = {
             '6xl': '3rem',
             '7xl': '4rem',
         },
+        boxShadow: {
+            DEFAULT: '0px 1px 2px -1px rgba(184, 184, 208, 0.4), 0px 0px 6px -2px rgba(131, 131, 165, 0.4)',
+            '3xl': '0px 1px 2px rgba(0, 0, 0, 0.08), 0px 12px 24px -18px rgba(0, 0, 0, 0.2)',
+        },
         extend: {
             boxShadow: {
-                header: '0px 1px 2px rgba(0, 0, 0, 0.08), 0px 12px 24px -18px rgba(0, 0, 0, 0.2)',
                 input: 'inset 0 0px 0px 1px #2463eb',
             },
         },
