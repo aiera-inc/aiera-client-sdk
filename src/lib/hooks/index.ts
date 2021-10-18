@@ -343,9 +343,9 @@ export function useAutoScroll<T extends HTMLElement>(length: number, skip = fals
     useLayoutEffect(() => {
         prevLengthRef.current = length;
         if (!skip && prevLength < length && element.current) {
-            element.current.scrollTo({ top: element.current.scrollHeight + 10000, behavior: 'smooth' });
+            element.current.scrollTo({ top: element.current.scrollHeight, behavior: 'smooth' });
         }
-    }, [length, skip]);
+    }, [length, element.current?.scrollHeight, skip]);
 
     return element;
 }
