@@ -38,7 +38,24 @@ export class AudioPlayer {
             },
         });
         this.dash.on(MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, this.triggerUpdate);
+        this.dash.on(window.dashjs.MediaPlayer.events.BUFFER_EMPTY, this.updateTargetLatency);
+        this.dash.on(window.dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.updateTargetLatency);
     }
+
+    updateTargetLatency = (): void => {
+        const settings = this.dash.getSettings();
+        const currentDelay = settings.streaming?.delay?.liveDelay || 1.5;
+        if (this.playing(null)) {
+            // Aggressively back off the target latency for now, but max out at 6 seconds
+            // behind.
+            const newTarget = Math.min(currentDelay * 1.5, 6);
+            this.dash.updateSettings({
+                streaming: {
+                    delay: { liveDelay: newTarget },
+                },
+            });
+        }
+    };
 
     init(opts?: { id: string; url: string; offset: number }): void {
         if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
