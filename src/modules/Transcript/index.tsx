@@ -16,6 +16,7 @@ import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
+import { Button } from '@aiera/client-sdk/components/Button';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
@@ -66,13 +67,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             >
                 <div className="flex items-center">
                     {onBack && (
-                        <button
-                            className="group flex h-8 items-center px-3 mr-3 font-semibold bg-gray-200 rounded-lg leading-3 hover:bg-gray-300 active:bg-gray-400 active:text-white text-base"
-                            onClick={onBack}
-                        >
+                        <Button extendClassName="mr-3" onClick={onBack}>
                             <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                             Events
-                        </button>
+                        </Button>
                     )}
                     <div className="group h-8 items-center w-full relative mr-3 input__search">
                         <input

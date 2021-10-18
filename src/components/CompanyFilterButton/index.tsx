@@ -8,6 +8,7 @@ import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-s
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { Button } from '@aiera/client-sdk/components/Button';
 import { Building } from '@aiera/client-sdk/components/Svg/Building';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import './styles.css';
@@ -91,11 +92,18 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                 position="bottom-right"
                 yOffset={5}
             >
-                <button
-                    className={classNames('relative flex items-center p-2 rounded-lg w-[120px]', {
-                        'bg-gray-200': !value,
-                        'bg-blue-800': !!value,
+                <Button
+                    extendClassName={classNames('max-w-[130px]', {
+                        'bg-blue-600': !!value,
                     })}
+                    onClick={
+                        value
+                            ? (event) => {
+                                  event.stopPropagation();
+                                  onChange?.(event, { value: null });
+                              }
+                            : undefined
+                    }
                 >
                     {!value && (
                         <div className="flex items-center whitespace-nowrap text-base">
@@ -104,21 +112,15 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                         </div>
                     )}
                     {value && (
-                        <div
-                            className="flex flex-1 items-center text-sm pr-3 min-w-0"
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                onChange?.(event, { value: null });
-                            }}
-                        >
-                            <div className="text-white font-bold mr-4">{getPrimaryQuote(value)?.localTicker}</div>
-                            <div className="text-white truncate pr-1">{value.commonName}</div>
-                            <div className="absolute w-4 right-2 text-white">
+                        <>
+                            <div className="text-white font-bold">{getPrimaryQuote(value)?.localTicker}</div>
+                            <div className="text-white font-light truncate mx-2">{value.commonName}</div>
+                            <div className="w-4 text-white flex-shrink-0">
                                 <Close />
                             </div>
-                        </div>
+                        </>
                     )}
-                </button>
+                </Button>
             </Tooltip>
         </div>
     );
