@@ -2,11 +2,16 @@
  * Utilities for working with data from GQL Query responses.
  * @module
  */
-import { useCallback } from 'react';
+import { useCallback, useEffect } from 'react';
 import gql from 'graphql-tag';
 import { useClient } from 'urql';
 import { DeepPartial, Instrument, Maybe, Quote } from '@aiera/client-sdk/types';
-import { CompanyResolutionQuery, CompanyResolutionQueryVariables } from '@aiera/client-sdk/types/generated';
+import {
+    CompanyResolutionQuery,
+    CompanyResolutionQueryVariables,
+    TrackMutation,
+    TrackMutationVariables,
+} from '@aiera/client-sdk/types/generated';
 
 /**
  * Utilities for working with quotes/instruments
@@ -81,4 +86,63 @@ export function useCompanyResolver(): (identifier: string) => Promise<CompanyRes
         },
         [client]
     );
+}
+
+type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit';
+type TrackingObject = 'Event' | 'Event Filter By' | 'Event Search';
+
+/**
+ * Returns a function that can be used tp track specific events with the app.
+ *
+ * The returned track function takes teh following params:
+ * @param event      - The event type, we have normalized these to `Click`, `View`, `Scroll` and `Submit`
+ * @param object     - The thing the event is taking place on, ie. an `Event` like an earnings event
+ * @param properties - A map/dictionary of additional information abotu the event, such as the component
+ *                     name, the object id, etc.
+ */
+export function useTrack(): (event: TrackingEvent, object: TrackingObject, properties: unknown) => Promise<void> {
+    const client = useClient();
+    const track = useCallback(
+        async (event: TrackingEvent, object: TrackingObject, properties: unknown) => {
+            await client
+                .mutation<TrackMutation, TrackMutationVariables>(
+                    gql`
+                        mutation Track($event: String!, $properties: GenericObjectScalar!) {
+                            track(event: $event, properties: $properties) {
+                                success
+                            }
+                        }
+                    `,
+                    { event: `${event} | ${object}`, properties }
+                )
+                .toPromise();
+        },
+        [client]
+    );
+
+    return track;
+}
+
+/**
+ * Automatically tracks an event when the deps change.
+ *
+ * @param event      - The event type, we have normalized these to `Click`, `View`, `Scroll` and `Submit`
+ * @param object     - The thing the event is taking place on, ie. an `Event` like an earnings event
+ * @param properties - A map/dictionary of additional information abotu the event, such as the component
+ *                     name, the object id, etc.
+ * @param skip       - Dont track if this is true
+ */
+export function useAutoTrack(
+    event: TrackingEvent,
+    object: TrackingObject,
+    properties: unknown,
+    deps: ReadonlyArray<unknown> = [],
+    skip = false
+): void {
+    const track = useTrack();
+    useEffect(() => {
+        if (!skip) {
+            void track(event, object, properties);
+        }
+    }, [track, event, object, skip, ...deps]);
 }
