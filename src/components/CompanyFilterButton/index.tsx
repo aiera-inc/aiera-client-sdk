@@ -93,9 +93,8 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                 yOffset={5}
             >
                 <Button
-                    extendClassName={classNames('max-w-[130px]', {
-                        'bg-blue-600': !!value,
-                    })}
+                    extendClassName={classNames('max-w-[130px]')}
+                    kind={value ? 'primary' : 'default'}
                     onClick={
                         value
                             ? (event) => {
