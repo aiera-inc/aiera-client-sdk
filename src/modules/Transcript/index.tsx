@@ -17,6 +17,7 @@ import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { Input } from '@aiera/client-sdk/components/Input';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
@@ -72,15 +73,9 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             Events
                         </Button>
                     )}
-                    <div className="group h-8 items-center w-full relative mr-3 input__search">
-                        <input
-                            className="w-full inset-0 absolute pl-8 text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600"
-                            placeholder="Search transcripts"
-                        />
-                        <div className="pointer-events-none h-8 w-8 justify-center items-center flex">
-                            <MagnifyingGlass className="group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4" />
-                        </div>
-                    </div>
+                    <Input name="search" extendClassName="mr-3" placeholder="Search Transcripts...">
+                        <MagnifyingGlass />
+                    </Input>
                     <div className="items-center flex">
                         <Gear className="w-5" />
                     </div>

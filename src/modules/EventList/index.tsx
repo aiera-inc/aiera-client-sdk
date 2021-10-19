@@ -14,6 +14,8 @@ import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/comp
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
+import { Input } from '@aiera/client-sdk/components/Input';
+import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { FilterBy } from './FilterBy';
 import { PlayButton } from './PlayButton';
 import './styles.css';
@@ -69,12 +71,15 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         <div className="h-full flex flex-col eventlist">
             <div className="flex flex-col p-3 shadow-3xl eventlist__header">
                 <div className="flex items-center mb-2">
-                    <input
-                        className="flex-1 p-2 text-sm rounded-lg border-gray-200 border"
+                    <Input
+                        name="search"
                         onChange={onSearchChange}
-                        placeholder="Search Events and Transcripts"
+                        placeholder="Search Events & Transcripts"
                         value={searchTerm}
-                    />
+                        extendClassName="mr-1"
+                    >
+                        <MagnifyingGlass />
+                    </Input>
                     <div className="ml-2">
                         <CompanyFilterButton onChange={onCompanyChange} value={company} />
                     </div>
