@@ -12,6 +12,7 @@ export interface Client {
     executeMutation: () => unknown;
     executeSubscription: () => unknown;
     query: () => { toPromise: () => Promise<unknown> };
+    mutation: () => { toPromise: () => Promise<unknown> };
 }
 type Mocked<T> = {
     [P in keyof T]: MockFn;
@@ -28,6 +29,12 @@ export function renderWithClient(
         executeSubscription: jest.fn(client?.executeSubscription || (() => never)),
         query: jest.fn(
             client?.query ||
+                (() => ({
+                    toPromise: () => Promise.resolve(),
+                }))
+        ),
+        mutation: jest.fn(
+            client?.mutation ||
                 (() => ({
                     toPromise: () => Promise.resolve(),
                 }))

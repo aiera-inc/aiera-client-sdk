@@ -7,7 +7,7 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
-import { getPrimaryQuote, useCompanyResolver } from '@aiera/client-sdk/lib/data';
+import { getPrimaryQuote, useCompanyResolver, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
@@ -319,6 +319,9 @@ export const EventList = (_props: EventListProps): ReactElement => {
         },
         [eventsQuery.status]
     );
+
+    useAutoTrack('Click', 'Event Filter By', { filterBy: state.filterByTypes }, [state.filterByTypes]);
+    useAutoTrack('Submit', 'Event Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
 
     return (
         <EventListUI

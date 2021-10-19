@@ -12,7 +12,7 @@ import {
 } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
-import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
@@ -338,6 +338,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     const paragraphs = useLatestTranscripts(eventId, eventQuery);
     const scrollRef = useAutoScroll<HTMLDivElement>(paragraphs.length, !eventQuery.state.data?.events[0]?.isLive);
+
+    useAutoTrack('View', 'Event', { eventId }, [eventId]);
 
     return (
         <TranscriptUI
