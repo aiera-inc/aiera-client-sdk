@@ -96,8 +96,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                 />
             </div>
             <div className="flex flex-col flex-1 p-3 pb-2 pt-0 overflow-y-scroll">
-                <div className="flex flex-col flex-grow eventlist__tabs">
-                    <div className="sticky top-3 mb-2">
+                <div className="flex flex-col flex-grow">
+                    <div className="sticky top-3 mb-2 z-10 eventlist__tabs">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[
