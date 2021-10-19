@@ -13,7 +13,7 @@
         "build:watch:docs": "typedoc --watch --preserveWatchOutput",
         "build:lib:js": "npm run ts src/build/index.ts",
         "build:lib:types": "npm run codegen && tsc --emitDeclarationOnly",
-        "build:watch:serve": "light-server --http2 -s dist -p 8000 --proxy http://localhost:8001 --proxypath /bundle -w '*.js, src/**/* # # reload'",
+        "build:watch:serve": "light-server -d 200 -s dist -p 8000 --proxy http://localhost:8001 --proxypath /bundle -w '*.js, src/**/* # # reload'",
         "build:watch:lib:js": "npm run ts src/build/index.ts -- --watch",
         "build:watch:lib:types:tsc": "tsc --emitDeclarationOnly --watch --incremental --pretty --preserveWatchOutput",
         "build:watch:lib:types:gql": "graphql-codegen -c .codegen.js --watch",

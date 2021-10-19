@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React, { ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import { DocumentNode } from 'graphql';
 import { render } from '@testing-library/react';
 import { never } from 'wonka';
@@ -22,7 +22,7 @@ export type MockedClient = Mocked<Client>;
 export function renderWithClient(
     children: ReactNode,
     client?: Partial<Client>
-): { client: MockedClient; rendered: ReturnType<typeof render>; reset: MockFn } {
+): { client: MockedClient; rerender: (el?: ReactElement) => void; rendered: ReturnType<typeof render>; reset: MockFn } {
     const mockedClient = {
         executeQuery: jest.fn(client?.executeQuery || (() => never)),
         executeMutation: jest.fn(client?.executeMutation || (() => never)),
@@ -42,7 +42,7 @@ export function renderWithClient(
     };
     const reset = jest.fn();
 
-    const rendered = render(
+    const renderComponent = (children: ReactNode) => (
         <ResetProvider value={{ reset }}>
             {/* 
                 // @ts-ignore */}
@@ -50,5 +50,8 @@ export function renderWithClient(
         </ResetProvider>
     );
 
-    return { client: mockedClient, rendered, reset };
+    const rendered = render(renderComponent(children));
+    const rerender = (children: ReactNode) => rendered.rerender(renderComponent(children));
+
+    return { client: mockedClient, rerender, rendered, reset };
 }
