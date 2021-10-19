@@ -1,11 +1,12 @@
-import React, { FormEvent, ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode } from 'react';
 import classNames from 'classnames';
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface InputSharedProps {
     children?: ReactNode;
     placeholder?: string;
-    onChange?: (event: FormEvent<HTMLInputElement>) => void;
+    onChange?: ChangeHandler<string>;
     value?: string;
     defaultValue?: string;
     extendClassName?: string;
@@ -24,7 +25,9 @@ export function InputUI(props: InputUIProps): ReactElement {
                     'w-full inset-0 absolute text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600',
                     { 'pl-7': !!children, 'pl-3': !children }
                 )}
-                onChange={onChange}
+                onChange={
+                    onChange ? (event) => onChange(event, { name, value: event?.currentTarget?.value }) : undefined
+                }
                 placeholder={placeholder}
                 defaultValue={defaultValue}
                 value={value}

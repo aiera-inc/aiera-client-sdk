@@ -1,19 +1,21 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom/extend-expect';
 
 import { renderWithClient } from 'testUtils';
-import { Button, ButtonUI } from '.';
-
-describe('ButtonUI', () => {
-    test('renders UI', () => {
-        render(<ButtonUI>ButtonUI</ButtonUI>);
-        screen.getByText('ButtonUI');
-    });
-});
+import { Button } from '.';
 
 describe('Button', () => {
     test('renders', () => {
         renderWithClient(<Button>ButtonUI</Button>);
         screen.getByText('ButtonUI');
+    });
+
+    test('onClick', () => {
+        const handleClick = jest.fn();
+        renderWithClient(<Button onClick={handleClick}>ButtonUI</Button>);
+        const button = screen.getByText('ButtonUI');
+        fireEvent.click(button);
+        expect(handleClick).toHaveBeenCalledTimes(1);
     });
 });

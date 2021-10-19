@@ -1,4 +1,5 @@
 import React, { MouseEvent, ReactElement, ReactNode } from 'react';
+import { match } from 'ts-pattern';
 import './styles.css';
 
 type ButtonKind = 'default' | 'primary' | 'secondary';
@@ -14,12 +15,11 @@ interface ButtonUIProps extends ButtonSharedProps {}
 
 export function ButtonUI(props: ButtonUIProps): ReactElement {
     const { children, onClick, extendClassName = '', kind = 'default' } = props;
-    const buttonStyleMap = {
-        primary: 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:text-white ',
-        default: 'bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white ',
-        secondary: 'active:text-black',
-    };
-    const buttonStyle = buttonStyleMap[kind] || buttonStyleMap.default;
+    const buttonStyle = match(kind)
+        .with('primary', () => 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:text-white')
+        .with('secondary', () => 'active:text-black')
+        .with('default', () => 'bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white')
+        .exhaustive();
 
     return (
         <button

@@ -1,4 +1,4 @@
-import React, { ReactElement, FormEventHandler, MouseEventHandler, useCallback } from 'react';
+import React, { ReactElement, MouseEventHandler, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
@@ -37,7 +37,7 @@ export interface EventListUIProps {
     loading?: boolean;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler<CompanyFilterResult>;
-    onSearchChange?: FormEventHandler<HTMLInputElement>;
+    onSearchChange?: ChangeHandler<string>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
     onSelectEvent?: ChangeHandler<EventListEvent>;
@@ -327,7 +327,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             listType={state.listType}
             onBackFromTranscript={(event) => onSelectEvent(event, { value: null })}
             onCompanyChange={onSelectCompany}
-            onSearchChange={({ currentTarget: { value } }) => setState({ ...state, searchTerm: value })}
+            onSearchChange={(_e, { value }) => typeof value === 'string' && setState({ ...state, searchTerm: value })}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}

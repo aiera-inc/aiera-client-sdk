@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import { Input, InputUI } from '.';
+import { Input } from '.';
 
 describe('Input', () => {
     test('renders', () => {
@@ -11,13 +11,12 @@ describe('Input', () => {
         fireEvent.change(inputEle, { target: { value: 'changed' } });
         expect(screen.getByPlaceholderText('example')).toHaveValue('changed');
     });
-});
 
-describe('InputUI', () => {
-    test('renders', () => {
-        render(<InputUI name="input" defaultValue="test" placeholder="example" />);
+    test('onChange called', () => {
+        const onChange = jest.fn();
+        render(<Input name="input" defaultValue="test" placeholder="example" onChange={onChange} />);
         const inputEle = screen.getByPlaceholderText('example');
         fireEvent.change(inputEle, { target: { value: 'changed' } });
-        expect(screen.getByPlaceholderText('example')).toHaveValue('changed');
+        expect(onChange).toHaveBeenCalledTimes(1);
     });
 });
