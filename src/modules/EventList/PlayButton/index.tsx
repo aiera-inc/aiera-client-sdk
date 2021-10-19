@@ -1,6 +1,7 @@
 import React, { useCallback, MouseEvent, ReactElement, ReactNode } from 'react';
 import classNames from 'classnames';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { useTrack } from '@aiera/client-sdk/lib/data';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
 import { Play } from '@aiera/client-sdk/components/Svg/Play';
 import { Pause } from '@aiera/client-sdk/components/Svg/Pause';
@@ -53,13 +54,16 @@ export interface PlayButtonProps extends PlayButtonSharedProps {
 export function PlayButton(props: PlayButtonProps): ReactElement {
     const { id, url, offset = 0 } = props;
     const audioPlayer = useAudioPlayer();
+    const track = useTrack();
     const isPlaying = audioPlayer.playing(id);
     const togglePlayback = useCallback(
         (event: MouseEvent) => {
             event.stopPropagation();
             if (audioPlayer.playing(id)) {
+                void track('Click', 'Audio Pause', { eventId: id, url });
                 audioPlayer.pause();
             } else if (url) {
+                void track('Click', 'Audio Play', { eventId: id, url });
                 void audioPlayer.play({ id, url, offset });
             }
         },

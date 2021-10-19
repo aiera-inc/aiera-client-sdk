@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { renderWithClient } from '@aiera/client-sdk/testUtils';
 import { AudioPlayer, AudioPlayerProvider } from '@aiera/client-sdk/lib/audio';
 
 import { PlayButton } from '.';
@@ -12,7 +13,7 @@ describe('PlayButtonUI', () => {
         player.playing = jest.fn().mockReturnValue(false);
         const mockedPlay = jest.fn();
         player.play = mockedPlay;
-        render(
+        renderWithClient(
             <AudioPlayerProvider audioPlayer={player}>
                 <PlayButton id="1" url="mp3!" />
             </AudioPlayerProvider>
@@ -26,7 +27,7 @@ describe('PlayButtonUI', () => {
         player.playing = jest.fn().mockReturnValue(true);
         const mockedPause = jest.fn();
         player.pause = mockedPause;
-        render(
+        renderWithClient(
             <AudioPlayerProvider audioPlayer={player}>
                 <PlayButton id="1" url="mp3!" />
             </AudioPlayerProvider>
@@ -38,7 +39,7 @@ describe('PlayButtonUI', () => {
     test('renders calendar icon when there is no url', () => {
         const player = new AudioPlayer();
         player.playing = jest.fn().mockReturnValue(true);
-        render(
+        renderWithClient(
             <AudioPlayerProvider audioPlayer={player}>
                 <PlayButton id="1" />
             </AudioPlayerProvider>

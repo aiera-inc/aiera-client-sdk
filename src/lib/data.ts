@@ -12,6 +12,7 @@ import {
     TrackMutation,
     TrackMutationVariables,
 } from '@aiera/client-sdk/types/generated';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 /**
  * Utilities for working with quotes/instruments
@@ -89,7 +90,15 @@ export function useCompanyResolver(): (identifier: string) => Promise<CompanyRes
 }
 
 type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit';
-type TrackingObject = 'Event' | 'Event Filter By' | 'Event Search';
+type TrackingObject =
+    | 'Event'
+    | 'Event Filter By'
+    | 'Event Search'
+    | 'Audio Pause'
+    | 'Audio Play'
+    | 'Audio Fast Forward'
+    | 'Audio Rewind'
+    | 'Audio Stop';
 
 /**
  * Returns a function that can be used tp track specific events with the app.
@@ -100,10 +109,15 @@ type TrackingObject = 'Event' | 'Event Filter By' | 'Event Search';
  * @param properties - A map/dictionary of additional information abotu the event, such as the component
  *                     name, the object id, etc.
  */
-export function useTrack(): (event: TrackingEvent, object: TrackingObject, properties: unknown) => Promise<void> {
+export function useTrack(): (
+    event: TrackingEvent,
+    object: TrackingObject,
+    properties: { [key: string]: unknown }
+) => Promise<void> {
     const client = useClient();
+    const config = useConfig();
     const track = useCallback(
-        async (event: TrackingEvent, object: TrackingObject, properties: unknown) => {
+        async (event: TrackingEvent, object: TrackingObject, properties: { [key: string]: unknown }) => {
             await client
                 .mutation<TrackMutation, TrackMutationVariables>(
                     gql`
@@ -113,7 +127,14 @@ export function useTrack(): (event: TrackingEvent, object: TrackingObject, prope
                             }
                         }
                     `,
-                    { event: `${event} | ${object}`, properties }
+                    {
+                        event: `${event} | ${object}`,
+                        properties: {
+                            moduleName: config.moduleName,
+                            platform: config.platform,
+                            ...properties,
+                        },
+                    }
                 )
                 .toPromise();
         },
@@ -135,7 +156,7 @@ export function useTrack(): (event: TrackingEvent, object: TrackingObject, prope
 export function useAutoTrack(
     event: TrackingEvent,
     object: TrackingObject,
-    properties: unknown,
+    properties: { [key: string]: unknown },
     deps: ReadonlyArray<unknown> = [],
     skip = false
 ): void {

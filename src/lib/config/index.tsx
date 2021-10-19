@@ -3,6 +3,8 @@ import React, { createContext, useContext, ReactNode, ReactElement } from 'react
 interface AppConfig {
     apiUrl: string;
     assetPath: string;
+    moduleName?: string;
+    platform?: string;
 }
 
 // Setup default values for env

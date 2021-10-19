@@ -1,7 +1,8 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { renderWithClient } from '@aiera/client-sdk/testUtils';
 import { AudioPlayer, AudioPlayerProvider } from '@aiera/client-sdk/lib/audio';
 
 import { Playbar } from '.';
@@ -12,7 +13,7 @@ describe('PlaybarUI', () => {
         player.playing = jest.fn().mockReturnValue(false);
         const mockedPlay = jest.fn();
         player.play = mockedPlay;
-        render(
+        renderWithClient(
             <AudioPlayerProvider audioPlayer={player}>
                 <Playbar />
             </AudioPlayerProvider>
@@ -25,7 +26,7 @@ describe('PlaybarUI', () => {
         const mockedPlay = jest.fn();
         player.play = mockedPlay;
         player.id = '1';
-        render(
+        renderWithClient(
             <AudioPlayerProvider audioPlayer={player}>
                 <Playbar />
             </AudioPlayerProvider>
@@ -40,7 +41,7 @@ describe('PlaybarUI', () => {
         const mockedPause = jest.fn();
         player.pause = mockedPause;
         player.id = '1';
-        render(
+        renderWithClient(
             <AudioPlayerProvider audioPlayer={player}>
                 <Playbar />
             </AudioPlayerProvider>

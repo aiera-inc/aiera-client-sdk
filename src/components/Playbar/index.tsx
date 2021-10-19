@@ -5,6 +5,7 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import { AudioPlayer, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { OnDragStart, OnDragEnd, useDrag } from '@aiera/client-sdk/lib/hooks/useDrag';
 import { useWindowSize } from '@aiera/client-sdk/lib/hooks/useWindowSize';
+import { useTrack } from '@aiera/client-sdk/lib/data';
 import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
@@ -150,6 +151,7 @@ function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject<HTMLDivElement>, n
 
 function usePlayer(id?: string, url?: string, offset = 0) {
     const audioPlayer = useAudioPlayer();
+    const track = useTrack();
     useEffect(() => {
         if (id) {
             audioPlayer.init({ id, url: url || '', offset });
@@ -160,15 +162,26 @@ function usePlayer(id?: string, url?: string, offset = 0) {
     const isPlaying = audioPlayer.playing(null);
     const togglePlayback = useCallback(() => {
         if (isPlaying) {
+            void track('Click', 'Audio Pause', { eventId: id, url });
             audioPlayer.pause();
         } else {
+            void track('Click', 'Audio Play', { eventId: id, url });
             void audioPlayer.play();
         }
     }, [isPlaying]);
 
-    const fastForward = useCallback(() => audioPlayer.ff(15), []);
-    const rewind = useCallback(() => audioPlayer.rewind(15), []);
-    const clear = useCallback(() => audioPlayer.clear(), []);
+    const fastForward = useCallback(() => {
+        void track('Click', 'Audio Fast Forward', { eventId: id, url });
+        audioPlayer.ff(15);
+    }, []);
+    const rewind = useCallback(() => {
+        void track('Click', 'Audio Rewind', { eventId: id, url });
+        audioPlayer.rewind(15);
+    }, []);
+    const clear = useCallback(() => {
+        void track('Click', 'Audio Stop', { eventId: id, url });
+        audioPlayer.clear();
+    }, []);
 
     return {
         audioPlayer,
