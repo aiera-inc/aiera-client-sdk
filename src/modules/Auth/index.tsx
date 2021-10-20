@@ -87,7 +87,7 @@ export const AuthUI = (props: AuthProps): ReactElement => {
                     </button>
                 </div>
             )}
-            {children && <div className="h-full">{children}</div>}
+            {children && <div className="h-full pb-6">{children}</div>}
         </div>
     );
 };

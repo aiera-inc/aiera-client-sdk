@@ -5,27 +5,23 @@
         <link rel="icon" href="favicon.png" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <meta name="theme-color" content="#000000" />
-        <title>My App</title>
+        <link href="/css/styles.css" rel="stylesheet" />
+        <link href="/bundle/index.css" rel="stylesheet" />
+        <style>
+            html, body {
+                height: 100%;
+            }
+            #root {
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+        </style>
     </head>
     <body>
-    <script>
-            // let start;
-            // function watch() {
-            //     start = Date.now();
-            //     fetch('/watch')
-            //         .then(() => {
-            //             window.location.reload();
-            //         })
-            //         .catch(() => {
-            //             if (Date.now() - start < 100) {
-            //                 window.location.reload();
-            //             } else {
-            //                 setTimeout(watch, 0);
-            //             }
-            //         });
-            // }
-            // watch();
-        </script>
-        <iframe style="border: none; resize: both;" width="370" height="575" src="frame.html" />
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+        <script src="/bundle/index.js"></script>
     </body>
 </html>

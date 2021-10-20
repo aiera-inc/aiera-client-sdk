@@ -17,19 +17,17 @@ const App: FC = (): ReactElement => {
         'out'
     );
     return (
-        <div>
-            <ConfigProvider config={{ apiUrl: 'https://api-dev.aiera.com/graphql', assetPath: 'bundle/' }}>
-                <MessageBusProvider bus={bus}>
-                    <ClientProvider>
-                        <Auth showLogout>
-                            <div id="frame-content" className="border border-black">
-                                <EventList />
-                            </div>
-                        </Auth>
-                    </ClientProvider>
-                </MessageBusProvider>
-            </ConfigProvider>
-        </div>
+        <ConfigProvider config={{ apiUrl: 'https://api-dev.aiera.com/graphql', assetPath: 'bundle/' }}>
+            <MessageBusProvider bus={bus}>
+                <ClientProvider>
+                    <Auth showLogout>
+                        <div className="h-full border border-black">
+                            <EventList />
+                        </div>
+                    </Auth>
+                </ClientProvider>
+            </MessageBusProvider>
+        </ConfigProvider>
     );
 };
 
