@@ -4,6 +4,7 @@ module.exports = {
     darkMode: false, // or 'media' or 'class'
     theme: {
         fontSize: {
+            xxs: '.5rem',
             xs: '.625rem',
             sm: '.75rem',
             base: '.875rem',
@@ -16,12 +17,10 @@ module.exports = {
             '6xl': '3rem',
             '7xl': '4rem',
         },
-        boxShadow: {
-            DEFAULT: '0px 1px 2px rgba(184, 184, 208, 0.28), 0px 4px 8px rgba(131, 131, 165, 0.07)',
-            '3xl': '0px 1px 2px rgba(184, 184, 208, 0.28), 0px 20px 28px rgba(131, 131, 165, 0.12)',
-        },
         extend: {
             boxShadow: {
+                DEFAULT: '0px 1px 2px rgba(184, 184, 208, 0.28), 0px 4px 8px rgba(131, 131, 165, 0.07)',
+                '3xl': '0px 1px 2px rgba(184, 184, 208, 0.28), 0px 20px 28px rgba(131, 131, 165, 0.12)',
                 input: 'inset 0 0px 0px 1px #2463eb',
             },
         },

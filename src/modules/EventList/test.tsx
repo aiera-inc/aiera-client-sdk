@@ -120,12 +120,14 @@ describe('EventList', () => {
                     },
                 }),
         });
-        screen.getByText('Event Title');
+        //screen.getByText('Event Title'); would like to add this back as hint
         screen.getByText('TICK');
         screen.getByText('EXCH');
-        screen.getByText('Aug 25');
-        screen.getByText('2:00PM 2021');
-        screen.getByText(/earnings$/);
+        const row = screen.getByText('TICK').closest('li');
+        expect(row).toBeTruthy();
+        if (row) within(row).getByText('Aug 25, 2021');
+        if (row) within(row).getByText('earnings');
+        screen.getByText('2:00PM');
     });
 
     test('handles company selection via message bus', () => {
@@ -152,7 +154,7 @@ describe('EventList', () => {
                     },
                 }),
         });
-        const row = screen.getByText('Event Title').closest('li');
+        const row = screen.getByText('TICK').closest('li');
         expect(row).toBeTruthy();
         if (row) within(row).getByTitle('Calendar');
     });
@@ -166,7 +168,7 @@ describe('EventList', () => {
                     },
                 }),
         });
-        const row = screen.getByText('Event Title').closest('li');
+        const row = screen.getByText('TICK').closest('li');
         expect(row).toBeTruthy();
         if (row) within(row).getByTitle('Play');
     });
@@ -189,7 +191,7 @@ describe('EventList', () => {
                       });
             },
         });
-        userEvent.click(screen.getByText('Event Title'));
+        userEvent.click(screen.getByText('TICK'));
         screen.getByText('Transcript for 1');
     });
 });

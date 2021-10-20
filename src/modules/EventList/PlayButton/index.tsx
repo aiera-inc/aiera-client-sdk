@@ -23,19 +23,29 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
     return hasAudio ? (
         <div
             className={classNames(
-                'flex items-center justify-center w-full h-full rounded-full border border-blue-700 cursor-pointer',
+                'group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm',
                 {
-                    'text-blue-700': !isPlaying,
+                    'hover:border-blue-500': !isPlaying,
+                    'active:border-blue-600': !isPlaying,
+                    'border-blue-600': isPlaying,
+                    'text-blue-600': !isPlaying,
                     'text-white': isPlaying,
-                    'bg-blue-700': isPlaying,
+                    'bg-blue-600': isPlaying,
+                    'bg-white': !isPlaying,
+                    'hover:bg-blue-700': isPlaying,
+                    'hover:border-blue-700': isPlaying,
+                    'active:bg-blue-800': isPlaying,
+                    'active:border-blue-800': isPlaying,
+                    'active:bg-blue-600': !isPlaying,
+                    'active:text-white': !isPlaying,
                 }
             )}
             onClick={togglePlayback}
         >
-            {isPlaying ? <Pause className="w-3" /> : <Play className="ml-1 w-4" />}
+            {isPlaying ? <Pause className="w-3" /> : <Play className="ml-1 w-4 h-4 group-active:text-current" />}
         </div>
     ) : (
-        <div className="flex items-center justify-center w-full h-full rounded-full border border-gray-300 text-gray-300">
+        <div className="flex items-center justify-center w-full h-full text-blue-100">
             <Calendar className="w-4" />
         </div>
     );

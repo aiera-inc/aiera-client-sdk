@@ -2,6 +2,7 @@ import React, { ReactElement, ReactNode } from 'react';
 import classNames from 'classnames';
 
 import { ChangeHandler } from '@aiera/client-sdk/types';
+import { Check } from '@aiera/client-sdk/components/Svg/Check';
 import './styles.css';
 
 interface FilterOption<T> {
@@ -33,6 +34,7 @@ export const FilterBy = <T extends string | number>(props: FilterByProps<T>): Re
                     <div
                         key={`filterby-option-${option.value}`}
                         className={classNames(
+                            'flex',
                             'mx-1',
                             'last:mx-0',
                             'py-0.5',
@@ -71,6 +73,7 @@ export const FilterBy = <T extends string | number>(props: FilterByProps<T>): Re
                         }
                     >
                         {option.label}
+                        {value?.includes(option.value) && <Check className="w-2 ml-1.5" />}
                     </div>
                 ))}
             </div>
