@@ -16,6 +16,7 @@ import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { FilterBy } from './FilterBy';
 import { PlayButton } from './PlayButton';
 import './styles.css';
@@ -78,7 +79,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         onChange={onSearchChange}
                         placeholder="Search Events & Transcripts"
                         value={searchTerm}
-                        className="mr-1"
                     >
                         <MagnifyingGlass />
                     </Input>
@@ -97,9 +97,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     value={listType}
                 />
             </div>
-            <div className="flex flex-col flex-1 pt-3 pb-2 pt-0 overflow-y-scroll">
+            <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">
                 <div className="flex flex-col flex-grow">
-                    <div className="sticky top-3 mx-3 mb-2 z-10 eventlist__tabs">
+                    <div className="sticky top-0 px-3 pt-3 pb-2 z-10 eventlist__tabs">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[
@@ -109,7 +109,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             value={filterByTypes}
                         />
                     </div>
-                    <div className="flex flex-col items-center justify-center flex-1 mt-3">
+                    <div className="flex flex-col items-center justify-center flex-1">
                         {match(eventsQuery)
                             .with({ status: 'loading' }, () => (
                                 <ul className="w-full EventList__loading">
@@ -149,7 +149,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         ) {
                                             prevEventDate = eventDate;
                                             divider = (
-                                                <li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-xs uppercase tracking-widest whitespace-nowrap text-gray-400 px-1 py-2 font-semibold mx-3">
+                                                <li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3">
                                                     {eventDate.toFormat('DDDD')}
                                                     <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"></div>
                                                 </li>
@@ -159,10 +159,22 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                             <Fragment key={event.id}>
                                                 {divider}
                                                 <li
-                                                    className="text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
+                                                    className="group h-12 text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
                                                     onClick={(e) => onSelectEvent?.(e, { value: event })}
                                                 >
-                                                    <div className="flex flex-row">
+                                                    <Tooltip
+                                                        className="h-12 flex flex-row"
+                                                        content={
+                                                            <div className="max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9">
+                                                                {event.title}
+                                                            </div>
+                                                        }
+                                                        grow="up-right"
+                                                        openOn="hover"
+                                                        position="top-left"
+                                                        yOffset={4}
+                                                        hideOnDocumentScroll
+                                                    >
                                                         <div className="flex items-center justify-center">
                                                             <div className="flex items-center justify-center w-8 h-8">
                                                                 <PlayButton
@@ -176,36 +188,34 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                                 />
                                                             </div>
                                                         </div>
-                                                        <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
-                                                            <div>
-                                                                <span className="text-blue-600 pr-1 font-semibold">
+                                                        <div className="flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4">
+                                                            <div className="flex items-end">
+                                                                <span className="leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600">
                                                                     {primaryQuote?.localTicker}
                                                                 </span>
-                                                                <span className="text-gray-400">
+                                                                <span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
                                                                     {primaryQuote?.exchange?.shortName}
                                                                 </span>
                                                             </div>
-                                                            <div className="flex text-sm capitalize items-center">
-                                                                {/*event.title*/}
-                                                                {event.isLive && (
-                                                                    <div className="text-xxs leading-none flex justify-center items-center font-semibold text-white bg-red-500 rounded-sm pl-1 pr-0.5 py-0.5 mr-1 tracking-widest">
-                                                                        LIVE
-                                                                    </div>
-                                                                )}
-                                                                <span className="mr-1 text-black">
-                                                                    {event.eventType.replace(/_/g, ' ')}
-                                                                </span>
+                                                            <div className="leading-none flex text-sm capitalize items-center mt-1 text-black">
+                                                                {event.eventType.replace(/_/g, ' ')}
                                                             </div>
                                                         </div>
-                                                        <div className="flex flex-col justify-center items-center">
-                                                            <div className="text-gray-500">
-                                                                {eventDate.toFormat('h:mma')}
-                                                            </div>
-                                                            <div className="text-gray-300">
+                                                        <div className="flex flex-col justify-center items-end">
+                                                            {event.isLive ? (
+                                                                <div className="text-xs leading-none flex justify-center items-center text-red-600 font-semibold bg-red-50 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white">
+                                                                    {`Live • ${eventDate.toFormat('h:mma')}`}
+                                                                </div>
+                                                            ) : (
+                                                                <div className="leading-none text-gray-500 group-hover:text-black">
+                                                                    {eventDate.toFormat('h:mma')}
+                                                                </div>
+                                                            )}
+                                                            <div className="leading-none mt-1 text-gray-300 group-hover:text-gray-500">
                                                                 {eventDate.toFormat('MMM dd, yyyy')}
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </Tooltip>
                                                 </li>
                                             </Fragment>
                                         );

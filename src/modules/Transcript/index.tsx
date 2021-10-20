@@ -68,7 +68,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             >
                 <div className="flex items-center">
                     {onBack && (
-                        <Button className="mr-3" onClick={onBack}>
+                        <Button className="mr-2" onClick={onBack}>
                             <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                             Events
                         </Button>

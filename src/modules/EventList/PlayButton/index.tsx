@@ -45,7 +45,7 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
             {isPlaying ? <Pause className="w-3" /> : <Play className="ml-1 w-4 h-4 group-active:text-current" />}
         </div>
     ) : (
-        <div className="flex items-center justify-center w-full h-full text-blue-100">
+        <div className="flex items-center justify-center w-full h-full text-blue-100 group-hover:text-blue-300">
             <Calendar className="w-4" />
         </div>
     );

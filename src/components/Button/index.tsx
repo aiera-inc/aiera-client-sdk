@@ -17,13 +17,16 @@ export function ButtonUI(props: ButtonUIProps): ReactElement {
     const { children, onClick, className = '', kind = 'default' } = props;
     const buttonStyle = match(kind)
         .with('primary', () => 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:text-white')
-        .with('secondary', () => 'active:text-black')
+        .with(
+            'secondary',
+            () => 'border-[1px] border-gray-300 hover:border-gray-400 active:bg-gray-400 active:text-white'
+        )
         .with('default', () => 'bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white')
         .exhaustive();
 
     return (
         <button
-            className={`group flex h-8 items-center px-3 font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`}
+            className={`group flex h-8 items-center px-2.5 font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`}
             onClick={onClick}
         >
             {children}

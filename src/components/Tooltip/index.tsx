@@ -1,4 +1,4 @@
-import React, { RefObject, MouseEvent, ReactElement, ReactNode, useRef, useState, useCallback } from 'react';
+import React, { RefObject, MouseEvent, ReactElement, ReactNode, useRef, useState, useCallback, useEffect } from 'react';
 import { match } from 'ts-pattern';
 import { useDelayCallback } from '@aiera/client-sdk/lib/hooks/useDelayCallback';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
@@ -13,6 +13,7 @@ type TooltipRenderProps = (args: {
 /** @notExported */
 interface TooltipUIProps {
     children: TooltipProps['children'];
+    className?: string;
     content: TooltipProps['content'];
     targetRef: RefObject<HTMLDivElement>;
     hideTooltip: (event?: MouseEvent) => void;
@@ -29,6 +30,7 @@ interface TooltipUIProps {
 function TooltipUI(props: TooltipUIProps): ReactElement {
     const {
         children,
+        className = '',
         content,
         hideTooltip,
         modal,
@@ -54,7 +56,7 @@ function TooltipUI(props: TooltipUIProps): ReactElement {
                 <div className="fixed z-10 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal" />
             )}
             <div
-                className="tooltip"
+                className={`tooltip ${className}`}
                 onClick={onTargetClick}
                 onMouseEnter={onTargetMouseEnter}
                 onMouseLeave={onTargetMouseLeave}
@@ -101,6 +103,11 @@ export interface TooltipProps {
      * The tooltip target
      */
     children: TooltipRenderProps | ReactNode;
+
+    /**
+     * styles for element wrapping the children
+     */
+    className?: string;
 
     /**
      * Delay hiding the tooltip for [delay] millisenconds.
@@ -155,6 +162,11 @@ export interface TooltipProps {
      *                        corner of the tooltip content.
      */
     grow?: 'down-right' | 'down-left' | 'up-right' | 'up-left';
+
+    /**
+     * Hide tooltip when the document scrolls
+     */
+    hideOnDocumentScroll?: boolean;
 
     /**
      * Delay showing the tooltip for [delay] millisenconds.
@@ -347,9 +359,11 @@ interface TooltipState {
 export function Tooltip(props: TooltipProps): ReactElement {
     const {
         children,
+        className,
         closeDelay = 0,
         content,
         grow = 'down-right',
+        hideOnDocumentScroll = false,
         matchWidth,
         modal = false,
         openDelay = 0,
@@ -430,8 +444,18 @@ export function Tooltip(props: TooltipProps): ReactElement {
         }, [closeOn, hideTooltip])
     );
 
+    // Hide tooltip on document scrolling
+    useEffect(() => {
+        if (hideOnDocumentScroll) {
+            document.addEventListener('scroll', delayedHideTooltip, true);
+        }
+
+        return () => document.removeEventListener('scroll', delayedHideTooltip, true);
+    }, [delayedHideTooltip, hideOnDocumentScroll]);
+
     return (
         <TooltipUI
+            className={className}
             content={content}
             targetRef={targetRef}
             hideTooltip={hideTooltip}

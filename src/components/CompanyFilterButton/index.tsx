@@ -94,7 +94,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
             >
                 <Button
                     className={classNames('max-w-[130px]')}
-                    kind={value ? 'primary' : 'default'}
+                    kind={value ? 'default' : 'secondary'}
                     onClick={
                         value
                             ? (event) => {
@@ -105,16 +105,16 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                     }
                 >
                     {!value && (
-                        <div className="flex items-center whitespace-nowrap text-base">
+                        <div className="flex items-center whitespace-nowrap text-sm font-normal">
                             <Building alt="building" className="mr-2" />
                             By Company
                         </div>
                     )}
                     {value && (
                         <>
-                            <div className="text-white font-bold">{getPrimaryQuote(value)?.localTicker}</div>
-                            <div className="text-white font-light truncate mx-2">{value.commonName}</div>
-                            <div className="w-4 text-white flex-shrink-0">
+                            <div className="text-black font-bold">{getPrimaryQuote(value)?.localTicker}</div>
+                            <div className="text-black font-light truncate mx-2">{value.commonName}</div>
+                            <div className="w-4 text-black flex-shrink-0">
                                 <Close />
                             </div>
                         </>

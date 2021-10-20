@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
-import { act, render, screen, waitFor } from '@testing-library/react';
+import { act, render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { Tooltip, TooltipProps } from '.';
@@ -377,5 +377,41 @@ describe('Tooltip', () => {
         userEvent.click(target);
         await waitFor(() => screen.getByText(tooltipContent));
         expect(container.querySelector('.tooltip__modal')).toBeFalsy();
+    });
+
+    test('hides tooltip on scroll if hideOnDocumentScroll is true', async () => {
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'hover',
+            position: 'top-left',
+            grow: 'up-right',
+            modal: false,
+            hideOnDocumentScroll: true,
+        });
+
+        const target = screen.getByText(targetContent);
+        userEvent.hover(target);
+        await waitFor(() => screen.getByText(tooltipContent));
+        fireEvent.scroll(document);
+        await waitFor(() => expect(screen.queryByText(tooltipContent)).toBeNull());
+    });
+
+    test('does not hide tooltip on scroll if hideOnDocumentScroll is false', async () => {
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'hover',
+            position: 'top-left',
+            grow: 'up-right',
+            modal: false,
+            hideOnDocumentScroll: false,
+        });
+
+        const target = screen.getByText(targetContent);
+        userEvent.hover(target);
+        await waitFor(() => screen.getByText(tooltipContent));
+        fireEvent.scroll(document);
+        await waitFor(() => expect(screen.queryByText(tooltipContent)).toBeTruthy());
     });
 });

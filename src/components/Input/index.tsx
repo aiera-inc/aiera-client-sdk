@@ -22,7 +22,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         <div className={`group h-8 items-center w-full relative ${className} input__${name}`}>
             <input
                 className={classNames(
-                    'w-full inset-0 absolute text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600',
+                    'w-full inset-0 absolute text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400',
                     { 'pl-7': !!children, 'pl-3': !children }
                 )}
                 onChange={
