@@ -123,6 +123,8 @@
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#CompanyFilterQuery" class="tsd-kind-icon">Company<wbr>Filter<wbr>Query</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#CompanyResolutionQueryVariables" class="tsd-kind-icon">Company<wbr>Resolution<wbr>Query<wbr>Variables</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#CompanyResolutionQuery" class="tsd-kind-icon">Company<wbr>Resolution<wbr>Query</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#TrackMutationVariables" class="tsd-kind-icon">Track<wbr>Mutation<wbr>Variables</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#TrackMutation" class="tsd-kind-icon">Track<wbr>Mutation</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#CurrentUserQueryVariables" class="tsd-kind-icon">Current<wbr>User<wbr>Query<wbr>Variables</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#CurrentUserQuery" class="tsd-kind-icon">Current<wbr>User<wbr>Query</a></li>
 								<li class="tsd-kind-type-alias tsd-parent-kind-module"><a href="types_generated.html#LoginMutationVariables" class="tsd-kind-icon">Login<wbr>Mutation<wbr>Variables</a></li>
@@ -157,6 +159,7 @@
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="types_generated.html#RefreshDocument" class="tsd-kind-icon">Refresh<wbr>Document</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="types_generated.html#CompanyFilterDocument" class="tsd-kind-icon">Company<wbr>Filter<wbr>Document</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="types_generated.html#CompanyResolutionDocument" class="tsd-kind-icon">Company<wbr>Resolution<wbr>Document</a></li>
+								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="types_generated.html#TrackDocument" class="tsd-kind-icon">Track<wbr>Document</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="types_generated.html#CurrentUserDocument" class="tsd-kind-icon">Current<wbr>User<wbr>Document</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="types_generated.html#LoginDocument" class="tsd-kind-icon">Login<wbr>Document</a></li>
 								<li class="tsd-kind-variable tsd-parent-kind-module"><a href="types_generated.html#EventListDocument" class="tsd-kind-icon">Event<wbr>List<wbr>Document</a></li>
@@ -1642,12 +1645,51 @@
 					</div>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="TrackMutationVariables" class="tsd-anchor"></a>
+					<h3>Track<wbr>Mutation<wbr>Variables</h3>
+					<div class="tsd-signature tsd-kind-icon">Track<wbr>Mutation<wbr>Variables<span class="tsd-signature-symbol">:</span> <a href="types_generated.html#Exact" class="tsd-signature-type" data-tsd-kind="Type alias">Exact</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>event<span class="tsd-signature-symbol">: </span><a href="types_generated.html#Scalars" class="tsd-signature-type" data-tsd-kind="Type alias">Scalars</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;String&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">; </span>properties<span class="tsd-signature-symbol">: </span><a href="types_generated.html#Scalars" class="tsd-signature-type" data-tsd-kind="Type alias">Scalars</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;GenericObjectScalar&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/types/generated.ts:477</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
+					<a name="TrackMutation" class="tsd-anchor"></a>
+					<h3>Track<wbr>Mutation</h3>
+					<div class="tsd-signature tsd-kind-icon">Track<wbr>Mutation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Mutation&quot;</span><span class="tsd-signature-symbol">; </span>track<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;TrackResponse&quot;</span><span class="tsd-signature-symbol">; </span>success<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/types/generated.ts:483</li>
+						</ul>
+					</aside>
+					<div class="tsd-type-declaration">
+						<h4>Type declaration</h4>
+						<ul class="tsd-parameters">
+							<li class="tsd-parameter">
+								<h5><span class="tsd-flag ts-flagOptional">Optional</span> __typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Mutation&quot;</span></h5>
+							</li>
+							<li class="tsd-parameter">
+								<h5>track<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;TrackResponse&quot;</span><span class="tsd-signature-symbol">; </span>success<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol"> }</span></h5>
+								<ul class="tsd-parameters">
+									<li class="tsd-parameter">
+										<h5><span class="tsd-flag ts-flagOptional">Optional</span> __typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;TrackResponse&quot;</span></h5>
+									</li>
+									<li class="tsd-parameter">
+										<h5>success<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></h5>
+									</li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module">
 					<a name="CurrentUserQueryVariables" class="tsd-anchor"></a>
 					<h3>Current<wbr>User<wbr>Query<wbr>Variables</h3>
 					<div class="tsd-signature tsd-kind-icon">Current<wbr>User<wbr>Query<wbr>Variables<span class="tsd-signature-symbol">:</span> <a href="types_generated.html#Exact" class="tsd-signature-type" data-tsd-kind="Type alias">Exact</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{}</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:477</li>
+							<li>Defined in src/types/generated.ts:485</li>
 						</ul>
 					</aside>
 				</section>
@@ -1657,7 +1699,7 @@
 					<div class="tsd-signature tsd-kind-icon">Current<wbr>User<wbr>Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Query&quot;</span><span class="tsd-signature-symbol">; </span>currentUser<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;User&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>firstName<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>lastName<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:480</li>
+							<li>Defined in src/types/generated.ts:488</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -1692,7 +1734,7 @@
 					<div class="tsd-signature tsd-kind-icon">Login<wbr>Mutation<wbr>Variables<span class="tsd-signature-symbol">:</span> <a href="types_generated.html#Exact" class="tsd-signature-type" data-tsd-kind="Type alias">Exact</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>email<span class="tsd-signature-symbol">: </span><a href="types_generated.html#Scalars" class="tsd-signature-type" data-tsd-kind="Type alias">Scalars</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;String&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol">; </span>password<span class="tsd-signature-symbol">: </span><a href="types_generated.html#Scalars" class="tsd-signature-type" data-tsd-kind="Type alias">Scalars</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;String&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:482</li>
+							<li>Defined in src/types/generated.ts:490</li>
 						</ul>
 					</aside>
 				</section>
@@ -1702,7 +1744,7 @@
 					<div class="tsd-signature tsd-kind-icon">Login<wbr>Mutation<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Mutation&quot;</span><span class="tsd-signature-symbol">; </span>login<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;LoginResponse&quot;</span><span class="tsd-signature-symbol">; </span>accessToken<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>refreshToken<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:488</li>
+							<li>Defined in src/types/generated.ts:496</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -1734,7 +1776,7 @@
 					<div class="tsd-signature tsd-kind-icon">Event<wbr>List<wbr>Query<wbr>Variables<span class="tsd-signature-symbol">:</span> <a href="types_generated.html#Exact" class="tsd-signature-type" data-tsd-kind="Type alias">Exact</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>filter<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><a href="types_generated.html#EventFilter" class="tsd-signature-type" data-tsd-kind="Type alias">EventFilter</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>view<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><a href="../enums/types_generated.EventView.html" class="tsd-signature-type" data-tsd-kind="Enumeration">EventView</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:490</li>
+							<li>Defined in src/types/generated.ts:498</li>
 						</ul>
 					</aside>
 				</section>
@@ -1744,7 +1786,7 @@
 					<div class="tsd-signature tsd-kind-icon">Event<wbr>List<wbr>Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Query&quot;</span><span class="tsd-signature-symbol">; </span>events<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Event&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>eventDate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>eventType<span class="tsd-signature-symbol">: </span><a href="../enums/types_generated.EventType.html" class="tsd-signature-type" data-tsd-kind="Enumeration">EventType</a><span class="tsd-signature-symbol">; </span>isLive<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>audioRecordingUrl<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>audioRecordingOffsetMs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>primaryCompany<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Company&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>commonName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>instruments<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Instrument&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>isPrimary<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>quotes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Quote&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>isPrimary<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>localTicker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>exchange<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Exchange&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>shortName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>country<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Country&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>countryCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:496</li>
+							<li>Defined in src/types/generated.ts:504</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -1765,7 +1807,7 @@
 					<div class="tsd-signature tsd-kind-icon">Latest<wbr>Paragraphs<wbr>Query<wbr>Variables<span class="tsd-signature-symbol">:</span> <a href="types_generated.html#Exact" class="tsd-signature-type" data-tsd-kind="Type alias">Exact</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>eventId<span class="tsd-signature-symbol">: </span><a href="types_generated.html#Scalars" class="tsd-signature-type" data-tsd-kind="Type alias">Scalars</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;ID&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:498</li>
+							<li>Defined in src/types/generated.ts:506</li>
 						</ul>
 					</aside>
 				</section>
@@ -1775,7 +1817,7 @@
 					<div class="tsd-signature tsd-kind-icon">Latest<wbr>Paragraphs<wbr>Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Query&quot;</span><span class="tsd-signature-symbol">; </span>events<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Event&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>transcripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscript&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>latestParagraphs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscriptParagraph&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>timestamp<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>syncMs<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>sentences<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscriptSentence&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:503</li>
+							<li>Defined in src/types/generated.ts:511</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -1796,7 +1838,7 @@
 					<div class="tsd-signature tsd-kind-icon">Transcript<wbr>Query<wbr>Variables<span class="tsd-signature-symbol">:</span> <a href="types_generated.html#Exact" class="tsd-signature-type" data-tsd-kind="Type alias">Exact</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>eventId<span class="tsd-signature-symbol">: </span><a href="types_generated.html#Scalars" class="tsd-signature-type" data-tsd-kind="Type alias">Scalars</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">&quot;ID&quot;</span><span class="tsd-signature-symbol">]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:505</li>
+							<li>Defined in src/types/generated.ts:513</li>
 						</ul>
 					</aside>
 				</section>
@@ -1806,7 +1848,7 @@
 					<div class="tsd-signature tsd-kind-icon">Transcript<wbr>Query<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Query&quot;</span><span class="tsd-signature-symbol">; </span>events<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Event&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>title<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>eventDate<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>eventType<span class="tsd-signature-symbol">: </span><a href="../enums/types_generated.EventType.html" class="tsd-signature-type" data-tsd-kind="Enumeration">EventType</a><span class="tsd-signature-symbol">; </span>isLive<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>audioRecordingUrl<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>audioRecordingOffsetMs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">; </span>primaryCompany<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Company&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>commonName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>instruments<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Instrument&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>isPrimary<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>quotes<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Quote&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>isPrimary<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span><span class="tsd-signature-symbol">; </span>localTicker<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>exchange<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Exchange&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>shortName<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>country<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;Country&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>countryCode<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>transcripts<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscript&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>sections<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscriptSection&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>speakerTurns<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscriptSpeakerTurn&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>paragraphs<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscriptParagraph&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>timestamp<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>syncMs<span class="tsd-signature-symbol">?: </span><a href="types_generated.html#Maybe" class="tsd-signature-type" data-tsd-kind="Type alias">Maybe</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>sentences<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>__typename<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">&quot;EventTranscriptSentence&quot;</span><span class="tsd-signature-symbol">; </span>id<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">; </span>text<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> }</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:510</li>
+							<li>Defined in src/types/generated.ts:518</li>
 						</ul>
 					</aside>
 					<div class="tsd-type-declaration">
@@ -1830,7 +1872,7 @@
 					<div class="tsd-signature tsd-kind-icon">Refresh<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:513</li>
+							<li>Defined in src/types/generated.ts:521</li>
 						</ul>
 					</aside>
 				</section>
@@ -1840,7 +1882,7 @@
 					<div class="tsd-signature tsd-kind-icon">Company<wbr>Filter<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:523</li>
+							<li>Defined in src/types/generated.ts:531</li>
 						</ul>
 					</aside>
 				</section>
@@ -1850,7 +1892,17 @@
 					<div class="tsd-signature tsd-kind-icon">Company<wbr>Resolution<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:548</li>
+							<li>Defined in src/types/generated.ts:556</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-variable tsd-parent-kind-module">
+					<a name="TrackDocument" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagConst">Const</span> Track<wbr>Document</h3>
+					<div class="tsd-signature tsd-kind-icon">Track<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/types/generated.ts:583</li>
 						</ul>
 					</aside>
 				</section>
@@ -1860,7 +1912,7 @@
 					<div class="tsd-signature tsd-kind-icon">Current<wbr>User<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:575</li>
+							<li>Defined in src/types/generated.ts:590</li>
 						</ul>
 					</aside>
 				</section>
@@ -1870,7 +1922,7 @@
 					<div class="tsd-signature tsd-kind-icon">Login<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:584</li>
+							<li>Defined in src/types/generated.ts:599</li>
 						</ul>
 					</aside>
 				</section>
@@ -1880,7 +1932,7 @@
 					<div class="tsd-signature tsd-kind-icon">Event<wbr>List<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:592</li>
+							<li>Defined in src/types/generated.ts:607</li>
 						</ul>
 					</aside>
 				</section>
@@ -1890,7 +1942,7 @@
 					<div class="tsd-signature tsd-kind-icon">Latest<wbr>Paragraphs<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:626</li>
+							<li>Defined in src/types/generated.ts:641</li>
 						</ul>
 					</aside>
 				</section>
@@ -1900,7 +1952,7 @@
 					<div class="tsd-signature tsd-kind-icon">Transcript<wbr>Document<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">DocumentNode</span><span class="tsd-signature-symbol"> = ...</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:645</li>
+							<li>Defined in src/types/generated.ts:660</li>
 						</ul>
 					</aside>
 				</section>
@@ -2106,6 +2158,12 @@
 						<a href="types_generated.html#CompanyResolutionQuery" class="tsd-kind-icon">Company<wbr>Resolution<wbr>Query</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="types_generated.html#TrackMutationVariables" class="tsd-kind-icon">Track<wbr>Mutation<wbr>Variables</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
+						<a href="types_generated.html#TrackMutation" class="tsd-kind-icon">Track<wbr>Mutation</a>
+					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
 						<a href="types_generated.html#CurrentUserQueryVariables" class="tsd-kind-icon">Current<wbr>User<wbr>Query<wbr>Variables</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module">
@@ -2143,6 +2201,9 @@
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="types_generated.html#CompanyResolutionDocument" class="tsd-kind-icon">Company<wbr>Resolution<wbr>Document</a>
+					</li>
+					<li class=" tsd-kind-variable tsd-parent-kind-module">
+						<a href="types_generated.html#TrackDocument" class="tsd-kind-icon">Track<wbr>Document</a>
 					</li>
 					<li class=" tsd-kind-variable tsd-parent-kind-module">
 						<a href="types_generated.html#CurrentUserDocument" class="tsd-kind-icon">Current<wbr>User<wbr>Document</a>
