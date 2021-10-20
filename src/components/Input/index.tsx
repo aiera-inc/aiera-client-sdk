@@ -9,7 +9,7 @@ interface InputSharedProps {
     onChange?: ChangeHandler<string>;
     value?: string;
     defaultValue?: string;
-    extendClassName?: string;
+    className?: string;
     name: string;
 }
 
@@ -17,9 +17,9 @@ interface InputSharedProps {
 interface InputUIProps extends InputSharedProps {}
 
 export function InputUI(props: InputUIProps): ReactElement {
-    const { children, placeholder, onChange, value, name, extendClassName = '', defaultValue } = props;
+    const { children, placeholder, onChange, value, name, className = '', defaultValue } = props;
     return (
-        <div className={`group h-8 items-center w-full relative ${extendClassName} input__${name}`}>
+        <div className={`group h-8 items-center w-full relative ${className} input__${name}`}>
             <input
                 className={classNames(
                     'w-full inset-0 absolute text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600',
@@ -51,14 +51,14 @@ export interface InputProps extends InputSharedProps {}
  * Renders Input
  */
 export function Input(props: InputProps): ReactElement {
-    const { children, placeholder, onChange, value, name, extendClassName, defaultValue } = props;
+    const { children, placeholder, onChange, value, name, className, defaultValue } = props;
     return (
         <InputUI
             placeholder={placeholder}
             onChange={onChange}
             defaultValue={defaultValue}
             value={value}
-            extendClassName={extendClassName}
+            className={className}
             name={name}
         >
             {children}

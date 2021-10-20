@@ -17,6 +17,6 @@ describe('Input', () => {
         render(<Input name="input" defaultValue="test" placeholder="example" onChange={onChange} />);
         const inputEle = screen.getByPlaceholderText('example');
         fireEvent.change(inputEle, { target: { value: 'changed' } });
-        expect(onChange).toHaveBeenCalledTimes(1);
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { name: 'input', value: 'changed' });
     });
 });

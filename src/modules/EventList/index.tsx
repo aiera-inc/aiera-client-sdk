@@ -69,14 +69,14 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
         <div className="h-full flex flex-col eventlist">
-            <div className="flex flex-col p-3 shadow-3xl eventlist__header">
-                <div className="flex items-center mb-2">
+            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header">
+                <div className="flex items-center mb-3">
                     <Input
                         name="search"
                         onChange={onSearchChange}
                         placeholder="Search Events & Transcripts"
                         value={searchTerm}
-                        extendClassName="mr-1"
+                        className="mr-1"
                     >
                         <MagnifyingGlass />
                     </Input>
@@ -85,6 +85,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     </div>
                 </div>
                 <Tabs<EventView>
+                    className="ml-1"
+                    kind="line"
                     onChange={onSelectListType}
                     options={[
                         { value: EventView.LiveAndUpcoming, label: 'Live & Upcoming' },
@@ -327,7 +329,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             listType={state.listType}
             onBackFromTranscript={(event) => onSelectEvent(event, { value: null })}
             onCompanyChange={onSelectCompany}
-            onSearchChange={(_e, { value }) => typeof value === 'string' && setState({ ...state, searchTerm: value })}
+            onSearchChange={handlers.searchTerm}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}
