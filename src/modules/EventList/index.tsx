@@ -1,4 +1,4 @@
-import React, { ReactElement, MouseEventHandler, useCallback } from 'react';
+import React, { Fragment, ReactElement, MouseEventHandler, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
@@ -67,6 +67,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     }
 
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
+    let prevEventDate: DateTime | null = null;
+
     return (
         <div className="h-full flex flex-col eventlist">
             <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header">
@@ -95,9 +97,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     value={listType}
                 />
             </div>
-            <div className="flex flex-col flex-1 p-3 pb-2 pt-0 overflow-y-scroll">
+            <div className="flex flex-col flex-1 pt-3 pb-2 pt-0 overflow-y-scroll">
                 <div className="flex flex-col flex-grow">
-                    <div className="sticky top-3 mb-2 z-10 eventlist__tabs">
+                    <div className="sticky top-3 mx-3 mb-2 z-10 eventlist__tabs">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[
@@ -112,20 +114,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'loading' }, () => (
                                 <ul className="w-full EventList__loading">
                                     {new Array(15).fill(0).map((_, idx) => (
-                                        <li key={idx} className="p-2 animate-pulse">
+                                        <li key={idx} className="p-2 animate-pulse mx-2">
                                             <div className="flex items-center">
                                                 <div className="rounded-full bg-gray-300 w-9 h-9" />
                                                 <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
                                                     <div className="flex">
                                                         <div className="rounded-full bg-gray-500 h-[10px] mr-2 w-7" />
                                                         <div className="rounded-full bg-gray-400 h-[10px] mr-2 w-12" />
-                                                        <div className="rounded-full bg-gray-300 h-[10px] mr-2 w-20" />
                                                     </div>
-                                                    <div className="mt-2 rounded-full bg-gray-300 h-[10px] w-full" />
-                                                </div>
-                                                <div className="flex flex-col items-center justify-center">
-                                                    <div className="rounded-full bg-gray-300 h-[10px] w-8" />
-                                                    <div className="mt-2 rounded-full bg-gray-300 h-[10px] w-10" />
+                                                    <div className="flex">
+                                                        <div className="rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2" />
+                                                        <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2" />
+                                                        <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2" />
+                                                    </div>
                                                 </div>
                                             </div>
                                         </li>
@@ -141,55 +142,72 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                         const eventDate = DateTime.fromISO(event.eventDate);
                                         const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
+                                        let divider = null;
+                                        if (
+                                            !prevEventDate ||
+                                            prevEventDate.toFormat('MM/dd/yyyy') !== eventDate.toFormat('MM/dd/yyyy')
+                                        ) {
+                                            prevEventDate = eventDate;
+                                            divider = (
+                                                <li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-xs uppercase tracking-widest whitespace-nowrap text-gray-400 px-1 py-2 font-semibold mx-3">
+                                                    {eventDate.toFormat('DDDD')}
+                                                    <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"></div>
+                                                </li>
+                                            );
+                                        }
                                         return (
-                                            <li
-                                                className="text-xs"
-                                                onClick={(e) => onSelectEvent?.(e, { value: event })}
-                                                key={event.id}
-                                            >
-                                                <div className="flex flex-row">
-                                                    <div className="flex items-center justify-center">
-                                                        <div className="flex items-center justify-center w-9 h-9">
-                                                            <PlayButton
-                                                                id={event.id}
-                                                                url={
-                                                                    event.isLive
-                                                                        ? `https://storage.media.aiera.com/${event.id}`
-                                                                        : event.audioRecordingUrl
-                                                                }
-                                                                offset={audioOffset || 0}
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
-                                                        <div>
-                                                            <span className="pr-1 font-semibold">
-                                                                {primaryQuote?.localTicker}
-                                                            </span>
-                                                            <span className="text-gray-300">
-                                                                {primaryQuote?.exchange?.shortName}
-                                                            </span>
-                                                            <span className="text-gray-400"> • {event.eventType}</span>
-                                                        </div>
-                                                        <div className="text-sm truncate whitespace-normal line-clamp-2">
-                                                            {event.title}
-                                                        </div>
-                                                    </div>
-                                                    <div className="flex flex-col items-center justify-center w-24 pr-1 text-xs">
-                                                        {event.isLive && (
-                                                            <div className="px-2 font-semibold text-white bg-red-500 rounded-md">
-                                                                LIVE
+                                            <Fragment key={event.id}>
+                                                {divider}
+                                                <li
+                                                    className="text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
+                                                    onClick={(e) => onSelectEvent?.(e, { value: event })}
+                                                >
+                                                    <div className="flex flex-row">
+                                                        <div className="flex items-center justify-center">
+                                                            <div className="flex items-center justify-center w-8 h-8">
+                                                                <PlayButton
+                                                                    id={event.id}
+                                                                    url={
+                                                                        event.isLive
+                                                                            ? `https://storage.media.aiera.com/${event.id}`
+                                                                            : event.audioRecordingUrl
+                                                                    }
+                                                                    offset={audioOffset || 0}
+                                                                />
                                                             </div>
-                                                        )}
-                                                        {!event.isLive && (
-                                                            <>
-                                                                <div>{eventDate.toFormat('MMM dd')}</div>
-                                                                <div>{eventDate.toFormat('h:mma yyyy')}</div>
-                                                            </>
-                                                        )}
+                                                        </div>
+                                                        <div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4">
+                                                            <div>
+                                                                <span className="text-blue-600 pr-1 font-semibold">
+                                                                    {primaryQuote?.localTicker}
+                                                                </span>
+                                                                <span className="text-gray-400">
+                                                                    {primaryQuote?.exchange?.shortName}
+                                                                </span>
+                                                            </div>
+                                                            <div className="flex text-sm capitalize items-center">
+                                                                {/*event.title*/}
+                                                                {event.isLive && (
+                                                                    <div className="text-xxs leading-none flex justify-center items-center font-semibold text-white bg-red-500 rounded-sm pl-1 pr-0.5 py-0.5 mr-1 tracking-widest">
+                                                                        LIVE
+                                                                    </div>
+                                                                )}
+                                                                <span className="mr-1 text-black">
+                                                                    {event.eventType.replace(/_/g, ' ')}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex flex-col justify-center items-center">
+                                                            <div className="text-gray-500">
+                                                                {eventDate.toFormat('h:mma')}
+                                                            </div>
+                                                            <div className="text-gray-300">
+                                                                {eventDate.toFormat('MMM dd, yyyy')}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            </li>
+                                                </li>
+                                            </Fragment>
                                         );
                                     })}
                                 </ul>
