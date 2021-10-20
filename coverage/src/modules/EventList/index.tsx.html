@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.35% </span>
+                <span class="strong">68.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>33/49</span>
+                <span class='fraction'>33/48</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.14% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>12/21</span>
+                <span class='fraction'>12/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.57% </span>
+                <span class="strong">71.11% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>32/46</span>
+                <span class='fraction'>32/45</span>
             </div>
         
             
@@ -390,7 +390,16 @@
 <a name='L331'></a><a href='#L331'>331</a>
 <a name='L332'></a><a href='#L332'>332</a>
 <a name='L333'></a><a href='#L333'>333</a>
-<a name='L334'></a><a href='#L334'>334</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L334'></a><a href='#L334'>334</a>
+<a name='L335'></a><a href='#L335'>335</a>
+<a name='L336'></a><a href='#L336'>336</a>
+<a name='L337'></a><a href='#L337'>337</a>
+<a name='L338'></a><a href='#L338'>338</a>
+<a name='L339'></a><a href='#L339'>339</a>
+<a name='L340'></a><a href='#L340'>340</a>
+<a name='L341'></a><a href='#L341'>341</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -458,6 +467,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -714,7 +728,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -723,7 +736,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement, FormEventHandler, MouseEventHandler, useCallback } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement, MouseEventHandler, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
@@ -739,6 +753,8 @@ import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/comp
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
+import { Input } from '@aiera/client-sdk/components/Input';
+import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { FilterBy } from './FilterBy';
 import { PlayButton } from './PlayButton';
 import './styles.css';
@@ -760,7 +776,7 @@ export interface EventListUIProps {
     loading?: boolean;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler&lt;CompanyFilterResult&gt;;
-    onSearchChange?: FormEventHandler&lt;HTMLInputElement&gt;;
+    onSearchChange?: ChangeHandler&lt;string&gt;;
     onSelectFilterBy?: ChangeHandler&lt;FilterByType[]&gt;;
     onSelectListType?: ChangeHandler&lt;EventView&gt;;
     onSelectEvent?: ChangeHandler&lt;EventListEvent&gt;;
@@ -792,19 +808,24 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
     const wrapMsg = (msg: string) =&gt; &lt;div className="flex flex-1 items-center justify-center text-gray-600"&gt;{msg}&lt;/div&gt;;
     return (
         &lt;div className="h-full flex flex-col eventlist"&gt;
-            &lt;div className="flex flex-col p-3 shadow-3xl eventlist__header"&gt;
-                &lt;div className="flex items-center mb-2"&gt;
-                    &lt;input
-                        className="flex-1 p-2 text-sm rounded-lg border-gray-200 border"
+            &lt;div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header"&gt;
+                &lt;div className="flex items-center mb-3"&gt;
+                    &lt;Input
+                        name="search"
                         onChange={onSearchChange}
-                        placeholder="Search Events and Transcripts"
+                        placeholder="Search Events &amp; Transcripts"
                         value={searchTerm}
-                    /&gt;
+                        className="mr-1"
+                    &gt;
+                        &lt;MagnifyingGlass /&gt;
+                    &lt;/Input&gt;
                     &lt;div className="ml-2"&gt;
                         &lt;CompanyFilterButton onChange={onCompanyChange} value={company} /&gt;
                     &lt;/div&gt;
                 &lt;/div&gt;
                 &lt;Tabs&lt;EventView&gt;
+                    className="ml-1"
+                    kind="line"
                     onChange={onSelectListType}
                     options={[
                         { value: EventView.LiveAndUpcoming, label: 'Live &amp; Upcoming' },
@@ -1047,7 +1068,7 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
             listType={state.listType}
             onBackFromTranscript={<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; <span class="cstat-no" title="statement not covered" >onSelectEvent(event, { value: null })}</span>
             onCompanyChange={onSelectCompany}
-            onSearchChange={<span class="fstat-no" title="function not covered" >({</span> currentTarget: { value } }) =&gt; <span class="cstat-no" title="statement not covered" >setState({ ...state, searchTerm: value })}</span>
+            onSearchChange={handlers.searchTerm}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}
@@ -1063,7 +1084,7 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 18 2021 17:05:42 GMT-0400 (Eastern Daylight Time)
+                at Tue Oct 19 2021 20:52:36 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
