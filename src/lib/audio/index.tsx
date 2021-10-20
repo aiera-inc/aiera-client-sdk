@@ -69,9 +69,13 @@ export class AudioPlayer {
                 this.url = url;
                 this.audio.src = url;
             }
+            this.offset = opts.offset;
             this.triggerUpdate();
         }
-        this.offset = opts?.offset || 0;
+
+        if (opts && opts.offset !== this.offset) {
+            this.offset = opts.offset;
+        }
     }
 
     clear(): void {
