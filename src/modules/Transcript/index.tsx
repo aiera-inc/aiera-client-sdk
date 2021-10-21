@@ -30,6 +30,7 @@ interface TranscriptUIProps {
     headerExpanded: boolean;
     toggleHeader: () => void;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
+    currentParagraph?: string | null;
     paragraphs: Paragraph[];
     onBack?: MouseEventHandler;
     onClickTranscript?: (paragraph: Paragraph) => void;
@@ -37,7 +38,16 @@ interface TranscriptUIProps {
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
-    const { eventQuery, onBack, onClickTranscript, paragraphs, toggleHeader, headerExpanded, scrollRef } = props;
+    const {
+        eventQuery,
+        onBack,
+        onClickTranscript,
+        currentParagraph,
+        paragraphs,
+        toggleHeader,
+        headerExpanded,
+        scrollRef,
+    } = props;
 
     const renderExpandButton = () => (
         <button
@@ -161,13 +171,20 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         paragraphs.map((paragraph) => {
                             const { id, sentences, timestamp } = paragraph;
                             return (
-                                <div key={id} className="p-3 pb-4" onClick={() => onClickTranscript?.(paragraph)}>
+                                <div
+                                    key={id}
+                                    className="relative p-3 pb-4"
+                                    onClick={() => onClickTranscript?.(paragraph)}
+                                >
                                     {timestamp && (
                                         <div className="pb-2 font-semibold text-sm">
                                             {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
                                         </div>
                                     )}
                                     <div className="text-sm">{sentences.map(({ text }) => text).join(' ')}</div>
+                                    {id === currentParagraph && (
+                                        <div className="w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm" />
+                                    )}
                                 </div>
                             );
                         })
@@ -331,7 +348,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         },
     });
 
-    const audioPlayer = useAudioPlayer(false);
+    const audioPlayer = useAudioPlayer();
     const onClickTranscript = (paragraph: Paragraph) => {
         audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
     };
@@ -339,11 +356,21 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const paragraphs = useLatestTranscripts(eventId, eventQuery);
     const scrollRef = useAutoScroll<HTMLDivElement>(paragraphs.length, !eventQuery.state.data?.events[0]?.isLive);
 
+    const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
+    useEffect(() => {
+        const index = paragraphs.findIndex((p) => p.syncMs && p.syncMs > audioPlayer.rawCurrentTime * 1000);
+        const paragraph = paragraphs[index - 1];
+        if (paragraph) {
+            setCurrentParagraph(paragraph.id);
+        }
+    }, [Math.floor(audioPlayer.rawCurrentTime)]);
+
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 
     return (
         <TranscriptUI
             eventQuery={eventQuery}
+            currentParagraph={currentParagraph}
             paragraphs={paragraphs}
             headerExpanded={headerExpanded}
             toggleHeader={toggleHeader}
