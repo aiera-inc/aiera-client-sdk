@@ -7,6 +7,7 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
+import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { getPrimaryQuote, useCompanyResolver, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
@@ -166,7 +167,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         className="h-12 flex flex-row"
                                                         content={
                                                             <div className="max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9">
-                                                                {event.title}
+                                                                {prettyLineBreak(event.title)}
                                                             </div>
                                                         }
                                                         grow="up-right"

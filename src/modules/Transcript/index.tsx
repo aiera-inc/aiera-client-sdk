@@ -22,6 +22,7 @@ import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
+import { EmptyMessage } from './EmptyMessage';
 import './styles.css';
 
 type Paragraph = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0]['paragraphs'][0];
@@ -69,93 +70,95 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         </button>
     );
 
-    return (
-        <div className="h-full flex flex-col transcript">
-            <div
-                className={classNames(
-                    'relative p-3 shadow-3xl rounded-b-lg transition-all',
-                    headerExpanded ? 'max-h-80' : 'max-h-28',
-                    'transcript__header'
+    const renderHeader = () => (
+        <div
+            className={classNames(
+                'relative p-3 shadow-3xl rounded-b-lg transition-all',
+                headerExpanded ? 'max-h-80' : 'max-h-28',
+                'transcript__header'
+            )}
+        >
+            <div className="flex items-center">
+                {onBack && (
+                    <Button className="mr-2" onClick={onBack}>
+                        <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
+                        Events
+                    </Button>
                 )}
-            >
-                <div className="flex items-center">
-                    {onBack && (
-                        <Button className="mr-2" onClick={onBack}>
-                            <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-                            Events
-                        </Button>
-                    )}
-                    <Input name="search" className="mr-3" placeholder="Search Transcripts...">
-                        <MagnifyingGlass />
-                    </Input>
-                    <div className="items-center flex">
-                        <Gear className="w-5" />
-                    </div>
+                <Input name="search" className="mr-3" placeholder="Search Transcripts...">
+                    <MagnifyingGlass />
+                </Input>
+                <div className="items-center flex">
+                    <Gear className="w-5" />
                 </div>
-                {match(eventQuery)
-                    .with({ status: 'loading' }, () => {
-                        return (
+            </div>
+            {match(eventQuery)
+                .with({ status: 'loading' }, () => {
+                    return (
+                        <div className="flex flex-row mt-3 items-center">
+                            <div className="animate-pulse flex-1">
+                                <div className="flex">
+                                    <div className="rounded-md bg-gray-500 h-[10px] m-1 w-7" />
+                                    <div className="rounded-md bg-gray-400 h-[10px] m-1 w-10" />
+                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
+                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
+                                </div>
+                                <div className="flex">
+                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 flex-1" />
+                                </div>
+                            </div>
+                            {renderExpandButton()}
+                        </div>
+                    );
+                })
+                .with({ status: 'success' }, ({ data }) => {
+                    const event = data.events[0];
+                    const primaryQuote = getPrimaryQuote(event.primaryCompany);
+                    const eventDate = DateTime.fromISO(data.events[0].eventDate);
+                    return (
+                        <>
                             <div className="flex flex-row mt-3 items-center">
-                                <div className="animate-pulse flex-1">
-                                    <div className="flex">
-                                        <div className="rounded-md bg-gray-500 h-[10px] m-1 w-7" />
-                                        <div className="rounded-md bg-gray-400 h-[10px] m-1 w-10" />
-                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
-                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
+                                <div className="flex flex-col justify-center flex-1 min-w-0">
+                                    <div className="text-xs">
+                                        {primaryQuote?.localTicker && (
+                                            <span className="pr-1 font-semibold">{primaryQuote?.localTicker}</span>
+                                        )}
+                                        {primaryQuote?.exchange?.shortName && (
+                                            <span className="text-gray-400">{primaryQuote?.exchange?.shortName}</span>
+                                        )}
+                                        {event?.eventType && (
+                                            <span className="text-gray-300 capitalize"> • {event?.eventType}</span>
+                                        )}
+                                        {eventDate && (
+                                            <span className="text-gray-300">
+                                                {' '}
+                                                • {eventDate.toFormat('h:mma M/dd/yyyy')}
+                                            </span>
+                                        )}
                                     </div>
-                                    <div className="flex">
-                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 flex-1" />
+                                    <div
+                                        className={
+                                            headerExpanded
+                                                ? 'text-sm'
+                                                : 'text-sm truncate whitespace-normal line-clamp-1'
+                                        }
+                                    >
+                                        {event?.title}
                                     </div>
                                 </div>
                                 {renderExpandButton()}
                             </div>
-                        );
-                    })
-                    .with({ status: 'success' }, ({ data }) => {
-                        const event = data.events[0];
-                        const primaryQuote = getPrimaryQuote(event.primaryCompany);
-                        const eventDate = DateTime.fromISO(data.events[0].eventDate);
-                        return (
-                            <>
-                                <div className="flex flex-row mt-3 items-center">
-                                    <div className="flex flex-col justify-center flex-1 min-w-0">
-                                        <div className="text-xs">
-                                            {primaryQuote?.localTicker && (
-                                                <span className="pr-1 font-semibold">{primaryQuote?.localTicker}</span>
-                                            )}
-                                            {primaryQuote?.exchange?.shortName && (
-                                                <span className="text-gray-400">
-                                                    {primaryQuote?.exchange?.shortName}
-                                                </span>
-                                            )}
-                                            {event?.eventType && (
-                                                <span className="text-gray-300 capitalize"> • {event?.eventType}</span>
-                                            )}
-                                            {eventDate && (
-                                                <span className="text-gray-300">
-                                                    {' '}
-                                                    • {eventDate.toFormat('h:mma M/dd/yyyy')}
-                                                </span>
-                                            )}
-                                        </div>
-                                        <div
-                                            className={
-                                                headerExpanded
-                                                    ? 'text-sm'
-                                                    : 'text-sm truncate whitespace-normal line-clamp-1'
-                                            }
-                                        >
-                                            {event?.title}
-                                        </div>
-                                    </div>
-                                    {renderExpandButton()}
-                                </div>
-                                {headerExpanded && 'Event Extras'}
-                            </>
-                        );
-                    })
-                    .otherwise(() => null)}
-            </div>
+                            {headerExpanded && 'Event Extras'}
+                        </>
+                    );
+                })
+                .otherwise(() => null)}
+        </div>
+    );
+
+    return (
+        <div className="h-full flex flex-col transcript">
+            {renderHeader()}
             <div className="overflow-y-scroll flex-1 bg-gray-50" ref={scrollRef}>
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
@@ -169,8 +172,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             </div>
                         ))
                     )
-                    .with({ status: 'success' }, () =>
-                        paragraphs.map((paragraph) => {
+                    .with({ status: 'success' }, ({ data }) => {
+                        const event = data.events[0];
+
+                        if (!paragraphs || paragraphs.length === 0) {
+                            return <EmptyMessage event={event} />;
+                        }
+
+                        return paragraphs.map((paragraph) => {
                             const { id, sentences, timestamp } = paragraph;
                             return (
                                 <div
@@ -190,8 +199,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     )}
                                 </div>
                             );
-                        })
-                    )
+                        });
+                    })
                     .otherwise(() => null)}
             </div>
             {match(eventQuery)
@@ -342,9 +351,13 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                     title
                     eventDate
                     eventType
+                    hasConnectionDetails
                     isLive
                     audioRecordingUrl
                     audioRecordingOffsetMs
+                    expectPublishedTranscript
+                    hasTranscript
+                    hasPublishedTranscript
                     primaryCompany {
                         id
                         commonName
