@@ -418,7 +418,18 @@
 <a name='L359'></a><a href='#L359'>359</a>
 <a name='L360'></a><a href='#L360'>360</a>
 <a name='L361'></a><a href='#L361'>361</a>
-<a name='L362'></a><a href='#L362'>362</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -490,7 +501,6 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -581,6 +591,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -797,6 +817,7 @@ import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { FilterBy } from './FilterBy';
 import { PlayButton } from './PlayButton';
 import './styles.css';
@@ -859,7 +880,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                         onChange={onSearchChange}
                         placeholder="Search Events &amp; Transcripts"
                         value={searchTerm}
-                        className="mr-1"
                     &gt;
                         &lt;MagnifyingGlass /&gt;
                     &lt;/Input&gt;
@@ -878,9 +898,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                     value={listType}
                 /&gt;
             &lt;/div&gt;
-            &lt;div className="flex flex-col flex-1 pt-3 pb-2 pt-0 overflow-y-scroll"&gt;
+            &lt;div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"&gt;
                 &lt;div className="flex flex-col flex-grow"&gt;
-                    &lt;div className="sticky top-3 mx-3 mb-2 z-10 eventlist__tabs"&gt;
+                    &lt;div className="sticky top-0 px-3 pt-3 pb-2 z-10 eventlist__tabs"&gt;
                         &lt;FilterBy
                             onChange={onSelectFilterBy}
                             options={[
@@ -890,7 +910,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                             value={filterByTypes}
                         /&gt;
                     &lt;/div&gt;
-                    &lt;div className="flex flex-col items-center justify-center flex-1 mt-3"&gt;
+                    &lt;div className="flex flex-col items-center justify-center flex-1"&gt;
                         {match(eventsQuery)
                             .with({ status: 'loading' }, () =&gt; (
                                 &lt;ul className="w-full EventList__loading"&gt;
@@ -930,7 +950,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                                         ) {
                                             prevEventDate = eventDate;
                                             divider = (
-                                                &lt;li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-xs uppercase tracking-widest whitespace-nowrap text-gray-400 px-1 py-2 font-semibold mx-3"&gt;
+                                                &lt;li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"&gt;
                                                     {eventDate.toFormat('DDDD')}
                                                     &lt;div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"&gt;&lt;/div&gt;
                                                 &lt;/li&gt;
@@ -940,10 +960,22 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                                             &lt;Fragment key={event.id}&gt;
                                                 {divider}
                                                 &lt;li
-                                                    className="text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
+                                                    className="group h-12 text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
                                                     onClick={(e) =&gt; onSelectEvent?.(e, { value: event })}
                                                 &gt;
-                                                    &lt;div className="flex flex-row"&gt;
+                                                    &lt;Tooltip
+                                                        className="h-12 flex flex-row"
+                                                        content={
+                                                            &lt;div className="max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9"&gt;
+                                                                {event.title}
+                                                            &lt;/div&gt;
+                                                        }
+                                                        grow="up-right"
+                                                        openOn="hover"
+                                                        position="top-left"
+                                                        yOffset={4}
+                                                        hideOnDocumentScroll
+                                                    &gt;
                                                         &lt;div className="flex items-center justify-center"&gt;
                                                             &lt;div className="flex items-center justify-center w-8 h-8"&gt;
                                                                 &lt;PlayButton
@@ -957,36 +989,34 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                                                                 /&gt;
                                                             &lt;/div&gt;
                                                         &lt;/div&gt;
-                                                        &lt;div className="flex flex-col justify-center flex-1 min-w-0 p-2 pr-4"&gt;
-                                                            &lt;div&gt;
-                                                                &lt;span className="text-blue-600 pr-1 font-semibold"&gt;
+                                                        &lt;div className="flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"&gt;
+                                                            &lt;div className="flex items-end"&gt;
+                                                                &lt;span className="leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"&gt;
                                                                     {primaryQuote?.localTicker}
                                                                 &lt;/span&gt;
-                                                                &lt;span className="text-gray-400"&gt;
+                                                                &lt;span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"&gt;
                                                                     {primaryQuote?.exchange?.shortName}
                                                                 &lt;/span&gt;
                                                             &lt;/div&gt;
-                                                            &lt;div className="flex text-sm capitalize items-center"&gt;
-                                                                {/*event.title*/}
-                                                                {event.isLive &amp;&amp; (
-<span class="branch-1 cbranch-no" title="branch not covered" >                                                                    &lt;div className="text-xxs leading-none flex justify-center items-center font-semibold text-white bg-red-500 rounded-sm pl-1 pr-0.5 py-0.5 mr-1 tracking-widest"&gt;</span>
-                                                                        LIVE
-                                                                    &lt;/div&gt;
-                                                                )}
-                                                                &lt;span className="mr-1 text-black"&gt;
-                                                                    {event.eventType.replace(/_/g, ' ')}
-                                                                &lt;/span&gt;
+                                                            &lt;div className="leading-none flex text-sm capitalize items-center mt-1 text-black"&gt;
+                                                                {event.eventType.replace(/_/g, ' ')}
                                                             &lt;/div&gt;
                                                         &lt;/div&gt;
-                                                        &lt;div className="flex flex-col justify-center items-center"&gt;
-                                                            &lt;div className="text-gray-500"&gt;
-                                                                {eventDate.toFormat('h:mma')}
-                                                            &lt;/div&gt;
-                                                            &lt;div className="text-gray-300"&gt;
+                                                        &lt;div className="flex flex-col justify-center items-end"&gt;
+                                                            {event.isLive ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                                                                &lt;div className="text-xs leading-none flex justify-center items-center text-red-600 font-semibold bg-red-50 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"&gt;</span>
+                                                                    {`Live • ${eventDate.toFormat('h:mma')}`}
+                                                                &lt;/div&gt;
+                                                            ) : (
+                                                                &lt;div className="leading-none text-gray-500 group-hover:text-black"&gt;
+                                                                    {eventDate.toFormat('h:mma')}
+                                                                &lt;/div&gt;
+                                                            )}
+                                                            &lt;div className="leading-none mt-1 text-gray-300 group-hover:text-gray-500"&gt;
                                                                 {eventDate.toFormat('MMM dd, yyyy')}
                                                             &lt;/div&gt;
                                                         &lt;/div&gt;
-                                                    &lt;/div&gt;
+                                                    &lt;/Tooltip&gt;
                                                 &lt;/li&gt;
                                             &lt;/Fragment&gt;
                                         );
@@ -1147,7 +1177,7 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Oct 21 2021 09:38:44 GMT-0400 (Eastern Daylight Time)
+                at Thu Oct 21 2021 13:14:43 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
