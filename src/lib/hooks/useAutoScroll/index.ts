@@ -16,17 +16,10 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     const { skip = false } = opts || {};
     const element = useRef<E>(null);
     const target = useRef<T>(null);
-    const isAutoScrolling = useRef<boolean>(false);
-    const scrollStopTimer = useRef<number>(0);
     const pauseAutoScroll = useRef<boolean>(false);
 
-    function onScroll() {
-        if (isAutoScrolling.current) {
-            window.clearTimeout(scrollStopTimer.current);
-            scrollStopTimer.current = window.setTimeout(() => {
-                isAutoScrolling.current = false;
-            }, 100);
-        } else {
+    useEffect(() => {
+        function onScroll() {
             if (target.current && element.current) {
                 const targetPosition = target.current.getBoundingClientRect();
                 const containerPosition = element.current.getBoundingClientRect();
@@ -41,21 +34,18 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
                 }
             }
         }
-    }
 
-    useEffect(() => {
         if (element.current) {
             element.current.addEventListener('scroll', onScroll);
         }
         return () => element.current?.removeEventListener('scroll', onScroll);
-    }, [target.current, element.current]);
+    }, [element.current]);
 
     useLayoutEffect(() => {
         if (!skip && !pauseAutoScroll.current && element.current) {
-            isAutoScrolling.current = true;
             target.current?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
         }
-    }, [target.current, element.current?.scrollHeight, skip]);
+    }, [target.current, skip]);
 
     return [element, target];
 }
