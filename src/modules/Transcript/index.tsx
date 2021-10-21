@@ -11,7 +11,7 @@ import {
     TranscriptQueryVariables,
 } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
-import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
@@ -31,6 +31,7 @@ interface TranscriptUIProps {
     toggleHeader: () => void;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
     currentParagraph?: string | null;
+    currentParagraphRef: RefObject<HTMLDivElement>;
     paragraphs: Paragraph[];
     onBack?: MouseEventHandler;
     onClickTranscript?: (paragraph: Paragraph) => void;
@@ -43,6 +44,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         onBack,
         onClickTranscript,
         currentParagraph,
+        currentParagraphRef,
         paragraphs,
         toggleHeader,
         headerExpanded,
@@ -175,6 +177,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     key={id}
                                     className="relative p-3 pb-4"
                                     onClick={() => onClickTranscript?.(paragraph)}
+                                    ref={id === currentParagraph ? currentParagraphRef : undefined}
                                 >
                                     {timestamp && (
                                         <div className="pb-2 font-semibold text-sm">
@@ -244,12 +247,10 @@ function useLatestTranscripts(
         },
     });
 
-    useInterval(() => {
-        if (eventQuery.state.data?.events[0]?.isLive) {
-            latestParagraphsQuery.refetch();
-        }
-    }, 2000);
+    // Request the latest paragraphs every 2 seconds
+    useInterval(() => latestParagraphsQuery.refetch(), eventQuery.state.data?.events[0]?.isLive ? 2000 : null);
 
+    // Each time the latestParagraphs get updated, set them in state
     const [latestParagraphs, setLatestParagraphs] = useState<Paragraph[]>([]);
     useEffect(() => {
         if (latestParagraphsQuery.state.data) {
@@ -260,6 +261,9 @@ function useLatestTranscripts(
         }
     }, [latestParagraphsQuery.state.data]);
 
+    // Loop through the initial paragraph array and the new latest paragraphs to generate
+    // the final paragraph array to render in the UI. memoize so we only recalc when things
+    // actaully change.
     return useMemo<Paragraph[]>(() => {
         const paragraphs = new Map<string, Paragraph>();
         eventQuery.state.data?.events[0]?.transcripts[0]?.sections
@@ -268,15 +272,52 @@ function useLatestTranscripts(
             .forEach((p) => paragraphs.set(p.id, p));
         latestParagraphs.forEach((p) => paragraphs.set(p.id, p));
 
-        return [...paragraphs.values()].sort((p1, p2) =>
-            p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)
-        );
+        // If live, loop over the values in the map and sort by timestamp since the server
+        // may update older paragraphs.
+        //
+        // For past events, just using the mapping as is, which will be the server-returned
+        // order of paragraphs.
+        return eventQuery.state.data?.events[0]?.isLive
+            ? [...paragraphs.values()].sort((p1, p2) =>
+                  p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)
+              )
+            : [...paragraphs.values()];
     }, [eventQuery.state.data?.events[0]?.transcripts, latestParagraphs]);
 }
 
-/**
- * @notExported
- */
+function useAudioSync(
+    paragraphs: Paragraph[],
+    eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>,
+    audioPlayer: AudioPlayer
+): [string | null, RefObject<HTMLDivElement>, RefObject<HTMLDivElement>] {
+    const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
+    const [scrollRef, currentParagraphRef] = useAutoScroll<HTMLDivElement>();
+
+    useEffect(() => {
+        // Find the _last_ paragraph with a timetamp <= the current audio time, that's the
+        // one the should be currently playing
+        let paragraph = [...paragraphs]
+            .reverse()
+            .find((p) => p.syncMs && p.syncMs <= audioPlayer.rawCurrentTime * 1000);
+
+        // If we couldn't find one:
+        // - if the event is live default to the last paragraph
+        // - other default to the first paragraph
+        if (!paragraph) {
+            paragraph = eventQuery.state.data?.events[0]?.isLive ? paragraphs.slice(-1)[0] : paragraphs[0];
+        }
+
+        // As long as we found one, set it so we can scroll to it and show
+        // an indicator in the UI
+        if (paragraph) {
+            setCurrentParagraph(paragraph.id);
+        }
+    }, [paragraphs, Math.floor(audioPlayer.rawCurrentTime)]);
+
+    return [currentParagraph, scrollRef, currentParagraphRef];
+}
+
+/** @notExported */
 export interface TranscriptProps {
     eventId: string;
     onBack?: MouseEventHandler;
@@ -354,16 +395,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     };
 
     const paragraphs = useLatestTranscripts(eventId, eventQuery);
-    const scrollRef = useAutoScroll<HTMLDivElement>(paragraphs.length, !eventQuery.state.data?.events[0]?.isLive);
-
-    const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
-    useEffect(() => {
-        const index = paragraphs.findIndex((p) => p.syncMs && p.syncMs > audioPlayer.rawCurrentTime * 1000);
-        const paragraph = paragraphs[index - 1];
-        if (paragraph) {
-            setCurrentParagraph(paragraph.id);
-        }
-    }, [Math.floor(audioPlayer.rawCurrentTime)]);
+    const [currentParagraph, scrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
 
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 
@@ -371,6 +403,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         <TranscriptUI
             eventQuery={eventQuery}
             currentParagraph={currentParagraph}
+            currentParagraphRef={currentParagraphRef}
             paragraphs={paragraphs}
             headerExpanded={headerExpanded}
             toggleHeader={toggleHeader}

@@ -1,21 +1,24 @@
 import { useEffect, useLayoutEffect, useRef, RefObject } from 'react';
 
 /**
- * Very simple implementation of autoscroll based on the length of some array
- * changing. Anytime the length changes, this will autoscroll to the bottom.
+ * Implementation of autoscroll that watches a `target` and autoscrolls anything the target
+ * changes. Target can be a targetRef that you want to keep in view or it can be simply the
+ * length of an array that changes and causes a scroll to the bottom.
  *
- * @param   length - the length of the array of items being rendered in the scroll container
  * @param   skip   - set to true to skip auto scrolling altogether
  *
- * @returns A React ref object that should be set on the scroll container
+ * @returns A React ref object that should be set on the scroll container, and another ref that should be
+ *          the target to scroll into view.
  */
-export function useAutoScroll<T extends HTMLElement>(length: number, skip = false): RefObject<T> {
-    const element = useRef<T>(null);
+export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends HTMLElement = HTMLDivElement>(opts?: {
+    skip?: boolean;
+}): [RefObject<E>, RefObject<T>] {
+    const { skip = false } = opts || {};
+    const element = useRef<E>(null);
+    const target = useRef<T>(null);
     const isAutoScrolling = useRef<boolean>(false);
     const scrollStopTimer = useRef<number>(0);
-    const scrolledManually = useRef<boolean>(false);
-    const prevLengthRef = useRef(length);
-    const prevLength = prevLengthRef.current;
+    const pauseAutoScroll = useRef<boolean>(false);
 
     function onScroll() {
         if (isAutoScrolling.current) {
@@ -24,10 +27,19 @@ export function useAutoScroll<T extends HTMLElement>(length: number, skip = fals
                 isAutoScrolling.current = false;
             }, 100);
         } else {
-            const scrollTop = element.current?.scrollTop || 0;
-            const height = element.current?.clientHeight || 0;
-            // If scroll to the bottom, go back to autoscrolling
-            scrolledManually.current = scrollTop + height + 5 <= (element.current?.scrollHeight || 0);
+            if (target.current && element.current) {
+                const targetPosition = target.current.getBoundingClientRect();
+                const containerPosition = element.current.getBoundingClientRect();
+
+                // If the target is visible in the viewport, we want to keep autoscrolling,
+                // but it not then it means the user manually scrolled away and we don't want
+                // to auto scroll on them so we pause until they scroll the target back into view.
+                if (targetPosition.top <= containerPosition.top) {
+                    pauseAutoScroll.current = containerPosition.top - targetPosition.top > targetPosition.height;
+                } else {
+                    pauseAutoScroll.current = targetPosition.bottom - containerPosition.bottom > targetPosition.height;
+                }
+            }
         }
     }
 
@@ -36,15 +48,14 @@ export function useAutoScroll<T extends HTMLElement>(length: number, skip = fals
             element.current.addEventListener('scroll', onScroll);
         }
         return () => element.current?.removeEventListener('scroll', onScroll);
-    }, [element.current]);
+    }, [target.current, element.current]);
 
     useLayoutEffect(() => {
-        prevLengthRef.current = length;
-        if (!skip && !scrolledManually.current && prevLength < length && element.current) {
+        if (!skip && !pauseAutoScroll.current && element.current) {
             isAutoScrolling.current = true;
-            element.current.scrollTo({ top: element.current.scrollHeight });
+            target.current?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
         }
-    }, [length, element.current?.scrollHeight, skip]);
+    }, [target.current, element.current?.scrollHeight, skip]);
 
-    return element;
+    return [element, target];
 }
