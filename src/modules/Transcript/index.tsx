@@ -172,13 +172,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             </div>
                         ))
                     )
-                    .with({ status: 'success' }, ({ data }) => {
-                        const event = data.events[0];
-
-                        if (!paragraphs || paragraphs.length === 0) {
-                            return <EmptyMessage event={event} />;
-                        }
-
+                    .with({ status: 'empty' }, ({ data }) => {
+                        return <EmptyMessage event={data.events[0]} />;
+                    })
+                    .with({ status: 'success' }, () => {
                         return paragraphs.map((paragraph) => {
                             const { id, sentences, timestamp } = paragraph;
                             return (
@@ -344,6 +341,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const [headerExpanded, setHeaderState] = useState(false);
     const toggleHeader = useCallback(() => setHeaderState(!headerExpanded), [headerExpanded]);
     const eventQuery = useQuery<TranscriptQuery, TranscriptQueryVariables>({
+        isEmpty: ({ events }) => !events[0]?.transcripts[0]?.sections?.length,
         query: gql`
             query Transcript($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
