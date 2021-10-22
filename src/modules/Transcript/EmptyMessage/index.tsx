@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 import { TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
+import { Check } from '@aiera/client-sdk/components/Svg/Check';
 import './styles.css';
 
 export type Event = TranscriptQuery['events'][0];
@@ -113,9 +114,14 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
             </div>
             {message}
             {event?.expectPublishedTranscript && (
-                <div className="text-base text-gray-400 mt-4">
-                    We expect to receive a<br />
-                    published transcript for this event.
+                <div className="flex mt-4 items-center justify-start text-left bg-green-50 rounded-2xl py-1.5 pr-2 pl-3 border-[1px] border-green-100">
+                    <div className="text-sm leading-tight text-green-600">
+                        We expect to receive a<br />
+                        published transcript for this event.
+                    </div>
+                    <div className="text-white bg-green-400 h-6 w-6 rounded-2xl flex items-center justify-center ml-4">
+                        <Check className="w-2.5" />
+                    </div>
                 </div>
             )}
         </div>
