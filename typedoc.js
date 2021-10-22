@@ -1,6 +1,14 @@
 const glob = require('fast-glob');
 
-const ignore = ['src/dev', 'src/build', 'src/css', 'src/testUtils.tsx', '**/*test.{ts,tsx}', '**/styles.css'];
+const ignore = [
+    'src/dev',
+    'src/build',
+    'src/css',
+    'src/components/Svg',
+    'src/testUtils.tsx',
+    '**/*test.{ts,tsx}',
+    '**/styles.css',
+];
 const entryPoints = [
     ...new Set([
         ...glob.sync(['src/modules/**/*'], {
@@ -16,7 +24,7 @@ const entryPoints = [
             ignore,
         }),
         ...glob.sync(['src/lib/**/*'], {
-            deep: 2,
+            deep: 3,
             ignore,
         }),
         ...glob.sync(['src/**/*'], {
@@ -30,6 +38,6 @@ module.exports = {
     name: '@aiera/client-sdk',
     sort: ['source-order'],
     readme: 'none',
-    out: 'dist/docs',
+    out: 'dist/site/docs',
     entryPoints: entryPoints,
 };

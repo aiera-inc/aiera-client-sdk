@@ -1,5 +1,5 @@
 import minimatch from 'minimatch';
-import { join } from 'path';
+import { basename, join } from 'path';
 import { readFile } from 'fs/promises';
 import copy from 'cpy';
 import { build, BuildOptions, OnLoadResult, Plugin, serve } from 'esbuild';
@@ -83,6 +83,25 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
         plugins,
     });
 
+    const modules = await globby('src/dev/*.tsx');
+    await Promise.all(
+        modules.map(async (module) => {
+            await build({
+                ...sharedConfig,
+                entryPoints: [module],
+                bundle: true,
+                outfile: `dist/site/${basename(module, '.tsx')}/index.js`,
+                format: 'cjs',
+                plugins,
+                loader: {
+                    '.svg': 'file',
+                },
+            });
+
+            await copy('src/dev/index.html', `dist/site/${basename(module, '.tsx')}`);
+        })
+    );
+
     if (watchers) {
         watchers.src.on('all', () => void buildAll(null, plugins));
         watchers.tailwind.on('all', () => void buildAll(null, plugins));
@@ -105,7 +124,7 @@ async function serveAll(port: number, module: string, plugins: Plugin[]) {
             ...sharedConfig,
             entryPoints: [`src/dev/${module}.tsx`],
             bundle: true,
-            outfile: 'src/dev/bundle/index.js',
+            outfile: 'src/dev/index.js',
             plugins,
             incremental: true,
             write: false,
