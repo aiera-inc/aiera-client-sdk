@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75.36% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>52/69</span>
+                <span class='fraction'>51/68</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.46% </span>
+                <span class="strong">50.88% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>32/61</span>
+                <span class='fraction'>29/57</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.06% </span>
+                <span class="strong">57.58% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>18/31</span>
+                <span class='fraction'>19/33</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.61% </span>
+                <span class="strong">77.27% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>52/67</span>
+                <span class='fraction'>51/66</span>
             </div>
         
             
@@ -487,9 +487,7 @@
 <a name='L428'></a><a href='#L428'>428</a>
 <a name='L429'></a><a href='#L429'>429</a>
 <a name='L430'></a><a href='#L430'>430</a>
-<a name='L431'></a><a href='#L431'>431</a>
-<a name='L432'></a><a href='#L432'>432</a>
-<a name='L433'></a><a href='#L433'>433</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L431'></a><a href='#L431'>431</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -664,9 +662,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -835,6 +830,7 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1095,13 +1091,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
                             &lt;/div&gt;
                         ))
                     )
-                    .with({ status: 'success' }, ({ data }) =&gt; {
-                        const event = data.events[0];
-&nbsp;
-                        <span class="missing-if-branch" title="if path not taken" >I</span>if (!paragraphs || paragraphs.length === 0) {
-<span class="cstat-no" title="statement not covered" >                            return &lt;EmptyMessage event={event} /&gt;;</span>
-                        }
-&nbsp;
+                    .with({ status: 'empty' }, <span class="fstat-no" title="function not covered" >({</span> data }) =&gt; {
+<span class="cstat-no" title="statement not covered" >                        return &lt;EmptyMessage event={data.events[0]} /&gt;;</span>
+                    })
+                    .with({ status: 'success' }, () =&gt; {
                         return paragraphs.map((paragraph) =&gt; {
                             const { id, sentences, timestamp } = paragraph;
                             return (
@@ -1267,6 +1260,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
     const [headerExpanded, setHeaderState] = useState(false);
     const toggleHeader = useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >setHeaderState(!headerExpanded),</span> [headerExpanded]);
     const eventQuery = useQuery&lt;TranscriptQuery, TranscriptQueryVariables&gt;({
+        isEmpty: ({ events }) =&gt; !events[0]?.transcripts[0]?.sections?.length,
         query: gql`
             query Transcript($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
@@ -1360,7 +1354,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Oct 22 2021 13:33:30 GMT-0400 (Eastern Daylight Time)
+                at Fri Oct 22 2021 13:55:10 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

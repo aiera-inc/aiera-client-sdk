@@ -76649,13 +76649,11 @@ var TranscriptUI = (props) => {
     className: "rounded-md bg-gray-300 h-3 m-1"
   }), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
-  })))).with({ status: "success" }, ({ data }) => {
-    const event = data.events[0];
-    if (!paragraphs || paragraphs.length === 0) {
-      return /* @__PURE__ */ import_react33.default.createElement(EmptyMessage, {
-        event
-      });
-    }
+  })))).with({ status: "empty" }, ({ data }) => {
+    return /* @__PURE__ */ import_react33.default.createElement(EmptyMessage, {
+      event: data.events[0]
+    });
+  }).with({ status: "success" }, () => {
     return paragraphs.map((paragraph) => {
       const { id, sentences, timestamp } = paragraph;
       return /* @__PURE__ */ import_react33.default.createElement("div", {
@@ -76749,6 +76747,10 @@ var Transcript = (props) => {
   const [headerExpanded, setHeaderState] = (0, import_react33.useState)(false);
   const toggleHeader = (0, import_react33.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
   const eventQuery = useQuery2({
+    isEmpty: ({ events }) => {
+      var _a, _b, _c;
+      return !((_c = (_b = (_a = events[0]) == null ? void 0 : _a.transcripts[0]) == null ? void 0 : _b.sections) == null ? void 0 : _c.length);
+    },
     query: lib_default`
             query Transcript($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
