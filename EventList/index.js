@@ -74752,7 +74752,7 @@ function createTokenAuthConfig(store = local) {
       const fetchOptions = typeof operation.context.fetchOptions === "function" ? operation.context.fetchOptions() : operation.context.fetchOptions || {};
       let isRefresh = false;
       const definition = operation.query.definitions[0];
-      if (operation.kind === "mutation" && definition.kind === "OperationDefinition") {
+      if (operation.kind === "mutation" && (definition == null ? void 0 : definition.kind) === "OperationDefinition") {
         isRefresh = ((_a = definition.name) == null ? void 0 : _a.value) === "Refresh";
       }
       return makeOperation(operation.kind, operation, __spreadProps(__spreadValues({}, operation.context), {
@@ -76609,10 +76609,10 @@ var TranscriptUI = (props) => {
       className: "rounded-md bg-gray-300 h-[10px] m-1 flex-1"
     }))), renderExpandButton());
   }).with({ status: "success" }, ({ data }) => {
-    var _a, _b;
+    var _a, _b, _c;
     const event = data.events[0];
-    const primaryQuote = getPrimaryQuote(event.primaryCompany);
-    const eventDate = import_luxon2.DateTime.fromISO(data.events[0].eventDate);
+    const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
+    const eventDate = ((_a = data.events[0]) == null ? void 0 : _a.eventDate) && import_luxon2.DateTime.fromISO(data.events[0].eventDate);
     return /* @__PURE__ */ import_react33.default.createElement(import_react33.default.Fragment, null, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "flex flex-row mt-3 items-center"
     }, /* @__PURE__ */ import_react33.default.createElement("div", {
@@ -76621,9 +76621,9 @@ var TranscriptUI = (props) => {
       className: "text-xs"
     }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "pr-1 font-semibold"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_a = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _a.shortName) && /* @__PURE__ */ import_react33.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName) && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "text-gray-400"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react33.default.createElement("span", {
+    }, (_c = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _c.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "text-gray-300 capitalize"
     }, " \u2022 ", event == null ? void 0 : event.eventType), eventDate && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "text-gray-300"
@@ -76650,9 +76650,10 @@ var TranscriptUI = (props) => {
   }), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
   })))).with({ status: "empty" }, ({ data }) => {
-    return /* @__PURE__ */ import_react33.default.createElement(EmptyMessage, {
-      event: data.events[0]
-    });
+    return data.events.map((e) => /* @__PURE__ */ import_react33.default.createElement(EmptyMessage, {
+      key: e.id,
+      event: e
+    }))[0];
   }).with({ status: "success" }, () => {
     return paragraphs.map((paragraph) => {
       const { id, sentences, timestamp } = paragraph;
