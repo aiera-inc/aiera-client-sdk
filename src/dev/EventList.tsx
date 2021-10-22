@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react';
+import React, { FC, ReactElement, StrictMode } from 'react';
 import ReactDOM from 'react-dom';
 
 import { Provider as ClientProvider } from '@aiera/client-sdk/api/client';
@@ -17,17 +17,19 @@ const App: FC = (): ReactElement => {
         'out'
     );
     return (
-        <ConfigProvider config={{ apiUrl: 'https://api-dev.aiera.com/graphql', assetPath: 'bundle/' }}>
-            <MessageBusProvider bus={bus}>
-                <ClientProvider>
-                    <Auth showLogout>
-                        <div className="h-full border border-black">
-                            <EventList />
-                        </div>
-                    </Auth>
-                </ClientProvider>
-            </MessageBusProvider>
-        </ConfigProvider>
+        <StrictMode>
+            <ConfigProvider config={{ apiUrl: 'https://api-dev.aiera.com/graphql', assetPath: 'bundle/' }}>
+                <MessageBusProvider bus={bus}>
+                    <ClientProvider>
+                        <Auth showLogout>
+                            <div className="h-full border border-black">
+                                <EventList />
+                            </div>
+                        </Auth>
+                    </ClientProvider>
+                </MessageBusProvider>
+            </ConfigProvider>
+        </StrictMode>
     );
 };
 
