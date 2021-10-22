@@ -113,8 +113,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 })
                 .with({ status: 'success' }, ({ data }) => {
                     const event = data.events[0];
-                    const primaryQuote = getPrimaryQuote(event.primaryCompany);
-                    const eventDate = DateTime.fromISO(data.events[0].eventDate);
+                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
+                    const eventDate = data.events[0]?.eventDate && DateTime.fromISO(data.events[0].eventDate);
                     return (
                         <>
                             <div className="flex flex-row mt-3 items-center">
@@ -173,7 +173,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         ))
                     )
                     .with({ status: 'empty' }, ({ data }) => {
-                        return <EmptyMessage event={data.events[0]} />;
+                        return data.events.map((e) => <EmptyMessage key={e.id} event={e} />)[0];
                     })
                     .with({ status: 'success' }, () => {
                         return paragraphs.map((paragraph) => {

@@ -109,7 +109,7 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
 
             let isRefresh = false;
             const definition = operation.query.definitions[0];
-            if (operation.kind === 'mutation' && definition.kind === 'OperationDefinition') {
+            if (operation.kind === 'mutation' && definition?.kind === 'OperationDefinition') {
                 isRefresh = definition.name?.value === 'Refresh';
             }
 

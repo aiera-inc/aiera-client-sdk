@@ -54,7 +54,7 @@ async function copyAssets(watchers: Watchers | null) {
 }
 
 function toCamelCase(snakeCase: string): string {
-    return snakeCase.toLowerCase().replace(/_[a-z]/g, (char) => `${char[1].toUpperCase()}`);
+    return snakeCase.toLowerCase().replace(/_[a-z]/g, (char) => `${char[1]?.toUpperCase() || ''}`);
 }
 
 function getEnv(): { [key: string]: string } {
