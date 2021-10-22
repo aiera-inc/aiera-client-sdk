@@ -76650,10 +76650,9 @@ var TranscriptUI = (props) => {
   }), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
   })))).with({ status: "empty" }, ({ data }) => {
-    return data.events.map((e) => /* @__PURE__ */ import_react33.default.createElement(EmptyMessage, {
-      key: e.id,
-      event: e
-    }))[0];
+    return data.events[0] && /* @__PURE__ */ import_react33.default.createElement(EmptyMessage, {
+      event: data.events[0]
+    });
   }).with({ status: "success" }, () => {
     return paragraphs.map((paragraph) => {
       const { id, sentences, timestamp } = paragraph;
