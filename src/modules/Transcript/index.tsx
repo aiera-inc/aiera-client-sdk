@@ -251,13 +251,16 @@ function useLatestTranscripts(
     useInterval(() => latestParagraphsQuery.refetch(), eventQuery.state.data?.events[0]?.isLive ? 2000 : null);
 
     // Each time the latestParagraphs get updated, set them in state
-    const [latestParagraphs, setLatestParagraphs] = useState<Paragraph[]>([]);
+    const [latestParagraphs, setLatestParagraphs] = useState<Map<string, Paragraph>>(new Map());
     useEffect(() => {
         if (latestParagraphsQuery.state.data) {
-            setLatestParagraphs((prev) => [
-                ...prev,
-                ...(latestParagraphsQuery.state.data?.events[0]?.transcripts[0]?.latestParagraphs || []),
-            ]);
+            setLatestParagraphs((prev) => {
+                const next = new Map(prev);
+                (latestParagraphsQuery.state.data?.events[0]?.transcripts[0]?.latestParagraphs || []).forEach((p) => {
+                    next.set(p.id, p);
+                });
+                return next;
+            });
         }
     }, [latestParagraphsQuery.state.data]);
 
@@ -265,12 +268,13 @@ function useLatestTranscripts(
     // the final paragraph array to render in the UI. memoize so we only recalc when things
     // actaully change.
     return useMemo<Paragraph[]>(() => {
-        const paragraphs = new Map<string, Paragraph>();
-        eventQuery.state.data?.events[0]?.transcripts[0]?.sections
-            .flatMap((section) => section.speakerTurns)
-            .flatMap((turn) => turn.paragraphs)
-            .forEach((p) => paragraphs.set(p.id, p));
-        latestParagraphs.forEach((p) => paragraphs.set(p.id, p));
+        const originalParagraphs = new Map<string, Paragraph>(
+            eventQuery.state.data?.events[0]?.transcripts[0]?.sections
+                .flatMap((section) => section.speakerTurns)
+                .flatMap((turn) => turn.paragraphs)
+                .map((p) => [p.id, p])
+        );
+        const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
 
         // If live, loop over the values in the map and sort by timestamp since the server
         // may update older paragraphs.
