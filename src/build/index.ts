@@ -92,7 +92,7 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
     return buildResult;
 }
 
-async function serveAll(port: number, plugins: Plugin[]) {
+async function serveAll(port: number, module: string, plugins: Plugin[]) {
     const serveResult = await serve(
         {
             port,
@@ -103,9 +103,9 @@ async function serveAll(port: number, plugins: Plugin[]) {
         },
         {
             ...sharedConfig,
-            entryPoints: ['src/dev/index.tsx'],
+            entryPoints: [`src/dev/${module}.tsx`],
             bundle: true,
-            outdir: 'src/dev/bundle',
+            outfile: 'src/dev/bundle/index.js',
             plugins,
             incremental: true,
             write: false,
@@ -119,12 +119,14 @@ async function serveAll(port: number, plugins: Plugin[]) {
 }
 
 interface Arguments {
+    module: string;
     port: number;
     watch: boolean;
 }
 
 async function cli() {
     const args: Arguments = await yargs(process.argv.slice(2)).options({
+        module: { type: 'string', default: 'EventList' },
         port: { type: 'number', default: 8001 },
         watch: { type: 'boolean', default: false },
     }).argv;
@@ -137,7 +139,7 @@ async function cli() {
             assets: chokidar.watch(['package.json', 'src/**/*.{html,svg,png}'], { ignoreInitial: true }),
             tailwind: tailwindWatcher,
         };
-        await serveAll(args.port, plugins);
+        await serveAll(args.port, args.module, plugins);
         await buildAll(watchers, plugins);
         await copyAssets(watchers);
     } else {
