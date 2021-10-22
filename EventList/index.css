@@ -603,6 +603,9 @@ video {
 .w-3\.5 {
   width: 0.875rem;
 }
+.w-\[3px\] {
+  width: 3px;
+}
 .min-w-0 {
   min-width: 0px;
 }
@@ -715,6 +718,10 @@ video {
 .rounded-b-lg {
   border-bottom-right-radius: 0.5rem;
   border-bottom-left-radius: 0.5rem;
+}
+.rounded-r-sm {
+  border-top-right-radius: 0.125rem;
+  border-bottom-right-radius: 0.125rem;
 }
 .border {
   border-width: 1px;

@@ -1080,7 +1080,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context4, unstable_observedBits);
         }
-        function useState10(initialState) {
+        function useState11(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1668,7 +1668,7 @@ var require_react_development = __commonJS({
         exports2.useMemo = useMemo3;
         exports2.useReducer = useReducer;
         exports2.useRef = useRef6;
-        exports2.useState = useState10;
+        exports2.useState = useState11;
         exports2.version = ReactVersion;
       })();
     }
@@ -5463,7 +5463,7 @@ var require_react_dom_development = __commonJS({
         var ContentReset = 16;
         var Callback = 32;
         var DidCapture = 64;
-        var Ref = 128;
+        var Ref2 = 128;
         var Snapshot = 256;
         var Passive = 512;
         var PassiveUnmountPendingDev = 8192;
@@ -10205,7 +10205,7 @@ var require_react_dom_development = __commonJS({
         }
         var ReactVersion = "17.0.2";
         var NoMode = 0;
-        var StrictMode = 1;
+        var StrictMode2 = 1;
         var BlockingMode = 2;
         var ConcurrentMode = 4;
         var ProfileMode = 8;
@@ -10232,7 +10232,7 @@ var require_react_dom_development = __commonJS({
             var maybeStrictRoot = null;
             var node = fiber;
             while (node !== null) {
-              if (node.mode & StrictMode) {
+              if (node.mode & StrictMode2) {
                 maybeStrictRoot = node;
               }
               node = node.return;
@@ -10260,19 +10260,19 @@ var require_react_dom_development = __commonJS({
             if (typeof instance.componentWillMount === "function" && instance.componentWillMount.__suppressDeprecationWarning !== true) {
               pendingComponentWillMountWarnings.push(fiber);
             }
-            if (fiber.mode & StrictMode && typeof instance.UNSAFE_componentWillMount === "function") {
+            if (fiber.mode & StrictMode2 && typeof instance.UNSAFE_componentWillMount === "function") {
               pendingUNSAFE_ComponentWillMountWarnings.push(fiber);
             }
             if (typeof instance.componentWillReceiveProps === "function" && instance.componentWillReceiveProps.__suppressDeprecationWarning !== true) {
               pendingComponentWillReceivePropsWarnings.push(fiber);
             }
-            if (fiber.mode & StrictMode && typeof instance.UNSAFE_componentWillReceiveProps === "function") {
+            if (fiber.mode & StrictMode2 && typeof instance.UNSAFE_componentWillReceiveProps === "function") {
               pendingUNSAFE_ComponentWillReceivePropsWarnings.push(fiber);
             }
             if (typeof instance.componentWillUpdate === "function" && instance.componentWillUpdate.__suppressDeprecationWarning !== true) {
               pendingComponentWillUpdateWarnings.push(fiber);
             }
-            if (fiber.mode & StrictMode && typeof instance.UNSAFE_componentWillUpdate === "function") {
+            if (fiber.mode & StrictMode2 && typeof instance.UNSAFE_componentWillUpdate === "function") {
               pendingUNSAFE_ComponentWillUpdateWarnings.push(fiber);
             }
           };
@@ -10738,7 +10738,7 @@ var require_react_dom_development = __commonJS({
                 }
                 var nextState = payload.call(instance, prevState, nextProps);
                 {
-                  if (workInProgress2.mode & StrictMode) {
+                  if (workInProgress2.mode & StrictMode2) {
                     disableLogs();
                     try {
                       payload.call(instance, prevState, nextProps);
@@ -10764,7 +10764,7 @@ var require_react_dom_development = __commonJS({
                 }
                 partialState = _payload.call(instance, prevState, nextProps);
                 {
-                  if (workInProgress2.mode & StrictMode) {
+                  if (workInProgress2.mode & StrictMode2) {
                     disableLogs();
                     try {
                       _payload.call(instance, prevState, nextProps);
@@ -10987,7 +10987,7 @@ var require_react_dom_development = __commonJS({
         function applyDerivedStateFromProps(workInProgress2, ctor, getDerivedStateFromProps, nextProps) {
           var prevState = workInProgress2.memoizedState;
           {
-            if (workInProgress2.mode & StrictMode) {
+            if (workInProgress2.mode & StrictMode2) {
               disableLogs();
               try {
                 getDerivedStateFromProps(nextProps, prevState);
@@ -11060,7 +11060,7 @@ var require_react_dom_development = __commonJS({
           var instance = workInProgress2.stateNode;
           if (typeof instance.shouldComponentUpdate === "function") {
             {
-              if (workInProgress2.mode & StrictMode) {
+              if (workInProgress2.mode & StrictMode2) {
                 disableLogs();
                 try {
                   instance.shouldComponentUpdate(newProps, newState, nextContext);
@@ -11205,7 +11205,7 @@ var require_react_dom_development = __commonJS({
             context = isLegacyContextConsumer ? getMaskedContext(workInProgress2, unmaskedContext) : emptyContextObject;
           }
           {
-            if (workInProgress2.mode & StrictMode) {
+            if (workInProgress2.mode & StrictMode2) {
               disableLogs();
               try {
                 new ctor(props, context);
@@ -11317,7 +11317,7 @@ var require_react_dom_development = __commonJS({
                 error("%s: It is not recommended to assign props directly to state because updates to props won't be reflected in state. In most cases, it is better to use props directly.", componentName);
               }
             }
-            if (workInProgress2.mode & StrictMode) {
+            if (workInProgress2.mode & StrictMode2) {
               ReactStrictModeWarnings.recordLegacyContextWarning(workInProgress2, instance);
             }
             {
@@ -11519,7 +11519,7 @@ var require_react_dom_development = __commonJS({
           var mixedRef = element.ref;
           if (mixedRef !== null && typeof mixedRef !== "function" && typeof mixedRef !== "object") {
             {
-              if ((returnFiber.mode & StrictMode || warnAboutStringRefs) && !(element._owner && element._self && element._owner.stateNode !== element._self)) {
+              if ((returnFiber.mode & StrictMode2 || warnAboutStringRefs) && !(element._owner && element._self && element._owner.stateNode !== element._self)) {
                 var componentName = getComponentName(returnFiber.type) || "Component";
                 if (!didWarnAboutStringRefs[componentName]) {
                   {
@@ -14364,7 +14364,7 @@ var require_react_dom_development = __commonJS({
             ReactCurrentOwner$1.current = workInProgress2;
             setIsRendering(true);
             nextChildren = renderWithHooks(current2, workInProgress2, render2, nextProps, ref, renderLanes2);
-            if (workInProgress2.mode & StrictMode) {
+            if (workInProgress2.mode & StrictMode2) {
               disableLogs();
               try {
                 nextChildren = renderWithHooks(current2, workInProgress2, render2, nextProps, ref, renderLanes2);
@@ -14542,7 +14542,7 @@ var require_react_dom_development = __commonJS({
         function markRef(current2, workInProgress2) {
           var ref = workInProgress2.ref;
           if (current2 === null && ref !== null || current2 !== null && current2.ref !== ref) {
-            workInProgress2.flags |= Ref;
+            workInProgress2.flags |= Ref2;
           }
         }
         function updateFunctionComponent(current2, workInProgress2, Component, nextProps, renderLanes2) {
@@ -14565,7 +14565,7 @@ var require_react_dom_development = __commonJS({
             ReactCurrentOwner$1.current = workInProgress2;
             setIsRendering(true);
             nextChildren = renderWithHooks(current2, workInProgress2, Component, nextProps, context, renderLanes2);
-            if (workInProgress2.mode & StrictMode) {
+            if (workInProgress2.mode & StrictMode2) {
               disableLogs();
               try {
                 nextChildren = renderWithHooks(current2, workInProgress2, Component, nextProps, context, renderLanes2);
@@ -14649,7 +14649,7 @@ var require_react_dom_development = __commonJS({
             {
               setIsRendering(true);
               nextChildren = instance.render();
-              if (workInProgress2.mode & StrictMode) {
+              if (workInProgress2.mode & StrictMode2) {
                 disableLogs();
                 try {
                   instance.render();
@@ -14854,7 +14854,7 @@ var require_react_dom_development = __commonJS({
                 didWarnAboutBadClass[componentName] = true;
               }
             }
-            if (workInProgress2.mode & StrictMode) {
+            if (workInProgress2.mode & StrictMode2) {
               ReactStrictModeWarnings.recordLegacyContextWarning(workInProgress2, null);
             }
             setIsRendering(true);
@@ -14902,7 +14902,7 @@ var require_react_dom_development = __commonJS({
           } else {
             workInProgress2.tag = FunctionComponent;
             {
-              if (workInProgress2.mode & StrictMode) {
+              if (workInProgress2.mode & StrictMode2) {
                 disableLogs();
                 try {
                   value = renderWithHooks(null, workInProgress2, Component, props, context, renderLanes2);
@@ -15743,7 +15743,7 @@ var require_react_dom_development = __commonJS({
           workInProgress2.flags |= Update;
         }
         function markRef$1(workInProgress2) {
-          workInProgress2.flags |= Ref;
+          workInProgress2.flags |= Ref2;
         }
         var appendAllChildren;
         var updateHostContainer;
@@ -18335,7 +18335,7 @@ var require_react_dom_development = __commonJS({
             if (flags & ContentReset) {
               commitResetTextContent(nextEffect);
             }
-            if (flags & Ref) {
+            if (flags & Ref2) {
               var current2 = nextEffect.alternate;
               if (current2 !== null) {
                 commitDetachRef(current2);
@@ -18388,7 +18388,7 @@ var require_react_dom_development = __commonJS({
               commitLifeCycles(root2, current2, nextEffect);
             }
             {
-              if (flags & Ref) {
+              if (flags & Ref2) {
                 commitAttachRef(nextEffect);
               }
             }
@@ -18819,7 +18819,7 @@ var require_react_dom_development = __commonJS({
         }
         function warnIfNotCurrentlyActingEffectsInDEV(fiber) {
           {
-            if ((fiber.mode & StrictMode) !== NoMode && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
+            if ((fiber.mode & StrictMode2) !== NoMode && IsSomeRendererActing.current === false && IsThisRendererActing.current === false) {
               error("An update to %s ran an effect, but was not wrapped in act(...).\n\nWhen testing, code that causes React state updates should be wrapped into act(...):\n\nact(() => {\n  /* fire events that update state */\n});\n/* assert on the output */\n\nThis ensures that you're testing the behavior the user would see in the browser. Learn more at https://reactjs.org/link/wrap-tests-with-act", getComponentName(fiber.type));
             }
           }
@@ -19430,9 +19430,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         function createHostRootFiber(tag) {
           var mode;
           if (tag === ConcurrentRoot) {
-            mode = ConcurrentMode | BlockingMode | StrictMode;
+            mode = ConcurrentMode | BlockingMode | StrictMode2;
           } else if (tag === BlockingRoot) {
-            mode = BlockingMode | StrictMode;
+            mode = BlockingMode | StrictMode2;
           } else {
             mode = NoMode;
           }
@@ -19468,7 +19468,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
                   break;
                 case REACT_STRICT_MODE_TYPE:
                   fiberTag = Mode;
-                  mode |= StrictMode;
+                  mode |= StrictMode2;
                   break;
                 case REACT_PROFILER_TYPE:
                   return createFiberFromProfiler(pendingProps, mode, lanes, key);
@@ -19783,14 +19783,14 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
             if (hostFiber === null) {
               return null;
             }
-            if (hostFiber.mode & StrictMode) {
+            if (hostFiber.mode & StrictMode2) {
               var componentName = getComponentName(fiber.type) || "Component";
               if (!didWarnAboutFindNodeInStrictMode[componentName]) {
                 didWarnAboutFindNodeInStrictMode[componentName] = true;
                 var previousFiber = current;
                 try {
                   setCurrentFiber(hostFiber);
-                  if (fiber.mode & StrictMode) {
+                  if (fiber.mode & StrictMode2) {
                     error("%s is deprecated in StrictMode. %s was passed an instance of %s which is inside StrictMode. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node", methodName, methodName, componentName);
                   } else {
                     error("%s is deprecated in StrictMode. %s was passed an instance of %s which renders StrictMode children. Instead, add a ref directly to the element you want to reference. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-find-node", methodName, methodName, componentName);
@@ -75943,44 +75943,35 @@ function useAudioPlayer(withUpdates = true) {
 
 // src/lib/hooks/useAutoScroll/index.ts
 var import_react17 = __toModule(require_react());
-function useAutoScroll(length, skip = false) {
-  var _a;
-  const element = (0, import_react17.useRef)(null);
-  const isAutoScrolling = (0, import_react17.useRef)(false);
-  const scrollStopTimer = (0, import_react17.useRef)(0);
-  const scrolledManually = (0, import_react17.useRef)(false);
-  const prevLengthRef = (0, import_react17.useRef)(length);
-  const prevLength = prevLengthRef.current;
-  function onScroll() {
-    var _a2, _b, _c;
-    if (isAutoScrolling.current) {
-      window.clearTimeout(scrollStopTimer.current);
-      scrollStopTimer.current = window.setTimeout(() => {
-        isAutoScrolling.current = false;
-      }, 100);
-    } else {
-      const scrollTop = ((_a2 = element.current) == null ? void 0 : _a2.scrollTop) || 0;
-      const height = ((_b = element.current) == null ? void 0 : _b.clientHeight) || 0;
-      scrolledManually.current = scrollTop + height + 5 <= (((_c = element.current) == null ? void 0 : _c.scrollHeight) || 0);
-    }
-  }
+function useAutoScroll(opts) {
+  const { skip = false } = opts || {};
+  const [element, setElement] = (0, import_react17.useState)(null);
+  const [target, setTarget] = (0, import_react17.useState)(null);
+  const pauseAutoScroll = (0, import_react17.useRef)(false);
   (0, import_react17.useEffect)(() => {
-    if (element.current) {
-      element.current.addEventListener("scroll", onScroll);
+    function onScroll() {
+      if (target && element) {
+        const targetPosition = target.getBoundingClientRect();
+        const containerPosition = element.getBoundingClientRect();
+        if (targetPosition.top <= containerPosition.top) {
+          pauseAutoScroll.current = containerPosition.top - targetPosition.top > targetPosition.height;
+        } else {
+          pauseAutoScroll.current = targetPosition.bottom - containerPosition.bottom > targetPosition.height;
+        }
+      }
     }
-    return () => {
-      var _a2;
-      return (_a2 = element.current) == null ? void 0 : _a2.removeEventListener("scroll", onScroll);
-    };
-  }, [element.current]);
+    if (element) {
+      element.addEventListener("scroll", onScroll);
+    }
+    return () => element == null ? void 0 : element.removeEventListener("scroll", onScroll);
+  }, [element, target]);
   (0, import_react17.useLayoutEffect)(() => {
-    prevLengthRef.current = length;
-    if (!skip && !scrolledManually.current && prevLength < length && element.current) {
-      isAutoScrolling.current = true;
-      element.current.scrollTo({ top: element.current.scrollHeight });
+    var _a;
+    if (!skip && !pauseAutoScroll.current && element) {
+      (_a = target == null ? void 0 : target.scrollIntoView) == null ? void 0 : _a.call(target, { behavior: "smooth", block: "nearest" });
     }
-  }, [length, (_a = element.current) == null ? void 0 : _a.scrollHeight, skip]);
-  return element;
+  }, [element, target, skip]);
+  return [setElement, setTarget];
 }
 
 // src/components/Playbar/index.tsx
@@ -76420,7 +76411,17 @@ function Gear({ className, alt = "Gear" }) {
 
 // src/modules/Transcript/index.tsx
 var TranscriptUI = (props) => {
-  const { eventQuery, onBack, onClickTranscript, paragraphs, toggleHeader, headerExpanded, scrollRef } = props;
+  const {
+    eventQuery,
+    onBack,
+    onClickTranscript,
+    currentParagraph,
+    currentParagraphRef,
+    paragraphs,
+    toggleHeader,
+    headerExpanded,
+    scrollRef
+  } = props;
   const renderExpandButton = () => /* @__PURE__ */ import_react31.default.createElement("button", {
     onClick: toggleHeader,
     className: (0, import_classnames15.default)("transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 rounded-xl flex items-center justify-center", headerExpanded ? "bg-blue-600" : "bg-gray-100")
@@ -76508,13 +76509,16 @@ var TranscriptUI = (props) => {
     const { id, sentences, timestamp } = paragraph;
     return /* @__PURE__ */ import_react31.default.createElement("div", {
       key: id,
-      className: "p-3 pb-4",
-      onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph)
+      className: "relative p-3 pb-4",
+      onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
+      ref: id === currentParagraph ? currentParagraphRef : void 0
     }, timestamp && /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "pb-2 font-semibold text-sm"
     }, import_luxon.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "text-sm"
-    }, sentences.map(({ text }) => text).join(" ")));
+    }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
+    }));
   })).otherwise(() => null)), (0, import_ts_pattern4.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
     const event = events[0];
     return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react31.default.createElement(Playbar, {
@@ -76525,7 +76529,7 @@ var TranscriptUI = (props) => {
   }).otherwise(() => null));
 };
 function useLatestTranscripts(eventId, eventQuery) {
-  var _a, _b;
+  var _a, _b, _c, _d;
   const latestParagraphsQuery = useQuery2({
     query: lib_default`
             query LatestParagraphs($eventId: ID!) {
@@ -76552,34 +76556,43 @@ function useLatestTranscripts(eventId, eventQuery) {
       eventId
     }
   });
-  useInterval(() => {
-    var _a2, _b2;
-    if ((_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.isLive) {
-      latestParagraphsQuery.refetch();
-    }
-  }, 2e3);
+  useInterval(() => latestParagraphsQuery.refetch(), ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? 2e3 : null);
   const [latestParagraphs, setLatestParagraphs] = (0, import_react31.useState)([]);
   (0, import_react31.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
-        var _a2, _b2, _c;
+        var _a2, _b2, _c2;
         return [
           ...prev,
-          ...((_c = (_b2 = (_a2 = latestParagraphsQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.latestParagraphs) || []
+          ...((_c2 = (_b2 = (_a2 = latestParagraphsQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.latestParagraphs) || []
         ];
       });
     }
   }, [latestParagraphsQuery.state.data]);
   return (0, import_react31.useMemo)(() => {
-    var _a2, _b2, _c;
+    var _a2, _b2, _c2, _d2, _e;
     const paragraphs = new Map();
-    (_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).forEach((p2) => paragraphs.set(p2.id, p2));
+    (_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).forEach((p2) => paragraphs.set(p2.id, p2));
     latestParagraphs.forEach((p2) => paragraphs.set(p2.id, p2));
-    return [...paragraphs.values()].sort((p1, p2) => p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id));
-  }, [(_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.transcripts, latestParagraphs]);
+    return ((_e = (_d2 = eventQuery.state.data) == null ? void 0 : _d2.events[0]) == null ? void 0 : _e.isLive) ? [...paragraphs.values()].sort((p1, p2) => p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)) : [...paragraphs.values()];
+  }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
+}
+function useAudioSync(paragraphs, eventQuery, audioPlayer) {
+  const [currentParagraph, setCurrentParagraph] = (0, import_react31.useState)(null);
+  const [scrollRef, currentParagraphRef] = useAutoScroll();
+  (0, import_react31.useEffect)(() => {
+    var _a, _b;
+    let paragraph = [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
+    if (!paragraph) {
+      paragraph = ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? paragraphs.slice(-1)[0] : paragraphs[0];
+    }
+    if (paragraph) {
+      setCurrentParagraph(paragraph.id);
+    }
+  }, [paragraphs, Math.floor(audioPlayer.rawCurrentTime)]);
+  return [currentParagraph, scrollRef, currentParagraphRef];
 }
 var Transcript = (props) => {
-  var _a, _b;
   const { eventId, onBack } = props;
   const [headerExpanded, setHeaderState] = (0, import_react31.useState)(false);
   const toggleHeader = (0, import_react31.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
@@ -76641,15 +76654,17 @@ var Transcript = (props) => {
       eventId
     }
   });
-  const audioPlayer = useAudioPlayer(false);
+  const audioPlayer = useAudioPlayer();
   const onClickTranscript = (paragraph) => {
     audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
   };
   const paragraphs = useLatestTranscripts(eventId, eventQuery);
-  const scrollRef = useAutoScroll(paragraphs.length, !((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive));
+  const [currentParagraph, scrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
   useAutoTrack("View", "Event", { eventId }, [eventId]);
   return /* @__PURE__ */ import_react31.default.createElement(TranscriptUI, {
     eventQuery,
+    currentParagraph,
+    currentParagraphRef,
     paragraphs,
     headerExpanded,
     toggleHeader,
@@ -77077,7 +77092,7 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react37.default.createElement(Provider, {
+  return /* @__PURE__ */ import_react37.default.createElement(import_react37.StrictMode, null, /* @__PURE__ */ import_react37.default.createElement(Provider, {
     config: { apiUrl: "https://api-dev.aiera.com/graphql", assetPath: "bundle/" }
   }, /* @__PURE__ */ import_react37.default.createElement(Provider3, {
     bus
@@ -77085,7 +77100,7 @@ var App = () => {
     showLogout: true
   }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react37.default.createElement(EventList, null))))));
+  }, /* @__PURE__ */ import_react37.default.createElement(EventList, null)))))));
 };
 import_react_dom.default.render(/* @__PURE__ */ import_react37.default.createElement(App, null), document.getElementById("root"));
 /*
