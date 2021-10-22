@@ -76557,23 +76557,23 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   });
   useInterval(() => latestParagraphsQuery.refetch(), ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? 2e3 : null);
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react31.useState)([]);
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react31.useState)(new Map());
   (0, import_react31.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c2;
-        return [
-          ...prev,
-          ...((_c2 = (_b2 = (_a2 = latestParagraphsQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.latestParagraphs) || []
-        ];
+        const next = new Map(prev);
+        (((_c2 = (_b2 = (_a2 = latestParagraphsQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.latestParagraphs) || []).forEach((p2) => {
+          next.set(p2.id, p2);
+        });
+        return next;
       });
     }
   }, [latestParagraphsQuery.state.data]);
   return (0, import_react31.useMemo)(() => {
     var _a2, _b2, _c2, _d2, _e;
-    const paragraphs = new Map();
-    (_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).forEach((p2) => paragraphs.set(p2.id, p2));
-    latestParagraphs.forEach((p2) => paragraphs.set(p2.id, p2));
+    const originalParagraphs = new Map((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).map((p2) => [p2.id, p2]));
+    const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
     return ((_e = (_d2 = eventQuery.state.data) == null ? void 0 : _d2.events[0]) == null ? void 0 : _e.isLive) ? [...paragraphs.values()].sort((p1, p2) => p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)) : [...paragraphs.values()];
   }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
 }
