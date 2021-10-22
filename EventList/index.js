@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement29 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement30 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement29(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement30(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement29(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement30(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement29(element.type, key, ref, self2, source, owner, props);
+          return ReactElement30(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -657,8 +657,8 @@ var require_react_development = __commonJS({
             "=": "=0",
             ":": "=2"
           };
-          var escapedString = key.replace(escapeRegex, function(match7) {
-            return escaperLookup[match7];
+          var escapedString = key.replace(escapeRegex, function(match8) {
+            return escaperLookup[match8];
           });
           return "$" + escapedString;
         }
@@ -1204,8 +1204,8 @@ var require_react_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match7 && match7[1] || "";
+                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match8 && match8[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React29 = require_react();
+        var React30 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React29.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React30.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React29) {
+        if (!React30) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3126,8 +3126,8 @@ var require_react_dom_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match7 && match7[1] || "";
+                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match8 && match8[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React29.Children.forEach(children, function(child) {
+          React30.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React29.Children.forEach(props.children, function(child) {
+              React30.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React29.Component().refs;
+        var emptyRefsObject = new React30.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -21175,8 +21175,8 @@ var require_lib = __commonJS({
     Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
       return wildcards_1.__;
     } });
-    var match7 = (value) => builder(value, []);
-    exports2.match = match7;
+    var match8 = (value) => builder(value, []);
+    exports2.match = match8;
     var builder = (value, cases) => {
       const run = () => {
         const entry = cases.find(({ test }) => test(value));
@@ -22517,9 +22517,9 @@ var require_luxon = __commonJS({
       };
       IANAZone2.parseGMTOffset = function parseGMTOffset(specifier) {
         if (specifier) {
-          var match8 = specifier.match(/^Etc\/GMT(0|[+-]\d{1,2})$/i);
-          if (match8) {
-            return -60 * parseInt(match8[1]);
+          var match9 = specifier.match(/^Etc\/GMT(0|[+-]\d{1,2})$/i);
+          if (match9) {
+            return -60 * parseInt(match9[1]);
           }
         }
         return null;
@@ -22870,7 +22870,7 @@ var require_luxon = __commonJS({
     function mapMonths(f2) {
       var ms = [];
       for (var i3 = 1; i3 <= 12; i3++) {
-        var dt = DateTime3.utc(2016, i3, 1);
+        var dt = DateTime4.utc(2016, i3, 1);
         ms.push(f2(dt));
       }
       return ms;
@@ -22878,7 +22878,7 @@ var require_luxon = __commonJS({
     function mapWeekdays(f2) {
       var ms = [];
       for (var i3 = 1; i3 <= 7; i3++) {
-        var dt = DateTime3.utc(2016, 11, 13 + i3);
+        var dt = DateTime4.utc(2016, 11, 13 + i3);
         ms.push(f2(dt));
       }
       return ms;
@@ -22941,7 +22941,7 @@ var require_luxon = __commonJS({
             if (opts.timeZoneName) {
               this.dt = dt;
             } else {
-              this.dt = dt.offset === 0 ? dt : DateTime3.fromMillis(dt.ts + dt.offset * 60 * 1e3);
+              this.dt = dt.offset === 0 ? dt : DateTime4.fromMillis(dt.ts + dt.offset * 60 * 1e3);
             }
           }
         } else if (dt.zone.type === "system") {
@@ -23127,7 +23127,7 @@ var require_luxon = __commonJS({
               hour: "numeric",
               hourCycle: "h12"
             };
-            _this3.meridiemCache = [DateTime3.utc(2016, 11, 13, 9), DateTime3.utc(2016, 11, 13, 19)].map(function(dt) {
+            _this3.meridiemCache = [DateTime4.utc(2016, 11, 13, 9), DateTime4.utc(2016, 11, 13, 19)].map(function(dt) {
               return _this3.extract(dt, intl, "dayperiod");
             });
           }
@@ -23144,7 +23144,7 @@ var require_luxon = __commonJS({
             era: length
           };
           if (!_this4.eraCache[length]) {
-            _this4.eraCache[length] = [DateTime3.utc(-40, 1, 1), DateTime3.utc(2017, 1, 1)].map(function(dt) {
+            _this4.eraCache[length] = [DateTime4.utc(-40, 1, 1), DateTime4.utc(2017, 1, 1)].map(function(dt) {
               return _this4.extract(dt, intl, "era");
             });
           }
@@ -23233,11 +23233,11 @@ var require_luxon = __commonJS({
       for (var _len4 = arguments.length, keys = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         keys[_key4] = arguments[_key4];
       }
-      return function(match8, cursor) {
+      return function(match9, cursor) {
         var ret = {};
         var i3;
         for (i3 = 0; i3 < keys.length; i3++) {
-          ret[keys[i3]] = parseInteger(match8[cursor + i3]);
+          ret[keys[i3]] = parseInteger(match9[cursor + i3]);
         }
         return [ret, null, cursor + i3];
       };
@@ -23254,39 +23254,39 @@ var require_luxon = __commonJS({
     var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
     var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
     var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
-    function int(match8, pos, fallback) {
-      var m2 = match8[pos];
+    function int(match9, pos, fallback) {
+      var m2 = match9[pos];
       return isUndefined(m2) ? fallback : parseInteger(m2);
     }
-    function extractISOYmd(match8, cursor) {
+    function extractISOYmd(match9, cursor) {
       var item = {
-        year: int(match8, cursor),
-        month: int(match8, cursor + 1, 1),
-        day: int(match8, cursor + 2, 1)
+        year: int(match9, cursor),
+        month: int(match9, cursor + 1, 1),
+        day: int(match9, cursor + 2, 1)
       };
       return [item, null, cursor + 3];
     }
-    function extractISOTime(match8, cursor) {
+    function extractISOTime(match9, cursor) {
       var item = {
-        hours: int(match8, cursor, 0),
-        minutes: int(match8, cursor + 1, 0),
-        seconds: int(match8, cursor + 2, 0),
-        milliseconds: parseMillis(match8[cursor + 3])
+        hours: int(match9, cursor, 0),
+        minutes: int(match9, cursor + 1, 0),
+        seconds: int(match9, cursor + 2, 0),
+        milliseconds: parseMillis(match9[cursor + 3])
       };
       return [item, null, cursor + 4];
     }
-    function extractISOOffset(match8, cursor) {
-      var local2 = !match8[cursor] && !match8[cursor + 1], fullOffset = signedOffset(match8[cursor + 1], match8[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
+    function extractISOOffset(match9, cursor) {
+      var local2 = !match9[cursor] && !match9[cursor + 1], fullOffset = signedOffset(match9[cursor + 1], match9[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
       return [{}, zone, cursor + 3];
     }
-    function extractIANAZone(match8, cursor) {
-      var zone = match8[cursor] ? IANAZone.create(match8[cursor]) : null;
+    function extractIANAZone(match9, cursor) {
+      var zone = match9[cursor] ? IANAZone.create(match9[cursor]) : null;
       return [{}, zone, cursor + 1];
     }
     var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$");
     var isoDuration = /^-?P(?:(?:(-?\d{1,9})Y)?(?:(-?\d{1,9})M)?(?:(-?\d{1,9})W)?(?:(-?\d{1,9})D)?(?:T(?:(-?\d{1,9})H)?(?:(-?\d{1,9})M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
-    function extractISODuration(match8) {
-      var s4 = match8[0], yearStr = match8[1], monthStr = match8[2], weekStr = match8[3], dayStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], millisecondsStr = match8[8];
+    function extractISODuration(match9) {
+      var s4 = match9[0], yearStr = match9[1], monthStr = match9[2], weekStr = match9[3], dayStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], millisecondsStr = match9[8];
       var hasNegativePrefix = s4[0] === "-";
       var negativeSeconds = secondStr && secondStr[0] === "-";
       var maybeNegate = function maybeNegate2(num, force) {
@@ -23333,8 +23333,8 @@ var require_luxon = __commonJS({
       return result;
     }
     var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
-    function extractRFC2822(match8) {
-      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], obsOffset = match8[8], milOffset = match8[9], offHourStr = match8[10], offMinuteStr = match8[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC2822(match9) {
+      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], obsOffset = match9[8], milOffset = match9[9], offHourStr = match9[10], offMinuteStr = match9[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       var offset2;
       if (obsOffset) {
         offset2 = obsOffsets[obsOffset];
@@ -23351,12 +23351,12 @@ var require_luxon = __commonJS({
     var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/;
     var rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/;
     var ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
-    function extractRFC1123Or850(match8) {
-      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC1123Or850(match9) {
+      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
-    function extractASCII(match8) {
-      var weekdayStr = match8[1], monthStr = match8[2], dayStr = match8[3], hourStr = match8[4], minuteStr = match8[5], secondStr = match8[6], yearStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractASCII(match9) {
+      var weekdayStr = match9[1], monthStr = match9[2], dayStr = match9[3], hourStr = match9[4], minuteStr = match9[5], secondStr = match9[6], yearStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
     var isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
@@ -23970,14 +23970,14 @@ var require_luxon = __commonJS({
         if (s4 && e) {
           var start, startIsValid;
           try {
-            start = DateTime3.fromISO(s4, opts);
+            start = DateTime4.fromISO(s4, opts);
             startIsValid = start.isValid;
           } catch (e2) {
             startIsValid = false;
           }
           var end, endIsValid;
           try {
-            end = DateTime3.fromISO(e, opts);
+            end = DateTime4.fromISO(e, opts);
             endIsValid = end.isValid;
           } catch (e2) {
             endIsValid = false;
@@ -24254,7 +24254,7 @@ var require_luxon = __commonJS({
         if (zone === void 0) {
           zone = Settings.defaultZone;
         }
-        var proto = DateTime3.now().setZone(zone).set({
+        var proto = DateTime4.now().setZone(zone).set({
           month: 12
         });
         return !zone.isUniversal && proto.offset !== proto.set({
@@ -24691,7 +24691,7 @@ var require_luxon = __commonJS({
       }, "");
       return ["^" + re + "$", units];
     }
-    function match7(input, regex, handlers) {
+    function match8(input, regex, handlers) {
       var matches = input.match(regex);
       if (matches) {
         var all = {};
@@ -24780,7 +24780,7 @@ var require_luxon = __commonJS({
     var dummyDateTimeCache = null;
     function getDummyDateTime() {
       if (!dummyDateTimeCache) {
-        dummyDateTimeCache = DateTime3.fromMillis(1555555555555);
+        dummyDateTimeCache = DateTime4.fromMillis(1555555555555);
       }
       return dummyDateTimeCache;
     }
@@ -24821,7 +24821,7 @@ var require_luxon = __commonJS({
           invalidReason: disqualifyingUnit.invalidReason
         };
       } else {
-        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match7(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
+        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match8(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
         if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
           throw new ConflictingSpecificationError("Can't include meridiem when specifying 24-hour format");
         }
@@ -24980,7 +24980,7 @@ var require_luxon = __commonJS({
         loc: inst.loc,
         invalid: inst.invalid
       };
-      return new DateTime3(_extends6({}, current, alts, {
+      return new DateTime4(_extends6({}, current, alts, {
         old: current
       }));
     }
@@ -25042,12 +25042,12 @@ var require_luxon = __commonJS({
     function parseDataToDateTime(parsed, parsedZone, opts, format, text) {
       var setZone = opts.setZone, zone = opts.zone;
       if (parsed && Object.keys(parsed).length !== 0) {
-        var interpretationZone = parsedZone || zone, inst = DateTime3.fromObject(parsed, _extends6({}, opts, {
+        var interpretationZone = parsedZone || zone, inst = DateTime4.fromObject(parsed, _extends6({}, opts, {
           zone: interpretationZone
         }));
         return setZone ? inst : inst.setZone(zone);
       } else {
-        return DateTime3.invalid(new Invalid("unparsable", 'the input "' + text + `" can't be parsed as ` + format));
+        return DateTime4.invalid(new Invalid("unparsable", 'the input "' + text + `" can't be parsed as ` + format));
       }
     }
     function toTechFormat(dt, format, allowZ) {
@@ -25151,7 +25151,7 @@ var require_luxon = __commonJS({
         }
         var invalid = hasInvalidGregorianData(obj) || hasInvalidTimeData(obj);
         if (invalid) {
-          return DateTime3.invalid(invalid);
+          return DateTime4.invalid(invalid);
         }
         var offsetProvis = zone.offset(tsNow);
         var _objToTS = objToTS(obj, offsetProvis, zone);
@@ -25160,7 +25160,7 @@ var require_luxon = __commonJS({
       } else {
         ts = tsNow;
       }
-      return new DateTime3({
+      return new DateTime4({
         ts,
         zone,
         loc,
@@ -25204,8 +25204,8 @@ var require_luxon = __commonJS({
       }
       return [opts, args];
     }
-    var DateTime3 = /* @__PURE__ */ function() {
-      function DateTime4(config) {
+    var DateTime4 = /* @__PURE__ */ function() {
+      function DateTime5(config) {
         var zone = config.zone || Settings.defaultZone;
         var invalid = config.invalid || (Number.isNaN(config.ts) ? new Invalid("invalid input") : null) || (!zone.isValid ? unsupportedZone(zone) : null);
         this.ts = isUndefined(config.ts) ? Settings.now() : config.ts;
@@ -25232,10 +25232,10 @@ var require_luxon = __commonJS({
         this.o = o2;
         this.isLuxonDateTime = true;
       }
-      DateTime4.now = function now2() {
-        return new DateTime4({});
+      DateTime5.now = function now2() {
+        return new DateTime5({});
       };
-      DateTime4.local = function local2() {
+      DateTime5.local = function local2() {
         var _lastOpts = lastOpts(arguments), opts = _lastOpts[0], args = _lastOpts[1], year = args[0], month = args[1], day = args[2], hour = args[3], minute = args[4], second = args[5], millisecond = args[6];
         return quickDT({
           year,
@@ -25247,7 +25247,7 @@ var require_luxon = __commonJS({
           millisecond
         }, opts);
       };
-      DateTime4.utc = function utc() {
+      DateTime5.utc = function utc() {
         var _lastOpts2 = lastOpts(arguments), opts = _lastOpts2[0], args = _lastOpts2[1], year = args[0], month = args[1], day = args[2], hour = args[3], minute = args[4], second = args[5], millisecond = args[6];
         opts.zone = FixedOffsetZone.utcInstance;
         return quickDT({
@@ -25260,62 +25260,62 @@ var require_luxon = __commonJS({
           millisecond
         }, opts);
       };
-      DateTime4.fromJSDate = function fromJSDate(date, options) {
+      DateTime5.fromJSDate = function fromJSDate(date, options) {
         if (options === void 0) {
           options = {};
         }
         var ts = isDate(date) ? date.valueOf() : NaN;
         if (Number.isNaN(ts)) {
-          return DateTime4.invalid("invalid input");
+          return DateTime5.invalid("invalid input");
         }
         var zoneToUse = normalizeZone(options.zone, Settings.defaultZone);
         if (!zoneToUse.isValid) {
-          return DateTime4.invalid(unsupportedZone(zoneToUse));
+          return DateTime5.invalid(unsupportedZone(zoneToUse));
         }
-        return new DateTime4({
+        return new DateTime5({
           ts,
           zone: zoneToUse,
           loc: Locale.fromObject(options)
         });
       };
-      DateTime4.fromMillis = function fromMillis(milliseconds, options) {
+      DateTime5.fromMillis = function fromMillis(milliseconds, options) {
         if (options === void 0) {
           options = {};
         }
         if (!isNumber(milliseconds)) {
           throw new InvalidArgumentError("fromMillis requires a numerical input, but received a " + typeof milliseconds + " with value " + milliseconds);
         } else if (milliseconds < -MAX_DATE || milliseconds > MAX_DATE) {
-          return DateTime4.invalid("Timestamp out of range");
+          return DateTime5.invalid("Timestamp out of range");
         } else {
-          return new DateTime4({
+          return new DateTime5({
             ts: milliseconds,
             zone: normalizeZone(options.zone, Settings.defaultZone),
             loc: Locale.fromObject(options)
           });
         }
       };
-      DateTime4.fromSeconds = function fromSeconds(seconds, options) {
+      DateTime5.fromSeconds = function fromSeconds(seconds, options) {
         if (options === void 0) {
           options = {};
         }
         if (!isNumber(seconds)) {
           throw new InvalidArgumentError("fromSeconds requires a numerical input");
         } else {
-          return new DateTime4({
+          return new DateTime5({
             ts: seconds * 1e3,
             zone: normalizeZone(options.zone, Settings.defaultZone),
             loc: Locale.fromObject(options)
           });
         }
       };
-      DateTime4.fromObject = function fromObject(obj, opts) {
+      DateTime5.fromObject = function fromObject(obj, opts) {
         if (opts === void 0) {
           opts = {};
         }
         obj = obj || {};
         var zoneToUse = normalizeZone(opts.zone, Settings.defaultZone);
         if (!zoneToUse.isValid) {
-          return DateTime4.invalid(unsupportedZone(zoneToUse));
+          return DateTime5.invalid(unsupportedZone(zoneToUse));
         }
         var tsNow = Settings.now(), offsetProvis = zoneToUse.offset(tsNow), normalized = normalizeObject(obj, normalizeUnit), containsOrdinal = !isUndefined(normalized.ordinal), containsGregorYear = !isUndefined(normalized.year), containsGregorMD = !isUndefined(normalized.month) || !isUndefined(normalized.day), containsGregor = containsGregorYear || containsGregorMD, definiteWeekDef = normalized.weekYear || normalized.weekNumber, loc = Locale.fromObject(opts);
         if ((containsGregor || containsOrdinal) && definiteWeekDef) {
@@ -25352,41 +25352,41 @@ var require_luxon = __commonJS({
         }
         var higherOrderInvalid = useWeekData ? hasInvalidWeekData(normalized) : containsOrdinal ? hasInvalidOrdinalData(normalized) : hasInvalidGregorianData(normalized), invalid = higherOrderInvalid || hasInvalidTimeData(normalized);
         if (invalid) {
-          return DateTime4.invalid(invalid);
+          return DateTime5.invalid(invalid);
         }
-        var gregorian = useWeekData ? weekToGregorian(normalized) : containsOrdinal ? ordinalToGregorian(normalized) : normalized, _objToTS2 = objToTS(gregorian, offsetProvis, zoneToUse), tsFinal = _objToTS2[0], offsetFinal = _objToTS2[1], inst = new DateTime4({
+        var gregorian = useWeekData ? weekToGregorian(normalized) : containsOrdinal ? ordinalToGregorian(normalized) : normalized, _objToTS2 = objToTS(gregorian, offsetProvis, zoneToUse), tsFinal = _objToTS2[0], offsetFinal = _objToTS2[1], inst = new DateTime5({
           ts: tsFinal,
           zone: zoneToUse,
           o: offsetFinal,
           loc
         });
         if (normalized.weekday && containsGregor && obj.weekday !== inst.weekday) {
-          return DateTime4.invalid("mismatched weekday", "you can't specify both a weekday of " + normalized.weekday + " and a date of " + inst.toISO());
+          return DateTime5.invalid("mismatched weekday", "you can't specify both a weekday of " + normalized.weekday + " and a date of " + inst.toISO());
         }
         return inst;
       };
-      DateTime4.fromISO = function fromISO(text, opts) {
+      DateTime5.fromISO = function fromISO(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseISODate = parseISODate(text), vals = _parseISODate[0], parsedZone = _parseISODate[1];
         return parseDataToDateTime(vals, parsedZone, opts, "ISO 8601", text);
       };
-      DateTime4.fromRFC2822 = function fromRFC2822(text, opts) {
+      DateTime5.fromRFC2822 = function fromRFC2822(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseRFC2822Date = parseRFC2822Date(text), vals = _parseRFC2822Date[0], parsedZone = _parseRFC2822Date[1];
         return parseDataToDateTime(vals, parsedZone, opts, "RFC 2822", text);
       };
-      DateTime4.fromHTTP = function fromHTTP(text, opts) {
+      DateTime5.fromHTTP = function fromHTTP(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseHTTPDate = parseHTTPDate(text), vals = _parseHTTPDate[0], parsedZone = _parseHTTPDate[1];
         return parseDataToDateTime(vals, parsedZone, opts, "HTTP", opts);
       };
-      DateTime4.fromFormat = function fromFormat(text, fmt, opts) {
+      DateTime5.fromFormat = function fromFormat(text, fmt, opts) {
         if (opts === void 0) {
           opts = {};
         }
@@ -25399,25 +25399,25 @@ var require_luxon = __commonJS({
           defaultToEN: true
         }), _parseFromTokens = parseFromTokens(localeToUse, text, fmt), vals = _parseFromTokens[0], parsedZone = _parseFromTokens[1], invalid = _parseFromTokens[2];
         if (invalid) {
-          return DateTime4.invalid(invalid);
+          return DateTime5.invalid(invalid);
         } else {
           return parseDataToDateTime(vals, parsedZone, opts, "format " + fmt, text);
         }
       };
-      DateTime4.fromString = function fromString(text, fmt, opts) {
+      DateTime5.fromString = function fromString(text, fmt, opts) {
         if (opts === void 0) {
           opts = {};
         }
-        return DateTime4.fromFormat(text, fmt, opts);
+        return DateTime5.fromFormat(text, fmt, opts);
       };
-      DateTime4.fromSQL = function fromSQL(text, opts) {
+      DateTime5.fromSQL = function fromSQL(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseSQL = parseSQL(text), vals = _parseSQL[0], parsedZone = _parseSQL[1];
         return parseDataToDateTime(vals, parsedZone, opts, "SQL", text);
       };
-      DateTime4.invalid = function invalid(reason, explanation) {
+      DateTime5.invalid = function invalid(reason, explanation) {
         if (explanation === void 0) {
           explanation = null;
         }
@@ -25428,15 +25428,15 @@ var require_luxon = __commonJS({
         if (Settings.throwOnInvalid) {
           throw new InvalidDateTimeError(invalid2);
         } else {
-          return new DateTime4({
+          return new DateTime5({
             invalid: invalid2
           });
         }
       };
-      DateTime4.isDateTime = function isDateTime(o2) {
+      DateTime5.isDateTime = function isDateTime(o2) {
         return o2 && o2.isLuxonDateTime || false;
       };
-      var _proto = DateTime4.prototype;
+      var _proto = DateTime5.prototype;
       _proto.get = function get(unit) {
         return this[unit];
       };
@@ -25469,7 +25469,7 @@ var require_luxon = __commonJS({
         if (zone.equals(this.zone)) {
           return this;
         } else if (!zone.isValid) {
-          return DateTime4.invalid(unsupportedZone(zone));
+          return DateTime5.invalid(unsupportedZone(zone));
         } else {
           var newTS = this.ts;
           if (keepLocalTime || keepCalendarTime) {
@@ -25709,7 +25709,7 @@ var require_luxon = __commonJS({
         if (opts === void 0) {
           opts = {};
         }
-        return this.diff(DateTime4.now(), unit, opts);
+        return this.diff(DateTime5.now(), unit, opts);
       };
       _proto.until = function until(otherDateTime) {
         return this.isValid ? Interval.fromDateTimes(this, otherDateTime) : this;
@@ -25732,7 +25732,7 @@ var require_luxon = __commonJS({
         }
         if (!this.isValid)
           return null;
-        var base = options.base || DateTime4.fromObject({}, {
+        var base = options.base || DateTime5.fromObject({}, {
           zone: this.zone
         }), padding = options.padding ? this < base ? -options.padding : options.padding : 0;
         var units = ["years", "months", "days", "hours", "minutes", "seconds"];
@@ -25753,7 +25753,7 @@ var require_luxon = __commonJS({
         }
         if (!this.isValid)
           return null;
-        return diffRelative(options.base || DateTime4.fromObject({}, {
+        return diffRelative(options.base || DateTime5.fromObject({}, {
           zone: this.zone
         }), this, _extends6({}, options, {
           numeric: "auto",
@@ -25761,29 +25761,29 @@ var require_luxon = __commonJS({
           calendary: true
         }));
       };
-      DateTime4.min = function min() {
+      DateTime5.min = function min() {
         for (var _len = arguments.length, dateTimes = new Array(_len), _key = 0; _key < _len; _key++) {
           dateTimes[_key] = arguments[_key];
         }
-        if (!dateTimes.every(DateTime4.isDateTime)) {
+        if (!dateTimes.every(DateTime5.isDateTime)) {
           throw new InvalidArgumentError("min requires all arguments be DateTimes");
         }
         return bestBy(dateTimes, function(i3) {
           return i3.valueOf();
         }, Math.min);
       };
-      DateTime4.max = function max() {
+      DateTime5.max = function max() {
         for (var _len2 = arguments.length, dateTimes = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
           dateTimes[_key2] = arguments[_key2];
         }
-        if (!dateTimes.every(DateTime4.isDateTime)) {
+        if (!dateTimes.every(DateTime5.isDateTime)) {
           throw new InvalidArgumentError("max requires all arguments be DateTimes");
         }
         return bestBy(dateTimes, function(i3) {
           return i3.valueOf();
         }, Math.max);
       };
-      DateTime4.fromFormatExplain = function fromFormatExplain(text, fmt, options) {
+      DateTime5.fromFormatExplain = function fromFormatExplain(text, fmt, options) {
         if (options === void 0) {
           options = {};
         }
@@ -25794,13 +25794,13 @@ var require_luxon = __commonJS({
         });
         return explainFromTokens(localeToUse, text, fmt);
       };
-      DateTime4.fromStringExplain = function fromStringExplain(text, fmt, options) {
+      DateTime5.fromStringExplain = function fromStringExplain(text, fmt, options) {
         if (options === void 0) {
           options = {};
         }
-        return DateTime4.fromFormatExplain(text, fmt, options);
+        return DateTime5.fromFormatExplain(text, fmt, options);
       };
-      _createClass3(DateTime4, [{
+      _createClass3(DateTime5, [{
         key: "isValid",
         get: function get() {
           return this.invalid === null;
@@ -26106,21 +26106,21 @@ var require_luxon = __commonJS({
           return DATETIME_HUGE_WITH_SECONDS;
         }
       }]);
-      return DateTime4;
+      return DateTime5;
     }();
     function friendlyDateTime(dateTimeish) {
-      if (DateTime3.isDateTime(dateTimeish)) {
+      if (DateTime4.isDateTime(dateTimeish)) {
         return dateTimeish;
       } else if (dateTimeish && dateTimeish.valueOf && isNumber(dateTimeish.valueOf())) {
-        return DateTime3.fromJSDate(dateTimeish);
+        return DateTime4.fromJSDate(dateTimeish);
       } else if (dateTimeish && typeof dateTimeish === "object") {
-        return DateTime3.fromObject(dateTimeish);
+        return DateTime4.fromObject(dateTimeish);
       } else {
         throw new InvalidArgumentError("Unknown datetime argument: " + dateTimeish + ", of type " + typeof dateTimeish);
       }
     }
     var VERSION = "2.0.2";
-    exports2.DateTime = DateTime3;
+    exports2.DateTime = DateTime4;
     exports2.Duration = Duration;
     exports2.FixedOffsetZone = FixedOffsetZone;
     exports2.IANAZone = IANAZone;
@@ -42812,12 +42812,12 @@ var require_dash_all_debug = __commonJS({
               return _super.call(this, function(attr) {
                 return datetimeRegex.test(attr.value);
               }, function(str) {
-                var match7 = datetimeRegex.exec(str);
+                var match8 = datetimeRegex.exec(str);
                 var utcDate;
-                utcDate = Date.UTC(parseInt(match7[1], 10), parseInt(match7[2], 10) - 1, parseInt(match7[3], 10), parseInt(match7[4], 10), parseInt(match7[5], 10), match7[6] && parseInt(match7[6], 10) || 0, match7[7] && parseFloat(match7[7]) * MILLISECONDS_IN_SECONDS || 0);
-                if (match7[9] && match7[10]) {
-                  var timezoneOffset = parseInt(match7[9], 10) * MINUTES_IN_HOUR + parseInt(match7[10], 10);
-                  utcDate += (match7[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
+                utcDate = Date.UTC(parseInt(match8[1], 10), parseInt(match8[2], 10) - 1, parseInt(match8[3], 10), parseInt(match8[4], 10), parseInt(match8[5], 10), match8[6] && parseInt(match8[6], 10) || 0, match8[7] && parseFloat(match8[7]) * MILLISECONDS_IN_SECONDS || 0);
+                if (match8[9] && match8[10]) {
+                  var timezoneOffset = parseInt(match8[9], 10) * MINUTES_IN_HOUR + parseInt(match8[10], 10);
+                  utcDate += (match8[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
                 }
                 return new Date(utcDate);
               });
@@ -42932,9 +42932,9 @@ var require_dash_all_debug = __commonJS({
                 }
                 return false;
               }, function(str) {
-                var match7 = durationRegex.exec(str);
-                var result = parseFloat(match7[3] || 0) * SECONDS_IN_YEAR + parseFloat(match7[5] || 0) * SECONDS_IN_MONTH + parseFloat(match7[7] || 0) * SECONDS_IN_DAY + parseFloat(match7[9] || 0) * SECONDS_IN_HOUR + parseFloat(match7[11] || 0) * SECONDS_IN_MIN + parseFloat(match7[13] || 0);
-                if (match7[1] !== void 0) {
+                var match8 = durationRegex.exec(str);
+                var result = parseFloat(match8[3] || 0) * SECONDS_IN_YEAR + parseFloat(match8[5] || 0) * SECONDS_IN_MONTH + parseFloat(match8[7] || 0) * SECONDS_IN_DAY + parseFloat(match8[9] || 0) * SECONDS_IN_HOUR + parseFloat(match8[11] || 0) * SECONDS_IN_MIN + parseFloat(match8[13] || 0);
+                if (match8[1] !== void 0) {
                   result = -result;
                 }
                 return result;
@@ -53665,11 +53665,11 @@ var require_dash_all_debug = __commonJS({
               var MILLISECONDS_IN_SECONDS = 1e3;
               var datetimeRegex = /^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2})(?::([0-9]*)(\.[0-9]*)?)?(?:([+\-])([0-9]{2})([0-9]{2}))?/;
               var utcDate, timezoneOffset;
-              var match7 = datetimeRegex.exec(xsdatetimeStr);
-              utcDate = Date.UTC(parseInt(match7[1], 10), parseInt(match7[2], 10) - 1, parseInt(match7[3], 10), parseInt(match7[4], 10), parseInt(match7[5], 10), match7[6] && (parseInt(match7[6], 10) || 0), match7[7] && parseFloat(match7[7]) * MILLISECONDS_IN_SECONDS || 0);
-              if (match7[9] && match7[10]) {
-                timezoneOffset = parseInt(match7[9], 10) * MINUTES_IN_HOUR + parseInt(match7[10], 10);
-                utcDate += (match7[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
+              var match8 = datetimeRegex.exec(xsdatetimeStr);
+              utcDate = Date.UTC(parseInt(match8[1], 10), parseInt(match8[2], 10) - 1, parseInt(match8[3], 10), parseInt(match8[4], 10), parseInt(match8[5], 10), match8[6] && (parseInt(match8[6], 10) || 0), match8[7] && parseFloat(match8[7]) * MILLISECONDS_IN_SECONDS || 0);
+              if (match8[9] && match8[10]) {
+                timezoneOffset = parseInt(match8[9], 10) * MINUTES_IN_HOUR + parseInt(match8[10], 10);
+                utcDate += (match8[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
               }
               return new Date(utcDate).getTime();
             }
@@ -65082,8 +65082,8 @@ var require_dash_all_debug = __commonJS({
                   var imsc1ImgUrnTester = /^(urn:)(mpeg:[a-z0-9][a-z0-9-]{0,31}:)(subs:)([0-9]+)$/;
                   var smpteImgUrnTester = /^#(.*)$/;
                   if (imsc1ImgUrnTester.test(uri)) {
-                    var match7 = imsc1ImgUrnTester.exec(uri);
-                    var imageId = parseInt(match7[4], 10) - 1;
+                    var match8 = imsc1ImgUrnTester.exec(uri);
+                    var imageId = parseInt(match8[4], 10) - 1;
                     var imageData = btoa(cue.images[imageId]);
                     var dataUrl = "data:image/png;base64," + imageData;
                     return dataUrl;
@@ -68440,7 +68440,7 @@ var require_dash_all_debug = __commonJS({
 });
 
 // src/dev/EventList.tsx
-var import_react37 = __toModule(require_react());
+var import_react38 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/api/client.tsx
@@ -69181,10 +69181,10 @@ function getLocation(source, position) {
   var lineRegexp = /\r\n|[\n\r]/g;
   var line = 1;
   var column = position + 1;
-  var match7;
-  while ((match7 = lineRegexp.exec(source.body)) && match7.index < position) {
+  var match8;
+  while ((match8 = lineRegexp.exec(source.body)) && match8.index < position) {
     line += 1;
-    column = position + 1 - (match7.index + match7[0].length);
+    column = position + 1 - (match8.index + match8[0].length);
   }
   return {
     line,
@@ -74994,9 +74994,9 @@ var Auth = ({
 };
 
 // src/modules/EventList/index.tsx
-var import_react36 = __toModule(require_react());
-var import_ts_pattern6 = __toModule(require_lib());
-var import_luxon2 = __toModule(require_luxon());
+var import_react37 = __toModule(require_react());
+var import_ts_pattern7 = __toModule(require_lib());
+var import_luxon3 = __toModule(require_luxon());
 
 // src/types/generated.ts
 var BillingSource;
@@ -75217,9 +75217,13 @@ var TranscriptDocument = lib_default`
     title
     eventDate
     eventType
+    hasConnectionDetails
     isLive
     audioRecordingUrl
     audioRecordingOffsetMs
+    expectPublishedTranscript
+    hasTranscript
+    hasPublishedTranscript
     primaryCompany {
       id
       commonName
@@ -75262,6 +75266,14 @@ var TranscriptDocument = lib_default`
   }
 }
     `;
+
+// src/lib/strings/index.ts
+function prettyLineBreak(line) {
+  const centerIndex = line.length / 9 * 5;
+  const start = line.slice(0, centerIndex);
+  const end = line.slice(centerIndex).replace(/ /g, "\xA0");
+  return start + end;
+}
 
 // src/lib/data/index.ts
 var import_react6 = __toModule(require_react());
@@ -75768,9 +75780,9 @@ function CompanyFilterButton(props) {
 }
 
 // src/modules/Transcript/index.tsx
-var import_react31 = __toModule(require_react());
-var import_ts_pattern4 = __toModule(require_lib());
-var import_luxon = __toModule(require_luxon());
+var import_react32 = __toModule(require_react());
+var import_ts_pattern5 = __toModule(require_lib());
+var import_luxon2 = __toModule(require_luxon());
 var import_classnames15 = __toModule(require_classnames());
 
 // src/lib/audio/index.tsx
@@ -76409,6 +76421,112 @@ function Gear({ className, alt = "Gear" }) {
   }));
 }
 
+// src/modules/Transcript/EmptyMessage/index.tsx
+var import_react31 = __toModule(require_react());
+var import_luxon = __toModule(require_luxon());
+var import_ts_pattern4 = __toModule(require_lib());
+function EmptyMessageUI(props) {
+  const { event, eventStatus } = props;
+  const { pillBgColor, pillTextColor, pillText, message } = (0, import_ts_pattern4.match)(eventStatus).with("connection_not_expected", () => ({
+    pillBgColor: "bg-gray-200",
+    pillTextColor: "text-gray-700",
+    pillText: "no connection details",
+    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "text-base text-gray-500"
+    }, "This event will be transcribed if we receive", /* @__PURE__ */ import_react31.default.createElement("br", null), "connection details before the event start time.")
+  })).with("connection_expected", () => ({
+    pillBgColor: "bg-green-300",
+    pillTextColor: "text-green-700",
+    pillText: "connection expected",
+    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "text-base text-gray-500"
+    }, "The transcript will appear here", /* @__PURE__ */ import_react31.default.createElement("br", null), "after the event begins.")
+  })).with("waiting_to_connect", () => ({
+    pillBgColor: "bg-yellow-200",
+    pillTextColor: "text-yellow-700",
+    pillText: "waiting for connection",
+    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "text-base text-gray-500"
+    }, "We are attempting to connect, ", /* @__PURE__ */ import_react31.default.createElement("br", null), "this may take up to 3 minutes,", /* @__PURE__ */ import_react31.default.createElement("br", null), " please wait.")
+  })).with("connected", () => ({
+    pillBgColor: "bg-yellow-300",
+    pillTextColor: "text-yellow-900",
+    pillText: "connected",
+    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "text-base text-gray-500"
+    }, "Transcription will start automatically", /* @__PURE__ */ import_react31.default.createElement("br", null), "when the conference speaker begins.")
+  })).with("missed", () => ({
+    pillBgColor: "bg-gray-200",
+    pillTextColor: "text-gray-700",
+    pillText: "missed",
+    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "text-base text-gray-500"
+    }, (event == null ? void 0 : event.hasConnectionDetails) ? prettyLineBreak("Sorry, we were unable to connect to the live audio for this event.") : "Apologies, no connection details were found for this event")
+  })).with("transcribing", () => ({
+    pillBgColor: "bg-green-300",
+    pillTextColor: "text-green-700",
+    pillText: "Transcribing event",
+    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "text-base text-gray-500"
+    }, "This message should not appear")
+  })).with("transcribed", () => ({
+    pillBgColor: "bg-green-300",
+    pillTextColor: "text-green-700",
+    pillText: "Event Transcribed",
+    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+      className: "text-base text-gray-500"
+    }, "This message should not appear")
+  })).exhaustive();
+  return /* @__PURE__ */ import_react31.default.createElement("div", {
+    className: "w-full px-6 h-full flex flex-col text-center items-center justify-center"
+  }, /* @__PURE__ */ import_react31.default.createElement("span", {
+    className: "text-xl font-semibold text-gray-600 line-clamp-2"
+  }, prettyLineBreak(event == null ? void 0 : event.title)), /* @__PURE__ */ import_react31.default.createElement("div", {
+    className: `overflow-hidden relative text-xxs ${pillTextColor} uppercase tracking-widest px-1.5 py-0.5 rounded-xl mt-2 mb-8`
+  }, /* @__PURE__ */ import_react31.default.createElement("span", {
+    className: "z-10 relative"
+  }, pillText), /* @__PURE__ */ import_react31.default.createElement("span", {
+    className: `animate-pulse ${pillBgColor} absolute top-0 bottom-0 left-0 right-0`
+  })), message, (event == null ? void 0 : event.expectPublishedTranscript) && /* @__PURE__ */ import_react31.default.createElement("div", {
+    className: "text-base text-gray-400 mt-4"
+  }, "We expect to receive a", /* @__PURE__ */ import_react31.default.createElement("br", null), "published transcript for this event."));
+}
+function EmptyMessage(props) {
+  const { event } = props;
+  const eventDate = import_luxon.DateTime.fromISO(event == null ? void 0 : event.eventDate);
+  const diffSeconds = eventDate == null ? void 0 : eventDate.diffNow("seconds").seconds;
+  const missed = false;
+  const pastEventTime = diffSeconds < 0;
+  const hasNoTranscript = !(event == null ? void 0 : event.hasTranscript) && !(event == null ? void 0 : event.hasPublishedTranscript);
+  const waitingForTranscription = (event == null ? void 0 : event.isLive) && !missed && hasNoTranscript;
+  const waitingForConnection = pastEventTime && diffSeconds > -300 && !missed && !(event == null ? void 0 : event.isLive) && (event == null ? void 0 : event.hasConnectionDetails) && hasNoTranscript;
+  const missedConnection = pastEventTime && missed && hasNoTranscript;
+  const connectionExpected = (event == null ? void 0 : event.hasConnectionDetails) && !(event == null ? void 0 : event.isLive) && !pastEventTime && hasNoTranscript;
+  const connectionNotExpected = !pastEventTime && !(event == null ? void 0 : event.hasConnectionDetails) && hasNoTranscript && !(event == null ? void 0 : event.isLive);
+  const eventInProgress = (event == null ? void 0 : event.isLive) && (event.hasTranscript || event.hasPublishedTranscript);
+  const eventFinished = !(event == null ? void 0 : event.isLive) && ((event == null ? void 0 : event.hasTranscript) || (event == null ? void 0 : event.hasPublishedTranscript));
+  let eventStatus = "connection_not_expected";
+  if (connectionNotExpected) {
+    eventStatus = "connection_not_expected";
+  } else if (connectionExpected) {
+    eventStatus = "connection_expected";
+  } else if (waitingForConnection) {
+    eventStatus = "waiting_to_connect";
+  } else if (waitingForTranscription) {
+    eventStatus = "connected";
+  } else if (missedConnection) {
+    eventStatus = "missed";
+  } else if (eventInProgress) {
+    eventStatus = "transcribing";
+  } else if (eventFinished) {
+    eventStatus = "transcribed";
+  }
+  return /* @__PURE__ */ import_react31.default.createElement(EmptyMessageUI, {
+    event,
+    eventStatus
+  });
+}
+
 // src/modules/Transcript/index.tsx
 var TranscriptUI = (props) => {
   const {
@@ -76422,106 +76540,115 @@ var TranscriptUI = (props) => {
     headerExpanded,
     scrollRef
   } = props;
-  const renderExpandButton = () => /* @__PURE__ */ import_react31.default.createElement("button", {
+  const renderExpandButton = () => /* @__PURE__ */ import_react32.default.createElement("button", {
     onClick: toggleHeader,
     className: (0, import_classnames15.default)("transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 rounded-xl flex items-center justify-center", headerExpanded ? "bg-blue-600" : "bg-gray-100")
-  }, /* @__PURE__ */ import_react31.default.createElement(Chevron, {
+  }, /* @__PURE__ */ import_react32.default.createElement(Chevron, {
     className: headerExpanded ? "transition-all mb-0.5 rotate-180 w-2 fill-current text-white" : "transition-all w-2 opacity-30"
   }));
-  return /* @__PURE__ */ import_react31.default.createElement("div", {
-    className: "h-full flex flex-col transcript"
-  }, /* @__PURE__ */ import_react31.default.createElement("div", {
+  const renderHeader = () => /* @__PURE__ */ import_react32.default.createElement("div", {
     className: (0, import_classnames15.default)("relative p-3 shadow-3xl rounded-b-lg transition-all", headerExpanded ? "max-h-80" : "max-h-28", "transcript__header")
-  }, /* @__PURE__ */ import_react31.default.createElement("div", {
+  }, /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "flex items-center"
-  }, onBack && /* @__PURE__ */ import_react31.default.createElement(Button, {
+  }, onBack && /* @__PURE__ */ import_react32.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react31.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react32.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "Events"), /* @__PURE__ */ import_react31.default.createElement(Input, {
+  }), "Events"), /* @__PURE__ */ import_react32.default.createElement(Input, {
     name: "search",
     className: "mr-3",
     placeholder: "Search Transcripts..."
-  }, /* @__PURE__ */ import_react31.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react31.default.createElement("div", {
+  }, /* @__PURE__ */ import_react32.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "items-center flex"
-  }, /* @__PURE__ */ import_react31.default.createElement(Gear, {
+  }, /* @__PURE__ */ import_react32.default.createElement(Gear, {
     className: "w-5"
-  }))), (0, import_ts_pattern4.match)(eventQuery).with({ status: "loading" }, () => {
-    return /* @__PURE__ */ import_react31.default.createElement("div", {
+  }))), (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => {
+    return /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "flex flex-row mt-3 items-center"
-    }, /* @__PURE__ */ import_react31.default.createElement("div", {
+    }, /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "animate-pulse flex-1"
-    }, /* @__PURE__ */ import_react31.default.createElement("div", {
+    }, /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react31.default.createElement("div", {
+    }, /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "rounded-md bg-gray-500 h-[10px] m-1 w-7"
-    }), /* @__PURE__ */ import_react31.default.createElement("div", {
+    }), /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "rounded-md bg-gray-400 h-[10px] m-1 w-10"
-    }), /* @__PURE__ */ import_react31.default.createElement("div", {
+    }), /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    }), /* @__PURE__ */ import_react31.default.createElement("div", {
+    }), /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    })), /* @__PURE__ */ import_react31.default.createElement("div", {
+    })), /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react31.default.createElement("div", {
+    }, /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 flex-1"
     }))), renderExpandButton());
   }).with({ status: "success" }, ({ data }) => {
     var _a, _b;
     const event = data.events[0];
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
-    const eventDate = import_luxon.DateTime.fromISO(data.events[0].eventDate);
-    return /* @__PURE__ */ import_react31.default.createElement(import_react31.default.Fragment, null, /* @__PURE__ */ import_react31.default.createElement("div", {
+    const eventDate = import_luxon2.DateTime.fromISO(data.events[0].eventDate);
+    return /* @__PURE__ */ import_react32.default.createElement(import_react32.default.Fragment, null, /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "flex flex-row mt-3 items-center"
-    }, /* @__PURE__ */ import_react31.default.createElement("div", {
+    }, /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0"
-    }, /* @__PURE__ */ import_react31.default.createElement("div", {
+    }, /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-xs"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react31.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react32.default.createElement("span", {
       className: "pr-1 font-semibold"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_a = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _a.shortName) && /* @__PURE__ */ import_react31.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_a = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _a.shortName) && /* @__PURE__ */ import_react32.default.createElement("span", {
       className: "text-gray-400"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react31.default.createElement("span", {
+    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react32.default.createElement("span", {
       className: "text-gray-300 capitalize"
-    }, " \u2022 ", event == null ? void 0 : event.eventType), eventDate && /* @__PURE__ */ import_react31.default.createElement("span", {
+    }, " \u2022 ", event == null ? void 0 : event.eventType), eventDate && /* @__PURE__ */ import_react32.default.createElement("span", {
       className: "text-gray-300"
-    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react31.default.createElement("div", {
+    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react32.default.createElement("div", {
       className: headerExpanded ? "text-sm" : "text-sm truncate whitespace-normal line-clamp-1"
     }, event == null ? void 0 : event.title)), renderExpandButton()), headerExpanded && "Event Extras");
-  }).otherwise(() => null)), /* @__PURE__ */ import_react31.default.createElement("div", {
+  }).otherwise(() => null));
+  return /* @__PURE__ */ import_react32.default.createElement("div", {
+    className: "h-full flex flex-col transcript"
+  }, renderHeader(), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "overflow-y-scroll flex-1 bg-gray-50",
     ref: scrollRef
-  }, (0, import_ts_pattern4.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react31.default.createElement("div", {
+  }, (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react32.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react31.default.createElement("div", {
+  }, /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10"
-  }), /* @__PURE__ */ import_react31.default.createElement("div", {
+  }), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14"
-  }), /* @__PURE__ */ import_react31.default.createElement("div", {
+  }), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react31.default.createElement("div", {
+  }), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react31.default.createElement("div", {
+  }), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
-  })))).with({ status: "success" }, () => paragraphs.map((paragraph) => {
-    const { id, sentences, timestamp } = paragraph;
-    return /* @__PURE__ */ import_react31.default.createElement("div", {
-      key: id,
-      className: "relative p-3 pb-4",
-      onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
-      ref: id === currentParagraph ? currentParagraphRef : void 0
-    }, timestamp && /* @__PURE__ */ import_react31.default.createElement("div", {
-      className: "pb-2 font-semibold text-sm"
-    }, import_luxon.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react31.default.createElement("div", {
-      className: "text-sm"
-    }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react31.default.createElement("div", {
-      className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
-    }));
-  })).otherwise(() => null)), (0, import_ts_pattern4.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
+  })))).with({ status: "success" }, ({ data }) => {
+    const event = data.events[0];
+    if (!paragraphs || paragraphs.length === 0) {
+      return /* @__PURE__ */ import_react32.default.createElement(EmptyMessage, {
+        event
+      });
+    }
+    return paragraphs.map((paragraph) => {
+      const { id, sentences, timestamp } = paragraph;
+      return /* @__PURE__ */ import_react32.default.createElement("div", {
+        key: id,
+        className: "relative p-3 pb-4",
+        onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
+        ref: id === currentParagraph ? currentParagraphRef : void 0
+      }, timestamp && /* @__PURE__ */ import_react32.default.createElement("div", {
+        className: "pb-2 font-semibold text-sm"
+      }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react32.default.createElement("div", {
+        className: "text-sm"
+      }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react32.default.createElement("div", {
+        className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
+      }));
+    });
+  }).otherwise(() => null)), (0, import_ts_pattern5.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
     const event = events[0];
-    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react31.default.createElement(Playbar, {
+    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react32.default.createElement(Playbar, {
       id: event == null ? void 0 : event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl || "",
       offset: ((event == null ? void 0 : event.audioRecordingOffsetMs) || 0) / 1e3
@@ -76557,8 +76684,8 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   });
   useInterval(() => latestParagraphsQuery.refetch(), ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? 2e3 : null);
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react31.useState)(new Map());
-  (0, import_react31.useEffect)(() => {
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react32.useState)(new Map());
+  (0, import_react32.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c2;
@@ -76570,7 +76697,7 @@ function useLatestTranscripts(eventId, eventQuery) {
       });
     }
   }, [latestParagraphsQuery.state.data]);
-  return (0, import_react31.useMemo)(() => {
+  return (0, import_react32.useMemo)(() => {
     var _a2, _b2, _c2, _d2, _e;
     const originalParagraphs = new Map((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).map((p2) => [p2.id, p2]));
     const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
@@ -76578,9 +76705,9 @@ function useLatestTranscripts(eventId, eventQuery) {
   }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
 }
 function useAudioSync(paragraphs, eventQuery, audioPlayer) {
-  const [currentParagraph, setCurrentParagraph] = (0, import_react31.useState)(null);
+  const [currentParagraph, setCurrentParagraph] = (0, import_react32.useState)(null);
   const [scrollRef, currentParagraphRef] = useAutoScroll();
-  (0, import_react31.useEffect)(() => {
+  (0, import_react32.useEffect)(() => {
     var _a, _b;
     let paragraph = [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
     if (!paragraph) {
@@ -76594,8 +76721,8 @@ function useAudioSync(paragraphs, eventQuery, audioPlayer) {
 }
 var Transcript = (props) => {
   const { eventId, onBack } = props;
-  const [headerExpanded, setHeaderState] = (0, import_react31.useState)(false);
-  const toggleHeader = (0, import_react31.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
+  const [headerExpanded, setHeaderState] = (0, import_react32.useState)(false);
+  const toggleHeader = (0, import_react32.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
   const eventQuery = useQuery2({
     query: lib_default`
             query Transcript($eventId: ID!) {
@@ -76604,9 +76731,13 @@ var Transcript = (props) => {
                     title
                     eventDate
                     eventType
+                    hasConnectionDetails
                     isLive
                     audioRecordingUrl
                     audioRecordingOffsetMs
+                    expectPublishedTranscript
+                    hasTranscript
+                    hasPublishedTranscript
                     primaryCompany {
                         id
                         commonName
@@ -76661,7 +76792,7 @@ var Transcript = (props) => {
   const paragraphs = useLatestTranscripts(eventId, eventQuery);
   const [currentParagraph, scrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
   useAutoTrack("View", "Event", { eventId }, [eventId]);
-  return /* @__PURE__ */ import_react31.default.createElement(TranscriptUI, {
+  return /* @__PURE__ */ import_react32.default.createElement(TranscriptUI, {
     eventQuery,
     currentParagraph,
     currentParagraphRef,
@@ -76675,12 +76806,12 @@ var Transcript = (props) => {
 };
 
 // src/components/Tabs/index.tsx
-var import_react32 = __toModule(require_react());
+var import_react33 = __toModule(require_react());
 var import_classnames16 = __toModule(require_classnames());
-var import_ts_pattern5 = __toModule(require_lib());
+var import_ts_pattern6 = __toModule(require_lib());
 var Tabs = (props) => {
   const { onChange, options = [], value, kind = "button", className = "" } = props;
-  const getClasses = (val) => (0, import_ts_pattern5.match)(kind).with("button", () => (0, import_classnames16.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val) => (0, import_ts_pattern6.match)(kind).with("button", () => (0, import_classnames16.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
@@ -76695,13 +76826,13 @@ var Tabs = (props) => {
     tab__option: true,
     "tab__option--selected": val === value
   })).exhaustive();
-  return /* @__PURE__ */ import_react32.default.createElement("div", {
+  return /* @__PURE__ */ import_react33.default.createElement("div", {
     className: `flex tab relative ${className}`
-  }, options.map((option) => /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, options.map((option) => /* @__PURE__ */ import_react33.default.createElement("div", {
     key: `tab-option-${option.value}`,
     className: getClasses(option.value),
     onClick: (event) => onChange && onChange(event, { value: option.value })
-  }, option.label, kind === "line" && /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, option.label, kind === "line" && /* @__PURE__ */ import_react33.default.createElement("div", {
     className: (0, import_classnames16.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": option.value === value,
       "-bottom-0.5": option.value !== value
@@ -76710,20 +76841,20 @@ var Tabs = (props) => {
 };
 
 // src/modules/EventList/FilterBy/index.tsx
-var import_react34 = __toModule(require_react());
+var import_react35 = __toModule(require_react());
 var import_classnames18 = __toModule(require_classnames());
 
 // src/components/Svg/Check.tsx
-var import_react33 = __toModule(require_react());
+var import_react34 = __toModule(require_react());
 var import_classnames17 = __toModule(require_classnames());
 function Check({ className, alt = "Check" }) {
-  return /* @__PURE__ */ import_react33.default.createElement("svg", {
+  return /* @__PURE__ */ import_react34.default.createElement("svg", {
     className: (0, import_classnames17.default)(className, "fill-current", "Svg", "Svg__check"),
     width: "100%",
     viewBox: "0 0 8 6",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react33.default.createElement("title", null, alt), /* @__PURE__ */ import_react33.default.createElement("path", {
+  }, /* @__PURE__ */ import_react34.default.createElement("title", null, alt), /* @__PURE__ */ import_react34.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M7.69471 1.69471C7.87687 1.50611 7.97766 1.25351 7.97539 0.991311C7.97311 0.729114 7.86794 0.478302 7.68253 0.292894C7.49712 0.107485 7.24631 0.00231622 6.98411 3.78025e-05C6.72192 -0.00224062 6.46931 0.0985542 6.28071 0.280712L2.98771 3.57371L1.69471 2.28071C1.50611 2.09855 1.25351 1.99776 0.991311 2.00004C0.729114 2.00232 0.478302 2.10749 0.292894 2.29289C0.107485 2.4783 0.00231622 2.72911 3.78025e-05 2.99131C-0.00224062 3.25351 0.0985542 3.50611 0.280712 3.69471L2.28071 5.69471C2.46824 5.88218 2.72255 5.9875 2.98771 5.9875C3.25288 5.9875 3.50718 5.88218 3.69471 5.69471L7.69471 1.69471Z",
@@ -76734,13 +76865,13 @@ function Check({ className, alt = "Check" }) {
 // src/modules/EventList/FilterBy/index.tsx
 var FilterBy = (props) => {
   const { onChange, options = [], value = [] } = props;
-  return /* @__PURE__ */ import_react34.default.createElement("div", {
+  return /* @__PURE__ */ import_react35.default.createElement("div", {
     className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow eventlist__filterby"
-  }, /* @__PURE__ */ import_react34.default.createElement("div", {
+  }, /* @__PURE__ */ import_react35.default.createElement("div", {
     className: "text-sm font-semibold"
-  }, "Filter By"), /* @__PURE__ */ import_react34.default.createElement("div", {
+  }, "Filter By"), /* @__PURE__ */ import_react35.default.createElement("div", {
     className: "flex justify-end flex-1"
-  }, options.map((option) => /* @__PURE__ */ import_react34.default.createElement("div", {
+  }, options.map((option) => /* @__PURE__ */ import_react35.default.createElement("div", {
     key: `filterby-option-${option.value}`,
     className: (0, import_classnames18.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
       "bg-blue-100": value == null ? void 0 : value.includes(option.value),
@@ -76763,17 +76894,17 @@ var FilterBy = (props) => {
     onClick: (event) => onChange && onChange(event, {
       value: value.includes(option.value) ? value.filter((o2) => o2 !== option.value) : [...value, option.value]
     })
-  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react34.default.createElement(Check, {
+  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react35.default.createElement(Check, {
     className: "w-2 ml-1.5"
   })))));
 };
 
 // src/modules/EventList/PlayButton/index.tsx
-var import_react35 = __toModule(require_react());
+var import_react36 = __toModule(require_react());
 var import_classnames19 = __toModule(require_classnames());
 function PlayButtonUI(props) {
   const { hasAudio, isPlaying, togglePlayback } = props;
-  return hasAudio ? /* @__PURE__ */ import_react35.default.createElement("div", {
+  return hasAudio ? /* @__PURE__ */ import_react36.default.createElement("div", {
     className: (0, import_classnames19.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
       "hover:border-blue-500": !isPlaying,
       "active:border-blue-600": !isPlaying,
@@ -76790,13 +76921,13 @@ function PlayButtonUI(props) {
       "active:text-white": !isPlaying
     }),
     onClick: togglePlayback
-  }, isPlaying ? /* @__PURE__ */ import_react35.default.createElement(Pause, {
+  }, isPlaying ? /* @__PURE__ */ import_react36.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react35.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react36.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
-  })) : /* @__PURE__ */ import_react35.default.createElement("div", {
+  })) : /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 group-hover:text-blue-300"
-  }, /* @__PURE__ */ import_react35.default.createElement(Calendar, {
+  }, /* @__PURE__ */ import_react36.default.createElement(Calendar, {
     className: "w-4"
   }));
 }
@@ -76805,7 +76936,7 @@ function PlayButton(props) {
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
-  const togglePlayback = (0, import_react35.useCallback)((event) => {
+  const togglePlayback = (0, import_react36.useCallback)((event) => {
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
@@ -76815,7 +76946,7 @@ function PlayButton(props) {
       void audioPlayer.play({ id, url, offset });
     }
   }, [isPlaying, id, url, offset]);
-  return /* @__PURE__ */ import_react35.default.createElement(PlayButtonUI, {
+  return /* @__PURE__ */ import_react36.default.createElement(PlayButtonUI, {
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
     togglePlayback
@@ -76845,32 +76976,32 @@ var EventListUI = (props) => {
     searchTerm
   } = props;
   if (event) {
-    return /* @__PURE__ */ import_react36.default.createElement(Transcript, {
+    return /* @__PURE__ */ import_react37.default.createElement(Transcript, {
       eventId: event.id,
       onBack: onBackFromTranscript
     });
   }
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react36.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react36.default.createElement("div", {
+  return /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "h-full flex flex-col eventlist"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react36.default.createElement(Input, {
+  }, /* @__PURE__ */ import_react37.default.createElement(Input, {
     name: "search",
     onChange: onSearchChange,
     placeholder: "Search Events & Transcripts",
     value: searchTerm
-  }, /* @__PURE__ */ import_react36.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react36.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react37.default.createElement(CompanyFilterButton, {
     onChange: onCompanyChange,
     value: company
-  }))), /* @__PURE__ */ import_react36.default.createElement(Tabs, {
+  }))), /* @__PURE__ */ import_react37.default.createElement(Tabs, {
     className: "ml-1",
     kind: "line",
     onChange: onSelectListType,
@@ -76879,107 +77010,107 @@ var EventListUI = (props) => {
       { value: EventView.Recent, label: "Recent Events" }
     ],
     value: listType
-  })), /* @__PURE__ */ import_react36.default.createElement("div", {
+  })), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "sticky top-0 px-3 pt-3 pb-2 z-10 eventlist__tabs"
-  }, /* @__PURE__ */ import_react36.default.createElement(FilterBy, {
+  }, /* @__PURE__ */ import_react37.default.createElement(FilterBy, {
     onChange: onSelectFilterBy,
     options: [
       { value: 0, label: "Has transcript" },
       { value: 1, label: "Earnings only" }
     ],
     value: filterByTypes
-  })), /* @__PURE__ */ import_react36.default.createElement("div", {
+  })), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern6.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react36.default.createElement("ul", {
+  }, (0, import_ts_pattern7.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react37.default.createElement("ul", {
     className: "w-full EventList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react36.default.createElement("li", {
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react37.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-300 w-9 h-9"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-500 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-400 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react36.default.createElement("div", {
+  })), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react36.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react37.default.createElement("ul", {
     className: "w-full"
   }, events.map((event2) => {
     var _a, _b;
     const primaryQuote = getPrimaryQuote(event2.primaryCompany);
-    const eventDate = import_luxon2.DateTime.fromISO(event2.eventDate);
+    const eventDate = import_luxon3.DateTime.fromISO(event2.eventDate);
     const audioOffset = ((_a = event2.audioRecordingOffsetMs) != null ? _a : 0) / 1e3;
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== eventDate.toFormat("MM/dd/yyyy")) {
       prevEventDate = eventDate;
-      divider = /* @__PURE__ */ import_react36.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react37.default.createElement("li", {
         className: "sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"
-      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react36.default.createElement("div", {
+      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react37.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       }));
     }
-    return /* @__PURE__ */ import_react36.default.createElement(import_react36.Fragment, {
+    return /* @__PURE__ */ import_react37.default.createElement(import_react37.Fragment, {
       key: event2.id
-    }, divider, /* @__PURE__ */ import_react36.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react37.default.createElement("li", {
       className: "group h-12 text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
       onClick: (e) => onSelectEvent == null ? void 0 : onSelectEvent(e, { value: event2 })
-    }, /* @__PURE__ */ import_react36.default.createElement(Tooltip, {
+    }, /* @__PURE__ */ import_react37.default.createElement(Tooltip, {
       className: "h-12 flex flex-row",
-      content: /* @__PURE__ */ import_react36.default.createElement("div", {
+      content: /* @__PURE__ */ import_react37.default.createElement("div", {
         className: "max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9"
-      }, event2.title),
+      }, prettyLineBreak(event2.title)),
       grow: "up-right",
       openOn: "hover",
       position: "top-left",
       yOffset: 4,
       hideOnDocumentScroll: true
-    }, /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "flex items-center justify-center"
-    }, /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "flex items-center justify-center w-8 h-8"
-    }, /* @__PURE__ */ import_react36.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react37.default.createElement(PlayButton, {
       id: event2.id,
       url: event2.isLive ? `https://storage.media.aiera.com/${event2.id}` : event2.audioRecordingUrl,
       offset: audioOffset || 0
-    }))), /* @__PURE__ */ import_react36.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
-    }, /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "flex items-end"
-    }, /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)), /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)), /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black"
-    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event2.isLive ? /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, event2.isLive ? /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 font-semibold bg-red-50 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
-    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black"
-    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "leading-none mt-1 text-gray-300 group-hover:text-gray-500"
     }, eventDate.toFormat("MMM dd, yyyy"))))));
-  }))).exhaustive(), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }))).exhaustive(), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex-1"
-  })))), /* @__PURE__ */ import_react36.default.createElement(Playbar, {
+  })))), /* @__PURE__ */ import_react37.default.createElement(Playbar, {
     onClickCalendar: onSelectEventById
   }));
 };
@@ -77002,13 +77133,13 @@ var EventList = (_props) => {
       }
     }
   }), "in");
-  const onSelectEvent = (0, import_react36.useCallback)((event, change) => {
+  const onSelectEvent = (0, import_react37.useCallback)((event, change) => {
     var _a2;
     const primaryQuote = getPrimaryQuote((_a2 = change.value) == null ? void 0 : _a2.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.event(event, change);
   }, [state]);
-  const onSelectCompany = (0, import_react36.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react37.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
@@ -77059,8 +77190,8 @@ var EventList = (_props) => {
       }
     }
   });
-  useInterval((0, import_react36.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
-  const onSelectEventById = (0, import_react36.useCallback)((event, change) => {
+  useInterval((0, import_react37.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
+  const onSelectEventById = (0, import_react37.useCallback)((event, change) => {
     if (eventsQuery.status === "success") {
       const selectedEvent = eventsQuery.data.events.find((event2) => event2.id === change.value);
       if (selectedEvent) {
@@ -77070,7 +77201,7 @@ var EventList = (_props) => {
   }, [eventsQuery.status]);
   useAutoTrack("Click", "Event Filter By", { filterBy: state.filterByTypes }, [state.filterByTypes]);
   useAutoTrack("Submit", "Event Search", { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
-  return /* @__PURE__ */ import_react36.default.createElement(EventListUI, {
+  return /* @__PURE__ */ import_react37.default.createElement(EventListUI, {
     company: state.company,
     event: state.event,
     eventsQuery,
@@ -77092,17 +77223,17 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react37.default.createElement(import_react37.StrictMode, null, /* @__PURE__ */ import_react37.default.createElement(Provider, {
+  return /* @__PURE__ */ import_react38.default.createElement(import_react38.StrictMode, null, /* @__PURE__ */ import_react38.default.createElement(Provider, {
     config: { apiUrl: "https://api-dev.aiera.com/graphql", assetPath: "bundle/" }
-  }, /* @__PURE__ */ import_react37.default.createElement(Provider3, {
+  }, /* @__PURE__ */ import_react38.default.createElement(Provider3, {
     bus
-  }, /* @__PURE__ */ import_react37.default.createElement(Provider2, null, /* @__PURE__ */ import_react37.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react38.default.createElement(Provider2, null, /* @__PURE__ */ import_react38.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react37.default.createElement(EventList, null)))))));
+  }, /* @__PURE__ */ import_react38.default.createElement(EventList, null)))))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react37.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react38.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus
