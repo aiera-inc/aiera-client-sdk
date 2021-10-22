@@ -75780,10 +75780,10 @@ function CompanyFilterButton(props) {
 }
 
 // src/modules/Transcript/index.tsx
-var import_react32 = __toModule(require_react());
+var import_react33 = __toModule(require_react());
 var import_ts_pattern5 = __toModule(require_lib());
 var import_luxon2 = __toModule(require_luxon());
-var import_classnames15 = __toModule(require_classnames());
+var import_classnames16 = __toModule(require_classnames());
 
 // src/lib/audio/index.tsx
 var import_react16 = __toModule(require_react());
@@ -76422,74 +76422,99 @@ function Gear({ className, alt = "Gear" }) {
 }
 
 // src/modules/Transcript/EmptyMessage/index.tsx
-var import_react31 = __toModule(require_react());
+var import_react32 = __toModule(require_react());
 var import_luxon = __toModule(require_luxon());
 var import_ts_pattern4 = __toModule(require_lib());
+
+// src/components/Svg/Check.tsx
+var import_react31 = __toModule(require_react());
+var import_classnames15 = __toModule(require_classnames());
+function Check({ className, alt = "Check" }) {
+  return /* @__PURE__ */ import_react31.default.createElement("svg", {
+    className: (0, import_classnames15.default)(className, "fill-current", "Svg", "Svg__check"),
+    width: "100%",
+    viewBox: "0 0 8 6",
+    fill: "none",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react31.default.createElement("title", null, alt), /* @__PURE__ */ import_react31.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M7.69471 1.69471C7.87687 1.50611 7.97766 1.25351 7.97539 0.991311C7.97311 0.729114 7.86794 0.478302 7.68253 0.292894C7.49712 0.107485 7.24631 0.00231622 6.98411 3.78025e-05C6.72192 -0.00224062 6.46931 0.0985542 6.28071 0.280712L2.98771 3.57371L1.69471 2.28071C1.50611 2.09855 1.25351 1.99776 0.991311 2.00004C0.729114 2.00232 0.478302 2.10749 0.292894 2.29289C0.107485 2.4783 0.00231622 2.72911 3.78025e-05 2.99131C-0.00224062 3.25351 0.0985542 3.50611 0.280712 3.69471L2.28071 5.69471C2.46824 5.88218 2.72255 5.9875 2.98771 5.9875C3.25288 5.9875 3.50718 5.88218 3.69471 5.69471L7.69471 1.69471Z"
+  }));
+}
+
+// src/modules/Transcript/EmptyMessage/index.tsx
 function EmptyMessageUI(props) {
   const { event, eventStatus } = props;
   const { pillBgColor, pillTextColor, pillText, message } = (0, import_ts_pattern4.match)(eventStatus).with("connection_not_expected", () => ({
     pillBgColor: "bg-gray-200",
     pillTextColor: "text-gray-700",
     pillText: "no connection details",
-    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+    message: /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "This event will be transcribed if we receive", /* @__PURE__ */ import_react31.default.createElement("br", null), "connection details before the event start time.")
+    }, "This event will be transcribed if we receive", /* @__PURE__ */ import_react32.default.createElement("br", null), "connection details before the event start time.")
   })).with("connection_expected", () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "connection expected",
-    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+    message: /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "The transcript will appear here", /* @__PURE__ */ import_react31.default.createElement("br", null), "after the event begins.")
+    }, "The transcript will appear here", /* @__PURE__ */ import_react32.default.createElement("br", null), "after the event begins.")
   })).with("waiting_to_connect", () => ({
     pillBgColor: "bg-yellow-200",
     pillTextColor: "text-yellow-700",
     pillText: "waiting for connection",
-    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+    message: /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "We are attempting to connect, ", /* @__PURE__ */ import_react31.default.createElement("br", null), "this may take up to 3 minutes,", /* @__PURE__ */ import_react31.default.createElement("br", null), " please wait.")
+    }, "We are attempting to connect, ", /* @__PURE__ */ import_react32.default.createElement("br", null), "this may take up to 3 minutes,", /* @__PURE__ */ import_react32.default.createElement("br", null), " please wait.")
   })).with("connected", () => ({
     pillBgColor: "bg-yellow-300",
     pillTextColor: "text-yellow-900",
     pillText: "connected",
-    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+    message: /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "Transcription will start automatically", /* @__PURE__ */ import_react31.default.createElement("br", null), "when the conference speaker begins.")
+    }, "Transcription will start automatically", /* @__PURE__ */ import_react32.default.createElement("br", null), "when the conference speaker begins.")
   })).with("missed", () => ({
     pillBgColor: "bg-gray-200",
     pillTextColor: "text-gray-700",
     pillText: "missed",
-    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+    message: /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-base text-gray-500"
     }, (event == null ? void 0 : event.hasConnectionDetails) ? prettyLineBreak("Sorry, we were unable to connect to the live audio for this event.") : "Apologies, no connection details were found for this event")
   })).with("transcribing", () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "Transcribing event",
-    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+    message: /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-base text-gray-500"
     }, "This message should not appear")
   })).with("transcribed", () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "Event Transcribed",
-    message: /* @__PURE__ */ import_react31.default.createElement("div", {
+    message: /* @__PURE__ */ import_react32.default.createElement("div", {
       className: "text-base text-gray-500"
     }, "This message should not appear")
   })).exhaustive();
-  return /* @__PURE__ */ import_react31.default.createElement("div", {
+  return /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "w-full px-6 h-full flex flex-col text-center items-center justify-center"
-  }, /* @__PURE__ */ import_react31.default.createElement("span", {
+  }, /* @__PURE__ */ import_react32.default.createElement("span", {
     className: "text-xl font-semibold text-gray-600 line-clamp-2"
-  }, prettyLineBreak(event == null ? void 0 : event.title)), /* @__PURE__ */ import_react31.default.createElement("div", {
+  }, prettyLineBreak(event == null ? void 0 : event.title)), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: `overflow-hidden relative text-xxs ${pillTextColor} uppercase tracking-widest px-1.5 py-0.5 rounded-xl mt-2 mb-8`
-  }, /* @__PURE__ */ import_react31.default.createElement("span", {
+  }, /* @__PURE__ */ import_react32.default.createElement("span", {
     className: "z-10 relative"
-  }, pillText), /* @__PURE__ */ import_react31.default.createElement("span", {
+  }, pillText), /* @__PURE__ */ import_react32.default.createElement("span", {
     className: `animate-pulse ${pillBgColor} absolute top-0 bottom-0 left-0 right-0`
-  })), message, (event == null ? void 0 : event.expectPublishedTranscript) && /* @__PURE__ */ import_react31.default.createElement("div", {
-    className: "text-base text-gray-400 mt-4"
-  }, "We expect to receive a", /* @__PURE__ */ import_react31.default.createElement("br", null), "published transcript for this event."));
+  })), message, (event == null ? void 0 : event.expectPublishedTranscript) && /* @__PURE__ */ import_react32.default.createElement("div", {
+    className: "flex mt-4 items-center justify-start text-left bg-green-50 rounded-2xl py-1.5 pr-2 pl-3 border-[1px] border-green-100"
+  }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    className: "text-sm leading-tight text-green-600"
+  }, "We expect to receive a", /* @__PURE__ */ import_react32.default.createElement("br", null), "published transcript for this event."), /* @__PURE__ */ import_react32.default.createElement("div", {
+    className: "text-white bg-green-400 h-6 w-6 rounded-2xl flex items-center justify-center ml-4"
+  }, /* @__PURE__ */ import_react32.default.createElement(Check, {
+    className: "w-2.5"
+  }))));
 }
 function EmptyMessage(props) {
   const { event } = props;
@@ -76521,7 +76546,7 @@ function EmptyMessage(props) {
   } else if (eventFinished) {
     eventStatus = "transcribed";
   }
-  return /* @__PURE__ */ import_react31.default.createElement(EmptyMessageUI, {
+  return /* @__PURE__ */ import_react32.default.createElement(EmptyMessageUI, {
     event,
     eventStatus
   });
@@ -76540,47 +76565,47 @@ var TranscriptUI = (props) => {
     headerExpanded,
     scrollRef
   } = props;
-  const renderExpandButton = () => /* @__PURE__ */ import_react32.default.createElement("button", {
+  const renderExpandButton = () => /* @__PURE__ */ import_react33.default.createElement("button", {
     onClick: toggleHeader,
-    className: (0, import_classnames15.default)("transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 rounded-xl flex items-center justify-center", headerExpanded ? "bg-blue-600" : "bg-gray-100")
-  }, /* @__PURE__ */ import_react32.default.createElement(Chevron, {
+    className: (0, import_classnames16.default)("transition-all ml-2 mt-2 self-start flex-shrink-0 h-5 w-5 rounded-xl flex items-center justify-center", headerExpanded ? "bg-blue-600" : "bg-gray-100")
+  }, /* @__PURE__ */ import_react33.default.createElement(Chevron, {
     className: headerExpanded ? "transition-all mb-0.5 rotate-180 w-2 fill-current text-white" : "transition-all w-2 opacity-30"
   }));
-  const renderHeader = () => /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: (0, import_classnames15.default)("relative p-3 shadow-3xl rounded-b-lg transition-all", headerExpanded ? "max-h-80" : "max-h-28", "transcript__header")
-  }, /* @__PURE__ */ import_react32.default.createElement("div", {
+  const renderHeader = () => /* @__PURE__ */ import_react33.default.createElement("div", {
+    className: (0, import_classnames16.default)("relative p-3 shadow-3xl rounded-b-lg transition-all", headerExpanded ? "max-h-80" : "max-h-28", "transcript__header")
+  }, /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "flex items-center"
-  }, onBack && /* @__PURE__ */ import_react32.default.createElement(Button, {
+  }, onBack && /* @__PURE__ */ import_react33.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react32.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react33.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "Events"), /* @__PURE__ */ import_react32.default.createElement(Input, {
+  }), "Events"), /* @__PURE__ */ import_react33.default.createElement(Input, {
     name: "search",
     className: "mr-3",
     placeholder: "Search Transcripts..."
-  }, /* @__PURE__ */ import_react32.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, /* @__PURE__ */ import_react33.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "items-center flex"
-  }, /* @__PURE__ */ import_react32.default.createElement(Gear, {
+  }, /* @__PURE__ */ import_react33.default.createElement(Gear, {
     className: "w-5"
   }))), (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => {
-    return /* @__PURE__ */ import_react32.default.createElement("div", {
+    return /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "flex flex-row mt-3 items-center"
-    }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    }, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "animate-pulse flex-1"
-    }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    }, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    }, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "rounded-md bg-gray-500 h-[10px] m-1 w-7"
-    }), /* @__PURE__ */ import_react32.default.createElement("div", {
+    }), /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "rounded-md bg-gray-400 h-[10px] m-1 w-10"
-    }), /* @__PURE__ */ import_react32.default.createElement("div", {
+    }), /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    }), /* @__PURE__ */ import_react32.default.createElement("div", {
+    }), /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    })), /* @__PURE__ */ import_react32.default.createElement("div", {
+    })), /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    }, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 flex-1"
     }))), renderExpandButton());
   }).with({ status: "success" }, ({ data }) => {
@@ -76588,67 +76613,67 @@ var TranscriptUI = (props) => {
     const event = data.events[0];
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = import_luxon2.DateTime.fromISO(data.events[0].eventDate);
-    return /* @__PURE__ */ import_react32.default.createElement(import_react32.default.Fragment, null, /* @__PURE__ */ import_react32.default.createElement("div", {
+    return /* @__PURE__ */ import_react33.default.createElement(import_react33.default.Fragment, null, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "flex flex-row mt-3 items-center"
-    }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    }, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0"
-    }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    }, /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-xs"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react32.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "pr-1 font-semibold"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_a = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _a.shortName) && /* @__PURE__ */ import_react32.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_a = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _a.shortName) && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "text-gray-400"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react32.default.createElement("span", {
+    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "text-gray-300 capitalize"
-    }, " \u2022 ", event == null ? void 0 : event.eventType), eventDate && /* @__PURE__ */ import_react32.default.createElement("span", {
+    }, " \u2022 ", event == null ? void 0 : event.eventType), eventDate && /* @__PURE__ */ import_react33.default.createElement("span", {
       className: "text-gray-300"
-    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react32.default.createElement("div", {
+    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react33.default.createElement("div", {
       className: headerExpanded ? "text-sm" : "text-sm truncate whitespace-normal line-clamp-1"
     }, event == null ? void 0 : event.title)), renderExpandButton()), headerExpanded && "Event Extras");
   }).otherwise(() => null));
-  return /* @__PURE__ */ import_react32.default.createElement("div", {
+  return /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "h-full flex flex-col transcript"
-  }, renderHeader(), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, renderHeader(), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "overflow-y-scroll flex-1 bg-gray-50",
     ref: scrollRef
-  }, (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react33.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10"
-  }), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14"
-  }), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
   })))).with({ status: "success" }, ({ data }) => {
     const event = data.events[0];
     if (!paragraphs || paragraphs.length === 0) {
-      return /* @__PURE__ */ import_react32.default.createElement(EmptyMessage, {
+      return /* @__PURE__ */ import_react33.default.createElement(EmptyMessage, {
         event
       });
     }
     return paragraphs.map((paragraph) => {
       const { id, sentences, timestamp } = paragraph;
-      return /* @__PURE__ */ import_react32.default.createElement("div", {
+      return /* @__PURE__ */ import_react33.default.createElement("div", {
         key: id,
         className: "relative p-3 pb-4",
         onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
         ref: id === currentParagraph ? currentParagraphRef : void 0
-      }, timestamp && /* @__PURE__ */ import_react32.default.createElement("div", {
+      }, timestamp && /* @__PURE__ */ import_react33.default.createElement("div", {
         className: "pb-2 font-semibold text-sm"
-      }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react32.default.createElement("div", {
+      }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react33.default.createElement("div", {
         className: "text-sm"
-      }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react32.default.createElement("div", {
+      }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react33.default.createElement("div", {
         className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
       }));
     });
   }).otherwise(() => null)), (0, import_ts_pattern5.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
     const event = events[0];
-    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react32.default.createElement(Playbar, {
+    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react33.default.createElement(Playbar, {
       id: event == null ? void 0 : event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl || "",
       offset: ((event == null ? void 0 : event.audioRecordingOffsetMs) || 0) / 1e3
@@ -76684,8 +76709,8 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   });
   useInterval(() => latestParagraphsQuery.refetch(), ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? 2e3 : null);
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react32.useState)(new Map());
-  (0, import_react32.useEffect)(() => {
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react33.useState)(new Map());
+  (0, import_react33.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c2;
@@ -76697,7 +76722,7 @@ function useLatestTranscripts(eventId, eventQuery) {
       });
     }
   }, [latestParagraphsQuery.state.data]);
-  return (0, import_react32.useMemo)(() => {
+  return (0, import_react33.useMemo)(() => {
     var _a2, _b2, _c2, _d2, _e;
     const originalParagraphs = new Map((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).map((p2) => [p2.id, p2]));
     const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
@@ -76705,9 +76730,9 @@ function useLatestTranscripts(eventId, eventQuery) {
   }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
 }
 function useAudioSync(paragraphs, eventQuery, audioPlayer) {
-  const [currentParagraph, setCurrentParagraph] = (0, import_react32.useState)(null);
+  const [currentParagraph, setCurrentParagraph] = (0, import_react33.useState)(null);
   const [scrollRef, currentParagraphRef] = useAutoScroll();
-  (0, import_react32.useEffect)(() => {
+  (0, import_react33.useEffect)(() => {
     var _a, _b;
     let paragraph = [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
     if (!paragraph) {
@@ -76721,8 +76746,8 @@ function useAudioSync(paragraphs, eventQuery, audioPlayer) {
 }
 var Transcript = (props) => {
   const { eventId, onBack } = props;
-  const [headerExpanded, setHeaderState] = (0, import_react32.useState)(false);
-  const toggleHeader = (0, import_react32.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
+  const [headerExpanded, setHeaderState] = (0, import_react33.useState)(false);
+  const toggleHeader = (0, import_react33.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
   const eventQuery = useQuery2({
     query: lib_default`
             query Transcript($eventId: ID!) {
@@ -76792,7 +76817,7 @@ var Transcript = (props) => {
   const paragraphs = useLatestTranscripts(eventId, eventQuery);
   const [currentParagraph, scrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
   useAutoTrack("View", "Event", { eventId }, [eventId]);
-  return /* @__PURE__ */ import_react32.default.createElement(TranscriptUI, {
+  return /* @__PURE__ */ import_react33.default.createElement(TranscriptUI, {
     eventQuery,
     currentParagraph,
     currentParagraphRef,
@@ -76806,17 +76831,17 @@ var Transcript = (props) => {
 };
 
 // src/components/Tabs/index.tsx
-var import_react33 = __toModule(require_react());
-var import_classnames16 = __toModule(require_classnames());
+var import_react34 = __toModule(require_react());
+var import_classnames17 = __toModule(require_classnames());
 var import_ts_pattern6 = __toModule(require_lib());
 var Tabs = (props) => {
   const { onChange, options = [], value, kind = "button", className = "" } = props;
-  const getClasses = (val) => (0, import_ts_pattern6.match)(kind).with("button", () => (0, import_classnames16.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val) => (0, import_ts_pattern6.match)(kind).with("button", () => (0, import_classnames17.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
     "tab__option--selected": val === value
-  })).with("line", () => (0, import_classnames16.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
+  })).with("line", () => (0, import_classnames17.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
     "cursor-pointer": val !== value,
     "text-gray-400": val !== value,
     "text-black": val === value,
@@ -76826,14 +76851,14 @@ var Tabs = (props) => {
     tab__option: true,
     "tab__option--selected": val === value
   })).exhaustive();
-  return /* @__PURE__ */ import_react33.default.createElement("div", {
+  return /* @__PURE__ */ import_react34.default.createElement("div", {
     className: `flex tab relative ${className}`
-  }, options.map((option) => /* @__PURE__ */ import_react33.default.createElement("div", {
+  }, options.map((option) => /* @__PURE__ */ import_react34.default.createElement("div", {
     key: `tab-option-${option.value}`,
     className: getClasses(option.value),
     onClick: (event) => onChange && onChange(event, { value: option.value })
-  }, option.label, kind === "line" && /* @__PURE__ */ import_react33.default.createElement("div", {
-    className: (0, import_classnames16.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
+  }, option.label, kind === "line" && /* @__PURE__ */ import_react34.default.createElement("div", {
+    className: (0, import_classnames17.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": option.value === value,
       "-bottom-0.5": option.value !== value
     })
@@ -76843,26 +76868,6 @@ var Tabs = (props) => {
 // src/modules/EventList/FilterBy/index.tsx
 var import_react35 = __toModule(require_react());
 var import_classnames18 = __toModule(require_classnames());
-
-// src/components/Svg/Check.tsx
-var import_react34 = __toModule(require_react());
-var import_classnames17 = __toModule(require_classnames());
-function Check({ className, alt = "Check" }) {
-  return /* @__PURE__ */ import_react34.default.createElement("svg", {
-    className: (0, import_classnames17.default)(className, "fill-current", "Svg", "Svg__check"),
-    width: "100%",
-    viewBox: "0 0 8 6",
-    fill: "none",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react34.default.createElement("title", null, alt), /* @__PURE__ */ import_react34.default.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M7.69471 1.69471C7.87687 1.50611 7.97766 1.25351 7.97539 0.991311C7.97311 0.729114 7.86794 0.478302 7.68253 0.292894C7.49712 0.107485 7.24631 0.00231622 6.98411 3.78025e-05C6.72192 -0.00224062 6.46931 0.0985542 6.28071 0.280712L2.98771 3.57371L1.69471 2.28071C1.50611 2.09855 1.25351 1.99776 0.991311 2.00004C0.729114 2.00232 0.478302 2.10749 0.292894 2.29289C0.107485 2.4783 0.00231622 2.72911 3.78025e-05 2.99131C-0.00224062 3.25351 0.0985542 3.50611 0.280712 3.69471L2.28071 5.69471C2.46824 5.88218 2.72255 5.9875 2.98771 5.9875C3.25288 5.9875 3.50718 5.88218 3.69471 5.69471L7.69471 1.69471Z",
-    fill: "#0066FF"
-  }));
-}
-
-// src/modules/EventList/FilterBy/index.tsx
 var FilterBy = (props) => {
   const { onChange, options = [], value = [] } = props;
   return /* @__PURE__ */ import_react35.default.createElement("div", {
