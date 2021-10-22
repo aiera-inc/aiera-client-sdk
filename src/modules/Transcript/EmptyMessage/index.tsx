@@ -1,35 +1,24 @@
 import React, { ReactElement } from 'react';
-import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
-import { TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import { TranscriptQuery, EventConnectionStatus } from '@aiera/client-sdk/types/generated';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { Check } from '@aiera/client-sdk/components/Svg/Check';
 import './styles.css';
 
 export type Event = TranscriptQuery['events'][0];
-export type EventStatus =
-    | 'connection_expected'
-    | 'connection_not_expected'
-    | 'waiting_to_connect'
-    | 'connected'
-    | 'transcribing'
-    | 'transcribed'
-    | 'missed';
 
 interface EmptyMessageSharedProps {
     event: Event;
 }
 
 /** @notExported */
-interface EmptyMessageUIProps extends EmptyMessageSharedProps {
-    eventStatus: EventStatus;
-}
+interface EmptyMessageUIProps extends EmptyMessageSharedProps {}
 
 export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
-    const { event, eventStatus } = props;
+    const { event } = props;
 
-    const { pillBgColor, pillTextColor, pillText, message } = match(eventStatus)
-        .with('connection_not_expected', () => ({
+    const { pillBgColor, pillTextColor, pillText, message } = match(event.connectionStatus)
+        .with(EventConnectionStatus.ConnectionNotExpected, () => ({
             pillBgColor: 'bg-gray-200',
             pillTextColor: 'text-gray-700',
             pillText: 'no connection details',
@@ -41,7 +30,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                 </div>
             ),
         }))
-        .with('connection_expected', () => ({
+        .with(EventConnectionStatus.ConnectionExpected, () => ({
             pillBgColor: 'bg-green-300',
             pillTextColor: 'text-green-700',
             pillText: 'connection expected',
@@ -53,19 +42,18 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                 </div>
             ),
         }))
-        .with('waiting_to_connect', () => ({
+        .with(EventConnectionStatus.WaitingToConnect, () => ({
             pillBgColor: 'bg-yellow-200',
             pillTextColor: 'text-yellow-700',
             pillText: 'waiting for connection',
             message: (
                 <div className="text-base text-gray-500">
-                    We are attempting to connect, <br />
-                    this may take up to 3 minutes,
+                    We are attempting to connect,
                     <br /> please wait.
                 </div>
             ),
         }))
-        .with('connected', () => ({
+        .with(EventConnectionStatus.Connected, () => ({
             pillBgColor: 'bg-yellow-300',
             pillTextColor: 'text-yellow-900',
             pillText: 'connected',
@@ -77,7 +65,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                 </div>
             ),
         }))
-        .with('missed', () => ({
+        .with(EventConnectionStatus.Missed, () => ({
             pillBgColor: 'bg-gray-200',
             pillTextColor: 'text-gray-700',
             pillText: 'missed',
@@ -85,17 +73,17 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                 <div className="text-base text-gray-500">
                     {event?.hasConnectionDetails
                         ? prettyLineBreak('Sorry, we were unable to connect to the live audio for this event.')
-                        : 'Apologies, no connection details were found for this event'}
+                        : prettyLineBreak('Apologies, no connection details were found for this event')}
                 </div>
             ),
         }))
-        .with('transcribing', () => ({
+        .with(EventConnectionStatus.Transcribing, () => ({
             pillBgColor: 'bg-green-300',
             pillTextColor: 'text-green-700',
             pillText: 'Transcribing event',
             message: <div className="text-base text-gray-500">This message should not appear</div>,
         }))
-        .with('transcribed', () => ({
+        .with(EventConnectionStatus.Transcribed, () => ({
             pillBgColor: 'bg-green-300',
             pillTextColor: 'text-green-700',
             pillText: 'Event Transcribed',
@@ -136,45 +124,6 @@ export interface EmptyMessageProps extends EmptyMessageSharedProps {}
  */
 export function EmptyMessage(props: EmptyMessageProps): ReactElement {
     const { event } = props;
-    //TODO REMOVE MOCKS
-    const eventDate = DateTime.fromISO(event?.eventDate);
-    const diffSeconds = eventDate?.diffNow('seconds').seconds;
-    const missed = false;
-    const pastEventTime = diffSeconds < 0;
-    const hasNoTranscript = !event?.hasTranscript && !event?.hasPublishedTranscript;
 
-    // Cases
-    const waitingForTranscription = event?.isLive && !missed && hasNoTranscript;
-    const waitingForConnection =
-        pastEventTime &&
-        diffSeconds > -300 &&
-        !missed &&
-        !event?.isLive &&
-        event?.hasConnectionDetails &&
-        hasNoTranscript;
-    const missedConnection = pastEventTime && missed && hasNoTranscript;
-    const connectionExpected = event?.hasConnectionDetails && !event?.isLive && !pastEventTime && hasNoTranscript;
-    const connectionNotExpected = !pastEventTime && !event?.hasConnectionDetails && hasNoTranscript && !event?.isLive;
-    const eventInProgress = event?.isLive && (event.hasTranscript || event.hasPublishedTranscript);
-    const eventFinished = !event?.isLive && (event?.hasTranscript || event?.hasPublishedTranscript);
-
-    let eventStatus = 'connection_not_expected';
-
-    if (connectionNotExpected) {
-        eventStatus = 'connection_not_expected';
-    } else if (connectionExpected) {
-        eventStatus = 'connection_expected';
-    } else if (waitingForConnection) {
-        eventStatus = 'waiting_to_connect';
-    } else if (waitingForTranscription) {
-        eventStatus = 'connected';
-    } else if (missedConnection) {
-        eventStatus = 'missed';
-    } else if (eventInProgress) {
-        eventStatus = 'transcribing';
-    } else if (eventFinished) {
-        eventStatus = 'transcribed';
-    }
-
-    return <EmptyMessageUI event={event} eventStatus={eventStatus as EventStatus} />;
+    return <EmptyMessageUI event={event} />;
 }

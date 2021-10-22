@@ -87,16 +87,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         <CompanyFilterButton onChange={onCompanyChange} value={company} />
                     </div>
                 </div>
-                <Tabs<EventView>
-                    className="ml-1"
-                    kind="line"
-                    onChange={onSelectListType}
-                    options={[
-                        { value: EventView.LiveAndUpcoming, label: 'Live & Upcoming' },
-                        { value: EventView.Recent, label: 'Recent Events' },
-                    ]}
-                    value={listType}
-                />
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">
                 <div className="flex flex-col flex-grow">
@@ -104,11 +94,26 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[
-                                { value: FilterByType.transcript, label: 'Has transcript' },
-                                { value: FilterByType.earningsOnly, label: 'Earnings only' },
+                                { value: FilterByType.transcript, label: 'Transcripts' },
+                                { value: FilterByType.earningsOnly, label: 'Earnings' },
                             ]}
                             value={filterByTypes}
-                        />
+                        >
+                            <Tabs<EventView>
+                                className="ml-1"
+                                kind="line"
+                                onChange={onSelectListType}
+                                options={[
+                                    {
+                                        value: EventView.LiveAndUpcoming,
+                                        label: 'Live Events',
+                                        className: 'h-9 items-center',
+                                    },
+                                    { value: EventView.Recent, label: 'Recent', className: 'h-9 items-center' },
+                                ]}
+                                value={listType}
+                            />
+                        </FilterBy>
                     </div>
                     <div className="flex flex-col items-center justify-center flex-1">
                         {match(eventsQuery)
@@ -150,9 +155,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         ) {
                                             prevEventDate = eventDate;
                                             divider = (
-                                                <li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3">
-                                                    {eventDate.toFormat('DDDD')}
-                                                    <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"></div>
+                                                <li className="sticky top-[56px] px-3">
+                                                    <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold">
+                                                        {eventDate.toFormat('DDDD')}
+                                                        <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"></div>
+                                                    </div>
                                                 </li>
                                             );
                                         }

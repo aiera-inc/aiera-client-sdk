@@ -31,7 +31,9 @@ interface CompanyFilterButtonUIProps extends CompanyFilterButtonSharedProps {
 
 function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
     const { companiesQuery, hideTooltip, onChange, onSearchChange } = props;
-    const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
+    const wrapMsg = (msg: string) => (
+        <div className="flex flex-1 items-center justify-center text-gray-600 mb-5">{msg}</div>
+    );
     return (
         <div className="shadow-md bg-white rounded-lg w-72 overflow-hidden">
             <div className="p-3 w-full">

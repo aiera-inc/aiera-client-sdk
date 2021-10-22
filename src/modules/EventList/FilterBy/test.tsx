@@ -22,4 +22,22 @@ describe('FilterBy', () => {
         expect(onChange).toHaveBeenCalledWith(expect.anything(), expect.objectContaining({ value: [1, 2] }));
         expect(screen.getByText('One').classList).toContain('eventlist__filterby__option--selected');
     });
+
+    test('renders children', () => {
+        const onChange = jest.fn();
+        render(
+            <FilterBy<number>
+                onChange={onChange}
+                options={[
+                    { value: 1, label: 'One' },
+                    { value: 2, label: 'Two' },
+                ]}
+                value={[1]}
+            >
+                children
+            </FilterBy>
+        );
+
+        screen.getByText('children');
+    });
 });

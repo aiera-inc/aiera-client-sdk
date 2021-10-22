@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
-
+import { EventConnectionStatus } from '@aiera/client-sdk/types/generated';
 import { renderWithClient } from 'testUtils';
 import { EmptyMessage, Event } from '.';
 
@@ -10,6 +10,7 @@ const event = {
     title: 'Event Title',
     eventType: 'earnings',
     hasConnectionDetails: true,
+    connectionStatus: EventConnectionStatus.Connected,
     isLive: true,
     publishedTranscriptExpected: true,
     hasTranscript: true,
@@ -40,42 +41,66 @@ describe('EmptyMessage', () => {
         screen.getByText('Event Title');
     });
 
-    /*
     test('EventStatus Connection Not Expected', () => {
-        renderWithClient(
-            <EmptyMessage event={event as Event} eventStatus={'connection_not_expected' as EventStatus} />
-        );
+        const testEvent = {
+            ...event,
+            connectionStatus: EventConnectionStatus.ConnectionNotExpected,
+        };
+        renderWithClient(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('no connection details');
     });
 
     test('EventStatus Connection Expected', () => {
-        renderWithClient(<EmptyMessage event={event as Event} eventStatus={'connection_expected' as EventStatus} />);
+        const testEvent = {
+            ...event,
+            connectionStatus: EventConnectionStatus.ConnectionExpected,
+        };
+        renderWithClient(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('connection expected');
     });
 
     test('EventStatus Waiting to Connect', () => {
-        renderWithClient(<EmptyMessage event={event as Event} eventStatus={'waiting_to_connect' as EventStatus} />);
+        const testEvent = {
+            ...event,
+            connectionStatus: EventConnectionStatus.WaitingToConnect,
+        };
+        renderWithClient(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('waiting for connection');
     });
 
     test('EventStatus Connected', () => {
-        renderWithClient(<EmptyMessage event={event as Event} eventStatus={'connected' as EventStatus} />);
+        const testEvent = {
+            ...event,
+            connectionStatus: EventConnectionStatus.Connected,
+        };
+        renderWithClient(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('connected');
     });
 
     test('EventStatus Missed', () => {
-        renderWithClient(<EmptyMessage event={event as Event} eventStatus={'missed' as EventStatus} />);
+        const testEvent = {
+            ...event,
+            connectionStatus: EventConnectionStatus.Missed,
+        };
+        renderWithClient(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('missed');
     });
 
     test('EventStatus Transcribing', () => {
-        renderWithClient(<EmptyMessage event={event as Event} eventStatus={'transcribing' as EventStatus} />);
+        const testEvent = {
+            ...event,
+            connectionStatus: EventConnectionStatus.Transcribing,
+        };
+        renderWithClient(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('This message should not appear');
     });
 
     test('EventStatus Transcribed', () => {
-        renderWithClient(<EmptyMessage event={event as Event} eventStatus={'transcribed' as EventStatus} />);
+        const testEvent = {
+            ...event,
+            connectionStatus: EventConnectionStatus.Transcribed,
+        };
+        renderWithClient(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('This message should not appear');
     });
-     */
 });
