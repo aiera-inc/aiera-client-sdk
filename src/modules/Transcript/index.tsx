@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactElement, RefObject, useMemo, useEffect, useState, useCallback } from 'react';
+import React, { MouseEventHandler, ReactElement, Ref, useMemo, useEffect, useState, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
@@ -31,11 +31,11 @@ interface TranscriptUIProps {
     toggleHeader: () => void;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
     currentParagraph?: string | null;
-    currentParagraphRef: RefObject<HTMLDivElement>;
+    currentParagraphRef: Ref<HTMLDivElement>;
     paragraphs: Paragraph[];
     onBack?: MouseEventHandler;
     onClickTranscript?: (paragraph: Paragraph) => void;
-    scrollRef: RefObject<HTMLDivElement>;
+    scrollRef: Ref<HTMLDivElement>;
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
@@ -289,7 +289,7 @@ function useAudioSync(
     paragraphs: Paragraph[],
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>,
     audioPlayer: AudioPlayer
-): [string | null, RefObject<HTMLDivElement>, RefObject<HTMLDivElement>] {
+): [string | null, Ref<HTMLDivElement>, Ref<HTMLDivElement>] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
     const [scrollRef, currentParagraphRef] = useAutoScroll<HTMLDivElement>();
 

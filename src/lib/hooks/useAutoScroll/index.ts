@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, RefObject } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState, RefCallback } from 'react';
 
 /**
  * Implementation of autoscroll that watches a `target` and autoscrolls anything the target
@@ -12,17 +12,17 @@ import { useEffect, useLayoutEffect, useRef, RefObject } from 'react';
  */
 export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends HTMLElement = HTMLDivElement>(opts?: {
     skip?: boolean;
-}): [RefObject<E>, RefObject<T>] {
+}): [RefCallback<E>, RefCallback<T>] {
     const { skip = false } = opts || {};
-    const element = useRef<E>(null);
-    const target = useRef<T>(null);
+    const [element, setElement] = useState<E | null>(null);
+    const [target, setTarget] = useState<T | null>(null);
     const pauseAutoScroll = useRef<boolean>(false);
 
     useEffect(() => {
         function onScroll() {
-            if (target.current && element.current) {
-                const targetPosition = target.current.getBoundingClientRect();
-                const containerPosition = element.current.getBoundingClientRect();
+            if (target && element) {
+                const targetPosition = target.getBoundingClientRect();
+                const containerPosition = element.getBoundingClientRect();
 
                 // If the target is visible in the viewport, we want to keep autoscrolling,
                 // but it not then it means the user manually scrolled away and we don't want
@@ -35,17 +35,17 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
             }
         }
 
-        if (element.current) {
-            element.current.addEventListener('scroll', onScroll);
+        if (element) {
+            element.addEventListener('scroll', onScroll);
         }
-        return () => element.current?.removeEventListener('scroll', onScroll);
-    }, [element.current]);
+        return () => element?.removeEventListener('scroll', onScroll);
+    }, [element, target]);
 
     useLayoutEffect(() => {
-        if (!skip && !pauseAutoScroll.current && element.current) {
-            target.current?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+        if (!skip && !pauseAutoScroll.current && element) {
+            target?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
         }
-    }, [target.current, skip]);
+    }, [element, target, skip]);
 
-    return [element, target];
+    return [setElement, setTarget];
 }
