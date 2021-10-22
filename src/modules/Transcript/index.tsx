@@ -173,7 +173,9 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         ))
                     )
                     .with({ status: 'empty' }, ({ data }) => {
-                        return data.events.map((e) => <EmptyMessage key={e.id} event={e} />)[0];
+                        // We'll always have one event here, but to satisify the strict array index check
+                        // we need to make sure it's not undefined still
+                        return data.events[0] && <EmptyMessage event={data.events[0]} />;
                     })
                     .with({ status: 'success' }, () => {
                         return paragraphs.map((paragraph) => {
