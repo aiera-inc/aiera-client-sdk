@@ -31,16 +31,28 @@ export function useChangeHandlers<T>(initialState: T): {
     state: T;
     handlers: ChangeHandlers<T>;
     setState: Dispatch<SetStateAction<T>>;
+    mergeState: Dispatch<SetStateAction<Partial<T>>>;
 } {
     const [state, setState] = useState<T>(initialState);
     const handlers = {} as ChangeHandlers<T>;
-    for (const key in initialState) {
-        handlers[key] = useCallback((_, change) => setState({ ...state, [key]: change.value }), [state]);
+    const mergeState = useCallback(
+        (newState: SetStateAction<Partial<T>>) =>
+            setState((prevState) => {
+                if (typeof newState === 'function') {
+                    return { ...prevState, ...newState(prevState) };
+                }
+                return { ...prevState, ...newState };
+            }),
+        [setState]
+    );
+    for (const key in state) {
+        handlers[key] = useCallback((_, change) => mergeState({ [key]: change.value } as Partial<T>), [state]);
     }
     /** The same as the `state` value from useState */
     return {
         state,
         setState,
+        mergeState,
         handlers,
     };
 }
