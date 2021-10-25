@@ -1,6 +1,5 @@
 import React from 'react';
 import { render, fireEvent, screen } from '@testing-library/react';
-import '@testing-library/jest-dom/extend-expect';
 
 import { Input } from '.';
 
@@ -18,5 +17,13 @@ describe('Input', () => {
         const inputEle = screen.getByPlaceholderText('example');
         fireEvent.change(inputEle, { target: { value: 'changed' } });
         expect(onChange).toHaveBeenCalledWith(expect.anything(), { name: 'input', value: 'changed' });
+    });
+
+    test('onFocus called', () => {
+        const onFocus = jest.fn();
+        render(<Input name="input" defaultValue="test" placeholder="example" onFocus={onFocus} />);
+        const inputEle = screen.getByPlaceholderText('example');
+        fireEvent.focus(inputEle);
+        expect(onFocus).toHaveBeenCalled();
     });
 });
