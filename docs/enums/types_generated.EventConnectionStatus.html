@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>CompanyUrlType | @aiera/client-sdk</title>
+	<title>EventConnectionStatus | @aiera/client-sdk</title>
 	<meta name="description" content="Documentation for @aiera/client-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/types_generated.html">types/generated</a>
 				</li>
 				<li>
-					<a href="types_generated.CompanyUrlType.html">CompanyUrlType</a>
+					<a href="types_generated.EventConnectionStatus.html">EventConnectionStatus</a>
 				</li>
 			</ul>
-			<h1>Enumeration CompanyUrlType</h1>
+			<h1>Enumeration EventConnectionStatus</h1>
 		</div>
 	</div>
 </header>
@@ -75,11 +75,13 @@
 						<section class="tsd-index-section ">
 							<h3>Enumeration members</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.CompanyUrlType.html#Home" class="tsd-kind-icon">Home</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.CompanyUrlType.html#IrEvents" class="tsd-kind-icon">Ir<wbr>Events</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.CompanyUrlType.html#IrHome" class="tsd-kind-icon">Ir<wbr>Home</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.CompanyUrlType.html#IrNews" class="tsd-kind-icon">Ir<wbr>News</a></li>
-								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.CompanyUrlType.html#LogoIcon" class="tsd-kind-icon">Logo<wbr>Icon</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.EventConnectionStatus.html#Connected" class="tsd-kind-icon">Connected</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.EventConnectionStatus.html#ConnectionExpected" class="tsd-kind-icon">Connection<wbr>Expected</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.EventConnectionStatus.html#ConnectionNotExpected" class="tsd-kind-icon">Connection<wbr>Not<wbr>Expected</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.EventConnectionStatus.html#Missed" class="tsd-kind-icon">Missed</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.EventConnectionStatus.html#Transcribed" class="tsd-kind-icon">Transcribed</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.EventConnectionStatus.html#Transcribing" class="tsd-kind-icon">Transcribing</a></li>
+								<li class="tsd-kind-enum-member tsd-parent-kind-enum"><a href="types_generated.EventConnectionStatus.html#WaitingToConnect" class="tsd-kind-icon">Waiting<wbr>ToConnect</a></li>
 							</ul>
 						</section>
 					</div>
@@ -88,52 +90,72 @@
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Enumeration members</h2>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="Home" class="tsd-anchor"></a>
-					<h3>Home</h3>
-					<div class="tsd-signature tsd-kind-icon">Home<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;home&quot;</span></div>
+					<a name="Connected" class="tsd-anchor"></a>
+					<h3>Connected</h3>
+					<div class="tsd-signature tsd-kind-icon">Connected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;connected&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:76</li>
+							<li>Defined in src/types/generated.ts:154</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="IrEvents" class="tsd-anchor"></a>
-					<h3>Ir<wbr>Events</h3>
-					<div class="tsd-signature tsd-kind-icon">Ir<wbr>Events<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;ir_events&quot;</span></div>
+					<a name="ConnectionExpected" class="tsd-anchor"></a>
+					<h3>Connection<wbr>Expected</h3>
+					<div class="tsd-signature tsd-kind-icon">Connection<wbr>Expected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;connection_expected&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:77</li>
+							<li>Defined in src/types/generated.ts:155</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="IrHome" class="tsd-anchor"></a>
-					<h3>Ir<wbr>Home</h3>
-					<div class="tsd-signature tsd-kind-icon">Ir<wbr>Home<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;ir_home&quot;</span></div>
+					<a name="ConnectionNotExpected" class="tsd-anchor"></a>
+					<h3>Connection<wbr>Not<wbr>Expected</h3>
+					<div class="tsd-signature tsd-kind-icon">Connection<wbr>Not<wbr>Expected<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;connection_not_expected&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:78</li>
+							<li>Defined in src/types/generated.ts:156</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="IrNews" class="tsd-anchor"></a>
-					<h3>Ir<wbr>News</h3>
-					<div class="tsd-signature tsd-kind-icon">Ir<wbr>News<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;ir_news&quot;</span></div>
+					<a name="Missed" class="tsd-anchor"></a>
+					<h3>Missed</h3>
+					<div class="tsd-signature tsd-kind-icon">Missed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;missed&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:79</li>
+							<li>Defined in src/types/generated.ts:157</li>
 						</ul>
 					</aside>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
-					<a name="LogoIcon" class="tsd-anchor"></a>
-					<h3>Logo<wbr>Icon</h3>
-					<div class="tsd-signature tsd-kind-icon">Logo<wbr>Icon<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;logo_icon&quot;</span></div>
+					<a name="Transcribed" class="tsd-anchor"></a>
+					<h3>Transcribed</h3>
+					<div class="tsd-signature tsd-kind-icon">Transcribed<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;transcribed&quot;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in src/types/generated.ts:80</li>
+							<li>Defined in src/types/generated.ts:158</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="Transcribing" class="tsd-anchor"></a>
+					<h3>Transcribing</h3>
+					<div class="tsd-signature tsd-kind-icon">Transcribing<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;transcribing&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/types/generated.ts:159</li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-enum-member tsd-parent-kind-enum">
+					<a name="WaitingToConnect" class="tsd-anchor"></a>
+					<h3>Waiting<wbr>ToConnect</h3>
+					<div class="tsd-signature tsd-kind-icon">Waiting<wbr>ToConnect<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-symbol"> = &quot;waiting_to_connect&quot;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in src/types/generated.ts:160</li>
 						</ul>
 					</aside>
 				</section>
@@ -155,22 +177,28 @@
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-enum tsd-parent-kind-module">
-						<a href="types_generated.CompanyUrlType.html" class="tsd-kind-icon">Company<wbr>Url<wbr>Type</a>
+						<a href="types_generated.EventConnectionStatus.html" class="tsd-kind-icon">Event<wbr>Connection<wbr>Status</a>
 						<ul>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="types_generated.CompanyUrlType.html#Home" class="tsd-kind-icon">Home</a>
+								<a href="types_generated.EventConnectionStatus.html#Connected" class="tsd-kind-icon">Connected</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="types_generated.CompanyUrlType.html#IrEvents" class="tsd-kind-icon">Ir<wbr>Events</a>
+								<a href="types_generated.EventConnectionStatus.html#ConnectionExpected" class="tsd-kind-icon">Connection<wbr>Expected</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="types_generated.CompanyUrlType.html#IrHome" class="tsd-kind-icon">Ir<wbr>Home</a>
+								<a href="types_generated.EventConnectionStatus.html#ConnectionNotExpected" class="tsd-kind-icon">Connection<wbr>Not<wbr>Expected</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="types_generated.CompanyUrlType.html#IrNews" class="tsd-kind-icon">Ir<wbr>News</a>
+								<a href="types_generated.EventConnectionStatus.html#Missed" class="tsd-kind-icon">Missed</a>
 							</li>
 							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
-								<a href="types_generated.CompanyUrlType.html#LogoIcon" class="tsd-kind-icon">Logo<wbr>Icon</a>
+								<a href="types_generated.EventConnectionStatus.html#Transcribed" class="tsd-kind-icon">Transcribed</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="types_generated.EventConnectionStatus.html#Transcribing" class="tsd-kind-icon">Transcribing</a>
+							</li>
+							<li class=" tsd-kind-enum-member tsd-parent-kind-enum">
+								<a href="types_generated.EventConnectionStatus.html#WaitingToConnect" class="tsd-kind-icon">Waiting<wbr>ToConnect</a>
 							</li>
 						</ul>
 					</li>

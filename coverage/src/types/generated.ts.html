@@ -770,7 +770,73 @@
 <a name='L711'></a><a href='#L711'>711</a>
 <a name='L712'></a><a href='#L712'>712</a>
 <a name='L713'></a><a href='#L713'>713</a>
-<a name='L714'></a><a href='#L714'>714</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L714'></a><a href='#L714'>714</a>
+<a name='L715'></a><a href='#L715'>715</a>
+<a name='L716'></a><a href='#L716'>716</a>
+<a name='L717'></a><a href='#L717'>717</a>
+<a name='L718'></a><a href='#L718'>718</a>
+<a name='L719'></a><a href='#L719'>719</a>
+<a name='L720'></a><a href='#L720'>720</a>
+<a name='L721'></a><a href='#L721'>721</a>
+<a name='L722'></a><a href='#L722'>722</a>
+<a name='L723'></a><a href='#L723'>723</a>
+<a name='L724'></a><a href='#L724'>724</a>
+<a name='L725'></a><a href='#L725'>725</a>
+<a name='L726'></a><a href='#L726'>726</a>
+<a name='L727'></a><a href='#L727'>727</a>
+<a name='L728'></a><a href='#L728'>728</a>
+<a name='L729'></a><a href='#L729'>729</a>
+<a name='L730'></a><a href='#L730'>730</a>
+<a name='L731'></a><a href='#L731'>731</a>
+<a name='L732'></a><a href='#L732'>732</a>
+<a name='L733'></a><a href='#L733'>733</a>
+<a name='L734'></a><a href='#L734'>734</a>
+<a name='L735'></a><a href='#L735'>735</a>
+<a name='L736'></a><a href='#L736'>736</a>
+<a name='L737'></a><a href='#L737'>737</a>
+<a name='L738'></a><a href='#L738'>738</a>
+<a name='L739'></a><a href='#L739'>739</a>
+<a name='L740'></a><a href='#L740'>740</a>
+<a name='L741'></a><a href='#L741'>741</a>
+<a name='L742'></a><a href='#L742'>742</a>
+<a name='L743'></a><a href='#L743'>743</a>
+<a name='L744'></a><a href='#L744'>744</a>
+<a name='L745'></a><a href='#L745'>745</a>
+<a name='L746'></a><a href='#L746'>746</a>
+<a name='L747'></a><a href='#L747'>747</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1539,6 +1605,7 @@ export type Company = {
 &nbsp;
 export type CompanyFilter = {
   companyIds?: Maybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
+  identifierResolution?: Maybe&lt;IdentifierResolutionInput&gt;;
   resolution?: Maybe&lt;ResolutionInput&gt;;
   searchTerm?: Maybe&lt;Scalars['String']&gt;;
 };
@@ -1612,24 +1679,37 @@ export type Event = {
   audioRecordingUrl?: Maybe&lt;Scalars['String']&gt;;
   audioStreamUri?: Maybe&lt;Scalars['String']&gt;;
   companies: Array&lt;Company&gt;;
+  connectionExpected: Scalars['Boolean'];
+  connectionStatus: EventConnectionStatus;
   dialInPhoneNumbers: Array&lt;Scalars['String']&gt;;
   dialInPin?: Maybe&lt;Scalars['String']&gt;;
   eventDate: Scalars['DateTime'];
   eventGroups: Array&lt;EventGroup&gt;;
   eventType: EventType;
-  expectPublishedTranscript: Scalars['Boolean'];
   fiscalQuarter?: Maybe&lt;Scalars['Int']&gt;;
   fiscalYear?: Maybe&lt;Scalars['Int']&gt;;
   hasConnectionDetails: Scalars['Boolean'];
+  hasLiveTranscript: Scalars['Boolean'];
   hasPublishedTranscript: Scalars['Boolean'];
   hasTranscript: Scalars['Boolean'];
   id: Scalars['ID'];
   isLive: Scalars['Boolean'];
   primaryCompany?: Maybe&lt;Company&gt;;
+  publishedTranscriptExpected: Scalars['Boolean'];
   title: Scalars['String'];
   transcripts: Array&lt;EventTranscript&gt;;
   webcastUrls: Array&lt;Scalars['String']&gt;;
 };
+&nbsp;
+export enum EventConnectionStatus {
+  Connected = 'connected',
+  ConnectionExpected = 'connection_expected',
+  ConnectionNotExpected = 'connection_not_expected',
+  Missed = 'missed',
+  Transcribed = 'transcribed',
+  Transcribing = 'transcribing',
+  WaitingToConnect = 'waiting_to_connect'
+}
 &nbsp;
 export type EventFilter = {
   companyIds?: Maybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
@@ -1772,6 +1852,25 @@ export type GicsSubIndustry = {
   id: Scalars['ID'];
   name: Scalars['String'];
 };
+&nbsp;
+export type IdentifierInput = {
+  identifier: Scalars['String'];
+  identifierType?: IdentifierType;
+};
+&nbsp;
+export type IdentifierResolutionFilter = {
+  universe?: Maybe&lt;IdentifierResolutionUniverse&gt;;
+};
+&nbsp;
+export type IdentifierResolutionInput = {
+  filter?: Maybe&lt;IdentifierResolutionFilter&gt;;
+  identifiers: Array&lt;IdentifierInput&gt;;
+};
+&nbsp;
+export enum IdentifierResolutionUniverse {
+  Default = 'default',
+  UsOnly = 'us_only'
+}
 &nbsp;
 export enum IdentifierType {
   Unknown = 'unknown'
@@ -1999,7 +2098,7 @@ export type TranscriptQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, audioRecordingOffsetMs: number, expectPublishedTranscript: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;string&gt;, syncMs?: Maybe&lt;number&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;string&gt;, syncMs?: Maybe&lt;number&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 &nbsp;
 export const RefreshDocument = gql`
@@ -2152,7 +2251,7 @@ export const TranscriptDocument = gql`
     isLive
     audioRecordingUrl
     audioRecordingOffsetMs
-    expectPublishedTranscript
+    publishedTranscriptExpected
     hasTranscript
     hasPublishedTranscript
     primaryCompany {
@@ -2203,7 +2302,7 @@ export const TranscriptDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Oct 22 2021 14:36:04 GMT-0400 (Eastern Daylight Time)
+                at Mon Oct 25 2021 13:04:12 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

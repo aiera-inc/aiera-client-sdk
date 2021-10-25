@@ -75018,6 +75018,16 @@ var CompanyUrlType;
   CompanyUrlType2["IrNews"] = "ir_news";
   CompanyUrlType2["LogoIcon"] = "logo_icon";
 })(CompanyUrlType || (CompanyUrlType = {}));
+var EventConnectionStatus;
+(function(EventConnectionStatus2) {
+  EventConnectionStatus2["Connected"] = "connected";
+  EventConnectionStatus2["ConnectionExpected"] = "connection_expected";
+  EventConnectionStatus2["ConnectionNotExpected"] = "connection_not_expected";
+  EventConnectionStatus2["Missed"] = "missed";
+  EventConnectionStatus2["Transcribed"] = "transcribed";
+  EventConnectionStatus2["Transcribing"] = "transcribing";
+  EventConnectionStatus2["WaitingToConnect"] = "waiting_to_connect";
+})(EventConnectionStatus || (EventConnectionStatus = {}));
 var EventTranscriptSectionType;
 (function(EventTranscriptSectionType2) {
   EventTranscriptSectionType2["Presentation"] = "presentation";
@@ -75045,6 +75055,11 @@ var ExchangePriceDelay;
   ExchangePriceDelay2["Eod"] = "eod";
   ExchangePriceDelay2["FifteenMinute"] = "fifteen_minute";
 })(ExchangePriceDelay || (ExchangePriceDelay = {}));
+var IdentifierResolutionUniverse;
+(function(IdentifierResolutionUniverse2) {
+  IdentifierResolutionUniverse2["Default"] = "default";
+  IdentifierResolutionUniverse2["UsOnly"] = "us_only";
+})(IdentifierResolutionUniverse || (IdentifierResolutionUniverse = {}));
 var IdentifierType;
 (function(IdentifierType2) {
   IdentifierType2["Unknown"] = "unknown";
@@ -75221,7 +75236,7 @@ var TranscriptDocument = lib_default`
     isLive
     audioRecordingUrl
     audioRecordingOffsetMs
-    expectPublishedTranscript
+    publishedTranscriptExpected
     hasTranscript
     hasPublishedTranscript
     primaryCompany {
@@ -76506,7 +76521,7 @@ function EmptyMessageUI(props) {
     className: "z-10 relative"
   }, pillText), /* @__PURE__ */ import_react32.default.createElement("span", {
     className: `animate-pulse ${pillBgColor} absolute top-0 bottom-0 left-0 right-0`
-  })), message, (event == null ? void 0 : event.expectPublishedTranscript) && /* @__PURE__ */ import_react32.default.createElement("div", {
+  })), message, (event == null ? void 0 : event.publishedTranscriptExpected) && /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "flex mt-4 items-center justify-start text-left bg-green-50 rounded-2xl py-1.5 pr-2 pl-3 border-[1px] border-green-100"
   }, /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "text-sm leading-tight text-green-600"
@@ -76762,7 +76777,7 @@ var Transcript = (props) => {
                     isLive
                     audioRecordingUrl
                     audioRecordingOffsetMs
-                    expectPublishedTranscript
+                    publishedTranscriptExpected
                     hasTranscript
                     hasPublishedTranscript
                     primaryCompany {
