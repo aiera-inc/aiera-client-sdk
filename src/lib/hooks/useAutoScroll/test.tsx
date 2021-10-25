@@ -26,7 +26,7 @@ describe('useAutoScroll', () => {
 
         refDiv(targetRef, targetDiv);
         // target ref is now set so scroll should have been called
-        expect(targetDiv.scrollIntoView).toHaveBeenCalledTimes(1);
+        expect(targetDiv.scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'auto' }));
 
         // target ref didn't change so scroll should not have been called again
         rerender();
@@ -34,7 +34,7 @@ describe('useAutoScroll', () => {
 
         targetDiv = refDiv(targetRef);
         // target ref changed so scroll should have been called again
-        expect(targetDiv.scrollIntoView).toHaveBeenCalledTimes(1);
+        expect(targetDiv.scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'smooth' }));
     });
 
     test('pauses auto scrolling after manual scroll', () => {

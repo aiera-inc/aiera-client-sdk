@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState, RefCallback } from 'react';
+import { useLayoutEffect, useRef, useState, RefCallback } from 'react';
 
 /**
  * Implementation of autoscroll that watches a `target` and autoscrolls anything the target
@@ -17,10 +17,11 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     const [element, setElement] = useState<E | null>(null);
     const [target, setTarget] = useState<T | null>(null);
     const pauseAutoScroll = useRef<boolean>(false);
+    const initialScroll = useRef<boolean>(true);
 
-    useEffect(() => {
-        function onScroll() {
-            if (target && element) {
+    useLayoutEffect(() => {
+        function checkPosition() {
+            if (target && element && !skip) {
                 const targetPosition = target.getBoundingClientRect();
                 const containerPosition = element.getBoundingClientRect();
 
@@ -35,16 +36,24 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
             }
         }
 
-        if (element) {
-            element.addEventListener('scroll', onScroll);
-        }
-        return () => element?.removeEventListener('scroll', onScroll);
-    }, [element, target]);
-
-    useLayoutEffect(() => {
+        // Whenever one of the refs changes, check if we should scroll to the current target
         if (!skip && !pauseAutoScroll.current && element) {
-            target?.scrollIntoView?.({ behavior: 'smooth', block: 'nearest' });
+            target?.scrollIntoView?.({ behavior: initialScroll.current ? 'auto' : 'smooth', block: 'nearest' });
+            // If we scrolled, reset initial back so we start smooth scrolling from now on
+            initialScroll.current = false;
         }
+
+        if (!target) {
+            initialScroll.current = !target;
+        }
+
+        // Check the position on target changes in addition to onScroll
+        checkPosition();
+
+        if (element) {
+            element.addEventListener('scroll', checkPosition);
+        }
+        return () => element?.removeEventListener('scroll', checkPosition);
     }, [element, target, skip]);
 
     return [setElement, setTarget];
