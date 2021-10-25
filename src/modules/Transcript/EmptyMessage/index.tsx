@@ -113,7 +113,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                 <span className={`animate-pulse ${pillBgColor} absolute top-0 bottom-0 left-0 right-0`}></span>
             </div>
             {message}
-            {event?.expectPublishedTranscript && (
+            {event?.publishedTranscriptExpected && (
                 <div className="flex mt-4 items-center justify-start text-left bg-green-50 rounded-2xl py-1.5 pr-2 pl-3 border-[1px] border-green-100">
                     <div className="text-sm leading-tight text-green-600">
                         We expect to receive a<br />

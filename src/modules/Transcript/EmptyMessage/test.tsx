@@ -11,7 +11,7 @@ const event = {
     eventType: 'earnings',
     hasConnectionDetails: true,
     isLive: true,
-    expectPublishedTranscript: true,
+    publishedTranscriptExpected: true,
     hasTranscript: true,
     hasPublishedTranscript: true,
     audioRecordingOffsetMs: 0,

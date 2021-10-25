@@ -355,7 +355,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                     isLive
                     audioRecordingUrl
                     audioRecordingOffsetMs
-                    expectPublishedTranscript
+                    publishedTranscriptExpected
                     hasTranscript
                     hasPublishedTranscript
                     primaryCompany {
