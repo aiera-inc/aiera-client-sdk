@@ -75371,12 +75371,19 @@ var import_react7 = __toModule(require_react());
 function useChangeHandlers(initialState) {
   const [state, setState] = (0, import_react7.useState)(initialState);
   const handlers = {};
-  for (const key in initialState) {
-    handlers[key] = (0, import_react7.useCallback)((_2, change) => setState(__spreadProps(__spreadValues({}, state), { [key]: change.value })), [state]);
+  const mergeState = (0, import_react7.useCallback)((newState) => setState((prevState) => {
+    if (typeof newState === "function") {
+      return __spreadValues(__spreadValues({}, prevState), newState(prevState));
+    }
+    return __spreadValues(__spreadValues({}, prevState), newState);
+  }), [setState]);
+  for (const key in state) {
+    handlers[key] = (0, import_react7.useCallback)((_2, change) => mergeState({ [key]: change.value }), [state]);
   }
   return {
     state,
     setState,
+    mergeState,
     handlers
   };
 }
