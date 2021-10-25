@@ -429,7 +429,14 @@
 <a name='L370'></a><a href='#L370'>370</a>
 <a name='L371'></a><a href='#L371'>371</a>
 <a name='L372'></a><a href='#L372'>372</a>
-<a name='L373'></a><a href='#L373'>373</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -503,6 +510,11 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -581,6 +593,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -890,16 +904,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                         &lt;CompanyFilterButton onChange={onCompanyChange} value={company} /&gt;
                     &lt;/div&gt;
                 &lt;/div&gt;
-                &lt;Tabs&lt;EventView&gt;
-                    className="ml-1"
-                    kind="line"
-                    onChange={onSelectListType}
-                    options={[
-                        { value: EventView.LiveAndUpcoming, label: 'Live &amp; Upcoming' },
-                        { value: EventView.Recent, label: 'Recent Events' },
-                    ]}
-                    value={listType}
-                /&gt;
             &lt;/div&gt;
             &lt;div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"&gt;
                 &lt;div className="flex flex-col flex-grow"&gt;
@@ -907,11 +911,26 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                         &lt;FilterBy
                             onChange={onSelectFilterBy}
                             options={[
-                                { value: FilterByType.transcript, label: 'Has transcript' },
-                                { value: FilterByType.earningsOnly, label: 'Earnings only' },
+                                { value: FilterByType.transcript, label: 'Transcripts' },
+                                { value: FilterByType.earningsOnly, label: 'Earnings' },
                             ]}
                             value={filterByTypes}
-                        /&gt;
+                        &gt;
+                            &lt;Tabs&lt;EventView&gt;
+                                className="ml-1"
+                                kind="line"
+                                onChange={onSelectListType}
+                                options={[
+                                    {
+                                        value: EventView.LiveAndUpcoming,
+                                        label: 'Live Events',
+                                        className: 'h-9 items-center',
+                                    },
+                                    { value: EventView.Recent, label: 'Recent', className: 'h-9 items-center' },
+                                ]}
+                                value={listType}
+                            /&gt;
+                        &lt;/FilterBy&gt;
                     &lt;/div&gt;
                     &lt;div className="flex flex-col items-center justify-center flex-1"&gt;
                         {match(eventsQuery)
@@ -953,9 +972,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                                         ) {
                                             prevEventDate = eventDate;
                                             divider = (
-                                                &lt;li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"&gt;
-                                                    {eventDate.toFormat('DDDD')}
-                                                    &lt;div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"&gt;&lt;/div&gt;
+                                                &lt;li className="sticky top-[56px] px-3"&gt;
+                                                    &lt;div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold"&gt;
+                                                        {eventDate.toFormat('DDDD')}
+                                                        &lt;div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"&gt;&lt;/div&gt;
+                                                    &lt;/div&gt;
                                                 &lt;/li&gt;
                                             );
                                         }
@@ -1180,7 +1201,7 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 25 2021 13:04:12 GMT-0400 (Eastern Daylight Time)
+                at Mon Oct 25 2021 13:31:58 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
