@@ -76525,10 +76525,9 @@ var import_react31 = __toModule(require_react());
 var import_classnames14 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
   return /* @__PURE__ */ import_react31.default.createElement("svg", {
-    className: (0, import_classnames14.default)(className, "Svg", "Svg__arrowLeft"),
+    className: (0, import_classnames14.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
-    fill: "black",
     xmlns: "http://www.w3.org/2000/svg"
   }, /* @__PURE__ */ import_react31.default.createElement("title", null, alt), /* @__PURE__ */ import_react31.default.createElement("path", {
     fillRule: "evenodd",
