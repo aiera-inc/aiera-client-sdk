@@ -1100,7 +1100,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create, deps);
         }
-        function useCallback11(callback, deps) {
+        function useCallback12(callback, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
@@ -1659,7 +1659,7 @@ var require_react_development = __commonJS({
         exports2.isValidElement = isValidElement;
         exports2.lazy = lazy;
         exports2.memo = memo;
-        exports2.useCallback = useCallback11;
+        exports2.useCallback = useCallback12;
         exports2.useContext = useContext5;
         exports2.useDebugValue = useDebugValue;
         exports2.useEffect = useEffect12;
@@ -76488,15 +76488,13 @@ function ExpandButton(props) {
 var import_react30 = __toModule(require_react());
 var import_classnames13 = __toModule(require_classnames());
 function InputUI(props) {
-  const { children, placeholder, onChange, value, name, className = "", defaultValue } = props;
+  const { children, placeholder, onChange, onFocus, value, name, className = "", defaultValue } = props;
   return /* @__PURE__ */ import_react30.default.createElement("div", {
     className: `group h-8 items-center w-full relative ${className} input__${name}`
   }, /* @__PURE__ */ import_react30.default.createElement("input", {
     className: (0, import_classnames13.default)("w-full inset-0 absolute text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400", { "pl-7": !!children, "pl-3": !children }),
-    onChange: onChange ? (event) => {
-      var _a;
-      return onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
-    } : void 0,
+    onChange,
+    onFocus,
     placeholder,
     defaultValue,
     value
@@ -76507,10 +76505,14 @@ function InputUI(props) {
   })));
 }
 function Input(props) {
-  const { children, placeholder, onChange, value, name, className, defaultValue } = props;
+  const { children, placeholder, onChange, onFocus, value, name, className, defaultValue } = props;
   return /* @__PURE__ */ import_react30.default.createElement(InputUI, {
     placeholder,
-    onChange,
+    onChange: (0, import_react30.useCallback)((event) => {
+      var _a;
+      return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
+    }, [onChange]),
+    onFocus,
     defaultValue,
     value,
     className,
