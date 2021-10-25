@@ -1092,7 +1092,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect12(create, deps) {
+        function useEffect11(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1662,7 +1662,7 @@ var require_react_development = __commonJS({
         exports2.useCallback = useCallback12;
         exports2.useContext = useContext5;
         exports2.useDebugValue = useDebugValue;
-        exports2.useEffect = useEffect12;
+        exports2.useEffect = useEffect11;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect3;
         exports2.useMemo = useMemo3;
@@ -75978,9 +75978,11 @@ function useAutoScroll(opts) {
   const [element, setElement] = (0, import_react17.useState)(null);
   const [target, setTarget] = (0, import_react17.useState)(null);
   const pauseAutoScroll = (0, import_react17.useRef)(false);
-  (0, import_react17.useEffect)(() => {
-    function onScroll() {
-      if (target && element) {
+  const initialScroll = (0, import_react17.useRef)(true);
+  (0, import_react17.useLayoutEffect)(() => {
+    var _a;
+    function checkPosition() {
+      if (target && element && !skip) {
         const targetPosition = target.getBoundingClientRect();
         const containerPosition = element.getBoundingClientRect();
         if (targetPosition.top <= containerPosition.top) {
@@ -75990,16 +75992,18 @@ function useAutoScroll(opts) {
         }
       }
     }
-    if (element) {
-      element.addEventListener("scroll", onScroll);
-    }
-    return () => element == null ? void 0 : element.removeEventListener("scroll", onScroll);
-  }, [element, target]);
-  (0, import_react17.useLayoutEffect)(() => {
-    var _a;
     if (!skip && !pauseAutoScroll.current && element) {
-      (_a = target == null ? void 0 : target.scrollIntoView) == null ? void 0 : _a.call(target, { behavior: "smooth", block: "nearest" });
+      (_a = target == null ? void 0 : target.scrollIntoView) == null ? void 0 : _a.call(target, { behavior: initialScroll.current ? "auto" : "smooth", block: "nearest" });
+      initialScroll.current = false;
     }
+    if (!target) {
+      initialScroll.current = !target;
+    }
+    checkPosition();
+    if (element) {
+      element.addEventListener("scroll", checkPosition);
+    }
+    return () => element == null ? void 0 : element.removeEventListener("scroll", checkPosition);
   }, [element, target, skip]);
   return [setElement, setTarget];
 }
