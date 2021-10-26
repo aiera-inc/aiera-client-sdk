@@ -2,6 +2,8 @@ import React, { MouseEventHandler, ReactElement, useState, useCallback, useRef, 
 import { match } from 'ts-pattern';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
+
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
@@ -20,6 +22,8 @@ export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
     eventQuery: EventQuery;
     onBack?: MouseEventHandler;
+    searchTerm?: string;
+    onChangeSearchTerm?: ChangeHandler<string>;
 }
 
 /** @notExported */
@@ -44,6 +48,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         toggleEventDetails,
         priceChartExpanded,
         togglePriceChart,
+        searchTerm,
+        onChangeSearchTerm,
     } = props;
 
     return (
@@ -65,7 +71,13 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                         Events
                     </Button>
                 )}
-                <Input name="search" className="mr-3" placeholder="Search Transcripts...">
+                <Input
+                    name="search"
+                    className="mr-3"
+                    placeholder="Search Transcripts..."
+                    value={searchTerm}
+                    onChange={onChangeSearchTerm}
+                >
                     <MagnifyingGlass />
                 </Input>
                 <div className="items-center flex">
@@ -187,7 +199,7 @@ export interface HeaderProps extends HeaderSharedProps {}
  * Renders Header
  */
 export function Header(props: HeaderProps): ReactElement {
-    const { eventQuery, onBack } = props;
+    const { eventQuery, onBack, searchTerm, onChangeSearchTerm } = props;
     const [headerExpanded, setHeaderState] = useState(false);
     const [priceChartExpanded, setPriceChartState] = useState(false);
     const [eventDetailsExpanded, setEventDetailsState] = useState(false);
@@ -230,6 +242,8 @@ export function Header(props: HeaderProps): ReactElement {
             toggleEventDetails={toggleEventDetails}
             togglePriceChart={togglePriceChart}
             priceChartExpanded={priceChartExpanded}
+            searchTerm={searchTerm}
+            onChangeSearchTerm={onChangeSearchTerm}
         />
     );
 }

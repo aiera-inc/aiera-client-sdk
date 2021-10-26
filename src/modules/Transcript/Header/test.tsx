@@ -71,11 +71,30 @@ describe('Header', () => {
         renderWithClient(<Header eventQuery={eventQuery as EventQuery} onBack={onBack} />);
         screen.getByText('VERB');
     });
+
     test('Back function is called', () => {
         const onBack = jest.fn();
         renderWithClient(<Header eventQuery={eventQuery as EventQuery} onBack={onBack} />);
         const eventsBtn = screen.getByText('Events');
         fireEvent.click(eventsBtn);
         expect(onBack).toHaveBeenCalledTimes(1);
+    });
+
+    test('Renders search term and fires search change events', () => {
+        const onChangeSearchTerm = jest.fn();
+        renderWithClient(
+            <Header
+                eventQuery={eventQuery as EventQuery}
+                onChangeSearchTerm={onChangeSearchTerm}
+                searchTerm={'test search'}
+            />
+        );
+        const searchInput = screen.getByPlaceholderText('Search Transcripts...') as HTMLInputElement;
+        expect(searchInput.value).toBe('test search');
+        fireEvent.change(searchInput, { target: { value: 'new search' } });
+        expect(onChangeSearchTerm).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({ value: 'new search' })
+        );
     });
 });
