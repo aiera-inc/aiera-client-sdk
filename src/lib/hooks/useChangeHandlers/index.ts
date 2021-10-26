@@ -1,6 +1,7 @@
 import { useCallback, useState, Dispatch, SetStateAction } from 'react';
 
-import { ChangeHandlers } from '@aiera/client-sdk/types';
+import { ChangeHandler, ChangeHandlers } from '@aiera/client-sdk/types';
+export { ChangeHandler };
 
 /**
  * This is a utility for taking a a set of fields
