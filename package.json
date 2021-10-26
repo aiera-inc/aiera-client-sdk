@@ -102,6 +102,8 @@
         "eventemitter3": "4.0.7",
         "graphql": "15.5.3",
         "graphql-tag": "2.12.5",
+        "highcharts": "^9.3.0",
+        "highcharts-react-official": "^3.1.0",
         "luxon": "2.0.2",
         "tailwindcss-interaction-variants": "^5.0.0",
         "ts-pattern": "3.2.5",

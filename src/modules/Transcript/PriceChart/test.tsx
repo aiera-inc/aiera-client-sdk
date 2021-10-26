@@ -1,9 +1,10 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
-
 import { renderWithClient } from 'testUtils';
-import { EventDetails, Event } from '.';
+import '@testing-library/jest-dom/extend-expect';
+import { PriceChart } from '.';
 
+/*
 const event = {
     id: '1',
     eventDate: '2021-08-25T18:00:00+00:00',
@@ -37,15 +38,17 @@ const event = {
             },
         ],
     },
-};
+    };*/
 
-describe('EventDetails', () => {
+describe('PriceChart', () => {
     test('renders', () => {
         const toggle = jest.fn();
-        renderWithClient(<EventDetails event={event as Event} eventDetailsExpanded toggleEventDetails={toggle} />);
-        const eventDetails = screen.getByText('Event Details');
-        fireEvent.click(eventDetails);
-        screen.getByText('http://www.example.com/audio');
+        const { rendered } = renderWithClient(
+            <PriceChart headerExpanded={true} priceChartExpanded togglePriceChart={toggle} />
+        );
+        const label = screen.getByText('Price Reaction');
+        fireEvent.click(label);
+        expect(rendered.container.querySelector('.highcharts-container')).not.toBeNull();
         expect(toggle).toHaveBeenCalledTimes(1);
     });
 });

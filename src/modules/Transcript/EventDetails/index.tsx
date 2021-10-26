@@ -1,4 +1,4 @@
-import React, { ReactElement, useState, useCallback } from 'react';
+import React, { ReactElement } from 'react';
 import { TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import classNames from 'classnames';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
@@ -6,14 +6,13 @@ import './styles.css';
 
 export type Event = TranscriptQuery['events'][0];
 interface EventDetailsSharedProps {
+    eventDetailsExpanded: boolean;
+    toggleEventDetails: () => void;
     event: Event;
 }
 
 /** @notExported */
-interface EventDetailsUIProps extends EventDetailsSharedProps {
-    eventDetailsExpanded: boolean;
-    toggleEventDetails: () => void;
-}
+interface EventDetailsUIProps extends EventDetailsSharedProps {}
 
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
     const { event, eventDetailsExpanded, toggleEventDetails } = props;
@@ -21,8 +20,8 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
         <div>
             <div className="flex flex-col justify-start border-t-[1px] border-gray-100 px-3">
                 <div className="flex items-center justify-start h-10 cursor-pointer group" onClick={toggleEventDetails}>
-                    <span className="text-sm block font-semibold w-24 mr-1">Event Details</span>
-                    <span className="text-gray-400 text-sm flex-1 group-hover:text-gray-600">
+                    <span className="text-sm block font-semibold w-28 mr-1">Event Details</span>
+                    <span className="text-gray-400 text-sm flex-1 truncate group-hover:text-gray-600">
                         Connection Info, Slides, Downloads...
                     </span>
                     <ExpandButton
@@ -102,9 +101,7 @@ export interface EventDetailsProps extends EventDetailsSharedProps {}
  * Renders EventDetails
  */
 export function EventDetails(props: EventDetailsProps): ReactElement {
-    const { event } = props;
-    const [eventDetailsExpanded, setEventDetailsState] = useState(false);
-    const toggleEventDetails = useCallback(() => setEventDetailsState(!eventDetailsExpanded), [eventDetailsExpanded]);
+    const { event, eventDetailsExpanded, toggleEventDetails } = props;
     return (
         <EventDetailsUI
             event={event}

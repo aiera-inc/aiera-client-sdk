@@ -13,6 +13,7 @@ import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
 import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
 import { QueryResult } from '@aiera/client-sdk/api/client';
 import { EventDetails } from '../EventDetails';
+import { PriceChart } from '../PriceChart';
 import './styles.css';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
@@ -26,16 +27,30 @@ interface HeaderUIProps extends HeaderSharedProps {
     headerExpanded: boolean;
     headerRef: Ref<HTMLDivElement>;
     toggleHeader: () => void;
+    eventDetailsExpanded: boolean;
+    toggleEventDetails: () => void;
+    priceChartExpanded: boolean;
+    togglePriceChart: () => void;
 }
 
 export function HeaderUI(props: HeaderUIProps): ReactElement {
-    const { eventQuery, onBack, headerRef, headerExpanded, toggleHeader } = props;
+    const {
+        eventQuery,
+        onBack,
+        headerRef,
+        headerExpanded,
+        toggleHeader,
+        eventDetailsExpanded,
+        toggleEventDetails,
+        priceChartExpanded,
+        togglePriceChart,
+    } = props;
 
     return (
         <div
             ref={headerRef}
             className={classNames(
-                'relative pt-3 rounded-b-lg transition-all',
+                'bg-white relative pt-3 rounded-b-lg -mb-1 z-10 transition-all overflow-hidden',
                 {
                     'shadow-3xl': !headerExpanded,
                     'shadow-xl': headerExpanded,
@@ -145,7 +160,18 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     />
                                 )}
                             </div>
-                            {headerExpanded && event && <EventDetails event={event} />}
+                            {headerExpanded && event && (
+                                <EventDetails
+                                    event={event}
+                                    eventDetailsExpanded={eventDetailsExpanded}
+                                    toggleEventDetails={toggleEventDetails}
+                                />
+                            )}
+                            <PriceChart
+                                headerExpanded={headerExpanded}
+                                priceChartExpanded={priceChartExpanded}
+                                togglePriceChart={togglePriceChart}
+                            />
                         </>
                     );
                 })
@@ -163,7 +189,24 @@ export interface HeaderProps extends HeaderSharedProps {}
 export function Header(props: HeaderProps): ReactElement {
     const { eventQuery, onBack } = props;
     const [headerExpanded, setHeaderState] = useState(false);
+    const [priceChartExpanded, setPriceChartState] = useState(false);
+    const [eventDetailsExpanded, setEventDetailsState] = useState(false);
+
     const toggleHeader = useCallback(() => setHeaderState(!headerExpanded), [headerExpanded]);
+
+    const toggleEventDetails = useCallback(() => {
+        setEventDetailsState(!eventDetailsExpanded);
+        if (priceChartExpanded && !eventDetailsExpanded) {
+            setPriceChartState(false);
+        }
+    }, [eventDetailsExpanded, priceChartExpanded]);
+
+    const togglePriceChart = useCallback(() => {
+        setPriceChartState(!priceChartExpanded);
+        if (eventDetailsExpanded && !priceChartExpanded) {
+            setEventDetailsState(false);
+        }
+    }, [priceChartExpanded, eventDetailsExpanded]);
 
     // Collapse Expanded Header on Outside Click
     const headerRef = useRef<HTMLDivElement>(null);
@@ -183,6 +226,10 @@ export function Header(props: HeaderProps): ReactElement {
             headerRef={headerRef}
             headerExpanded={headerExpanded}
             toggleHeader={toggleHeader}
+            eventDetailsExpanded={eventDetailsExpanded}
+            toggleEventDetails={toggleEventDetails}
+            togglePriceChart={togglePriceChart}
+            priceChartExpanded={priceChartExpanded}
         />
     );
 }
