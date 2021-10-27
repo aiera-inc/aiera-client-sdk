@@ -98,6 +98,9 @@ type TrackingObject =
     | 'Audio Play'
     | 'Audio Fast Forward'
     | 'Audio Rewind'
+    | 'Audio Playback Rate'
+    | 'Audio Start'
+    | 'Audio Over'
     | 'Audio Stop';
 
 /**

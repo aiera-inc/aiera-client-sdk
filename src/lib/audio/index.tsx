@@ -1,5 +1,12 @@
 import React, { createContext, useContext, useEffect, useState, ReactElement, ReactNode } from 'react';
 import { MediaPlayer, MediaPlayerClass } from 'dashjs';
+import { EventType, Quote } from '@aiera/client-sdk/types/generated';
+import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
+
+export interface EventMetaData {
+    quote?: Maybe<DeepPartial<Quote>>;
+    eventType?: EventType;
+}
 
 export class AudioPlayer {
     id?: string;
@@ -9,6 +16,7 @@ export class AudioPlayer {
         lastPosition?: number;
         error: boolean;
     };
+    metaData?: EventMetaData;
     offset = 0;
     audio: HTMLAudioElement;
     dash: MediaPlayerClass;
@@ -57,7 +65,7 @@ export class AudioPlayer {
         }
     };
 
-    init(opts?: { id: string; url: string; offset: number }): void {
+    init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): void {
         if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
             const { id, url } = opts;
             this.id = id;
@@ -73,9 +81,13 @@ export class AudioPlayer {
             this.triggerUpdate();
         }
 
+        // TODO Make sure these trigger an update when they change
         if (opts && opts.offset !== this.offset) {
             this.offset = opts.offset;
         }
+
+        // TODO Make sure these trigger an update when they change
+        if (opts?.metaData) this.metaData = opts?.metaData;
     }
 
     clear(): void {
@@ -83,6 +95,7 @@ export class AudioPlayer {
         delete this.url;
         window.clearTimeout(this.errorInfo.timeout);
         delete this.errorInfo.timeout;
+        this.metaData = {};
         this.errorInfo.error = false;
         this.errorInfo.lastPosition = 0;
         if (this.usingDash) {
@@ -97,7 +110,7 @@ export class AudioPlayer {
         this.audio.dispatchEvent(new Event('update'));
     };
 
-    async play(opts?: { id: string; url: string; offset: number }): Promise<void> {
+    async play(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
         this.init(opts);
         if (this.rawCurrentTime === 0) this.rawSeek(this.offset);
 
@@ -136,6 +149,14 @@ export class AudioPlayer {
         this.audio.currentTime = position + this.offset;
     }
 
+    seekToEnd(): void {
+        this.audio.currentTime = this.rawDuration;
+    }
+
+    seekToStart(): void {
+        this.audio.currentTime = this.offset;
+    }
+
     rawSeek(position: number): void {
         this.audio.currentTime = position;
     }
@@ -146,6 +167,37 @@ export class AudioPlayer {
 
     rewind(distance: number): void {
         this.rawSeek(Math.max(this.rawCurrentTime - distance, this.offset));
+    }
+
+    setRate(rate: number): void {
+        this.audio.playbackRate = rate;
+        if (this.usingDash) {
+            this.dash.setPlaybackRate(rate);
+            this.dash.updateSettings({ streaming: { liveCatchup: { playbackRate: Math.max(rate - 1, 0.2) } } });
+        }
+        this.triggerUpdate();
+    }
+
+    setVolume = (volume: number): void => {
+        if (volume >= 0 && volume <= 1) {
+            this.audio.volume = volume;
+        }
+    };
+
+    togglePlaybackRate(): void {
+        if (this.audio.playbackRate < 1) {
+            this.setRate(1);
+        } else if (this.audio.playbackRate >= 1 && this.audio.playbackRate < 1.25) {
+            this.setRate(1.25);
+        } else if (this.audio.playbackRate >= 1.25 && this.audio.playbackRate < 1.5) {
+            this.setRate(1.5);
+        } else if (this.audio.playbackRate >= 1.5 && this.audio.playbackRate < 1.75) {
+            this.setRate(1.75);
+        } else if (this.audio.playbackRate >= 1.75 && this.audio.playbackRate < 2) {
+            this.setRate(2);
+        } else {
+            this.setRate(1);
+        }
     }
 
     playing(id: string | null): boolean {
@@ -161,6 +213,18 @@ export class AudioPlayer {
 
     get rawCurrentTime(): number {
         return this.audio.currentTime || 0;
+    }
+
+    get playbackRate(): number {
+        return this.audio.playbackRate;
+    }
+
+    get volume(): number {
+        return this.audio.volume;
+    }
+
+    get eventMetaData(): EventMetaData {
+        return this.metaData || {};
     }
 
     get displayDuration(): number {

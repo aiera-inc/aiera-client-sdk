@@ -186,6 +186,10 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         <div className="flex items-center justify-center">
                                                             <div className="flex items-center justify-center w-8 h-8">
                                                                 <PlayButton
+                                                                    metaData={{
+                                                                        quote: primaryQuote,
+                                                                        eventType: event.eventType,
+                                                                    }}
                                                                     id={event.id}
                                                                     url={
                                                                         event.isLive

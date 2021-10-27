@@ -22,6 +22,7 @@ import {
     TranscriptQuery,
     TranscriptQueryVariables,
 } from '@aiera/client-sdk/types/generated';
+import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
@@ -168,6 +169,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             {match(eventQuery)
                 .with({ status: 'success' }, ({ data: { events } }) => {
                     const event = events[0];
+                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
                     return (
                         (event?.audioRecordingUrl || event?.isLive) && (
                             <Playbar
@@ -178,6 +180,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                         : event.audioRecordingUrl || ''
                                 }
                                 offset={(event?.audioRecordingOffsetMs || 0) / 1000}
+                                metaData={{
+                                    quote: primaryQuote,
+                                    eventType: event?.eventType,
+                                }}
                             />
                         )
                     );

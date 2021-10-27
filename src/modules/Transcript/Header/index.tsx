@@ -139,7 +139,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         {event?.eventType && (
                                             <span className="text-gray-300 group-hover:text-gray-400 capitalize">
                                                 {' '}
-                                                • {event?.eventType}
+                                                • {event?.eventType.replace(/_/g, ' ')}
                                             </span>
                                         )}
                                         {eventDate && (
