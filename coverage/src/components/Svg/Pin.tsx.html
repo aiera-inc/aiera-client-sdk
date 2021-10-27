@@ -1,0 +1,140 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/components/Svg/Pin.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Svg</a> Pin.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
+import classNames from 'classnames';
+&nbsp;
+export function Pin({ className, alt = 'Pin' }: { className?: string; alt?: string }): ReactElement {
+    return (
+        &lt;svg
+            className={classNames(className, 'fill-current', 'Svg', 'Svg__pin')}
+            width="100%"
+            viewBox="0 0 12 14"
+            xmlns="http://www.w3.org/2000/svg"
+        &gt;
+            &lt;title&gt;{alt}&lt;/title&gt;
+            &lt;path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M2.4119 0C2.17181 0 1.94623 0.114944 1.80512 0.309186C1.664 0.503428 1.62441 0.753489 1.69862 0.981821L2.50223 3.45438V4.77264C1.30693 5.34871 0.673665 6.32085 0.347619 7.15684C0.164168 7.62721 0.0734836 8.06276 0.0281426 8.38053C0.00534171 8.54033 -0.00635266 8.6729 -0.012365 8.76847C-0.0153756 8.81633 -0.0169749 8.85513 -0.0178223 8.88367C-0.0182463 8.89794 -0.0184827 8.90967 -0.0186132 8.9187L-0.0187396 8.93022L-0.0187624 8.93443L-0.018767 8.93615L-0.018768 8.9369C-0.0187683 8.93726 -0.0187683 8.9376 0.731232 8.9376H-0.0187683C-0.0187683 9.35181 0.317018 9.6876 0.731232 9.6876H5.23261V13.2461C5.23261 13.6604 5.5684 13.9961 5.98261 13.9961C6.39683 13.9961 6.73261 13.6604 6.73261 13.2461V9.6876H11.2354C11.6496 9.6876 11.9854 9.35181 11.9854 8.9376H11.2354C11.9854 8.9376 11.9854 8.93726 11.9854 8.9369L11.9854 8.93615L11.9854 8.93443L11.9854 8.93022L11.9852 8.9187C11.9851 8.90967 11.9849 8.89794 11.9844 8.88367C11.9836 8.85513 11.982 8.81633 11.979 8.76847C11.973 8.6729 11.9613 8.54033 11.9385 8.38053C11.8931 8.06276 11.8025 7.62721 11.619 7.15684C11.293 6.32085 10.6597 5.34871 9.46439 4.77264V3.45438L10.268 0.981821C10.3422 0.753489 10.3026 0.503428 10.1615 0.309186C10.0204 0.114944 9.79482 0 9.55473 0H2.4119ZM10.3748 8.1876H1.59183C1.62924 8.03598 1.67901 7.87133 1.74509 7.70187C2.00593 7.03308 2.50264 6.3236 3.49485 5.9844C3.79831 5.88065 4.00223 5.59543 4.00223 5.27472V3.33556C4.00223 3.25683 3.98984 3.1786 3.9655 3.10374L3.44427 1.5H8.52235L8.00112 3.10374C7.97679 3.1786 7.96439 3.25683 7.96439 3.33556V5.27472C7.96439 5.59543 8.16831 5.88065 8.47178 5.9844C9.46399 6.3236 9.96069 7.03308 10.2215 7.70187C10.2876 7.87133 10.3374 8.03598 10.3748 8.1876Z"
+            /&gt;
+        &lt;/svg&gt;
+    );
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
+                at Wed Oct 27 2021 15:01:11 GMT-0400 (Eastern Daylight Time)
+            </div>
+        </div>
+        <script src="../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
+    </body>
+</html>
+    

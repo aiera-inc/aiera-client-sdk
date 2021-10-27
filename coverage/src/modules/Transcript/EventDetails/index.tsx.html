@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>5/5</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
@@ -169,10 +169,7 @@
 <a name='L110'></a><a href='#L110'>110</a>
 <a name='L111'></a><a href='#L111'>111</a>
 <a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a>
-<a name='L114'></a><a href='#L114'>114</a>
-<a name='L115'></a><a href='#L115'>115</a>
-<a name='L116'></a><a href='#L116'>116</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -189,9 +186,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -276,10 +272,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -287,7 +281,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement, useState, useCallback } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
 import { TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import classNames from 'classnames';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
@@ -295,14 +289,13 @@ import './styles.css';
 &nbsp;
 export type Event = TranscriptQuery['events'][0];
 interface EventDetailsSharedProps {
+    eventDetailsExpanded: boolean;
+    toggleEventDetails: () =&gt; void;
     event: Event;
 }
 &nbsp;
 /** @notExported */
-interface EventDetailsUIProps extends EventDetailsSharedProps {
-    eventDetailsExpanded: boolean;
-    toggleEventDetails: () =&gt; void;
-}
+interface EventDetailsUIProps extends EventDetailsSharedProps {}
 &nbsp;
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
     const { event, eventDetailsExpanded, toggleEventDetails } = props;
@@ -310,8 +303,8 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
         &lt;div&gt;
             &lt;div className="flex flex-col justify-start border-t-[1px] border-gray-100 px-3"&gt;
                 &lt;div className="flex items-center justify-start h-10 cursor-pointer group" onClick={toggleEventDetails}&gt;
-                    &lt;span className="text-sm block font-semibold w-24 mr-1"&gt;Event Details&lt;/span&gt;
-                    &lt;span className="text-gray-400 text-sm flex-1 group-hover:text-gray-600"&gt;
+                    &lt;span className="text-sm block font-semibold w-28 mr-1"&gt;Event Details&lt;/span&gt;
+                    &lt;span className="text-gray-400 text-sm flex-1 truncate group-hover:text-gray-600"&gt;
                         Connection Info, Slides, Downloads...
                     &lt;/span&gt;
                     &lt;ExpandButton
@@ -391,9 +384,7 @@ export interface EventDetailsProps extends EventDetailsSharedProps {}
  * Renders EventDetails
  */
 export function EventDetails(props: EventDetailsProps): ReactElement {
-    const { event } = props;
-    const [eventDetailsExpanded, setEventDetailsState] = useState(false);
-    const toggleEventDetails = useCallback(() =&gt; setEventDetailsState(!eventDetailsExpanded), [eventDetailsExpanded]);
+    const { event, eventDetailsExpanded, toggleEventDetails } = props;
     return (
         &lt;EventDetailsUI
             event={event}
@@ -409,7 +400,7 @@ export function EventDetails(props: EventDetailsProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Oct 25 2021 16:39:44 GMT-0400 (Eastern Daylight Time)
+                at Wed Oct 27 2021 15:01:11 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

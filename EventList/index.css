@@ -7,6 +7,7 @@
 /* src/components/ExpandButton/styles.css */
 /* src/components/Input/styles.css */
 /* src/modules/Transcript/EventDetails/styles.css */
+/* src/modules/Transcript/PriceChart/styles.css */
 /* src/modules/Transcript/Header/styles.css */
 /* src/modules/Transcript/styles.css */
 /* src/components/Tabs/styles.css */
@@ -502,6 +503,9 @@ video {
 .mb-3\.5 {
   margin-bottom: 0.875rem;
 }
+.-mb-1 {
+  margin-bottom: -0.25rem;
+}
 .block {
   display: block;
 }
@@ -630,6 +634,9 @@ video {
 }
 .w-3\.5 {
   width: 0.875rem;
+}
+.w-\[12px\] {
+  width: 12px;
 }
 .min-w-0 {
   min-width: 0px;
@@ -1141,6 +1148,14 @@ video {
   --tw-text-opacity: 1;
   color: rgba(5, 150, 105, var(--tw-text-opacity));
 }
+.text-green-500 {
+  --tw-text-opacity: 1;
+  color: rgba(16, 185, 129, var(--tw-text-opacity));
+}
+.text-red-500 {
+  --tw-text-opacity: 1;
+  color: rgba(239, 68, 68, var(--tw-text-opacity));
+}
 .opacity-30 {
   opacity: 0.3;
 }
@@ -1277,6 +1292,18 @@ video {
   --tw-text-opacity: 1;
   color: rgba(29, 78, 216, var(--tw-text-opacity));
 }
+.hover\:text-green-600:hover {
+  --tw-text-opacity: 1;
+  color: rgba(5, 150, 105, var(--tw-text-opacity));
+}
+.hover\:text-red-600:hover {
+  --tw-text-opacity: 1;
+  color: rgba(220, 38, 38, var(--tw-text-opacity));
+}
+.hover\:text-gray-600:hover {
+  --tw-text-opacity: 1;
+  color: rgba(75, 85, 99, var(--tw-text-opacity));
+}
 .hover\:underline:hover {
   text-decoration: underline;
 }
@@ -1339,6 +1366,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgba(37, 99, 235, var(--tw-bg-opacity));
 }
+.active\:bg-blue-900:active {
+  --tw-bg-opacity: 1;
+  background-color: rgba(30, 58, 138, var(--tw-bg-opacity));
+}
 .active\:text-white:active {
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
@@ -1354,6 +1385,18 @@ video {
 .active\:text-blue-800:active {
   --tw-text-opacity: 1;
   color: rgba(30, 64, 175, var(--tw-text-opacity));
+}
+.active\:text-green-800:active {
+  --tw-text-opacity: 1;
+  color: rgba(6, 95, 70, var(--tw-text-opacity));
+}
+.active\:text-red-800:active {
+  --tw-text-opacity: 1;
+  color: rgba(153, 27, 27, var(--tw-text-opacity));
+}
+.active\:text-blue-900:active {
+  --tw-text-opacity: 1;
+  color: rgba(30, 58, 138, var(--tw-text-opacity));
 }
 .group:hover .group-hover\:bg-red-500 {
   --tw-bg-opacity: 1;

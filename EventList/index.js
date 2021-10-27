@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement33 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement37 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement33(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement37(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement33(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement37(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement33(element.type, key, ref, self2, source, owner, props);
+          return ReactElement37(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React33 = require_react();
+        var React37 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React33.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React37.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React33) {
+        if (!React37) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React33.Children.forEach(children, function(child) {
+          React37.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React33.Children.forEach(props.children, function(child) {
+              React37.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React33.Component().refs;
+        var emptyRefsObject = new React37.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26140,7 +26140,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames22() {
+      function classNames26() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26151,7 +26151,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames22.apply(null, arg);
+              var inner = classNames26.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26171,14 +26171,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames22.default = classNames22;
-        module2.exports = classNames22;
+        classNames26.default = classNames26;
+        module2.exports = classNames26;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames22;
+          return classNames26;
         });
       } else {
-        window.classNames = classNames22;
+        window.classNames = classNames26;
       }
     })();
   }
@@ -68439,8 +68439,11702 @@ var require_dash_all_debug = __commonJS({
   }
 });
 
+// node_modules/highcharts/highstock.js
+var require_highstock = __commonJS({
+  "node_modules/highcharts/highstock.js"(exports2, module2) {
+    "use strict";
+    (function(V, M2) {
+      typeof module2 === "object" && module2.exports ? (M2["default"] = M2, module2.exports = V.document ? M2(V) : M2) : typeof define === "function" && define.amd ? define("highcharts/highstock", function() {
+        return M2(V);
+      }) : (V.Highcharts && V.Highcharts.error(16, true), V.Highcharts = M2(V));
+    })(typeof window !== "undefined" ? window : exports2, function(V) {
+      function M2(h4, D3, A, E3) {
+        h4.hasOwnProperty(D3) || (h4[D3] = E3.apply(null, A));
+      }
+      var h3 = {};
+      M2(h3, "Core/Globals.js", [], function() {
+        var h4 = typeof V !== "undefined" ? V : typeof window !== "undefined" ? window : {}, D3;
+        (function(e) {
+          e.SVG_NS = "http://www.w3.org/2000/svg";
+          e.product = "Highcharts";
+          e.version = "9.3.0";
+          e.win = h4;
+          e.doc = e.win.document;
+          e.svg = e.doc && e.doc.createElementNS && !!e.doc.createElementNS(e.SVG_NS, "svg").createSVGRect;
+          e.userAgent = e.win.navigator && e.win.navigator.userAgent || "";
+          e.isChrome = e.userAgent.indexOf("Chrome") !== -1;
+          e.isFirefox = e.userAgent.indexOf("Firefox") !== -1;
+          e.isMS = /(edge|msie|trident)/i.test(e.userAgent) && !e.win.opera;
+          e.isSafari = !e.isChrome && e.userAgent.indexOf("Safari") !== -1;
+          e.isTouchDevice = /(Mobile|Android|Windows Phone)/.test(e.userAgent);
+          e.isWebKit = e.userAgent.indexOf("AppleWebKit") !== -1;
+          e.deg2rad = 2 * Math.PI / 360;
+          e.hasBidiBug = e.isFirefox && 4 > parseInt(e.userAgent.split("Firefox/")[1], 10);
+          e.hasTouch = !!e.win.TouchEvent;
+          e.marginNames = ["plotTop", "marginRight", "marginBottom", "plotLeft"];
+          e.noop = function() {
+          };
+          e.supportsPassiveEvents = function() {
+            var h5 = false;
+            if (!e.isMS) {
+              var D4 = Object.defineProperty({}, "passive", { get: function() {
+                h5 = true;
+              } });
+              e.win.addEventListener && e.win.removeEventListener && (e.win.addEventListener("testPassive", e.noop, D4), e.win.removeEventListener("testPassive", e.noop, D4));
+            }
+            return h5;
+          }();
+          e.charts = [];
+          e.dateFormats = {};
+          e.seriesTypes = {};
+          e.symbolSizes = {};
+          e.chartCount = 0;
+        })(D3 || (D3 = {}));
+        "";
+        return D3;
+      });
+      M2(h3, "Core/Utilities.js", [h3["Core/Globals.js"]], function(e) {
+        function h4(b3, r3, g3, m2) {
+          var n3 = r3 ? "Highcharts error" : "Highcharts warning";
+          b3 === 32 && (b3 = n3 + ": Deprecated member");
+          var N3 = l3(b3), G2 = N3 ? n3 + " #" + b3 + ": www.highcharts.com/errors/" + b3 + "/" : b3.toString();
+          if (typeof m2 !== "undefined") {
+            var P2 = "";
+            N3 && (G2 += "?");
+            K2(m2, function(b4, m3) {
+              P2 += "\n - " + m3 + ": " + b4;
+              N3 && (G2 += encodeURI(m3) + "=" + encodeURI(b4));
+            });
+            G2 += P2;
+          }
+          y2(e, "displayError", { chart: g3, code: b3, message: G2, params: m2 }, function() {
+            if (r3)
+              throw Error(G2);
+            c3.console && h4.messages.indexOf(G2) === -1 && console.warn(G2);
+          });
+          h4.messages.push(G2);
+        }
+        function A(b3, r3) {
+          var c4 = {};
+          K2(b3, function(m2, g3) {
+            if (I2(b3[g3], true) && !b3.nodeType && r3[g3])
+              m2 = A(b3[g3], r3[g3]), Object.keys(m2).length && (c4[g3] = m2);
+            else if (I2(b3[g3]) || b3[g3] !== r3[g3])
+              c4[g3] = b3[g3];
+          });
+          return c4;
+        }
+        function E3(b3, r3) {
+          return parseInt(b3, r3 || 10);
+        }
+        function v(b3) {
+          return typeof b3 === "string";
+        }
+        function H2(b3) {
+          b3 = Object.prototype.toString.call(b3);
+          return b3 === "[object Array]" || b3 === "[object Array Iterator]";
+        }
+        function I2(b3, r3) {
+          return !!b3 && typeof b3 === "object" && (!r3 || !H2(b3));
+        }
+        function z2(b3) {
+          return I2(b3) && typeof b3.nodeType === "number";
+        }
+        function q3(b3) {
+          var r3 = b3 && b3.constructor;
+          return !(!I2(b3, true) || z2(b3) || !r3 || !r3.name || r3.name === "Object");
+        }
+        function l3(b3) {
+          return typeof b3 === "number" && !isNaN(b3) && Infinity > b3 && -Infinity < b3;
+        }
+        function f2(b3) {
+          return typeof b3 !== "undefined" && b3 !== null;
+        }
+        function d2(b3, r3, c4) {
+          var m2;
+          v(r3) ? f2(c4) ? b3.setAttribute(r3, c4) : b3 && b3.getAttribute && ((m2 = b3.getAttribute(r3)) || r3 !== "class" || (m2 = b3.getAttribute(r3 + "Name"))) : K2(r3, function(m3, r4) {
+            f2(m3) ? b3.setAttribute(r4, m3) : b3.removeAttribute(r4);
+          });
+          return m2;
+        }
+        function a4(b3, r3) {
+          var c4;
+          b3 || (b3 = {});
+          for (c4 in r3)
+            b3[c4] = r3[c4];
+          return b3;
+        }
+        function p2() {
+          for (var b3 = arguments, r3 = b3.length, c4 = 0; c4 < r3; c4++) {
+            var m2 = b3[c4];
+            if (typeof m2 !== "undefined" && m2 !== null)
+              return m2;
+          }
+        }
+        function k2(b3, r3) {
+          e.isMS && !e.svg && r3 && typeof r3.opacity !== "undefined" && (r3.filter = "alpha(opacity=" + 100 * r3.opacity + ")");
+          a4(b3.style, r3);
+        }
+        function F2(b3, r3, c4, m2, g3) {
+          b3 = x3.createElement(b3);
+          r3 && a4(b3, r3);
+          g3 && k2(b3, { padding: "0", border: "none", margin: "0" });
+          c4 && k2(b3, c4);
+          m2 && m2.appendChild(b3);
+          return b3;
+        }
+        function B(b3, r3) {
+          return 1e14 < b3 ? b3 : parseFloat(b3.toPrecision(r3 || 14));
+        }
+        function J2(b3, r3, g3) {
+          var m2 = e.getStyle || J2;
+          if (r3 === "width")
+            return r3 = Math.min(b3.offsetWidth, b3.scrollWidth), g3 = b3.getBoundingClientRect && b3.getBoundingClientRect().width, g3 < r3 && g3 >= r3 - 1 && (r3 = Math.floor(g3)), Math.max(0, r3 - (m2(b3, "padding-left", true) || 0) - (m2(b3, "padding-right", true) || 0));
+          if (r3 === "height")
+            return Math.max(0, Math.min(b3.offsetHeight, b3.scrollHeight) - (m2(b3, "padding-top", true) || 0) - (m2(b3, "padding-bottom", true) || 0));
+          c3.getComputedStyle || h4(27, true);
+          if (b3 = c3.getComputedStyle(b3, void 0)) {
+            var n3 = b3.getPropertyValue(r3);
+            p2(g3, r3 !== "opacity") && (n3 = E3(n3));
+          }
+          return n3;
+        }
+        function K2(b3, r3, c4) {
+          for (var m2 in b3)
+            Object.hasOwnProperty.call(b3, m2) && r3.call(c4 || b3[m2], b3[m2], m2, b3);
+        }
+        function L3(b3, r3, c4) {
+          function m2(m3, r4) {
+            var P2 = b3.removeEventListener || e.removeEventListenerPolyfill;
+            P2 && P2.call(b3, m3, r4, false);
+          }
+          function g3(P2) {
+            var c5;
+            if (b3.nodeName) {
+              if (r3) {
+                var g4 = {};
+                g4[r3] = true;
+              } else
+                g4 = P2;
+              K2(g4, function(b4, r4) {
+                if (P2[r4])
+                  for (c5 = P2[r4].length; c5--; )
+                    m2(r4, P2[r4][c5].fn);
+              });
+            }
+          }
+          var n3 = typeof b3 === "function" && b3.prototype || b3;
+          if (Object.hasOwnProperty.call(n3, "hcEvents")) {
+            var G2 = n3.hcEvents;
+            r3 ? (n3 = G2[r3] || [], c4 ? (G2[r3] = n3.filter(function(b4) {
+              return c4 !== b4.fn;
+            }), m2(r3, c4)) : (g3(G2), G2[r3] = [])) : (g3(G2), delete n3.hcEvents);
+          }
+        }
+        function y2(b3, r3, c4, m2) {
+          c4 = c4 || {};
+          if (x3.createEvent && (b3.dispatchEvent || b3.fireEvent && b3 !== e)) {
+            var g3 = x3.createEvent("Events");
+            g3.initEvent(r3, true, true);
+            c4 = a4(g3, c4);
+            b3.dispatchEvent ? b3.dispatchEvent(c4) : b3.fireEvent(r3, c4);
+          } else if (b3.hcEvents) {
+            c4.target || a4(c4, { preventDefault: function() {
+              c4.defaultPrevented = true;
+            }, target: b3, type: r3 });
+            g3 = [];
+            for (var n3 = b3, u5 = false; n3.hcEvents; )
+              Object.hasOwnProperty.call(n3, "hcEvents") && n3.hcEvents[r3] && (g3.length && (u5 = true), g3.unshift.apply(g3, n3.hcEvents[r3])), n3 = Object.getPrototypeOf(n3);
+            u5 && g3.sort(function(b4, c5) {
+              return b4.order - c5.order;
+            });
+            g3.forEach(function(r4) {
+              r4.fn.call(b3, c4) === false && c4.preventDefault();
+            });
+          }
+          m2 && !c4.defaultPrevented && m2.call(b3, c4);
+        }
+        var C2 = e.charts, x3 = e.doc, c3 = e.win;
+        (h4 || (h4 = {})).messages = [];
+        var t2;
+        Math.easeInOutSine = function(b3) {
+          return -0.5 * (Math.cos(Math.PI * b3) - 1);
+        };
+        var g2 = Array.prototype.find ? function(b3, c4) {
+          return b3.find(c4);
+        } : function(b3, c4) {
+          var r3, m2 = b3.length;
+          for (r3 = 0; r3 < m2; r3++)
+            if (c4(b3[r3], r3))
+              return b3[r3];
+        };
+        K2({ map: "map", each: "forEach", grep: "filter", reduce: "reduce", some: "some" }, function(b3, c4) {
+          e[c4] = function(r3) {
+            var m2;
+            h4(32, false, void 0, (m2 = {}, m2["Highcharts." + c4] = "use Array." + b3, m2));
+            return Array.prototype[b3].apply(r3, [].slice.call(arguments, 1));
+          };
+        });
+        var u4, n2 = function() {
+          var b3 = Math.random().toString(36).substring(2, 9) + "-", c4 = 0;
+          return function() {
+            return "highcharts-" + (u4 ? "" : b3) + c4++;
+          };
+        }();
+        c3.jQuery && (c3.jQuery.fn.highcharts = function() {
+          var b3 = [].slice.call(arguments);
+          if (this[0])
+            return b3[0] ? (new e[v(b3[0]) ? b3.shift() : "Chart"](this[0], b3[0], b3[1]), this) : C2[d2(this[0], "data-highcharts-chart")];
+        });
+        g2 = { addEvent: function(b3, c4, g3, m2) {
+          m2 === void 0 && (m2 = {});
+          var r3 = typeof b3 === "function" && b3.prototype || b3;
+          Object.hasOwnProperty.call(r3, "hcEvents") || (r3.hcEvents = {});
+          r3 = r3.hcEvents;
+          e.Point && b3 instanceof e.Point && b3.series && b3.series.chart && (b3.series.chart.runTrackerClick = true);
+          var n3 = b3.addEventListener || e.addEventListenerPolyfill;
+          n3 && n3.call(b3, c4, g3, e.supportsPassiveEvents ? { passive: m2.passive === void 0 ? c4.indexOf("touch") !== -1 : m2.passive, capture: false } : false);
+          r3[c4] || (r3[c4] = []);
+          r3[c4].push({ fn: g3, order: typeof m2.order === "number" ? m2.order : Infinity });
+          r3[c4].sort(function(b4, c5) {
+            return b4.order - c5.order;
+          });
+          return function() {
+            L3(b3, c4, g3);
+          };
+        }, arrayMax: function(b3) {
+          for (var c4 = b3.length, g3 = b3[0]; c4--; )
+            b3[c4] > g3 && (g3 = b3[c4]);
+          return g3;
+        }, arrayMin: function(b3) {
+          for (var c4 = b3.length, g3 = b3[0]; c4--; )
+            b3[c4] < g3 && (g3 = b3[c4]);
+          return g3;
+        }, attr: d2, clamp: function(b3, c4, g3) {
+          return b3 > c4 ? b3 < g3 ? b3 : g3 : c4;
+        }, cleanRecursively: A, clearTimeout: function(b3) {
+          f2(b3) && clearTimeout(b3);
+        }, correctFloat: B, createElement: F2, css: k2, defined: f2, destroyObjectProperties: function(b3, c4) {
+          K2(b3, function(g3, m2) {
+            g3 && g3 !== c4 && g3.destroy && g3.destroy();
+            delete b3[m2];
+          });
+        }, discardElement: function(b3) {
+          t2 || (t2 = F2("div"));
+          b3 && t2.appendChild(b3);
+          t2.innerHTML = "";
+        }, erase: function(b3, c4) {
+          for (var g3 = b3.length; g3--; )
+            if (b3[g3] === c4) {
+              b3.splice(g3, 1);
+              break;
+            }
+        }, error: h4, extend: a4, extendClass: function(b3, c4) {
+          var g3 = function() {
+          };
+          g3.prototype = new b3();
+          a4(g3.prototype, c4);
+          return g3;
+        }, find: g2, fireEvent: y2, getMagnitude: function(b3) {
+          return Math.pow(10, Math.floor(Math.log(b3) / Math.LN10));
+        }, getNestedProperty: function(b3, g3) {
+          for (b3 = b3.split("."); b3.length && f2(g3); ) {
+            var r3 = b3.shift();
+            if (typeof r3 === "undefined" || r3 === "__proto__")
+              return;
+            g3 = g3[r3];
+            if (!f2(g3) || typeof g3 === "function" || typeof g3.nodeType === "number" || g3 === c3)
+              return;
+          }
+          return g3;
+        }, getStyle: J2, inArray: function(b3, c4, g3) {
+          h4(32, false, void 0, { "Highcharts.inArray": "use Array.indexOf" });
+          return c4.indexOf(b3, g3);
+        }, isArray: H2, isClass: q3, isDOMElement: z2, isFunction: function(b3) {
+          return typeof b3 === "function";
+        }, isNumber: l3, isObject: I2, isString: v, keys: function(b3) {
+          h4(32, false, void 0, { "Highcharts.keys": "use Object.keys" });
+          return Object.keys(b3);
+        }, merge: function() {
+          var b3, c4 = arguments, g3 = {}, m2 = function(b4, c5) {
+            typeof b4 !== "object" && (b4 = {});
+            K2(c5, function(g4, r3) {
+              r3 !== "__proto__" && r3 !== "constructor" && (!I2(g4, true) || q3(g4) || z2(g4) ? b4[r3] = c5[r3] : b4[r3] = m2(b4[r3] || {}, g4));
+            });
+            return b4;
+          };
+          c4[0] === true && (g3 = c4[1], c4 = Array.prototype.slice.call(c4, 2));
+          var n3 = c4.length;
+          for (b3 = 0; b3 < n3; b3++)
+            g3 = m2(g3, c4[b3]);
+          return g3;
+        }, normalizeTickInterval: function(b3, c4, g3, m2, n3) {
+          var r3 = b3;
+          g3 = p2(g3, 1);
+          var u5 = b3 / g3;
+          c4 || (c4 = n3 ? [1, 1.2, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10] : [1, 2, 2.5, 5, 10], m2 === false && (g3 === 1 ? c4 = c4.filter(function(b4) {
+            return b4 % 1 === 0;
+          }) : 0.1 >= g3 && (c4 = [1 / g3])));
+          for (m2 = 0; m2 < c4.length && !(r3 = c4[m2], n3 && r3 * g3 >= b3 || !n3 && u5 <= (c4[m2] + (c4[m2 + 1] || c4[m2])) / 2); m2++)
+            ;
+          return r3 = B(r3 * g3, -Math.round(Math.log(1e-3) / Math.LN10));
+        }, objectEach: K2, offset: function(b3) {
+          var g3 = x3.documentElement;
+          b3 = b3.parentElement || b3.parentNode ? b3.getBoundingClientRect() : { top: 0, left: 0, width: 0, height: 0 };
+          return { top: b3.top + (c3.pageYOffset || g3.scrollTop) - (g3.clientTop || 0), left: b3.left + (c3.pageXOffset || g3.scrollLeft) - (g3.clientLeft || 0), width: b3.width, height: b3.height };
+        }, pad: function(b3, c4, g3) {
+          return Array((c4 || 2) + 1 - String(b3).replace("-", "").length).join(g3 || "0") + b3;
+        }, pick: p2, pInt: E3, relativeLength: function(b3, c4, g3) {
+          return /%$/.test(b3) ? c4 * parseFloat(b3) / 100 + (g3 || 0) : parseFloat(b3);
+        }, removeEvent: L3, splat: function(b3) {
+          return H2(b3) ? b3 : [b3];
+        }, stableSort: function(b3, c4) {
+          var g3 = b3.length, m2, n3;
+          for (n3 = 0; n3 < g3; n3++)
+            b3[n3].safeI = n3;
+          b3.sort(function(b4, g4) {
+            m2 = c4(b4, g4);
+            return m2 === 0 ? b4.safeI - g4.safeI : m2;
+          });
+          for (n3 = 0; n3 < g3; n3++)
+            delete b3[n3].safeI;
+        }, syncTimeout: function(b3, c4, g3) {
+          if (0 < c4)
+            return setTimeout(b3, c4, g3);
+          b3.call(0, g3);
+          return -1;
+        }, timeUnits: {
+          millisecond: 1,
+          second: 1e3,
+          minute: 6e4,
+          hour: 36e5,
+          day: 864e5,
+          week: 6048e5,
+          month: 24192e5,
+          year: 314496e5
+        }, uniqueKey: n2, useSerialIds: function(b3) {
+          return u4 = p2(b3, u4);
+        }, wrap: function(b3, c4, g3) {
+          var m2 = b3[c4];
+          b3[c4] = function() {
+            var b4 = Array.prototype.slice.call(arguments), c5 = arguments, n3 = this;
+            n3.proceed = function() {
+              m2.apply(n3, arguments.length ? arguments : c5);
+            };
+            b4.unshift(m2);
+            b4 = g3.apply(this, b4);
+            n3.proceed = null;
+            return b4;
+          };
+        } };
+        "";
+        return g2;
+      });
+      M2(h3, "Core/Chart/ChartDefaults.js", [], function() {
+        return { panning: { enabled: false, type: "x" }, styledMode: false, borderRadius: 0, colorCount: 10, defaultSeriesType: "line", ignoreHiddenSeries: true, spacing: [
+          10,
+          10,
+          15,
+          10
+        ], resetZoomButton: { theme: { zIndex: 6 }, position: { align: "right", x: -10, y: 10 } }, zoomBySingleTouch: false, width: null, height: null, borderColor: "#335cad", backgroundColor: "#ffffff", plotBorderColor: "#cccccc" };
+      });
+      M2(h3, "Core/Color/Color.js", [h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var D3 = h4.isNumber, E3 = h4.merge, v = h4.pInt;
+        h4 = function() {
+          function h5(D4) {
+            this.rgba = [NaN, NaN, NaN, NaN];
+            this.input = D4;
+            var z2 = e.Color;
+            if (z2 && z2 !== h5)
+              return new z2(D4);
+            if (!(this instanceof h5))
+              return new h5(D4);
+            this.init(D4);
+          }
+          h5.parse = function(e2) {
+            return e2 ? new h5(e2) : h5.None;
+          };
+          h5.prototype.init = function(e2) {
+            var z2;
+            if (typeof e2 === "object" && typeof e2.stops !== "undefined")
+              this.stops = e2.stops.map(function(d2) {
+                return new h5(d2[1]);
+              });
+            else if (typeof e2 === "string") {
+              this.input = e2 = h5.names[e2.toLowerCase()] || e2;
+              if (e2.charAt(0) === "#") {
+                var q3 = e2.length;
+                var l3 = parseInt(e2.substr(1), 16);
+                q3 === 7 ? z2 = [(l3 & 16711680) >> 16, (l3 & 65280) >> 8, l3 & 255, 1] : q3 === 4 && (z2 = [(l3 & 3840) >> 4 | (l3 & 3840) >> 8, (l3 & 240) >> 4 | l3 & 240, (l3 & 15) << 4 | l3 & 15, 1]);
+              }
+              if (!z2)
+                for (l3 = h5.parsers.length; l3-- && !z2; ) {
+                  var f2 = h5.parsers[l3];
+                  (q3 = f2.regex.exec(e2)) && (z2 = f2.parse(q3));
+                }
+            }
+            z2 && (this.rgba = z2);
+          };
+          h5.prototype.get = function(e2) {
+            var z2 = this.input, q3 = this.rgba;
+            if (typeof z2 === "object" && typeof this.stops !== "undefined") {
+              var l3 = E3(z2);
+              l3.stops = [].slice.call(l3.stops);
+              this.stops.forEach(function(f2, d2) {
+                l3.stops[d2] = [l3.stops[d2][0], f2.get(e2)];
+              });
+              return l3;
+            }
+            return q3 && D3(q3[0]) ? e2 === "rgb" || !e2 && q3[3] === 1 ? "rgb(" + q3[0] + "," + q3[1] + "," + q3[2] + ")" : e2 === "a" ? "" + q3[3] : "rgba(" + q3.join(",") + ")" : z2;
+          };
+          h5.prototype.brighten = function(e2) {
+            var z2 = this.rgba;
+            if (this.stops)
+              this.stops.forEach(function(l3) {
+                l3.brighten(e2);
+              });
+            else if (D3(e2) && e2 !== 0)
+              for (var q3 = 0; 3 > q3; q3++)
+                z2[q3] += v(255 * e2), 0 > z2[q3] && (z2[q3] = 0), 255 < z2[q3] && (z2[q3] = 255);
+            return this;
+          };
+          h5.prototype.setOpacity = function(e2) {
+            this.rgba[3] = e2;
+            return this;
+          };
+          h5.prototype.tweenTo = function(e2, z2) {
+            var q3 = this.rgba, l3 = e2.rgba;
+            if (!D3(q3[0]) || !D3(l3[0]))
+              return e2.input || "none";
+            e2 = l3[3] !== 1 || q3[3] !== 1;
+            return (e2 ? "rgba(" : "rgb(") + Math.round(l3[0] + (q3[0] - l3[0]) * (1 - z2)) + "," + Math.round(l3[1] + (q3[1] - l3[1]) * (1 - z2)) + "," + Math.round(l3[2] + (q3[2] - l3[2]) * (1 - z2)) + (e2 ? "," + (l3[3] + (q3[3] - l3[3]) * (1 - z2)) : "") + ")";
+          };
+          h5.names = { white: "#ffffff", black: "#000000" };
+          h5.parsers = [{
+            regex: /rgba\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]?(?:\.[0-9]+)?)\s*\)/,
+            parse: function(e2) {
+              return [v(e2[1]), v(e2[2]), v(e2[3]), parseFloat(e2[4], 10)];
+            }
+          }, { regex: /rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/, parse: function(e2) {
+            return [v(e2[1]), v(e2[2]), v(e2[3]), 1];
+          } }];
+          h5.None = new h5("");
+          return h5;
+        }();
+        "";
+        return h4;
+      });
+      M2(h3, "Core/Color/Palettes.js", [], function() {
+        return { colors: "#7cb5ec #434348 #90ed7d #f7a35c #8085e9 #f15c80 #e4d354 #2b908f #f45b5b #91e8e1".split(" ") };
+      });
+      M2(h3, "Core/Time.js", [h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var D3 = e.win, E3 = h4.defined, v = h4.error, H2 = h4.extend, I2 = h4.isObject, z2 = h4.merge, q3 = h4.objectEach, l3 = h4.pad, f2 = h4.pick, d2 = h4.splat, a4 = h4.timeUnits, p2 = e.isSafari && D3.Intl && D3.Intl.DateTimeFormat.prototype.formatRange, k2 = e.isSafari && D3.Intl && !D3.Intl.DateTimeFormat.prototype.formatRange;
+        h4 = function() {
+          function F2(a5) {
+            this.options = {};
+            this.variableTimezone = this.useUTC = false;
+            this.Date = D3.Date;
+            this.getTimezoneOffset = this.timezoneOffsetFunction();
+            this.update(a5);
+          }
+          F2.prototype.get = function(a5, d3) {
+            if (this.variableTimezone || this.timezoneOffset) {
+              var B = d3.getTime(), f3 = B - this.getTimezoneOffset(d3);
+              d3.setTime(f3);
+              a5 = d3["getUTC" + a5]();
+              d3.setTime(B);
+              return a5;
+            }
+            return this.useUTC ? d3["getUTC" + a5]() : d3["get" + a5]();
+          };
+          F2.prototype.set = function(a5, d3, f3) {
+            if (this.variableTimezone || this.timezoneOffset) {
+              if (a5 === "Milliseconds" || a5 === "Seconds" || a5 === "Minutes" && this.getTimezoneOffset(d3) % 36e5 === 0)
+                return d3["setUTC" + a5](f3);
+              var B = this.getTimezoneOffset(d3);
+              B = d3.getTime() - B;
+              d3.setTime(B);
+              d3["setUTC" + a5](f3);
+              a5 = this.getTimezoneOffset(d3);
+              B = d3.getTime() + a5;
+              return d3.setTime(B);
+            }
+            return this.useUTC || p2 && a5 === "FullYear" ? d3["setUTC" + a5](f3) : d3["set" + a5](f3);
+          };
+          F2.prototype.update = function(a5) {
+            var d3 = f2(a5 && a5.useUTC, true);
+            this.options = a5 = z2(true, this.options || {}, a5);
+            this.Date = a5.Date || D3.Date || Date;
+            this.timezoneOffset = (this.useUTC = d3) && a5.timezoneOffset;
+            this.getTimezoneOffset = this.timezoneOffsetFunction();
+            this.variableTimezone = d3 && !(!a5.getTimezoneOffset && !a5.timezone);
+          };
+          F2.prototype.makeTime = function(a5, d3, p3, F3, y2, C2) {
+            if (this.useUTC) {
+              var x3 = this.Date.UTC.apply(0, arguments);
+              var c3 = this.getTimezoneOffset(x3);
+              x3 += c3;
+              var t2 = this.getTimezoneOffset(x3);
+              c3 !== t2 ? x3 += t2 - c3 : c3 - 36e5 !== this.getTimezoneOffset(x3 - 36e5) || k2 || (x3 -= 36e5);
+            } else
+              x3 = new this.Date(a5, d3, f2(p3, 1), f2(F3, 0), f2(y2, 0), f2(C2, 0)).getTime();
+            return x3;
+          };
+          F2.prototype.timezoneOffsetFunction = function() {
+            var a5 = this, d3 = this.options, f3 = d3.moment || D3.moment;
+            if (!this.useUTC)
+              return function(a6) {
+                return 6e4 * new Date(a6.toString()).getTimezoneOffset();
+              };
+            if (d3.timezone) {
+              if (f3)
+                return function(a6) {
+                  return 6e4 * -f3.tz(a6, d3.timezone).utcOffset();
+                };
+              v(25);
+            }
+            return this.useUTC && d3.getTimezoneOffset ? function(a6) {
+              return 6e4 * d3.getTimezoneOffset(a6.valueOf());
+            } : function() {
+              return 6e4 * (a5.timezoneOffset || 0);
+            };
+          };
+          F2.prototype.dateFormat = function(a5, d3, p3) {
+            if (!E3(d3) || isNaN(d3))
+              return e.defaultOptions.lang && e.defaultOptions.lang.invalidDate || "";
+            a5 = f2(a5, "%Y-%m-%d %H:%M:%S");
+            var B = this, y2 = new this.Date(d3), C2 = this.get("Hours", y2), x3 = this.get("Day", y2), c3 = this.get("Date", y2), t2 = this.get("Month", y2), g2 = this.get("FullYear", y2), u4 = e.defaultOptions.lang, n2 = u4 && u4.weekdays, b3 = u4 && u4.shortWeekdays;
+            y2 = H2({
+              a: b3 ? b3[x3] : n2[x3].substr(0, 3),
+              A: n2[x3],
+              d: l3(c3),
+              e: l3(c3, 2, " "),
+              w: x3,
+              b: u4.shortMonths[t2],
+              B: u4.months[t2],
+              m: l3(t2 + 1),
+              o: t2 + 1,
+              y: g2.toString().substr(2, 2),
+              Y: g2,
+              H: l3(C2),
+              k: C2,
+              I: l3(C2 % 12 || 12),
+              l: C2 % 12 || 12,
+              M: l3(this.get("Minutes", y2)),
+              p: 12 > C2 ? "AM" : "PM",
+              P: 12 > C2 ? "am" : "pm",
+              S: l3(y2.getSeconds()),
+              L: l3(Math.floor(d3 % 1e3), 3)
+            }, e.dateFormats);
+            q3(y2, function(b4, c4) {
+              for (; a5.indexOf("%" + c4) !== -1; )
+                a5 = a5.replace("%" + c4, typeof b4 === "function" ? b4.call(B, d3) : b4);
+            });
+            return p3 ? a5.substr(0, 1).toUpperCase() + a5.substr(1) : a5;
+          };
+          F2.prototype.resolveDTLFormat = function(a5) {
+            return I2(a5, true) ? a5 : (a5 = d2(a5), { main: a5[0], from: a5[1], to: a5[2] });
+          };
+          F2.prototype.getTimeTicks = function(d3, p3, k3, F3) {
+            var y2 = this, C2 = [], x3 = {}, c3 = new y2.Date(p3), t2 = d3.unitRange, g2 = d3.count || 1, u4;
+            F3 = f2(F3, 1);
+            if (E3(p3)) {
+              y2.set("Milliseconds", c3, t2 >= a4.second ? 0 : g2 * Math.floor(y2.get("Milliseconds", c3) / g2));
+              t2 >= a4.second && y2.set("Seconds", c3, t2 >= a4.minute ? 0 : g2 * Math.floor(y2.get("Seconds", c3) / g2));
+              t2 >= a4.minute && y2.set("Minutes", c3, t2 >= a4.hour ? 0 : g2 * Math.floor(y2.get("Minutes", c3) / g2));
+              t2 >= a4.hour && y2.set("Hours", c3, t2 >= a4.day ? 0 : g2 * Math.floor(y2.get("Hours", c3) / g2));
+              t2 >= a4.day && y2.set("Date", c3, t2 >= a4.month ? 1 : Math.max(1, g2 * Math.floor(y2.get("Date", c3) / g2)));
+              if (t2 >= a4.month) {
+                y2.set("Month", c3, t2 >= a4.year ? 0 : g2 * Math.floor(y2.get("Month", c3) / g2));
+                var n2 = y2.get("FullYear", c3);
+              }
+              t2 >= a4.year && y2.set("FullYear", c3, n2 - n2 % g2);
+              t2 === a4.week && (n2 = y2.get("Day", c3), y2.set("Date", c3, y2.get("Date", c3) - n2 + F3 + (n2 < F3 ? -7 : 0)));
+              n2 = y2.get("FullYear", c3);
+              F3 = y2.get("Month", c3);
+              var b3 = y2.get("Date", c3), r3 = y2.get("Hours", c3);
+              p3 = c3.getTime();
+              !y2.variableTimezone && y2.useUTC || !E3(k3) || (u4 = k3 - p3 > 4 * a4.month || y2.getTimezoneOffset(p3) !== y2.getTimezoneOffset(k3));
+              p3 = c3.getTime();
+              for (c3 = 1; p3 < k3; )
+                C2.push(p3), p3 = t2 === a4.year ? y2.makeTime(n2 + c3 * g2, 0) : t2 === a4.month ? y2.makeTime(n2, F3 + c3 * g2) : !u4 || t2 !== a4.day && t2 !== a4.week ? u4 && t2 === a4.hour && 1 < g2 ? y2.makeTime(n2, F3, b3, r3 + c3 * g2) : p3 + t2 * g2 : y2.makeTime(n2, F3, b3 + c3 * g2 * (t2 === a4.day ? 1 : 7)), c3++;
+              C2.push(p3);
+              t2 <= a4.hour && 1e4 > C2.length && C2.forEach(function(b4) {
+                b4 % 18e5 === 0 && y2.dateFormat("%H%M%S%L", b4) === "000000000" && (x3[b4] = "day");
+              });
+            }
+            C2.info = H2(d3, { higherRanks: x3, totalRange: t2 * g2 });
+            return C2;
+          };
+          F2.prototype.getDateFormat = function(d3, p3, f3, k3) {
+            var y2 = this.dateFormat("%m-%d %H:%M:%S.%L", p3), C2 = { millisecond: 15, second: 12, minute: 9, hour: 6, day: 3 }, x3 = "millisecond";
+            for (c3 in a4) {
+              if (d3 === a4.week && +this.dateFormat("%w", p3) === f3 && y2.substr(6) === "00:00:00.000") {
+                var c3 = "week";
+                break;
+              }
+              if (a4[c3] > d3) {
+                c3 = x3;
+                break;
+              }
+              if (C2[c3] && y2.substr(C2[c3]) !== "01-01 00:00:00.000".substr(C2[c3]))
+                break;
+              c3 !== "week" && (x3 = c3);
+            }
+            if (c3)
+              var t2 = this.resolveDTLFormat(k3[c3]).main;
+            return t2;
+          };
+          return F2;
+        }();
+        "";
+        return h4;
+      });
+      M2(h3, "Core/DefaultOptions.js", [h3["Core/Chart/ChartDefaults.js"], h3["Core/Color/Color.js"], h3["Core/Globals.js"], h3["Core/Color/Palettes.js"], h3["Core/Time.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v, H2) {
+        h4 = h4.parse;
+        var D3 = H2.merge, z2 = {
+          colors: E3.colors,
+          symbols: ["circle", "diamond", "square", "triangle", "triangle-down"],
+          lang: {
+            loading: "Loading...",
+            months: "January February March April May June July August September October November December".split(" "),
+            shortMonths: "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec".split(" "),
+            weekdays: "Sunday Monday Tuesday Wednesday Thursday Friday Saturday".split(" "),
+            decimalPoint: ".",
+            numericSymbols: "kMGTPE".split(""),
+            resetZoom: "Reset zoom",
+            resetZoomTitle: "Reset zoom level 1:1",
+            thousandsSep: " "
+          },
+          global: {},
+          time: { Date: void 0, getTimezoneOffset: void 0, timezone: void 0, timezoneOffset: 0, useUTC: true },
+          chart: e,
+          title: { text: "Chart title", align: "center", margin: 15, widthAdjust: -44 },
+          subtitle: { text: "", align: "center", widthAdjust: -44 },
+          caption: { margin: 15, text: "", align: "left", verticalAlign: "bottom" },
+          plotOptions: {},
+          labels: { style: { position: "absolute", color: "#333333" } },
+          legend: {
+            enabled: true,
+            align: "center",
+            alignColumns: true,
+            className: "highcharts-no-tooltip",
+            layout: "horizontal",
+            labelFormatter: function() {
+              return this.name;
+            },
+            borderColor: "#999999",
+            borderRadius: 0,
+            navigation: { activeColor: "#003399", inactiveColor: "#cccccc" },
+            itemStyle: { color: "#333333", cursor: "pointer", fontSize: "12px", fontWeight: "bold", textOverflow: "ellipsis" },
+            itemHoverStyle: { color: "#000000" },
+            itemHiddenStyle: { color: "#cccccc" },
+            shadow: false,
+            itemCheckboxStyle: { position: "absolute", width: "13px", height: "13px" },
+            squareSymbol: true,
+            symbolPadding: 5,
+            verticalAlign: "bottom",
+            x: 0,
+            y: 0,
+            title: { style: { fontWeight: "bold" } }
+          },
+          loading: { labelStyle: { fontWeight: "bold", position: "relative", top: "45%" }, style: { position: "absolute", backgroundColor: "#ffffff", opacity: 0.5, textAlign: "center" } },
+          tooltip: {
+            enabled: true,
+            animation: A.svg,
+            borderRadius: 3,
+            dateTimeLabelFormats: {
+              millisecond: "%A, %b %e, %H:%M:%S.%L",
+              second: "%A, %b %e, %H:%M:%S",
+              minute: "%A, %b %e, %H:%M",
+              hour: "%A, %b %e, %H:%M",
+              day: "%A, %b %e, %Y",
+              week: "Week from %A, %b %e, %Y",
+              month: "%B %Y",
+              year: "%Y"
+            },
+            footerFormat: "",
+            headerShape: "callout",
+            hideDelay: 500,
+            padding: 8,
+            shape: "callout",
+            shared: false,
+            snap: A.isTouchDevice ? 25 : 10,
+            headerFormat: '<span style="font-size: 10px">{point.key}</span><br/>',
+            pointFormat: '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.y}</b><br/>',
+            backgroundColor: h4("#f7f7f7").setOpacity(0.85).get(),
+            borderWidth: 1,
+            shadow: true,
+            stickOnContact: false,
+            style: { color: "#333333", cursor: "default", fontSize: "12px", whiteSpace: "nowrap" },
+            useHTML: false
+          },
+          credits: { enabled: true, href: "https://www.highcharts.com?credits", position: { align: "right", x: -10, verticalAlign: "bottom", y: -5 }, style: { cursor: "pointer", color: "#999999", fontSize: "9px" }, text: "Highcharts.com" }
+        };
+        z2.chart.styledMode = false;
+        "";
+        var q3 = new v(D3(z2.global, z2.time));
+        e = { defaultOptions: z2, defaultTime: q3, getOptions: function() {
+          return z2;
+        }, setOptions: function(l3) {
+          D3(true, z2, l3);
+          if (l3.time || l3.global)
+            A.time ? A.time.update(D3(z2.global, z2.time, l3.global, l3.time)) : A.time = q3;
+          return z2;
+        } };
+        "";
+        return e;
+      });
+      M2(h3, "Core/Animation/Fx.js", [h3["Core/Color/Color.js"], h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = e.parse, v = h4.win, H2 = A.isNumber, I2 = A.objectEach;
+        return function() {
+          function e2(q3, l3, f2) {
+            this.pos = NaN;
+            this.options = l3;
+            this.elem = q3;
+            this.prop = f2;
+          }
+          e2.prototype.dSetter = function() {
+            var q3 = this.paths, l3 = q3 && q3[0];
+            q3 = q3 && q3[1];
+            var f2 = this.now || 0, d2 = [];
+            if (f2 !== 1 && l3 && q3)
+              if (l3.length === q3.length && 1 > f2)
+                for (var a4 = 0; a4 < q3.length; a4++) {
+                  for (var p2 = l3[a4], k2 = q3[a4], F2 = [], B = 0; B < k2.length; B++) {
+                    var J2 = p2[B], K2 = k2[B];
+                    H2(J2) && H2(K2) && (k2[0] !== "A" || B !== 4 && B !== 5) ? F2[B] = J2 + f2 * (K2 - J2) : F2[B] = K2;
+                  }
+                  d2.push(F2);
+                }
+              else
+                d2 = q3;
+            else
+              d2 = this.toD || [];
+            this.elem.attr("d", d2, void 0, true);
+          };
+          e2.prototype.update = function() {
+            var q3 = this.elem, l3 = this.prop, f2 = this.now, d2 = this.options.step;
+            if (this[l3 + "Setter"])
+              this[l3 + "Setter"]();
+            else
+              q3.attr ? q3.element && q3.attr(l3, f2, null, true) : q3.style[l3] = f2 + this.unit;
+            d2 && d2.call(q3, f2, this);
+          };
+          e2.prototype.run = function(q3, l3, f2) {
+            var d2 = this, a4 = d2.options, p2 = function(a5) {
+              return p2.stopped ? false : d2.step(a5);
+            }, k2 = v.requestAnimationFrame || function(a5) {
+              setTimeout(a5, 13);
+            }, F2 = function() {
+              for (var a5 = 0; a5 < e2.timers.length; a5++)
+                e2.timers[a5]() || e2.timers.splice(a5--, 1);
+              e2.timers.length && k2(F2);
+            };
+            q3 !== l3 || this.elem["forceAnimate:" + this.prop] ? (this.startTime = +new Date(), this.start = q3, this.end = l3, this.unit = f2, this.now = this.start, this.pos = 0, p2.elem = this.elem, p2.prop = this.prop, p2() && e2.timers.push(p2) === 1 && k2(F2)) : (delete a4.curAnim[this.prop], a4.complete && Object.keys(a4.curAnim).length === 0 && a4.complete.call(this.elem));
+          };
+          e2.prototype.step = function(q3) {
+            var l3 = +new Date(), f2 = this.options, d2 = this.elem, a4 = f2.complete, p2 = f2.duration, k2 = f2.curAnim;
+            if (d2.attr && !d2.element)
+              q3 = false;
+            else if (q3 || l3 >= p2 + this.startTime) {
+              this.now = this.end;
+              this.pos = 1;
+              this.update();
+              var F2 = k2[this.prop] = true;
+              I2(k2, function(a5) {
+                a5 !== true && (F2 = false);
+              });
+              F2 && a4 && a4.call(d2);
+              q3 = false;
+            } else
+              this.pos = f2.easing((l3 - this.startTime) / p2), this.now = this.start + (this.end - this.start) * this.pos, this.update(), q3 = true;
+            return q3;
+          };
+          e2.prototype.initPath = function(q3, l3, f2) {
+            function d2(a5, d3) {
+              for (; a5.length < L3; ) {
+                var x3 = a5[0], c3 = d3[L3 - a5.length];
+                c3 && x3[0] === "M" && (a5[0] = c3[0] === "C" ? ["C", x3[1], x3[2], x3[1], x3[2], x3[1], x3[2]] : [
+                  "L",
+                  x3[1],
+                  x3[2]
+                ]);
+                a5.unshift(x3);
+                F2 && (x3 = a5.pop(), a5.push(a5[a5.length - 1], x3));
+              }
+            }
+            function a4(a5, d3) {
+              for (; a5.length < L3; )
+                if (d3 = a5[Math.floor(a5.length / B) - 1].slice(), d3[0] === "C" && (d3[1] = d3[5], d3[2] = d3[6]), F2) {
+                  var x3 = a5[Math.floor(a5.length / B)].slice();
+                  a5.splice(a5.length / 2, 0, d3, x3);
+                } else
+                  a5.push(d3);
+            }
+            var p2 = q3.startX, k2 = q3.endX;
+            f2 = f2.slice();
+            var F2 = q3.isArea, B = F2 ? 2 : 1;
+            l3 = l3 && l3.slice();
+            if (!l3)
+              return [f2, f2];
+            if (p2 && k2 && k2.length) {
+              for (q3 = 0; q3 < p2.length; q3++)
+                if (p2[q3] === k2[0]) {
+                  var J2 = q3;
+                  break;
+                } else if (p2[0] === k2[k2.length - p2.length + q3]) {
+                  J2 = q3;
+                  var K2 = true;
+                  break;
+                } else if (p2[p2.length - 1] === k2[k2.length - p2.length + q3]) {
+                  J2 = p2.length - q3;
+                  break;
+                }
+              typeof J2 === "undefined" && (l3 = []);
+            }
+            if (l3.length && H2(J2)) {
+              var L3 = f2.length + J2 * B;
+              K2 ? (d2(l3, f2), a4(f2, l3)) : (d2(f2, l3), a4(l3, f2));
+            }
+            return [l3, f2];
+          };
+          e2.prototype.fillSetter = function() {
+            e2.prototype.strokeSetter.apply(this, arguments);
+          };
+          e2.prototype.strokeSetter = function() {
+            this.elem.attr(this.prop, D3(this.start).tweenTo(D3(this.end), this.pos), null, true);
+          };
+          e2.timers = [];
+          return e2;
+        }();
+      });
+      M2(h3, "Core/Animation/AnimationUtilities.js", [h3["Core/Animation/Fx.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        function D3(a4) {
+          return q3(a4) ? l3({ duration: 500, defer: 0 }, a4) : { duration: a4 ? 500 : 0, defer: 0 };
+        }
+        function E3(a4, d3) {
+          for (var f3 = e.timers.length; f3--; )
+            e.timers[f3].elem !== a4 || d3 && d3 !== e.timers[f3].prop || (e.timers[f3].stopped = true);
+        }
+        var v = h4.defined, H2 = h4.getStyle, I2 = h4.isArray, z2 = h4.isNumber, q3 = h4.isObject, l3 = h4.merge, f2 = h4.objectEach, d2 = h4.pick;
+        return { animate: function(a4, d3, k2) {
+          var p2, B = "", J2, K2;
+          if (!q3(k2)) {
+            var L3 = arguments;
+            k2 = { duration: L3[2], easing: L3[3], complete: L3[4] };
+          }
+          z2(k2.duration) || (k2.duration = 400);
+          k2.easing = typeof k2.easing === "function" ? k2.easing : Math[k2.easing] || Math.easeInOutSine;
+          k2.curAnim = l3(d3);
+          f2(d3, function(f3, C2) {
+            E3(a4, C2);
+            K2 = new e(a4, k2, C2);
+            J2 = void 0;
+            C2 === "d" && I2(d3.d) ? (K2.paths = K2.initPath(a4, a4.pathArray, d3.d), K2.toD = d3.d, p2 = 0, J2 = 1) : a4.attr ? p2 = a4.attr(C2) : (p2 = parseFloat(H2(a4, C2)) || 0, C2 !== "opacity" && (B = "px"));
+            J2 || (J2 = f3);
+            typeof J2 === "string" && J2.match("px") && (J2 = J2.replace(/px/g, ""));
+            K2.run(p2, J2, B);
+          });
+        }, animObject: D3, getDeferredAnimation: function(a4, d3, f3) {
+          var p2 = D3(d3), k2 = 0, l4 = 0;
+          (f3 ? [f3] : a4.series).forEach(function(a5) {
+            a5 = D3(a5.options.animation);
+            k2 = d3 && v(d3.defer) ? p2.defer : Math.max(k2, a5.duration + a5.defer);
+            l4 = Math.min(p2.duration, a5.duration);
+          });
+          a4.renderer.forExport && (k2 = 0);
+          return { defer: Math.max(0, k2 - l4), duration: Math.min(k2, l4) };
+        }, setAnimation: function(a4, f3) {
+          f3.renderer.globalAnimation = d2(a4, f3.options.chart.animation, true);
+        }, stop: E3 };
+      });
+      M2(h3, "Core/Renderer/HTML/AST.js", [h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var D3 = e.SVG_NS, E3 = h4.attr, v = h4.createElement, H2 = h4.discardElement, I2 = h4.error, z2 = h4.isString, q3 = h4.objectEach, l3 = h4.splat;
+        try {
+          var f2 = !!new DOMParser().parseFromString("", "text/html");
+        } catch (d2) {
+          f2 = false;
+        }
+        h4 = function() {
+          function d2(a4) {
+            this.nodes = typeof a4 === "string" ? this.parseMarkup(a4) : a4;
+          }
+          d2.filterUserAttributes = function(a4) {
+            q3(a4, function(f3, k2) {
+              var p2 = true;
+              d2.allowedAttributes.indexOf(k2) === -1 && (p2 = false);
+              ["background", "dynsrc", "href", "lowsrc", "src"].indexOf(k2) !== -1 && (p2 = z2(f3) && d2.allowedReferences.some(function(a5) {
+                return f3.indexOf(a5) === 0;
+              }));
+              p2 || (I2("Highcharts warning: Invalid attribute '" + k2 + "' in config"), delete a4[k2]);
+            });
+            return a4;
+          };
+          d2.setElementHTML = function(a4, f3) {
+            a4.innerHTML = "";
+            f3 && new d2(f3).addToDOM(a4);
+          };
+          d2.prototype.addToDOM = function(a4) {
+            function f3(a5, p2) {
+              var k2;
+              l3(a5).forEach(function(a6) {
+                var B = a6.tagName, l4 = a6.textContent ? e.doc.createTextNode(a6.textContent) : void 0;
+                if (B)
+                  if (B === "#text")
+                    var y2 = l4;
+                  else if (d2.allowedTags.indexOf(B) !== -1) {
+                    B = e.doc.createElementNS(B === "svg" ? D3 : p2.namespaceURI || D3, B);
+                    var C2 = a6.attributes || {};
+                    q3(a6, function(a7, c3) {
+                      c3 !== "tagName" && c3 !== "attributes" && c3 !== "children" && c3 !== "textContent" && (C2[c3] = a7);
+                    });
+                    E3(B, d2.filterUserAttributes(C2));
+                    l4 && B.appendChild(l4);
+                    f3(a6.children || [], B);
+                    y2 = B;
+                  } else
+                    I2("Highcharts warning: Invalid tagName '" + B + "' in config");
+                y2 && p2.appendChild(y2);
+                k2 = y2;
+              });
+              return k2;
+            }
+            return f3(this.nodes, a4);
+          };
+          d2.prototype.parseMarkup = function(a4) {
+            var d3 = [];
+            a4 = a4.trim();
+            if (f2)
+              a4 = new DOMParser().parseFromString(a4, "text/html");
+            else {
+              var k2 = v("div");
+              k2.innerHTML = a4;
+              a4 = { body: k2 };
+            }
+            var l4 = function(a5, d4) {
+              var f3 = a5.nodeName.toLowerCase(), p2 = { tagName: f3 };
+              f3 === "#text" && (p2.textContent = a5.textContent || "");
+              if (f3 = a5.attributes) {
+                var k3 = {};
+                [].forEach.call(f3, function(a6) {
+                  k3[a6.name] = a6.value;
+                });
+                p2.attributes = k3;
+              }
+              if (a5.childNodes.length) {
+                var C2 = [];
+                [].forEach.call(a5.childNodes, function(a6) {
+                  l4(a6, C2);
+                });
+                C2.length && (p2.children = C2);
+              }
+              d4.push(p2);
+            };
+            [].forEach.call(a4.body.childNodes, function(a5) {
+              return l4(a5, d3);
+            });
+            k2 && H2(k2);
+            return d3;
+          };
+          d2.allowedAttributes = "aria-controls aria-describedby aria-expanded aria-haspopup aria-hidden aria-label aria-labelledby aria-live aria-pressed aria-readonly aria-roledescription aria-selected class clip-path color colspan cx cy d dx dy disabled fill height href id in markerHeight markerWidth offset opacity orient padding paddingLeft paddingRight patternUnits r refX refY role scope slope src startOffset stdDeviation stroke stroke-linecap stroke-width style tableValues result rowspan summary target tabindex text-align textAnchor textLength title type valign width x x1 x2 y y1 y2 zIndex".split(" ");
+          d2.allowedReferences = "https:// http:// mailto: / ../ ./ #".split(" ");
+          d2.allowedTags = "a abbr b br button caption circle clipPath code dd defs div dl dt em feComponentTransfer feFuncA feFuncB feFuncG feFuncR feGaussianBlur feOffset feMerge feMergeNode filter h1 h2 h3 h4 h5 h6 hr i img li linearGradient marker ol p path pattern pre rect small span stop strong style sub sup svg table text thead tbody tspan td th tr u ul #text".split(" ");
+          return d2;
+        }();
+        "";
+        return h4;
+      });
+      M2(h3, "Core/FormatUtilities.js", [
+        h3["Core/DefaultOptions.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4) {
+        function D3(l3, f2, d2, a4) {
+          l3 = +l3 || 0;
+          f2 = +f2;
+          var p2 = E3.lang, k2 = (l3.toString().split(".")[1] || "").split("e")[0].length, F2 = l3.toString().split("e"), B = f2;
+          if (f2 === -1)
+            f2 = Math.min(k2, 20);
+          else if (!I2(f2))
+            f2 = 2;
+          else if (f2 && F2[1] && 0 > F2[1]) {
+            var J2 = f2 + +F2[1];
+            0 <= J2 ? (F2[0] = (+F2[0]).toExponential(J2).split("e")[0], f2 = J2) : (F2[0] = F2[0].split(".")[0] || 0, l3 = 20 > f2 ? (F2[0] * Math.pow(10, F2[1])).toFixed(f2) : 0, F2[1] = 0);
+          }
+          J2 = (Math.abs(F2[1] ? F2[0] : l3) + Math.pow(10, -Math.max(f2, k2) - 1)).toFixed(f2);
+          k2 = String(q3(J2));
+          var K2 = 3 < k2.length ? k2.length % 3 : 0;
+          d2 = z2(d2, p2.decimalPoint);
+          a4 = z2(a4, p2.thousandsSep);
+          l3 = (0 > l3 ? "-" : "") + (K2 ? k2.substr(0, K2) + a4 : "");
+          l3 = 0 > +F2[1] && !B ? "0" : l3 + k2.substr(K2).replace(/(\d{3})(?=\d)/g, "$1" + a4);
+          f2 && (l3 += d2 + J2.slice(-f2));
+          F2[1] && +l3 !== 0 && (l3 += "e" + F2[1]);
+          return l3;
+        }
+        var E3 = e.defaultOptions, v = e.defaultTime, H2 = h4.getNestedProperty, I2 = h4.isNumber, z2 = h4.pick, q3 = h4.pInt;
+        return { dateFormat: function(l3, f2, d2) {
+          return v.dateFormat(l3, f2, d2);
+        }, format: function(l3, f2, d2) {
+          var a4 = "{", p2 = false, k2 = /f$/, F2 = /\.([0-9])/, B = E3.lang, J2 = d2 && d2.time || v;
+          d2 = d2 && d2.numberFormatter || D3;
+          for (var K2 = []; l3; ) {
+            var q4 = l3.indexOf(a4);
+            if (q4 === -1)
+              break;
+            var y2 = l3.slice(0, q4);
+            if (p2) {
+              y2 = y2.split(":");
+              a4 = H2(y2.shift() || "", f2);
+              if (y2.length && typeof a4 === "number")
+                if (y2 = y2.join(":"), k2.test(y2)) {
+                  var C2 = parseInt((y2.match(F2) || ["", "-1"])[1], 10);
+                  a4 !== null && (a4 = d2(a4, C2, B.decimalPoint, -1 < y2.indexOf(",") ? B.thousandsSep : ""));
+                } else
+                  a4 = J2.dateFormat(y2, a4);
+              K2.push(a4);
+            } else
+              K2.push(y2);
+            l3 = l3.slice(q4 + 1);
+            a4 = (p2 = !p2) ? "}" : "{";
+          }
+          K2.push(l3);
+          return K2.join("");
+        }, numberFormat: D3 };
+      });
+      M2(h3, "Core/Renderer/RendererUtilities.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.clamp, A = e.pick, E3 = e.stableSort, v;
+        (function(e2) {
+          function v2(e3, q3, l3) {
+            var f2 = e3, d2 = f2.reducedLen || q3, a4 = function(a5, d3) {
+              return (d3.rank || 0) - (a5.rank || 0);
+            }, p2 = function(a5, d3) {
+              return a5.target - d3.target;
+            }, k2, F2 = true, B = [], J2 = 0;
+            for (k2 = e3.length; k2--; )
+              J2 += e3[k2].size;
+            if (J2 > d2) {
+              E3(e3, a4);
+              for (J2 = k2 = 0; J2 <= d2; )
+                J2 += e3[k2].size, k2++;
+              B = e3.splice(k2 - 1, e3.length);
+            }
+            E3(e3, p2);
+            for (e3 = e3.map(function(a5) {
+              return { size: a5.size, targets: [a5.target], align: A(a5.align, 0.5) };
+            }); F2; ) {
+              for (k2 = e3.length; k2--; )
+                d2 = e3[k2], a4 = (Math.min.apply(0, d2.targets) + Math.max.apply(0, d2.targets)) / 2, d2.pos = h4(a4 - d2.size * d2.align, 0, q3 - d2.size);
+              k2 = e3.length;
+              for (F2 = false; k2--; )
+                0 < k2 && e3[k2 - 1].pos + e3[k2 - 1].size > e3[k2].pos && (e3[k2 - 1].size += e3[k2].size, e3[k2 - 1].targets = e3[k2 - 1].targets.concat(e3[k2].targets), e3[k2 - 1].align = 0.5, e3[k2 - 1].pos + e3[k2 - 1].size > q3 && (e3[k2 - 1].pos = q3 - e3[k2 - 1].size), e3.splice(k2, 1), F2 = true);
+            }
+            f2.push.apply(f2, B);
+            k2 = 0;
+            e3.some(function(a5) {
+              var d3 = 0;
+              return (a5.targets || []).some(function() {
+                f2[k2].pos = a5.pos + d3;
+                if (typeof l3 !== "undefined" && Math.abs(f2[k2].pos - f2[k2].target) > l3)
+                  return f2.slice(0, k2 + 1).forEach(function(a6) {
+                    return delete a6.pos;
+                  }), f2.reducedLen = (f2.reducedLen || q3) - 0.1 * q3, f2.reducedLen > 0.1 * q3 && v2(f2, q3, l3), true;
+                d3 += f2[k2].size;
+                k2++;
+                return false;
+              });
+            });
+            E3(f2, p2);
+            return f2;
+          }
+          e2.distribute = v2;
+        })(v || (v = {}));
+        return v;
+      });
+      M2(h3, "Core/Renderer/SVG/SVGElement.js", [h3["Core/Animation/AnimationUtilities.js"], h3["Core/Renderer/HTML/AST.js"], h3["Core/Color/Color.js"], h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v) {
+        var D3 = e.animate, I2 = e.animObject, z2 = e.stop, q3 = E3.deg2rad, l3 = E3.doc, f2 = E3.noop, d2 = E3.svg, a4 = E3.SVG_NS, p2 = E3.win, k2 = v.addEvent, F2 = v.attr, B = v.createElement, J2 = v.css, K2 = v.defined, L3 = v.erase, y2 = v.extend, C2 = v.fireEvent, x3 = v.isArray, c3 = v.isFunction, t2 = v.isNumber, g2 = v.isString, u4 = v.merge, n2 = v.objectEach, b3 = v.pick, r3 = v.pInt, G2 = v.syncTimeout, m2 = v.uniqueKey;
+        e = function() {
+          function w2() {
+            this.element = void 0;
+            this.onEvents = {};
+            this.opacity = 1;
+            this.renderer = void 0;
+            this.SVG_NS = a4;
+            this.symbolCustomAttribs = "x y width height r start end innerR anchorX anchorY rounded".split(" ");
+          }
+          w2.prototype._defaultGetter = function(c4) {
+            c4 = b3(this[c4 + "Value"], this[c4], this.element ? this.element.getAttribute(c4) : null, 0);
+            /^[\-0-9\.]+$/.test(c4) && (c4 = parseFloat(c4));
+            return c4;
+          };
+          w2.prototype._defaultSetter = function(b4, c4, g3) {
+            g3.setAttribute(c4, b4);
+          };
+          w2.prototype.add = function(b4) {
+            var c4 = this.renderer, g3 = this.element;
+            b4 && (this.parentGroup = b4);
+            this.parentInverted = b4 && b4.inverted;
+            typeof this.textStr !== "undefined" && this.element.nodeName === "text" && c4.buildText(this);
+            this.added = true;
+            if (!b4 || b4.handleZ || this.zIndex)
+              var m3 = this.zIndexSetter();
+            m3 || (b4 ? b4.element : c4.box).appendChild(g3);
+            if (this.onAdd)
+              this.onAdd();
+            return this;
+          };
+          w2.prototype.addClass = function(b4, c4) {
+            var g3 = c4 ? "" : this.attr("class") || "";
+            b4 = (b4 || "").split(/ /g).reduce(function(b5, c5) {
+              g3.indexOf(c5) === -1 && b5.push(c5);
+              return b5;
+            }, g3 ? [g3] : []).join(" ");
+            b4 !== g3 && this.attr("class", b4);
+            return this;
+          };
+          w2.prototype.afterSetters = function() {
+            this.doTransform && (this.updateTransform(), this.doTransform = false);
+          };
+          w2.prototype.align = function(c4, m3, n3) {
+            var P2 = {}, a5 = this.renderer, r4 = a5.alignedObjects, u5, N3, d3;
+            if (c4) {
+              if (this.alignOptions = c4, this.alignByTranslate = m3, !n3 || g2(n3))
+                this.alignTo = u5 = n3 || "renderer", L3(r4, this), r4.push(this), n3 = void 0;
+            } else
+              c4 = this.alignOptions, m3 = this.alignByTranslate, u5 = this.alignTo;
+            n3 = b3(n3, a5[u5], u5 === "scrollablePlotBox" ? a5.plotBox : void 0, a5);
+            u5 = c4.align;
+            var t3 = c4.verticalAlign;
+            a5 = (n3.x || 0) + (c4.x || 0);
+            r4 = (n3.y || 0) + (c4.y || 0);
+            u5 === "right" ? N3 = 1 : u5 === "center" && (N3 = 2);
+            N3 && (a5 += (n3.width - (c4.width || 0)) / N3);
+            P2[m3 ? "translateX" : "x"] = Math.round(a5);
+            t3 === "bottom" ? d3 = 1 : t3 === "middle" && (d3 = 2);
+            d3 && (r4 += (n3.height - (c4.height || 0)) / d3);
+            P2[m3 ? "translateY" : "y"] = Math.round(r4);
+            this[this.placed ? "animate" : "attr"](P2);
+            this.placed = true;
+            this.alignAttr = P2;
+            return this;
+          };
+          w2.prototype.alignSetter = function(b4) {
+            var c4 = { left: "start", center: "middle", right: "end" };
+            c4[b4] && (this.alignValue = b4, this.element.setAttribute("text-anchor", c4[b4]));
+          };
+          w2.prototype.animate = function(c4, g3, m3) {
+            var a5 = this, r4 = I2(b3(g3, this.renderer.globalAnimation, true));
+            g3 = r4.defer;
+            b3(l3.hidden, l3.msHidden, l3.webkitHidden, false) && (r4.duration = 0);
+            r4.duration !== 0 ? (m3 && (r4.complete = m3), G2(function() {
+              a5.element && D3(a5, c4, r4);
+            }, g3)) : (this.attr(c4, void 0, m3), n2(c4, function(b4, c5) {
+              r4.step && r4.step.call(this, b4, { prop: c5, pos: 1, elem: this });
+            }, this));
+            return this;
+          };
+          w2.prototype.applyTextOutline = function(b4) {
+            var c4 = this.element;
+            b4.indexOf("contrast") !== -1 && (b4 = b4.replace(/contrast/g, this.renderer.getContrast(c4.style.fill)));
+            var g3 = b4.split(" ");
+            b4 = g3[g3.length - 1];
+            if ((g3 = g3[0]) && g3 !== "none" && E3.svg) {
+              this.fakeTS = true;
+              this.ySetter = this.xSetter;
+              g3 = g3.replace(/(^[\d\.]+)(.*?)$/g, function(b5, c5, g4) {
+                return 2 * Number(c5) + g4;
+              });
+              this.removeTextOutline();
+              var m3 = l3.createElementNS(a4, "tspan");
+              F2(m3, { "class": "highcharts-text-outline", fill: b4, stroke: b4, "stroke-width": g3, "stroke-linejoin": "round" });
+              [].forEach.call(c4.childNodes, function(b5) {
+                var c5 = b5.cloneNode(true);
+                c5.removeAttribute && ["fill", "stroke", "stroke-width", "stroke"].forEach(function(b6) {
+                  return c5.removeAttribute(b6);
+                });
+                m3.appendChild(c5);
+              });
+              var n3 = l3.createElementNS(a4, "tspan");
+              n3.textContent = "\u200B";
+              ["x", "y"].forEach(function(b5) {
+                var g4 = c4.getAttribute(b5);
+                g4 && n3.setAttribute(b5, g4);
+              });
+              m3.appendChild(n3);
+              c4.insertBefore(m3, c4.firstChild);
+            }
+          };
+          w2.prototype.attr = function(b4, c4, g3, m3) {
+            var r4 = this.element, a5 = this.symbolCustomAttribs, P2, O3 = this, u5, N3;
+            if (typeof b4 === "string" && typeof c4 !== "undefined") {
+              var d3 = b4;
+              b4 = {};
+              b4[d3] = c4;
+            }
+            typeof b4 === "string" ? O3 = (this[b4 + "Getter"] || this._defaultGetter).call(this, b4, r4) : (n2(b4, function(c5, g4) {
+              u5 = false;
+              m3 || z2(this, g4);
+              this.symbolName && a5.indexOf(g4) !== -1 && (P2 || (this.symbolAttr(b4), P2 = true), u5 = true);
+              !this.rotation || g4 !== "x" && g4 !== "y" || (this.doTransform = true);
+              u5 || (N3 = this[g4 + "Setter"] || this._defaultSetter, N3.call(this, c5, g4, r4), !this.styledMode && this.shadows && /^(width|height|visibility|x|y|d|transform|cx|cy|r)$/.test(g4) && this.updateShadows(g4, c5, N3));
+            }, this), this.afterSetters());
+            g3 && g3.call(this);
+            return O3;
+          };
+          w2.prototype.clip = function(b4) {
+            return this.attr("clip-path", b4 ? "url(" + this.renderer.url + "#" + b4.id + ")" : "none");
+          };
+          w2.prototype.crisp = function(b4, c4) {
+            c4 = c4 || b4.strokeWidth || 0;
+            var g3 = Math.round(c4) % 2 / 2;
+            b4.x = Math.floor(b4.x || this.x || 0) + g3;
+            b4.y = Math.floor(b4.y || this.y || 0) + g3;
+            b4.width = Math.floor((b4.width || this.width || 0) - 2 * g3);
+            b4.height = Math.floor((b4.height || this.height || 0) - 2 * g3);
+            K2(b4.strokeWidth) && (b4.strokeWidth = c4);
+            return b4;
+          };
+          w2.prototype.complexColor = function(b4, c4, g3) {
+            var r4 = this.renderer, a5, P2, d3, t3, w3, N3, G3, f3, p3, k3, y3 = [], B2;
+            C2(this.renderer, "complexColor", { args: arguments }, function() {
+              b4.radialGradient ? P2 = "radialGradient" : b4.linearGradient && (P2 = "linearGradient");
+              if (P2) {
+                d3 = b4[P2];
+                w3 = r4.gradients;
+                N3 = b4.stops;
+                p3 = g3.radialReference;
+                x3(d3) && (b4[P2] = d3 = { x1: d3[0], y1: d3[1], x2: d3[2], y2: d3[3], gradientUnits: "userSpaceOnUse" });
+                P2 === "radialGradient" && p3 && !K2(d3.gradientUnits) && (t3 = d3, d3 = u4(d3, r4.getRadialAttr(p3, t3), { gradientUnits: "userSpaceOnUse" }));
+                n2(d3, function(b5, c5) {
+                  c5 !== "id" && y3.push(c5, b5);
+                });
+                n2(N3, function(b5) {
+                  y3.push(b5);
+                });
+                y3 = y3.join(",");
+                if (w3[y3])
+                  k3 = w3[y3].attr("id");
+                else {
+                  d3.id = k3 = m2();
+                  var O3 = w3[y3] = r4.createElement(P2).attr(d3).add(r4.defs);
+                  O3.radAttr = t3;
+                  O3.stops = [];
+                  N3.forEach(function(b5) {
+                    b5[1].indexOf("rgba") === 0 ? (a5 = A.parse(b5[1]), G3 = a5.get("rgb"), f3 = a5.get("a")) : (G3 = b5[1], f3 = 1);
+                    b5 = r4.createElement("stop").attr({
+                      offset: b5[0],
+                      "stop-color": G3,
+                      "stop-opacity": f3
+                    }).add(O3);
+                    O3.stops.push(b5);
+                  });
+                }
+                B2 = "url(" + r4.url + "#" + k3 + ")";
+                g3.setAttribute(c4, B2);
+                g3.gradient = y3;
+                b4.toString = function() {
+                  return B2;
+                };
+              }
+            });
+          };
+          w2.prototype.css = function(b4) {
+            var c4 = this.styles, g3 = {}, m3 = this.element, a5 = ["textOutline", "textOverflow", "width"], u5 = "", t3 = !c4;
+            b4 && b4.color && (b4.fill = b4.color);
+            c4 && n2(b4, function(b5, m4) {
+              c4 && c4[m4] !== b5 && (g3[m4] = b5, t3 = true);
+            });
+            if (t3) {
+              c4 && (b4 = y2(c4, g3));
+              if (b4) {
+                if (b4.width === null || b4.width === "auto")
+                  delete this.textWidth;
+                else if (m3.nodeName.toLowerCase() === "text" && b4.width)
+                  var w3 = this.textWidth = r3(b4.width);
+              }
+              this.styles = b4;
+              w3 && !d2 && this.renderer.forExport && delete b4.width;
+              if (m3.namespaceURI === this.SVG_NS) {
+                var N3 = function(b5, c5) {
+                  return "-" + c5.toLowerCase();
+                };
+                n2(b4, function(b5, c5) {
+                  a5.indexOf(c5) === -1 && (u5 += c5.replace(/([A-Z])/g, N3) + ":" + b5 + ";");
+                });
+                u5 && F2(m3, "style", u5);
+              } else
+                J2(m3, b4);
+              this.added && (this.element.nodeName === "text" && this.renderer.buildText(this), b4 && b4.textOutline && this.applyTextOutline(b4.textOutline));
+            }
+            return this;
+          };
+          w2.prototype.dashstyleSetter = function(c4) {
+            var g3 = this["stroke-width"];
+            g3 === "inherit" && (g3 = 1);
+            if (c4 = c4 && c4.toLowerCase()) {
+              var m3 = c4.replace("shortdashdotdot", "3,1,1,1,1,1,").replace("shortdashdot", "3,1,1,1").replace("shortdot", "1,1,").replace("shortdash", "3,1,").replace("longdash", "8,3,").replace(/dot/g, "1,3,").replace("dash", "4,3,").replace(/,$/, "").split(",");
+              for (c4 = m3.length; c4--; )
+                m3[c4] = "" + r3(m3[c4]) * b3(g3, NaN);
+              c4 = m3.join(",").replace(/NaN/g, "none");
+              this.element.setAttribute("stroke-dasharray", c4);
+            }
+          };
+          w2.prototype.destroy = function() {
+            var b4 = this, c4 = b4.element || {}, g3 = b4.renderer, m3 = c4.ownerSVGElement, r4 = g3.isSVG && c4.nodeName === "SPAN" && b4.parentGroup || void 0;
+            c4.onclick = c4.onmouseout = c4.onmouseover = c4.onmousemove = c4.point = null;
+            z2(b4);
+            if (b4.clipPath && m3) {
+              var a5 = b4.clipPath;
+              [].forEach.call(m3.querySelectorAll("[clip-path],[CLIP-PATH]"), function(b5) {
+                -1 < b5.getAttribute("clip-path").indexOf(a5.element.id) && b5.removeAttribute("clip-path");
+              });
+              b4.clipPath = a5.destroy();
+            }
+            if (b4.stops) {
+              for (m3 = 0; m3 < b4.stops.length; m3++)
+                b4.stops[m3].destroy();
+              b4.stops.length = 0;
+              b4.stops = void 0;
+            }
+            b4.safeRemoveChild(c4);
+            for (g3.styledMode || b4.destroyShadows(); r4 && r4.div && r4.div.childNodes.length === 0; )
+              c4 = r4.parentGroup, b4.safeRemoveChild(r4.div), delete r4.div, r4 = c4;
+            b4.alignTo && L3(g3.alignedObjects, b4);
+            n2(b4, function(c5, g4) {
+              b4[g4] && b4[g4].parentGroup === b4 && b4[g4].destroy && b4[g4].destroy();
+              delete b4[g4];
+            });
+          };
+          w2.prototype.destroyShadows = function() {
+            (this.shadows || []).forEach(function(b4) {
+              this.safeRemoveChild(b4);
+            }, this);
+            this.shadows = void 0;
+          };
+          w2.prototype.destroyTextPath = function(b4, c4) {
+            var g3 = b4.getElementsByTagName("text")[0];
+            if (g3) {
+              if (g3.removeAttribute("dx"), g3.removeAttribute("dy"), c4.element.setAttribute("id", ""), this.textPathWrapper && g3.getElementsByTagName("textPath").length) {
+                for (b4 = this.textPathWrapper.element.childNodes; b4.length; )
+                  g3.appendChild(b4[0]);
+                g3.removeChild(this.textPathWrapper.element);
+              }
+            } else if (b4.getAttribute("dx") || b4.getAttribute("dy"))
+              b4.removeAttribute("dx"), b4.removeAttribute("dy");
+            this.textPathWrapper && (this.textPathWrapper = this.textPathWrapper.destroy());
+          };
+          w2.prototype.dSetter = function(b4, c4, g3) {
+            x3(b4) && (typeof b4[0] === "string" && (b4 = this.renderer.pathToSegments(b4)), this.pathArray = b4, b4 = b4.reduce(function(b5, c5, g4) {
+              return c5 && c5.join ? (g4 ? b5 + " " : "") + c5.join(" ") : (c5 || "").toString();
+            }, ""));
+            /(NaN| {2}|^$)/.test(b4) && (b4 = "M 0 0");
+            this[c4] !== b4 && (g3.setAttribute(c4, b4), this[c4] = b4);
+          };
+          w2.prototype.fadeOut = function(c4) {
+            var g3 = this;
+            g3.animate({ opacity: 0 }, { duration: b3(c4, 150), complete: function() {
+              g3.attr({ y: -9999 }).hide();
+            } });
+          };
+          w2.prototype.fillSetter = function(b4, c4, g3) {
+            typeof b4 === "string" ? g3.setAttribute(c4, b4) : b4 && this.complexColor(b4, c4, g3);
+          };
+          w2.prototype.getBBox = function(g3, m3) {
+            var n3 = this.renderer, r4 = this.element, a5 = this.styles, u5 = this.textStr, d3 = n3.cache, t3 = n3.cacheKeys, Q2 = r4.namespaceURI === this.SVG_NS;
+            m3 = b3(m3, this.rotation, 0);
+            var x4 = n3.styledMode ? r4 && w2.prototype.getStyle.call(r4, "font-size") : a5 && a5.fontSize, G3;
+            if (K2(u5)) {
+              var f3 = u5.toString();
+              f3.indexOf("<") === -1 && (f3 = f3.replace(/[0-9]/g, "0"));
+              f3 += ["", m3, x4, this.textWidth, a5 && a5.textOverflow, a5 && a5.fontWeight].join();
+            }
+            f3 && !g3 && (G3 = d3[f3]);
+            if (!G3) {
+              if (Q2 || n3.forExport) {
+                try {
+                  var N3 = this.fakeTS && function(b4) {
+                    var c4 = r4.querySelector(".highcharts-text-outline");
+                    c4 && J2(c4, { display: b4 });
+                  };
+                  c3(N3) && N3("none");
+                  G3 = r4.getBBox ? y2({}, r4.getBBox()) : { width: r4.offsetWidth, height: r4.offsetHeight };
+                  c3(N3) && N3("");
+                } catch (U) {
+                  "";
+                }
+                if (!G3 || 0 > G3.width)
+                  G3 = {
+                    width: 0,
+                    height: 0
+                  };
+              } else
+                G3 = this.htmlGetBBox();
+              n3.isSVG && (g3 = G3.width, n3 = G3.height, Q2 && (G3.height = n3 = { "11px,17": 14, "13px,20": 16 }[a5 && a5.fontSize + "," + Math.round(n3)] || n3), m3 && (a5 = m3 * q3, G3.width = Math.abs(n3 * Math.sin(a5)) + Math.abs(g3 * Math.cos(a5)), G3.height = Math.abs(n3 * Math.cos(a5)) + Math.abs(g3 * Math.sin(a5))));
+              if (f3 && (u5 === "" || 0 < G3.height)) {
+                for (; 250 < t3.length; )
+                  delete d3[t3.shift()];
+                d3[f3] || t3.push(f3);
+                d3[f3] = G3;
+              }
+            }
+            return G3;
+          };
+          w2.prototype.getStyle = function(b4) {
+            return p2.getComputedStyle(this.element || this, "").getPropertyValue(b4);
+          };
+          w2.prototype.hasClass = function(b4) {
+            return ("" + this.attr("class")).split(" ").indexOf(b4) !== -1;
+          };
+          w2.prototype.hide = function(b4) {
+            b4 ? this.attr({ y: -9999 }) : this.attr({ visibility: "hidden" });
+            return this;
+          };
+          w2.prototype.htmlGetBBox = function() {
+            return { height: 0, width: 0, x: 0, y: 0 };
+          };
+          w2.prototype.init = function(b4, c4) {
+            this.element = c4 === "span" ? B(c4) : l3.createElementNS(this.SVG_NS, c4);
+            this.renderer = b4;
+            C2(this, "afterInit");
+          };
+          w2.prototype.invert = function(b4) {
+            this.inverted = b4;
+            this.updateTransform();
+            return this;
+          };
+          w2.prototype.on = function(b4, c4) {
+            var g3 = this.onEvents;
+            if (g3[b4])
+              g3[b4]();
+            g3[b4] = k2(this.element, b4, c4);
+            return this;
+          };
+          w2.prototype.opacitySetter = function(b4, c4, g3) {
+            this.opacity = b4 = Number(Number(b4).toFixed(3));
+            g3.setAttribute(c4, b4);
+          };
+          w2.prototype.removeClass = function(b4) {
+            return this.attr("class", ("" + this.attr("class")).replace(g2(b4) ? new RegExp("(^| )" + b4 + "( |$)") : b4, " ").replace(/ +/g, " ").trim());
+          };
+          w2.prototype.removeTextOutline = function() {
+            var b4 = this.element.querySelector("tspan.highcharts-text-outline");
+            b4 && this.safeRemoveChild(b4);
+          };
+          w2.prototype.safeRemoveChild = function(b4) {
+            var c4 = b4.parentNode;
+            c4 && c4.removeChild(b4);
+          };
+          w2.prototype.setRadialReference = function(b4) {
+            var c4 = this.element.gradient && this.renderer.gradients[this.element.gradient];
+            this.element.radialReference = b4;
+            c4 && c4.radAttr && c4.animate(this.renderer.getRadialAttr(b4, c4.radAttr));
+            return this;
+          };
+          w2.prototype.setTextPath = function(b4, c4) {
+            var g3 = this.element, r4 = this.text ? this.text.element : g3, a5 = { textAnchor: "text-anchor" }, d3 = false, w3 = this.textPathWrapper, G3 = !w3;
+            c4 = u4(true, { enabled: true, attributes: { dy: -5, startOffset: "50%", textAnchor: "middle" } }, c4);
+            var x4 = h4.filterUserAttributes(c4.attributes);
+            if (b4 && c4 && c4.enabled) {
+              w3 && w3.element.parentNode === null ? (G3 = true, w3 = w3.destroy()) : w3 && this.removeTextOutline.call(w3.parentGroup);
+              this.options && this.options.padding && (x4.dx = -this.options.padding);
+              w3 || (this.textPathWrapper = w3 = this.renderer.createElement("textPath"), d3 = true);
+              var C3 = w3.element;
+              (c4 = b4.element.getAttribute("id")) || b4.element.setAttribute("id", c4 = m2());
+              if (G3)
+                for (r4.setAttribute("y", 0), t2(x4.dx) && r4.setAttribute("x", -x4.dx), b4 = [].slice.call(r4.childNodes), G3 = 0; G3 < b4.length; G3++) {
+                  var k3 = b4[G3];
+                  k3.nodeType !== p2.Node.TEXT_NODE && k3.nodeName !== "tspan" || C3.appendChild(k3);
+                }
+              d3 && w3 && w3.add({ element: r4 });
+              C3.setAttributeNS("http://www.w3.org/1999/xlink", "href", this.renderer.url + "#" + c4);
+              K2(x4.dy) && (C3.parentNode.setAttribute("dy", x4.dy), delete x4.dy);
+              K2(x4.dx) && (C3.parentNode.setAttribute("dx", x4.dx), delete x4.dx);
+              n2(x4, function(b5, c5) {
+                C3.setAttribute(a5[c5] || c5, b5);
+              });
+              g3.removeAttribute("transform");
+              this.removeTextOutline.call(w3);
+              this.text && !this.renderer.styledMode && this.attr({ fill: "none", "stroke-width": 0 });
+              this.applyTextOutline = this.updateTransform = f2;
+            } else
+              w3 && (delete this.updateTransform, delete this.applyTextOutline, this.destroyTextPath(g3, b4), this.updateTransform(), this.options && this.options.rotation && this.applyTextOutline(this.options.style.textOutline));
+            return this;
+          };
+          w2.prototype.shadow = function(b4, c4, g3) {
+            var m3 = [], r4 = this.element, a5 = this.oldShadowOptions, u5 = { color: "#000000", offsetX: this.parentInverted ? -1 : 1, offsetY: this.parentInverted ? -1 : 1, opacity: 0.15, width: 3 }, P2 = false, d3;
+            b4 === true ? d3 = u5 : typeof b4 === "object" && (d3 = y2(u5, b4));
+            d3 && (d3 && a5 && n2(d3, function(b5, c5) {
+              b5 !== a5[c5] && (P2 = true);
+            }), P2 && this.destroyShadows(), this.oldShadowOptions = d3);
+            if (!d3)
+              this.destroyShadows();
+            else if (!this.shadows) {
+              var w3 = d3.opacity / d3.width;
+              var t3 = this.parentInverted ? "translate(" + d3.offsetY + ", " + d3.offsetX + ")" : "translate(" + d3.offsetX + ", " + d3.offsetY + ")";
+              for (u5 = 1; u5 <= d3.width; u5++) {
+                var G3 = r4.cloneNode(false);
+                var x4 = 2 * d3.width + 1 - 2 * u5;
+                F2(G3, { stroke: b4.color || "#000000", "stroke-opacity": w3 * u5, "stroke-width": x4, transform: t3, fill: "none" });
+                G3.setAttribute("class", (G3.getAttribute("class") || "") + " highcharts-shadow");
+                g3 && (F2(G3, "height", Math.max(F2(G3, "height") - x4, 0)), G3.cutHeight = x4);
+                c4 ? c4.element.appendChild(G3) : r4.parentNode && r4.parentNode.insertBefore(G3, r4);
+                m3.push(G3);
+              }
+              this.shadows = m3;
+            }
+            return this;
+          };
+          w2.prototype.show = function(b4) {
+            return this.attr({ visibility: b4 ? "inherit" : "visible" });
+          };
+          w2.prototype.strokeSetter = function(b4, c4, g3) {
+            this[c4] = b4;
+            this.stroke && this["stroke-width"] ? (w2.prototype.fillSetter.call(this, this.stroke, "stroke", g3), g3.setAttribute("stroke-width", this["stroke-width"]), this.hasStroke = true) : c4 === "stroke-width" && b4 === 0 && this.hasStroke ? (g3.removeAttribute("stroke"), this.hasStroke = false) : this.renderer.styledMode && this["stroke-width"] && (g3.setAttribute("stroke-width", this["stroke-width"]), this.hasStroke = true);
+          };
+          w2.prototype.strokeWidth = function() {
+            if (!this.renderer.styledMode)
+              return this["stroke-width"] || 0;
+            var b4 = this.getStyle("stroke-width"), c4 = 0;
+            if (b4.indexOf("px") === b4.length - 2)
+              c4 = r3(b4);
+            else if (b4 !== "") {
+              var g3 = l3.createElementNS(a4, "rect");
+              F2(g3, { width: b4, "stroke-width": 0 });
+              this.element.parentNode.appendChild(g3);
+              c4 = g3.getBBox().width;
+              g3.parentNode.removeChild(g3);
+            }
+            return c4;
+          };
+          w2.prototype.symbolAttr = function(c4) {
+            var g3 = this;
+            "x y r start end width height innerR anchorX anchorY clockwise".split(" ").forEach(function(m3) {
+              g3[m3] = b3(c4[m3], g3[m3]);
+            });
+            g3.attr({ d: g3.renderer.symbols[g3.symbolName](g3.x, g3.y, g3.width, g3.height, g3) });
+          };
+          w2.prototype.textSetter = function(b4) {
+            b4 !== this.textStr && (delete this.textPxLength, this.textStr = b4, this.added && this.renderer.buildText(this));
+          };
+          w2.prototype.titleSetter = function(c4) {
+            var g3 = this.element, m3 = g3.getElementsByTagName("title")[0] || l3.createElementNS(this.SVG_NS, "title");
+            g3.insertBefore ? g3.insertBefore(m3, g3.firstChild) : g3.appendChild(m3);
+            m3.textContent = String(b3(c4, "")).replace(/<[^>]*>/g, "").replace(/&lt;/g, "<").replace(/&gt;/g, ">");
+          };
+          w2.prototype.toFront = function() {
+            var b4 = this.element;
+            b4.parentNode.appendChild(b4);
+            return this;
+          };
+          w2.prototype.translate = function(b4, c4) {
+            return this.attr({ translateX: b4, translateY: c4 });
+          };
+          w2.prototype.updateShadows = function(b4, c4, g3) {
+            var m3 = this.shadows;
+            if (m3)
+              for (var n3 = m3.length; n3--; )
+                g3.call(m3[n3], b4 === "height" ? Math.max(c4 - (m3[n3].cutHeight || 0), 0) : b4 === "d" ? this.d : c4, b4, m3[n3]);
+          };
+          w2.prototype.updateTransform = function() {
+            var c4 = this.scaleX, g3 = this.scaleY, m3 = this.inverted, n3 = this.rotation, r4 = this.matrix, a5 = this.element, u5 = this.translateX || 0, d3 = this.translateY || 0;
+            m3 && (u5 += this.width, d3 += this.height);
+            u5 = ["translate(" + u5 + "," + d3 + ")"];
+            K2(r4) && u5.push("matrix(" + r4.join(",") + ")");
+            m3 ? u5.push("rotate(90) scale(-1,1)") : n3 && u5.push("rotate(" + n3 + " " + b3(this.rotationOriginX, a5.getAttribute("x"), 0) + " " + b3(this.rotationOriginY, a5.getAttribute("y") || 0) + ")");
+            (K2(c4) || K2(g3)) && u5.push("scale(" + b3(c4, 1) + " " + b3(g3, 1) + ")");
+            u5.length && a5.setAttribute("transform", u5.join(" "));
+          };
+          w2.prototype.visibilitySetter = function(b4, c4, g3) {
+            b4 === "inherit" ? g3.removeAttribute(c4) : this[c4] !== b4 && g3.setAttribute(c4, b4);
+            this[c4] = b4;
+          };
+          w2.prototype.xGetter = function(b4) {
+            this.element.nodeName === "circle" && (b4 === "x" ? b4 = "cx" : b4 === "y" && (b4 = "cy"));
+            return this._defaultGetter(b4);
+          };
+          w2.prototype.zIndexSetter = function(b4, c4) {
+            var g3 = this.renderer, m3 = this.parentGroup, n3 = (m3 || g3).element || g3.box, a5 = this.element;
+            g3 = n3 === g3.box;
+            var u5 = false;
+            var d3 = this.added;
+            var w3;
+            K2(b4) ? (a5.setAttribute("data-z-index", b4), b4 = +b4, this[c4] === b4 && (d3 = false)) : K2(this[c4]) && a5.removeAttribute("data-z-index");
+            this[c4] = b4;
+            if (d3) {
+              (b4 = this.zIndex) && m3 && (m3.handleZ = true);
+              c4 = n3.childNodes;
+              for (w3 = c4.length - 1; 0 <= w3 && !u5; w3--) {
+                m3 = c4[w3];
+                d3 = m3.getAttribute("data-z-index");
+                var t3 = !K2(d3);
+                if (m3 !== a5) {
+                  if (0 > b4 && t3 && !g3 && !w3)
+                    n3.insertBefore(a5, c4[w3]), u5 = true;
+                  else if (r3(d3) <= b4 || t3 && (!K2(b4) || 0 <= b4))
+                    n3.insertBefore(a5, c4[w3 + 1] || null), u5 = true;
+                }
+              }
+              u5 || (n3.insertBefore(a5, c4[g3 ? 3 : 0] || null), u5 = true);
+            }
+            return u5;
+          };
+          return w2;
+        }();
+        e.prototype["stroke-widthSetter"] = e.prototype.strokeSetter;
+        e.prototype.yGetter = e.prototype.xGetter;
+        e.prototype.matrixSetter = e.prototype.rotationOriginXSetter = e.prototype.rotationOriginYSetter = e.prototype.rotationSetter = e.prototype.scaleXSetter = e.prototype.scaleYSetter = e.prototype.translateXSetter = e.prototype.translateYSetter = e.prototype.verticalAlignSetter = function(b4, c4) {
+          this[c4] = b4;
+          this.doTransform = true;
+        };
+        "";
+        return e;
+      });
+      M2(h3, "Core/Renderer/RendererRegistry.js", [h3["Core/Globals.js"]], function(e) {
+        var h4;
+        (function(h5) {
+          h5.rendererTypes = {};
+          var D3;
+          h5.getRendererType = function(e2) {
+            e2 === void 0 && (e2 = D3);
+            return h5.rendererTypes[e2] || h5.rendererTypes[D3];
+          };
+          h5.registerRendererType = function(v, A, I2) {
+            h5.rendererTypes[v] = A;
+            if (!D3 || I2)
+              D3 = v, e.Renderer = A;
+          };
+        })(h4 || (h4 = {}));
+        return h4;
+      });
+      M2(h3, "Core/Renderer/SVG/SVGLabel.js", [h3["Core/Renderer/SVG/SVGElement.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var D3 = this && this.__extends || function() {
+          var l3 = function(f2, d2) {
+            l3 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a4, d3) {
+              a4.__proto__ = d3;
+            } || function(a4, d3) {
+              for (var f3 in d3)
+                d3.hasOwnProperty(f3) && (a4[f3] = d3[f3]);
+            };
+            return l3(f2, d2);
+          };
+          return function(f2, d2) {
+            function a4() {
+              this.constructor = f2;
+            }
+            l3(f2, d2);
+            f2.prototype = d2 === null ? Object.create(d2) : (a4.prototype = d2.prototype, new a4());
+          };
+        }(), E3 = h4.defined, v = h4.extend, H2 = h4.isNumber, I2 = h4.merge, z2 = h4.pick, q3 = h4.removeEvent;
+        return function(l3) {
+          function f2(d2, a4, p2, k2, F2, B, J2, K2, e2, y2) {
+            var C2 = l3.call(this) || this;
+            C2.paddingLeftSetter = C2.paddingSetter;
+            C2.paddingRightSetter = C2.paddingSetter;
+            C2.init(d2, "g");
+            C2.textStr = a4;
+            C2.x = p2;
+            C2.y = k2;
+            C2.anchorX = B;
+            C2.anchorY = J2;
+            C2.baseline = e2;
+            C2.className = y2;
+            C2.addClass(y2 === "button" ? "highcharts-no-tooltip" : "highcharts-label");
+            y2 && C2.addClass("highcharts-" + y2);
+            C2.text = d2.text(void 0, 0, 0, K2).attr({ zIndex: 1 });
+            var x3;
+            typeof F2 === "string" && ((x3 = /^url\((.*?)\)$/.test(F2)) || C2.renderer.symbols[F2]) && (C2.symbolKey = F2);
+            C2.bBox = f2.emptyBBox;
+            C2.padding = 3;
+            C2.baselineOffset = 0;
+            C2.needsBox = d2.styledMode || x3;
+            C2.deferredAttr = {};
+            C2.alignFactor = 0;
+            return C2;
+          }
+          D3(f2, l3);
+          f2.prototype.alignSetter = function(d2) {
+            d2 = { left: 0, center: 0.5, right: 1 }[d2];
+            d2 !== this.alignFactor && (this.alignFactor = d2, this.bBox && H2(this.xSetting) && this.attr({ x: this.xSetting }));
+          };
+          f2.prototype.anchorXSetter = function(d2, a4) {
+            this.anchorX = d2;
+            this.boxAttr(a4, Math.round(d2) - this.getCrispAdjust() - this.xSetting);
+          };
+          f2.prototype.anchorYSetter = function(d2, a4) {
+            this.anchorY = d2;
+            this.boxAttr(a4, d2 - this.ySetting);
+          };
+          f2.prototype.boxAttr = function(d2, a4) {
+            this.box ? this.box.attr(d2, a4) : this.deferredAttr[d2] = a4;
+          };
+          f2.prototype.css = function(d2) {
+            if (d2) {
+              var a4 = {};
+              d2 = I2(d2);
+              f2.textProps.forEach(function(f3) {
+                typeof d2[f3] !== "undefined" && (a4[f3] = d2[f3], delete d2[f3]);
+              });
+              this.text.css(a4);
+              var p2 = "width" in a4;
+              "fontSize" in a4 || "fontWeight" in a4 ? this.updateTextPadding() : p2 && this.updateBoxSize();
+            }
+            return e.prototype.css.call(this, d2);
+          };
+          f2.prototype.destroy = function() {
+            q3(this.element, "mouseenter");
+            q3(this.element, "mouseleave");
+            this.text && this.text.destroy();
+            this.box && (this.box = this.box.destroy());
+            e.prototype.destroy.call(this);
+          };
+          f2.prototype.fillSetter = function(d2, a4) {
+            d2 && (this.needsBox = true);
+            this.fill = d2;
+            this.boxAttr(a4, d2);
+          };
+          f2.prototype.getBBox = function() {
+            this.textStr && this.bBox.width === 0 && this.bBox.height === 0 && this.updateBoxSize();
+            var d2 = this.padding, a4 = z2(this.paddingLeft, d2);
+            return { width: this.width, height: this.height, x: this.bBox.x - a4, y: this.bBox.y - d2 };
+          };
+          f2.prototype.getCrispAdjust = function() {
+            return this.renderer.styledMode && this.box ? this.box.strokeWidth() % 2 / 2 : (this["stroke-width"] ? parseInt(this["stroke-width"], 10) : 0) % 2 / 2;
+          };
+          f2.prototype.heightSetter = function(d2) {
+            this.heightSetting = d2;
+          };
+          f2.prototype.onAdd = function() {
+            var d2 = this.textStr;
+            this.text.add(this);
+            this.attr({ text: E3(d2) ? d2 : "", x: this.x, y: this.y });
+            this.box && E3(this.anchorX) && this.attr({ anchorX: this.anchorX, anchorY: this.anchorY });
+          };
+          f2.prototype.paddingSetter = function(d2, a4) {
+            H2(d2) ? d2 !== this[a4] && (this[a4] = d2, this.updateTextPadding()) : this[a4] = void 0;
+          };
+          f2.prototype.rSetter = function(d2, a4) {
+            this.boxAttr(a4, d2);
+          };
+          f2.prototype.shadow = function(d2) {
+            d2 && !this.renderer.styledMode && (this.updateBoxSize(), this.box && this.box.shadow(d2));
+            return this;
+          };
+          f2.prototype.strokeSetter = function(d2, a4) {
+            this.stroke = d2;
+            this.boxAttr(a4, d2);
+          };
+          f2.prototype["stroke-widthSetter"] = function(d2, a4) {
+            d2 && (this.needsBox = true);
+            this["stroke-width"] = d2;
+            this.boxAttr(a4, d2);
+          };
+          f2.prototype["text-alignSetter"] = function(d2) {
+            this.textAlign = d2;
+          };
+          f2.prototype.textSetter = function(d2) {
+            typeof d2 !== "undefined" && this.text.attr({ text: d2 });
+            this.updateTextPadding();
+          };
+          f2.prototype.updateBoxSize = function() {
+            var d2 = this.text.element.style, a4 = {}, p2 = this.padding, k2 = this.bBox = H2(this.widthSetting) && H2(this.heightSetting) && !this.textAlign || !E3(this.text.textStr) ? f2.emptyBBox : this.text.getBBox();
+            this.width = this.getPaddedWidth();
+            this.height = (this.heightSetting || k2.height || 0) + 2 * p2;
+            d2 = this.renderer.fontMetrics(d2 && d2.fontSize, this.text);
+            this.baselineOffset = p2 + Math.min((this.text.firstLineMetrics || d2).b, k2.height || Infinity);
+            this.heightSetting && (this.baselineOffset += (this.heightSetting - d2.h) / 2);
+            this.needsBox && (this.box || (p2 = this.box = this.symbolKey ? this.renderer.symbol(this.symbolKey) : this.renderer.rect(), p2.addClass((this.className === "button" ? "" : "highcharts-label-box") + (this.className ? " highcharts-" + this.className + "-box" : "")), p2.add(this)), p2 = this.getCrispAdjust(), a4.x = p2, a4.y = (this.baseline ? -this.baselineOffset : 0) + p2, a4.width = Math.round(this.width), a4.height = Math.round(this.height), this.box.attr(v(a4, this.deferredAttr)), this.deferredAttr = {});
+          };
+          f2.prototype.updateTextPadding = function() {
+            var d2 = this.text;
+            this.updateBoxSize();
+            var a4 = this.baseline ? 0 : this.baselineOffset, f3 = z2(this.paddingLeft, this.padding);
+            E3(this.widthSetting) && this.bBox && (this.textAlign === "center" || this.textAlign === "right") && (f3 += { center: 0.5, right: 1 }[this.textAlign] * (this.widthSetting - this.bBox.width));
+            if (f3 !== d2.x || a4 !== d2.y)
+              d2.attr("x", f3), d2.hasBoxWidthChanged && (this.bBox = d2.getBBox(true)), typeof a4 !== "undefined" && d2.attr("y", a4);
+            d2.x = f3;
+            d2.y = a4;
+          };
+          f2.prototype.widthSetter = function(d2) {
+            this.widthSetting = H2(d2) ? d2 : void 0;
+          };
+          f2.prototype.getPaddedWidth = function() {
+            var d2 = this.padding, a4 = z2(this.paddingLeft, d2);
+            d2 = z2(this.paddingRight, d2);
+            return (this.widthSetting || this.bBox.width || 0) + a4 + d2;
+          };
+          f2.prototype.xSetter = function(d2) {
+            this.x = d2;
+            this.alignFactor && (d2 -= this.alignFactor * this.getPaddedWidth(), this["forceAnimate:x"] = true);
+            this.xSetting = Math.round(d2);
+            this.attr("translateX", this.xSetting);
+          };
+          f2.prototype.ySetter = function(d2) {
+            this.ySetting = this.y = Math.round(d2);
+            this.attr("translateY", this.ySetting);
+          };
+          f2.emptyBBox = { width: 0, height: 0, x: 0, y: 0 };
+          f2.textProps = "color direction fontFamily fontSize fontStyle fontWeight lineHeight textAlign textDecoration textOutline textOverflow width".split(" ");
+          return f2;
+        }(e);
+      });
+      M2(h3, "Core/Renderer/SVG/Symbols.js", [h3["Core/Utilities.js"]], function(e) {
+        function h4(e2, q3, l3, f2, d2) {
+          var a4 = [];
+          if (d2) {
+            var p2 = d2.start || 0, k2 = I2(d2.r, l3);
+            l3 = I2(d2.r, f2 || l3);
+            var F2 = (d2.end || 0) - 1e-3;
+            f2 = d2.innerR;
+            var B = I2(d2.open, 1e-3 > Math.abs((d2.end || 0) - p2 - 2 * Math.PI)), J2 = Math.cos(p2), K2 = Math.sin(p2), h5 = Math.cos(F2), y2 = Math.sin(F2);
+            p2 = I2(d2.longArc, 1e-3 > F2 - p2 - Math.PI ? 0 : 1);
+            a4.push(["M", e2 + k2 * J2, q3 + l3 * K2], ["A", k2, l3, 0, p2, I2(d2.clockwise, 1), e2 + k2 * h5, q3 + l3 * y2]);
+            v(f2) && a4.push(B ? ["M", e2 + f2 * h5, q3 + f2 * y2] : ["L", e2 + f2 * h5, q3 + f2 * y2], ["A", f2, f2, 0, p2, v(d2.clockwise) ? 1 - d2.clockwise : 0, e2 + f2 * J2, q3 + f2 * K2]);
+            B || a4.push(["Z"]);
+          }
+          return a4;
+        }
+        function A(e2, q3, l3, f2, d2) {
+          return d2 && d2.r ? E3(e2, q3, l3, f2, d2) : [["M", e2, q3], ["L", e2 + l3, q3], ["L", e2 + l3, q3 + f2], ["L", e2, q3 + f2], ["Z"]];
+        }
+        function E3(e2, q3, l3, f2, d2) {
+          d2 = d2 && d2.r || 0;
+          return [["M", e2 + d2, q3], ["L", e2 + l3 - d2, q3], ["C", e2 + l3, q3, e2 + l3, q3, e2 + l3, q3 + d2], ["L", e2 + l3, q3 + f2 - d2], ["C", e2 + l3, q3 + f2, e2 + l3, q3 + f2, e2 + l3 - d2, q3 + f2], ["L", e2 + d2, q3 + f2], ["C", e2, q3 + f2, e2, q3 + f2, e2, q3 + f2 - d2], ["L", e2, q3 + d2], ["C", e2, q3, e2, q3, e2 + d2, q3]];
+        }
+        var v = e.defined, H2 = e.isNumber, I2 = e.pick;
+        return { arc: h4, callout: function(e2, q3, l3, f2, d2) {
+          var a4 = Math.min(d2 && d2.r || 0, l3, f2), p2 = a4 + 6, k2 = d2 && d2.anchorX;
+          d2 = d2 && d2.anchorY || 0;
+          var F2 = E3(e2, q3, l3, f2, { r: a4 });
+          if (!H2(k2))
+            return F2;
+          e2 + k2 >= l3 ? d2 > q3 + p2 && d2 < q3 + f2 - p2 ? F2.splice(3, 1, ["L", e2 + l3, d2 - 6], ["L", e2 + l3 + 6, d2], ["L", e2 + l3, d2 + 6], ["L", e2 + l3, q3 + f2 - a4]) : F2.splice(3, 1, ["L", e2 + l3, f2 / 2], ["L", k2, d2], ["L", e2 + l3, f2 / 2], ["L", e2 + l3, q3 + f2 - a4]) : 0 >= e2 + k2 ? d2 > q3 + p2 && d2 < q3 + f2 - p2 ? F2.splice(7, 1, ["L", e2, d2 + 6], ["L", e2 - 6, d2], ["L", e2, d2 - 6], ["L", e2, q3 + a4]) : F2.splice(7, 1, ["L", e2, f2 / 2], ["L", k2, d2], ["L", e2, f2 / 2], ["L", e2, q3 + a4]) : d2 && d2 > f2 && k2 > e2 + p2 && k2 < e2 + l3 - p2 ? F2.splice(5, 1, ["L", k2 + 6, q3 + f2], ["L", k2, q3 + f2 + 6], ["L", k2 - 6, q3 + f2], ["L", e2 + a4, q3 + f2]) : d2 && 0 > d2 && k2 > e2 + p2 && k2 < e2 + l3 - p2 && F2.splice(1, 1, ["L", k2 - 6, q3], ["L", k2, q3 - 6], ["L", k2 + 6, q3], ["L", l3 - a4, q3]);
+          return F2;
+        }, circle: function(e2, q3, l3, f2) {
+          return h4(e2 + l3 / 2, q3 + f2 / 2, l3 / 2, f2 / 2, { start: 0.5 * Math.PI, end: 2.5 * Math.PI, open: false });
+        }, diamond: function(e2, q3, l3, f2) {
+          return [["M", e2 + l3 / 2, q3], ["L", e2 + l3, q3 + f2 / 2], ["L", e2 + l3 / 2, q3 + f2], ["L", e2, q3 + f2 / 2], ["Z"]];
+        }, rect: A, roundedRect: E3, square: A, triangle: function(e2, q3, l3, f2) {
+          return [["M", e2 + l3 / 2, q3], ["L", e2 + l3, q3 + f2], ["L", e2, q3 + f2], ["Z"]];
+        }, "triangle-down": function(e2, q3, l3, f2) {
+          return [["M", e2, q3], ["L", e2 + l3, q3], ["L", e2 + l3 / 2, q3 + f2], ["Z"]];
+        } };
+      });
+      M2(h3, "Core/Renderer/SVG/TextBuilder.js", [h3["Core/Renderer/HTML/AST.js"], h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = h4.doc, v = h4.SVG_NS, H2 = h4.win, I2 = A.attr, z2 = A.isString, q3 = A.objectEach, l3 = A.pick;
+        return function() {
+          function f2(d2) {
+            var a4 = d2.styles;
+            this.renderer = d2.renderer;
+            this.svgElement = d2;
+            this.width = d2.textWidth;
+            this.textLineHeight = a4 && a4.lineHeight;
+            this.textOutline = a4 && a4.textOutline;
+            this.ellipsis = !(!a4 || a4.textOverflow !== "ellipsis");
+            this.noWrap = !(!a4 || a4.whiteSpace !== "nowrap");
+            this.fontSize = a4 && a4.fontSize;
+          }
+          f2.prototype.buildSVG = function() {
+            var d2 = this.svgElement, a4 = d2.element, f3 = d2.renderer, k2 = l3(d2.textStr, "").toString(), F2 = k2.indexOf("<") !== -1, B = a4.childNodes;
+            f3 = this.width && !d2.added && f3.box;
+            var J2 = /<br.*?>/g, K2 = [k2, this.ellipsis, this.noWrap, this.textLineHeight, this.textOutline, this.fontSize, this.width].join();
+            if (K2 !== d2.textCache) {
+              d2.textCache = K2;
+              delete d2.actualWidth;
+              for (K2 = B.length; K2--; )
+                a4.removeChild(B[K2]);
+              F2 || this.ellipsis || this.width || k2.indexOf(" ") !== -1 && (!this.noWrap || J2.test(k2)) ? k2 !== "" && (f3 && f3.appendChild(a4), k2 = new e(k2), this.modifyTree(k2.nodes), k2.addToDOM(d2.element), this.modifyDOM(), this.ellipsis && (a4.textContent || "").indexOf("\u2026") !== -1 && d2.attr("title", this.unescapeEntities(d2.textStr || "", ["&lt;", "&gt;"])), f3 && f3.removeChild(a4)) : a4.appendChild(D3.createTextNode(this.unescapeEntities(k2)));
+              z2(this.textOutline) && d2.applyTextOutline && d2.applyTextOutline(this.textOutline);
+            }
+          };
+          f2.prototype.modifyDOM = function() {
+            var d2 = this, a4 = this.svgElement, f3 = I2(a4.element, "x");
+            a4.firstLineMetrics = void 0;
+            for (var k2; k2 = a4.element.firstChild; )
+              if (/^[\s\u200B]*$/.test(k2.textContent || " "))
+                a4.element.removeChild(k2);
+              else
+                break;
+            [].forEach.call(a4.element.querySelectorAll("tspan.highcharts-br"), function(k3, p2) {
+              k3.nextSibling && k3.previousSibling && (p2 === 0 && k3.previousSibling.nodeType === 1 && (a4.firstLineMetrics = a4.renderer.fontMetrics(void 0, k3.previousSibling)), I2(k3, { dy: d2.getLineHeight(k3.nextSibling), x: f3 }));
+            });
+            var e2 = this.width || 0;
+            if (e2) {
+              var B = function(k3, p2) {
+                var y2 = k3.textContent || "", C2 = y2.replace(/([^\^])-/g, "$1- ").split(" "), x3 = !d2.noWrap && (1 < C2.length || 1 < a4.element.childNodes.length), c3 = d2.getLineHeight(p2), t2 = 0, g2 = a4.actualWidth;
+                if (d2.ellipsis)
+                  y2 && d2.truncate(k3, y2, void 0, 0, Math.max(0, e2 - parseInt(d2.fontSize || 12, 10)), function(c4, g3) {
+                    return c4.substring(0, g3) + "\u2026";
+                  });
+                else if (x3) {
+                  y2 = [];
+                  for (x3 = []; p2.firstChild && p2.firstChild !== k3; )
+                    x3.push(p2.firstChild), p2.removeChild(p2.firstChild);
+                  for (; C2.length; )
+                    C2.length && !d2.noWrap && 0 < t2 && (y2.push(k3.textContent || ""), k3.textContent = C2.join(" ").replace(/- /g, "-")), d2.truncate(k3, void 0, C2, t2 === 0 ? g2 || 0 : 0, e2, function(c4, g3) {
+                      return C2.slice(0, g3).join(" ").replace(/- /g, "-");
+                    }), g2 = a4.actualWidth, t2++;
+                  x3.forEach(function(c4) {
+                    p2.insertBefore(c4, k3);
+                  });
+                  y2.forEach(function(g3) {
+                    p2.insertBefore(D3.createTextNode(g3), k3);
+                    g3 = D3.createElementNS(v, "tspan");
+                    g3.textContent = "\u200B";
+                    I2(g3, { dy: c3, x: f3 });
+                    p2.insertBefore(g3, k3);
+                  });
+                }
+              }, l4 = function(d3) {
+                [].slice.call(d3.childNodes).forEach(function(f4) {
+                  f4.nodeType === H2.Node.TEXT_NODE ? B(f4, d3) : (f4.className.baseVal.indexOf("highcharts-br") !== -1 && (a4.actualWidth = 0), l4(f4));
+                });
+              };
+              l4(a4.element);
+            }
+          };
+          f2.prototype.getLineHeight = function(d2) {
+            var a4;
+            d2 = d2.nodeType === H2.Node.TEXT_NODE ? d2.parentElement : d2;
+            this.renderer.styledMode || (a4 = d2 && /(px|em)$/.test(d2.style.fontSize) ? d2.style.fontSize : this.fontSize || this.renderer.style.fontSize || 12);
+            return this.textLineHeight ? parseInt(this.textLineHeight.toString(), 10) : this.renderer.fontMetrics(a4, d2 || this.svgElement.element).h;
+          };
+          f2.prototype.modifyTree = function(d2) {
+            var a4 = this, f3 = function(k2, p2) {
+              var B = k2.tagName, e2 = a4.renderer.styledMode, l4 = k2.attributes || {};
+              if (B === "b" || B === "strong")
+                e2 ? l4["class"] = "highcharts-strong" : l4.style = "font-weight:bold;" + (l4.style || "");
+              else if (B === "i" || B === "em")
+                e2 ? l4["class"] = "highcharts-emphasized" : l4.style = "font-style:italic;" + (l4.style || "");
+              z2(l4.style) && (l4.style = l4.style.replace(/(;| |^)color([ :])/, "$1fill$2"));
+              B === "br" && (l4["class"] = "highcharts-br", k2.textContent = "\u200B", (p2 = d2[p2 + 1]) && p2.textContent && (p2.textContent = p2.textContent.replace(/^ +/gm, "")));
+              B !== "#text" && B !== "a" && (k2.tagName = "tspan");
+              k2.attributes = l4;
+              k2.children && k2.children.filter(function(a5) {
+                return a5.tagName !== "#text";
+              }).forEach(f3);
+            };
+            d2.forEach(f3);
+          };
+          f2.prototype.truncate = function(d2, a4, f3, k2, l4, B) {
+            var p2 = this.svgElement, e2 = p2.renderer, F2 = p2.rotation, y2 = [], C2 = f3 ? 1 : 0, x3 = (a4 || f3 || "").length, c3 = x3, t2, g2 = function(c4, b3) {
+              b3 = b3 || c4;
+              var g3 = d2.parentNode;
+              if (g3 && typeof y2[b3] === "undefined")
+                if (g3.getSubStringLength)
+                  try {
+                    y2[b3] = k2 + g3.getSubStringLength(0, f3 ? b3 + 1 : b3);
+                  } catch (G2) {
+                    "";
+                  }
+                else
+                  e2.getSpanWidth && (d2.textContent = B(a4 || f3, c4), y2[b3] = k2 + e2.getSpanWidth(p2, d2));
+              return y2[b3];
+            };
+            p2.rotation = 0;
+            var u4 = g2(d2.textContent.length);
+            if (k2 + u4 > l4) {
+              for (; C2 <= x3; )
+                c3 = Math.ceil((C2 + x3) / 2), f3 && (t2 = B(f3, c3)), u4 = g2(c3, t2 && t2.length - 1), C2 === x3 ? C2 = x3 + 1 : u4 > l4 ? x3 = c3 - 1 : C2 = c3;
+              x3 === 0 ? d2.textContent = "" : a4 && x3 === a4.length - 1 || (d2.textContent = t2 || B(a4 || f3, c3));
+            }
+            f3 && f3.splice(0, c3);
+            p2.actualWidth = u4;
+            p2.rotation = F2;
+          };
+          f2.prototype.unescapeEntities = function(d2, a4) {
+            q3(this.renderer.escapes, function(f3, k2) {
+              a4 && a4.indexOf(f3) !== -1 || (d2 = d2.toString().replace(new RegExp(f3, "g"), k2));
+            });
+            return d2;
+          };
+          return f2;
+        }();
+      });
+      M2(h3, "Core/Renderer/SVG/SVGRenderer.js", [h3["Core/Renderer/HTML/AST.js"], h3["Core/Color/Color.js"], h3["Core/Globals.js"], h3["Core/Renderer/RendererRegistry.js"], h3["Core/Renderer/SVG/SVGElement.js"], h3["Core/Renderer/SVG/SVGLabel.js"], h3["Core/Renderer/SVG/Symbols.js"], h3["Core/Renderer/SVG/TextBuilder.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v, H2, I2, z2, q3) {
+        var l3 = A.charts, f2 = A.deg2rad, d2 = A.doc, a4 = A.isFirefox, p2 = A.isMS, k2 = A.isWebKit, F2 = A.noop, B = A.SVG_NS, J2 = A.symbolSizes, K2 = A.win, L3 = q3.addEvent, y2 = q3.attr, C2 = q3.createElement, x3 = q3.css, c3 = q3.defined, t2 = q3.destroyObjectProperties, g2 = q3.extend, u4 = q3.isArray, n2 = q3.isNumber, b3 = q3.isObject, r3 = q3.isString, G2 = q3.merge, m2 = q3.pick, w2 = q3.pInt, N3 = q3.uniqueKey, X;
+        A = function() {
+          function P2(b4, c4, g3, m3, n3, a5, r4) {
+            this.width = this.url = this.style = this.isSVG = this.imgCount = this.height = this.gradients = this.globalAnimation = this.defs = this.chartIndex = this.cacheKeys = this.cache = this.boxWrapper = this.box = this.alignedObjects = void 0;
+            this.init(b4, c4, g3, m3, n3, a5, r4);
+          }
+          P2.prototype.init = function(b4, c4, g3, m3, n3, r4, u5) {
+            var O3 = this.createElement("svg").attr({ version: "1.1", "class": "highcharts-root" }), w3 = O3.element;
+            u5 || O3.css(this.getStyle(m3));
+            b4.appendChild(w3);
+            y2(b4, "dir", "ltr");
+            b4.innerHTML.indexOf("xmlns") === -1 && y2(w3, "xmlns", this.SVG_NS);
+            this.isSVG = true;
+            this.box = w3;
+            this.boxWrapper = O3;
+            this.alignedObjects = [];
+            this.url = this.getReferenceURL();
+            this.createElement("desc").add().element.appendChild(d2.createTextNode("Created with Highcharts 9.3.0"));
+            this.defs = this.createElement("defs").add();
+            this.allowHTML = r4;
+            this.forExport = n3;
+            this.styledMode = u5;
+            this.gradients = {};
+            this.cache = {};
+            this.cacheKeys = [];
+            this.imgCount = 0;
+            this.setSize(c4, g3, false);
+            var P3;
+            a4 && b4.getBoundingClientRect && (c4 = function() {
+              x3(b4, { left: 0, top: 0 });
+              P3 = b4.getBoundingClientRect();
+              x3(b4, { left: Math.ceil(P3.left) - P3.left + "px", top: Math.ceil(P3.top) - P3.top + "px" });
+            }, c4(), this.unSubPixelFix = L3(K2, "resize", c4));
+          };
+          P2.prototype.definition = function(b4) {
+            return new e([b4]).addToDOM(this.defs.element);
+          };
+          P2.prototype.getReferenceURL = function() {
+            if ((a4 || k2) && d2.getElementsByTagName("base").length) {
+              if (!c3(X)) {
+                var b4 = N3();
+                b4 = new e([{
+                  tagName: "svg",
+                  attributes: { width: 8, height: 8 },
+                  children: [{ tagName: "defs", children: [{ tagName: "clipPath", attributes: { id: b4 }, children: [{ tagName: "rect", attributes: { width: 4, height: 4 } }] }] }, { tagName: "rect", attributes: { id: "hitme", width: 8, height: 8, "clip-path": "url(#" + b4 + ")", fill: "rgba(0,0,0,0.001)" } }]
+                }]).addToDOM(d2.body);
+                x3(b4, { position: "fixed", top: 0, left: 0, zIndex: 9e5 });
+                var g3 = d2.elementFromPoint(6, 6);
+                X = (g3 && g3.id) === "hitme";
+                d2.body.removeChild(b4);
+              }
+              if (X)
+                return K2.location.href.split("#")[0].replace(/<[^>]*>/g, "").replace(/([\('\)])/g, "\\$1").replace(/ /g, "%20");
+            }
+            return "";
+          };
+          P2.prototype.getStyle = function(b4) {
+            return this.style = g2({ fontFamily: '"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif', fontSize: "12px" }, b4);
+          };
+          P2.prototype.setStyle = function(b4) {
+            this.boxWrapper.css(this.getStyle(b4));
+          };
+          P2.prototype.isHidden = function() {
+            return !this.boxWrapper.getBBox().width;
+          };
+          P2.prototype.destroy = function() {
+            var b4 = this.defs;
+            this.box = null;
+            this.boxWrapper = this.boxWrapper.destroy();
+            t2(this.gradients || {});
+            this.gradients = null;
+            b4 && (this.defs = b4.destroy());
+            this.unSubPixelFix && this.unSubPixelFix();
+            return this.alignedObjects = null;
+          };
+          P2.prototype.createElement = function(b4) {
+            var c4 = new this.Element();
+            c4.init(this, b4);
+            return c4;
+          };
+          P2.prototype.getRadialAttr = function(b4, c4) {
+            return { cx: b4[0] - b4[2] / 2 + (c4.cx || 0) * b4[2], cy: b4[1] - b4[2] / 2 + (c4.cy || 0) * b4[2], r: (c4.r || 0) * b4[2] };
+          };
+          P2.prototype.buildText = function(b4) {
+            new z2(b4).buildSVG();
+          };
+          P2.prototype.getContrast = function(b4) {
+            b4 = h4.parse(b4).rgba;
+            b4[0] *= 1;
+            b4[1] *= 1.2;
+            b4[2] *= 0.5;
+            return 459 < b4[0] + b4[1] + b4[2] ? "#000000" : "#FFFFFF";
+          };
+          P2.prototype.button = function(b4, c4, m3, n3, a5, r4, u5, d3, w3, P3) {
+            var t3 = this.label(b4, c4, m3, w3, void 0, void 0, P3, void 0, "button"), x4 = this.styledMode, O3 = 0, f3 = a5 ? G2(a5) : {};
+            b4 = f3 && f3.style || {};
+            f3 = e.filterUserAttributes(f3);
+            t3.attr(G2({ padding: 8, r: 2 }, f3));
+            if (!x4) {
+              f3 = G2({ fill: "#f7f7f7", stroke: "#cccccc", "stroke-width": 1, style: { color: "#333333", cursor: "pointer", fontWeight: "normal" } }, { style: b4 }, f3);
+              var Q2 = f3.style;
+              delete f3.style;
+              r4 = G2(f3, { fill: "#e6e6e6" }, e.filterUserAttributes(r4 || {}));
+              var C3 = r4.style;
+              delete r4.style;
+              u5 = G2(f3, { fill: "#e6ebf5", style: { color: "#000000", fontWeight: "bold" } }, e.filterUserAttributes(u5 || {}));
+              var k3 = u5.style;
+              delete u5.style;
+              d3 = G2(f3, { style: { color: "#cccccc" } }, e.filterUserAttributes(d3 || {}));
+              var W2 = d3.style;
+              delete d3.style;
+            }
+            L3(t3.element, p2 ? "mouseover" : "mouseenter", function() {
+              O3 !== 3 && t3.setState(1);
+            });
+            L3(t3.element, p2 ? "mouseout" : "mouseleave", function() {
+              O3 !== 3 && t3.setState(O3);
+            });
+            t3.setState = function(b5) {
+              b5 !== 1 && (t3.state = O3 = b5);
+              t3.removeClass(/highcharts-button-(normal|hover|pressed|disabled)/).addClass("highcharts-button-" + ["normal", "hover", "pressed", "disabled"][b5 || 0]);
+              x4 || t3.attr([f3, r4, u5, d3][b5 || 0]).css([Q2, C3, k3, W2][b5 || 0]);
+            };
+            x4 || t3.attr(f3).css(g2({ cursor: "default" }, Q2));
+            return t3.on("touchstart", function(b5) {
+              return b5.stopPropagation();
+            }).on("click", function(b5) {
+              O3 !== 3 && n3.call(t3, b5);
+            });
+          };
+          P2.prototype.crispLine = function(b4, g3, m3) {
+            m3 === void 0 && (m3 = "round");
+            var n3 = b4[0], r4 = b4[1];
+            c3(n3[1]) && n3[1] === r4[1] && (n3[1] = r4[1] = Math[m3](n3[1]) - g3 % 2 / 2);
+            c3(n3[2]) && n3[2] === r4[2] && (n3[2] = r4[2] = Math[m3](n3[2]) + g3 % 2 / 2);
+            return b4;
+          };
+          P2.prototype.path = function(c4) {
+            var m3 = this.styledMode ? {} : { fill: "none" };
+            u4(c4) ? m3.d = c4 : b3(c4) && g2(m3, c4);
+            return this.createElement("path").attr(m3);
+          };
+          P2.prototype.circle = function(c4, g3, m3) {
+            c4 = b3(c4) ? c4 : typeof c4 === "undefined" ? {} : { x: c4, y: g3, r: m3 };
+            g3 = this.createElement("circle");
+            g3.xSetter = g3.ySetter = function(b4, c5, g4) {
+              g4.setAttribute("c" + c5, b4);
+            };
+            return g3.attr(c4);
+          };
+          P2.prototype.arc = function(c4, g3, m3, n3, r4, a5) {
+            b3(c4) ? (n3 = c4, g3 = n3.y, m3 = n3.r, c4 = n3.x) : n3 = { innerR: n3, start: r4, end: a5 };
+            c4 = this.symbol("arc", c4, g3, m3, m3, n3);
+            c4.r = m3;
+            return c4;
+          };
+          P2.prototype.rect = function(c4, g3, m3, n3, r4, a5) {
+            r4 = b3(c4) ? c4.r : r4;
+            var u5 = this.createElement("rect");
+            c4 = b3(c4) ? c4 : typeof c4 === "undefined" ? {} : { x: c4, y: g3, width: Math.max(m3, 0), height: Math.max(n3, 0) };
+            this.styledMode || (typeof a5 !== "undefined" && (c4["stroke-width"] = a5, c4 = u5.crisp(c4)), c4.fill = "none");
+            r4 && (c4.r = r4);
+            u5.rSetter = function(b4, c5, g4) {
+              u5.r = b4;
+              y2(g4, { rx: b4, ry: b4 });
+            };
+            u5.rGetter = function() {
+              return u5.r || 0;
+            };
+            return u5.attr(c4);
+          };
+          P2.prototype.setSize = function(b4, c4, g3) {
+            this.width = b4;
+            this.height = c4;
+            this.boxWrapper.animate({ width: b4, height: c4 }, { step: function() {
+              this.attr({ viewBox: "0 0 " + this.attr("width") + " " + this.attr("height") });
+            }, duration: m2(g3, true) ? void 0 : 0 });
+            this.alignElements();
+          };
+          P2.prototype.g = function(b4) {
+            var c4 = this.createElement("g");
+            return b4 ? c4.attr({ "class": "highcharts-" + b4 }) : c4;
+          };
+          P2.prototype.image = function(b4, c4, g3, m3, r4, a5) {
+            var u5 = { preserveAspectRatio: "none" }, d3 = function(b5, c5) {
+              b5.setAttributeNS ? b5.setAttributeNS("http://www.w3.org/1999/xlink", "href", c5) : b5.setAttribute("hc-svg-href", c5);
+            };
+            n2(c4) && (u5.x = c4);
+            n2(g3) && (u5.y = g3);
+            n2(m3) && (u5.width = m3);
+            n2(r4) && (u5.height = r4);
+            var w3 = this.createElement("image").attr(u5);
+            c4 = function(c5) {
+              d3(w3.element, b4);
+              a5.call(w3, c5);
+            };
+            a5 ? (d3(w3.element, "data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw=="), g3 = new K2.Image(), L3(g3, "load", c4), g3.src = b4, g3.complete && c4({})) : d3(w3.element, b4);
+            return w3;
+          };
+          P2.prototype.symbol = function(b4, n3, r4, a5, u5, w3) {
+            var t3 = this, P3 = /^url\((.*?)\)$/, G3 = P3.test(b4), f3 = !G3 && (this.symbols[b4] ? b4 : "circle"), O3 = f3 && this.symbols[f3], Q2;
+            if (O3) {
+              typeof n3 === "number" && (Q2 = O3.call(this.symbols, Math.round(n3 || 0), Math.round(r4 || 0), a5 || 0, u5 || 0, w3));
+              var k3 = this.path(Q2);
+              t3.styledMode || k3.attr("fill", "none");
+              g2(k3, { symbolName: f3 || void 0, x: n3, y: r4, width: a5, height: u5 });
+              w3 && g2(k3, w3);
+            } else if (G3) {
+              var p3 = b4.match(P3)[1];
+              var y3 = k3 = this.image(p3);
+              y3.imgwidth = m2(J2[p3] && J2[p3].width, w3 && w3.width);
+              y3.imgheight = m2(J2[p3] && J2[p3].height, w3 && w3.height);
+              var e2 = function(b5) {
+                return b5.attr({ width: b5.width, height: b5.height });
+              };
+              ["width", "height"].forEach(function(b5) {
+                y3[b5 + "Setter"] = function(b6, g3) {
+                  var m3 = this["img" + g3];
+                  this[g3] = b6;
+                  c3(m3) && (w3 && w3.backgroundSize === "within" && this.width && this.height && (m3 = Math.round(m3 * Math.min(this.width / this.imgwidth, this.height / this.imgheight))), this.element && this.element.setAttribute(g3, m3), this.alignByTranslate || (b6 = ((this[g3] || 0) - m3) / 2, this.attr(g3 === "width" ? { translateX: b6 } : { translateY: b6 })));
+                };
+              });
+              c3(n3) && y3.attr({ x: n3, y: r4 });
+              y3.isImg = true;
+              c3(y3.imgwidth) && c3(y3.imgheight) ? e2(y3) : (y3.attr({ width: 0, height: 0 }), C2("img", { onload: function() {
+                var b5 = l3[t3.chartIndex];
+                this.width === 0 && (x3(this, { position: "absolute", top: "-999em" }), d2.body.appendChild(this));
+                J2[p3] = { width: this.width, height: this.height };
+                y3.imgwidth = this.width;
+                y3.imgheight = this.height;
+                y3.element && e2(y3);
+                this.parentNode && this.parentNode.removeChild(this);
+                t3.imgCount--;
+                if (!t3.imgCount && b5 && !b5.hasLoaded)
+                  b5.onload();
+              }, src: p3 }), this.imgCount++);
+            }
+            return k3;
+          };
+          P2.prototype.clipRect = function(b4, c4, g3, m3) {
+            var n3 = N3() + "-", r4 = this.createElement("clipPath").attr({ id: n3 }).add(this.defs);
+            b4 = this.rect(b4, c4, g3, m3, 0).add(r4);
+            b4.id = n3;
+            b4.clipPath = r4;
+            b4.count = 0;
+            return b4;
+          };
+          P2.prototype.text = function(b4, g3, m3, n3) {
+            var r4 = {};
+            if (n3 && (this.allowHTML || !this.forExport))
+              return this.html(b4, g3, m3);
+            r4.x = Math.round(g3 || 0);
+            m3 && (r4.y = Math.round(m3));
+            c3(b4) && (r4.text = b4);
+            b4 = this.createElement("text").attr(r4);
+            if (!n3 || this.forExport && !this.allowHTML)
+              b4.xSetter = function(b5, c4, g4) {
+                for (var m4 = g4.getElementsByTagName("tspan"), n4 = g4.getAttribute(c4), r5 = 0, a5; r5 < m4.length; r5++)
+                  a5 = m4[r5], a5.getAttribute(c4) === n4 && a5.setAttribute(c4, b5);
+                g4.setAttribute(c4, b5);
+              };
+            return b4;
+          };
+          P2.prototype.fontMetrics = function(b4, c4) {
+            b4 = !this.styledMode && /px/.test(b4) || !K2.getComputedStyle ? b4 || c4 && c4.style && c4.style.fontSize || this.style && this.style.fontSize : c4 && v.prototype.getStyle.call(c4, "font-size");
+            b4 = /px/.test(b4) ? w2(b4) : 12;
+            c4 = 24 > b4 ? b4 + 3 : Math.round(1.2 * b4);
+            return { h: c4, b: Math.round(0.8 * c4), f: b4 };
+          };
+          P2.prototype.rotCorr = function(b4, c4, g3) {
+            var m3 = b4;
+            c4 && g3 && (m3 = Math.max(m3 * Math.cos(c4 * f2), 4));
+            return { x: -b4 / 3 * Math.sin(c4 * f2), y: m3 };
+          };
+          P2.prototype.pathToSegments = function(b4) {
+            for (var c4 = [], g3 = [], m3 = { A: 8, C: 7, H: 2, L: 3, M: 3, Q: 5, S: 5, T: 3, V: 2 }, a5 = 0; a5 < b4.length; a5++)
+              r3(g3[0]) && n2(b4[a5]) && g3.length === m3[g3[0].toUpperCase()] && b4.splice(a5, 0, g3[0].replace("M", "L").replace("m", "l")), typeof b4[a5] === "string" && (g3.length && c4.push(g3.slice(0)), g3.length = 0), g3.push(b4[a5]);
+            c4.push(g3.slice(0));
+            return c4;
+          };
+          P2.prototype.label = function(b4, c4, g3, m3, n3, r4, a5, u5, d3) {
+            return new H2(this, b4, c4, g3, m3, n3, r4, a5, u5, d3);
+          };
+          P2.prototype.alignElements = function() {
+            this.alignedObjects.forEach(function(b4) {
+              return b4.align();
+            });
+          };
+          return P2;
+        }();
+        g2(A.prototype, {
+          Element: v,
+          SVG_NS: B,
+          escapes: { "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" },
+          symbols: I2,
+          draw: F2
+        });
+        E3.registerRendererType("svg", A, true);
+        "";
+        return A;
+      });
+      M2(h3, "Core/Renderer/HTML/HTMLElement.js", [h3["Core/Globals.js"], h3["Core/Renderer/SVG/SVGElement.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = this && this.__extends || function() {
+          var a5 = function(d3, f3) {
+            a5 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a6, d4) {
+              a6.__proto__ = d4;
+            } || function(a6, d4) {
+              for (var f4 in d4)
+                d4.hasOwnProperty(f4) && (a6[f4] = d4[f4]);
+            };
+            return a5(d3, f3);
+          };
+          return function(d3, f3) {
+            function k2() {
+              this.constructor = d3;
+            }
+            a5(d3, f3);
+            d3.prototype = f3 === null ? Object.create(f3) : (k2.prototype = f3.prototype, new k2());
+          };
+        }(), v = e.isFirefox, H2 = e.isMS, I2 = e.isWebKit, z2 = e.win, q3 = A.css, l3 = A.defined, f2 = A.extend, d2 = A.pick, a4 = A.pInt;
+        return function(p2) {
+          function k2() {
+            return p2 !== null && p2.apply(this, arguments) || this;
+          }
+          D3(k2, p2);
+          k2.compose = function(a5) {
+            if (k2.composedClasses.indexOf(a5) === -1) {
+              k2.composedClasses.push(a5);
+              var d3 = k2.prototype, f3 = a5.prototype;
+              f3.getSpanCorrection = d3.getSpanCorrection;
+              f3.htmlCss = d3.htmlCss;
+              f3.htmlGetBBox = d3.htmlGetBBox;
+              f3.htmlUpdateTransform = d3.htmlUpdateTransform;
+              f3.setSpanRotation = d3.setSpanRotation;
+            }
+            return a5;
+          };
+          k2.prototype.getSpanCorrection = function(a5, d3, f3) {
+            this.xCorr = -a5 * f3;
+            this.yCorr = -d3;
+          };
+          k2.prototype.htmlCss = function(a5) {
+            var k3 = this.element.tagName === "SPAN" && a5 && "width" in a5, p3 = d2(k3 && a5.width, void 0);
+            if (k3) {
+              delete a5.width;
+              this.textWidth = p3;
+              var l4 = true;
+            }
+            a5 && a5.textOverflow === "ellipsis" && (a5.whiteSpace = "nowrap", a5.overflow = "hidden");
+            this.styles = f2(this.styles, a5);
+            q3(this.element, a5);
+            l4 && this.htmlUpdateTransform();
+            return this;
+          };
+          k2.prototype.htmlGetBBox = function() {
+            var a5 = this.element;
+            return { x: a5.offsetLeft, y: a5.offsetTop, width: a5.offsetWidth, height: a5.offsetHeight };
+          };
+          k2.prototype.htmlUpdateTransform = function() {
+            if (this.added) {
+              var d3 = this.renderer, f3 = this.element, k3 = this.translateX || 0, p3 = this.translateY || 0, e2 = this.x || 0, y2 = this.y || 0, C2 = this.textAlign || "left", x3 = { left: 0, center: 0.5, right: 1 }[C2], c3 = this.styles;
+              c3 = c3 && c3.whiteSpace;
+              q3(f3, { marginLeft: k3, marginTop: p3 });
+              !d3.styledMode && this.shadows && this.shadows.forEach(function(b4) {
+                q3(b4, { marginLeft: k3 + 1, marginTop: p3 + 1 });
+              });
+              this.inverted && [].forEach.call(f3.childNodes, function(b4) {
+                d3.invertChild(b4, f3);
+              });
+              if (f3.tagName === "SPAN") {
+                var t2 = this.rotation, g2 = this.textWidth && a4(this.textWidth), u4 = [t2, C2, f3.innerHTML, this.textWidth, this.textAlign].join(), n2 = void 0;
+                n2 = false;
+                if (g2 !== this.oldTextWidth) {
+                  if (this.textPxLength)
+                    var b3 = this.textPxLength;
+                  else
+                    q3(f3, { width: "", whiteSpace: c3 || "nowrap" }), b3 = f3.offsetWidth;
+                  (g2 > this.oldTextWidth || b3 > g2) && (/[ \-]/.test(f3.textContent || f3.innerText) || f3.style.textOverflow === "ellipsis") && (q3(f3, { width: b3 > g2 || t2 ? g2 + "px" : "auto", display: "block", whiteSpace: c3 || "normal" }), this.oldTextWidth = g2, n2 = true);
+                }
+                this.hasBoxWidthChanged = n2;
+                u4 !== this.cTT && (n2 = d3.fontMetrics(f3.style.fontSize, f3).b, !l3(t2) || t2 === (this.oldRotation || 0) && C2 === this.oldAlign || this.setSpanRotation(t2, x3, n2), this.getSpanCorrection(!l3(t2) && this.textPxLength || f3.offsetWidth, n2, x3, t2, C2));
+                q3(f3, { left: e2 + (this.xCorr || 0) + "px", top: y2 + (this.yCorr || 0) + "px" });
+                this.cTT = u4;
+                this.oldRotation = t2;
+                this.oldAlign = C2;
+              }
+            } else
+              this.alignOnAdd = true;
+          };
+          k2.prototype.setSpanRotation = function(a5, d3, f3) {
+            var k3 = {}, p3 = H2 && !/Edge/.test(z2.navigator.userAgent) ? "-ms-transform" : I2 ? "-webkit-transform" : v ? "MozTransform" : z2.opera ? "-o-transform" : void 0;
+            p3 && (k3[p3] = k3.transform = "rotate(" + a5 + "deg)", k3[p3 + (v ? "Origin" : "-origin")] = k3.transformOrigin = 100 * d3 + "% " + f3 + "px", q3(this.element, k3));
+          };
+          k2.composedClasses = [];
+          return k2;
+        }(h4);
+      });
+      M2(h3, "Core/Renderer/HTML/HTMLRenderer.js", [h3["Core/Renderer/HTML/AST.js"], h3["Core/Renderer/SVG/SVGElement.js"], h3["Core/Renderer/SVG/SVGRenderer.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3) {
+        var v = this && this.__extends || function() {
+          var l3 = function(f2, d2) {
+            l3 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a4, d3) {
+              a4.__proto__ = d3;
+            } || function(a4, d3) {
+              for (var f3 in d3)
+                d3.hasOwnProperty(f3) && (a4[f3] = d3[f3]);
+            };
+            return l3(f2, d2);
+          };
+          return function(f2, d2) {
+            function a4() {
+              this.constructor = f2;
+            }
+            l3(f2, d2);
+            f2.prototype = d2 === null ? Object.create(d2) : (a4.prototype = d2.prototype, new a4());
+          };
+        }(), D3 = E3.attr, I2 = E3.createElement, z2 = E3.extend, q3 = E3.pick;
+        return function(l3) {
+          function f2() {
+            return l3 !== null && l3.apply(this, arguments) || this;
+          }
+          v(f2, l3);
+          f2.compose = function(d2) {
+            f2.composedClasses.indexOf(d2) === -1 && (f2.composedClasses.push(d2), d2.prototype.html = f2.prototype.html);
+            return d2;
+          };
+          f2.prototype.html = function(d2, a4, f3) {
+            var k2 = this.createElement("span"), p2 = k2.element, l4 = k2.renderer, J2 = l4.isSVG, K2 = function(a5, d3) {
+              ["opacity", "visibility"].forEach(function(f4) {
+                a5[f4 + "Setter"] = function(x3, c3, t2) {
+                  var g2 = a5.div ? a5.div.style : d3;
+                  h4.prototype[f4 + "Setter"].call(this, x3, c3, t2);
+                  g2 && (g2[c3] = x3);
+                };
+              });
+              a5.addedSetters = true;
+            };
+            k2.textSetter = function(a5) {
+              a5 !== this.textStr && (delete this.bBox, delete this.oldTextWidth, e.setElementHTML(this.element, q3(a5, "")), this.textStr = a5, k2.doTransform = true);
+            };
+            J2 && K2(k2, k2.element.style);
+            k2.xSetter = k2.ySetter = k2.alignSetter = k2.rotationSetter = function(a5, d3) {
+              d3 === "align" ? k2.alignValue = k2.textAlign = a5 : k2[d3] = a5;
+              k2.doTransform = true;
+            };
+            k2.afterSetters = function() {
+              this.doTransform && (this.htmlUpdateTransform(), this.doTransform = false);
+            };
+            k2.attr({ text: d2, x: Math.round(a4), y: Math.round(f3) }).css({ position: "absolute" });
+            l4.styledMode || k2.css({ fontFamily: this.style.fontFamily, fontSize: this.style.fontSize });
+            p2.style.whiteSpace = "nowrap";
+            k2.css = k2.htmlCss;
+            J2 && (k2.add = function(a5) {
+              var d3 = l4.box.parentNode, f4 = [];
+              if (this.parentGroup = a5) {
+                var x3 = a5.div;
+                if (!x3) {
+                  for (; a5; )
+                    f4.push(a5), a5 = a5.parentGroup;
+                  f4.reverse().forEach(function(c3) {
+                    function a6(b3, g3) {
+                      c3[g3] = b3;
+                      g3 === "translateX" ? n2.left = b3 + "px" : n2.top = b3 + "px";
+                      c3.doTransform = true;
+                    }
+                    var g2 = D3(c3.element, "class"), u4 = c3.styles || {};
+                    x3 = c3.div = c3.div || I2("div", g2 ? { className: g2 } : void 0, { position: "absolute", left: (c3.translateX || 0) + "px", top: (c3.translateY || 0) + "px", display: c3.display, opacity: c3.opacity, cursor: u4.cursor, pointerEvents: u4.pointerEvents, visibility: c3.visibility }, x3 || d3);
+                    var n2 = x3.style;
+                    z2(c3, { classSetter: function(b3) {
+                      return function(c4) {
+                        this.element.setAttribute("class", c4);
+                        b3.className = c4;
+                      };
+                    }(x3), on: function() {
+                      f4[0].div && k2.on.apply({ element: f4[0].div, onEvents: c3.onEvents }, arguments);
+                      return c3;
+                    }, translateXSetter: a6, translateYSetter: a6 });
+                    c3.addedSetters || K2(c3);
+                  });
+                }
+              } else
+                x3 = d3;
+              x3.appendChild(p2);
+              k2.added = true;
+              k2.alignOnAdd && k2.htmlUpdateTransform();
+              return k2;
+            });
+            return k2;
+          };
+          f2.composedClasses = [];
+          return f2;
+        }(A);
+      });
+      M2(h3, "Core/Axis/AxisDefaults.js", [], function() {
+        var e;
+        (function(e2) {
+          e2.defaultXAxisOptions = {
+            alignTicks: true,
+            allowDecimals: void 0,
+            panningEnabled: true,
+            zIndex: 2,
+            zoomEnabled: true,
+            dateTimeLabelFormats: { millisecond: {
+              main: "%H:%M:%S.%L",
+              range: false
+            }, second: { main: "%H:%M:%S", range: false }, minute: { main: "%H:%M", range: false }, hour: { main: "%H:%M", range: false }, day: { main: "%e. %b" }, week: { main: "%e. %b" }, month: { main: "%b '%y" }, year: { main: "%Y" } },
+            endOnTick: false,
+            gridLineDashStyle: "Solid",
+            gridZIndex: 1,
+            labels: { autoRotation: void 0, autoRotationLimit: 80, distance: void 0, enabled: true, indentation: 10, overflow: "justify", padding: 5, reserveSpace: void 0, rotation: void 0, staggerLines: 0, step: 0, useHTML: false, x: 0, zIndex: 7, style: { color: "#666666", cursor: "default", fontSize: "11px" } },
+            maxPadding: 0.01,
+            minorGridLineDashStyle: "Solid",
+            minorTickLength: 2,
+            minorTickPosition: "outside",
+            minPadding: 0.01,
+            offset: void 0,
+            opposite: false,
+            reversed: void 0,
+            reversedStacks: false,
+            showEmpty: true,
+            showFirstLabel: true,
+            showLastLabel: true,
+            startOfWeek: 1,
+            startOnTick: false,
+            tickLength: 10,
+            tickPixelInterval: 100,
+            tickmarkPlacement: "between",
+            tickPosition: "outside",
+            title: { align: "middle", rotation: 0, useHTML: false, x: 0, y: 0, style: { color: "#666666" } },
+            type: "linear",
+            uniqueNames: true,
+            visible: true,
+            minorGridLineColor: "#f2f2f2",
+            minorGridLineWidth: 1,
+            minorTickColor: "#999999",
+            lineColor: "#ccd6eb",
+            lineWidth: 1,
+            gridLineColor: "#e6e6e6",
+            gridLineWidth: void 0,
+            tickColor: "#ccd6eb"
+          };
+          e2.defaultYAxisOptions = { reversedStacks: true, endOnTick: true, maxPadding: 0.05, minPadding: 0.05, tickPixelInterval: 72, showLastLabel: true, labels: { x: -8 }, startOnTick: true, title: { rotation: 270, text: "Values" }, stackLabels: { animation: {}, allowOverlap: false, enabled: false, crop: true, overflow: "justify", formatter: function() {
+            var e3 = this.axis.chart.numberFormatter;
+            return e3(this.total, -1);
+          }, style: {
+            color: "#000000",
+            fontSize: "11px",
+            fontWeight: "bold",
+            textOutline: "1px contrast"
+          } }, gridLineWidth: 1, lineWidth: 0 };
+          e2.defaultLeftAxisOptions = { labels: { x: -15 }, title: { rotation: 270 } };
+          e2.defaultRightAxisOptions = { labels: { x: 15 }, title: { rotation: 90 } };
+          e2.defaultBottomAxisOptions = { labels: { autoRotation: [-45], x: 0 }, margin: 15, title: { rotation: 0 } };
+          e2.defaultTopAxisOptions = { labels: { autoRotation: [-45], x: 0 }, margin: 15, title: { rotation: 0 } };
+        })(e || (e = {}));
+        return e;
+      });
+      M2(h3, "Core/Foundation.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.addEvent, A = e.isFunction, E3 = e.objectEach, v = e.removeEvent, H2;
+        (function(e2) {
+          e2.registerEventOptions = function(e3, q3) {
+            e3.eventOptions = e3.eventOptions || {};
+            E3(q3.events, function(l3, f2) {
+              e3.eventOptions[f2] !== l3 && (e3.eventOptions[f2] && (v(e3, f2, e3.eventOptions[f2]), delete e3.eventOptions[f2]), A(l3) && (e3.eventOptions[f2] = l3, h4(e3, f2, l3)));
+            });
+          };
+        })(H2 || (H2 = {}));
+        return H2;
+      });
+      M2(h3, "Core/Axis/Tick.js", [h3["Core/FormatUtilities.js"], h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = h4.deg2rad, v = A.clamp, H2 = A.correctFloat, I2 = A.defined, z2 = A.destroyObjectProperties, q3 = A.extend, l3 = A.fireEvent, f2 = A.isNumber, d2 = A.merge, a4 = A.objectEach, p2 = A.pick;
+        h4 = function() {
+          function k2(a5, d3, f3, k3, e2) {
+            this.isNewLabel = this.isNew = true;
+            this.axis = a5;
+            this.pos = d3;
+            this.type = f3 || "";
+            this.parameters = e2 || {};
+            this.tickmarkOffset = this.parameters.tickmarkOffset;
+            this.options = this.parameters.options;
+            l3(this, "init");
+            f3 || k3 || this.addLabel();
+          }
+          k2.prototype.addLabel = function() {
+            var a5 = this, d3 = a5.axis, k3 = d3.options, h5 = d3.chart, L3 = d3.categories, y2 = d3.logarithmic, C2 = d3.names, x3 = a5.pos, c3 = p2(a5.options && a5.options.labels, k3.labels), t2 = d3.tickPositions, g2 = x3 === t2[0], u4 = x3 === t2[t2.length - 1], n2 = (!c3.step || c3.step === 1) && d3.tickInterval === 1;
+            t2 = t2.info;
+            var b3 = a5.label, r3;
+            L3 = this.parameters.category || (L3 ? p2(L3[x3], C2[x3], x3) : x3);
+            y2 && f2(L3) && (L3 = H2(y2.lin2log(L3)));
+            if (d3.dateTime)
+              if (t2) {
+                var G2 = h5.time.resolveDTLFormat(k3.dateTimeLabelFormats[!k3.grid && t2.higherRanks[x3] || t2.unitName]);
+                var m2 = G2.main;
+              } else
+                f2(L3) && (m2 = d3.dateTime.getXDateFormat(L3, k3.dateTimeLabelFormats || {}));
+            a5.isFirst = g2;
+            a5.isLast = u4;
+            var w2 = { axis: d3, chart: h5, dateTimeLabelFormat: m2, isFirst: g2, isLast: u4, pos: x3, tick: a5, tickPositionInfo: t2, value: L3 };
+            l3(this, "labelFormat", w2);
+            var N3 = function(b4) {
+              return c3.formatter ? c3.formatter.call(b4, b4) : c3.format ? (b4.text = d3.defaultLabelFormatter.call(b4), e.format(c3.format, b4, h5)) : d3.defaultLabelFormatter.call(b4, b4);
+            };
+            k3 = N3.call(w2, w2);
+            var X = G2 && G2.list;
+            a5.shortenLabel = X ? function() {
+              for (r3 = 0; r3 < X.length; r3++)
+                if (q3(w2, { dateTimeLabelFormat: X[r3] }), b3.attr({ text: N3.call(w2, w2) }), b3.getBBox().width < d3.getSlotWidth(a5) - 2 * c3.padding)
+                  return;
+              b3.attr({ text: "" });
+            } : void 0;
+            n2 && d3._addedPlotLB && a5.moveLabel(k3, c3);
+            I2(b3) || a5.movedLabel ? b3 && b3.textStr !== k3 && !n2 && (!b3.textWidth || c3.style.width || b3.styles.width || b3.css({ width: null }), b3.attr({ text: k3 }), b3.textPxLength = b3.getBBox().width) : (a5.label = b3 = a5.createLabel({ x: 0, y: 0 }, k3, c3), a5.rotation = 0);
+          };
+          k2.prototype.createLabel = function(a5, f3, k3) {
+            var e2 = this.axis, p3 = e2.chart;
+            if (a5 = I2(f3) && k3.enabled ? p3.renderer.text(f3, a5.x, a5.y, k3.useHTML).add(e2.labelGroup) : null)
+              p3.styledMode || a5.css(d2(k3.style)), a5.textPxLength = a5.getBBox().width;
+            return a5;
+          };
+          k2.prototype.destroy = function() {
+            z2(this, this.axis);
+          };
+          k2.prototype.getPosition = function(a5, d3, f3, k3) {
+            var e2 = this.axis, p3 = e2.chart, C2 = k3 && p3.oldChartHeight || p3.chartHeight;
+            a5 = { x: a5 ? H2(e2.translate(d3 + f3, null, null, k3) + e2.transB) : e2.left + e2.offset + (e2.opposite ? (k3 && p3.oldChartWidth || p3.chartWidth) - e2.right - e2.left : 0), y: a5 ? C2 - e2.bottom + e2.offset - (e2.opposite ? e2.height : 0) : H2(C2 - e2.translate(d3 + f3, null, null, k3) - e2.transB) };
+            a5.y = v(a5.y, -1e5, 1e5);
+            l3(this, "afterGetPosition", { pos: a5 });
+            return a5;
+          };
+          k2.prototype.getLabelPosition = function(a5, d3, f3, k3, e2, p3, C2, x3) {
+            var c3 = this.axis, t2 = c3.transA, g2 = c3.isLinked && c3.linkedParent ? c3.linkedParent.reversed : c3.reversed, u4 = c3.staggerLines, n2 = c3.tickRotCorr || { x: 0, y: 0 }, b3 = k3 || c3.reserveSpaceDefault ? 0 : -c3.labelOffset * (c3.labelAlign === "center" ? 0.5 : 1), r3 = {}, G2 = e2.y;
+            I2(G2) || (G2 = c3.side === 0 ? f3.rotation ? -8 : -f3.getBBox().height : c3.side === 2 ? n2.y + 8 : Math.cos(f3.rotation * D3) * (n2.y - f3.getBBox(false, 0).height / 2));
+            a5 = a5 + e2.x + b3 + n2.x - (p3 && k3 ? p3 * t2 * (g2 ? -1 : 1) : 0);
+            d3 = d3 + G2 - (p3 && !k3 ? p3 * t2 * (g2 ? 1 : -1) : 0);
+            u4 && (f3 = C2 / (x3 || 1) % u4, c3.opposite && (f3 = u4 - f3 - 1), d3 += c3.labelOffset / u4 * f3);
+            r3.x = a5;
+            r3.y = Math.round(d3);
+            l3(this, "afterGetLabelPosition", { pos: r3, tickmarkOffset: p3, index: C2 });
+            return r3;
+          };
+          k2.prototype.getLabelSize = function() {
+            return this.label ? this.label.getBBox()[this.axis.horiz ? "height" : "width"] : 0;
+          };
+          k2.prototype.getMarkPath = function(a5, d3, f3, k3, e2, p3) {
+            return p3.crispLine([["M", a5, d3], ["L", a5 + (e2 ? 0 : -f3), d3 + (e2 ? f3 : 0)]], k3);
+          };
+          k2.prototype.handleOverflow = function(a5) {
+            var d3 = this.axis, f3 = d3.options.labels, k3 = a5.x, e2 = d3.chart.chartWidth, l4 = d3.chart.spacing, C2 = p2(d3.labelLeft, Math.min(d3.pos, l4[3]));
+            l4 = p2(d3.labelRight, Math.max(d3.isRadial ? 0 : d3.pos + d3.len, e2 - l4[1]));
+            var x3 = this.label, c3 = this.rotation, t2 = { left: 0, center: 0.5, right: 1 }[d3.labelAlign || x3.attr("align")], g2 = x3.getBBox().width, u4 = d3.getSlotWidth(this), n2 = {}, b3 = u4, r3 = 1, G2;
+            if (c3 || f3.overflow !== "justify")
+              0 > c3 && k3 - t2 * g2 < C2 ? G2 = Math.round(k3 / Math.cos(c3 * D3) - C2) : 0 < c3 && k3 + t2 * g2 > l4 && (G2 = Math.round((e2 - k3) / Math.cos(c3 * D3)));
+            else if (e2 = k3 + (1 - t2) * g2, k3 - t2 * g2 < C2 ? b3 = a5.x + b3 * (1 - t2) - C2 : e2 > l4 && (b3 = l4 - a5.x + b3 * t2, r3 = -1), b3 = Math.min(u4, b3), b3 < u4 && d3.labelAlign === "center" && (a5.x += r3 * (u4 - b3 - t2 * (u4 - Math.min(g2, b3)))), g2 > b3 || d3.autoRotation && (x3.styles || {}).width)
+              G2 = b3;
+            G2 && (this.shortenLabel ? this.shortenLabel() : (n2.width = Math.floor(G2) + "px", (f3.style || {}).textOverflow || (n2.textOverflow = "ellipsis"), x3.css(n2)));
+          };
+          k2.prototype.moveLabel = function(d3, f3) {
+            var k3 = this, e2 = k3.label, p3 = k3.axis, l4 = p3.reversed, C2 = false;
+            e2 && e2.textStr === d3 ? (k3.movedLabel = e2, C2 = true, delete k3.label) : a4(p3.ticks, function(c3) {
+              C2 || c3.isNew || c3 === k3 || !c3.label || c3.label.textStr !== d3 || (k3.movedLabel = c3.label, C2 = true, c3.labelPos = k3.movedLabel.xy, delete c3.label);
+            });
+            if (!C2 && (k3.labelPos || e2)) {
+              var x3 = k3.labelPos || e2.xy;
+              e2 = p3.horiz ? l4 ? 0 : p3.width + p3.left : x3.x;
+              p3 = p3.horiz ? x3.y : l4 ? p3.width + p3.left : 0;
+              k3.movedLabel = k3.createLabel({ x: e2, y: p3 }, d3, f3);
+              k3.movedLabel && k3.movedLabel.attr({ opacity: 0 });
+            }
+          };
+          k2.prototype.render = function(a5, d3, f3) {
+            var k3 = this.axis, e2 = k3.horiz, y2 = this.pos, C2 = p2(this.tickmarkOffset, k3.tickmarkOffset);
+            y2 = this.getPosition(e2, y2, C2, d3);
+            C2 = y2.x;
+            var x3 = y2.y;
+            k3 = e2 && C2 === k3.pos + k3.len || !e2 && x3 === k3.pos ? -1 : 1;
+            e2 = p2(f3, this.label && this.label.newOpacity, 1);
+            f3 = p2(f3, 1);
+            this.isActive = true;
+            this.renderGridLine(d3, f3, k3);
+            this.renderMark(y2, f3, k3);
+            this.renderLabel(y2, d3, e2, a5);
+            this.isNew = false;
+            l3(this, "afterRender");
+          };
+          k2.prototype.renderGridLine = function(a5, d3, f3) {
+            var k3 = this.axis, e2 = k3.options, l4 = {}, C2 = this.pos, x3 = this.type, c3 = p2(this.tickmarkOffset, k3.tickmarkOffset), t2 = k3.chart.renderer, g2 = this.gridLine, u4 = e2.gridLineWidth, n2 = e2.gridLineColor, b3 = e2.gridLineDashStyle;
+            this.type === "minor" && (u4 = e2.minorGridLineWidth, n2 = e2.minorGridLineColor, b3 = e2.minorGridLineDashStyle);
+            g2 || (k3.chart.styledMode || (l4.stroke = n2, l4["stroke-width"] = u4 || 0, l4.dashstyle = b3), x3 || (l4.zIndex = 1), a5 && (d3 = 0), this.gridLine = g2 = t2.path().attr(l4).addClass("highcharts-" + (x3 ? x3 + "-" : "") + "grid-line").add(k3.gridGroup));
+            if (g2 && (f3 = k3.getPlotLinePath({ value: C2 + c3, lineWidth: g2.strokeWidth() * f3, force: "pass", old: a5 })))
+              g2[a5 || this.isNew ? "attr" : "animate"]({ d: f3, opacity: d3 });
+          };
+          k2.prototype.renderMark = function(a5, d3, f3) {
+            var k3 = this.axis, e2 = k3.options, l4 = k3.chart.renderer, C2 = this.type, x3 = k3.tickSize(C2 ? C2 + "Tick" : "tick"), c3 = a5.x;
+            a5 = a5.y;
+            var t2 = p2(e2[C2 !== "minor" ? "tickWidth" : "minorTickWidth"], !C2 && k3.isXAxis ? 1 : 0);
+            e2 = e2[C2 !== "minor" ? "tickColor" : "minorTickColor"];
+            var g2 = this.mark, u4 = !g2;
+            x3 && (k3.opposite && (x3[0] = -x3[0]), g2 || (this.mark = g2 = l4.path().addClass("highcharts-" + (C2 ? C2 + "-" : "") + "tick").add(k3.axisGroup), k3.chart.styledMode || g2.attr({ stroke: e2, "stroke-width": t2 })), g2[u4 ? "attr" : "animate"]({ d: this.getMarkPath(c3, a5, x3[0], g2.strokeWidth() * f3, k3.horiz, l4), opacity: d3 }));
+          };
+          k2.prototype.renderLabel = function(a5, d3, k3, e2) {
+            var l4 = this.axis, y2 = l4.horiz, C2 = l4.options, x3 = this.label, c3 = C2.labels, t2 = c3.step;
+            l4 = p2(this.tickmarkOffset, l4.tickmarkOffset);
+            var g2 = a5.x;
+            a5 = a5.y;
+            var u4 = true;
+            x3 && f2(g2) && (x3.xy = a5 = this.getLabelPosition(g2, a5, x3, y2, c3, l4, e2, t2), this.isFirst && !this.isLast && !C2.showFirstLabel || this.isLast && !this.isFirst && !C2.showLastLabel ? u4 = false : !y2 || c3.step || c3.rotation || d3 || k3 === 0 || this.handleOverflow(a5), t2 && e2 % t2 && (u4 = false), u4 && f2(a5.y) ? (a5.opacity = k3, x3[this.isNewLabel ? "attr" : "animate"](a5), this.isNewLabel = false) : (x3.attr("y", -9999), this.isNewLabel = true));
+          };
+          k2.prototype.replaceMovedLabel = function() {
+            var a5 = this.label, d3 = this.axis, f3 = d3.reversed;
+            if (a5 && !this.isNew) {
+              var k3 = d3.horiz ? f3 ? d3.left : d3.width + d3.left : a5.xy.x;
+              f3 = d3.horiz ? a5.xy.y : f3 ? d3.width + d3.top : d3.top;
+              a5.animate({ x: k3, y: f3, opacity: 0 }, void 0, a5.destroy);
+              delete this.label;
+            }
+            d3.isDirty = true;
+            this.label = this.movedLabel;
+            delete this.movedLabel;
+          };
+          return k2;
+        }();
+        "";
+        return h4;
+      });
+      M2(h3, "Core/Axis/Axis.js", [
+        h3["Core/Animation/AnimationUtilities.js"],
+        h3["Core/Axis/AxisDefaults.js"],
+        h3["Core/Color/Color.js"],
+        h3["Core/DefaultOptions.js"],
+        h3["Core/Foundation.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Axis/Tick.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v, H2, I2, z2) {
+        var q3 = e.animObject, l3 = E3.defaultOptions, f2 = v.registerEventOptions, d2 = H2.deg2rad, a4 = z2.arrayMax, p2 = z2.arrayMin, k2 = z2.clamp, F2 = z2.correctFloat, B = z2.defined, J2 = z2.destroyObjectProperties, K2 = z2.erase, L3 = z2.error, y2 = z2.extend, C2 = z2.fireEvent, x3 = z2.getMagnitude, c3 = z2.isArray, t2 = z2.isNumber, g2 = z2.isString, u4 = z2.merge, n2 = z2.normalizeTickInterval, b3 = z2.objectEach, r3 = z2.pick, G2 = z2.relativeLength, m2 = z2.removeEvent, w2 = z2.splat, N3 = z2.syncTimeout;
+        e = function() {
+          function e2(b4, c4) {
+            this.zoomEnabled = this.width = this.visible = this.userOptions = this.translationSlope = this.transB = this.transA = this.top = this.ticks = this.tickRotCorr = this.tickPositions = this.tickmarkOffset = this.tickInterval = this.tickAmount = this.side = this.series = this.right = this.positiveValuesOnly = this.pos = this.pointRangePadding = this.pointRange = this.plotLinesAndBandsGroups = this.plotLinesAndBands = this.paddedTicks = this.overlap = this.options = this.offset = this.names = this.minPixelPadding = this.minorTicks = this.minorTickInterval = this.min = this.maxLabelLength = this.max = this.len = this.left = this.labelFormatter = this.labelEdge = this.isLinked = this.height = this.hasVisibleSeries = this.hasNames = this.eventOptions = this.coll = this.closestPointRange = this.chart = this.categories = this.bottom = this.alternateBands = void 0;
+            this.init(b4, c4);
+          }
+          e2.prototype.init = function(b4, c4) {
+            var g3 = c4.isX;
+            this.chart = b4;
+            this.horiz = b4.inverted && !this.isZAxis ? !g3 : g3;
+            this.isXAxis = g3;
+            this.coll = this.coll || (g3 ? "xAxis" : "yAxis");
+            C2(this, "init", { userOptions: c4 });
+            this.opposite = r3(c4.opposite, this.opposite);
+            this.side = r3(c4.side, this.side, this.horiz ? this.opposite ? 0 : 2 : this.opposite ? 1 : 3);
+            this.setOptions(c4);
+            var a5 = this.options, m3 = a5.labels, n3 = a5.type;
+            this.userOptions = c4;
+            this.minPixelPadding = 0;
+            this.reversed = r3(a5.reversed, this.reversed);
+            this.visible = a5.visible;
+            this.zoomEnabled = a5.zoomEnabled;
+            this.hasNames = n3 === "category" || a5.categories === true;
+            this.categories = a5.categories || this.hasNames;
+            this.names || (this.names = [], this.names.keys = {});
+            this.plotLinesAndBandsGroups = {};
+            this.positiveValuesOnly = !!this.logarithmic;
+            this.isLinked = B(a5.linkedTo);
+            this.ticks = {};
+            this.labelEdge = [];
+            this.minorTicks = {};
+            this.plotLinesAndBands = [];
+            this.alternateBands = {};
+            this.len = 0;
+            this.minRange = this.userMinRange = a5.minRange || a5.maxZoom;
+            this.range = a5.range;
+            this.offset = a5.offset || 0;
+            this.min = this.max = null;
+            c4 = r3(a5.crosshair, w2(b4.options.tooltip.crosshairs)[g3 ? 0 : 1]);
+            this.crosshair = c4 === true ? {} : c4;
+            b4.axes.indexOf(this) === -1 && (g3 ? b4.axes.splice(b4.xAxis.length, 0, this) : b4.axes.push(this), b4[this.coll].push(this));
+            this.series = this.series || [];
+            b4.inverted && !this.isZAxis && g3 && typeof this.reversed === "undefined" && (this.reversed = true);
+            this.labelRotation = t2(m3.rotation) ? m3.rotation : void 0;
+            f2(this, a5);
+            C2(this, "afterInit");
+          };
+          e2.prototype.setOptions = function(b4) {
+            this.options = u4(h4.defaultXAxisOptions, this.coll === "yAxis" && h4.defaultYAxisOptions, [h4.defaultTopAxisOptions, h4.defaultRightAxisOptions, h4.defaultBottomAxisOptions, h4.defaultLeftAxisOptions][this.side], u4(l3[this.coll], b4));
+            C2(this, "afterSetOptions", { userOptions: b4 });
+          };
+          e2.prototype.defaultLabelFormatter = function(b4) {
+            var c4 = this.axis;
+            b4 = this.chart.numberFormatter;
+            var g3 = t2(this.value) ? this.value : NaN, a5 = c4.chart.time, m3 = this.dateTimeLabelFormat, n3 = l3.lang, d3 = n3.numericSymbols;
+            n3 = n3.numericSymbolMagnitude || 1e3;
+            var r4 = c4.logarithmic ? Math.abs(g3) : c4.tickInterval, u5 = d3 && d3.length;
+            if (c4.categories)
+              var f3 = "" + this.value;
+            else if (m3)
+              f3 = a5.dateFormat(m3, g3);
+            else if (u5 && 1e3 <= r4)
+              for (; u5-- && typeof f3 === "undefined"; )
+                c4 = Math.pow(n3, u5 + 1), r4 >= c4 && 10 * g3 % c4 === 0 && d3[u5] !== null && g3 !== 0 && (f3 = b4(g3 / c4, -1) + d3[u5]);
+            typeof f3 === "undefined" && (f3 = 1e4 <= Math.abs(g3) ? b4(g3, -1) : b4(g3, -1, void 0, ""));
+            return f3;
+          };
+          e2.prototype.getSeriesExtremes = function() {
+            var b4 = this, c4 = b4.chart, g3;
+            C2(this, "getSeriesExtremes", null, function() {
+              b4.hasVisibleSeries = false;
+              b4.dataMin = b4.dataMax = b4.threshold = null;
+              b4.softThreshold = !b4.isXAxis;
+              b4.stacking && b4.stacking.buildStacks();
+              b4.series.forEach(function(a5) {
+                if (a5.visible || !c4.options.chart.ignoreHiddenSeries) {
+                  var m3 = a5.options, n3 = m3.threshold;
+                  b4.hasVisibleSeries = true;
+                  b4.positiveValuesOnly && 0 >= n3 && (n3 = null);
+                  if (b4.isXAxis) {
+                    if (m3 = a5.xData, m3.length) {
+                      m3 = b4.logarithmic ? m3.filter(b4.validatePositiveValue) : m3;
+                      g3 = a5.getXExtremes(m3);
+                      var d3 = g3.min;
+                      var u5 = g3.max;
+                      t2(d3) || d3 instanceof Date || (m3 = m3.filter(t2), g3 = a5.getXExtremes(m3), d3 = g3.min, u5 = g3.max);
+                      m3.length && (b4.dataMin = Math.min(r3(b4.dataMin, d3), d3), b4.dataMax = Math.max(r3(b4.dataMax, u5), u5));
+                    }
+                  } else if (a5 = a5.applyExtremes(), t2(a5.dataMin) && (d3 = a5.dataMin, b4.dataMin = Math.min(r3(b4.dataMin, d3), d3)), t2(a5.dataMax) && (u5 = a5.dataMax, b4.dataMax = Math.max(r3(b4.dataMax, u5), u5)), B(n3) && (b4.threshold = n3), !m3.softThreshold || b4.positiveValuesOnly)
+                    b4.softThreshold = false;
+                }
+              });
+            });
+            C2(this, "afterGetSeriesExtremes");
+          };
+          e2.prototype.translate = function(b4, c4, g3, a5, m3, n3) {
+            var d3 = this.linkedParent || this, r4 = a5 && d3.old ? d3.old.min : d3.min, u5 = d3.minPixelPadding;
+            m3 = (d3.isOrdinal || d3.brokenAxis && d3.brokenAxis.hasBreaks || d3.logarithmic && m3) && d3.lin2val;
+            var f3 = 1, w3 = 0;
+            a5 = a5 && d3.old ? d3.old.transA : d3.transA;
+            a5 || (a5 = d3.transA);
+            g3 && (f3 *= -1, w3 = d3.len);
+            d3.reversed && (f3 *= -1, w3 -= f3 * (d3.sector || d3.len));
+            c4 ? (b4 = (b4 * f3 + w3 - u5) / a5 + r4, m3 && (b4 = d3.lin2val(b4))) : (m3 && (b4 = d3.val2lin(b4)), b4 = t2(r4) ? f3 * (b4 - r4) * a5 + w3 + f3 * u5 + (t2(n3) ? a5 * n3 : 0) : void 0);
+            return b4;
+          };
+          e2.prototype.toPixels = function(b4, c4) {
+            return this.translate(b4, false, !this.horiz, null, true) + (c4 ? 0 : this.pos);
+          };
+          e2.prototype.toValue = function(b4, c4) {
+            return this.translate(b4 - (c4 ? 0 : this.pos), true, !this.horiz, null, true);
+          };
+          e2.prototype.getPlotLinePath = function(b4) {
+            function c4(b5, c5, g4) {
+              if (P2 !== "pass" && b5 < c5 || b5 > g4)
+                P2 ? b5 = k2(b5, c5, g4) : h5 = true;
+              return b5;
+            }
+            var g3 = this, a5 = g3.chart, m3 = g3.left, n3 = g3.top, d3 = b4.old, u5 = b4.value, f3 = b4.lineWidth, w3 = d3 && a5.oldChartHeight || a5.chartHeight, G3 = d3 && a5.oldChartWidth || a5.chartWidth, e3 = g3.transB, x4 = b4.translatedValue, P2 = b4.force, p3, l4, y3, N4, h5;
+            b4 = { value: u5, lineWidth: f3, old: d3, force: P2, acrossPanes: b4.acrossPanes, translatedValue: x4 };
+            C2(this, "getPlotLinePath", b4, function(b5) {
+              x4 = r3(x4, g3.translate(u5, null, null, d3));
+              x4 = k2(x4, -1e5, 1e5);
+              p3 = y3 = Math.round(x4 + e3);
+              l4 = N4 = Math.round(w3 - x4 - e3);
+              t2(x4) ? g3.horiz ? (l4 = n3, N4 = w3 - g3.bottom, p3 = y3 = c4(p3, m3, m3 + g3.width)) : (p3 = m3, y3 = G3 - g3.right, l4 = N4 = c4(l4, n3, n3 + g3.height)) : (h5 = true, P2 = false);
+              b5.path = h5 && !P2 ? null : a5.renderer.crispLine([["M", p3, l4], ["L", y3, N4]], f3 || 1);
+            });
+            return b4.path;
+          };
+          e2.prototype.getLinearTickPositions = function(b4, c4, g3) {
+            var a5 = F2(Math.floor(c4 / b4) * b4);
+            g3 = F2(Math.ceil(g3 / b4) * b4);
+            var m3 = [], n3;
+            F2(a5 + b4) === a5 && (n3 = 20);
+            if (this.single)
+              return [c4];
+            for (c4 = a5; c4 <= g3; ) {
+              m3.push(c4);
+              c4 = F2(c4 + b4, n3);
+              if (c4 === d3)
+                break;
+              var d3 = c4;
+            }
+            return m3;
+          };
+          e2.prototype.getMinorTickInterval = function() {
+            var b4 = this.options;
+            return b4.minorTicks === true ? r3(b4.minorTickInterval, "auto") : b4.minorTicks === false ? null : b4.minorTickInterval;
+          };
+          e2.prototype.getMinorTickPositions = function() {
+            var b4 = this.options, c4 = this.tickPositions, g3 = this.minorTickInterval, a5 = this.pointRangePadding || 0, m3 = this.min - a5;
+            a5 = this.max + a5;
+            var n3 = a5 - m3, d3 = [];
+            if (n3 && n3 / g3 < this.len / 3) {
+              var r4 = this.logarithmic;
+              if (r4)
+                this.paddedTicks.forEach(function(b5, c5, a6) {
+                  c5 && d3.push.apply(d3, r4.getLogTickPositions(g3, a6[c5 - 1], a6[c5], true));
+                });
+              else if (this.dateTime && this.getMinorTickInterval() === "auto")
+                d3 = d3.concat(this.getTimeTicks(this.dateTime.normalizeTimeTickInterval(g3), m3, a5, b4.startOfWeek));
+              else
+                for (b4 = m3 + (c4[0] - m3) % g3; b4 <= a5 && b4 !== d3[0]; b4 += g3)
+                  d3.push(b4);
+            }
+            d3.length !== 0 && this.trimTicks(d3);
+            return d3;
+          };
+          e2.prototype.adjustForMinRange = function() {
+            var b4 = this.options, c4 = this.logarithmic, g3 = this.min, m3 = this.max, d3 = 0, n3, u5, f3, w3;
+            this.isXAxis && typeof this.minRange === "undefined" && !c4 && (B(b4.min) || B(b4.max) || B(b4.floor) || B(b4.ceiling) ? this.minRange = null : (this.series.forEach(function(b5) {
+              f3 = b5.xData;
+              w3 = b5.xIncrement ? 1 : f3.length - 1;
+              if (1 < f3.length) {
+                for (n3 = w3; 0 < n3; n3--)
+                  if (u5 = f3[n3] - f3[n3 - 1], !d3 || u5 < d3)
+                    d3 = u5;
+              }
+            }), this.minRange = Math.min(5 * d3, this.dataMax - this.dataMin)));
+            if (m3 - g3 < this.minRange) {
+              var t3 = this.dataMax - this.dataMin >= this.minRange;
+              var G3 = this.minRange;
+              var e3 = (G3 - m3 + g3) / 2;
+              e3 = [g3 - e3, r3(b4.min, g3 - e3)];
+              t3 && (e3[2] = this.logarithmic ? this.logarithmic.log2lin(this.dataMin) : this.dataMin);
+              g3 = a4(e3);
+              m3 = [g3 + G3, r3(b4.max, g3 + G3)];
+              t3 && (m3[2] = c4 ? c4.log2lin(this.dataMax) : this.dataMax);
+              m3 = p2(m3);
+              m3 - g3 < G3 && (e3[0] = m3 - G3, e3[1] = r3(b4.min, m3 - G3), g3 = a4(e3));
+            }
+            this.min = g3;
+            this.max = m3;
+          };
+          e2.prototype.getClosest = function() {
+            var b4;
+            this.categories ? b4 = 1 : this.series.forEach(function(c4) {
+              var g3 = c4.closestPointRange, a5 = c4.visible || !c4.chart.options.chart.ignoreHiddenSeries;
+              !c4.noSharedTooltip && B(g3) && a5 && (b4 = B(b4) ? Math.min(b4, g3) : g3);
+            });
+            return b4;
+          };
+          e2.prototype.nameToX = function(b4) {
+            var g3 = c3(this.categories), a5 = g3 ? this.categories : this.names, m3 = b4.options.x;
+            b4.series.requireSorting = false;
+            B(m3) || (m3 = this.options.uniqueNames ? g3 ? a5.indexOf(b4.name) : r3(a5.keys[b4.name], -1) : b4.series.autoIncrement());
+            if (m3 === -1) {
+              if (!g3)
+                var d3 = a5.length;
+            } else
+              d3 = m3;
+            typeof d3 !== "undefined" && (this.names[d3] = b4.name, this.names.keys[b4.name] = d3);
+            return d3;
+          };
+          e2.prototype.updateNames = function() {
+            var b4 = this, c4 = this.names;
+            0 < c4.length && (Object.keys(c4.keys).forEach(function(b5) {
+              delete c4.keys[b5];
+            }), c4.length = 0, this.minRange = this.userMinRange, (this.series || []).forEach(function(c5) {
+              c5.xIncrement = null;
+              if (!c5.points || c5.isDirtyData)
+                b4.max = Math.max(b4.max, c5.xData.length - 1), c5.processData(), c5.generatePoints();
+              c5.data.forEach(function(g3, a5) {
+                if (g3 && g3.options && typeof g3.name !== "undefined") {
+                  var m3 = b4.nameToX(g3);
+                  typeof m3 !== "undefined" && m3 !== g3.x && (g3.x = m3, c5.xData[a5] = m3);
+                }
+              });
+            }));
+          };
+          e2.prototype.setAxisTranslation = function() {
+            var b4 = this, c4 = b4.max - b4.min, a5 = b4.linkedParent, m3 = !!b4.categories, d3 = b4.isXAxis, n3 = b4.axisPointRange || 0, u5 = 0, f3 = 0, w3 = b4.transA;
+            if (d3 || m3 || n3) {
+              var t3 = b4.getClosest();
+              a5 ? (u5 = a5.minPointOffset, f3 = a5.pointRangePadding) : b4.series.forEach(function(c5) {
+                var a6 = m3 ? 1 : d3 ? r3(c5.options.pointRange, t3, 0) : b4.axisPointRange || 0, w4 = c5.options.pointPlacement;
+                n3 = Math.max(n3, a6);
+                if (!b4.single || m3)
+                  c5 = c5.is("xrange") ? !d3 : d3, u5 = Math.max(u5, c5 && g2(w4) ? 0 : a6 / 2), f3 = Math.max(f3, c5 && w4 === "on" ? 0 : a6);
+              });
+              a5 = b4.ordinal && b4.ordinal.slope && t3 ? b4.ordinal.slope / t3 : 1;
+              b4.minPointOffset = u5 *= a5;
+              b4.pointRangePadding = f3 *= a5;
+              b4.pointRange = Math.min(n3, b4.single && m3 ? 1 : c4);
+              d3 && (b4.closestPointRange = t3);
+            }
+            b4.translationSlope = b4.transA = w3 = b4.staticScale || b4.len / (c4 + f3 || 1);
+            b4.transB = b4.horiz ? b4.left : b4.bottom;
+            b4.minPixelPadding = w3 * u5;
+            C2(this, "afterSetAxisTranslation");
+          };
+          e2.prototype.minFromRange = function() {
+            return this.max - this.range;
+          };
+          e2.prototype.setTickInterval = function(b4) {
+            var c4 = this.chart, g3 = this.logarithmic, a5 = this.options, m3 = this.isXAxis, d3 = this.isLinked, u5 = a5.tickPixelInterval, f3 = this.categories, w3 = this.softThreshold, G3 = a5.maxPadding, e3 = a5.minPadding, k3 = t2(a5.tickInterval) && 0 <= a5.tickInterval ? a5.tickInterval : void 0, p3 = t2(this.threshold) ? this.threshold : null;
+            this.dateTime || f3 || d3 || this.getTickAmount();
+            var l4 = r3(this.userMin, a5.min);
+            var P2 = r3(this.userMax, a5.max);
+            if (d3) {
+              this.linkedParent = c4[this.coll][a5.linkedTo];
+              var y3 = this.linkedParent.getExtremes();
+              this.min = r3(y3.min, y3.dataMin);
+              this.max = r3(y3.max, y3.dataMax);
+              a5.type !== this.linkedParent.options.type && L3(11, 1, c4);
+            } else {
+              if (w3 && B(p3)) {
+                if (this.dataMin >= p3)
+                  y3 = p3, e3 = 0;
+                else if (this.dataMax <= p3) {
+                  var N4 = p3;
+                  G3 = 0;
+                }
+              }
+              this.min = r3(l4, y3, this.dataMin);
+              this.max = r3(P2, N4, this.dataMax);
+            }
+            g3 && (this.positiveValuesOnly && !b4 && 0 >= Math.min(this.min, r3(this.dataMin, this.min)) && L3(10, 1, c4), this.min = F2(g3.log2lin(this.min), 16), this.max = F2(g3.log2lin(this.max), 16));
+            this.range && B(this.max) && (this.userMin = this.min = l4 = Math.max(this.dataMin, this.minFromRange()), this.userMax = P2 = this.max, this.range = null);
+            C2(this, "foundExtremes");
+            this.beforePadding && this.beforePadding();
+            this.adjustForMinRange();
+            !(f3 || this.axisPointRange || this.stacking && this.stacking.usePercentage || d3) && B(this.min) && B(this.max) && (c4 = this.max - this.min) && (!B(l4) && e3 && (this.min -= c4 * e3), !B(P2) && G3 && (this.max += c4 * G3));
+            t2(this.userMin) || (t2(a5.softMin) && a5.softMin < this.min && (this.min = l4 = a5.softMin), t2(a5.floor) && (this.min = Math.max(this.min, a5.floor)));
+            t2(this.userMax) || (t2(a5.softMax) && a5.softMax > this.max && (this.max = P2 = a5.softMax), t2(a5.ceiling) && (this.max = Math.min(this.max, a5.ceiling)));
+            w3 && B(this.dataMin) && (p3 = p3 || 0, !B(l4) && this.min < p3 && this.dataMin >= p3 ? this.min = this.options.minRange ? Math.min(p3, this.max - this.minRange) : p3 : !B(P2) && this.max > p3 && this.dataMax <= p3 && (this.max = this.options.minRange ? Math.max(p3, this.min + this.minRange) : p3));
+            t2(this.min) && t2(this.max) && !this.chart.polar && this.min > this.max && (B(this.options.min) ? this.max = this.min : B(this.options.max) && (this.min = this.max));
+            this.tickInterval = this.min === this.max || typeof this.min === "undefined" || typeof this.max === "undefined" ? 1 : d3 && this.linkedParent && !k3 && u5 === this.linkedParent.options.tickPixelInterval ? k3 = this.linkedParent.tickInterval : r3(k3, this.tickAmount ? (this.max - this.min) / Math.max(this.tickAmount - 1, 1) : void 0, f3 ? 1 : (this.max - this.min) * u5 / Math.max(this.len, u5));
+            if (m3 && !b4) {
+              var h5 = this.min !== (this.old && this.old.min) || this.max !== (this.old && this.old.max);
+              this.series.forEach(function(b5) {
+                b5.forceCrop = b5.forceCropping && b5.forceCropping();
+                b5.processData(h5);
+              });
+              C2(this, "postProcessData", { hasExtemesChanged: h5 });
+            }
+            this.setAxisTranslation();
+            C2(this, "initialAxisTranslation");
+            this.pointRange && !k3 && (this.tickInterval = Math.max(this.pointRange, this.tickInterval));
+            b4 = r3(a5.minTickInterval, this.dateTime && !this.series.some(function(b5) {
+              return b5.noSharedTooltip;
+            }) ? this.closestPointRange : 0);
+            !k3 && this.tickInterval < b4 && (this.tickInterval = b4);
+            this.dateTime || this.logarithmic || k3 || (this.tickInterval = n2(this.tickInterval, void 0, x3(this.tickInterval), r3(a5.allowDecimals, 0.5 > this.tickInterval || this.tickAmount !== void 0), !!this.tickAmount));
+            this.tickAmount || (this.tickInterval = this.unsquish());
+            this.setTickPositions();
+          };
+          e2.prototype.setTickPositions = function() {
+            var b4 = this.options, c4 = b4.tickPositions, g3 = this.getMinorTickInterval(), a5 = this.hasVerticalPanning(), m3 = this.coll === "colorAxis", d3 = (m3 || !a5) && b4.startOnTick;
+            a5 = (m3 || !a5) && b4.endOnTick;
+            m3 = b4.tickPositioner;
+            this.tickmarkOffset = this.categories && b4.tickmarkPlacement === "between" && this.tickInterval === 1 ? 0.5 : 0;
+            this.minorTickInterval = g3 === "auto" && this.tickInterval ? this.tickInterval / 5 : g3;
+            this.single = this.min === this.max && B(this.min) && !this.tickAmount && (parseInt(this.min, 10) === this.min || b4.allowDecimals !== false);
+            this.tickPositions = g3 = c4 && c4.slice();
+            !g3 && (this.ordinal && this.ordinal.positions || !((this.max - this.min) / this.tickInterval > Math.max(2 * this.len, 200)) ? g3 = this.dateTime ? this.getTimeTicks(this.dateTime.normalizeTimeTickInterval(this.tickInterval, b4.units), this.min, this.max, b4.startOfWeek, this.ordinal && this.ordinal.positions, this.closestPointRange, true) : this.logarithmic ? this.logarithmic.getLogTickPositions(this.tickInterval, this.min, this.max) : this.getLinearTickPositions(this.tickInterval, this.min, this.max) : (g3 = [this.min, this.max], L3(19, false, this.chart)), g3.length > this.len && (g3 = [g3[0], g3.pop()], g3[0] === g3[1] && (g3.length = 1)), this.tickPositions = g3, m3 && (m3 = m3.apply(this, [this.min, this.max]))) && (this.tickPositions = g3 = m3);
+            this.paddedTicks = g3.slice(0);
+            this.trimTicks(g3, d3, a5);
+            this.isLinked || (this.single && 2 > g3.length && !this.categories && !this.series.some(function(b5) {
+              return b5.is("heatmap") && b5.options.pointPlacement === "between";
+            }) && (this.min -= 0.5, this.max += 0.5), c4 || m3 || this.adjustTickAmount());
+            C2(this, "afterSetTickPositions");
+          };
+          e2.prototype.trimTicks = function(b4, c4, g3) {
+            var a5 = b4[0], m3 = b4[b4.length - 1], d3 = !this.isOrdinal && this.minPointOffset || 0;
+            C2(this, "trimTicks");
+            if (!this.isLinked) {
+              if (c4 && a5 !== -Infinity)
+                this.min = a5;
+              else
+                for (; this.min - d3 > b4[0]; )
+                  b4.shift();
+              if (g3)
+                this.max = m3;
+              else
+                for (; this.max + d3 < b4[b4.length - 1]; )
+                  b4.pop();
+              b4.length === 0 && B(a5) && !this.options.tickPositions && b4.push((m3 + a5) / 2);
+            }
+          };
+          e2.prototype.alignToOthers = function() {
+            var b4 = {}, c4 = this.options, g3;
+            this.chart.options.chart.alignTicks !== false && c4.alignTicks && c4.startOnTick !== false && c4.endOnTick !== false && !this.logarithmic && this.chart[this.coll].forEach(function(c5) {
+              var a5 = c5.options;
+              a5 = [c5.horiz ? a5.left : a5.top, a5.width, a5.height, a5.pane].join();
+              c5.series.length && (b4[a5] ? g3 = true : b4[a5] = 1);
+            });
+            return g3;
+          };
+          e2.prototype.getTickAmount = function() {
+            var b4 = this.options, c4 = b4.tickPixelInterval, g3 = b4.tickAmount;
+            !B(b4.tickInterval) && !g3 && this.len < c4 && !this.isRadial && !this.logarithmic && b4.startOnTick && b4.endOnTick && (g3 = 2);
+            !g3 && this.alignToOthers() && (g3 = Math.ceil(this.len / c4) + 1);
+            4 > g3 && (this.finalTickAmt = g3, g3 = 5);
+            this.tickAmount = g3;
+          };
+          e2.prototype.adjustTickAmount = function() {
+            var b4 = this.options, c4 = this.tickInterval, g3 = this.tickPositions, a5 = this.tickAmount, m3 = this.finalTickAmt, d3 = g3 && g3.length, n3 = r3(this.threshold, this.softThreshold ? 0 : null);
+            if (this.hasData() && t2(this.min) && t2(this.max)) {
+              if (d3 < a5) {
+                for (; g3.length < a5; )
+                  g3.length % 2 || this.min === n3 ? g3.push(F2(g3[g3.length - 1] + c4)) : g3.unshift(F2(g3[0] - c4));
+                this.transA *= (d3 - 1) / (a5 - 1);
+                this.min = b4.startOnTick ? g3[0] : Math.min(this.min, g3[0]);
+                this.max = b4.endOnTick ? g3[g3.length - 1] : Math.max(this.max, g3[g3.length - 1]);
+              } else
+                d3 > a5 && (this.tickInterval *= 2, this.setTickPositions());
+              if (B(m3)) {
+                for (c4 = b4 = g3.length; c4--; )
+                  (m3 === 3 && c4 % 2 === 1 || 2 >= m3 && 0 < c4 && c4 < b4 - 1) && g3.splice(c4, 1);
+                this.finalTickAmt = void 0;
+              }
+            }
+          };
+          e2.prototype.setScale = function() {
+            var b4 = false, c4 = false;
+            this.series.forEach(function(g4) {
+              b4 = b4 || g4.isDirtyData || g4.isDirty;
+              c4 = c4 || g4.xAxis && g4.xAxis.isDirty || false;
+            });
+            this.setAxisSize();
+            var g3 = this.len !== (this.old && this.old.len);
+            g3 || b4 || c4 || this.isLinked || this.forceRedraw || this.userMin !== (this.old && this.old.userMin) || this.userMax !== (this.old && this.old.userMax) || this.alignToOthers() ? (this.stacking && this.stacking.resetStacks(), this.forceRedraw = false, this.getSeriesExtremes(), this.setTickInterval(), this.isDirty || (this.isDirty = g3 || this.min !== (this.old && this.old.min) || this.max !== (this.old && this.old.max))) : this.stacking && this.stacking.cleanStacks();
+            b4 && this.panningState && (this.panningState.isDirty = true);
+            C2(this, "afterSetScale");
+          };
+          e2.prototype.setExtremes = function(b4, c4, g3, a5, m3) {
+            var d3 = this, n3 = d3.chart;
+            g3 = r3(g3, true);
+            d3.series.forEach(function(b5) {
+              delete b5.kdTree;
+            });
+            m3 = y2(m3, { min: b4, max: c4 });
+            C2(d3, "setExtremes", m3, function() {
+              d3.userMin = b4;
+              d3.userMax = c4;
+              d3.eventArgs = m3;
+              g3 && n3.redraw(a5);
+            });
+          };
+          e2.prototype.zoom = function(b4, c4) {
+            var g3 = this, a5 = this.dataMin, m3 = this.dataMax, d3 = this.options, n3 = Math.min(a5, r3(d3.min, a5)), u5 = Math.max(m3, r3(d3.max, m3));
+            b4 = { newMin: b4, newMax: c4 };
+            C2(this, "zoom", b4, function(b5) {
+              var c5 = b5.newMin, d4 = b5.newMax;
+              if (c5 !== g3.min || d4 !== g3.max)
+                g3.allowZoomOutside || (B(a5) && (c5 < n3 && (c5 = n3), c5 > u5 && (c5 = u5)), B(m3) && (d4 < n3 && (d4 = n3), d4 > u5 && (d4 = u5))), g3.displayBtn = typeof c5 !== "undefined" || typeof d4 !== "undefined", g3.setExtremes(c5, d4, false, void 0, { trigger: "zoom" });
+              b5.zoomed = true;
+            });
+            return b4.zoomed;
+          };
+          e2.prototype.setAxisSize = function() {
+            var b4 = this.chart, c4 = this.options, g3 = c4.offsets || [0, 0, 0, 0], a5 = this.horiz, m3 = this.width = Math.round(G2(r3(c4.width, b4.plotWidth - g3[3] + g3[1]), b4.plotWidth)), d3 = this.height = Math.round(G2(r3(c4.height, b4.plotHeight - g3[0] + g3[2]), b4.plotHeight)), n3 = this.top = Math.round(G2(r3(c4.top, b4.plotTop + g3[0]), b4.plotHeight, b4.plotTop));
+            c4 = this.left = Math.round(G2(r3(c4.left, b4.plotLeft + g3[3]), b4.plotWidth, b4.plotLeft));
+            this.bottom = b4.chartHeight - d3 - n3;
+            this.right = b4.chartWidth - m3 - c4;
+            this.len = Math.max(a5 ? m3 : d3, 0);
+            this.pos = a5 ? c4 : n3;
+          };
+          e2.prototype.getExtremes = function() {
+            var b4 = this.logarithmic;
+            return {
+              min: b4 ? F2(b4.lin2log(this.min)) : this.min,
+              max: b4 ? F2(b4.lin2log(this.max)) : this.max,
+              dataMin: this.dataMin,
+              dataMax: this.dataMax,
+              userMin: this.userMin,
+              userMax: this.userMax
+            };
+          };
+          e2.prototype.getThreshold = function(b4) {
+            var c4 = this.logarithmic, g3 = c4 ? c4.lin2log(this.min) : this.min;
+            c4 = c4 ? c4.lin2log(this.max) : this.max;
+            b4 === null || b4 === -Infinity ? b4 = g3 : b4 === Infinity ? b4 = c4 : g3 > b4 ? b4 = g3 : c4 < b4 && (b4 = c4);
+            return this.translate(b4, 0, 1, 0, 1);
+          };
+          e2.prototype.autoLabelAlign = function(b4) {
+            var c4 = (r3(b4, 0) - 90 * this.side + 720) % 360;
+            b4 = { align: "center" };
+            C2(this, "autoLabelAlign", b4, function(b5) {
+              15 < c4 && 165 > c4 ? b5.align = "right" : 195 < c4 && 345 > c4 && (b5.align = "left");
+            });
+            return b4.align;
+          };
+          e2.prototype.tickSize = function(b4) {
+            var c4 = this.options, g3 = r3(c4[b4 === "tick" ? "tickWidth" : "minorTickWidth"], b4 === "tick" && this.isXAxis && !this.categories ? 1 : 0), a5 = c4[b4 === "tick" ? "tickLength" : "minorTickLength"];
+            if (g3 && a5) {
+              c4[b4 + "Position"] === "inside" && (a5 = -a5);
+              var m3 = [a5, g3];
+            }
+            b4 = { tickSize: m3 };
+            C2(this, "afterTickSize", b4);
+            return b4.tickSize;
+          };
+          e2.prototype.labelMetrics = function() {
+            var b4 = this.tickPositions && this.tickPositions[0] || 0;
+            return this.chart.renderer.fontMetrics(this.options.labels.style.fontSize, this.ticks[b4] && this.ticks[b4].label);
+          };
+          e2.prototype.unsquish = function() {
+            var b4 = this.options.labels, c4 = this.horiz, g3 = this.tickInterval, a5 = this.len / (((this.categories ? 1 : 0) + this.max - this.min) / g3), m3 = b4.rotation, n3 = this.labelMetrics(), u5 = Math.max(this.max - this.min, 0), f3 = function(b5) {
+              var c5 = b5 / (a5 || 1);
+              c5 = 1 < c5 ? Math.ceil(c5) : 1;
+              c5 * g3 > u5 && b5 !== Infinity && a5 !== Infinity && u5 && (c5 = Math.ceil(u5 / g3));
+              return F2(c5 * g3);
+            }, w3 = g3, G3, e3, x4 = Number.MAX_VALUE;
+            if (c4) {
+              if (!b4.staggerLines && !b4.step)
+                if (t2(m3))
+                  var k3 = [m3];
+                else
+                  a5 < b4.autoRotationLimit && (k3 = b4.autoRotation);
+              k3 && k3.forEach(function(b5) {
+                if (b5 === m3 || b5 && -90 <= b5 && 90 >= b5) {
+                  e3 = f3(Math.abs(n3.h / Math.sin(d2 * b5)));
+                  var c5 = e3 + Math.abs(b5 / 360);
+                  c5 < x4 && (x4 = c5, G3 = b5, w3 = e3);
+                }
+              });
+            } else
+              b4.step || (w3 = f3(n3.h));
+            this.autoRotation = k3;
+            this.labelRotation = r3(G3, t2(m3) ? m3 : 0);
+            return w3;
+          };
+          e2.prototype.getSlotWidth = function(b4) {
+            var c4 = this.chart, g3 = this.horiz, a5 = this.options.labels, m3 = Math.max(this.tickPositions.length - (this.categories ? 0 : 1), 1), d3 = c4.margin[3];
+            if (b4 && t2(b4.slotWidth))
+              return b4.slotWidth;
+            if (g3 && 2 > a5.step)
+              return a5.rotation ? 0 : (this.staggerLines || 1) * this.len / m3;
+            if (!g3) {
+              b4 = a5.style.width;
+              if (b4 !== void 0)
+                return parseInt(String(b4), 10);
+              if (d3)
+                return d3 - c4.spacing[3];
+            }
+            return 0.33 * c4.chartWidth;
+          };
+          e2.prototype.renderUnsquish = function() {
+            var b4 = this.chart, c4 = b4.renderer, a5 = this.tickPositions, m3 = this.ticks, d3 = this.options.labels, n3 = d3.style, r4 = this.horiz, u5 = this.getSlotWidth(), f3 = Math.max(1, Math.round(u5 - 2 * d3.padding)), w3 = {}, t3 = this.labelMetrics(), G3 = n3.textOverflow, e3 = 0;
+            g2(d3.rotation) || (w3.rotation = d3.rotation || 0);
+            a5.forEach(function(b5) {
+              b5 = m3[b5];
+              b5.movedLabel && b5.replaceMovedLabel();
+              b5 && b5.label && b5.label.textPxLength > e3 && (e3 = b5.label.textPxLength);
+            });
+            this.maxLabelLength = e3;
+            if (this.autoRotation)
+              e3 > f3 && e3 > t3.h ? w3.rotation = this.labelRotation : this.labelRotation = 0;
+            else if (u5) {
+              var x4 = f3;
+              if (!G3) {
+                var k3 = "clip";
+                for (f3 = a5.length; !r4 && f3--; ) {
+                  var p3 = a5[f3];
+                  if (p3 = m3[p3].label)
+                    p3.styles && p3.styles.textOverflow === "ellipsis" ? p3.css({ textOverflow: "clip" }) : p3.textPxLength > u5 && p3.css({ width: u5 + "px" }), p3.getBBox().height > this.len / a5.length - (t3.h - t3.f) && (p3.specificTextOverflow = "ellipsis");
+                }
+              }
+            }
+            w3.rotation && (x4 = e3 > 0.5 * b4.chartHeight ? 0.33 * b4.chartHeight : e3, G3 || (k3 = "ellipsis"));
+            if (this.labelAlign = d3.align || this.autoLabelAlign(this.labelRotation))
+              w3.align = this.labelAlign;
+            a5.forEach(function(b5) {
+              var c5 = (b5 = m3[b5]) && b5.label, g3 = n3.width, a6 = {};
+              c5 && (c5.attr(w3), b5.shortenLabel ? b5.shortenLabel() : x4 && !g3 && n3.whiteSpace !== "nowrap" && (x4 < c5.textPxLength || c5.element.tagName === "SPAN") ? (a6.width = x4 + "px", G3 || (a6.textOverflow = c5.specificTextOverflow || k3), c5.css(a6)) : c5.styles && c5.styles.width && !a6.width && !g3 && c5.css({ width: null }), delete c5.specificTextOverflow, b5.rotation = w3.rotation);
+            }, this);
+            this.tickRotCorr = c4.rotCorr(t3.b, this.labelRotation || 0, this.side !== 0);
+          };
+          e2.prototype.hasData = function() {
+            return this.series.some(function(b4) {
+              return b4.hasData();
+            }) || this.options.showEmpty && B(this.min) && B(this.max);
+          };
+          e2.prototype.addTitle = function(b4) {
+            var c4 = this.chart.renderer, g3 = this.horiz, a5 = this.opposite, m3 = this.options.title, d3 = this.chart.styledMode, n3;
+            this.axisTitle || ((n3 = m3.textAlign) || (n3 = (g3 ? { low: "left", middle: "center", high: "right" } : { low: a5 ? "right" : "left", middle: "center", high: a5 ? "left" : "right" })[m3.align]), this.axisTitle = c4.text(m3.text || "", 0, 0, m3.useHTML).attr({ zIndex: 7, rotation: m3.rotation, align: n3 }).addClass("highcharts-axis-title"), d3 || this.axisTitle.css(u4(m3.style)), this.axisTitle.add(this.axisGroup), this.axisTitle.isNew = true);
+            d3 || m3.style.width || this.isRadial || this.axisTitle.css({ width: this.len + "px" });
+            this.axisTitle[b4 ? "show" : "hide"](b4);
+          };
+          e2.prototype.generateTick = function(b4) {
+            var c4 = this.ticks;
+            c4[b4] ? c4[b4].addLabel() : c4[b4] = new I2(this, b4);
+          };
+          e2.prototype.getOffset = function() {
+            var c4 = this, g3 = this, a5 = g3.chart, m3 = g3.horiz, d3 = g3.options, n3 = g3.side, u5 = g3.ticks, f3 = g3.tickPositions, w3 = g3.coll, t3 = g3.axisParent, e3 = a5.renderer, G3 = a5.inverted && !g3.isZAxis ? [1, 0, 3, 2][n3] : n3, x4 = g3.hasData(), k3 = d3.title, p3 = d3.labels, l4 = a5.axisOffset;
+            a5 = a5.clipOffset;
+            var y3 = [
+              -1,
+              1,
+              1,
+              -1
+            ][n3], N4 = d3.className, h5, q4 = 0, J3 = 0, F3 = 0;
+            g3.showAxis = h5 = x4 || d3.showEmpty;
+            g3.staggerLines = g3.horiz && p3.staggerLines || void 0;
+            if (!g3.axisGroup) {
+              var K3 = function(b4, g4, a6) {
+                return e3.g(b4).attr({ zIndex: a6 }).addClass("highcharts-" + w3.toLowerCase() + g4 + " " + (c4.isRadial ? "highcharts-radial-axis" + g4 + " " : "") + (N4 || "")).add(t3);
+              };
+              g3.gridGroup = K3("grid", "-grid", d3.gridZIndex);
+              g3.axisGroup = K3("axis", "", d3.zIndex);
+              g3.labelGroup = K3("axis-labels", "-labels", p3.zIndex);
+            }
+            x4 || g3.isLinked ? (f3.forEach(function(b4) {
+              g3.generateTick(b4);
+            }), g3.renderUnsquish(), g3.reserveSpaceDefault = n3 === 0 || n3 === 2 || { 1: "left", 3: "right" }[n3] === g3.labelAlign, r3(p3.reserveSpace, g3.labelAlign === "center" ? true : null, g3.reserveSpaceDefault) && f3.forEach(function(b4) {
+              F3 = Math.max(u5[b4].getLabelSize(), F3);
+            }), g3.staggerLines && (F3 *= g3.staggerLines), g3.labelOffset = F3 * (g3.opposite ? -1 : 1)) : b3(u5, function(b4, c5) {
+              b4.destroy();
+              delete u5[c5];
+            });
+            if (k3 && k3.text && k3.enabled !== false && (g3.addTitle(h5), h5 && k3.reserveSpace !== false)) {
+              g3.titleOffset = q4 = g3.axisTitle.getBBox()[m3 ? "height" : "width"];
+              var L4 = k3.offset;
+              J3 = B(L4) ? 0 : r3(k3.margin, m3 ? 5 : 10);
+            }
+            g3.renderLine();
+            g3.offset = y3 * r3(d3.offset, l4[n3] ? l4[n3] + (d3.margin || 0) : 0);
+            g3.tickRotCorr = g3.tickRotCorr || { x: 0, y: 0 };
+            k3 = n3 === 0 ? -g3.labelMetrics().h : n3 === 2 ? g3.tickRotCorr.y : 0;
+            x4 = Math.abs(F3) + J3;
+            F3 && (x4 = x4 - k3 + y3 * (m3 ? r3(p3.y, g3.tickRotCorr.y + 8 * y3) : p3.x));
+            g3.axisTitleMargin = r3(L4, x4);
+            g3.getMaxLabelDimensions && (g3.maxLabelDimensions = g3.getMaxLabelDimensions(u5, f3));
+            w3 !== "colorAxis" && (m3 = this.tickSize("tick"), l4[n3] = Math.max(l4[n3], (g3.axisTitleMargin || 0) + q4 + y3 * g3.offset, x4, f3 && f3.length && m3 ? m3[0] + y3 * g3.offset : 0), d3 = !g3.axisLine || d3.offset ? 0 : 2 * Math.floor(g3.axisLine.strokeWidth() / 2), a5[G3] = Math.max(a5[G3], d3));
+            C2(this, "afterGetOffset");
+          };
+          e2.prototype.getLinePath = function(b4) {
+            var c4 = this.chart, g3 = this.opposite, a5 = this.offset, m3 = this.horiz, d3 = this.left + (g3 ? this.width : 0) + a5;
+            a5 = c4.chartHeight - this.bottom - (g3 ? this.height : 0) + a5;
+            g3 && (b4 *= -1);
+            return c4.renderer.crispLine([["M", m3 ? this.left : d3, m3 ? a5 : this.top], ["L", m3 ? c4.chartWidth - this.right : d3, m3 ? a5 : c4.chartHeight - this.bottom]], b4);
+          };
+          e2.prototype.renderLine = function() {
+            this.axisLine || (this.axisLine = this.chart.renderer.path().addClass("highcharts-axis-line").add(this.axisGroup), this.chart.styledMode || this.axisLine.attr({ stroke: this.options.lineColor, "stroke-width": this.options.lineWidth, zIndex: 7 }));
+          };
+          e2.prototype.getTitlePosition = function() {
+            var b4 = this.horiz, c4 = this.left, g3 = this.top, a5 = this.len, m3 = this.options.title, d3 = b4 ? c4 : g3, n3 = this.opposite, r4 = this.offset, u5 = m3.x, f3 = m3.y, w3 = this.axisTitle, t3 = this.chart.renderer.fontMetrics(m3.style.fontSize, w3);
+            w3 = Math.max(w3.getBBox(null, 0).height - t3.h - 1, 0);
+            a5 = { low: d3 + (b4 ? 0 : a5), middle: d3 + a5 / 2, high: d3 + (b4 ? a5 : 0) }[m3.align];
+            c4 = (b4 ? g3 + this.height : c4) + (b4 ? 1 : -1) * (n3 ? -1 : 1) * this.axisTitleMargin + [
+              -w3,
+              w3,
+              t3.f,
+              -w3
+            ][this.side];
+            b4 = { x: b4 ? a5 + u5 : c4 + (n3 ? this.width : 0) + r4 + u5, y: b4 ? c4 + f3 - (n3 ? this.height : 0) + r4 : a5 + f3 };
+            C2(this, "afterGetTitlePosition", { titlePosition: b4 });
+            return b4;
+          };
+          e2.prototype.renderMinorTick = function(b4, c4) {
+            var g3 = this.minorTicks;
+            g3[b4] || (g3[b4] = new I2(this, b4, "minor"));
+            c4 && g3[b4].isNew && g3[b4].render(null, true);
+            g3[b4].render(null, false, 1);
+          };
+          e2.prototype.renderTick = function(b4, c4, g3) {
+            var a5 = this.ticks;
+            if (!this.isLinked || b4 >= this.min && b4 <= this.max || this.grid && this.grid.isColumn)
+              a5[b4] || (a5[b4] = new I2(this, b4)), g3 && a5[b4].isNew && a5[b4].render(c4, true, -1), a5[b4].render(c4);
+          };
+          e2.prototype.render = function() {
+            var c4 = this, g3 = c4.chart, a5 = c4.logarithmic, m3 = c4.options, d3 = c4.isLinked, n3 = c4.tickPositions, r4 = c4.axisTitle, u5 = c4.ticks, f3 = c4.minorTicks, w3 = c4.alternateBands, e3 = m3.stackLabels, G3 = m3.alternateGridColor, x4 = c4.tickmarkOffset, k3 = c4.axisLine, p3 = c4.showAxis, l4 = q3(g3.renderer.globalAnimation), y3, h5;
+            c4.labelEdge.length = 0;
+            c4.overlap = false;
+            [u5, f3, w3].forEach(function(c5) {
+              b3(c5, function(b4) {
+                b4.isActive = false;
+              });
+            });
+            if (c4.hasData() || d3) {
+              var B2 = c4.chart.hasRendered && c4.old && t2(c4.old.min);
+              c4.minorTickInterval && !c4.categories && c4.getMinorTickPositions().forEach(function(b4) {
+                c4.renderMinorTick(b4, B2);
+              });
+              n3.length && (n3.forEach(function(b4, g4) {
+                c4.renderTick(b4, g4, B2);
+              }), x4 && (c4.min === 0 || c4.single) && (u5[-1] || (u5[-1] = new I2(c4, -1, null, true)), u5[-1].render(-1)));
+              G3 && n3.forEach(function(b4, m4) {
+                h5 = typeof n3[m4 + 1] !== "undefined" ? n3[m4 + 1] + x4 : c4.max - x4;
+                m4 % 2 === 0 && b4 < c4.max && h5 <= c4.max + (g3.polar ? -x4 : x4) && (w3[b4] || (w3[b4] = new H2.PlotLineOrBand(c4)), y3 = b4 + x4, w3[b4].options = { from: a5 ? a5.lin2log(y3) : y3, to: a5 ? a5.lin2log(h5) : h5, color: G3, className: "highcharts-alternate-grid" }, w3[b4].render(), w3[b4].isActive = true);
+              });
+              c4._addedPlotLB || (c4._addedPlotLB = true, (m3.plotLines || []).concat(m3.plotBands || []).forEach(function(b4) {
+                c4.addPlotBandOrLine(b4);
+              }));
+            }
+            [u5, f3, w3].forEach(function(c5) {
+              var a6 = [], m4 = l4.duration;
+              b3(c5, function(b4, c6) {
+                b4.isActive || (b4.render(c6, false, 0), b4.isActive = false, a6.push(c6));
+              });
+              N3(function() {
+                for (var b4 = a6.length; b4--; )
+                  c5[a6[b4]] && !c5[a6[b4]].isActive && (c5[a6[b4]].destroy(), delete c5[a6[b4]]);
+              }, c5 !== w3 && g3.hasRendered && m4 ? m4 : 0);
+            });
+            k3 && (k3[k3.isPlaced ? "animate" : "attr"]({ d: this.getLinePath(k3.strokeWidth()) }), k3.isPlaced = true, k3[p3 ? "show" : "hide"](p3));
+            r4 && p3 && (m3 = c4.getTitlePosition(), t2(m3.y) ? (r4[r4.isNew ? "attr" : "animate"](m3), r4.isNew = false) : (r4.attr("y", -9999), r4.isNew = true));
+            e3 && e3.enabled && c4.stacking && c4.stacking.renderStackTotals();
+            c4.old = { len: c4.len, max: c4.max, min: c4.min, transA: c4.transA, userMax: c4.userMax, userMin: c4.userMin };
+            c4.isDirty = false;
+            C2(this, "afterRender");
+          };
+          e2.prototype.redraw = function() {
+            this.visible && (this.render(), this.plotLinesAndBands.forEach(function(b4) {
+              b4.render();
+            }));
+            this.series.forEach(function(b4) {
+              b4.isDirty = true;
+            });
+          };
+          e2.prototype.getKeepProps = function() {
+            return this.keepProps || e2.keepProps;
+          };
+          e2.prototype.destroy = function(c4) {
+            var g3 = this, a5 = g3.plotLinesAndBands, d3 = this.eventOptions;
+            C2(this, "destroy", { keepEvents: c4 });
+            c4 || m2(g3);
+            [g3.ticks, g3.minorTicks, g3.alternateBands].forEach(function(b4) {
+              J2(b4);
+            });
+            if (a5)
+              for (c4 = a5.length; c4--; )
+                a5[c4].destroy();
+            "axisLine axisTitle axisGroup gridGroup labelGroup cross scrollbar".split(" ").forEach(function(b4) {
+              g3[b4] && (g3[b4] = g3[b4].destroy());
+            });
+            for (var n3 in g3.plotLinesAndBandsGroups)
+              g3.plotLinesAndBandsGroups[n3] = g3.plotLinesAndBandsGroups[n3].destroy();
+            b3(g3, function(b4, c5) {
+              g3.getKeepProps().indexOf(c5) === -1 && delete g3[c5];
+            });
+            this.eventOptions = d3;
+          };
+          e2.prototype.drawCrosshair = function(b4, c4) {
+            var g3 = this.crosshair, a5 = r3(g3 && g3.snap, true), m3 = this.chart, d3, n3 = this.cross;
+            C2(this, "drawCrosshair", { e: b4, point: c4 });
+            b4 || (b4 = this.cross && this.cross.e);
+            if (g3 && (B(c4) || !a5) !== false) {
+              a5 ? B(c4) && (d3 = r3(this.coll !== "colorAxis" ? c4.crosshairPos : null, this.isXAxis ? c4.plotX : this.len - c4.plotY)) : d3 = b4 && (this.horiz ? b4.chartX - this.pos : this.len - b4.chartY + this.pos);
+              if (B(d3)) {
+                var u5 = { value: c4 && (this.isXAxis ? c4.x : r3(c4.stackY, c4.y)), translatedValue: d3 };
+                m3.polar && y2(u5, { isCrosshair: true, chartX: b4 && b4.chartX, chartY: b4 && b4.chartY, point: c4 });
+                u5 = this.getPlotLinePath(u5) || null;
+              }
+              if (!B(u5)) {
+                this.hideCrosshair();
+                return;
+              }
+              a5 = this.categories && !this.isRadial;
+              n3 || (this.cross = n3 = m3.renderer.path().addClass("highcharts-crosshair highcharts-crosshair-" + (a5 ? "category " : "thin ") + (g3.className || "")).attr({ zIndex: r3(g3.zIndex, 2) }).add(), m3.styledMode || (n3.attr({ stroke: g3.color || (a5 ? A.parse("#ccd6eb").setOpacity(0.25).get() : "#cccccc"), "stroke-width": r3(g3.width, 1) }).css({ "pointer-events": "none" }), g3.dashStyle && n3.attr({ dashstyle: g3.dashStyle })));
+              n3.show().attr({ d: u5 });
+              a5 && !g3.width && n3.attr({ "stroke-width": this.transA });
+              this.cross.e = b4;
+            } else
+              this.hideCrosshair();
+            C2(this, "afterDrawCrosshair", { e: b4, point: c4 });
+          };
+          e2.prototype.hideCrosshair = function() {
+            this.cross && this.cross.hide();
+            C2(this, "afterHideCrosshair");
+          };
+          e2.prototype.hasVerticalPanning = function() {
+            var b4 = this.chart.options.chart.panning;
+            return !!(b4 && b4.enabled && /y/.test(b4.type));
+          };
+          e2.prototype.validatePositiveValue = function(b4) {
+            return t2(b4) && 0 < b4;
+          };
+          e2.prototype.update = function(b4, c4) {
+            var g3 = this.chart;
+            b4 = u4(this.userOptions, b4);
+            this.destroy(true);
+            this.init(g3, b4);
+            g3.isDirtyBox = true;
+            r3(c4, true) && g3.redraw();
+          };
+          e2.prototype.remove = function(b4) {
+            for (var c4 = this.chart, g3 = this.coll, a5 = this.series, m3 = a5.length; m3--; )
+              a5[m3] && a5[m3].remove(false);
+            K2(c4.axes, this);
+            K2(c4[g3], this);
+            c4[g3].forEach(function(b5, c5) {
+              b5.options.index = b5.userOptions.index = c5;
+            });
+            this.destroy();
+            c4.isDirtyBox = true;
+            r3(b4, true) && c4.redraw();
+          };
+          e2.prototype.setTitle = function(b4, c4) {
+            this.update({ title: b4 }, c4);
+          };
+          e2.prototype.setCategories = function(b4, c4) {
+            this.update({ categories: b4 }, c4);
+          };
+          e2.defaultOptions = h4.defaultXAxisOptions;
+          e2.keepProps = "extKey hcEvents names series userMax userMin".split(" ");
+          return e2;
+        }();
+        "";
+        return e;
+      });
+      M2(h3, "Core/Axis/DateTimeAxis.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.addEvent, A = e.getMagnitude, E3 = e.normalizeTickInterval, v = e.timeUnits, H2;
+        (function(e2) {
+          function z2() {
+            return this.chart.time.getTimeTicks.apply(this.chart.time, arguments);
+          }
+          function q3(d2) {
+            d2.userOptions.type !== "datetime" ? this.dateTime = void 0 : this.dateTime || (this.dateTime = new f2(this));
+          }
+          var l3 = [];
+          e2.compose = function(d2) {
+            l3.indexOf(d2) === -1 && (l3.push(d2), d2.keepProps.push("dateTime"), d2.prototype.getTimeTicks = z2, h4(d2, "init", q3));
+            return d2;
+          };
+          var f2 = function() {
+            function d2(a4) {
+              this.axis = a4;
+            }
+            d2.prototype.normalizeTimeTickInterval = function(a4, d3) {
+              var f3 = d3 || [["millisecond", [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]], ["second", [1, 2, 5, 10, 15, 30]], ["minute", [1, 2, 5, 10, 15, 30]], ["hour", [1, 2, 3, 4, 6, 8, 12]], ["day", [1, 2]], ["week", [1, 2]], ["month", [1, 2, 3, 4, 6]], ["year", null]];
+              d3 = f3[f3.length - 1];
+              var e3 = v[d3[0]], p2 = d3[1], l4;
+              for (l4 = 0; l4 < f3.length && !(d3 = f3[l4], e3 = v[d3[0]], p2 = d3[1], f3[l4 + 1] && a4 <= (e3 * p2[p2.length - 1] + v[f3[l4 + 1][0]]) / 2); l4++)
+                ;
+              e3 === v.year && a4 < 5 * e3 && (p2 = [1, 2, 5]);
+              a4 = E3(a4 / e3, p2, d3[0] === "year" ? Math.max(A(a4 / e3), 1) : 1);
+              return { unitRange: e3, count: a4, unitName: d3[0] };
+            };
+            d2.prototype.getXDateFormat = function(a4, d3) {
+              var f3 = this.axis;
+              return f3.closestPointRange ? f3.chart.time.getDateFormat(f3.closestPointRange, a4, f3.options.startOfWeek, d3) || d3.year : d3.day;
+            };
+            return d2;
+          }();
+          e2.Additions = f2;
+        })(H2 || (H2 = {}));
+        return H2;
+      });
+      M2(h3, "Core/Axis/LogarithmicAxis.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.addEvent, A = e.getMagnitude, E3 = e.normalizeTickInterval, v = e.pick, H2;
+        (function(e2) {
+          function z2(d2) {
+            var a4 = this.logarithmic;
+            d2.userOptions.type !== "logarithmic" ? this.logarithmic = void 0 : a4 || (this.logarithmic = new f2(this));
+          }
+          function q3() {
+            var d2 = this.logarithmic;
+            d2 && (this.lin2val = function(a4) {
+              return d2.lin2log(a4);
+            }, this.val2lin = function(a4) {
+              return d2.log2lin(a4);
+            });
+          }
+          var l3 = [];
+          e2.compose = function(d2) {
+            l3.indexOf(d2) === -1 && (l3.push(d2), d2.keepProps.push("logarithmic"), h4(d2, "init", z2), h4(d2, "afterInit", q3));
+            return d2;
+          };
+          var f2 = function() {
+            function d2(a4) {
+              this.axis = a4;
+            }
+            d2.prototype.getLogTickPositions = function(a4, d3, f3, e3) {
+              var k2 = this.axis, p2 = k2.len, l4 = k2.options, h5 = [];
+              e3 || (this.minorAutoInterval = void 0);
+              if (0.5 <= a4)
+                a4 = Math.round(a4), h5 = k2.getLinearTickPositions(a4, d3, f3);
+              else if (0.08 <= a4) {
+                var y2 = Math.floor(d3), C2, x3 = l4 = void 0;
+                for (p2 = 0.3 < a4 ? [1, 2, 4] : 0.15 < a4 ? [1, 2, 4, 6, 8] : [1, 2, 3, 4, 5, 6, 7, 8, 9]; y2 < f3 + 1 && !x3; y2++) {
+                  var c3 = p2.length;
+                  for (C2 = 0; C2 < c3 && !x3; C2++) {
+                    var t2 = this.log2lin(this.lin2log(y2) * p2[C2]);
+                    t2 > d3 && (!e3 || l4 <= f3) && typeof l4 !== "undefined" && h5.push(l4);
+                    l4 > f3 && (x3 = true);
+                    l4 = t2;
+                  }
+                }
+              } else
+                d3 = this.lin2log(d3), f3 = this.lin2log(f3), a4 = e3 ? k2.getMinorTickInterval() : l4.tickInterval, a4 = v(a4 === "auto" ? null : a4, this.minorAutoInterval, l4.tickPixelInterval / (e3 ? 5 : 1) * (f3 - d3) / ((e3 ? p2 / k2.tickPositions.length : p2) || 1)), a4 = E3(a4, void 0, A(a4)), h5 = k2.getLinearTickPositions(a4, d3, f3).map(this.log2lin), e3 || (this.minorAutoInterval = a4 / 5);
+              e3 || (k2.tickInterval = a4);
+              return h5;
+            };
+            d2.prototype.lin2log = function(a4) {
+              return Math.pow(10, a4);
+            };
+            d2.prototype.log2lin = function(a4) {
+              return Math.log(a4) / Math.LN10;
+            };
+            return d2;
+          }();
+          e2.Additions = f2;
+        })(H2 || (H2 = {}));
+        return H2;
+      });
+      M2(h3, "Core/Axis/PlotLineOrBand/PlotLineOrBandAxis.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.erase, A = e.extend, E3 = e.isNumber, v;
+        (function(e2) {
+          var v2 = [], z2;
+          e2.compose = function(e3, f2) {
+            z2 || (z2 = e3);
+            v2.indexOf(f2) === -1 && (v2.push(f2), A(f2.prototype, q3.prototype));
+            return f2;
+          };
+          var q3 = function() {
+            function e3() {
+            }
+            e3.prototype.getPlotBandPath = function(f2, d2, a4) {
+              a4 === void 0 && (a4 = this.options);
+              var e4 = this.getPlotLinePath({ value: d2, force: true, acrossPanes: a4.acrossPanes }), k2 = [], l3 = this.horiz;
+              d2 = !E3(this.min) || !E3(this.max) || f2 < this.min && d2 < this.min || f2 > this.max && d2 > this.max;
+              f2 = this.getPlotLinePath({ value: f2, force: true, acrossPanes: a4.acrossPanes });
+              a4 = 1;
+              if (f2 && e4) {
+                if (d2) {
+                  var h5 = f2.toString() === e4.toString();
+                  a4 = 0;
+                }
+                for (d2 = 0; d2 < f2.length; d2 += 2) {
+                  var q4 = f2[d2], K2 = f2[d2 + 1], L3 = e4[d2], y2 = e4[d2 + 1];
+                  q4[0] !== "M" && q4[0] !== "L" || K2[0] !== "M" && K2[0] !== "L" || L3[0] !== "M" && L3[0] !== "L" || y2[0] !== "M" && y2[0] !== "L" || (l3 && L3[1] === q4[1] ? (L3[1] += a4, y2[1] += a4) : l3 || L3[2] !== q4[2] || (L3[2] += a4, y2[2] += a4), k2.push(["M", q4[1], q4[2]], ["L", K2[1], K2[2]], ["L", y2[1], y2[2]], ["L", L3[1], L3[2]], ["Z"]));
+                  k2.isFlat = h5;
+                }
+              }
+              return k2;
+            };
+            e3.prototype.addPlotBand = function(f2) {
+              return this.addPlotBandOrLine(f2, "plotBands");
+            };
+            e3.prototype.addPlotLine = function(f2) {
+              return this.addPlotBandOrLine(f2, "plotLines");
+            };
+            e3.prototype.addPlotBandOrLine = function(f2, d2) {
+              var a4 = this, e4 = this.userOptions, k2 = new z2(this, f2);
+              this.visible && (k2 = k2.render());
+              if (k2) {
+                this._addedPlotLB || (this._addedPlotLB = true, (e4.plotLines || []).concat(e4.plotBands || []).forEach(function(d3) {
+                  a4.addPlotBandOrLine(d3);
+                }));
+                if (d2) {
+                  var l3 = e4[d2] || [];
+                  l3.push(f2);
+                  e4[d2] = l3;
+                }
+                this.plotLinesAndBands.push(k2);
+              }
+              return k2;
+            };
+            e3.prototype.removePlotBandOrLine = function(f2) {
+              var d2 = this.plotLinesAndBands, a4 = this.options, e4 = this.userOptions;
+              if (d2) {
+                for (var k2 = d2.length; k2--; )
+                  d2[k2].id === f2 && d2[k2].destroy();
+                [a4.plotLines || [], e4.plotLines || [], a4.plotBands || [], e4.plotBands || []].forEach(function(a5) {
+                  for (k2 = a5.length; k2--; )
+                    (a5[k2] || {}).id === f2 && h4(a5, a5[k2]);
+                });
+              }
+            };
+            e3.prototype.removePlotBand = function(f2) {
+              this.removePlotBandOrLine(f2);
+            };
+            e3.prototype.removePlotLine = function(f2) {
+              this.removePlotBandOrLine(f2);
+            };
+            return e3;
+          }();
+        })(v || (v = {}));
+        return v;
+      });
+      M2(h3, "Core/Axis/PlotLineOrBand/PlotLineOrBand.js", [h3["Core/Axis/PlotLineOrBand/PlotLineOrBandAxis.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var A = h4.arrayMax, D3 = h4.arrayMin, v = h4.defined, H2 = h4.destroyObjectProperties, I2 = h4.erase, z2 = h4.fireEvent, q3 = h4.merge, l3 = h4.objectEach, f2 = h4.pick;
+        h4 = function() {
+          function d2(a4, d3) {
+            this.axis = a4;
+            d3 && (this.options = d3, this.id = d3.id);
+          }
+          d2.compose = function(a4) {
+            return e.compose(d2, a4);
+          };
+          d2.prototype.render = function() {
+            z2(this, "render");
+            var a4 = this, d3 = a4.axis, e2 = d3.horiz, h5 = d3.logarithmic, B = a4.options, J2 = B.color, K2 = f2(B.zIndex, 0), L3 = B.events, y2 = {}, C2 = d3.chart.renderer, x3 = B.label, c3 = a4.label, t2 = B.to, g2 = B.from, u4 = B.value, n2 = a4.svgElem, b3 = [], r3 = v(g2) && v(t2);
+            b3 = v(u4);
+            var G2 = !n2, m2 = { "class": "highcharts-plot-" + (r3 ? "band " : "line ") + (B.className || "") }, w2 = r3 ? "bands" : "lines";
+            h5 && (g2 = h5.log2lin(g2), t2 = h5.log2lin(t2), u4 = h5.log2lin(u4));
+            d3.chart.styledMode || (b3 ? (m2.stroke = J2 || "#999999", m2["stroke-width"] = f2(B.width, 1), B.dashStyle && (m2.dashstyle = B.dashStyle)) : r3 && (m2.fill = J2 || "#e6ebf5", B.borderWidth && (m2.stroke = B.borderColor, m2["stroke-width"] = B.borderWidth)));
+            y2.zIndex = K2;
+            w2 += "-" + K2;
+            (h5 = d3.plotLinesAndBandsGroups[w2]) || (d3.plotLinesAndBandsGroups[w2] = h5 = C2.g("plot-" + w2).attr(y2).add());
+            G2 && (a4.svgElem = n2 = C2.path().attr(m2).add(h5));
+            if (b3)
+              b3 = d3.getPlotLinePath({ value: u4, lineWidth: n2.strokeWidth(), acrossPanes: B.acrossPanes });
+            else if (r3)
+              b3 = d3.getPlotBandPath(g2, t2, B);
+            else
+              return;
+            !a4.eventsAdded && L3 && (l3(L3, function(b4, c4) {
+              n2.on(c4, function(b5) {
+                L3[c4].apply(a4, [b5]);
+              });
+            }), a4.eventsAdded = true);
+            (G2 || !n2.d) && b3 && b3.length ? n2.attr({ d: b3 }) : n2 && (b3 ? (n2.show(true), n2.animate({ d: b3 })) : n2.d && (n2.hide(), c3 && (a4.label = c3 = c3.destroy())));
+            x3 && (v(x3.text) || v(x3.formatter)) && b3 && b3.length && 0 < d3.width && 0 < d3.height && !b3.isFlat ? (x3 = q3({ align: e2 && r3 && "center", x: e2 ? !r3 && 4 : 10, verticalAlign: !e2 && r3 && "middle", y: e2 ? r3 ? 16 : 10 : r3 ? 6 : -4, rotation: e2 && !r3 && 90 }, x3), this.renderLabel(x3, b3, r3, K2)) : c3 && c3.hide();
+            return a4;
+          };
+          d2.prototype.renderLabel = function(a4, d3, f3, e2) {
+            var k2 = this.axis, l4 = k2.chart.renderer, p2 = this.label;
+            p2 || (this.label = p2 = l4.text(this.getLabelText(a4), 0, 0, a4.useHTML).attr({ align: a4.textAlign || a4.align, rotation: a4.rotation, "class": "highcharts-plot-" + (f3 ? "band" : "line") + "-label " + (a4.className || ""), zIndex: e2 }).add(), k2.chart.styledMode || p2.css(q3({ textOverflow: "ellipsis" }, a4.style)));
+            e2 = d3.xBounds || [d3[0][1], d3[1][1], f3 ? d3[2][1] : d3[0][1]];
+            d3 = d3.yBounds || [d3[0][2], d3[1][2], f3 ? d3[2][2] : d3[0][2]];
+            f3 = D3(e2);
+            l4 = D3(d3);
+            p2.align(a4, false, { x: f3, y: l4, width: A(e2) - f3, height: A(d3) - l4 });
+            p2.alignValue && p2.alignValue !== "left" || p2.css({ width: (p2.rotation === 90 ? k2.height - (p2.alignAttr.y - k2.top) : k2.width - (p2.alignAttr.x - k2.left)) + "px" });
+            p2.show(true);
+          };
+          d2.prototype.getLabelText = function(a4) {
+            return v(a4.formatter) ? a4.formatter.call(this) : a4.text;
+          };
+          d2.prototype.destroy = function() {
+            I2(this.axis.plotLinesAndBands, this);
+            delete this.axis;
+            H2(this);
+          };
+          return d2;
+        }();
+        "";
+        "";
+        return h4;
+      });
+      M2(h3, "Core/Tooltip.js", [h3["Core/FormatUtilities.js"], h3["Core/Globals.js"], h3["Core/Renderer/RendererUtilities.js"], h3["Core/Renderer/RendererRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v) {
+        var D3 = e.format, I2 = h4.doc, z2 = A.distribute, q3 = v.addEvent, l3 = v.clamp, f2 = v.css, d2 = v.defined, a4 = v.discardElement, p2 = v.extend, k2 = v.fireEvent, F2 = v.isArray, B = v.isNumber, J2 = v.isString, K2 = v.merge, L3 = v.pick, y2 = v.splat, C2 = v.syncTimeout;
+        e = function() {
+          function e2(c3, a5) {
+            this.allowShared = true;
+            this.container = void 0;
+            this.crosshairs = [];
+            this.distance = 0;
+            this.isHidden = true;
+            this.isSticky = false;
+            this.now = {};
+            this.options = {};
+            this.outside = false;
+            this.chart = c3;
+            this.init(c3, a5);
+          }
+          e2.prototype.applyFilter = function() {
+            var c3 = this.chart;
+            c3.renderer.definition({
+              tagName: "filter",
+              attributes: { id: "drop-shadow-" + c3.index, opacity: 0.5 },
+              children: [{ tagName: "feGaussianBlur", attributes: { "in": "SourceAlpha", stdDeviation: 1 } }, { tagName: "feOffset", attributes: { dx: 1, dy: 1 } }, { tagName: "feComponentTransfer", children: [{ tagName: "feFuncA", attributes: { type: "linear", slope: 0.3 } }] }, { tagName: "feMerge", children: [{ tagName: "feMergeNode" }, { tagName: "feMergeNode", attributes: { "in": "SourceGraphic" } }] }]
+            });
+          };
+          e2.prototype.bodyFormatter = function(c3) {
+            return c3.map(function(c4) {
+              var g2 = c4.series.tooltipOptions;
+              return (g2[(c4.point.formatPrefix || "point") + "Formatter"] || c4.point.tooltipFormatter).call(c4.point, g2[(c4.point.formatPrefix || "point") + "Format"] || "");
+            });
+          };
+          e2.prototype.cleanSplit = function(c3) {
+            this.chart.series.forEach(function(a5) {
+              var g2 = a5 && a5.tt;
+              g2 && (!g2.isActive || c3 ? a5.tt = g2.destroy() : g2.isActive = false);
+            });
+          };
+          e2.prototype.defaultFormatter = function(c3) {
+            var a5 = this.points || y2(this);
+            var g2 = [c3.tooltipFooterHeaderFormatter(a5[0])];
+            g2 = g2.concat(c3.bodyFormatter(a5));
+            g2.push(c3.tooltipFooterHeaderFormatter(a5[0], true));
+            return g2;
+          };
+          e2.prototype.destroy = function() {
+            this.label && (this.label = this.label.destroy());
+            this.split && this.tt && (this.cleanSplit(true), this.tt = this.tt.destroy());
+            this.renderer && (this.renderer = this.renderer.destroy(), a4(this.container));
+            v.clearTimeout(this.hideTimer);
+            v.clearTimeout(this.tooltipTimeout);
+          };
+          e2.prototype.getAnchor = function(c3, a5) {
+            var g2 = this.chart, d3 = g2.pointer, n2 = g2.inverted, b3 = g2.plotTop, r3 = g2.plotLeft, f3, m2, e3 = 0, t2 = 0;
+            c3 = y2(c3);
+            this.followPointer && a5 ? (typeof a5.chartX === "undefined" && (a5 = d3.normalize(a5)), d3 = [a5.chartX - r3, a5.chartY - b3]) : c3[0].tooltipPos ? d3 = c3[0].tooltipPos : (c3.forEach(function(c4) {
+              f3 = c4.series.yAxis;
+              m2 = c4.series.xAxis;
+              e3 += c4.plotX || 0;
+              t2 += c4.plotLow ? (c4.plotLow + (c4.plotHigh || 0)) / 2 : c4.plotY || 0;
+              m2 && f3 && (n2 ? (e3 += b3 + g2.plotHeight - m2.len - m2.pos, t2 += r3 + g2.plotWidth - f3.len - f3.pos) : (e3 += m2.pos - r3, t2 += f3.pos - b3));
+            }), e3 /= c3.length, t2 /= c3.length, d3 = [n2 ? g2.plotWidth - t2 : e3, n2 ? g2.plotHeight - e3 : t2], this.shared && 1 < c3.length && a5 && (n2 ? d3[0] = a5.chartX - r3 : d3[1] = a5.chartY - b3));
+            return d3.map(Math.round);
+          };
+          e2.prototype.getLabel = function() {
+            var c3 = this, a5 = this.chart.styledMode, g2 = this.options, u4 = this.split && this.allowShared, n2 = "tooltip" + (d2(g2.className) ? " " + g2.className : ""), b3 = g2.style.pointerEvents || (!this.followPointer && g2.stickOnContact ? "auto" : "none"), r3 = function() {
+              c3.inContact = true;
+            }, e3 = function(b4) {
+              var g3 = c3.chart.hoverSeries;
+              c3.inContact = c3.shouldStickOnContact() && c3.chart.pointer.inClass(b4.relatedTarget, "highcharts-tooltip");
+              if (!c3.inContact && g3 && g3.onMouseOut)
+                g3.onMouseOut();
+            }, m2, w2 = this.chart.renderer;
+            if (c3.label) {
+              var x3 = !c3.label.hasClass("highcharts-label");
+              (u4 && !x3 || !u4 && x3) && c3.destroy();
+            }
+            if (!this.label) {
+              if (this.outside) {
+                x3 = this.chart.options.chart.style;
+                var k3 = E3.getRendererType();
+                this.container = m2 = h4.doc.createElement("div");
+                m2.className = "highcharts-tooltip-container";
+                f2(m2, { position: "absolute", top: "1px", pointerEvents: b3, zIndex: Math.max(this.options.style.zIndex || 0, (x3 && x3.zIndex || 0) + 3) });
+                q3(m2, "mouseenter", r3);
+                q3(m2, "mouseleave", e3);
+                h4.doc.body.appendChild(m2);
+                this.renderer = w2 = new k3(m2, 0, 0, x3, void 0, void 0, w2.styledMode);
+              }
+              u4 ? this.label = w2.g(n2) : (this.label = w2.label("", 0, 0, g2.shape, void 0, void 0, g2.useHTML, void 0, n2).attr({ padding: g2.padding, r: g2.borderRadius }), a5 || this.label.attr({
+                fill: g2.backgroundColor,
+                "stroke-width": g2.borderWidth
+              }).css(g2.style).css({ pointerEvents: b3 }).shadow(g2.shadow));
+              a5 && g2.shadow && (this.applyFilter(), this.label.attr({ filter: "url(#drop-shadow-" + this.chart.index + ")" }));
+              if (c3.outside && !c3.split) {
+                var l4 = this.label, p3 = l4.xSetter, C3 = l4.ySetter;
+                l4.xSetter = function(b4) {
+                  p3.call(l4, c3.distance);
+                  m2.style.left = b4 + "px";
+                };
+                l4.ySetter = function(b4) {
+                  C3.call(l4, c3.distance);
+                  m2.style.top = b4 + "px";
+                };
+              }
+              this.label.on("mouseenter", r3).on("mouseleave", e3).attr({ zIndex: 8 }).add();
+            }
+            return this.label;
+          };
+          e2.prototype.getPosition = function(c3, a5, g2) {
+            var d3 = this.chart, n2 = this.distance, b3 = {}, r3 = d3.inverted && g2.h || 0, f3 = this.outside, m2 = f3 ? I2.documentElement.clientWidth - 2 * n2 : d3.chartWidth, e3 = f3 ? Math.max(I2.body.scrollHeight, I2.documentElement.scrollHeight, I2.body.offsetHeight, I2.documentElement.offsetHeight, I2.documentElement.clientHeight) : d3.chartHeight, t2 = d3.pointer.getChartPosition(), x3 = function(b4) {
+              var r4 = b4 === "x";
+              return [b4, r4 ? m2 : e3, r4 ? c3 : a5].concat(f3 ? [r4 ? c3 * t2.scaleX : a5 * t2.scaleY, r4 ? t2.left - n2 + (g2.plotX + d3.plotLeft) * t2.scaleX : t2.top - n2 + (g2.plotY + d3.plotTop) * t2.scaleY, 0, r4 ? m2 : e3] : [r4 ? c3 : a5, r4 ? g2.plotX + d3.plotLeft : g2.plotY + d3.plotTop, r4 ? d3.plotLeft : d3.plotTop, r4 ? d3.plotLeft + d3.plotWidth : d3.plotTop + d3.plotHeight]);
+            }, k3 = x3("y"), l4 = x3("x"), p3;
+            x3 = !!g2.negative;
+            !d3.polar && d3.hoverSeries && d3.hoverSeries.yAxis && d3.hoverSeries.yAxis.reversed && (x3 = !x3);
+            var C3 = !this.followPointer && L3(g2.ttBelow, !d3.inverted === x3), y3 = function(c4, g3, a6, m3, d4, u4, e4) {
+              var w2 = f3 ? c4 === "y" ? n2 * t2.scaleY : n2 * t2.scaleX : n2, G2 = (a6 - m3) / 2, x4 = m3 < d4 - n2, k4 = d4 + n2 + m3 < g3, l5 = d4 - w2 - a6 + G2;
+              d4 = d4 + w2 - G2;
+              if (C3 && k4)
+                b3[c4] = d4;
+              else if (!C3 && x4)
+                b3[c4] = l5;
+              else if (x4)
+                b3[c4] = Math.min(e4 - m3, 0 > l5 - r3 ? l5 : l5 - r3);
+              else if (k4)
+                b3[c4] = Math.max(u4, d4 + r3 + a6 > g3 ? d4 : d4 + r3);
+              else
+                return false;
+            }, h5 = function(c4, g3, a6, m3, d4) {
+              var r4;
+              d4 < n2 || d4 > g3 - n2 ? r4 = false : b3[c4] = d4 < a6 / 2 ? 1 : d4 > g3 - m3 / 2 ? g3 - m3 - 2 : d4 - a6 / 2;
+              return r4;
+            }, Q2 = function(b4) {
+              var c4 = k3;
+              k3 = l4;
+              l4 = c4;
+              p3 = b4;
+            }, q4 = function() {
+              y3.apply(0, k3) !== false ? h5.apply(0, l4) !== false || p3 || (Q2(true), q4()) : p3 ? b3.x = b3.y = 0 : (Q2(true), q4());
+            };
+            (d3.inverted || 1 < this.len) && Q2();
+            q4();
+            return b3;
+          };
+          e2.prototype.hide = function(c3) {
+            var a5 = this;
+            v.clearTimeout(this.hideTimer);
+            c3 = L3(c3, this.options.hideDelay);
+            this.isHidden || (this.hideTimer = C2(function() {
+              a5.getLabel().fadeOut(c3 ? void 0 : c3);
+              a5.isHidden = true;
+            }, c3));
+          };
+          e2.prototype.init = function(c3, a5) {
+            this.chart = c3;
+            this.options = a5;
+            this.crosshairs = [];
+            this.now = { x: 0, y: 0 };
+            this.isHidden = true;
+            this.split = a5.split && !c3.inverted && !c3.polar;
+            this.shared = a5.shared || this.split;
+            this.outside = L3(a5.outside, !(!c3.scrollablePixelsX && !c3.scrollablePixelsY));
+          };
+          e2.prototype.shouldStickOnContact = function() {
+            return !(this.followPointer || !this.options.stickOnContact);
+          };
+          e2.prototype.isStickyOnContact = function() {
+            return !(!this.shouldStickOnContact() || !this.inContact);
+          };
+          e2.prototype.move = function(c3, a5, g2, d3) {
+            var n2 = this, b3 = n2.now, r3 = n2.options.animation !== false && !n2.isHidden && (1 < Math.abs(c3 - b3.x) || 1 < Math.abs(a5 - b3.y)), f3 = n2.followPointer || 1 < n2.len;
+            p2(b3, { x: r3 ? (2 * b3.x + c3) / 3 : c3, y: r3 ? (b3.y + a5) / 2 : a5, anchorX: f3 ? void 0 : r3 ? (2 * b3.anchorX + g2) / 3 : g2, anchorY: f3 ? void 0 : r3 ? (b3.anchorY + d3) / 2 : d3 });
+            n2.getLabel().attr(b3);
+            n2.drawTracker();
+            r3 && (v.clearTimeout(this.tooltipTimeout), this.tooltipTimeout = setTimeout(function() {
+              n2 && n2.move(c3, a5, g2, d3);
+            }, 32));
+          };
+          e2.prototype.refresh = function(c3, a5) {
+            var g2 = this.chart, d3 = this.options, n2 = y2(c3), b3 = n2[0], r3 = [], f3 = d3.formatter || this.defaultFormatter, m2 = this.shared, e3 = g2.styledMode, x3 = {};
+            if (d3.enabled) {
+              v.clearTimeout(this.hideTimer);
+              this.allowShared = !(!F2(c3) && c3.series && c3.series.noSharedTooltip);
+              this.followPointer = !this.split && b3.series.tooltipOptions.followPointer;
+              c3 = this.getAnchor(c3, a5);
+              var t2 = c3[0], l4 = c3[1];
+              m2 && this.allowShared ? (g2.pointer.applyInactiveState(n2), n2.forEach(function(b4) {
+                b4.setState("hover");
+                r3.push(b4.getLabelConfig());
+              }), x3 = { x: b3.category, y: b3.y }, x3.points = r3) : x3 = b3.getLabelConfig();
+              this.len = r3.length;
+              f3 = f3.call(x3, this);
+              m2 = b3.series;
+              this.distance = L3(m2.tooltipOptions.distance, 16);
+              if (f3 === false)
+                this.hide();
+              else {
+                if (this.split && this.allowShared)
+                  this.renderSplit(f3, n2);
+                else {
+                  var p3 = t2, C3 = l4;
+                  a5 && g2.pointer.isDirectTouch && (p3 = a5.chartX - g2.plotLeft, C3 = a5.chartY - g2.plotTop);
+                  if (g2.polar || m2.options.clip === false || n2.some(function(b4) {
+                    return b4.series.shouldShowTooltip(p3, C3);
+                  }))
+                    a5 = this.getLabel(), d3.style.width && !e3 || a5.css({ width: this.chart.spacingBox.width + "px" }), a5.attr({ text: f3 && f3.join ? f3.join("") : f3 }), a5.removeClass(/highcharts-color-[\d]+/g).addClass("highcharts-color-" + L3(b3.colorIndex, m2.colorIndex)), e3 || a5.attr({ stroke: d3.borderColor || b3.color || m2.color || "#666666" }), this.updatePosition({
+                      plotX: t2,
+                      plotY: l4,
+                      negative: b3.negative,
+                      ttBelow: b3.ttBelow,
+                      h: c3[2] || 0
+                    });
+                  else {
+                    this.hide();
+                    return;
+                  }
+                }
+                this.isHidden && this.label && this.label.attr({ opacity: 1 }).show();
+                this.isHidden = false;
+              }
+              k2(this, "refresh");
+            }
+          };
+          e2.prototype.renderSplit = function(c3, a5) {
+            function g2(b4, c4, g3, a6, m3) {
+              m3 === void 0 && (m3 = true);
+              g3 ? (c4 = A2 ? 0 : ea, b4 = l3(b4 - a6 / 2, R.left, R.right - a6 - (d3.outside ? D4 : 0))) : (c4 -= H2, b4 = m3 ? b4 - a6 - B2 : b4 + B2, b4 = l3(b4, m3 ? b4 : R.left, R.right));
+              return { x: b4, y: c4 };
+            }
+            var d3 = this, n2 = d3.chart, b3 = d3.chart, r3 = b3.chartWidth, f3 = b3.chartHeight, m2 = b3.plotHeight, e3 = b3.plotLeft, x3 = b3.plotTop, t2 = b3.pointer, k3 = b3.scrollablePixelsY;
+            k3 = k3 === void 0 ? 0 : k3;
+            var C3 = b3.scrollablePixelsX, y3 = b3.scrollingContainer;
+            y3 = y3 === void 0 ? { scrollLeft: 0, scrollTop: 0 } : y3;
+            var h5 = y3.scrollLeft;
+            y3 = y3.scrollTop;
+            var q4 = b3.styledMode, B2 = d3.distance, Q2 = d3.options, F3 = d3.options.positioner, R = d3.outside && typeof C3 !== "number" ? I2.documentElement.getBoundingClientRect() : { left: h5, right: h5 + r3, top: y3, bottom: y3 + f3 }, K3 = d3.getLabel(), v2 = this.renderer || n2.renderer, A2 = !(!n2.xAxis[0] || !n2.xAxis[0].opposite);
+            n2 = t2.getChartPosition();
+            var D4 = n2.left;
+            n2 = n2.top;
+            var H2 = x3 + y3, E4 = 0, ea = m2 - k3;
+            J2(c3) && (c3 = [false, c3]);
+            c3 = c3.slice(0, a5.length + 1).reduce(function(b4, c4, n3) {
+              if (c4 !== false && c4 !== "") {
+                n3 = a5[n3 - 1] || { isHeader: true, plotX: a5[0].plotX, plotY: m2, series: {} };
+                var r4 = n3.isHeader, f4 = r4 ? d3 : n3.series;
+                c4 = c4.toString();
+                var u4 = f4.tt, w2 = n3.isHeader;
+                var t3 = n3.series;
+                var G2 = "highcharts-color-" + L3(n3.colorIndex, t3.colorIndex, "none");
+                u4 || (u4 = { padding: Q2.padding, r: Q2.borderRadius }, q4 || (u4.fill = Q2.backgroundColor, u4["stroke-width"] = Q2.borderWidth), u4 = v2.label("", 0, 0, Q2[w2 ? "headerShape" : "shape"], void 0, void 0, Q2.useHTML).addClass((w2 ? "highcharts-tooltip-header " : "") + "highcharts-tooltip-box " + G2).attr(u4).add(K3));
+                u4.isActive = true;
+                u4.attr({ text: c4 });
+                q4 || u4.css(Q2.style).shadow(Q2.shadow).attr({ stroke: Q2.borderColor || n3.color || t3.color || "#333333" });
+                f4 = f4.tt = u4;
+                w2 = f4.getBBox();
+                c4 = w2.width + f4.strokeWidth();
+                r4 && (E4 = w2.height, ea += E4, A2 && (H2 -= E4));
+                t3 = n3.plotX;
+                t3 = t3 === void 0 ? 0 : t3;
+                G2 = n3.plotY;
+                G2 = G2 === void 0 ? 0 : G2;
+                u4 = n3.series;
+                if (n3.isHeader) {
+                  t3 = e3 + t3;
+                  var k4 = x3 + m2 / 2;
+                } else {
+                  var C4 = u4.xAxis, p3 = u4.yAxis;
+                  t3 = C4.pos + l3(t3, -B2, C4.len + B2);
+                  u4.shouldShowTooltip(0, p3.pos - x3 + G2, { ignoreX: true }) && (k4 = p3.pos + G2);
+                }
+                t3 = l3(t3, R.left - B2, R.right + B2);
+                typeof k4 === "number" ? (w2 = w2.height + 1, G2 = F3 ? F3.call(d3, c4, w2, n3) : g2(t3, k4, r4, c4), b4.push({ align: F3 ? 0 : void 0, anchorX: t3, anchorY: k4, boxWidth: c4, point: n3, rank: L3(G2.rank, r4 ? 1 : 0), size: w2, target: G2.y, tt: f4, x: G2.x })) : f4.isActive = false;
+              }
+              return b4;
+            }, []);
+            !F3 && c3.some(function(b4) {
+              var c4 = (d3.outside ? D4 : 0) + b4.anchorX;
+              return c4 < R.left && c4 + b4.boxWidth < R.right ? true : c4 < D4 - R.left + b4.boxWidth && R.right - c4 > c4;
+            }) && (c3 = c3.map(function(b4) {
+              var c4 = g2(b4.anchorX, b4.anchorY, b4.point.isHeader, b4.boxWidth, false);
+              return p2(b4, { target: c4.y, x: c4.x });
+            }));
+            d3.cleanSplit();
+            z2(c3, ea);
+            var M3 = D4, Y = D4;
+            c3.forEach(function(b4) {
+              var c4 = b4.x, g3 = b4.boxWidth;
+              b4 = b4.isHeader;
+              b4 || (d3.outside && D4 + c4 < M3 && (M3 = D4 + c4), !b4 && d3.outside && M3 + g3 > Y && (Y = D4 + c4));
+            });
+            c3.forEach(function(b4) {
+              var c4 = b4.x, g3 = b4.anchorX, a6 = b4.pos, m3 = b4.point.isHeader;
+              a6 = { visibility: typeof a6 === "undefined" ? "hidden" : "inherit", x: c4, y: a6 + H2, anchorX: g3, anchorY: b4.anchorY };
+              if (d3.outside && c4 < g3) {
+                var n3 = D4 - M3;
+                0 < n3 && (m3 || (a6.x = c4 + n3, a6.anchorX = g3 + n3), m3 && (a6.x = (Y - M3) / 2, a6.anchorX = g3 + n3));
+              }
+              b4.tt.attr(a6);
+            });
+            c3 = d3.container;
+            k3 = d3.renderer;
+            d3.outside && c3 && k3 && (b3 = K3.getBBox(), k3.setSize(b3.width + b3.x, b3.height + b3.y, false), c3.style.left = M3 + "px", c3.style.top = n2 + "px");
+          };
+          e2.prototype.drawTracker = function() {
+            if (this.followPointer || !this.options.stickOnContact)
+              this.tracker && this.tracker.destroy();
+            else {
+              var c3 = this.chart, a5 = this.label, g2 = this.shared ? c3.hoverPoints : c3.hoverPoint;
+              if (a5 && g2) {
+                var d3 = { x: 0, y: 0, width: 0, height: 0 };
+                g2 = this.getAnchor(g2);
+                var n2 = a5.getBBox();
+                g2[0] += c3.plotLeft - a5.translateX;
+                g2[1] += c3.plotTop - a5.translateY;
+                d3.x = Math.min(0, g2[0]);
+                d3.y = Math.min(0, g2[1]);
+                d3.width = 0 > g2[0] ? Math.max(Math.abs(g2[0]), n2.width - g2[0]) : Math.max(Math.abs(g2[0]), n2.width);
+                d3.height = 0 > g2[1] ? Math.max(Math.abs(g2[1]), n2.height - Math.abs(g2[1])) : Math.max(Math.abs(g2[1]), n2.height);
+                this.tracker ? this.tracker.attr(d3) : (this.tracker = a5.renderer.rect(d3).addClass("highcharts-tracker").add(a5), c3.styledMode || this.tracker.attr({ fill: "rgba(0,0,0,0)" }));
+              }
+            }
+          };
+          e2.prototype.styledModeFormat = function(c3) {
+            return c3.replace('style="font-size: 10px"', 'class="highcharts-header"').replace(/style="color:{(point|series)\.color}"/g, 'class="highcharts-color-{$1.colorIndex}"');
+          };
+          e2.prototype.tooltipFooterHeaderFormatter = function(c3, a5) {
+            var g2 = c3.series, d3 = g2.tooltipOptions, n2 = g2.xAxis, b3 = n2 && n2.dateTime;
+            n2 = {
+              isFooter: a5,
+              labelConfig: c3
+            };
+            var r3 = d3.xDateFormat, f3 = d3[a5 ? "footerFormat" : "headerFormat"];
+            k2(this, "headerFormatter", n2, function(a6) {
+              b3 && !r3 && B(c3.key) && (r3 = b3.getXDateFormat(c3.key, d3.dateTimeLabelFormats));
+              b3 && r3 && (c3.point && c3.point.tooltipDateKeys || ["key"]).forEach(function(b4) {
+                f3 = f3.replace("{point." + b4 + "}", "{point." + b4 + ":" + r3 + "}");
+              });
+              g2.chart.styledMode && (f3 = this.styledModeFormat(f3));
+              a6.text = D3(f3, { point: c3, series: g2 }, this.chart);
+            });
+            return n2.text;
+          };
+          e2.prototype.update = function(c3) {
+            this.destroy();
+            K2(true, this.chart.options.tooltip.userOptions, c3);
+            this.init(this.chart, K2(true, this.options, c3));
+          };
+          e2.prototype.updatePosition = function(c3) {
+            var a5 = this.chart, g2 = this.options, d3 = a5.pointer, n2 = this.getLabel();
+            d3 = d3.getChartPosition();
+            var b3 = (g2.positioner || this.getPosition).call(this, n2.width, n2.height, c3), r3 = c3.plotX + a5.plotLeft;
+            c3 = c3.plotY + a5.plotTop;
+            if (this.outside) {
+              g2 = g2.borderWidth + 2 * this.distance;
+              this.renderer.setSize(n2.width + g2, n2.height + g2, false);
+              if (d3.scaleX !== 1 || d3.scaleY !== 1)
+                f2(this.container, { transform: "scale(" + d3.scaleX + ", " + d3.scaleY + ")" }), r3 *= d3.scaleX, c3 *= d3.scaleY;
+              r3 += d3.left - b3.x;
+              c3 += d3.top - b3.y;
+            }
+            this.move(Math.round(b3.x), Math.round(b3.y || 0), r3, c3);
+          };
+          return e2;
+        }();
+        "";
+        return e;
+      });
+      M2(h3, "Core/Series/Point.js", [h3["Core/Renderer/HTML/AST.js"], h3["Core/Animation/AnimationUtilities.js"], h3["Core/DefaultOptions.js"], h3["Core/FormatUtilities.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v) {
+        var D3 = h4.animObject, I2 = A.defaultOptions, z2 = E3.format, q3 = v.addEvent, l3 = v.defined, f2 = v.erase, d2 = v.extend, a4 = v.fireEvent, p2 = v.getNestedProperty, k2 = v.isArray, F2 = v.isFunction, B = v.isNumber, J2 = v.isObject, K2 = v.merge, L3 = v.objectEach, y2 = v.pick, C2 = v.syncTimeout, x3 = v.removeEvent, c3 = v.uniqueKey;
+        h4 = function() {
+          function t2() {
+            this.colorIndex = this.category = void 0;
+            this.formatPrefix = "point";
+            this.id = void 0;
+            this.isNull = false;
+            this.percentage = this.options = this.name = void 0;
+            this.selected = false;
+            this.total = this.series = void 0;
+            this.visible = true;
+            this.x = void 0;
+          }
+          t2.prototype.animateBeforeDestroy = function() {
+            var c4 = this, a5 = { x: c4.startXPos, opacity: 0 }, n2 = c4.getGraphicalProps();
+            n2.singular.forEach(function(b3) {
+              c4[b3] = c4[b3].animate(b3 === "dataLabel" ? {
+                x: c4[b3].startXPos,
+                y: c4[b3].startYPos,
+                opacity: 0
+              } : a5);
+            });
+            n2.plural.forEach(function(b3) {
+              c4[b3].forEach(function(b4) {
+                b4.element && b4.animate(d2({ x: c4.startXPos }, b4.startYPos ? { x: b4.startXPos, y: b4.startYPos } : {}));
+              });
+            });
+          };
+          t2.prototype.applyOptions = function(c4, a5) {
+            var g2 = this.series, b3 = g2.options.pointValKey || g2.pointValKey;
+            c4 = t2.prototype.optionsToObject.call(this, c4);
+            d2(this, c4);
+            this.options = this.options ? d2(this.options, c4) : c4;
+            c4.group && delete this.group;
+            c4.dataLabels && delete this.dataLabels;
+            b3 && (this.y = t2.prototype.getNestedProperty.call(this, b3));
+            this.formatPrefix = (this.isNull = y2(this.isValid && !this.isValid(), this.x === null || !B(this.y))) ? "null" : "point";
+            this.selected && (this.state = "select");
+            "name" in this && typeof a5 === "undefined" && g2.xAxis && g2.xAxis.hasNames && (this.x = g2.xAxis.nameToX(this));
+            typeof this.x === "undefined" && g2 ? this.x = typeof a5 === "undefined" ? g2.autoIncrement() : a5 : B(c4.x) && g2.options.relativeXValue && (this.x = g2.autoIncrement(c4.x));
+            return this;
+          };
+          t2.prototype.destroy = function() {
+            function c4() {
+              if (a5.graphic || a5.dataLabel || a5.dataLabels)
+                x3(a5), a5.destroyElements();
+              for (m2 in a5)
+                a5[m2] = null;
+            }
+            var a5 = this, d3 = a5.series, b3 = d3.chart;
+            d3 = d3.options.dataSorting;
+            var r3 = b3.hoverPoints, e2 = D3(a5.series.chart.renderer.globalAnimation), m2;
+            a5.legendItem && b3.legend.destroyItem(a5);
+            r3 && (a5.setState(), f2(r3, a5), r3.length || (b3.hoverPoints = null));
+            if (a5 === b3.hoverPoint)
+              a5.onMouseOut();
+            d3 && d3.enabled ? (this.animateBeforeDestroy(), C2(c4, e2.duration)) : c4();
+            b3.pointCount--;
+          };
+          t2.prototype.destroyElements = function(c4) {
+            var g2 = this;
+            c4 = g2.getGraphicalProps(c4);
+            c4.singular.forEach(function(c5) {
+              g2[c5] = g2[c5].destroy();
+            });
+            c4.plural.forEach(function(c5) {
+              g2[c5].forEach(function(b3) {
+                b3.element && b3.destroy();
+              });
+              delete g2[c5];
+            });
+          };
+          t2.prototype.firePointEvent = function(c4, d3, n2) {
+            var b3 = this, g2 = this.series.options;
+            (g2.point.events[c4] || b3.options && b3.options.events && b3.options.events[c4]) && b3.importEvents();
+            c4 === "click" && g2.allowPointSelect && (n2 = function(c5) {
+              b3.select && b3.select(null, c5.ctrlKey || c5.metaKey || c5.shiftKey);
+            });
+            a4(b3, c4, d3, n2);
+          };
+          t2.prototype.getClassName = function() {
+            return "highcharts-point" + (this.selected ? " highcharts-point-select" : "") + (this.negative ? " highcharts-negative" : "") + (this.isNull ? " highcharts-null-point" : "") + (typeof this.colorIndex !== "undefined" ? " highcharts-color-" + this.colorIndex : "") + (this.options.className ? " " + this.options.className : "") + (this.zone && this.zone.className ? " " + this.zone.className.replace("highcharts-negative", "") : "");
+          };
+          t2.prototype.getGraphicalProps = function(c4) {
+            var g2 = this, a5 = [], b3 = { singular: [], plural: [] }, d3;
+            c4 = c4 || { graphic: 1, dataLabel: 1 };
+            c4.graphic && a5.push("graphic", "upperGraphic", "shadowGroup");
+            c4.dataLabel && a5.push("dataLabel", "dataLabelUpper", "connector");
+            for (d3 = a5.length; d3--; ) {
+              var f3 = a5[d3];
+              g2[f3] && b3.singular.push(f3);
+            }
+            ["dataLabel", "connector"].forEach(function(a6) {
+              var d4 = a6 + "s";
+              c4[a6] && g2[d4] && b3.plural.push(d4);
+            });
+            return b3;
+          };
+          t2.prototype.getLabelConfig = function() {
+            return { x: this.category, y: this.y, color: this.color, colorIndex: this.colorIndex, key: this.name || this.category, series: this.series, point: this, percentage: this.percentage, total: this.total || this.stackTotal };
+          };
+          t2.prototype.getNestedProperty = function(c4) {
+            if (c4)
+              return c4.indexOf("custom.") === 0 ? p2(c4, this.options) : this[c4];
+          };
+          t2.prototype.getZone = function() {
+            var c4 = this.series, a5 = c4.zones;
+            c4 = c4.zoneAxis || "y";
+            var d3, b3 = 0;
+            for (d3 = a5[b3]; this[c4] >= d3.value; )
+              d3 = a5[++b3];
+            this.nonZonedColor || (this.nonZonedColor = this.color);
+            this.color = d3 && d3.color && !this.options.color ? d3.color : this.nonZonedColor;
+            return d3;
+          };
+          t2.prototype.hasNewShapeType = function() {
+            return (this.graphic && (this.graphic.symbolName || this.graphic.element.nodeName)) !== this.shapeType;
+          };
+          t2.prototype.init = function(g2, d3, n2) {
+            this.series = g2;
+            this.applyOptions(d3, n2);
+            this.id = l3(this.id) ? this.id : c3();
+            this.resolveColor();
+            g2.chart.pointCount++;
+            a4(this, "afterInit");
+            return this;
+          };
+          t2.prototype.optionsToObject = function(c4) {
+            var g2 = this.series, a5 = g2.options.keys, b3 = a5 || g2.pointArrayMap || ["y"], d3 = b3.length, f3 = {}, m2 = 0, e2 = 0;
+            if (B(c4) || c4 === null)
+              f3[b3[0]] = c4;
+            else if (k2(c4))
+              for (!a5 && c4.length > d3 && (g2 = typeof c4[0], g2 === "string" ? f3.name = c4[0] : g2 === "number" && (f3.x = c4[0]), m2++); e2 < d3; )
+                a5 && typeof c4[m2] === "undefined" || (0 < b3[e2].indexOf(".") ? t2.prototype.setNestedProperty(f3, c4[m2], b3[e2]) : f3[b3[e2]] = c4[m2]), m2++, e2++;
+            else
+              typeof c4 === "object" && (f3 = c4, c4.dataLabels && (g2._hasPointLabels = true), c4.marker && (g2._hasPointMarkers = true));
+            return f3;
+          };
+          t2.prototype.resolveColor = function() {
+            var c4 = this.series, a5 = c4.chart.styledMode;
+            var d3 = c4.chart.options.chart.colorCount;
+            delete this.nonZonedColor;
+            if (c4.options.colorByPoint) {
+              if (!a5) {
+                d3 = c4.options.colors || c4.chart.options.colors;
+                var b3 = d3[c4.colorCounter];
+                d3 = d3.length;
+              }
+              a5 = c4.colorCounter;
+              c4.colorCounter++;
+              c4.colorCounter === d3 && (c4.colorCounter = 0);
+            } else
+              a5 || (b3 = c4.color), a5 = c4.colorIndex;
+            this.colorIndex = y2(this.options.colorIndex, a5);
+            this.color = y2(this.options.color, b3);
+          };
+          t2.prototype.setNestedProperty = function(c4, a5, d3) {
+            d3.split(".").reduce(function(b3, c5, g2, d4) {
+              b3[c5] = d4.length - 1 === g2 ? a5 : J2(b3[c5], true) ? b3[c5] : {};
+              return b3[c5];
+            }, c4);
+            return c4;
+          };
+          t2.prototype.tooltipFormatter = function(c4) {
+            var g2 = this.series, a5 = g2.tooltipOptions, b3 = y2(a5.valueDecimals, ""), d3 = a5.valuePrefix || "", f3 = a5.valueSuffix || "";
+            g2.chart.styledMode && (c4 = g2.chart.tooltip.styledModeFormat(c4));
+            (g2.pointArrayMap || ["y"]).forEach(function(g3) {
+              g3 = "{point." + g3;
+              if (d3 || f3)
+                c4 = c4.replace(RegExp(g3 + "}", "g"), d3 + g3 + "}" + f3);
+              c4 = c4.replace(RegExp(g3 + "}", "g"), g3 + ":,." + b3 + "f}");
+            });
+            return z2(c4, { point: this, series: this.series }, g2.chart);
+          };
+          t2.prototype.update = function(c4, a5, d3, b3) {
+            function g2() {
+              n2.applyOptions(c4);
+              var b4 = f3 && n2.hasDummyGraphic;
+              b4 = n2.y === null ? !b4 : b4;
+              f3 && b4 && (n2.graphic = f3.destroy(), delete n2.hasDummyGraphic);
+              J2(c4, true) && (f3 && f3.element && c4 && c4.marker && typeof c4.marker.symbol !== "undefined" && (n2.graphic = f3.destroy()), c4 && c4.dataLabels && n2.dataLabel && (n2.dataLabel = n2.dataLabel.destroy()), n2.connector && (n2.connector = n2.connector.destroy()));
+              x4 = n2.index;
+              m2.updateParallelArrays(n2, x4);
+              u4.data[x4] = J2(u4.data[x4], true) || J2(c4, true) ? n2.options : y2(c4, u4.data[x4]);
+              m2.isDirty = m2.isDirtyData = true;
+              !m2.fixedBox && m2.hasCartesianSeries && (e2.isDirtyBox = true);
+              u4.legendType === "point" && (e2.isDirtyLegend = true);
+              a5 && e2.redraw(d3);
+            }
+            var n2 = this, m2 = n2.series, f3 = n2.graphic, e2 = m2.chart, u4 = m2.options, x4;
+            a5 = y2(a5, true);
+            b3 === false ? g2() : n2.firePointEvent("update", { options: c4 }, g2);
+          };
+          t2.prototype.remove = function(c4, a5) {
+            this.series.removePoint(this.series.data.indexOf(this), c4, a5);
+          };
+          t2.prototype.select = function(c4, a5) {
+            var g2 = this, b3 = g2.series, d3 = b3.chart;
+            this.selectedStaging = c4 = y2(c4, !g2.selected);
+            g2.firePointEvent(c4 ? "select" : "unselect", { accumulate: a5 }, function() {
+              g2.selected = g2.options.selected = c4;
+              b3.options.data[b3.data.indexOf(g2)] = g2.options;
+              g2.setState(c4 && "select");
+              a5 || d3.getSelectedPoints().forEach(function(b4) {
+                var c5 = b4.series;
+                b4.selected && b4 !== g2 && (b4.selected = b4.options.selected = false, c5.options.data[c5.data.indexOf(b4)] = b4.options, b4.setState(d3.hoverPoints && c5.options.inactiveOtherPoints ? "inactive" : ""), b4.firePointEvent("unselect"));
+              });
+            });
+            delete this.selectedStaging;
+          };
+          t2.prototype.onMouseOver = function(c4) {
+            var a5 = this.series.chart, g2 = a5.pointer;
+            c4 = c4 ? g2.normalize(c4) : g2.getChartCoordinatesFromPoint(this, a5.inverted);
+            g2.runPointActions(c4, this);
+          };
+          t2.prototype.onMouseOut = function() {
+            var c4 = this.series.chart;
+            this.firePointEvent("mouseOut");
+            this.series.options.inactiveOtherPoints || (c4.hoverPoints || []).forEach(function(c5) {
+              c5.setState();
+            });
+            c4.hoverPoints = c4.hoverPoint = null;
+          };
+          t2.prototype.importEvents = function() {
+            if (!this.hasImportedEvents) {
+              var c4 = this, a5 = K2(c4.series.options.point, c4.options).events;
+              c4.events = a5;
+              L3(a5, function(a6, b3) {
+                F2(a6) && q3(c4, b3, a6);
+              });
+              this.hasImportedEvents = true;
+            }
+          };
+          t2.prototype.setState = function(c4, f3) {
+            var g2 = this.series, b3 = this.state, r3 = g2.options.states[c4 || "normal"] || {}, u4 = I2.plotOptions[g2.type].marker && g2.options.marker, m2 = u4 && u4.enabled === false, w2 = u4 && u4.states && u4.states[c4 || "normal"] || {}, x4 = w2.enabled === false, k3 = this.marker || {}, t3 = g2.chart, l4 = u4 && g2.markerAttribs, C3 = g2.halo, p3, h5 = g2.stateMarkerGraphic;
+            c4 = c4 || "";
+            if (!(c4 === this.state && !f3 || this.selected && c4 !== "select" || r3.enabled === false || c4 && (x4 || m2 && w2.enabled === false) || c4 && k3.states && k3.states[c4] && k3.states[c4].enabled === false)) {
+              this.state = c4;
+              l4 && (p3 = g2.markerAttribs(this, c4));
+              if (this.graphic && !this.hasDummyGraphic) {
+                b3 && this.graphic.removeClass("highcharts-point-" + b3);
+                c4 && this.graphic.addClass("highcharts-point-" + c4);
+                if (!t3.styledMode) {
+                  var q4 = g2.pointAttribs(this, c4);
+                  var Q2 = y2(t3.options.chart.animation, r3.animation);
+                  g2.options.inactiveOtherPoints && B(q4.opacity) && ((this.dataLabels || []).forEach(function(b4) {
+                    b4 && b4.animate({ opacity: q4.opacity }, Q2);
+                  }), this.connector && this.connector.animate({ opacity: q4.opacity }, Q2));
+                  this.graphic.animate(q4, Q2);
+                }
+                p3 && this.graphic.animate(p3, y2(t3.options.chart.animation, w2.animation, u4.animation));
+                h5 && h5.hide();
+              } else {
+                if (c4 && w2) {
+                  b3 = k3.symbol || g2.symbol;
+                  h5 && h5.currentSymbol !== b3 && (h5 = h5.destroy());
+                  if (p3)
+                    if (h5)
+                      h5[f3 ? "animate" : "attr"]({ x: p3.x, y: p3.y });
+                    else
+                      b3 && (g2.stateMarkerGraphic = h5 = t3.renderer.symbol(b3, p3.x, p3.y, p3.width, p3.height).add(g2.markerGroup), h5.currentSymbol = b3);
+                  !t3.styledMode && h5 && this.state !== "inactive" && h5.attr(g2.pointAttribs(this, c4));
+                }
+                h5 && (h5[c4 && this.isInside ? "show" : "hide"](), h5.element.point = this, h5.addClass(this.getClassName(), true));
+              }
+              r3 = r3.halo;
+              p3 = (h5 = this.graphic || h5) && h5.visibility || "inherit";
+              r3 && r3.size && h5 && p3 !== "hidden" && !this.isCluster ? (C3 || (g2.halo = C3 = t3.renderer.path().add(h5.parentGroup)), C3.show()[f3 ? "animate" : "attr"]({ d: this.haloPath(r3.size) }), C3.attr({ "class": "highcharts-halo highcharts-color-" + y2(this.colorIndex, g2.colorIndex) + (this.className ? " " + this.className : ""), visibility: p3, zIndex: -1 }), C3.point = this, t3.styledMode || C3.attr(d2({ fill: this.color || g2.color, "fill-opacity": r3.opacity }, e.filterUserAttributes(r3.attributes || {})))) : C3 && C3.point && C3.point.haloPath && C3.animate({ d: C3.point.haloPath(0) }, null, C3.hide);
+              a4(this, "afterSetState", { state: c4 });
+            }
+          };
+          t2.prototype.haloPath = function(c4) {
+            return this.series.chart.renderer.symbols.circle(Math.floor(this.plotX) - c4, this.plotY - c4, 2 * c4, 2 * c4);
+          };
+          return t2;
+        }();
+        "";
+        return h4;
+      });
+      M2(h3, "Core/Pointer.js", [h3["Core/Color/Color.js"], h3["Core/Globals.js"], h3["Core/Tooltip.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3) {
+        var v = e.parse, D3 = h4.charts, I2 = h4.noop, z2 = E3.addEvent, q3 = E3.attr, l3 = E3.css, f2 = E3.defined, d2 = E3.extend, a4 = E3.find, p2 = E3.fireEvent, k2 = E3.isNumber, F2 = E3.isObject, B = E3.objectEach, J2 = E3.offset, K2 = E3.pick, L3 = E3.splat;
+        e = function() {
+          function e2(a5, d3) {
+            this.lastValidTouch = {};
+            this.pinchDown = [];
+            this.runChartClick = false;
+            this.eventsToUnbind = [];
+            this.chart = a5;
+            this.hasDragged = false;
+            this.options = d3;
+            this.init(a5, d3);
+          }
+          e2.prototype.applyInactiveState = function(a5) {
+            var d3 = [], c3;
+            (a5 || []).forEach(function(a6) {
+              c3 = a6.series;
+              d3.push(c3);
+              c3.linkedParent && d3.push(c3.linkedParent);
+              c3.linkedSeries && (d3 = d3.concat(c3.linkedSeries));
+              c3.navigatorSeries && d3.push(c3.navigatorSeries);
+            });
+            this.chart.series.forEach(function(c4) {
+              d3.indexOf(c4) === -1 ? c4.setState("inactive", true) : c4.options.inactiveOtherPoints && c4.setAllPointsToState("inactive");
+            });
+          };
+          e2.prototype.destroy = function() {
+            var a5 = this;
+            this.eventsToUnbind.forEach(function(a6) {
+              return a6();
+            });
+            this.eventsToUnbind = [];
+            h4.chartCount || (e2.unbindDocumentMouseUp && (e2.unbindDocumentMouseUp = e2.unbindDocumentMouseUp()), e2.unbindDocumentTouchEnd && (e2.unbindDocumentTouchEnd = e2.unbindDocumentTouchEnd()));
+            clearInterval(a5.tooltipTimeout);
+            B(a5, function(d3, c3) {
+              a5[c3] = void 0;
+            });
+          };
+          e2.prototype.drag = function(a5) {
+            var d3 = this.chart, c3 = d3.options.chart, f3 = this.zoomHor, g2 = this.zoomVert, e3 = d3.plotLeft, n2 = d3.plotTop, b3 = d3.plotWidth, r3 = d3.plotHeight, k3 = this.mouseDownX || 0, m2 = this.mouseDownY || 0, w2 = F2(c3.panning) ? c3.panning && c3.panning.enabled : c3.panning, l4 = c3.panKey && a5[c3.panKey + "Key"], p3 = a5.chartX, C2 = a5.chartY, h5 = this.selectionMarker;
+            if (!h5 || !h5.touch) {
+              if (p3 < e3 ? p3 = e3 : p3 > e3 + b3 && (p3 = e3 + b3), C2 < n2 ? C2 = n2 : C2 > n2 + r3 && (C2 = n2 + r3), this.hasDragged = Math.sqrt(Math.pow(k3 - p3, 2) + Math.pow(m2 - C2, 2)), 10 < this.hasDragged) {
+                var y2 = d3.isInsidePlot(k3 - e3, m2 - n2, { visiblePlotOnly: true });
+                !d3.hasCartesianSeries && !d3.mapView || !this.zoomX && !this.zoomY || !y2 || l4 || h5 || (this.selectionMarker = h5 = d3.renderer.rect(e3, n2, f3 ? 1 : b3, g2 ? 1 : r3, 0).attr({ "class": "highcharts-selection-marker", zIndex: 7 }).add(), d3.styledMode || h5.attr({ fill: c3.selectionMarkerFill || v("#335cad").setOpacity(0.25).get() }));
+                h5 && f3 && (f3 = p3 - k3, h5.attr({ width: Math.abs(f3), x: (0 < f3 ? 0 : f3) + k3 }));
+                h5 && g2 && (f3 = C2 - m2, h5.attr({ height: Math.abs(f3), y: (0 < f3 ? 0 : f3) + m2 }));
+                y2 && !h5 && w2 && d3.pan(a5, c3.panning);
+              }
+            }
+          };
+          e2.prototype.dragStart = function(a5) {
+            var d3 = this.chart;
+            d3.mouseIsDown = a5.type;
+            d3.cancelClick = false;
+            d3.mouseDownX = this.mouseDownX = a5.chartX;
+            d3.mouseDownY = this.mouseDownY = a5.chartY;
+          };
+          e2.prototype.drop = function(a5) {
+            var e3 = this, c3 = this.chart, t2 = this.hasPinched;
+            if (this.selectionMarker) {
+              var g2 = this.selectionMarker, u4 = g2.attr ? g2.attr("x") : g2.x, n2 = g2.attr ? g2.attr("y") : g2.y, b3 = g2.attr ? g2.attr("width") : g2.width, r3 = g2.attr ? g2.attr("height") : g2.height, G2 = { originalEvent: a5, xAxis: [], yAxis: [], x: u4, y: n2, width: b3, height: r3 }, m2 = !!c3.mapView;
+              if (this.hasDragged || t2)
+                c3.axes.forEach(function(c4) {
+                  if (c4.zoomEnabled && f2(c4.min) && (t2 || e3[{ xAxis: "zoomX", yAxis: "zoomY" }[c4.coll]]) && k2(u4) && k2(n2)) {
+                    var g3 = c4.horiz, d3 = a5.type === "touchend" ? c4.minPixelPadding : 0, w2 = c4.toValue((g3 ? u4 : n2) + d3);
+                    g3 = c4.toValue((g3 ? u4 + b3 : n2 + r3) - d3);
+                    G2[c4.coll].push({ axis: c4, min: Math.min(w2, g3), max: Math.max(w2, g3) });
+                    m2 = true;
+                  }
+                }), m2 && p2(c3, "selection", G2, function(b4) {
+                  c3.zoom(d2(b4, t2 ? { animation: false } : null));
+                });
+              k2(c3.index) && (this.selectionMarker = this.selectionMarker.destroy());
+              t2 && this.scaleGroups();
+            }
+            c3 && k2(c3.index) && (l3(c3.container, { cursor: c3._cursor }), c3.cancelClick = 10 < this.hasDragged, c3.mouseIsDown = this.hasDragged = this.hasPinched = false, this.pinchDown = []);
+          };
+          e2.prototype.findNearestKDPoint = function(a5, d3, c3) {
+            var f3 = this.chart, g2 = f3.hoverPoint;
+            f3 = f3.tooltip;
+            if (g2 && f3 && f3.isStickyOnContact())
+              return g2;
+            var e3;
+            a5.forEach(function(a6) {
+              var b3 = !(a6.noSharedTooltip && d3) && 0 > a6.options.findNearestPointBy.indexOf("y");
+              a6 = a6.searchPoint(c3, b3);
+              if ((b3 = F2(a6, true) && a6.series) && !(b3 = !F2(e3, true))) {
+                b3 = e3.distX - a6.distX;
+                var g3 = e3.dist - a6.dist, f4 = (a6.series.group && a6.series.group.zIndex) - (e3.series.group && e3.series.group.zIndex);
+                b3 = 0 < (b3 !== 0 && d3 ? b3 : g3 !== 0 ? g3 : f4 !== 0 ? f4 : e3.series.index > a6.series.index ? -1 : 1);
+              }
+              b3 && (e3 = a6);
+            });
+            return e3;
+          };
+          e2.prototype.getChartCoordinatesFromPoint = function(a5, d3) {
+            var c3 = a5.series, f3 = c3.xAxis;
+            c3 = c3.yAxis;
+            var g2 = a5.shapeArgs;
+            if (f3 && c3) {
+              var e3 = K2(a5.clientX, a5.plotX), n2 = a5.plotY || 0;
+              a5.isNode && g2 && k2(g2.x) && k2(g2.y) && (e3 = g2.x, n2 = g2.y);
+              return d3 ? { chartX: c3.len + c3.pos - n2, chartY: f3.len + f3.pos - e3 } : { chartX: e3 + f3.pos, chartY: n2 + c3.pos };
+            }
+            if (g2 && g2.x && g2.y)
+              return { chartX: g2.x, chartY: g2.y };
+          };
+          e2.prototype.getChartPosition = function() {
+            if (this.chartPosition)
+              return this.chartPosition;
+            var a5 = this.chart.container, d3 = J2(a5);
+            this.chartPosition = { left: d3.left, top: d3.top, scaleX: 1, scaleY: 1 };
+            var c3 = a5.offsetWidth;
+            a5 = a5.offsetHeight;
+            2 < c3 && 2 < a5 && (this.chartPosition.scaleX = d3.width / c3, this.chartPosition.scaleY = d3.height / a5);
+            return this.chartPosition;
+          };
+          e2.prototype.getCoordinates = function(a5) {
+            var d3 = { xAxis: [], yAxis: [] };
+            this.chart.axes.forEach(function(c3) {
+              d3[c3.isXAxis ? "xAxis" : "yAxis"].push({ axis: c3, value: c3.toValue(a5[c3.horiz ? "chartX" : "chartY"]) });
+            });
+            return d3;
+          };
+          e2.prototype.getHoverData = function(d3, f3, c3, e3, g2, u4) {
+            var n2 = [];
+            e3 = !(!e3 || !d3);
+            var b3 = { chartX: u4 ? u4.chartX : void 0, chartY: u4 ? u4.chartY : void 0, shared: g2 };
+            p2(this, "beforeGetHoverData", b3);
+            var r3 = f3 && !f3.stickyTracking ? [f3] : c3.filter(function(c4) {
+              return b3.filter ? b3.filter(c4) : c4.visible && !(!g2 && c4.directTouch) && K2(c4.options.enableMouseTracking, true) && c4.stickyTracking;
+            });
+            var k3 = e3 || !u4 ? d3 : this.findNearestKDPoint(r3, g2, u4);
+            f3 = k3 && k3.series;
+            k3 && (g2 && !f3.noSharedTooltip ? (r3 = c3.filter(function(c4) {
+              return b3.filter ? b3.filter(c4) : c4.visible && !(!g2 && c4.directTouch) && K2(c4.options.enableMouseTracking, true) && !c4.noSharedTooltip;
+            }), r3.forEach(function(b4) {
+              var c4 = a4(b4.points, function(b5) {
+                return b5.x === k3.x && !b5.isNull;
+              });
+              F2(c4) && (b4.chart.isBoosting && (c4 = b4.getPoint(c4)), n2.push(c4));
+            })) : n2.push(k3));
+            b3 = { hoverPoint: k3 };
+            p2(this, "afterGetHoverData", b3);
+            return { hoverPoint: b3.hoverPoint, hoverSeries: f3, hoverPoints: n2 };
+          };
+          e2.prototype.getPointFromEvent = function(a5) {
+            a5 = a5.target;
+            for (var d3; a5 && !d3; )
+              d3 = a5.point, a5 = a5.parentNode;
+            return d3;
+          };
+          e2.prototype.onTrackerMouseOut = function(a5) {
+            a5 = a5.relatedTarget || a5.toElement;
+            var d3 = this.chart.hoverSeries;
+            this.isDirectTouch = false;
+            if (!(!d3 || !a5 || d3.stickyTracking || this.inClass(a5, "highcharts-tooltip") || this.inClass(a5, "highcharts-series-" + d3.index) && this.inClass(a5, "highcharts-tracker")))
+              d3.onMouseOut();
+          };
+          e2.prototype.inClass = function(a5, d3) {
+            for (var c3; a5; ) {
+              if (c3 = q3(a5, "class")) {
+                if (c3.indexOf(d3) !== -1)
+                  return true;
+                if (c3.indexOf("highcharts-container") !== -1)
+                  return false;
+              }
+              a5 = a5.parentNode;
+            }
+          };
+          e2.prototype.init = function(a5, d3) {
+            this.options = d3;
+            this.chart = a5;
+            this.runChartClick = !(!d3.chart.events || !d3.chart.events.click);
+            this.pinchDown = [];
+            this.lastValidTouch = {};
+            A && (a5.tooltip = new A(a5, d3.tooltip), this.followTouchMove = K2(d3.tooltip.followTouchMove, true));
+            this.setDOMEvents();
+          };
+          e2.prototype.normalize = function(a5, f3) {
+            var c3 = a5.touches, e3 = c3 ? c3.length ? c3.item(0) : K2(c3.changedTouches, a5.changedTouches)[0] : a5;
+            f3 || (f3 = this.getChartPosition());
+            c3 = e3.pageX - f3.left;
+            e3 = e3.pageY - f3.top;
+            c3 /= f3.scaleX;
+            e3 /= f3.scaleY;
+            return d2(a5, { chartX: Math.round(c3), chartY: Math.round(e3) });
+          };
+          e2.prototype.onContainerClick = function(a5) {
+            var f3 = this.chart, c3 = f3.hoverPoint;
+            a5 = this.normalize(a5);
+            var e3 = f3.plotLeft, g2 = f3.plotTop;
+            f3.cancelClick || (c3 && this.inClass(a5.target, "highcharts-tracker") ? (p2(c3.series, "click", d2(a5, { point: c3 })), f3.hoverPoint && c3.firePointEvent("click", a5)) : (d2(a5, this.getCoordinates(a5)), f3.isInsidePlot(a5.chartX - e3, a5.chartY - g2, { visiblePlotOnly: true }) && p2(f3, "click", a5)));
+          };
+          e2.prototype.onContainerMouseDown = function(a5) {
+            var d3 = ((a5.buttons || a5.button) & 1) === 1;
+            a5 = this.normalize(a5);
+            if (h4.isFirefox && a5.button !== 0)
+              this.onContainerMouseMove(a5);
+            if (typeof a5.button === "undefined" || d3)
+              this.zoomOption(a5), d3 && a5.preventDefault && a5.preventDefault(), this.dragStart(a5);
+          };
+          e2.prototype.onContainerMouseLeave = function(a5) {
+            var d3 = D3[K2(e2.hoverChartIndex, -1)], c3 = this.chart.tooltip;
+            c3 && c3.shouldStickOnContact() && this.inClass(a5.relatedTarget, "highcharts-tooltip-container") || (a5 = this.normalize(a5), d3 && (a5.relatedTarget || a5.toElement) && (d3.pointer.reset(), d3.pointer.chartPosition = void 0), c3 && !c3.isHidden && this.reset());
+          };
+          e2.prototype.onContainerMouseEnter = function(a5) {
+            delete this.chartPosition;
+          };
+          e2.prototype.onContainerMouseMove = function(a5) {
+            var d3 = this.chart;
+            a5 = this.normalize(a5);
+            this.setHoverChartIndex();
+            a5.preventDefault || (a5.returnValue = false);
+            (d3.mouseIsDown === "mousedown" || this.touchSelect(a5)) && this.drag(a5);
+            d3.openMenu || !this.inClass(a5.target, "highcharts-tracker") && !d3.isInsidePlot(a5.chartX - d3.plotLeft, a5.chartY - d3.plotTop, { visiblePlotOnly: true }) || (this.inClass(a5.target, "highcharts-no-tooltip") ? this.reset(false, 0) : this.runPointActions(a5));
+          };
+          e2.prototype.onDocumentTouchEnd = function(a5) {
+            var d3 = D3[K2(e2.hoverChartIndex, -1)];
+            d3 && d3.pointer.drop(a5);
+          };
+          e2.prototype.onContainerTouchMove = function(a5) {
+            if (this.touchSelect(a5))
+              this.onContainerMouseMove(a5);
+            else
+              this.touch(a5);
+          };
+          e2.prototype.onContainerTouchStart = function(a5) {
+            if (this.touchSelect(a5))
+              this.onContainerMouseDown(a5);
+            else
+              this.zoomOption(a5), this.touch(a5, true);
+          };
+          e2.prototype.onDocumentMouseMove = function(a5) {
+            var d3 = this.chart, c3 = this.chartPosition;
+            a5 = this.normalize(a5, c3);
+            var f3 = d3.tooltip;
+            !c3 || f3 && f3.isStickyOnContact() || d3.isInsidePlot(a5.chartX - d3.plotLeft, a5.chartY - d3.plotTop, { visiblePlotOnly: true }) || this.inClass(a5.target, "highcharts-tracker") || this.reset();
+          };
+          e2.prototype.onDocumentMouseUp = function(a5) {
+            var d3 = D3[K2(e2.hoverChartIndex, -1)];
+            d3 && d3.pointer.drop(a5);
+          };
+          e2.prototype.pinch = function(a5) {
+            var f3 = this, c3 = f3.chart, e3 = f3.pinchDown, g2 = a5.touches || [], u4 = g2.length, n2 = f3.lastValidTouch, b3 = f3.hasZoom, r3 = {}, k3 = u4 === 1 && (f3.inClass(a5.target, "highcharts-tracker") && c3.runTrackerClick || f3.runChartClick), m2 = {}, w2 = f3.selectionMarker;
+            1 < u4 ? f3.initiated = true : u4 === 1 && this.followTouchMove && (f3.initiated = false);
+            b3 && f3.initiated && !k3 && a5.cancelable !== false && a5.preventDefault();
+            [].map.call(g2, function(b4) {
+              return f3.normalize(b4);
+            });
+            a5.type === "touchstart" ? ([].forEach.call(g2, function(b4, c4) {
+              e3[c4] = { chartX: b4.chartX, chartY: b4.chartY };
+            }), n2.x = [e3[0].chartX, e3[1] && e3[1].chartX], n2.y = [e3[0].chartY, e3[1] && e3[1].chartY], c3.axes.forEach(function(b4) {
+              if (b4.zoomEnabled) {
+                var a6 = c3.bounds[b4.horiz ? "h" : "v"], g3 = b4.minPixelPadding, d3 = b4.toPixels(Math.min(K2(b4.options.min, b4.dataMin), b4.dataMin)), m3 = b4.toPixels(Math.max(K2(b4.options.max, b4.dataMax), b4.dataMax)), f4 = Math.max(d3, m3);
+                a6.min = Math.min(b4.pos, Math.min(d3, m3) - g3);
+                a6.max = Math.max(b4.pos + b4.len, f4 + g3);
+              }
+            }), f3.res = true) : f3.followTouchMove && u4 === 1 ? this.runPointActions(f3.normalize(a5)) : e3.length && (p2(c3, "touchpan", { originalEvent: a5 }, function() {
+              w2 || (f3.selectionMarker = w2 = d2({ destroy: I2, touch: true }, c3.plotBox));
+              f3.pinchTranslate(e3, g2, r3, w2, m2, n2);
+              f3.hasPinched = b3;
+              f3.scaleGroups(r3, m2);
+            }), f3.res && (f3.res = false, this.reset(false, 0)));
+          };
+          e2.prototype.pinchTranslate = function(a5, d3, c3, f3, g2, e3) {
+            this.zoomHor && this.pinchTranslateDirection(true, a5, d3, c3, f3, g2, e3);
+            this.zoomVert && this.pinchTranslateDirection(false, a5, d3, c3, f3, g2, e3);
+          };
+          e2.prototype.pinchTranslateDirection = function(a5, d3, c3, f3, g2, e3, n2, b3) {
+            var r3 = this.chart, k3 = a5 ? "x" : "y", m2 = a5 ? "X" : "Y", w2 = "chart" + m2, u4 = a5 ? "width" : "height", t2 = r3["plot" + (a5 ? "Left" : "Top")], l4 = r3.inverted, p3 = r3.bounds[a5 ? "h" : "v"], x3 = d3.length === 1, h5 = d3[0][w2], y2 = !x3 && d3[1][w2];
+            d3 = function() {
+              typeof J3 === "number" && 20 < Math.abs(h5 - y2) && (B2 = b3 || Math.abs(R - J3) / Math.abs(h5 - y2));
+              C2 = (t2 - R) / B2 + h5;
+              q4 = r3["plot" + (a5 ? "Width" : "Height")] / B2;
+            };
+            var q4, C2, B2 = b3 || 1, R = c3[0][w2], J3 = !x3 && c3[1][w2];
+            d3();
+            c3 = C2;
+            if (c3 < p3.min) {
+              c3 = p3.min;
+              var F3 = true;
+            } else
+              c3 + q4 > p3.max && (c3 = p3.max - q4, F3 = true);
+            F3 ? (R -= 0.8 * (R - n2[k3][0]), typeof J3 === "number" && (J3 -= 0.8 * (J3 - n2[k3][1])), d3()) : n2[k3] = [R, J3];
+            l4 || (e3[k3] = C2 - t2, e3[u4] = q4);
+            e3 = l4 ? 1 / B2 : B2;
+            g2[u4] = q4;
+            g2[k3] = c3;
+            f3[l4 ? a5 ? "scaleY" : "scaleX" : "scale" + m2] = B2;
+            f3["translate" + m2] = e3 * t2 + (R - e3 * h5);
+          };
+          e2.prototype.reset = function(a5, d3) {
+            var c3 = this.chart, f3 = c3.hoverSeries, g2 = c3.hoverPoint, e3 = c3.hoverPoints, n2 = c3.tooltip, b3 = n2 && n2.shared ? e3 : g2;
+            a5 && b3 && L3(b3).forEach(function(b4) {
+              b4.series.isCartesian && typeof b4.plotX === "undefined" && (a5 = false);
+            });
+            if (a5)
+              n2 && b3 && L3(b3).length && (n2.refresh(b3), n2.shared && e3 ? e3.forEach(function(b4) {
+                b4.setState(b4.state, true);
+                b4.series.isCartesian && (b4.series.xAxis.crosshair && b4.series.xAxis.drawCrosshair(null, b4), b4.series.yAxis.crosshair && b4.series.yAxis.drawCrosshair(null, b4));
+              }) : g2 && (g2.setState(g2.state, true), c3.axes.forEach(function(b4) {
+                b4.crosshair && g2.series[b4.coll] === b4 && b4.drawCrosshair(null, g2);
+              })));
+            else {
+              if (g2)
+                g2.onMouseOut();
+              e3 && e3.forEach(function(b4) {
+                b4.setState();
+              });
+              if (f3)
+                f3.onMouseOut();
+              n2 && n2.hide(d3);
+              this.unDocMouseMove && (this.unDocMouseMove = this.unDocMouseMove());
+              c3.axes.forEach(function(b4) {
+                b4.hideCrosshair();
+              });
+              this.hoverX = c3.hoverPoints = c3.hoverPoint = null;
+            }
+          };
+          e2.prototype.runPointActions = function(d3, f3) {
+            var c3 = this.chart, k3 = c3.tooltip && c3.tooltip.options.enabled ? c3.tooltip : void 0, g2 = k3 ? k3.shared : false, u4 = f3 || c3.hoverPoint, n2 = u4 && u4.series || c3.hoverSeries;
+            f3 = this.getHoverData(u4, n2, c3.series, (!d3 || d3.type !== "touchmove") && (!!f3 || n2 && n2.directTouch && this.isDirectTouch), g2, d3);
+            u4 = f3.hoverPoint;
+            n2 = f3.hoverSeries;
+            var b3 = f3.hoverPoints;
+            f3 = n2 && n2.tooltipOptions.followPointer && !n2.tooltipOptions.split;
+            g2 = g2 && n2 && !n2.noSharedTooltip;
+            if (u4 && (u4 !== c3.hoverPoint || k3 && k3.isHidden)) {
+              (c3.hoverPoints || []).forEach(function(c4) {
+                b3.indexOf(c4) === -1 && c4.setState();
+              });
+              if (c3.hoverSeries !== n2)
+                n2.onMouseOver();
+              this.applyInactiveState(b3);
+              (b3 || []).forEach(function(b4) {
+                b4.setState("hover");
+              });
+              c3.hoverPoint && c3.hoverPoint.firePointEvent("mouseOut");
+              if (!u4.series)
+                return;
+              c3.hoverPoints = b3;
+              c3.hoverPoint = u4;
+              u4.firePointEvent("mouseOver");
+              k3 && k3.refresh(g2 ? b3 : u4, d3);
+            } else
+              f3 && k3 && !k3.isHidden && (u4 = k3.getAnchor([{}], d3), c3.isInsidePlot(u4[0], u4[1], { visiblePlotOnly: true }) && k3.updatePosition({ plotX: u4[0], plotY: u4[1] }));
+            this.unDocMouseMove || (this.unDocMouseMove = z2(c3.container.ownerDocument, "mousemove", function(b4) {
+              var c4 = D3[e2.hoverChartIndex];
+              if (c4)
+                c4.pointer.onDocumentMouseMove(b4);
+            }), this.eventsToUnbind.push(this.unDocMouseMove));
+            c3.axes.forEach(function(g3) {
+              var f4 = K2((g3.crosshair || {}).snap, true), m2;
+              f4 && ((m2 = c3.hoverPoint) && m2.series[g3.coll] === g3 || (m2 = a4(b3, function(b4) {
+                return b4.series[g3.coll] === g3;
+              })));
+              m2 || !f4 ? g3.drawCrosshair(d3, m2) : g3.hideCrosshair();
+            });
+          };
+          e2.prototype.scaleGroups = function(a5, d3) {
+            var c3 = this.chart;
+            c3.series.forEach(function(f3) {
+              var g2 = a5 || f3.getPlotBox();
+              f3.group && (f3.xAxis && f3.xAxis.zoomEnabled || c3.mapView) && (f3.group.attr(g2), f3.markerGroup && (f3.markerGroup.attr(g2), f3.markerGroup.clip(d3 ? c3.clipRect : null)), f3.dataLabelsGroup && f3.dataLabelsGroup.attr(g2));
+            });
+            c3.clipRect.attr(d3 || c3.clipBox);
+          };
+          e2.prototype.setDOMEvents = function() {
+            var a5 = this, d3 = this.chart.container, c3 = d3.ownerDocument;
+            d3.onmousedown = this.onContainerMouseDown.bind(this);
+            d3.onmousemove = this.onContainerMouseMove.bind(this);
+            d3.onclick = this.onContainerClick.bind(this);
+            this.eventsToUnbind.push(z2(d3, "mouseenter", this.onContainerMouseEnter.bind(this)));
+            this.eventsToUnbind.push(z2(d3, "mouseleave", this.onContainerMouseLeave.bind(this)));
+            e2.unbindDocumentMouseUp || (e2.unbindDocumentMouseUp = z2(c3, "mouseup", this.onDocumentMouseUp.bind(this)));
+            for (var f3 = this.chart.renderTo.parentElement; f3 && f3.tagName !== "BODY"; )
+              this.eventsToUnbind.push(z2(f3, "scroll", function() {
+                delete a5.chartPosition;
+              })), f3 = f3.parentElement;
+            h4.hasTouch && (this.eventsToUnbind.push(z2(d3, "touchstart", this.onContainerTouchStart.bind(this), { passive: false })), this.eventsToUnbind.push(z2(d3, "touchmove", this.onContainerTouchMove.bind(this), { passive: false })), e2.unbindDocumentTouchEnd || (e2.unbindDocumentTouchEnd = z2(c3, "touchend", this.onDocumentTouchEnd.bind(this), { passive: false })));
+          };
+          e2.prototype.setHoverChartIndex = function() {
+            var a5 = this.chart, d3 = h4.charts[K2(e2.hoverChartIndex, -1)];
+            if (d3 && d3 !== a5)
+              d3.pointer.onContainerMouseLeave({ relatedTarget: true });
+            d3 && d3.mouseIsDown || (e2.hoverChartIndex = a5.index);
+          };
+          e2.prototype.touch = function(a5, d3) {
+            var c3 = this.chart, f3;
+            this.setHoverChartIndex();
+            if (a5.touches.length === 1)
+              if (a5 = this.normalize(a5), (f3 = c3.isInsidePlot(a5.chartX - c3.plotLeft, a5.chartY - c3.plotTop, { visiblePlotOnly: true })) && !c3.openMenu) {
+                d3 && this.runPointActions(a5);
+                if (a5.type === "touchmove") {
+                  d3 = this.pinchDown;
+                  var g2 = d3[0] ? 4 <= Math.sqrt(Math.pow(d3[0].chartX - a5.chartX, 2) + Math.pow(d3[0].chartY - a5.chartY, 2)) : false;
+                }
+                K2(g2, true) && this.pinch(a5);
+              } else
+                d3 && this.reset();
+            else
+              a5.touches.length === 2 && this.pinch(a5);
+          };
+          e2.prototype.touchSelect = function(a5) {
+            return !(!this.chart.options.chart.zoomBySingleTouch || !a5.touches || a5.touches.length !== 1);
+          };
+          e2.prototype.zoomOption = function(a5) {
+            var d3 = this.chart, c3 = d3.options.chart;
+            d3 = d3.inverted;
+            var f3 = c3.zoomType || "";
+            /touch/.test(a5.type) && (f3 = K2(c3.pinchType, f3));
+            this.zoomX = a5 = /x/.test(f3);
+            this.zoomY = c3 = /y/.test(f3);
+            this.zoomHor = a5 && !d3 || c3 && d3;
+            this.zoomVert = c3 && !d3 || a5 && d3;
+            this.hasZoom = a5 || c3;
+          };
+          return e2;
+        }();
+        "";
+        return e;
+      });
+      M2(h3, "Core/MSPointer.js", [h3["Core/Globals.js"], h3["Core/Pointer.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        function D3() {
+          var d3 = [];
+          d3.item = function(a5) {
+            return this[a5];
+          };
+          a4(k2, function(a5) {
+            d3.push({ pageX: a5.pageX, pageY: a5.pageY, target: a5.target });
+          });
+          return d3;
+        }
+        function v(a5, d3, f3, e2) {
+          var k3 = I2[h4.hoverChartIndex || NaN];
+          a5.pointerType !== "touch" && a5.pointerType !== a5.MSPOINTER_TYPE_TOUCH || !k3 || (k3 = k3.pointer, e2(a5), k3[d3]({ type: f3, target: a5.currentTarget, preventDefault: q3, touches: D3() }));
+        }
+        var H2 = this && this.__extends || function() {
+          var a5 = function(d3, f3) {
+            a5 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a6, d4) {
+              a6.__proto__ = d4;
+            } || function(a6, d4) {
+              for (var f4 in d4)
+                d4.hasOwnProperty(f4) && (a6[f4] = d4[f4]);
+            };
+            return a5(d3, f3);
+          };
+          return function(d3, f3) {
+            function e2() {
+              this.constructor = d3;
+            }
+            a5(d3, f3);
+            d3.prototype = f3 === null ? Object.create(f3) : (e2.prototype = f3.prototype, new e2());
+          };
+        }(), I2 = e.charts, z2 = e.doc, q3 = e.noop, l3 = e.win, f2 = A.addEvent, d2 = A.css, a4 = A.objectEach, p2 = A.removeEvent, k2 = {}, F2 = !!l3.PointerEvent;
+        return function(a5) {
+          function h5() {
+            return a5 !== null && a5.apply(this, arguments) || this;
+          }
+          H2(h5, a5);
+          h5.isRequired = function() {
+            return !(e.hasTouch || !l3.PointerEvent && !l3.MSPointerEvent);
+          };
+          h5.prototype.batchMSEvents = function(a6) {
+            a6(this.chart.container, F2 ? "pointerdown" : "MSPointerDown", this.onContainerPointerDown);
+            a6(this.chart.container, F2 ? "pointermove" : "MSPointerMove", this.onContainerPointerMove);
+            a6(z2, F2 ? "pointerup" : "MSPointerUp", this.onDocumentPointerUp);
+          };
+          h5.prototype.destroy = function() {
+            this.batchMSEvents(p2);
+            a5.prototype.destroy.call(this);
+          };
+          h5.prototype.init = function(f3, e2) {
+            a5.prototype.init.call(this, f3, e2);
+            this.hasZoom && d2(f3.container, { "-ms-touch-action": "none", "touch-action": "none" });
+          };
+          h5.prototype.onContainerPointerDown = function(a6) {
+            v(a6, "onContainerTouchStart", "touchstart", function(a7) {
+              k2[a7.pointerId] = { pageX: a7.pageX, pageY: a7.pageY, target: a7.currentTarget };
+            });
+          };
+          h5.prototype.onContainerPointerMove = function(a6) {
+            v(a6, "onContainerTouchMove", "touchmove", function(a7) {
+              k2[a7.pointerId] = {
+                pageX: a7.pageX,
+                pageY: a7.pageY
+              };
+              k2[a7.pointerId].target || (k2[a7.pointerId].target = a7.currentTarget);
+            });
+          };
+          h5.prototype.onDocumentPointerUp = function(a6) {
+            v(a6, "onDocumentTouchEnd", "touchend", function(a7) {
+              delete k2[a7.pointerId];
+            });
+          };
+          h5.prototype.setDOMEvents = function() {
+            a5.prototype.setDOMEvents.call(this);
+            (this.hasZoom || this.followTouchMove) && this.batchMSEvents(f2);
+          };
+          return h5;
+        }(h4);
+      });
+      M2(h3, "Core/Legend/Legend.js", [
+        h3["Core/Animation/AnimationUtilities.js"],
+        h3["Core/FormatUtilities.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Series/Point.js"],
+        h3["Core/Renderer/RendererUtilities.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v, H2) {
+        var D3 = e.animObject, z2 = e.setAnimation, q3 = h4.format;
+        e = A.isFirefox;
+        var l3 = A.marginNames;
+        A = A.win;
+        var f2 = v.distribute, d2 = H2.addEvent, a4 = H2.createElement, p2 = H2.css, k2 = H2.defined, F2 = H2.discardElement, B = H2.find, J2 = H2.fireEvent, K2 = H2.isNumber, L3 = H2.merge, y2 = H2.pick, C2 = H2.relativeLength, x3 = H2.stableSort, c3 = H2.syncTimeout;
+        v = H2.wrap;
+        H2 = function() {
+          function e2(c4, a5) {
+            this.allItems = [];
+            this.contentGroup = this.box = void 0;
+            this.display = false;
+            this.group = void 0;
+            this.offsetWidth = this.maxLegendWidth = this.maxItemWidth = this.legendWidth = this.legendHeight = this.lastLineHeight = this.lastItemY = this.itemY = this.itemX = this.itemMarginTop = this.itemMarginBottom = this.itemHeight = this.initialItemY = 0;
+            this.options = {};
+            this.padding = 0;
+            this.pages = [];
+            this.proximate = false;
+            this.scrollGroup = void 0;
+            this.widthOption = this.totalItemWidth = this.titleHeight = this.symbolWidth = this.symbolHeight = 0;
+            this.chart = c4;
+            this.init(c4, a5);
+          }
+          e2.prototype.init = function(c4, a5) {
+            this.chart = c4;
+            this.setOptions(a5);
+            a5.enabled && (this.render(), d2(this.chart, "endResize", function() {
+              this.legend.positionCheckboxes();
+            }), this.proximate ? this.unchartrender = d2(this.chart, "render", function() {
+              this.legend.proximatePositions();
+              this.legend.positionItems();
+            }) : this.unchartrender && this.unchartrender());
+          };
+          e2.prototype.setOptions = function(c4) {
+            var a5 = y2(c4.padding, 8);
+            this.options = c4;
+            this.chart.styledMode || (this.itemStyle = c4.itemStyle, this.itemHiddenStyle = L3(this.itemStyle, c4.itemHiddenStyle));
+            this.itemMarginTop = c4.itemMarginTop || 0;
+            this.itemMarginBottom = c4.itemMarginBottom || 0;
+            this.padding = a5;
+            this.initialItemY = a5 - 5;
+            this.symbolWidth = y2(c4.symbolWidth, 16);
+            this.pages = [];
+            this.proximate = c4.layout === "proximate" && !this.chart.inverted;
+            this.baseline = void 0;
+          };
+          e2.prototype.update = function(c4, a5) {
+            var d3 = this.chart;
+            this.setOptions(L3(true, this.options, c4));
+            this.destroy();
+            d3.isDirtyLegend = d3.isDirtyBox = true;
+            y2(a5, true) && d3.redraw();
+            J2(this, "afterUpdate");
+          };
+          e2.prototype.colorizeItem = function(c4, a5) {
+            c4.legendGroup[a5 ? "removeClass" : "addClass"]("highcharts-legend-item-hidden");
+            if (!this.chart.styledMode) {
+              var d3 = this.options, b3 = c4.legendItem, g2 = c4.legendLine, f3 = c4.legendSymbol, m2 = this.itemHiddenStyle.color;
+              d3 = a5 ? d3.itemStyle.color : m2;
+              var e3 = a5 ? c4.color || m2 : m2, k3 = c4.options && c4.options.marker, u4 = { fill: e3 };
+              b3 && b3.css({ fill: d3, color: d3 });
+              g2 && g2.attr({ stroke: e3 });
+              f3 && (k3 && f3.isMarker && (u4 = c4.pointAttribs(), a5 || (u4.stroke = u4.fill = m2)), f3.attr(u4));
+            }
+            J2(this, "afterColorizeItem", { item: c4, visible: a5 });
+          };
+          e2.prototype.positionItems = function() {
+            this.allItems.forEach(this.positionItem, this);
+            this.chart.isResizing || this.positionCheckboxes();
+          };
+          e2.prototype.positionItem = function(c4) {
+            var a5 = this, d3 = this.options, b3 = d3.symbolPadding, g2 = !d3.rtl, f3 = c4._legendItemPos;
+            d3 = f3[0];
+            f3 = f3[1];
+            var m2 = c4.checkbox, e3 = c4.legendGroup;
+            e3 && e3.element && (b3 = { translateX: g2 ? d3 : this.legendWidth - d3 - 2 * b3 - 4, translateY: f3 }, g2 = function() {
+              J2(a5, "afterPositionItem", { item: c4 });
+            }, k2(e3.translateY) ? e3.animate(b3, void 0, g2) : (e3.attr(b3), g2()));
+            m2 && (m2.x = d3, m2.y = f3);
+          };
+          e2.prototype.destroyItem = function(c4) {
+            var a5 = c4.checkbox;
+            ["legendItem", "legendLine", "legendSymbol", "legendGroup"].forEach(function(a6) {
+              c4[a6] && (c4[a6] = c4[a6].destroy());
+            });
+            a5 && F2(c4.checkbox);
+          };
+          e2.prototype.destroy = function() {
+            function c4(c5) {
+              this[c5] && (this[c5] = this[c5].destroy());
+            }
+            this.getAllItems().forEach(function(a5) {
+              [
+                "legendItem",
+                "legendGroup"
+              ].forEach(c4, a5);
+            });
+            "clipRect up down pager nav box title group".split(" ").forEach(c4, this);
+            this.display = null;
+          };
+          e2.prototype.positionCheckboxes = function() {
+            var c4 = this.group && this.group.alignAttr, a5 = this.clipHeight || this.legendHeight, d3 = this.titleHeight;
+            if (c4) {
+              var b3 = c4.translateY;
+              this.allItems.forEach(function(g2) {
+                var f3 = g2.checkbox;
+                if (f3) {
+                  var m2 = b3 + d3 + f3.y + (this.scrollOffset || 0) + 3;
+                  p2(f3, { left: c4.translateX + g2.checkboxOffset + f3.x - 20 + "px", top: m2 + "px", display: this.proximate || m2 > b3 - 6 && m2 < b3 + a5 - 6 ? "" : "none" });
+                }
+              }, this);
+            }
+          };
+          e2.prototype.renderTitle = function() {
+            var c4 = this.options, a5 = this.padding, d3 = c4.title, b3 = 0;
+            d3.text && (this.title || (this.title = this.chart.renderer.label(d3.text, a5 - 3, a5 - 4, null, null, null, c4.useHTML, null, "legend-title").attr({ zIndex: 1 }), this.chart.styledMode || this.title.css(d3.style), this.title.add(this.group)), d3.width || this.title.css({ width: this.maxLegendWidth + "px" }), c4 = this.title.getBBox(), b3 = c4.height, this.offsetWidth = c4.width, this.contentGroup.attr({ translateY: b3 }));
+            this.titleHeight = b3;
+          };
+          e2.prototype.setText = function(c4) {
+            var a5 = this.options;
+            c4.legendItem.attr({ text: a5.labelFormat ? q3(a5.labelFormat, c4, this.chart) : a5.labelFormatter.call(c4) });
+          };
+          e2.prototype.renderItem = function(c4) {
+            var a5 = this.chart, d3 = a5.renderer, b3 = this.options, g2 = this.symbolWidth, f3 = b3.symbolPadding || 0, m2 = this.itemStyle, e3 = this.itemHiddenStyle, k3 = b3.layout === "horizontal" ? y2(b3.itemDistance, 20) : 0, l4 = !b3.rtl, p3 = !c4.series, h5 = !p3 && c4.series.drawLegendSymbol ? c4.series : c4, t2 = h5.options, x4 = this.createCheckboxForItem && t2 && t2.showCheckbox, q4 = b3.useHTML, C3 = c4.options.className, Q2 = c4.legendItem;
+            t2 = g2 + f3 + k3 + (x4 ? 20 : 0);
+            Q2 || (c4.legendGroup = d3.g("legend-item").addClass("highcharts-" + h5.type + "-series highcharts-color-" + c4.colorIndex + (C3 ? " " + C3 : "") + (p3 ? " highcharts-series-" + c4.index : "")).attr({ zIndex: 1 }).add(this.scrollGroup), c4.legendItem = Q2 = d3.text("", l4 ? g2 + f3 : -f3, this.baseline || 0, q4), a5.styledMode || Q2.css(L3(c4.visible ? m2 : e3)), Q2.attr({ align: l4 ? "left" : "right", zIndex: 2 }).add(c4.legendGroup), this.baseline || (this.fontMetrics = d3.fontMetrics(a5.styledMode ? 12 : m2.fontSize, Q2), this.baseline = this.fontMetrics.f + 3 + this.itemMarginTop, Q2.attr("y", this.baseline), this.symbolHeight = b3.symbolHeight || this.fontMetrics.f, b3.squareSymbol && (this.symbolWidth = y2(b3.symbolWidth, Math.max(this.symbolHeight, 16)), t2 = this.symbolWidth + f3 + k3 + (x4 ? 20 : 0), l4 && Q2.attr("x", this.symbolWidth + f3))), h5.drawLegendSymbol(this, c4), this.setItemEvents && this.setItemEvents(c4, Q2, q4));
+            x4 && !c4.checkbox && this.createCheckboxForItem && this.createCheckboxForItem(c4);
+            this.colorizeItem(c4, c4.visible);
+            !a5.styledMode && m2.width || Q2.css({ width: (b3.itemWidth || this.widthOption || a5.spacingBox.width) - t2 + "px" });
+            this.setText(c4);
+            a5 = Q2.getBBox();
+            c4.itemWidth = c4.checkboxOffset = b3.itemWidth || c4.legendItemWidth || a5.width + t2;
+            this.maxItemWidth = Math.max(this.maxItemWidth, c4.itemWidth);
+            this.totalItemWidth += c4.itemWidth;
+            this.itemHeight = c4.itemHeight = Math.round(c4.legendItemHeight || a5.height || this.symbolHeight);
+          };
+          e2.prototype.layoutItem = function(c4) {
+            var a5 = this.options, d3 = this.padding, b3 = a5.layout === "horizontal", g2 = c4.itemHeight, f3 = this.itemMarginBottom, m2 = this.itemMarginTop, e3 = b3 ? y2(a5.itemDistance, 20) : 0, k3 = this.maxLegendWidth;
+            a5 = a5.alignColumns && this.totalItemWidth > k3 ? this.maxItemWidth : c4.itemWidth;
+            b3 && this.itemX - d3 + a5 > k3 && (this.itemX = d3, this.lastLineHeight && (this.itemY += m2 + this.lastLineHeight + f3), this.lastLineHeight = 0);
+            this.lastItemY = m2 + this.itemY + f3;
+            this.lastLineHeight = Math.max(g2, this.lastLineHeight);
+            c4._legendItemPos = [this.itemX, this.itemY];
+            b3 ? this.itemX += a5 : (this.itemY += m2 + g2 + f3, this.lastLineHeight = g2);
+            this.offsetWidth = this.widthOption || Math.max((b3 ? this.itemX - d3 - (c4.checkbox ? 0 : e3) : a5) + d3, this.offsetWidth);
+          };
+          e2.prototype.getAllItems = function() {
+            var c4 = [];
+            this.chart.series.forEach(function(a5) {
+              var d3 = a5 && a5.options;
+              a5 && y2(d3.showInLegend, k2(d3.linkedTo) ? false : void 0, true) && (c4 = c4.concat(a5.legendItems || (d3.legendType === "point" ? a5.data : a5)));
+            });
+            J2(this, "afterGetAllItems", { allItems: c4 });
+            return c4;
+          };
+          e2.prototype.getAlignment = function() {
+            var c4 = this.options;
+            return this.proximate ? c4.align.charAt(0) + "tv" : c4.floating ? "" : c4.align.charAt(0) + c4.verticalAlign.charAt(0) + c4.layout.charAt(0);
+          };
+          e2.prototype.adjustMargins = function(c4, a5) {
+            var d3 = this.chart, b3 = this.options, g2 = this.getAlignment();
+            g2 && [/(lth|ct|rth)/, /(rtv|rm|rbv)/, /(rbh|cb|lbh)/, /(lbv|lm|ltv)/].forEach(function(f3, m2) {
+              f3.test(g2) && !k2(c4[m2]) && (d3[l3[m2]] = Math.max(d3[l3[m2]], d3.legend[(m2 + 1) % 2 ? "legendHeight" : "legendWidth"] + [1, -1, -1, 1][m2] * b3[m2 % 2 ? "x" : "y"] + y2(b3.margin, 12) + a5[m2] + (d3.titleOffset[m2] || 0)));
+            });
+          };
+          e2.prototype.proximatePositions = function() {
+            var c4 = this.chart, a5 = [], d3 = this.options.align === "left";
+            this.allItems.forEach(function(b3) {
+              var g2;
+              var f3 = d3;
+              if (b3.yAxis) {
+                b3.xAxis.options.reversed && (f3 = !f3);
+                b3.points && (g2 = B(f3 ? b3.points : b3.points.slice(0).reverse(), function(b4) {
+                  return K2(b4.plotY);
+                }));
+                f3 = this.itemMarginTop + b3.legendItem.getBBox().height + this.itemMarginBottom;
+                var m2 = b3.yAxis.top - c4.plotTop;
+                b3.visible ? (g2 = g2 ? g2.plotY : b3.yAxis.height, g2 += m2 - 0.3 * f3) : g2 = m2 + b3.yAxis.height;
+                a5.push({ target: g2, size: f3, item: b3 });
+              }
+            }, this);
+            f2(a5, c4.plotHeight).forEach(function(b3) {
+              b3.item._legendItemPos && (b3.item._legendItemPos[1] = c4.plotTop - c4.spacing[0] + b3.pos);
+            });
+          };
+          e2.prototype.render = function() {
+            var c4 = this.chart, a5 = c4.renderer, d3 = this.options, b3 = this.padding, f3 = this.getAllItems(), e3 = this.group, m2 = this.box;
+            this.itemX = b3;
+            this.itemY = this.initialItemY;
+            this.lastItemY = this.offsetWidth = 0;
+            this.widthOption = C2(d3.width, c4.spacingBox.width - b3);
+            var k3 = c4.spacingBox.width - 2 * b3 - d3.x;
+            -1 < ["rm", "lm"].indexOf(this.getAlignment().substring(0, 2)) && (k3 /= 2);
+            this.maxLegendWidth = this.widthOption || k3;
+            e3 || (this.group = e3 = a5.g("legend").addClass(d3.className || "").attr({ zIndex: 7 }).add(), this.contentGroup = a5.g().attr({ zIndex: 1 }).add(e3), this.scrollGroup = a5.g().add(this.contentGroup));
+            this.renderTitle();
+            x3(f3, function(b4, c5) {
+              return (b4.options && b4.options.legendIndex || 0) - (c5.options && c5.options.legendIndex || 0);
+            });
+            d3.reversed && f3.reverse();
+            this.allItems = f3;
+            this.display = k3 = !!f3.length;
+            this.itemHeight = this.totalItemWidth = this.maxItemWidth = this.lastLineHeight = 0;
+            f3.forEach(this.renderItem, this);
+            f3.forEach(this.layoutItem, this);
+            f3 = (this.widthOption || this.offsetWidth) + b3;
+            var l4 = this.lastItemY + this.lastLineHeight + this.titleHeight;
+            l4 = this.handleOverflow(l4);
+            l4 += b3;
+            m2 || (this.box = m2 = a5.rect().addClass("highcharts-legend-box").attr({ r: d3.borderRadius }).add(e3), m2.isNew = true);
+            c4.styledMode || m2.attr({ stroke: d3.borderColor, "stroke-width": d3.borderWidth || 0, fill: d3.backgroundColor || "none" }).shadow(d3.shadow);
+            0 < f3 && 0 < l4 && (m2[m2.isNew ? "attr" : "animate"](m2.crisp.call({}, { x: 0, y: 0, width: f3, height: l4 }, m2.strokeWidth())), m2.isNew = false);
+            m2[k3 ? "show" : "hide"]();
+            c4.styledMode && e3.getStyle("display") === "none" && (f3 = l4 = 0);
+            this.legendWidth = f3;
+            this.legendHeight = l4;
+            k3 && this.align();
+            this.proximate || this.positionItems();
+            J2(this, "afterRender");
+          };
+          e2.prototype.align = function(c4) {
+            c4 === void 0 && (c4 = this.chart.spacingBox);
+            var a5 = this.chart, d3 = this.options, b3 = c4.y;
+            /(lth|ct|rth)/.test(this.getAlignment()) && 0 < a5.titleOffset[0] ? b3 += a5.titleOffset[0] : /(lbh|cb|rbh)/.test(this.getAlignment()) && 0 < a5.titleOffset[2] && (b3 -= a5.titleOffset[2]);
+            b3 !== c4.y && (c4 = L3(c4, { y: b3 }));
+            this.group.align(L3(d3, { width: this.legendWidth, height: this.legendHeight, verticalAlign: this.proximate ? "top" : d3.verticalAlign }), true, c4);
+          };
+          e2.prototype.handleOverflow = function(c4) {
+            var a5 = this, d3 = this.chart, b3 = d3.renderer, g2 = this.options, f3 = g2.y, m2 = g2.verticalAlign === "top", e3 = this.padding, k3 = g2.maxHeight, l4 = g2.navigation, p3 = y2(l4.animation, true), h5 = l4.arrowSize || 12, t2 = this.pages, x4 = this.allItems, q4 = function(b4) {
+              typeof b4 === "number" ? F3.attr({ height: b4 }) : F3 && (a5.clipRect = F3.destroy(), a5.contentGroup.clip());
+              a5.contentGroup.div && (a5.contentGroup.div.style.clip = b4 ? "rect(" + e3 + "px,9999px," + (e3 + b4) + "px,0)" : "auto");
+            }, C3 = function(c5) {
+              a5[c5] = b3.circle(0, 0, 1.3 * h5).translate(h5 / 2, h5 / 2).add(R);
+              d3.styledMode || a5[c5].attr("fill", "rgba(0,0,0,0.0001)");
+              return a5[c5];
+            }, Q2, B2;
+            f3 = d3.spacingBox.height + (m2 ? -f3 : f3) - e3;
+            var R = this.nav, F3 = this.clipRect;
+            g2.layout !== "horizontal" || g2.verticalAlign === "middle" || g2.floating || (f3 /= 2);
+            k3 && (f3 = Math.min(f3, k3));
+            t2.length = 0;
+            c4 && 0 < f3 && c4 > f3 && l4.enabled !== false ? (this.clipHeight = Q2 = Math.max(f3 - 20 - this.titleHeight - e3, 0), this.currentPage = y2(this.currentPage, 1), this.fullHeight = c4, x4.forEach(function(b4, c5) {
+              var a6 = b4._legendItemPos[1], d4 = Math.round(b4.legendItem.getBBox().height), g3 = t2.length;
+              if (!g3 || a6 - t2[g3 - 1] > Q2 && (B2 || a6) !== t2[g3 - 1])
+                t2.push(B2 || a6), g3++;
+              b4.pageIx = g3 - 1;
+              B2 && (x4[c5 - 1].pageIx = g3 - 1);
+              c5 === x4.length - 1 && a6 + d4 - t2[g3 - 1] > Q2 && d4 <= Q2 && (t2.push(a6), b4.pageIx = g3);
+              a6 !== B2 && (B2 = a6);
+            }), F3 || (F3 = a5.clipRect = b3.clipRect(0, e3, 9999, 0), a5.contentGroup.clip(F3)), q4(Q2), R || (this.nav = R = b3.g().attr({ zIndex: 1 }).add(this.group), this.up = b3.symbol("triangle", 0, 0, h5, h5).add(R), C3("upTracker").on("click", function() {
+              a5.scroll(-1, p3);
+            }), this.pager = b3.text("", 15, 10).addClass("highcharts-legend-navigation"), d3.styledMode || this.pager.css(l4.style), this.pager.add(R), this.down = b3.symbol("triangle-down", 0, 0, h5, h5).add(R), C3("downTracker").on("click", function() {
+              a5.scroll(1, p3);
+            })), a5.scroll(0), c4 = f3) : R && (q4(), this.nav = R.destroy(), this.scrollGroup.attr({ translateY: 1 }), this.clipHeight = 0);
+            return c4;
+          };
+          e2.prototype.scroll = function(a5, d3) {
+            var g2 = this, b3 = this.chart, f3 = this.pages, e3 = f3.length, m2 = this.clipHeight, k3 = this.options.navigation, l4 = this.pager, p3 = this.padding, u4 = this.currentPage + a5;
+            u4 > e3 && (u4 = e3);
+            0 < u4 && (typeof d3 !== "undefined" && z2(d3, b3), this.nav.attr({ translateX: p3, translateY: m2 + this.padding + 7 + this.titleHeight, visibility: "visible" }), [this.up, this.upTracker].forEach(function(b4) {
+              b4.attr({ "class": u4 === 1 ? "highcharts-legend-nav-inactive" : "highcharts-legend-nav-active" });
+            }), l4.attr({ text: u4 + "/" + e3 }), [this.down, this.downTracker].forEach(function(b4) {
+              b4.attr({ x: 18 + this.pager.getBBox().width, "class": u4 === e3 ? "highcharts-legend-nav-inactive" : "highcharts-legend-nav-active" });
+            }, this), b3.styledMode || (this.up.attr({ fill: u4 === 1 ? k3.inactiveColor : k3.activeColor }), this.upTracker.css({ cursor: u4 === 1 ? "default" : "pointer" }), this.down.attr({ fill: u4 === e3 ? k3.inactiveColor : k3.activeColor }), this.downTracker.css({ cursor: u4 === e3 ? "default" : "pointer" })), this.scrollOffset = -f3[u4 - 1] + this.initialItemY, this.scrollGroup.animate({ translateY: this.scrollOffset }), this.currentPage = u4, this.positionCheckboxes(), a5 = D3(y2(d3, b3.renderer.globalAnimation, true)), c3(function() {
+              J2(g2, "afterScroll", { currentPage: u4 });
+            }, a5.duration));
+          };
+          e2.prototype.setItemEvents = function(c4, a5, d3) {
+            var b3 = this, g2 = b3.chart.renderer.boxWrapper, f3 = c4 instanceof E3, m2 = "highcharts-legend-" + (f3 ? "point" : "series") + "-active", e3 = b3.chart.styledMode, n2 = function(a6) {
+              b3.allItems.forEach(function(b4) {
+                c4 !== b4 && [b4].concat(b4.linkedSeries || []).forEach(function(b5) {
+                  b5.setState(a6, !f3);
+                });
+              });
+            };
+            (d3 ? [a5, c4.legendSymbol] : [c4.legendGroup]).forEach(function(d4) {
+              if (d4)
+                d4.on("mouseover", function() {
+                  c4.visible && n2("inactive");
+                  c4.setState("hover");
+                  c4.visible && g2.addClass(m2);
+                  e3 || a5.css(b3.options.itemHoverStyle);
+                }).on("mouseout", function() {
+                  b3.chart.styledMode || a5.css(L3(c4.visible ? b3.itemStyle : b3.itemHiddenStyle));
+                  n2("");
+                  g2.removeClass(m2);
+                  c4.setState();
+                }).on("click", function(b4) {
+                  var a6 = function() {
+                    c4.setVisible && c4.setVisible();
+                    n2(c4.visible ? "inactive" : "");
+                  };
+                  g2.removeClass(m2);
+                  b4 = { browserEvent: b4 };
+                  c4.firePointEvent ? c4.firePointEvent("legendItemClick", b4, a6) : J2(c4, "legendItemClick", b4, a6);
+                });
+            });
+          };
+          e2.prototype.createCheckboxForItem = function(c4) {
+            c4.checkbox = a4("input", { type: "checkbox", className: "highcharts-legend-checkbox", checked: c4.selected, defaultChecked: c4.selected }, this.options.itemCheckboxStyle, this.chart.container);
+            d2(c4.checkbox, "click", function(a5) {
+              J2(c4.series || c4, "checkboxClick", { checked: a5.target.checked, item: c4 }, function() {
+                c4.select();
+              });
+            });
+          };
+          return e2;
+        }();
+        (/Trident\/7\.0/.test(A.navigator && A.navigator.userAgent) || e) && v(H2.prototype, "positionItem", function(c4, a5) {
+          var d3 = this, g2 = function() {
+            a5._legendItemPos && c4.call(d3, a5);
+          };
+          g2();
+          d3.bubbleLegend || setTimeout(g2);
+        });
+        "";
+        return H2;
+      });
+      M2(h3, "Core/Series/SeriesRegistry.js", [h3["Core/Globals.js"], h3["Core/DefaultOptions.js"], h3["Core/Series/Point.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3) {
+        var v = h4.defaultOptions, D3 = E3.error, I2 = E3.extendClass, z2 = E3.merge, q3;
+        (function(l3) {
+          function f2(d2, a4) {
+            var f3 = v.plotOptions || {}, e2 = a4.defaultOptions;
+            a4.prototype.pointClass || (a4.prototype.pointClass = A);
+            a4.prototype.type = d2;
+            e2 && (f3[d2] = e2);
+            l3.seriesTypes[d2] = a4;
+          }
+          l3.seriesTypes = e.seriesTypes;
+          l3.getSeries = function(d2, a4) {
+            a4 === void 0 && (a4 = {});
+            var f3 = d2.options.chart;
+            f3 = a4.type || f3.type || f3.defaultSeriesType || "";
+            var e2 = l3.seriesTypes[f3];
+            l3 || D3(17, true, d2, { missingModuleFor: f3 });
+            f3 = new e2();
+            typeof f3.init === "function" && f3.init(d2, a4);
+            return f3;
+          };
+          l3.registerSeriesType = f2;
+          l3.seriesType = function(d2, a4, e2, k2, h5) {
+            var p2 = v.plotOptions || {};
+            a4 = a4 || "";
+            p2[d2] = z2(p2[a4], e2);
+            f2(d2, I2(l3.seriesTypes[a4] || function() {
+            }, k2));
+            l3.seriesTypes[d2].prototype.type = d2;
+            h5 && (l3.seriesTypes[d2].prototype.pointClass = I2(A, h5));
+            return l3.seriesTypes[d2];
+          };
+        })(q3 || (q3 = {}));
+        return q3;
+      });
+      M2(h3, "Core/Chart/Chart.js", [
+        h3["Core/Animation/AnimationUtilities.js"],
+        h3["Core/Axis/Axis.js"],
+        h3["Core/FormatUtilities.js"],
+        h3["Core/Foundation.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Legend/Legend.js"],
+        h3["Core/MSPointer.js"],
+        h3["Core/DefaultOptions.js"],
+        h3["Core/Pointer.js"],
+        h3["Core/Renderer/RendererRegistry.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Renderer/SVG/SVGRenderer.js"],
+        h3["Core/Time.js"],
+        h3["Core/Utilities.js"],
+        h3["Core/Renderer/HTML/AST.js"]
+      ], function(e, h4, A, E3, v, H2, I2, z2, q3, l3, f2, d2, a4, p2, k2) {
+        var F2 = e.animate, B = e.animObject, J2 = e.setAnimation, K2 = A.numberFormat, L3 = E3.registerEventOptions, y2 = v.charts, C2 = v.doc, x3 = v.marginNames, c3 = v.svg, t2 = v.win, g2 = z2.defaultOptions, u4 = z2.defaultTime, n2 = f2.seriesTypes, b3 = p2.addEvent, r3 = p2.attr, G2 = p2.cleanRecursively, m2 = p2.createElement, w2 = p2.css, N3 = p2.defined, X = p2.discardElement, P2 = p2.erase, O3 = p2.error, W2 = p2.extend, Z = p2.find, D3 = p2.fireEvent, aa = p2.getStyle, Q2 = p2.isArray, ba = p2.isNumber, R = p2.isObject, ca = p2.isString, T = p2.merge, U = p2.objectEach, S2 = p2.pick, da = p2.pInt, ia = p2.relativeLength, M3 = p2.removeEvent, fa = p2.splat, Y = p2.syncTimeout, ja = p2.uniqueKey;
+        e = function() {
+          function f3(b4, c4, a5) {
+            this.series = this.renderTo = this.renderer = this.pointer = this.pointCount = this.plotWidth = this.plotTop = this.plotLeft = this.plotHeight = this.plotBox = this.options = this.numberFormatter = this.margin = this.legend = this.labelCollectors = this.isResizing = this.index = this.eventOptions = this.container = this.colorCounter = this.clipBox = this.chartWidth = this.chartHeight = this.bounds = this.axisOffset = this.axes = void 0;
+            this.sharedClips = {};
+            this.yAxis = this.xAxis = this.userOptions = this.titleOffset = this.time = this.symbolCounter = this.spacingBox = this.spacing = void 0;
+            this.getArgs(b4, c4, a5);
+          }
+          f3.chart = function(b4, c4, a5) {
+            return new f3(b4, c4, a5);
+          };
+          f3.prototype.getArgs = function(b4, c4, a5) {
+            ca(b4) || b4.nodeName ? (this.renderTo = b4, this.init(c4, a5)) : this.init(b4, c4);
+          };
+          f3.prototype.init = function(b4, c4) {
+            var d3 = b4.plotOptions || {};
+            D3(this, "init", { args: arguments }, function() {
+              var f4 = T(g2, b4), m3 = f4.chart;
+              U(f4.plotOptions, function(b5, c5) {
+                R(b5) && (b5.tooltip = d3[c5] && T(d3[c5].tooltip) || void 0);
+              });
+              f4.tooltip.userOptions = b4.chart && b4.chart.forExport && b4.tooltip.userOptions || b4.tooltip;
+              this.userOptions = b4;
+              this.margin = [];
+              this.spacing = [];
+              this.bounds = { h: {}, v: {} };
+              this.labelCollectors = [];
+              this.callback = c4;
+              this.isResizing = 0;
+              this.options = f4;
+              this.axes = [];
+              this.series = [];
+              this.time = b4.time && Object.keys(b4.time).length ? new a4(b4.time) : v.time;
+              this.numberFormatter = m3.numberFormatter || K2;
+              this.styledMode = m3.styledMode;
+              this.hasCartesianSeries = m3.showAxes;
+              this.index = y2.length;
+              y2.push(this);
+              v.chartCount++;
+              L3(this, m3);
+              this.xAxis = [];
+              this.yAxis = [];
+              this.pointCount = this.colorCounter = this.symbolCounter = 0;
+              D3(this, "afterInit");
+              this.firstRender();
+            });
+          };
+          f3.prototype.initSeries = function(b4) {
+            var c4 = this.options.chart;
+            c4 = b4.type || c4.type || c4.defaultSeriesType;
+            var a5 = n2[c4];
+            a5 || O3(17, true, this, { missingModuleFor: c4 });
+            c4 = new a5();
+            typeof c4.init === "function" && c4.init(this, b4);
+            return c4;
+          };
+          f3.prototype.setSeriesData = function() {
+            this.getSeriesOrderByLinks().forEach(function(b4) {
+              b4.points || b4.data || !b4.enabledDataSorting || b4.setData(b4.options.data, false);
+            });
+          };
+          f3.prototype.getSeriesOrderByLinks = function() {
+            return this.series.concat().sort(function(b4, c4) {
+              return b4.linkedSeries.length || c4.linkedSeries.length ? c4.linkedSeries.length - b4.linkedSeries.length : 0;
+            });
+          };
+          f3.prototype.orderSeries = function(b4) {
+            var c4 = this.series;
+            b4 = b4 || 0;
+            for (var a5 = c4.length; b4 < a5; ++b4)
+              c4[b4] && (c4[b4].index = b4, c4[b4].name = c4[b4].getName());
+          };
+          f3.prototype.isInsidePlot = function(b4, c4, a5) {
+            a5 === void 0 && (a5 = {});
+            var d3 = this.inverted, g3 = this.plotBox, f4 = this.plotLeft, m3 = this.plotTop, e2 = this.scrollablePlotBox, n3 = 0;
+            var r4 = 0;
+            a5.visiblePlotOnly && this.scrollingContainer && (r4 = this.scrollingContainer, n3 = r4.scrollLeft, r4 = r4.scrollTop);
+            var k3 = a5.series;
+            g3 = a5.visiblePlotOnly && e2 || g3;
+            e2 = a5.inverted ? c4 : b4;
+            c4 = a5.inverted ? b4 : c4;
+            b4 = { x: e2, y: c4, isInsidePlot: true };
+            if (!a5.ignoreX) {
+              var w3 = k3 && (d3 ? k3.yAxis : k3.xAxis) || { pos: f4, len: Infinity };
+              e2 = a5.paneCoordinates ? w3.pos + e2 : f4 + e2;
+              e2 >= Math.max(n3 + f4, w3.pos) && e2 <= Math.min(n3 + f4 + g3.width, w3.pos + w3.len) || (b4.isInsidePlot = false);
+            }
+            !a5.ignoreY && b4.isInsidePlot && (d3 = k3 && (d3 ? k3.xAxis : k3.yAxis) || { pos: m3, len: Infinity }, a5 = a5.paneCoordinates ? d3.pos + c4 : m3 + c4, a5 >= Math.max(r4 + m3, d3.pos) && a5 <= Math.min(r4 + m3 + g3.height, d3.pos + d3.len) || (b4.isInsidePlot = false));
+            D3(this, "afterIsInsidePlot", b4);
+            return b4.isInsidePlot;
+          };
+          f3.prototype.redraw = function(b4) {
+            D3(this, "beforeRedraw");
+            var c4 = this.hasCartesianSeries ? this.axes : this.colorAxis || [], a5 = this.series, d3 = this.pointer, g3 = this.legend, f4 = this.userOptions.legend, m3 = this.renderer, e2 = m3.isHidden(), n3 = [], r4 = this.isDirtyBox, k3 = this.isDirtyLegend;
+            this.setResponsive && this.setResponsive(false);
+            J2(this.hasRendered ? b4 : false, this);
+            e2 && this.temporaryDisplay();
+            this.layOutTitles();
+            for (b4 = a5.length; b4--; ) {
+              var w3 = a5[b4];
+              if (w3.options.stacking || w3.options.centerInCategory) {
+                var l4 = true;
+                if (w3.isDirty) {
+                  var p3 = true;
+                  break;
+                }
+              }
+            }
+            if (p3)
+              for (b4 = a5.length; b4--; )
+                w3 = a5[b4], w3.options.stacking && (w3.isDirty = true);
+            a5.forEach(function(b5) {
+              b5.isDirty && (b5.options.legendType === "point" ? (typeof b5.updateTotals === "function" && b5.updateTotals(), k3 = true) : f4 && (f4.labelFormatter || f4.labelFormat) && (k3 = true));
+              b5.isDirtyData && D3(b5, "updatedData");
+            });
+            k3 && g3 && g3.options.enabled && (g3.render(), this.isDirtyLegend = false);
+            l4 && this.getStacks();
+            c4.forEach(function(b5) {
+              b5.updateNames();
+              b5.setScale();
+            });
+            this.getMargins();
+            c4.forEach(function(b5) {
+              b5.isDirty && (r4 = true);
+            });
+            c4.forEach(function(b5) {
+              var c5 = b5.min + "," + b5.max;
+              b5.extKey !== c5 && (b5.extKey = c5, n3.push(function() {
+                D3(b5, "afterSetExtremes", W2(b5.eventArgs, b5.getExtremes()));
+                delete b5.eventArgs;
+              }));
+              (r4 || l4) && b5.redraw();
+            });
+            r4 && this.drawChartBox();
+            D3(this, "predraw");
+            a5.forEach(function(b5) {
+              (r4 || b5.isDirty) && b5.visible && b5.redraw();
+              b5.isDirtyData = false;
+            });
+            d3 && d3.reset(true);
+            m3.draw();
+            D3(this, "redraw");
+            D3(this, "render");
+            e2 && this.temporaryDisplay(true);
+            n3.forEach(function(b5) {
+              b5.call();
+            });
+          };
+          f3.prototype.get = function(b4) {
+            function c4(c5) {
+              return c5.id === b4 || c5.options && c5.options.id === b4;
+            }
+            for (var a5 = this.series, d3 = Z(this.axes, c4) || Z(this.series, c4), g3 = 0; !d3 && g3 < a5.length; g3++)
+              d3 = Z(a5[g3].points || [], c4);
+            return d3;
+          };
+          f3.prototype.getAxes = function() {
+            var b4 = this, c4 = this.options, a5 = c4.xAxis = fa(c4.xAxis || {});
+            c4 = c4.yAxis = fa(c4.yAxis || {});
+            D3(this, "getAxes");
+            a5.forEach(function(b5, c5) {
+              b5.index = c5;
+              b5.isX = true;
+            });
+            c4.forEach(function(b5, c5) {
+              b5.index = c5;
+            });
+            a5.concat(c4).forEach(function(c5) {
+              new h4(b4, c5);
+            });
+            D3(this, "afterGetAxes");
+          };
+          f3.prototype.getSelectedPoints = function() {
+            return this.series.reduce(function(b4, c4) {
+              c4.getPointsCollection().forEach(function(c5) {
+                S2(c5.selectedStaging, c5.selected) && b4.push(c5);
+              });
+              return b4;
+            }, []);
+          };
+          f3.prototype.getSelectedSeries = function() {
+            return this.series.filter(function(b4) {
+              return b4.selected;
+            });
+          };
+          f3.prototype.setTitle = function(b4, c4, a5) {
+            this.applyDescription("title", b4);
+            this.applyDescription("subtitle", c4);
+            this.applyDescription("caption", void 0);
+            this.layOutTitles(a5);
+          };
+          f3.prototype.applyDescription = function(b4, c4) {
+            var a5 = this, d3 = b4 === "title" ? { color: "#333333", fontSize: this.options.isStock ? "16px" : "18px" } : { color: "#666666" };
+            d3 = this.options[b4] = T(!this.styledMode && { style: d3 }, this.options[b4], c4);
+            var g3 = this[b4];
+            g3 && c4 && (this[b4] = g3 = g3.destroy());
+            d3 && !g3 && (g3 = this.renderer.text(d3.text, 0, 0, d3.useHTML).attr({ align: d3.align, "class": "highcharts-" + b4, zIndex: d3.zIndex || 4 }).add(), g3.update = function(c5) {
+              a5[{ title: "setTitle", subtitle: "setSubtitle", caption: "setCaption" }[b4]](c5);
+            }, this.styledMode || g3.css(d3.style), this[b4] = g3);
+          };
+          f3.prototype.layOutTitles = function(b4) {
+            var c4 = [0, 0, 0], a5 = this.renderer, d3 = this.spacingBox;
+            ["title", "subtitle", "caption"].forEach(function(b5) {
+              var g4 = this[b5], f4 = this.options[b5], m3 = f4.verticalAlign || "top";
+              b5 = b5 === "title" ? m3 === "top" ? -3 : 0 : m3 === "top" ? c4[0] + 2 : 0;
+              var e2;
+              if (g4) {
+                this.styledMode || (e2 = f4.style && f4.style.fontSize);
+                e2 = a5.fontMetrics(e2, g4).b;
+                g4.css({ width: (f4.width || d3.width + (f4.widthAdjust || 0)) + "px" });
+                var n3 = Math.round(g4.getBBox(f4.useHTML).height);
+                g4.align(W2({ y: m3 === "bottom" ? e2 : b5 + e2, height: n3 }, f4), false, "spacingBox");
+                f4.floating || (m3 === "top" ? c4[0] = Math.ceil(c4[0] + n3) : m3 === "bottom" && (c4[2] = Math.ceil(c4[2] + n3)));
+              }
+            }, this);
+            c4[0] && (this.options.title.verticalAlign || "top") === "top" && (c4[0] += this.options.title.margin);
+            c4[2] && this.options.caption.verticalAlign === "bottom" && (c4[2] += this.options.caption.margin);
+            var g3 = !this.titleOffset || this.titleOffset.join(",") !== c4.join(",");
+            this.titleOffset = c4;
+            D3(this, "afterLayOutTitles");
+            !this.isDirtyBox && g3 && (this.isDirtyBox = this.isDirtyLegend = g3, this.hasRendered && S2(b4, true) && this.isDirtyBox && this.redraw());
+          };
+          f3.prototype.getChartSize = function() {
+            var b4 = this.options.chart, c4 = b4.width;
+            b4 = b4.height;
+            var a5 = this.renderTo;
+            N3(c4) || (this.containerWidth = aa(a5, "width"));
+            N3(b4) || (this.containerHeight = aa(a5, "height"));
+            this.chartWidth = Math.max(0, c4 || this.containerWidth || 600);
+            this.chartHeight = Math.max(0, ia(b4, this.chartWidth) || (1 < this.containerHeight ? this.containerHeight : 400));
+          };
+          f3.prototype.temporaryDisplay = function(b4) {
+            var c4 = this.renderTo;
+            if (b4)
+              for (; c4 && c4.style; )
+                c4.hcOrigStyle && (w2(c4, c4.hcOrigStyle), delete c4.hcOrigStyle), c4.hcOrigDetached && (C2.body.removeChild(c4), c4.hcOrigDetached = false), c4 = c4.parentNode;
+            else
+              for (; c4 && c4.style; ) {
+                C2.body.contains(c4) || c4.parentNode || (c4.hcOrigDetached = true, C2.body.appendChild(c4));
+                if (aa(c4, "display", false) === "none" || c4.hcOricDetached)
+                  c4.hcOrigStyle = { display: c4.style.display, height: c4.style.height, overflow: c4.style.overflow }, b4 = { display: "block", overflow: "hidden" }, c4 !== this.renderTo && (b4.height = 0), w2(c4, b4), c4.offsetWidth || c4.style.setProperty("display", "block", "important");
+                c4 = c4.parentNode;
+                if (c4 === C2.body)
+                  break;
+              }
+          };
+          f3.prototype.setClassName = function(b4) {
+            this.container.className = "highcharts-container " + (b4 || "");
+          };
+          f3.prototype.getContainer = function() {
+            var b4 = this.options, a5 = b4.chart, g3 = ja(), f4, e2 = this.renderTo;
+            e2 || (this.renderTo = e2 = a5.renderTo);
+            ca(e2) && (this.renderTo = e2 = C2.getElementById(e2));
+            e2 || O3(13, true, this);
+            var n3 = da(r3(e2, "data-highcharts-chart"));
+            ba(n3) && y2[n3] && y2[n3].hasRendered && y2[n3].destroy();
+            r3(e2, "data-highcharts-chart", this.index);
+            e2.innerHTML = "";
+            a5.skipClone || e2.offsetWidth || this.temporaryDisplay();
+            this.getChartSize();
+            n3 = this.chartWidth;
+            var k3 = this.chartHeight;
+            w2(e2, { overflow: "hidden" });
+            this.styledMode || (f4 = W2({ position: "relative", overflow: "hidden", width: n3 + "px", height: k3 + "px", textAlign: "left", lineHeight: "normal", zIndex: 0, "-webkit-tap-highlight-color": "rgba(0,0,0,0)", userSelect: "none", "touch-action": "manipulation", outline: "none" }, a5.style || {}));
+            this.container = g3 = m2("div", { id: g3 }, f4, e2);
+            this._cursor = g3.style.cursor;
+            this.renderer = new (a5.renderer || !c3 ? l3.getRendererType(a5.renderer) : d2)(g3, n3, k3, void 0, a5.forExport, b4.exporting && b4.exporting.allowHTML, this.styledMode);
+            J2(void 0, this);
+            this.setClassName(a5.className);
+            if (this.styledMode)
+              for (var p3 in b4.defs)
+                this.renderer.definition(b4.defs[p3]);
+            else
+              this.renderer.setStyle(a5.style);
+            this.renderer.chartIndex = this.index;
+            D3(this, "afterGetContainer");
+          };
+          f3.prototype.getMargins = function(b4) {
+            var c4 = this.spacing, a5 = this.margin, d3 = this.titleOffset;
+            this.resetMargins();
+            d3[0] && !N3(a5[0]) && (this.plotTop = Math.max(this.plotTop, d3[0] + c4[0]));
+            d3[2] && !N3(a5[2]) && (this.marginBottom = Math.max(this.marginBottom, d3[2] + c4[2]));
+            this.legend && this.legend.display && this.legend.adjustMargins(a5, c4);
+            D3(this, "getMargins");
+            b4 || this.getAxisMargins();
+          };
+          f3.prototype.getAxisMargins = function() {
+            var b4 = this, c4 = b4.axisOffset = [0, 0, 0, 0], a5 = b4.colorAxis, d3 = b4.margin, g3 = function(b5) {
+              b5.forEach(function(b6) {
+                b6.visible && b6.getOffset();
+              });
+            };
+            b4.hasCartesianSeries ? g3(b4.axes) : a5 && a5.length && g3(a5);
+            x3.forEach(function(a6, g4) {
+              N3(d3[g4]) || (b4[a6] += c4[g4]);
+            });
+            b4.setChartSize();
+          };
+          f3.prototype.reflow = function(b4) {
+            var c4 = this, a5 = c4.options.chart, d3 = c4.renderTo, g3 = N3(a5.width) && N3(a5.height), f4 = a5.width || aa(d3, "width");
+            a5 = a5.height || aa(d3, "height");
+            d3 = b4 ? b4.target : t2;
+            delete c4.pointer.chartPosition;
+            if (!g3 && !c4.isPrinting && f4 && a5 && (d3 === t2 || d3 === C2)) {
+              if (f4 !== c4.containerWidth || a5 !== c4.containerHeight)
+                p2.clearTimeout(c4.reflowTimeout), c4.reflowTimeout = Y(function() {
+                  c4.container && c4.setSize(void 0, void 0, false);
+                }, b4 ? 100 : 0);
+              c4.containerWidth = f4;
+              c4.containerHeight = a5;
+            }
+          };
+          f3.prototype.setReflow = function(c4) {
+            var a5 = this;
+            c4 === false || this.unbindReflow ? c4 === false && this.unbindReflow && (this.unbindReflow = this.unbindReflow()) : (this.unbindReflow = b3(t2, "resize", function(b4) {
+              a5.options && a5.reflow(b4);
+            }), b3(this, "destroy", this.unbindReflow));
+          };
+          f3.prototype.setSize = function(b4, c4, a5) {
+            var d3 = this, g3 = d3.renderer;
+            d3.isResizing += 1;
+            J2(a5, d3);
+            a5 = g3.globalAnimation;
+            d3.oldChartHeight = d3.chartHeight;
+            d3.oldChartWidth = d3.chartWidth;
+            typeof b4 !== "undefined" && (d3.options.chart.width = b4);
+            typeof c4 !== "undefined" && (d3.options.chart.height = c4);
+            d3.getChartSize();
+            d3.styledMode || (a5 ? F2 : w2)(d3.container, { width: d3.chartWidth + "px", height: d3.chartHeight + "px" }, a5);
+            d3.setChartSize(true);
+            g3.setSize(d3.chartWidth, d3.chartHeight, a5);
+            d3.axes.forEach(function(b5) {
+              b5.isDirty = true;
+              b5.setScale();
+            });
+            d3.isDirtyLegend = true;
+            d3.isDirtyBox = true;
+            d3.layOutTitles();
+            d3.getMargins();
+            d3.redraw(a5);
+            d3.oldChartHeight = null;
+            D3(d3, "resize");
+            Y(function() {
+              d3 && D3(d3, "endResize", null, function() {
+                --d3.isResizing;
+              });
+            }, B(a5).duration);
+          };
+          f3.prototype.setChartSize = function(b4) {
+            var c4 = this.inverted, a5 = this.renderer, d3 = this.chartWidth, g3 = this.chartHeight, f4 = this.options.chart, m3 = this.spacing, e2 = this.clipOffset, n3, r4, k3, w3;
+            this.plotLeft = n3 = Math.round(this.plotLeft);
+            this.plotTop = r4 = Math.round(this.plotTop);
+            this.plotWidth = k3 = Math.max(0, Math.round(d3 - n3 - this.marginRight));
+            this.plotHeight = w3 = Math.max(0, Math.round(g3 - r4 - this.marginBottom));
+            this.plotSizeX = c4 ? w3 : k3;
+            this.plotSizeY = c4 ? k3 : w3;
+            this.plotBorderWidth = f4.plotBorderWidth || 0;
+            this.spacingBox = a5.spacingBox = { x: m3[3], y: m3[0], width: d3 - m3[3] - m3[1], height: g3 - m3[0] - m3[2] };
+            this.plotBox = a5.plotBox = { x: n3, y: r4, width: k3, height: w3 };
+            c4 = 2 * Math.floor(this.plotBorderWidth / 2);
+            d3 = Math.ceil(Math.max(c4, e2[3]) / 2);
+            g3 = Math.ceil(Math.max(c4, e2[0]) / 2);
+            this.clipBox = { x: d3, y: g3, width: Math.floor(this.plotSizeX - Math.max(c4, e2[1]) / 2 - d3), height: Math.max(0, Math.floor(this.plotSizeY - Math.max(c4, e2[2]) / 2 - g3)) };
+            b4 || (this.axes.forEach(function(b5) {
+              b5.setAxisSize();
+              b5.setAxisTranslation();
+            }), a5.alignElements());
+            D3(this, "afterSetChartSize", { skipAxes: b4 });
+          };
+          f3.prototype.resetMargins = function() {
+            D3(this, "resetMargins");
+            var b4 = this, c4 = b4.options.chart;
+            ["margin", "spacing"].forEach(function(a5) {
+              var d3 = c4[a5], g3 = R(d3) ? d3 : [d3, d3, d3, d3];
+              ["Top", "Right", "Bottom", "Left"].forEach(function(d4, f4) {
+                b4[a5][f4] = S2(c4[a5 + d4], g3[f4]);
+              });
+            });
+            x3.forEach(function(c5, a5) {
+              b4[c5] = S2(b4.margin[a5], b4.spacing[a5]);
+            });
+            b4.axisOffset = [0, 0, 0, 0];
+            b4.clipOffset = [0, 0, 0, 0];
+          };
+          f3.prototype.drawChartBox = function() {
+            var b4 = this.options.chart, c4 = this.renderer, a5 = this.chartWidth, d3 = this.chartHeight, g3 = this.styledMode, f4 = this.plotBGImage, m3 = b4.backgroundColor, e2 = b4.plotBackgroundColor, n3 = b4.plotBackgroundImage, r4 = this.plotLeft, k3 = this.plotTop, w3 = this.plotWidth, l4 = this.plotHeight, p3 = this.plotBox, u5 = this.clipRect, h5 = this.clipBox, t3 = this.chartBackground, G3 = this.plotBackground, x4 = this.plotBorder, y3, q4 = "animate";
+            t3 || (this.chartBackground = t3 = c4.rect().addClass("highcharts-background").add(), q4 = "attr");
+            if (g3)
+              var Q3 = y3 = t3.strokeWidth();
+            else {
+              Q3 = b4.borderWidth || 0;
+              y3 = Q3 + (b4.shadow ? 8 : 0);
+              m3 = { fill: m3 || "none" };
+              if (Q3 || t3["stroke-width"])
+                m3.stroke = b4.borderColor, m3["stroke-width"] = Q3;
+              t3.attr(m3).shadow(b4.shadow);
+            }
+            t3[q4]({ x: y3 / 2, y: y3 / 2, width: a5 - y3 - Q3 % 2, height: d3 - y3 - Q3 % 2, r: b4.borderRadius });
+            q4 = "animate";
+            G3 || (q4 = "attr", this.plotBackground = G3 = c4.rect().addClass("highcharts-plot-background").add());
+            G3[q4](p3);
+            g3 || (G3.attr({ fill: e2 || "none" }).shadow(b4.plotShadow), n3 && (f4 ? (n3 !== f4.attr("href") && f4.attr("href", n3), f4.animate(p3)) : this.plotBGImage = c4.image(n3, r4, k3, w3, l4).add()));
+            u5 ? u5.animate({ width: h5.width, height: h5.height }) : this.clipRect = c4.clipRect(h5);
+            q4 = "animate";
+            x4 || (q4 = "attr", this.plotBorder = x4 = c4.rect().addClass("highcharts-plot-border").attr({ zIndex: 1 }).add());
+            g3 || x4.attr({ stroke: b4.plotBorderColor, "stroke-width": b4.plotBorderWidth || 0, fill: "none" });
+            x4[q4](x4.crisp({ x: r4, y: k3, width: w3, height: l4 }, -x4.strokeWidth()));
+            this.isDirtyBox = false;
+            D3(this, "afterDrawChartBox");
+          };
+          f3.prototype.propFromSeries = function() {
+            var b4 = this, c4 = b4.options.chart, a5 = b4.options.series, d3, g3, f4;
+            ["inverted", "angular", "polar"].forEach(function(m3) {
+              g3 = n2[c4.type || c4.defaultSeriesType];
+              f4 = c4[m3] || g3 && g3.prototype[m3];
+              for (d3 = a5 && a5.length; !f4 && d3--; )
+                (g3 = n2[a5[d3].type]) && g3.prototype[m3] && (f4 = true);
+              b4[m3] = f4;
+            });
+          };
+          f3.prototype.linkSeries = function() {
+            var b4 = this, c4 = b4.series;
+            c4.forEach(function(b5) {
+              b5.linkedSeries.length = 0;
+            });
+            c4.forEach(function(c5) {
+              var a5 = c5.options.linkedTo;
+              ca(a5) && (a5 = a5 === ":previous" ? b4.series[c5.index - 1] : b4.get(a5)) && a5.linkedParent !== c5 && (a5.linkedSeries.push(c5), c5.linkedParent = a5, a5.enabledDataSorting && c5.setDataSortingOptions(), c5.visible = S2(c5.options.visible, a5.options.visible, c5.visible));
+            });
+            D3(this, "afterLinkSeries");
+          };
+          f3.prototype.renderSeries = function() {
+            this.series.forEach(function(b4) {
+              b4.translate();
+              b4.render();
+            });
+          };
+          f3.prototype.renderLabels = function() {
+            var b4 = this, c4 = b4.options.labels;
+            c4.items && c4.items.forEach(function(a5) {
+              var d3 = W2(c4.style, a5.style), g3 = da(d3.left) + b4.plotLeft, f4 = da(d3.top) + b4.plotTop + 12;
+              delete d3.left;
+              delete d3.top;
+              b4.renderer.text(a5.html, g3, f4).attr({ zIndex: 2 }).css(d3).add();
+            });
+          };
+          f3.prototype.render = function() {
+            var b4 = this.axes, c4 = this.colorAxis, a5 = this.renderer, d3 = this.options, g3 = function(b5) {
+              b5.forEach(function(b6) {
+                b6.visible && b6.render();
+              });
+            }, f4 = 0;
+            this.setTitle();
+            this.legend = new H2(this, d3.legend);
+            this.getStacks && this.getStacks();
+            this.getMargins(true);
+            this.setChartSize();
+            d3 = this.plotWidth;
+            b4.some(function(b5) {
+              if (b5.horiz && b5.visible && b5.options.labels.enabled && b5.series.length)
+                return f4 = 21, true;
+            });
+            var m3 = this.plotHeight = Math.max(this.plotHeight - f4, 0);
+            b4.forEach(function(b5) {
+              b5.setScale();
+            });
+            this.getAxisMargins();
+            var e2 = 1.1 < d3 / this.plotWidth, n3 = 1.05 < m3 / this.plotHeight;
+            if (e2 || n3)
+              b4.forEach(function(b5) {
+                (b5.horiz && e2 || !b5.horiz && n3) && b5.setTickInterval(true);
+              }), this.getMargins();
+            this.drawChartBox();
+            this.hasCartesianSeries ? g3(b4) : c4 && c4.length && g3(c4);
+            this.seriesGroup || (this.seriesGroup = a5.g("series-group").attr({ zIndex: 3 }).add());
+            this.renderSeries();
+            this.renderLabels();
+            this.addCredits();
+            this.setResponsive && this.setResponsive();
+            this.hasRendered = true;
+          };
+          f3.prototype.addCredits = function(b4) {
+            var c4 = this, a5 = T(true, this.options.credits, b4);
+            a5.enabled && !this.credits && (this.credits = this.renderer.text(a5.text + (this.mapCredits || ""), 0, 0).addClass("highcharts-credits").on("click", function() {
+              a5.href && (t2.location.href = a5.href);
+            }).attr({ align: a5.position.align, zIndex: 8 }), c4.styledMode || this.credits.css(a5.style), this.credits.add().align(a5.position), this.credits.update = function(b5) {
+              c4.credits = c4.credits.destroy();
+              c4.addCredits(b5);
+            });
+          };
+          f3.prototype.destroy = function() {
+            var b4 = this, c4 = b4.axes, a5 = b4.series, d3 = b4.container, g3 = d3 && d3.parentNode, f4;
+            D3(b4, "destroy");
+            b4.renderer.forExport ? P2(y2, b4) : y2[b4.index] = void 0;
+            v.chartCount--;
+            b4.renderTo.removeAttribute("data-highcharts-chart");
+            M3(b4);
+            for (f4 = c4.length; f4--; )
+              c4[f4] = c4[f4].destroy();
+            this.scroller && this.scroller.destroy && this.scroller.destroy();
+            for (f4 = a5.length; f4--; )
+              a5[f4] = a5[f4].destroy();
+            "title subtitle chartBackground plotBackground plotBGImage plotBorder seriesGroup clipRect credits pointer rangeSelector legend resetZoomButton tooltip renderer".split(" ").forEach(function(c5) {
+              var a6 = b4[c5];
+              a6 && a6.destroy && (b4[c5] = a6.destroy());
+            });
+            d3 && (d3.innerHTML = "", M3(d3), g3 && X(d3));
+            U(b4, function(c5, a6) {
+              delete b4[a6];
+            });
+          };
+          f3.prototype.firstRender = function() {
+            var b4 = this, c4 = b4.options;
+            if (!b4.isReadyToRender || b4.isReadyToRender()) {
+              b4.getContainer();
+              b4.resetMargins();
+              b4.setChartSize();
+              b4.propFromSeries();
+              b4.getAxes();
+              (Q2(c4.series) ? c4.series : []).forEach(function(c5) {
+                b4.initSeries(c5);
+              });
+              b4.linkSeries();
+              b4.setSeriesData();
+              D3(b4, "beforeRender");
+              q3 && (I2.isRequired() ? b4.pointer = new I2(b4, c4) : b4.pointer = new q3(b4, c4));
+              b4.render();
+              b4.pointer.getChartPosition();
+              if (!b4.renderer.imgCount && !b4.hasLoaded)
+                b4.onload();
+              b4.temporaryDisplay(true);
+            }
+          };
+          f3.prototype.onload = function() {
+            this.callbacks.concat([this.callback]).forEach(function(b4) {
+              b4 && typeof this.index !== "undefined" && b4.apply(this, [this]);
+            }, this);
+            D3(this, "load");
+            D3(this, "render");
+            N3(this.index) && this.setReflow(this.options.chart.reflow);
+            this.hasLoaded = true;
+          };
+          f3.prototype.addSeries = function(b4, c4, a5) {
+            var d3 = this, g3;
+            b4 && (c4 = S2(c4, true), D3(d3, "addSeries", { options: b4 }, function() {
+              g3 = d3.initSeries(b4);
+              d3.isDirtyLegend = true;
+              d3.linkSeries();
+              g3.enabledDataSorting && g3.setData(b4.data, false);
+              D3(d3, "afterAddSeries", { series: g3 });
+              c4 && d3.redraw(a5);
+            }));
+            return g3;
+          };
+          f3.prototype.addAxis = function(b4, c4, a5, d3) {
+            return this.createAxis(c4 ? "xAxis" : "yAxis", { axis: b4, redraw: a5, animation: d3 });
+          };
+          f3.prototype.addColorAxis = function(b4, c4, a5) {
+            return this.createAxis("colorAxis", { axis: b4, redraw: c4, animation: a5 });
+          };
+          f3.prototype.createAxis = function(b4, c4) {
+            b4 = new h4(this, T(c4.axis, { index: this[b4].length, isX: b4 === "xAxis" }));
+            S2(c4.redraw, true) && this.redraw(c4.animation);
+            return b4;
+          };
+          f3.prototype.showLoading = function(c4) {
+            var a5 = this, d3 = a5.options, g3 = d3.loading, f4 = function() {
+              e2 && w2(e2, { left: a5.plotLeft + "px", top: a5.plotTop + "px", width: a5.plotWidth + "px", height: a5.plotHeight + "px" });
+            }, e2 = a5.loadingDiv, n3 = a5.loadingSpan;
+            e2 || (a5.loadingDiv = e2 = m2("div", { className: "highcharts-loading highcharts-loading-hidden" }, null, a5.container));
+            n3 || (a5.loadingSpan = n3 = m2("span", { className: "highcharts-loading-inner" }, null, e2), b3(a5, "redraw", f4));
+            e2.className = "highcharts-loading";
+            k2.setElementHTML(n3, S2(c4, d3.lang.loading, ""));
+            a5.styledMode || (w2(e2, W2(g3.style, { zIndex: 10 })), w2(n3, g3.labelStyle), a5.loadingShown || (w2(e2, { opacity: 0, display: "" }), F2(e2, { opacity: g3.style.opacity || 0.5 }, { duration: g3.showDuration || 0 })));
+            a5.loadingShown = true;
+            f4();
+          };
+          f3.prototype.hideLoading = function() {
+            var b4 = this.options, c4 = this.loadingDiv;
+            c4 && (c4.className = "highcharts-loading highcharts-loading-hidden", this.styledMode || F2(c4, { opacity: 0 }, {
+              duration: b4.loading.hideDuration || 100,
+              complete: function() {
+                w2(c4, { display: "none" });
+              }
+            }));
+            this.loadingShown = false;
+          };
+          f3.prototype.update = function(b4, c4, d3, g3) {
+            var f4 = this, m3 = { credits: "addCredits", title: "setTitle", subtitle: "setSubtitle", caption: "setCaption" }, e2 = b4.isResponsiveOptions, n3 = [], r4, k3;
+            D3(f4, "update", { options: b4 });
+            e2 || f4.setResponsive(false, true);
+            b4 = G2(b4, f4.options);
+            f4.userOptions = T(f4.userOptions, b4);
+            var w3 = b4.chart;
+            if (w3) {
+              T(true, f4.options.chart, w3);
+              "className" in w3 && f4.setClassName(w3.className);
+              "reflow" in w3 && f4.setReflow(w3.reflow);
+              if ("inverted" in w3 || "polar" in w3 || "type" in w3) {
+                f4.propFromSeries();
+                var l4 = true;
+              }
+              "alignTicks" in w3 && (l4 = true);
+              "events" in w3 && L3(this, w3);
+              U(w3, function(b5, c5) {
+                f4.propsRequireUpdateSeries.indexOf("chart." + c5) !== -1 && (r4 = true);
+                f4.propsRequireDirtyBox.indexOf(c5) !== -1 && (f4.isDirtyBox = true);
+                f4.propsRequireReflow.indexOf(c5) !== -1 && (e2 ? f4.isDirtyBox = true : k3 = true);
+              });
+              !f4.styledMode && w3.style && f4.renderer.setStyle(f4.options.chart.style || {});
+            }
+            !f4.styledMode && b4.colors && (this.options.colors = b4.colors);
+            b4.time && (this.time === u4 && (this.time = new a4(b4.time)), T(true, f4.options.time, b4.time));
+            U(b4, function(c5, a5) {
+              if (f4[a5] && typeof f4[a5].update === "function")
+                f4[a5].update(c5, false);
+              else if (typeof f4[m3[a5]] === "function")
+                f4[m3[a5]](c5);
+              else
+                a5 !== "colors" && f4.collectionsWithUpdate.indexOf(a5) === -1 && T(true, f4.options[a5], b4[a5]);
+              a5 !== "chart" && f4.propsRequireUpdateSeries.indexOf(a5) !== -1 && (r4 = true);
+            });
+            this.collectionsWithUpdate.forEach(function(c5) {
+              if (b4[c5]) {
+                var a5 = [];
+                f4[c5].forEach(function(b5, c6) {
+                  b5.options.isInternal || a5.push(S2(b5.options.index, c6));
+                });
+                fa(b4[c5]).forEach(function(b5, g4) {
+                  var m4 = N3(b5.id), e3;
+                  m4 && (e3 = f4.get(b5.id));
+                  !e3 && f4[c5] && (e3 = f4[c5][a5 ? a5[g4] : g4]) && m4 && N3(e3.options.id) && (e3 = void 0);
+                  e3 && e3.coll === c5 && (e3.update(b5, false), d3 && (e3.touched = true));
+                  !e3 && d3 && f4.collectionsWithInit[c5] && (f4.collectionsWithInit[c5][0].apply(f4, [b5].concat(f4.collectionsWithInit[c5][1] || []).concat([false])).touched = true);
+                });
+                d3 && f4[c5].forEach(function(b5) {
+                  b5.touched || b5.options.isInternal ? delete b5.touched : n3.push(b5);
+                });
+              }
+            });
+            n3.forEach(function(b5) {
+              b5.chart && b5.remove && b5.remove(false);
+            });
+            l4 && f4.axes.forEach(function(b5) {
+              b5.update({}, false);
+            });
+            r4 && f4.getSeriesOrderByLinks().forEach(function(b5) {
+              b5.chart && b5.update({}, false);
+            }, this);
+            l4 = w3 && w3.width;
+            w3 = w3 && (ca(w3.height) ? ia(w3.height, l4 || f4.chartWidth) : w3.height);
+            k3 || ba(l4) && l4 !== f4.chartWidth || ba(w3) && w3 !== f4.chartHeight ? f4.setSize(l4, w3, g3) : S2(c4, true) && f4.redraw(g3);
+            D3(f4, "afterUpdate", { options: b4, redraw: c4, animation: g3 });
+          };
+          f3.prototype.setSubtitle = function(b4, c4) {
+            this.applyDescription("subtitle", b4);
+            this.layOutTitles(c4);
+          };
+          f3.prototype.setCaption = function(b4, c4) {
+            this.applyDescription("caption", b4);
+            this.layOutTitles(c4);
+          };
+          f3.prototype.showResetZoom = function() {
+            function b4() {
+              c4.zoomOut();
+            }
+            var c4 = this, a5 = g2.lang, d3 = c4.options.chart.resetZoomButton, f4 = d3.theme, m3 = f4.states, e2 = d3.relativeTo === "chart" || d3.relativeTo === "spacingBox" ? null : "scrollablePlotBox";
+            D3(this, "beforeShowResetZoom", null, function() {
+              c4.resetZoomButton = c4.renderer.button(a5.resetZoom, null, null, b4, f4, m3 && m3.hover).attr({ align: d3.position.align, title: a5.resetZoomTitle }).addClass("highcharts-reset-zoom").add().align(d3.position, false, e2);
+            });
+            D3(this, "afterShowResetZoom");
+          };
+          f3.prototype.zoomOut = function() {
+            D3(this, "selection", { resetSelection: true }, this.zoom);
+          };
+          f3.prototype.zoom = function(b4) {
+            var c4 = this, a5 = c4.pointer, d3 = c4.inverted ? a5.mouseDownX : a5.mouseDownY, g3 = false, f4;
+            !b4 || b4.resetSelection ? (c4.axes.forEach(function(b5) {
+              f4 = b5.zoom();
+            }), a5.initiated = false) : b4.xAxis.concat(b4.yAxis).forEach(function(b5) {
+              var m4 = b5.axis, e2 = c4.inverted ? m4.left : m4.top, n3 = c4.inverted ? e2 + m4.width : e2 + m4.height, r4 = m4.isXAxis, k3 = false;
+              if (!r4 && d3 >= e2 && d3 <= n3 || r4 || !N3(d3))
+                k3 = true;
+              a5[r4 ? "zoomX" : "zoomY"] && k3 && (f4 = m4.zoom(b5.min, b5.max), m4.displayBtn && (g3 = true));
+            });
+            var m3 = c4.resetZoomButton;
+            g3 && !m3 ? c4.showResetZoom() : !g3 && R(m3) && (c4.resetZoomButton = m3.destroy());
+            f4 && c4.redraw(S2(c4.options.chart.animation, b4 && b4.animation, 100 > c4.pointCount));
+          };
+          f3.prototype.pan = function(b4, c4) {
+            var a5 = this, d3 = a5.hoverPoints;
+            c4 = typeof c4 === "object" ? c4 : { enabled: c4, type: "x" };
+            var g3 = a5.options.chart, f4 = a5.options.mapNavigation && a5.options.mapNavigation.enabled;
+            g3 && g3.panning && (g3.panning = c4);
+            var m3 = c4.type, e2;
+            D3(this, "pan", { originalEvent: b4 }, function() {
+              d3 && d3.forEach(function(b5) {
+                b5.setState();
+              });
+              var c5 = a5.xAxis;
+              m3 === "xy" ? c5 = c5.concat(a5.yAxis) : m3 === "y" && (c5 = a5.yAxis);
+              var g4 = {};
+              c5.forEach(function(c6) {
+                if (c6.options.panningEnabled && !c6.options.isInternal) {
+                  var d4 = c6.horiz, n3 = b4[d4 ? "chartX" : "chartY"];
+                  d4 = d4 ? "mouseDownX" : "mouseDownY";
+                  var r4 = a5[d4], k3 = c6.minPointOffset || 0, w3 = c6.reversed && !a5.inverted || !c6.reversed && a5.inverted ? -1 : 1, l4 = c6.getExtremes(), p3 = c6.toValue(r4 - n3, true) + k3 * w3, u5 = c6.toValue(r4 + c6.len - n3, true) - (k3 * w3 || c6.isXAxis && c6.pointRangePadding || 0), h5 = u5 < p3;
+                  w3 = c6.hasVerticalPanning();
+                  r4 = h5 ? u5 : p3;
+                  p3 = h5 ? p3 : u5;
+                  var t3 = c6.panningState;
+                  !w3 || c6.isXAxis || t3 && !t3.isDirty || c6.series.forEach(function(b5) {
+                    var c7 = b5.getProcessedData(true);
+                    c7 = b5.getExtremes(c7.yData, true);
+                    t3 || (t3 = { startMin: Number.MAX_VALUE, startMax: -Number.MAX_VALUE });
+                    ba(c7.dataMin) && ba(c7.dataMax) && (t3.startMin = Math.min(S2(b5.options.threshold, Infinity), c7.dataMin, t3.startMin), t3.startMax = Math.max(S2(b5.options.threshold, -Infinity), c7.dataMax, t3.startMax));
+                  });
+                  w3 = Math.min(S2(t3 && t3.startMin, l4.dataMin), k3 ? l4.min : c6.toValue(c6.toPixels(l4.min) - c6.minPixelPadding));
+                  u5 = Math.max(S2(t3 && t3.startMax, l4.dataMax), k3 ? l4.max : c6.toValue(c6.toPixels(l4.max) + c6.minPixelPadding));
+                  c6.panningState = t3;
+                  c6.isOrdinal || (k3 = w3 - r4, 0 < k3 && (p3 += k3, r4 = w3), k3 = p3 - u5, 0 < k3 && (p3 = u5, r4 -= k3), c6.series.length && r4 !== l4.min && p3 !== l4.max && r4 >= w3 && p3 <= u5 && (c6.setExtremes(r4, p3, false, false, { trigger: "pan" }), a5.resetZoomButton || f4 || r4 === w3 || p3 === u5 || !m3.match("y") || (a5.showResetZoom(), c6.displayBtn = false), e2 = true), g4[d4] = n3);
+                }
+              });
+              U(g4, function(b5, c6) {
+                a5[c6] = b5;
+              });
+              e2 && a5.redraw(false);
+              w2(a5.container, { cursor: "move" });
+            });
+          };
+          return f3;
+        }();
+        W2(e.prototype, {
+          callbacks: [],
+          collectionsWithInit: { xAxis: [e.prototype.addAxis, [true]], yAxis: [e.prototype.addAxis, [false]], series: [e.prototype.addSeries] },
+          collectionsWithUpdate: ["xAxis", "yAxis", "series"],
+          propsRequireDirtyBox: "backgroundColor borderColor borderWidth borderRadius plotBackgroundColor plotBackgroundImage plotBorderColor plotBorderWidth plotShadow shadow".split(" "),
+          propsRequireReflow: "margin marginTop marginRight marginBottom marginLeft spacing spacingTop spacingRight spacingBottom spacingLeft".split(" "),
+          propsRequireUpdateSeries: "chart.inverted chart.polar chart.ignoreHiddenSeries chart.type colors plotOptions time tooltip".split(" ")
+        });
+        "";
+        return e;
+      });
+      M2(h3, "Core/Legend/LegendSymbol.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.merge, A = e.pick, E3;
+        (function(e2) {
+          e2.drawLineMarker = function(e3) {
+            var v = this.options, z2 = e3.symbolWidth, q3 = e3.symbolHeight, l3 = q3 / 2, f2 = this.chart.renderer, d2 = this.legendGroup;
+            e3 = e3.baseline - Math.round(0.3 * e3.fontMetrics.b);
+            var a4 = {}, p2 = v.marker;
+            this.chart.styledMode || (a4 = { "stroke-width": v.lineWidth || 0 }, v.dashStyle && (a4.dashstyle = v.dashStyle));
+            this.legendLine = f2.path([["M", 0, e3], ["L", z2, e3]]).addClass("highcharts-graph").attr(a4).add(d2);
+            p2 && p2.enabled !== false && z2 && (v = Math.min(A(p2.radius, l3), l3), this.symbol.indexOf("url") === 0 && (p2 = h4(p2, { width: q3, height: q3 }), v = 0), this.legendSymbol = z2 = f2.symbol(this.symbol, z2 / 2 - v, e3 - v, 2 * v, 2 * v, p2).addClass("highcharts-point").add(d2), z2.isMarker = true);
+          };
+          e2.drawRectangle = function(e3, h5) {
+            var v = e3.symbolHeight, q3 = e3.options.squareSymbol;
+            h5.legendSymbol = this.chart.renderer.rect(q3 ? (e3.symbolWidth - v) / 2 : 0, e3.baseline - v + 1, q3 ? v : e3.symbolWidth, v, A(e3.options.symbolRadius, v / 2)).addClass("highcharts-point").attr({ zIndex: 3 }).add(h5.legendGroup);
+          };
+        })(E3 || (E3 = {}));
+        return E3;
+      });
+      M2(h3, "Core/Series/SeriesDefaults.js", [], function() {
+        return { lineWidth: 2, allowPointSelect: false, crisp: true, showCheckbox: false, animation: { duration: 1e3 }, events: {}, marker: { enabledThreshold: 2, lineColor: "#ffffff", lineWidth: 0, radius: 4, states: {
+          normal: { animation: true },
+          hover: { animation: { duration: 50 }, enabled: true, radiusPlus: 2, lineWidthPlus: 1 },
+          select: { fillColor: "#cccccc", lineColor: "#000000", lineWidth: 2 }
+        } }, point: { events: {} }, dataLabels: { animation: {}, align: "center", defer: true, formatter: function() {
+          var e = this.series.chart.numberFormatter;
+          return typeof this.y !== "number" ? "" : e(this.y, -1);
+        }, padding: 5, style: { fontSize: "11px", fontWeight: "bold", color: "contrast", textOutline: "1px contrast" }, verticalAlign: "bottom", x: 0, y: 0 }, cropThreshold: 300, opacity: 1, pointRange: 0, softThreshold: true, states: {
+          normal: { animation: true },
+          hover: { animation: { duration: 50 }, lineWidthPlus: 1, marker: {}, halo: { size: 10, opacity: 0.25 } },
+          select: { animation: { duration: 0 } },
+          inactive: { animation: { duration: 50 }, opacity: 0.2 }
+        }, stickyTracking: true, turboThreshold: 1e3, findNearestPointBy: "x" };
+      });
+      M2(h3, "Core/Series/Series.js", [
+        h3["Core/Animation/AnimationUtilities.js"],
+        h3["Core/DefaultOptions.js"],
+        h3["Core/Foundation.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Legend/LegendSymbol.js"],
+        h3["Core/Series/Point.js"],
+        h3["Core/Series/SeriesDefaults.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Renderer/SVG/SVGElement.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v, H2, I2, z2, q3, l3) {
+        var f2 = e.animObject, d2 = e.setAnimation, a4 = h4.defaultOptions, p2 = A.registerEventOptions, k2 = E3.hasTouch, F2 = E3.svg, B = E3.win, J2 = z2.seriesTypes, K2 = l3.addEvent, L3 = l3.arrayMax, y2 = l3.arrayMin, C2 = l3.clamp, x3 = l3.cleanRecursively, c3 = l3.correctFloat, t2 = l3.defined, g2 = l3.erase, u4 = l3.error, n2 = l3.extend, b3 = l3.find, r3 = l3.fireEvent, G2 = l3.getNestedProperty, m2 = l3.isArray, w2 = l3.isNumber, N3 = l3.isString, D3 = l3.merge, P2 = l3.objectEach, O3 = l3.pick, W2 = l3.removeEvent, Z = l3.splat, ha = l3.syncTimeout;
+        e = function() {
+          function e2() {
+            this.zones = this.yAxis = this.xAxis = this.userOptions = this.tooltipOptions = this.processedYData = this.processedXData = this.points = this.options = this.linkedSeries = this.index = this.eventsToUnbind = this.eventOptions = this.data = this.chart = this._i = void 0;
+          }
+          e2.prototype.init = function(b4, c4) {
+            r3(this, "init", { options: c4 });
+            var a5 = this, d3 = b4.series;
+            this.eventsToUnbind = [];
+            a5.chart = b4;
+            a5.options = a5.setOptions(c4);
+            c4 = a5.options;
+            a5.linkedSeries = [];
+            a5.bindAxes();
+            n2(a5, { name: c4.name, state: "", visible: c4.visible !== false, selected: c4.selected === true });
+            p2(this, c4);
+            var g3 = c4.events;
+            if (g3 && g3.click || c4.point && c4.point.events && c4.point.events.click || c4.allowPointSelect)
+              b4.runTrackerClick = true;
+            a5.getColor();
+            a5.getSymbol();
+            a5.parallelArrays.forEach(function(b5) {
+              a5[b5 + "Data"] || (a5[b5 + "Data"] = []);
+            });
+            a5.isCartesian && (b4.hasCartesianSeries = true);
+            var f3;
+            d3.length && (f3 = d3[d3.length - 1]);
+            a5._i = O3(f3 && f3._i, -1) + 1;
+            a5.opacity = a5.options.opacity;
+            b4.orderSeries(this.insert(d3));
+            c4.dataSorting && c4.dataSorting.enabled ? a5.setDataSortingOptions() : a5.points || a5.data || a5.setData(c4.data, false);
+            r3(this, "afterInit");
+          };
+          e2.prototype.is = function(b4) {
+            return J2[b4] && this instanceof J2[b4];
+          };
+          e2.prototype.insert = function(b4) {
+            var c4 = this.options.index, a5;
+            if (w2(c4)) {
+              for (a5 = b4.length; a5--; )
+                if (c4 >= O3(b4[a5].options.index, b4[a5]._i)) {
+                  b4.splice(a5 + 1, 0, this);
+                  break;
+                }
+              a5 === -1 && b4.unshift(this);
+              a5 += 1;
+            } else
+              b4.push(this);
+            return O3(a5, b4.length - 1);
+          };
+          e2.prototype.bindAxes = function() {
+            var b4 = this, c4 = b4.options, a5 = b4.chart, d3;
+            r3(this, "bindAxes", null, function() {
+              (b4.axisTypes || []).forEach(function(g3) {
+                var f3 = 0;
+                a5[g3].forEach(function(a6) {
+                  d3 = a6.options;
+                  if (c4[g3] === f3 && !d3.isInternal || typeof c4[g3] !== "undefined" && c4[g3] === d3.id || typeof c4[g3] === "undefined" && d3.index === 0)
+                    b4.insert(a6.series), b4[g3] = a6, a6.isDirty = true;
+                  d3.isInternal || f3++;
+                });
+                b4[g3] || b4.optionalAxis === g3 || u4(18, true, a5);
+              });
+            });
+            r3(this, "afterBindAxes");
+          };
+          e2.prototype.updateParallelArrays = function(b4, c4) {
+            var a5 = b4.series, d3 = arguments, g3 = w2(c4) ? function(d4) {
+              var g4 = d4 === "y" && a5.toYData ? a5.toYData(b4) : b4[d4];
+              a5[d4 + "Data"][c4] = g4;
+            } : function(b5) {
+              Array.prototype[c4].apply(a5[b5 + "Data"], Array.prototype.slice.call(d3, 2));
+            };
+            a5.parallelArrays.forEach(g3);
+          };
+          e2.prototype.hasData = function() {
+            return this.visible && typeof this.dataMax !== "undefined" && typeof this.dataMin !== "undefined" || this.visible && this.yData && 0 < this.yData.length;
+          };
+          e2.prototype.autoIncrement = function(b4) {
+            var c4 = this.options, a5 = c4.pointIntervalUnit, d3 = c4.relativeXValue, g3 = this.chart.time, f3 = this.xIncrement, e3;
+            f3 = O3(f3, c4.pointStart, 0);
+            this.pointInterval = e3 = O3(this.pointInterval, c4.pointInterval, 1);
+            d3 && w2(b4) && (e3 *= b4);
+            a5 && (c4 = new g3.Date(f3), a5 === "day" ? g3.set("Date", c4, g3.get("Date", c4) + e3) : a5 === "month" ? g3.set("Month", c4, g3.get("Month", c4) + e3) : a5 === "year" && g3.set("FullYear", c4, g3.get("FullYear", c4) + e3), e3 = c4.getTime() - f3);
+            if (d3 && w2(b4))
+              return f3 + e3;
+            this.xIncrement = f3 + e3;
+            return f3;
+          };
+          e2.prototype.setDataSortingOptions = function() {
+            var b4 = this.options;
+            n2(this, { requireSorting: false, sorted: false, enabledDataSorting: true, allowDG: false });
+            t2(b4.pointRange) || (b4.pointRange = 1);
+          };
+          e2.prototype.setOptions = function(b4) {
+            var c4 = this.chart, d3 = c4.options, g3 = d3.plotOptions, f3 = c4.userOptions || {};
+            b4 = D3(b4);
+            c4 = c4.styledMode;
+            var e3 = { plotOptions: g3, userOptions: b4 };
+            r3(this, "setOptions", e3);
+            var m3 = e3.plotOptions[this.type], n3 = f3.plotOptions || {};
+            this.userOptions = e3.userOptions;
+            f3 = D3(m3, g3.series, f3.plotOptions && f3.plotOptions[this.type], b4);
+            this.tooltipOptions = D3(a4.tooltip, a4.plotOptions.series && a4.plotOptions.series.tooltip, a4.plotOptions[this.type].tooltip, d3.tooltip.userOptions, g3.series && g3.series.tooltip, g3[this.type].tooltip, b4.tooltip);
+            this.stickyTracking = O3(b4.stickyTracking, n3[this.type] && n3[this.type].stickyTracking, n3.series && n3.series.stickyTracking, this.tooltipOptions.shared && !this.noSharedTooltip ? true : f3.stickyTracking);
+            m3.marker === null && delete f3.marker;
+            this.zoneAxis = f3.zoneAxis;
+            g3 = this.zones = (f3.zones || []).slice();
+            !f3.negativeColor && !f3.negativeFillColor || f3.zones || (d3 = { value: f3[this.zoneAxis + "Threshold"] || f3.threshold || 0, className: "highcharts-negative" }, c4 || (d3.color = f3.negativeColor, d3.fillColor = f3.negativeFillColor), g3.push(d3));
+            g3.length && t2(g3[g3.length - 1].value) && g3.push(c4 ? {} : { color: this.color, fillColor: this.fillColor });
+            r3(this, "afterSetOptions", { options: f3 });
+            return f3;
+          };
+          e2.prototype.getName = function() {
+            return O3(this.options.name, "Series " + (this.index + 1));
+          };
+          e2.prototype.getCyclic = function(b4, c4, a5) {
+            var d3 = this.chart, g3 = this.userOptions, f3 = b4 + "Index", e3 = b4 + "Counter", m3 = a5 ? a5.length : O3(d3.options.chart[b4 + "Count"], d3[b4 + "Count"]);
+            if (!c4) {
+              var n3 = O3(g3[f3], g3["_" + f3]);
+              t2(n3) || (d3.series.length || (d3[e3] = 0), g3["_" + f3] = n3 = d3[e3] % m3, d3[e3] += 1);
+              a5 && (c4 = a5[n3]);
+            }
+            typeof n3 !== "undefined" && (this[f3] = n3);
+            this[b4] = c4;
+          };
+          e2.prototype.getColor = function() {
+            this.chart.styledMode ? this.getCyclic("color") : this.options.colorByPoint ? this.color = "#cccccc" : this.getCyclic("color", this.options.color || a4.plotOptions[this.type].color, this.chart.options.colors);
+          };
+          e2.prototype.getPointsCollection = function() {
+            return (this.hasGroupedData ? this.points : this.data) || [];
+          };
+          e2.prototype.getSymbol = function() {
+            this.getCyclic("symbol", this.options.marker.symbol, this.chart.options.symbols);
+          };
+          e2.prototype.findPointIndex = function(c4, a5) {
+            var d3 = c4.id, g3 = c4.x, f3 = this.points, e3 = this.options.dataSorting, m3, n3;
+            if (d3)
+              e3 = this.chart.get(d3), e3 instanceof H2 && (m3 = e3);
+            else if (this.linkedParent || this.enabledDataSorting || this.options.relativeXValue) {
+              if (m3 = function(b4) {
+                return !b4.touched && b4.index === c4.index;
+              }, e3 && e3.matchByName ? m3 = function(b4) {
+                return !b4.touched && b4.name === c4.name;
+              } : this.options.relativeXValue && (m3 = function(b4) {
+                return !b4.touched && b4.options.x === c4.x;
+              }), m3 = b3(f3, m3), !m3)
+                return;
+            }
+            if (m3) {
+              var r4 = m3 && m3.index;
+              typeof r4 !== "undefined" && (n3 = true);
+            }
+            typeof r4 === "undefined" && w2(g3) && (r4 = this.xData.indexOf(g3, a5));
+            r4 !== -1 && typeof r4 !== "undefined" && this.cropped && (r4 = r4 >= this.cropStart ? r4 - this.cropStart : r4);
+            !n3 && w2(r4) && f3[r4] && f3[r4].touched && (r4 = void 0);
+            return r4;
+          };
+          e2.prototype.updateData = function(b4, c4) {
+            var a5 = this.options, d3 = a5.dataSorting, g3 = this.points, f3 = [], e3 = this.requireSorting, m3 = b4.length === g3.length, n3, r4, k3, l4 = true;
+            this.xIncrement = null;
+            b4.forEach(function(b5, c5) {
+              var r5 = t2(b5) && this.pointClass.prototype.optionsToObject.call({ series: this }, b5) || {}, l5 = r5.x;
+              if (r5.id || w2(l5)) {
+                if (r5 = this.findPointIndex(r5, k3), r5 === -1 || typeof r5 === "undefined" ? f3.push(b5) : g3[r5] && b5 !== a5.data[r5] ? (g3[r5].update(b5, false, null, false), g3[r5].touched = true, e3 && (k3 = r5 + 1)) : g3[r5] && (g3[r5].touched = true), !m3 || c5 !== r5 || d3 && d3.enabled || this.hasDerivedData)
+                  n3 = true;
+              } else
+                f3.push(b5);
+            }, this);
+            if (n3)
+              for (b4 = g3.length; b4--; )
+                (r4 = g3[b4]) && !r4.touched && r4.remove && r4.remove(false, c4);
+            else
+              !m3 || d3 && d3.enabled ? l4 = false : (b4.forEach(function(b5, c5) {
+                b5 !== g3[c5].y && g3[c5].update && g3[c5].update(b5, false, null, false);
+              }), f3.length = 0);
+            g3.forEach(function(b5) {
+              b5 && (b5.touched = false);
+            });
+            if (!l4)
+              return false;
+            f3.forEach(function(b5) {
+              this.addPoint(b5, false, null, null, false);
+            }, this);
+            this.xIncrement === null && this.xData && this.xData.length && (this.xIncrement = L3(this.xData), this.autoIncrement());
+            return true;
+          };
+          e2.prototype.setData = function(b4, c4, a5, d3) {
+            var g3 = this, f3 = g3.points, e3 = f3 && f3.length || 0, n3 = g3.options, r4 = g3.chart, k3 = n3.dataSorting, l4 = g3.xAxis, p3 = n3.turboThreshold, h5 = this.xData, t3 = this.yData, x4 = g3.pointArrayMap;
+            x4 = x4 && x4.length;
+            var G3 = n3.keys, y3, q4 = 0, C3 = 1, B2 = null;
+            b4 = b4 || [];
+            var Q2 = b4.length;
+            c4 = O3(c4, true);
+            k3 && k3.enabled && (b4 = this.sortData(b4));
+            d3 !== false && Q2 && e3 && !g3.cropped && !g3.hasGroupedData && g3.visible && !g3.isSeriesBoosting && (y3 = this.updateData(b4, a5));
+            if (!y3) {
+              g3.xIncrement = null;
+              g3.colorCounter = 0;
+              this.parallelArrays.forEach(function(b5) {
+                g3[b5 + "Data"].length = 0;
+              });
+              if (p3 && Q2 > p3)
+                if (B2 = g3.getFirstValidPoint(b4), w2(B2))
+                  for (a5 = 0; a5 < Q2; a5++)
+                    h5[a5] = this.autoIncrement(), t3[a5] = b4[a5];
+                else if (m2(B2))
+                  if (x4)
+                    if (B2.length === x4)
+                      for (a5 = 0; a5 < Q2; a5++)
+                        h5[a5] = this.autoIncrement(), t3[a5] = b4[a5];
+                    else
+                      for (a5 = 0; a5 < Q2; a5++)
+                        d3 = b4[a5], h5[a5] = d3[0], t3[a5] = d3.slice(1, x4 + 1);
+                  else if (G3 && (q4 = G3.indexOf("x"), C3 = G3.indexOf("y"), q4 = 0 <= q4 ? q4 : 0, C3 = 0 <= C3 ? C3 : 1), B2.length === 1 && (C3 = 0), q4 === C3)
+                    for (a5 = 0; a5 < Q2; a5++)
+                      h5[a5] = this.autoIncrement(), t3[a5] = b4[a5][C3];
+                  else
+                    for (a5 = 0; a5 < Q2; a5++)
+                      d3 = b4[a5], h5[a5] = d3[q4], t3[a5] = d3[C3];
+                else
+                  u4(12, false, r4);
+              else
+                for (a5 = 0; a5 < Q2; a5++)
+                  typeof b4[a5] !== "undefined" && (d3 = { series: g3 }, g3.pointClass.prototype.applyOptions.apply(d3, [b4[a5]]), g3.updateParallelArrays(d3, a5));
+              t3 && N3(t3[0]) && u4(14, true, r4);
+              g3.data = [];
+              g3.options.data = g3.userOptions.data = b4;
+              for (a5 = e3; a5--; )
+                f3[a5] && f3[a5].destroy && f3[a5].destroy();
+              l4 && (l4.minRange = l4.userMinRange);
+              g3.isDirty = r4.isDirtyBox = true;
+              g3.isDirtyData = !!f3;
+              a5 = false;
+            }
+            n3.legendType === "point" && (this.processData(), this.generatePoints());
+            c4 && r4.redraw(a5);
+          };
+          e2.prototype.sortData = function(b4) {
+            var c4 = this, a5 = c4.options.dataSorting.sortKey || "y", d3 = function(b5, c5) {
+              return t2(c5) && b5.pointClass.prototype.optionsToObject.call({ series: b5 }, c5) || {};
+            };
+            b4.forEach(function(a6, g3) {
+              b4[g3] = d3(c4, a6);
+              b4[g3].index = g3;
+            }, this);
+            b4.concat().sort(function(b5, c5) {
+              b5 = G2(a5, b5);
+              c5 = G2(a5, c5);
+              return c5 < b5 ? -1 : c5 > b5 ? 1 : 0;
+            }).forEach(function(b5, c5) {
+              b5.x = c5;
+            }, this);
+            c4.linkedSeries && c4.linkedSeries.forEach(function(c5) {
+              var a6 = c5.options, g3 = a6.data;
+              a6.dataSorting && a6.dataSorting.enabled || !g3 || (g3.forEach(function(a7, f3) {
+                g3[f3] = d3(c5, a7);
+                b4[f3] && (g3[f3].x = b4[f3].x, g3[f3].index = f3);
+              }), c5.setData(g3, false));
+            });
+            return b4;
+          };
+          e2.prototype.getProcessedData = function(b4) {
+            var c4 = this.xAxis, a5 = this.options, d3 = a5.cropThreshold, g3 = b4 || this.getExtremesFromAll || a5.getExtremesFromAll, f3 = this.isCartesian;
+            b4 = c4 && c4.val2lin;
+            a5 = !(!c4 || !c4.logarithmic);
+            var e3 = 0, m3 = this.xData, n3 = this.yData, r4 = this.requireSorting;
+            var k3 = false;
+            var w3 = m3.length;
+            if (c4) {
+              k3 = c4.getExtremes();
+              var l4 = k3.min;
+              var p3 = k3.max;
+              k3 = c4.categories && !c4.names.length;
+            }
+            if (f3 && this.sorted && !g3 && (!d3 || w3 > d3 || this.forceCrop)) {
+              if (m3[w3 - 1] < l4 || m3[0] > p3)
+                m3 = [], n3 = [];
+              else if (this.yData && (m3[0] < l4 || m3[w3 - 1] > p3)) {
+                var h5 = this.cropData(this.xData, this.yData, l4, p3);
+                m3 = h5.xData;
+                n3 = h5.yData;
+                e3 = h5.start;
+                h5 = true;
+              }
+            }
+            for (d3 = m3.length || 1; --d3; )
+              if (c4 = a5 ? b4(m3[d3]) - b4(m3[d3 - 1]) : m3[d3] - m3[d3 - 1], 0 < c4 && (typeof t3 === "undefined" || c4 < t3))
+                var t3 = c4;
+              else
+                0 > c4 && r4 && !k3 && (u4(15, false, this.chart), r4 = false);
+            return { xData: m3, yData: n3, cropped: h5, cropStart: e3, closestPointRange: t3 };
+          };
+          e2.prototype.processData = function(b4) {
+            var c4 = this.xAxis;
+            if (this.isCartesian && !this.isDirty && !c4.isDirty && !this.yAxis.isDirty && !b4)
+              return false;
+            b4 = this.getProcessedData();
+            this.cropped = b4.cropped;
+            this.cropStart = b4.cropStart;
+            this.processedXData = b4.xData;
+            this.processedYData = b4.yData;
+            this.closestPointRange = this.basePointRange = b4.closestPointRange;
+            r3(this, "afterProcessData");
+          };
+          e2.prototype.cropData = function(b4, c4, a5, d3, g3) {
+            var f3 = b4.length, e3, m3 = 0, n3 = f3;
+            g3 = O3(g3, this.cropShoulder);
+            for (e3 = 0; e3 < f3; e3++)
+              if (b4[e3] >= a5) {
+                m3 = Math.max(0, e3 - g3);
+                break;
+              }
+            for (a5 = e3; a5 < f3; a5++)
+              if (b4[a5] > d3) {
+                n3 = a5 + g3;
+                break;
+              }
+            return { xData: b4.slice(m3, n3), yData: c4.slice(m3, n3), start: m3, end: n3 };
+          };
+          e2.prototype.generatePoints = function() {
+            var b4 = this.options, c4 = b4.data, a5 = this.processedXData, d3 = this.processedYData, g3 = this.pointClass, f3 = a5.length, e3 = this.cropStart || 0, m3 = this.hasGroupedData, k3 = b4.keys, w3 = [];
+            b4 = b4.dataGrouping && b4.dataGrouping.groupAll ? e3 : 0;
+            var l4, p3, h5 = this.data;
+            if (!h5 && !m3) {
+              var u5 = [];
+              u5.length = c4.length;
+              h5 = this.data = u5;
+            }
+            k3 && m3 && (this.options.keys = false);
+            for (p3 = 0; p3 < f3; p3++) {
+              u5 = e3 + p3;
+              if (m3) {
+                var t3 = new g3().init(this, [a5[p3]].concat(Z(d3[p3])));
+                t3.dataGroup = this.groupMap[b4 + p3];
+                t3.dataGroup.options && (t3.options = t3.dataGroup.options, n2(t3, t3.dataGroup.options), delete t3.dataLabels);
+              } else
+                (t3 = h5[u5]) || typeof c4[u5] === "undefined" || (h5[u5] = t3 = new g3().init(this, c4[u5], a5[p3]));
+              t3 && (t3.index = m3 ? b4 + p3 : u5, w3[p3] = t3);
+            }
+            this.options.keys = k3;
+            if (h5 && (f3 !== (l4 = h5.length) || m3))
+              for (p3 = 0; p3 < l4; p3++)
+                p3 !== e3 || m3 || (p3 += f3), h5[p3] && (h5[p3].destroyElements(), h5[p3].plotX = void 0);
+            this.data = h5;
+            this.points = w3;
+            r3(this, "afterGeneratePoints");
+          };
+          e2.prototype.getXExtremes = function(b4) {
+            return { min: y2(b4), max: L3(b4) };
+          };
+          e2.prototype.getExtremes = function(b4, c4) {
+            var a5 = this.xAxis, d3 = this.yAxis, g3 = this.processedXData || this.xData, f3 = [], e3 = this.requireSorting ? this.cropShoulder : 0;
+            d3 = d3 ? d3.positiveValuesOnly : false;
+            var n3, k3 = 0, l4 = 0, p3 = 0;
+            b4 = b4 || this.stackedYData || this.processedYData || [];
+            var h5 = b4.length;
+            if (a5) {
+              var t3 = a5.getExtremes();
+              k3 = t3.min;
+              l4 = t3.max;
+            }
+            for (n3 = 0; n3 < h5; n3++) {
+              var u5 = g3[n3];
+              t3 = b4[n3];
+              var x4 = (w2(t3) || m2(t3)) && (t3.length || 0 < t3 || !d3);
+              u5 = c4 || this.getExtremesFromAll || this.options.getExtremesFromAll || this.cropped || !a5 || (g3[n3 + e3] || u5) >= k3 && (g3[n3 - e3] || u5) <= l4;
+              if (x4 && u5)
+                if (x4 = t3.length)
+                  for (; x4--; )
+                    w2(t3[x4]) && (f3[p3++] = t3[x4]);
+                else
+                  f3[p3++] = t3;
+            }
+            b4 = { activeYData: f3, dataMin: y2(f3), dataMax: L3(f3) };
+            r3(this, "afterGetExtremes", { dataExtremes: b4 });
+            return b4;
+          };
+          e2.prototype.applyExtremes = function() {
+            var b4 = this.getExtremes();
+            this.dataMin = b4.dataMin;
+            this.dataMax = b4.dataMax;
+            return b4;
+          };
+          e2.prototype.getFirstValidPoint = function(b4) {
+            for (var c4 = b4.length, a5 = 0, d3 = null; d3 === null && a5 < c4; )
+              d3 = b4[a5], a5++;
+            return d3;
+          };
+          e2.prototype.translate = function() {
+            this.processedXData || this.processData();
+            this.generatePoints();
+            var b4 = this.options, a5 = b4.stacking, d3 = this.xAxis, g3 = d3.categories, f3 = this.enabledDataSorting, e3 = this.yAxis, n3 = this.points, k3 = n3.length, l4 = this.pointPlacementToXValue(), p3 = !!l4, h5 = b4.threshold, u5 = b4.startFromThreshold ? h5 : 0, x4 = this.zoneAxis || "y", G3, q4, y3 = Number.MAX_VALUE;
+            for (G3 = 0; G3 < k3; G3++) {
+              var B2 = n3[G3], N4 = B2.x, F3 = void 0, J3 = void 0, K3 = B2.y, L4 = B2.low, v2 = a5 && e3.stacking && e3.stacking.stacks[(this.negStacks && K3 < (u5 ? 0 : h5) ? "-" : "") + this.stackKey];
+              if (e3.positiveValuesOnly && !e3.validatePositiveValue(K3) || d3.positiveValuesOnly && !d3.validatePositiveValue(N4))
+                B2.isNull = true;
+              B2.plotX = q4 = c3(C2(d3.translate(N4, 0, 0, 0, 1, l4, this.type === "flags"), -1e5, 1e5));
+              if (a5 && this.visible && v2 && v2[N4]) {
+                var z3 = this.getStackIndicator(z3, N4, this.index);
+                B2.isNull || (F3 = v2[N4], J3 = F3.points[z3.key]);
+              }
+              m2(J3) && (L4 = J3[0], K3 = J3[1], L4 === u5 && z3.key === v2[N4].base && (L4 = O3(w2(h5) && h5, e3.min)), e3.positiveValuesOnly && 0 >= L4 && (L4 = null), B2.total = B2.stackTotal = F3.total, B2.percentage = F3.total && B2.y / F3.total * 100, B2.stackY = K3, this.irregularWidths || F3.setOffset(this.pointXOffset || 0, this.barW || 0));
+              B2.yBottom = t2(L4) ? C2(e3.translate(L4, 0, 1, 0, 1), -1e5, 1e5) : null;
+              this.dataModify && (K3 = this.dataModify.modifyValue(K3, G3));
+              B2.plotY = void 0;
+              w2(K3) && (F3 = e3.translate(K3, false, true, false, true), typeof F3 !== "undefined" && (B2.plotY = C2(F3, -1e5, 1e5)));
+              B2.isInside = this.isPointInside(B2);
+              B2.clientX = p3 ? c3(d3.translate(N4, 0, 0, 0, 1, l4)) : q4;
+              B2.negative = B2[x4] < (b4[x4 + "Threshold"] || h5 || 0);
+              B2.category = g3 && typeof g3[B2.x] !== "undefined" ? g3[B2.x] : B2.x;
+              if (!B2.isNull && B2.visible !== false) {
+                typeof P3 !== "undefined" && (y3 = Math.min(y3, Math.abs(q4 - P3)));
+                var P3 = q4;
+              }
+              B2.zone = this.zones.length ? B2.getZone() : void 0;
+              !B2.graphic && this.group && f3 && (B2.isNew = true);
+            }
+            this.closestPointRangePx = y3;
+            r3(this, "afterTranslate");
+          };
+          e2.prototype.getValidPoints = function(b4, c4, a5) {
+            var d3 = this.chart;
+            return (b4 || this.points || []).filter(function(b5) {
+              return c4 && !d3.isInsidePlot(b5.plotX, b5.plotY, { inverted: d3.inverted }) ? false : b5.visible !== false && (a5 || !b5.isNull);
+            });
+          };
+          e2.prototype.getClipBox = function() {
+            var b4 = this.chart, c4 = this.xAxis, a5 = this.yAxis, d3 = D3(b4.clipBox);
+            c4 && c4.len !== b4.plotSizeX && (d3.width = c4.len);
+            a5 && a5.len !== b4.plotSizeY && (d3.height = a5.len);
+            return d3;
+          };
+          e2.prototype.getSharedClipKey = function() {
+            return this.sharedClipKey = (this.options.xAxis || 0) + "," + (this.options.yAxis || 0);
+          };
+          e2.prototype.setClip = function() {
+            var b4 = this.chart, c4 = this.group, a5 = this.markerGroup, d3 = b4.sharedClips;
+            b4 = b4.renderer;
+            var g3 = this.getClipBox(), f3 = this.getSharedClipKey(), e3 = d3[f3];
+            e3 ? e3.animate(g3) : d3[f3] = e3 = b4.clipRect(g3);
+            c4 && c4.clip(this.options.clip === false ? void 0 : e3);
+            a5 && a5.clip();
+          };
+          e2.prototype.animate = function(b4) {
+            var c4 = this.chart, a5 = this.group, d3 = this.markerGroup, g3 = c4.inverted, e3 = f2(this.options.animation), m3 = [this.getSharedClipKey(), e3.duration, e3.easing, e3.defer].join(), n3 = c4.sharedClips[m3], r4 = c4.sharedClips[m3 + "m"];
+            if (b4 && a5)
+              e3 = this.getClipBox(), n3 ? n3.attr("height", e3.height) : (e3.width = 0, g3 && (e3.x = c4.plotHeight), n3 = c4.renderer.clipRect(e3), c4.sharedClips[m3] = n3, r4 = c4.renderer.clipRect({ x: g3 ? (c4.plotSizeX || 0) + 99 : -99, y: g3 ? -c4.plotLeft : -c4.plotTop, width: 99, height: g3 ? c4.chartWidth : c4.chartHeight }), c4.sharedClips[m3 + "m"] = r4), a5.clip(n3), d3 && d3.clip(r4);
+            else if (n3 && !n3.hasClass("highcharts-animating")) {
+              c4 = this.getClipBox();
+              var k3 = e3.step;
+              d3 && d3.element.childNodes.length && (e3.step = function(b5, c5) {
+                k3 && k3.apply(c5, arguments);
+                r4 && r4.element && r4.attr(c5.prop, c5.prop === "width" ? b5 + 99 : b5);
+              });
+              n3.addClass("highcharts-animating").animate(c4, e3);
+            }
+          };
+          e2.prototype.afterAnimate = function() {
+            var b4 = this;
+            this.setClip();
+            P2(this.chart.sharedClips, function(c4, a5, d3) {
+              c4 && !b4.chart.container.querySelector('[clip-path="url(#' + c4.id + ')"]') && (c4.destroy(), delete d3[a5]);
+            });
+            this.finishedAnimating = true;
+            r3(this, "afterAnimate");
+          };
+          e2.prototype.drawPoints = function() {
+            var b4 = this.points, c4 = this.chart, a5 = this.options.marker, d3 = this[this.specialGroup] || this.markerGroup, g3 = this.xAxis, f3 = O3(a5.enabled, !g3 || g3.isRadial ? true : null, this.closestPointRangePx >= a5.enabledThreshold * a5.radius), e3, m3;
+            if (a5.enabled !== false || this._hasPointMarkers)
+              for (e3 = 0; e3 < b4.length; e3++) {
+                var n3 = b4[e3];
+                var r4 = (m3 = n3.graphic) ? "animate" : "attr";
+                var k3 = n3.marker || {};
+                var w3 = !!n3.marker;
+                if ((f3 && typeof k3.enabled === "undefined" || k3.enabled) && !n3.isNull && n3.visible !== false) {
+                  var l4 = O3(k3.symbol, this.symbol, "rect");
+                  var p3 = this.markerAttribs(n3, n3.selected && "select");
+                  this.enabledDataSorting && (n3.startXPos = g3.reversed ? -(p3.width || 0) : g3.width);
+                  var t3 = n3.isInside !== false;
+                  m3 ? m3[t3 ? "show" : "hide"](t3).animate(p3) : t3 && (0 < (p3.width || 0) || n3.hasImage) && (n3.graphic = m3 = c4.renderer.symbol(l4, p3.x, p3.y, p3.width, p3.height, w3 ? k3 : a5).add(d3), this.enabledDataSorting && c4.hasRendered && (m3.attr({ x: n3.startXPos }), r4 = "animate"));
+                  m3 && r4 === "animate" && m3[t3 ? "show" : "hide"](t3).animate(p3);
+                  if (m3 && !c4.styledMode)
+                    m3[r4](this.pointAttribs(n3, n3.selected && "select"));
+                  m3 && m3.addClass(n3.getClassName(), true);
+                } else
+                  m3 && (n3.graphic = m3.destroy());
+              }
+          };
+          e2.prototype.markerAttribs = function(b4, c4) {
+            var a5 = this.options, d3 = a5.marker, g3 = b4.marker || {}, f3 = g3.symbol || d3.symbol, e3 = O3(g3.radius, d3.radius);
+            c4 && (d3 = d3.states[c4], c4 = g3.states && g3.states[c4], e3 = O3(c4 && c4.radius, d3 && d3.radius, e3 + (d3 && d3.radiusPlus || 0)));
+            b4.hasImage = f3 && f3.indexOf("url") === 0;
+            b4.hasImage && (e3 = 0);
+            b4 = { x: a5.crisp ? Math.floor(b4.plotX - e3) : b4.plotX - e3, y: b4.plotY - e3 };
+            e3 && (b4.width = b4.height = 2 * e3);
+            return b4;
+          };
+          e2.prototype.pointAttribs = function(b4, c4) {
+            var a5 = this.options.marker, d3 = b4 && b4.options, g3 = d3 && d3.marker || {}, f3 = d3 && d3.color, e3 = b4 && b4.color, m3 = b4 && b4.zone && b4.zone.color, n3 = this.color;
+            b4 = O3(g3.lineWidth, a5.lineWidth);
+            d3 = 1;
+            n3 = f3 || m3 || e3 || n3;
+            f3 = g3.fillColor || a5.fillColor || n3;
+            e3 = g3.lineColor || a5.lineColor || n3;
+            c4 = c4 || "normal";
+            a5 = a5.states[c4] || {};
+            c4 = g3.states && g3.states[c4] || {};
+            b4 = O3(c4.lineWidth, a5.lineWidth, b4 + O3(c4.lineWidthPlus, a5.lineWidthPlus, 0));
+            f3 = c4.fillColor || a5.fillColor || f3;
+            e3 = c4.lineColor || a5.lineColor || e3;
+            d3 = O3(c4.opacity, a5.opacity, d3);
+            return { stroke: e3, "stroke-width": b4, fill: f3, opacity: d3 };
+          };
+          e2.prototype.destroy = function(b4) {
+            var c4 = this, a5 = c4.chart, d3 = /AppleWebKit\/533/.test(B.navigator.userAgent), f3 = c4.data || [], e3, m3, n3, k3;
+            r3(c4, "destroy");
+            this.removeEvents(b4);
+            (c4.axisTypes || []).forEach(function(b5) {
+              (k3 = c4[b5]) && k3.series && (g2(k3.series, c4), k3.isDirty = k3.forceRedraw = true);
+            });
+            c4.legendItem && c4.chart.legend.destroyItem(c4);
+            for (m3 = f3.length; m3--; )
+              (n3 = f3[m3]) && n3.destroy && n3.destroy();
+            c4.clips && c4.clips.forEach(function(b5) {
+              return b5.destroy();
+            });
+            l3.clearTimeout(c4.animationTimeout);
+            P2(c4, function(b5, c5) {
+              b5 instanceof q3 && !b5.survive && (e3 = d3 && c5 === "group" ? "hide" : "destroy", b5[e3]());
+            });
+            a5.hoverSeries === c4 && (a5.hoverSeries = void 0);
+            g2(a5.series, c4);
+            a5.orderSeries();
+            P2(c4, function(a6, d4) {
+              b4 && d4 === "hcEvents" || delete c4[d4];
+            });
+          };
+          e2.prototype.applyZones = function() {
+            var b4 = this, c4 = this.chart, a5 = c4.renderer, d3 = this.zones, g3 = this.clips || [], f3 = this.graph, e3 = this.area, m3 = Math.max(c4.chartWidth, c4.chartHeight), n3 = this[(this.zoneAxis || "y") + "Axis"], r4 = c4.inverted, k3, w3, l4, p3, t3, h5, u5, x4, G3 = false;
+            if (d3.length && (f3 || e3) && n3 && typeof n3.min !== "undefined") {
+              var q4 = n3.reversed;
+              var y3 = n3.horiz;
+              f3 && !this.showLine && f3.hide();
+              e3 && e3.hide();
+              var B2 = n3.getExtremes();
+              d3.forEach(function(d4, N4) {
+                k3 = q4 ? y3 ? c4.plotWidth : 0 : y3 ? 0 : n3.toPixels(B2.min) || 0;
+                k3 = C2(O3(w3, k3), 0, m3);
+                w3 = C2(Math.round(n3.toPixels(O3(d4.value, B2.max), true) || 0), 0, m3);
+                G3 && (k3 = w3 = n3.toPixels(B2.max));
+                p3 = Math.abs(k3 - w3);
+                t3 = Math.min(k3, w3);
+                h5 = Math.max(k3, w3);
+                n3.isXAxis ? (l4 = { x: r4 ? h5 : t3, y: 0, width: p3, height: m3 }, y3 || (l4.x = c4.plotHeight - l4.x)) : (l4 = { x: 0, y: r4 ? h5 : t3, width: m3, height: p3 }, y3 && (l4.y = c4.plotWidth - l4.y));
+                r4 && a5.isVML && (l4 = n3.isXAxis ? {
+                  x: 0,
+                  y: q4 ? t3 : h5,
+                  height: l4.width,
+                  width: c4.chartWidth
+                } : { x: l4.y - c4.plotLeft - c4.spacingBox.x, y: 0, width: l4.height, height: c4.chartHeight });
+                g3[N4] ? g3[N4].animate(l4) : g3[N4] = a5.clipRect(l4);
+                u5 = b4["zone-area-" + N4];
+                x4 = b4["zone-graph-" + N4];
+                f3 && x4 && x4.clip(g3[N4]);
+                e3 && u5 && u5.clip(g3[N4]);
+                G3 = d4.value > B2.max;
+                b4.resetZones && w3 === 0 && (w3 = void 0);
+              });
+              this.clips = g3;
+            } else
+              b4.visible && (f3 && f3.show(true), e3 && e3.show(true));
+          };
+          e2.prototype.invertGroups = function(b4) {
+            function c4() {
+              ["group", "markerGroup"].forEach(function(c5) {
+                a5[c5] && (d3.renderer.isVML && a5[c5].attr({ width: a5.yAxis.len, height: a5.xAxis.len }), a5[c5].width = a5.yAxis.len, a5[c5].height = a5.xAxis.len, a5[c5].invert(a5.isRadialSeries ? false : b4));
+              });
+            }
+            var a5 = this, d3 = a5.chart;
+            a5.xAxis && (a5.eventsToUnbind.push(K2(d3, "resize", c4)), c4(), a5.invertGroups = c4);
+          };
+          e2.prototype.plotGroup = function(b4, c4, a5, d3, g3) {
+            var f3 = this[b4], e3 = !f3;
+            a5 = { visibility: a5, zIndex: d3 || 0.1 };
+            typeof this.opacity === "undefined" || this.chart.styledMode || this.state === "inactive" || (a5.opacity = this.opacity);
+            e3 && (this[b4] = f3 = this.chart.renderer.g().add(g3));
+            f3.addClass("highcharts-" + c4 + " highcharts-series-" + this.index + " highcharts-" + this.type + "-series " + (t2(this.colorIndex) ? "highcharts-color-" + this.colorIndex + " " : "") + (this.options.className || "") + (f3.hasClass("highcharts-tracker") ? " highcharts-tracker" : ""), true);
+            f3.attr(a5)[e3 ? "attr" : "animate"](this.getPlotBox());
+            return f3;
+          };
+          e2.prototype.getPlotBox = function() {
+            var b4 = this.chart, c4 = this.xAxis, a5 = this.yAxis;
+            b4.inverted && (c4 = a5, a5 = this.xAxis);
+            return { translateX: c4 ? c4.left : b4.plotLeft, translateY: a5 ? a5.top : b4.plotTop, scaleX: 1, scaleY: 1 };
+          };
+          e2.prototype.removeEvents = function(b4) {
+            b4 || W2(this);
+            this.eventsToUnbind.length && (this.eventsToUnbind.forEach(function(b5) {
+              b5();
+            }), this.eventsToUnbind.length = 0);
+          };
+          e2.prototype.render = function() {
+            var b4 = this, c4 = b4.chart, a5 = b4.options, d3 = f2(a5.animation), g3 = b4.visible ? "inherit" : "hidden", e3 = a5.zIndex, m3 = b4.hasRendered, n3 = c4.seriesGroup, k3 = c4.inverted;
+            c4 = !b4.finishedAnimating && c4.renderer.isSVG ? d3.duration : 0;
+            r3(this, "render");
+            var w3 = b4.plotGroup("group", "series", g3, e3, n3);
+            b4.markerGroup = b4.plotGroup("markerGroup", "markers", g3, e3, n3);
+            a5.clip !== false && b4.setClip();
+            b4.animate && c4 && b4.animate(true);
+            w3.inverted = O3(b4.invertible, b4.isCartesian) ? k3 : false;
+            b4.drawGraph && (b4.drawGraph(), b4.applyZones());
+            b4.visible && b4.drawPoints();
+            b4.drawDataLabels && b4.drawDataLabels();
+            b4.redrawPoints && b4.redrawPoints();
+            b4.drawTracker && b4.options.enableMouseTracking !== false && b4.drawTracker();
+            b4.invertGroups(k3);
+            b4.animate && c4 && b4.animate();
+            m3 || (c4 && d3.defer && (c4 += d3.defer), b4.animationTimeout = ha(function() {
+              b4.afterAnimate();
+            }, c4 || 0));
+            b4.isDirty = false;
+            b4.hasRendered = true;
+            r3(b4, "afterRender");
+          };
+          e2.prototype.redraw = function() {
+            var b4 = this.chart, c4 = this.isDirty || this.isDirtyData, a5 = this.group, d3 = this.xAxis, g3 = this.yAxis;
+            a5 && (b4.inverted && a5.attr({
+              width: b4.plotWidth,
+              height: b4.plotHeight
+            }), a5.animate({ translateX: O3(d3 && d3.left, b4.plotLeft), translateY: O3(g3 && g3.top, b4.plotTop) }));
+            this.translate();
+            this.render();
+            c4 && delete this.kdTree;
+          };
+          e2.prototype.searchPoint = function(b4, c4) {
+            var a5 = this.xAxis, d3 = this.yAxis, g3 = this.chart.inverted;
+            return this.searchKDTree({ clientX: g3 ? a5.len - b4.chartY + a5.pos : b4.chartX - a5.pos, plotY: g3 ? d3.len - b4.chartX + d3.pos : b4.chartY - d3.pos }, c4, b4);
+          };
+          e2.prototype.buildKDTree = function(b4) {
+            function c4(b5, d4, g3) {
+              var f3 = b5 && b5.length;
+              if (f3) {
+                var e3 = a5.kdAxisArray[d4 % g3];
+                b5.sort(function(b6, c5) {
+                  return b6[e3] - c5[e3];
+                });
+                f3 = Math.floor(f3 / 2);
+                return { point: b5[f3], left: c4(b5.slice(0, f3), d4 + 1, g3), right: c4(b5.slice(f3 + 1), d4 + 1, g3) };
+              }
+            }
+            this.buildingKdTree = true;
+            var a5 = this, d3 = -1 < a5.options.findNearestPointBy.indexOf("y") ? 2 : 1;
+            delete a5.kdTree;
+            ha(function() {
+              a5.kdTree = c4(a5.getValidPoints(null, !a5.directTouch), d3, d3);
+              a5.buildingKdTree = false;
+            }, a5.options.kdNow || b4 && b4.type === "touchstart" ? 0 : 1);
+          };
+          e2.prototype.searchKDTree = function(b4, c4, a5) {
+            function d3(b5, c5, a6, n3) {
+              var r4 = c5.point, k3 = g3.kdAxisArray[a6 % n3], w3 = r4, l4 = t2(b5[f3]) && t2(r4[f3]) ? Math.pow(b5[f3] - r4[f3], 2) : null;
+              var p3 = t2(b5[e3]) && t2(r4[e3]) ? Math.pow(b5[e3] - r4[e3], 2) : null;
+              p3 = (l4 || 0) + (p3 || 0);
+              r4.dist = t2(p3) ? Math.sqrt(p3) : Number.MAX_VALUE;
+              r4.distX = t2(l4) ? Math.sqrt(l4) : Number.MAX_VALUE;
+              k3 = b5[k3] - r4[k3];
+              p3 = 0 > k3 ? "left" : "right";
+              l4 = 0 > k3 ? "right" : "left";
+              c5[p3] && (p3 = d3(b5, c5[p3], a6 + 1, n3), w3 = p3[m3] < w3[m3] ? p3 : r4);
+              c5[l4] && Math.sqrt(k3 * k3) < w3[m3] && (b5 = d3(b5, c5[l4], a6 + 1, n3), w3 = b5[m3] < w3[m3] ? b5 : w3);
+              return w3;
+            }
+            var g3 = this, f3 = this.kdAxisArray[0], e3 = this.kdAxisArray[1], m3 = c4 ? "distX" : "dist";
+            c4 = -1 < g3.options.findNearestPointBy.indexOf("y") ? 2 : 1;
+            this.kdTree || this.buildingKdTree || this.buildKDTree(a5);
+            if (this.kdTree)
+              return d3(b4, this.kdTree, c4, c4);
+          };
+          e2.prototype.pointPlacementToXValue = function() {
+            var b4 = this.options, c4 = b4.pointRange, a5 = this.xAxis;
+            b4 = b4.pointPlacement;
+            b4 === "between" && (b4 = a5.reversed ? -0.5 : 0.5);
+            return w2(b4) ? b4 * (c4 || a5.pointRange) : 0;
+          };
+          e2.prototype.isPointInside = function(b4) {
+            var c4 = this.chart, a5 = this.xAxis, d3 = this.yAxis;
+            return typeof b4.plotY !== "undefined" && typeof b4.plotX !== "undefined" && 0 <= b4.plotY && b4.plotY <= (d3 ? d3.len : c4.plotHeight) && 0 <= b4.plotX && b4.plotX <= (a5 ? a5.len : c4.plotWidth);
+          };
+          e2.prototype.drawTracker = function() {
+            var b4 = this, c4 = b4.options, a5 = c4.trackByArea, d3 = [].concat(a5 ? b4.areaPath : b4.graphPath), g3 = b4.chart, f3 = g3.pointer, e3 = g3.renderer, m3 = g3.options.tooltip.snap, n3 = b4.tracker, w3 = function(c5) {
+              if (g3.hoverSeries !== b4)
+                b4.onMouseOver();
+            }, l4 = "rgba(192,192,192," + (F2 ? 1e-4 : 2e-3) + ")";
+            n3 ? n3.attr({ d: d3 }) : b4.graph && (b4.tracker = e3.path(d3).attr({ visibility: b4.visible ? "visible" : "hidden", zIndex: 2 }).addClass(a5 ? "highcharts-tracker-area" : "highcharts-tracker-line").add(b4.group), g3.styledMode || b4.tracker.attr({ "stroke-linecap": "round", "stroke-linejoin": "round", stroke: l4, fill: a5 ? l4 : "none", "stroke-width": b4.graph.strokeWidth() + (a5 ? 0 : 2 * m3) }), [b4.tracker, b4.markerGroup, b4.dataLabelsGroup].forEach(function(b5) {
+              if (b5 && (b5.addClass("highcharts-tracker").on("mouseover", w3).on("mouseout", function(b6) {
+                f3.onTrackerMouseOut(b6);
+              }), c4.cursor && !g3.styledMode && b5.css({ cursor: c4.cursor }), k2))
+                b5.on("touchstart", w3);
+            }));
+            r3(this, "afterDrawTracker");
+          };
+          e2.prototype.addPoint = function(b4, c4, a5, d3, g3) {
+            var f3 = this.options, e3 = this.data, m3 = this.chart, n3 = this.xAxis;
+            n3 = n3 && n3.hasNames && n3.names;
+            var k3 = f3.data, w3 = this.xData, l4;
+            c4 = O3(c4, true);
+            var p3 = { series: this };
+            this.pointClass.prototype.applyOptions.apply(p3, [b4]);
+            var t3 = p3.x;
+            var h5 = w3.length;
+            if (this.requireSorting && t3 < w3[h5 - 1])
+              for (l4 = true; h5 && w3[h5 - 1] > t3; )
+                h5--;
+            this.updateParallelArrays(p3, "splice", h5, 0, 0);
+            this.updateParallelArrays(p3, h5);
+            n3 && p3.name && (n3[t3] = p3.name);
+            k3.splice(h5, 0, b4);
+            l4 && (this.data.splice(h5, 0, null), this.processData());
+            f3.legendType === "point" && this.generatePoints();
+            a5 && (e3[0] && e3[0].remove ? e3[0].remove(false) : (e3.shift(), this.updateParallelArrays(p3, "shift"), k3.shift()));
+            g3 !== false && r3(this, "addPoint", { point: p3 });
+            this.isDirtyData = this.isDirty = true;
+            c4 && m3.redraw(d3);
+          };
+          e2.prototype.removePoint = function(b4, c4, a5) {
+            var g3 = this, f3 = g3.data, e3 = f3[b4], m3 = g3.points, n3 = g3.chart, r4 = function() {
+              m3 && m3.length === f3.length && m3.splice(b4, 1);
+              f3.splice(b4, 1);
+              g3.options.data.splice(b4, 1);
+              g3.updateParallelArrays(e3 || { series: g3 }, "splice", b4, 1);
+              e3 && e3.destroy();
+              g3.isDirty = true;
+              g3.isDirtyData = true;
+              c4 && n3.redraw();
+            };
+            d2(a5, n3);
+            c4 = O3(c4, true);
+            e3 ? e3.firePointEvent("remove", null, r4) : r4();
+          };
+          e2.prototype.remove = function(b4, c4, a5, d3) {
+            function g3() {
+              f3.destroy(d3);
+              e3.isDirtyLegend = e3.isDirtyBox = true;
+              e3.linkSeries();
+              O3(b4, true) && e3.redraw(c4);
+            }
+            var f3 = this, e3 = f3.chart;
+            a5 !== false ? r3(f3, "remove", null, g3) : g3();
+          };
+          e2.prototype.update = function(b4, c4) {
+            b4 = x3(b4, this.userOptions);
+            r3(this, "update", { options: b4 });
+            var a5 = this, d3 = a5.chart, g3 = a5.userOptions, f3 = a5.initialType || a5.type, e3 = d3.options.plotOptions, m3 = J2[f3].prototype, k3 = a5.finishedAnimating && { animation: false }, w3 = {}, l4, p3 = ["eventOptions", "navigatorSeries", "baseSeries"], t3 = b4.type || g3.type || d3.options.chart.type, h5 = !(this.hasDerivedData || t3 && t3 !== this.type || typeof b4.pointStart !== "undefined" || typeof b4.pointInterval !== "undefined" || typeof b4.relativeXValue !== "undefined" || a5.hasOptionChanged("dataGrouping") || a5.hasOptionChanged("pointStart") || a5.hasOptionChanged("pointInterval") || a5.hasOptionChanged("pointIntervalUnit") || a5.hasOptionChanged("keys"));
+            t3 = t3 || f3;
+            h5 && (p3.push("data", "isDirtyData", "points", "processedXData", "processedYData", "xIncrement", "cropped", "_hasPointMarkers", "_hasPointLabels", "clips", "nodes", "layout", "mapMap", "mapData", "minY", "maxY", "minX", "maxX"), b4.visible !== false && p3.push("area", "graph"), a5.parallelArrays.forEach(function(b5) {
+              p3.push(b5 + "Data");
+            }), b4.data && (b4.dataSorting && n2(a5.options.dataSorting, b4.dataSorting), this.setData(b4.data, false)));
+            b4 = D3(g3, k3, { index: typeof g3.index === "undefined" ? a5.index : g3.index, pointStart: O3(e3 && e3.series && e3.series.pointStart, g3.pointStart, a5.xData[0]) }, !h5 && { data: a5.options.data }, b4);
+            h5 && b4.data && (b4.data = a5.options.data);
+            p3 = ["group", "markerGroup", "dataLabelsGroup", "transformGroup"].concat(p3);
+            p3.forEach(function(b5) {
+              p3[b5] = a5[b5];
+              delete a5[b5];
+            });
+            e3 = false;
+            if (J2[t3]) {
+              if (e3 = t3 !== a5.type, a5.remove(false, false, false, true), e3)
+                if (Object.setPrototypeOf)
+                  Object.setPrototypeOf(a5, J2[t3].prototype);
+                else {
+                  k3 = Object.hasOwnProperty.call(a5, "hcEvents") && a5.hcEvents;
+                  for (l4 in m3)
+                    a5[l4] = void 0;
+                  n2(a5, J2[t3].prototype);
+                  k3 ? a5.hcEvents = k3 : delete a5.hcEvents;
+                }
+            } else
+              u4(17, true, d3, { missingModuleFor: t3 });
+            p3.forEach(function(b5) {
+              a5[b5] = p3[b5];
+            });
+            a5.init(d3, b4);
+            if (h5 && this.points) {
+              var G3 = a5.options;
+              G3.visible === false ? (w3.graphic = 1, w3.dataLabel = 1) : a5._hasPointLabels || (b4 = G3.marker, m3 = G3.dataLabels, !b4 || b4.enabled !== false && (g3.marker && g3.marker.symbol) === b4.symbol || (w3.graphic = 1), m3 && m3.enabled === false && (w3.dataLabel = 1));
+              this.points.forEach(function(b5) {
+                b5 && b5.series && (b5.resolveColor(), Object.keys(w3).length && b5.destroyElements(w3), G3.showInLegend === false && b5.legendItem && d3.legend.destroyItem(b5));
+              }, this);
+            }
+            a5.initialType = f3;
+            d3.linkSeries();
+            e3 && a5.linkedSeries.length && (a5.isDirtyData = true);
+            r3(this, "afterUpdate");
+            O3(c4, true) && d3.redraw(h5 ? void 0 : false);
+          };
+          e2.prototype.setName = function(b4) {
+            this.name = this.options.name = this.userOptions.name = b4;
+            this.chart.isDirtyLegend = true;
+          };
+          e2.prototype.hasOptionChanged = function(b4) {
+            var c4 = this.options[b4], a5 = this.chart.options.plotOptions, d3 = this.userOptions[b4];
+            return d3 ? c4 !== d3 : c4 !== O3(a5 && a5[this.type] && a5[this.type][b4], a5 && a5.series && a5.series[b4], c4);
+          };
+          e2.prototype.onMouseOver = function() {
+            var b4 = this.chart, c4 = b4.hoverSeries;
+            b4.pointer.setHoverChartIndex();
+            if (c4 && c4 !== this)
+              c4.onMouseOut();
+            this.options.events.mouseOver && r3(this, "mouseOver");
+            this.setState("hover");
+            b4.hoverSeries = this;
+          };
+          e2.prototype.onMouseOut = function() {
+            var b4 = this.options, c4 = this.chart, a5 = c4.tooltip, d3 = c4.hoverPoint;
+            c4.hoverSeries = null;
+            if (d3)
+              d3.onMouseOut();
+            this && b4.events.mouseOut && r3(this, "mouseOut");
+            !a5 || this.stickyTracking || a5.shared && !this.noSharedTooltip || a5.hide();
+            c4.series.forEach(function(b5) {
+              b5.setState("", true);
+            });
+          };
+          e2.prototype.setState = function(b4, c4) {
+            var a5 = this, d3 = a5.options, g3 = a5.graph, f3 = d3.inactiveOtherPoints, e3 = d3.states, m3 = O3(e3[b4 || "normal"] && e3[b4 || "normal"].animation, a5.chart.options.chart.animation), n3 = d3.lineWidth, r4 = 0, k3 = d3.opacity;
+            b4 = b4 || "";
+            if (a5.state !== b4 && ([a5.group, a5.markerGroup, a5.dataLabelsGroup].forEach(function(c5) {
+              c5 && (a5.state && c5.removeClass("highcharts-series-" + a5.state), b4 && c5.addClass("highcharts-series-" + b4));
+            }), a5.state = b4, !a5.chart.styledMode)) {
+              if (e3[b4] && e3[b4].enabled === false)
+                return;
+              b4 && (n3 = e3[b4].lineWidth || n3 + (e3[b4].lineWidthPlus || 0), k3 = O3(e3[b4].opacity, k3));
+              if (g3 && !g3.dashstyle)
+                for (d3 = { "stroke-width": n3 }, g3.animate(d3, m3); a5["zone-graph-" + r4]; )
+                  a5["zone-graph-" + r4].animate(d3, m3), r4 += 1;
+              f3 || [a5.group, a5.markerGroup, a5.dataLabelsGroup, a5.labelBySeries].forEach(function(b5) {
+                b5 && b5.animate({ opacity: k3 }, m3);
+              });
+            }
+            c4 && f3 && a5.points && a5.setAllPointsToState(b4 || void 0);
+          };
+          e2.prototype.setAllPointsToState = function(b4) {
+            this.points.forEach(function(c4) {
+              c4.setState && c4.setState(b4);
+            });
+          };
+          e2.prototype.setVisible = function(b4, c4) {
+            var a5 = this, d3 = a5.chart, g3 = a5.legendItem, f3 = d3.options.chart.ignoreHiddenSeries, e3 = a5.visible, m3 = (a5.visible = b4 = a5.options.visible = a5.userOptions.visible = typeof b4 === "undefined" ? !e3 : b4) ? "show" : "hide";
+            ["group", "dataLabelsGroup", "markerGroup", "tracker", "tt"].forEach(function(b5) {
+              if (a5[b5])
+                a5[b5][m3]();
+            });
+            if (d3.hoverSeries === a5 || (d3.hoverPoint && d3.hoverPoint.series) === a5)
+              a5.onMouseOut();
+            g3 && d3.legend.colorizeItem(a5, b4);
+            a5.isDirty = true;
+            a5.options.stacking && d3.series.forEach(function(b5) {
+              b5.options.stacking && b5.visible && (b5.isDirty = true);
+            });
+            a5.linkedSeries.forEach(function(c5) {
+              c5.setVisible(b4, false);
+            });
+            f3 && (d3.isDirtyBox = true);
+            r3(a5, m3);
+            c4 !== false && d3.redraw();
+          };
+          e2.prototype.show = function() {
+            this.setVisible(true);
+          };
+          e2.prototype.hide = function() {
+            this.setVisible(false);
+          };
+          e2.prototype.select = function(b4) {
+            this.selected = b4 = this.options.selected = typeof b4 === "undefined" ? !this.selected : b4;
+            this.checkbox && (this.checkbox.checked = b4);
+            r3(this, b4 ? "select" : "unselect");
+          };
+          e2.prototype.shouldShowTooltip = function(b4, c4, a5) {
+            a5 === void 0 && (a5 = {});
+            a5.series = this;
+            a5.visiblePlotOnly = true;
+            return this.chart.isInsidePlot(b4, c4, a5);
+          };
+          e2.defaultOptions = I2;
+          return e2;
+        }();
+        n2(e.prototype, { axisTypes: [
+          "xAxis",
+          "yAxis"
+        ], coll: "series", colorCounter: 0, cropShoulder: 1, directTouch: false, drawLegendSymbol: v.drawLineMarker, isCartesian: true, kdAxisArray: ["clientX", "plotY"], parallelArrays: ["x", "y"], pointClass: H2, requireSorting: true, sorted: true });
+        z2.series = e;
+        "";
+        "";
+        return e;
+      });
+      M2(h3, "Extensions/ScrollablePlotArea.js", [h3["Core/Animation/AnimationUtilities.js"], h3["Core/Axis/Axis.js"], h3["Core/Chart/Chart.js"], h3["Core/Series/Series.js"], h3["Core/Renderer/RendererRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v, H2) {
+        var D3 = e.stop, z2 = H2.addEvent, q3 = H2.createElement, l3 = H2.merge, f2 = H2.pick;
+        z2(A, "afterSetChartSize", function(d2) {
+          var a4 = this.options.chart.scrollablePlotArea, f3 = a4 && a4.minWidth;
+          a4 = a4 && a4.minHeight;
+          if (!this.renderer.forExport) {
+            if (f3) {
+              if (this.scrollablePixelsX = f3 = Math.max(0, f3 - this.chartWidth)) {
+                this.scrollablePlotBox = this.renderer.scrollablePlotBox = l3(this.plotBox);
+                this.plotBox.width = this.plotWidth += f3;
+                this.inverted ? this.clipBox.height += f3 : this.clipBox.width += f3;
+                var e2 = { 1: { name: "right", value: f3 } };
+              }
+            } else
+              a4 && (this.scrollablePixelsY = f3 = Math.max(0, a4 - this.chartHeight)) && (this.scrollablePlotBox = this.renderer.scrollablePlotBox = l3(this.plotBox), this.plotBox.height = this.plotHeight += f3, this.inverted ? this.clipBox.width += f3 : this.clipBox.height += f3, e2 = { 2: { name: "bottom", value: f3 } });
+            e2 && !d2.skipAxes && this.axes.forEach(function(a5) {
+              e2[a5.side] ? a5.getPlotLinePath = function() {
+                var d3 = e2[a5.side].name, f4 = this[d3];
+                this[d3] = f4 - e2[a5.side].value;
+                var k2 = h4.prototype.getPlotLinePath.apply(this, arguments);
+                this[d3] = f4;
+                return k2;
+              } : (a5.setAxisSize(), a5.setAxisTranslation());
+            });
+          }
+        });
+        z2(A, "render", function() {
+          this.scrollablePixelsX || this.scrollablePixelsY ? (this.setUpScrolling && this.setUpScrolling(), this.applyFixed()) : this.fixedDiv && this.applyFixed();
+        });
+        A.prototype.setUpScrolling = function() {
+          var d2 = this, a4 = { WebkitOverflowScrolling: "touch", overflowX: "hidden", overflowY: "hidden" };
+          this.scrollablePixelsX && (a4.overflowX = "auto");
+          this.scrollablePixelsY && (a4.overflowY = "auto");
+          this.scrollingParent = q3("div", { className: "highcharts-scrolling-parent" }, { position: "relative" }, this.renderTo);
+          this.scrollingContainer = q3("div", { className: "highcharts-scrolling" }, a4, this.scrollingParent);
+          z2(this.scrollingContainer, "scroll", function() {
+            d2.pointer && delete d2.pointer.chartPosition;
+          });
+          this.innerContainer = q3("div", { className: "highcharts-inner-container" }, null, this.scrollingContainer);
+          this.innerContainer.appendChild(this.container);
+          this.setUpScrolling = null;
+        };
+        A.prototype.moveFixedElements = function() {
+          var d2 = this.container, a4 = this.fixedRenderer, f3 = ".highcharts-contextbutton .highcharts-credits .highcharts-legend .highcharts-legend-checkbox .highcharts-navigator-series .highcharts-navigator-xaxis .highcharts-navigator-yaxis .highcharts-navigator .highcharts-reset-zoom .highcharts-drillup-button .highcharts-scrollbar .highcharts-subtitle .highcharts-title".split(" "), e2;
+          this.scrollablePixelsX && !this.inverted ? e2 = ".highcharts-yaxis" : this.scrollablePixelsX && this.inverted ? e2 = ".highcharts-xaxis" : this.scrollablePixelsY && !this.inverted ? e2 = ".highcharts-xaxis" : this.scrollablePixelsY && this.inverted && (e2 = ".highcharts-yaxis");
+          e2 && f3.push(e2 + ":not(.highcharts-radial-axis)", e2 + "-labels:not(.highcharts-radial-axis-labels)");
+          f3.forEach(function(f4) {
+            [].forEach.call(d2.querySelectorAll(f4), function(d3) {
+              (d3.namespaceURI === a4.SVG_NS ? a4.box : a4.box.parentNode).appendChild(d3);
+              d3.style.pointerEvents = "auto";
+            });
+          });
+        };
+        A.prototype.applyFixed = function() {
+          var d2 = !this.fixedDiv, a4 = this.options.chart, e2 = a4.scrollablePlotArea, k2 = v.getRendererType();
+          d2 ? (this.fixedDiv = q3("div", { className: "highcharts-fixed" }, { position: "absolute", overflow: "hidden", pointerEvents: "none", zIndex: (a4.style && a4.style.zIndex || 0) + 2, top: 0 }, null, true), this.scrollingContainer && this.scrollingContainer.parentNode.insertBefore(this.fixedDiv, this.scrollingContainer), this.renderTo.style.overflow = "visible", this.fixedRenderer = a4 = new k2(this.fixedDiv, this.chartWidth, this.chartHeight, this.options.chart.style), this.scrollableMask = a4.path().attr({ fill: this.options.chart.backgroundColor || "#fff", "fill-opacity": f2(e2.opacity, 0.85), zIndex: -1 }).addClass("highcharts-scrollable-mask").add(), z2(this, "afterShowResetZoom", this.moveFixedElements), z2(this, "afterDrilldown", this.moveFixedElements), z2(this, "afterLayOutTitles", this.moveFixedElements)) : this.fixedRenderer.setSize(this.chartWidth, this.chartHeight);
+          if (this.scrollableDirty || d2)
+            this.scrollableDirty = false, this.moveFixedElements();
+          a4 = this.chartWidth + (this.scrollablePixelsX || 0);
+          k2 = this.chartHeight + (this.scrollablePixelsY || 0);
+          D3(this.container);
+          this.container.style.width = a4 + "px";
+          this.container.style.height = k2 + "px";
+          this.renderer.boxWrapper.attr({ width: a4, height: k2, viewBox: [0, 0, a4, k2].join(" ") });
+          this.chartBackground.attr({ width: a4, height: k2 });
+          this.scrollingContainer.style.height = this.chartHeight + "px";
+          d2 && (e2.scrollPositionX && (this.scrollingContainer.scrollLeft = this.scrollablePixelsX * e2.scrollPositionX), e2.scrollPositionY && (this.scrollingContainer.scrollTop = this.scrollablePixelsY * e2.scrollPositionY));
+          k2 = this.axisOffset;
+          d2 = this.plotTop - k2[0] - 1;
+          e2 = this.plotLeft - k2[3] - 1;
+          a4 = this.plotTop + this.plotHeight + k2[2] + 1;
+          k2 = this.plotLeft + this.plotWidth + k2[1] + 1;
+          var l4 = this.plotLeft + this.plotWidth - (this.scrollablePixelsX || 0), h5 = this.plotTop + this.plotHeight - (this.scrollablePixelsY || 0);
+          d2 = this.scrollablePixelsX ? [["M", 0, d2], ["L", this.plotLeft - 1, d2], ["L", this.plotLeft - 1, a4], ["L", 0, a4], ["Z"], ["M", l4, d2], ["L", this.chartWidth, d2], ["L", this.chartWidth, a4], ["L", l4, a4], ["Z"]] : this.scrollablePixelsY ? [["M", e2, 0], ["L", e2, this.plotTop - 1], ["L", k2, this.plotTop - 1], ["L", k2, 0], ["Z"], ["M", e2, h5], ["L", e2, this.chartHeight], ["L", k2, this.chartHeight], ["L", k2, h5], ["Z"]] : [["M", 0, 0]];
+          this.redrawTrigger !== "adjustHeight" && this.scrollableMask.attr({ d: d2 });
+        };
+        z2(h4, "afterInit", function() {
+          this.chart.scrollableDirty = true;
+        });
+        z2(E3, "show", function() {
+          this.chart.scrollableDirty = true;
+        });
+        "";
+      });
+      M2(h3, "Core/Axis/StackingAxis.js", [h3["Core/Animation/AnimationUtilities.js"], h3["Core/Axis/Axis.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = e.getDeferredAnimation, v = A.addEvent, H2 = A.destroyObjectProperties, I2 = A.fireEvent, z2 = A.isNumber, q3 = A.objectEach, l3;
+        (function(f2) {
+          function d2() {
+            var a5 = this.stacking;
+            if (a5) {
+              var d3 = a5.stacks;
+              q3(d3, function(a6, f3) {
+                H2(a6);
+                d3[f3] = null;
+              });
+              a5 && a5.stackTotalGroup && a5.stackTotalGroup.destroy();
+            }
+          }
+          function a4() {
+            this.stacking || (this.stacking = new k2(this));
+          }
+          var e2 = [];
+          f2.compose = function(f3) {
+            e2.indexOf(f3) === -1 && (e2.push(f3), v(f3, "init", a4), v(f3, "destroy", d2));
+            return f3;
+          };
+          var k2 = function() {
+            function a5(a6) {
+              this.oldStacks = {};
+              this.stacks = {};
+              this.stacksTouched = 0;
+              this.axis = a6;
+            }
+            a5.prototype.buildStacks = function() {
+              var a6 = this.axis, d3 = a6.series, f3 = a6.options.reversedStacks, e3 = d3.length, k3;
+              if (!a6.isXAxis) {
+                this.usePercentage = false;
+                for (k3 = e3; k3--; ) {
+                  var l4 = d3[f3 ? k3 : e3 - k3 - 1];
+                  l4.setStackedPoints();
+                  l4.setGroupedPoints();
+                }
+                for (k3 = 0; k3 < e3; k3++)
+                  d3[k3].modifyStacks();
+                I2(a6, "afterBuildStacks");
+              }
+            };
+            a5.prototype.cleanStacks = function() {
+              if (!this.axis.isXAxis) {
+                if (this.oldStacks)
+                  var a6 = this.stacks = this.oldStacks;
+                q3(a6, function(a7) {
+                  q3(a7, function(a8) {
+                    a8.cumulative = a8.total;
+                  });
+                });
+              }
+            };
+            a5.prototype.resetStacks = function() {
+              var a6 = this, d3 = a6.stacks;
+              a6.axis.isXAxis || q3(d3, function(d4) {
+                q3(d4, function(f3, e3) {
+                  z2(f3.touched) && f3.touched < a6.stacksTouched ? (f3.destroy(), delete d4[e3]) : (f3.total = null, f3.cumulative = null);
+                });
+              });
+            };
+            a5.prototype.renderStackTotals = function() {
+              var a6 = this.axis, d3 = a6.chart, f3 = d3.renderer, e3 = this.stacks;
+              a6 = D3(d3, a6.options.stackLabels && a6.options.stackLabels.animation || false);
+              var k3 = this.stackTotalGroup = this.stackTotalGroup || f3.g("stack-labels").attr({ visibility: "visible", zIndex: 6, opacity: 0 }).add();
+              k3.translate(d3.plotLeft, d3.plotTop);
+              q3(e3, function(a7) {
+                q3(a7, function(a8) {
+                  a8.render(k3);
+                });
+              });
+              k3.animate({ opacity: 1 }, a6);
+            };
+            return a5;
+          }();
+          f2.Additions = k2;
+        })(l3 || (l3 = {}));
+        return l3;
+      });
+      M2(h3, "Extensions/Stacking.js", [h3["Core/Axis/Axis.js"], h3["Core/Chart/Chart.js"], h3["Core/FormatUtilities.js"], h3["Core/Globals.js"], h3["Core/Series/Series.js"], h3["Core/Axis/StackingAxis.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v, H2, I2) {
+        var z2 = A.format, q3 = I2.correctFloat, l3 = I2.defined, f2 = I2.destroyObjectProperties, d2 = I2.isArray, a4 = I2.isNumber, p2 = I2.objectEach, k2 = I2.pick, F2 = function() {
+          function d3(a5, d4, f3, e2, k3) {
+            var l4 = a5.chart.inverted;
+            this.axis = a5;
+            this.isNegative = f3;
+            this.options = d4 = d4 || {};
+            this.x = e2;
+            this.total = null;
+            this.points = {};
+            this.hasValidPoints = false;
+            this.stack = k3;
+            this.rightCliff = this.leftCliff = 0;
+            this.alignOptions = { align: d4.align || (l4 ? f3 ? "left" : "right" : "center"), verticalAlign: d4.verticalAlign || (l4 ? "middle" : f3 ? "bottom" : "top"), y: d4.y, x: d4.x };
+            this.textAlign = d4.textAlign || (l4 ? f3 ? "right" : "left" : "center");
+          }
+          d3.prototype.destroy = function() {
+            f2(this, this.axis);
+          };
+          d3.prototype.render = function(a5) {
+            var d4 = this.axis.chart, f3 = this.options, e2 = f3.format;
+            e2 = e2 ? z2(e2, this, d4) : f3.formatter.call(this);
+            this.label ? this.label.attr({
+              text: e2,
+              visibility: "hidden"
+            }) : (this.label = d4.renderer.label(e2, null, null, f3.shape, null, null, f3.useHTML, false, "stack-labels"), e2 = { r: f3.borderRadius || 0, text: e2, rotation: f3.rotation, padding: k2(f3.padding, 5), visibility: "hidden" }, d4.styledMode || (e2.fill = f3.backgroundColor, e2.stroke = f3.borderColor, e2["stroke-width"] = f3.borderWidth, this.label.css(f3.style)), this.label.attr(e2), this.label.added || this.label.add(a5));
+            this.label.labelrank = d4.plotSizeY;
+          };
+          d3.prototype.setOffset = function(d4, f3, e2, p3, h5) {
+            var x3 = this.axis, c3 = x3.chart;
+            p3 = x3.translate(x3.stacking.usePercentage ? 100 : p3 ? p3 : this.total, 0, 0, 0, 1);
+            e2 = x3.translate(e2 ? e2 : 0);
+            e2 = l3(p3) && Math.abs(p3 - e2);
+            d4 = k2(h5, c3.xAxis[0].translate(this.x)) + d4;
+            x3 = l3(p3) && this.getStackBox(c3, this, d4, p3, f3, e2, x3);
+            f3 = this.label;
+            e2 = this.isNegative;
+            d4 = k2(this.options.overflow, "justify") === "justify";
+            var t2 = this.textAlign;
+            f3 && x3 && (h5 = f3.getBBox(), p3 = f3.padding, t2 = t2 === "left" ? c3.inverted ? -p3 : p3 : t2 === "right" ? h5.width : c3.inverted && t2 === "center" ? h5.width / 2 : c3.inverted ? e2 ? h5.width + p3 : -p3 : h5.width / 2, e2 = c3.inverted ? h5.height / 2 : e2 ? -p3 : h5.height, this.alignOptions.x = k2(this.options.x, 0), this.alignOptions.y = k2(this.options.y, 0), x3.x -= t2, x3.y -= e2, f3.align(this.alignOptions, null, x3), c3.isInsidePlot(f3.alignAttr.x + t2 - this.alignOptions.x, f3.alignAttr.y + e2 - this.alignOptions.y) ? f3.show() : (f3.alignAttr.y = -9999, d4 = false), d4 && v.prototype.justifyDataLabel.call(this.axis, f3, this.alignOptions, f3.alignAttr, h5, x3), f3.attr({ x: f3.alignAttr.x, y: f3.alignAttr.y }), k2(!d4 && this.options.crop, true) && ((c3 = a4(f3.x) && a4(f3.y) && c3.isInsidePlot(f3.x - p3 + f3.width, f3.y) && c3.isInsidePlot(f3.x + p3, f3.y)) || f3.hide()));
+          };
+          d3.prototype.getStackBox = function(a5, d4, f3, e2, k3, l4, c3) {
+            var p3 = d4.axis.reversed, g2 = a5.inverted, h5 = c3.height + c3.pos - (g2 ? a5.plotLeft : a5.plotTop);
+            d4 = d4.isNegative && !p3 || !d4.isNegative && p3;
+            return { x: g2 ? d4 ? e2 - c3.right : e2 - l4 + c3.pos - a5.plotLeft : f3 + a5.xAxis[0].transB - a5.plotLeft, y: g2 ? c3.height - f3 - k3 : d4 ? h5 - e2 - l4 : h5 - e2, width: g2 ? l4 : k3, height: g2 ? k3 : l4 };
+          };
+          return d3;
+        }();
+        h4.prototype.getStacks = function() {
+          var a5 = this, d3 = a5.inverted;
+          a5.yAxis.forEach(function(a6) {
+            a6.stacking && a6.stacking.stacks && a6.hasVisibleSeries && (a6.stacking.oldStacks = a6.stacking.stacks);
+          });
+          a5.series.forEach(function(f3) {
+            var e2 = f3.xAxis && f3.xAxis.options || {};
+            !f3.options.stacking || f3.visible !== true && a5.options.chart.ignoreHiddenSeries !== false || (f3.stackKey = [f3.type, k2(f3.options.stack, ""), d3 ? e2.top : e2.left, d3 ? e2.height : e2.width].join());
+          });
+        };
+        H2.compose(e);
+        v.prototype.setGroupedPoints = function() {
+          var a5 = this.yAxis.stacking;
+          this.options.centerInCategory && (this.is("column") || this.is("columnrange")) && !this.options.stacking && 1 < this.chart.series.length ? v.prototype.setStackedPoints.call(this, "group") : a5 && p2(a5.stacks, function(d3, f3) {
+            f3.slice(-5) === "group" && (p2(d3, function(a6) {
+              return a6.destroy();
+            }), delete a5.stacks[f3]);
+          });
+        };
+        v.prototype.setStackedPoints = function(a5) {
+          var f3 = a5 || this.options.stacking;
+          if (f3 && (this.visible === true || this.chart.options.chart.ignoreHiddenSeries === false)) {
+            var e2 = this.processedXData, p3 = this.processedYData, h5 = [], C2 = p3.length, x3 = this.options, c3 = x3.threshold, t2 = k2(x3.startFromThreshold && c3, 0);
+            x3 = x3.stack;
+            a5 = a5 ? this.type + "," + f3 : this.stackKey;
+            var g2 = "-" + a5, u4 = this.negStacks, n2 = this.yAxis, b3 = n2.stacking.stacks, r3 = n2.stacking.oldStacks, G2, m2;
+            n2.stacking.stacksTouched += 1;
+            for (m2 = 0; m2 < C2; m2++) {
+              var w2 = e2[m2];
+              var N3 = p3[m2];
+              var B = this.getStackIndicator(B, w2, this.index);
+              var v2 = B.key;
+              var O3 = (G2 = u4 && N3 < (t2 ? 0 : c3)) ? g2 : a5;
+              b3[O3] || (b3[O3] = {});
+              b3[O3][w2] || (r3[O3] && r3[O3][w2] ? (b3[O3][w2] = r3[O3][w2], b3[O3][w2].total = null) : b3[O3][w2] = new F2(n2, n2.options.stackLabels, G2, w2, x3));
+              O3 = b3[O3][w2];
+              N3 !== null ? (O3.points[v2] = O3.points[this.index] = [k2(O3.cumulative, t2)], l3(O3.cumulative) || (O3.base = v2), O3.touched = n2.stacking.stacksTouched, 0 < B.index && this.singleStacks === false && (O3.points[v2][0] = O3.points[this.index + "," + w2 + ",0"][0])) : O3.points[v2] = O3.points[this.index] = null;
+              f3 === "percent" ? (G2 = G2 ? a5 : g2, u4 && b3[G2] && b3[G2][w2] ? (G2 = b3[G2][w2], O3.total = G2.total = Math.max(G2.total, O3.total) + Math.abs(N3) || 0) : O3.total = q3(O3.total + (Math.abs(N3) || 0))) : f3 === "group" ? (d2(N3) && (N3 = N3[0]), N3 !== null && (O3.total = (O3.total || 0) + 1)) : O3.total = q3(O3.total + (N3 || 0));
+              O3.cumulative = f3 === "group" ? (O3.total || 1) - 1 : k2(O3.cumulative, t2) + (N3 || 0);
+              N3 !== null && (O3.points[v2].push(O3.cumulative), h5[m2] = O3.cumulative, O3.hasValidPoints = true);
+            }
+            f3 === "percent" && (n2.stacking.usePercentage = true);
+            f3 !== "group" && (this.stackedYData = h5);
+            n2.stacking.oldStacks = {};
+          }
+        };
+        v.prototype.modifyStacks = function() {
+          var a5 = this, d3 = a5.stackKey, f3 = a5.yAxis.stacking.stacks, e2 = a5.processedXData, k3, l4 = a5.options.stacking;
+          a5[l4 + "Stacker"] && [d3, "-" + d3].forEach(function(d4) {
+            for (var c3 = e2.length, p3, g2; c3--; )
+              if (p3 = e2[c3], k3 = a5.getStackIndicator(k3, p3, a5.index, d4), g2 = (p3 = f3[d4] && f3[d4][p3]) && p3.points[k3.key])
+                a5[l4 + "Stacker"](g2, p3, c3);
+          });
+        };
+        v.prototype.percentStacker = function(a5, d3, f3) {
+          d3 = d3.total ? 100 / d3.total : 0;
+          a5[0] = q3(a5[0] * d3);
+          a5[1] = q3(a5[1] * d3);
+          this.stackedYData[f3] = a5[1];
+        };
+        v.prototype.getStackIndicator = function(a5, d3, f3, e2) {
+          !l3(a5) || a5.x !== d3 || e2 && a5.key !== e2 ? a5 = { x: d3, index: 0, key: e2 } : a5.index++;
+          a5.key = [f3, d3, a5.index].join();
+          return a5;
+        };
+        E3.StackItem = F2;
+        "";
+        return E3.StackItem;
+      });
+      M2(h3, "Series/Line/LineSeries.js", [h3["Core/Series/Series.js"], h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = this && this.__extends || function() {
+          var e2 = function(h5, q3) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(e3, f2) {
+              e3.__proto__ = f2;
+            } || function(e3, f2) {
+              for (var d2 in f2)
+                f2.hasOwnProperty(d2) && (e3[d2] = f2[d2]);
+            };
+            return e2(h5, q3);
+          };
+          return function(h5, q3) {
+            function l3() {
+              this.constructor = h5;
+            }
+            e2(h5, q3);
+            h5.prototype = q3 === null ? Object.create(q3) : (l3.prototype = q3.prototype, new l3());
+          };
+        }(), v = A.defined, H2 = A.merge;
+        A = function(h5) {
+          function z2() {
+            var e2 = h5 !== null && h5.apply(this, arguments) || this;
+            e2.data = void 0;
+            e2.options = void 0;
+            e2.points = void 0;
+            return e2;
+          }
+          D3(z2, h5);
+          z2.prototype.drawGraph = function() {
+            var e2 = this, l3 = this.options, f2 = (this.gappedPath || this.getGraphPath).call(this), d2 = this.chart.styledMode, a4 = [["graph", "highcharts-graph"]];
+            d2 || a4[0].push(l3.lineColor || this.color || "#cccccc", l3.dashStyle);
+            a4 = e2.getZonesGraphs(a4);
+            a4.forEach(function(a5, k2) {
+              var p2 = a5[0], h6 = e2[p2], q3 = h6 ? "animate" : "attr";
+              h6 ? (h6.endX = e2.preventGraphAnimation ? null : f2.xMap, h6.animate({ d: f2 })) : f2.length && (e2[p2] = h6 = e2.chart.renderer.path(f2).addClass(a5[1]).attr({ zIndex: 1 }).add(e2.group));
+              h6 && !d2 && (p2 = { stroke: a5[2], "stroke-width": l3.lineWidth, fill: e2.fillGraph && e2.color || "none" }, a5[3] ? p2.dashstyle = a5[3] : l3.linecap !== "square" && (p2["stroke-linecap"] = p2["stroke-linejoin"] = "round"), h6[q3](p2).shadow(2 > k2 && l3.shadow));
+              h6 && (h6.startX = f2.xMap, h6.isArea = f2.isArea);
+            });
+          };
+          z2.prototype.getGraphPath = function(e2, l3, f2) {
+            var d2 = this, a4 = d2.options, h6 = [], k2 = [], q3, B = a4.step;
+            e2 = e2 || d2.points;
+            var J2 = e2.reversed;
+            J2 && e2.reverse();
+            (B = { right: 1, center: 2 }[B] || B && 3) && J2 && (B = 4 - B);
+            e2 = this.getValidPoints(e2, false, !(a4.connectNulls && !l3 && !f2));
+            e2.forEach(function(p2, F2) {
+              var y2 = p2.plotX, C2 = p2.plotY, x3 = e2[F2 - 1];
+              (p2.leftCliff || x3 && x3.rightCliff) && !f2 && (q3 = true);
+              p2.isNull && !v(l3) && 0 < F2 ? q3 = !a4.connectNulls : p2.isNull && !l3 ? q3 = true : (F2 === 0 || q3 ? F2 = [["M", p2.plotX, p2.plotY]] : d2.getPointSpline ? F2 = [d2.getPointSpline(e2, p2, F2)] : B ? (F2 = B === 1 ? [["L", x3.plotX, C2]] : B === 2 ? [["L", (x3.plotX + y2) / 2, x3.plotY], ["L", (x3.plotX + y2) / 2, C2]] : [["L", y2, x3.plotY]], F2.push(["L", y2, C2])) : F2 = [["L", y2, C2]], k2.push(p2.x), B && (k2.push(p2.x), B === 2 && k2.push(p2.x)), h6.push.apply(h6, F2), q3 = false);
+            });
+            h6.xMap = k2;
+            return d2.graphPath = h6;
+          };
+          z2.prototype.getZonesGraphs = function(e2) {
+            this.zones.forEach(function(l3, f2) {
+              f2 = ["zone-graph-" + f2, "highcharts-graph highcharts-zone-graph-" + f2 + " " + (l3.className || "")];
+              this.chart.styledMode || f2.push(l3.color || this.color, l3.dashStyle || this.options.dashStyle);
+              e2.push(f2);
+            }, this);
+            return e2;
+          };
+          z2.defaultOptions = H2(e.defaultOptions, {});
+          return z2;
+        }(e);
+        h4.registerSeriesType("line", A);
+        "";
+        return A;
+      });
+      M2(h3, "Series/Area/AreaSeries.js", [
+        h3["Core/Color/Color.js"],
+        h3["Core/Legend/LegendSymbol.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3) {
+        var v = this && this.__extends || function() {
+          var f2 = function(d2, a4) {
+            f2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a5, d3) {
+              a5.__proto__ = d3;
+            } || function(a5, d3) {
+              for (var f3 in d3)
+                d3.hasOwnProperty(f3) && (a5[f3] = d3[f3]);
+            };
+            return f2(d2, a4);
+          };
+          return function(d2, a4) {
+            function e2() {
+              this.constructor = d2;
+            }
+            f2(d2, a4);
+            d2.prototype = a4 === null ? Object.create(a4) : (e2.prototype = a4.prototype, new e2());
+          };
+        }(), D3 = e.parse, I2 = A.seriesTypes.line;
+        e = E3.extend;
+        var z2 = E3.merge, q3 = E3.objectEach, l3 = E3.pick;
+        E3 = function(f2) {
+          function d2() {
+            var a4 = f2 !== null && f2.apply(this, arguments) || this;
+            a4.data = void 0;
+            a4.options = void 0;
+            a4.points = void 0;
+            return a4;
+          }
+          v(d2, f2);
+          d2.prototype.drawGraph = function() {
+            this.areaPath = [];
+            f2.prototype.drawGraph.apply(this);
+            var a4 = this, d3 = this.areaPath, e2 = this.options, h5 = [["area", "highcharts-area", this.color, e2.fillColor]];
+            this.zones.forEach(function(d4, f3) {
+              h5.push(["zone-area-" + f3, "highcharts-area highcharts-zone-area-" + f3 + " " + d4.className, d4.color || a4.color, d4.fillColor || e2.fillColor]);
+            });
+            h5.forEach(function(f3) {
+              var k2 = f3[0], h6 = a4[k2], p2 = h6 ? "animate" : "attr", q4 = {};
+              h6 ? (h6.endX = a4.preventGraphAnimation ? null : d3.xMap, h6.animate({ d: d3 })) : (q4.zIndex = 0, h6 = a4[k2] = a4.chart.renderer.path(d3).addClass(f3[1]).add(a4.group), h6.isArea = true);
+              a4.chart.styledMode || (q4.fill = l3(f3[3], D3(f3[2]).setOpacity(l3(e2.fillOpacity, 0.75)).get()));
+              h6[p2](q4);
+              h6.startX = d3.xMap;
+              h6.shiftUnit = e2.step ? 2 : 1;
+            });
+          };
+          d2.prototype.getGraphPath = function(a4) {
+            var d3 = I2.prototype.getGraphPath, f3 = this.options, e2 = f3.stacking, h5 = this.yAxis, q4, v2 = [], z3 = [], y2 = this.index, C2 = h5.stacking.stacks[this.stackKey], x3 = f3.threshold, c3 = Math.round(h5.getThreshold(f3.threshold));
+            f3 = l3(f3.connectNulls, e2 === "percent");
+            var t2 = function(b3, d4, f4) {
+              var g3 = a4[b3];
+              b3 = e2 && C2[g3.x].points[y2];
+              var n3 = g3[f4 + "Null"] || 0;
+              f4 = g3[f4 + "Cliff"] || 0;
+              g3 = true;
+              if (f4 || n3) {
+                var r3 = (n3 ? b3[0] : b3[1]) + f4;
+                var k2 = b3[0] + f4;
+                g3 = !!n3;
+              } else
+                !e2 && a4[d4] && a4[d4].isNull && (r3 = k2 = x3);
+              typeof r3 !== "undefined" && (z3.push({ plotX: u4, plotY: r3 === null ? c3 : h5.getThreshold(r3), isNull: g3, isCliff: true }), v2.push({ plotX: u4, plotY: k2 === null ? c3 : h5.getThreshold(k2), doCurve: false }));
+            };
+            a4 = a4 || this.points;
+            e2 && (a4 = this.getStackPoints(a4));
+            for (q4 = 0; q4 < a4.length; q4++) {
+              e2 || (a4[q4].leftCliff = a4[q4].rightCliff = a4[q4].leftNull = a4[q4].rightNull = void 0);
+              var g2 = a4[q4].isNull;
+              var u4 = l3(a4[q4].rectPlotX, a4[q4].plotX);
+              var n2 = e2 ? l3(a4[q4].yBottom, c3) : c3;
+              if (!g2 || f3)
+                f3 || t2(q4, q4 - 1, "left"), g2 && !e2 && f3 || (z3.push(a4[q4]), v2.push({ x: q4, plotX: u4, plotY: n2 })), f3 || t2(q4, q4 + 1, "right");
+            }
+            q4 = d3.call(this, z3, true, true);
+            v2.reversed = true;
+            g2 = d3.call(this, v2, true, true);
+            (n2 = g2[0]) && n2[0] === "M" && (g2[0] = ["L", n2[1], n2[2]]);
+            g2 = q4.concat(g2);
+            g2.length && g2.push(["Z"]);
+            d3 = d3.call(this, z3, false, f3);
+            g2.xMap = q4.xMap;
+            this.areaPath = g2;
+            return d3;
+          };
+          d2.prototype.getStackPoints = function(a4) {
+            var d3 = this, f3 = [], e2 = [], h5 = this.xAxis, v2 = this.yAxis, z3 = v2.stacking.stacks[this.stackKey], D4 = {}, y2 = v2.series, C2 = y2.length, x3 = v2.options.reversedStacks ? 1 : -1, c3 = y2.indexOf(d3);
+            a4 = a4 || this.points;
+            if (this.options.stacking) {
+              for (var t2 = 0; t2 < a4.length; t2++)
+                a4[t2].leftNull = a4[t2].rightNull = void 0, D4[a4[t2].x] = a4[t2];
+              q3(z3, function(c4, a5) {
+                c4.total !== null && e2.push(a5);
+              });
+              e2.sort(function(c4, a5) {
+                return c4 - a5;
+              });
+              var g2 = y2.map(function(c4) {
+                return c4.visible;
+              });
+              e2.forEach(function(a5, n2) {
+                var b3 = 0, r3, k2;
+                if (D4[a5] && !D4[a5].isNull)
+                  f3.push(D4[a5]), [-1, 1].forEach(function(b4) {
+                    var f4 = b4 === 1 ? "rightNull" : "leftNull", m3 = 0, w2 = z3[e2[n2 + b4]];
+                    if (w2)
+                      for (var h6 = c3; 0 <= h6 && h6 < C2; ) {
+                        var l4 = y2[h6].index;
+                        r3 = w2.points[l4];
+                        r3 || (l4 === d3.index ? D4[a5][f4] = true : g2[h6] && (k2 = z3[a5].points[l4]) && (m3 -= k2[1] - k2[0]));
+                        h6 += x3;
+                      }
+                    D4[a5][b4 === 1 ? "rightCliff" : "leftCliff"] = m3;
+                  });
+                else {
+                  for (var m2 = c3; 0 <= m2 && m2 < C2; ) {
+                    if (r3 = z3[a5].points[y2[m2].index]) {
+                      b3 = r3[1];
+                      break;
+                    }
+                    m2 += x3;
+                  }
+                  b3 = l3(b3, 0);
+                  b3 = v2.translate(b3, 0, 1, 0, 1);
+                  f3.push({ isNull: true, plotX: h5.translate(a5, 0, 0, 0, 1), x: a5, plotY: b3, yBottom: b3 });
+                }
+              });
+            }
+            return f3;
+          };
+          d2.defaultOptions = z2(I2.defaultOptions, { threshold: 0 });
+          return d2;
+        }(I2);
+        e(E3.prototype, {
+          singleStacks: false,
+          drawLegendSymbol: h4.drawRectangle
+        });
+        A.registerSeriesType("area", E3);
+        "";
+        return E3;
+      });
+      M2(h3, "Series/Spline/SplineSeries.js", [h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var D3 = this && this.__extends || function() {
+          var e2 = function(h5, q3) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(e3, f2) {
+              e3.__proto__ = f2;
+            } || function(e3, f2) {
+              for (var d2 in f2)
+                f2.hasOwnProperty(d2) && (e3[d2] = f2[d2]);
+            };
+            return e2(h5, q3);
+          };
+          return function(h5, q3) {
+            function l3() {
+              this.constructor = h5;
+            }
+            e2(h5, q3);
+            h5.prototype = q3 === null ? Object.create(q3) : (l3.prototype = q3.prototype, new l3());
+          };
+        }(), E3 = e.seriesTypes.line, v = h4.merge, H2 = h4.pick;
+        h4 = function(e2) {
+          function h5() {
+            var h6 = e2 !== null && e2.apply(this, arguments) || this;
+            h6.data = void 0;
+            h6.options = void 0;
+            h6.points = void 0;
+            return h6;
+          }
+          D3(h5, e2);
+          h5.prototype.getPointSpline = function(e3, h6, f2) {
+            var d2 = h6.plotX || 0, a4 = h6.plotY || 0, l3 = e3[f2 - 1];
+            f2 = e3[f2 + 1];
+            if (l3 && !l3.isNull && l3.doCurve !== false && !h6.isCliff && f2 && !f2.isNull && f2.doCurve !== false && !h6.isCliff) {
+              e3 = l3.plotY || 0;
+              var k2 = f2.plotX || 0;
+              f2 = f2.plotY || 0;
+              var q3 = 0;
+              var B = (1.5 * d2 + (l3.plotX || 0)) / 2.5;
+              var v2 = (1.5 * a4 + e3) / 2.5;
+              k2 = (1.5 * d2 + k2) / 2.5;
+              var z2 = (1.5 * a4 + f2) / 2.5;
+              k2 !== B && (q3 = (z2 - v2) * (k2 - d2) / (k2 - B) + a4 - z2);
+              v2 += q3;
+              z2 += q3;
+              v2 > e3 && v2 > a4 ? (v2 = Math.max(e3, a4), z2 = 2 * a4 - v2) : v2 < e3 && v2 < a4 && (v2 = Math.min(e3, a4), z2 = 2 * a4 - v2);
+              z2 > f2 && z2 > a4 ? (z2 = Math.max(f2, a4), v2 = 2 * a4 - z2) : z2 < f2 && z2 < a4 && (z2 = Math.min(f2, a4), v2 = 2 * a4 - z2);
+              h6.rightContX = k2;
+              h6.rightContY = z2;
+            }
+            h6 = ["C", H2(l3.rightContX, l3.plotX, 0), H2(l3.rightContY, l3.plotY, 0), H2(B, d2, 0), H2(v2, a4, 0), d2, a4];
+            l3.rightContX = l3.rightContY = void 0;
+            return h6;
+          };
+          h5.defaultOptions = v(E3.defaultOptions);
+          return h5;
+        }(E3);
+        e.registerSeriesType("spline", h4);
+        "";
+        return h4;
+      });
+      M2(h3, "Series/AreaSpline/AreaSplineSeries.js", [h3["Series/Area/AreaSeries.js"], h3["Series/Spline/SplineSeries.js"], h3["Core/Legend/LegendSymbol.js"], h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v) {
+        var D3 = this && this.__extends || function() {
+          var e2 = function(f2, d2) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a4, d3) {
+              a4.__proto__ = d3;
+            } || function(a4, d3) {
+              for (var f3 in d3)
+                d3.hasOwnProperty(f3) && (a4[f3] = d3[f3]);
+            };
+            return e2(f2, d2);
+          };
+          return function(f2, d2) {
+            function a4() {
+              this.constructor = f2;
+            }
+            e2(f2, d2);
+            f2.prototype = d2 === null ? Object.create(d2) : (a4.prototype = d2.prototype, new a4());
+          };
+        }(), I2 = e.prototype, z2 = v.extend, q3 = v.merge;
+        v = function(l3) {
+          function f2() {
+            var d2 = l3 !== null && l3.apply(this, arguments) || this;
+            d2.data = void 0;
+            d2.points = void 0;
+            d2.options = void 0;
+            return d2;
+          }
+          D3(f2, l3);
+          f2.defaultOptions = q3(h4.defaultOptions, e.defaultOptions);
+          return f2;
+        }(h4);
+        z2(v.prototype, { getGraphPath: I2.getGraphPath, getStackPoints: I2.getStackPoints, drawGraph: I2.drawGraph, drawLegendSymbol: A.drawRectangle });
+        E3.registerSeriesType("areaspline", v);
+        "";
+        return v;
+      });
+      M2(h3, "Series/Column/ColumnSeries.js", [
+        h3["Core/Animation/AnimationUtilities.js"],
+        h3["Core/Color/Color.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Legend/LegendSymbol.js"],
+        h3["Core/Series/Series.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v, H2, I2) {
+        var z2 = this && this.__extends || function() {
+          var a5 = function(d3, c3) {
+            a5 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(c4, a6) {
+              c4.__proto__ = a6;
+            } || function(c4, a6) {
+              for (var d4 in a6)
+                a6.hasOwnProperty(d4) && (c4[d4] = a6[d4]);
+            };
+            return a5(d3, c3);
+          };
+          return function(d3, c3) {
+            function f3() {
+              this.constructor = d3;
+            }
+            a5(d3, c3);
+            d3.prototype = c3 === null ? Object.create(c3) : (f3.prototype = c3.prototype, new f3());
+          };
+        }(), q3 = e.animObject, l3 = h4.parse, f2 = A.hasTouch;
+        e = A.noop;
+        var d2 = I2.clamp, a4 = I2.css, p2 = I2.defined, k2 = I2.extend, F2 = I2.fireEvent, B = I2.isArray, J2 = I2.isNumber, D3 = I2.merge, L3 = I2.pick, y2 = I2.objectEach;
+        I2 = function(e2) {
+          function h5() {
+            var c3 = e2 !== null && e2.apply(this, arguments) || this;
+            c3.borderWidth = void 0;
+            c3.data = void 0;
+            c3.group = void 0;
+            c3.options = void 0;
+            c3.points = void 0;
+            return c3;
+          }
+          z2(h5, e2);
+          h5.prototype.animate = function(c3) {
+            var a5 = this, f3 = this.yAxis, e3 = a5.options, n2 = this.chart.inverted, b3 = {}, r3 = n2 ? "translateX" : "translateY";
+            if (c3)
+              b3.scaleY = 1e-3, c3 = d2(f3.toPixels(e3.threshold), f3.pos, f3.pos + f3.len), n2 ? b3.translateX = c3 - f3.len : b3.translateY = c3, a5.clipBox && a5.setClip(), a5.group.attr(b3);
+            else {
+              var h6 = Number(a5.group.attr(r3));
+              a5.group.animate({ scaleY: 1 }, k2(q3(a5.options.animation), { step: function(c4, d3) {
+                a5.group && (b3[r3] = h6 + d3.pos * (f3.pos - h6), a5.group.attr(b3));
+              } }));
+            }
+          };
+          h5.prototype.init = function(c3, a5) {
+            e2.prototype.init.apply(this, arguments);
+            var d3 = this;
+            c3 = d3.chart;
+            c3.hasRendered && c3.series.forEach(function(c4) {
+              c4.type === d3.type && (c4.isDirty = true);
+            });
+          };
+          h5.prototype.getColumnMetrics = function() {
+            var c3 = this, a5 = c3.options, d3 = c3.xAxis, f3 = c3.yAxis, e3 = d3.options.reversedStacks;
+            e3 = d3.reversed && !e3 || !d3.reversed && e3;
+            var b3 = {}, r3, k3 = 0;
+            a5.grouping === false ? k3 = 1 : c3.chart.series.forEach(function(a6) {
+              var d4 = a6.yAxis, g2 = a6.options;
+              if (a6.type === c3.type && (a6.visible || !c3.chart.options.chart.ignoreHiddenSeries) && f3.len === d4.len && f3.pos === d4.pos) {
+                if (g2.stacking && g2.stacking !== "group") {
+                  r3 = a6.stackKey;
+                  typeof b3[r3] === "undefined" && (b3[r3] = k3++);
+                  var e4 = b3[r3];
+                } else
+                  g2.grouping !== false && (e4 = k3++);
+                a6.columnIndex = e4;
+              }
+            });
+            var m2 = Math.min(Math.abs(d3.transA) * (d3.ordinal && d3.ordinal.slope || a5.pointRange || d3.closestPointRange || d3.tickInterval || 1), d3.len), h6 = m2 * a5.groupPadding, l4 = (m2 - 2 * h6) / (k3 || 1);
+            a5 = Math.min(a5.maxPointWidth || d3.len, L3(a5.pointWidth, l4 * (1 - 2 * a5.pointPadding)));
+            c3.columnMetrics = { width: a5, offset: (l4 - a5) / 2 + (h6 + ((c3.columnIndex || 0) + (e3 ? 1 : 0)) * l4 - m2 / 2) * (e3 ? -1 : 1), paddedWidth: l4, columnCount: k3 };
+            return c3.columnMetrics;
+          };
+          h5.prototype.crispCol = function(c3, a5, d3, f3) {
+            var g2 = this.chart, b3 = this.borderWidth, e3 = -(b3 % 2 ? 0.5 : 0);
+            b3 = b3 % 2 ? 0.5 : 1;
+            g2.inverted && g2.renderer.isVML && (b3 += 1);
+            this.options.crisp && (d3 = Math.round(c3 + d3) + e3, c3 = Math.round(c3) + e3, d3 -= c3);
+            f3 = Math.round(a5 + f3) + b3;
+            e3 = 0.5 >= Math.abs(a5) && 0.5 < f3;
+            a5 = Math.round(a5) + b3;
+            f3 -= a5;
+            e3 && f3 && (--a5, f3 += 1);
+            return { x: c3, y: a5, width: d3, height: f3 };
+          };
+          h5.prototype.adjustForMissingColumns = function(c3, a5, d3, f3) {
+            var g2 = this, b3 = this.options.stacking;
+            if (!d3.isNull && 1 < f3.columnCount) {
+              var e3 = 0, k3 = 0;
+              y2(this.yAxis.stacking && this.yAxis.stacking.stacks, function(c4) {
+                if (typeof d3.x === "number" && (c4 = c4[d3.x.toString()])) {
+                  var a6 = c4.points[g2.index], f4 = c4.total;
+                  b3 ? (a6 && (e3 = k3), c4.hasValidPoints && k3++) : B(a6) && (e3 = a6[1], k3 = f4 || 0);
+                }
+              });
+              c3 = (d3.plotX || 0) + ((k3 - 1) * f3.paddedWidth + a5) / 2 - a5 - e3 * f3.paddedWidth;
+            }
+            return c3;
+          };
+          h5.prototype.translate = function() {
+            var c3 = this, a5 = c3.chart, f3 = c3.options, e3 = c3.dense = 2 > c3.closestPointRange * c3.xAxis.transA;
+            e3 = c3.borderWidth = L3(f3.borderWidth, e3 ? 0 : 1);
+            var n2 = c3.xAxis, b3 = c3.yAxis, r3 = f3.threshold, k3 = c3.translatedThreshold = b3.getThreshold(r3), m2 = L3(f3.minPointLength, 5), h6 = c3.getColumnMetrics(), l4 = h6.width, x3 = c3.pointXOffset = h6.offset, q4 = c3.dataMin, y3 = c3.dataMax, C2 = c3.barW = Math.max(l4, 1 + 2 * e3);
+            a5.inverted && (k3 -= 0.5);
+            f3.pointPadding && (C2 = Math.ceil(C2));
+            v.prototype.translate.apply(c3);
+            c3.points.forEach(function(g2) {
+              var e4 = L3(g2.yBottom, k3), w2 = 999 + Math.abs(e4), t2 = g2.plotX || 0;
+              w2 = d2(g2.plotY, -w2, b3.len + w2);
+              var u4 = Math.min(w2, e4), G2 = Math.max(w2, e4) - u4, N3 = l4, B2 = t2 + x3, F3 = C2;
+              m2 && Math.abs(G2) < m2 && (G2 = m2, t2 = !b3.reversed && !g2.negative || b3.reversed && g2.negative, J2(r3) && J2(y3) && g2.y === r3 && y3 <= r3 && (b3.min || 0) < r3 && (q4 !== y3 || (b3.max || 0) <= r3) && (t2 = !t2), u4 = Math.abs(u4 - k3) > m2 ? e4 - m2 : k3 - (t2 ? m2 : 0));
+              p2(g2.options.pointWidth) && (N3 = F3 = Math.ceil(g2.options.pointWidth), B2 -= Math.round((N3 - l4) / 2));
+              f3.centerInCategory && (B2 = c3.adjustForMissingColumns(B2, N3, g2, h6));
+              g2.barX = B2;
+              g2.pointWidth = N3;
+              g2.tooltipPos = a5.inverted ? [d2(b3.len + b3.pos - a5.plotLeft - w2, b3.pos - a5.plotLeft, b3.len + b3.pos - a5.plotLeft), n2.len + n2.pos - a5.plotTop - B2 - F3 / 2, G2] : [n2.left - a5.plotLeft + B2 + F3 / 2, d2(w2 + b3.pos - a5.plotTop, b3.pos - a5.plotTop, b3.len + b3.pos - a5.plotTop), G2];
+              g2.shapeType = c3.pointClass.prototype.shapeType || "rect";
+              g2.shapeArgs = c3.crispCol.apply(c3, g2.isNull ? [B2, k3, F3, 0] : [B2, u4, F3, G2]);
+            });
+          };
+          h5.prototype.drawGraph = function() {
+            this.group[this.dense ? "addClass" : "removeClass"]("highcharts-dense-data");
+          };
+          h5.prototype.pointAttribs = function(c3, a5) {
+            var d3 = this.options, f3 = this.pointAttrToOptions || {}, e3 = f3.stroke || "borderColor", b3 = f3["stroke-width"] || "borderWidth", r3 = c3 && c3.color || this.color, k3 = c3 && c3[e3] || d3[e3] || r3;
+            f3 = c3 && c3.options.dashStyle || d3.dashStyle;
+            var m2 = c3 && c3[b3] || d3[b3] || this[b3] || 0, h6 = L3(c3 && c3.opacity, d3.opacity, 1);
+            if (c3 && this.zones.length) {
+              var p3 = c3.getZone();
+              r3 = c3.options.color || p3 && (p3.color || c3.nonZonedColor) || this.color;
+              p3 && (k3 = p3.borderColor || k3, f3 = p3.dashStyle || f3, m2 = p3.borderWidth || m2);
+            }
+            a5 && c3 && (c3 = D3(d3.states[a5], c3.options.states && c3.options.states[a5] || {}), a5 = c3.brightness, r3 = c3.color || typeof a5 !== "undefined" && l3(r3).brighten(c3.brightness).get() || r3, k3 = c3[e3] || k3, m2 = c3[b3] || m2, f3 = c3.dashStyle || f3, h6 = L3(c3.opacity, h6));
+            e3 = { fill: r3, stroke: k3, "stroke-width": m2, opacity: h6 };
+            f3 && (e3.dashstyle = f3);
+            return e3;
+          };
+          h5.prototype.drawPoints = function() {
+            var c3 = this, a5 = this.chart, d3 = c3.options, f3 = a5.renderer, e3 = d3.animationLimit || 250, b3;
+            c3.points.forEach(function(g2) {
+              var n2 = g2.graphic, m2 = !!n2, k3 = n2 && a5.pointCount < e3 ? "animate" : "attr";
+              if (J2(g2.plotY) && g2.y !== null) {
+                b3 = g2.shapeArgs;
+                n2 && g2.hasNewShapeType() && (n2 = n2.destroy());
+                c3.enabledDataSorting && (g2.startXPos = c3.xAxis.reversed ? -(b3 ? b3.width || 0 : 0) : c3.xAxis.width);
+                n2 || (g2.graphic = n2 = f3[g2.shapeType](b3).add(g2.group || c3.group)) && c3.enabledDataSorting && a5.hasRendered && a5.pointCount < e3 && (n2.attr({ x: g2.startXPos }), m2 = true, k3 = "animate");
+                if (n2 && m2)
+                  n2[k3](D3(b3));
+                if (d3.borderRadius)
+                  n2[k3]({ r: d3.borderRadius });
+                a5.styledMode || n2[k3](c3.pointAttribs(g2, g2.selected && "select")).shadow(g2.allowShadow !== false && d3.shadow, null, d3.stacking && !d3.borderRadius);
+                n2 && (n2.addClass(g2.getClassName(), true), n2.attr({ visibility: g2.visible ? "inherit" : "hidden" }));
+              } else
+                n2 && (g2.graphic = n2.destroy());
+            });
+          };
+          h5.prototype.drawTracker = function() {
+            var c3 = this, d3 = c3.chart, g2 = d3.pointer, e3 = function(b3) {
+              var c4 = g2.getPointFromEvent(b3);
+              typeof c4 !== "undefined" && (g2.isDirectTouch = true, c4.onMouseOver(b3));
+            }, n2;
+            c3.points.forEach(function(b3) {
+              n2 = B(b3.dataLabels) ? b3.dataLabels : b3.dataLabel ? [b3.dataLabel] : [];
+              b3.graphic && (b3.graphic.element.point = b3);
+              n2.forEach(function(c4) {
+                c4.div ? c4.div.point = b3 : c4.element.point = b3;
+              });
+            });
+            c3._hasTracking || (c3.trackerGroups.forEach(function(b3) {
+              if (c3[b3]) {
+                c3[b3].addClass("highcharts-tracker").on("mouseover", e3).on("mouseout", function(b4) {
+                  g2.onTrackerMouseOut(b4);
+                });
+                if (f2)
+                  c3[b3].on("touchstart", e3);
+                !d3.styledMode && c3.options.cursor && c3[b3].css(a4).css({ cursor: c3.options.cursor });
+              }
+            }), c3._hasTracking = true);
+            F2(this, "afterDrawTracker");
+          };
+          h5.prototype.remove = function() {
+            var c3 = this, a5 = c3.chart;
+            a5.hasRendered && a5.series.forEach(function(a6) {
+              a6.type === c3.type && (a6.isDirty = true);
+            });
+            v.prototype.remove.apply(c3, arguments);
+          };
+          h5.defaultOptions = D3(v.defaultOptions, { borderRadius: 0, centerInCategory: false, groupPadding: 0.2, marker: null, pointPadding: 0.1, minPointLength: 0, cropThreshold: 50, pointRange: null, states: {
+            hover: { halo: false, brightness: 0.1 },
+            select: { color: "#cccccc", borderColor: "#000000" }
+          }, dataLabels: { align: void 0, verticalAlign: void 0, y: void 0 }, startFromThreshold: true, stickyTracking: false, tooltip: { distance: 6 }, threshold: 0, borderColor: "#ffffff" });
+          return h5;
+        }(v);
+        k2(I2.prototype, { cropShoulder: 0, directTouch: true, drawLegendSymbol: E3.drawRectangle, getSymbol: e, negStacks: true, trackerGroups: ["group", "dataLabelsGroup"] });
+        H2.registerSeriesType("column", I2);
+        "";
+        "";
+        return I2;
+      });
+      M2(h3, "Core/Series/DataLabel.js", [
+        h3["Core/Animation/AnimationUtilities.js"],
+        h3["Core/FormatUtilities.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A) {
+        var D3 = e.getDeferredAnimation, v = h4.format, H2 = A.defined, I2 = A.extend, z2 = A.fireEvent, q3 = A.isArray, l3 = A.merge, f2 = A.objectEach, d2 = A.pick, a4 = A.splat, p2;
+        (function(e2) {
+          function k2(a5, c3, f3, g2, e3) {
+            var n2 = this, b3 = this.chart, k3 = this.isCartesian && b3.inverted, h6 = this.enabledDataSorting, m2 = d2(a5.dlBox && a5.dlBox.centerX, a5.plotX, -9999), w2 = d2(a5.plotY, -9999), l4 = c3.getBBox(), p4 = f3.rotation, t2 = f3.align, u4 = b3.isInsidePlot(m2, Math.round(w2), { inverted: k3, paneCoordinates: true, series: n2 }), x3 = function(b4) {
+              h6 && n2.xAxis && !q4 && n2.setDataLabelStartPos(a5, c3, e3, u4, b4);
+            }, q4 = d2(f3.overflow, h6 ? "none" : "justify") === "justify", y3 = this.visible && a5.visible !== false && (a5.series.forceDL || h6 && !q4 || u4 || d2(f3.inside, !!this.options.stacking) && g2 && b3.isInsidePlot(m2, k3 ? g2.x + 1 : g2.y + g2.height - 1, { inverted: k3, paneCoordinates: true, series: n2 }));
+            if (y3) {
+              var C3 = b3.renderer.fontMetrics(b3.styledMode ? void 0 : f3.style.fontSize, c3).b;
+              g2 = I2({ x: k3 ? this.yAxis.len - w2 : m2, y: Math.round(k3 ? this.xAxis.len - m2 : w2), width: 0, height: 0 }, g2);
+              I2(f3, { width: l4.width, height: l4.height });
+              p4 ? (q4 = false, m2 = b3.renderer.rotCorr(C3, p4), m2 = { x: g2.x + (f3.x || 0) + g2.width / 2 + m2.x, y: g2.y + (f3.y || 0) + { top: 0, middle: 0.5, bottom: 1 }[f3.verticalAlign] * g2.height }, x3(m2), c3[e3 ? "attr" : "animate"](m2).attr({ align: t2 }), x3 = (p4 + 720) % 360, x3 = 180 < x3 && 360 > x3, t2 === "left" ? m2.y -= x3 ? l4.height : 0 : t2 === "center" ? (m2.x -= l4.width / 2, m2.y -= l4.height / 2) : t2 === "right" && (m2.x -= l4.width, m2.y -= x3 ? 0 : l4.height), c3.placed = true, c3.alignAttr = m2) : (x3(g2), c3.align(f3, void 0, g2), m2 = c3.alignAttr);
+              q4 && 0 <= g2.height ? this.justifyDataLabel(c3, f3, m2, l4, g2, e3) : d2(f3.crop, true) && (y3 = b3.isInsidePlot(m2.x, m2.y, { paneCoordinates: true, series: n2 }) && b3.isInsidePlot(m2.x + l4.width, m2.y + l4.height, {
+                paneCoordinates: true,
+                series: n2
+              }));
+              if (f3.shape && !p4)
+                c3[e3 ? "attr" : "animate"]({ anchorX: k3 ? b3.plotWidth - a5.plotY : a5.plotX, anchorY: k3 ? b3.plotHeight - a5.plotX : a5.plotY });
+            }
+            e3 && h6 && (c3.placed = false);
+            y3 || h6 && !q4 || (c3.hide(true), c3.placed = false);
+          }
+          function h5(a5, c3) {
+            var d3 = c3.filter;
+            return d3 ? (c3 = d3.operator, a5 = a5[d3.property], d3 = d3.value, c3 === ">" && a5 > d3 || c3 === "<" && a5 < d3 || c3 === ">=" && a5 >= d3 || c3 === "<=" && a5 <= d3 || c3 === "==" && a5 == d3 || c3 === "===" && a5 === d3 ? true : false) : true;
+          }
+          function p3() {
+            var e3 = this, c3 = e3.chart, k3 = e3.options, g2 = e3.points, l4 = e3.hasRendered || 0, n2 = c3.renderer, b3 = k3.dataLabels, r3, p4 = b3.animation;
+            p4 = b3.defer ? D3(c3, p4, e3) : { defer: 0, duration: 0 };
+            b3 = L3(L3(c3.options.plotOptions && c3.options.plotOptions.series && c3.options.plotOptions.series.dataLabels, c3.options.plotOptions && c3.options.plotOptions[e3.type] && c3.options.plotOptions[e3.type].dataLabels), b3);
+            z2(this, "drawDataLabels");
+            if (q3(b3) || b3.enabled || e3._hasPointLabels) {
+              var m2 = e3.plotGroup("dataLabelsGroup", "data-labels", l4 ? "inherit" : "hidden", b3.zIndex || 6);
+              m2.attr({ opacity: +l4 });
+              !l4 && (l4 = e3.dataLabelsGroup) && (e3.visible && m2.show(true), l4[k3.animation ? "animate" : "attr"]({ opacity: 1 }, p4));
+              g2.forEach(function(g3) {
+                r3 = a4(L3(b3, g3.dlOptions || g3.options && g3.options.dataLabels));
+                r3.forEach(function(b4, a5) {
+                  var r4 = b4.enabled && (!g3.isNull || g3.dataLabelOnNull) && h5(g3, b4), l5 = g3.connectors ? g3.connectors[a5] : g3.connector, w2 = g3.dataLabels ? g3.dataLabels[a5] : g3.dataLabel, p5 = d2(b4.distance, g3.labelDistance), u4 = !w2;
+                  if (r4) {
+                    var t2 = g3.getLabelConfig();
+                    var q4 = d2(b4[g3.formatPrefix + "Format"], b4.format);
+                    t2 = H2(q4) ? v(q4, t2, c3) : (b4[g3.formatPrefix + "Formatter"] || b4.formatter).call(t2, b4);
+                    q4 = b4.style;
+                    var x3 = b4.rotation;
+                    c3.styledMode || (q4.color = d2(b4.color, q4.color, e3.color, "#000000"), q4.color === "contrast" ? (g3.contrastColor = n2.getContrast(g3.color || e3.color), q4.color = !H2(p5) && b4.inside || 0 > p5 || k3.stacking ? g3.contrastColor : "#000000") : delete g3.contrastColor, k3.cursor && (q4.cursor = k3.cursor));
+                    var G2 = { r: b4.borderRadius || 0, rotation: x3, padding: b4.padding, zIndex: 1 };
+                    c3.styledMode || (G2.fill = b4.backgroundColor, G2.stroke = b4.borderColor, G2["stroke-width"] = b4.borderWidth);
+                    f2(G2, function(b5, c4) {
+                      typeof b5 === "undefined" && delete G2[c4];
+                    });
+                  }
+                  !w2 || r4 && H2(t2) ? r4 && H2(t2) && (w2 ? G2.text = t2 : (g3.dataLabels = g3.dataLabels || [], w2 = g3.dataLabels[a5] = x3 ? n2.text(t2, 0, -9999, b4.useHTML).addClass("highcharts-data-label") : n2.label(t2, 0, -9999, b4.shape, null, null, b4.useHTML, null, "data-label"), a5 || (g3.dataLabel = w2), w2.addClass(" highcharts-data-label-color-" + g3.colorIndex + " " + (b4.className || "") + (b4.useHTML ? " highcharts-tracker" : ""))), w2.options = b4, w2.attr(G2), c3.styledMode || w2.css(q4).shadow(b4.shadow), w2.added || w2.add(m2), b4.textPath && !b4.useHTML && (w2.setTextPath(g3.getDataLabelPath && g3.getDataLabelPath(w2) || g3.graphic, b4.textPath), g3.dataLabelPath && !b4.textPath.enabled && (g3.dataLabelPath = g3.dataLabelPath.destroy())), e3.alignDataLabel(g3, w2, b4, null, u4)) : (g3.dataLabel = g3.dataLabel && g3.dataLabel.destroy(), g3.dataLabels && (g3.dataLabels.length === 1 ? delete g3.dataLabels : delete g3.dataLabels[a5]), a5 || delete g3.dataLabel, l5 && (g3.connector = g3.connector.destroy(), g3.connectors && (g3.connectors.length === 1 ? delete g3.connectors : delete g3.connectors[a5])));
+                });
+              });
+            }
+            z2(this, "afterDrawDataLabels");
+          }
+          function A2(a5, c3, d3, f3, e3, n2) {
+            var b3 = this.chart, g2 = c3.align, k3 = c3.verticalAlign, m2 = a5.box ? 0 : a5.padding || 0, h6 = c3.x;
+            h6 = h6 === void 0 ? 0 : h6;
+            var l4 = c3.y;
+            l4 = l4 === void 0 ? 0 : l4;
+            var p4 = (d3.x || 0) + m2;
+            if (0 > p4) {
+              g2 === "right" && 0 <= h6 ? (c3.align = "left", c3.inside = true) : h6 -= p4;
+              var u4 = true;
+            }
+            p4 = (d3.x || 0) + f3.width - m2;
+            p4 > b3.plotWidth && (g2 === "left" && 0 >= h6 ? (c3.align = "right", c3.inside = true) : h6 += b3.plotWidth - p4, u4 = true);
+            p4 = d3.y + m2;
+            0 > p4 && (k3 === "bottom" && 0 <= l4 ? (c3.verticalAlign = "top", c3.inside = true) : l4 -= p4, u4 = true);
+            p4 = (d3.y || 0) + f3.height - m2;
+            p4 > b3.plotHeight && (k3 === "top" && 0 >= l4 ? (c3.verticalAlign = "bottom", c3.inside = true) : l4 += b3.plotHeight - p4, u4 = true);
+            u4 && (c3.x = h6, c3.y = l4, a5.placed = !n2, a5.align(c3, void 0, e3));
+            return u4;
+          }
+          function L3(a5, c3) {
+            var d3 = [], f3;
+            if (q3(a5) && !q3(c3))
+              d3 = a5.map(function(a6) {
+                return l3(a6, c3);
+              });
+            else if (q3(c3) && !q3(a5))
+              d3 = c3.map(function(c4) {
+                return l3(a5, c4);
+              });
+            else if (q3(a5) || q3(c3))
+              for (f3 = Math.max(a5.length, c3.length); f3--; )
+                d3[f3] = l3(a5[f3], c3[f3]);
+            else
+              d3 = l3(a5, c3);
+            return d3;
+          }
+          function y2(a5, c3, d3, f3, e3) {
+            var g2 = this.chart, b3 = g2.inverted, k3 = this.xAxis, h6 = k3.reversed, m2 = b3 ? c3.height / 2 : c3.width / 2;
+            a5 = (a5 = a5.pointWidth) ? a5 / 2 : 0;
+            c3.startXPos = b3 ? e3.x : h6 ? -m2 - a5 : k3.width - m2 + a5;
+            c3.startYPos = b3 ? h6 ? this.yAxis.height - m2 + a5 : -m2 - a5 : e3.y;
+            f3 ? c3.visibility === "hidden" && (c3.show(), c3.attr({ opacity: 0 }).animate({ opacity: 1 })) : c3.attr({ opacity: 1 }).animate({ opacity: 0 }, void 0, c3.hide);
+            g2.hasRendered && (d3 && c3.attr({ x: c3.startXPos, y: c3.startYPos }), c3.placed = true);
+          }
+          var C2 = [];
+          e2.compose = function(a5) {
+            if (C2.indexOf(a5) === -1) {
+              var c3 = a5.prototype;
+              C2.push(a5);
+              c3.alignDataLabel = k2;
+              c3.drawDataLabels = p3;
+              c3.justifyDataLabel = A2;
+              c3.setDataLabelStartPos = y2;
+            }
+          };
+        })(p2 || (p2 = {}));
+        "";
+        return p2;
+      });
+      M2(h3, "Series/Column/ColumnDataLabel.js", [h3["Core/Series/DataLabel.js"], h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = h4.series, v = A.merge, H2 = A.pick, I2;
+        (function(h5) {
+          function q3(f2, d2, a4, e2, k2) {
+            var h6 = this.chart.inverted, l4 = f2.series, p2 = (l4.xAxis ? l4.xAxis.len : this.chart.plotSizeX) || 0;
+            l4 = (l4.yAxis ? l4.yAxis.len : this.chart.plotSizeY) || 0;
+            var q4 = f2.dlBox || f2.shapeArgs, z2 = H2(f2.below, f2.plotY > H2(this.translatedThreshold, l4)), y2 = H2(a4.inside, !!this.options.stacking);
+            q4 && (e2 = v(q4), 0 > e2.y && (e2.height += e2.y, e2.y = 0), q4 = e2.y + e2.height - l4, 0 < q4 && q4 < e2.height && (e2.height -= q4), h6 && (e2 = { x: l4 - e2.y - e2.height, y: p2 - e2.x - e2.width, width: e2.height, height: e2.width }), y2 || (h6 ? (e2.x += z2 ? 0 : e2.width, e2.width = 0) : (e2.y += z2 ? e2.height : 0, e2.height = 0)));
+            a4.align = H2(a4.align, !h6 || y2 ? "center" : z2 ? "right" : "left");
+            a4.verticalAlign = H2(a4.verticalAlign, h6 || y2 ? "middle" : z2 ? "top" : "bottom");
+            D3.prototype.alignDataLabel.call(this, f2, d2, a4, e2, k2);
+            a4.inside && f2.contrastColor && d2.css({ color: f2.contrastColor });
+          }
+          var l3 = [];
+          h5.compose = function(f2) {
+            e.compose(D3);
+            l3.indexOf(f2) === -1 && (l3.push(f2), f2.prototype.alignDataLabel = q3);
+          };
+        })(I2 || (I2 = {}));
+        return I2;
+      });
+      M2(h3, "Series/Bar/BarSeries.js", [h3["Series/Column/ColumnSeries.js"], h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = this && this.__extends || function() {
+          var e2 = function(h5, q3) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(e3, f2) {
+              e3.__proto__ = f2;
+            } || function(e3, f2) {
+              for (var d2 in f2)
+                f2.hasOwnProperty(d2) && (e3[d2] = f2[d2]);
+            };
+            return e2(h5, q3);
+          };
+          return function(h5, q3) {
+            function l3() {
+              this.constructor = h5;
+            }
+            e2(h5, q3);
+            h5.prototype = q3 === null ? Object.create(q3) : (l3.prototype = q3.prototype, new l3());
+          };
+        }(), v = A.extend, H2 = A.merge;
+        A = function(h5) {
+          function v2() {
+            var e2 = h5 !== null && h5.apply(this, arguments) || this;
+            e2.data = void 0;
+            e2.options = void 0;
+            e2.points = void 0;
+            return e2;
+          }
+          D3(v2, h5);
+          v2.defaultOptions = H2(e.defaultOptions, {});
+          return v2;
+        }(e);
+        v(A.prototype, { inverted: true });
+        h4.registerSeriesType("bar", A);
+        "";
+        return A;
+      });
+      M2(h3, "Series/Scatter/ScatterSeries.js", [h3["Series/Column/ColumnSeries.js"], h3["Series/Line/LineSeries.js"], h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3) {
+        var v = this && this.__extends || function() {
+          var e2 = function(h5, f2) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, a4) {
+              d2.__proto__ = a4;
+            } || function(d2, a4) {
+              for (var f3 in a4)
+                a4.hasOwnProperty(f3) && (d2[f3] = a4[f3]);
+            };
+            return e2(h5, f2);
+          };
+          return function(h5, f2) {
+            function d2() {
+              this.constructor = h5;
+            }
+            e2(h5, f2);
+            h5.prototype = f2 === null ? Object.create(f2) : (d2.prototype = f2.prototype, new d2());
+          };
+        }(), D3 = E3.addEvent, I2 = E3.extend, z2 = E3.merge;
+        E3 = function(e2) {
+          function l3() {
+            var f2 = e2 !== null && e2.apply(this, arguments) || this;
+            f2.data = void 0;
+            f2.options = void 0;
+            f2.points = void 0;
+            return f2;
+          }
+          v(l3, e2);
+          l3.prototype.applyJitter = function() {
+            var f2 = this, d2 = this.options.jitter, a4 = this.points.length;
+            d2 && this.points.forEach(function(e3, k2) {
+              ["x", "y"].forEach(function(h5, l4) {
+                var p2 = "plot" + h5.toUpperCase();
+                if (d2[h5] && !e3.isNull) {
+                  var q3 = f2[h5 + "Axis"];
+                  var B = d2[h5] * q3.transA;
+                  if (q3 && !q3.isLog) {
+                    var y2 = Math.max(0, e3[p2] - B);
+                    q3 = Math.min(q3.len, e3[p2] + B);
+                    l4 = 1e4 * Math.sin(k2 + l4 * a4);
+                    e3[p2] = y2 + (q3 - y2) * (l4 - Math.floor(l4));
+                    h5 === "x" && (e3.clientX = e3.plotX);
+                  }
+                }
+              });
+            });
+          };
+          l3.prototype.drawGraph = function() {
+            this.options.lineWidth ? e2.prototype.drawGraph.call(this) : this.graph && (this.graph = this.graph.destroy());
+          };
+          l3.defaultOptions = z2(h4.defaultOptions, { lineWidth: 0, findNearestPointBy: "xy", jitter: { x: 0, y: 0 }, marker: { enabled: true }, tooltip: { headerFormat: '<span style="color:{point.color}">\u25CF</span> <span style="font-size: 10px"> {series.name}</span><br/>', pointFormat: "x: <b>{point.x}</b><br/>y: <b>{point.y}</b><br/>" } });
+          return l3;
+        }(h4);
+        I2(E3.prototype, { drawTracker: e.prototype.drawTracker, sorted: false, requireSorting: false, noSharedTooltip: true, trackerGroups: ["group", "markerGroup", "dataLabelsGroup"], takeOrdinalPosition: false });
+        D3(E3, "afterTranslate", function() {
+          this.applyJitter();
+        });
+        A.registerSeriesType("scatter", E3);
+        "";
+        return E3;
+      });
+      M2(h3, "Series/CenteredUtilities.js", [h3["Core/Globals.js"], h3["Core/Series/Series.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = e.deg2rad, v = A.isNumber, H2 = A.pick, I2 = A.relativeLength, z2;
+        (function(e2) {
+          e2.getCenter = function() {
+            var e3 = this.options, f2 = this.chart, d2 = 2 * (e3.slicedOffset || 0), a4 = f2.plotWidth - 2 * d2, p2 = f2.plotHeight - 2 * d2, k2 = e3.center, q3 = Math.min(a4, p2), B = e3.size, v2 = e3.innerSize || 0;
+            typeof B === "string" && (B = parseFloat(B));
+            typeof v2 === "string" && (v2 = parseFloat(v2));
+            e3 = [H2(k2[0], "50%"), H2(k2[1], "50%"), H2(B && 0 > B ? void 0 : e3.size, "100%"), H2(v2 && 0 > v2 ? void 0 : e3.innerSize || 0, "0%")];
+            !f2.angular || this instanceof h4 || (e3[3] = 0);
+            for (k2 = 0; 4 > k2; ++k2)
+              B = e3[k2], f2 = 2 > k2 || k2 === 2 && /%$/.test(B), e3[k2] = I2(B, [a4, p2, q3, e3[2]][k2]) + (f2 ? d2 : 0);
+            e3[3] > e3[2] && (e3[3] = e3[2]);
+            return e3;
+          };
+          e2.getStartAndEndRadians = function(e3, f2) {
+            e3 = v(e3) ? e3 : 0;
+            f2 = v(f2) && f2 > e3 && 360 > f2 - e3 ? f2 : e3 + 360;
+            return { start: D3 * (e3 + -90), end: D3 * (f2 + -90) };
+          };
+        })(z2 || (z2 = {}));
+        "";
+        return z2;
+      });
+      M2(h3, "Series/Pie/PiePoint.js", [h3["Core/Animation/AnimationUtilities.js"], h3["Core/Series/Point.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = this && this.__extends || function() {
+          var f2 = function(d2, a4) {
+            f2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a5, d3) {
+              a5.__proto__ = d3;
+            } || function(a5, d3) {
+              for (var f3 in d3)
+                d3.hasOwnProperty(f3) && (a5[f3] = d3[f3]);
+            };
+            return f2(d2, a4);
+          };
+          return function(d2, a4) {
+            function e2() {
+              this.constructor = d2;
+            }
+            f2(d2, a4);
+            d2.prototype = a4 === null ? Object.create(a4) : (e2.prototype = a4.prototype, new e2());
+          };
+        }(), v = e.setAnimation, H2 = A.addEvent, I2 = A.defined;
+        e = A.extend;
+        var z2 = A.isNumber, q3 = A.pick, l3 = A.relativeLength;
+        h4 = function(f2) {
+          function d2() {
+            var a4 = f2 !== null && f2.apply(this, arguments) || this;
+            a4.labelDistance = void 0;
+            a4.options = void 0;
+            a4.series = void 0;
+            return a4;
+          }
+          D3(d2, f2);
+          d2.prototype.getConnectorPath = function() {
+            var a4 = this.labelPosition, d3 = this.series.options.dataLabels, f3 = this.connectorShapes, e2 = d3.connectorShape;
+            f3[e2] && (e2 = f3[e2]);
+            return e2.call(this, {
+              x: a4.final.x,
+              y: a4.final.y,
+              alignment: a4.alignment
+            }, a4.connectorPosition, d3);
+          };
+          d2.prototype.getTranslate = function() {
+            return this.sliced ? this.slicedTranslation : { translateX: 0, translateY: 0 };
+          };
+          d2.prototype.haloPath = function(a4) {
+            var d3 = this.shapeArgs;
+            return this.sliced || !this.visible ? [] : this.series.chart.renderer.symbols.arc(d3.x, d3.y, d3.r + a4, d3.r + a4, { innerR: d3.r - 1, start: d3.start, end: d3.end });
+          };
+          d2.prototype.init = function() {
+            var a4 = this;
+            f2.prototype.init.apply(this, arguments);
+            this.name = q3(this.name, "Slice");
+            var d3 = function(d4) {
+              a4.slice(d4.type === "select");
+            };
+            H2(this, "select", d3);
+            H2(this, "unselect", d3);
+            return this;
+          };
+          d2.prototype.isValid = function() {
+            return z2(this.y) && 0 <= this.y;
+          };
+          d2.prototype.setVisible = function(a4, d3) {
+            var f3 = this, e2 = this.series, h5 = e2.chart, l4 = e2.options.ignoreHiddenPoint;
+            d3 = q3(d3, l4);
+            a4 !== this.visible && (this.visible = this.options.visible = a4 = typeof a4 === "undefined" ? !this.visible : a4, e2.options.data[e2.data.indexOf(this)] = this.options, ["graphic", "dataLabel", "connector", "shadowGroup"].forEach(function(d4) {
+              if (f3[d4])
+                f3[d4][a4 ? "show" : "hide"](a4);
+            }), this.legendItem && h5.legend.colorizeItem(this, a4), a4 || this.state !== "hover" || this.setState(""), l4 && (e2.isDirty = true), d3 && h5.redraw());
+          };
+          d2.prototype.slice = function(a4, d3, f3) {
+            var e2 = this.series;
+            v(f3, e2.chart);
+            q3(d3, true);
+            this.sliced = this.options.sliced = I2(a4) ? a4 : !this.sliced;
+            e2.options.data[e2.data.indexOf(this)] = this.options;
+            this.graphic && this.graphic.animate(this.getTranslate());
+            this.shadowGroup && this.shadowGroup.animate(this.getTranslate());
+          };
+          return d2;
+        }(h4);
+        e(h4.prototype, { connectorShapes: { fixedOffset: function(f2, d2, a4) {
+          var e2 = d2.breakAt;
+          d2 = d2.touchingSliceAt;
+          return [[
+            "M",
+            f2.x,
+            f2.y
+          ], a4.softConnector ? ["C", f2.x + (f2.alignment === "left" ? -5 : 5), f2.y, 2 * e2.x - d2.x, 2 * e2.y - d2.y, e2.x, e2.y] : ["L", e2.x, e2.y], ["L", d2.x, d2.y]];
+        }, straight: function(e2, d2) {
+          d2 = d2.touchingSliceAt;
+          return [["M", e2.x, e2.y], ["L", d2.x, d2.y]];
+        }, crookedLine: function(e2, d2, a4) {
+          d2 = d2.touchingSliceAt;
+          var f2 = this.series, h5 = f2.center[0], q4 = f2.chart.plotWidth, B = f2.chart.plotLeft;
+          f2 = e2.alignment;
+          var v2 = this.shapeArgs.r;
+          a4 = l3(a4.crookDistance, 1);
+          q4 = f2 === "left" ? h5 + v2 + (q4 + B - h5 - v2) * (1 - a4) : B + (h5 - v2) * a4;
+          a4 = ["L", q4, e2.y];
+          h5 = true;
+          if (f2 === "left" ? q4 > e2.x || q4 < d2.x : q4 < e2.x || q4 > d2.x)
+            h5 = false;
+          e2 = [["M", e2.x, e2.y]];
+          h5 && e2.push(a4);
+          e2.push(["L", d2.x, d2.y]);
+          return e2;
+        } } });
+        return h4;
+      });
+      M2(h3, "Series/Pie/PieSeries.js", [h3["Series/CenteredUtilities.js"], h3["Series/Column/ColumnSeries.js"], h3["Core/Globals.js"], h3["Core/Legend/LegendSymbol.js"], h3["Series/Pie/PiePoint.js"], h3["Core/Series/Series.js"], h3["Core/Series/SeriesRegistry.js"], h3["Core/Renderer/SVG/Symbols.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v, H2, I2, z2, q3) {
+        var l3 = this && this.__extends || function() {
+          var a5 = function(d3, e2) {
+            a5 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a6, d4) {
+              a6.__proto__ = d4;
+            } || function(a6, d4) {
+              for (var e3 in d4)
+                d4.hasOwnProperty(e3) && (a6[e3] = d4[e3]);
+            };
+            return a5(d3, e2);
+          };
+          return function(d3, e2) {
+            function f3() {
+              this.constructor = d3;
+            }
+            a5(d3, e2);
+            d3.prototype = e2 === null ? Object.create(e2) : (f3.prototype = e2.prototype, new f3());
+          };
+        }(), f2 = e.getStartAndEndRadians;
+        A = A.noop;
+        var d2 = q3.clamp, a4 = q3.extend, p2 = q3.fireEvent, k2 = q3.merge, F2 = q3.pick, B = q3.relativeLength;
+        q3 = function(a5) {
+          function e2() {
+            var d3 = a5 !== null && a5.apply(this, arguments) || this;
+            d3.center = void 0;
+            d3.data = void 0;
+            d3.maxLabelDistance = void 0;
+            d3.options = void 0;
+            d3.points = void 0;
+            return d3;
+          }
+          l3(e2, a5);
+          e2.prototype.animate = function(a6) {
+            var d3 = this, e3 = d3.points, f3 = d3.startAngleRad;
+            a6 || e3.forEach(function(c3) {
+              var a7 = c3.graphic, e4 = c3.shapeArgs;
+              a7 && e4 && (a7.attr({ r: F2(c3.startR, d3.center && d3.center[3] / 2), start: f3, end: f3 }), a7.animate({ r: e4.r, start: e4.start, end: e4.end }, d3.options.animation));
+            });
+          };
+          e2.prototype.drawEmpty = function() {
+            var a6 = this.startAngleRad, d3 = this.endAngleRad, e3 = this.options;
+            if (this.total === 0 && this.center) {
+              var f3 = this.center[0];
+              var c3 = this.center[1];
+              this.graph || (this.graph = this.chart.renderer.arc(f3, c3, this.center[1] / 2, 0, a6, d3).addClass("highcharts-empty-series").add(this.group));
+              this.graph.attr({ d: z2.arc(f3, c3, this.center[2] / 2, 0, { start: a6, end: d3, innerR: this.center[3] / 2 }) });
+              this.chart.styledMode || this.graph.attr({ "stroke-width": e3.borderWidth, fill: e3.fillColor || "none", stroke: e3.color || "#cccccc" });
+            } else
+              this.graph && (this.graph = this.graph.destroy());
+          };
+          e2.prototype.drawPoints = function() {
+            var a6 = this.chart.renderer;
+            this.points.forEach(function(d3) {
+              d3.graphic && d3.hasNewShapeType() && (d3.graphic = d3.graphic.destroy());
+              d3.graphic || (d3.graphic = a6[d3.shapeType](d3.shapeArgs).add(d3.series.group), d3.delayedRendering = true);
+            });
+          };
+          e2.prototype.generatePoints = function() {
+            a5.prototype.generatePoints.call(this);
+            this.updateTotals();
+          };
+          e2.prototype.getX = function(a6, e3, f3) {
+            var h5 = this.center, c3 = this.radii ? this.radii[f3.index] || 0 : h5[2] / 2;
+            a6 = Math.asin(d2((a6 - h5[1]) / (c3 + f3.labelDistance), -1, 1));
+            return h5[0] + (e3 ? -1 : 1) * Math.cos(a6) * (c3 + f3.labelDistance) + (0 < f3.labelDistance ? (e3 ? -1 : 1) * this.options.dataLabels.padding : 0);
+          };
+          e2.prototype.hasData = function() {
+            return !!this.processedXData.length;
+          };
+          e2.prototype.redrawPoints = function() {
+            var a6 = this, d3 = a6.chart, e3 = d3.renderer, f3 = a6.options.shadow, c3, h5, g2, l4;
+            this.drawEmpty();
+            !f3 || a6.shadowGroup || d3.styledMode || (a6.shadowGroup = e3.g("shadow").attr({ zIndex: -1 }).add(a6.group));
+            a6.points.forEach(function(n2) {
+              var b3 = {};
+              h5 = n2.graphic;
+              if (!n2.isNull && h5) {
+                var r3 = void 0;
+                l4 = n2.shapeArgs;
+                c3 = n2.getTranslate();
+                d3.styledMode || (r3 = n2.shadowGroup, f3 && !r3 && (r3 = n2.shadowGroup = e3.g("shadow").add(a6.shadowGroup)), r3 && r3.attr(c3), g2 = a6.pointAttribs(n2, n2.selected && "select"));
+                n2.delayedRendering ? (h5.setRadialReference(a6.center).attr(l4).attr(c3), d3.styledMode || h5.attr(g2).attr({ "stroke-linejoin": "round" }).shadow(f3, r3), n2.delayedRendering = false) : (h5.setRadialReference(a6.center), d3.styledMode || k2(true, b3, g2), k2(true, b3, l4, c3), h5.animate(b3));
+                h5.attr({ visibility: n2.visible ? "inherit" : "hidden" });
+                h5.addClass(n2.getClassName(), true);
+              } else
+                h5 && (n2.graphic = h5.destroy());
+            });
+          };
+          e2.prototype.sortByAngle = function(a6, d3) {
+            a6.sort(function(a7, e3) {
+              return typeof a7.angle !== "undefined" && (e3.angle - a7.angle) * d3;
+            });
+          };
+          e2.prototype.translate = function(a6) {
+            this.generatePoints();
+            var d3 = this.options, e3 = d3.slicedOffset, h5 = e3 + (d3.borderWidth || 0), c3 = f2(d3.startAngle, d3.endAngle), k3 = this.startAngleRad = c3.start;
+            c3 = (this.endAngleRad = c3.end) - k3;
+            var g2 = this.points, l4 = d3.dataLabels.distance;
+            d3 = d3.ignoreHiddenPoint;
+            var n2 = g2.length, b3, r3 = 0;
+            a6 || (this.center = a6 = this.getCenter());
+            for (b3 = 0; b3 < n2; b3++) {
+              var q4 = g2[b3];
+              var m2 = k3 + r3 * c3;
+              !q4.isValid() || d3 && !q4.visible || (r3 += q4.percentage / 100);
+              var w2 = k3 + r3 * c3;
+              var N3 = { x: a6[0], y: a6[1], r: a6[2] / 2, innerR: a6[3] / 2, start: Math.round(1e3 * m2) / 1e3, end: Math.round(1e3 * w2) / 1e3 };
+              q4.shapeType = "arc";
+              q4.shapeArgs = N3;
+              q4.labelDistance = F2(q4.options.dataLabels && q4.options.dataLabels.distance, l4);
+              q4.labelDistance = B(q4.labelDistance, N3.r);
+              this.maxLabelDistance = Math.max(this.maxLabelDistance || 0, q4.labelDistance);
+              w2 = (w2 + m2) / 2;
+              w2 > 1.5 * Math.PI ? w2 -= 2 * Math.PI : w2 < -Math.PI / 2 && (w2 += 2 * Math.PI);
+              q4.slicedTranslation = { translateX: Math.round(Math.cos(w2) * e3), translateY: Math.round(Math.sin(w2) * e3) };
+              N3 = Math.cos(w2) * a6[2] / 2;
+              var v2 = Math.sin(w2) * a6[2] / 2;
+              q4.tooltipPos = [a6[0] + 0.7 * N3, a6[1] + 0.7 * v2];
+              q4.half = w2 < -Math.PI / 2 || w2 > Math.PI / 2 ? 1 : 0;
+              q4.angle = w2;
+              m2 = Math.min(h5, q4.labelDistance / 5);
+              q4.labelPosition = { natural: { x: a6[0] + N3 + Math.cos(w2) * q4.labelDistance, y: a6[1] + v2 + Math.sin(w2) * q4.labelDistance }, "final": {}, alignment: 0 > q4.labelDistance ? "center" : q4.half ? "right" : "left", connectorPosition: { breakAt: { x: a6[0] + N3 + Math.cos(w2) * m2, y: a6[1] + v2 + Math.sin(w2) * m2 }, touchingSliceAt: { x: a6[0] + N3, y: a6[1] + v2 } } };
+            }
+            p2(this, "afterTranslate");
+          };
+          e2.prototype.updateTotals = function() {
+            var a6 = this.points, d3 = a6.length, e3 = this.options.ignoreHiddenPoint, f3, c3 = 0;
+            for (f3 = 0; f3 < d3; f3++) {
+              var h5 = a6[f3];
+              !h5.isValid() || e3 && !h5.visible || (c3 += h5.y);
+            }
+            this.total = c3;
+            for (f3 = 0; f3 < d3; f3++)
+              h5 = a6[f3], h5.percentage = 0 < c3 && (h5.visible || !e3) ? h5.y / c3 * 100 : 0, h5.total = c3;
+          };
+          e2.defaultOptions = k2(H2.defaultOptions, {
+            center: [null, null],
+            clip: false,
+            colorByPoint: true,
+            dataLabels: { allowOverlap: true, connectorPadding: 5, connectorShape: "fixedOffset", crookDistance: "70%", distance: 30, enabled: true, formatter: function() {
+              return this.point.isNull ? void 0 : this.point.name;
+            }, softConnector: true, x: 0 },
+            fillColor: void 0,
+            ignoreHiddenPoint: true,
+            inactiveOtherPoints: true,
+            legendType: "point",
+            marker: null,
+            size: null,
+            showInLegend: false,
+            slicedOffset: 10,
+            stickyTracking: false,
+            tooltip: { followPointer: true },
+            borderColor: "#ffffff",
+            borderWidth: 1,
+            lineWidth: void 0,
+            states: { hover: { brightness: 0.1 } }
+          });
+          return e2;
+        }(H2);
+        a4(q3.prototype, { axisTypes: [], directTouch: true, drawGraph: void 0, drawLegendSymbol: E3.drawRectangle, drawTracker: h4.prototype.drawTracker, getCenter: e.getCenter, getSymbol: A, isCartesian: false, noSharedTooltip: true, pointAttribs: h4.prototype.pointAttribs, pointClass: v, requireSorting: false, searchPoint: A, trackerGroups: ["group", "dataLabelsGroup"] });
+        I2.registerSeriesType("pie", q3);
+        "";
+        return q3;
+      });
+      M2(h3, "Series/Pie/PieDataLabel.js", [
+        h3["Core/Series/DataLabel.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Renderer/RendererUtilities.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v) {
+        var D3 = h4.noop, I2 = A.distribute, z2 = E3.series, q3 = v.arrayMax, l3 = v.clamp, f2 = v.defined, d2 = v.merge, a4 = v.pick, p2 = v.relativeLength, k2;
+        (function(h5) {
+          function k3() {
+            var e2 = this, h6 = e2.data, c3 = e2.chart, k4 = e2.options.dataLabels || {}, g2 = k4.connectorPadding, l4 = c3.plotWidth, n2 = c3.plotHeight, b3 = c3.plotLeft, r3 = Math.round(c3.chartWidth / 3), p3 = e2.center, m2 = p3[2] / 2, w2 = p3[1], y3 = [[], []], B = [0, 0, 0, 0], v3 = e2.dataLabelPositioners, F3, D4, A3, J2, E4, K2, H2, L3, M3, T, U, S2;
+            e2.visible && (k4.enabled || e2._hasPointLabels) && (h6.forEach(function(b4) {
+              b4.dataLabel && b4.visible && b4.dataLabel.shortened && (b4.dataLabel.attr({ width: "auto" }).css({ width: "auto", textOverflow: "clip" }), b4.dataLabel.shortened = false);
+            }), z2.prototype.drawDataLabels.apply(e2), h6.forEach(function(b4) {
+              b4.dataLabel && (b4.visible ? (y3[b4.half].push(b4), b4.dataLabel._pos = null, !f2(k4.style.width) && !f2(b4.options.dataLabels && b4.options.dataLabels.style && b4.options.dataLabels.style.width) && b4.dataLabel.getBBox().width > r3 && (b4.dataLabel.css({ width: Math.round(0.7 * r3) + "px" }), b4.dataLabel.shortened = true)) : (b4.dataLabel = b4.dataLabel.destroy(), b4.dataLabels && b4.dataLabels.length === 1 && delete b4.dataLabels));
+            }), y3.forEach(function(d3, h7) {
+              var r4 = d3.length, u4 = [], q4;
+              if (r4) {
+                e2.sortByAngle(d3, h7 - 0.5);
+                if (0 < e2.maxLabelDistance) {
+                  var t2 = Math.max(0, w2 - m2 - e2.maxLabelDistance);
+                  var G2 = Math.min(w2 + m2 + e2.maxLabelDistance, c3.plotHeight);
+                  d3.forEach(function(b4) {
+                    0 < b4.labelDistance && b4.dataLabel && (b4.top = Math.max(0, w2 - m2 - b4.labelDistance), b4.bottom = Math.min(w2 + m2 + b4.labelDistance, c3.plotHeight), q4 = b4.dataLabel.getBBox().height || 21, b4.distributeBox = { target: b4.labelPosition.natural.y - b4.top + q4 / 2, size: q4, rank: b4.y }, u4.push(b4.distributeBox));
+                  });
+                  t2 = G2 + q4 - t2;
+                  I2(u4, t2, t2 / 5);
+                }
+                for (U = 0; U < r4; U++) {
+                  F3 = d3[U];
+                  K2 = F3.labelPosition;
+                  J2 = F3.dataLabel;
+                  T = F3.visible === false ? "hidden" : "inherit";
+                  M3 = t2 = K2.natural.y;
+                  u4 && f2(F3.distributeBox) && (typeof F3.distributeBox.pos === "undefined" ? T = "hidden" : (H2 = F3.distributeBox.size, M3 = v3.radialDistributionY(F3)));
+                  delete F3.positionIndex;
+                  if (k4.justify)
+                    L3 = v3.justify(F3, m2, p3);
+                  else
+                    switch (k4.alignTo) {
+                      case "connectors":
+                        L3 = v3.alignToConnectors(d3, h7, l4, b3);
+                        break;
+                      case "plotEdges":
+                        L3 = v3.alignToPlotEdges(J2, h7, l4, b3);
+                        break;
+                      default:
+                        L3 = v3.radialDistributionX(e2, F3, M3, t2);
+                    }
+                  J2._attr = { visibility: T, align: K2.alignment };
+                  S2 = F3.options.dataLabels || {};
+                  J2._pos = { x: L3 + a4(S2.x, k4.x) + ({ left: g2, right: -g2 }[K2.alignment] || 0), y: M3 + a4(S2.y, k4.y) - 10 };
+                  K2.final.x = L3;
+                  K2.final.y = M3;
+                  a4(k4.crop, true) && (E4 = J2.getBBox().width, t2 = null, L3 - E4 < g2 && h7 === 1 ? (t2 = Math.round(E4 - L3 + g2), B[3] = Math.max(t2, B[3])) : L3 + E4 > l4 - g2 && h7 === 0 && (t2 = Math.round(L3 + E4 - l4 + g2), B[1] = Math.max(t2, B[1])), 0 > M3 - H2 / 2 ? B[0] = Math.max(Math.round(-M3 + H2 / 2), B[0]) : M3 + H2 / 2 > n2 && (B[2] = Math.max(Math.round(M3 + H2 / 2 - n2), B[2])), J2.sideOverflow = t2);
+                }
+              }
+            }), q3(B) === 0 || this.verifyDataLabelOverflow(B)) && (this.placeDataLabels(), this.points.forEach(function(b4) {
+              S2 = d2(k4, b4.options.dataLabels);
+              if (D4 = a4(S2.connectorWidth, 1)) {
+                var f3;
+                A3 = b4.connector;
+                if ((J2 = b4.dataLabel) && J2._pos && b4.visible && 0 < b4.labelDistance) {
+                  T = J2._attr.visibility;
+                  if (f3 = !A3)
+                    b4.connector = A3 = c3.renderer.path().addClass("highcharts-data-label-connector  highcharts-color-" + b4.colorIndex + (b4.className ? " " + b4.className : "")).add(e2.dataLabelsGroup), c3.styledMode || A3.attr({ "stroke-width": D4, stroke: S2.connectorColor || b4.color || "#666666" });
+                  A3[f3 ? "attr" : "animate"]({ d: b4.getConnectorPath() });
+                  A3.attr("visibility", T);
+                } else
+                  A3 && (b4.connector = A3.destroy());
+              }
+            }));
+          }
+          function v2() {
+            this.points.forEach(function(a5) {
+              var d3 = a5.dataLabel, c3;
+              d3 && a5.visible && ((c3 = d3._pos) ? (d3.sideOverflow && (d3._attr.width = Math.max(d3.getBBox().width - d3.sideOverflow, 0), d3.css({ width: d3._attr.width + "px", textOverflow: (this.options.dataLabels.style || {}).textOverflow || "ellipsis" }), d3.shortened = true), d3.attr(d3._attr), d3[d3.moved ? "animate" : "attr"](c3), d3.moved = true) : d3 && d3.attr({ y: -9999 }));
+              delete a5.distributeBox;
+            }, this);
+          }
+          function F2(a5) {
+            var d3 = this.center, c3 = this.options, e2 = c3.center, f3 = c3.minSize || 80, h6 = c3.size !== null;
+            if (!h6) {
+              if (e2[0] !== null)
+                var n2 = Math.max(d3[2] - Math.max(a5[1], a5[3]), f3);
+              else
+                n2 = Math.max(d3[2] - a5[1] - a5[3], f3), d3[0] += (a5[3] - a5[1]) / 2;
+              e2[1] !== null ? n2 = l3(n2, f3, d3[2] - Math.max(a5[0], a5[2])) : (n2 = l3(n2, f3, d3[2] - a5[0] - a5[2]), d3[1] += (a5[0] - a5[2]) / 2);
+              n2 < d3[2] ? (d3[2] = n2, d3[3] = Math.min(p2(c3.innerSize || 0, n2), n2), this.translate(d3), this.drawDataLabels && this.drawDataLabels()) : h6 = true;
+            }
+            return h6;
+          }
+          var A2 = [], y2 = { radialDistributionY: function(a5) {
+            return a5.top + a5.distributeBox.pos;
+          }, radialDistributionX: function(a5, d3, c3, e2) {
+            return a5.getX(c3 < d3.top + 2 || c3 > d3.bottom - 2 ? e2 : c3, d3.half, d3);
+          }, justify: function(a5, d3, c3) {
+            return c3[0] + (a5.half ? -1 : 1) * (d3 + a5.labelDistance);
+          }, alignToPlotEdges: function(a5, d3, c3, e2) {
+            a5 = a5.getBBox().width;
+            return d3 ? a5 + e2 : c3 - a5 - e2;
+          }, alignToConnectors: function(a5, d3, c3, e2) {
+            var f3 = 0, h6;
+            a5.forEach(function(a6) {
+              h6 = a6.dataLabel.getBBox().width;
+              h6 > f3 && (f3 = h6);
+            });
+            return d3 ? f3 + e2 : c3 - f3 - e2;
+          } };
+          h5.compose = function(a5) {
+            e.compose(z2);
+            A2.indexOf(a5) === -1 && (A2.push(a5), a5 = a5.prototype, a5.dataLabelPositioners = y2, a5.alignDataLabel = D3, a5.drawDataLabels = k3, a5.placeDataLabels = v2, a5.verifyDataLabelOverflow = F2);
+          };
+        })(k2 || (k2 = {}));
+        return k2;
+      });
+      M2(h3, "Extensions/OverlappingDataLabels.js", [h3["Core/Chart/Chart.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        function D3(e2, f2) {
+          var d2 = false;
+          if (e2) {
+            var a4 = e2.newOpacity;
+            e2.oldOpacity !== a4 && (e2.alignAttr && e2.placed ? (e2[a4 ? "removeClass" : "addClass"]("highcharts-data-label-hidden"), d2 = true, e2.alignAttr.opacity = a4, e2[e2.isOld ? "animate" : "attr"](e2.alignAttr, null, function() {
+              f2.styledMode || e2.css({ pointerEvents: a4 ? "auto" : "none" });
+            }), v(f2, "afterHideOverlappingLabel")) : e2.attr({ opacity: a4 }));
+            e2.isOld = true;
+          }
+          return d2;
+        }
+        var E3 = h4.addEvent, v = h4.fireEvent, H2 = h4.isArray, I2 = h4.isNumber, z2 = h4.objectEach, q3 = h4.pick;
+        E3(e, "render", function() {
+          var e2 = this, f2 = [];
+          (this.labelCollectors || []).forEach(function(d2) {
+            f2 = f2.concat(d2());
+          });
+          (this.yAxis || []).forEach(function(d2) {
+            d2.stacking && d2.options.stackLabels && !d2.options.stackLabels.allowOverlap && z2(d2.stacking.stacks, function(a4) {
+              z2(a4, function(a5) {
+                a5.label && a5.label.visibility !== "hidden" && f2.push(a5.label);
+              });
+            });
+          });
+          (this.series || []).forEach(function(d2) {
+            var a4 = d2.options.dataLabels;
+            d2.visible && (a4.enabled !== false || d2._hasPointLabels) && (a4 = function(a5) {
+              return a5.forEach(function(a6) {
+                a6.visible && (H2(a6.dataLabels) ? a6.dataLabels : a6.dataLabel ? [a6.dataLabel] : []).forEach(function(d3) {
+                  var h5 = d3.options;
+                  d3.labelrank = q3(h5.labelrank, a6.labelrank, a6.shapeArgs && a6.shapeArgs.height);
+                  h5.allowOverlap ? (d3.oldOpacity = d3.opacity, d3.newOpacity = 1, D3(d3, e2)) : f2.push(d3);
+                });
+              });
+            }, a4(d2.nodes || []), a4(d2.points));
+          });
+          this.hideOverlappingLabels(f2);
+        });
+        e.prototype.hideOverlappingLabels = function(e2) {
+          var f2 = this, d2 = e2.length, a4 = f2.renderer, h5, k2, l3, q4 = false;
+          var z3 = function(d3) {
+            var e3, f3 = d3.box ? 0 : d3.padding || 0, c3 = e3 = 0, h6;
+            if (d3 && (!d3.alignAttr || d3.placed)) {
+              var g2 = d3.alignAttr || { x: d3.attr("x"), y: d3.attr("y") };
+              var k3 = d3.parentGroup;
+              d3.width || (e3 = d3.getBBox(), d3.width = e3.width, d3.height = e3.height, e3 = a4.fontMetrics(null, d3.element).h);
+              var n2 = d3.width - 2 * f3;
+              (h6 = { left: "0", center: "0.5", right: "1" }[d3.alignValue]) ? c3 = +h6 * n2 : I2(d3.x) && Math.round(d3.x) !== d3.translateX && (c3 = d3.x - d3.translateX);
+              return { x: g2.x + (k3.translateX || 0) + f3 - (c3 || 0), y: g2.y + (k3.translateY || 0) + f3 - e3, width: d3.width - 2 * f3, height: d3.height - 2 * f3 };
+            }
+          };
+          for (k2 = 0; k2 < d2; k2++)
+            if (h5 = e2[k2])
+              h5.oldOpacity = h5.opacity, h5.newOpacity = 1, h5.absoluteBox = z3(h5);
+          e2.sort(function(a5, d3) {
+            return (d3.labelrank || 0) - (a5.labelrank || 0);
+          });
+          for (k2 = 0; k2 < d2; k2++) {
+            var A = (z3 = e2[k2]) && z3.absoluteBox;
+            for (h5 = k2 + 1; h5 < d2; ++h5) {
+              var E4 = (l3 = e2[h5]) && l3.absoluteBox;
+              !A || !E4 || z3 === l3 || z3.newOpacity === 0 || l3.newOpacity === 0 || E4.x >= A.x + A.width || E4.x + E4.width <= A.x || E4.y >= A.y + A.height || E4.y + E4.height <= A.y || ((z3.labelrank < l3.labelrank ? z3 : l3).newOpacity = 0);
+            }
+          }
+          e2.forEach(function(a5) {
+            D3(a5, f2) && (q4 = true);
+          });
+          q4 && v(f2, "afterHideAllOverlappingLabels");
+        };
+      });
+      M2(h3, "Core/Responsive.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.extend, A = e.find, E3 = e.isArray, v = e.isObject, H2 = e.merge, I2 = e.objectEach, z2 = e.pick, q3 = e.splat, l3 = e.uniqueKey, f2;
+        (function(d2) {
+          var a4 = [];
+          d2.compose = function(d3) {
+            a4.indexOf(d3) === -1 && (a4.push(d3), h4(d3.prototype, e2.prototype));
+            return d3;
+          };
+          var e2 = function() {
+            function a5() {
+            }
+            a5.prototype.currentOptions = function(a6) {
+              function d3(a7, f4, h5, k2) {
+                var c3;
+                I2(a7, function(a8, g2) {
+                  if (!k2 && -1 < e3.collectionsWithUpdate.indexOf(g2) && f4[g2])
+                    for (a8 = q3(a8), h5[g2] = [], c3 = 0; c3 < Math.max(a8.length, f4[g2].length); c3++)
+                      f4[g2][c3] && (a8[c3] === void 0 ? h5[g2][c3] = f4[g2][c3] : (h5[g2][c3] = {}, d3(a8[c3], f4[g2][c3], h5[g2][c3], k2 + 1)));
+                  else
+                    v(a8) ? (h5[g2] = E3(a8) ? [] : {}, d3(a8, f4[g2] || {}, h5[g2], k2 + 1)) : h5[g2] = typeof f4[g2] === "undefined" ? null : f4[g2];
+                });
+              }
+              var e3 = this, f3 = {};
+              d3(a6, this.options, f3, 0);
+              return f3;
+            };
+            a5.prototype.matchResponsiveRule = function(a6, d3) {
+              var e3 = a6.condition;
+              (e3.callback || function() {
+                return this.chartWidth <= z2(e3.maxWidth, Number.MAX_VALUE) && this.chartHeight <= z2(e3.maxHeight, Number.MAX_VALUE) && this.chartWidth >= z2(e3.minWidth, 0) && this.chartHeight >= z2(e3.minHeight, 0);
+              }).call(this) && d3.push(a6._id);
+            };
+            a5.prototype.setResponsive = function(a6, d3) {
+              var e3 = this, f3 = this.options.responsive, h5 = this.currentResponsive, k2 = [];
+              !d3 && f3 && f3.rules && f3.rules.forEach(function(a7) {
+                typeof a7._id === "undefined" && (a7._id = l3());
+                e3.matchResponsiveRule(a7, k2);
+              }, this);
+              d3 = H2.apply(void 0, k2.map(function(a7) {
+                return A((f3 || {}).rules || [], function(d4) {
+                  return d4._id === a7;
+                });
+              }).map(function(a7) {
+                return a7 && a7.chartOptions;
+              }));
+              d3.isResponsiveOptions = true;
+              k2 = k2.toString() || void 0;
+              k2 !== (h5 && h5.ruleIds) && (h5 && this.update(h5.undoOptions, a6, true), k2 ? (h5 = this.currentOptions(d3), h5.isResponsiveOptions = true, this.currentResponsive = { ruleIds: k2, mergedOptions: d3, undoOptions: h5 }, this.update(d3, a6, true)) : this.currentResponsive = void 0);
+            };
+            return a5;
+          }();
+        })(f2 || (f2 = {}));
+        "";
+        "";
+        return f2;
+      });
+      M2(h3, "masters/highcharts.src.js", [
+        h3["Core/Globals.js"],
+        h3["Core/Utilities.js"],
+        h3["Core/DefaultOptions.js"],
+        h3["Core/Animation/Fx.js"],
+        h3["Core/Animation/AnimationUtilities.js"],
+        h3["Core/Renderer/HTML/AST.js"],
+        h3["Core/FormatUtilities.js"],
+        h3["Core/Renderer/RendererUtilities.js"],
+        h3["Core/Renderer/SVG/SVGElement.js"],
+        h3["Core/Renderer/SVG/SVGRenderer.js"],
+        h3["Core/Renderer/HTML/HTMLElement.js"],
+        h3["Core/Renderer/HTML/HTMLRenderer.js"],
+        h3["Core/Axis/Axis.js"],
+        h3["Core/Axis/DateTimeAxis.js"],
+        h3["Core/Axis/LogarithmicAxis.js"],
+        h3["Core/Axis/PlotLineOrBand/PlotLineOrBand.js"],
+        h3["Core/Axis/Tick.js"],
+        h3["Core/Tooltip.js"],
+        h3["Core/Series/Point.js"],
+        h3["Core/Pointer.js"],
+        h3["Core/MSPointer.js"],
+        h3["Core/Legend/Legend.js"],
+        h3["Core/Chart/Chart.js"],
+        h3["Core/Series/Series.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Series/Column/ColumnSeries.js"],
+        h3["Series/Column/ColumnDataLabel.js"],
+        h3["Series/Pie/PieSeries.js"],
+        h3["Series/Pie/PieDataLabel.js"],
+        h3["Core/Series/DataLabel.js"],
+        h3["Core/Responsive.js"],
+        h3["Core/Color/Color.js"],
+        h3["Core/Time.js"]
+      ], function(e, h4, A, E3, v, H2, I2, z2, q3, l3, f2, d2, a4, p2, k2, F2, B, J2, K2, L3, y2, C2, x3, c3, t2, g2, u4, n2, b3, r3, G2, m2, w2) {
+        e.animate = v.animate;
+        e.animObject = v.animObject;
+        e.getDeferredAnimation = v.getDeferredAnimation;
+        e.setAnimation = v.setAnimation;
+        e.stop = v.stop;
+        e.timers = E3.timers;
+        e.AST = H2;
+        e.Axis = a4;
+        e.Chart = x3;
+        e.chart = x3.chart;
+        e.Fx = E3;
+        e.Legend = C2;
+        e.PlotLineOrBand = F2;
+        e.Point = K2;
+        e.Pointer = y2.isRequired() ? y2 : L3;
+        e.Series = c3;
+        e.SVGElement = q3;
+        e.SVGRenderer = l3;
+        e.Tick = B;
+        e.Time = w2;
+        e.Tooltip = J2;
+        e.Color = m2;
+        e.color = m2.parse;
+        d2.compose(l3);
+        f2.compose(q3);
+        e.defaultOptions = A.defaultOptions;
+        e.getOptions = A.getOptions;
+        e.time = A.defaultTime;
+        e.setOptions = A.setOptions;
+        e.dateFormat = I2.dateFormat;
+        e.format = I2.format;
+        e.numberFormat = I2.numberFormat;
+        e.addEvent = h4.addEvent;
+        e.arrayMax = h4.arrayMax;
+        e.arrayMin = h4.arrayMin;
+        e.attr = h4.attr;
+        e.clearTimeout = h4.clearTimeout;
+        e.correctFloat = h4.correctFloat;
+        e.createElement = h4.createElement;
+        e.css = h4.css;
+        e.defined = h4.defined;
+        e.destroyObjectProperties = h4.destroyObjectProperties;
+        e.discardElement = h4.discardElement;
+        e.distribute = z2.distribute;
+        e.erase = h4.erase;
+        e.error = h4.error;
+        e.extend = h4.extend;
+        e.extendClass = h4.extendClass;
+        e.find = h4.find;
+        e.fireEvent = h4.fireEvent;
+        e.getMagnitude = h4.getMagnitude;
+        e.getStyle = h4.getStyle;
+        e.inArray = h4.inArray;
+        e.isArray = h4.isArray;
+        e.isClass = h4.isClass;
+        e.isDOMElement = h4.isDOMElement;
+        e.isFunction = h4.isFunction;
+        e.isNumber = h4.isNumber;
+        e.isObject = h4.isObject;
+        e.isString = h4.isString;
+        e.keys = h4.keys;
+        e.merge = h4.merge;
+        e.normalizeTickInterval = h4.normalizeTickInterval;
+        e.objectEach = h4.objectEach;
+        e.offset = h4.offset;
+        e.pad = h4.pad;
+        e.pick = h4.pick;
+        e.pInt = h4.pInt;
+        e.relativeLength = h4.relativeLength;
+        e.removeEvent = h4.removeEvent;
+        e.seriesType = t2.seriesType;
+        e.splat = h4.splat;
+        e.stableSort = h4.stableSort;
+        e.syncTimeout = h4.syncTimeout;
+        e.timeUnits = h4.timeUnits;
+        e.uniqueKey = h4.uniqueKey;
+        e.useSerialIds = h4.useSerialIds;
+        e.wrap = h4.wrap;
+        u4.compose(g2);
+        r3.compose(c3);
+        p2.compose(a4);
+        k2.compose(a4);
+        b3.compose(n2);
+        F2.compose(a4);
+        G2.compose(x3);
+        return e;
+      });
+      M2(h3, "Core/Axis/OrdinalAxis.js", [
+        h3["Core/Axis/Axis.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Series/Series.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3) {
+        var v = E3.addEvent, D3 = E3.correctFloat, I2 = E3.css, z2 = E3.defined, q3 = E3.error, l3 = E3.pick, f2 = E3.timeUnits, d2 = [], a4;
+        (function(a5) {
+          function e2(a6, c4, b3, d3, e3, g3, h5) {
+            e3 === void 0 && (e3 = []);
+            g3 === void 0 && (g3 = 0);
+            var m2 = {}, n2 = this.options.tickPixelInterval, k2 = this.chart.time, r3 = [], l4, w2, p3 = 0, u4 = [], t3 = -Number.MAX_VALUE;
+            if (!this.options.ordinal && !this.options.breaks || !e3 || 3 > e3.length || typeof c4 === "undefined")
+              return k2.getTimeTicks.apply(k2, arguments);
+            var G2 = e3.length;
+            for (l4 = 0; l4 < G2; l4++) {
+              var x4 = l4 && e3[l4 - 1] > b3;
+              e3[l4] < c4 && (p3 = l4);
+              if (l4 === G2 - 1 || e3[l4 + 1] - e3[l4] > 5 * g3 || x4) {
+                if (e3[l4] > t3) {
+                  for (w2 = k2.getTimeTicks(a6, e3[p3], e3[l4], d3); w2.length && w2[0] <= t3; )
+                    w2.shift();
+                  w2.length && (t3 = w2[w2.length - 1]);
+                  r3.push(u4.length);
+                  u4 = u4.concat(w2);
+                }
+                p3 = l4 + 1;
+              }
+              if (x4)
+                break;
+            }
+            if (w2) {
+              w2 = w2.info;
+              if (h5 && w2.unitRange <= f2.hour) {
+                l4 = u4.length - 1;
+                for (p3 = 1; p3 < l4; p3++)
+                  if (k2.dateFormat("%d", u4[p3]) !== k2.dateFormat("%d", u4[p3 - 1])) {
+                    m2[u4[p3]] = "day";
+                    var y3 = true;
+                  }
+                y3 && (m2[u4[0]] = "day");
+                w2.higherRanks = m2;
+              }
+              w2.segmentStarts = r3;
+              u4.info = w2;
+            } else
+              q3(12, false, this.chart);
+            if (h5 && z2(n2)) {
+              w2 = u4.length;
+              k2 = [];
+              p3 = [];
+              l4 = void 0;
+              for (y3 = w2; y3--; )
+                r3 = this.translate(u4[y3]), l4 && (p3[y3] = l4 - r3), k2[y3] = l4 = r3;
+              p3.sort();
+              p3 = p3[Math.floor(p3.length / 2)];
+              p3 < 0.6 * n2 && (p3 = null);
+              y3 = u4[w2 - 1] > b3 ? w2 - 1 : w2;
+              for (l4 = void 0; y3--; )
+                r3 = k2[y3], w2 = Math.abs(l4 - r3), l4 && w2 < 0.8 * n2 && (p3 === null || w2 < 0.8 * p3) ? (m2[u4[y3]] && !m2[u4[y3 + 1]] ? (w2 = y3 + 1, l4 = r3) : w2 = y3, u4.splice(w2, 1)) : l4 = r3;
+            }
+            return u4;
+          }
+          function p2(a6) {
+            var c4 = this.ordinal.positions;
+            if (!c4)
+              return a6;
+            var b3 = c4.length - 1;
+            if (0 > a6)
+              a6 = c4[0];
+            else if (a6 > b3)
+              a6 = c4[b3];
+            else {
+              b3 = Math.floor(a6);
+              var d3 = a6 - b3;
+            }
+            return typeof d3 !== "undefined" && typeof c4[b3] !== "undefined" ? c4[b3] + (d3 ? d3 * (c4[b3 + 1] - c4[b3]) : 0) : a6;
+          }
+          function B(a6) {
+            var c4 = this.ordinal, b3 = c4.positions;
+            if (!b3)
+              return a6;
+            var d3 = (a6 - (this.old ? this.old.min : this.min)) * (this.old ? this.old.transA : this.transA) + this.minPixelPadding;
+            0 < d3 && d3 < this.left + this.len || (c4.extendedOrdinalPositions || (c4.extendedOrdinalPositions = c4.getExtendedPositions()), b3 = c4.extendedOrdinalPositions);
+            if (b3 && b3.length) {
+              a6 = c4.getIndexOfPoint(d3, b3);
+              c4 = D3(a6 % 1);
+              if (0 <= a6 && a6 < b3.length - 1)
+                return b3[Math.floor(a6)] + c4 * (b3[Math.ceil(a6)] - b3[Math.floor(a6)]);
+              c4 = b3.length;
+              d3 = b3[0];
+              b3 = b3[c4 - 1];
+              var e3 = (b3 - d3) / (c4 - 1);
+              return 0 > a6 ? d3 + e3 * a6 : b3 + e3 * (a6 - c4);
+            }
+            return a6;
+          }
+          function J2(c4, d3) {
+            var b3 = a5.Additions.findIndexOf(c4, d3, true);
+            return c4[b3] === d3 ? b3 : b3 + (d3 - c4[b3]) / (c4[b3 + 1] - c4[b3]);
+          }
+          function E4() {
+            this.ordinal || (this.ordinal = new a5.Additions(this));
+          }
+          function H2() {
+            this.isXAxis && z2(this.options.overscroll) && this.max === this.dataMax && (!this.chart.mouseIsDown || this.isInternal) && (!this.eventArgs || this.eventArgs && this.eventArgs.trigger !== "navigator") && (this.max += this.options.overscroll, !this.isInternal && z2(this.userMin) && (this.min += this.options.overscroll));
+          }
+          function y2() {
+            this.horiz && !this.isDirty && (this.isDirty = this.isOrdinal && this.chart.navigator && !this.chart.navigator.adaptToUpdatedData);
+          }
+          function C2() {
+            this.ordinal && (this.ordinal.beforeSetTickPositions(), this.tickInterval = this.ordinal.postProcessTickInterval(this.tickInterval));
+          }
+          function x3(a6) {
+            var c4 = this.xAxis[0], b3 = c4.options.overscroll, d3 = a6.originalEvent.chartX, e3 = this.options.chart.panning, f3 = false;
+            if (e3 && e3.type !== "y" && c4.options.ordinal && c4.series.length) {
+              var g3 = this.mouseDownX, h5 = c4.getExtremes(), k2 = h5.dataMax, l4 = h5.min, p3 = h5.max, q4 = this.hoverPoints, u4 = c4.closestPointRange || c4.ordinal && c4.ordinal.overscrollPointsRange;
+              g3 = (g3 - d3) / (c4.translationSlope * (c4.ordinal.slope || u4));
+              u4 = { ordinal: { positions: c4.ordinal.getExtendedPositions() } };
+              var t3 = c4.index2val, x4 = c4.val2lin, y3 = void 0, v2 = y3 = void 0, B2 = void 0;
+              u4.ordinal.positions ? 1 < Math.abs(g3) && (q4 && q4.forEach(function(b4) {
+                b4.setState();
+              }), 0 > g3 ? (v2 = u4, B2 = c4.ordinal.positions ? c4 : u4) : (v2 = c4.ordinal.positions ? c4 : u4, B2 = u4), y3 = B2.ordinal.positions, k2 > y3[y3.length - 1] && y3.push(k2), this.fixedRange = p3 - l4, y3 = c4.navigatorAxis.toFixedRange(null, null, t3.apply(v2, [x4.apply(v2, [l4, true]) + g3]), t3.apply(B2, [x4.apply(B2, [p3, true]) + g3])), y3.min >= Math.min(h5.dataMin, l4) && y3.max <= Math.max(k2, p3) + b3 && c4.setExtremes(y3.min, y3.max, true, false, { trigger: "pan" }), this.mouseDownX = d3, I2(this.container, { cursor: "move" })) : f3 = true;
+            } else
+              f3 = true;
+            f3 || e3 && /y/.test(e3.type) ? b3 && (c4.max = c4.dataMax + b3) : a6.preventDefault();
+          }
+          function c3() {
+            var a6 = this.xAxis;
+            a6 && a6.options.ordinal && (delete a6.ordinal.index, delete a6.ordinal.extendedOrdinalPositions);
+          }
+          function t2(a6, c4) {
+            var b3 = this.ordinal, d3 = b3.positions, e3 = b3.slope, f3 = b3.extendedOrdinalPositions;
+            if (!d3)
+              return a6;
+            var g3 = d3.length;
+            if (d3[0] <= a6 && d3[g3 - 1] >= a6)
+              a6 = J2(d3, a6);
+            else {
+              f3 || (f3 = b3.getExtendedPositions && b3.getExtendedPositions(), b3.extendedOrdinalPositions = f3);
+              if (!f3 || !f3.length)
+                return a6;
+              g3 = f3.length;
+              e3 || (e3 = (f3[g3 - 1] - f3[0]) / g3);
+              d3 = J2(f3, d3[0]);
+              a6 >= f3[0] && a6 <= f3[g3 - 1] ? a6 = J2(f3, a6) - d3 : a6 < f3[0] ? (a6 = f3[0] - a6, a6 = -d3 - a6 / e3) : (a6 -= f3[g3 - 1], a6 = a6 / e3 + g3 - d3);
+            }
+            return c4 ? a6 : e3 * (a6 || 0) + b3.offset;
+          }
+          a5.compose = function(a6, f3, b3) {
+            if (d2.indexOf(a6) === -1) {
+              d2.push(a6);
+              var g3 = a6.prototype;
+              g3.getTimeTicks = e2;
+              g3.index2val = p2;
+              g3.lin2val = B;
+              g3.val2lin = t2;
+              g3.ordinal2lin = g3.val2lin;
+              v(a6, "afterInit", E4);
+              v(a6, "foundExtremes", H2);
+              v(a6, "afterSetScale", y2);
+              v(a6, "initialAxisTranslation", C2);
+            }
+            d2.indexOf(b3) === -1 && (d2.push(b3), v(b3, "pan", x3));
+            d2.indexOf(f3) === -1 && (d2.push(f3), v(f3, "updatedData", c3));
+            return a6;
+          };
+          var g2 = function() {
+            function a6(a7) {
+              this.index = {};
+              this.axis = a7;
+            }
+            a6.prototype.beforeSetTickPositions = function() {
+              var a7 = this.axis, b3 = a7.ordinal, c4 = a7.getExtremes(), d3 = c4.min, e3 = c4.max, f3 = a7.isXAxis && !!a7.options.breaks;
+              c4 = a7.options.ordinal;
+              var g3 = a7.chart.options.chart.ignoreHiddenSeries, h5, k2, p3 = [], q4 = Number.MAX_VALUE, t3 = false;
+              if (c4 || f3) {
+                a7.series.forEach(function(b4, a8) {
+                  h5 = [];
+                  if (!(g3 && b4.visible === false || b4.takeOrdinalPosition === false && !f3) && (p3 = p3.concat(b4.processedXData), u4 = p3.length, p3.sort(function(b5, a9) {
+                    return b5 - a9;
+                  }), q4 = Math.min(q4, l3(b4.closestPointRange, q4)), u4)) {
+                    for (a8 = 0; a8 < u4 - 1; )
+                      p3[a8] !== p3[a8 + 1] && h5.push(p3[a8 + 1]), a8++;
+                    h5[0] !== p3[0] && h5.unshift(p3[0]);
+                    p3 = h5;
+                  }
+                });
+                var u4 = p3.length;
+                if (2 < u4) {
+                  var x4 = p3[1] - p3[0];
+                  for (k2 = u4 - 1; k2-- && !t3; )
+                    p3[k2 + 1] - p3[k2] !== x4 && (t3 = true);
+                  !a7.options.keepOrdinalPadding && (p3[0] - d3 > x4 || e3 - p3[p3.length - 1] > x4) && (t3 = true);
+                } else
+                  a7.options.overscroll && (u4 === 2 ? q4 = p3[1] - p3[0] : u4 === 1 ? (q4 = a7.options.overscroll, p3 = [p3[0], p3[0] + q4]) : q4 = b3.overscrollPointsRange);
+                t3 || a7.forceOrdinal ? (a7.options.overscroll && (b3.overscrollPointsRange = q4, p3 = p3.concat(b3.getOverscrollPositions())), b3.positions = p3, x4 = a7.ordinal2lin(Math.max(d3, p3[0]), true), k2 = Math.max(a7.ordinal2lin(Math.min(e3, p3[p3.length - 1]), true), 1), b3.slope = e3 = (e3 - d3) / (k2 - x4), b3.offset = d3 - x4 * e3) : (b3.overscrollPointsRange = l3(a7.closestPointRange, b3.overscrollPointsRange), b3.positions = a7.ordinal.slope = b3.offset = void 0);
+              }
+              a7.isOrdinal = c4 && t3;
+              b3.groupIntervalFactor = null;
+            };
+            a6.findIndexOf = function(a7, b3, c4) {
+              for (var d3 = 0, e3 = a7.length - 1, f3; d3 < e3; )
+                f3 = Math.ceil((d3 + e3) / 2), a7[f3] <= b3 ? d3 = f3 : e3 = f3 - 1;
+              return a7[d3] === b3 ? d3 : c4 ? d3 : -1;
+            };
+            a6.prototype.getExtendedPositions = function() {
+              var a7 = this, b3 = a7.axis, c4 = b3.constructor.prototype, d3 = b3.chart, e3 = b3.series[0].currentDataGrouping, f3 = e3 ? e3.count + e3.unitName : "raw", g3 = b3.options.overscroll, k2 = b3.getExtremes(), l4 = void 0, p3 = a7.index;
+              p3 || (p3 = a7.index = {});
+              if (!p3[f3]) {
+                var q4 = {
+                  series: [],
+                  chart: d3,
+                  forceOrdinal: false,
+                  getExtremes: function() {
+                    return { min: k2.dataMin, max: k2.dataMax + g3 };
+                  },
+                  getGroupPixelWidth: c4.getGroupPixelWidth,
+                  getTimeTicks: c4.getTimeTicks,
+                  options: { ordinal: true },
+                  ordinal: { getGroupIntervalFactor: this.getGroupIntervalFactor },
+                  ordinal2lin: c4.ordinal2lin,
+                  getIndexOfPoint: c4.getIndexOfPoint,
+                  val2lin: c4.val2lin
+                };
+                q4.ordinal.axis = q4;
+                b3.series.forEach(function(b4) {
+                  l4 = { xAxis: q4, xData: b4.xData.slice(), chart: d3, destroyGroupedData: h4.noop, getProcessedData: A.prototype.getProcessedData, applyGrouping: A.prototype.applyGrouping };
+                  l4.xData = l4.xData.concat(a7.getOverscrollPositions());
+                  l4.options = { dataGrouping: e3 ? { firstAnchor: "firstPoint", anchor: "middle", lastAnchor: "lastPoint", enabled: true, forced: true, approximation: "open", units: [[e3.unitName, [e3.count]]] } : { enabled: false } };
+                  q4.series.push(l4);
+                  b4.processData.apply(l4);
+                });
+                b3.applyGrouping.call(q4, { hasExtemesChanged: false });
+                l4.closestPointRange !== l4.basePointRange && l4.currentDataGrouping && (q4.forceOrdinal = true);
+                b3.ordinal.beforeSetTickPositions.apply({ axis: q4 });
+                p3[f3] = q4.ordinal.positions;
+              }
+              return p3[f3];
+            };
+            a6.prototype.getGroupIntervalFactor = function(a7, b3, c4) {
+              c4 = c4.processedXData;
+              var d3 = c4.length, e3 = [];
+              var f3 = this.groupIntervalFactor;
+              if (!f3) {
+                for (f3 = 0; f3 < d3 - 1; f3++)
+                  e3[f3] = c4[f3 + 1] - c4[f3];
+                e3.sort(function(b4, a8) {
+                  return b4 - a8;
+                });
+                e3 = e3[Math.floor(d3 / 2)];
+                a7 = Math.max(a7, c4[0]);
+                b3 = Math.min(b3, c4[d3 - 1]);
+                this.groupIntervalFactor = f3 = d3 * e3 / (b3 - a7);
+              }
+              return f3;
+            };
+            a6.prototype.getIndexOfPoint = function(c4, b3) {
+              var d3 = this.axis, e3 = this.positions ? this.positions[0] : 0, f3 = d3.series[0].points && d3.series[0].points[0] && d3.series[0].points[0].plotX || d3.minPixelPadding;
+              1 < d3.series.length && d3.series.forEach(function(b4) {
+                b4.points && z2(b4.points[0]) && z2(b4.points[0].plotX) && b4.points[0].plotX < f3 && (f3 = b4.points[0].plotX);
+              });
+              c4 = (c4 - f3) / (d3.translationSlope * (this.slope || d3.closestPointRange || this.overscrollPointsRange));
+              return a6.findIndexOf(b3, e3) + c4;
+            };
+            a6.prototype.getOverscrollPositions = function() {
+              var a7 = this.axis, b3 = a7.options.overscroll, c4 = this.overscrollPointsRange, d3 = [], e3 = a7.dataMax;
+              if (z2(c4))
+                for (; e3 <= a7.dataMax + b3; )
+                  e3 += c4, d3.push(e3);
+              return d3;
+            };
+            a6.prototype.postProcessTickInterval = function(a7) {
+              var b3 = this.axis, c4 = this.slope;
+              return c4 ? b3.options.breaks ? b3.closestPointRange || a7 : a7 / (c4 / b3.closestPointRange) : a7;
+            };
+            return a6;
+          }();
+          a5.Additions = g2;
+        })(a4 || (a4 = {}));
+        return a4;
+      });
+      M2(h3, "Series/DataModifyComposition.js", [h3["Core/Axis/Axis.js"], h3["Core/Series/Point.js"], h3["Core/Series/Series.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3) {
+        var v = h4.prototype.tooltipFormatter, D3 = E3.addEvent, I2 = E3.arrayMax, z2 = E3.arrayMin, q3 = E3.correctFloat, l3 = E3.defined, f2 = E3.isArray, d2 = E3.isNumber, a4 = E3.isString, p2 = E3.pick, k2;
+        (function(e2) {
+          function h5(c4, b3, d3) {
+            this.isXAxis || (this.series.forEach(function(d4) {
+              c4 === "compare" && typeof b3 !== "boolean" ? d4.setCompare(b3, false) : c4 !== "cumulative" || a4(b3) || d4.setCumulative(b3, false);
+            }), p2(d3, true) && this.chart.redraw());
+          }
+          function k3(a5) {
+            var b3 = this, c4 = b3.series.chart.numberFormatter, d3 = function(d4) {
+              a5 = a5.replace("{point." + d4 + "}", (0 < b3[d4] && d4 === "change" ? "+" : "") + c4(b3[d4], p2(b3.series.tooltipOptions.changeDecimals, 2)));
+            };
+            l3(b3.change) && d3("change");
+            l3(b3.cumulativeSum) && d3("cumulativeSum");
+            return v.apply(this, [a5]);
+          }
+          function F2() {
+            var a5 = this.options.compare;
+            if (a5 === "percent" || a5 === "value" || this.options.cumulative) {
+              var b3 = new u4(this);
+              a5 === "percent" || a5 === "value" ? b3.initCompare(a5) : b3.initCumulative();
+            }
+            this.dataModify = b3;
+          }
+          function A2(a5) {
+            a5 = a5.dataExtremes;
+            var b3 = a5.activeYData;
+            if (this.dataModify && a5) {
+              var c4 = void 0;
+              this.options.compare ? c4 = [this.dataModify.modifyValue(a5.dataMin), this.dataModify.modifyValue(a5.dataMax)] : this.options.cumulative && f2(b3) && 2 <= b3.length && (c4 = u4.getCumulativeExtremes(b3));
+              c4 && (a5.dataMin = z2(c4), a5.dataMax = I2(c4));
+            }
+          }
+          function y2(a5, b3) {
+            this.options.compare = this.userOptions.compare = a5;
+            this.update({}, p2(b3, true));
+            !this.dataModify || a5 !== "value" && a5 !== "percent" ? this.points.forEach(function(b4) {
+              delete b4.change;
+            }) : this.dataModify.initCompare(a5);
+          }
+          function C2() {
+            if (this.xAxis && this.processedYData && this.dataModify) {
+              var a5 = this.processedXData, b3 = this.processedYData, c4 = b3.length, e3 = this.options.compareStart === true ? 0 : 1, f3 = -1, g3;
+              this.pointArrayMap && (f3 = this.pointArrayMap.indexOf(this.options.pointValKey || this.pointValKey || "y"));
+              for (g3 = 0; g3 < c4 - e3; g3++) {
+                var h6 = b3[g3] && -1 < f3 ? b3[g3][f3] : b3[g3];
+                if (d2(h6) && h6 !== 0 && a5[g3 + e3] >= (this.xAxis.min || 0)) {
+                  this.dataModify.compareValue = h6;
+                  break;
+                }
+              }
+            }
+          }
+          function x3(a5, b3) {
+            this.setModifier("compare", a5, b3);
+          }
+          function c3(a5, b3) {
+            a5 = p2(a5, false);
+            this.options.cumulative = this.userOptions.cumulative = a5;
+            this.update({}, p2(b3, true));
+            this.dataModify ? this.dataModify.initCumulative() : this.points.forEach(function(b4) {
+              delete b4.cumulativeSum;
+            });
+          }
+          function t2(a5, b3) {
+            this.setModifier("cumulative", a5, b3);
+          }
+          var g2 = [];
+          e2.compose = function(a5, b3, d3) {
+            if (g2.indexOf(a5) === -1) {
+              g2.push(a5);
+              var e3 = a5.prototype;
+              e3.setCompare = y2;
+              e3.setCumulative = c3;
+              D3(a5, "afterInit", F2);
+              D3(a5, "afterGetExtremes", A2);
+              D3(a5, "afterProcessData", C2);
+            }
+            g2.indexOf(b3) === -1 && (g2.push(b3), b3 = b3.prototype, b3.setCompare = x3, b3.setModifier = h5, b3.setCumulative = t2);
+            g2.indexOf(d3) === -1 && (g2.push(d3), d3.prototype.tooltipFormatter = k3);
+            return a5;
+          };
+          var u4 = function() {
+            function a5(b3) {
+              this.series = b3;
+            }
+            a5.prototype.modifyValue = function() {
+              return 0;
+            };
+            a5.getCumulativeExtremes = function(b3) {
+              var a6 = Infinity, c4 = -Infinity;
+              b3.reduce(function(b4, d3) {
+                d3 = b4 + d3;
+                a6 = Math.min(a6, d3, b4);
+                c4 = Math.max(c4, d3, b4);
+                return d3;
+              });
+              return [a6, c4];
+            };
+            a5.prototype.initCompare = function(b3) {
+              this.modifyValue = function(a6, c4) {
+                a6 === null && (a6 = 0);
+                var d3 = this.compareValue;
+                return typeof a6 !== "undefined" && typeof d3 !== "undefined" ? (a6 = b3 === "value" ? a6 - d3 : a6 / d3 * 100 - (this.series.options.compareBase === 100 ? 0 : 100), typeof c4 !== "undefined" && (c4 = this.series.points[c4]) && (c4.change = a6), a6) : 0;
+              };
+            };
+            a5.prototype.initCumulative = function() {
+              this.modifyValue = function(b3, a6) {
+                b3 === null && (b3 = 0);
+                if (b3 !== void 0 && a6 !== void 0) {
+                  var c4 = 0 < a6 ? this.series.points[a6 - 1] : null;
+                  c4 && c4.cumulativeSum && (b3 = q3(c4.cumulativeSum + b3));
+                  if (a6 = this.series.points[a6])
+                    a6.cumulativeSum = b3;
+                  return b3;
+                }
+                return 0;
+              };
+            };
+            return a5;
+          }();
+          e2.Additions = u4;
+        })(k2 || (k2 = {}));
+        "";
+        return k2;
+      });
+      M2(h3, "Core/Axis/BrokenAxis.js", [h3["Extensions/Stacking.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var A = h4.addEvent, D3 = h4.find, v = h4.fireEvent, H2 = h4.isArray, I2 = h4.isNumber, z2 = h4.pick, q3;
+        (function(h5) {
+          function f2() {
+            typeof this.brokenAxis !== "undefined" && this.brokenAxis.setBreaks(this.options.breaks, false);
+          }
+          function d2() {
+            this.brokenAxis && this.brokenAxis.hasBreaks && (this.options.ordinal = false);
+          }
+          function a4() {
+            var a5 = this.brokenAxis;
+            if (a5 && a5.hasBreaks) {
+              for (var d3 = this.tickPositions, e2 = this.tickPositions.info, c3 = [], f3 = 0; f3 < d3.length; f3++)
+                a5.isInAnyBreak(d3[f3]) || c3.push(d3[f3]);
+              this.tickPositions = c3;
+              this.tickPositions.info = e2;
+            }
+          }
+          function l3() {
+            this.brokenAxis || (this.brokenAxis = new L3(this));
+          }
+          function k2() {
+            var a5 = this.options.connectNulls, d3 = this.points, e2 = this.xAxis, c3 = this.yAxis;
+            if (this.isDirty)
+              for (var f3 = d3.length; f3--; ) {
+                var g2 = d3[f3], h6 = !(g2.y === null && a5 === false) && (e2 && e2.brokenAxis && e2.brokenAxis.isInAnyBreak(g2.x, true) || c3 && c3.brokenAxis && c3.brokenAxis.isInAnyBreak(g2.y, true));
+                g2.visible = h6 ? false : g2.options.visible !== false;
+              }
+          }
+          function q4() {
+            this.drawBreaks(this.xAxis, ["x"]);
+            this.drawBreaks(this.yAxis, z2(this.pointArrayMap, ["y"]));
+          }
+          function B(a5, d3) {
+            var e2 = this, c3 = e2.points, f3, g2, h6, k3;
+            if (a5 && a5.brokenAxis && a5.brokenAxis.hasBreaks) {
+              var b3 = a5.brokenAxis;
+              d3.forEach(function(d4) {
+                f3 = b3 && b3.breakArray || [];
+                g2 = a5.isXAxis ? a5.min : z2(e2.options.threshold, a5.min);
+                c3.forEach(function(b4) {
+                  k3 = z2(b4["stack" + d4.toUpperCase()], b4[d4]);
+                  f3.forEach(function(c4) {
+                    if (I2(g2) && I2(k3)) {
+                      h6 = false;
+                      if (g2 < c4.from && k3 > c4.to || g2 > c4.from && k3 < c4.from)
+                        h6 = "pointBreak";
+                      else if (g2 < c4.from && k3 > c4.from && k3 < c4.to || g2 > c4.from && k3 > c4.to && k3 < c4.from)
+                        h6 = "pointInBreak";
+                      h6 && v(a5, h6, { point: b4, brk: c4 });
+                    }
+                  });
+                });
+              });
+            }
+          }
+          function J2() {
+            var a5 = this.currentDataGrouping, d3 = a5 && a5.gapSize;
+            a5 = this.points.slice();
+            var f3 = this.yAxis, c3 = this.options.gapSize, h6 = a5.length - 1, g2;
+            if (c3 && 0 < h6)
+              for (this.options.gapUnit !== "value" && (c3 *= this.basePointRange), d3 && d3 > c3 && d3 >= this.basePointRange && (c3 = d3), g2 = void 0; h6--; )
+                g2 && g2.visible !== false || (g2 = a5[h6 + 1]), d3 = a5[h6], g2.visible !== false && d3.visible !== false && (g2.x - d3.x > c3 && (g2 = (d3.x + g2.x) / 2, a5.splice(h6 + 1, 0, { isNull: true, x: g2 }), f3.stacking && this.options.stacking && (g2 = f3.stacking.stacks[this.stackKey][g2] = new e(f3, f3.options.stackLabels, false, g2, this.stack), g2.total = 0)), g2 = d3);
+            return this.getGraphPath(a5);
+          }
+          var E3 = [];
+          h5.compose = function(e2, h6) {
+            E3.indexOf(e2) === -1 && (E3.push(e2), e2.keepProps.push("brokenAxis"), A(e2, "init", l3), A(e2, "afterInit", f2), A(e2, "afterSetTickPositions", a4), A(e2, "afterSetOptions", d2));
+            if (E3.indexOf(h6) === -1) {
+              E3.push(h6);
+              var p2 = h6.prototype;
+              p2.drawBreaks = B;
+              p2.gappedPath = J2;
+              A(h6, "afterGeneratePoints", k2);
+              A(h6, "afterRender", q4);
+            }
+            return e2;
+          };
+          var L3 = function() {
+            function a5(a6) {
+              this.hasBreaks = false;
+              this.axis = a6;
+            }
+            a5.isInBreak = function(a6, d3) {
+              var c3 = a6.repeat || Infinity, e2 = a6.from, f3 = a6.to - a6.from;
+              d3 = d3 >= e2 ? (d3 - e2) % c3 : c3 - (e2 - d3) % c3;
+              return a6.inclusive ? d3 <= f3 : d3 < f3 && d3 !== 0;
+            };
+            a5.lin2Val = function(d3) {
+              var e2 = this.brokenAxis;
+              e2 = e2 && e2.breakArray;
+              if (!e2 || !I2(d3))
+                return d3;
+              var c3;
+              for (c3 = 0; c3 < e2.length; c3++) {
+                var f3 = e2[c3];
+                if (f3.from >= d3)
+                  break;
+                else
+                  f3.to < d3 ? d3 += f3.len : a5.isInBreak(f3, d3) && (d3 += f3.len);
+              }
+              return d3;
+            };
+            a5.val2Lin = function(d3) {
+              var e2 = this.brokenAxis;
+              e2 = e2 && e2.breakArray;
+              if (!e2 || !I2(d3))
+                return d3;
+              var c3 = d3, f3;
+              for (f3 = 0; f3 < e2.length; f3++) {
+                var g2 = e2[f3];
+                if (g2.to <= d3)
+                  c3 -= g2.len;
+                else if (g2.from >= d3)
+                  break;
+                else if (a5.isInBreak(g2, d3)) {
+                  c3 -= d3 - g2.from;
+                  break;
+                }
+              }
+              return c3;
+            };
+            a5.prototype.findBreakAt = function(a6, d3) {
+              return D3(d3, function(c3) {
+                return c3.from < a6 && a6 < c3.to;
+              });
+            };
+            a5.prototype.isInAnyBreak = function(d3, e2) {
+              var c3 = this.axis, f3 = c3.options.breaks || [], g2 = f3.length, h6;
+              if (g2 && I2(d3)) {
+                for (; g2--; )
+                  if (a5.isInBreak(f3[g2], d3)) {
+                    var k3 = true;
+                    h6 || (h6 = z2(f3[g2].showPoints, !c3.isXAxis));
+                  }
+                var b3 = k3 && e2 ? k3 && !h6 : k3;
+              }
+              return b3;
+            };
+            a5.prototype.setBreaks = function(d3, e2) {
+              var c3 = this, f3 = c3.axis, g2 = H2(d3) && !!d3.length;
+              f3.isDirty = c3.hasBreaks !== g2;
+              c3.hasBreaks = g2;
+              f3.options.breaks = f3.userOptions.breaks = d3;
+              f3.forceRedraw = true;
+              f3.series.forEach(function(a6) {
+                a6.isDirty = true;
+              });
+              g2 || f3.val2lin !== a5.val2Lin || (delete f3.val2lin, delete f3.lin2val);
+              g2 && (f3.userOptions.ordinal = false, f3.lin2val = a5.lin2Val, f3.val2lin = a5.val2Lin, f3.setExtremes = function(a6, d4, b3, e3, g3) {
+                if (c3.hasBreaks) {
+                  for (var m2 = this.options.breaks || [], h6; h6 = c3.findBreakAt(a6, m2); )
+                    a6 = h6.to;
+                  for (; h6 = c3.findBreakAt(d4, m2); )
+                    d4 = h6.from;
+                  d4 < a6 && (d4 = a6);
+                }
+                f3.constructor.prototype.setExtremes.call(this, a6, d4, b3, e3, g3);
+              }, f3.setAxisTranslation = function() {
+                f3.constructor.prototype.setAxisTranslation.call(this);
+                c3.unitLength = void 0;
+                if (c3.hasBreaks) {
+                  var d4 = f3.options.breaks || [], e3 = [], b3 = [], g3 = z2(f3.pointRangePadding, 0), h6 = 0, m2, k3 = f3.userMin || f3.min, l4 = f3.userMax || f3.max, p2;
+                  d4.forEach(function(b4) {
+                    m2 = b4.repeat || Infinity;
+                    I2(k3) && I2(l4) && (a5.isInBreak(b4, k3) && (k3 += b4.to % m2 - k3 % m2), a5.isInBreak(b4, l4) && (l4 -= l4 % m2 - b4.from % m2));
+                  });
+                  d4.forEach(function(b4) {
+                    t2 = b4.from;
+                    m2 = b4.repeat || Infinity;
+                    if (I2(k3) && I2(l4)) {
+                      for (; t2 - m2 > k3; )
+                        t2 -= m2;
+                      for (; t2 < k3; )
+                        t2 += m2;
+                      for (p2 = t2; p2 < l4; p2 += m2)
+                        e3.push({
+                          value: p2,
+                          move: "in"
+                        }), e3.push({ value: p2 + b4.to - b4.from, move: "out", size: b4.breakSize });
+                    }
+                  });
+                  e3.sort(function(b4, a6) {
+                    return b4.value === a6.value ? (b4.move === "in" ? 0 : 1) - (a6.move === "in" ? 0 : 1) : b4.value - a6.value;
+                  });
+                  var q5 = 0;
+                  var t2 = k3;
+                  e3.forEach(function(a6) {
+                    q5 += a6.move === "in" ? 1 : -1;
+                    q5 === 1 && a6.move === "in" && (t2 = a6.value);
+                    q5 === 0 && I2(t2) && (b3.push({ from: t2, to: a6.value, len: a6.value - t2 - (a6.size || 0) }), h6 += a6.value - t2 - (a6.size || 0));
+                  });
+                  c3.breakArray = b3;
+                  I2(k3) && I2(l4) && I2(f3.min) && (c3.unitLength = l4 - k3 - h6 + g3, v(f3, "afterBreaks"), f3.staticScale ? f3.transA = f3.staticScale : c3.unitLength && (f3.transA *= (l4 - f3.min + g3) / c3.unitLength), g3 && (f3.minPixelPadding = f3.transA * (f3.minPointOffset || 0)), f3.min = k3, f3.max = l4);
+                }
+              });
+              z2(e2, true) && f3.chart.redraw();
+            };
+            return a5;
+          }();
+          h5.Additions = L3;
+        })(q3 || (q3 = {}));
+        return q3;
+      });
+      M2(h3, "masters/modules/broken-axis.src.js", [h3["Core/Globals.js"], h3["Core/Axis/BrokenAxis.js"]], function(e, h4) {
+        h4.compose(e.Axis, e.Series);
+      });
+      M2(h3, "Extensions/DataGrouping.js", [
+        h3["Core/Axis/Axis.js"],
+        h3["Core/Axis/DateTimeAxis.js"],
+        h3["Core/FormatUtilities.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Series/Point.js"],
+        h3["Core/Series/Series.js"],
+        h3["Core/Tooltip.js"],
+        h3["Core/DefaultOptions.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v, H2, I2, z2, q3) {
+        var l3 = A.format, f2 = H2.prototype;
+        A = q3.addEvent;
+        var d2 = q3.arrayMax, a4 = q3.arrayMin, p2 = q3.correctFloat, k2 = q3.defined, F2 = q3.error, B = q3.extend, J2 = q3.isNumber, D3 = q3.merge, L3 = q3.pick;
+        "";
+        var y2 = E3.approximations = { sum: function(a5) {
+          var c4 = a5.length;
+          if (!c4 && a5.hasNulls)
+            var b3 = null;
+          else if (c4)
+            for (b3 = 0; c4--; )
+              b3 += a5[c4];
+          return b3;
+        }, average: function(a5) {
+          var c4 = a5.length;
+          a5 = y2.sum(a5);
+          J2(a5) && c4 && (a5 = p2(a5 / c4));
+          return a5;
+        }, averages: function() {
+          var a5 = [];
+          [].forEach.call(arguments, function(c4) {
+            a5.push(y2.average(c4));
+          });
+          return typeof a5[0] === "undefined" ? void 0 : a5;
+        }, open: function(a5) {
+          return a5.length ? a5[0] : a5.hasNulls ? null : void 0;
+        }, high: function(a5) {
+          return a5.length ? d2(a5) : a5.hasNulls ? null : void 0;
+        }, low: function(c4) {
+          return c4.length ? a4(c4) : c4.hasNulls ? null : void 0;
+        }, close: function(a5) {
+          return a5.length ? a5[a5.length - 1] : a5.hasNulls ? null : void 0;
+        }, hlc: function(a5, c4, b3) {
+          a5 = y2.high(a5);
+          c4 = y2.low(c4);
+          b3 = y2.close(b3);
+          if (J2(a5) || J2(c4) || J2(b3))
+            return [a5, c4, b3];
+        }, ohlc: function(a5, c4, b3, d3) {
+          a5 = y2.open(a5);
+          c4 = y2.high(c4);
+          b3 = y2.low(b3);
+          d3 = y2.close(d3);
+          if (J2(a5) || J2(c4) || J2(b3) || J2(d3))
+            return [a5, c4, b3, d3];
+        }, range: function(a5, c4) {
+          a5 = y2.low(a5);
+          c4 = y2.high(c4);
+          if (J2(a5) || J2(c4))
+            return [a5, c4];
+          if (a5 === null && c4 === null)
+            return null;
+        } };
+        q3 = function(a5, c4, b3, d3) {
+          var e2 = this, f3 = e2.data, g3 = e2.options && e2.options.data, h5 = [], l4 = [], n2 = [], r3 = a5.length, p3 = !!c4, q4 = [], t3 = e2.pointArrayMap, u4 = t3 && t3.length, x4 = ["x"].concat(t3 || ["y"]), v2 = this.options.dataGrouping && this.options.dataGrouping.groupAll, B2 = 0, F3 = 0, z3;
+          d3 = typeof d3 === "function" ? d3 : y2[d3] ? y2[d3] : y2[e2.getDGApproximation && e2.getDGApproximation() || "average"];
+          u4 ? t3.forEach(function() {
+            q4.push([]);
+          }) : q4.push([]);
+          var C3 = u4 || 1;
+          for (z3 = 0; z3 <= r3 && !(a5[z3] >= b3[0]); z3++)
+            ;
+          for (z3; z3 <= r3; z3++) {
+            for (; typeof b3[B2 + 1] !== "undefined" && a5[z3] >= b3[B2 + 1] || z3 === r3; ) {
+              var A2 = b3[B2];
+              e2.dataGroupInfo = { start: v2 ? F3 : e2.cropStart + F3, length: q4[0].length };
+              var E4 = d3.apply(e2, q4);
+              e2.pointClass && !k2(e2.dataGroupInfo.options) && (e2.dataGroupInfo.options = D3(e2.pointClass.prototype.optionsToObject.call({ series: e2 }, e2.options.data[e2.cropStart + F3])), x4.forEach(function(b4) {
+                delete e2.dataGroupInfo.options[b4];
+              }));
+              typeof E4 !== "undefined" && (h5.push(A2), l4.push(E4), n2.push(e2.dataGroupInfo));
+              F3 = z3;
+              for (A2 = 0; A2 < C3; A2++)
+                q4[A2].length = 0, q4[A2].hasNulls = false;
+              B2 += 1;
+              if (z3 === r3)
+                break;
+            }
+            if (z3 === r3)
+              break;
+            if (t3) {
+              A2 = e2.options.dataGrouping && e2.options.dataGrouping.groupAll ? z3 : e2.cropStart + z3;
+              E4 = f3 && f3[A2] || e2.pointClass.prototype.applyOptions.apply({ series: e2 }, [g3[A2]]);
+              var H3 = void 0;
+              for (A2 = 0; A2 < u4; A2++)
+                H3 = E4[t3[A2]], J2(H3) ? q4[A2].push(H3) : H3 === null && (q4[A2].hasNulls = true);
+            } else
+              A2 = p3 ? c4[z3] : null, J2(A2) ? q4[0].push(A2) : A2 === null && (q4[0].hasNulls = true);
+          }
+          return { groupedXData: h5, groupedYData: l4, groupMap: n2 };
+        };
+        var C2 = { approximations: y2, groupData: q3 }, x3 = f2.generatePoints, c3 = {
+          groupPixelWidth: 2,
+          dateTimeLabelFormats: { millisecond: ["%A, %b %e, %H:%M:%S.%L", "%A, %b %e, %H:%M:%S.%L", "-%H:%M:%S.%L"], second: ["%A, %b %e, %H:%M:%S", "%A, %b %e, %H:%M:%S", "-%H:%M:%S"], minute: ["%A, %b %e, %H:%M", "%A, %b %e, %H:%M", "-%H:%M"], hour: ["%A, %b %e, %H:%M", "%A, %b %e, %H:%M", "-%H:%M"], day: ["%A, %b %e, %Y", "%A, %b %e", "-%A, %b %e, %Y"], week: ["Week from %A, %b %e, %Y", "%A, %b %e", "-%A, %b %e, %Y"], month: ["%B %Y", "%B", "-%B %Y"], year: ["%Y", "%Y", "-%Y"] }
+        }, t2 = {
+          line: {},
+          spline: {},
+          area: {},
+          areaspline: {},
+          arearange: {},
+          column: { groupPixelWidth: 10 },
+          columnrange: { groupPixelWidth: 10 },
+          candlestick: { groupPixelWidth: 10 },
+          ohlc: { groupPixelWidth: 5 },
+          hlc: { groupPixelWidth: 5 },
+          heikinashi: { groupPixelWidth: 10 }
+        }, g2 = E3.defaultDataGroupingUnits = [["millisecond", [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]], ["second", [1, 2, 5, 10, 15, 30]], ["minute", [1, 2, 5, 10, 15, 30]], ["hour", [1, 2, 3, 4, 6, 8, 12]], ["day", [1]], ["week", [1]], ["month", [1, 3, 6]], ["year", null]];
+        f2.getDGApproximation = function() {
+          return this.is("arearange") ? "range" : this.is("ohlc") ? "ohlc" : this.is("hlc") ? "hlc" : this.is("column") ? "sum" : "average";
+        };
+        f2.groupData = q3;
+        f2.applyGrouping = function(a5) {
+          var c4 = this.chart, b3 = this.options.dataGrouping, d3 = this.allowDG !== false && b3 && L3(b3.enabled, c4.options.isStock), e2 = this.visible || !c4.options.chart.ignoreHiddenSeries, m2, l4 = this.currentDataGrouping, p3 = false;
+          d3 && !this.requireSorting && (this.requireSorting = p3 = true);
+          a5 = !(this.isCartesian && !this.isDirty && !this.xAxis.isDirty && !this.yAxis.isDirty && !a5) === false || !d3;
+          p3 && (this.requireSorting = false);
+          if (!a5) {
+            this.destroyGroupedData();
+            d3 = b3.groupAll ? this.xData : this.processedXData;
+            var q4 = b3.groupAll ? this.yData : this.processedYData;
+            a5 = c4.plotSizeX;
+            p3 = this.xAxis;
+            var t3 = p3.options.ordinal, u4 = this.groupPixelWidth;
+            if (u4 && d3 && d3.length) {
+              this.isDirty = m2 = true;
+              this.points = null;
+              var x4 = p3.getExtremes();
+              var y3 = x4.min;
+              x4 = x4.max;
+              t3 = t3 && p3.ordinal && p3.ordinal.getGroupIntervalFactor(y3, x4, this) || 1;
+              a5 = p3.getTimeTicks(h4.Additions.prototype.normalizeTimeTickInterval(u4 * (x4 - y3) / a5 * t3, b3.units || g2), Math.min(y3, d3[0]), Math.max(x4, d3[d3.length - 1]), p3.options.startOfWeek, d3, this.closestPointRange);
+              u4 = f2.groupData.apply(this, [d3, q4, a5, b3.approximation]);
+              d3 = u4.groupedXData;
+              q4 = u4.groupedYData;
+              t3 = 0;
+              b3 && b3.smoothed && d3.length && (b3.firstAnchor = "firstPoint", b3.anchor = "middle", b3.lastAnchor = "lastPoint", F2(32, false, c4, { "dataGrouping.smoothed": "use dataGrouping.anchor" }));
+              c4 = d3;
+              var v2 = this.options.dataGrouping;
+              y3 = this.currentDataGrouping && this.currentDataGrouping.gapSize;
+              if (v2 && this.xData && y3 && this.groupMap) {
+                var B2 = c4.length - 1;
+                var z3 = v2.anchor;
+                var C3 = L3(v2.firstAnchor, z3);
+                v2 = L3(v2.lastAnchor, z3);
+                if (z3 && z3 !== "start") {
+                  var A2 = y3 * { middle: 0.5, end: 1 }[z3];
+                  for (z3 = c4.length - 1; z3-- && 0 < z3; )
+                    c4[z3] += A2;
+                }
+                if (C3 && C3 !== "start" && this.xData[0] >= c4[0]) {
+                  z3 = this.groupMap[0].start;
+                  A2 = this.groupMap[0].length;
+                  var E4 = void 0;
+                  J2(z3) && J2(A2) && (E4 = z3 + (A2 - 1));
+                  c4[0] = { middle: c4[0] + 0.5 * y3, end: c4[0] + y3, firstPoint: this.xData[0], lastPoint: E4 && this.xData[E4] }[C3];
+                }
+                v2 && v2 !== "start" && y3 && c4[B2] >= x4 - y3 && (x4 = this.groupMap[this.groupMap.length - 1].start, c4[B2] = { middle: c4[B2] + 0.5 * y3, end: c4[B2] + y3, firstPoint: x4 && this.xData[x4], lastPoint: this.xData[this.xData.length - 1] }[v2]);
+              }
+              for (x4 = 1; x4 < a5.length; x4++)
+                a5.info.segmentStarts && a5.info.segmentStarts.indexOf(x4) !== -1 || (t3 = Math.max(a5[x4] - a5[x4 - 1], t3));
+              x4 = a5.info;
+              x4.gapSize = t3;
+              this.closestPointRange = a5.info.totalRange;
+              this.groupMap = u4.groupMap;
+              if (e2) {
+                e2 = d3;
+                if (k2(e2[0]) && J2(p3.min) && J2(p3.dataMin) && e2[0] < p3.min) {
+                  if (!k2(p3.options.min) && p3.min <= p3.dataMin || p3.min === p3.dataMin)
+                    p3.min = Math.min(e2[0], p3.min);
+                  p3.dataMin = Math.min(e2[0], p3.dataMin);
+                }
+                if (k2(e2[e2.length - 1]) && J2(p3.max) && J2(p3.dataMax) && e2[e2.length - 1] > p3.max) {
+                  if (!k2(p3.options.max) && J2(p3.dataMax) && p3.max >= p3.dataMax || p3.max === p3.dataMax)
+                    p3.max = Math.max(e2[e2.length - 1], p3.max);
+                  p3.dataMax = Math.max(e2[e2.length - 1], p3.dataMax);
+                }
+              }
+              b3.groupAll && (this.allGroupedData = q4, b3 = this.cropData(d3, q4, p3.min, p3.max, 1), d3 = b3.xData, q4 = b3.yData, this.cropStart = b3.start);
+              this.processedXData = d3;
+              this.processedYData = q4;
+            } else
+              this.groupMap = null;
+            this.hasGroupedData = m2;
+            this.currentDataGrouping = x4;
+            this.preventGraphAnimation = (l4 && l4.totalRange) !== (x4 && x4.totalRange);
+          }
+        };
+        f2.destroyGroupedData = function() {
+          this.groupedData && (this.groupedData.forEach(function(a5, c4) {
+            a5 && (this.groupedData[c4] = a5.destroy ? a5.destroy() : null);
+          }, this), this.groupedData.length = 0);
+        };
+        f2.generatePoints = function() {
+          x3.apply(this);
+          this.destroyGroupedData();
+          this.groupedData = this.hasGroupedData ? this.points : null;
+        };
+        e.prototype.applyGrouping = function(a5) {
+          var c4 = this;
+          c4.series.forEach(function(b3) {
+            b3.groupPixelWidth = void 0;
+            b3.groupPixelWidth = c4.getGroupPixelWidth && c4.getGroupPixelWidth();
+            b3.groupPixelWidth && (b3.hasProcessed = true);
+            b3.applyGrouping(!!a5.hasExtemesChanged);
+          });
+        };
+        e.prototype.getGroupPixelWidth = function() {
+          var a5 = this.series, d3 = a5.length, b3, e2 = 0, f3 = false, g3;
+          for (b3 = d3; b3--; )
+            (g3 = a5[b3].options.dataGrouping) && (e2 = Math.max(e2, L3(g3.groupPixelWidth, c3.groupPixelWidth)));
+          for (b3 = d3; b3--; )
+            if (g3 = a5[b3].options.dataGrouping) {
+              if (d3 = (a5[b3].processedXData || a5[b3].data).length, a5[b3].groupPixelWidth || d3 > this.chart.plotSizeX / e2 || d3 && g3.forced)
+                f3 = true;
+            }
+          return f3 ? e2 : 0;
+        };
+        e.prototype.setDataGrouping = function(a5, c4) {
+          var b3;
+          c4 = L3(c4, true);
+          a5 || (a5 = { forced: false, units: null });
+          if (this instanceof e)
+            for (b3 = this.series.length; b3--; )
+              this.series[b3].update({ dataGrouping: a5 }, false);
+          else
+            this.chart.options.series.forEach(function(b4) {
+              b4.dataGrouping = a5;
+            }, false);
+          this.ordinal && (this.ordinal.slope = void 0);
+          c4 && this.chart.redraw();
+        };
+        A(e, "postProcessData", e.prototype.applyGrouping);
+        A(v, "update", function() {
+          if (this.dataGroup)
+            return F2(24, false, this.series.chart), false;
+        });
+        A(I2, "headerFormatter", function(a5) {
+          var d3 = this.chart, b3 = d3.time, e2 = a5.labelConfig, f3 = e2.series, g3 = f3.tooltipOptions, h5 = f3.options.dataGrouping, k3 = g3.xDateFormat, p3 = f3.xAxis, q4 = g3[a5.isFooter ? "footerFormat" : "headerFormat"];
+          if (p3 && p3.options.type === "datetime" && h5 && J2(e2.key)) {
+            var t3 = f3.currentDataGrouping;
+            h5 = h5.dateTimeLabelFormats || c3.dateTimeLabelFormats;
+            if (t3)
+              if (g3 = h5[t3.unitName], t3.count === 1)
+                k3 = g3[0];
+              else {
+                k3 = g3[1];
+                var u4 = g3[2];
+              }
+            else
+              !k3 && h5 && p3.dateTime && (k3 = p3.dateTime.getXDateFormat(e2.x, g3.dateTimeLabelFormats));
+            k3 = b3.dateFormat(k3, e2.key);
+            u4 && (k3 += b3.dateFormat(u4, e2.key + t3.totalRange - 1));
+            f3.chart.styledMode && (q4 = this.styledModeFormat(q4));
+            a5.text = l3(q4, { point: B(e2.point, { key: k3 }), series: f3 }, d3);
+            a5.preventDefault();
+          }
+        });
+        A(H2, "destroy", f2.destroyGroupedData);
+        A(H2, "afterSetOptions", function(a5) {
+          a5 = a5.options;
+          var d3 = this.type, b3 = this.chart.options.plotOptions, e2 = z2.defaultOptions.plotOptions[d3].dataGrouping, f3 = this.useCommonDataGrouping && c3;
+          if (t2[d3] || f3) {
+            e2 || (e2 = D3(c3, t2[d3]));
+            var g3 = this.chart.rangeSelector;
+            a5.dataGrouping = D3(f3, e2, b3.series && b3.series.dataGrouping, b3[d3].dataGrouping, this.userOptions.dataGrouping, !a5.isInternal && g3 && J2(g3.selected) && g3.buttonOptions[g3.selected].dataGrouping);
+          }
+        });
+        A(e, "afterSetScale", function() {
+          this.series.forEach(function(a5) {
+            a5.hasProcessed = false;
+          });
+        });
+        E3.dataGrouping = C2;
+        "";
+        return C2;
+      });
+      M2(h3, "Series/HLC/HLCPoint.js", [h3["Core/Series/SeriesRegistry.js"]], function(e) {
+        var h4 = this && this.__extends || function() {
+          var e2 = function(h5, v) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(e3, h6) {
+              e3.__proto__ = h6;
+            } || function(e3, h6) {
+              for (var v2 in h6)
+                h6.hasOwnProperty(v2) && (e3[v2] = h6[v2]);
+            };
+            return e2(h5, v);
+          };
+          return function(h5, v) {
+            function A() {
+              this.constructor = h5;
+            }
+            e2(h5, v);
+            h5.prototype = v === null ? Object.create(v) : (A.prototype = v.prototype, new A());
+          };
+        }();
+        return function(e2) {
+          function A() {
+            var h5 = e2 !== null && e2.apply(this, arguments) || this;
+            h5.close = void 0;
+            h5.high = void 0;
+            h5.low = void 0;
+            h5.options = void 0;
+            h5.plotClose = void 0;
+            h5.series = void 0;
+            return h5;
+          }
+          h4(A, e2);
+          return A;
+        }(e.seriesTypes.column.prototype.pointClass);
+      });
+      M2(h3, "Series/HLC/HLCSeries.js", [
+        h3["Series/HLC/HLCPoint.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A) {
+        var E3 = this && this.__extends || function() {
+          var e2 = function(h5, l3) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(e3, d2) {
+              e3.__proto__ = d2;
+            } || function(e3, d2) {
+              for (var a4 in d2)
+                d2.hasOwnProperty(a4) && (e3[a4] = d2[a4]);
+            };
+            return e2(h5, l3);
+          };
+          return function(h5, l3) {
+            function f2() {
+              this.constructor = h5;
+            }
+            e2(h5, l3);
+            h5.prototype = l3 === null ? Object.create(l3) : (f2.prototype = l3.prototype, new f2());
+          };
+        }(), v = h4.seriesTypes.column, D3 = A.extend, I2 = A.merge;
+        A = function(e2) {
+          function h5() {
+            var h6 = e2 !== null && e2.apply(this, arguments) || this;
+            h6.data = void 0;
+            h6.options = void 0;
+            h6.points = void 0;
+            h6.yData = void 0;
+            return h6;
+          }
+          E3(h5, e2);
+          h5.prototype.extendStem = function(e3, f2, d2) {
+            var a4 = e3[0];
+            e3 = e3[1];
+            typeof a4[2] === "number" && (a4[2] = Math.max(d2 + f2, a4[2]));
+            typeof e3[2] === "number" && (e3[2] = Math.min(d2 - f2, e3[2]));
+          };
+          h5.prototype.getPointPath = function(e3, f2) {
+            f2 = f2.strokeWidth();
+            var d2 = e3.series, a4 = f2 % 2 / 2, h6 = Math.round(e3.plotX) - a4, k2 = Math.round(e3.shapeArgs.width / 2);
+            var l3 = [["M", h6, Math.round(e3.yBottom)], ["L", h6, Math.round(e3.plotHigh)]];
+            e3.close !== null && (e3 = Math.round(e3.plotClose) + a4, l3.push(["M", h6, e3], ["L", h6 + k2, e3]), d2.extendStem(l3, f2 / 2, e3));
+            return l3;
+          };
+          h5.prototype.drawSinglePoint = function(e3) {
+            var f2 = e3.series, d2 = f2.chart, a4 = e3.graphic, h6 = !a4;
+            typeof e3.plotY !== "undefined" && (a4 || (e3.graphic = a4 = d2.renderer.path().add(f2.group)), d2.styledMode || a4.attr(f2.pointAttribs(e3, e3.selected && "select")), f2 = f2.getPointPath(e3, a4), a4[h6 ? "attr" : "animate"]({ d: f2 }).addClass(e3.getClassName(), true));
+          };
+          h5.prototype.drawPoints = function() {
+            this.points.forEach(this.drawSinglePoint);
+          };
+          h5.prototype.init = function() {
+            e2.prototype.init.apply(this, arguments);
+            this.options.stacking = void 0;
+          };
+          h5.prototype.pointAttribs = function(h6, f2) {
+            h6 = e2.prototype.pointAttribs.call(this, h6, f2);
+            delete h6.fill;
+            return h6;
+          };
+          h5.prototype.toYData = function(e3) {
+            return [e3.high, e3.low, e3.close];
+          };
+          h5.prototype.translate = function() {
+            var h6 = this, f2 = h6.yAxis, d2 = this.pointArrayMap && this.pointArrayMap.slice() || [], a4 = d2.map(function(a5) {
+              return "plot" + (a5.charAt(0).toUpperCase() + a5.slice(1));
+            });
+            a4.push("yBottom");
+            d2.push("low");
+            e2.prototype.translate.apply(h6);
+            h6.points.forEach(function(e3) {
+              d2.forEach(function(d3, l3) {
+                d3 = e3[d3];
+                d3 !== null && (h6.dataModify && (d3 = h6.dataModify.modifyValue(d3)), e3[a4[l3]] = f2.toPixels(d3, true));
+              });
+              e3.tooltipPos[1] = e3.plotHigh + f2.pos - h6.chart.plotTop;
+            });
+          };
+          h5.defaultOptions = I2(v.defaultOptions, { lineWidth: 1, tooltip: { pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {series.name}</b><br/>High: {point.high}<br/>Low: {point.low}<br/>Close: {point.close}<br/>' }, threshold: null, states: { hover: { lineWidth: 3 } }, stickyTracking: true });
+          return h5;
+        }(v);
+        D3(A.prototype, { animate: null, directTouch: false, pointArrayMap: [
+          "high",
+          "low",
+          "close"
+        ], pointAttrToOptions: { stroke: "color", "stroke-width": "lineWidth" }, pointValKey: "close" });
+        A.prototype.pointClass = e;
+        h4.registerSeriesType("hlc", A);
+        "";
+        return A;
+      });
+      M2(h3, "Series/OHLC/OHLCPoint.js", [h3["Core/Series/SeriesRegistry.js"]], function(e) {
+        var h4 = this && this.__extends || function() {
+          var e2 = function(h5, v) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(e3, h6) {
+              e3.__proto__ = h6;
+            } || function(e3, h6) {
+              for (var v2 in h6)
+                h6.hasOwnProperty(v2) && (e3[v2] = h6[v2]);
+            };
+            return e2(h5, v);
+          };
+          return function(h5, v) {
+            function A() {
+              this.constructor = h5;
+            }
+            e2(h5, v);
+            h5.prototype = v === null ? Object.create(v) : (A.prototype = v.prototype, new A());
+          };
+        }();
+        return function(e2) {
+          function A() {
+            var h5 = e2 !== null && e2.apply(this, arguments) || this;
+            h5.open = void 0;
+            h5.options = void 0;
+            h5.plotOpen = void 0;
+            h5.series = void 0;
+            return h5;
+          }
+          h4(A, e2);
+          A.prototype.getClassName = function() {
+            return e2.prototype.getClassName.call(this) + (this.open < this.close ? " highcharts-point-up" : " highcharts-point-down");
+          };
+          A.prototype.resolveUpColor = function() {
+            this.open < this.close && !this.options.color && this.series.options.upColor && (this.color = this.series.options.upColor);
+          };
+          A.prototype.resolveColor = function() {
+            e2.prototype.resolveColor.call(this);
+            this.resolveUpColor();
+          };
+          A.prototype.getZone = function() {
+            var h5 = e2.prototype.getZone.call(this);
+            this.resolveUpColor();
+            return h5;
+          };
+          A.prototype.applyOptions = function() {
+            e2.prototype.applyOptions.apply(this, arguments);
+            this.resolveColor && this.resolveColor();
+            return this;
+          };
+          return A;
+        }(e.seriesTypes.hlc.prototype.pointClass);
+      });
+      M2(h3, "Series/OHLC/OHLCSeries.js", [
+        h3["Series/OHLC/OHLCPoint.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A) {
+        var D3 = this && this.__extends || function() {
+          var e2 = function(d2, a4) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a5, d3) {
+              a5.__proto__ = d3;
+            } || function(a5, d3) {
+              for (var e3 in d3)
+                d3.hasOwnProperty(e3) && (a5[e3] = d3[e3]);
+            };
+            return e2(d2, a4);
+          };
+          return function(d2, a4) {
+            function f2() {
+              this.constructor = d2;
+            }
+            e2(d2, a4);
+            d2.prototype = a4 === null ? Object.create(a4) : (f2.prototype = a4.prototype, new f2());
+          };
+        }(), v = h4.series, H2 = h4.seriesTypes.hlc, I2 = A.addEvent, z2 = A.extend, q3 = A.merge, l3 = function(e2) {
+          function d2() {
+            var a4 = e2 !== null && e2.apply(this, arguments) || this;
+            a4.data = void 0;
+            a4.options = void 0;
+            a4.points = void 0;
+            return a4;
+          }
+          D3(d2, e2);
+          d2.prototype.getPointPath = function(a4, d3) {
+            var f2 = e2.prototype.getPointPath.call(this, a4, d3);
+            d3 = d3.strokeWidth();
+            var h5 = d3 % 2 / 2, l4 = Math.round(a4.plotX) - h5, p2 = Math.round(a4.shapeArgs.width / 2);
+            a4.open !== null && (a4 = Math.round(a4.plotOpen) + h5, f2.push(["M", l4, a4], ["L", l4 - p2, a4]), e2.prototype.extendStem.call(this, f2, d3 / 2, a4));
+            return f2;
+          };
+          d2.prototype.pointAttribs = function(a4, d3) {
+            d3 = e2.prototype.pointAttribs.call(this, a4, d3);
+            var f2 = this.options;
+            delete d3.fill;
+            !a4.options.color && f2.upColor && a4.open < a4.close && (d3.stroke = f2.upColor);
+            return d3;
+          };
+          d2.prototype.toYData = function(a4) {
+            return [a4.open, a4.high, a4.low, a4.close];
+          };
+          d2.defaultOptions = q3(H2.defaultOptions, { tooltip: { pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {series.name}</b><br/>Open: {point.open}<br/>High: {point.high}<br/>Low: {point.low}<br/>Close: {point.close}<br/>' } });
+          return d2;
+        }(H2);
+        z2(l3.prototype, { pointArrayMap: ["open", "high", "low", "close"] });
+        l3.prototype.pointClass = e;
+        h4.registerSeriesType("ohlc", l3);
+        I2(v, "init", function(e2) {
+          e2 = e2.options;
+          e2.useOhlcData && e2.id !== "highcharts-navigator-series" && z2(this, { pointValKey: l3.prototype.pointValKey, pointArrayMap: l3.prototype.pointArrayMap, toYData: l3.prototype.toYData });
+        });
+        I2(v, "afterSetOptions", function(e2) {
+          e2 = e2.options;
+          var d2 = e2.dataGrouping;
+          d2 && e2.useOhlcData && e2.id !== "highcharts-navigator-series" && (d2.approximation = "ohlc");
+        });
+        "";
+        return l3;
+      });
+      M2(h3, "Series/Candlestick/CandlestickSeries.js", [h3["Core/DefaultOptions.js"], h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4, A) {
+        var D3 = this && this.__extends || function() {
+          var e2 = function(h5, f2) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, a4) {
+              d2.__proto__ = a4;
+            } || function(d2, a4) {
+              for (var e3 in a4)
+                a4.hasOwnProperty(e3) && (d2[e3] = a4[e3]);
+            };
+            return e2(h5, f2);
+          };
+          return function(h5, f2) {
+            function d2() {
+              this.constructor = h5;
+            }
+            e2(h5, f2);
+            h5.prototype = f2 === null ? Object.create(f2) : (d2.prototype = f2.prototype, new d2());
+          };
+        }(), v = e.defaultOptions;
+        e = h4.seriesTypes;
+        var H2 = e.column, I2 = e.ohlc, z2 = A.merge;
+        A = function(e2) {
+          function h5() {
+            var f2 = e2 !== null && e2.apply(this, arguments) || this;
+            f2.data = void 0;
+            f2.options = void 0;
+            f2.points = void 0;
+            return f2;
+          }
+          D3(h5, e2);
+          h5.prototype.pointAttribs = function(e3, d2) {
+            var a4 = H2.prototype.pointAttribs.call(this, e3, d2), f2 = this.options, h6 = e3.open < e3.close, l3 = f2.lineColor || this.color, q3 = e3.color || this.color;
+            a4["stroke-width"] = f2.lineWidth;
+            a4.fill = e3.options.color || (h6 ? f2.upColor || q3 : q3);
+            a4.stroke = e3.options.lineColor || (h6 ? f2.upLineColor || l3 : l3);
+            d2 && (e3 = f2.states[d2], a4.fill = e3.color || a4.fill, a4.stroke = e3.lineColor || a4.stroke, a4["stroke-width"] = e3.lineWidth || a4["stroke-width"]);
+            return a4;
+          };
+          h5.prototype.drawPoints = function() {
+            var e3 = this, d2 = e3.chart, a4 = e3.yAxis.reversed;
+            e3.points.forEach(function(f2) {
+              var h6 = f2.graphic, l3 = !h6;
+              if (typeof f2.plotY !== "undefined") {
+                h6 || (f2.graphic = h6 = d2.renderer.path().add(e3.group));
+                e3.chart.styledMode || h6.attr(e3.pointAttribs(f2, f2.selected && "select")).shadow(e3.options.shadow);
+                var p2 = h6.strokeWidth() % 2 / 2;
+                var q3 = Math.round(f2.plotX) - p2;
+                var v2 = f2.plotOpen;
+                var z3 = f2.plotClose;
+                var y2 = Math.min(v2, z3);
+                v2 = Math.max(v2, z3);
+                var C2 = Math.round(f2.shapeArgs.width / 2);
+                z3 = a4 ? v2 !== f2.yBottom : Math.round(y2) !== Math.round(f2.plotHigh);
+                var x3 = a4 ? Math.round(y2) !== Math.round(f2.plotHigh) : v2 !== f2.yBottom;
+                y2 = Math.round(y2) + p2;
+                v2 = Math.round(v2) + p2;
+                p2 = [];
+                p2.push(["M", q3 - C2, v2], ["L", q3 - C2, y2], ["L", q3 + C2, y2], ["L", q3 + C2, v2], ["Z"], ["M", q3, y2], ["L", q3, z3 ? Math.round(a4 ? f2.yBottom : f2.plotHigh) : y2], ["M", q3, v2], ["L", q3, x3 ? Math.round(a4 ? f2.plotHigh : f2.yBottom) : v2]);
+                h6[l3 ? "attr" : "animate"]({ d: p2 }).addClass(f2.getClassName(), true);
+              }
+            });
+          };
+          h5.defaultOptions = z2(I2.defaultOptions, v.plotOptions, {
+            states: { hover: { lineWidth: 2 } },
+            tooltip: v.plotOptions.ohlc.tooltip,
+            threshold: null,
+            lineColor: "#000000",
+            lineWidth: 1,
+            upColor: "#ffffff",
+            stickyTracking: true
+          });
+          return h5;
+        }(I2);
+        h4.registerSeriesType("candlestick", A);
+        "";
+        return A;
+      });
+      M2(h3, "Series/Flags/FlagsPoint.js", [h3["Core/Series/SeriesRegistry.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var A = this && this.__extends || function() {
+          var e2 = function(h5, v) {
+            e2 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(e3, h6) {
+              e3.__proto__ = h6;
+            } || function(e3, h6) {
+              for (var l3 in h6)
+                h6.hasOwnProperty(l3) && (e3[l3] = h6[l3]);
+            };
+            return e2(h5, v);
+          };
+          return function(h5, v) {
+            function z2() {
+              this.constructor = h5;
+            }
+            e2(h5, v);
+            h5.prototype = v === null ? Object.create(v) : (z2.prototype = v.prototype, new z2());
+          };
+        }(), D3 = h4.isNumber;
+        return function(e2) {
+          function h5() {
+            var h6 = e2 !== null && e2.apply(this, arguments) || this;
+            h6.options = void 0;
+            h6.series = void 0;
+            return h6;
+          }
+          A(h5, e2);
+          h5.prototype.isValid = function() {
+            return D3(this.y) || typeof this.y === "undefined";
+          };
+          h5.prototype.hasNewShapeType = function() {
+            var e3 = this.options.shape || this.series.options.shape;
+            return this.graphic && e3 && e3 !== this.graphic.symbolKey;
+          };
+          return h5;
+        }(e.seriesTypes.column.prototype.pointClass);
+      });
+      M2(h3, "Series/OnSeriesComposition.js", [
+        h3["Series/Column/ColumnSeries.js"],
+        h3["Core/Series/Series.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A) {
+        var D3 = e.prototype, v = h4.prototype, H2 = A.defined, I2 = A.stableSort, z2;
+        (function(e2) {
+          function h5() {
+            return v.getPlotBox.call(this.options.onSeries && this.chart.get(this.options.onSeries) || this);
+          }
+          function f2() {
+            D3.translate.apply(this);
+            var a4 = this, d3 = a4.options, e3 = a4.chart, f3 = a4.points, h6 = d3.onSeries, l3 = (h6 = h6 && e3.get(h6)) && h6.options.step, q3 = h6 && h6.points, v2 = e3.inverted, y2 = a4.xAxis, z3 = a4.yAxis;
+            e3 = f3.length - 1;
+            var x3;
+            d3 = d3.onKey || "y";
+            var c3 = q3 && q3.length, t2 = 0, g2;
+            if (h6 && h6.visible && c3) {
+              t2 = (h6.pointXOffset || 0) + (h6.barW || 0) / 2;
+              var u4 = h6.currentDataGrouping;
+              var n2 = q3[c3 - 1].x + (u4 ? u4.totalRange : 0);
+              I2(f3, function(b4, a5) {
+                return b4.x - a5.x;
+              });
+              for (d3 = "plot" + d3[0].toUpperCase() + d3.substr(1); c3-- && f3[e3]; ) {
+                var b3 = q3[c3];
+                u4 = f3[e3];
+                u4.y = b3.y;
+                if (b3.x <= u4.x && typeof b3[d3] !== "undefined") {
+                  if (u4.x <= n2 && (u4.plotY = b3[d3], b3.x < u4.x && !l3 && (g2 = q3[c3 + 1]) && typeof g2[d3] !== "undefined")) {
+                    var r3 = (u4.x - b3.x) / (g2.x - b3.x);
+                    u4.plotY += r3 * (g2[d3] - b3[d3]);
+                    u4.y += r3 * (g2.y - b3.y);
+                  }
+                  e3--;
+                  c3++;
+                  if (0 > e3)
+                    break;
+                }
+              }
+            }
+            f3.forEach(function(b4, c4) {
+              b4.plotX += t2;
+              if (typeof b4.plotY === "undefined" || v2)
+                0 <= b4.plotX && b4.plotX <= y2.len ? v2 ? (b4.plotY = y2.translate(b4.x, 0, 1, 0, 1), b4.plotX = H2(b4.y) ? z3.translate(b4.y, 0, 0, 0, 1) : 0) : b4.plotY = (y2.opposite ? 0 : a4.yAxis.len) + y2.offset : b4.shapeArgs = {};
+              if ((x3 = f3[c4 - 1]) && x3.plotX === b4.plotX) {
+                typeof x3.stackIndex === "undefined" && (x3.stackIndex = 0);
+                var d4 = x3.stackIndex + 1;
+              }
+              b4.stackIndex = d4;
+            });
+            this.onSeries = h6;
+          }
+          var d2 = [];
+          e2.compose = function(a4) {
+            if (d2.indexOf(a4) === -1) {
+              d2.push(a4);
+              var e3 = a4.prototype;
+              e3.getPlotBox = h5;
+              e3.translate = f2;
+            }
+            return a4;
+          };
+          e2.getPlotBox = h5;
+          e2.translate = f2;
+        })(z2 || (z2 = {}));
+        return z2;
+      });
+      M2(h3, "Series/Flags/FlagsSymbols.js", [h3["Core/Renderer/RendererRegistry.js"], h3["Core/Renderer/SVG/SVGRenderer.js"]], function(e, h4) {
+        function A(e2) {
+          D3[e2 + "pin"] = function(h5, v, z2, q3, l3) {
+            var f2 = l3 && l3.anchorX;
+            l3 = l3 && l3.anchorY;
+            e2 === "circle" && q3 > z2 && (h5 -= Math.round((q3 - z2) / 2), z2 = q3);
+            var d2 = D3[e2](h5, v, z2, q3);
+            if (f2 && l3) {
+              var a4 = f2;
+              e2 === "circle" ? a4 = h5 + z2 / 2 : (h5 = d2[0], z2 = d2[1], h5[0] === "M" && z2[0] === "L" && (a4 = (h5[1] + z2[1]) / 2));
+              d2.push(["M", a4, v > l3 ? v : v + q3], ["L", f2, l3]);
+              d2 = d2.concat(D3.circle(f2 - 1, l3 - 1, 2, 2));
+            }
+            return d2;
+          };
+        }
+        var D3 = h4.prototype.symbols;
+        D3.flag = function(e2, h5, A2, z2, q3) {
+          var l3 = q3 && q3.anchorX || e2;
+          q3 = q3 && q3.anchorY || h5;
+          var f2 = D3.circle(l3 - 1, q3 - 1, 2, 2);
+          f2.push(["M", l3, q3], ["L", e2, h5 + z2], ["L", e2, h5], ["L", e2 + A2, h5], ["L", e2 + A2, h5 + z2], ["L", e2, h5 + z2], ["Z"]);
+          return f2;
+        };
+        A("circle");
+        A("square");
+        e = e.getRendererType();
+        e !== h4 && (e.prototype.symbols.circlepin = D3.circlepin, e.prototype.symbols.flag = D3.flag, e.prototype.symbols.squarepin = D3.squarepin);
+        return D3;
+      });
+      M2(h3, "Series/Flags/FlagsSeries.js", [
+        h3["Series/Flags/FlagsPoint.js"],
+        h3["Core/Globals.js"],
+        h3["Series/OnSeriesComposition.js"],
+        h3["Core/Renderer/RendererUtilities.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Renderer/SVG/SVGElement.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v, H2, I2) {
+        var z2 = this && this.__extends || function() {
+          var a5 = function(d3, e2) {
+            a5 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a6, d4) {
+              a6.__proto__ = d4;
+            } || function(a6, d4) {
+              for (var e3 in d4)
+                d4.hasOwnProperty(e3) && (a6[e3] = d4[e3]);
+            };
+            return a5(d3, e2);
+          };
+          return function(d3, e2) {
+            function f3() {
+              this.constructor = d3;
+            }
+            a5(d3, e2);
+            d3.prototype = e2 === null ? Object.create(e2) : (f3.prototype = e2.prototype, new f3());
+          };
+        }();
+        h4 = h4.noop;
+        var q3 = E3.distribute, l3 = v.series, f2 = v.seriesTypes.column, d2 = I2.addEvent, a4 = I2.defined;
+        E3 = I2.extend;
+        var p2 = I2.merge, k2 = I2.objectEach, F2 = I2.wrap;
+        I2 = function(e2) {
+          function h5() {
+            var a5 = e2 !== null && e2.apply(this, arguments) || this;
+            a5.data = void 0;
+            a5.options = void 0;
+            a5.points = void 0;
+            return a5;
+          }
+          z2(h5, e2);
+          h5.prototype.animate = function(a5) {
+            a5 && this.setClip();
+          };
+          h5.prototype.drawPoints = function() {
+            var d3 = this.points, e3 = this.chart, f3 = e3.renderer, h6 = e3.inverted, l4 = this.options, c3 = l4.y, t2, g2 = this.yAxis, u4 = {}, n2 = [];
+            for (t2 = d3.length; t2--; ) {
+              var b3 = d3[t2];
+              var r3 = (h6 ? b3.plotY : b3.plotX) > this.xAxis.len;
+              var v2 = b3.plotX;
+              var m2 = b3.stackIndex;
+              var w2 = b3.options.shape || l4.shape;
+              var B = b3.plotY;
+              typeof B !== "undefined" && (B = b3.plotY + c3 - (typeof m2 !== "undefined" && m2 * l4.stackDistance));
+              b3.anchorX = m2 ? void 0 : b3.plotX;
+              var z3 = m2 ? void 0 : b3.plotY;
+              var A2 = w2 !== "flag";
+              m2 = b3.graphic;
+              typeof B !== "undefined" && 0 <= v2 && !r3 ? (m2 && b3.hasNewShapeType() && (m2 = m2.destroy()), m2 || (m2 = b3.graphic = f3.label("", null, null, w2, null, null, l4.useHTML).addClass("highcharts-point").add(this.markerGroup), b3.graphic.div && (b3.graphic.div.point = b3), m2.isNew = true), m2.attr({
+                align: A2 ? "center" : "left",
+                width: l4.width,
+                height: l4.height,
+                "text-align": l4.textAlign
+              }), e3.styledMode || m2.attr(this.pointAttribs(b3)).css(p2(l4.style, b3.style)).shadow(l4.shadow), 0 < v2 && (v2 -= m2.strokeWidth() % 2), w2 = { y: B, anchorY: z3 }, l4.allowOverlapX && (w2.x = v2, w2.anchorX = b3.anchorX), m2.attr({ text: b3.options.title || l4.title || "A" })[m2.isNew ? "attr" : "animate"](w2), l4.allowOverlapX || (u4[b3.plotX] ? u4[b3.plotX].size = Math.max(u4[b3.plotX].size, m2.width) : u4[b3.plotX] = { align: A2 ? 0.5 : 0, size: m2.width, target: v2, anchorX: v2 }), b3.tooltipPos = [v2, B + g2.pos - e3.plotTop]) : m2 && (b3.graphic = m2.destroy());
+            }
+            if (!l4.allowOverlapX) {
+              var D3 = 100;
+              k2(u4, function(b4) {
+                b4.plotX = b4.anchorX;
+                n2.push(b4);
+                D3 = Math.max(b4.size, D3);
+              });
+              q3(n2, h6 ? g2.len : this.xAxis.len, D3);
+              d3.forEach(function(b4) {
+                var c4 = b4.graphic && u4[b4.plotX];
+                c4 && (b4.graphic[b4.graphic.isNew ? "attr" : "animate"]({ x: c4.pos + c4.align * c4.size, anchorX: b4.anchorX }), a4(c4.pos) ? b4.graphic.isNew = false : (b4.graphic.attr({ x: -9999, anchorX: -9999 }), b4.graphic.isNew = true));
+              });
+            }
+            l4.useHTML && F2(this.markerGroup, "on", function(b4) {
+              return H2.prototype.on.apply(b4.apply(this, [].slice.call(arguments, 1)), [].slice.call(arguments, 1));
+            });
+          };
+          h5.prototype.drawTracker = function() {
+            var a5 = this.points;
+            e2.prototype.drawTracker.call(this);
+            a5.forEach(function(e3) {
+              var f3 = e3.graphic;
+              f3 && (e3.unbindMouseOver && e3.unbindMouseOver(), e3.unbindMouseOver = d2(f3.element, "mouseover", function() {
+                0 < e3.stackIndex && !e3.raised && (e3._y = f3.y, f3.attr({ y: e3._y - 8 }), e3.raised = true);
+                a5.forEach(function(a6) {
+                  a6 !== e3 && a6.raised && a6.graphic && (a6.graphic.attr({ y: a6._y }), a6.raised = false);
+                });
+              }));
+            });
+          };
+          h5.prototype.pointAttribs = function(a5, d3) {
+            var e3 = this.options, f3 = a5 && a5.color || this.color, h6 = e3.lineColor, c3 = a5 && a5.lineWidth;
+            a5 = a5 && a5.fillColor || e3.fillColor;
+            d3 && (a5 = e3.states[d3].fillColor, h6 = e3.states[d3].lineColor, c3 = e3.states[d3].lineWidth);
+            return { fill: a5 || f3, stroke: h6 || f3, "stroke-width": c3 || e3.lineWidth || 0 };
+          };
+          h5.prototype.setClip = function() {
+            l3.prototype.setClip.apply(this, arguments);
+            this.options.clip !== false && this.sharedClipKey && this.markerGroup && this.markerGroup.clip(this.chart.sharedClips[this.sharedClipKey]);
+          };
+          h5.defaultOptions = p2(f2.defaultOptions, {
+            pointRange: 0,
+            allowOverlapX: false,
+            shape: "flag",
+            stackDistance: 12,
+            textAlign: "center",
+            tooltip: { pointFormat: "{point.text}" },
+            threshold: null,
+            y: -30,
+            fillColor: "#ffffff",
+            lineWidth: 1,
+            states: { hover: { lineColor: "#000000", fillColor: "#ccd6eb" } },
+            style: { fontSize: "11px", fontWeight: "bold" }
+          });
+          return h5;
+        }(f2);
+        A.compose(I2);
+        E3(I2.prototype, { allowDG: false, forceCrop: true, invertible: false, noSharedTooltip: true, pointClass: e, sorted: false, takeOrdinalPosition: false, trackerGroups: ["markerGroup"], buildKDTree: h4, init: l3.prototype.init, invertGroups: h4 });
+        v.registerSeriesType("flags", I2);
+        "";
+        "";
+        return I2;
+      });
+      M2(h3, "Core/Axis/ScrollbarAxis.js", [h3["Core/Utilities.js"]], function(e) {
+        var h4 = e.addEvent, A = e.defined, E3 = e.pick;
+        return function() {
+          function e2() {
+          }
+          e2.compose = function(v, D3) {
+            if (e2.composed.indexOf(v) === -1)
+              e2.composed.push(v);
+            else
+              return v;
+            var z2 = function(e3) {
+              var h5 = E3(e3.options && e3.options.min, e3.min), f2 = E3(e3.options && e3.options.max, e3.max);
+              return { axisMin: h5, axisMax: f2, scrollMin: A(e3.dataMin) ? Math.min(h5, e3.min, e3.dataMin, E3(e3.threshold, Infinity)) : h5, scrollMax: A(e3.dataMax) ? Math.max(f2, e3.max, e3.dataMax, E3(e3.threshold, -Infinity)) : f2 };
+            };
+            h4(v, "afterInit", function() {
+              var e3 = this;
+              e3.options && e3.options.scrollbar && e3.options.scrollbar.enabled && (e3.options.scrollbar.vertical = !e3.horiz, e3.options.startOnTick = e3.options.endOnTick = false, e3.scrollbar = new D3(e3.chart.renderer, e3.options.scrollbar, e3.chart), h4(e3.scrollbar, "changed", function(h5) {
+                var f2 = z2(e3), d2 = f2.axisMax, a4 = f2.scrollMin, l3 = f2.scrollMax - a4;
+                A(f2.axisMin) && A(d2) && (e3.horiz && !e3.reversed || !e3.horiz && e3.reversed ? (f2 = a4 + l3 * this.to, a4 += l3 * this.from) : (f2 = a4 + l3 * (1 - this.from), a4 += l3 * (1 - this.to)), this.shouldUpdateExtremes(h5.DOMType) ? e3.setExtremes(a4, f2, true, h5.DOMType !== "mousemove" && h5.DOMType !== "touchmove", h5) : this.setRange(this.from, this.to));
+              }));
+            });
+            h4(v, "afterRender", function() {
+              var e3 = z2(this), h5 = e3.scrollMin, f2 = e3.scrollMax;
+              e3 = this.scrollbar;
+              var d2 = this.axisTitleMargin + (this.titleOffset || 0), a4 = this.chart.scrollbarsOffsets, p2 = this.options.margin || 0;
+              e3 && (this.horiz ? (this.opposite || (a4[1] += d2), e3.position(this.left, this.top + this.height + 2 + a4[1] - (this.opposite ? p2 : 0), this.width, this.height), this.opposite || (a4[1] += p2), d2 = 1) : (this.opposite && (a4[0] += d2), e3.position(e3.options.opposite ? this.left + this.width + 2 + a4[0] - (this.opposite ? 0 : p2) : this.opposite ? 0 : p2, this.top, this.width, this.height), this.opposite && (a4[0] += p2), d2 = 0), a4[d2] += e3.size + e3.options.margin, isNaN(h5) || isNaN(f2) || !A(this.min) || !A(this.max) || this.min === this.max ? e3.setRange(0, 1) : (a4 = (this.min - h5) / (f2 - h5), h5 = (this.max - h5) / (f2 - h5), this.horiz && !this.reversed || !this.horiz && this.reversed ? e3.setRange(a4, h5) : e3.setRange(1 - h5, 1 - a4)));
+            });
+            h4(v, "afterGetOffset", function() {
+              var e3 = this.scrollbar && !this.scrollbar.options.opposite;
+              e3 = this.horiz ? 2 : e3 ? 3 : 1;
+              var h5 = this.scrollbar;
+              h5 && (this.chart.scrollbarsOffsets = [0, 0], this.chart.axisOffset[e3] += h5.size + h5.options.margin);
+            });
+            return v;
+          };
+          e2.composed = [];
+          return e2;
+        }();
+      });
+      M2(h3, "Core/ScrollbarDefaults.js", [h3["Core/Globals.js"]], function(e) {
+        return {
+          height: e.isTouchDevice ? 20 : 14,
+          barBorderRadius: 0,
+          buttonBorderRadius: 0,
+          liveRedraw: void 0,
+          margin: 10,
+          minWidth: 6,
+          opposite: true,
+          step: 0.2,
+          zIndex: 3,
+          barBackgroundColor: "#cccccc",
+          barBorderWidth: 1,
+          barBorderColor: "#cccccc",
+          buttonArrowColor: "#333333",
+          buttonBackgroundColor: "#e6e6e6",
+          buttonBorderColor: "#cccccc",
+          buttonBorderWidth: 1,
+          rifleColor: "#333333",
+          trackBackgroundColor: "#f2f2f2",
+          trackBorderColor: "#f2f2f2",
+          trackBorderWidth: 1
+        };
+      });
+      M2(h3, "Core/Scrollbar.js", [h3["Core/DefaultOptions.js"], h3["Core/Globals.js"], h3["Core/Axis/ScrollbarAxis.js"], h3["Core/ScrollbarDefaults.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v) {
+        var D3 = e.defaultOptions, I2 = v.addEvent, z2 = v.correctFloat, q3 = v.defined, l3 = v.destroyObjectProperties, f2 = v.fireEvent, d2 = v.merge, a4 = v.pick, p2 = v.removeEvent;
+        e = function() {
+          function e2(a5, d3, e3) {
+            this._events = [];
+            this.chart = void 0;
+            this.from = this.chartY = this.chartX = 0;
+            this.scrollbar = this.renderer = this.options = this.group = void 0;
+            this.scrollbarButtons = [];
+            this.scrollbarGroup = void 0;
+            this.scrollbarLeft = 0;
+            this.scrollbarRifles = void 0;
+            this.scrollbarStrokeWidth = 1;
+            this.to = this.size = this.scrollbarTop = 0;
+            this.track = void 0;
+            this.trackBorderWidth = 1;
+            this.userOptions = void 0;
+            this.y = this.x = 0;
+            this.init(a5, d3, e3);
+          }
+          e2.compose = function(a5) {
+            A.compose(a5, e2);
+          };
+          e2.swapXY = function(a5, d3) {
+            d3 && a5.forEach(function(a6) {
+              for (var d4 = a6.length, e3, f3 = 0; f3 < d4; f3 += 2)
+                e3 = a6[f3 + 1], typeof e3 === "number" && (a6[f3 + 1] = a6[f3 + 2], a6[f3 + 2] = e3);
+            });
+            return a5;
+          };
+          e2.prototype.addEvents = function() {
+            var a5 = this.options.inverted ? [1, 0] : [0, 1], d3 = this.scrollbarButtons, e3 = this.scrollbarGroup.element, f3 = this.track.element, k2 = this.mouseDownHandler.bind(this), l4 = this.mouseMoveHandler.bind(this), p3 = this.mouseUpHandler.bind(this);
+            a5 = [[d3[a5[0]].element, "click", this.buttonToMinClick.bind(this)], [d3[a5[1]].element, "click", this.buttonToMaxClick.bind(this)], [f3, "click", this.trackClick.bind(this)], [e3, "mousedown", k2], [e3.ownerDocument, "mousemove", l4], [e3.ownerDocument, "mouseup", p3]];
+            h4.hasTouch && a5.push([e3, "touchstart", k2], [e3.ownerDocument, "touchmove", l4], [e3.ownerDocument, "touchend", p3]);
+            a5.forEach(function(a6) {
+              I2.apply(null, a6);
+            });
+            this._events = a5;
+          };
+          e2.prototype.buttonToMaxClick = function(d3) {
+            var e3 = (this.to - this.from) * a4(this.options.step, 0.2);
+            this.updatePosition(this.from + e3, this.to + e3);
+            f2(this, "changed", { from: this.from, to: this.to, trigger: "scrollbar", DOMEvent: d3 });
+          };
+          e2.prototype.buttonToMinClick = function(d3) {
+            var e3 = z2(this.to - this.from) * a4(this.options.step, 0.2);
+            this.updatePosition(z2(this.from - e3), z2(this.to - e3));
+            f2(this, "changed", {
+              from: this.from,
+              to: this.to,
+              trigger: "scrollbar",
+              DOMEvent: d3
+            });
+          };
+          e2.prototype.cursorToScrollbarPosition = function(a5) {
+            var d3 = this.options;
+            d3 = d3.minWidth > this.calculatedWidth ? d3.minWidth : 0;
+            return { chartX: (a5.chartX - this.x - this.xOffset) / (this.barWidth - d3), chartY: (a5.chartY - this.y - this.yOffset) / (this.barWidth - d3) };
+          };
+          e2.prototype.destroy = function() {
+            var a5 = this, d3 = a5.chart.scroller;
+            a5.removeEvents();
+            ["track", "scrollbarRifles", "scrollbar", "scrollbarGroup", "group"].forEach(function(d4) {
+              a5[d4] && a5[d4].destroy && (a5[d4] = a5[d4].destroy());
+            });
+            d3 && a5 === d3.scrollbar && (d3.scrollbar = null, l3(d3.scrollbarButtons));
+          };
+          e2.prototype.drawScrollbarButton = function(a5) {
+            var d3 = this.renderer, f3 = this.scrollbarButtons, h5 = this.options, k2 = this.size, l4 = d3.g().add(this.group);
+            f3.push(l4);
+            l4 = d3.rect().addClass("highcharts-scrollbar-button").add(l4);
+            this.chart.styledMode || l4.attr({ stroke: h5.buttonBorderColor, "stroke-width": h5.buttonBorderWidth, fill: h5.buttonBackgroundColor });
+            l4.attr(l4.crisp({ x: -0.5, y: -0.5, width: k2 + 1, height: k2 + 1, r: h5.buttonBorderRadius }, l4.strokeWidth()));
+            l4 = d3.path(e2.swapXY([["M", k2 / 2 + (a5 ? -1 : 1), k2 / 2 - 3], ["L", k2 / 2 + (a5 ? -1 : 1), k2 / 2 + 3], ["L", k2 / 2 + (a5 ? 2 : -2), k2 / 2]], h5.vertical)).addClass("highcharts-scrollbar-arrow").add(f3[a5]);
+            this.chart.styledMode || l4.attr({ fill: h5.buttonArrowColor });
+          };
+          e2.prototype.init = function(e3, f3, h5) {
+            this.scrollbarButtons = [];
+            this.renderer = e3;
+            this.userOptions = f3;
+            this.options = d2(E3, D3.scrollbar, f3);
+            this.chart = h5;
+            this.size = a4(this.options.size, this.options.height);
+            f3.enabled && (this.render(), this.addEvents());
+          };
+          e2.prototype.mouseDownHandler = function(a5) {
+            a5 = this.chart.pointer.normalize(a5);
+            a5 = this.cursorToScrollbarPosition(a5);
+            this.chartX = a5.chartX;
+            this.chartY = a5.chartY;
+            this.initPositions = [this.from, this.to];
+            this.grabbedCenter = true;
+          };
+          e2.prototype.mouseMoveHandler = function(a5) {
+            var d3 = this.chart.pointer.normalize(a5), e3 = this.options.vertical ? "chartY" : "chartX", h5 = this.initPositions || [];
+            !this.grabbedCenter || a5.touches && a5.touches[0][e3] === 0 || (d3 = this.cursorToScrollbarPosition(d3)[e3], e3 = this[e3], e3 = d3 - e3, this.hasDragged = true, this.updatePosition(h5[0] + e3, h5[1] + e3), this.hasDragged && f2(this, "changed", { from: this.from, to: this.to, trigger: "scrollbar", DOMType: a5.type, DOMEvent: a5 }));
+          };
+          e2.prototype.mouseUpHandler = function(a5) {
+            this.hasDragged && f2(this, "changed", { from: this.from, to: this.to, trigger: "scrollbar", DOMType: a5.type, DOMEvent: a5 });
+            this.grabbedCenter = this.hasDragged = this.chartX = this.chartY = null;
+          };
+          e2.prototype.position = function(a5, d3, e3, f3) {
+            var h5 = this.options.vertical, k2 = this.rendered ? "animate" : "attr", l4 = 0;
+            this.x = a5;
+            this.y = d3 + this.trackBorderWidth;
+            this.width = e3;
+            this.xOffset = this.height = f3;
+            this.yOffset = l4;
+            h5 ? (this.width = this.yOffset = e3 = l4 = this.size, this.xOffset = d3 = 0, this.barWidth = f3 - 2 * e3, this.x = a5 += this.options.margin) : (this.height = this.xOffset = f3 = d3 = this.size, this.barWidth = e3 - 2 * f3, this.y += this.options.margin);
+            this.group[k2]({ translateX: a5, translateY: this.y });
+            this.track[k2]({ width: e3, height: f3 });
+            this.scrollbarButtons[1][k2]({ translateX: h5 ? 0 : e3 - d3, translateY: h5 ? f3 - l4 : 0 });
+          };
+          e2.prototype.removeEvents = function() {
+            this._events.forEach(function(a5) {
+              p2.apply(null, a5);
+            });
+            this._events.length = 0;
+          };
+          e2.prototype.render = function() {
+            var a5 = this.renderer, d3 = this.options, f3 = this.size, h5 = this.chart.styledMode, k2 = a5.g("scrollbar").attr({ zIndex: d3.zIndex, translateY: -99999 }).add();
+            this.group = k2;
+            this.track = a5.rect().addClass("highcharts-scrollbar-track").attr({ x: 0, r: d3.trackBorderRadius || 0, height: f3, width: f3 }).add(k2);
+            h5 || this.track.attr({ fill: d3.trackBackgroundColor, stroke: d3.trackBorderColor, "stroke-width": d3.trackBorderWidth });
+            this.trackBorderWidth = this.track.strokeWidth();
+            this.track.attr({ y: -this.trackBorderWidth % 2 / 2 });
+            this.scrollbarGroup = a5.g().add(k2);
+            this.scrollbar = a5.rect().addClass("highcharts-scrollbar-thumb").attr({ height: f3, width: f3, r: d3.barBorderRadius || 0 }).add(this.scrollbarGroup);
+            this.scrollbarRifles = a5.path(e2.swapXY([["M", -3, f3 / 4], ["L", -3, 2 * f3 / 3], ["M", 0, f3 / 4], ["L", 0, 2 * f3 / 3], ["M", 3, f3 / 4], ["L", 3, 2 * f3 / 3]], d3.vertical)).addClass("highcharts-scrollbar-rifles").add(this.scrollbarGroup);
+            h5 || (this.scrollbar.attr({ fill: d3.barBackgroundColor, stroke: d3.barBorderColor, "stroke-width": d3.barBorderWidth }), this.scrollbarRifles.attr({ stroke: d3.rifleColor, "stroke-width": 1 }));
+            this.scrollbarStrokeWidth = this.scrollbar.strokeWidth();
+            this.scrollbarGroup.translate(-this.scrollbarStrokeWidth % 2 / 2, -this.scrollbarStrokeWidth % 2 / 2);
+            this.drawScrollbarButton(0);
+            this.drawScrollbarButton(1);
+          };
+          e2.prototype.setRange = function(a5, d3) {
+            var e3 = this.options, f3 = e3.vertical, h5 = e3.minWidth, k2 = this.barWidth, l4 = !this.rendered || this.hasDragged || this.chart.navigator && this.chart.navigator.hasDragged ? "attr" : "animate";
+            if (q3(k2)) {
+              var p3 = k2 * Math.min(d3, 1);
+              a5 = Math.max(a5, 0);
+              var c3 = Math.ceil(k2 * a5);
+              this.calculatedWidth = p3 = z2(p3 - c3);
+              p3 < h5 && (c3 = (k2 - h5 + p3) * a5, p3 = h5);
+              h5 = Math.floor(c3 + this.xOffset + this.yOffset);
+              k2 = p3 / 2 - 0.5;
+              this.from = a5;
+              this.to = d3;
+              f3 ? (this.scrollbarGroup[l4]({ translateY: h5 }), this.scrollbar[l4]({ height: p3 }), this.scrollbarRifles[l4]({ translateY: k2 }), this.scrollbarTop = h5, this.scrollbarLeft = 0) : (this.scrollbarGroup[l4]({ translateX: h5 }), this.scrollbar[l4]({ width: p3 }), this.scrollbarRifles[l4]({ translateX: k2 }), this.scrollbarLeft = h5, this.scrollbarTop = 0);
+              12 >= p3 ? this.scrollbarRifles.hide() : this.scrollbarRifles.show(true);
+              e3.showFull === false && (0 >= a5 && 1 <= d3 ? this.group.hide() : this.group.show());
+              this.rendered = true;
+            }
+          };
+          e2.prototype.shouldUpdateExtremes = function(d3) {
+            return a4(this.options.liveRedraw, h4.svg && !h4.isTouchDevice && !this.chart.isBoosting) || d3 === "mouseup" || d3 === "touchend" || !q3(d3);
+          };
+          e2.prototype.trackClick = function(a5) {
+            var d3 = this.chart.pointer.normalize(a5), e3 = this.to - this.from, h5 = this.y + this.scrollbarTop, k2 = this.x + this.scrollbarLeft;
+            this.options.vertical && d3.chartY > h5 || !this.options.vertical && d3.chartX > k2 ? this.updatePosition(this.from + e3, this.to + e3) : this.updatePosition(this.from - e3, this.to - e3);
+            f2(this, "changed", { from: this.from, to: this.to, trigger: "scrollbar", DOMEvent: a5 });
+          };
+          e2.prototype.update = function(a5) {
+            this.destroy();
+            this.init(this.chart.renderer, d2(true, this.options, a5), this.chart);
+          };
+          e2.prototype.updatePosition = function(a5, d3) {
+            1 < d3 && (a5 = z2(1 - z2(d3 - a5)), d3 = 1);
+            0 > a5 && (d3 = z2(d3 - a5), a5 = 0);
+            this.from = a5;
+            this.to = d3;
+          };
+          e2.defaultOptions = E3;
+          return e2;
+        }();
+        D3.scrollbar = d2(true, e.defaultOptions, D3.scrollbar);
+        return e;
+      });
+      M2(h3, "Core/Axis/NavigatorAxis.js", [h3["Core/Globals.js"], h3["Core/Utilities.js"]], function(e, h4) {
+        var A = e.isTouchDevice, D3 = h4.addEvent, v = h4.correctFloat, H2 = h4.defined, I2 = h4.isNumber, z2 = h4.pick, q3 = function() {
+          function e2(e3) {
+            this.axis = e3;
+          }
+          e2.prototype.destroy = function() {
+            this.axis = void 0;
+          };
+          e2.prototype.toFixedRange = function(e3, d2, a4, h5) {
+            var f2 = this.axis, l3 = f2.chart;
+            l3 = l3 && l3.fixedRange;
+            var p2 = (f2.pointRange || 0) / 2;
+            e3 = z2(a4, f2.translate(e3, true, !f2.horiz));
+            d2 = z2(h5, f2.translate(d2, true, !f2.horiz));
+            f2 = l3 && (d2 - e3) / l3;
+            H2(a4) || (e3 = v(e3 + p2));
+            H2(h5) || (d2 = v(d2 - p2));
+            0.7 < f2 && 1.3 > f2 && (h5 ? e3 = d2 - l3 : d2 = e3 + l3);
+            I2(e3) && I2(d2) || (e3 = d2 = void 0);
+            return { min: e3, max: d2 };
+          };
+          return e2;
+        }();
+        return function() {
+          function e2() {
+          }
+          e2.compose = function(e3) {
+            e3.keepProps.push("navigatorAxis");
+            D3(e3, "init", function() {
+              this.navigatorAxis || (this.navigatorAxis = new q3(this));
+            });
+            D3(e3, "zoom", function(d2) {
+              var a4 = this.chart.options, e4 = a4.navigator, f2 = this.navigatorAxis, h5 = a4.chart.pinchType, l3 = a4.rangeSelector;
+              a4 = a4.chart.zoomType;
+              this.isXAxis && (e4 && e4.enabled || l3 && l3.enabled) && (a4 === "y" ? d2.zoomed = false : (!A && a4 === "xy" || A && h5 === "xy") && this.options.range && (e4 = f2.previousZoom, H2(d2.newMin) ? f2.previousZoom = [this.min, this.max] : e4 && (d2.newMin = e4[0], d2.newMax = e4[1], f2.previousZoom = void 0)));
+              typeof d2.zoomed !== "undefined" && d2.preventDefault();
+            });
+          };
+          e2.AdditionsClass = q3;
+          return e2;
+        }();
+      });
+      M2(h3, "Core/Navigator.js", [
+        h3["Core/Axis/Axis.js"],
+        h3["Core/Chart/Chart.js"],
+        h3["Core/Color/Color.js"],
+        h3["Core/Globals.js"],
+        h3["Core/Axis/NavigatorAxis.js"],
+        h3["Core/DefaultOptions.js"],
+        h3["Core/Renderer/RendererRegistry.js"],
+        h3["Core/Scrollbar.js"],
+        h3["Core/Series/Series.js"],
+        h3["Core/Series/SeriesRegistry.js"],
+        h3["Core/Utilities.js"]
+      ], function(e, h4, A, E3, v, H2, I2, z2, q3, l3, f2) {
+        A = A.parse;
+        var d2 = E3.hasTouch, a4 = E3.isTouchDevice, p2 = H2.defaultOptions, k2 = f2.addEvent, D3 = f2.clamp, B = f2.correctFloat, J2 = f2.defined, K2 = f2.destroyObjectProperties, L3 = f2.erase, y2 = f2.extend, C2 = f2.find, x3 = f2.isArray, c3 = f2.isNumber, t2 = f2.merge, g2 = f2.pick, u4 = f2.removeEvent, n2 = f2.splat, b3 = function(a5) {
+          for (var b4 = [], d3 = 1; d3 < arguments.length; d3++)
+            b4[d3 - 1] = arguments[d3];
+          b4 = [].filter.call(b4, c3);
+          if (b4.length)
+            return Math[a5].apply(0, b4);
+        };
+        H2 = typeof l3.seriesTypes.areaspline === "undefined" ? "line" : "areaspline";
+        y2(p2, { navigator: { height: 40, margin: 25, maskInside: true, handles: { width: 7, height: 15, symbols: ["navigator-handle", "navigator-handle"], enabled: true, lineWidth: 1, backgroundColor: "#f2f2f2", borderColor: "#999999" }, maskFill: A("#6685c2").setOpacity(0.3).get(), outlineColor: "#cccccc", outlineWidth: 1, series: {
+          type: H2,
+          fillOpacity: 0.05,
+          lineWidth: 1,
+          compare: null,
+          dataGrouping: { approximation: "average", enabled: true, groupPixelWidth: 2, firstAnchor: "firstPoint", anchor: "middle", lastAnchor: "lastPoint", units: [["millisecond", [1, 2, 5, 10, 20, 25, 50, 100, 200, 500]], ["second", [1, 2, 5, 10, 15, 30]], ["minute", [1, 2, 5, 10, 15, 30]], ["hour", [1, 2, 3, 4, 6, 8, 12]], ["day", [1, 2, 3, 4]], ["week", [1, 2, 3]], ["month", [1, 3, 6]], ["year", null]] },
+          dataLabels: { enabled: false, zIndex: 2 },
+          id: "highcharts-navigator-series",
+          className: "highcharts-navigator-series",
+          lineColor: null,
+          marker: { enabled: false },
+          threshold: null
+        }, xAxis: { overscroll: 0, className: "highcharts-navigator-xaxis", tickLength: 0, lineWidth: 0, gridLineColor: "#e6e6e6", gridLineWidth: 1, tickPixelInterval: 200, labels: { align: "left", style: { color: "#999999" }, x: 3, y: -4 }, crosshair: false }, yAxis: { className: "highcharts-navigator-yaxis", gridLineWidth: 0, startOnTick: false, endOnTick: false, minPadding: 0.1, maxPadding: 0.1, labels: { enabled: false }, crosshair: false, title: { text: null }, tickLength: 0, tickWidth: 0 } } });
+        I2.getRendererType().prototype.symbols["navigator-handle"] = function(a5, b4, c4, d3, e2) {
+          a5 = (e2 && e2.width || 0) / 2;
+          b4 = Math.round(a5 / 3) + 0.5;
+          e2 = e2 && e2.height || 0;
+          return [["M", -a5 - 1, 0.5], ["L", a5, 0.5], ["L", a5, e2 + 0.5], ["L", -a5 - 1, e2 + 0.5], ["L", -a5 - 1, 0.5], ["M", -b4, 4], ["L", -b4, e2 - 3], ["M", b4 - 1, 4], ["L", b4 - 1, e2 - 3]];
+        };
+        var r3 = function() {
+          function f3(a5) {
+            this.zoomedMin = this.zoomedMax = this.yAxis = this.xAxis = this.top = this.size = this.shades = this.rendered = this.range = this.outlineHeight = this.outline = this.opposite = this.navigatorSize = this.navigatorSeries = this.navigatorOptions = this.navigatorGroup = this.navigatorEnabled = this.left = this.height = this.handles = this.chart = this.baseSeries = void 0;
+            this.init(a5);
+          }
+          f3.prototype.drawHandle = function(a5, b4, c4, d3) {
+            var e2 = this.navigatorOptions.handles.height;
+            this.handles[b4][d3](c4 ? { translateX: Math.round(this.left + this.height / 2), translateY: Math.round(this.top + parseInt(a5, 10) + 0.5 - e2) } : { translateX: Math.round(this.left + parseInt(a5, 10)), translateY: Math.round(this.top + this.height / 2 - e2 / 2 - 1) });
+          };
+          f3.prototype.drawOutline = function(a5, b4, c4, d3) {
+            var e2 = this.navigatorOptions.maskInside, f4 = this.outline.strokeWidth(), g3 = f4 / 2, h5 = f4 % 2 / 2;
+            f4 = this.outlineHeight;
+            var m2 = this.scrollbarHeight || 0, k3 = this.size, l4 = this.left - m2, n3 = this.top;
+            c4 ? (l4 -= g3, c4 = n3 + b4 + h5, b4 = n3 + a5 + h5, h5 = [["M", l4 + f4, n3 - m2 - h5], ["L", l4 + f4, c4], ["L", l4, c4], ["L", l4, b4], ["L", l4 + f4, b4], ["L", l4 + f4, n3 + k3 + m2]], e2 && h5.push(["M", l4 + f4, c4 - g3], ["L", l4 + f4, b4 + g3])) : (a5 += l4 + m2 - h5, b4 += l4 + m2 - h5, n3 += g3, h5 = [["M", l4, n3], ["L", a5, n3], ["L", a5, n3 + f4], ["L", b4, n3 + f4], ["L", b4, n3], ["L", l4 + k3 + 2 * m2, n3]], e2 && h5.push(["M", a5 - g3, n3], ["L", b4 + g3, n3]));
+            this.outline[d3]({ d: h5 });
+          };
+          f3.prototype.drawMasks = function(a5, b4, c4, d3) {
+            var e2 = this.left, f4 = this.top, g3 = this.height;
+            if (c4) {
+              var h5 = [e2, e2, e2];
+              var m2 = [f4, f4 + a5, f4 + b4];
+              var k3 = [g3, g3, g3];
+              var l4 = [a5, b4 - a5, this.size - b4];
+            } else
+              h5 = [e2, e2 + a5, e2 + b4], m2 = [f4, f4, f4], k3 = [a5, b4 - a5, this.size - b4], l4 = [g3, g3, g3];
+            this.shades.forEach(function(a6, b5) {
+              a6[d3]({ x: h5[b5], y: m2[b5], width: k3[b5], height: l4[b5] });
+            });
+          };
+          f3.prototype.renderElements = function() {
+            var a5 = this, b4 = a5.navigatorOptions, c4 = b4.maskInside, d3 = a5.chart, e2 = d3.renderer, f4, g3 = { cursor: d3.inverted ? "ns-resize" : "ew-resize" };
+            a5.navigatorGroup = f4 = e2.g("navigator").attr({ zIndex: 8, visibility: "hidden" }).add();
+            [!c4, c4, !c4].forEach(function(c5, h5) {
+              a5.shades[h5] = e2.rect().addClass("highcharts-navigator-mask" + (h5 === 1 ? "-inside" : "-outside")).add(f4);
+              d3.styledMode || a5.shades[h5].attr({ fill: c5 ? b4.maskFill : "rgba(0,0,0,0)" }).css(h5 === 1 && g3);
+            });
+            a5.outline = e2.path().addClass("highcharts-navigator-outline").add(f4);
+            d3.styledMode || a5.outline.attr({ "stroke-width": b4.outlineWidth, stroke: b4.outlineColor });
+            b4.handles.enabled && [0, 1].forEach(function(c5) {
+              b4.handles.inverted = d3.inverted;
+              a5.handles[c5] = e2.symbol(b4.handles.symbols[c5], -b4.handles.width / 2 - 1, 0, b4.handles.width, b4.handles.height, b4.handles);
+              a5.handles[c5].attr({ zIndex: 7 - c5 }).addClass("highcharts-navigator-handle highcharts-navigator-handle-" + ["left", "right"][c5]).add(f4);
+              if (!d3.styledMode) {
+                var h5 = b4.handles;
+                a5.handles[c5].attr({ fill: h5.backgroundColor, stroke: h5.borderColor, "stroke-width": h5.lineWidth }).css(g3);
+              }
+            });
+          };
+          f3.prototype.update = function(a5) {
+            (this.series || []).forEach(function(a6) {
+              a6.baseSeries && delete a6.baseSeries.navigatorSeries;
+            });
+            this.destroy();
+            t2(true, this.chart.options.navigator, this.options, a5);
+            this.init(this.chart);
+          };
+          f3.prototype.render = function(a5, b4, d3, e2) {
+            var f4 = this.chart, h5 = this.scrollbarHeight, m2, k3 = this.xAxis, l4 = k3.pointRange || 0;
+            var n3 = k3.navigatorAxis.fake ? f4.xAxis[0] : k3;
+            var r4 = this.navigatorEnabled, p3, w2 = this.rendered;
+            var q4 = f4.inverted;
+            var t3 = f4.xAxis[0].minRange, u5 = f4.xAxis[0].options.maxRange;
+            if (!this.hasDragged || J2(d3)) {
+              a5 = B(a5 - l4 / 2);
+              b4 = B(b4 + l4 / 2);
+              if (!c3(a5) || !c3(b4))
+                if (w2)
+                  d3 = 0, e2 = g2(k3.width, n3.width);
+                else
+                  return;
+              this.left = g2(k3.left, f4.plotLeft + h5 + (q4 ? f4.plotWidth : 0));
+              this.size = p3 = m2 = g2(k3.len, (q4 ? f4.plotHeight : f4.plotWidth) - 2 * h5);
+              f4 = q4 ? h5 : m2 + 2 * h5;
+              d3 = g2(d3, k3.toPixels(a5, true));
+              e2 = g2(e2, k3.toPixels(b4, true));
+              c3(d3) && Math.abs(d3) !== Infinity || (d3 = 0, e2 = f4);
+              a5 = k3.toValue(d3, true);
+              b4 = k3.toValue(e2, true);
+              var x4 = Math.abs(B(b4 - a5));
+              x4 < t3 ? this.grabbedLeft ? d3 = k3.toPixels(b4 - t3 - l4, true) : this.grabbedRight && (e2 = k3.toPixels(a5 + t3 + l4, true)) : J2(u5) && B(x4 - l4) > u5 && (this.grabbedLeft ? d3 = k3.toPixels(b4 - u5 - l4, true) : this.grabbedRight && (e2 = k3.toPixels(a5 + u5 + l4, true)));
+              this.zoomedMax = D3(Math.max(d3, e2), 0, p3);
+              this.zoomedMin = D3(this.fixedWidth ? this.zoomedMax - this.fixedWidth : Math.min(d3, e2), 0, p3);
+              this.range = this.zoomedMax - this.zoomedMin;
+              p3 = Math.round(this.zoomedMax);
+              d3 = Math.round(this.zoomedMin);
+              r4 && (this.navigatorGroup.attr({ visibility: "visible" }), w2 = w2 && !this.hasDragged ? "animate" : "attr", this.drawMasks(d3, p3, q4, w2), this.drawOutline(d3, p3, q4, w2), this.navigatorOptions.handles.enabled && (this.drawHandle(d3, 0, q4, w2), this.drawHandle(p3, 1, q4, w2)));
+              this.scrollbar && (q4 ? (q4 = this.top - h5, n3 = this.left - h5 + (r4 || !n3.opposite ? 0 : (n3.titleOffset || 0) + n3.axisTitleMargin), h5 = m2 + 2 * h5) : (q4 = this.top + (r4 ? this.height : -h5), n3 = this.left - h5), this.scrollbar.position(n3, q4, f4, h5), this.scrollbar.setRange(this.zoomedMin / (m2 || 1), this.zoomedMax / (m2 || 1)));
+              this.rendered = true;
+            }
+          };
+          f3.prototype.addMouseEvents = function() {
+            var a5 = this, b4 = a5.chart, c4 = b4.container, e2 = [], f4, g3;
+            a5.mouseMoveHandler = f4 = function(b5) {
+              a5.onMouseMove(b5);
+            };
+            a5.mouseUpHandler = g3 = function(b5) {
+              a5.onMouseUp(b5);
+            };
+            e2 = a5.getPartsEvents("mousedown");
+            e2.push(k2(b4.renderTo, "mousemove", f4), k2(c4.ownerDocument, "mouseup", g3));
+            d2 && (e2.push(k2(b4.renderTo, "touchmove", f4), k2(c4.ownerDocument, "touchend", g3)), e2.concat(a5.getPartsEvents("touchstart")));
+            a5.eventsToUnbind = e2;
+            a5.series && a5.series[0] && e2.push(k2(a5.series[0].xAxis, "foundExtremes", function() {
+              b4.navigator.modifyNavigatorAxisExtremes();
+            }));
+          };
+          f3.prototype.getPartsEvents = function(a5) {
+            var b4 = this, c4 = [];
+            ["shades", "handles"].forEach(function(d3) {
+              b4[d3].forEach(function(e2, f4) {
+                c4.push(k2(e2.element, a5, function(a6) {
+                  b4[d3 + "Mousedown"](a6, f4);
+                }));
+              });
+            });
+            return c4;
+          };
+          f3.prototype.shadesMousedown = function(a5, b4) {
+            a5 = this.chart.pointer.normalize(a5);
+            var c4 = this.chart, d3 = this.xAxis, e2 = this.zoomedMin, f4 = this.left, g3 = this.size, h5 = this.range, m2 = a5.chartX;
+            c4.inverted && (m2 = a5.chartY, f4 = this.top);
+            if (b4 === 1)
+              this.grabbedCenter = m2, this.fixedWidth = h5, this.dragOffset = m2 - e2;
+            else {
+              a5 = m2 - f4 - h5 / 2;
+              if (b4 === 0)
+                a5 = Math.max(0, a5);
+              else if (b4 === 2 && a5 + h5 >= g3)
+                if (a5 = g3 - h5, this.reversedExtremes) {
+                  a5 -= h5;
+                  var k3 = this.getUnionExtremes().dataMin;
+                } else
+                  var l4 = this.getUnionExtremes().dataMax;
+              a5 !== e2 && (this.fixedWidth = h5, b4 = d3.navigatorAxis.toFixedRange(a5, a5 + h5, k3, l4), J2(b4.min) && c4.xAxis[0].setExtremes(Math.min(b4.min, b4.max), Math.max(b4.min, b4.max), true, null, { trigger: "navigator" }));
+            }
+          };
+          f3.prototype.handlesMousedown = function(a5, b4) {
+            this.chart.pointer.normalize(a5);
+            a5 = this.chart;
+            var c4 = a5.xAxis[0], d3 = this.reversedExtremes;
+            b4 === 0 ? (this.grabbedLeft = true, this.otherHandlePos = this.zoomedMax, this.fixedExtreme = d3 ? c4.min : c4.max) : (this.grabbedRight = true, this.otherHandlePos = this.zoomedMin, this.fixedExtreme = d3 ? c4.max : c4.min);
+            a5.fixedRange = null;
+          };
+          f3.prototype.onMouseMove = function(b4) {
+            var c4 = this, d3 = c4.chart, e2 = c4.left, f4 = c4.navigatorSize, h5 = c4.range, m2 = c4.dragOffset, k3 = d3.inverted;
+            b4.touches && b4.touches[0].pageX === 0 || (b4 = d3.pointer.normalize(b4), d3 = b4.chartX, k3 && (e2 = c4.top, d3 = b4.chartY), c4.grabbedLeft ? (c4.hasDragged = true, c4.render(0, 0, d3 - e2, c4.otherHandlePos)) : c4.grabbedRight ? (c4.hasDragged = true, c4.render(0, 0, c4.otherHandlePos, d3 - e2)) : c4.grabbedCenter && (c4.hasDragged = true, d3 < m2 ? d3 = m2 : d3 > f4 + m2 - h5 && (d3 = f4 + m2 - h5), c4.render(0, 0, d3 - m2, d3 - m2 + h5)), c4.hasDragged && c4.scrollbar && g2(c4.scrollbar.options.liveRedraw, E3.svg && !a4 && !this.chart.isBoosting) && (b4.DOMType = b4.type, setTimeout(function() {
+              c4.onMouseUp(b4);
+            }, 0)));
+          };
+          f3.prototype.onMouseUp = function(a5) {
+            var b4 = this.chart, d3 = this.xAxis, e2 = this.scrollbar, f4 = a5.DOMEvent || a5, g3 = b4.inverted, h5 = this.rendered && !this.hasDragged ? "animate" : "attr";
+            if (this.hasDragged && (!e2 || !e2.hasDragged) || a5.trigger === "scrollbar") {
+              e2 = this.getUnionExtremes();
+              if (this.zoomedMin === this.otherHandlePos)
+                var m2 = this.fixedExtreme;
+              else if (this.zoomedMax === this.otherHandlePos)
+                var k3 = this.fixedExtreme;
+              this.zoomedMax === this.size && (k3 = this.reversedExtremes ? e2.dataMin : e2.dataMax);
+              this.zoomedMin === 0 && (m2 = this.reversedExtremes ? e2.dataMax : e2.dataMin);
+              d3 = d3.navigatorAxis.toFixedRange(this.zoomedMin, this.zoomedMax, m2, k3);
+              J2(d3.min) && b4.xAxis[0].setExtremes(Math.min(d3.min, d3.max), Math.max(d3.min, d3.max), true, this.hasDragged ? false : null, { trigger: "navigator", triggerOp: "navigator-drag", DOMEvent: f4 });
+            }
+            a5.DOMType !== "mousemove" && a5.DOMType !== "touchmove" && (this.grabbedLeft = this.grabbedRight = this.grabbedCenter = this.fixedWidth = this.fixedExtreme = this.otherHandlePos = this.hasDragged = this.dragOffset = null);
+            this.navigatorEnabled && c3(this.zoomedMin) && c3(this.zoomedMax) && (b4 = Math.round(this.zoomedMin), a5 = Math.round(this.zoomedMax), this.shades && this.drawMasks(b4, a5, g3, h5), this.outline && this.drawOutline(b4, a5, g3, h5), this.navigatorOptions.handles.enabled && Object.keys(this.handles).length === this.handles.length && (this.drawHandle(b4, 0, g3, h5), this.drawHandle(a5, 1, g3, h5)));
+          };
+          f3.prototype.removeEvents = function() {
+            this.eventsToUnbind && (this.eventsToUnbind.forEach(function(a5) {
+              a5();
+            }), this.eventsToUnbind = void 0);
+            this.removeBaseSeriesEvents();
+          };
+          f3.prototype.removeBaseSeriesEvents = function() {
+            var a5 = this.baseSeries || [];
+            this.navigatorEnabled && a5[0] && (this.navigatorOptions.adaptToUpdatedData !== false && a5.forEach(function(a6) {
+              u4(a6, "updatedData", this.updatedDataHandler);
+            }, this), a5[0].xAxis && u4(a5[0].xAxis, "foundExtremes", this.modifyBaseAxisExtremes));
+          };
+          f3.prototype.init = function(a5) {
+            var c4 = a5.options, d3 = c4.navigator, f4 = d3.enabled, h5 = c4.scrollbar, m2 = h5.enabled;
+            c4 = f4 ? d3.height : 0;
+            var l4 = m2 ? h5.height : 0;
+            this.handles = [];
+            this.shades = [];
+            this.chart = a5;
+            this.setBaseSeries();
+            this.height = c4;
+            this.scrollbarHeight = l4;
+            this.scrollbarEnabled = m2;
+            this.navigatorEnabled = f4;
+            this.navigatorOptions = d3;
+            this.scrollbarOptions = h5;
+            this.outlineHeight = c4 + l4;
+            this.opposite = g2(d3.opposite, !(f4 || !a5.inverted));
+            var n3 = this;
+            f4 = n3.baseSeries;
+            h5 = a5.xAxis.length;
+            m2 = a5.yAxis.length;
+            var r4 = f4 && f4[0] && f4[0].xAxis || a5.xAxis[0] || { options: {} };
+            a5.isDirtyBox = true;
+            n3.navigatorEnabled ? (n3.xAxis = new e(a5, t2({ breaks: r4.options.breaks, ordinal: r4.options.ordinal }, d3.xAxis, { id: "navigator-x-axis", yAxis: "navigator-y-axis", isX: true, type: "datetime", index: h5, isInternal: true, offset: 0, keepOrdinalPadding: true, startOnTick: false, endOnTick: false, minPadding: 0, maxPadding: 0, zoomEnabled: false }, a5.inverted ? { offsets: [l4, 0, -l4, 0], width: c4 } : { offsets: [0, -l4, 0, l4], height: c4 })), n3.yAxis = new e(a5, t2(d3.yAxis, { id: "navigator-y-axis", alignTicks: false, offset: 0, index: m2, isInternal: true, reversed: g2(d3.yAxis && d3.yAxis.reversed, a5.yAxis[0] && a5.yAxis[0].reversed, false), zoomEnabled: false }, a5.inverted ? { width: c4 } : { height: c4 })), f4 || d3.series.data ? n3.updateNavigatorSeries(false) : a5.series.length === 0 && (n3.unbindRedraw = k2(a5, "beforeRedraw", function() {
+              0 < a5.series.length && !n3.series && (n3.setBaseSeries(), n3.unbindRedraw());
+            })), n3.reversedExtremes = a5.inverted && !n3.xAxis.reversed || !a5.inverted && n3.xAxis.reversed, n3.renderElements(), n3.addMouseEvents()) : (n3.xAxis = {
+              chart: a5,
+              navigatorAxis: { fake: true },
+              translate: function(c5, d4) {
+                var e2 = a5.xAxis[0], f5 = e2.getExtremes(), g3 = e2.len - 2 * l4, h6 = b3("min", e2.options.min, f5.dataMin);
+                e2 = b3("max", e2.options.max, f5.dataMax) - h6;
+                return d4 ? c5 * e2 / g3 + h6 : g3 * (c5 - h6) / e2;
+              },
+              toPixels: function(a6) {
+                return this.translate(a6);
+              },
+              toValue: function(a6) {
+                return this.translate(a6, true);
+              }
+            }, n3.xAxis.navigatorAxis.axis = n3.xAxis, n3.xAxis.navigatorAxis.toFixedRange = v.AdditionsClass.prototype.toFixedRange.bind(n3.xAxis.navigatorAxis));
+            a5.options.scrollbar.enabled && (a5.scrollbar = n3.scrollbar = new z2(a5.renderer, t2(a5.options.scrollbar, { margin: n3.navigatorEnabled ? 0 : 10, vertical: a5.inverted }), a5), k2(n3.scrollbar, "changed", function(a6) {
+              var b4 = n3.size, c5 = b4 * this.to;
+              b4 *= this.from;
+              n3.hasDragged = n3.scrollbar.hasDragged;
+              n3.render(0, 0, b4, c5);
+              this.shouldUpdateExtremes(a6.DOMType) && setTimeout(function() {
+                n3.onMouseUp(a6);
+              });
+            }));
+            n3.addBaseSeriesEvents();
+            n3.addChartEvents();
+          };
+          f3.prototype.getUnionExtremes = function(a5) {
+            var c4 = this.chart.xAxis[0], d3 = this.xAxis, e2 = d3.options, f4 = c4.options, h5;
+            a5 && c4.dataMin === null || (h5 = { dataMin: g2(e2 && e2.min, b3("min", f4.min, c4.dataMin, d3.dataMin, d3.min)), dataMax: g2(e2 && e2.max, b3("max", f4.max, c4.dataMax, d3.dataMax, d3.max)) });
+            return h5;
+          };
+          f3.prototype.setBaseSeries = function(a5, b4) {
+            var c4 = this.chart, d3 = this.baseSeries = [];
+            a5 = a5 || c4.options && c4.options.navigator.baseSeries || (c4.series.length ? C2(c4.series, function(a6) {
+              return !a6.options.isInternal;
+            }).index : 0);
+            (c4.series || []).forEach(function(b5, c5) {
+              b5.options.isInternal || !b5.options.showInNavigator && (c5 !== a5 && b5.options.id !== a5 || b5.options.showInNavigator === false) || d3.push(b5);
+            });
+            this.xAxis && !this.xAxis.navigatorAxis.fake && this.updateNavigatorSeries(true, b4);
+          };
+          f3.prototype.updateNavigatorSeries = function(a5, b4) {
+            var c4 = this, d3 = c4.chart, e2 = c4.baseSeries, f4, h5, m2 = c4.navigatorOptions.series, k3, l4 = {
+              enableMouseTracking: false,
+              index: null,
+              linkedTo: null,
+              group: "nav",
+              padXAxis: false,
+              xAxis: "navigator-x-axis",
+              yAxis: "navigator-y-axis",
+              showInLegend: false,
+              stacking: void 0,
+              isInternal: true,
+              states: { inactive: { opacity: 1 } }
+            }, r4 = c4.series = (c4.series || []).filter(function(a6) {
+              var b5 = a6.baseSeries;
+              return 0 > e2.indexOf(b5) ? (b5 && (u4(b5, "updatedData", c4.updatedDataHandler), delete b5.navigatorSeries), a6.chart && a6.destroy(), false) : true;
+            });
+            e2 && e2.length && e2.forEach(function(a6) {
+              var w2 = a6.navigatorSeries, q4 = y2({ color: a6.color, visible: a6.visible }, x3(m2) ? p2.navigator.series : m2);
+              w2 && c4.navigatorOptions.adaptToUpdatedData === false || (l4.name = "Navigator " + e2.length, f4 = a6.options || {}, k3 = f4.navigatorOptions || {}, q4.dataLabels = n2(q4.dataLabels), h5 = t2(f4, l4, q4, k3), h5.pointRange = g2(q4.pointRange, k3.pointRange, p2.plotOptions[h5.type || "line"].pointRange), q4 = k3.data || q4.data, c4.hasNavigatorData = c4.hasNavigatorData || !!q4, h5.data = q4 || f4.data && f4.data.slice(0), w2 && w2.options ? w2.update(h5, b4) : (a6.navigatorSeries = d3.initSeries(h5), a6.navigatorSeries.baseSeries = a6, r4.push(a6.navigatorSeries)));
+            });
+            if (m2.data && (!e2 || !e2.length) || x3(m2))
+              c4.hasNavigatorData = false, m2 = n2(m2), m2.forEach(function(a6, b5) {
+                l4.name = "Navigator " + (r4.length + 1);
+                h5 = t2(p2.navigator.series, { color: d3.series[b5] && !d3.series[b5].options.isInternal && d3.series[b5].color || d3.options.colors[b5] || d3.options.colors[0] }, l4, a6);
+                h5.data = a6.data;
+                h5.data && (c4.hasNavigatorData = true, r4.push(d3.initSeries(h5)));
+              });
+            a5 && this.addBaseSeriesEvents();
+          };
+          f3.prototype.addBaseSeriesEvents = function() {
+            var a5 = this, b4 = a5.baseSeries || [];
+            b4[0] && b4[0].xAxis && b4[0].eventsToUnbind.push(k2(b4[0].xAxis, "foundExtremes", this.modifyBaseAxisExtremes));
+            b4.forEach(function(b5) {
+              b5.eventsToUnbind.push(k2(b5, "show", function() {
+                this.navigatorSeries && this.navigatorSeries.setVisible(true, false);
+              }));
+              b5.eventsToUnbind.push(k2(b5, "hide", function() {
+                this.navigatorSeries && this.navigatorSeries.setVisible(false, false);
+              }));
+              this.navigatorOptions.adaptToUpdatedData !== false && b5.xAxis && b5.eventsToUnbind.push(k2(b5, "updatedData", this.updatedDataHandler));
+              b5.eventsToUnbind.push(k2(b5, "remove", function() {
+                this.navigatorSeries && (L3(a5.series, this.navigatorSeries), J2(this.navigatorSeries.options) && this.navigatorSeries.remove(false), delete this.navigatorSeries);
+              }));
+            }, this);
+          };
+          f3.prototype.getBaseSeriesMin = function(a5) {
+            return this.baseSeries.reduce(function(a6, b4) {
+              return Math.min(a6, b4.xData ? b4.xData[0] : a6);
+            }, a5);
+          };
+          f3.prototype.modifyNavigatorAxisExtremes = function() {
+            var a5 = this.xAxis, b4;
+            typeof a5.getExtremes !== "undefined" && (!(b4 = this.getUnionExtremes(true)) || b4.dataMin === a5.min && b4.dataMax === a5.max || (a5.min = b4.dataMin, a5.max = b4.dataMax));
+          };
+          f3.prototype.modifyBaseAxisExtremes = function() {
+            var a5 = this.chart.navigator, b4 = this.getExtremes(), d3 = b4.dataMin, e2 = b4.dataMax;
+            b4 = b4.max - b4.min;
+            var f4 = a5.stickToMin, h5 = a5.stickToMax, k3 = g2(this.options.overscroll, 0), l4 = a5.series && a5.series[0], n3 = !!this.setExtremes;
+            if (!this.eventArgs || this.eventArgs.trigger !== "rangeSelectorButton") {
+              if (f4) {
+                var r4 = d3;
+                var p3 = r4 + b4;
+              }
+              h5 && (p3 = e2 + k3, f4 || (r4 = Math.max(d3, p3 - b4, a5.getBaseSeriesMin(l4 && l4.xData ? l4.xData[0] : -Number.MAX_VALUE))));
+              n3 && (f4 || h5) && c3(r4) && (this.min = this.userMin = r4, this.max = this.userMax = p3);
+            }
+            a5.stickToMin = a5.stickToMax = null;
+          };
+          f3.prototype.updatedDataHandler = function() {
+            var a5 = this.chart.navigator, b4 = this.navigatorSeries;
+            a5.stickToMax = a5.reversedExtremes ? Math.round(a5.zoomedMin) === 0 : Math.round(a5.zoomedMax) >= Math.round(a5.size);
+            a5.stickToMin = a5.shouldStickToMin(this, a5);
+            b4 && !a5.hasNavigatorData && (b4.options.pointStart = this.xData[0], b4.setData(this.options.data, false, null, false));
+          };
+          f3.prototype.shouldStickToMin = function(a5, b4) {
+            b4 = b4.getBaseSeriesMin(a5.xData[0]);
+            var d3 = a5.xAxis;
+            a5 = d3.max;
+            var e2 = d3.min;
+            d3 = d3.options.range;
+            return c3(a5) && c3(e2) ? d3 && 0 < a5 - b4 ? a5 - b4 < d3 : e2 <= b4 : false;
+          };
+          f3.prototype.addChartEvents = function() {
+            this.eventsToUnbind || (this.eventsToUnbind = []);
+            this.eventsToUnbind.push(k2(this.chart, "redraw", function() {
+              var a5 = this.navigator, b4 = a5 && (a5.baseSeries && a5.baseSeries[0] && a5.baseSeries[0].xAxis || this.xAxis[0]);
+              b4 && a5.render(b4.min, b4.max);
+            }), k2(this.chart, "getMargins", function() {
+              var a5 = this.navigator, b4 = a5.opposite ? "plotTop" : "marginBottom";
+              this.inverted && (b4 = a5.opposite ? "marginRight" : "plotLeft");
+              this[b4] = (this[b4] || 0) + (a5.navigatorEnabled || !this.inverted ? a5.outlineHeight : 0) + a5.navigatorOptions.margin;
+            }));
+          };
+          f3.prototype.destroy = function() {
+            this.removeEvents();
+            this.xAxis && (L3(this.chart.xAxis, this.xAxis), L3(this.chart.axes, this.xAxis));
+            this.yAxis && (L3(this.chart.yAxis, this.yAxis), L3(this.chart.axes, this.yAxis));
+            (this.series || []).forEach(function(a5) {
+              a5.destroy && a5.destroy();
+            });
+            "series xAxis yAxis shades outline scrollbarTrack scrollbarRifles scrollbarGroup scrollbar navigatorGroup rendered".split(" ").forEach(function(a5) {
+              this[a5] && this[a5].destroy && this[a5].destroy();
+              this[a5] = null;
+            }, this);
+            [this.handles].forEach(function(a5) {
+              K2(a5);
+            }, this);
+          };
+          return f3;
+        }();
+        E3.Navigator || (E3.Navigator = r3, v.compose(e), k2(h4, "beforeShowResetZoom", function() {
+          var b4 = this.options, c4 = b4.navigator, d3 = b4.rangeSelector;
+          if ((c4 && c4.enabled || d3 && d3.enabled) && (!a4 && b4.chart.zoomType === "x" || a4 && b4.chart.pinchType === "x"))
+            return false;
+        }), k2(h4, "beforeRender", function() {
+          var a5 = this.options;
+          if (a5.navigator.enabled || a5.scrollbar.enabled)
+            this.scroller = this.navigator = new r3(this);
+        }), k2(h4, "afterSetChartSize", function() {
+          var a5 = this.legend, b4 = this.navigator;
+          if (b4) {
+            var c4 = a5 && a5.options;
+            var d3 = b4.xAxis;
+            var e2 = b4.yAxis;
+            var f3 = b4.scrollbarHeight;
+            this.inverted ? (b4.left = b4.opposite ? this.chartWidth - f3 - b4.height : this.spacing[3] + f3, b4.top = this.plotTop + f3) : (b4.left = g2(d3.left, this.plotLeft + f3), b4.top = b4.navigatorOptions.top || this.chartHeight - b4.height - f3 - this.spacing[2] - (this.rangeSelector && this.extraBottomMargin ? this.rangeSelector.getHeight() : 0) - (c4 && c4.verticalAlign === "bottom" && c4.layout !== "proximate" && c4.enabled && !c4.floating ? a5.legendHeight + g2(c4.margin, 10) : 0) - (this.titleOffset ? this.titleOffset[2] : 0));
+            d3 && e2 && (this.inverted ? d3.options.left = e2.options.left = b4.left : d3.options.top = e2.options.top = b4.top, d3.setAxisSize(), e2.setAxisSize());
+          }
+        }), k2(h4, "update", function(a5) {
+          var b4 = a5.options.navigator || {}, c4 = a5.options.scrollbar || {};
+          this.navigator || this.scroller || !b4.enabled && !c4.enabled || (t2(true, this.options.navigator, b4), t2(true, this.options.scrollbar, c4), delete a5.options.navigator, delete a5.options.scrollbar);
+        }), k2(h4, "afterUpdate", function(a5) {
+          this.navigator || this.scroller || !this.options.navigator.enabled && !this.options.scrollbar.enabled || (this.scroller = this.navigator = new r3(this), g2(a5.redraw, true) && this.redraw(a5.animation));
+        }), k2(h4, "afterAddSeries", function() {
+          this.navigator && this.navigator.setBaseSeries(null, false);
+        }), k2(q3, "afterUpdate", function() {
+          this.chart.navigator && !this.options.isInternal && this.chart.navigator.setBaseSeries(null, false);
+        }), h4.prototype.callbacks.push(function(a5) {
+          var b4 = a5.navigator;
+          b4 && a5.xAxis[0] && (a5 = a5.xAxis[0].getExtremes(), b4.render(a5.min, a5.max));
+        }));
+        E3.Navigator = r3;
+        return E3.Navigator;
+      });
+      M2(h3, "Extensions/RangeSelector.js", [h3["Core/Axis/Axis.js"], h3["Core/Chart/Chart.js"], h3["Core/Globals.js"], h3["Core/DefaultOptions.js"], h3["Core/Renderer/SVG/SVGElement.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v, H2) {
+        function D3(a5) {
+          if (a5.indexOf("%L") !== -1)
+            return "text";
+          var b3 = "aAdewbBmoyY".split("").some(function(b4) {
+            return a5.indexOf("%" + b4) !== -1;
+          }), c4 = "HkIlMS".split("").some(function(b4) {
+            return a5.indexOf("%" + b4) !== -1;
+          });
+          return b3 && c4 ? "datetime-local" : b3 ? "date" : c4 ? "time" : "text";
+        }
+        var z2 = E3.defaultOptions, q3 = H2.addEvent, l3 = H2.createElement, f2 = H2.css, d2 = H2.defined, a4 = H2.destroyObjectProperties, p2 = H2.discardElement, k2 = H2.extend, F2 = H2.find, B = H2.fireEvent, J2 = H2.isNumber, K2 = H2.merge, L3 = H2.objectEach, y2 = H2.pad, C2 = H2.pick, x3 = H2.pInt, c3 = H2.splat;
+        k2(z2, { rangeSelector: { allButtonsEnabled: false, buttons: void 0, buttonSpacing: 5, dropdown: "responsive", enabled: void 0, verticalAlign: "top", buttonTheme: {
+          width: 28,
+          height: 18,
+          padding: 2,
+          zIndex: 7
+        }, floating: false, x: 0, y: 0, height: void 0, inputBoxBorderColor: "none", inputBoxHeight: 17, inputBoxWidth: void 0, inputDateFormat: "%b %e, %Y", inputDateParser: void 0, inputEditDateFormat: "%Y-%m-%d", inputEnabled: true, inputPosition: { align: "right", x: 0, y: 0 }, inputSpacing: 5, selected: void 0, buttonPosition: { align: "left", x: 0, y: 0 }, inputStyle: { color: "#335cad", cursor: "pointer" }, labelStyle: { color: "#666666" } } });
+        k2(z2.lang, { rangeSelectorZoom: "Zoom", rangeSelectorFrom: "", rangeSelectorTo: "\u2192" });
+        var t2 = function() {
+          function g3(a5) {
+            this.buttons = void 0;
+            this.buttonOptions = g3.prototype.defaultButtons;
+            this.initialButtonGroupWidth = 0;
+            this.options = void 0;
+            this.chart = a5;
+            this.init(a5);
+          }
+          g3.prototype.clickButton = function(a5, f3) {
+            var b3 = this.chart, g4 = this.buttonOptions[a5], h5 = b3.xAxis[0], k3 = b3.scroller && b3.scroller.getUnionExtremes() || h5 || {}, l4 = k3.dataMin, n2 = k3.dataMax, r3 = h5 && Math.round(Math.min(h5.max, C2(n2, h5.max))), p3 = g4.type;
+            k3 = g4._range;
+            var t3, u5 = g4.dataGrouping;
+            if (l4 !== null && n2 !== null) {
+              b3.fixedRange = k3;
+              this.setSelected(a5);
+              u5 && (this.forcedDataGrouping = true, e.prototype.setDataGrouping.call(h5 || { chart: this.chart }, u5, false), this.frozenStates = g4.preserveDataGrouping);
+              if (p3 === "month" || p3 === "year")
+                if (h5) {
+                  p3 = { range: g4, max: r3, chart: b3, dataMin: l4, dataMax: n2 };
+                  var x4 = h5.minFromRange.call(p3);
+                  J2(p3.newMax) && (r3 = p3.newMax);
+                } else
+                  k3 = g4;
+              else if (k3)
+                x4 = Math.max(r3 - k3, l4), r3 = Math.min(x4 + k3, n2);
+              else if (p3 === "ytd")
+                if (h5)
+                  typeof n2 === "undefined" && (l4 = Number.MAX_VALUE, n2 = Number.MIN_VALUE, b3.series.forEach(function(a6) {
+                    a6 = a6.xData;
+                    l4 = Math.min(a6[0], l4);
+                    n2 = Math.max(a6[a6.length - 1], n2);
+                  }), f3 = false), r3 = this.getYTDExtremes(n2, l4, b3.time.useUTC), x4 = t3 = r3.min, r3 = r3.max;
+                else {
+                  this.deferredYTDClick = a5;
+                  return;
+                }
+              else
+                p3 === "all" && h5 && (b3.navigator && b3.navigator.baseSeries[0] && (b3.navigator.baseSeries[0].xAxis.options.range = void 0), x4 = l4, r3 = n2);
+              d2(x4) && (x4 += g4._offsetMin);
+              d2(r3) && (r3 += g4._offsetMax);
+              this.dropdown && (this.dropdown.selectedIndex = a5 + 1);
+              if (h5)
+                h5.setExtremes(x4, r3, C2(f3, true), void 0, { trigger: "rangeSelectorButton", rangeSelectorButton: g4 });
+              else {
+                var v2 = c3(b3.options.xAxis)[0];
+                var y3 = v2.range;
+                v2.range = k3;
+                var z3 = v2.min;
+                v2.min = t3;
+                q3(b3, "load", function() {
+                  v2.range = y3;
+                  v2.min = z3;
+                });
+              }
+              B(this, "afterBtnClick");
+            }
+          };
+          g3.prototype.setSelected = function(a5) {
+            this.selected = this.options.selected = a5;
+          };
+          g3.prototype.init = function(a5) {
+            var b3 = this, c4 = a5.options.rangeSelector, d3 = c4.buttons || b3.defaultButtons.slice(), e2 = c4.selected, f3 = function() {
+              var a6 = b3.minInput, c5 = b3.maxInput;
+              a6 && a6.blur && B(a6, "blur");
+              c5 && c5.blur && B(c5, "blur");
+            };
+            b3.chart = a5;
+            b3.options = c4;
+            b3.buttons = [];
+            b3.buttonOptions = d3;
+            this.eventsToUnbind = [];
+            this.eventsToUnbind.push(q3(a5.container, "mousedown", f3));
+            this.eventsToUnbind.push(q3(a5, "resize", f3));
+            d3.forEach(b3.computeButtonRange);
+            typeof e2 !== "undefined" && d3[e2] && this.clickButton(e2, false);
+            this.eventsToUnbind.push(q3(a5, "load", function() {
+              a5.xAxis && a5.xAxis[0] && q3(a5.xAxis[0], "setExtremes", function(c5) {
+                this.max - this.min !== a5.fixedRange && c5.trigger !== "rangeSelectorButton" && c5.trigger !== "updatedData" && b3.forcedDataGrouping && !b3.frozenStates && this.setDataGrouping(false, false);
+              });
+            }));
+          };
+          g3.prototype.updateButtonStates = function() {
+            var a5 = this, c4 = this.chart, d3 = this.dropdown, e2 = c4.xAxis[0], f3 = Math.round(e2.max - e2.min), g4 = !e2.hasVisibleSeries, h5 = c4.scroller && c4.scroller.getUnionExtremes() || e2, k3 = h5.dataMin, l4 = h5.dataMax;
+            c4 = a5.getYTDExtremes(l4, k3, c4.time.useUTC);
+            var n2 = c4.min, p3 = c4.max, q4 = a5.selected, t3 = J2(q4), u5 = a5.options.allButtonsEnabled, x4 = a5.buttons;
+            a5.buttonOptions.forEach(function(b3, c5) {
+              var h6 = b3._range, m2 = b3.type, r3 = b3.count || 1, w2 = x4[c5], v2 = 0, y3 = b3._offsetMax - b3._offsetMin;
+              b3 = c5 === q4;
+              var z3 = h6 > l4 - k3, A2 = h6 < e2.minRange, G2 = false, B2 = false;
+              h6 = h6 === f3;
+              (m2 === "month" || m2 === "year") && f3 + 36e5 >= 864e5 * { month: 28, year: 365 }[m2] * r3 - y3 && f3 - 36e5 <= 864e5 * { month: 31, year: 366 }[m2] * r3 + y3 ? h6 = true : m2 === "ytd" ? (h6 = p3 - n2 + y3 === f3, G2 = !b3) : m2 === "all" && (h6 = e2.max - e2.min >= l4 - k3, B2 = !b3 && t3 && h6);
+              m2 = !u5 && (z3 || A2 || B2 || g4);
+              r3 = b3 && h6 || h6 && !t3 && !G2 || b3 && a5.frozenStates;
+              m2 ? v2 = 3 : r3 && (t3 = true, v2 = 2);
+              w2.state !== v2 && (w2.setState(v2), d3 && (d3.options[c5 + 1].disabled = m2, v2 === 2 && (d3.selectedIndex = c5 + 1)), v2 === 0 && q4 === c5 && a5.setSelected());
+            });
+          };
+          g3.prototype.computeButtonRange = function(a5) {
+            var b3 = a5.type, c4 = a5.count || 1, d3 = { millisecond: 1, second: 1e3, minute: 6e4, hour: 36e5, day: 864e5, week: 6048e5 };
+            if (d3[b3])
+              a5._range = d3[b3] * c4;
+            else if (b3 === "month" || b3 === "year")
+              a5._range = 864e5 * { month: 30, year: 365 }[b3] * c4;
+            a5._offsetMin = C2(a5.offsetMin, 0);
+            a5._offsetMax = C2(a5.offsetMax, 0);
+            a5._range += a5._offsetMax - a5._offsetMin;
+          };
+          g3.prototype.getInputValue = function(a5) {
+            a5 = a5 === "min" ? this.minInput : this.maxInput;
+            var b3 = this.chart.options.rangeSelector, c4 = this.chart.time;
+            return a5 ? (a5.type === "text" && b3.inputDateParser || this.defaultInputDateParser)(a5.value, c4.useUTC, c4) : 0;
+          };
+          g3.prototype.setInputValue = function(a5, c4) {
+            var b3 = this.options, e2 = this.chart.time, f3 = a5 === "min" ? this.minInput : this.maxInput;
+            a5 = a5 === "min" ? this.minDateBox : this.maxDateBox;
+            if (f3) {
+              var g4 = f3.getAttribute("data-hc-time");
+              g4 = d2(g4) ? Number(g4) : void 0;
+              d2(c4) && (d2(g4) && f3.setAttribute("data-hc-time-previous", g4), f3.setAttribute("data-hc-time", c4), g4 = c4);
+              f3.value = e2.dateFormat(this.inputTypeFormats[f3.type] || b3.inputEditDateFormat, g4);
+              a5 && a5.attr({ text: e2.dateFormat(b3.inputDateFormat, g4) });
+            }
+          };
+          g3.prototype.setInputExtremes = function(a5, c4, d3) {
+            if (a5 = a5 === "min" ? this.minInput : this.maxInput) {
+              var b3 = this.inputTypeFormats[a5.type], e2 = this.chart.time;
+              b3 && (c4 = e2.dateFormat(b3, c4), a5.min !== c4 && (a5.min = c4), d3 = e2.dateFormat(b3, d3), a5.max !== d3 && (a5.max = d3));
+            }
+          };
+          g3.prototype.showInput = function(a5) {
+            var b3 = a5 === "min" ? this.minDateBox : this.maxDateBox;
+            if ((a5 = a5 === "min" ? this.minInput : this.maxInput) && b3 && this.inputGroup) {
+              var c4 = a5.type === "text", d3 = this.inputGroup, e2 = d3.translateX;
+              d3 = d3.translateY;
+              var g4 = this.options.inputBoxWidth;
+              f2(a5, { width: c4 ? b3.width + (g4 ? -2 : 20) + "px" : "auto", height: c4 ? b3.height - 2 + "px" : "auto", border: "2px solid silver" });
+              c4 && g4 ? f2(a5, { left: e2 + b3.x + "px", top: d3 + "px" }) : f2(a5, { left: Math.min(Math.round(b3.x + e2 - (a5.offsetWidth - b3.width) / 2), this.chart.chartWidth - a5.offsetWidth) + "px", top: d3 - (a5.offsetHeight - b3.height) / 2 + "px" });
+            }
+          };
+          g3.prototype.hideInput = function(a5) {
+            (a5 = a5 === "min" ? this.minInput : this.maxInput) && f2(a5, { top: "-9999em", border: 0, width: "1px", height: "1px" });
+          };
+          g3.prototype.defaultInputDateParser = function(a5, c4, d3) {
+            var b3 = a5.split("/").join("-").split(" ").join("T");
+            b3.indexOf("T") === -1 && (b3 += "T00:00");
+            if (c4)
+              b3 += "Z";
+            else {
+              var e2;
+              if (e2 = A.isSafari)
+                e2 = b3, e2 = !(6 < e2.length && (e2.lastIndexOf("-") === e2.length - 6 || e2.lastIndexOf("+") === e2.length - 6));
+              e2 && (e2 = new Date(b3).getTimezoneOffset() / 60, b3 += 0 >= e2 ? "+" + y2(-e2) + ":00" : "-" + y2(e2) + ":00");
+            }
+            b3 = Date.parse(b3);
+            J2(b3) || (a5 = a5.split("-"), b3 = Date.UTC(x3(a5[0]), x3(a5[1]) - 1, x3(a5[2])));
+            d3 && c4 && J2(b3) && (b3 += d3.getTimezoneOffset(b3));
+            return b3;
+          };
+          g3.prototype.drawInput = function(a5) {
+            function b3() {
+              var b4 = g4.getInputValue(a5), d4 = c4.xAxis[0], e3 = c4.scroller && c4.scroller.xAxis ? c4.scroller.xAxis : d4, f3 = e3.dataMin;
+              e3 = e3.dataMax;
+              var h6 = g4.maxInput, k3 = g4.minInput;
+              b4 !== Number(u5.getAttribute("data-hc-time-previous")) && J2(b4) && (u5.setAttribute("data-hc-time-previous", b4), q4 && h6 && J2(f3) ? b4 > Number(h6.getAttribute("data-hc-time")) ? b4 = void 0 : b4 < f3 && (b4 = f3) : k3 && J2(e3) && (b4 < Number(k3.getAttribute("data-hc-time")) ? b4 = void 0 : b4 > e3 && (b4 = e3)), typeof b4 !== "undefined" && d4.setExtremes(q4 ? b4 : d4.min, q4 ? d4.max : b4, void 0, void 0, { trigger: "rangeSelectorInput" }));
+            }
+            var c4 = this.chart, d3 = this.div, e2 = this.inputGroup, g4 = this, h5 = c4.renderer.style || {}, n2 = c4.renderer, p3 = c4.options.rangeSelector, q4 = a5 === "min", t3 = z2.lang[q4 ? "rangeSelectorFrom" : "rangeSelectorTo"] || "";
+            t3 = n2.label(t3, 0).addClass("highcharts-range-label").attr({ padding: t3 ? 2 : 0, height: t3 ? p3.inputBoxHeight : 0 }).add(e2);
+            n2 = n2.label("", 0).addClass("highcharts-range-input").attr({ padding: 2, width: p3.inputBoxWidth, height: p3.inputBoxHeight, "text-align": "center" }).on("click", function() {
+              g4.showInput(a5);
+              g4[a5 + "Input"].focus();
+            });
+            c4.styledMode || n2.attr({ stroke: p3.inputBoxBorderColor, "stroke-width": 1 });
+            n2.add(e2);
+            var u5 = l3("input", { name: a5, className: "highcharts-range-selector" }, void 0, d3);
+            u5.setAttribute("type", D3(p3.inputDateFormat || "%b %e, %Y"));
+            c4.styledMode || (t3.css(K2(h5, p3.labelStyle)), n2.css(K2({ color: "#333333" }, h5, p3.inputStyle)), f2(u5, k2({
+              position: "absolute",
+              border: 0,
+              boxShadow: "0 0 15px rgba(0,0,0,0.3)",
+              width: "1px",
+              height: "1px",
+              padding: 0,
+              textAlign: "center",
+              fontSize: h5.fontSize,
+              fontFamily: h5.fontFamily,
+              top: "-9999em"
+            }, p3.inputStyle)));
+            u5.onfocus = function() {
+              g4.showInput(a5);
+            };
+            u5.onblur = function() {
+              u5 === A.doc.activeElement && b3();
+              g4.hideInput(a5);
+              g4.setInputValue(a5);
+              u5.blur();
+            };
+            var x4 = false;
+            u5.onchange = function() {
+              x4 || (b3(), g4.hideInput(a5), u5.blur());
+            };
+            u5.onkeypress = function(a6) {
+              a6.keyCode === 13 && b3();
+            };
+            u5.onkeydown = function(a6) {
+              x4 = true;
+              a6.keyCode !== 38 && a6.keyCode !== 40 || b3();
+            };
+            u5.onkeyup = function() {
+              x4 = false;
+            };
+            return { dateBox: n2, input: u5, label: t3 };
+          };
+          g3.prototype.getPosition = function() {
+            var a5 = this.chart, c4 = a5.options.rangeSelector;
+            a5 = c4.verticalAlign === "top" ? a5.plotTop - a5.axisOffset[0] : 0;
+            return { buttonTop: a5 + c4.buttonPosition.y, inputTop: a5 + c4.inputPosition.y - 10 };
+          };
+          g3.prototype.getYTDExtremes = function(a5, c4, d3) {
+            var b3 = this.chart.time, e2 = new b3.Date(a5), f3 = b3.get("FullYear", e2);
+            d3 = d3 ? b3.Date.UTC(f3, 0, 1) : +new b3.Date(f3, 0, 1);
+            c4 = Math.max(c4, d3);
+            e2 = e2.getTime();
+            return { max: Math.min(a5 || e2, e2), min: c4 };
+          };
+          g3.prototype.render = function(a5, c4) {
+            var b3 = this.chart, e2 = b3.renderer, f3 = b3.container, g4 = b3.options, h5 = g4.rangeSelector, k3 = C2(g4.chart.style && g4.chart.style.zIndex, 0) + 1;
+            g4 = h5.inputEnabled;
+            if (h5.enabled !== false) {
+              this.rendered || (this.group = e2.g("range-selector-group").attr({ zIndex: 7 }).add(), this.div = l3("div", void 0, { position: "relative", height: 0, zIndex: k3 }), this.buttonOptions.length && this.renderButtons(), f3.parentNode && f3.parentNode.insertBefore(this.div, f3), g4 && (this.inputGroup = e2.g("input-group").add(this.group), e2 = this.drawInput("min"), this.minDateBox = e2.dateBox, this.minLabel = e2.label, this.minInput = e2.input, e2 = this.drawInput("max"), this.maxDateBox = e2.dateBox, this.maxLabel = e2.label, this.maxInput = e2.input));
+              if (g4 && (this.setInputValue("min", a5), this.setInputValue("max", c4), a5 = b3.scroller && b3.scroller.getUnionExtremes() || b3.xAxis[0] || {}, d2(a5.dataMin) && d2(a5.dataMax) && (b3 = b3.xAxis[0].minRange || 0, this.setInputExtremes("min", a5.dataMin, Math.min(a5.dataMax, this.getInputValue("max")) - b3), this.setInputExtremes("max", Math.max(a5.dataMin, this.getInputValue("min")) + b3, a5.dataMax)), this.inputGroup)) {
+                var n2 = 0;
+                [this.minLabel, this.minDateBox, this.maxLabel, this.maxDateBox].forEach(function(a6) {
+                  if (a6) {
+                    var b4 = a6.getBBox().width;
+                    b4 && (a6.attr({ x: n2 }), n2 += b4 + h5.inputSpacing);
+                  }
+                });
+              }
+              this.alignElements();
+              this.rendered = true;
+            }
+          };
+          g3.prototype.renderButtons = function() {
+            var a5 = this, c4 = this.buttons, d3 = this.options, e2 = z2.lang, f3 = this.chart.renderer, g4 = K2(d3.buttonTheme), h5 = g4 && g4.states, k3 = g4.width || 28;
+            delete g4.width;
+            delete g4.states;
+            this.buttonGroup = f3.g("range-selector-buttons").add(this.group);
+            var n2 = this.dropdown = l3("select", void 0, { position: "absolute", width: "1px", height: "1px", padding: 0, border: 0, top: "-9999em", cursor: "pointer", opacity: 1e-4 }, this.div);
+            q3(n2, "touchstart", function() {
+              n2.style.fontSize = "16px";
+            });
+            [[A.isMS ? "mouseover" : "mouseenter"], [A.isMS ? "mouseout" : "mouseleave"], ["change", "click"]].forEach(function(b3) {
+              var d4 = b3[0], e3 = b3[1];
+              q3(n2, d4, function() {
+                var b4 = c4[a5.currentButtonIndex()];
+                b4 && B(b4.element, e3 || d4);
+              });
+            });
+            this.zoomText = f3.label(e2 && e2.rangeSelectorZoom || "", 0).attr({ padding: d3.buttonTheme.padding, height: d3.buttonTheme.height, paddingLeft: 0, paddingRight: 0 }).add(this.buttonGroup);
+            this.chart.styledMode || (this.zoomText.css(d3.labelStyle), g4["stroke-width"] = C2(g4["stroke-width"], 0));
+            l3("option", { textContent: this.zoomText.textStr, disabled: true }, void 0, n2);
+            this.buttonOptions.forEach(function(b3, d4) {
+              l3("option", { textContent: b3.title || b3.text }, void 0, n2);
+              c4[d4] = f3.button(b3.text, 0, 0, function(c5) {
+                var e3 = b3.events && b3.events.click, f4;
+                e3 && (f4 = e3.call(b3, c5));
+                f4 !== false && a5.clickButton(d4);
+                a5.isActive = true;
+              }, g4, h5 && h5.hover, h5 && h5.select, h5 && h5.disabled).attr({ "text-align": "center", width: k3 }).add(a5.buttonGroup);
+              b3.title && c4[d4].attr("title", b3.title);
+            });
+          };
+          g3.prototype.alignElements = function() {
+            var a5 = this, c4 = this.buttonGroup, d3 = this.buttons, e2 = this.chart, f3 = this.group, g4 = this.inputGroup, h5 = this.options, k3 = this.zoomText, l4 = e2.options, n2 = l4.exporting && l4.exporting.enabled !== false && l4.navigation && l4.navigation.buttonOptions;
+            l4 = h5.buttonPosition;
+            var p3 = h5.inputPosition, q4 = h5.verticalAlign, t3 = function(b3, c5) {
+              return n2 && a5.titleCollision(e2) && q4 === "top" && c5.align === "right" && c5.y - b3.getBBox().height - 12 < (n2.y || 0) + (n2.height || 0) + e2.spacing[0] ? -40 : 0;
+            }, u5 = e2.plotLeft;
+            if (f3 && l4 && p3) {
+              var x4 = l4.x - e2.spacing[3];
+              if (c4) {
+                this.positionButtons();
+                if (!this.initialButtonGroupWidth) {
+                  var v2 = 0;
+                  k3 && (v2 += k3.getBBox().width + 5);
+                  d3.forEach(function(a6, b3) {
+                    v2 += a6.width;
+                    b3 !== d3.length - 1 && (v2 += h5.buttonSpacing);
+                  });
+                  this.initialButtonGroupWidth = v2;
+                }
+                u5 -= e2.spacing[3];
+                this.updateButtonStates();
+                k3 = t3(c4, l4);
+                this.alignButtonGroup(k3);
+                f3.placed = c4.placed = e2.hasLoaded;
+              }
+              c4 = 0;
+              g4 && (c4 = t3(g4, p3), p3.align === "left" ? x4 = u5 : p3.align === "right" && (x4 = -Math.max(e2.axisOffset[1], -c4)), g4.align({ y: p3.y, width: g4.getBBox().width, align: p3.align, x: p3.x + x4 - 2 }, true, e2.spacingBox), g4.placed = e2.hasLoaded);
+              this.handleCollision(c4);
+              f3.align({ verticalAlign: q4 }, true, e2.spacingBox);
+              g4 = f3.alignAttr.translateY;
+              c4 = f3.getBBox().height + 20;
+              t3 = 0;
+              q4 === "bottom" && (t3 = (t3 = e2.legend && e2.legend.options) && t3.verticalAlign === "bottom" && t3.enabled && !t3.floating ? e2.legend.legendHeight + C2(t3.margin, 10) : 0, c4 = c4 + t3 - 20, t3 = g4 - c4 - (h5.floating ? 0 : h5.y) - (e2.titleOffset ? e2.titleOffset[2] : 0) - 10);
+              if (q4 === "top")
+                h5.floating && (t3 = 0), e2.titleOffset && e2.titleOffset[0] && (t3 = e2.titleOffset[0]), t3 += e2.margin[0] - e2.spacing[0] || 0;
+              else if (q4 === "middle") {
+                if (p3.y === l4.y)
+                  t3 = g4;
+                else if (p3.y || l4.y)
+                  t3 = 0 > p3.y || 0 > l4.y ? t3 - Math.min(p3.y, l4.y) : g4 - c4;
+              }
+              f3.translate(h5.x, h5.y + Math.floor(t3));
+              l4 = this.minInput;
+              p3 = this.maxInput;
+              g4 = this.dropdown;
+              h5.inputEnabled && l4 && p3 && (l4.style.marginTop = f3.translateY + "px", p3.style.marginTop = f3.translateY + "px");
+              g4 && (g4.style.marginTop = f3.translateY + "px");
+            }
+          };
+          g3.prototype.alignButtonGroup = function(a5, c4) {
+            var b3 = this.chart, d3 = this.buttonGroup, e2 = this.options.buttonPosition, f3 = b3.plotLeft - b3.spacing[3], g4 = e2.x - b3.spacing[3];
+            e2.align === "right" ? g4 += a5 - f3 : e2.align === "center" && (g4 -= f3 / 2);
+            d3 && d3.align({ y: e2.y, width: C2(c4, this.initialButtonGroupWidth), align: e2.align, x: g4 }, true, b3.spacingBox);
+          };
+          g3.prototype.positionButtons = function() {
+            var a5 = this.buttons, c4 = this.chart, d3 = this.options, e2 = this.zoomText, f3 = c4.hasLoaded ? "animate" : "attr", g4 = d3.buttonPosition, h5 = c4.plotLeft, k3 = h5;
+            e2 && e2.visibility !== "hidden" && (e2[f3]({ x: C2(h5 + g4.x, h5) }), k3 += g4.x + e2.getBBox().width + 5);
+            this.buttonOptions.forEach(function(b3, c5) {
+              if (a5[c5].visibility !== "hidden")
+                a5[c5][f3]({ x: k3 }), k3 += a5[c5].width + d3.buttonSpacing;
+              else
+                a5[c5][f3]({ x: h5 });
+            });
+          };
+          g3.prototype.handleCollision = function(a5) {
+            var b3 = this, c4 = this.chart, d3 = this.buttonGroup, e2 = this.inputGroup, f3 = this.options, g4 = f3.buttonPosition, h5 = f3.dropdown, k3 = f3.inputPosition;
+            f3 = function() {
+              var a6 = 0;
+              b3.buttons.forEach(function(b4) {
+                b4 = b4.getBBox();
+                b4.width > a6 && (a6 = b4.width);
+              });
+              return a6;
+            };
+            var l4 = function(b4) {
+              if (e2 && d3) {
+                var c5 = e2.alignAttr.translateX + e2.alignOptions.x - a5 + e2.getBBox().x + 2, f4 = e2.alignOptions.width, h6 = d3.alignAttr.translateX + d3.getBBox().x;
+                return h6 + b4 > c5 && c5 + f4 > h6 && g4.y < k3.y + e2.getBBox().height;
+              }
+              return false;
+            }, n2 = function() {
+              e2 && d3 && e2.attr({ translateX: e2.alignAttr.translateX + (c4.axisOffset[1] >= -a5 ? 0 : -a5), translateY: e2.alignAttr.translateY + d3.getBBox().height + 10 });
+            };
+            if (d3) {
+              if (h5 === "always") {
+                this.collapseButtons(a5);
+                l4(f3()) && n2();
+                return;
+              }
+              h5 === "never" && this.expandButtons();
+            }
+            e2 && d3 ? k3.align === g4.align || l4(this.initialButtonGroupWidth + 20) ? h5 === "responsive" ? (this.collapseButtons(a5), l4(f3()) && n2()) : n2() : h5 === "responsive" && this.expandButtons() : d3 && h5 === "responsive" && (this.initialButtonGroupWidth > c4.plotWidth ? this.collapseButtons(a5) : this.expandButtons());
+          };
+          g3.prototype.collapseButtons = function(a5) {
+            var b3 = this.buttons, c4 = this.buttonOptions, d3 = this.chart, e2 = this.dropdown, f3 = this.options, g4 = this.zoomText, h5 = d3.userOptions.rangeSelector && d3.userOptions.rangeSelector.buttonTheme || {}, k3 = function(a6) {
+              return { text: a6 ? a6 + " \u25BE" : "\u25BE", width: "auto", paddingLeft: C2(f3.buttonTheme.paddingLeft, h5.padding, 8), paddingRight: C2(f3.buttonTheme.paddingRight, h5.padding, 8) };
+            };
+            g4 && g4.hide();
+            var l4 = false;
+            c4.forEach(function(a6, c5) {
+              c5 = b3[c5];
+              c5.state !== 2 ? c5.hide() : (c5.show(), c5.attr(k3(a6.text)), l4 = true);
+            });
+            l4 || (e2 && (e2.selectedIndex = 0), b3[0].show(), b3[0].attr(k3(this.zoomText && this.zoomText.textStr)));
+            c4 = f3.buttonPosition.align;
+            this.positionButtons();
+            c4 !== "right" && c4 !== "center" || this.alignButtonGroup(a5, b3[this.currentButtonIndex()].getBBox().width);
+            this.showDropdown();
+          };
+          g3.prototype.expandButtons = function() {
+            var a5 = this.buttons, c4 = this.buttonOptions, d3 = this.options, e2 = this.zoomText;
+            this.hideDropdown();
+            e2 && e2.show();
+            c4.forEach(function(b3, c5) {
+              c5 = a5[c5];
+              c5.show();
+              c5.attr({ text: b3.text, width: d3.buttonTheme.width || 28, paddingLeft: C2(d3.buttonTheme.paddingLeft, "unset"), paddingRight: C2(d3.buttonTheme.paddingRight, "unset") });
+              2 > c5.state && c5.setState(0);
+            });
+            this.positionButtons();
+          };
+          g3.prototype.currentButtonIndex = function() {
+            var a5 = this.dropdown;
+            return a5 && 0 < a5.selectedIndex ? a5.selectedIndex - 1 : 0;
+          };
+          g3.prototype.showDropdown = function() {
+            var a5 = this.buttonGroup, c4 = this.buttons, d3 = this.chart, e2 = this.dropdown;
+            if (a5 && e2) {
+              var g4 = a5.translateX;
+              a5 = a5.translateY;
+              c4 = c4[this.currentButtonIndex()].getBBox();
+              f2(e2, { left: d3.plotLeft + g4 + "px", top: a5 + 0.5 + "px", width: c4.width + "px", height: c4.height + "px" });
+              this.hasVisibleDropdown = true;
+            }
+          };
+          g3.prototype.hideDropdown = function() {
+            var a5 = this.dropdown;
+            a5 && (f2(a5, { top: "-9999em", width: "1px", height: "1px" }), this.hasVisibleDropdown = false);
+          };
+          g3.prototype.getHeight = function() {
+            var a5 = this.options, c4 = this.group, d3 = a5.y, e2 = a5.buttonPosition.y, f3 = a5.inputPosition.y;
+            if (a5.height)
+              return a5.height;
+            this.alignElements();
+            a5 = c4 ? c4.getBBox(true).height + 13 + d3 : 0;
+            c4 = Math.min(f3, e2);
+            if (0 > f3 && 0 > e2 || 0 < f3 && 0 < e2)
+              a5 += Math.abs(c4);
+            return a5;
+          };
+          g3.prototype.titleCollision = function(a5) {
+            return !(a5.options.title.text || a5.options.subtitle.text);
+          };
+          g3.prototype.update = function(a5) {
+            var b3 = this.chart;
+            K2(true, b3.options.rangeSelector, a5);
+            this.destroy();
+            this.init(b3);
+            this.render();
+          };
+          g3.prototype.destroy = function() {
+            var b3 = this, c4 = b3.minInput, d3 = b3.maxInput;
+            b3.eventsToUnbind && (b3.eventsToUnbind.forEach(function(a5) {
+              return a5();
+            }), b3.eventsToUnbind = void 0);
+            a4(b3.buttons);
+            c4 && (c4.onfocus = c4.onblur = c4.onchange = null);
+            d3 && (d3.onfocus = d3.onblur = d3.onchange = null);
+            L3(b3, function(a5, c5) {
+              a5 && c5 !== "chart" && (a5 instanceof v ? a5.destroy() : a5 instanceof window.HTMLElement && p2(a5));
+              a5 !== g3.prototype[c5] && (b3[c5] = null);
+            }, this);
+          };
+          return g3;
+        }();
+        t2.prototype.defaultButtons = [
+          { type: "month", count: 1, text: "1m", title: "View 1 month" },
+          { type: "month", count: 3, text: "3m", title: "View 3 months" },
+          { type: "month", count: 6, text: "6m", title: "View 6 months" },
+          { type: "ytd", text: "YTD", title: "View year to date" },
+          { type: "year", count: 1, text: "1y", title: "View 1 year" },
+          { type: "all", text: "All", title: "View all" }
+        ];
+        t2.prototype.inputTypeFormats = { "datetime-local": "%Y-%m-%dT%H:%M:%S", date: "%Y-%m-%d", time: "%H:%M:%S" };
+        e.prototype.minFromRange = function() {
+          var a5 = this.range, b3 = a5.type, c4 = this.max, d3 = this.chart.time, e2 = function(a6, c5) {
+            var e3 = b3 === "year" ? "FullYear" : "Month", f4 = new d3.Date(a6), g4 = d3.get(e3, f4);
+            d3.set(e3, f4, g4 + c5);
+            g4 === d3.get(e3, f4) && d3.set("Date", f4, 0);
+            return f4.getTime() - a6;
+          };
+          if (J2(a5)) {
+            var f3 = c4 - a5;
+            var g3 = a5;
+          } else
+            f3 = c4 + e2(c4, -a5.count), this.chart && (this.chart.fixedRange = c4 - f3);
+          var h5 = C2(this.dataMin, Number.MIN_VALUE);
+          J2(f3) || (f3 = h5);
+          f3 <= h5 && (f3 = h5, typeof g3 === "undefined" && (g3 = e2(f3, a5.count)), this.newMax = Math.min(f3 + g3, this.dataMax));
+          J2(c4) || (f3 = void 0);
+          return f3;
+        };
+        if (!A.RangeSelector) {
+          var g2 = [], u4 = function(a5) {
+            function b3() {
+              d3 && (c4 = a5.xAxis[0].getExtremes(), e2 = a5.legend, h5 = d3 && d3.options.verticalAlign, J2(c4.min) && d3.render(c4.min, c4.max), e2.display && h5 === "top" && h5 === e2.options.verticalAlign && (f3 = K2(a5.spacingBox), f3.y = e2.options.layout === "vertical" ? a5.plotTop : f3.y + d3.getHeight(), e2.group.placed = false, e2.align(f3)));
+            }
+            var c4, d3 = a5.rangeSelector, e2, f3, h5;
+            d3 && (F2(g2, function(b4) {
+              return b4[0] === a5;
+            }) || g2.push([a5, [q3(a5.xAxis[0], "afterSetExtremes", function(a6) {
+              d3 && d3.render(a6.min, a6.max);
+            }), q3(a5, "redraw", b3)]]), b3());
+          };
+          q3(h4, "afterGetContainer", function() {
+            this.options.rangeSelector && this.options.rangeSelector.enabled && (this.rangeSelector = new t2(this));
+          });
+          q3(h4, "beforeRender", function() {
+            var a5 = this.axes, b3 = this.rangeSelector;
+            b3 && (J2(b3.deferredYTDClick) && (b3.clickButton(b3.deferredYTDClick), delete b3.deferredYTDClick), a5.forEach(function(a6) {
+              a6.updateNames();
+              a6.setScale();
+            }), this.getAxisMargins(), b3.render(), a5 = b3.options.verticalAlign, b3.options.floating || (a5 === "bottom" ? this.extraBottomMargin = true : a5 !== "middle" && (this.extraTopMargin = true)));
+          });
+          q3(h4, "update", function(a5) {
+            var b3 = a5.options.rangeSelector;
+            a5 = this.rangeSelector;
+            var c4 = this.extraBottomMargin, e2 = this.extraTopMargin;
+            b3 && b3.enabled && !d2(a5) && this.options.rangeSelector && (this.options.rangeSelector.enabled = true, this.rangeSelector = a5 = new t2(this));
+            this.extraTopMargin = this.extraBottomMargin = false;
+            a5 && (u4(this), b3 = b3 && b3.verticalAlign || a5.options && a5.options.verticalAlign, a5.options.floating || (b3 === "bottom" ? this.extraBottomMargin = true : b3 !== "middle" && (this.extraTopMargin = true)), this.extraBottomMargin !== c4 || this.extraTopMargin !== e2) && (this.isDirtyBox = true);
+          });
+          q3(h4, "render", function() {
+            var a5 = this.rangeSelector;
+            a5 && !a5.options.floating && (a5.render(), a5 = a5.options.verticalAlign, a5 === "bottom" ? this.extraBottomMargin = true : a5 !== "middle" && (this.extraTopMargin = true));
+          });
+          q3(h4, "getMargins", function() {
+            var a5 = this.rangeSelector;
+            a5 && (a5 = a5.getHeight(), this.extraTopMargin && (this.plotTop += a5), this.extraBottomMargin && (this.marginBottom += a5));
+          });
+          h4.prototype.callbacks.push(u4);
+          q3(h4, "destroy", function() {
+            for (var a5 = 0; a5 < g2.length; a5++) {
+              var b3 = g2[a5];
+              if (b3[0] === this) {
+                b3[1].forEach(function(a6) {
+                  return a6();
+                });
+                g2.splice(a5, 1);
+                break;
+              }
+            }
+          });
+          A.RangeSelector = t2;
+        }
+        return t2;
+      });
+      M2(h3, "Core/Chart/StockChart.js", [h3["Core/Animation/AnimationUtilities.js"], h3["Core/Axis/Axis.js"], h3["Core/Chart/Chart.js"], h3["Core/FormatUtilities.js"], h3["Core/DefaultOptions.js"], h3["Core/Series/Series.js"], h3["Core/Renderer/SVG/SVGRenderer.js"], h3["Core/Utilities.js"]], function(e, h4, A, E3, v, H2, I2, z2) {
+        function q3(a5, c3) {
+          return a5 === "xAxis" ? { minPadding: 0, maxPadding: 0, overscroll: 0, ordinal: true, title: { text: null }, labels: { overflow: "justify" }, showLastLabel: true } : a5 === "yAxis" ? { labels: { y: -2 }, opposite: y2(c3.opposite, true), showLastLabel: !(!c3.categories && c3.type !== "category"), title: { text: null } } : {};
+        }
+        function l3(d3, c3) {
+          if (d3 === "xAxis") {
+            d3 = a4();
+            var e2 = { type: "datetime", categories: void 0 };
+            y2(c3.navigator && c3.navigator.enabled, d3.navigator.enabled, true) && (e2.startOnTick = false, e2.endOnTick = false);
+            return e2;
+          }
+          return {};
+        }
+        var f2 = this && this.__extends || function() {
+          var a5 = function(c3, d3) {
+            a5 = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(a6, c4) {
+              a6.__proto__ = c4;
+            } || function(a6, c4) {
+              for (var d4 in c4)
+                c4.hasOwnProperty(d4) && (a6[d4] = c4[d4]);
+            };
+            return a5(c3, d3);
+          };
+          return function(c3, d3) {
+            function e2() {
+              this.constructor = c3;
+            }
+            a5(c3, d3);
+            c3.prototype = d3 === null ? Object.create(d3) : (e2.prototype = d3.prototype, new e2());
+          };
+        }(), d2 = E3.format, a4 = v.getOptions;
+        e = z2.addEvent;
+        var p2 = z2.clamp, k2 = z2.defined, D3 = z2.extend, B = z2.find, J2 = z2.isNumber, K2 = z2.isString, L3 = z2.merge, y2 = z2.pick, C2 = z2.splat;
+        z2 = function(d3) {
+          function c3() {
+            return d3 !== null && d3.apply(this, arguments) || this;
+          }
+          f2(c3, d3);
+          c3.prototype.init = function(c4, e2) {
+            var f3 = a4(), g2 = c4.xAxis, b3 = c4.yAxis, h5 = y2(c4.navigator && c4.navigator.enabled, f3.navigator.enabled, true);
+            c4.xAxis = c4.yAxis = void 0;
+            h5 = L3({ chart: { panning: { enabled: true, type: "x" }, pinchType: "x" }, navigator: { enabled: h5 }, scrollbar: { enabled: y2(f3.scrollbar && f3.scrollbar.enabled, true) }, rangeSelector: { enabled: y2(f3.rangeSelector.enabled, true) }, title: { text: null }, tooltip: { split: y2(f3.tooltip.split, true), crosshairs: true }, legend: { enabled: false } }, c4, { isStock: true });
+            c4.xAxis = g2;
+            c4.yAxis = b3;
+            h5.xAxis = C2(c4.xAxis || {}).map(function(a5, b4) {
+              return L3(q3("xAxis", a5), f3.xAxis, f3.xAxis && f3.xAxis[b4], a5, l3("xAxis", c4));
+            });
+            h5.yAxis = C2(c4.yAxis || {}).map(function(a5, b4) {
+              return L3(q3("yAxis", a5), f3.yAxis, f3.yAxis && f3.yAxis[b4], a5);
+            });
+            d3.prototype.init.call(this, h5, e2);
+          };
+          c3.prototype.createAxis = function(a5, c4) {
+            c4.axis = L3(q3(a5, c4.axis), c4.axis, l3(a5, this.userOptions));
+            return d3.prototype.createAxis.call(this, a5, c4);
+          };
+          return c3;
+        }(A);
+        (function(a5) {
+          a5.stockChart = function(c3, d3, e2) {
+            return new a5(c3, d3, e2);
+          };
+        })(z2 || (z2 = {}));
+        e(H2, "setOptions", function(a5) {
+          var c3;
+          this.chart.options.isStock && (this.is("column") || this.is("columnrange") ? c3 = { borderWidth: 0, shadow: false } : this.is("scatter") || this.is("sma") || (c3 = { marker: { enabled: false, radius: 2 } }), c3 && (a5.plotOptions[this.type] = L3(a5.plotOptions[this.type], c3)));
+        });
+        e(h4, "autoLabelAlign", function(a5) {
+          var c3 = this.chart, d3 = this.options;
+          c3 = c3._labelPanes = c3._labelPanes || {};
+          var e2 = this.options.labels;
+          this.chart.options.isStock && this.coll === "yAxis" && (d3 = d3.top + "," + d3.height, !c3[d3] && e2.enabled && (e2.x === 15 && (e2.x = 0), typeof e2.align === "undefined" && (e2.align = "right"), c3[d3] = this, a5.align = "right", a5.preventDefault()));
+        });
+        e(h4, "destroy", function() {
+          var a5 = this.chart, c3 = this.options && this.options.top + "," + this.options.height;
+          c3 && a5._labelPanes && a5._labelPanes[c3] === this && delete a5._labelPanes[c3];
+        });
+        e(h4, "getPlotLinePath", function(a5) {
+          function c3(a6) {
+            var b4 = a6 === "xAxis" ? "yAxis" : "xAxis";
+            a6 = d3.options[b4];
+            return J2(a6) ? [f3[b4][a6]] : K2(a6) ? [f3.get(a6)] : e2.map(function(a7) {
+              return a7[b4];
+            });
+          }
+          var d3 = this, e2 = this.isLinked && !this.series ? this.linkedParent.series : this.series, f3 = d3.chart, h5 = f3.renderer, b3 = d3.left, l4 = d3.top, q4, m2, w2, v2, x3 = [], z3 = [], A2 = a5.translatedValue, C3 = a5.value, D4 = a5.force;
+          if (f3.options.isStock && a5.acrossPanes !== false && d3.coll === "xAxis" || d3.coll === "yAxis") {
+            a5.preventDefault();
+            z3 = c3(d3.coll);
+            var E4 = d3.isXAxis ? f3.yAxis : f3.xAxis;
+            E4.forEach(function(a6) {
+              if (k2(a6.options.id) ? a6.options.id.indexOf("navigator") === -1 : 1) {
+                var b4 = a6.isXAxis ? "yAxis" : "xAxis";
+                b4 = k2(a6.options[b4]) ? f3[b4][a6.options[b4]] : f3[b4][0];
+                d3 === b4 && z3.push(a6);
+              }
+            });
+            var F2 = z3.length ? [] : [d3.isXAxis ? f3.yAxis[0] : f3.xAxis[0]];
+            z3.forEach(function(a6) {
+              F2.indexOf(a6) !== -1 || B(F2, function(b4) {
+                return b4.pos === a6.pos && b4.len === a6.len;
+              }) || F2.push(a6);
+            });
+            var H3 = y2(A2, d3.translate(C3, null, null, a5.old));
+            J2(H3) && (d3.horiz ? F2.forEach(function(a6) {
+              var c4;
+              m2 = a6.pos;
+              v2 = m2 + a6.len;
+              q4 = w2 = Math.round(H3 + d3.transB);
+              D4 !== "pass" && (q4 < b3 || q4 > b3 + d3.width) && (D4 ? q4 = w2 = p2(q4, b3, b3 + d3.width) : c4 = true);
+              c4 || x3.push(["M", q4, m2], ["L", w2, v2]);
+            }) : F2.forEach(function(a6) {
+              var b4;
+              q4 = a6.pos;
+              w2 = q4 + a6.len;
+              m2 = v2 = Math.round(l4 + d3.height - H3);
+              D4 !== "pass" && (m2 < l4 || m2 > l4 + d3.height) && (D4 ? m2 = v2 = p2(m2, l4, l4 + d3.height) : b4 = true);
+              b4 || x3.push(["M", q4, m2], ["L", w2, v2]);
+            }));
+            a5.path = 0 < x3.length ? h5.crispPolyLine(x3, a5.lineWidth || 1) : null;
+          }
+        });
+        I2.prototype.crispPolyLine = function(a5, c3) {
+          for (var d3 = 0; d3 < a5.length; d3 += 2) {
+            var e2 = a5[d3], f3 = a5[d3 + 1];
+            e2[1] === f3[1] && (e2[1] = f3[1] = Math.round(e2[1]) - c3 % 2 / 2);
+            e2[2] === f3[2] && (e2[2] = f3[2] = Math.round(e2[2]) + c3 % 2 / 2);
+          }
+          return a5;
+        };
+        e(h4, "afterHideCrosshair", function() {
+          this.crossLabel && (this.crossLabel = this.crossLabel.hide());
+        });
+        e(h4, "afterDrawCrosshair", function(a5) {
+          var c3, e2;
+          if (this.crosshair && this.crosshair.label && this.crosshair.label.enabled && this.cross && J2(this.min) && J2(this.max)) {
+            var f3 = this.chart, h5 = this.logarithmic, k3 = this.crosshair.label, b3 = this.horiz, l4 = this.opposite, p3 = this.left, m2 = this.top, q4 = this.crossLabel, v2 = k3.format, x3 = "", z3 = this.options.tickPosition === "inside", A2 = this.crosshair.snap !== false, B2 = 0, C3 = a5.e || this.cross && this.cross.e;
+            a5 = a5.point;
+            var E4 = this.min, F2 = this.max;
+            h5 && (E4 = h5.lin2log(E4), F2 = h5.lin2log(F2));
+            h5 = b3 ? "center" : l4 ? this.labelAlign === "right" ? "right" : "left" : this.labelAlign === "left" ? "left" : "center";
+            q4 || (q4 = this.crossLabel = f3.renderer.label("", 0, void 0, k3.shape || "callout").addClass("highcharts-crosshair-label highcharts-color-" + (a5 ? a5.series.colorIndex : this.series[0] && this.series[0].colorIndex)).attr({ align: k3.align || h5, padding: y2(k3.padding, 8), r: y2(k3.borderRadius, 3), zIndex: 2 }).add(this.labelGroup), f3.styledMode || q4.attr({ fill: k3.backgroundColor || a5 && a5.series && a5.series.color || "#666666", stroke: k3.borderColor || "", "stroke-width": k3.borderWidth || 0 }).css(D3({ color: "#ffffff", fontWeight: "normal", fontSize: "11px", textAlign: "center" }, k3.style || {})));
+            b3 ? (h5 = A2 ? (a5.plotX || 0) + p3 : C3.chartX, m2 += l4 ? 0 : this.height) : (h5 = l4 ? this.width + p3 : 0, m2 = A2 ? (a5.plotY || 0) + m2 : C3.chartY);
+            v2 || k3.formatter || (this.dateTime && (x3 = "%b %d, %Y"), v2 = "{value" + (x3 ? ":" + x3 : "") + "}");
+            x3 = A2 ? this.isXAxis ? a5.x : a5.y : this.toValue(b3 ? C3.chartX : C3.chartY);
+            A2 = a5 ? a5.series.isPointInside(a5) : J2(x3) && x3 > E4 && x3 < F2;
+            C3 = "";
+            v2 ? C3 = d2(v2, { value: x3 }, f3) : k3.formatter && J2(x3) && (C3 = k3.formatter.call(this, x3));
+            q4.attr({ text: C3, x: h5, y: m2, visibility: A2 ? "visible" : "hidden" });
+            k3 = q4.getBBox();
+            if (J2(q4.y))
+              if (b3) {
+                if (z3 && !l4 || !z3 && l4)
+                  m2 = q4.y - k3.height;
+              } else
+                m2 = q4.y - k3.height / 2;
+            b3 ? (c3 = p3 - k3.x, e2 = p3 + this.width - k3.x) : (c3 = this.labelAlign === "left" ? p3 : 0, e2 = this.labelAlign === "right" ? p3 + this.width : f3.chartWidth);
+            q4.translateX < c3 && (B2 = c3 - q4.translateX);
+            q4.translateX + k3.width >= e2 && (B2 = -(q4.translateX + k3.width - e2));
+            q4.attr({ x: h5 + B2, y: m2, anchorX: b3 ? h5 : this.opposite ? 0 : f3.chartWidth, anchorY: b3 ? this.opposite ? f3.chartHeight : 0 : m2 + k3.height / 2 });
+          }
+        });
+        H2.prototype.forceCropping = function() {
+          var a5 = this.chart, c3 = this.options.dataGrouping;
+          return this.allowDG !== false && c3 && y2(c3.enabled, a5.options.isStock);
+        };
+        e(A, "update", function(a5) {
+          a5 = a5.options;
+          "scrollbar" in a5 && this.navigator && (L3(true, this.options.scrollbar, a5.scrollbar), this.navigator.update({}, false), delete a5.scrollbar);
+        });
+        return z2;
+      });
+      M2(h3, "masters/modules/stock.src.js", [
+        h3["Core/Globals.js"],
+        h3["Core/Axis/OrdinalAxis.js"],
+        h3["Series/DataModifyComposition.js"],
+        h3["Core/Scrollbar.js"],
+        h3["Core/Chart/StockChart.js"]
+      ], function(e, h4, A, E3, v) {
+        e.Scrollbar = E3;
+        e.StockChart = e.stockChart = v.stockChart;
+        E3.compose(e.Axis);
+        h4.compose(e.Axis, e.Series, e.Chart);
+        A.compose(e.Series, e.Axis, e.Point);
+      });
+      M2(h3, "masters/highstock.src.js", [h3["masters/highcharts.src.js"]], function(e) {
+        e.product = "Highstock";
+        return e;
+      });
+      h3["masters/highstock.src.js"]._modules = h3;
+      return h3["masters/highstock.src.js"];
+    });
+  }
+});
+
+// node_modules/highcharts-react-official/dist/highcharts-react.min.js
+var require_highcharts_react_min = __commonJS({
+  "node_modules/highcharts-react-official/dist/highcharts-react.min.js"(exports2, module2) {
+    !function(e, t2) {
+      typeof exports2 == "object" && typeof module2 == "object" ? module2.exports = t2(require_react()) : typeof define == "function" && define.amd ? define(["react"], t2) : typeof exports2 == "object" ? exports2.HighchartsReact = t2(require_react()) : e.HighchartsReact = t2(e.React);
+    }(typeof self != "undefined" ? self : exports2, function(e) {
+      return function(e2) {
+        function t2(n2) {
+          if (r3[n2])
+            return r3[n2].exports;
+          var o2 = r3[n2] = { i: n2, l: false, exports: {} };
+          return e2[n2].call(o2.exports, o2, o2.exports, t2), o2.l = true, o2.exports;
+        }
+        var r3 = {};
+        return t2.m = e2, t2.c = r3, t2.d = function(e3, r4, n2) {
+          t2.o(e3, r4) || Object.defineProperty(e3, r4, { configurable: false, enumerable: true, get: n2 });
+        }, t2.n = function(e3) {
+          var r4 = e3 && e3.__esModule ? function() {
+            return e3.default;
+          } : function() {
+            return e3;
+          };
+          return t2.d(r4, "a", r4), r4;
+        }, t2.o = function(e3, t3) {
+          return Object.prototype.hasOwnProperty.call(e3, t3);
+        }, t2.p = "", t2(t2.s = 0);
+      }([function(e2, t2, r3) {
+        "use strict";
+        function n2() {
+          return n2 = Object.assign || function(e3) {
+            for (var t3 = 1; t3 < arguments.length; t3++) {
+              var r4 = arguments[t3];
+              for (var n3 in r4)
+                Object.prototype.hasOwnProperty.call(r4, n3) && (e3[n3] = r4[n3]);
+            }
+            return e3;
+          }, n2.apply(this, arguments);
+        }
+        function o2(e3) {
+          return a4(e3) || i3(e3) || u4(e3) || c3();
+        }
+        function c3() {
+          throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+        }
+        function u4(e3, t3) {
+          if (e3) {
+            if (typeof e3 == "string")
+              return f2(e3, t3);
+            var r4 = Object.prototype.toString.call(e3).slice(8, -1);
+            return r4 === "Object" && e3.constructor && (r4 = e3.constructor.name), r4 === "Map" || r4 === "Set" ? Array.from(e3) : r4 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r4) ? f2(e3, t3) : void 0;
+          }
+        }
+        function i3(e3) {
+          if (typeof Symbol != "undefined" && e3[Symbol.iterator] != null || e3["@@iterator"] != null)
+            return Array.from(e3);
+        }
+        function a4(e3) {
+          if (Array.isArray(e3))
+            return f2(e3);
+        }
+        function f2(e3, t3) {
+          (t3 == null || t3 > e3.length) && (t3 = e3.length);
+          for (var r4 = 0, n3 = new Array(t3); r4 < t3; r4++)
+            n3[r4] = e3[r4];
+          return n3;
+        }
+        function s3(e3) {
+          "@babel/helpers - typeof";
+          return (s3 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(e4) {
+            return typeof e4;
+          } : function(e4) {
+            return e4 && typeof Symbol == "function" && e4.constructor === Symbol && e4 !== Symbol.prototype ? "symbol" : typeof e4;
+          })(e3);
+        }
+        Object.defineProperty(t2, "__esModule", { value: true });
+        var p2 = r3(1), l3 = r3.n(p2), y2 = typeof window != "undefined" ? p2.useLayoutEffect : p2.useEffect, d2 = Object(p2.forwardRef)(function(e3, t3) {
+          var r4 = Object(p2.useRef)(), c4 = Object(p2.useRef)();
+          return y2(function() {
+            function t4() {
+              var t5 = e3.highcharts || (typeof window == "undefined" ? "undefined" : s3(window)) === "object" && window.Highcharts, n4 = e3.constructorType || "chart";
+              t5 ? t5[n4] ? e3.options ? c4.current = t5[n4](r4.current, e3.options, e3.callback ? e3.callback : void 0) : console.warn('The "options" property was not passed.') : console.warn('The "constructorType" property is incorrect or some required module is not imported.') : console.warn('The "highcharts" property was not passed.');
+            }
+            if (c4.current) {
+              if (e3.allowChartUpdate !== false)
+                if (!e3.immutable && c4.current) {
+                  var n3;
+                  (n3 = c4.current).update.apply(n3, [e3.options].concat(o2(e3.updateArgs || [true, true])));
+                } else
+                  t4();
+            } else
+              t4();
+          }), y2(function() {
+            return function() {
+              c4.current && (c4.current.destroy(), c4.current = null);
+            };
+          }, []), Object(p2.useImperativeHandle)(t3, function() {
+            return { get chart() {
+              return c4.current;
+            }, container: r4 };
+          }, []), l3.a.createElement("div", n2({}, e3.containerProps, { ref: r4 }));
+        });
+        t2.default = Object(p2.memo)(d2);
+      }, function(t2, r3) {
+        t2.exports = e;
+      }]);
+    });
+  }
+});
+
 // src/dev/EventList.tsx
-var import_react41 = __toModule(require_react());
+var import_react45 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/api/client.tsx
@@ -74994,7 +86688,7 @@ var Auth = ({
 };
 
 // src/modules/EventList/index.tsx
-var import_react40 = __toModule(require_react());
+var import_react44 = __toModule(require_react());
 var import_ts_pattern8 = __toModule(require_lib());
 var import_luxon3 = __toModule(require_luxon());
 
@@ -75806,7 +87500,7 @@ function CompanyFilterButton(props) {
 }
 
 // src/modules/Transcript/index.tsx
-var import_react36 = __toModule(require_react());
+var import_react40 = __toModule(require_react());
 var import_ts_pattern6 = __toModule(require_lib());
 var import_luxon2 = __toModule(require_luxon());
 
@@ -76439,9 +88133,9 @@ function EmptyMessage(props) {
 }
 
 // src/modules/Transcript/Header/index.tsx
-var import_react35 = __toModule(require_react());
+var import_react39 = __toModule(require_react());
 var import_ts_pattern5 = __toModule(require_lib());
-var import_classnames18 = __toModule(require_classnames());
+var import_classnames22 = __toModule(require_classnames());
 var import_luxon = __toModule(require_luxon());
 
 // src/components/ExpandButton/index.tsx
@@ -76604,9 +88298,9 @@ function EventDetailsUI(props) {
     className: "flex items-center justify-start h-10 cursor-pointer group",
     onClick: toggleEventDetails
   }, /* @__PURE__ */ import_react34.default.createElement("span", {
-    className: "text-sm block font-semibold w-24 mr-1"
+    className: "text-sm block font-semibold w-28 mr-1"
   }, "Event Details"), /* @__PURE__ */ import_react34.default.createElement("span", {
-    className: "text-gray-400 text-sm flex-1 group-hover:text-gray-600"
+    className: "text-gray-400 text-sm flex-1 truncate group-hover:text-gray-600"
   }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react34.default.createElement(ExpandButton, {
     className: (0, import_classnames17.default)("ml-2", {
       "group-hover:bg-gray-200": !eventDetailsExpanded,
@@ -76656,9 +88350,7 @@ function EventDetailsUI(props) {
   }, event.audioRecordingUrl))))));
 }
 function EventDetails(props) {
-  const { event } = props;
-  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react34.useState)(false);
-  const toggleEventDetails = (0, import_react34.useCallback)(() => setEventDetailsState(!eventDetailsExpanded), [eventDetailsExpanded]);
+  const { event, eventDetailsExpanded, toggleEventDetails } = props;
   return /* @__PURE__ */ import_react34.default.createElement(EventDetailsUI, {
     event,
     eventDetailsExpanded,
@@ -76666,50 +88358,382 @@ function EventDetails(props) {
   });
 }
 
+// src/modules/Transcript/PriceChart/index.tsx
+var import_react38 = __toModule(require_react());
+var import_classnames21 = __toModule(require_classnames());
+var import_highstock = __toModule(require_highstock());
+var import_highcharts_react_official = __toModule(require_highcharts_react_min());
+
+// src/components/Svg/Pin.tsx
+var import_react35 = __toModule(require_react());
+var import_classnames18 = __toModule(require_classnames());
+function Pin({ className, alt = "Pin" }) {
+  return /* @__PURE__ */ import_react35.default.createElement("svg", {
+    className: (0, import_classnames18.default)(className, "fill-current", "Svg", "Svg__pin"),
+    width: "100%",
+    viewBox: "0 0 12 14",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react35.default.createElement("title", null, alt), /* @__PURE__ */ import_react35.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M2.4119 0C2.17181 0 1.94623 0.114944 1.80512 0.309186C1.664 0.503428 1.62441 0.753489 1.69862 0.981821L2.50223 3.45438V4.77264C1.30693 5.34871 0.673665 6.32085 0.347619 7.15684C0.164168 7.62721 0.0734836 8.06276 0.0281426 8.38053C0.00534171 8.54033 -0.00635266 8.6729 -0.012365 8.76847C-0.0153756 8.81633 -0.0169749 8.85513 -0.0178223 8.88367C-0.0182463 8.89794 -0.0184827 8.90967 -0.0186132 8.9187L-0.0187396 8.93022L-0.0187624 8.93443L-0.018767 8.93615L-0.018768 8.9369C-0.0187683 8.93726 -0.0187683 8.9376 0.731232 8.9376H-0.0187683C-0.0187683 9.35181 0.317018 9.6876 0.731232 9.6876H5.23261V13.2461C5.23261 13.6604 5.5684 13.9961 5.98261 13.9961C6.39683 13.9961 6.73261 13.6604 6.73261 13.2461V9.6876H11.2354C11.6496 9.6876 11.9854 9.35181 11.9854 8.9376H11.2354C11.9854 8.9376 11.9854 8.93726 11.9854 8.9369L11.9854 8.93615L11.9854 8.93443L11.9854 8.93022L11.9852 8.9187C11.9851 8.90967 11.9849 8.89794 11.9844 8.88367C11.9836 8.85513 11.982 8.81633 11.979 8.76847C11.973 8.6729 11.9613 8.54033 11.9385 8.38053C11.8931 8.06276 11.8025 7.62721 11.619 7.15684C11.293 6.32085 10.6597 5.34871 9.46439 4.77264V3.45438L10.268 0.981821C10.3422 0.753489 10.3026 0.503428 10.1615 0.309186C10.0204 0.114944 9.79482 0 9.55473 0H2.4119ZM10.3748 8.1876H1.59183C1.62924 8.03598 1.67901 7.87133 1.74509 7.70187C2.00593 7.03308 2.50264 6.3236 3.49485 5.9844C3.79831 5.88065 4.00223 5.59543 4.00223 5.27472V3.33556C4.00223 3.25683 3.98984 3.1786 3.9655 3.10374L3.44427 1.5H8.52235L8.00112 3.10374C7.97679 3.1786 7.96439 3.25683 7.96439 3.33556V5.27472C7.96439 5.59543 8.16831 5.88065 8.47178 5.9844C9.46399 6.3236 9.96069 7.03308 10.2215 7.70187C10.2876 7.87133 10.3374 8.03598 10.3748 8.1876Z"
+  }));
+}
+
+// src/components/Svg/PinSolid.tsx
+var import_react36 = __toModule(require_react());
+var import_classnames19 = __toModule(require_classnames());
+function PinSolid({ className, alt = "Pin" }) {
+  return /* @__PURE__ */ import_react36.default.createElement("svg", {
+    className: (0, import_classnames19.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
+    width: "100%",
+    viewBox: "0 0 12 14",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react36.default.createElement("title", null, alt), /* @__PURE__ */ import_react36.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M2.3356 1.33475L2.8351 2.74084V4.79647C0.85057 5.41718 0.214343 7.45042 0.0103719 8.69031C-0.0792778 9.23527 0.36184 9.6838 0.914125 9.6838H5.24867V13.2466C5.24867 13.6609 5.58446 13.9966 5.99867 13.9966C6.41288 13.9966 6.74867 13.6609 6.74867 13.2466V9.6838H11.0848C11.6371 9.6838 12.0783 9.23527 11.9886 8.69031C11.7846 7.45042 11.1484 5.41718 9.16387 4.79647V2.74084L9.66338 1.33475C9.89463 0.683783 9.41189 0 8.72107 0H3.2779C2.58709 0 2.10435 0.683783 2.3356 1.33475Z"
+  }));
+}
+
+// src/components/Svg/MovementArrow.tsx
+var import_react37 = __toModule(require_react());
+var import_classnames20 = __toModule(require_classnames());
+function MovementArrow({
+  className,
+  alt = "Movement Arrow"
+}) {
+  return /* @__PURE__ */ import_react37.default.createElement("svg", {
+    className: (0, import_classnames20.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
+    width: "100%",
+    viewBox: "0 0 8 10",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react37.default.createElement("title", null, alt), /* @__PURE__ */ import_react37.default.createElement("path", {
+    d: "M3.07553 1.24173C3.41575 0.416723 4.58425 0.416724 4.92447 1.24173L7.76051 8.11875C8.03196 8.77699 7.54805 9.5 6.83604 9.5H1.16396C0.451948 9.5 -0.0319641 8.77699 0.239489 8.11875L3.07553 1.24173Z"
+  }));
+}
+
+// src/modules/Transcript/PriceChart/index.tsx
+function addMin(min) {
+  return 1635266013785 + 6e4 * min;
+}
+var chartData = [
+  {
+    x: addMin(1),
+    y: 76.32
+  },
+  {
+    x: addMin(2),
+    y: 74.3
+  },
+  {
+    x: addMin(3),
+    y: 73.3
+  },
+  {
+    x: addMin(4),
+    y: 76.8
+  },
+  {
+    x: addMin(5),
+    y: 76.5
+  },
+  {
+    x: addMin(6),
+    y: 74.54
+  },
+  {
+    x: addMin(7),
+    y: 76.75
+  },
+  {
+    x: addMin(8),
+    y: 77.32
+  },
+  {
+    x: addMin(9),
+    y: 75.23
+  },
+  {
+    x: addMin(10),
+    y: 76.42
+  },
+  {
+    x: addMin(11),
+    y: 78.43
+  },
+  {
+    x: addMin(12),
+    y: 79.64
+  },
+  {
+    x: addMin(13),
+    y: 82.32
+  },
+  {
+    x: addMin(14),
+    y: 75.23
+  },
+  {
+    x: addMin(15),
+    y: 74.42
+  },
+  {
+    x: addMin(16),
+    y: 79.43
+  },
+  {
+    x: addMin(17),
+    y: 76.64
+  },
+  {
+    x: addMin(18),
+    y: 82.32
+  },
+  {
+    x: addMin(19),
+    y: 84.42
+  },
+  {
+    x: addMin(20),
+    y: 89.76
+  }
+];
+function PriceChartUI(props) {
+  const { togglePin, togglePriceChart, pinned, priceChartExpanded, currentPrice, setPrice } = props;
+  const price = parseFloat(currentPrice == null ? void 0 : currentPrice.toFixed(2));
+  const originalPrice = 75.32;
+  const absolutePriceChange = parseFloat((price - originalPrice).toFixed(2));
+  const percentPriceChange = parseFloat((absolutePriceChange * 100 / originalPrice).toFixed(2));
+  const options = {
+    chart: {
+      type: "areaspline",
+      spacing: [0, 0, 0, 0],
+      height: 60
+    },
+    credits: { enabled: false },
+    scrollbar: { enabled: false },
+    series: [
+      {
+        type: "areaspline",
+        fillColor: "rgb(135, 206, 235, 0.08)",
+        lineColor: "#0094FF",
+        shadow: {
+          color: "#C1DFF0",
+          opacity: 0.3,
+          offsetY: 2,
+          width: 5
+        },
+        threshold: null,
+        point: {
+          events: {
+            mouseOver: (e) => {
+              var _a, _b, _c, _d, _e;
+              const event = e;
+              if ((_a = event == null ? void 0 : event.target) == null ? void 0 : _a.x) {
+                const hoverPoint = event.target.x;
+                if (typeof hoverPoint === "number") {
+                  let epoch = (_b = chartData[0]) == null ? void 0 : _b.x;
+                  let idx = 0;
+                  for (let i3 = 0; i3 < chartData.length; i3++) {
+                    if (epoch && typeof epoch === "number" && Math.abs(hoverPoint - (((_c = chartData[i3]) == null ? void 0 : _c.x) || 0)) < Math.abs(hoverPoint - epoch)) {
+                      epoch = (_d = chartData[i3]) == null ? void 0 : _d.x;
+                      idx = i3;
+                    }
+                  }
+                  const newPrice = (_e = chartData[idx]) == null ? void 0 : _e.y;
+                  if (typeof newPrice === "number") {
+                    setPrice(newPrice);
+                  }
+                }
+              }
+            },
+            mouseOut: () => {
+              var _a;
+              const newPrice = (_a = chartData[(chartData || []).length - 1]) == null ? void 0 : _a.y;
+              if (typeof newPrice === "number") {
+                setPrice(newPrice);
+              }
+            }
+          }
+        },
+        data: chartData
+      }
+    ],
+    navigator: { enabled: false },
+    rangeSelector: { enabled: false },
+    tooltip: {
+      enabled: false
+    },
+    xAxis: {
+      gridLineColor: "transparent",
+      labels: {
+        enabled: true,
+        style: {
+          fontFamily: 'ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
+          fontSize: "10px",
+          letterSpacing: "1px",
+          color: "rgb(156, 163, 175)"
+        }
+      },
+      top: -6,
+      lineWidth: 0,
+      plotLines: [
+        {
+          color: "orange",
+          value: 1635267129890,
+          width: 3
+        }
+      ],
+      tickColor: "transparent",
+      title: {
+        text: null
+      },
+      type: "datetime",
+      zIndex: 1
+    },
+    yAxis: {
+      offset: -10,
+      endOnTick: true,
+      tickPixelInterval: 30,
+      showFirstLabel: false,
+      maxPadding: 0,
+      minPadding: 0.21,
+      height: 60,
+      gridLineColor: "transparent",
+      labels: {
+        format: "${value}"
+      }
+    }
+  };
+  return /* @__PURE__ */ import_react38.default.createElement("div", null, /* @__PURE__ */ import_react38.default.createElement("div", {
+    className: "flex flex-col justify-start border-t-[1px] border-gray-100"
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
+    className: "flex items-center justify-start h-10 px-3"
+  }, /* @__PURE__ */ import_react38.default.createElement("span", {
+    className: "text-sm block font-semibold w-28 mr-1 cursor-pointer",
+    onClick: togglePriceChart
+  }, "Price Reaction"), /* @__PURE__ */ import_react38.default.createElement("span", {
+    className: "flex-1"
+  }), /* @__PURE__ */ import_react38.default.createElement("span", {
+    className: (0, import_classnames21.default)("text-sm flex cursor-pointer mr-4", {
+      "text-green-500": absolutePriceChange > 0,
+      "hover:text-green-600": absolutePriceChange > 0,
+      "active:text-green-800": absolutePriceChange > 0,
+      "text-red-500": absolutePriceChange < 0,
+      "hover:text-red-600": absolutePriceChange < 0,
+      "active:text-red-800": absolutePriceChange < 0
+    }),
+    onClick: togglePriceChart
+  }, `$${price} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, /* @__PURE__ */ import_react38.default.createElement(MovementArrow, {
+    className: (0, import_classnames21.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
+  })), /* @__PURE__ */ import_react38.default.createElement("div", {
+    className: (0, import_classnames21.default)("flex mr-1 cursor-pointer", {
+      "text-blue-600": pinned,
+      "text-gray-400": !pinned,
+      "hover:text-blue-700": pinned,
+      "hover:text-gray-600": !pinned,
+      "active:text-blue-900": pinned,
+      "active:text-gray-900": !pinned
+    }),
+    onClick: (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      togglePin();
+    }
+  }, pinned ? /* @__PURE__ */ import_react38.default.createElement(PinSolid, {
+    className: "w-[12px]"
+  }) : /* @__PURE__ */ import_react38.default.createElement(Pin, {
+    className: "w-[12px]"
+  })), /* @__PURE__ */ import_react38.default.createElement(ExpandButton, {
+    className: (0, import_classnames21.default)("ml-2", {
+      "hover:bg-gray-200": !priceChartExpanded,
+      "hover:bg-blue-700": priceChartExpanded,
+      "active:bg-gray-400": !priceChartExpanded,
+      "active:bg-blue-900": priceChartExpanded
+    }),
+    onClick: togglePriceChart,
+    expanded: priceChartExpanded
+  })), priceChartExpanded && /* @__PURE__ */ import_react38.default.createElement("div", {
+    className: "overflow-hidden relative"
+  }, /* @__PURE__ */ import_react38.default.createElement(import_highcharts_react_official.default, {
+    options,
+    highcharts: import_highstock.default,
+    constructorType: "stockChart"
+  }))));
+}
+function PriceChart(props) {
+  var _a;
+  const { headerExpanded, togglePriceChart, priceChartExpanded } = props;
+  const [pinned, setPinState] = (0, import_react38.useState)(false);
+  const [currentPrice, setPrice] = (0, import_react38.useState)((_a = chartData[chartData.length - 1]) == null ? void 0 : _a.y);
+  const togglePin = (0, import_react38.useCallback)(() => setPinState(!pinned), [pinned]);
+  if (!pinned && !headerExpanded || typeof currentPrice !== "number")
+    return null;
+  return /* @__PURE__ */ import_react38.default.createElement(PriceChartUI, {
+    togglePriceChart,
+    togglePin,
+    currentPrice: currentPrice || 0,
+    setPrice,
+    pinned,
+    priceChartExpanded
+  });
+}
+
 // src/modules/Transcript/Header/index.tsx
 function HeaderUI(props) {
-  const { eventQuery, onBack, headerRef, headerExpanded, toggleHeader } = props;
-  return /* @__PURE__ */ import_react35.default.createElement("div", {
+  const {
+    eventQuery,
+    onBack,
+    headerRef,
+    headerExpanded,
+    toggleHeader,
+    eventDetailsExpanded,
+    toggleEventDetails,
+    priceChartExpanded,
+    togglePriceChart
+  } = props;
+  return /* @__PURE__ */ import_react39.default.createElement("div", {
     ref: headerRef,
-    className: (0, import_classnames18.default)("relative pt-3 rounded-b-lg transition-all", {
+    className: (0, import_classnames22.default)("bg-white relative pt-3 rounded-b-lg -mb-1 z-10 transition-all overflow-hidden", {
       "shadow-3xl": !headerExpanded,
       "shadow-xl": headerExpanded
     }, "transcript__header")
-  }, /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "flex items-center px-3"
-  }, onBack && /* @__PURE__ */ import_react35.default.createElement(Button, {
+  }, onBack && /* @__PURE__ */ import_react39.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react35.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react39.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "Events"), /* @__PURE__ */ import_react35.default.createElement(Input, {
+  }), "Events"), /* @__PURE__ */ import_react39.default.createElement(Input, {
     name: "search",
     className: "mr-3",
     placeholder: "Search Transcripts..."
-  }, /* @__PURE__ */ import_react35.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react39.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "items-center flex"
-  }, /* @__PURE__ */ import_react35.default.createElement(Gear, {
+  }, /* @__PURE__ */ import_react39.default.createElement(Gear, {
     className: "w-5"
   }))), (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => {
-    return /* @__PURE__ */ import_react35.default.createElement("div", {
+    return /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "flex flex-row p-3 items-center"
-    }, /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "animate-pulse flex-1"
-    }, /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "rounded-md bg-gray-500 h-[10px] m-1 w-7"
-    }), /* @__PURE__ */ import_react35.default.createElement("div", {
+    }), /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "rounded-md bg-gray-400 h-[10px] m-1 w-10"
-    }), /* @__PURE__ */ import_react35.default.createElement("div", {
+    }), /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    }), /* @__PURE__ */ import_react35.default.createElement("div", {
+    }), /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    })), /* @__PURE__ */ import_react35.default.createElement("div", {
+    })), /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 flex-1"
-    }))), /* @__PURE__ */ import_react35.default.createElement(ExpandButton, {
+    }))), /* @__PURE__ */ import_react39.default.createElement(ExpandButton, {
       className: "ml-2 mt-2 self-start",
       onClick: toggleHeader,
       expanded: headerExpanded
@@ -76720,28 +88744,28 @@ function HeaderUI(props) {
     const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
     const eventDate = ((_a = data.events[0]) == null ? void 0 : _a.eventDate) && import_luxon.DateTime.fromISO(data.events[0].eventDate);
     const hasEventExtras = ((_b = event == null ? void 0 : event.dialInPhoneNumbers) == null ? void 0 : _b.length) || (event == null ? void 0 : event.dialInPin) || ((_c = event == null ? void 0 : event.webcastUrls) == null ? void 0 : _c.length) || (event == null ? void 0 : event.audioRecordingUrl);
-    return /* @__PURE__ */ import_react35.default.createElement(import_react35.default.Fragment, null, /* @__PURE__ */ import_react35.default.createElement("div", {
-      className: (0, import_classnames18.default)("flex flex-row p-3 items-center", {
+    return /* @__PURE__ */ import_react39.default.createElement(import_react39.default.Fragment, null, /* @__PURE__ */ import_react39.default.createElement("div", {
+      className: (0, import_classnames22.default)("flex flex-row p-3 items-center", {
         "cursor-pointer": hasEventExtras,
         group: hasEventExtras
       }),
       onClick: hasEventExtras ? toggleHeader : void 0
-    }, /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0"
-    }, /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, /* @__PURE__ */ import_react39.default.createElement("div", {
       className: "text-xs"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react39.default.createElement("span", {
       className: "pr-1 font-semibold"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_d = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _d.shortName) && /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_d = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _d.shortName) && /* @__PURE__ */ import_react39.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
-    }, (_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, (_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react39.default.createElement("span", {
       className: "text-gray-300 group-hover:text-gray-400 capitalize"
-    }, " ", "\u2022 ", event == null ? void 0 : event.eventType), eventDate && /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, " ", "\u2022 ", event == null ? void 0 : event.eventType), eventDate && /* @__PURE__ */ import_react39.default.createElement("span", {
       className: "text-gray-300 group-hover:text-gray-400"
-    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react39.default.createElement("div", {
       className: headerExpanded ? "text-sm" : "text-sm truncate whitespace-normal line-clamp-1"
-    }, event == null ? void 0 : event.title)), hasEventExtras && /* @__PURE__ */ import_react35.default.createElement(ExpandButton, {
-      className: (0, import_classnames18.default)("ml-2 mt-2 self-start", {
+    }, event == null ? void 0 : event.title)), hasEventExtras && /* @__PURE__ */ import_react39.default.createElement(ExpandButton, {
+      className: (0, import_classnames22.default)("ml-2 mt-2 self-start", {
         "group-hover:bg-gray-200": !headerExpanded,
         "group-hover:bg-blue-700": headerExpanded,
         "group-active:bg-gray-400": !headerExpanded,
@@ -76749,77 +88773,101 @@ function HeaderUI(props) {
       }),
       onClick: toggleHeader,
       expanded: headerExpanded
-    })), headerExpanded && event && /* @__PURE__ */ import_react35.default.createElement(EventDetails, {
-      event
+    })), headerExpanded && event && /* @__PURE__ */ import_react39.default.createElement(EventDetails, {
+      event,
+      eventDetailsExpanded,
+      toggleEventDetails
+    }), /* @__PURE__ */ import_react39.default.createElement(PriceChart, {
+      headerExpanded,
+      priceChartExpanded,
+      togglePriceChart
     }));
   }).otherwise(() => null));
 }
 function Header(props) {
   const { eventQuery, onBack } = props;
-  const [headerExpanded, setHeaderState] = (0, import_react35.useState)(false);
-  const toggleHeader = (0, import_react35.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
-  const headerRef = (0, import_react35.useRef)(null);
-  useOutsideClickHandler([headerRef], (0, import_react35.useCallback)(() => {
+  const [headerExpanded, setHeaderState] = (0, import_react39.useState)(false);
+  const [priceChartExpanded, setPriceChartState] = (0, import_react39.useState)(false);
+  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react39.useState)(false);
+  const toggleHeader = (0, import_react39.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
+  const toggleEventDetails = (0, import_react39.useCallback)(() => {
+    setEventDetailsState(!eventDetailsExpanded);
+    if (priceChartExpanded && !eventDetailsExpanded) {
+      setPriceChartState(false);
+    }
+  }, [eventDetailsExpanded, priceChartExpanded]);
+  const togglePriceChart = (0, import_react39.useCallback)(() => {
+    setPriceChartState(!priceChartExpanded);
+    if (eventDetailsExpanded && !priceChartExpanded) {
+      setEventDetailsState(false);
+    }
+  }, [priceChartExpanded, eventDetailsExpanded]);
+  const headerRef = (0, import_react39.useRef)(null);
+  useOutsideClickHandler([headerRef], (0, import_react39.useCallback)(() => {
     if (headerExpanded) {
       toggleHeader();
     }
   }, [headerExpanded]));
-  return /* @__PURE__ */ import_react35.default.createElement(HeaderUI, {
+  return /* @__PURE__ */ import_react39.default.createElement(HeaderUI, {
     eventQuery,
     onBack,
     headerRef,
     headerExpanded,
-    toggleHeader
+    toggleHeader,
+    eventDetailsExpanded,
+    toggleEventDetails,
+    togglePriceChart,
+    priceChartExpanded
   });
 }
 
 // src/modules/Transcript/index.tsx
 var TranscriptUI = (props) => {
   const { currentParagraph, currentParagraphRef, eventQuery, onBack, onClickTranscript, paragraphs, scrollRef } = props;
-  return /* @__PURE__ */ import_react36.default.createElement("div", {
+  return /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "h-full flex flex-col transcript"
-  }, /* @__PURE__ */ import_react36.default.createElement(Header, {
+  }, /* @__PURE__ */ import_react40.default.createElement(Header, {
     eventQuery,
     onBack
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "overflow-y-scroll flex-1 bg-gray-50",
     ref: scrollRef
-  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react40.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
   })))).with({ status: "empty" }, ({ data }) => {
-    return data.events[0] && /* @__PURE__ */ import_react36.default.createElement(EmptyMessage, {
+    return data.events[0] && /* @__PURE__ */ import_react40.default.createElement(EmptyMessage, {
       event: data.events[0]
     });
   }).with({ status: "success" }, () => {
     return paragraphs.map((paragraph) => {
       const { id, sentences, timestamp } = paragraph;
-      return /* @__PURE__ */ import_react36.default.createElement("div", {
+      return /* @__PURE__ */ import_react40.default.createElement("div", {
         key: id,
         className: "relative p-3 pb-4",
         onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
         ref: id === currentParagraph ? currentParagraphRef : void 0
-      }, timestamp && /* @__PURE__ */ import_react36.default.createElement("div", {
+      }, timestamp && /* @__PURE__ */ import_react40.default.createElement("div", {
         className: "pb-2 font-semibold text-sm"
-      }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react36.default.createElement("div", {
+      }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react40.default.createElement("div", {
         className: "text-sm"
-      }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react36.default.createElement("div", {
+      }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react40.default.createElement("div", {
         className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
       }));
     });
   }).otherwise(() => null)), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
     const event = events[0];
-    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react36.default.createElement(Playbar, {
+    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react40.default.createElement(Playbar, {
       id: event == null ? void 0 : event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl || "",
       offset: ((event == null ? void 0 : event.audioRecordingOffsetMs) || 0) / 1e3
@@ -76855,8 +88903,8 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   });
   useInterval(() => latestParagraphsQuery.refetch(), ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? 2e3 : null);
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react36.useState)(new Map());
-  (0, import_react36.useEffect)(() => {
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react40.useState)(new Map());
+  (0, import_react40.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c2;
@@ -76868,7 +88916,7 @@ function useLatestTranscripts(eventId, eventQuery) {
       });
     }
   }, [latestParagraphsQuery.state.data]);
-  return (0, import_react36.useMemo)(() => {
+  return (0, import_react40.useMemo)(() => {
     var _a2, _b2, _c2, _d2, _e;
     const originalParagraphs = new Map((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).map((p2) => [p2.id, p2]));
     const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
@@ -76876,9 +88924,9 @@ function useLatestTranscripts(eventId, eventQuery) {
   }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
 }
 function useAudioSync(paragraphs, eventQuery, audioPlayer) {
-  const [currentParagraph, setCurrentParagraph] = (0, import_react36.useState)(null);
+  const [currentParagraph, setCurrentParagraph] = (0, import_react40.useState)(null);
   const [scrollRef, currentParagraphRef] = useAutoScroll();
-  (0, import_react36.useEffect)(() => {
+  (0, import_react40.useEffect)(() => {
     var _a, _b;
     let paragraph = [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
     if (!paragraph) {
@@ -76969,7 +89017,7 @@ var Transcript = (props) => {
   const paragraphs = useLatestTranscripts(eventId, eventQuery);
   const [currentParagraph, scrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
   useAutoTrack("View", "Event", { eventId }, [eventId]);
-  return /* @__PURE__ */ import_react36.default.createElement(TranscriptUI, {
+  return /* @__PURE__ */ import_react40.default.createElement(TranscriptUI, {
     eventQuery,
     currentParagraph,
     currentParagraphRef,
@@ -76981,17 +89029,17 @@ var Transcript = (props) => {
 };
 
 // src/components/Tabs/index.tsx
-var import_react37 = __toModule(require_react());
-var import_classnames19 = __toModule(require_classnames());
+var import_react41 = __toModule(require_react());
+var import_classnames23 = __toModule(require_classnames());
 var import_ts_pattern7 = __toModule(require_lib());
 var Tabs = (props) => {
   const { onChange, options = [], value, kind = "button", className = "" } = props;
-  const getClasses = (val, opStyles) => (0, import_ts_pattern7.match)(kind).with("button", () => (0, import_classnames19.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val, opStyles) => (0, import_ts_pattern7.match)(kind).with("button", () => (0, import_classnames23.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
     "tab__option--selected": val === value
-  }, opStyles)).with("line", () => (0, import_classnames19.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
+  }, opStyles)).with("line", () => (0, import_classnames23.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
     "cursor-pointer": val !== value,
     "text-gray-400": val !== value,
     "text-black": val === value,
@@ -77001,14 +89049,14 @@ var Tabs = (props) => {
     tab__option: true,
     "tab__option--selected": val === value
   }, opStyles)).exhaustive();
-  return /* @__PURE__ */ import_react37.default.createElement("div", {
+  return /* @__PURE__ */ import_react41.default.createElement("div", {
     className: `flex tab relative ${className}`
-  }, options.map(({ value: opVal, label, className: opStyles = "" }) => /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, options.map(({ value: opVal, label, className: opStyles = "" }) => /* @__PURE__ */ import_react41.default.createElement("div", {
     key: `tab-option-${opVal}`,
     className: getClasses(opVal, opStyles),
     onClick: (event) => onChange && onChange(event, { value: opVal })
-  }, label, kind === "line" && /* @__PURE__ */ import_react37.default.createElement("div", {
-    className: (0, import_classnames19.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
+  }, label, kind === "line" && /* @__PURE__ */ import_react41.default.createElement("div", {
+    className: (0, import_classnames23.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": opVal === value,
       "-bottom-0.5": opVal !== value
     })
@@ -77016,19 +89064,19 @@ var Tabs = (props) => {
 };
 
 // src/modules/EventList/FilterBy/index.tsx
-var import_react38 = __toModule(require_react());
-var import_classnames20 = __toModule(require_classnames());
+var import_react42 = __toModule(require_react());
+var import_classnames24 = __toModule(require_classnames());
 var FilterBy = (props) => {
   const { children, onChange, options = [], value = [] } = props;
-  return /* @__PURE__ */ import_react38.default.createElement("div", {
+  return /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow eventlist__filterby"
-  }, children || /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, children || /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "text-sm font-semibold"
-  }, "Filter By"), /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, "Filter By"), /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex justify-end flex-1"
-  }, options.map((option) => /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, options.map((option) => /* @__PURE__ */ import_react42.default.createElement("div", {
     key: `filterby-option-${option.value}`,
-    className: (0, import_classnames20.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
+    className: (0, import_classnames24.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
       "bg-blue-100": value == null ? void 0 : value.includes(option.value),
       "border-blue-300": value == null ? void 0 : value.includes(option.value),
       "border-gray-100": !(value == null ? void 0 : value.includes(option.value)),
@@ -77049,18 +89097,18 @@ var FilterBy = (props) => {
     onClick: (event) => onChange && onChange(event, {
       value: value.includes(option.value) ? value.filter((o2) => o2 !== option.value) : [...value, option.value]
     })
-  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react38.default.createElement(Check, {
+  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react42.default.createElement(Check, {
     className: "w-2 ml-1.5"
   })))));
 };
 
 // src/modules/EventList/PlayButton/index.tsx
-var import_react39 = __toModule(require_react());
-var import_classnames21 = __toModule(require_classnames());
+var import_react43 = __toModule(require_react());
+var import_classnames25 = __toModule(require_classnames());
 function PlayButtonUI(props) {
   const { hasAudio, isPlaying, togglePlayback } = props;
-  return hasAudio ? /* @__PURE__ */ import_react39.default.createElement("div", {
-    className: (0, import_classnames21.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
+  return hasAudio ? /* @__PURE__ */ import_react43.default.createElement("div", {
+    className: (0, import_classnames25.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
       "hover:border-blue-500": !isPlaying,
       "active:border-blue-600": !isPlaying,
       "border-blue-600": isPlaying,
@@ -77076,13 +89124,13 @@ function PlayButtonUI(props) {
       "active:text-white": !isPlaying
     }),
     onClick: togglePlayback
-  }, isPlaying ? /* @__PURE__ */ import_react39.default.createElement(Pause, {
+  }, isPlaying ? /* @__PURE__ */ import_react43.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react39.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react43.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
-  })) : /* @__PURE__ */ import_react39.default.createElement("div", {
+  })) : /* @__PURE__ */ import_react43.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 group-hover:text-blue-300"
-  }, /* @__PURE__ */ import_react39.default.createElement(Calendar, {
+  }, /* @__PURE__ */ import_react43.default.createElement(Calendar, {
     className: "w-4"
   }));
 }
@@ -77091,7 +89139,7 @@ function PlayButton(props) {
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
-  const togglePlayback = (0, import_react39.useCallback)((event) => {
+  const togglePlayback = (0, import_react43.useCallback)((event) => {
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
@@ -77101,7 +89149,7 @@ function PlayButton(props) {
       void audioPlayer.play({ id, url, offset });
     }
   }, [isPlaying, id, url, offset]);
-  return /* @__PURE__ */ import_react39.default.createElement(PlayButtonUI, {
+  return /* @__PURE__ */ import_react43.default.createElement(PlayButtonUI, {
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
     togglePlayback
@@ -77131,45 +89179,45 @@ var EventListUI = (props) => {
     searchTerm
   } = props;
   if (event) {
-    return /* @__PURE__ */ import_react40.default.createElement(Transcript, {
+    return /* @__PURE__ */ import_react44.default.createElement(Transcript, {
       eventId: event.id,
       onBack: onBackFromTranscript
     });
   }
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react40.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react40.default.createElement("div", {
+  return /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "h-full flex flex-col eventlist"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react40.default.createElement(Input, {
+  }, /* @__PURE__ */ import_react44.default.createElement(Input, {
     name: "search",
     onChange: onSearchChange,
     placeholder: "Search Events & Transcripts",
     value: searchTerm
-  }, /* @__PURE__ */ import_react40.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react40.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react44.default.createElement(CompanyFilterButton, {
     onChange: onCompanyChange,
     value: company
-  })))), /* @__PURE__ */ import_react40.default.createElement("div", {
+  })))), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "sticky top-0 px-3 pt-3 pb-2 z-10 eventlist__tabs"
-  }, /* @__PURE__ */ import_react40.default.createElement(FilterBy, {
+  }, /* @__PURE__ */ import_react44.default.createElement(FilterBy, {
     onChange: onSelectFilterBy,
     options: [
       { value: 0, label: "Transcripts" },
       { value: 1, label: "Earnings" }
     ],
     value: filterByTypes
-  }, /* @__PURE__ */ import_react40.default.createElement(Tabs, {
+  }, /* @__PURE__ */ import_react44.default.createElement(Tabs, {
     className: "ml-1",
     kind: "line",
     onChange: onSelectListType,
@@ -77182,34 +89230,34 @@ var EventListUI = (props) => {
       { value: EventView.Recent, label: "Recent", className: "h-9 items-center" }
     ],
     value: listType
-  }))), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern8.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react40.default.createElement("ul", {
+  }, (0, import_ts_pattern8.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react44.default.createElement("ul", {
     className: "w-full EventList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react40.default.createElement("li", {
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react44.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "rounded-full bg-gray-300 w-9 h-9"
-  }), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "rounded-full bg-gray-500 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "rounded-full bg-gray-400 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react40.default.createElement("div", {
+  })), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react40.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react44.default.createElement("ul", {
     className: "w-full"
   }, events.map((event2) => {
     var _a, _b;
@@ -77219,22 +89267,22 @@ var EventListUI = (props) => {
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== eventDate.toFormat("MM/dd/yyyy")) {
       prevEventDate = eventDate;
-      divider = /* @__PURE__ */ import_react40.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react44.default.createElement("li", {
         className: "sticky top-[56px] px-3"
-      }, /* @__PURE__ */ import_react40.default.createElement("div", {
+      }, /* @__PURE__ */ import_react44.default.createElement("div", {
         className: "px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold"
-      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react40.default.createElement("div", {
+      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react44.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       })));
     }
-    return /* @__PURE__ */ import_react40.default.createElement(import_react40.Fragment, {
+    return /* @__PURE__ */ import_react44.default.createElement(import_react44.Fragment, {
       key: event2.id
-    }, divider, /* @__PURE__ */ import_react40.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react44.default.createElement("li", {
       className: "group h-12 text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
       onClick: (e) => onSelectEvent == null ? void 0 : onSelectEvent(e, { value: event2 })
-    }, /* @__PURE__ */ import_react40.default.createElement(Tooltip, {
+    }, /* @__PURE__ */ import_react44.default.createElement(Tooltip, {
       className: "h-12 flex flex-row",
-      content: /* @__PURE__ */ import_react40.default.createElement("div", {
+      content: /* @__PURE__ */ import_react44.default.createElement("div", {
         className: "max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9"
       }, prettyLineBreak(event2.title)),
       grow: "up-right",
@@ -77242,36 +89290,36 @@ var EventListUI = (props) => {
       position: "top-left",
       yOffset: 4,
       hideOnDocumentScroll: true
-    }, /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex items-center justify-center"
-    }, /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex items-center justify-center w-8 h-8"
-    }, /* @__PURE__ */ import_react40.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react44.default.createElement(PlayButton, {
       id: event2.id,
       url: event2.isLive ? `https://storage.media.aiera.com/${event2.id}` : event2.audioRecordingUrl,
       offset: audioOffset || 0
-    }))), /* @__PURE__ */ import_react40.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
-    }, /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex items-end"
-    }, /* @__PURE__ */ import_react40.default.createElement("span", {
+    }, /* @__PURE__ */ import_react44.default.createElement("span", {
       className: "leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react40.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react44.default.createElement("span", {
       className: "leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)), /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black"
-    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event2.isLive ? /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, event2.isLive ? /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 font-semibold bg-red-50 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
-    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black"
-    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react40.default.createElement("div", {
+    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "leading-none mt-1 text-gray-300 group-hover:text-gray-500"
     }, eventDate.toFormat("MMM dd, yyyy"))))));
-  }))).exhaustive(), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }))).exhaustive(), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex-1"
-  })))), /* @__PURE__ */ import_react40.default.createElement(Playbar, {
+  })))), /* @__PURE__ */ import_react44.default.createElement(Playbar, {
     onClickCalendar: onSelectEventById
   }));
 };
@@ -77294,13 +89342,13 @@ var EventList = (_props) => {
       }
     }
   }), "in");
-  const onSelectEvent = (0, import_react40.useCallback)((event, change) => {
+  const onSelectEvent = (0, import_react44.useCallback)((event, change) => {
     var _a2;
     const primaryQuote = getPrimaryQuote((_a2 = change.value) == null ? void 0 : _a2.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.event(event, change);
   }, [state]);
-  const onSelectCompany = (0, import_react40.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react44.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
@@ -77351,8 +89399,8 @@ var EventList = (_props) => {
       }
     }
   });
-  useInterval((0, import_react40.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
-  const onSelectEventById = (0, import_react40.useCallback)((event, change) => {
+  useInterval((0, import_react44.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
+  const onSelectEventById = (0, import_react44.useCallback)((event, change) => {
     if (eventsQuery.status === "success") {
       const selectedEvent = eventsQuery.data.events.find((event2) => event2.id === change.value);
       if (selectedEvent) {
@@ -77362,7 +89410,7 @@ var EventList = (_props) => {
   }, [eventsQuery.status]);
   useAutoTrack("Click", "Event Filter By", { filterBy: state.filterByTypes }, [state.filterByTypes]);
   useAutoTrack("Submit", "Event Search", { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
-  return /* @__PURE__ */ import_react40.default.createElement(EventListUI, {
+  return /* @__PURE__ */ import_react44.default.createElement(EventListUI, {
     company: state.company,
     event: state.event,
     eventsQuery,
@@ -77384,17 +89432,17 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react41.default.createElement(import_react41.StrictMode, null, /* @__PURE__ */ import_react41.default.createElement(Provider, {
+  return /* @__PURE__ */ import_react45.default.createElement(import_react45.StrictMode, null, /* @__PURE__ */ import_react45.default.createElement(Provider, {
     config: { apiUrl: "https://api-dev.aiera.com/graphql", assetPath: "bundle/" }
-  }, /* @__PURE__ */ import_react41.default.createElement(Provider3, {
+  }, /* @__PURE__ */ import_react45.default.createElement(Provider3, {
     bus
-  }, /* @__PURE__ */ import_react41.default.createElement(Provider2, null, /* @__PURE__ */ import_react41.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react45.default.createElement(Provider2, null, /* @__PURE__ */ import_react45.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react41.default.createElement("div", {
+  }, /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react41.default.createElement(EventList, null)))))));
+  }, /* @__PURE__ */ import_react45.default.createElement(EventList, null)))))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react41.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react45.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus
