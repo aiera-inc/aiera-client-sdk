@@ -37,6 +37,11 @@ const events = [
                         speakerTurns: [
                             {
                                 id: '1',
+                                speaker: {
+                                    id: '1',
+                                    name: 'Speaker Name',
+                                    title: 'Speaker Title',
+                                },
                                 paragraphs: [
                                     {
                                         id: '1',

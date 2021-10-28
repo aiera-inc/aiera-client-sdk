@@ -35,18 +35,22 @@ import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
 import './styles.css';
 
-type Paragraph = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0]['paragraphs'][0];
+type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
+type Paragraph = SpeakerTurn['paragraphs'][0];
 type Chunk = { text: string; id: string; highlight: boolean };
 interface ParagraphWithMatches {
     paragraph: Paragraph;
     chunks: Chunk[];
 }
+type SpeakerTurnsWithMatches = SpeakerTurn & { paragraphsWithMatches: ParagraphWithMatches[] };
+
 /** @notExported */
 interface TranscriptUIProps {
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
     currentParagraph?: string | null;
     currentParagraphRef: Ref<HTMLDivElement>;
-    paragraphs: ParagraphWithMatches[];
+    speakerTurns: SpeakerTurnsWithMatches[];
+    showSpeakers: boolean;
     onBack?: MouseEventHandler;
     onClickTranscript?: (paragraph: Paragraph) => void;
     scrollRef: Ref<HTMLDivElement>;
@@ -67,7 +71,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         eventQuery,
         onBack,
         onClickTranscript,
-        paragraphs,
+        speakerTurns,
+        showSpeakers,
         scrollRef,
         searchTerm,
         onChangeSearchTerm,
@@ -80,7 +85,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     } = props;
 
     return (
-        <div className="h-full flex flex-col transcript">
+        <div className="h-full flex flex-col transcript bg-gray-50">
             <div>
                 <Header
                     eventQuery={eventQuery}
@@ -127,39 +132,53 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         return data.events[0] && <EmptyMessage event={data.events[0]} />;
                     })
                     .with({ status: 'success' }, () => {
-                        return paragraphs.map(({ chunks, paragraph }) => {
-                            const { id, timestamp } = paragraph;
+                        return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
                             return (
-                                <div
-                                    key={id}
-                                    id={`paragraph-${id}`}
-                                    className="relative p-3 pb-4"
-                                    onClick={() => onClickTranscript?.(paragraph)}
-                                    ref={id === currentParagraph ? currentParagraphRef : undefined}
-                                >
-                                    {timestamp && (
-                                        <div className="pb-2 font-semibold text-sm">
-                                            {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
+                                <div key={`speaker-turn-${id}`}>
+                                    {showSpeakers && (
+                                        <div className="p-3 pb-1 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50">
+                                            <span className="font-semibold">{speaker.name}</span>
+                                            {speaker.title && <span className="text-gray-400">, {speaker.title}</span>}
                                         </div>
                                     )}
-                                    <div className="text-sm">
-                                        {chunks.map(({ highlight, id, text }) =>
-                                            highlight ? (
-                                                <mark
-                                                    ref={id === currentMatch ? currentMatchRef : undefined}
-                                                    className={classNames({ 'bg-yellow-300': id === currentMatch })}
-                                                    key={id}
-                                                >
-                                                    {text}
-                                                </mark>
-                                            ) : (
-                                                <span key={id}>{text}</span>
-                                            )
-                                        )}
-                                    </div>
-                                    {id === currentParagraph && (
-                                        <div className="w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm" />
-                                    )}
+                                    {paragraphs.map(({ chunks, paragraph }) => {
+                                        const { id, timestamp } = paragraph;
+                                        return (
+                                            <div
+                                                key={id}
+                                                id={`paragraph-${id}`}
+                                                className="relative p-3 pb-4"
+                                                onClick={() => onClickTranscript?.(paragraph)}
+                                                ref={id === currentParagraph ? currentParagraphRef : undefined}
+                                            >
+                                                {timestamp && (
+                                                    <div className="pb-2 font-semibold text-sm">
+                                                        {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
+                                                    </div>
+                                                )}
+                                                <div className="text-sm">
+                                                    {chunks.map(({ highlight, id, text }) =>
+                                                        highlight ? (
+                                                            <mark
+                                                                ref={id === currentMatch ? currentMatchRef : undefined}
+                                                                className={classNames({
+                                                                    'bg-yellow-300': id === currentMatch,
+                                                                })}
+                                                                key={id}
+                                                            >
+                                                                {text}
+                                                            </mark>
+                                                        ) : (
+                                                            <span key={id}>{text}</span>
+                                                        )
+                                                    )}
+                                                </div>
+                                                {id === currentParagraph && (
+                                                    <div className="w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm" />
+                                                )}
+                                            </div>
+                                        );
+                                    })}
                                 </div>
                             );
                         });
@@ -196,7 +215,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
 function useLatestTranscripts(
     eventId: string,
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>
-): Paragraph[] {
+): SpeakerTurn[] {
     const latestParagraphsQuery = useQuery<LatestParagraphsQuery, LatestParagraphsQueryVariables>({
         query: gql`
             query LatestParagraphs($eventId: ID!) {
@@ -244,7 +263,7 @@ function useLatestTranscripts(
     // Loop through the initial paragraph array and the new latest paragraphs to generate
     // the final paragraph array to render in the UI. memoize so we only recalc when things
     // actaully change.
-    return useMemo<Paragraph[]>(() => {
+    return useMemo<SpeakerTurn[]>(() => {
         const originalParagraphs = new Map<string, Paragraph>(
             eventQuery.state.data?.events[0]?.transcripts[0]?.sections
                 .flatMap((section) => section.speakerTurns)
@@ -258,22 +277,38 @@ function useLatestTranscripts(
         //
         // For past events, just using the mapping as is, which will be the server-returned
         // order of paragraphs.
-        return eventQuery.state.data?.events[0]?.isLive
-            ? [...paragraphs.values()].sort((p1, p2) =>
-                  p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)
-              )
-            : [...paragraphs.values()];
+        const speakerTurns =
+            eventQuery.state.data?.events[0]?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns) || [];
+
+        return speakerTurns.map((s) => {
+            const updatedParagraphs = s.paragraphs.map((p) => ({
+                ...p,
+                ...(paragraphs.get(p.id) || {}),
+            }));
+
+            if (eventQuery.state.data?.events[0]?.isLive) {
+                updatedParagraphs.sort((p1, p2) =>
+                    p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)
+                );
+            }
+
+            return {
+                ...s,
+                paragraphs: updatedParagraphs,
+            };
+        });
     }, [eventQuery.state.data?.events[0]?.transcripts, latestParagraphs]);
 }
 
 function useAudioSync(
-    paragraphs: Paragraph[],
+    speakerTurns: SpeakerTurn[],
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>,
     audioPlayer: AudioPlayer
 ): [string | null, Dispatch<SetStateAction<string | null>>, RefCallback<HTMLDivElement>, RefCallback<HTMLDivElement>] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
     const [scrollRef, currentParagraphRef] = useAutoScroll<HTMLDivElement>();
 
+    const paragraphs = useMemo(() => speakerTurns.flatMap((s) => s.paragraphs), [speakerTurns]);
     useEffect(() => {
         // Find the _last_ paragraph with a timetamp <= the current audio time, that's the
         // one the should be currently playing
@@ -298,7 +333,7 @@ function useAudioSync(
     return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef];
 }
 
-function useSearchState(paragraphs: Paragraph[]) {
+function useSearchState(speakerTurns: SpeakerTurn[]) {
     const { state, handlers } = useChangeHandlers({
         searchTerm: '',
     });
@@ -316,46 +351,52 @@ function useSearchState(paragraphs: Paragraph[]) {
     // adding the search highlights to each as a separate `chunks` field. Then
     // instead of using the paragraph directly, we can loop over the chunks
     // and render the highlight or not for each one.
-    const paragraphsWithMatches: ParagraphWithMatches[] = useMemo(
+    const speakerTurnsWithMatches: SpeakerTurnsWithMatches[] = useMemo(
         () =>
-            paragraphs.map((paragraph) => {
-                if (!state.searchTerm) {
+            speakerTurns.map((s) => ({
+                ...s,
+                paragraphsWithMatches: s.paragraphs.map((paragraph) => {
+                    if (!state.searchTerm) {
+                        return {
+                            chunks: paragraph.sentences.map(({ text }, idx) => ({
+                                highlight: false,
+                                id: `${paragraph.id}-chunk-${idx}`,
+                                text,
+                            })),
+                            paragraph,
+                        };
+                    }
+
+                    const text = paragraph.sentences.map((s) => s.text).join(' ');
+
+                    const chunks = findAll({
+                        autoEscape: true,
+                        caseSensitive: false,
+                        searchWords: [state.searchTerm],
+                        textToHighlight: text,
+                    }).map(({ highlight, start, end }, idx) => ({
+                        highlight,
+                        id: `${paragraph.id}-chunk-${idx}`,
+                        text: text.substr(start, end - start),
+                    }));
+
                     return {
-                        chunks: paragraph.sentences.map(({ text }, idx) => ({
-                            highlight: false,
-                            id: `${paragraph.id}-chunk-${idx}`,
-                            text,
-                        })),
+                        chunks,
                         paragraph,
                     };
-                }
+                }),
+            })),
 
-                const text = paragraph.sentences.map((s) => s.text).join(' ');
-
-                const chunks = findAll({
-                    autoEscape: true,
-                    caseSensitive: false,
-                    searchWords: [state.searchTerm],
-                    textToHighlight: text,
-                }).map(({ highlight, start, end }, idx) => ({
-                    highlight,
-                    id: `${paragraph.id}-chunk-${idx}`,
-                    text: text.substr(start, end - start),
-                }));
-
-                return {
-                    chunks,
-                    paragraph,
-                };
-            }),
-
-        [paragraphs, state.searchTerm]
+        [speakerTurns, state.searchTerm]
     );
 
     // Get just the paragraphs with search matches
     const matches = useMemo(
-        () => paragraphsWithMatches.flatMap((p) => p.chunks.filter((h) => h.highlight)),
-        [paragraphsWithMatches]
+        () =>
+            speakerTurnsWithMatches
+                .flatMap((s) => s.paragraphsWithMatches)
+                .flatMap((p) => p.chunks.filter((h) => h.highlight)),
+        [speakerTurnsWithMatches]
     );
 
     // When the search term changes, reset the current match to the first hit on the new term
@@ -381,7 +422,7 @@ function useSearchState(paragraphs: Paragraph[]) {
     return {
         searchTerm: state.searchTerm,
         onChangeSearchTerm: handlers.searchTerm,
-        paragraphsWithMatches,
+        speakerTurnsWithMatches,
         matches,
         matchIndex,
         nextMatch,
@@ -450,6 +491,11 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
                             id
                             speakerTurns {
                                 id
+                                speaker {
+                                    id
+                                    name
+                                    title
+                                }
                                 paragraphs {
                                     id
                                     timestamp
@@ -473,13 +519,13 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     const audioPlayer = useAudioPlayer();
 
-    const paragraphs = useLatestTranscripts(eventId, eventQuery);
+    const speakerTurns = useLatestTranscripts(eventId, eventQuery);
     const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(
-        paragraphs,
+        speakerTurns,
         eventQuery,
         audioPlayer
     );
-    const searchState = useSearchState(paragraphs);
+    const searchState = useSearchState(speakerTurns);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
     const scrollRef = useCallback(
@@ -500,7 +546,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             eventQuery={eventQuery}
             currentParagraph={currentParagraph}
             currentParagraphRef={currentParagraphRef}
-            paragraphs={searchState.paragraphsWithMatches}
+            speakerTurns={searchState.speakerTurnsWithMatches}
+            showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
             onBack={onBack}
             onClickTranscript={onClickTranscript}
             scrollRef={scrollRef}
