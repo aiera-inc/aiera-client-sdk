@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { ReactElement, ReactNode } from 'react';
 import { DocumentNode } from 'graphql';
-import { render } from '@testing-library/react';
+import { screen, render } from '@testing-library/react';
 import { never } from 'wonka';
 import { Provider } from 'urql';
 import { ResetProvider } from 'api/client';
@@ -54,4 +54,14 @@ export function renderWithClient(
     const rerender = (children: ReactNode) => rendered.rerender(renderComponent(children));
 
     return { client: mockedClient, rerender, rendered, reset };
+}
+
+export function getByTextWithMarkup(text: string): void {
+    screen.getByText((_content, node: Element | null) => {
+        const hasText = (node: Element | null) => node?.textContent === text;
+        const childrenDontHaveText = !!(
+            node?.children && Array.from(node.children).every((child) => !hasText(child as HTMLElement))
+        );
+        return hasText(node) && childrenDontHaveText;
+    });
 }
