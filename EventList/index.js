@@ -87122,6 +87122,11 @@ var TranscriptDocument = lib_default`
         id
         speakerTurns {
           id
+          speaker {
+            id
+            name
+            title
+          }
           paragraphs {
             id
             timestamp
@@ -89211,7 +89216,8 @@ var TranscriptUI = (props) => {
     eventQuery,
     onBack,
     onClickTranscript,
-    paragraphs,
+    speakerTurns,
+    showSpeakers,
     scrollRef,
     searchTerm,
     onChangeSearchTerm,
@@ -89223,7 +89229,7 @@ var TranscriptUI = (props) => {
     matchIndex
   } = props;
   return /* @__PURE__ */ import_react44.default.createElement("div", {
-    className: "h-full flex flex-col transcript"
+    className: "h-full flex flex-col transcript bg-gray-50"
   }, /* @__PURE__ */ import_react44.default.createElement("div", null, /* @__PURE__ */ import_react44.default.createElement(Header, {
     eventQuery,
     onBack,
@@ -89266,26 +89272,38 @@ var TranscriptUI = (props) => {
       event: data.events[0]
     });
   }).with({ status: "success" }, () => {
-    return paragraphs.map(({ chunks, paragraph }) => {
-      const { id, timestamp } = paragraph;
+    return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
       return /* @__PURE__ */ import_react44.default.createElement("div", {
-        key: id,
-        id: `paragraph-${id}`,
-        className: "relative p-3 pb-4",
-        onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
-        ref: id === currentParagraph ? currentParagraphRef : void 0
-      }, timestamp && /* @__PURE__ */ import_react44.default.createElement("div", {
-        className: "pb-2 font-semibold text-sm"
-      }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react44.default.createElement("div", {
-        className: "text-sm"
-      }, chunks.map(({ highlight, id: id2, text }) => highlight ? /* @__PURE__ */ import_react44.default.createElement("mark", {
-        ref: id2 === currentMatch ? currentMatchRef : void 0,
-        className: (0, import_classnames27.default)({ "bg-yellow-300": id2 === currentMatch }),
-        key: id2
-      }, text) : /* @__PURE__ */ import_react44.default.createElement("span", {
-        key: id2
-      }, text))), id === currentParagraph && /* @__PURE__ */ import_react44.default.createElement("div", {
-        className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
+        key: `speaker-turn-${id}`
+      }, showSpeakers && /* @__PURE__ */ import_react44.default.createElement("div", {
+        className: "p-3 pb-1 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50"
+      }, /* @__PURE__ */ import_react44.default.createElement("span", {
+        className: "font-semibold"
+      }, speaker.name), speaker.title && /* @__PURE__ */ import_react44.default.createElement("span", {
+        className: "text-gray-400"
+      }, ", ", speaker.title)), paragraphs.map(({ chunks, paragraph }) => {
+        const { id: id2, timestamp } = paragraph;
+        return /* @__PURE__ */ import_react44.default.createElement("div", {
+          key: id2,
+          id: `paragraph-${id2}`,
+          className: "relative p-3 pb-4",
+          onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
+          ref: id2 === currentParagraph ? currentParagraphRef : void 0
+        }, timestamp && /* @__PURE__ */ import_react44.default.createElement("div", {
+          className: "pb-2 font-semibold text-sm"
+        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react44.default.createElement("div", {
+          className: "text-sm"
+        }, chunks.map(({ highlight, id: id3, text }) => highlight ? /* @__PURE__ */ import_react44.default.createElement("mark", {
+          ref: id3 === currentMatch ? currentMatchRef : void 0,
+          className: (0, import_classnames27.default)({
+            "bg-yellow-300": id3 === currentMatch
+          }),
+          key: id3
+        }, text) : /* @__PURE__ */ import_react44.default.createElement("span", {
+          key: id3
+        }, text))), id2 === currentParagraph && /* @__PURE__ */ import_react44.default.createElement("div", {
+          className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
+        }));
       }));
     });
   }).otherwise(() => null)), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
@@ -89345,15 +89363,26 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   }, [latestParagraphsQuery.state.data]);
   return (0, import_react44.useMemo)(() => {
-    var _a2, _b2, _c2, _d2, _e;
+    var _a2, _b2, _c2, _d2, _e, _f;
     const originalParagraphs = new Map((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).map((p2) => [p2.id, p2]));
     const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
-    return ((_e = (_d2 = eventQuery.state.data) == null ? void 0 : _d2.events[0]) == null ? void 0 : _e.isLive) ? [...paragraphs.values()].sort((p1, p2) => p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)) : [...paragraphs.values()];
+    const speakerTurns = ((_f = (_e = (_d2 = eventQuery.state.data) == null ? void 0 : _d2.events[0]) == null ? void 0 : _e.transcripts[0]) == null ? void 0 : _f.sections.flatMap((section) => section.speakerTurns)) || [];
+    return speakerTurns.map((s3) => {
+      var _a3, _b3;
+      const updatedParagraphs = s3.paragraphs.map((p2) => __spreadValues(__spreadValues({}, p2), paragraphs.get(p2.id) || {}));
+      if ((_b3 = (_a3 = eventQuery.state.data) == null ? void 0 : _a3.events[0]) == null ? void 0 : _b3.isLive) {
+        updatedParagraphs.sort((p1, p2) => p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id));
+      }
+      return __spreadProps(__spreadValues({}, s3), {
+        paragraphs: updatedParagraphs
+      });
+    });
   }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
 }
-function useAudioSync(paragraphs, eventQuery, audioPlayer) {
+function useAudioSync(speakerTurns, eventQuery, audioPlayer) {
   const [currentParagraph, setCurrentParagraph] = (0, import_react44.useState)(null);
   const [scrollRef, currentParagraphRef] = useAutoScroll();
+  const paragraphs = (0, import_react44.useMemo)(() => speakerTurns.flatMap((s3) => s3.paragraphs), [speakerTurns]);
   (0, import_react44.useEffect)(() => {
     var _a, _b;
     let paragraph = [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
@@ -89366,7 +89395,7 @@ function useAudioSync(paragraphs, eventQuery, audioPlayer) {
   }, [paragraphs, Math.floor(audioPlayer.rawCurrentTime)]);
   return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef];
 }
-function useSearchState(paragraphs) {
+function useSearchState(speakerTurns) {
   const { state, handlers } = useChangeHandlers({
     searchTerm: ""
   });
@@ -89377,34 +89406,36 @@ function useSearchState(paragraphs) {
     inline: "center",
     behavior: "auto"
   });
-  const paragraphsWithMatches = (0, import_react44.useMemo)(() => paragraphs.map((paragraph) => {
-    if (!state.searchTerm) {
+  const speakerTurnsWithMatches = (0, import_react44.useMemo)(() => speakerTurns.map((s3) => __spreadProps(__spreadValues({}, s3), {
+    paragraphsWithMatches: s3.paragraphs.map((paragraph) => {
+      if (!state.searchTerm) {
+        return {
+          chunks: paragraph.sentences.map(({ text: text2 }, idx) => ({
+            highlight: false,
+            id: `${paragraph.id}-chunk-${idx}`,
+            text: text2
+          })),
+          paragraph
+        };
+      }
+      const text = paragraph.sentences.map((s4) => s4.text).join(" ");
+      const chunks = (0, import_highlight_words_core.findAll)({
+        autoEscape: true,
+        caseSensitive: false,
+        searchWords: [state.searchTerm],
+        textToHighlight: text
+      }).map(({ highlight, start, end }, idx) => ({
+        highlight,
+        id: `${paragraph.id}-chunk-${idx}`,
+        text: text.substr(start, end - start)
+      }));
       return {
-        chunks: paragraph.sentences.map(({ text: text2 }, idx) => ({
-          highlight: false,
-          id: `${paragraph.id}-chunk-${idx}`,
-          text: text2
-        })),
+        chunks,
         paragraph
       };
-    }
-    const text = paragraph.sentences.map((s3) => s3.text).join(" ");
-    const chunks = (0, import_highlight_words_core.findAll)({
-      autoEscape: true,
-      caseSensitive: false,
-      searchWords: [state.searchTerm],
-      textToHighlight: text
-    }).map(({ highlight, start, end }, idx) => ({
-      highlight,
-      id: `${paragraph.id}-chunk-${idx}`,
-      text: text.substr(start, end - start)
-    }));
-    return {
-      chunks,
-      paragraph
-    };
-  }), [paragraphs, state.searchTerm]);
-  const matches = (0, import_react44.useMemo)(() => paragraphsWithMatches.flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [paragraphsWithMatches]);
+    })
+  })), [speakerTurns, state.searchTerm]);
+  const matches = (0, import_react44.useMemo)(() => speakerTurnsWithMatches.flatMap((s3) => s3.paragraphsWithMatches).flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
   (0, import_react44.useEffect)(() => {
     var _a;
     setCurrentMatch(((_a = matches[0]) == null ? void 0 : _a.id) || null);
@@ -89423,7 +89454,7 @@ function useSearchState(paragraphs) {
   return {
     searchTerm: state.searchTerm,
     onChangeSearchTerm: handlers.searchTerm,
-    paragraphsWithMatches,
+    speakerTurnsWithMatches,
     matches,
     matchIndex,
     nextMatch,
@@ -89434,11 +89465,12 @@ function useSearchState(paragraphs) {
   };
 }
 var Transcript = (props) => {
+  var _a, _b;
   const { eventId, onBack } = props;
   const eventQuery = useQuery2({
     isEmpty: ({ events }) => {
-      var _a, _b, _c;
-      return !((_c = (_b = (_a = events[0]) == null ? void 0 : _a.transcripts[0]) == null ? void 0 : _b.sections) == null ? void 0 : _c.length);
+      var _a2, _b2, _c;
+      return !((_c = (_b2 = (_a2 = events[0]) == null ? void 0 : _a2.transcripts[0]) == null ? void 0 : _b2.sections) == null ? void 0 : _c.length);
     },
     query: lib_default`
             query Transcript($eventId: ID!) {
@@ -89485,6 +89517,11 @@ var Transcript = (props) => {
                             id
                             speakerTurns {
                                 id
+                                speaker {
+                                    id
+                                    name
+                                    title
+                                }
                                 paragraphs {
                                     id
                                     timestamp
@@ -89506,9 +89543,9 @@ var Transcript = (props) => {
     }
   });
   const audioPlayer = useAudioPlayer();
-  const paragraphs = useLatestTranscripts(eventId, eventQuery);
-  const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
-  const searchState = useSearchState(paragraphs);
+  const speakerTurns = useLatestTranscripts(eventId, eventQuery);
+  const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(speakerTurns, eventQuery, audioPlayer);
+  const searchState = useSearchState(speakerTurns);
   const scrollRef = (0, import_react44.useCallback)((ref) => {
     autoScrollRef(ref);
     searchState.scrollRef(ref);
@@ -89521,7 +89558,8 @@ var Transcript = (props) => {
     eventQuery,
     currentParagraph,
     currentParagraphRef,
-    paragraphs: searchState.paragraphsWithMatches,
+    speakerTurns: searchState.speakerTurnsWithMatches,
+    showSpeakers: !((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive),
     onBack,
     onClickTranscript,
     scrollRef,
