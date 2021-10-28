@@ -1100,7 +1100,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create, deps);
         }
-        function useCallback12(callback, deps) {
+        function useCallback13(callback, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
@@ -1659,7 +1659,7 @@ var require_react_development = __commonJS({
         exports2.isValidElement = isValidElement;
         exports2.lazy = lazy;
         exports2.memo = memo;
-        exports2.useCallback = useCallback12;
+        exports2.useCallback = useCallback13;
         exports2.useContext = useContext5;
         exports2.useDebugValue = useDebugValue;
         exports2.useEffect = useEffect11;
@@ -26140,7 +26140,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames26() {
+      function classNames27() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26151,7 +26151,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames26.apply(null, arg);
+              var inner = classNames27.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26171,16 +26171,174 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames26.default = classNames26;
-        module2.exports = classNames26;
+        classNames27.default = classNames27;
+        module2.exports = classNames27;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames26;
+          return classNames27;
         });
       } else {
-        window.classNames = classNames26;
+        window.classNames = classNames27;
       }
     })();
+  }
+});
+
+// node_modules/highlight-words-core/dist/index.js
+var require_dist = __commonJS({
+  "node_modules/highlight-words-core/dist/index.js"(exports2, module2) {
+    module2.exports = function(modules) {
+      var installedModules = {};
+      function __webpack_require__(moduleId) {
+        if (installedModules[moduleId])
+          return installedModules[moduleId].exports;
+        var module3 = installedModules[moduleId] = {
+          exports: {},
+          id: moduleId,
+          loaded: false
+        };
+        modules[moduleId].call(module3.exports, module3, module3.exports, __webpack_require__);
+        module3.loaded = true;
+        return module3.exports;
+      }
+      __webpack_require__.m = modules;
+      __webpack_require__.c = installedModules;
+      __webpack_require__.p = "";
+      return __webpack_require__(0);
+    }([
+      function(module3, exports3, __webpack_require__) {
+        module3.exports = __webpack_require__(1);
+      },
+      function(module3, exports3, __webpack_require__) {
+        "use strict";
+        Object.defineProperty(exports3, "__esModule", {
+          value: true
+        });
+        var _utils = __webpack_require__(2);
+        Object.defineProperty(exports3, "combineChunks", {
+          enumerable: true,
+          get: function get() {
+            return _utils.combineChunks;
+          }
+        });
+        Object.defineProperty(exports3, "fillInChunks", {
+          enumerable: true,
+          get: function get() {
+            return _utils.fillInChunks;
+          }
+        });
+        Object.defineProperty(exports3, "findAll", {
+          enumerable: true,
+          get: function get() {
+            return _utils.findAll;
+          }
+        });
+        Object.defineProperty(exports3, "findChunks", {
+          enumerable: true,
+          get: function get() {
+            return _utils.findChunks;
+          }
+        });
+      },
+      function(module3, exports3) {
+        "use strict";
+        Object.defineProperty(exports3, "__esModule", {
+          value: true
+        });
+        var findAll2 = exports3.findAll = function findAll3(_ref) {
+          var autoEscape = _ref.autoEscape, _ref$caseSensitive = _ref.caseSensitive, caseSensitive = _ref$caseSensitive === void 0 ? false : _ref$caseSensitive, _ref$findChunks = _ref.findChunks, findChunks = _ref$findChunks === void 0 ? defaultFindChunks : _ref$findChunks, sanitize = _ref.sanitize, searchWords = _ref.searchWords, textToHighlight = _ref.textToHighlight;
+          return fillInChunks({
+            chunksToHighlight: combineChunks({
+              chunks: findChunks({
+                autoEscape,
+                caseSensitive,
+                sanitize,
+                searchWords,
+                textToHighlight
+              })
+            }),
+            totalLength: textToHighlight ? textToHighlight.length : 0
+          });
+        };
+        var combineChunks = exports3.combineChunks = function combineChunks2(_ref22) {
+          var chunks = _ref22.chunks;
+          chunks = chunks.sort(function(first, second) {
+            return first.start - second.start;
+          }).reduce(function(processedChunks, nextChunk) {
+            if (processedChunks.length === 0) {
+              return [nextChunk];
+            } else {
+              var prevChunk = processedChunks.pop();
+              if (nextChunk.start <= prevChunk.end) {
+                var endIndex = Math.max(prevChunk.end, nextChunk.end);
+                processedChunks.push({ highlight: false, start: prevChunk.start, end: endIndex });
+              } else {
+                processedChunks.push(prevChunk, nextChunk);
+              }
+              return processedChunks;
+            }
+          }, []);
+          return chunks;
+        };
+        var defaultFindChunks = function defaultFindChunks2(_ref3) {
+          var autoEscape = _ref3.autoEscape, caseSensitive = _ref3.caseSensitive, _ref3$sanitize = _ref3.sanitize, sanitize = _ref3$sanitize === void 0 ? defaultSanitize : _ref3$sanitize, searchWords = _ref3.searchWords, textToHighlight = _ref3.textToHighlight;
+          textToHighlight = sanitize(textToHighlight);
+          return searchWords.filter(function(searchWord) {
+            return searchWord;
+          }).reduce(function(chunks, searchWord) {
+            searchWord = sanitize(searchWord);
+            if (autoEscape) {
+              searchWord = escapeRegExpFn(searchWord);
+            }
+            var regex = new RegExp(searchWord, caseSensitive ? "g" : "gi");
+            var match9 = void 0;
+            while (match9 = regex.exec(textToHighlight)) {
+              var _start = match9.index;
+              var _end = regex.lastIndex;
+              if (_end > _start) {
+                chunks.push({ highlight: false, start: _start, end: _end });
+              }
+              if (match9.index === regex.lastIndex) {
+                regex.lastIndex++;
+              }
+            }
+            return chunks;
+          }, []);
+        };
+        exports3.findChunks = defaultFindChunks;
+        var fillInChunks = exports3.fillInChunks = function fillInChunks2(_ref4) {
+          var chunksToHighlight = _ref4.chunksToHighlight, totalLength = _ref4.totalLength;
+          var allChunks = [];
+          var append = function append2(start, end, highlight) {
+            if (end - start > 0) {
+              allChunks.push({
+                start,
+                end,
+                highlight
+              });
+            }
+          };
+          if (chunksToHighlight.length === 0) {
+            append(0, totalLength, false);
+          } else {
+            var lastIndex = 0;
+            chunksToHighlight.forEach(function(chunk) {
+              append(lastIndex, chunk.start, false);
+              append(chunk.start, chunk.end, true);
+              lastIndex = chunk.end;
+            });
+            append(lastIndex, totalLength, false);
+          }
+          return allChunks;
+        };
+        function defaultSanitize(string) {
+          return string;
+        }
+        function escapeRegExpFn(string) {
+          return string.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, "\\$&");
+        }
+      }
+    ]);
   }
 });
 
@@ -87501,8 +87659,10 @@ function CompanyFilterButton(props) {
 
 // src/modules/Transcript/index.tsx
 var import_react40 = __toModule(require_react());
+var import_classnames23 = __toModule(require_classnames());
 var import_ts_pattern6 = __toModule(require_lib());
 var import_luxon2 = __toModule(require_luxon());
+var import_highlight_words_core = __toModule(require_dist());
 
 // src/lib/audio/index.tsx
 var import_react16 = __toModule(require_react());
@@ -87675,7 +87835,14 @@ function useAudioPlayer(withUpdates = true) {
 // src/lib/hooks/useAutoScroll/index.ts
 var import_react17 = __toModule(require_react());
 function useAutoScroll(opts) {
-  const { skip = false } = opts || {};
+  const {
+    skip = false,
+    pauseOnUserScroll = true,
+    initialBehavior = "auto",
+    behavior = "smooth",
+    block: block2 = "nearest",
+    inline = "nearest"
+  } = opts || {};
   const [element, setElement] = (0, import_react17.useState)(null);
   const [target, setTarget] = (0, import_react17.useState)(null);
   const pauseAutoScroll = (0, import_react17.useRef)(false);
@@ -87683,7 +87850,7 @@ function useAutoScroll(opts) {
   (0, import_react17.useLayoutEffect)(() => {
     var _a;
     function checkPosition() {
-      if (target && element && !skip) {
+      if (target && element && !skip && pauseOnUserScroll) {
         const targetPosition = target.getBoundingClientRect();
         const containerPosition = element.getBoundingClientRect();
         if (targetPosition.top <= containerPosition.top) {
@@ -87694,33 +87861,53 @@ function useAutoScroll(opts) {
       }
     }
     if (!skip && !pauseAutoScroll.current && element) {
-      (_a = target == null ? void 0 : target.scrollIntoView) == null ? void 0 : _a.call(target, { behavior: initialScroll.current ? "auto" : "smooth", block: "nearest" });
+      (_a = target == null ? void 0 : target.scrollIntoView) == null ? void 0 : _a.call(target, {
+        behavior: initialScroll.current ? initialBehavior : behavior,
+        block: block2,
+        inline
+      });
       initialScroll.current = false;
     }
     if (!target) {
-      initialScroll.current = !target;
+      initialScroll.current = true;
     }
     checkPosition();
-    if (element) {
+    if (element && pauseOnUserScroll) {
       element.addEventListener("scroll", checkPosition);
     }
     return () => element == null ? void 0 : element.removeEventListener("scroll", checkPosition);
-  }, [element, target, skip]);
+  }, [element, target, skip, pauseOnUserScroll, initialBehavior, behavior, block2, inline]);
   return [setElement, setTarget];
 }
 
+// src/components/Svg/Chevron.tsx
+var import_react18 = __toModule(require_react());
+var import_classnames4 = __toModule(require_classnames());
+function Chevron({ className, alt = "Chevron" }) {
+  return /* @__PURE__ */ import_react18.default.createElement("svg", {
+    className: (0, import_classnames4.default)(className, "fill-current", "Svg", "Svg__chevron"),
+    width: "100%",
+    viewBox: "0 0 8 5",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react18.default.createElement("title", null, alt), /* @__PURE__ */ import_react18.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L4 2.58579L6.29289 0.292893C6.68342 -0.0976311 7.31658 -0.0976311 7.70711 0.292893C8.09763 0.683417 8.09763 1.31658 7.70711 1.70711L4.70711 4.70711C4.31658 5.09763 3.68342 5.09763 3.29289 4.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z"
+  }));
+}
+
 // src/components/Playbar/index.tsx
-var import_react25 = __toModule(require_react());
-var import_classnames9 = __toModule(require_classnames());
+var import_react26 = __toModule(require_react());
+var import_classnames10 = __toModule(require_classnames());
 
 // src/lib/hooks/useDrag/index.ts
-var import_react18 = __toModule(require_react());
+var import_react19 = __toModule(require_react());
 function useDrag(dragOpts) {
   const { dragTarget, onDragStart, onDragEnd } = dragOpts;
-  const [isDragging, setIsDragging] = (0, import_react18.useState)(false);
-  const [initialPos, setPosition] = (0, import_react18.useState)({ x: 0, y: 0 });
-  const [movePos, setMovement] = (0, import_react18.useState)({ x: 0, y: 0 });
-  (0, import_react18.useEffect)(() => {
+  const [isDragging, setIsDragging] = (0, import_react19.useState)(false);
+  const [initialPos, setPosition] = (0, import_react19.useState)({ x: 0, y: 0 });
+  const [movePos, setMovement] = (0, import_react19.useState)({ x: 0, y: 0 });
+  (0, import_react19.useEffect)(() => {
     function onMouseDown(event) {
       onDragStart == null ? void 0 : onDragStart(event, setPosition);
       setIsDragging(true);
@@ -87758,9 +87945,9 @@ function useDrag(dragOpts) {
 }
 
 // src/lib/hooks/useWindowSize/index.ts
-var import_react19 = __toModule(require_react());
+var import_react20 = __toModule(require_react());
 function useWindowSize() {
-  const [size, setSize] = (0, import_react19.useState)({
+  const [size, setSize] = (0, import_react20.useState)({
     height: window.innerHeight,
     width: window.innerWidth
   });
@@ -87768,7 +87955,7 @@ function useWindowSize() {
     height: window.innerHeight,
     width: window.innerWidth
   });
-  (0, import_react19.useLayoutEffect)(() => {
+  (0, import_react20.useLayoutEffect)(() => {
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
   }, []);
@@ -87776,32 +87963,32 @@ function useWindowSize() {
 }
 
 // src/components/Svg/Back15.tsx
-var import_react20 = __toModule(require_react());
-var import_classnames4 = __toModule(require_classnames());
+var import_react21 = __toModule(require_react());
+var import_classnames5 = __toModule(require_classnames());
 function Back15({ className, alt = "Back15" }) {
-  return /* @__PURE__ */ import_react20.default.createElement("svg", {
-    className: (0, import_classnames4.default)(className, "fill-current", "Svg", "Svg__back15"),
+  return /* @__PURE__ */ import_react21.default.createElement("svg", {
+    className: (0, import_classnames5.default)(className, "fill-current", "Svg", "Svg__back15"),
     width: "100%",
     viewBox: "0 0 18 18",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react20.default.createElement("title", null, alt), /* @__PURE__ */ import_react20.default.createElement("path", {
+  }, /* @__PURE__ */ import_react21.default.createElement("title", null, alt), /* @__PURE__ */ import_react21.default.createElement("path", {
     d: "M9 0C13.9626 0 18 4.0374 18 9C18 13.9626 13.9626 18 9 18C4.0374 18 0 13.9626 0 9H1.8C1.8 12.9699 5.0301 16.2 9 16.2C12.9699 16.2 16.2 12.9699 16.2 9C16.2 5.0301 12.9699 1.8 9 1.8C7.01461 1.8 5.21755 2.61043 3.91465 3.91465L6.3 6.3H0V0L2.64551 2.64551C4.27339 1.01364 6.51844 0 9 0Z"
-  }), /* @__PURE__ */ import_react20.default.createElement("path", {
+  }), /* @__PURE__ */ import_react21.default.createElement("path", {
     d: "M7.76705 6.18182H6.91193L5.46023 7.13068V7.97159L6.85227 7.0625H6.88636V12H7.76705V6.18182ZM11.2614 12.0795C12.4318 12.0795 13.267 11.2528 13.2642 10.1193C13.267 8.99432 12.483 8.17614 11.4233 8.17614C10.9915 8.17614 10.5909 8.34091 10.3636 8.5625H10.3295L10.5142 6.93466H12.983V6.18182H9.78409L9.45739 9.11364L10.2614 9.23295C10.4801 9.03693 10.8722 8.90341 11.2244 8.90341C11.9148 8.90909 12.4148 9.42614 12.4148 10.1364C12.4148 10.8352 11.929 11.3409 11.2614 11.3409C10.6989 11.3409 10.2528 10.983 10.2074 10.483H9.35511C9.3892 11.4091 10.1932 12.0795 11.2614 12.0795Z"
   }));
 }
 
 // src/components/Svg/Calendar.tsx
-var import_react21 = __toModule(require_react());
-var import_classnames5 = __toModule(require_classnames());
+var import_react22 = __toModule(require_react());
+var import_classnames6 = __toModule(require_classnames());
 function Calendar({ className, alt = "Calendar" }) {
-  return /* @__PURE__ */ import_react21.default.createElement("svg", {
-    className: (0, import_classnames5.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
+  return /* @__PURE__ */ import_react22.default.createElement("svg", {
+    className: (0, import_classnames6.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react21.default.createElement("title", null, alt), /* @__PURE__ */ import_react21.default.createElement("path", {
+  }, /* @__PURE__ */ import_react22.default.createElement("title", null, alt), /* @__PURE__ */ import_react22.default.createElement("path", {
     d: "M6 5V1V5ZM14 5V1V5ZM5 9H15H5ZM3 19H17C17.5304 19 18.0391 18.7893 18.4142 18.4142C18.7893 18.0391 19 17.5304 19 17V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H3C2.46957 3 1.96086 3.21071 1.58579 3.58579C1.21071 3.96086 1 4.46957 1 5V17C1 17.5304 1.21071 18.0391 1.58579 18.4142C1.96086 18.7893 2.46957 19 3 19Z",
     strokeWidth: "2",
     strokeLinecap: "round",
@@ -87810,50 +87997,50 @@ function Calendar({ className, alt = "Calendar" }) {
 }
 
 // src/components/Svg/Forward15.tsx
-var import_react22 = __toModule(require_react());
-var import_classnames6 = __toModule(require_classnames());
+var import_react23 = __toModule(require_react());
+var import_classnames7 = __toModule(require_classnames());
 function Forward15({ className, alt = "Forward15" }) {
-  return /* @__PURE__ */ import_react22.default.createElement("svg", {
-    className: (0, import_classnames6.default)(className, "fill-current", "Svg", "Svg__forward15"),
+  return /* @__PURE__ */ import_react23.default.createElement("svg", {
+    className: (0, import_classnames7.default)(className, "fill-current", "Svg", "Svg__forward15"),
     width: "100%",
     viewBox: "0 0 18 18",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react22.default.createElement("title", null, alt), /* @__PURE__ */ import_react22.default.createElement("path", {
+  }, /* @__PURE__ */ import_react23.default.createElement("title", null, alt), /* @__PURE__ */ import_react23.default.createElement("path", {
     d: "M9 0C4.0374 0 0 4.0374 0 9C0 13.9626 4.0374 18 9 18C13.9626 18 18 13.9626 18 9H16.2C16.2 12.9699 12.9699 16.2 9 16.2C5.0301 16.2 1.8 12.9699 1.8 9C1.8 5.0301 5.0301 1.8 9 1.8C10.9854 1.8 12.7825 2.61043 14.0854 3.91465L11.7 6.3H18V0L15.3545 2.64551C13.7266 1.01364 11.4816 0 9 0Z"
-  }), /* @__PURE__ */ import_react22.default.createElement("path", {
+  }), /* @__PURE__ */ import_react23.default.createElement("path", {
     d: "M7.76705 6.18182H6.91193L5.46023 7.13068V7.97159L6.85227 7.0625H6.88636V12H7.76705V6.18182ZM11.2614 12.0795C12.4318 12.0795 13.267 11.2528 13.2642 10.1193C13.267 8.99432 12.483 8.17614 11.4233 8.17614C10.9915 8.17614 10.5909 8.34091 10.3636 8.5625H10.3295L10.5142 6.93466H12.983V6.18182H9.78409L9.45739 9.11364L10.2614 9.23295C10.4801 9.03693 10.8722 8.90341 11.2244 8.90341C11.9148 8.90909 12.4148 9.42614 12.4148 10.1364C12.4148 10.8352 11.929 11.3409 11.2614 11.3409C10.6989 11.3409 10.2528 10.983 10.2074 10.483H9.35511C9.3892 11.4091 10.1932 12.0795 11.2614 12.0795Z"
   }));
 }
 
 // src/components/Svg/Play.tsx
-var import_react23 = __toModule(require_react());
-var import_classnames7 = __toModule(require_classnames());
+var import_react24 = __toModule(require_react());
+var import_classnames8 = __toModule(require_classnames());
 function Play({ className, alt = "Play" }) {
-  return /* @__PURE__ */ import_react23.default.createElement("svg", {
-    className: (0, import_classnames7.default)(className, "fill-current", "Svg", "Svg__play"),
+  return /* @__PURE__ */ import_react24.default.createElement("svg", {
+    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__play"),
     width: "100%",
     viewBox: "0 0 13 16",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react23.default.createElement("title", null, alt), /* @__PURE__ */ import_react23.default.createElement("path", {
+  }, /* @__PURE__ */ import_react24.default.createElement("title", null, alt), /* @__PURE__ */ import_react24.default.createElement("path", {
     d: "M11.383 6.31764C12.6076 7.10491 12.6076 8.89508 11.383 9.68236L3.08152 15.019C1.75049 15.8747 0 14.919 0 13.3367V2.66333C0 1.081 1.75049 0.125316 3.08151 0.980974L11.383 6.31764Z"
   }));
 }
 
 // src/components/Svg/Pause.tsx
-var import_react24 = __toModule(require_react());
-var import_classnames8 = __toModule(require_classnames());
+var import_react25 = __toModule(require_react());
+var import_classnames9 = __toModule(require_classnames());
 function Pause({ className, alt = "Pause" }) {
-  return /* @__PURE__ */ import_react24.default.createElement("svg", {
-    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__pause"),
+  return /* @__PURE__ */ import_react25.default.createElement("svg", {
+    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__pause"),
     width: "100%",
     fill: "white",
     viewBox: "0 0 12 16",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react24.default.createElement("title", null, alt), /* @__PURE__ */ import_react24.default.createElement("rect", {
+  }, /* @__PURE__ */ import_react25.default.createElement("title", null, alt), /* @__PURE__ */ import_react25.default.createElement("rect", {
     width: "4",
     height: "16",
     rx: "2"
-  }), /* @__PURE__ */ import_react24.default.createElement("rect", {
+  }), /* @__PURE__ */ import_react25.default.createElement("rect", {
     x: "8",
     width: "4",
     height: "16",
@@ -87886,73 +88073,73 @@ function PlaybarUI(props) {
     togglePlayback,
     rewind
   } = props;
-  return /* @__PURE__ */ import_react25.default.createElement("div", {
+  return /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "relative h-13 w-full flex items-center shadow p-3"
-  }, /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: (0, import_classnames9.default)("flex items-center justify-center w-[34px] h-[34px] rounded-full border border-blue-700 cursor-pointer", {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: (0, import_classnames10.default)("flex items-center justify-center w-[34px] h-[34px] rounded-full border border-blue-700 cursor-pointer", {
       "text-blue-700": !isPlaying,
       "text-white": isPlaying,
       "bg-blue-700": isPlaying
     }),
     onClick: togglePlayback
-  }, /* @__PURE__ */ import_react25.default.createElement("div", null, isPlaying ? /* @__PURE__ */ import_react25.default.createElement(Pause, {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", null, isPlaying ? /* @__PURE__ */ import_react26.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react25.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react26.default.createElement(Play, {
     className: "ml-1 w-4"
-  }))), /* @__PURE__ */ import_react25.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "ml-2 w-[18px] text-gray-800 cursor-pointer",
     onClick: rewind
-  }, /* @__PURE__ */ import_react25.default.createElement(Back15, null)), /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Back15, null)), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "ml-2 w-[18px] text-gray-800 cursor-pointer",
     onClick: fastForward
-  }, /* @__PURE__ */ import_react25.default.createElement(Forward15, null)), /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Forward15, null)), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "ml-2 w-12 text-xs select-none"
-  }, toDurationString(currentTime)), /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, toDurationString(currentTime)), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "flex flex-1 relative items-center"
-  }, /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "flex-1 h-[6px] bg-gray-200 rounded-full",
     onClick: onClickTrack
-  }, /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "h-[6px] bg-yellow-500 rounded-l-full",
     style: { width: knobLeft }
-  })), /* @__PURE__ */ import_react25.default.createElement("div", {
+  })), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "absolute rounded-md h-5 w-2 bg-white border border-gray-200",
     style: { left: knobLeft },
     ref: knobRef
-  })), /* @__PURE__ */ import_react25.default.createElement("div", {
+  })), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "ml-2 w-12 text-xs select-none"
-  }, toDurationString(duration)), !fixed && /* @__PURE__ */ import_react25.default.createElement(import_react25.default.Fragment, null, /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, toDurationString(duration)), !fixed && /* @__PURE__ */ import_react26.default.createElement(import_react26.default.Fragment, null, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "text-gray-800 bg-white cursor-pointer w-[18px] ml-1 mr-2",
     onClick: onClickCalendar
-  }, /* @__PURE__ */ import_react25.default.createElement(Calendar, null)), /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Calendar, null)), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "text-gray-800 cursor-pointer w-4",
     onClick: clear
-  }, /* @__PURE__ */ import_react25.default.createElement(Close, null))), error && /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Close, null))), error && /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "absolute w-full left-0 bottom-0"
-  }, /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "flex-1 text-center text-red-700 text-xs mb-1"
   }, "There was an error playing audio.")));
 }
 function usePlaybarDrag(audioPlayer) {
   var _a, _b, _c;
-  const knobRef = (0, import_react25.useRef)(null);
+  const knobRef = (0, import_react26.useRef)(null);
   useWindowSize();
   const knobTrackWidth = ((_b = (_a = knobRef.current) == null ? void 0 : _a.parentElement) == null ? void 0 : _b.getBoundingClientRect().width) || 0;
   const knobWidth = ((_c = knobRef.current) == null ? void 0 : _c.getBoundingClientRect().width) || 0;
   const trackWidth = Math.max(0, knobTrackWidth - knobWidth);
   const [isDragging, dragXOffset] = useDrag({
     dragTarget: knobRef,
-    onDragStart: (0, import_react25.useCallback)((_event, setPosition) => {
+    onDragStart: (0, import_react26.useCallback)((_event, setPosition) => {
       var _a2;
       setPosition({ x: ((_a2 = knobRef.current) == null ? void 0 : _a2.offsetLeft) || 0, y: 0 });
     }, [knobRef.current]),
-    onDragEnd: (0, import_react25.useCallback)(() => {
+    onDragEnd: (0, import_react26.useCallback)(() => {
       var _a2;
       const leftOffset = Math.max(0, ((_a2 = knobRef.current) == null ? void 0 : _a2.offsetLeft) || 0);
       audioPlayer.displaySeek(leftOffset / trackWidth * audioPlayer.displayDuration);
     }, [knobRef.current, trackWidth])
   });
-  const onClickTrack = (0, import_react25.useCallback)((event) => {
+  const onClickTrack = (0, import_react26.useCallback)((event) => {
     var _a2;
     const trackElem = (_a2 = knobRef.current) == null ? void 0 : _a2.parentElement;
     const trackXOffset = (trackElem == null ? void 0 : trackElem.getBoundingClientRect().left) || 0;
@@ -87966,14 +88153,14 @@ function usePlaybarDrag(audioPlayer) {
 function usePlayer(id, url, offset = 0) {
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
-  (0, import_react25.useEffect)(() => {
+  (0, import_react26.useEffect)(() => {
     if (id) {
       audioPlayer.init({ id, url: url || "", offset });
     }
   }, [id, url, offset]);
   const isActive = audioPlayer.id;
   const isPlaying = audioPlayer.playing(null);
-  const togglePlayback = (0, import_react25.useCallback)(() => {
+  const togglePlayback = (0, import_react26.useCallback)(() => {
     if (isPlaying) {
       void track("Click", "Audio Pause", { eventId: id, url });
       audioPlayer.pause();
@@ -87982,15 +88169,15 @@ function usePlayer(id, url, offset = 0) {
       void audioPlayer.play();
     }
   }, [isPlaying]);
-  const fastForward = (0, import_react25.useCallback)(() => {
+  const fastForward = (0, import_react26.useCallback)(() => {
     void track("Click", "Audio Fast Forward", { eventId: id, url });
     audioPlayer.ff(15);
   }, []);
-  const rewind = (0, import_react25.useCallback)(() => {
+  const rewind = (0, import_react26.useCallback)(() => {
     void track("Click", "Audio Rewind", { eventId: id, url });
     audioPlayer.rewind(15);
   }, []);
-  const clear = (0, import_react25.useCallback)(() => {
+  const clear = (0, import_react26.useCallback)(() => {
     void track("Click", "Audio Stop", { eventId: id, url });
     audioPlayer.clear();
   }, []);
@@ -88008,13 +88195,13 @@ function Playbar(props) {
   const { id, url, offset = 0 } = props;
   const { audioPlayer, isActive, isPlaying, togglePlayback, fastForward, rewind, clear } = usePlayer(id, url, offset);
   const [knobRef, knobLeft, onClickTrack] = usePlaybarDrag(audioPlayer);
-  const onClickCalendar = (0, import_react25.useCallback)((event) => {
+  const onClickCalendar = (0, import_react26.useCallback)((event) => {
     var _a;
     return (_a = props.onClickCalendar) == null ? void 0 : _a.call(props, event, { value: audioPlayer.id });
   }, [audioPlayer.id]);
   if (!isActive)
     return null;
-  return /* @__PURE__ */ import_react25.default.createElement(PlaybarUI, {
+  return /* @__PURE__ */ import_react26.default.createElement(PlaybarUI, {
     clear,
     currentTime: audioPlayer.displayCurrentTime,
     duration: audioPlayer.displayDuration,
@@ -88032,20 +88219,20 @@ function Playbar(props) {
 }
 
 // src/modules/Transcript/EmptyMessage/index.tsx
-var import_react27 = __toModule(require_react());
+var import_react28 = __toModule(require_react());
 var import_ts_pattern4 = __toModule(require_lib());
 
 // src/components/Svg/Check.tsx
-var import_react26 = __toModule(require_react());
-var import_classnames10 = __toModule(require_classnames());
+var import_react27 = __toModule(require_react());
+var import_classnames11 = __toModule(require_classnames());
 function Check({ className, alt = "Check" }) {
-  return /* @__PURE__ */ import_react26.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__check"),
+  return /* @__PURE__ */ import_react27.default.createElement("svg", {
+    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__check"),
     width: "100%",
     viewBox: "0 0 8 6",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react26.default.createElement("title", null, alt), /* @__PURE__ */ import_react26.default.createElement("path", {
+  }, /* @__PURE__ */ import_react27.default.createElement("title", null, alt), /* @__PURE__ */ import_react27.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M7.69471 1.69471C7.87687 1.50611 7.97766 1.25351 7.97539 0.991311C7.97311 0.729114 7.86794 0.478302 7.68253 0.292894C7.49712 0.107485 7.24631 0.00231622 6.98411 3.78025e-05C6.72192 -0.00224062 6.46931 0.0985542 6.28071 0.280712L2.98771 3.57371L1.69471 2.28071C1.50611 2.09855 1.25351 1.99776 0.991311 2.00004C0.729114 2.00232 0.478302 2.10749 0.292894 2.29289C0.107485 2.4783 0.00231622 2.72911 3.78025e-05 2.99131C-0.00224062 3.25351 0.0985542 3.50611 0.280712 3.69471L2.28071 5.69471C2.46824 5.88218 2.72255 5.9875 2.98771 5.9875C3.25288 5.9875 3.50718 5.88218 3.69471 5.69471L7.69471 1.69471Z"
@@ -88059,75 +88246,75 @@ function EmptyMessageUI(props) {
     pillBgColor: "bg-gray-200",
     pillTextColor: "text-gray-700",
     pillText: "no connection details",
-    message: /* @__PURE__ */ import_react27.default.createElement("div", {
+    message: /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "This event will be transcribed if we receive", /* @__PURE__ */ import_react27.default.createElement("br", null), "connection details before the event start time.")
+    }, "This event will be transcribed if we receive", /* @__PURE__ */ import_react28.default.createElement("br", null), "connection details before the event start time.")
   })).with(EventConnectionStatus.ConnectionExpected, () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "connection expected",
-    message: /* @__PURE__ */ import_react27.default.createElement("div", {
+    message: /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "The transcript will appear here", /* @__PURE__ */ import_react27.default.createElement("br", null), "after the event begins.")
+    }, "The transcript will appear here", /* @__PURE__ */ import_react28.default.createElement("br", null), "after the event begins.")
   })).with(EventConnectionStatus.WaitingToConnect, () => ({
     pillBgColor: "bg-yellow-200",
     pillTextColor: "text-yellow-700",
     pillText: "waiting for connection",
-    message: /* @__PURE__ */ import_react27.default.createElement("div", {
+    message: /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "We are attempting to connect,", /* @__PURE__ */ import_react27.default.createElement("br", null), " please wait.")
+    }, "We are attempting to connect,", /* @__PURE__ */ import_react28.default.createElement("br", null), " please wait.")
   })).with(EventConnectionStatus.Connected, () => ({
     pillBgColor: "bg-yellow-300",
     pillTextColor: "text-yellow-900",
     pillText: "connected",
-    message: /* @__PURE__ */ import_react27.default.createElement("div", {
+    message: /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "Transcription will start automatically", /* @__PURE__ */ import_react27.default.createElement("br", null), "when the conference speaker begins.")
+    }, "Transcription will start automatically", /* @__PURE__ */ import_react28.default.createElement("br", null), "when the conference speaker begins.")
   })).with(EventConnectionStatus.Missed, () => ({
     pillBgColor: "bg-gray-200",
     pillTextColor: "text-gray-700",
     pillText: "missed",
-    message: /* @__PURE__ */ import_react27.default.createElement("div", {
+    message: /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "text-base text-gray-500"
     }, (event == null ? void 0 : event.hasConnectionDetails) ? prettyLineBreak("Sorry, we were unable to connect to the live audio for this event.") : prettyLineBreak("Apologies, no connection details were found for this event"))
   })).with(EventConnectionStatus.Transcribing, () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "Transcribing event",
-    message: /* @__PURE__ */ import_react27.default.createElement("div", {
+    message: /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "text-base text-gray-500"
     }, "This message should not appear")
   })).with(EventConnectionStatus.Transcribed, () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "Event Transcribed",
-    message: /* @__PURE__ */ import_react27.default.createElement("div", {
+    message: /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "text-base text-gray-500"
     }, "This message should not appear")
   })).exhaustive();
-  return /* @__PURE__ */ import_react27.default.createElement("div", {
+  return /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "w-full px-6 h-full flex flex-col text-center items-center justify-center"
-  }, /* @__PURE__ */ import_react27.default.createElement("span", {
+  }, /* @__PURE__ */ import_react28.default.createElement("span", {
     className: "text-xl font-semibold text-gray-600 line-clamp-2"
-  }, prettyLineBreak(event == null ? void 0 : event.title)), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, prettyLineBreak(event == null ? void 0 : event.title)), /* @__PURE__ */ import_react28.default.createElement("div", {
     className: `overflow-hidden relative text-xxs ${pillTextColor} uppercase tracking-widest px-1.5 py-0.5 rounded-xl mt-2 mb-8`
-  }, /* @__PURE__ */ import_react27.default.createElement("span", {
+  }, /* @__PURE__ */ import_react28.default.createElement("span", {
     className: "z-10 relative"
-  }, pillText), /* @__PURE__ */ import_react27.default.createElement("span", {
+  }, pillText), /* @__PURE__ */ import_react28.default.createElement("span", {
     className: `animate-pulse ${pillBgColor} absolute top-0 bottom-0 left-0 right-0`
-  })), message, (event == null ? void 0 : event.publishedTranscriptExpected) && /* @__PURE__ */ import_react27.default.createElement("div", {
+  })), message, (event == null ? void 0 : event.publishedTranscriptExpected) && /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "flex mt-4 items-center justify-start text-left bg-green-50 rounded-2xl py-1.5 pr-2 pl-3 border-[1px] border-green-100"
-  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "text-sm leading-tight text-green-600"
-  }, "We expect to receive a", /* @__PURE__ */ import_react27.default.createElement("br", null), "published transcript for this event."), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, "We expect to receive a", /* @__PURE__ */ import_react28.default.createElement("br", null), "published transcript for this event."), /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "text-white bg-green-400 h-6 w-6 rounded-2xl flex items-center justify-center ml-4"
-  }, /* @__PURE__ */ import_react27.default.createElement(Check, {
+  }, /* @__PURE__ */ import_react28.default.createElement(Check, {
     className: "w-2.5"
   }))));
 }
 function EmptyMessage(props) {
   const { event } = props;
-  return /* @__PURE__ */ import_react27.default.createElement(EmptyMessageUI, {
+  return /* @__PURE__ */ import_react28.default.createElement(EmptyMessageUI, {
     event
   });
 }
@@ -88141,25 +88328,6 @@ var import_luxon = __toModule(require_luxon());
 // src/components/ExpandButton/index.tsx
 var import_react29 = __toModule(require_react());
 var import_classnames12 = __toModule(require_classnames());
-
-// src/components/Svg/Chevron.tsx
-var import_react28 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
-function Chevron({ className, alt = "Chevron" }) {
-  return /* @__PURE__ */ import_react28.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "Svg", "Svg__chevron"),
-    width: "100%",
-    viewBox: "0 0 8 5",
-    fill: "black",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react28.default.createElement("title", null, alt), /* @__PURE__ */ import_react28.default.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L4 2.58579L6.29289 0.292893C6.68342 -0.0976311 7.31658 -0.0976311 7.70711 0.292893C8.09763 0.683417 8.09763 1.31658 7.70711 1.70711L4.70711 4.70711C4.31658 5.09763 3.68342 5.09763 3.29289 4.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z"
-  }));
-}
-
-// src/components/ExpandButton/index.tsx
 function ExpandButtonUI(props) {
   const { className = "", onClick, expanded } = props;
   return /* @__PURE__ */ import_react29.default.createElement("button", {
@@ -88691,7 +88859,9 @@ function HeaderUI(props) {
     eventDetailsExpanded,
     toggleEventDetails,
     priceChartExpanded,
-    togglePriceChart
+    togglePriceChart,
+    searchTerm,
+    onChangeSearchTerm
   } = props;
   return /* @__PURE__ */ import_react39.default.createElement("div", {
     ref: headerRef,
@@ -88709,7 +88879,9 @@ function HeaderUI(props) {
   }), "Events"), /* @__PURE__ */ import_react39.default.createElement(Input, {
     name: "search",
     className: "mr-3",
-    placeholder: "Search Transcripts..."
+    placeholder: "Search Transcripts...",
+    value: searchTerm,
+    onChange: onChangeSearchTerm
   }, /* @__PURE__ */ import_react39.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "items-center flex"
   }, /* @__PURE__ */ import_react39.default.createElement(Gear, {
@@ -88785,7 +88957,7 @@ function HeaderUI(props) {
   }).otherwise(() => null));
 }
 function Header(props) {
-  const { eventQuery, onBack } = props;
+  const { eventQuery, onBack, searchTerm, onChangeSearchTerm } = props;
   const [headerExpanded, setHeaderState] = (0, import_react39.useState)(false);
   const [priceChartExpanded, setPriceChartState] = (0, import_react39.useState)(false);
   const [eventDetailsExpanded, setEventDetailsState] = (0, import_react39.useState)(false);
@@ -88817,19 +88989,55 @@ function Header(props) {
     eventDetailsExpanded,
     toggleEventDetails,
     togglePriceChart,
-    priceChartExpanded
+    priceChartExpanded,
+    searchTerm,
+    onChangeSearchTerm
   });
 }
 
 // src/modules/Transcript/index.tsx
 var TranscriptUI = (props) => {
-  const { currentParagraph, currentParagraphRef, eventQuery, onBack, onClickTranscript, paragraphs, scrollRef } = props;
+  const {
+    currentParagraph,
+    currentParagraphRef,
+    eventQuery,
+    onBack,
+    onClickTranscript,
+    paragraphs,
+    scrollRef,
+    searchTerm,
+    onChangeSearchTerm,
+    matches,
+    currentMatch,
+    currentMatchRef,
+    nextMatch,
+    prevMatch,
+    matchIndex
+  } = props;
   return /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "h-full flex flex-col transcript"
-  }, /* @__PURE__ */ import_react40.default.createElement(Header, {
+  }, /* @__PURE__ */ import_react40.default.createElement("div", null, /* @__PURE__ */ import_react40.default.createElement(Header, {
     eventQuery,
-    onBack
+    onBack,
+    searchTerm,
+    onChangeSearchTerm
+  }), searchTerm && /* @__PURE__ */ import_react40.default.createElement("div", {
+    className: "flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow"
+  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+    className: "text-sm"
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react40.default.createElement("span", {
+    className: "font-semibold"
+  }, searchTerm), '"'), /* @__PURE__ */ import_react40.default.createElement("div", {
+    className: "flex-1"
   }), /* @__PURE__ */ import_react40.default.createElement("div", {
+    className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
+    onClick: nextMatch
+  }, /* @__PURE__ */ import_react40.default.createElement(Chevron, null)), /* @__PURE__ */ import_react40.default.createElement("div", {
+    className: "min-w-[35px] mr-2 text-center"
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react40.default.createElement("div", {
+    className: "w-2.5 cursor-pointer rotate-180 hover:text-gray-600",
+    onClick: prevMatch
+  }, /* @__PURE__ */ import_react40.default.createElement(Chevron, null)))), /* @__PURE__ */ import_react40.default.createElement("div", {
     className: "overflow-y-scroll flex-1 bg-gray-50",
     ref: scrollRef
   }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react40.default.createElement("div", {
@@ -88850,10 +89058,11 @@ var TranscriptUI = (props) => {
       event: data.events[0]
     });
   }).with({ status: "success" }, () => {
-    return paragraphs.map((paragraph) => {
-      const { id, sentences, timestamp } = paragraph;
+    return paragraphs.map(({ chunks, paragraph }) => {
+      const { id, timestamp } = paragraph;
       return /* @__PURE__ */ import_react40.default.createElement("div", {
         key: id,
+        id: `paragraph-${id}`,
         className: "relative p-3 pb-4",
         onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
         ref: id === currentParagraph ? currentParagraphRef : void 0
@@ -88861,7 +89070,13 @@ var TranscriptUI = (props) => {
         className: "pb-2 font-semibold text-sm"
       }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react40.default.createElement("div", {
         className: "text-sm"
-      }, sentences.map(({ text }) => text).join(" ")), id === currentParagraph && /* @__PURE__ */ import_react40.default.createElement("div", {
+      }, chunks.map(({ highlight, id: id2, text }) => highlight ? /* @__PURE__ */ import_react40.default.createElement("mark", {
+        ref: id2 === currentMatch ? currentMatchRef : void 0,
+        className: (0, import_classnames23.default)({ "bg-yellow-300": id2 === currentMatch }),
+        key: id2
+      }, text) : /* @__PURE__ */ import_react40.default.createElement("span", {
+        key: id2
+      }, text))), id === currentParagraph && /* @__PURE__ */ import_react40.default.createElement("div", {
         className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
       }));
     });
@@ -88936,7 +89151,74 @@ function useAudioSync(paragraphs, eventQuery, audioPlayer) {
       setCurrentParagraph(paragraph.id);
     }
   }, [paragraphs, Math.floor(audioPlayer.rawCurrentTime)]);
-  return [currentParagraph, scrollRef, currentParagraphRef];
+  return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef];
+}
+function useSearchState(paragraphs) {
+  const { state, handlers } = useChangeHandlers({
+    searchTerm: ""
+  });
+  const [currentMatch, setCurrentMatch] = (0, import_react40.useState)(null);
+  const [scrollRef, currentMatchRef] = useAutoScroll({
+    pauseOnUserScroll: false,
+    block: "center",
+    inline: "center",
+    behavior: "auto"
+  });
+  const paragraphsWithMatches = (0, import_react40.useMemo)(() => paragraphs.map((paragraph) => {
+    if (!state.searchTerm) {
+      return {
+        chunks: paragraph.sentences.map(({ text: text2 }, idx) => ({
+          highlight: false,
+          id: `${paragraph.id}-chunk-${idx}`,
+          text: text2
+        })),
+        paragraph
+      };
+    }
+    const text = paragraph.sentences.map((s3) => s3.text).join(" ");
+    const chunks = (0, import_highlight_words_core.findAll)({
+      autoEscape: true,
+      caseSensitive: false,
+      searchWords: [state.searchTerm],
+      textToHighlight: text
+    }).map(({ highlight, start, end }, idx) => ({
+      highlight,
+      id: `${paragraph.id}-chunk-${idx}`,
+      text: text.substr(start, end - start)
+    }));
+    return {
+      chunks,
+      paragraph
+    };
+  }), [paragraphs, state.searchTerm]);
+  const matches = (0, import_react40.useMemo)(() => paragraphsWithMatches.flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [paragraphsWithMatches]);
+  (0, import_react40.useEffect)(() => {
+    var _a;
+    setCurrentMatch(((_a = matches[0]) == null ? void 0 : _a.id) || null);
+  }, [state.searchTerm]);
+  const matchIndex = (0, import_react40.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react40.useCallback)(() => {
+    const match9 = matches[(matchIndex + 1) % matches.length];
+    if (match9)
+      setCurrentMatch(match9.id);
+  }, [matches, matchIndex]);
+  const prevMatch = (0, import_react40.useCallback)(() => {
+    const match9 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
+    if (match9)
+      setCurrentMatch(match9.id);
+  }, [matches, matchIndex]);
+  return {
+    searchTerm: state.searchTerm,
+    onChangeSearchTerm: handlers.searchTerm,
+    paragraphsWithMatches,
+    matches,
+    matchIndex,
+    nextMatch,
+    prevMatch,
+    scrollRef,
+    currentMatch,
+    currentMatchRef
+  };
 }
 var Transcript = (props) => {
   const { eventId, onBack } = props;
@@ -89011,35 +89293,48 @@ var Transcript = (props) => {
     }
   });
   const audioPlayer = useAudioPlayer();
+  const paragraphs = useLatestTranscripts(eventId, eventQuery);
+  const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
+  const searchState = useSearchState(paragraphs);
+  const scrollRef = (0, import_react40.useCallback)((ref) => {
+    autoScrollRef(ref);
+    searchState.scrollRef(ref);
+  }, [autoScrollRef, searchState.scrollRef]);
   const onClickTranscript = (paragraph) => {
     audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
   };
-  const paragraphs = useLatestTranscripts(eventId, eventQuery);
-  const [currentParagraph, scrollRef, currentParagraphRef] = useAudioSync(paragraphs, eventQuery, audioPlayer);
   useAutoTrack("View", "Event", { eventId }, [eventId]);
   return /* @__PURE__ */ import_react40.default.createElement(TranscriptUI, {
     eventQuery,
     currentParagraph,
     currentParagraphRef,
-    paragraphs,
+    paragraphs: searchState.paragraphsWithMatches,
     onBack,
     onClickTranscript,
-    scrollRef
+    scrollRef,
+    searchTerm: searchState.searchTerm,
+    onChangeSearchTerm: searchState.onChangeSearchTerm,
+    matches: searchState.matches,
+    matchIndex: searchState.matchIndex,
+    nextMatch: searchState.nextMatch,
+    prevMatch: searchState.prevMatch,
+    currentMatch: searchState.currentMatch,
+    currentMatchRef: searchState.currentMatchRef
   });
 };
 
 // src/components/Tabs/index.tsx
 var import_react41 = __toModule(require_react());
-var import_classnames23 = __toModule(require_classnames());
+var import_classnames24 = __toModule(require_classnames());
 var import_ts_pattern7 = __toModule(require_lib());
 var Tabs = (props) => {
   const { onChange, options = [], value, kind = "button", className = "" } = props;
-  const getClasses = (val, opStyles) => (0, import_ts_pattern7.match)(kind).with("button", () => (0, import_classnames23.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val, opStyles) => (0, import_ts_pattern7.match)(kind).with("button", () => (0, import_classnames24.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
     "tab__option--selected": val === value
-  }, opStyles)).with("line", () => (0, import_classnames23.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
+  }, opStyles)).with("line", () => (0, import_classnames24.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
     "cursor-pointer": val !== value,
     "text-gray-400": val !== value,
     "text-black": val === value,
@@ -89056,7 +89351,7 @@ var Tabs = (props) => {
     className: getClasses(opVal, opStyles),
     onClick: (event) => onChange && onChange(event, { value: opVal })
   }, label, kind === "line" && /* @__PURE__ */ import_react41.default.createElement("div", {
-    className: (0, import_classnames23.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
+    className: (0, import_classnames24.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": opVal === value,
       "-bottom-0.5": opVal !== value
     })
@@ -89065,7 +89360,7 @@ var Tabs = (props) => {
 
 // src/modules/EventList/FilterBy/index.tsx
 var import_react42 = __toModule(require_react());
-var import_classnames24 = __toModule(require_classnames());
+var import_classnames25 = __toModule(require_classnames());
 var FilterBy = (props) => {
   const { children, onChange, options = [], value = [] } = props;
   return /* @__PURE__ */ import_react42.default.createElement("div", {
@@ -89076,7 +89371,7 @@ var FilterBy = (props) => {
     className: "flex justify-end flex-1"
   }, options.map((option) => /* @__PURE__ */ import_react42.default.createElement("div", {
     key: `filterby-option-${option.value}`,
-    className: (0, import_classnames24.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
+    className: (0, import_classnames25.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
       "bg-blue-100": value == null ? void 0 : value.includes(option.value),
       "border-blue-300": value == null ? void 0 : value.includes(option.value),
       "border-gray-100": !(value == null ? void 0 : value.includes(option.value)),
@@ -89104,11 +89399,11 @@ var FilterBy = (props) => {
 
 // src/modules/EventList/PlayButton/index.tsx
 var import_react43 = __toModule(require_react());
-var import_classnames25 = __toModule(require_classnames());
+var import_classnames26 = __toModule(require_classnames());
 function PlayButtonUI(props) {
   const { hasAudio, isPlaying, togglePlayback } = props;
   return hasAudio ? /* @__PURE__ */ import_react43.default.createElement("div", {
-    className: (0, import_classnames25.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
+    className: (0, import_classnames26.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
       "hover:border-blue-500": !isPlaying,
       "active:border-blue-600": !isPlaying,
       "border-blue-600": isPlaying,

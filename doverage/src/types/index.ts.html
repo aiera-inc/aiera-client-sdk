@@ -3,15 +3,15 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/lib/hooks/useChangeHandlers/index.ts</title>
+    <title>Code coverage report for src/types/index.ts</title>
     <meta charset="utf-8" />
-    <link rel="stylesheet" href="../../../../prettify.css" />
-    <link rel="stylesheet" href="../../../../base.css" />
-    <link rel="shortcut icon" type="image/x-icon" href="../../../../favicon.png" />
+    <link rel="stylesheet" href="../../prettify.css" />
+    <link rel="stylesheet" href="../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../favicon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style type='text/css'>
         .coverage-summary .sorter {
-            background-image: url(../../../../sort-arrow-sprite.png);
+            background-image: url(../../sort-arrow-sprite.png);
         }
     </style>
 </head>
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../../index.html">All files</a> / <a href="index.html">src/lib/hooks/useChangeHandlers</a> index.ts</h1>
+        <h1><a href="../../index.html">All files</a> / <a href="index.html">src/types</a> index.ts</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90.91% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>10/11</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>4/4</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">90% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/10</span>
+                <span class='fraction'>0/0</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -116,7 +116,12 @@
 <a name='L57'></a><a href='#L57'>57</a>
 <a name='L58'></a><a href='#L58'>58</a>
 <a name='L59'></a><a href='#L59'>59</a>
-<a name='L60'></a><a href='#L60'>60</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -152,88 +157,98 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20x</span>
-<span class="cline-any cline-yes">20x</span>
-<span class="cline-any cline-yes">20x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20x</span>
-<span class="cline-any cline-yes">52x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useCallback, useState, Dispatch, SetStateAction } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { SyntheticEvent } from 'react';
+import { CombinedError } from 'urql';
 &nbsp;
-import { ChangeHandler, ChangeHandlers } from '@aiera/client-sdk/types';
-export { ChangeHandler };
+export * from './generated';
+&nbsp;
+export type Maybe&lt;T&gt; = T | null | undefined;
+export type Nullable&lt;T&gt; = {
+    [P in keyof T]: T[P] | null;
+};
+export type QueryError = CombinedError;
+&nbsp;
+export interface ChangeEvent&lt;T = unknown&gt; {
+    /**
+     * The name for this input, used so that a single change handler can be used
+     *for many inputs.
+     */
+    name?: string;
+    /**
+     * Shortcut to get the value from the input.
+     */
+    value?: T;
+}
+/**
+ * Implements a consistent change handler interface for all inputs that
+ * is backwards compatible with browser change handler but has an optional
+ * second arg with some shortcuts for common use cases.
+ */
+export type ChangeHandler&lt;T = unknown, E extends SyntheticEvent = SyntheticEvent&gt; = (
+    event: E,
+    change: ChangeEvent&lt;T | null&gt;
+) =&gt; void;
 &nbsp;
 /**
- * This is a utility for taking a a set of fields
- * that will be used in forms, change/click handlers, etc.
- * to update state. It returns the initial state and the setState
- * function like `useState` does, however it also generates a change
- * handler for each field that is set up to work well with the
- * ChangeHandler interface.
- *
- * Example:
- * ```typescript
- * type Option = 'option1' | 'option2';
- * interface MyState {
- *     field1: Option;
- * }
- * const MyForm = () =&gt; {
- *     const { state, handlers } = useChangeHandlers&lt;MyState&gt;({ field1: 'option1' });
- *     return &lt;Select&lt;Option&gt; onChange={handlers.field1} /&gt;;
- * }
- * ```
- *
- * This is alpha stage, use only where it's easy to revert since the API may change significantly.
- *
- * @param initialState
- * @alpha
+ * Utility type for creating a set of functions to handle
+ * changes for multiple fields, like a form
  */
-export function useChangeHandlers&lt;T&gt;(initialState: T): {
-    state: T;
-    handlers: ChangeHandlers&lt;T&gt;;
-    setState: Dispatch&lt;SetStateAction&lt;T&gt;&gt;;
-    mergeState: Dispatch&lt;SetStateAction&lt;Partial&lt;T&gt;&gt;&gt;;
-} {
-    const [state, setState] = useState&lt;T&gt;(initialState);
-    const handlers = {} as ChangeHandlers&lt;T&gt;;
-    const mergeState = useCallback(
-        (newState: SetStateAction&lt;Partial&lt;T&gt;&gt;) =&gt;
-            setState((prevState) =&gt; {
-                <span class="missing-if-branch" title="if path not taken" >I</span>if (typeof newState === 'function') {
-<span class="cstat-no" title="statement not covered" >                    return { ...prevState, ...newState(prevState) };</span>
-                }
-                return { ...prevState, ...newState };
-            }),
-        [setState]
-    );
-    for (const key in state) {
-        handlers[key] = useCallback((_, change) =&gt; mergeState({ [key]: change.value } as Partial&lt;T&gt;), [state]);
-    }
-    /** The same as the `state` value from useState */
-    return {
-        state,
-        setState,
-        mergeState,
-        handlers,
-    };
-}
+export type ChangeHandlers&lt;T&gt; = {
+    [key in keyof T]-?: ChangeHandler&lt;T[key]&gt;;
+};
+&nbsp;
+/**
+ * Partial only goes one level deep,
+ * this makes all the nested types partials
+ * as well.
+ *
+ * The main use case for this is working with
+ * GQL results.
+ *
+ * If you have a utility function that you want
+ * to work on `Company` but you only queried
+ * some of the fields on `Company` (and it's
+ * child fields) which is almost always the case,
+ * then you'd get an error when passing the company
+ * field through even if you handle null/undefined
+ * properly. This allows you to specify the input type
+ * as DeepPartial&lt;Company&gt; so that it works and forces
+ * you to handle null/undefined.
+ *
+ * If the function can't handle null/undefined, specify
+ * the full expected shape in your input type.
+ */
+export type DeepPartial&lt;T&gt; = {
+    [P in keyof T]?: DeepPartial&lt;T[P]&gt;;
+};
 &nbsp;</pre></td></tr></table></pre>
 
                 <div class='push'></div><!-- for sticky footer -->
@@ -244,14 +259,14 @@ export function useChangeHandlers&lt;T&gt;(initialState: T): {
                 at Thu Oct 28 2021 13:13:12 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
-        <script src="../../../../prettify.js"></script>
+        <script src="../../prettify.js"></script>
         <script>
             window.onload = function () {
                 prettyPrint();
             };
         </script>
-        <script src="../../../../sorter.js"></script>
-        <script src="../../../../block-navigation.js"></script>
+        <script src="../../sorter.js"></script>
+        <script src="../../block-navigation.js"></script>
     </body>
 </html>
     
