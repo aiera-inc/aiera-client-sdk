@@ -47,6 +47,7 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     knobRef: RefObject<HTMLDivElement>;
     onClickCalendar: (event: MouseEvent) => void;
     onClickTrack: (event: MouseEvent) => void;
+    percentPlayed?: number;
     playbackRate: number;
     rewind: () => void;
     setVolume: (vol: number) => void;
@@ -73,6 +74,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         knobRef,
         onClickCalendar,
         onClickTrack,
+        percentPlayed = 0,
         playbackRate,
         rewind,
         setVolume,
@@ -84,10 +86,11 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         volume,
     } = props;
     return (
-        <div className="relative h-13 w-full flex flex-col justify-center mt-[-6px]">
+        <div className="relative h-13 w-full flex flex-col justify-center mt-[-6px] z-20">
+            <div className="bg-white absolute top-[9px] left-0 right-0 bottom-0" />
             <div
-                className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-60"
-                style={{ width: knobLeft + 74 /* 65 for timestamp width + 9 for half of knob width */ }}
+                className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-80"
+                style={{ width: `${percentPlayed}%` }}
             />
             <div className="flex z-20 player_timeline">
                 <div className="flex items-center justify-center px-2 text-xs select-none relative w-[65px]">
@@ -113,7 +116,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     </span>
                 </div>
             </div>
-            <div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 bg-white">
+            <div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5">
                 {!fixed && (
                     <Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
                         <XMark />
@@ -221,7 +224,9 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     );
 }
 
-function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject<HTMLDivElement>, number, (event: MouseEvent) => void] {
+function usePlaybarDrag(
+    audioPlayer: AudioPlayer
+): [RefObject<HTMLDivElement>, number, (event: MouseEvent) => void, number] {
     const knobRef = useRef<HTMLDivElement>(null);
     // Rerender on resize to make sure the knob stays positioned correctly
     useWindowSize();
@@ -254,7 +259,8 @@ function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject<HTMLDivElement>, n
 
     const audioOffset = (audioPlayer.displayCurrentTime / audioPlayer.displayDuration) * trackWidth || 0;
     const knobLeft = Math.min(trackWidth, Math.max(0, isDragging ? dragXOffset : audioOffset));
-    return [knobRef, knobLeft, onClickTrack];
+    const percentPlayed = (knobLeft * 100) / trackWidth;
+    return [knobRef, knobLeft, onClickTrack, percentPlayed];
 }
 
 function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaData) {
@@ -354,7 +360,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
         swap,
         toggleRate,
     } = usePlayer(id, url, offset, metaData);
-    const [knobRef, knobLeft, onClickTrack] = usePlaybarDrag(audioPlayer);
+    const [knobRef, knobLeft, onClickTrack, percentPlayed] = usePlaybarDrag(audioPlayer);
 
     const onClickCalendar = useCallback(
         (event: MouseEvent) => props.onClickCalendar?.(event, { value: audioPlayer.id }),
@@ -377,6 +383,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             knobRef={knobRef}
             onClickCalendar={onClickCalendar}
             onClickTrack={onClickTrack}
+            percentPlayed={percentPlayed}
             playbackRate={audioPlayer.playbackRate}
             rewind={rewind}
             setVolume={audioPlayer.setVolume}

@@ -31,6 +31,7 @@ import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/us
 import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
+import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
@@ -49,48 +50,53 @@ type SpeakerTurnsWithMatches = SpeakerTurn & { paragraphsWithMatches: ParagraphW
 
 /** @notExported */
 interface TranscriptUIProps {
-    eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
-    currentParagraph?: string | null;
-    currentParagraphRef: Ref<HTMLDivElement>;
-    speakerTurns: SpeakerTurnsWithMatches[];
-    showSpeakers: boolean;
-    onBack?: MouseEventHandler;
-    onClickTranscript?: (paragraph: Paragraph) => void;
-    scrollRef: Ref<HTMLDivElement>;
-    searchTerm: string;
-    onChangeSearchTerm: ChangeHandler<string>;
-    matches: Chunk[];
-    matchIndex: number;
-    nextMatch: () => void;
-    prevMatch: () => void;
+    containerHeight: number;
+    containerRef: Ref<HTMLDivElement>;
     currentMatch?: string | null;
     currentMatchRef: Ref<HTMLDivElement>;
+    currentParagraph?: string | null;
+    currentParagraphRef: Ref<HTMLDivElement>;
+    eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
+    matchIndex: number;
+    matches: Chunk[];
+    nextMatch: () => void;
+    onBack?: MouseEventHandler;
+    onChangeSearchTerm: ChangeHandler<string>;
+    onClickTranscript?: (paragraph: Paragraph) => void;
+    prevMatch: () => void;
+    scrollRef: Ref<HTMLDivElement>;
+    searchTerm: string;
+    showSpeakers: boolean;
+    speakerTurns: SpeakerTurnsWithMatches[];
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const {
+        containerHeight,
+        containerRef,
+        currentMatch,
+        currentMatchRef,
         currentParagraph,
         currentParagraphRef,
         eventQuery,
+        matchIndex,
+        matches,
+        nextMatch,
         onBack,
+        onChangeSearchTerm,
         onClickTranscript,
-        speakerTurns,
-        showSpeakers,
+        prevMatch,
         scrollRef,
         searchTerm,
-        onChangeSearchTerm,
-        matches,
-        currentMatch,
-        currentMatchRef,
-        nextMatch,
-        prevMatch,
-        matchIndex,
+        showSpeakers,
+        speakerTurns,
     } = props;
 
     return (
-        <div className="h-full flex flex-col transcript bg-gray-50">
+        <div className="h-full flex flex-col transcript bg-gray-50" ref={containerRef}>
             <div>
                 <Header
+                    containerHeight={containerHeight}
                     eventQuery={eventQuery}
                     onBack={onBack}
                     searchTerm={searchTerm}
@@ -615,26 +621,30 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         [onBack]
     );
 
+    const { height: containerHeight, ref: containerRef } = useElementSize();
+
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 
     return (
         <TranscriptUI
-            eventQuery={eventQuery}
+            containerRef={containerRef}
+            containerHeight={containerHeight}
+            currentMatch={searchState.currentMatch}
+            currentMatchRef={searchState.currentMatchRef}
             currentParagraph={currentParagraph}
             currentParagraphRef={currentParagraphRef}
             speakerTurns={searchState.speakerTurnsWithMatches}
             showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
             onBack={onClickBack}
+            eventQuery={eventQuery}
+            matchIndex={searchState.matchIndex}
+            matches={searchState.matches}
+            nextMatch={searchState.nextMatch}
+            onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
+            prevMatch={searchState.prevMatch}
             scrollRef={scrollRef}
             searchTerm={searchState.searchTerm}
-            onChangeSearchTerm={searchState.onChangeSearchTerm}
-            matches={searchState.matches}
-            matchIndex={searchState.matchIndex}
-            nextMatch={searchState.nextMatch}
-            prevMatch={searchState.prevMatch}
-            currentMatch={searchState.currentMatch}
-            currentMatchRef={searchState.currentMatchRef}
         />
     );
 };

@@ -68,13 +68,13 @@ const eventQuery = {
 describe('Header', () => {
     test('renders', () => {
         const onBack = jest.fn();
-        renderWithClient(<Header eventQuery={eventQuery as EventQuery} onBack={onBack} />);
+        renderWithClient(<Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} />);
         screen.getByText('VERB');
     });
 
     test('Back function is called', () => {
         const onBack = jest.fn();
-        renderWithClient(<Header eventQuery={eventQuery as EventQuery} onBack={onBack} />);
+        renderWithClient(<Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} />);
         const eventsBtn = screen.getByText('Events');
         fireEvent.click(eventsBtn);
         expect(onBack).toHaveBeenCalledTimes(1);
@@ -84,6 +84,7 @@ describe('Header', () => {
         const onChangeSearchTerm = jest.fn();
         renderWithClient(
             <Header
+                containerHeight={500}
                 eventQuery={eventQuery as EventQuery}
                 onChangeSearchTerm={onChangeSearchTerm}
                 searchTerm={'test search'}

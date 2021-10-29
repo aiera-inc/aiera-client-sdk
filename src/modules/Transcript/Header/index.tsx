@@ -16,10 +16,12 @@ import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/typ
 import { QueryResult } from '@aiera/client-sdk/api/client';
 import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
+import { KeyMentions } from '../KeyMentions';
 import './styles.css';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
+    containerHeight: number;
     eventQuery: EventQuery;
     onBack?: MouseEventHandler;
     searchTerm?: string;
@@ -35,34 +37,41 @@ interface HeaderUIProps extends HeaderSharedProps {
     toggleEventDetails: () => void;
     priceChartExpanded: boolean;
     togglePriceChart: () => void;
+    keyMentionsExpanded: boolean;
+    toggleKeyMentions: () => void;
 }
 
 export function HeaderUI(props: HeaderUIProps): ReactElement {
     const {
-        eventQuery,
-        onBack,
-        headerRef,
-        headerExpanded,
-        toggleHeader,
+        containerHeight,
         eventDetailsExpanded,
-        toggleEventDetails,
-        priceChartExpanded,
-        togglePriceChart,
-        searchTerm,
+        eventQuery,
+        headerExpanded,
+        headerRef,
+        keyMentionsExpanded,
+        onBack,
         onChangeSearchTerm,
+        priceChartExpanded,
+        searchTerm,
+        toggleEventDetails,
+        toggleHeader,
+        toggleKeyMentions,
+        togglePriceChart,
     } = props;
 
     return (
         <div
             ref={headerRef}
             className={classNames(
-                'bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all overflow-hidden',
+                'bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all flex flex-col',
                 {
                     'shadow-3xl': !headerExpanded,
                     'shadow-xl': headerExpanded,
                 },
                 'transcript__header'
             )}
+            // Height can grow, but should not overlap the audio player (53px)
+            style={{ maxHeight: containerHeight > 0 ? containerHeight - 53 : 'calc(100% - 53px)' }}
         >
             <div className="flex items-center px-3">
                 {onBack && (
@@ -179,6 +188,12 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     toggleEventDetails={toggleEventDetails}
                                 />
                             )}
+                            {false && headerExpanded && (
+                                <KeyMentions
+                                    toggleKeyMentions={toggleKeyMentions}
+                                    keyMentionsExpanded={keyMentionsExpanded}
+                                />
+                            )}
                             <PriceChart
                                 headerExpanded={headerExpanded}
                                 priceChartExpanded={priceChartExpanded}
@@ -199,26 +214,31 @@ export interface HeaderProps extends HeaderSharedProps {}
  * Renders Header
  */
 export function Header(props: HeaderProps): ReactElement {
-    const { eventQuery, onBack, searchTerm, onChangeSearchTerm } = props;
+    const { eventQuery, onBack, searchTerm, onChangeSearchTerm, containerHeight } = props;
     const [headerExpanded, setHeaderState] = useState(false);
     const [priceChartExpanded, setPriceChartState] = useState(false);
     const [eventDetailsExpanded, setEventDetailsState] = useState(false);
+    const [keyMentionsExpanded, setKeyMentionsState] = useState(false);
 
     const toggleHeader = useCallback(() => setHeaderState(!headerExpanded), [headerExpanded]);
 
+    const toggleKeyMentions = useCallback(() => {
+        setKeyMentionsState(!keyMentionsExpanded);
+        setPriceChartState(false);
+        setEventDetailsState(false);
+    }, [keyMentionsExpanded]);
+
     const toggleEventDetails = useCallback(() => {
         setEventDetailsState(!eventDetailsExpanded);
-        if (priceChartExpanded && !eventDetailsExpanded) {
-            setPriceChartState(false);
-        }
-    }, [eventDetailsExpanded, priceChartExpanded]);
+        setPriceChartState(false);
+        setKeyMentionsState(false);
+    }, [eventDetailsExpanded]);
 
     const togglePriceChart = useCallback(() => {
         setPriceChartState(!priceChartExpanded);
-        if (eventDetailsExpanded && !priceChartExpanded) {
-            setEventDetailsState(false);
-        }
-    }, [priceChartExpanded, eventDetailsExpanded]);
+        setEventDetailsState(false);
+        setKeyMentionsState(false);
+    }, [priceChartExpanded]);
 
     // Collapse Expanded Header on Outside Click
     const headerRef = useRef<HTMLDivElement>(null);
@@ -233,17 +253,20 @@ export function Header(props: HeaderProps): ReactElement {
 
     return (
         <HeaderUI
-            eventQuery={eventQuery}
-            onBack={onBack}
-            headerRef={headerRef}
-            headerExpanded={headerExpanded}
-            toggleHeader={toggleHeader}
+            containerHeight={containerHeight}
             eventDetailsExpanded={eventDetailsExpanded}
-            toggleEventDetails={toggleEventDetails}
-            togglePriceChart={togglePriceChart}
+            eventQuery={eventQuery}
+            headerExpanded={headerExpanded}
+            headerRef={headerRef}
+            keyMentionsExpanded={keyMentionsExpanded}
+            onBack={onBack}
+            onChangeSearchTerm={onChangeSearchTerm}
             priceChartExpanded={priceChartExpanded}
             searchTerm={searchTerm}
-            onChangeSearchTerm={onChangeSearchTerm}
+            toggleEventDetails={toggleEventDetails}
+            toggleHeader={toggleHeader}
+            toggleKeyMentions={toggleKeyMentions}
+            togglePriceChart={togglePriceChart}
         />
     );
 }
