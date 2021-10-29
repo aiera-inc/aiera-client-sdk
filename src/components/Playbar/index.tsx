@@ -84,7 +84,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-60"
                 style={{ width: knobLeft + 74 /* 65 for timestamp width + 9 for half of knob width */ }}
             />
-            <div className="flex player_timeline">
+            <div className="flex z-20 player_timeline">
                 <div className="flex items-center justify-center px-2 text-xs select-none relative w-[65px]">
                     <div className="absolute left-0 right-0 top-0 bottom-0 bg-white backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-r-md" />
                     <span className="z-10 relative font-mono text-yellow-800 opacity-60">
@@ -108,7 +108,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     </span>
                 </div>
             </div>
-            <div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5">
+            <div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 bg-white">
                 {!fixed && (
                     <Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-2">
                         <XMark />
