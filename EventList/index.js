@@ -89917,6 +89917,9 @@ var EventList = (_props) => {
     const primaryQuote = getPrimaryQuote((_a2 = change.value) == null ? void 0 : _a2.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.event(event, change);
+    if (!change.value) {
+      eventsQuery.refetch();
+    }
   }, [state]);
   const onSelectCompany = (0, import_react49.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
@@ -89925,6 +89928,7 @@ var EventList = (_props) => {
   }, [state]);
   const eventsQuery = useQuery2({
     isEmpty: ({ events }) => events.length === 0,
+    requestPolicy: "cache-and-network",
     query: lib_default`
             query EventList($filter: EventFilter, $view: EventView) {
                 events(filter: $filter, view: $view) {
