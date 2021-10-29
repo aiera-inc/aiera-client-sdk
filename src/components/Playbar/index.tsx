@@ -102,7 +102,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     />
                 </div>
                 <div className="px-2 text-xs select-none relative flex items-center justify-center w-[65px]">
-                    <div className="absolute left-0 right-0 top-0 bottom-0 backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-r-md" />
+                    <div className="absolute left-0 right-0 top-0 bottom-0 backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-l-md" />
                     <span className="z-10 relative font-mono text-gray-500 opacity-60">
                         {toDurationString(duration)}
                     </span>
@@ -110,23 +110,23 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
             </div>
             <div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 bg-white">
                 {!fixed && (
-                    <Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-2">
+                    <Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
                         <XMark />
                     </Button>
                 )}
                 <div
-                    className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[80px]"
+                    className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
                     onClick={onClickCalendar}
                 >
-                    <div className="flex items-end h-[12px]">
-                        <span className="select-none leading-none text-sm text-blue-600 font-bold uppercase">
+                    <div className="flex items-end h-[12px] mt-[1px]">
+                        <span className="select-none leading-none text-sm text-blue-600 font-bold uppercase group-hover:text-blue-800 group-active:text-blue-900">
                             {eventMetaData?.quote?.localTicker || 'Instrument'}
                         </span>
-                        <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400">
+                        <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
                             {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
                         </span>
                     </div>
-                    <span className="select-none truncate leading-none capitalize text-xs my-0.5">
+                    <span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900">
                         {eventMetaData?.eventType?.replace(/_/g, ' ') || 'No Type Found'}
                     </span>
                 </div>
