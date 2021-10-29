@@ -19,6 +19,7 @@ import {
     useClient as useUrqlClient,
     fetchExchange,
     Exchange,
+    makeOperation,
     Provider as UrqlProvider,
     useQuery as urqlUseQuery,
     CombinedError,
@@ -26,6 +27,7 @@ import {
     UseQueryResponse,
     UseQueryArgs,
 } from 'urql';
+import { pipe, map } from 'wonka';
 import { devtoolsExchange } from '@urql/devtools';
 import { DocumentNode } from 'graphql';
 
@@ -50,6 +52,30 @@ export function getQueryNames(doc: DocumentNode): string[] {
         .filter((n) => n);
 }
 
+const opNameExchange: Exchange = ({ forward }) => {
+    return (ops$) =>
+        pipe(
+            ops$,
+            map((op) => {
+                let url: string;
+                try {
+                    const parsedUrl = new window.URL(op.context.url);
+                    const params = parsedUrl.searchParams;
+                    params.set('ops', getQueryNames(op.query).join(','));
+                    parsedUrl.search = params.toString();
+                    url = parsedUrl.toString();
+                } catch (e) {
+                    url = op.context.url;
+                }
+                return makeOperation(op.kind, op, {
+                    ...op.context,
+                    url,
+                });
+            }),
+            forward
+        );
+};
+
 /**
  * @notExported
  */
@@ -60,7 +86,13 @@ interface Config {
 }
 
 function createGQLClient({ url, fetch, auth = defaultTokenAuthConfig }: Config): Client {
-    const exchanges = [devtoolsExchange, cacheExchange(), auth ? authExchange(auth) : null, fetchExchange].filter(
+    const exchanges = [
+        devtoolsExchange,
+        opNameExchange,
+        cacheExchange(),
+        auth ? authExchange(auth) : null,
+        fetchExchange,
+    ].filter(
         (t) => t
         // Cast needed because of the filter
     ) as Exchange[];
