@@ -3,6 +3,9 @@
 /* src/components/Button/styles.css */
 /* src/components/CompanyFilterButton/styles.css */
 /* src/components/Playbar/styles.css */
+.player_timeline {
+  box-shadow: inset 0 -7px 0 0 white;
+}
 .player_timeline__timeline_knob {
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25), 0px 3px 6px rgba(0, 0, 0, 0.15);
 }
@@ -425,11 +428,11 @@ video {
 .top-\[56px\] {
   top: 56px;
 }
-.z-10 {
-  z-index: 10;
-}
 .z-20 {
   z-index: 20;
+}
+.z-10 {
+  z-index: 10;
 }
 .m-3 {
   margin: 0.75rem;

@@ -88194,7 +88194,7 @@ function PlaybarUI(props) {
     className: "bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-60",
     style: { width: knobLeft + 74 }
   }), /* @__PURE__ */ import_react30.default.createElement("div", {
-    className: "flex player_timeline"
+    className: "flex z-20 player_timeline"
   }, /* @__PURE__ */ import_react30.default.createElement("div", {
     className: "flex items-center justify-center px-2 text-xs select-none relative w-[65px]"
   }, /* @__PURE__ */ import_react30.default.createElement("div", {
@@ -88220,7 +88220,7 @@ function PlaybarUI(props) {
   }), /* @__PURE__ */ import_react30.default.createElement("span", {
     className: "z-10 relative font-mono text-gray-500 opacity-60"
   }, toDurationString(duration)))), /* @__PURE__ */ import_react30.default.createElement("div", {
-    className: "z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5"
+    className: "z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 bg-white"
   }, !fixed && /* @__PURE__ */ import_react30.default.createElement(Button, {
     onClick: clear,
     className: "flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-2"
@@ -89078,7 +89078,7 @@ function HeaderUI(props) {
   } = props;
   return /* @__PURE__ */ import_react43.default.createElement("div", {
     ref: headerRef,
-    className: (0, import_classnames26.default)("bg-white relative pt-3 rounded-b-lg -mb-1 z-10 transition-all overflow-hidden", {
+    className: (0, import_classnames26.default)("bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all overflow-hidden", {
       "shadow-3xl": !headerExpanded,
       "shadow-xl": headerExpanded
     }, "transcript__header")
