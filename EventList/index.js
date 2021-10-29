@@ -89363,13 +89363,18 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   }, [latestParagraphsQuery.state.data]);
   return (0, import_react44.useMemo)(() => {
-    var _a2, _b2, _c2, _d2, _e, _f;
-    const originalParagraphs = new Map((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns).flatMap((turn) => turn.paragraphs).map((p2) => [p2.id, p2]));
-    const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
-    const speakerTurns = ((_f = (_e = (_d2 = eventQuery.state.data) == null ? void 0 : _d2.events[0]) == null ? void 0 : _e.transcripts[0]) == null ? void 0 : _f.sections.flatMap((section) => section.speakerTurns)) || [];
-    return speakerTurns.map((s3) => {
+    var _a2, _b2, _c2;
+    const speakerTurns = ((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns)) || [];
+    const originalParagraphIds = new Set(speakerTurns.flatMap((s3) => s3.paragraphs.map((p2) => p2.id)));
+    return speakerTurns.map((s3, idx) => {
       var _a3, _b3;
-      const updatedParagraphs = s3.paragraphs.map((p2) => __spreadValues(__spreadValues({}, p2), paragraphs.get(p2.id) || {}));
+      let updatedParagraphs = s3.paragraphs.map((p2) => __spreadValues(__spreadValues({}, p2), latestParagraphs.get(p2.id) || {}));
+      if (idx === speakerTurns.length - 1) {
+        updatedParagraphs = [
+          ...updatedParagraphs,
+          ...[...latestParagraphs.values()].filter((p2) => !originalParagraphIds.has(p2.id))
+        ];
+      }
       if ((_b3 = (_a3 = eventQuery.state.data) == null ? void 0 : _a3.events[0]) == null ? void 0 : _b3.isLive) {
         updatedParagraphs.sort((p1, p2) => p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id));
       }
