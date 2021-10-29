@@ -27,12 +27,28 @@ import {
     UseQueryArgs,
 } from 'urql';
 import { devtoolsExchange } from '@urql/devtools';
+import { DocumentNode } from 'graphql';
 
 import { AuthConfig, authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
+
+/**
+ * Function to extract the query names from a GQL document
+ *
+ * @param  doc - DocumentNode from parsed GQL query
+ * @returns An array of operation names
+ */
+export function getQueryNames(doc: DocumentNode): string[] {
+    return doc.definitions
+        .map<string>((definition) => {
+            const name = definition.kind === 'OperationDefinition' ? definition.name?.value : '';
+            return name || '';
+        })
+        .filter((n) => n);
+}
 
 /**
  * @notExported

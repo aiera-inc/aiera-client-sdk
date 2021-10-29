@@ -260,32 +260,37 @@ function useLatestTranscripts(
         }
     }, [latestParagraphsQuery.state.data]);
 
-    // Loop through the initial paragraph array and the new latest paragraphs to generate
-    // the final paragraph array to render in the UI. memoize so we only recalc when things
-    // actaully change.
+    // Loop throught he speaker turns and paragraphs and update any of the original paragraphs
+    // that have changed since the first download, then add any completely new paragraphs to the
+    // end of the last speaker turn.
+    //
+    // Memoize to make sure we only do this as needed.
     return useMemo<SpeakerTurn[]>(() => {
-        const originalParagraphs = new Map<string, Paragraph>(
-            eventQuery.state.data?.events[0]?.transcripts[0]?.sections
-                .flatMap((section) => section.speakerTurns)
-                .flatMap((turn) => turn.paragraphs)
-                .map((p) => [p.id, p])
-        );
-        const paragraphs = new Map([...originalParagraphs, ...latestParagraphs]);
-
-        // If live, loop over the values in the map and sort by timestamp since the server
-        // may update older paragraphs.
         //
         // For past events, just using the mapping as is, which will be the server-returned
         // order of paragraphs.
         const speakerTurns =
             eventQuery.state.data?.events[0]?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns) || [];
+        const originalParagraphIds = new Set(speakerTurns.flatMap((s) => s.paragraphs.map((p) => p.id)));
 
-        return speakerTurns.map((s) => {
-            const updatedParagraphs = s.paragraphs.map((p) => ({
+        return speakerTurns.map((s, idx) => {
+            // Update the paragraphs that we already pulled down if they have changed
+            let updatedParagraphs = s.paragraphs.map((p) => ({
                 ...p,
-                ...(paragraphs.get(p.id) || {}),
+                ...(latestParagraphs.get(p.id) || {}),
             }));
 
+            // If we are on the last speakerTurn, append any paragraphs from the latest that
+            // we didn't pull in the original query
+            if (idx === speakerTurns.length - 1) {
+                updatedParagraphs = [
+                    ...updatedParagraphs,
+                    ...[...latestParagraphs.values()].filter((p) => !originalParagraphIds.has(p.id)),
+                ];
+            }
+
+            // If live, loop over the values in the map and sort by timestamp since the server
+            // may update older paragraphs.
             if (eventQuery.state.data?.events[0]?.isLive) {
                 updatedParagraphs.sort((p1, p2) =>
                     p1.timestamp && p2.timestamp ? p1.timestamp.localeCompare(p2.timestamp) : p1.id.localeCompare(p2.id)
