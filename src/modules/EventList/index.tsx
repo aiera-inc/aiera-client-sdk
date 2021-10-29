@@ -283,6 +283,10 @@ export const EventList = (_props: EventListProps): ReactElement => {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
             handlers.event(event, change);
+            // If we are going back to the event list, refresh immediately
+            if (!change.value) {
+                eventsQuery.refetch();
+            }
         },
         [state]
     );
@@ -298,6 +302,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
 
     const eventsQuery = useQuery<EventListQuery, EventListQueryVariables>({
         isEmpty: ({ events }) => events.length === 0,
+        requestPolicy: 'cache-and-network',
         query: gql`
             query EventList($filter: EventFilter, $view: EventView) {
                 events(filter: $filter, view: $view) {
