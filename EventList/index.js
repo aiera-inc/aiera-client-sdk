@@ -86634,8 +86634,38 @@ function createTokenAuthConfig(store = local) {
 var defaultTokenAuthConfig = createTokenAuthConfig();
 
 // src/api/client.tsx
+function getQueryNames(doc) {
+  return doc.definitions.map((definition) => {
+    var _a;
+    const name = definition.kind === "OperationDefinition" ? (_a = definition.name) == null ? void 0 : _a.value : "";
+    return name || "";
+  }).filter((n2) => n2);
+}
+var opNameExchange = ({ forward }) => {
+  return (ops$) => pipe(ops$, map$1((op) => {
+    let url;
+    try {
+      const parsedUrl = new window.URL(op.context.url);
+      const params = parsedUrl.searchParams;
+      params.set("ops", getQueryNames(op.query).join(","));
+      parsedUrl.search = params.toString();
+      url = parsedUrl.toString();
+    } catch (e) {
+      url = op.context.url;
+    }
+    return makeOperation(op.kind, op, __spreadProps(__spreadValues({}, op.context), {
+      url
+    }));
+  }), forward);
+};
 function createGQLClient({ url, fetch: fetch2, auth = defaultTokenAuthConfig }) {
-  const exchanges = [devtoolsExchange, cacheExchange2(), auth ? authExchange(auth) : null, fetchExchange].filter((t2) => t2);
+  const exchanges = [
+    devtoolsExchange,
+    opNameExchange,
+    cacheExchange2(),
+    auth ? authExchange(auth) : null,
+    fetchExchange
+  ].filter((t2) => t2);
   return z({
     url,
     fetch: fetch2,
