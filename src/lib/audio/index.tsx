@@ -21,6 +21,7 @@ export class AudioPlayer {
     audio: HTMLAudioElement;
     dash: MediaPlayerClass;
     usingDash = false;
+    liveCatchupThreshold = 30;
 
     constructor() {
         this.errorInfo = {
@@ -41,14 +42,44 @@ export class AudioPlayer {
                     mode: 'liveCatchupModeLoLP',
                     minDrift: 0.05,
                     playbackRate: 0.2,
-                    latencyThreshold: 30,
+                    latencyThreshold: this.liveCatchupThreshold,
                 },
             },
         });
         this.dash.on(MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, this.triggerUpdate);
         this.dash.on(window.dashjs.MediaPlayer.events.BUFFER_EMPTY, this.updateTargetLatency);
         this.dash.on(window.dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.updateTargetLatency);
+        this.audio.addEventListener('timeupdate', this.adjustPlayback);
     }
+
+    // The dash player automatically overwrits the playback rate on each tick
+    // when liveCatchup is on so we need toi adjust those settings as the current time
+    // changes.
+    //
+    // If we are > threshold seconds back from the live edge, turn catchup mode
+    // off so we can set a cusotm playback rate.
+    // If we are within threshold seconds of the live edge, turn liveCatchup back on
+    // and let dashjs control the playback speed.
+    adjustPlayback = (): void => {
+        if (this.usingDash) {
+            const settings = this.dash.getSettings();
+            const lowLatencyEnabled = settings.streaming?.lowLatencyEnabled;
+            const playbackRate = settings.streaming?.liveCatchup?.playbackRate || 0;
+            const fromLiveEdge = this.dash.duration() - this.dash.time();
+            if (fromLiveEdge + 1 < this.liveCatchupThreshold) {
+                if (!lowLatencyEnabled) {
+                    this.dash.updateSettings({
+                        streaming: { lowLatencyEnabled: true, liveCatchup: { enabled: true } },
+                    });
+                }
+                if (fromLiveEdge < 6 && playbackRate > 0.2) {
+                    this.dash.updateSettings({ streaming: { liveCatchup: { playbackRate: 0.2 } } });
+                }
+            } else if (lowLatencyEnabled) {
+                this.dash.updateSettings({ streaming: { lowLatencyEnabled: false, liveCatchup: { enabled: false } } });
+            }
+        }
+    };
 
     updateTargetLatency = (): void => {
         const settings = this.dash.getSettings();
