@@ -442,11 +442,16 @@ function useAudioSync(
 
     const paragraphs = useMemo(() => speakerTurns.flatMap((s) => s.paragraphs), [speakerTurns]);
     useEffect(() => {
+        const eventId = eventQuery.state.data?.events[0]?.id;
+
         // Find the _last_ paragraph with a timetamp <= the current audio time, that's the
-        // one the should be currently playing
-        let paragraph = [...paragraphs]
-            .reverse()
-            .find((p) => p.syncMs && p.syncMs <= audioPlayer.rawCurrentTime * 1000);
+        // one the should be currently playing,
+        //
+        // If the audio player is playing a different event, dont search through.
+        let paragraph =
+            eventId && audioPlayer.id && audioPlayer.id !== eventId
+                ? null
+                : [...paragraphs].reverse().find((p) => p.syncMs && p.syncMs <= audioPlayer.rawCurrentTime * 1000);
 
         // If we couldn't find one:
         // - if the event is live default to the last paragraph
@@ -460,7 +465,7 @@ function useAudioSync(
         if (paragraph) {
             setCurrentParagraph(paragraph.id);
         }
-    }, [paragraphs, Math.floor(audioPlayer.rawCurrentTime)]);
+    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime)]);
 
     return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef];
 }

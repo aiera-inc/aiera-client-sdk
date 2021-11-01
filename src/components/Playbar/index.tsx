@@ -9,6 +9,7 @@ import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { Forward15 } from '@aiera/client-sdk/components/Svg/Forward15';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
+import { Swap } from '@aiera/client-sdk/components/Svg/Swap';
 import { End } from '@aiera/client-sdk/components/Svg/End';
 import { Speaker } from '@aiera/client-sdk/components/Svg/Speaker';
 import { SpeakerLoud } from '@aiera/client-sdk/components/Svg/SpeakerLoud';
@@ -50,6 +51,8 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     rewind: () => void;
     setVolume: (vol: number) => void;
     seekToStart: () => void;
+    showSwap: boolean;
+    swap: () => void;
     togglePlayback: () => void;
     toggleRate: () => void;
     volume: number;
@@ -74,6 +77,8 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         rewind,
         setVolume,
         seekToStart,
+        showSwap,
+        swap,
         togglePlayback,
         toggleRate,
         volume,
@@ -112,6 +117,11 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 {!fixed && (
                     <Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
                         <XMark />
+                    </Button>
+                )}
+                {showSwap && (
+                    <Button onClick={swap} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
+                        <Swap />
                     </Button>
                 )}
                 <div
@@ -251,14 +261,14 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
     useEffect(() => {
-        if (id) {
-            const initParams = metaData ? { id, url: url || '', offset, metaData } : { id, url: url || '', offset };
-            audioPlayer.init(initParams);
+        if (id && !audioPlayer.playing(null)) {
+            audioPlayer.init({ id, url: url || '', offset, metaData });
         }
-    }, [id, url, offset]);
+    }, [id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
 
     const isActive = audioPlayer.id;
     const isPlaying = audioPlayer.playing(null);
+    const isPlayingAnotherEvent = isPlaying && id && !audioPlayer.playing(id);
     const togglePlayback = useCallback(() => {
         if (isPlaying) {
             void track('Click', 'Audio Pause', { eventId: id, url });
@@ -292,18 +302,26 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
         void track('Click', 'Audio Stop', { eventId: id, url });
         audioPlayer.clear();
     }, []);
+    const swap = useCallback(() => {
+        if (id) {
+            audioPlayer.clear();
+            void audioPlayer.play({ id, url: url || '', offset, metaData });
+        }
+    }, [id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
 
     return {
         audioPlayer,
         seekToEnd,
         isActive,
         isPlaying,
+        isPlayingAnotherEvent,
         togglePlayback,
         fastForward,
         rewind,
         seekToStart,
         toggleRate,
         clear,
+        swap,
     };
 }
 
@@ -326,12 +344,14 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
         audioPlayer,
         isActive,
         isPlaying,
+        isPlayingAnotherEvent,
         togglePlayback,
         fastForward,
         rewind,
         seekToStart,
         seekToEnd,
         clear,
+        swap,
         toggleRate,
     } = usePlayer(id, url, offset, metaData);
     const [knobRef, knobLeft, onClickTrack] = usePlaybarDrag(audioPlayer);
@@ -361,6 +381,8 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             rewind={rewind}
             setVolume={audioPlayer.setVolume}
             seekToStart={seekToStart}
+            showSwap={!!isPlayingAnotherEvent}
+            swap={swap}
             togglePlayback={togglePlayback}
             toggleRate={toggleRate}
             volume={audioPlayer.volume}
