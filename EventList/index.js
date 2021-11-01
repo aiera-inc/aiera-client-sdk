@@ -87088,22 +87088,19 @@ var EventListDocument = lib_default`
   }
 }
     `;
-var LatestParagraphsDocument = lib_default`
-    query LatestParagraphs($eventId: ID!) {
+var EventUpdatesDocument = lib_default`
+    query EventUpdates($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
     id
-    transcripts {
-      id
-      latestParagraphs {
-        id
-        timestamp
-        syncMs
-        sentences {
-          id
-          text
-        }
-      }
-    }
+    eventDate
+    hasConnectionDetails
+    isLive
+    audioRecordingUrl
+    audioRecordingOffsetMs
+    publishedTranscriptExpected
+    hasTranscript
+    hasPublishedTranscript
+    connectionStatus
   }
 }
     `;
@@ -87166,6 +87163,25 @@ var TranscriptDocument = lib_default`
               text
             }
           }
+        }
+      }
+    }
+  }
+}
+    `;
+var LatestParagraphsDocument = lib_default`
+    query LatestParagraphs($eventId: ID!) {
+  events(filter: {eventIds: [$eventId]}) {
+    id
+    transcripts {
+      id
+      latestParagraphs {
+        id
+        timestamp
+        syncMs
+        sentences {
+          id
+          text
         }
       }
     }
@@ -89350,6 +89366,126 @@ var TranscriptUI = (props) => {
     });
   }).otherwise(() => null));
 };
+function useEventUpdates(eventId) {
+  var _a;
+  const eventUpdateQuery = useQuery2({
+    query: lib_default`
+            query EventUpdates($eventId: ID!) {
+                events(filter: { eventIds: [$eventId] }) {
+                    id
+                    eventDate
+                    hasConnectionDetails
+                    isLive
+                    audioRecordingUrl
+                    audioRecordingOffsetMs
+                    publishedTranscriptExpected
+                    hasTranscript
+                    hasPublishedTranscript
+                    connectionStatus
+                }
+            }
+        `,
+    requestPolicy: "network-only",
+    variables: {
+      eventId
+    }
+  });
+  function isLiveOrBefore(event, hoursAfterEvent = 0) {
+    if (!event)
+      return false;
+    if (event.isLive)
+      return true;
+    const eventDate = import_luxon2.DateTime.fromISO(event.eventDate);
+    return (eventDate.diffNow("hours").toObject().hours || 0) > 0 - hoursAfterEvent;
+  }
+  useInterval(() => eventUpdateQuery.refetch(), isLiveOrBefore((_a = eventUpdateQuery.state.data) == null ? void 0 : _a.events[0], 1) ? 5e3 : null);
+  return eventUpdateQuery;
+}
+function useEventData(eventId, eventUpdateQuery) {
+  var _a, _b;
+  const eventQuery = useQuery2({
+    isEmpty: ({ events }) => {
+      var _a2, _b2, _c, _d;
+      return !((_c = (_b2 = (_a2 = events[0]) == null ? void 0 : _a2.transcripts[0]) == null ? void 0 : _b2.sections) == null ? void 0 : _c.length) && !((_d = events[0]) == null ? void 0 : _d.hasTranscript);
+    },
+    query: lib_default`
+            query Transcript($eventId: ID!) {
+                events(filter: { eventIds: [$eventId] }) {
+                    id
+                    title
+                    eventDate
+                    eventType
+                    hasConnectionDetails
+                    isLive
+                    audioRecordingUrl
+                    audioRecordingOffsetMs
+                    publishedTranscriptExpected
+                    hasTranscript
+                    hasPublishedTranscript
+                    webcastUrls
+                    dialInPhoneNumbers
+                    dialInPin
+                    connectionStatus
+                    primaryCompany {
+                        id
+                        commonName
+                        instruments {
+                            id
+                            isPrimary
+                            quotes {
+                                id
+                                isPrimary
+                                localTicker
+                                exchange {
+                                    id
+                                    shortName
+                                    country {
+                                        id
+                                        countryCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    transcripts {
+                        id
+                        sections {
+                            id
+                            speakerTurns {
+                                id
+                                speaker {
+                                    id
+                                    name
+                                    title
+                                }
+                                paragraphs {
+                                    id
+                                    timestamp
+                                    syncMs
+                                    sentences {
+                                        id
+                                        text
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+    requestPolicy: "cache-and-network",
+    variables: {
+      eventId
+    }
+  });
+  (0, import_react44.useEffect)(() => {
+    var _a2, _b2;
+    if ((_b2 = (_a2 = eventUpdateQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.hasTranscript) {
+      eventQuery.refetch();
+    }
+  }, [(_b = (_a = eventUpdateQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.hasTranscript]);
+  return eventQuery;
+}
 function useLatestTranscripts(eventId, eventQuery) {
   var _a, _b, _c, _d;
   const latestParagraphsQuery = useQuery2({
@@ -89502,81 +89638,8 @@ function useSearchState(speakerTurns) {
 var Transcript = (props) => {
   var _a, _b;
   const { eventId, onBack } = props;
-  const eventQuery = useQuery2({
-    isEmpty: ({ events }) => {
-      var _a2, _b2, _c;
-      return !((_c = (_b2 = (_a2 = events[0]) == null ? void 0 : _a2.transcripts[0]) == null ? void 0 : _b2.sections) == null ? void 0 : _c.length);
-    },
-    query: lib_default`
-            query Transcript($eventId: ID!) {
-                events(filter: { eventIds: [$eventId] }) {
-                    id
-                    title
-                    eventDate
-                    eventType
-                    hasConnectionDetails
-                    isLive
-                    audioRecordingUrl
-                    audioRecordingOffsetMs
-                    publishedTranscriptExpected
-                    hasTranscript
-                    hasPublishedTranscript
-                    webcastUrls
-                    dialInPhoneNumbers
-                    dialInPin
-                    connectionStatus
-                    primaryCompany {
-                        id
-                        commonName
-                        instruments {
-                            id
-                            isPrimary
-                            quotes {
-                                id
-                                isPrimary
-                                localTicker
-                                exchange {
-                                    id
-                                    shortName
-                                    country {
-                                        id
-                                        countryCode
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    transcripts {
-                        id
-                        sections {
-                            id
-                            speakerTurns {
-                                id
-                                speaker {
-                                    id
-                                    name
-                                    title
-                                }
-                                paragraphs {
-                                    id
-                                    timestamp
-                                    syncMs
-                                    sentences {
-                                        id
-                                        text
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        `,
-    requestPolicy: "cache-and-network",
-    variables: {
-      eventId
-    }
-  });
+  const eventUpdateQuery = useEventUpdates(eventId);
+  const eventQuery = useEventData(eventId, eventUpdateQuery);
   const audioPlayer = useAudioPlayer();
   const speakerTurns = useLatestTranscripts(eventId, eventQuery);
   const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(speakerTurns, eventQuery, audioPlayer);
