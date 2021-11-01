@@ -17,6 +17,8 @@ import { DateTime } from 'luxon';
 import { findAll } from 'highlight-words-core';
 
 import {
+    EventUpdatesQuery,
+    EventUpdatesQueryVariables,
     LatestParagraphsQuery,
     LatestParagraphsQueryVariables,
     TranscriptQuery,
@@ -211,6 +213,130 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         </div>
     );
 };
+
+function useEventUpdates(eventId: string) {
+    const eventUpdateQuery = useQuery<EventUpdatesQuery, EventUpdatesQueryVariables>({
+        query: gql`
+            query EventUpdates($eventId: ID!) {
+                events(filter: { eventIds: [$eventId] }) {
+                    id
+                    eventDate
+                    hasConnectionDetails
+                    isLive
+                    audioRecordingUrl
+                    audioRecordingOffsetMs
+                    publishedTranscriptExpected
+                    hasTranscript
+                    hasPublishedTranscript
+                    connectionStatus
+                }
+            }
+        `,
+        requestPolicy: 'network-only',
+        variables: {
+            eventId,
+        },
+    });
+
+    function isLiveOrBefore(event?: EventUpdatesQuery['events'][0], hoursAfterEvent = 0): boolean {
+        if (!event) return false;
+        if (event.isLive) return true;
+        const eventDate = DateTime.fromISO(event.eventDate);
+        return (eventDate.diffNow('hours').toObject().hours || 0) > 0 - hoursAfterEvent;
+    }
+
+    // From before the event to up to 1 hour after it starts, refresh the status/connection
+    // details every 5 seconds
+    useInterval(
+        () => eventUpdateQuery.refetch(),
+        isLiveOrBefore(eventUpdateQuery.state.data?.events[0], 1) ? 5000 : null
+    );
+    return eventUpdateQuery;
+}
+
+function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdatesQuery, EventUpdatesQueryVariables>) {
+    const eventQuery = useQuery<TranscriptQuery, TranscriptQueryVariables>({
+        isEmpty: ({ events }) => !events[0]?.transcripts[0]?.sections?.length && !events[0]?.hasTranscript,
+        query: gql`
+            query Transcript($eventId: ID!) {
+                events(filter: { eventIds: [$eventId] }) {
+                    id
+                    title
+                    eventDate
+                    eventType
+                    hasConnectionDetails
+                    isLive
+                    audioRecordingUrl
+                    audioRecordingOffsetMs
+                    publishedTranscriptExpected
+                    hasTranscript
+                    hasPublishedTranscript
+                    webcastUrls
+                    dialInPhoneNumbers
+                    dialInPin
+                    connectionStatus
+                    primaryCompany {
+                        id
+                        commonName
+                        instruments {
+                            id
+                            isPrimary
+                            quotes {
+                                id
+                                isPrimary
+                                localTicker
+                                exchange {
+                                    id
+                                    shortName
+                                    country {
+                                        id
+                                        countryCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    transcripts {
+                        id
+                        sections {
+                            id
+                            speakerTurns {
+                                id
+                                speaker {
+                                    id
+                                    name
+                                    title
+                                }
+                                paragraphs {
+                                    id
+                                    timestamp
+                                    syncMs
+                                    sentences {
+                                        id
+                                        text
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        requestPolicy: 'cache-and-network',
+        variables: {
+            eventId,
+        },
+    });
+
+    // When we go from no transcript -> has transcript, refetch to get the initial transcript data.
+    useEffect(() => {
+        if (eventUpdateQuery.state.data?.events[0]?.hasTranscript) {
+            eventQuery.refetch();
+        }
+    }, [eventUpdateQuery.state.data?.events[0]?.hasTranscript]);
+
+    return eventQuery;
+}
 
 function useLatestTranscripts(
     eventId: string,
@@ -449,78 +575,8 @@ export interface TranscriptProps {
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
     const { eventId, onBack } = props;
-    const eventQuery = useQuery<TranscriptQuery, TranscriptQueryVariables>({
-        isEmpty: ({ events }) => !events[0]?.transcripts[0]?.sections?.length,
-        query: gql`
-            query Transcript($eventId: ID!) {
-                events(filter: { eventIds: [$eventId] }) {
-                    id
-                    title
-                    eventDate
-                    eventType
-                    hasConnectionDetails
-                    isLive
-                    audioRecordingUrl
-                    audioRecordingOffsetMs
-                    publishedTranscriptExpected
-                    hasTranscript
-                    hasPublishedTranscript
-                    webcastUrls
-                    dialInPhoneNumbers
-                    dialInPin
-                    connectionStatus
-                    primaryCompany {
-                        id
-                        commonName
-                        instruments {
-                            id
-                            isPrimary
-                            quotes {
-                                id
-                                isPrimary
-                                localTicker
-                                exchange {
-                                    id
-                                    shortName
-                                    country {
-                                        id
-                                        countryCode
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    transcripts {
-                        id
-                        sections {
-                            id
-                            speakerTurns {
-                                id
-                                speaker {
-                                    id
-                                    name
-                                    title
-                                }
-                                paragraphs {
-                                    id
-                                    timestamp
-                                    syncMs
-                                    sentences {
-                                        id
-                                        text
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        `,
-        requestPolicy: 'cache-and-network',
-        variables: {
-            eventId,
-        },
-    });
+    const eventUpdateQuery = useEventUpdates(eventId);
+    const eventQuery = useEventData(eventId, eventUpdateQuery);
 
     const audioPlayer = useAudioPlayer();
 
