@@ -1,6 +1,7 @@
 import React, {
     Dispatch,
     SetStateAction,
+    MouseEvent,
     MouseEventHandler,
     ReactElement,
     Ref,
@@ -599,6 +600,15 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const onClickTranscript = (paragraph: Paragraph) => {
         audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
     };
+    const onClickBack = useCallback(
+        (event: MouseEvent) => {
+            if (!audioPlayer.playing(null)) {
+                audioPlayer.clear();
+            }
+            onBack?.(event);
+        },
+        [onBack]
+    );
 
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 
@@ -609,7 +619,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             currentParagraphRef={currentParagraphRef}
             speakerTurns={searchState.speakerTurnsWithMatches}
             showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
-            onBack={onBack}
+            onBack={onClickBack}
             onClickTranscript={onClickTranscript}
             scrollRef={scrollRef}
             searchTerm={searchState.searchTerm}
