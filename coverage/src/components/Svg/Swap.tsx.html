@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Svg/XMark.tsx</title>
+    <title>Code coverage report for src/components/Svg/Swap.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Svg</a> XMark.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Svg</a> Swap.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>1/1</span>
+                <span class='fraction'>0/1</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line high'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -77,7 +77,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -92,16 +92,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 &nbsp;
-export function XMark({ className, alt = 'XMark' }: { className?: string; alt?: string }): ReactElement {
-    return (
+export function <span class="fstat-no" title="function not covered" >Swap(</span>{ className, alt = <span class="branch-0 cbranch-no" title="branch not covered" >'Swap' </span>}: { className?: string; alt?: string }): ReactElement {
+<span class="cstat-no" title="statement not covered" >    return (</span>
         &lt;svg
-            className={classNames(className, 'fill-current', 'Svg', 'Svg__xMark')}
+            className={classNames(className, 'stroke-current', 'Svg', 'Svg__swap')}
             width="100%"
-            viewBox="0 0 10 10"
+            viewBox="0 0 14 14"
             xmlns="http://www.w3.org/2000/svg"
         &gt;
             &lt;title&gt;{alt}&lt;/title&gt;
-            &lt;path d="M6.41425 5.00025C6.41425 5.00025 9.55325 8.13925 9.70725 8.29325C10.0983 8.68425 10.0983 9.31725 9.70725 9.70725C9.31625 10.0983 8.68325 10.0983 8.29325 9.70725C8.13925 9.55425 5.00025 6.41425 5.00025 6.41425C5.00025 6.41425 1.86125 9.55325 1.70725 9.70725C1.31625 10.0983 0.68325 10.0983 0.29325 9.70725C-0.09775 9.31625 -0.09775 8.68325 0.29325 8.29325C0.44625 8.13925 3.58625 5.00025 3.58625 5.00025C3.58625 5.00025 0.44725 1.86125 0.29325 1.70725C-0.09775 1.31625 -0.09775 0.68325 0.29325 0.29325C0.68425 -0.09775 1.31725 -0.09775 1.70725 0.29325C1.86125 0.44625 5.00025 3.58625 5.00025 3.58625C5.00025 3.58625 8.13925 0.44725 8.29325 0.29325C8.68425 -0.09775 9.31725 -0.09775 9.70725 0.29325C10.0983 0.68425 10.0983 1.31725 9.70725 1.70725C9.55425 1.86125 6.41425 5.00025 6.41425 5.00025Z" /&gt;
+            &lt;path d="M2.34306 0C2.1664 0 1.98972 0.0765511 1.86813 0.229386L0.0879082 2.46552C-0.119633 2.72608 0.0635023 3.11114 0.394948 3.11114H1.56866V10.1112C1.56866 11.8203 2.96465 13.2223 4.66628 13.2223C6.36791 13.2223 7.7639 11.8203 7.7639 10.1112V3.88893C7.7639 3.0204 8.44796 2.33336 9.31272 2.33336C10.1775 2.33336 10.8615 3.0204 10.8615 3.88893V10.889H9.70899C9.37755 10.889 9.1929 11.2741 9.40044 11.5346L11.1807 13.7707C11.4246 14.0764 11.8889 14.0764 12.132 13.7707L13.9123 11.5346C14.1198 11.2741 13.9359 10.889 13.6037 10.889H12.4103V3.88893C12.4103 2.17987 11.0143 0.777785 9.31272 0.777785C7.61109 0.777785 6.21509 2.17987 6.21509 3.88893V10.1112C6.21509 10.9797 5.53103 11.6668 4.66628 11.6668C3.80153 11.6668 3.11747 10.9797 3.11747 10.1112V3.11114H4.29118C4.62262 3.11114 4.8065 2.72608 4.59973 2.46552L2.81799 0.229386C2.69602 0.0765511 2.51972 0 2.34306 0Z" /&gt;
         &lt;/svg&gt;
     );
 }

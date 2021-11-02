@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement42 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement43 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement42(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement43(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement42(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement43(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement42(element.type, key, ref, self2, source, owner, props);
+          return ReactElement43(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React42 = require_react();
+        var React43 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React42.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React43.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React42) {
+        if (!React43) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React42.Children.forEach(children, function(child) {
+          React43.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React42.Children.forEach(props.children, function(child) {
+              React43.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React42.Component().refs;
+        var emptyRefsObject = new React43.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26140,7 +26140,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames32() {
+      function classNames33() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26151,7 +26151,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames32.apply(null, arg);
+              var inner = classNames33.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26171,14 +26171,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames32.default = classNames32;
-        module2.exports = classNames32;
+        classNames33.default = classNames33;
+        module2.exports = classNames33;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames32;
+          return classNames33;
         });
       } else {
-        window.classNames = classNames32;
+        window.classNames = classNames33;
       }
     })();
   }
@@ -80292,7 +80292,7 @@ var require_highcharts_react_min = __commonJS({
 });
 
 // src/dev/EventList.tsx
-var import_react50 = __toModule(require_react());
+var import_react51 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/api/client.tsx
@@ -86876,7 +86876,7 @@ var Auth = ({
 };
 
 // src/modules/EventList/index.tsx
-var import_react49 = __toModule(require_react());
+var import_react50 = __toModule(require_react());
 var import_ts_pattern8 = __toModule(require_lib());
 var import_luxon3 = __toModule(require_luxon());
 
@@ -87709,8 +87709,8 @@ function CompanyFilterButton(props) {
 }
 
 // src/modules/Transcript/index.tsx
-var import_react44 = __toModule(require_react());
-var import_classnames27 = __toModule(require_classnames());
+var import_react45 = __toModule(require_react());
+var import_classnames28 = __toModule(require_classnames());
 var import_ts_pattern6 = __toModule(require_lib());
 var import_luxon2 = __toModule(require_luxon());
 var import_highlight_words_core = __toModule(require_dist());
@@ -87722,6 +87722,28 @@ var AudioPlayer = class {
   constructor() {
     this.offset = 0;
     this.usingDash = false;
+    this.liveCatchupThreshold = 30;
+    this.adjustPlayback = () => {
+      var _a, _b, _c;
+      if (this.usingDash) {
+        const settings = this.dash.getSettings();
+        const lowLatencyEnabled = (_a = settings.streaming) == null ? void 0 : _a.lowLatencyEnabled;
+        const playbackRate = ((_c = (_b = settings.streaming) == null ? void 0 : _b.liveCatchup) == null ? void 0 : _c.playbackRate) || 0;
+        const fromLiveEdge = this.dash.duration() - this.dash.time();
+        if (fromLiveEdge + 1 < this.liveCatchupThreshold) {
+          if (!lowLatencyEnabled) {
+            this.dash.updateSettings({
+              streaming: { lowLatencyEnabled: true, liveCatchup: { enabled: true } }
+            });
+          }
+          if (fromLiveEdge < 6 && playbackRate > 0.2) {
+            this.dash.updateSettings({ streaming: { liveCatchup: { playbackRate: 0.2 } } });
+          }
+        } else if (lowLatencyEnabled) {
+          this.dash.updateSettings({ streaming: { lowLatencyEnabled: false, liveCatchup: { enabled: false } } });
+        }
+      }
+    };
     this.updateTargetLatency = () => {
       var _a, _b;
       const settings = this.dash.getSettings();
@@ -87761,13 +87783,14 @@ var AudioPlayer = class {
           mode: "liveCatchupModeLoLP",
           minDrift: 0.05,
           playbackRate: 0.2,
-          latencyThreshold: 30
+          latencyThreshold: this.liveCatchupThreshold
         }
       }
     });
     this.dash.on(import_dashjs.MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, this.triggerUpdate);
     this.dash.on(window.dashjs.MediaPlayer.events.BUFFER_EMPTY, this.updateTargetLatency);
     this.dash.on(window.dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.updateTargetLatency);
+    this.audio.addEventListener("timeupdate", this.adjustPlayback);
   }
   init(opts) {
     if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
@@ -87994,8 +88017,8 @@ function Chevron({ className, alt = "Chevron" }) {
 }
 
 // src/components/Playbar/index.tsx
-var import_react30 = __toModule(require_react());
-var import_classnames14 = __toModule(require_classnames());
+var import_react31 = __toModule(require_react());
+var import_classnames15 = __toModule(require_classnames());
 
 // src/lib/hooks/useDrag/index.ts
 var import_react19 = __toModule(require_react());
@@ -88105,60 +88128,74 @@ function XMark({ className, alt = "XMark" }) {
   }));
 }
 
-// src/components/Svg/End.tsx
+// src/components/Svg/Swap.tsx
 var import_react24 = __toModule(require_react());
 var import_classnames8 = __toModule(require_classnames());
-function End({ className, alt = "End" }) {
+function Swap({ className, alt = "Swap" }) {
   return /* @__PURE__ */ import_react24.default.createElement("svg", {
-    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__end"),
+    className: (0, import_classnames8.default)(className, "stroke-current", "Svg", "Svg__swap"),
+    width: "100%",
+    viewBox: "0 0 14 14",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react24.default.createElement("title", null, alt), /* @__PURE__ */ import_react24.default.createElement("path", {
+    d: "M2.34306 0C2.1664 0 1.98972 0.0765511 1.86813 0.229386L0.0879082 2.46552C-0.119633 2.72608 0.0635023 3.11114 0.394948 3.11114H1.56866V10.1112C1.56866 11.8203 2.96465 13.2223 4.66628 13.2223C6.36791 13.2223 7.7639 11.8203 7.7639 10.1112V3.88893C7.7639 3.0204 8.44796 2.33336 9.31272 2.33336C10.1775 2.33336 10.8615 3.0204 10.8615 3.88893V10.889H9.70899C9.37755 10.889 9.1929 11.2741 9.40044 11.5346L11.1807 13.7707C11.4246 14.0764 11.8889 14.0764 12.132 13.7707L13.9123 11.5346C14.1198 11.2741 13.9359 10.889 13.6037 10.889H12.4103V3.88893C12.4103 2.17987 11.0143 0.777785 9.31272 0.777785C7.61109 0.777785 6.21509 2.17987 6.21509 3.88893V10.1112C6.21509 10.9797 5.53103 11.6668 4.66628 11.6668C3.80153 11.6668 3.11747 10.9797 3.11747 10.1112V3.11114H4.29118C4.62262 3.11114 4.8065 2.72608 4.59973 2.46552L2.81799 0.229386C2.69602 0.0765511 2.51972 0 2.34306 0Z"
+  }));
+}
+
+// src/components/Svg/End.tsx
+var import_react25 = __toModule(require_react());
+var import_classnames9 = __toModule(require_classnames());
+function End({ className, alt = "End" }) {
+  return /* @__PURE__ */ import_react25.default.createElement("svg", {
+    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__end"),
     width: "100%",
     viewBox: "0 0 12 12",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react24.default.createElement("title", null, alt), /* @__PURE__ */ import_react24.default.createElement("path", {
+  }, /* @__PURE__ */ import_react25.default.createElement("title", null, alt), /* @__PURE__ */ import_react25.default.createElement("path", {
     d: "M0.666668 12C0.489857 12 0.320288 11.9298 0.195264 11.8047C0.0702393 11.6797 1.27153e-06 11.5101 1.27153e-06 11.3333C-4.23845e-07 11.3325 -4.23845e-07 11.3316 1.27153e-06 11.3307L1.27153e-06 6L1.27153e-06 0.66927C-4.23671e-07 0.668402 -4.23671e-07 0.667534 1.27153e-06 0.666666C1.27153e-06 0.489855 0.0702393 0.320286 0.195264 0.195261C0.320288 0.070237 0.489857 -3.57628e-07 0.666668 -3.57628e-07C0.808691 0.00026998 0.946915 0.045889 1.0612 0.130208H1.0625C1.06866 0.134876 1.07474 0.139651 1.08073 0.144531L8.36068 5.4388C8.45461 5.49923 8.53185 5.58228 8.58532 5.68034C8.63878 5.7784 8.66676 5.88831 8.66667 6C8.66659 6.10941 8.63959 6.21713 8.58805 6.31363C8.5365 6.41014 8.46199 6.49248 8.3711 6.55339L1.0625 11.8698C0.947859 11.9544 0.809136 12 0.666668 12ZM11 12C10.448 12 10 11.552 10 11L10 1C10 0.448 10.448 -3.57628e-07 11 -3.57628e-07C11.552 -3.57628e-07 12 0.448 12 1L12 11C12 11.552 11.552 12 11 12Z"
   }));
 }
 
 // src/components/Svg/Speaker.tsx
-var import_react25 = __toModule(require_react());
-var import_classnames9 = __toModule(require_classnames());
+var import_react26 = __toModule(require_react());
+var import_classnames10 = __toModule(require_classnames());
 function Speaker({ className, alt = "Speaker" }) {
-  return /* @__PURE__ */ import_react25.default.createElement("svg", {
-    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__speaker"),
+  return /* @__PURE__ */ import_react26.default.createElement("svg", {
+    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__speaker"),
     width: "100%",
     viewBox: "0 0 14 14",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react25.default.createElement("title", null, alt), /* @__PURE__ */ import_react25.default.createElement("path", {
+  }, /* @__PURE__ */ import_react26.default.createElement("title", null, alt), /* @__PURE__ */ import_react26.default.createElement("path", {
     d: "M9.29833 0C9.12627 0 8.95097 0.0568191 8.80792 0.180887L4.00147 4.37884H2.00073C0.895329 4.37884 0 5.16082 0 6.12628V7.87372C0 8.83918 0.895329 9.62116 2.00073 9.62116H4.00147L8.80792 13.8191C8.95097 13.9441 9.12627 14 9.29833 14C9.65847 14 10.0037 13.7561 10.0037 13.3874V0.612628C10.0037 0.243918 9.65847 0 9.29833 0ZM12.1158 4.2645C11.9168 4.26455 11.7223 4.31643 11.5572 4.41351C11.3922 4.5106 11.264 4.64847 11.1891 4.8095C11.1142 4.97054 11.096 5.14743 11.1368 5.31754C11.1777 5.48766 11.2756 5.64328 11.4183 5.76451C12.2086 6.45482 12.2086 7.54518 11.4183 8.23549C11.3252 8.31661 11.2514 8.41294 11.2009 8.51899C11.1505 8.62503 11.1245 8.73872 11.1244 8.85354C11.1243 8.96837 11.1501 9.08208 11.2003 9.1882C11.2505 9.29432 11.3242 9.39076 11.4171 9.47201C11.51 9.55326 11.6203 9.61773 11.7417 9.66173C11.8632 9.70574 11.9933 9.72843 12.1248 9.72849C12.2563 9.72855 12.3865 9.706 12.5079 9.66211C12.6294 9.61822 12.7398 9.55386 12.8328 9.4727C14.3873 8.11501 14.3873 5.88669 12.8328 4.52901C12.7396 4.44531 12.6281 4.37878 12.505 4.33335C12.3818 4.28792 12.2495 4.26451 12.1158 4.2645Z"
   }));
 }
 
 // src/components/Svg/SpeakerLoud.tsx
-var import_react26 = __toModule(require_react());
-var import_classnames10 = __toModule(require_classnames());
+var import_react27 = __toModule(require_react());
+var import_classnames11 = __toModule(require_classnames());
 function SpeakerLoud({ className, alt = "SpeakerLoud" }) {
-  return /* @__PURE__ */ import_react26.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__speakerLoud"),
+  return /* @__PURE__ */ import_react27.default.createElement("svg", {
+    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__speakerLoud"),
     width: "100%",
     viewBox: "0 0 18 14",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react26.default.createElement("title", null, alt), /* @__PURE__ */ import_react26.default.createElement("path", {
+  }, /* @__PURE__ */ import_react27.default.createElement("title", null, alt), /* @__PURE__ */ import_react27.default.createElement("path", {
     d: "M9.29833 0C9.12627 0 8.95097 0.0568191 8.80792 0.180887L4.00147 4.37884H2.00073C0.895329 4.37884 0 5.16082 0 6.12628V7.87372C0 8.83918 0.895329 9.62116 2.00073 9.62116H4.00147L8.80792 13.8191C8.95097 13.9441 9.12627 14 9.29833 14C9.65847 14 10.0037 13.7561 10.0037 13.3874V0.612628C10.0037 0.243918 9.65847 0 9.29833 0ZM14.9449 1.79181C14.7455 1.7915 14.5505 1.84326 14.385 1.94042C14.2195 2.03759 14.0911 2.17573 14.0161 2.33713C13.9411 2.49852 13.9231 2.6758 13.9643 2.84621C14.0055 3.01662 14.1041 3.17239 14.2474 3.29352C16.6002 5.34843 16.6 8.65251 14.2474 10.7065C14.1514 10.787 14.0748 10.8834 14.0219 10.9901C13.9691 11.0968 13.9412 11.2117 13.9399 11.3279C13.9385 11.4442 13.9638 11.5595 14.0141 11.6671C14.0644 11.7747 14.1388 11.8725 14.2329 11.9547C14.327 12.0369 14.4389 12.1019 14.5622 12.1458C14.6854 12.1897 14.8174 12.2118 14.9505 12.2106C15.0836 12.2094 15.2151 12.185 15.3372 12.1389C15.4594 12.0928 15.5698 12.0258 15.662 11.942C18.7794 9.2202 18.7792 4.78061 15.662 2.05802C15.5689 1.97401 15.4575 1.90717 15.3344 1.86144C15.2112 1.81572 15.0788 1.79204 14.9449 1.79181ZM12.1158 4.2645C11.9168 4.26455 11.7223 4.31643 11.5572 4.41351C11.3922 4.5106 11.264 4.64847 11.1891 4.8095C11.1142 4.97054 11.096 5.14743 11.1368 5.31754C11.1777 5.48766 11.2756 5.64328 11.4183 5.76451C12.2086 6.45482 12.2086 7.54518 11.4183 8.23549C11.3252 8.31661 11.2514 8.41294 11.2009 8.51899C11.1505 8.62503 11.1245 8.73872 11.1244 8.85354C11.1243 8.96837 11.1501 9.08208 11.2003 9.1882C11.2505 9.29432 11.3242 9.39076 11.4171 9.47201C11.51 9.55326 11.6203 9.61773 11.7417 9.66173C11.8632 9.70574 11.9933 9.72843 12.1248 9.72849C12.2563 9.72855 12.3865 9.706 12.5079 9.66211C12.6294 9.61822 12.7398 9.55386 12.8328 9.4727C14.3873 8.11501 14.3873 5.88669 12.8328 4.52901C12.7396 4.44531 12.6281 4.37878 12.505 4.33335C12.3818 4.28792 12.2495 4.26451 12.1158 4.2645Z"
   }));
 }
 
 // src/components/Svg/SpeakerMute.tsx
-var import_react27 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
+var import_react28 = __toModule(require_react());
+var import_classnames12 = __toModule(require_classnames());
 function SpeakerMute({ className, alt = "SpeakerMute" }) {
-  return /* @__PURE__ */ import_react27.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__speakerMute"),
+  return /* @__PURE__ */ import_react28.default.createElement("svg", {
+    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__speakerMute"),
     width: "100%",
     viewBox: "0 0 18 14",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react27.default.createElement("title", null, alt), /* @__PURE__ */ import_react27.default.createElement("path", {
+  }, /* @__PURE__ */ import_react28.default.createElement("title", null, alt), /* @__PURE__ */ import_react28.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M8.80792 0.180887C8.95097 0.0568191 9.12627 0 9.29833 0C9.65847 0 10.0037 0.243918 10.0037 0.612628V13.3874C10.0037 13.7561 9.65847 14 9.29833 14C9.12627 14 8.95097 13.9441 8.80792 13.8191L4.00147 9.62116H2.00073C0.895329 9.62116 0 8.83918 0 7.87372V6.12628C0 5.16082 0.895329 4.37884 2.00073 4.37884H4.00147L8.80792 0.180887ZM12.5226 4.22368C12.6418 4.14337 12.7824 4.10045 12.9261 4.10041C13.0227 4.10042 13.1183 4.11978 13.2073 4.15736C13.2963 4.19495 13.3769 4.24998 13.4442 4.31922L15.1015 5.97651L16.7588 4.31922C16.8897 4.18448 17.0679 4.10601 17.2557 4.10041C17.4013 4.09612 17.5448 4.13591 17.6674 4.21457C17.7899 4.29322 17.8859 4.40708 17.9427 4.54122C17.9994 4.67535 18.0144 4.82351 17.9855 4.96627C17.9566 5.10903 17.8853 5.23974 17.7808 5.34126L16.1235 6.99855L17.7808 8.65583C17.8502 8.72243 17.9056 8.8022 17.9437 8.89047C17.9819 8.97875 18.002 9.07374 18.003 9.1699C18.004 9.26606 17.9858 9.36144 17.9494 9.45047C17.9131 9.5395 17.8593 9.62038 17.7913 9.68838C17.7233 9.75638 17.6425 9.81013 17.5534 9.84647C17.4644 9.88282 17.369 9.90104 17.2729 9.90006C17.1767 9.89908 17.0817 9.87893 16.9934 9.84077C16.9052 9.80262 16.8254 9.74724 16.7588 9.67787L15.1015 8.02059L13.4442 9.67787C13.3776 9.74724 13.2978 9.80262 13.2096 9.84077C13.1213 9.87893 13.0263 9.89908 12.9301 9.90006C12.834 9.90104 12.7386 9.88282 12.6496 9.84647C12.5605 9.81013 12.4797 9.75638 12.4117 9.68838C12.3437 9.62038 12.2899 9.5395 12.2536 9.45047C12.2172 9.36144 12.199 9.26606 12.2 9.1699C12.201 9.07374 12.2211 8.97875 12.2593 8.89047C12.2974 8.8022 12.3528 8.72243 12.4222 8.65583L14.0795 6.99855L12.4222 5.34126C12.3191 5.24098 12.2483 5.11224 12.2189 4.97152C12.1894 4.83079 12.2025 4.68447 12.2566 4.55125C12.3107 4.41804 12.4033 4.30399 12.5226 4.22368Z"
@@ -88166,34 +88203,34 @@ function SpeakerMute({ className, alt = "SpeakerMute" }) {
 }
 
 // src/components/Svg/Play.tsx
-var import_react28 = __toModule(require_react());
-var import_classnames12 = __toModule(require_classnames());
+var import_react29 = __toModule(require_react());
+var import_classnames13 = __toModule(require_classnames());
 function Play({ className, alt = "Play" }) {
-  return /* @__PURE__ */ import_react28.default.createElement("svg", {
-    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__play"),
+  return /* @__PURE__ */ import_react29.default.createElement("svg", {
+    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__play"),
     width: "100%",
     viewBox: "0 0 13 16",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react28.default.createElement("title", null, alt), /* @__PURE__ */ import_react28.default.createElement("path", {
+  }, /* @__PURE__ */ import_react29.default.createElement("title", null, alt), /* @__PURE__ */ import_react29.default.createElement("path", {
     d: "M11.383 6.31764C12.6076 7.10491 12.6076 8.89508 11.383 9.68236L3.08152 15.019C1.75049 15.8747 0 14.919 0 13.3367V2.66333C0 1.081 1.75049 0.125316 3.08151 0.980974L11.383 6.31764Z"
   }));
 }
 
 // src/components/Svg/Pause.tsx
-var import_react29 = __toModule(require_react());
-var import_classnames13 = __toModule(require_classnames());
+var import_react30 = __toModule(require_react());
+var import_classnames14 = __toModule(require_classnames());
 function Pause({ className, alt = "Pause" }) {
-  return /* @__PURE__ */ import_react29.default.createElement("svg", {
-    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__pause"),
+  return /* @__PURE__ */ import_react30.default.createElement("svg", {
+    className: (0, import_classnames14.default)(className, "fill-current", "Svg", "Svg__pause"),
     width: "100%",
     fill: "white",
     viewBox: "0 0 12 16",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react29.default.createElement("title", null, alt), /* @__PURE__ */ import_react29.default.createElement("rect", {
+  }, /* @__PURE__ */ import_react30.default.createElement("title", null, alt), /* @__PURE__ */ import_react30.default.createElement("rect", {
     width: "4",
     height: "16",
     rx: "2"
-  }), /* @__PURE__ */ import_react29.default.createElement("rect", {
+  }), /* @__PURE__ */ import_react30.default.createElement("rect", {
     x: "8",
     width: "4",
     height: "16",
@@ -88230,95 +88267,100 @@ function PlaybarUI(props) {
     rewind,
     setVolume,
     seekToStart,
+    showSwap,
+    swap,
     togglePlayback,
     toggleRate,
     volume
   } = props;
-  return /* @__PURE__ */ import_react30.default.createElement("div", {
+  return /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "relative h-13 w-full flex flex-col justify-center mt-[-6px]"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-60",
     style: { width: knobLeft + 74 }
-  }), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex z-20 player_timeline"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex items-center justify-center px-2 text-xs select-none relative w-[65px]"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "absolute left-0 right-0 top-0 bottom-0 bg-white backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-r-md"
-  }), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "z-10 relative font-mono text-yellow-800 opacity-60"
-  }, toDurationString(currentTime))), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, toDurationString(currentTime))), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex flex-1 relative items-center",
     onClick: onClickTrack
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex-1 h-[3px] bg-gray-200"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "h-[3px] bg-yellow-400",
     style: { width: knobLeft }
-  })), /* @__PURE__ */ import_react30.default.createElement("div", {
+  })), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "absolute rounded-lg mb-[1px] h-[16px] w-[16px] bg-blue-600 border-[3px] border-white cursor-grab active:cursor-grabbing hover:bg-blue-400 active:bg-blue-800 player_timeline__timeline_knob",
     style: { left: knobLeft },
     ref: knobRef
-  })), /* @__PURE__ */ import_react30.default.createElement("div", {
+  })), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "px-2 text-xs select-none relative flex items-center justify-center w-[65px]"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "absolute left-0 right-0 top-0 bottom-0 backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-l-md"
-  }), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "z-10 relative font-mono text-gray-500 opacity-60"
-  }, toDurationString(duration)))), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, toDurationString(duration)))), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 bg-white"
-  }, !fixed && /* @__PURE__ */ import_react30.default.createElement(Button, {
+  }, !fixed && /* @__PURE__ */ import_react31.default.createElement(Button, {
     onClick: clear,
     className: "flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1"
-  }, /* @__PURE__ */ import_react30.default.createElement(XMark, null)), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement(XMark, null)), showSwap && /* @__PURE__ */ import_react31.default.createElement(Button, {
+    onClick: swap,
+    className: "flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1"
+  }, /* @__PURE__ */ import_react31.default.createElement(Swap, null)), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group",
     onClick: onClickCalendar
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex items-end h-[12px] mt-[1px]"
-  }, /* @__PURE__ */ import_react30.default.createElement("span", {
+  }, /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "select-none leading-none text-sm text-blue-600 font-bold uppercase group-hover:text-blue-800 group-active:text-blue-900"
-  }, ((_a = eventMetaData == null ? void 0 : eventMetaData.quote) == null ? void 0 : _a.localTicker) || "Instrument"), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }, ((_a = eventMetaData == null ? void 0 : eventMetaData.quote) == null ? void 0 : _a.localTicker) || "Instrument"), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800"
-  }, ((_c = (_b = eventMetaData == null ? void 0 : eventMetaData.quote) == null ? void 0 : _b.exchange) == null ? void 0 : _c.shortName) || "Exchange")), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }, ((_c = (_b = eventMetaData == null ? void 0 : eventMetaData.quote) == null ? void 0 : _b.exchange) == null ? void 0 : _c.shortName) || "Exchange")), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900"
-  }, ((_d = eventMetaData == null ? void 0 : eventMetaData.eventType) == null ? void 0 : _d.replace(/_/g, " ")) || "No Type Found")), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, ((_d = eventMetaData == null ? void 0 : eventMetaData.eventType) == null ? void 0 : _d.replace(/_/g, " ")) || "No Type Found")), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex items-center pr-1.5 flex-shrink-0 flex-1 justify-center"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     onClick: toggleRate,
     className: "select-none text-sm font-bold font-mono text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
-  }, `${playbackRate.toFixed(2)}x`), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, `${playbackRate.toFixed(2)}x`), /* @__PURE__ */ import_react31.default.createElement("div", {
     onClick: seekToStart,
     className: "rotate-180 text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
-  }, /* @__PURE__ */ import_react30.default.createElement(End, {
+  }, /* @__PURE__ */ import_react31.default.createElement(End, {
     className: "w-[12px]"
-  })), /* @__PURE__ */ import_react30.default.createElement("div", {
+  })), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2",
     onClick: rewind
-  }, /* @__PURE__ */ import_react30.default.createElement(Back15, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Back15, {
     className: "w-[16px]"
-  })), /* @__PURE__ */ import_react30.default.createElement("div", {
-    className: (0, import_classnames14.default)("flex items-center justify-center w-[30px] h-[30px] rounded-full bg-blue-600 text-white cursor-pointer mx-0.5 hover:bg-blue-700 active:bg-blue-800"),
+  })), /* @__PURE__ */ import_react31.default.createElement("div", {
+    className: (0, import_classnames15.default)("flex items-center justify-center w-[30px] h-[30px] rounded-full bg-blue-600 text-white cursor-pointer mx-0.5 hover:bg-blue-700 active:bg-blue-800"),
     onClick: togglePlayback
-  }, /* @__PURE__ */ import_react30.default.createElement("div", null, isPlaying ? /* @__PURE__ */ import_react30.default.createElement(Pause, {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", null, isPlaying ? /* @__PURE__ */ import_react31.default.createElement(Pause, {
     className: "w-2.5"
-  }) : /* @__PURE__ */ import_react30.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react31.default.createElement(Play, {
     className: "ml-0.5 w-3"
-  }))), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2",
     onClick: fastForward
-  }, /* @__PURE__ */ import_react30.default.createElement(Forward15, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Forward15, {
     className: "w-[16px]"
-  })), /* @__PURE__ */ import_react30.default.createElement("div", {
+  })), /* @__PURE__ */ import_react31.default.createElement("div", {
     onClick: seekToEnd,
     className: "text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
-  }, /* @__PURE__ */ import_react30.default.createElement(End, {
+  }, /* @__PURE__ */ import_react31.default.createElement(End, {
     className: "w-[12px]"
-  })), /* @__PURE__ */ import_react30.default.createElement(Tooltip, {
+  })), /* @__PURE__ */ import_react31.default.createElement(Tooltip, {
     yOffset: 66,
     xOffset: -53,
-    content: /* @__PURE__ */ import_react30.default.createElement("div", {
+    content: /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex items-center justify-center p-2 rounded-xl bg-white -rotate-90 player_timeline__volume_slider"
-    }, /* @__PURE__ */ import_react30.default.createElement("input", {
+    }, /* @__PURE__ */ import_react31.default.createElement("input", {
       defaultValue: volume,
       onChange: (e) => setVolume(parseFloat(e.target.value)),
       type: "range",
@@ -88331,40 +88373,40 @@ function PlaybarUI(props) {
     grow: "up-left",
     openOn: "click",
     position: "top-right"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "text-yellow-500 px-2 hover:text-yellow-600 active:text-yellow-800 cursor-pointer"
-  }, volume > 0.6 ? /* @__PURE__ */ import_react30.default.createElement(SpeakerLoud, {
+  }, volume > 0.6 ? /* @__PURE__ */ import_react31.default.createElement(SpeakerLoud, {
     className: "w-[18px]"
-  }) : volume === 0 ? /* @__PURE__ */ import_react30.default.createElement(SpeakerMute, {
+  }) : volume === 0 ? /* @__PURE__ */ import_react31.default.createElement(SpeakerMute, {
     className: "w-[18px]"
-  }) : /* @__PURE__ */ import_react30.default.createElement(Speaker, {
+  }) : /* @__PURE__ */ import_react31.default.createElement(Speaker, {
     className: "w-[14px] mr-[4px]"
-  })))), error && !isPlaying && /* @__PURE__ */ import_react30.default.createElement("div", {
+  })))), error && !isPlaying && /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "absolute py-2 px-2.5 backdrop-filter backdrop-blur-md rounded-lg bg-red-200 bg-opacity-30"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "text-center text-red-700 text-xs"
   }, "There was an error playing audio."))));
 }
 function usePlaybarDrag(audioPlayer) {
   var _a, _b, _c;
-  const knobRef = (0, import_react30.useRef)(null);
+  const knobRef = (0, import_react31.useRef)(null);
   useWindowSize();
   const knobTrackWidth = ((_b = (_a = knobRef.current) == null ? void 0 : _a.parentElement) == null ? void 0 : _b.getBoundingClientRect().width) || 0;
   const knobWidth = ((_c = knobRef.current) == null ? void 0 : _c.getBoundingClientRect().width) || 0;
   const trackWidth = Math.max(0, knobTrackWidth - knobWidth);
   const [isDragging, dragXOffset] = useDrag({
     dragTarget: knobRef,
-    onDragStart: (0, import_react30.useCallback)((_event, setPosition) => {
+    onDragStart: (0, import_react31.useCallback)((_event, setPosition) => {
       var _a2;
       setPosition({ x: ((_a2 = knobRef.current) == null ? void 0 : _a2.offsetLeft) || 0, y: 0 });
     }, [knobRef.current]),
-    onDragEnd: (0, import_react30.useCallback)(() => {
+    onDragEnd: (0, import_react31.useCallback)(() => {
       var _a2;
       const leftOffset = Math.max(0, ((_a2 = knobRef.current) == null ? void 0 : _a2.offsetLeft) || 0);
       audioPlayer.displaySeek(leftOffset / trackWidth * audioPlayer.displayDuration);
     }, [knobRef.current, trackWidth])
   });
-  const onClickTrack = (0, import_react30.useCallback)((event) => {
+  const onClickTrack = (0, import_react31.useCallback)((event) => {
     var _a2;
     const trackElem = (_a2 = knobRef.current) == null ? void 0 : _a2.parentElement;
     const trackXOffset = (trackElem == null ? void 0 : trackElem.getBoundingClientRect().left) || 0;
@@ -88378,15 +88420,15 @@ function usePlaybarDrag(audioPlayer) {
 function usePlayer(id, url, offset = 0, metaData) {
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
-  (0, import_react30.useEffect)(() => {
-    if (id) {
-      const initParams = metaData ? { id, url: url || "", offset, metaData } : { id, url: url || "", offset };
-      audioPlayer.init(initParams);
+  (0, import_react31.useEffect)(() => {
+    if (id && !audioPlayer.playing(null)) {
+      audioPlayer.init({ id, url: url || "", offset, metaData });
     }
-  }, [id, url, offset]);
+  }, [id, url, offset, ...Object.values(metaData || {})]);
   const isActive = audioPlayer.id;
   const isPlaying = audioPlayer.playing(null);
-  const togglePlayback = (0, import_react30.useCallback)(() => {
+  const isPlayingAnotherEvent = isPlaying && id && !audioPlayer.playing(id);
+  const togglePlayback = (0, import_react31.useCallback)(() => {
     if (isPlaying) {
       void track("Click", "Audio Pause", { eventId: id, url });
       audioPlayer.pause();
@@ -88395,41 +88437,49 @@ function usePlayer(id, url, offset = 0, metaData) {
       void audioPlayer.play();
     }
   }, [isPlaying]);
-  const fastForward = (0, import_react30.useCallback)(() => {
+  const fastForward = (0, import_react31.useCallback)(() => {
     void track("Click", "Audio Fast Forward", { eventId: id, url });
     audioPlayer.ff(15);
   }, []);
-  const rewind = (0, import_react30.useCallback)(() => {
+  const rewind = (0, import_react31.useCallback)(() => {
     void track("Click", "Audio Rewind", { eventId: id, url });
     audioPlayer.rewind(15);
   }, []);
-  const seekToStart = (0, import_react30.useCallback)(() => {
+  const seekToStart = (0, import_react31.useCallback)(() => {
     void track("Click", "Audio Start", { eventId: id, url });
     audioPlayer.seekToStart();
   }, []);
-  const seekToEnd = (0, import_react30.useCallback)(() => {
+  const seekToEnd = (0, import_react31.useCallback)(() => {
     void track("Click", "Audio Over", { eventId: id, url });
     audioPlayer.seekToEnd();
   }, []);
-  const toggleRate = (0, import_react30.useCallback)(() => {
+  const toggleRate = (0, import_react31.useCallback)(() => {
     void track("Click", "Audio Playback Rate", { eventId: id, url });
     audioPlayer.togglePlaybackRate();
   }, []);
-  const clear = (0, import_react30.useCallback)(() => {
+  const clear = (0, import_react31.useCallback)(() => {
     void track("Click", "Audio Stop", { eventId: id, url });
     audioPlayer.clear();
   }, []);
+  const swap = (0, import_react31.useCallback)(() => {
+    if (id) {
+      audioPlayer.clear();
+      void audioPlayer.play({ id, url: url || "", offset, metaData });
+    }
+  }, [id, url, offset, ...Object.values(metaData || {})]);
   return {
     audioPlayer,
     seekToEnd,
     isActive,
     isPlaying,
+    isPlayingAnotherEvent,
     togglePlayback,
     fastForward,
     rewind,
     seekToStart,
     toggleRate,
-    clear
+    clear,
+    swap
   };
 }
 function Playbar(props) {
@@ -88438,22 +88488,24 @@ function Playbar(props) {
     audioPlayer,
     isActive,
     isPlaying,
+    isPlayingAnotherEvent,
     togglePlayback,
     fastForward,
     rewind,
     seekToStart,
     seekToEnd,
     clear,
+    swap,
     toggleRate
   } = usePlayer(id, url, offset, metaData);
   const [knobRef, knobLeft, onClickTrack] = usePlaybarDrag(audioPlayer);
-  const onClickCalendar = (0, import_react30.useCallback)((event) => {
+  const onClickCalendar = (0, import_react31.useCallback)((event) => {
     var _a;
     return (_a = props.onClickCalendar) == null ? void 0 : _a.call(props, event, { value: audioPlayer.id });
   }, [audioPlayer.id]);
   if (!isActive)
     return null;
-  return /* @__PURE__ */ import_react30.default.createElement(PlaybarUI, {
+  return /* @__PURE__ */ import_react31.default.createElement(PlaybarUI, {
     clear,
     currentTime: audioPlayer.displayCurrentTime,
     duration: audioPlayer.displayDuration,
@@ -88471,6 +88523,8 @@ function Playbar(props) {
     rewind,
     setVolume: audioPlayer.setVolume,
     seekToStart,
+    showSwap: !!isPlayingAnotherEvent,
+    swap,
     togglePlayback,
     toggleRate,
     volume: audioPlayer.volume
@@ -88478,20 +88532,20 @@ function Playbar(props) {
 }
 
 // src/modules/Transcript/EmptyMessage/index.tsx
-var import_react32 = __toModule(require_react());
+var import_react33 = __toModule(require_react());
 var import_ts_pattern4 = __toModule(require_lib());
 
 // src/components/Svg/Check.tsx
-var import_react31 = __toModule(require_react());
-var import_classnames15 = __toModule(require_classnames());
+var import_react32 = __toModule(require_react());
+var import_classnames16 = __toModule(require_classnames());
 function Check({ className, alt = "Check" }) {
-  return /* @__PURE__ */ import_react31.default.createElement("svg", {
-    className: (0, import_classnames15.default)(className, "fill-current", "Svg", "Svg__check"),
+  return /* @__PURE__ */ import_react32.default.createElement("svg", {
+    className: (0, import_classnames16.default)(className, "fill-current", "Svg", "Svg__check"),
     width: "100%",
     viewBox: "0 0 8 6",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react31.default.createElement("title", null, alt), /* @__PURE__ */ import_react31.default.createElement("path", {
+  }, /* @__PURE__ */ import_react32.default.createElement("title", null, alt), /* @__PURE__ */ import_react32.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M7.69471 1.69471C7.87687 1.50611 7.97766 1.25351 7.97539 0.991311C7.97311 0.729114 7.86794 0.478302 7.68253 0.292894C7.49712 0.107485 7.24631 0.00231622 6.98411 3.78025e-05C6.72192 -0.00224062 6.46931 0.0985542 6.28071 0.280712L2.98771 3.57371L1.69471 2.28071C1.50611 2.09855 1.25351 1.99776 0.991311 2.00004C0.729114 2.00232 0.478302 2.10749 0.292894 2.29289C0.107485 2.4783 0.00231622 2.72911 3.78025e-05 2.99131C-0.00224062 3.25351 0.0985542 3.50611 0.280712 3.69471L2.28071 5.69471C2.46824 5.88218 2.72255 5.9875 2.98771 5.9875C3.25288 5.9875 3.50718 5.88218 3.69471 5.69471L7.69471 1.69471Z"
@@ -88505,94 +88559,94 @@ function EmptyMessageUI(props) {
     pillBgColor: "bg-gray-200",
     pillTextColor: "text-gray-700",
     pillText: "no connection details",
-    message: /* @__PURE__ */ import_react32.default.createElement("div", {
+    message: /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "This event will be transcribed if we receive", /* @__PURE__ */ import_react32.default.createElement("br", null), "connection details before the event start time.")
+    }, "This event will be transcribed if we receive", /* @__PURE__ */ import_react33.default.createElement("br", null), "connection details before the event start time.")
   })).with(EventConnectionStatus.ConnectionExpected, () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "connection expected",
-    message: /* @__PURE__ */ import_react32.default.createElement("div", {
+    message: /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "The transcript will appear here", /* @__PURE__ */ import_react32.default.createElement("br", null), "after the event begins.")
+    }, "The transcript will appear here", /* @__PURE__ */ import_react33.default.createElement("br", null), "after the event begins.")
   })).with(EventConnectionStatus.WaitingToConnect, () => ({
     pillBgColor: "bg-yellow-200",
     pillTextColor: "text-yellow-700",
     pillText: "waiting for connection",
-    message: /* @__PURE__ */ import_react32.default.createElement("div", {
+    message: /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "We are attempting to connect,", /* @__PURE__ */ import_react32.default.createElement("br", null), " please wait.")
+    }, "We are attempting to connect,", /* @__PURE__ */ import_react33.default.createElement("br", null), " please wait.")
   })).with(EventConnectionStatus.Connected, () => ({
     pillBgColor: "bg-yellow-300",
     pillTextColor: "text-yellow-900",
     pillText: "connected",
-    message: /* @__PURE__ */ import_react32.default.createElement("div", {
+    message: /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-base text-gray-500"
-    }, "Transcription will start automatically", /* @__PURE__ */ import_react32.default.createElement("br", null), "when the conference speaker begins.")
+    }, "Transcription will start automatically", /* @__PURE__ */ import_react33.default.createElement("br", null), "when the conference speaker begins.")
   })).with(EventConnectionStatus.Missed, () => ({
     pillBgColor: "bg-gray-200",
     pillTextColor: "text-gray-700",
     pillText: "missed",
-    message: /* @__PURE__ */ import_react32.default.createElement("div", {
+    message: /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-base text-gray-500"
     }, (event == null ? void 0 : event.hasConnectionDetails) ? prettyLineBreak("Sorry, we were unable to connect to the live audio for this event.") : prettyLineBreak("Apologies, no connection details were found for this event"))
   })).with(EventConnectionStatus.Transcribing, () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "Transcribing event",
-    message: /* @__PURE__ */ import_react32.default.createElement("div", {
+    message: /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-base text-gray-500"
     }, "This message should not appear")
   })).with(EventConnectionStatus.Transcribed, () => ({
     pillBgColor: "bg-green-300",
     pillTextColor: "text-green-700",
     pillText: "Event Transcribed",
-    message: /* @__PURE__ */ import_react32.default.createElement("div", {
+    message: /* @__PURE__ */ import_react33.default.createElement("div", {
       className: "text-base text-gray-500"
     }, "This message should not appear")
   })).exhaustive();
-  return /* @__PURE__ */ import_react32.default.createElement("div", {
+  return /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "w-full px-6 h-full flex flex-col text-center items-center justify-center"
-  }, /* @__PURE__ */ import_react32.default.createElement("span", {
+  }, /* @__PURE__ */ import_react33.default.createElement("span", {
     className: "text-xl font-semibold text-gray-600 line-clamp-2"
-  }, prettyLineBreak(event == null ? void 0 : event.title)), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, prettyLineBreak(event == null ? void 0 : event.title)), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: `overflow-hidden relative text-xxs ${pillTextColor} uppercase tracking-widest px-1.5 py-0.5 rounded-xl mt-2 mb-8`
-  }, /* @__PURE__ */ import_react32.default.createElement("span", {
+  }, /* @__PURE__ */ import_react33.default.createElement("span", {
     className: "z-10 relative"
-  }, pillText), /* @__PURE__ */ import_react32.default.createElement("span", {
+  }, pillText), /* @__PURE__ */ import_react33.default.createElement("span", {
     className: `animate-pulse ${pillBgColor} absolute top-0 bottom-0 left-0 right-0`
-  })), message, (event == null ? void 0 : event.publishedTranscriptExpected) && /* @__PURE__ */ import_react32.default.createElement("div", {
+  })), message, (event == null ? void 0 : event.publishedTranscriptExpected) && /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "flex mt-4 items-center justify-start text-left bg-green-50 rounded-2xl py-1.5 pr-2 pl-3 border-[1px] border-green-100"
-  }, /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "text-sm leading-tight text-green-600"
-  }, "We expect to receive a", /* @__PURE__ */ import_react32.default.createElement("br", null), "published transcript for this event."), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }, "We expect to receive a", /* @__PURE__ */ import_react33.default.createElement("br", null), "published transcript for this event."), /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "text-white bg-green-400 h-6 w-6 rounded-2xl flex items-center justify-center ml-4"
-  }, /* @__PURE__ */ import_react32.default.createElement(Check, {
+  }, /* @__PURE__ */ import_react33.default.createElement(Check, {
     className: "w-2.5"
   }))));
 }
 function EmptyMessage(props) {
   const { event } = props;
-  return /* @__PURE__ */ import_react32.default.createElement(EmptyMessageUI, {
+  return /* @__PURE__ */ import_react33.default.createElement(EmptyMessageUI, {
     event
   });
 }
 
 // src/modules/Transcript/Header/index.tsx
-var import_react43 = __toModule(require_react());
+var import_react44 = __toModule(require_react());
 var import_ts_pattern5 = __toModule(require_lib());
-var import_classnames26 = __toModule(require_classnames());
+var import_classnames27 = __toModule(require_classnames());
 var import_luxon = __toModule(require_luxon());
 
 // src/components/ExpandButton/index.tsx
-var import_react33 = __toModule(require_react());
-var import_classnames16 = __toModule(require_classnames());
+var import_react34 = __toModule(require_react());
+var import_classnames17 = __toModule(require_classnames());
 function ExpandButtonUI(props) {
   const { className = "", onClick, expanded } = props;
-  return /* @__PURE__ */ import_react33.default.createElement("button", {
+  return /* @__PURE__ */ import_react34.default.createElement("button", {
     title: "expand",
     onClick,
-    className: (0, import_classnames16.default)(`transition-all flex-shrink-0 h-5 w-5 rounded-xl flex items-start justify-center ${className}`, {
+    className: (0, import_classnames17.default)(`transition-all flex-shrink-0 h-5 w-5 rounded-xl flex items-start justify-center ${className}`, {
       "bg-blue-600": expanded,
       "bg-gray-100": !expanded,
       "hover:bg-blue-700": expanded,
@@ -88600,8 +88654,8 @@ function ExpandButtonUI(props) {
       "active:bg-blue-800": expanded,
       "active:bg-gray-300": !expanded
     })
-  }, /* @__PURE__ */ import_react33.default.createElement(Chevron, {
-    className: (0, import_classnames16.default)("flex-shrink-0 w-2 transition-all", {
+  }, /* @__PURE__ */ import_react34.default.createElement(Chevron, {
+    className: (0, import_classnames17.default)("flex-shrink-0 w-2 transition-all", {
       "mt-[7px] rotate-180 fill-current text-white": expanded,
       "mt-[8px] opacity-30": !expanded
     })
@@ -88609,7 +88663,7 @@ function ExpandButtonUI(props) {
 }
 function ExpandButton(props) {
   const { className, expanded, onClick } = props;
-  return /* @__PURE__ */ import_react33.default.createElement(ExpandButtonUI, {
+  return /* @__PURE__ */ import_react34.default.createElement(ExpandButtonUI, {
     className,
     expanded,
     onClick
@@ -88617,30 +88671,30 @@ function ExpandButton(props) {
 }
 
 // src/components/Input/index.tsx
-var import_react34 = __toModule(require_react());
-var import_classnames17 = __toModule(require_classnames());
+var import_react35 = __toModule(require_react());
+var import_classnames18 = __toModule(require_classnames());
 function InputUI(props) {
   const { children, placeholder, onChange, onFocus, value, name, className = "", defaultValue } = props;
-  return /* @__PURE__ */ import_react34.default.createElement("div", {
+  return /* @__PURE__ */ import_react35.default.createElement("div", {
     className: `group h-8 items-center w-full relative ${className} input__${name}`
-  }, /* @__PURE__ */ import_react34.default.createElement("input", {
-    className: (0, import_classnames17.default)("w-full inset-0 absolute text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400", { "pl-7": !!children, "pl-3": !children }),
+  }, /* @__PURE__ */ import_react35.default.createElement("input", {
+    className: (0, import_classnames18.default)("w-full inset-0 absolute text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400", { "pl-7": !!children, "pl-3": !children }),
     onChange,
     onFocus,
     placeholder,
     defaultValue,
     value
-  }), import_react34.default.isValidElement(children) && /* @__PURE__ */ import_react34.default.createElement("div", {
+  }), import_react35.default.isValidElement(children) && /* @__PURE__ */ import_react35.default.createElement("div", {
     className: "pointer-events-none h-8 w-8 justify-center items-center flex"
-  }, import_react34.default.cloneElement(children, {
+  }, import_react35.default.cloneElement(children, {
     className: "group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4"
   })));
 }
 function Input(props) {
   const { children, placeholder, onChange, onFocus, value, name, className, defaultValue } = props;
-  return /* @__PURE__ */ import_react34.default.createElement(InputUI, {
+  return /* @__PURE__ */ import_react35.default.createElement(InputUI, {
     placeholder,
-    onChange: (0, import_react34.useCallback)((event) => {
+    onChange: (0, import_react35.useCallback)((event) => {
       var _a;
       return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
     }, [onChange]),
@@ -88653,15 +88707,15 @@ function Input(props) {
 }
 
 // src/components/Svg/ArrowLeft.tsx
-var import_react35 = __toModule(require_react());
-var import_classnames18 = __toModule(require_classnames());
+var import_react36 = __toModule(require_react());
+var import_classnames19 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
-  return /* @__PURE__ */ import_react35.default.createElement("svg", {
-    className: (0, import_classnames18.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+  return /* @__PURE__ */ import_react36.default.createElement("svg", {
+    className: (0, import_classnames19.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react35.default.createElement("title", null, alt), /* @__PURE__ */ import_react35.default.createElement("path", {
+  }, /* @__PURE__ */ import_react36.default.createElement("title", null, alt), /* @__PURE__ */ import_react36.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M5.70679 9.69471C5.51926 9.88218 5.26495 9.9875 4.99979 9.9875C4.73462 9.9875 4.48031 9.88218 4.29279 9.69471L0.292787 5.69471C0.105316 5.50718 0 5.25288 0 4.98771C0 4.72255 0.105316 4.46824 0.292787 4.28071L4.29279 0.280712C4.48139 0.0985542 4.73399 -0.00224062 4.99619 3.78025e-05C5.25838 0.00231622 5.5092 0.107485 5.6946 0.292894C5.88001 0.478302 5.98518 0.729114 5.98746 0.991311C5.98974 1.25351 5.88894 1.50611 5.70679 1.69471L3.41379 3.98771H10.9998C11.265 3.98771 11.5194 4.09307 11.7069 4.28061C11.8944 4.46814 11.9998 4.7225 11.9998 4.98771C11.9998 5.25293 11.8944 5.50728 11.7069 5.69482C11.5194 5.88235 11.265 5.98771 10.9998 5.98771H3.41379L5.70679 8.28071C5.89426 8.46824 5.99957 8.72255 5.99957 8.98771C5.99957 9.25288 5.89426 9.50718 5.70679 9.69471V9.69471Z"
@@ -88669,20 +88723,20 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 }
 
 // src/components/Svg/MagnifyingGlass.tsx
-var import_react36 = __toModule(require_react());
-var import_classnames19 = __toModule(require_classnames());
+var import_react37 = __toModule(require_react());
+var import_classnames20 = __toModule(require_classnames());
 function MagnifyingGlass({
   className,
   alt = "Magnifying Glass"
 }) {
-  return /* @__PURE__ */ import_react36.default.createElement("svg", {
-    className: (0, import_classnames19.default)(className, "Svg", "Svg__magnifyingGlass"),
+  return /* @__PURE__ */ import_react37.default.createElement("svg", {
+    className: (0, import_classnames20.default)(className, "Svg", "Svg__magnifyingGlass"),
     width: "100%",
     viewBox: "0 0 12 12",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg",
     stroke: "black"
-  }, /* @__PURE__ */ import_react36.default.createElement("title", null, alt), /* @__PURE__ */ import_react36.default.createElement("path", {
+  }, /* @__PURE__ */ import_react37.default.createElement("title", null, alt), /* @__PURE__ */ import_react37.default.createElement("path", {
     d: "M11 11L8.41379 8.41379L11 11ZM1 5.31034C1 2.92981 2.92981 1 5.31034 1C7.6909 1 9.62069 2.92981 9.62069 5.31034C9.62069 7.6909 7.6909 9.62069 5.31034 9.62069C2.92981 9.62069 1 7.6909 1 5.31034Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
@@ -88691,21 +88745,21 @@ function MagnifyingGlass({
 }
 
 // src/components/Svg/Gear.tsx
-var import_react37 = __toModule(require_react());
-var import_classnames20 = __toModule(require_classnames());
+var import_react38 = __toModule(require_react());
+var import_classnames21 = __toModule(require_classnames());
 function Gear({ className, alt = "Gear" }) {
-  return /* @__PURE__ */ import_react37.default.createElement("svg", {
-    className: (0, import_classnames20.default)(className, "stroke-current", "Svg", "Svg__gear"),
+  return /* @__PURE__ */ import_react38.default.createElement("svg", {
+    className: (0, import_classnames21.default)(className, "stroke-current", "Svg", "Svg__gear"),
     width: "100%",
     fill: "none",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react37.default.createElement("title", null, alt), /* @__PURE__ */ import_react37.default.createElement("path", {
+  }, /* @__PURE__ */ import_react38.default.createElement("title", null, alt), /* @__PURE__ */ import_react38.default.createElement("path", {
     d: "M10.325 4.317C10.751 2.561 13.249 2.561 13.675 4.317C13.7389 4.5808 13.8642 4.82578 14.0407 5.032C14.2172 5.23822 14.4399 5.39985 14.6907 5.50375C14.9414 5.60764 15.2132 5.65085 15.4838 5.62987C15.7544 5.60889 16.0162 5.5243 16.248 5.383C17.791 4.443 19.558 6.209 18.618 7.753C18.4769 7.98466 18.3924 8.24634 18.3715 8.51677C18.3506 8.78721 18.3938 9.05877 18.4975 9.30938C18.6013 9.55999 18.7627 9.78258 18.9687 9.95905C19.1747 10.1355 19.4194 10.2609 19.683 10.325C21.439 10.751 21.439 13.249 19.683 13.675C19.4192 13.7389 19.1742 13.8642 18.968 14.0407C18.7618 14.2172 18.6001 14.4399 18.4963 14.6907C18.3924 14.9414 18.3491 15.2132 18.3701 15.4838C18.3911 15.7544 18.4757 16.0162 18.617 16.248C19.557 17.791 17.791 19.558 16.247 18.618C16.0153 18.4769 15.7537 18.3924 15.4832 18.3715C15.2128 18.3506 14.9412 18.3938 14.6906 18.4975C14.44 18.6013 14.2174 18.7627 14.0409 18.9687C13.8645 19.1747 13.7391 19.4194 13.675 19.683C13.249 21.439 10.751 21.439 10.325 19.683C10.2611 19.4192 10.1358 19.1742 9.95929 18.968C9.7828 18.7618 9.56011 18.6001 9.30935 18.4963C9.05859 18.3924 8.78683 18.3491 8.51621 18.3701C8.24559 18.3911 7.98375 18.4757 7.752 18.617C6.209 19.557 4.442 17.791 5.382 16.247C5.5231 16.0153 5.60755 15.7537 5.62848 15.4832C5.64942 15.2128 5.60624 14.9412 5.50247 14.6906C5.3987 14.44 5.23726 14.2174 5.03127 14.0409C4.82529 13.8645 4.58056 13.7391 4.317 13.675C2.561 13.249 2.561 10.751 4.317 10.325C4.5808 10.2611 4.82578 10.1358 5.032 9.95929C5.23822 9.7828 5.39985 9.56011 5.50375 9.30935C5.60764 9.05859 5.65085 8.78683 5.62987 8.51621C5.60889 8.24559 5.5243 7.98375 5.383 7.752C4.443 6.209 6.209 4.442 7.753 5.382C8.749 5.99 10.049 5.452 10.325 4.317Z",
     strokeWidth: "2",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }), /* @__PURE__ */ import_react37.default.createElement("path", {
+  }), /* @__PURE__ */ import_react38.default.createElement("path", {
     d: "M15 12C15 12.7956 14.6839 13.5587 14.1213 14.1213C13.5587 14.6839 12.7956 15 12 15C11.2044 15 10.4413 14.6839 9.87868 14.1213C9.31607 13.5587 9 12.7956 9 12C9 11.2044 9.31607 10.4413 9.87868 9.87868C10.4413 9.31607 11.2044 9 12 9C12.7956 9 13.5587 9.31607 14.1213 9.87868C14.6839 10.4413 15 11.2044 15 12V12Z",
     strokeWidth: "2",
     strokeLinecap: "round",
@@ -88714,22 +88768,22 @@ function Gear({ className, alt = "Gear" }) {
 }
 
 // src/modules/Transcript/EventDetails/index.tsx
-var import_react38 = __toModule(require_react());
-var import_classnames21 = __toModule(require_classnames());
+var import_react39 = __toModule(require_react());
+var import_classnames22 = __toModule(require_classnames());
 function EventDetailsUI(props) {
   var _a;
   const { event, eventDetailsExpanded, toggleEventDetails } = props;
-  return /* @__PURE__ */ import_react38.default.createElement("div", null, /* @__PURE__ */ import_react38.default.createElement("div", {
+  return /* @__PURE__ */ import_react39.default.createElement("div", null, /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "flex flex-col justify-start border-t-[1px] border-gray-100 px-3"
-  }, /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "flex items-center justify-start h-10 cursor-pointer group",
     onClick: toggleEventDetails
-  }, /* @__PURE__ */ import_react38.default.createElement("span", {
+  }, /* @__PURE__ */ import_react39.default.createElement("span", {
     className: "text-sm block font-semibold w-28 mr-1"
-  }, "Event Details"), /* @__PURE__ */ import_react38.default.createElement("span", {
+  }, "Event Details"), /* @__PURE__ */ import_react39.default.createElement("span", {
     className: "text-gray-400 text-sm flex-1 truncate group-hover:text-gray-600"
-  }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react38.default.createElement(ExpandButton, {
-    className: (0, import_classnames21.default)("ml-2", {
+  }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react39.default.createElement(ExpandButton, {
+    className: (0, import_classnames22.default)("ml-2", {
       "group-hover:bg-gray-200": !eventDetailsExpanded,
       "group-hover:bg-blue-700": eventDetailsExpanded,
       "group-active:bg-gray-400": !eventDetailsExpanded,
@@ -88737,39 +88791,39 @@ function EventDetailsUI(props) {
     }),
     onClick: toggleEventDetails,
     expanded: eventDetailsExpanded
-  })), eventDetailsExpanded && /* @__PURE__ */ import_react38.default.createElement("div", {
+  })), eventDetailsExpanded && /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "text-sm border-[1px] rounded-lg border-gray-200 mb-3.5"
-  }, event.dialInPhoneNumbers && event.dialInPhoneNumbers.length > 0 && /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, event.dialInPhoneNumbers && event.dialInPhoneNumbers.length > 0 && /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react38.default.createElement("span", {
+  }, /* @__PURE__ */ import_react39.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Phone number"), /* @__PURE__ */ import_react38.default.createElement("div", null, event.dialInPhoneNumbers.map((number) => /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, "Phone number"), /* @__PURE__ */ import_react39.default.createElement("div", null, event.dialInPhoneNumbers.map((number) => /* @__PURE__ */ import_react39.default.createElement("div", {
     key: number
-  }, number)))), event.dialInPin && /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, number)))), event.dialInPin && /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react38.default.createElement("span", {
+  }, /* @__PURE__ */ import_react39.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Pin Number"), /* @__PURE__ */ import_react38.default.createElement("span", null, event == null ? void 0 : event.dialInPin)), event.webcastUrls.length > 0 && /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, "Pin Number"), /* @__PURE__ */ import_react39.default.createElement("span", null, event == null ? void 0 : event.dialInPin)), event.webcastUrls.length > 0 && /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react38.default.createElement("span", {
+  }, /* @__PURE__ */ import_react39.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Webcast"), /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, "Webcast"), /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "overflow-hidden truncate"
-  }, (_a = event.webcastUrls) == null ? void 0 : _a.map((url) => /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, (_a = event.webcastUrls) == null ? void 0 : _a.map((url) => /* @__PURE__ */ import_react39.default.createElement("div", {
     key: url,
     className: "block truncate"
-  }, /* @__PURE__ */ import_react38.default.createElement("a", {
+  }, /* @__PURE__ */ import_react39.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: url,
     rel: "noreferrer",
     target: "_blank"
-  }, url))))), event.audioRecordingUrl && /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, url))))), event.audioRecordingUrl && /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react38.default.createElement("span", {
+  }, /* @__PURE__ */ import_react39.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Download MP3"), /* @__PURE__ */ import_react38.default.createElement("span", {
+  }, "Download MP3"), /* @__PURE__ */ import_react39.default.createElement("span", {
     className: "block truncate"
-  }, /* @__PURE__ */ import_react38.default.createElement("a", {
+  }, /* @__PURE__ */ import_react39.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: event.audioRecordingUrl,
     rel: "noreferrer",
@@ -88778,7 +88832,7 @@ function EventDetailsUI(props) {
 }
 function EventDetails(props) {
   const { event, eventDetailsExpanded, toggleEventDetails } = props;
-  return /* @__PURE__ */ import_react38.default.createElement(EventDetailsUI, {
+  return /* @__PURE__ */ import_react39.default.createElement(EventDetailsUI, {
     event,
     eventDetailsExpanded,
     toggleEventDetails
@@ -88786,21 +88840,21 @@ function EventDetails(props) {
 }
 
 // src/modules/Transcript/PriceChart/index.tsx
-var import_react42 = __toModule(require_react());
-var import_classnames25 = __toModule(require_classnames());
+var import_react43 = __toModule(require_react());
+var import_classnames26 = __toModule(require_classnames());
 var import_highstock = __toModule(require_highstock());
 var import_highcharts_react_official = __toModule(require_highcharts_react_min());
 
 // src/components/Svg/Pin.tsx
-var import_react39 = __toModule(require_react());
-var import_classnames22 = __toModule(require_classnames());
+var import_react40 = __toModule(require_react());
+var import_classnames23 = __toModule(require_classnames());
 function Pin({ className, alt = "Pin" }) {
-  return /* @__PURE__ */ import_react39.default.createElement("svg", {
-    className: (0, import_classnames22.default)(className, "fill-current", "Svg", "Svg__pin"),
+  return /* @__PURE__ */ import_react40.default.createElement("svg", {
+    className: (0, import_classnames23.default)(className, "fill-current", "Svg", "Svg__pin"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react39.default.createElement("title", null, alt), /* @__PURE__ */ import_react39.default.createElement("path", {
+  }, /* @__PURE__ */ import_react40.default.createElement("title", null, alt), /* @__PURE__ */ import_react40.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M2.4119 0C2.17181 0 1.94623 0.114944 1.80512 0.309186C1.664 0.503428 1.62441 0.753489 1.69862 0.981821L2.50223 3.45438V4.77264C1.30693 5.34871 0.673665 6.32085 0.347619 7.15684C0.164168 7.62721 0.0734836 8.06276 0.0281426 8.38053C0.00534171 8.54033 -0.00635266 8.6729 -0.012365 8.76847C-0.0153756 8.81633 -0.0169749 8.85513 -0.0178223 8.88367C-0.0182463 8.89794 -0.0184827 8.90967 -0.0186132 8.9187L-0.0187396 8.93022L-0.0187624 8.93443L-0.018767 8.93615L-0.018768 8.9369C-0.0187683 8.93726 -0.0187683 8.9376 0.731232 8.9376H-0.0187683C-0.0187683 9.35181 0.317018 9.6876 0.731232 9.6876H5.23261V13.2461C5.23261 13.6604 5.5684 13.9961 5.98261 13.9961C6.39683 13.9961 6.73261 13.6604 6.73261 13.2461V9.6876H11.2354C11.6496 9.6876 11.9854 9.35181 11.9854 8.9376H11.2354C11.9854 8.9376 11.9854 8.93726 11.9854 8.9369L11.9854 8.93615L11.9854 8.93443L11.9854 8.93022L11.9852 8.9187C11.9851 8.90967 11.9849 8.89794 11.9844 8.88367C11.9836 8.85513 11.982 8.81633 11.979 8.76847C11.973 8.6729 11.9613 8.54033 11.9385 8.38053C11.8931 8.06276 11.8025 7.62721 11.619 7.15684C11.293 6.32085 10.6597 5.34871 9.46439 4.77264V3.45438L10.268 0.981821C10.3422 0.753489 10.3026 0.503428 10.1615 0.309186C10.0204 0.114944 9.79482 0 9.55473 0H2.4119ZM10.3748 8.1876H1.59183C1.62924 8.03598 1.67901 7.87133 1.74509 7.70187C2.00593 7.03308 2.50264 6.3236 3.49485 5.9844C3.79831 5.88065 4.00223 5.59543 4.00223 5.27472V3.33556C4.00223 3.25683 3.98984 3.1786 3.9655 3.10374L3.44427 1.5H8.52235L8.00112 3.10374C7.97679 3.1786 7.96439 3.25683 7.96439 3.33556V5.27472C7.96439 5.59543 8.16831 5.88065 8.47178 5.9844C9.46399 6.3236 9.96069 7.03308 10.2215 7.70187C10.2876 7.87133 10.3374 8.03598 10.3748 8.1876Z"
@@ -88808,15 +88862,15 @@ function Pin({ className, alt = "Pin" }) {
 }
 
 // src/components/Svg/PinSolid.tsx
-var import_react40 = __toModule(require_react());
-var import_classnames23 = __toModule(require_classnames());
+var import_react41 = __toModule(require_react());
+var import_classnames24 = __toModule(require_classnames());
 function PinSolid({ className, alt = "Pin" }) {
-  return /* @__PURE__ */ import_react40.default.createElement("svg", {
-    className: (0, import_classnames23.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
+  return /* @__PURE__ */ import_react41.default.createElement("svg", {
+    className: (0, import_classnames24.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react40.default.createElement("title", null, alt), /* @__PURE__ */ import_react40.default.createElement("path", {
+  }, /* @__PURE__ */ import_react41.default.createElement("title", null, alt), /* @__PURE__ */ import_react41.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M2.3356 1.33475L2.8351 2.74084V4.79647C0.85057 5.41718 0.214343 7.45042 0.0103719 8.69031C-0.0792778 9.23527 0.36184 9.6838 0.914125 9.6838H5.24867V13.2466C5.24867 13.6609 5.58446 13.9966 5.99867 13.9966C6.41288 13.9966 6.74867 13.6609 6.74867 13.2466V9.6838H11.0848C11.6371 9.6838 12.0783 9.23527 11.9886 8.69031C11.7846 7.45042 11.1484 5.41718 9.16387 4.79647V2.74084L9.66338 1.33475C9.89463 0.683783 9.41189 0 8.72107 0H3.2779C2.58709 0 2.10435 0.683783 2.3356 1.33475Z"
@@ -88824,18 +88878,18 @@ function PinSolid({ className, alt = "Pin" }) {
 }
 
 // src/components/Svg/MovementArrow.tsx
-var import_react41 = __toModule(require_react());
-var import_classnames24 = __toModule(require_classnames());
+var import_react42 = __toModule(require_react());
+var import_classnames25 = __toModule(require_classnames());
 function MovementArrow({
   className,
   alt = "Movement Arrow"
 }) {
-  return /* @__PURE__ */ import_react41.default.createElement("svg", {
-    className: (0, import_classnames24.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
+  return /* @__PURE__ */ import_react42.default.createElement("svg", {
+    className: (0, import_classnames25.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
     width: "100%",
     viewBox: "0 0 8 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react41.default.createElement("title", null, alt), /* @__PURE__ */ import_react41.default.createElement("path", {
+  }, /* @__PURE__ */ import_react42.default.createElement("title", null, alt), /* @__PURE__ */ import_react42.default.createElement("path", {
     d: "M3.07553 1.24173C3.41575 0.416723 4.58425 0.416724 4.92447 1.24173L7.76051 8.11875C8.03196 8.77699 7.54805 9.5 6.83604 9.5H1.16396C0.451948 9.5 -0.0319641 8.77699 0.239489 8.11875L3.07553 1.24173Z"
   }));
 }
@@ -89033,17 +89087,17 @@ function PriceChartUI(props) {
       }
     }
   };
-  return /* @__PURE__ */ import_react42.default.createElement("div", null, /* @__PURE__ */ import_react42.default.createElement("div", {
+  return /* @__PURE__ */ import_react43.default.createElement("div", null, /* @__PURE__ */ import_react43.default.createElement("div", {
     className: "flex flex-col justify-start border-t-[1px] border-gray-100"
-  }, /* @__PURE__ */ import_react42.default.createElement("div", {
+  }, /* @__PURE__ */ import_react43.default.createElement("div", {
     className: "flex items-center justify-start h-10 px-3"
-  }, /* @__PURE__ */ import_react42.default.createElement("span", {
+  }, /* @__PURE__ */ import_react43.default.createElement("span", {
     className: "text-sm block font-semibold w-28 mr-1 cursor-pointer",
     onClick: togglePriceChart
-  }, "Price Reaction"), /* @__PURE__ */ import_react42.default.createElement("span", {
+  }, "Price Reaction"), /* @__PURE__ */ import_react43.default.createElement("span", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react42.default.createElement("span", {
-    className: (0, import_classnames25.default)("text-sm flex cursor-pointer mr-4", {
+  }), /* @__PURE__ */ import_react43.default.createElement("span", {
+    className: (0, import_classnames26.default)("text-sm flex cursor-pointer mr-4", {
       "text-green-500": absolutePriceChange > 0,
       "hover:text-green-600": absolutePriceChange > 0,
       "active:text-green-800": absolutePriceChange > 0,
@@ -89052,10 +89106,10 @@ function PriceChartUI(props) {
       "active:text-red-800": absolutePriceChange < 0
     }),
     onClick: togglePriceChart
-  }, `$${price} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, /* @__PURE__ */ import_react42.default.createElement(MovementArrow, {
-    className: (0, import_classnames25.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
-  })), /* @__PURE__ */ import_react42.default.createElement("div", {
-    className: (0, import_classnames25.default)("flex mr-1 cursor-pointer", {
+  }, `$${price} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, /* @__PURE__ */ import_react43.default.createElement(MovementArrow, {
+    className: (0, import_classnames26.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
+  })), /* @__PURE__ */ import_react43.default.createElement("div", {
+    className: (0, import_classnames26.default)("flex mr-1 cursor-pointer", {
       "text-blue-600": pinned,
       "text-gray-400": !pinned,
       "hover:text-blue-700": pinned,
@@ -89068,12 +89122,12 @@ function PriceChartUI(props) {
       e.stopPropagation();
       togglePin();
     }
-  }, pinned ? /* @__PURE__ */ import_react42.default.createElement(PinSolid, {
+  }, pinned ? /* @__PURE__ */ import_react43.default.createElement(PinSolid, {
     className: "w-[12px]"
-  }) : /* @__PURE__ */ import_react42.default.createElement(Pin, {
+  }) : /* @__PURE__ */ import_react43.default.createElement(Pin, {
     className: "w-[12px]"
-  })), /* @__PURE__ */ import_react42.default.createElement(ExpandButton, {
-    className: (0, import_classnames25.default)("ml-2", {
+  })), /* @__PURE__ */ import_react43.default.createElement(ExpandButton, {
+    className: (0, import_classnames26.default)("ml-2", {
       "hover:bg-gray-200": !priceChartExpanded,
       "hover:bg-blue-700": priceChartExpanded,
       "active:bg-gray-400": !priceChartExpanded,
@@ -89081,9 +89135,9 @@ function PriceChartUI(props) {
     }),
     onClick: togglePriceChart,
     expanded: priceChartExpanded
-  })), priceChartExpanded && /* @__PURE__ */ import_react42.default.createElement("div", {
+  })), priceChartExpanded && /* @__PURE__ */ import_react43.default.createElement("div", {
     className: "overflow-hidden relative"
-  }, /* @__PURE__ */ import_react42.default.createElement(import_highcharts_react_official.default, {
+  }, /* @__PURE__ */ import_react43.default.createElement(import_highcharts_react_official.default, {
     options,
     highcharts: import_highstock.default,
     constructorType: "stockChart"
@@ -89092,12 +89146,12 @@ function PriceChartUI(props) {
 function PriceChart(props) {
   var _a;
   const { headerExpanded, togglePriceChart, priceChartExpanded } = props;
-  const [pinned, setPinState] = (0, import_react42.useState)(false);
-  const [currentPrice, setPrice] = (0, import_react42.useState)((_a = chartData[chartData.length - 1]) == null ? void 0 : _a.y);
-  const togglePin = (0, import_react42.useCallback)(() => setPinState(!pinned), [pinned]);
+  const [pinned, setPinState] = (0, import_react43.useState)(false);
+  const [currentPrice, setPrice] = (0, import_react43.useState)((_a = chartData[chartData.length - 1]) == null ? void 0 : _a.y);
+  const togglePin = (0, import_react43.useCallback)(() => setPinState(!pinned), [pinned]);
   if (!pinned && !headerExpanded || typeof currentPrice !== "number")
     return null;
-  return /* @__PURE__ */ import_react42.default.createElement(PriceChartUI, {
+  return /* @__PURE__ */ import_react43.default.createElement(PriceChartUI, {
     togglePriceChart,
     togglePin,
     currentPrice: currentPrice || 0,
@@ -89122,49 +89176,49 @@ function HeaderUI(props) {
     searchTerm,
     onChangeSearchTerm
   } = props;
-  return /* @__PURE__ */ import_react43.default.createElement("div", {
+  return /* @__PURE__ */ import_react44.default.createElement("div", {
     ref: headerRef,
-    className: (0, import_classnames26.default)("bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all overflow-hidden", {
+    className: (0, import_classnames27.default)("bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all overflow-hidden", {
       "shadow-3xl": !headerExpanded,
       "shadow-xl": headerExpanded
     }, "transcript__header")
-  }, /* @__PURE__ */ import_react43.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "flex items-center px-3"
-  }, onBack && /* @__PURE__ */ import_react43.default.createElement(Button, {
+  }, onBack && /* @__PURE__ */ import_react44.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react43.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react44.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "Events"), /* @__PURE__ */ import_react43.default.createElement(Input, {
+  }), "Events"), /* @__PURE__ */ import_react44.default.createElement(Input, {
     name: "search",
     className: "mr-3",
     placeholder: "Search Transcripts...",
     value: searchTerm,
     onChange: onChangeSearchTerm
-  }, /* @__PURE__ */ import_react43.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react43.default.createElement("div", {
+  }, /* @__PURE__ */ import_react44.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "items-center flex"
-  }, /* @__PURE__ */ import_react43.default.createElement(Gear, {
+  }, /* @__PURE__ */ import_react44.default.createElement(Gear, {
     className: "w-5"
   }))), (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => {
-    return /* @__PURE__ */ import_react43.default.createElement("div", {
+    return /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex flex-row p-3 items-center"
-    }, /* @__PURE__ */ import_react43.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "animate-pulse flex-1"
-    }, /* @__PURE__ */ import_react43.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react43.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "rounded-md bg-gray-500 h-[10px] m-1 w-7"
-    }), /* @__PURE__ */ import_react43.default.createElement("div", {
+    }), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "rounded-md bg-gray-400 h-[10px] m-1 w-10"
-    }), /* @__PURE__ */ import_react43.default.createElement("div", {
+    }), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    }), /* @__PURE__ */ import_react43.default.createElement("div", {
+    }), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    })), /* @__PURE__ */ import_react43.default.createElement("div", {
+    })), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react43.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 flex-1"
-    }))), /* @__PURE__ */ import_react43.default.createElement(ExpandButton, {
+    }))), /* @__PURE__ */ import_react44.default.createElement(ExpandButton, {
       className: "ml-2 mt-2 self-start",
       onClick: toggleHeader,
       expanded: headerExpanded
@@ -89175,28 +89229,28 @@ function HeaderUI(props) {
     const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
     const eventDate = ((_a = data.events[0]) == null ? void 0 : _a.eventDate) && import_luxon.DateTime.fromISO(data.events[0].eventDate);
     const hasEventExtras = ((_b = event == null ? void 0 : event.dialInPhoneNumbers) == null ? void 0 : _b.length) || (event == null ? void 0 : event.dialInPin) || ((_c = event == null ? void 0 : event.webcastUrls) == null ? void 0 : _c.length) || (event == null ? void 0 : event.audioRecordingUrl);
-    return /* @__PURE__ */ import_react43.default.createElement(import_react43.default.Fragment, null, /* @__PURE__ */ import_react43.default.createElement("div", {
-      className: (0, import_classnames26.default)("flex flex-row p-3 items-center", {
+    return /* @__PURE__ */ import_react44.default.createElement(import_react44.default.Fragment, null, /* @__PURE__ */ import_react44.default.createElement("div", {
+      className: (0, import_classnames27.default)("flex flex-row p-3 items-center", {
         "cursor-pointer": hasEventExtras,
         group: hasEventExtras
       }),
       onClick: hasEventExtras ? toggleHeader : void 0
-    }, /* @__PURE__ */ import_react43.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0"
-    }, /* @__PURE__ */ import_react43.default.createElement("div", {
+    }, /* @__PURE__ */ import_react44.default.createElement("div", {
       className: "text-xs"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react43.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react44.default.createElement("span", {
       className: "pr-1 font-semibold"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_d = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _d.shortName) && /* @__PURE__ */ import_react43.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_d = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _d.shortName) && /* @__PURE__ */ import_react44.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
-    }, (_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react43.default.createElement("span", {
+    }, (_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react44.default.createElement("span", {
       className: "text-gray-300 group-hover:text-gray-400 capitalize"
-    }, " ", "\u2022 ", event == null ? void 0 : event.eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react43.default.createElement("span", {
+    }, " ", "\u2022 ", event == null ? void 0 : event.eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react44.default.createElement("span", {
       className: "text-gray-300 group-hover:text-gray-400"
-    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react43.default.createElement("div", {
+    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react44.default.createElement("div", {
       className: headerExpanded ? "text-sm" : "text-sm truncate whitespace-normal line-clamp-1"
-    }, event == null ? void 0 : event.title)), hasEventExtras && /* @__PURE__ */ import_react43.default.createElement(ExpandButton, {
-      className: (0, import_classnames26.default)("ml-2 mt-2 self-start", {
+    }, event == null ? void 0 : event.title)), hasEventExtras && /* @__PURE__ */ import_react44.default.createElement(ExpandButton, {
+      className: (0, import_classnames27.default)("ml-2 mt-2 self-start", {
         "group-hover:bg-gray-200": !headerExpanded,
         "group-hover:bg-blue-700": headerExpanded,
         "group-active:bg-gray-400": !headerExpanded,
@@ -89204,11 +89258,11 @@ function HeaderUI(props) {
       }),
       onClick: toggleHeader,
       expanded: headerExpanded
-    })), headerExpanded && event && /* @__PURE__ */ import_react43.default.createElement(EventDetails, {
+    })), headerExpanded && event && /* @__PURE__ */ import_react44.default.createElement(EventDetails, {
       event,
       eventDetailsExpanded,
       toggleEventDetails
-    }), /* @__PURE__ */ import_react43.default.createElement(PriceChart, {
+    }), /* @__PURE__ */ import_react44.default.createElement(PriceChart, {
       headerExpanded,
       priceChartExpanded,
       togglePriceChart
@@ -89217,29 +89271,29 @@ function HeaderUI(props) {
 }
 function Header(props) {
   const { eventQuery, onBack, searchTerm, onChangeSearchTerm } = props;
-  const [headerExpanded, setHeaderState] = (0, import_react43.useState)(false);
-  const [priceChartExpanded, setPriceChartState] = (0, import_react43.useState)(false);
-  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react43.useState)(false);
-  const toggleHeader = (0, import_react43.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
-  const toggleEventDetails = (0, import_react43.useCallback)(() => {
+  const [headerExpanded, setHeaderState] = (0, import_react44.useState)(false);
+  const [priceChartExpanded, setPriceChartState] = (0, import_react44.useState)(false);
+  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react44.useState)(false);
+  const toggleHeader = (0, import_react44.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
+  const toggleEventDetails = (0, import_react44.useCallback)(() => {
     setEventDetailsState(!eventDetailsExpanded);
     if (priceChartExpanded && !eventDetailsExpanded) {
       setPriceChartState(false);
     }
   }, [eventDetailsExpanded, priceChartExpanded]);
-  const togglePriceChart = (0, import_react43.useCallback)(() => {
+  const togglePriceChart = (0, import_react44.useCallback)(() => {
     setPriceChartState(!priceChartExpanded);
     if (eventDetailsExpanded && !priceChartExpanded) {
       setEventDetailsState(false);
     }
   }, [priceChartExpanded, eventDetailsExpanded]);
-  const headerRef = (0, import_react43.useRef)(null);
-  useOutsideClickHandler([headerRef], (0, import_react43.useCallback)(() => {
+  const headerRef = (0, import_react44.useRef)(null);
+  useOutsideClickHandler([headerRef], (0, import_react44.useCallback)(() => {
     if (headerExpanded) {
       toggleHeader();
     }
   }, [headerExpanded]));
-  return /* @__PURE__ */ import_react43.default.createElement(HeaderUI, {
+  return /* @__PURE__ */ import_react44.default.createElement(HeaderUI, {
     eventQuery,
     onBack,
     headerRef,
@@ -89274,80 +89328,80 @@ var TranscriptUI = (props) => {
     prevMatch,
     matchIndex
   } = props;
-  return /* @__PURE__ */ import_react44.default.createElement("div", {
+  return /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "h-full flex flex-col transcript bg-gray-50"
-  }, /* @__PURE__ */ import_react44.default.createElement("div", null, /* @__PURE__ */ import_react44.default.createElement(Header, {
+  }, /* @__PURE__ */ import_react45.default.createElement("div", null, /* @__PURE__ */ import_react45.default.createElement(Header, {
     eventQuery,
     onBack,
     searchTerm,
     onChangeSearchTerm
-  }), searchTerm && /* @__PURE__ */ import_react44.default.createElement("div", {
+  }), searchTerm && /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow"
-  }, /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "text-sm"
-  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react44.default.createElement("span", {
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react45.default.createElement("span", {
     className: "font-semibold"
-  }, searchTerm), '"'), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, searchTerm), '"'), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
     onClick: nextMatch
-  }, /* @__PURE__ */ import_react44.default.createElement(Chevron, null)), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, /* @__PURE__ */ import_react45.default.createElement(Chevron, null)), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
-  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "w-2.5 cursor-pointer rotate-180 hover:text-gray-600",
     onClick: prevMatch
-  }, /* @__PURE__ */ import_react44.default.createElement(Chevron, null)))), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, /* @__PURE__ */ import_react45.default.createElement(Chevron, null)))), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "overflow-y-scroll flex-1 bg-gray-50",
     ref: scrollRef
-  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react45.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10"
-  }), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14"
-  }), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react44.default.createElement("div", {
+  }), /* @__PURE__ */ import_react45.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
   })))).with({ status: "empty" }, ({ data }) => {
-    return data.events[0] && /* @__PURE__ */ import_react44.default.createElement(EmptyMessage, {
+    return data.events[0] && /* @__PURE__ */ import_react45.default.createElement(EmptyMessage, {
       event: data.events[0]
     });
   }).with({ status: "success" }, () => {
     return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
-      return /* @__PURE__ */ import_react44.default.createElement("div", {
+      return /* @__PURE__ */ import_react45.default.createElement("div", {
         key: `speaker-turn-${id}`
-      }, showSpeakers && /* @__PURE__ */ import_react44.default.createElement("div", {
+      }, showSpeakers && /* @__PURE__ */ import_react45.default.createElement("div", {
         className: "p-3 pb-1 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50"
-      }, /* @__PURE__ */ import_react44.default.createElement("span", {
+      }, /* @__PURE__ */ import_react45.default.createElement("span", {
         className: "font-semibold"
-      }, speaker.name), speaker.title && /* @__PURE__ */ import_react44.default.createElement("span", {
+      }, speaker.name), speaker.title && /* @__PURE__ */ import_react45.default.createElement("span", {
         className: "text-gray-400"
       }, ", ", speaker.title)), paragraphs.map(({ chunks, paragraph }) => {
         const { id: id2, timestamp } = paragraph;
-        return /* @__PURE__ */ import_react44.default.createElement("div", {
+        return /* @__PURE__ */ import_react45.default.createElement("div", {
           key: id2,
           id: `paragraph-${id2}`,
           className: "relative p-3 pb-4",
           onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
           ref: id2 === currentParagraph ? currentParagraphRef : void 0
-        }, timestamp && /* @__PURE__ */ import_react44.default.createElement("div", {
+        }, timestamp && /* @__PURE__ */ import_react45.default.createElement("div", {
           className: "pb-2 font-semibold text-sm"
-        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react44.default.createElement("div", {
+        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react45.default.createElement("div", {
           className: "text-sm"
-        }, chunks.map(({ highlight, id: id3, text }) => highlight ? /* @__PURE__ */ import_react44.default.createElement("mark", {
+        }, chunks.map(({ highlight, id: id3, text }) => highlight ? /* @__PURE__ */ import_react45.default.createElement("mark", {
           ref: id3 === currentMatch ? currentMatchRef : void 0,
-          className: (0, import_classnames27.default)({
+          className: (0, import_classnames28.default)({
             "bg-yellow-300": id3 === currentMatch
           }),
           key: id3
-        }, text) : /* @__PURE__ */ import_react44.default.createElement("span", {
+        }, text) : /* @__PURE__ */ import_react45.default.createElement("span", {
           key: id3
-        }, text))), id2 === currentParagraph && /* @__PURE__ */ import_react44.default.createElement("div", {
+        }, text))), id2 === currentParagraph && /* @__PURE__ */ import_react45.default.createElement("div", {
           className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
         }));
       }));
@@ -89355,7 +89409,7 @@ var TranscriptUI = (props) => {
   }).otherwise(() => null)), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
     const event = events[0];
     const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
-    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react44.default.createElement(Playbar, {
+    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react45.default.createElement(Playbar, {
       id: event == null ? void 0 : event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl || "",
       offset: ((event == null ? void 0 : event.audioRecordingOffsetMs) || 0) / 1e3,
@@ -89478,7 +89532,7 @@ function useEventData(eventId, eventUpdateQuery) {
       eventId
     }
   });
-  (0, import_react44.useEffect)(() => {
+  (0, import_react45.useEffect)(() => {
     var _a2, _b2;
     if ((_b2 = (_a2 = eventUpdateQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.hasTranscript) {
       eventQuery.refetch();
@@ -89515,8 +89569,8 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   });
   useInterval(() => latestParagraphsQuery.refetch(), ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? 2e3 : null);
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react44.useState)(new Map());
-  (0, import_react44.useEffect)(() => {
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react45.useState)(new Map());
+  (0, import_react45.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c2;
@@ -89528,7 +89582,7 @@ function useLatestTranscripts(eventId, eventQuery) {
       });
     }
   }, [latestParagraphsQuery.state.data]);
-  return (0, import_react44.useMemo)(() => {
+  return (0, import_react45.useMemo)(() => {
     var _a2, _b2, _c2;
     const speakerTurns = ((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns)) || [];
     const originalParagraphIds = new Set(speakerTurns.flatMap((s3) => s3.paragraphs.map((p2) => p2.id)));
@@ -89551,33 +89605,34 @@ function useLatestTranscripts(eventId, eventQuery) {
   }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
 }
 function useAudioSync(speakerTurns, eventQuery, audioPlayer) {
-  const [currentParagraph, setCurrentParagraph] = (0, import_react44.useState)(null);
+  const [currentParagraph, setCurrentParagraph] = (0, import_react45.useState)(null);
   const [scrollRef, currentParagraphRef] = useAutoScroll();
-  const paragraphs = (0, import_react44.useMemo)(() => speakerTurns.flatMap((s3) => s3.paragraphs), [speakerTurns]);
-  (0, import_react44.useEffect)(() => {
-    var _a, _b;
-    let paragraph = [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
+  const paragraphs = (0, import_react45.useMemo)(() => speakerTurns.flatMap((s3) => s3.paragraphs), [speakerTurns]);
+  (0, import_react45.useEffect)(() => {
+    var _a, _b, _c, _d;
+    const eventId = (_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.id;
+    let paragraph = eventId && audioPlayer.id && audioPlayer.id !== eventId ? null : [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
     if (!paragraph) {
-      paragraph = ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? paragraphs.slice(-1)[0] : paragraphs[0];
+      paragraph = ((_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.isLive) ? paragraphs.slice(-1)[0] : paragraphs[0];
     }
     if (paragraph) {
       setCurrentParagraph(paragraph.id);
     }
-  }, [paragraphs, Math.floor(audioPlayer.rawCurrentTime)]);
+  }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime)]);
   return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef];
 }
 function useSearchState(speakerTurns) {
   const { state, handlers } = useChangeHandlers({
     searchTerm: ""
   });
-  const [currentMatch, setCurrentMatch] = (0, import_react44.useState)(null);
+  const [currentMatch, setCurrentMatch] = (0, import_react45.useState)(null);
   const [scrollRef, currentMatchRef] = useAutoScroll({
     pauseOnUserScroll: false,
     block: "center",
     inline: "center",
     behavior: "auto"
   });
-  const speakerTurnsWithMatches = (0, import_react44.useMemo)(() => speakerTurns.map((s3) => __spreadProps(__spreadValues({}, s3), {
+  const speakerTurnsWithMatches = (0, import_react45.useMemo)(() => speakerTurns.map((s3) => __spreadProps(__spreadValues({}, s3), {
     paragraphsWithMatches: s3.paragraphs.map((paragraph) => {
       if (!state.searchTerm) {
         return {
@@ -89606,18 +89661,18 @@ function useSearchState(speakerTurns) {
       };
     })
   })), [speakerTurns, state.searchTerm]);
-  const matches = (0, import_react44.useMemo)(() => speakerTurnsWithMatches.flatMap((s3) => s3.paragraphsWithMatches).flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
-  (0, import_react44.useEffect)(() => {
+  const matches = (0, import_react45.useMemo)(() => speakerTurnsWithMatches.flatMap((s3) => s3.paragraphsWithMatches).flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
+  (0, import_react45.useEffect)(() => {
     var _a;
     setCurrentMatch(((_a = matches[0]) == null ? void 0 : _a.id) || null);
   }, [state.searchTerm]);
-  const matchIndex = (0, import_react44.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
-  const nextMatch = (0, import_react44.useCallback)(() => {
+  const matchIndex = (0, import_react45.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react45.useCallback)(() => {
     const match9 = matches[(matchIndex + 1) % matches.length];
     if (match9)
       setCurrentMatch(match9.id);
   }, [matches, matchIndex]);
-  const prevMatch = (0, import_react44.useCallback)(() => {
+  const prevMatch = (0, import_react45.useCallback)(() => {
     const match9 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
     if (match9)
       setCurrentMatch(match9.id);
@@ -89644,21 +89699,27 @@ var Transcript = (props) => {
   const speakerTurns = useLatestTranscripts(eventId, eventQuery);
   const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(speakerTurns, eventQuery, audioPlayer);
   const searchState = useSearchState(speakerTurns);
-  const scrollRef = (0, import_react44.useCallback)((ref) => {
+  const scrollRef = (0, import_react45.useCallback)((ref) => {
     autoScrollRef(ref);
     searchState.scrollRef(ref);
   }, [autoScrollRef, searchState.scrollRef]);
   const onClickTranscript = (paragraph) => {
     audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
   };
+  const onClickBack = (0, import_react45.useCallback)((event) => {
+    if (!audioPlayer.playing(null)) {
+      audioPlayer.clear();
+    }
+    onBack == null ? void 0 : onBack(event);
+  }, [onBack]);
   useAutoTrack("View", "Event", { eventId }, [eventId]);
-  return /* @__PURE__ */ import_react44.default.createElement(TranscriptUI, {
+  return /* @__PURE__ */ import_react45.default.createElement(TranscriptUI, {
     eventQuery,
     currentParagraph,
     currentParagraphRef,
     speakerTurns: searchState.speakerTurnsWithMatches,
     showSpeakers: !((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive),
-    onBack,
+    onBack: onClickBack,
     onClickTranscript,
     scrollRef,
     searchTerm: searchState.searchTerm,
@@ -89673,17 +89734,17 @@ var Transcript = (props) => {
 };
 
 // src/components/Tabs/index.tsx
-var import_react45 = __toModule(require_react());
-var import_classnames28 = __toModule(require_classnames());
+var import_react46 = __toModule(require_react());
+var import_classnames29 = __toModule(require_classnames());
 var import_ts_pattern7 = __toModule(require_lib());
 var Tabs = (props) => {
   const { onChange, options = [], value, kind = "button", className = "" } = props;
-  const getClasses = (val, opStyles) => (0, import_ts_pattern7.match)(kind).with("button", () => (0, import_classnames28.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val, opStyles) => (0, import_ts_pattern7.match)(kind).with("button", () => (0, import_classnames29.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
     "tab__option--selected": val === value
-  }, opStyles)).with("line", () => (0, import_classnames28.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
+  }, opStyles)).with("line", () => (0, import_classnames29.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
     "cursor-pointer": val !== value,
     "text-gray-400": val !== value,
     "text-black": val === value,
@@ -89693,14 +89754,14 @@ var Tabs = (props) => {
     tab__option: true,
     "tab__option--selected": val === value
   }, opStyles)).exhaustive();
-  return /* @__PURE__ */ import_react45.default.createElement("div", {
+  return /* @__PURE__ */ import_react46.default.createElement("div", {
     className: `flex tab relative ${className}`
-  }, options.map(({ value: opVal, label, className: opStyles = "" }) => /* @__PURE__ */ import_react45.default.createElement("div", {
+  }, options.map(({ value: opVal, label, className: opStyles = "" }) => /* @__PURE__ */ import_react46.default.createElement("div", {
     key: `tab-option-${opVal}`,
     className: getClasses(opVal, opStyles),
     onClick: (event) => onChange && onChange(event, { value: opVal })
-  }, label, kind === "line" && /* @__PURE__ */ import_react45.default.createElement("div", {
-    className: (0, import_classnames28.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
+  }, label, kind === "line" && /* @__PURE__ */ import_react46.default.createElement("div", {
+    className: (0, import_classnames29.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": opVal === value,
       "-bottom-0.5": opVal !== value
     })
@@ -89708,19 +89769,19 @@ var Tabs = (props) => {
 };
 
 // src/modules/EventList/FilterBy/index.tsx
-var import_react46 = __toModule(require_react());
-var import_classnames29 = __toModule(require_classnames());
+var import_react47 = __toModule(require_react());
+var import_classnames30 = __toModule(require_classnames());
 var FilterBy = (props) => {
   const { children, onChange, options = [], value = [] } = props;
-  return /* @__PURE__ */ import_react46.default.createElement("div", {
+  return /* @__PURE__ */ import_react47.default.createElement("div", {
     className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow eventlist__filterby"
-  }, children || /* @__PURE__ */ import_react46.default.createElement("div", {
+  }, children || /* @__PURE__ */ import_react47.default.createElement("div", {
     className: "text-sm font-semibold"
-  }, "Filter By"), /* @__PURE__ */ import_react46.default.createElement("div", {
+  }, "Filter By"), /* @__PURE__ */ import_react47.default.createElement("div", {
     className: "flex justify-end flex-1"
-  }, options.map((option) => /* @__PURE__ */ import_react46.default.createElement("div", {
+  }, options.map((option) => /* @__PURE__ */ import_react47.default.createElement("div", {
     key: `filterby-option-${option.value}`,
-    className: (0, import_classnames29.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
+    className: (0, import_classnames30.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
       "bg-blue-100": value == null ? void 0 : value.includes(option.value),
       "border-blue-300": value == null ? void 0 : value.includes(option.value),
       "border-gray-100": !(value == null ? void 0 : value.includes(option.value)),
@@ -89741,26 +89802,26 @@ var FilterBy = (props) => {
     onClick: (event) => onChange && onChange(event, {
       value: value.includes(option.value) ? value.filter((o2) => o2 !== option.value) : [...value, option.value]
     })
-  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react46.default.createElement(Check, {
+  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react47.default.createElement(Check, {
     className: "w-2 ml-1.5"
   })))));
 };
 
 // src/modules/EventList/PlayButton/index.tsx
-var import_react48 = __toModule(require_react());
-var import_classnames31 = __toModule(require_classnames());
+var import_react49 = __toModule(require_react());
+var import_classnames32 = __toModule(require_classnames());
 
 // src/components/Svg/Calendar.tsx
-var import_react47 = __toModule(require_react());
-var import_classnames30 = __toModule(require_classnames());
+var import_react48 = __toModule(require_react());
+var import_classnames31 = __toModule(require_classnames());
 function Calendar({ className, alt = "Calendar" }) {
-  return /* @__PURE__ */ import_react47.default.createElement("svg", {
-    className: (0, import_classnames30.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
+  return /* @__PURE__ */ import_react48.default.createElement("svg", {
+    className: (0, import_classnames31.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react47.default.createElement("title", null, alt), /* @__PURE__ */ import_react47.default.createElement("path", {
+  }, /* @__PURE__ */ import_react48.default.createElement("title", null, alt), /* @__PURE__ */ import_react48.default.createElement("path", {
     d: "M6 5V1V5ZM14 5V1V5ZM5 9H15H5ZM3 19H17C17.5304 19 18.0391 18.7893 18.4142 18.4142C18.7893 18.0391 19 17.5304 19 17V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H3C2.46957 3 1.96086 3.21071 1.58579 3.58579C1.21071 3.96086 1 4.46957 1 5V17C1 17.5304 1.21071 18.0391 1.58579 18.4142C1.96086 18.7893 2.46957 19 3 19Z",
     strokeWidth: "2",
     strokeLinecap: "round",
@@ -89771,8 +89832,8 @@ function Calendar({ className, alt = "Calendar" }) {
 // src/modules/EventList/PlayButton/index.tsx
 function PlayButtonUI(props) {
   const { hasAudio, isPlaying, togglePlayback } = props;
-  return hasAudio ? /* @__PURE__ */ import_react48.default.createElement("div", {
-    className: (0, import_classnames31.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
+  return hasAudio ? /* @__PURE__ */ import_react49.default.createElement("div", {
+    className: (0, import_classnames32.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
       "hover:border-blue-500": !isPlaying,
       "active:border-blue-600": !isPlaying,
       "border-blue-600": isPlaying,
@@ -89788,13 +89849,13 @@ function PlayButtonUI(props) {
       "active:text-white": !isPlaying
     }),
     onClick: togglePlayback
-  }, isPlaying ? /* @__PURE__ */ import_react48.default.createElement(Pause, {
+  }, isPlaying ? /* @__PURE__ */ import_react49.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react48.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react49.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
-  })) : /* @__PURE__ */ import_react48.default.createElement("div", {
+  })) : /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 group-hover:text-blue-300"
-  }, /* @__PURE__ */ import_react48.default.createElement(Calendar, {
+  }, /* @__PURE__ */ import_react49.default.createElement(Calendar, {
     className: "w-4"
   }));
 }
@@ -89803,7 +89864,7 @@ function PlayButton(props) {
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
-  const togglePlayback = (0, import_react48.useCallback)((event) => {
+  const togglePlayback = (0, import_react49.useCallback)((event) => {
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
@@ -89813,7 +89874,7 @@ function PlayButton(props) {
       void audioPlayer.play({ id, url, offset, metaData });
     }
   }, [isPlaying, id, url, offset]);
-  return /* @__PURE__ */ import_react48.default.createElement(PlayButtonUI, {
+  return /* @__PURE__ */ import_react49.default.createElement(PlayButtonUI, {
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
     togglePlayback
@@ -89843,45 +89904,45 @@ var EventListUI = (props) => {
     searchTerm
   } = props;
   if (event) {
-    return /* @__PURE__ */ import_react49.default.createElement(Transcript, {
+    return /* @__PURE__ */ import_react50.default.createElement(Transcript, {
       eventId: event.id,
       onBack: onBackFromTranscript
     });
   }
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react49.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react49.default.createElement("div", {
+  return /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "h-full flex flex-col eventlist"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react49.default.createElement(Input, {
+  }, /* @__PURE__ */ import_react50.default.createElement(Input, {
     name: "search",
     onChange: onSearchChange,
     placeholder: "Search Events & Transcripts",
     value: searchTerm
-  }, /* @__PURE__ */ import_react49.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement(MagnifyingGlass, null)), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react49.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react50.default.createElement(CompanyFilterButton, {
     onChange: onCompanyChange,
     value: company
-  })))), /* @__PURE__ */ import_react49.default.createElement("div", {
+  })))), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "sticky top-0 px-3 pt-3 pb-2 z-10 eventlist__tabs"
-  }, /* @__PURE__ */ import_react49.default.createElement(FilterBy, {
+  }, /* @__PURE__ */ import_react50.default.createElement(FilterBy, {
     onChange: onSelectFilterBy,
     options: [
       { value: 0, label: "Transcripts" },
       { value: 1, label: "Earnings" }
     ],
     value: filterByTypes
-  }, /* @__PURE__ */ import_react49.default.createElement(Tabs, {
+  }, /* @__PURE__ */ import_react50.default.createElement(Tabs, {
     className: "ml-1",
     kind: "line",
     onChange: onSelectListType,
@@ -89894,34 +89955,34 @@ var EventListUI = (props) => {
       { value: EventView.Recent, label: "Recent", className: "h-9 items-center" }
     ],
     value: listType
-  }))), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern8.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react49.default.createElement("ul", {
+  }, (0, import_ts_pattern8.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react50.default.createElement("ul", {
     className: "w-full EventList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react49.default.createElement("li", {
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react50.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "rounded-full bg-gray-300 w-9 h-9"
-  }), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "rounded-full bg-gray-500 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "rounded-full bg-gray-400 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react49.default.createElement("div", {
+  })), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react49.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react50.default.createElement("ul", {
     className: "w-full"
   }, events.map((event2) => {
     var _a, _b;
@@ -89931,22 +89992,22 @@ var EventListUI = (props) => {
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== eventDate.toFormat("MM/dd/yyyy")) {
       prevEventDate = eventDate;
-      divider = /* @__PURE__ */ import_react49.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react50.default.createElement("li", {
         className: "sticky top-[56px] px-3"
-      }, /* @__PURE__ */ import_react49.default.createElement("div", {
+      }, /* @__PURE__ */ import_react50.default.createElement("div", {
         className: "px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold"
-      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react49.default.createElement("div", {
+      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react50.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       })));
     }
-    return /* @__PURE__ */ import_react49.default.createElement(import_react49.Fragment, {
+    return /* @__PURE__ */ import_react50.default.createElement(import_react50.Fragment, {
       key: event2.id
-    }, divider, /* @__PURE__ */ import_react49.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react50.default.createElement("li", {
       className: "group h-12 text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
       onClick: (e) => onSelectEvent == null ? void 0 : onSelectEvent(e, { value: event2 })
-    }, /* @__PURE__ */ import_react49.default.createElement(Tooltip, {
+    }, /* @__PURE__ */ import_react50.default.createElement(Tooltip, {
       className: "h-12 flex flex-row",
-      content: /* @__PURE__ */ import_react49.default.createElement("div", {
+      content: /* @__PURE__ */ import_react50.default.createElement("div", {
         className: "max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9"
       }, prettyLineBreak(event2.title)),
       grow: "up-right",
@@ -89954,11 +90015,11 @@ var EventListUI = (props) => {
       position: "top-left",
       yOffset: 4,
       hideOnDocumentScroll: true
-    }, /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "flex items-center justify-center"
-    }, /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "flex items-center justify-center w-8 h-8"
-    }, /* @__PURE__ */ import_react49.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react50.default.createElement(PlayButton, {
       metaData: {
         quote: primaryQuote,
         eventType: event2.eventType
@@ -89966,28 +90027,28 @@ var EventListUI = (props) => {
       id: event2.id,
       url: event2.isLive ? `https://storage.media.aiera.com/${event2.id}` : event2.audioRecordingUrl,
       offset: audioOffset || 0
-    }))), /* @__PURE__ */ import_react49.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
-    }, /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "flex items-end"
-    }, /* @__PURE__ */ import_react49.default.createElement("span", {
+    }, /* @__PURE__ */ import_react50.default.createElement("span", {
       className: "leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react49.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react50.default.createElement("span", {
       className: "leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)), /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)), /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black"
-    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event2.isLive ? /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, event2.isLive ? /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 font-semibold bg-red-50 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
-    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black"
-    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react49.default.createElement("div", {
+    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react50.default.createElement("div", {
       className: "leading-none mt-1 text-gray-300 group-hover:text-gray-500"
     }, eventDate.toFormat("MMM dd, yyyy"))))));
-  }))).exhaustive(), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }))).exhaustive(), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex-1"
-  })))), /* @__PURE__ */ import_react49.default.createElement(Playbar, {
+  })))), /* @__PURE__ */ import_react50.default.createElement(Playbar, {
     onClickCalendar: onSelectEventById
   }));
 };
@@ -90010,7 +90071,7 @@ var EventList = (_props) => {
       }
     }
   }), "in");
-  const onSelectEvent = (0, import_react49.useCallback)((event, change) => {
+  const onSelectEvent = (0, import_react50.useCallback)((event, change) => {
     var _a2;
     const primaryQuote = getPrimaryQuote((_a2 = change.value) == null ? void 0 : _a2.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
@@ -90019,7 +90080,7 @@ var EventList = (_props) => {
       eventsQuery.refetch();
     }
   }, [state]);
-  const onSelectCompany = (0, import_react49.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react50.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
@@ -90071,8 +90132,8 @@ var EventList = (_props) => {
       }
     }
   });
-  useInterval((0, import_react49.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
-  const onSelectEventById = (0, import_react49.useCallback)((event, change) => {
+  useInterval((0, import_react50.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
+  const onSelectEventById = (0, import_react50.useCallback)((event, change) => {
     if (eventsQuery.status === "success") {
       const selectedEvent = eventsQuery.data.events.find((event2) => event2.id === change.value);
       if (selectedEvent) {
@@ -90082,7 +90143,7 @@ var EventList = (_props) => {
   }, [eventsQuery.status]);
   useAutoTrack("Click", "Event Filter By", { filterBy: state.filterByTypes }, [state.filterByTypes]);
   useAutoTrack("Submit", "Event Search", { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
-  return /* @__PURE__ */ import_react49.default.createElement(EventListUI, {
+  return /* @__PURE__ */ import_react50.default.createElement(EventListUI, {
     company: state.company,
     event: state.event,
     eventsQuery,
@@ -90104,17 +90165,17 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react50.default.createElement(import_react50.StrictMode, null, /* @__PURE__ */ import_react50.default.createElement(Provider, {
+  return /* @__PURE__ */ import_react51.default.createElement(import_react51.StrictMode, null, /* @__PURE__ */ import_react51.default.createElement(Provider, {
     config: { apiUrl: "https://api-dev.aiera.com/graphql", assetPath: "bundle/" }
-  }, /* @__PURE__ */ import_react50.default.createElement(Provider3, {
+  }, /* @__PURE__ */ import_react51.default.createElement(Provider3, {
     bus
-  }, /* @__PURE__ */ import_react50.default.createElement(Provider2, null, /* @__PURE__ */ import_react50.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react51.default.createElement(Provider2, null, /* @__PURE__ */ import_react51.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react50.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react50.default.createElement(EventList, null)))))));
+  }, /* @__PURE__ */ import_react51.default.createElement(EventList, null)))))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react50.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react51.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus

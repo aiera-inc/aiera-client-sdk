@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.78% </span>
+                <span class="strong">84.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>105/121</span>
+                <span class='fraction'>107/126</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65% </span>
+                <span class="strong">64.37% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>52/80</span>
+                <span class='fraction'>56/87</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.82% </span>
+                <span class="strong">80.36% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>45/55</span>
+                <span class='fraction'>45/56</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">87.62% </span>
+                <span class="strong">85.45% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>92/105</span>
+                <span class='fraction'>94/110</span>
             </div>
         
             
@@ -682,7 +682,23 @@
 <a name='L623'></a><a href='#L623'>623</a>
 <a name='L624'></a><a href='#L624'>624</a>
 <a name='L625'></a><a href='#L625'>625</a>
-<a name='L626'></a><a href='#L626'>626</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L626'></a><a href='#L626'>626</a>
+<a name='L627'></a><a href='#L627'>627</a>
+<a name='L628'></a><a href='#L628'>628</a>
+<a name='L629'></a><a href='#L629'>629</a>
+<a name='L630'></a><a href='#L630'>630</a>
+<a name='L631'></a><a href='#L631'>631</a>
+<a name='L632'></a><a href='#L632'>632</a>
+<a name='L633'></a><a href='#L633'>633</a>
+<a name='L634'></a><a href='#L634'>634</a>
+<a name='L635'></a><a href='#L635'>635</a>
+<a name='L636'></a><a href='#L636'>636</a>
+<a name='L637'></a><a href='#L637'>637</a>
+<a name='L638'></a><a href='#L638'>638</a>
+<a name='L639'></a><a href='#L639'>639</a>
+<a name='L640'></a><a href='#L640'>640</a>
+<a name='L641'></a><a href='#L641'>641</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1125,6 +1141,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
@@ -1283,6 +1304,15 @@
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1310,6 +1340,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {
     Dispatch,
     SetStateAction,
+    MouseEvent,
     MouseEventHandler,
     ReactElement,
     Ref,
@@ -1750,11 +1781,16 @@ function useAudioSync(
 &nbsp;
     const paragraphs = useMemo(() =&gt; speakerTurns.flatMap((s) =&gt; s.paragraphs), [speakerTurns]);
     useEffect(() =&gt; {
+        const eventId = eventQuery.state.data?.events[0]?.id;
+&nbsp;
         // Find the _last_ paragraph with a timetamp &lt;= the current audio time, that's the
-        // one the should be currently playing
-        let paragraph = [...paragraphs]
-            .reverse()
-            .find((p) =&gt; p.syncMs &amp;&amp; p.syncMs &lt;= audioPlayer.rawCurrentTime * 1000);
+        // one the should be currently playing,
+        //
+        // If the audio player is playing a different event, dont search through.
+        let paragraph =
+            eventId &amp;&amp; audioPlayer.id &amp;&amp; audioPlayer.id !== eventId
+                ? <span class="branch-0 cbranch-no" title="branch not covered" >null</span>
+                : [...paragraphs].reverse().find((p) =&gt; p.syncMs &amp;&amp; p.syncMs &lt;= audioPlayer.rawCurrentTime * 1000);
 &nbsp;
         // If we couldn't find one:
         // - if the event is live default to the last paragraph
@@ -1768,7 +1804,7 @@ function useAudioSync(
         <span class="missing-if-branch" title="else path not taken" >E</span>if (paragraph) {
             setCurrentParagraph(paragraph.id);
         }
-    }, [paragraphs, Math.floor(audioPlayer.rawCurrentTime)]);
+    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime)]);
 &nbsp;
     return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef];
 }
@@ -1908,6 +1944,15 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
     const onClickTranscript = <span class="fstat-no" title="function not covered" >(p</span>aragraph: Paragraph) =&gt; {
 <span class="cstat-no" title="statement not covered" >        audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);</span>
     };
+    const onClickBack = useCallback(
+<span class="fstat-no" title="function not covered" >        (e</span>vent: MouseEvent) =&gt; {
+<span class="cstat-no" title="statement not covered" >            if (!audioPlayer.playing(null)) {</span>
+<span class="cstat-no" title="statement not covered" >                audioPlayer.clear();</span>
+            }
+<span class="cstat-no" title="statement not covered" >            onBack?.(event);</span>
+        },
+        [onBack]
+    );
 &nbsp;
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 &nbsp;
@@ -1918,7 +1963,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             currentParagraphRef={currentParagraphRef}
             speakerTurns={searchState.speakerTurnsWithMatches}
             showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
-            onBack={onBack}
+            onBack={onClickBack}
             onClickTranscript={onClickTranscript}
             scrollRef={scrollRef}
             searchTerm={searchState.searchTerm}
@@ -1939,7 +1984,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Nov 01 2021 16:48:55 GMT-0400 (Eastern Daylight Time)
+                at Tue Nov 02 2021 10:01:05 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
