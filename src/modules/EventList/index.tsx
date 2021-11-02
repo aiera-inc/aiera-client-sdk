@@ -99,20 +99,26 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             ]}
                             value={filterByTypes}
                         >
-                            <Tabs<EventView>
-                                className="ml-1"
-                                kind="line"
-                                onChange={onSelectListType}
-                                options={[
-                                    {
-                                        value: EventView.LiveAndUpcoming,
-                                        label: 'Live Events',
-                                        className: 'h-9 items-center',
-                                    },
-                                    { value: EventView.Recent, label: 'Recent', className: 'h-9 items-center' },
-                                ]}
-                                value={listType}
-                            />
+                            {company?.commonName || searchTerm ? (
+                                <span className="truncate text-sm leading-4 font-bold mr-2">
+                                    {company?.commonName || 'Search Results'}
+                                </span>
+                            ) : (
+                                <Tabs<EventView>
+                                    className="ml-1"
+                                    kind="line"
+                                    onChange={onSelectListType}
+                                    options={[
+                                        {
+                                            value: EventView.LiveAndUpcoming,
+                                            label: 'Live Events',
+                                            className: 'h-9 items-center',
+                                        },
+                                        { value: EventView.Recent, label: 'Recent', className: 'h-9 items-center' },
+                                    ]}
+                                    value={listType}
+                                />
+                            )}
                         </FilterBy>
                     </div>
                     <div className="flex flex-col items-center justify-center flex-1">
