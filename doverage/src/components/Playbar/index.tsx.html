@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.2% </span>
+                <span class="strong">66.67% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>47/71</span>
+                <span class='fraction'>48/72</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.49% </span>
+                <span class="strong">62.5% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>40/63</span>
+                <span class='fraction'>40/64</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.22% </span>
+                <span class="strong">65.71% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>45/69</span>
+                <span class='fraction'>46/70</span>
             </div>
         
             
@@ -448,7 +448,14 @@
 <a name='L389'></a><a href='#L389'>389</a>
 <a name='L390'></a><a href='#L390'>390</a>
 <a name='L391'></a><a href='#L391'>391</a>
-<a name='L392'></a><a href='#L392'>392</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a>
+<a name='L397'></a><a href='#L397'>397</a>
+<a name='L398'></a><a href='#L398'>398</a>
+<a name='L399'></a><a href='#L399'>399</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -476,6 +483,8 @@
 <span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -636,7 +645,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -702,6 +714,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-yes">18x</span>
@@ -839,6 +852,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject } from 'react';
 import classNames from 'classnames';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -888,6 +902,7 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     knobRef: RefObject&lt;HTMLDivElement&gt;;
     onClickCalendar: (event: MouseEvent) =&gt; void;
     onClickTrack: (event: MouseEvent) =&gt; void;
+    percentPlayed?: number;
     playbackRate: number;
     rewind: () =&gt; void;
     setVolume: (vol: number) =&gt; void;
@@ -914,6 +929,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         knobRef,
         onClickCalendar,
         onClickTrack,
+        percentPlayed = <span class="branch-0 cbranch-no" title="branch not covered" >0,</span>
         playbackRate,
         rewind,
         setVolume,
@@ -925,10 +941,11 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         volume,
     } = props;
     return (
-        &lt;div className="relative h-13 w-full flex flex-col justify-center mt-[-6px]"&gt;
+        &lt;div className="relative h-13 w-full flex flex-col justify-center mt-[-6px] z-20"&gt;
+            &lt;div className="bg-white absolute top-[9px] left-0 right-0 bottom-0" /&gt;
             &lt;div
-                className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-60"
-                style={{ width: knobLeft + 74 /* 65 for timestamp width + 9 for half of knob width */ }}
+                className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-80"
+                style={{ width: `${percentPlayed}%` }}
             /&gt;
             &lt;div className="flex z-20 player_timeline"&gt;
                 &lt;div className="flex items-center justify-center px-2 text-xs select-none relative w-[65px]"&gt;
@@ -954,7 +971,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     &lt;/span&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
-            &lt;div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 bg-white"&gt;
+            &lt;div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5"&gt;
                 {!fixed &amp;&amp; (
                     &lt;Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1"&gt;
                         &lt;XMark /&gt;
@@ -1062,7 +1079,9 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     );
 }
 &nbsp;
-function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject&lt;HTMLDivElement&gt;, number, (event: MouseEvent) =&gt; void] {
+function usePlaybarDrag(
+    audioPlayer: AudioPlayer
+): [RefObject&lt;HTMLDivElement&gt;, number, (event: MouseEvent) =&gt; void, number] {
     const knobRef = useRef&lt;HTMLDivElement&gt;(null);
     // Rerender on resize to make sure the knob stays positioned correctly
     useWindowSize();
@@ -1095,7 +1114,8 @@ function usePlaybarDrag(audioPlayer: AudioPlayer): [RefObject&lt;HTMLDivElement&
 &nbsp;
     const audioOffset = (audioPlayer.displayCurrentTime / audioPlayer.displayDuration) * trackWidth || 0;
     const knobLeft = Math.min(trackWidth, Math.max(0, isDragging ? <span class="branch-0 cbranch-no" title="branch not covered" >dragXOffset </span>: audioOffset));
-    return [knobRef, knobLeft, onClickTrack];
+    const percentPlayed = (knobLeft * 100) / trackWidth;
+    return [knobRef, knobLeft, onClickTrack, percentPlayed];
 }
 &nbsp;
 function usePlayer(id?: string, url?: string, offset = <span class="branch-0 cbranch-no" title="branch not covered" >0,</span> metaData?: EventMetaData) {
@@ -1195,7 +1215,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
         swap,
         toggleRate,
     } = usePlayer(id, url, offset, metaData);
-    const [knobRef, knobLeft, onClickTrack] = usePlaybarDrag(audioPlayer);
+    const [knobRef, knobLeft, onClickTrack, percentPlayed] = usePlaybarDrag(audioPlayer);
 &nbsp;
     const onClickCalendar = useCallback(
 <span class="fstat-no" title="function not covered" >        (e</span>vent: MouseEvent) =&gt; <span class="cstat-no" title="statement not covered" >props.onClickCalendar?.(event, { value: audioPlayer.id }),</span>
@@ -1218,6 +1238,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             knobRef={knobRef}
             onClickCalendar={onClickCalendar}
             onClickTrack={onClickTrack}
+            percentPlayed={percentPlayed}
             playbackRate={audioPlayer.playbackRate}
             rewind={rewind}
             setVolume={audioPlayer.setVolume}
@@ -1237,7 +1258,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 02 2021 12:00:33 GMT-0400 (Eastern Daylight Time)
+                at Tue Nov 02 2021 17:22:44 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

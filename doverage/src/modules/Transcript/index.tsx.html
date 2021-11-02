@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.92% </span>
+                <span class="strong">85.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>107/126</span>
+                <span class='fraction'>108/127</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">85.45% </span>
+                <span class="strong">85.59% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>94/110</span>
+                <span class='fraction'>95/111</span>
             </div>
         
             
@@ -697,7 +697,20 @@
 <a name='L638'></a><a href='#L638'>638</a>
 <a name='L639'></a><a href='#L639'>639</a>
 <a name='L640'></a><a href='#L640'>640</a>
-<a name='L641'></a><a href='#L641'>641</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L641'></a><a href='#L641'>641</a>
+<a name='L642'></a><a href='#L642'>642</a>
+<a name='L643'></a><a href='#L643'>643</a>
+<a name='L644'></a><a href='#L644'>644</a>
+<a name='L645'></a><a href='#L645'>645</a>
+<a name='L646'></a><a href='#L646'>646</a>
+<a name='L647'></a><a href='#L647'>647</a>
+<a name='L648'></a><a href='#L648'>648</a>
+<a name='L649'></a><a href='#L649'>649</a>
+<a name='L650'></a><a href='#L650'>650</a>
+<a name='L651'></a><a href='#L651'>651</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -784,9 +797,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1318,6 +1334,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">20x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1370,6 +1390,7 @@ import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/us
 import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
+import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
@@ -1388,48 +1409,53 @@ type SpeakerTurnsWithMatches = SpeakerTurn &amp; { paragraphsWithMatches: Paragr
 &nbsp;
 /** @notExported */
 interface TranscriptUIProps {
-    eventQuery: QueryResult&lt;TranscriptQuery, TranscriptQueryVariables&gt;;
-    currentParagraph?: string | null;
-    currentParagraphRef: Ref&lt;HTMLDivElement&gt;;
-    speakerTurns: SpeakerTurnsWithMatches[];
-    showSpeakers: boolean;
-    onBack?: MouseEventHandler;
-    onClickTranscript?: (paragraph: Paragraph) =&gt; void;
-    scrollRef: Ref&lt;HTMLDivElement&gt;;
-    searchTerm: string;
-    onChangeSearchTerm: ChangeHandler&lt;string&gt;;
-    matches: Chunk[];
-    matchIndex: number;
-    nextMatch: () =&gt; void;
-    prevMatch: () =&gt; void;
+    containerHeight: number;
+    containerRef: Ref&lt;HTMLDivElement&gt;;
     currentMatch?: string | null;
     currentMatchRef: Ref&lt;HTMLDivElement&gt;;
+    currentParagraph?: string | null;
+    currentParagraphRef: Ref&lt;HTMLDivElement&gt;;
+    eventQuery: QueryResult&lt;TranscriptQuery, TranscriptQueryVariables&gt;;
+    matchIndex: number;
+    matches: Chunk[];
+    nextMatch: () =&gt; void;
+    onBack?: MouseEventHandler;
+    onChangeSearchTerm: ChangeHandler&lt;string&gt;;
+    onClickTranscript?: (paragraph: Paragraph) =&gt; void;
+    prevMatch: () =&gt; void;
+    scrollRef: Ref&lt;HTMLDivElement&gt;;
+    searchTerm: string;
+    showSpeakers: boolean;
+    speakerTurns: SpeakerTurnsWithMatches[];
 }
 &nbsp;
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
     const {
+        containerHeight,
+        containerRef,
+        currentMatch,
+        currentMatchRef,
         currentParagraph,
         currentParagraphRef,
         eventQuery,
+        matchIndex,
+        matches,
+        nextMatch,
         onBack,
+        onChangeSearchTerm,
         onClickTranscript,
-        speakerTurns,
-        showSpeakers,
+        prevMatch,
         scrollRef,
         searchTerm,
-        onChangeSearchTerm,
-        matches,
-        currentMatch,
-        currentMatchRef,
-        nextMatch,
-        prevMatch,
-        matchIndex,
+        showSpeakers,
+        speakerTurns,
     } = props;
 &nbsp;
     return (
-        &lt;div className="h-full flex flex-col transcript bg-gray-50"&gt;
+        &lt;div className="h-full flex flex-col transcript bg-gray-50" ref={containerRef}&gt;
             &lt;div&gt;
                 &lt;Header
+                    containerHeight={containerHeight}
                     eventQuery={eventQuery}
                     onBack={onBack}
                     searchTerm={searchTerm}
@@ -1954,26 +1980,30 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
         [onBack]
     );
 &nbsp;
+    const { height: containerHeight, ref: containerRef } = useElementSize();
+&nbsp;
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 &nbsp;
     return (
         &lt;TranscriptUI
-            eventQuery={eventQuery}
+            containerRef={containerRef}
+            containerHeight={containerHeight}
+            currentMatch={searchState.currentMatch}
+            currentMatchRef={searchState.currentMatchRef}
             currentParagraph={currentParagraph}
             currentParagraphRef={currentParagraphRef}
             speakerTurns={searchState.speakerTurnsWithMatches}
             showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
             onBack={onClickBack}
+            eventQuery={eventQuery}
+            matchIndex={searchState.matchIndex}
+            matches={searchState.matches}
+            nextMatch={searchState.nextMatch}
+            onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
+            prevMatch={searchState.prevMatch}
             scrollRef={scrollRef}
             searchTerm={searchState.searchTerm}
-            onChangeSearchTerm={searchState.onChangeSearchTerm}
-            matches={searchState.matches}
-            matchIndex={searchState.matchIndex}
-            nextMatch={searchState.nextMatch}
-            prevMatch={searchState.prevMatch}
-            currentMatch={searchState.currentMatch}
-            currentMatchRef={searchState.currentMatchRef}
         /&gt;
     );
 };
@@ -1984,7 +2014,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 02 2021 12:00:33 GMT-0400 (Eastern Daylight Time)
+                at Tue Nov 02 2021 17:22:44 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

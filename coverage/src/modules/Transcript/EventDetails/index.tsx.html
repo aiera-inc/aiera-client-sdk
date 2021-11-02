@@ -167,9 +167,7 @@
 <a name='L108'></a><a href='#L108'>108</a>
 <a name='L109'></a><a href='#L109'>109</a>
 <a name='L110'></a><a href='#L110'>110</a>
-<a name='L111'></a><a href='#L111'>111</a>
-<a name='L112'></a><a href='#L112'>112</a>
-<a name='L113'></a><a href='#L113'>113</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L111'></a><a href='#L111'>111</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -188,7 +186,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -271,7 +268,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -300,79 +296,77 @@ interface EventDetailsUIProps extends EventDetailsSharedProps {}
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
     const { event, eventDetailsExpanded, toggleEventDetails } = props;
     return (
-        &lt;div&gt;
-            &lt;div className="flex flex-col justify-start border-t-[1px] border-gray-100 px-3"&gt;
-                &lt;div className="flex items-center justify-start h-10 cursor-pointer group" onClick={toggleEventDetails}&gt;
-                    &lt;span className="text-sm block font-semibold w-28 mr-1"&gt;Event Details&lt;/span&gt;
-                    &lt;span className="text-gray-400 text-sm flex-1 truncate group-hover:text-gray-600"&gt;
-                        Connection Info, Slides, Downloads...
-                    &lt;/span&gt;
-                    &lt;ExpandButton
-                        className={classNames('ml-2', {
-                            'group-hover:bg-gray-200': !eventDetailsExpanded,
-                            'group-hover:bg-blue-700': eventDetailsExpanded,
-                            'group-active:bg-gray-400': !eventDetailsExpanded,
-                            'group-active:bg-blue-900': eventDetailsExpanded,
-                        })}
-                        onClick={toggleEventDetails}
-                        expanded={eventDetailsExpanded}
-                    /&gt;
-                &lt;/div&gt;
-                {eventDetailsExpanded &amp;&amp; (
-                    &lt;div className="text-sm border-[1px] rounded-lg border-gray-200 mb-3.5"&gt;
-                        {event.dialInPhoneNumbers &amp;&amp; event.dialInPhoneNumbers.length &gt; 0 &amp;&amp; (
-                            &lt;div className="flex my-3 px-3.5"&gt;
-                                &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Phone number&lt;/span&gt;
-                                &lt;div&gt;
-                                    {event.dialInPhoneNumbers.map((number: string) =&gt; (
-                                        &lt;div key={number}&gt;{number}&lt;/div&gt;
-                                    ))}
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        )}
-                        {event.dialInPin &amp;&amp; (
-                            &lt;div className="flex my-3 px-3.5"&gt;
-                                &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Pin Number&lt;/span&gt;
-                                &lt;span&gt;{event?.dialInPin}&lt;/span&gt;
-                            &lt;/div&gt;
-                        )}
-                        {event.webcastUrls.length &gt; 0 &amp;&amp; (
-                            &lt;div className="flex my-3 px-3.5"&gt;
-                                &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Webcast&lt;/span&gt;
-                                &lt;div className="overflow-hidden truncate"&gt;
-                                    {event.webcastUrls?.map((url: string) =&gt; (
-                                        &lt;div key={url} className="block truncate"&gt;
-                                            &lt;a
-                                                className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
-                                                href={url}
-                                                rel="noreferrer"
-                                                target="_blank"
-                                            &gt;
-                                                {url}
-                                            &lt;/a&gt;
-                                        &lt;/div&gt;
-                                    ))}
-                                &lt;/div&gt;
-                            &lt;/div&gt;
-                        )}
-                        {event.audioRecordingUrl &amp;&amp; (
-                            &lt;div className="flex my-3 px-3.5"&gt;
-                                &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Download MP3&lt;/span&gt;
-                                &lt;span className="block truncate"&gt;
-                                    &lt;a
-                                        className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
-                                        href={event.audioRecordingUrl}
-                                        rel="noreferrer"
-                                        target="_blank"
-                                    &gt;
-                                        {event.audioRecordingUrl}
-                                    &lt;/a&gt;
-                                &lt;/span&gt;
-                            &lt;/div&gt;
-                        )}
-                    &lt;/div&gt;
-                )}
+        &lt;div className="flex flex-col justify-start border-t-[1px] border-gray-100 px-3"&gt;
+            &lt;div className="flex items-center justify-start h-10 cursor-pointer group" onClick={toggleEventDetails}&gt;
+                &lt;span className="text-sm block font-semibold w-28 mr-1"&gt;Event Details&lt;/span&gt;
+                &lt;span className="text-gray-400 text-sm text-right flex-1 truncate group-hover:text-gray-600"&gt;
+                    Connection Info, Slides, Downloads...
+                &lt;/span&gt;
+                &lt;ExpandButton
+                    className={classNames('ml-3', {
+                        'group-hover:bg-gray-200': !eventDetailsExpanded,
+                        'group-hover:bg-blue-700': eventDetailsExpanded,
+                        'group-active:bg-gray-400': !eventDetailsExpanded,
+                        'group-active:bg-blue-900': eventDetailsExpanded,
+                    })}
+                    onClick={toggleEventDetails}
+                    expanded={eventDetailsExpanded}
+                /&gt;
             &lt;/div&gt;
+            {eventDetailsExpanded &amp;&amp; (
+                &lt;div className="text-sm border-[1px] rounded-lg border-gray-200 mb-3.5"&gt;
+                    {event.dialInPhoneNumbers &amp;&amp; event.dialInPhoneNumbers.length &gt; 0 &amp;&amp; (
+                        &lt;div className="flex my-3 px-3.5"&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Phone number&lt;/span&gt;
+                            &lt;div&gt;
+                                {event.dialInPhoneNumbers.map((number: string) =&gt; (
+                                    &lt;div key={number}&gt;{number}&lt;/div&gt;
+                                ))}
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    )}
+                    {event.dialInPin &amp;&amp; (
+                        &lt;div className="flex my-3 px-3.5"&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Pin Number&lt;/span&gt;
+                            &lt;span&gt;{event?.dialInPin}&lt;/span&gt;
+                        &lt;/div&gt;
+                    )}
+                    {event.webcastUrls.length &gt; 0 &amp;&amp; (
+                        &lt;div className="flex my-3 px-3.5"&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Webcast&lt;/span&gt;
+                            &lt;div className="overflow-hidden truncate"&gt;
+                                {event.webcastUrls?.map((url: string) =&gt; (
+                                    &lt;div key={url} className="block truncate"&gt;
+                                        &lt;a
+                                            className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
+                                            href={url}
+                                            rel="noreferrer"
+                                            target="_blank"
+                                        &gt;
+                                            {url}
+                                        &lt;/a&gt;
+                                    &lt;/div&gt;
+                                ))}
+                            &lt;/div&gt;
+                        &lt;/div&gt;
+                    )}
+                    {event.audioRecordingUrl &amp;&amp; (
+                        &lt;div className="flex my-3 px-3.5"&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Download MP3&lt;/span&gt;
+                            &lt;span className="block truncate"&gt;
+                                &lt;a
+                                    className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
+                                    href={event.audioRecordingUrl}
+                                    rel="noreferrer"
+                                    target="_blank"
+                                &gt;
+                                    {event.audioRecordingUrl}
+                                &lt;/a&gt;
+                            &lt;/span&gt;
+                        &lt;/div&gt;
+                    )}
+                &lt;/div&gt;
+            )}
         &lt;/div&gt;
     );
 }
@@ -400,7 +394,7 @@ export function EventDetails(props: EventDetailsProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 02 2021 12:00:33 GMT-0400 (Eastern Daylight Time)
+                at Tue Nov 02 2021 17:22:44 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>
