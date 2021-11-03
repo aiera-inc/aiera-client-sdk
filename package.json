@@ -25,6 +25,7 @@
         "new:module": "plop --plopfile templates/plopfile.ts component module",
         "new:nested:module": "plop --plopfile templates/plopfile.ts nested module",
         "new:svg": "plop --plopfile templates/plopfile.ts svg",
+        "new:hook": "plop --plopfile templates/plopfile.ts hook",
         "new": "plop --plopfile templates/plopfile.ts",
         "release": "hub release create -m v$npm_package_version -a dist/aiera-client-sdk-$npm_package_version.tgz v$npm_package_version",
         "start": "npm run build:watch",

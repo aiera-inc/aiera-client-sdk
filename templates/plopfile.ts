@@ -81,17 +81,23 @@ export default (plop: NodePlopAPI) => {
                 path: '../src/components/Svg/{{name}}.tsx',
                 templateFile: 'svg.tsx.hbs',
             },
+        ],
+    });
+
+    plop.setGenerator('hook', {
+        description: 'Create a new hook',
+        prompts: [
             {
-                type: 'append',
-                template: "import {{lowerCase name}} from './{{name}}';",
-                pattern: /import [a-zA-Z0-9]+ from '\.\/[a-zA-Z0-9]+';(?!\nimport)/,
-                path: '../src/components/Svg/index.tsx',
+                type: 'input',
+                name: 'name',
+                message: 'Enter hook name: ',
             },
+        ],
+        actions: [
             {
-                type: 'append',
-                template: '    {{lowerCase name}},',
-                pattern: /export const SvgMap = [^}]*,/,
-                path: '../src/components/Svg/index.tsx',
+                type: 'addMany',
+                destination: '../src/lib/hooks/{{name}}',
+                templateFiles: 'hook/*.hbs',
             },
         ],
     });

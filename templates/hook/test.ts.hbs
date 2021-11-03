@@ -1,0 +1,11 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import { renderHook } from '@testing-library/react-hooks';
+
+import { {{name}} } from '.';
+
+describe('{{name}}', () => {
+    test('it does its thing', () => {
+        const { result } = renderHook(() => {{name}}());
+        expect(result.current).toBeUndefined();
+    });
+});
