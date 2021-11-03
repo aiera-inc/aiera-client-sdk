@@ -201,12 +201,20 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         </div>
                                                         <div className="flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4">
                                                             <div className="flex items-end">
-                                                                <span className="leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600">
-                                                                    {primaryQuote?.localTicker}
-                                                                </span>
-                                                                <span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
-                                                                    {primaryQuote?.exchange?.shortName}
-                                                                </span>
+                                                                {primaryQuote?.localTicker ? (
+                                                                    <>
+                                                                        <span className="leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600">
+                                                                            {primaryQuote?.localTicker}
+                                                                        </span>
+                                                                        <span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
+                                                                            {primaryQuote?.exchange?.shortName}
+                                                                        </span>
+                                                                    </>
+                                                                ) : (
+                                                                    <span className="leading-none text-sm text-black truncate font-bold">
+                                                                        {event.title}
+                                                                    </span>
+                                                                )}
                                                             </div>
                                                             <div className="leading-none flex text-sm capitalize items-center mt-1 text-black">
                                                                 {event.eventType.replace(/_/g, ' ')}
