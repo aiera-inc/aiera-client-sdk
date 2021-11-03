@@ -81,14 +81,13 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                     </Button>
                 )}
                 <Input
+                    icon={<MagnifyingGlass />}
                     name="search"
                     className="mr-3"
                     placeholder="Search Transcripts..."
                     value={searchTerm}
                     onChange={onChangeSearchTerm}
-                >
-                    <MagnifyingGlass />
-                </Input>
+                />
                 <div className="items-center flex">
                     <Gear className="w-5" />
                 </div>

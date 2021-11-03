@@ -27,6 +27,22 @@ describe('Input', () => {
         expect(onFocus).toHaveBeenCalled();
     });
 
+    test('renders an icon if supplied', () => {
+        render(
+            <Input
+                icon={
+                    <svg>
+                        <title>test icon</title>
+                    </svg>
+                }
+                name="input"
+                value="test"
+                placeholder="example"
+            />
+        );
+        screen.getByTitle('test icon');
+    });
+
     test('can be cleared', () => {
         const onChange = jest.fn();
         render(<Input name="input" value="test" placeholder="example" onChange={onChange} />);

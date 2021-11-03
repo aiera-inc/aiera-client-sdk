@@ -76,13 +76,12 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
             <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header">
                 <div className="flex items-center mb-3">
                     <Input
+                        icon={<MagnifyingGlass />}
                         name="search"
                         onChange={onSearchChange}
                         placeholder="Search Events & Transcripts"
                         value={searchTerm}
-                    >
-                        <MagnifyingGlass />
-                    </Input>
+                    />
                     <div className="ml-2">
                         <CompanyFilterButton onChange={onCompanyChange} value={company} />
                     </div>
