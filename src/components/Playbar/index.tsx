@@ -116,7 +116,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     </span>
                 </div>
             </div>
-            <div className="z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5">
+            <div className="z-20 flex h-[44px] pb-[6px] items-center justify-center ml-2.5">
                 {!fixed && (
                     <Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
                         <XMark />
