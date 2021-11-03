@@ -1,16 +1,18 @@
-import React, { FormEvent, ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import classNames from 'classnames';
 
-import { ChangeHandler } from '@aiera/client-sdk/types';
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { Input } from '@aiera/client-sdk/components/Input';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { Building } from '@aiera/client-sdk/components/Svg/Building';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
+import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import './styles.css';
 
 export type CompanyFilterResult = CompanyFilterQuery['companies'][0];
@@ -26,7 +28,7 @@ interface CompanyFilterButtonUIProps extends CompanyFilterButtonSharedProps {
     companiesQuery: QueryResult<CompanyFilterQuery, CompanyFilterQueryVariables>;
     companiesLoading?: boolean;
     hideTooltip?: () => void;
-    onSearchChange: (event: FormEvent<HTMLInputElement>) => void;
+    onSearchChange: ChangeHandler<string>;
 }
 
 function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
@@ -37,9 +39,10 @@ function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
     return (
         <div className="shadow-md bg-white rounded-lg w-72 overflow-hidden">
             <div className="p-3 w-full">
-                <input
+                <Input
                     autoFocus
-                    className="p-2 w-full text-sm rounded-md border border-gray-200"
+                    icon={<MagnifyingGlass />}
+                    name="company-filter-button-search"
                     placeholder="Search..."
                     onChange={onSearchChange}
                 />
@@ -136,7 +139,7 @@ export interface CompanyFilterButtonProps extends CompanyFilterButtonSharedProps
 export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactElement {
     const { onChange, value } = props;
 
-    const [searchTerm, setSearchTerm] = useState<string>('');
+    const { state, handlers } = useChangeHandlers({ searchTerm: '' });
 
     const companiesQuery = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
         isEmpty: ({ companies }) => companies.length === 0,
@@ -166,20 +169,16 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
             }
         `,
         variables: {
-            searchTerm,
+            searchTerm: state.searchTerm,
         },
-        pause: !searchTerm,
+        pause: !state.searchTerm,
     });
-
-    const onSearchChange = useCallback((event: FormEvent<HTMLInputElement>) => {
-        setSearchTerm(event.currentTarget.value);
-    }, []);
 
     return (
         <CompanyFilterButtonUI
             companiesQuery={companiesQuery}
             onChange={onChange}
-            onSearchChange={onSearchChange}
+            onSearchChange={handlers.searchTerm}
             value={value}
         />
     );
