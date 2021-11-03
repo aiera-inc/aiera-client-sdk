@@ -88328,7 +88328,7 @@ function PlaybarUI(props) {
   }), /* @__PURE__ */ import_react32.default.createElement("span", {
     className: "z-10 relative font-mono text-gray-500 opacity-60"
   }, toDurationString(duration)))), /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "z-10 flex h-[44px] pb-[6px] items-center justify-center ml-2.5"
+    className: "z-20 flex h-[44px] pb-[6px] items-center justify-center ml-2.5"
   }, !fixed && /* @__PURE__ */ import_react32.default.createElement(Button, {
     onClick: clear,
     className: "flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1"
