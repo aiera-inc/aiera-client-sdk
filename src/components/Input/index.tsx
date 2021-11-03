@@ -14,6 +14,7 @@ import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import './styles.css';
 
 interface InputSharedProps {
+    autoFocus?: boolean;
     icon?: ReactNode;
     placeholder?: string;
     onFocus?: FocusEventHandler;
@@ -30,7 +31,7 @@ interface InputUIProps extends InputSharedProps {
 }
 
 export function InputUI(props: InputUIProps): ReactElement {
-    const { icon, clearable, clear, placeholder, onChange, onFocus, value, name, className = '' } = props;
+    const { autoFocus, icon, clearable, clear, placeholder, onChange, onFocus, value, name, className = '' } = props;
     return (
         <div className={`group h-8 items-center w-full relative ${className} input__${name}`}>
             {React.isValidElement(icon) && (
@@ -42,6 +43,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                 </div>
             )}
             <input
+                autoFocus={autoFocus}
                 className={classNames(
                     'w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400',
                     { 'pl-7': !!icon, 'pl-3': !icon }
@@ -72,9 +74,10 @@ export interface InputProps extends InputSharedProps {
  * Renders Input
  */
 export function Input(props: InputProps): ReactElement {
-    const { icon, clearable = true, placeholder, onChange, onFocus, value, name, className } = props;
+    const { autoFocus = false, icon, clearable = true, placeholder, onChange, onFocus, value, name, className } = props;
     return (
         <InputUI
+            autoFocus={autoFocus}
             clearable={clearable}
             clear={useCallback(
                 (event: MouseEvent<HTMLDivElement>) => onChange?.(event, { name, value: '' }),

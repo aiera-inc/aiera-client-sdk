@@ -27,6 +27,12 @@ describe('Input', () => {
         expect(onFocus).toHaveBeenCalled();
     });
 
+    test('can be auto focused', () => {
+        const onFocus = jest.fn();
+        render(<Input autoFocus name="input" value="test" placeholder="example" onFocus={onFocus} />);
+        expect(onFocus).toHaveBeenCalled();
+    });
+
     test('renders an icon if supplied', () => {
         render(
             <Input
