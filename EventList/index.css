@@ -1,5 +1,6 @@
 /* src/modules/Auth/styles.css */
 /* src/components/Tooltip/styles.css */
+/* src/components/Input/styles.css */
 /* src/components/Button/styles.css */
 /* src/components/CompanyFilterButton/styles.css */
 /* src/components/Playbar/styles.css */
@@ -13,8 +14,6 @@
 /* src/modules/Transcript/EmptyMessage/styles.css */
 
 /* src/components/ExpandButton/styles.css */
-
-/* src/components/Input/styles.css */
 
 /* src/modules/Transcript/EventDetails/styles.css */
 
@@ -397,11 +396,11 @@ video {
 .sticky {
   position: sticky;
 }
-.inset-0 {
+.top-0 {
   top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
+}
+.right-2 {
+  right: 0.5rem;
 }
 .top-\[9px\] {
   top: 9px;
@@ -414,9 +413,6 @@ video {
 }
 .bottom-0 {
   bottom: 0px;
-}
-.top-0 {
-  top: 0px;
 }
 .-bottom-0\.5 {
   bottom: -0.125rem;
@@ -660,6 +656,9 @@ video {
 .w-8 {
   width: 2rem;
 }
+.w-3 {
+  width: 0.75rem;
+}
 .w-\[65px\] {
   width: 65px;
 }
@@ -677,9 +676,6 @@ video {
 }
 .w-2\.5 {
   width: 0.625rem;
-}
-.w-3 {
-  width: 0.75rem;
 }
 .w-\[18px\] {
   width: 18px;
@@ -829,9 +825,6 @@ video {
 .rounded-lg {
   border-radius: 0.5rem;
 }
-.rounded-md {
-  border-radius: 0.375rem;
-}
 .rounded-xl {
   border-radius: 0.75rem;
 }
@@ -840,6 +833,9 @@ video {
 }
 .rounded {
   border-radius: 0.25rem;
+}
+.rounded-md {
+  border-radius: 0.375rem;
 }
 .rounded-2xl {
   border-radius: 1rem;
@@ -1458,6 +1454,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgba(59, 130, 246, var(--tw-bg-opacity));
 }
+.hover\:text-gray-500:hover {
+  --tw-text-opacity: 1;
+  color: rgba(107, 114, 128, var(--tw-text-opacity));
+}
 .hover\:text-blue-600:hover {
   --tw-text-opacity: 1;
   color: rgba(37, 99, 235, var(--tw-text-opacity));
@@ -1465,10 +1465,6 @@ video {
 .hover\:text-yellow-600:hover {
   --tw-text-opacity: 1;
   color: rgba(217, 119, 6, var(--tw-text-opacity));
-}
-.hover\:text-gray-500:hover {
-  --tw-text-opacity: 1;
-  color: rgba(107, 114, 128, var(--tw-text-opacity));
 }
 .hover\:text-gray-600:hover {
   --tw-text-opacity: 1;
@@ -1572,6 +1568,10 @@ video {
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
+.active\:text-gray-700:active {
+  --tw-text-opacity: 1;
+  color: rgba(55, 65, 81, var(--tw-text-opacity));
+}
 .active\:text-blue-700:active {
   --tw-text-opacity: 1;
   color: rgba(29, 78, 216, var(--tw-text-opacity));
@@ -1603,6 +1603,9 @@ video {
 .active\:text-blue-900:active {
   --tw-text-opacity: 1;
   color: rgba(30, 58, 138, var(--tw-text-opacity));
+}
+.group:hover .group-hover\:flex {
+  display: flex;
 }
 .group:hover .group-hover\:bg-red-500 {
   --tw-bg-opacity: 1;

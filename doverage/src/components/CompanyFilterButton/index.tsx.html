@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.15% </span>
+                <span class="strong">95.83% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/26</span>
+                <span class='fraction'>23/24</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.33% </span>
+                <span class="strong">92.86% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>14/15</span>
+                <span class='fraction'>13/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">96.15% </span>
+                <span class="strong">95.83% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/26</span>
+                <span class='fraction'>23/24</span>
             </div>
         
             
@@ -242,8 +242,9 @@
 <a name='L183'></a><a href='#L183'>183</a>
 <a name='L184'></a><a href='#L184'>184</a>
 <a name='L185'></a><a href='#L185'>185</a>
-<a name='L186'></a><a href='#L186'>186</a>
-<a name='L187'></a><a href='#L187'>187</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L186'></a><a href='#L186'>186</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -280,6 +281,7 @@
 <span class="cline-any cline-yes">9x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -417,10 +419,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">35x</span>
-<span class="cline-any cline-yes">9x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">35x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -429,19 +427,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { FormEvent, ReactElement, useCallback, useState } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import classNames from 'classnames';
 &nbsp;
-import { ChangeHandler } from '@aiera/client-sdk/types';
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { Input } from '@aiera/client-sdk/components/Input';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { Building } from '@aiera/client-sdk/components/Svg/Building';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
+import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import './styles.css';
 &nbsp;
 export type CompanyFilterResult = CompanyFilterQuery['companies'][0];
@@ -457,7 +457,7 @@ interface CompanyFilterButtonUIProps extends CompanyFilterButtonSharedProps {
     companiesQuery: QueryResult&lt;CompanyFilterQuery, CompanyFilterQueryVariables&gt;;
     companiesLoading?: boolean;
     hideTooltip?: () =&gt; void;
-    onSearchChange: (event: FormEvent&lt;HTMLInputElement&gt;) =&gt; void;
+    onSearchChange: ChangeHandler&lt;string&gt;;
 }
 &nbsp;
 function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
@@ -468,9 +468,10 @@ function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
     return (
         &lt;div className="shadow-md bg-white rounded-lg w-72 overflow-hidden"&gt;
             &lt;div className="p-3 w-full"&gt;
-                &lt;input
+                &lt;Input
                     autoFocus
-                    className="p-2 w-full text-sm rounded-md border border-gray-200"
+                    icon={&lt;MagnifyingGlass /&gt;}
+                    name="company-filter-button-search"
                     placeholder="Search..."
                     onChange={onSearchChange}
                 /&gt;
@@ -567,7 +568,7 @@ export interface CompanyFilterButtonProps extends CompanyFilterButtonSharedProps
 export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactElement {
     const { onChange, value } = props;
 &nbsp;
-    const [searchTerm, setSearchTerm] = useState&lt;string&gt;('');
+    const { state, handlers } = useChangeHandlers({ searchTerm: '' });
 &nbsp;
     const companiesQuery = useQuery&lt;CompanyFilterQuery, CompanyFilterQueryVariables&gt;({
         isEmpty: ({ companies }) =&gt; companies.length === 0,
@@ -597,20 +598,16 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
             }
         `,
         variables: {
-            searchTerm,
+            searchTerm: state.searchTerm,
         },
-        pause: !searchTerm,
+        pause: !state.searchTerm,
     });
-&nbsp;
-    const onSearchChange = useCallback((event: FormEvent&lt;HTMLInputElement&gt;) =&gt; {
-        setSearchTerm(event.currentTarget.value);
-    }, []);
 &nbsp;
     return (
         &lt;CompanyFilterButtonUI
             companiesQuery={companiesQuery}
             onChange={onChange}
-            onSearchChange={onSearchChange}
+            onSearchChange={handlers.searchTerm}
             value={value}
         /&gt;
     );
@@ -622,7 +619,7 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Nov 03 2021 12:37:00 GMT-0400 (Eastern Daylight Time)
+                at Wed Nov 03 2021 13:04:03 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
