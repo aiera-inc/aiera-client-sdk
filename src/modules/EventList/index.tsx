@@ -13,6 +13,7 @@ import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
+import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Input } from '@aiera/client-sdk/components/Input';
@@ -79,12 +80,13 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         icon={<MagnifyingGlass />}
                         name="search"
                         onChange={onSearchChange}
-                        placeholder="Search Events & Transcripts"
+                        placeholder="Events & Transcripts..."
                         value={searchTerm}
                     />
                     <div className="ml-2">
                         <CompanyFilterButton onChange={onCompanyChange} value={company} />
                     </div>
+                    {false && <SettingsButton />}
                 </div>
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">
@@ -166,7 +168,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                             <Fragment key={event.id}>
                                                 {divider}
                                                 <li
-                                                    className="group h-12 text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
+                                                    className="group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
                                                     onClick={(e) => onSelectEvent?.(e, { value: event })}
                                                 >
                                                     <Tooltip

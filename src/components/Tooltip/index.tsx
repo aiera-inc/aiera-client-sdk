@@ -53,7 +53,7 @@ function TooltipUI(props: TooltipUIProps): ReactElement {
     return (
         <>
             {modal && visible && (
-                <div className="fixed z-10 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal" />
+                <div className="fixed z-20 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal" />
             )}
             <div
                 className={`tooltip ${className}`}
@@ -63,16 +63,16 @@ function TooltipUI(props: TooltipUIProps): ReactElement {
                 ref={targetRef}
             >
                 {target}
-                {visible && (
-                    <div
-                        className="fixed z-20 tooltip__content"
-                        style={{ top, left, bottom, right, width }}
-                        ref={tooltipRef}
-                    >
-                        {typeof content === 'function' ? content({ hideTooltip, showTooltip }) : content}
-                    </div>
-                )}
             </div>
+            {visible && (
+                <div
+                    className="fixed z-30 tooltip__content"
+                    style={{ top, left, bottom, right, width }}
+                    ref={tooltipRef}
+                >
+                    {typeof content === 'function' ? content({ hideTooltip, showTooltip }) : content}
+                </div>
+            )}
         </>
     );
 }

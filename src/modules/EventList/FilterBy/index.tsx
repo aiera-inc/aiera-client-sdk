@@ -42,7 +42,6 @@ export const FilterBy = <T extends string | number>(props: FilterByProps<T>): Re
                             'rounded-full',
                             'text-sm',
                             'cursor-pointer',
-                            'rounded-md',
                             'border',
                             {
                                 'bg-blue-100': value?.includes(option.value),

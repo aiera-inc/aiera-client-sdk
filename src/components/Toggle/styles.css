@@ -1,0 +1,42 @@
+:root {
+    --toggle-border: 3px;
+    --toggle-width: 20px;
+    --toggle-width-hover: 16px;
+    --toggle-off-gray: calc(var(--toggle-width) * -1) 0 0 var(--toggle-border) rgb(229, 231, 235) inset, 0 0 0 var(--toggle-border) rgb(229, 231, 235) inset;
+    --toggle-off-gray-hover: calc(var(--toggle-width-hover) * -1) 0 0 var(--toggle-border) rgb(209, 213, 219) inset, 0 0 0 var(--toggle-border) rgb(209, 213, 219) inset;
+    --toggle-off-gray-active: calc(var(--toggle-width) * -1) 0 0 var(--toggle-border) rgb(156, 163, 175) inset, 0 0 0 var(--toggle-border) rgb(156, 163, 175) inset;
+    --toggle-on-green: var(--toggle-width) 0 0 var(--toggle-border) rgb(16, 185, 129) inset, 0 0 0 var(--toggle-border) rgb(16, 185, 129) inset;
+    --toggle-on-green-hover: var(--toggle-width-hover) 0 0 var(--toggle-border) rgb(5, 150, 105) inset, 0 0 0 var(--toggle-border) rgb(5, 150, 105) inset;
+    --toggle-on-green-active: var(--toggle-width) 0 0 var(--toggle-border) rgb(4, 120, 87) inset, 0 0 0 var(--toggle-border) rgb(4, 120, 87) inset;
+}
+
+.toggle {
+    appearance: none;
+    border-radius: 1.9rem;
+    height: 1.25rem;
+    width: 2.5rem;
+    cursor: pointer;
+    background-color: white;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .3s;
+    transition: background, box-shadow 0.2s ease-in-out;
+    box-shadow: var(--toggle-off-gray);
+}
+
+/* If .group is too generic, break out to separate .toggle-group class, and
+ * update any components using the Toggle component */
+.group:hover .toggle, .toggle:hover {
+    box-shadow: var(--toggle-off-gray-hover);
+}
+.group:active .toggle, .toggle:active {
+    box-shadow: var(--toggle-off-gray-active);
+}
+.group .toggle:checked, .toggle:checked {
+    box-shadow: var(--toggle-on-green);
+}
+.group:hover .toggle:checked, .toggle:checked:hover {
+    box-shadow: var(--toggle-on-green-hover);
+}
+.group:active .toggle:checked, .toggle:checked:active {
+    box-shadow: var(--toggle-on-green-active);
+}

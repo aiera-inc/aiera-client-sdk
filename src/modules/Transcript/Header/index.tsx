@@ -11,7 +11,7 @@ import { Button } from '@aiera/client-sdk/components/Button';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
+import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
 import { QueryResult } from '@aiera/client-sdk/api/client';
 import { EventDetails } from '../EventDetails';
@@ -83,14 +83,11 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                 <Input
                     icon={<MagnifyingGlass />}
                     name="search"
-                    className="mr-3"
                     placeholder="Search Transcripts..."
                     value={searchTerm}
                     onChange={onChangeSearchTerm}
                 />
-                <div className="items-center flex">
-                    <Gear className="w-5" />
-                </div>
+                {false && <SettingsButton />}
             </div>
             {match(eventQuery)
                 .with({ status: 'loading' }, () => {
