@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.25% </span>
+                <span class="strong">55.88% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>18/32</span>
+                <span class='fraction'>19/34</span>
             </div>
         
             
@@ -444,7 +444,15 @@
 <a name='L385'></a><a href='#L385'>385</a>
 <a name='L386'></a><a href='#L386'>386</a>
 <a name='L387'></a><a href='#L387'>387</a>
-<a name='L388'></a><a href='#L388'>388</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L388'></a><a href='#L388'>388</a>
+<a name='L389'></a><a href='#L389'>389</a>
+<a name='L390'></a><a href='#L390'>390</a>
+<a name='L391'></a><a href='#L391'>391</a>
+<a name='L392'></a><a href='#L392'>392</a>
+<a name='L393'></a><a href='#L393'>393</a>
+<a name='L394'></a><a href='#L394'>394</a>
+<a name='L395'></a><a href='#L395'>395</a>
+<a name='L396'></a><a href='#L396'>396</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -614,6 +622,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1034,12 +1050,20 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                                                         &lt;/div&gt;
                                                         &lt;div className="flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"&gt;
                                                             &lt;div className="flex items-end"&gt;
-                                                                &lt;span className="leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"&gt;
-                                                                    {primaryQuote?.localTicker}
-                                                                &lt;/span&gt;
-                                                                &lt;span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"&gt;
-                                                                    {primaryQuote?.exchange?.shortName}
-                                                                &lt;/span&gt;
+                                                                {primaryQuote?.localTicker ? (
+                                                                    &lt;&gt;
+                                                                        &lt;span className="leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"&gt;
+                                                                            {primaryQuote?.localTicker}
+                                                                        &lt;/span&gt;
+                                                                        &lt;span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"&gt;
+                                                                            {primaryQuote?.exchange?.shortName}
+                                                                        &lt;/span&gt;
+                                                                    &lt;/&gt;
+                                                                ) : (
+<span class="branch-1 cbranch-no" title="branch not covered" >                                                                    &lt;span className="leading-none text-sm text-black truncate font-bold"&gt;</span>
+                                                                        {event.title}
+                                                                    &lt;/span&gt;
+                                                                )}
                                                             &lt;/div&gt;
                                                             &lt;div className="leading-none flex text-sm capitalize items-center mt-1 text-black"&gt;
                                                                 {event.eventType.replace(/_/g, ' ')}
@@ -1225,7 +1249,7 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed Nov 03 2021 13:04:03 GMT-0400 (Eastern Daylight Time)
+                at Fri Nov 05 2021 14:12:05 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

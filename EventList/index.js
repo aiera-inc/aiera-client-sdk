@@ -86881,6 +86881,12 @@ var import_ts_pattern8 = __toModule(require_lib());
 var import_luxon3 = __toModule(require_luxon());
 
 // src/types/generated.ts
+var BasicTextualSentiment;
+(function(BasicTextualSentiment2) {
+  BasicTextualSentiment2["Negative"] = "negative";
+  BasicTextualSentiment2["Neutral"] = "neutral";
+  BasicTextualSentiment2["Positive"] = "positive";
+})(BasicTextualSentiment || (BasicTextualSentiment = {}));
 var BillingSource;
 (function(BillingSource2) {
   BillingSource2["Manual"] = "manual";
@@ -90086,11 +90092,13 @@ var EventListUI = (props) => {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
     }, /* @__PURE__ */ import_react52.default.createElement("div", {
       className: "flex items-end"
-    }, /* @__PURE__ */ import_react52.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) ? /* @__PURE__ */ import_react52.default.createElement(import_react52.default.Fragment, null, /* @__PURE__ */ import_react52.default.createElement("span", {
       className: "leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"
     }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react52.default.createElement("span", {
       className: "leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)), /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)) : /* @__PURE__ */ import_react52.default.createElement("span", {
+      className: "leading-none text-sm text-black truncate font-bold"
+    }, event2.title)), /* @__PURE__ */ import_react52.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black"
     }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react52.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
