@@ -89742,9 +89742,9 @@ var Transcript = (props) => {
     autoScrollRef(ref);
     searchState.scrollRef(ref);
   }, [autoScrollRef, searchState.scrollRef]);
-  const onClickTranscript = (paragraph) => {
+  const onClickTranscript = (0, import_react49.useCallback)((paragraph) => {
     audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
-  };
+  }, [audioPlayer]);
   const onClickBack = (0, import_react49.useCallback)((event) => {
     if (!audioPlayer.playing(null)) {
       audioPlayer.clear();
@@ -90194,7 +90194,7 @@ var EventList = (_props) => {
     eventsQuery,
     filterByTypes: state.filterByTypes,
     listType: state.listType,
-    onBackFromTranscript: (event) => onSelectEvent(event, { value: null }),
+    onBackFromTranscript: (0, import_react54.useCallback)((event) => onSelectEvent(event, { value: null }), [onSelectEvent]),
     onCompanyChange: onSelectCompany,
     onSearchChange: handlers.searchTerm,
     onSelectFilterBy: handlers.filterByTypes,
