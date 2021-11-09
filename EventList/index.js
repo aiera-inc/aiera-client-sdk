@@ -90211,7 +90211,12 @@ var App = () => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
   return /* @__PURE__ */ import_react55.default.createElement(import_react55.StrictMode, null, /* @__PURE__ */ import_react55.default.createElement(Provider, {
-    config: { apiUrl: "https://api-dev.aiera.com/graphql", assetPath: "bundle/" }
+    config: {
+      apiUrl: "https://api-dev.aiera.com/graphql",
+      assetPath: "bundle/",
+      moduleName: "EventList",
+      platform: "aiera-sdk-dev"
+    }
   }, /* @__PURE__ */ import_react55.default.createElement(Provider3, {
     bus
   }, /* @__PURE__ */ import_react55.default.createElement(Provider2, null, /* @__PURE__ */ import_react55.default.createElement(Auth, {
