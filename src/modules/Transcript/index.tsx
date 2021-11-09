@@ -608,9 +608,12 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         },
         [autoScrollRef, searchState.scrollRef]
     );
-    const onClickTranscript = (paragraph: Paragraph) => {
-        audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
-    };
+    const onClickTranscript = useCallback(
+        (paragraph: Paragraph) => {
+            audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
+        },
+        [audioPlayer]
+    );
     const onClickBack = useCallback(
         (event: MouseEvent) => {
             if (!audioPlayer.playing(null)) {

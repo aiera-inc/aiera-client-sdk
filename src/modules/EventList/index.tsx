@@ -384,7 +384,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}
             listType={state.listType}
-            onBackFromTranscript={(event) => onSelectEvent(event, { value: null })}
+            onBackFromTranscript={useCallback((event) => onSelectEvent(event, { value: null }), [onSelectEvent])}
             onCompanyChange={onSelectCompany}
             onSearchChange={handlers.searchTerm}
             onSelectFilterBy={handlers.filterByTypes}
