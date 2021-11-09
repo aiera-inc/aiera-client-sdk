@@ -1,10 +1,13 @@
 import React, { createContext, useContext, ReactNode, ReactElement } from 'react';
 
+type Module = 'EventList';
+type Platform = 'aiera-sdk-dev' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
+
 interface AppConfig {
     apiUrl: string;
     assetPath: string;
-    moduleName?: string;
-    platform?: string;
+    moduleName?: Module;
+    platform?: Platform;
 }
 
 // Setup default values for env

@@ -18,7 +18,14 @@ const App: FC = (): ReactElement => {
     );
     return (
         <StrictMode>
-            <ConfigProvider config={{ apiUrl: 'https://api-dev.aiera.com/graphql', assetPath: 'bundle/' }}>
+            <ConfigProvider
+                config={{
+                    apiUrl: 'https://api-dev.aiera.com/graphql',
+                    assetPath: 'bundle/',
+                    moduleName: 'EventList',
+                    platform: 'aiera-sdk-dev',
+                }}
+            >
                 <MessageBusProvider bus={bus}>
                     <ClientProvider>
                         <Auth showLogout>
