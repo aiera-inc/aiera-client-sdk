@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement44 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement46 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement44(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement46(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement44(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement46(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement44(element.type, key, ref, self2, source, owner, props);
+          return ReactElement46(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React44 = require_react();
+        var React46 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React44.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React46.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React44) {
+        if (!React46) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React44.Children.forEach(children, function(child) {
+          React46.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React44.Children.forEach(props.children, function(child) {
+              React46.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React44.Component().refs;
+        var emptyRefsObject = new React46.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -80292,7 +80292,7 @@ var require_highcharts_react_min = __commonJS({
 });
 
 // src/dev/EventList.tsx
-var import_react53 = __toModule(require_react());
+var import_react55 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/api/client.tsx
@@ -86876,7 +86876,7 @@ var Auth = ({
 };
 
 // src/modules/EventList/index.tsx
-var import_react52 = __toModule(require_react());
+var import_react54 = __toModule(require_react());
 var import_ts_pattern8 = __toModule(require_lib());
 var import_luxon3 = __toModule(require_luxon());
 
@@ -87398,18 +87398,18 @@ function TooltipUI(props) {
     target = render({ hideTooltip, showTooltip });
   }
   return /* @__PURE__ */ import_react11.default.createElement(import_react11.default.Fragment, null, modal && visible && /* @__PURE__ */ import_react11.default.createElement("div", {
-    className: "fixed z-10 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal"
+    className: "fixed z-20 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal"
   }), /* @__PURE__ */ import_react11.default.createElement("div", {
     className: `tooltip ${className}`,
     onClick: onTargetClick,
     onMouseEnter: onTargetMouseEnter,
     onMouseLeave: onTargetMouseLeave,
     ref: targetRef
-  }, target, visible && /* @__PURE__ */ import_react11.default.createElement("div", {
-    className: "fixed z-20 tooltip__content",
+  }, target), visible && /* @__PURE__ */ import_react11.default.createElement("div", {
+    className: "fixed z-30 tooltip__content",
     style: { top, left, bottom, right, width },
     ref: tooltipRef
-  }, typeof content === "function" ? content({ hideTooltip, showTooltip }) : content)));
+  }, typeof content === "function" ? content({ hideTooltip, showTooltip }) : content));
 }
 function getTooltipPosition({
   anchor,
@@ -87779,7 +87779,7 @@ function CompanyFilterButton(props) {
 }
 
 // src/modules/Transcript/index.tsx
-var import_react47 = __toModule(require_react());
+var import_react49 = __toModule(require_react());
 var import_classnames29 = __toModule(require_classnames());
 var import_ts_pattern6 = __toModule(require_lib());
 var import_luxon2 = __toModule(require_luxon());
@@ -88728,7 +88728,7 @@ function EmptyMessage(props) {
 }
 
 // src/modules/Transcript/Header/index.tsx
-var import_react46 = __toModule(require_react());
+var import_react48 = __toModule(require_react());
 var import_ts_pattern5 = __toModule(require_lib());
 var import_classnames28 = __toModule(require_classnames());
 var import_luxon = __toModule(require_luxon());
@@ -88781,45 +88781,32 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
   }));
 }
 
-// src/components/Svg/Gear.tsx
+// src/components/SettingsButton/index.tsx
+var import_react41 = __toModule(require_react());
+
+// src/components/Toggle/index.tsx
 var import_react39 = __toModule(require_react());
+
+// src/components/Svg/Gear.tsx
+var import_react40 = __toModule(require_react());
 var import_classnames21 = __toModule(require_classnames());
-function Gear({ className, alt = "Gear" }) {
-  return /* @__PURE__ */ import_react39.default.createElement("svg", {
-    className: (0, import_classnames21.default)(className, "stroke-current", "Svg", "Svg__gear"),
-    width: "100%",
-    fill: "none",
-    viewBox: "0 0 24 24",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react39.default.createElement("title", null, alt), /* @__PURE__ */ import_react39.default.createElement("path", {
-    d: "M10.325 4.317C10.751 2.561 13.249 2.561 13.675 4.317C13.7389 4.5808 13.8642 4.82578 14.0407 5.032C14.2172 5.23822 14.4399 5.39985 14.6907 5.50375C14.9414 5.60764 15.2132 5.65085 15.4838 5.62987C15.7544 5.60889 16.0162 5.5243 16.248 5.383C17.791 4.443 19.558 6.209 18.618 7.753C18.4769 7.98466 18.3924 8.24634 18.3715 8.51677C18.3506 8.78721 18.3938 9.05877 18.4975 9.30938C18.6013 9.55999 18.7627 9.78258 18.9687 9.95905C19.1747 10.1355 19.4194 10.2609 19.683 10.325C21.439 10.751 21.439 13.249 19.683 13.675C19.4192 13.7389 19.1742 13.8642 18.968 14.0407C18.7618 14.2172 18.6001 14.4399 18.4963 14.6907C18.3924 14.9414 18.3491 15.2132 18.3701 15.4838C18.3911 15.7544 18.4757 16.0162 18.617 16.248C19.557 17.791 17.791 19.558 16.247 18.618C16.0153 18.4769 15.7537 18.3924 15.4832 18.3715C15.2128 18.3506 14.9412 18.3938 14.6906 18.4975C14.44 18.6013 14.2174 18.7627 14.0409 18.9687C13.8645 19.1747 13.7391 19.4194 13.675 19.683C13.249 21.439 10.751 21.439 10.325 19.683C10.2611 19.4192 10.1358 19.1742 9.95929 18.968C9.7828 18.7618 9.56011 18.6001 9.30935 18.4963C9.05859 18.3924 8.78683 18.3491 8.51621 18.3701C8.24559 18.3911 7.98375 18.4757 7.752 18.617C6.209 19.557 4.442 17.791 5.382 16.247C5.5231 16.0153 5.60755 15.7537 5.62848 15.4832C5.64942 15.2128 5.60624 14.9412 5.50247 14.6906C5.3987 14.44 5.23726 14.2174 5.03127 14.0409C4.82529 13.8645 4.58056 13.7391 4.317 13.675C2.561 13.249 2.561 10.751 4.317 10.325C4.5808 10.2611 4.82578 10.1358 5.032 9.95929C5.23822 9.7828 5.39985 9.56011 5.50375 9.30935C5.60764 9.05859 5.65085 8.78683 5.62987 8.51621C5.60889 8.24559 5.5243 7.98375 5.383 7.752C4.443 6.209 6.209 4.442 7.753 5.382C8.749 5.99 10.049 5.452 10.325 4.317Z",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }), /* @__PURE__ */ import_react39.default.createElement("path", {
-    d: "M15 12C15 12.7956 14.6839 13.5587 14.1213 14.1213C13.5587 14.6839 12.7956 15 12 15C11.2044 15 10.4413 14.6839 9.87868 14.1213C9.31607 13.5587 9 12.7956 9 12C9 11.2044 9.31607 10.4413 9.87868 9.87868C10.4413 9.31607 11.2044 9 12 9C12.7956 9 13.5587 9.31607 14.1213 9.87868C14.6839 10.4413 15 11.2044 15 12V12Z",
-    strokeWidth: "2",
-    strokeLinecap: "round",
-    strokeLinejoin: "round"
-  }));
-}
 
 // src/modules/Transcript/EventDetails/index.tsx
-var import_react40 = __toModule(require_react());
+var import_react42 = __toModule(require_react());
 var import_classnames22 = __toModule(require_classnames());
 function EventDetailsUI(props) {
   var _a;
   const { event, eventDetailsExpanded, toggleEventDetails } = props;
-  return /* @__PURE__ */ import_react40.default.createElement("div", {
+  return /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex flex-col justify-start border-t-[1px] border-gray-100 px-3"
-  }, /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex items-center justify-start h-10 cursor-pointer group",
     onClick: toggleEventDetails
-  }, /* @__PURE__ */ import_react40.default.createElement("span", {
+  }, /* @__PURE__ */ import_react42.default.createElement("span", {
     className: "text-sm block font-semibold w-28 mr-1"
-  }, "Event Details"), /* @__PURE__ */ import_react40.default.createElement("span", {
+  }, "Event Details"), /* @__PURE__ */ import_react42.default.createElement("span", {
     className: "text-gray-400 text-sm text-right flex-1 truncate group-hover:text-gray-600"
-  }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react40.default.createElement(ExpandButton, {
+  }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react42.default.createElement(ExpandButton, {
     className: (0, import_classnames22.default)("ml-3", {
       "group-hover:bg-gray-200": !eventDetailsExpanded,
       "group-hover:bg-blue-700": eventDetailsExpanded,
@@ -88828,39 +88815,39 @@ function EventDetailsUI(props) {
     }),
     onClick: toggleEventDetails,
     expanded: eventDetailsExpanded
-  })), eventDetailsExpanded && /* @__PURE__ */ import_react40.default.createElement("div", {
+  })), eventDetailsExpanded && /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "text-sm border-[1px] rounded-lg border-gray-200 mb-3.5"
-  }, event.dialInPhoneNumbers && event.dialInPhoneNumbers.length > 0 && /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, event.dialInPhoneNumbers && event.dialInPhoneNumbers.length > 0 && /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react40.default.createElement("span", {
+  }, /* @__PURE__ */ import_react42.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Phone number"), /* @__PURE__ */ import_react40.default.createElement("div", null, event.dialInPhoneNumbers.map((number) => /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, "Phone number"), /* @__PURE__ */ import_react42.default.createElement("div", null, event.dialInPhoneNumbers.map((number) => /* @__PURE__ */ import_react42.default.createElement("div", {
     key: number
-  }, number)))), event.dialInPin && /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, number)))), event.dialInPin && /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react40.default.createElement("span", {
+  }, /* @__PURE__ */ import_react42.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Pin Number"), /* @__PURE__ */ import_react40.default.createElement("span", null, event == null ? void 0 : event.dialInPin)), event.webcastUrls.length > 0 && /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, "Pin Number"), /* @__PURE__ */ import_react42.default.createElement("span", null, event == null ? void 0 : event.dialInPin)), event.webcastUrls.length > 0 && /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react40.default.createElement("span", {
+  }, /* @__PURE__ */ import_react42.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Webcast"), /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, "Webcast"), /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "overflow-hidden truncate"
-  }, (_a = event.webcastUrls) == null ? void 0 : _a.map((url) => /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, (_a = event.webcastUrls) == null ? void 0 : _a.map((url) => /* @__PURE__ */ import_react42.default.createElement("div", {
     key: url,
     className: "block truncate"
-  }, /* @__PURE__ */ import_react40.default.createElement("a", {
+  }, /* @__PURE__ */ import_react42.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: url,
     rel: "noreferrer",
     target: "_blank"
-  }, url))))), event.audioRecordingUrl && /* @__PURE__ */ import_react40.default.createElement("div", {
+  }, url))))), event.audioRecordingUrl && /* @__PURE__ */ import_react42.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react40.default.createElement("span", {
+  }, /* @__PURE__ */ import_react42.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
-  }, "Download MP3"), /* @__PURE__ */ import_react40.default.createElement("span", {
+  }, "Download MP3"), /* @__PURE__ */ import_react42.default.createElement("span", {
     className: "block truncate"
-  }, /* @__PURE__ */ import_react40.default.createElement("a", {
+  }, /* @__PURE__ */ import_react42.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: event.audioRecordingUrl,
     rel: "noreferrer",
@@ -88869,7 +88856,7 @@ function EventDetailsUI(props) {
 }
 function EventDetails(props) {
   const { event, eventDetailsExpanded, toggleEventDetails } = props;
-  return /* @__PURE__ */ import_react40.default.createElement(EventDetailsUI, {
+  return /* @__PURE__ */ import_react42.default.createElement(EventDetailsUI, {
     event,
     eventDetailsExpanded,
     toggleEventDetails
@@ -88877,21 +88864,21 @@ function EventDetails(props) {
 }
 
 // src/modules/Transcript/PriceChart/index.tsx
-var import_react44 = __toModule(require_react());
+var import_react46 = __toModule(require_react());
 var import_classnames26 = __toModule(require_classnames());
 var import_highstock = __toModule(require_highstock());
 var import_highcharts_react_official = __toModule(require_highcharts_react_min());
 
 // src/components/Svg/Pin.tsx
-var import_react41 = __toModule(require_react());
+var import_react43 = __toModule(require_react());
 var import_classnames23 = __toModule(require_classnames());
 function Pin({ className, alt = "Pin" }) {
-  return /* @__PURE__ */ import_react41.default.createElement("svg", {
+  return /* @__PURE__ */ import_react43.default.createElement("svg", {
     className: (0, import_classnames23.default)(className, "fill-current", "Svg", "Svg__pin"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react41.default.createElement("title", null, alt), /* @__PURE__ */ import_react41.default.createElement("path", {
+  }, /* @__PURE__ */ import_react43.default.createElement("title", null, alt), /* @__PURE__ */ import_react43.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M2.4119 0C2.17181 0 1.94623 0.114944 1.80512 0.309186C1.664 0.503428 1.62441 0.753489 1.69862 0.981821L2.50223 3.45438V4.77264C1.30693 5.34871 0.673665 6.32085 0.347619 7.15684C0.164168 7.62721 0.0734836 8.06276 0.0281426 8.38053C0.00534171 8.54033 -0.00635266 8.6729 -0.012365 8.76847C-0.0153756 8.81633 -0.0169749 8.85513 -0.0178223 8.88367C-0.0182463 8.89794 -0.0184827 8.90967 -0.0186132 8.9187L-0.0187396 8.93022L-0.0187624 8.93443L-0.018767 8.93615L-0.018768 8.9369C-0.0187683 8.93726 -0.0187683 8.9376 0.731232 8.9376H-0.0187683C-0.0187683 9.35181 0.317018 9.6876 0.731232 9.6876H5.23261V13.2461C5.23261 13.6604 5.5684 13.9961 5.98261 13.9961C6.39683 13.9961 6.73261 13.6604 6.73261 13.2461V9.6876H11.2354C11.6496 9.6876 11.9854 9.35181 11.9854 8.9376H11.2354C11.9854 8.9376 11.9854 8.93726 11.9854 8.9369L11.9854 8.93615L11.9854 8.93443L11.9854 8.93022L11.9852 8.9187C11.9851 8.90967 11.9849 8.89794 11.9844 8.88367C11.9836 8.85513 11.982 8.81633 11.979 8.76847C11.973 8.6729 11.9613 8.54033 11.9385 8.38053C11.8931 8.06276 11.8025 7.62721 11.619 7.15684C11.293 6.32085 10.6597 5.34871 9.46439 4.77264V3.45438L10.268 0.981821C10.3422 0.753489 10.3026 0.503428 10.1615 0.309186C10.0204 0.114944 9.79482 0 9.55473 0H2.4119ZM10.3748 8.1876H1.59183C1.62924 8.03598 1.67901 7.87133 1.74509 7.70187C2.00593 7.03308 2.50264 6.3236 3.49485 5.9844C3.79831 5.88065 4.00223 5.59543 4.00223 5.27472V3.33556C4.00223 3.25683 3.98984 3.1786 3.9655 3.10374L3.44427 1.5H8.52235L8.00112 3.10374C7.97679 3.1786 7.96439 3.25683 7.96439 3.33556V5.27472C7.96439 5.59543 8.16831 5.88065 8.47178 5.9844C9.46399 6.3236 9.96069 7.03308 10.2215 7.70187C10.2876 7.87133 10.3374 8.03598 10.3748 8.1876Z"
@@ -88899,15 +88886,15 @@ function Pin({ className, alt = "Pin" }) {
 }
 
 // src/components/Svg/PinSolid.tsx
-var import_react42 = __toModule(require_react());
+var import_react44 = __toModule(require_react());
 var import_classnames24 = __toModule(require_classnames());
 function PinSolid({ className, alt = "Pin" }) {
-  return /* @__PURE__ */ import_react42.default.createElement("svg", {
+  return /* @__PURE__ */ import_react44.default.createElement("svg", {
     className: (0, import_classnames24.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react42.default.createElement("title", null, alt), /* @__PURE__ */ import_react42.default.createElement("path", {
+  }, /* @__PURE__ */ import_react44.default.createElement("title", null, alt), /* @__PURE__ */ import_react44.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M2.3356 1.33475L2.8351 2.74084V4.79647C0.85057 5.41718 0.214343 7.45042 0.0103719 8.69031C-0.0792778 9.23527 0.36184 9.6838 0.914125 9.6838H5.24867V13.2466C5.24867 13.6609 5.58446 13.9966 5.99867 13.9966C6.41288 13.9966 6.74867 13.6609 6.74867 13.2466V9.6838H11.0848C11.6371 9.6838 12.0783 9.23527 11.9886 8.69031C11.7846 7.45042 11.1484 5.41718 9.16387 4.79647V2.74084L9.66338 1.33475C9.89463 0.683783 9.41189 0 8.72107 0H3.2779C2.58709 0 2.10435 0.683783 2.3356 1.33475Z"
@@ -88915,18 +88902,18 @@ function PinSolid({ className, alt = "Pin" }) {
 }
 
 // src/components/Svg/MovementArrow.tsx
-var import_react43 = __toModule(require_react());
+var import_react45 = __toModule(require_react());
 var import_classnames25 = __toModule(require_classnames());
 function MovementArrow({
   className,
   alt = "Movement Arrow"
 }) {
-  return /* @__PURE__ */ import_react43.default.createElement("svg", {
+  return /* @__PURE__ */ import_react45.default.createElement("svg", {
     className: (0, import_classnames25.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
     width: "100%",
     viewBox: "0 0 8 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react43.default.createElement("title", null, alt), /* @__PURE__ */ import_react43.default.createElement("path", {
+  }, /* @__PURE__ */ import_react45.default.createElement("title", null, alt), /* @__PURE__ */ import_react45.default.createElement("path", {
     d: "M3.07553 1.24173C3.41575 0.416723 4.58425 0.416724 4.92447 1.24173L7.76051 8.11875C8.03196 8.77699 7.54805 9.5 6.83604 9.5H1.16396C0.451948 9.5 -0.0319641 8.77699 0.239489 8.11875L3.07553 1.24173Z"
   }));
 }
@@ -89124,16 +89111,16 @@ function PriceChartUI(props) {
       }
     }
   };
-  return /* @__PURE__ */ import_react44.default.createElement("div", null, /* @__PURE__ */ import_react44.default.createElement("div", {
+  return /* @__PURE__ */ import_react46.default.createElement("div", null, /* @__PURE__ */ import_react46.default.createElement("div", {
     className: "flex flex-col justify-start border-t-[1px] border-gray-100"
-  }, /* @__PURE__ */ import_react44.default.createElement("div", {
+  }, /* @__PURE__ */ import_react46.default.createElement("div", {
     className: "flex items-center justify-start h-10 px-3"
-  }, /* @__PURE__ */ import_react44.default.createElement("span", {
+  }, /* @__PURE__ */ import_react46.default.createElement("span", {
     className: "text-sm block font-semibold w-28 mr-1 cursor-pointer",
     onClick: togglePriceChart
-  }, "Price Reaction"), /* @__PURE__ */ import_react44.default.createElement("span", {
+  }, "Price Reaction"), /* @__PURE__ */ import_react46.default.createElement("span", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react44.default.createElement("span", {
+  }), /* @__PURE__ */ import_react46.default.createElement("span", {
     className: (0, import_classnames26.default)("text-sm flex cursor-pointer mr-4", {
       "text-green-500": absolutePriceChange > 0,
       "hover:text-green-600": absolutePriceChange > 0,
@@ -89143,9 +89130,9 @@ function PriceChartUI(props) {
       "active:text-red-800": absolutePriceChange < 0
     }),
     onClick: togglePriceChart
-  }, `$${price} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, /* @__PURE__ */ import_react44.default.createElement(MovementArrow, {
+  }, `$${price} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, /* @__PURE__ */ import_react46.default.createElement(MovementArrow, {
     className: (0, import_classnames26.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
-  })), /* @__PURE__ */ import_react44.default.createElement("div", {
+  })), /* @__PURE__ */ import_react46.default.createElement("div", {
     className: (0, import_classnames26.default)("flex mr-1 cursor-pointer", {
       "text-blue-600": pinned,
       "text-gray-400": !pinned,
@@ -89159,11 +89146,11 @@ function PriceChartUI(props) {
       e.stopPropagation();
       togglePin();
     }
-  }, pinned ? /* @__PURE__ */ import_react44.default.createElement(PinSolid, {
+  }, pinned ? /* @__PURE__ */ import_react46.default.createElement(PinSolid, {
     className: "w-[12px]"
-  }) : /* @__PURE__ */ import_react44.default.createElement(Pin, {
+  }) : /* @__PURE__ */ import_react46.default.createElement(Pin, {
     className: "w-[12px]"
-  })), /* @__PURE__ */ import_react44.default.createElement(ExpandButton, {
+  })), /* @__PURE__ */ import_react46.default.createElement(ExpandButton, {
     className: (0, import_classnames26.default)("ml-2", {
       "hover:bg-gray-200": !priceChartExpanded,
       "hover:bg-blue-700": priceChartExpanded,
@@ -89172,9 +89159,9 @@ function PriceChartUI(props) {
     }),
     onClick: togglePriceChart,
     expanded: priceChartExpanded
-  })), priceChartExpanded && /* @__PURE__ */ import_react44.default.createElement("div", {
+  })), priceChartExpanded && /* @__PURE__ */ import_react46.default.createElement("div", {
     className: "overflow-hidden relative"
-  }, /* @__PURE__ */ import_react44.default.createElement(import_highcharts_react_official.default, {
+  }, /* @__PURE__ */ import_react46.default.createElement(import_highcharts_react_official.default, {
     options,
     highcharts: import_highstock.default,
     constructorType: "stockChart"
@@ -89183,12 +89170,12 @@ function PriceChartUI(props) {
 function PriceChart(props) {
   var _a;
   const { headerExpanded, togglePriceChart, priceChartExpanded } = props;
-  const [pinned, setPinState] = (0, import_react44.useState)(false);
-  const [currentPrice, setPrice] = (0, import_react44.useState)((_a = chartData[chartData.length - 1]) == null ? void 0 : _a.y);
-  const togglePin = (0, import_react44.useCallback)(() => setPinState(!pinned), [pinned]);
+  const [pinned, setPinState] = (0, import_react46.useState)(false);
+  const [currentPrice, setPrice] = (0, import_react46.useState)((_a = chartData[chartData.length - 1]) == null ? void 0 : _a.y);
+  const togglePin = (0, import_react46.useCallback)(() => setPinState(!pinned), [pinned]);
   if (!pinned && !headerExpanded || typeof currentPrice !== "number")
     return null;
-  return /* @__PURE__ */ import_react44.default.createElement(PriceChartUI, {
+  return /* @__PURE__ */ import_react46.default.createElement(PriceChartUI, {
     togglePriceChart,
     togglePin,
     currentPrice: currentPrice || 0,
@@ -89199,7 +89186,7 @@ function PriceChart(props) {
 }
 
 // src/modules/Transcript/KeyMentions/index.tsx
-var import_react45 = __toModule(require_react());
+var import_react47 = __toModule(require_react());
 var import_classnames27 = __toModule(require_classnames());
 
 // src/modules/Transcript/Header/index.tsx
@@ -89220,51 +89207,46 @@ function HeaderUI(props) {
     toggleKeyMentions,
     togglePriceChart
   } = props;
-  return /* @__PURE__ */ import_react46.default.createElement("div", {
+  return /* @__PURE__ */ import_react48.default.createElement("div", {
     ref: headerRef,
     className: (0, import_classnames28.default)("bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all flex flex-col", {
       "shadow-3xl": !headerExpanded,
       "shadow-xl": headerExpanded
     }, "transcript__header"),
     style: { maxHeight: containerHeight > 0 ? containerHeight - 53 : "calc(100% - 53px)" }
-  }, /* @__PURE__ */ import_react46.default.createElement("div", {
+  }, /* @__PURE__ */ import_react48.default.createElement("div", {
     className: "flex items-center px-3"
-  }, onBack && /* @__PURE__ */ import_react46.default.createElement(Button, {
+  }, onBack && /* @__PURE__ */ import_react48.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react46.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react48.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "Events"), /* @__PURE__ */ import_react46.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react46.default.createElement(MagnifyingGlass, null),
+  }), "Events"), /* @__PURE__ */ import_react48.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react48.default.createElement(MagnifyingGlass, null),
     name: "search",
-    className: "mr-3",
     placeholder: "Search Transcripts...",
     value: searchTerm,
     onChange: onChangeSearchTerm
-  }), /* @__PURE__ */ import_react46.default.createElement("div", {
-    className: "items-center flex"
-  }, /* @__PURE__ */ import_react46.default.createElement(Gear, {
-    className: "w-5"
-  }))), (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => {
-    return /* @__PURE__ */ import_react46.default.createElement("div", {
+  }), false), (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => {
+    return /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "flex flex-row p-3 items-center"
-    }, /* @__PURE__ */ import_react46.default.createElement("div", {
+    }, /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "animate-pulse flex-1"
-    }, /* @__PURE__ */ import_react46.default.createElement("div", {
+    }, /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react46.default.createElement("div", {
+    }, /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "rounded-md bg-gray-500 h-[10px] m-1 w-7"
-    }), /* @__PURE__ */ import_react46.default.createElement("div", {
+    }), /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "rounded-md bg-gray-400 h-[10px] m-1 w-10"
-    }), /* @__PURE__ */ import_react46.default.createElement("div", {
+    }), /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    }), /* @__PURE__ */ import_react46.default.createElement("div", {
+    }), /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20"
-    })), /* @__PURE__ */ import_react46.default.createElement("div", {
+    })), /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react46.default.createElement("div", {
+    }, /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 flex-1"
-    }))), /* @__PURE__ */ import_react46.default.createElement(ExpandButton, {
+    }))), /* @__PURE__ */ import_react48.default.createElement(ExpandButton, {
       className: "ml-2 mt-2 self-start",
       onClick: toggleHeader,
       expanded: headerExpanded
@@ -89275,27 +89257,27 @@ function HeaderUI(props) {
     const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
     const eventDate = ((_a = data.events[0]) == null ? void 0 : _a.eventDate) && import_luxon.DateTime.fromISO(data.events[0].eventDate);
     const hasEventExtras = ((_b = event == null ? void 0 : event.dialInPhoneNumbers) == null ? void 0 : _b.length) || (event == null ? void 0 : event.dialInPin) || ((_c = event == null ? void 0 : event.webcastUrls) == null ? void 0 : _c.length) || (event == null ? void 0 : event.audioRecordingUrl);
-    return /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, /* @__PURE__ */ import_react46.default.createElement("div", {
+    return /* @__PURE__ */ import_react48.default.createElement(import_react48.default.Fragment, null, /* @__PURE__ */ import_react48.default.createElement("div", {
       className: (0, import_classnames28.default)("flex flex-row p-3 items-center", {
         "cursor-pointer": hasEventExtras,
         group: hasEventExtras
       }),
       onClick: hasEventExtras ? toggleHeader : void 0
-    }, /* @__PURE__ */ import_react46.default.createElement("div", {
+    }, /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0"
-    }, /* @__PURE__ */ import_react46.default.createElement("div", {
+    }, /* @__PURE__ */ import_react48.default.createElement("div", {
       className: "text-xs"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react46.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react48.default.createElement("span", {
       className: "pr-1 font-semibold"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_d = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _d.shortName) && /* @__PURE__ */ import_react46.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_d = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _d.shortName) && /* @__PURE__ */ import_react48.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
-    }, (_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react46.default.createElement("span", {
+    }, (_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName), (event == null ? void 0 : event.eventType) && /* @__PURE__ */ import_react48.default.createElement("span", {
       className: "text-gray-300 group-hover:text-gray-400 capitalize"
-    }, " ", "\u2022 ", event == null ? void 0 : event.eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react46.default.createElement("span", {
+    }, " ", "\u2022 ", event == null ? void 0 : event.eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react48.default.createElement("span", {
       className: "text-gray-300 group-hover:text-gray-400"
-    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react46.default.createElement("div", {
+    }, " ", "\u2022 ", eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react48.default.createElement("div", {
       className: headerExpanded ? "text-sm" : "text-sm truncate whitespace-normal line-clamp-1"
-    }, event == null ? void 0 : event.title)), hasEventExtras && /* @__PURE__ */ import_react46.default.createElement(ExpandButton, {
+    }, event == null ? void 0 : event.title)), hasEventExtras && /* @__PURE__ */ import_react48.default.createElement(ExpandButton, {
       className: (0, import_classnames28.default)("ml-2 mt-2 self-start", {
         "group-hover:bg-gray-200": !headerExpanded,
         "group-hover:bg-blue-700": headerExpanded,
@@ -89304,11 +89286,11 @@ function HeaderUI(props) {
       }),
       onClick: toggleHeader,
       expanded: headerExpanded
-    })), headerExpanded && event && /* @__PURE__ */ import_react46.default.createElement(EventDetails, {
+    })), headerExpanded && event && /* @__PURE__ */ import_react48.default.createElement(EventDetails, {
       event,
       eventDetailsExpanded,
       toggleEventDetails
-    }), false, /* @__PURE__ */ import_react46.default.createElement(PriceChart, {
+    }), false, /* @__PURE__ */ import_react48.default.createElement(PriceChart, {
       headerExpanded,
       priceChartExpanded,
       togglePriceChart
@@ -89317,33 +89299,33 @@ function HeaderUI(props) {
 }
 function Header(props) {
   const { eventQuery, onBack, searchTerm, onChangeSearchTerm, containerHeight } = props;
-  const [headerExpanded, setHeaderState] = (0, import_react46.useState)(false);
-  const [priceChartExpanded, setPriceChartState] = (0, import_react46.useState)(false);
-  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react46.useState)(false);
-  const [keyMentionsExpanded, setKeyMentionsState] = (0, import_react46.useState)(false);
-  const toggleHeader = (0, import_react46.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
-  const toggleKeyMentions = (0, import_react46.useCallback)(() => {
+  const [headerExpanded, setHeaderState] = (0, import_react48.useState)(false);
+  const [priceChartExpanded, setPriceChartState] = (0, import_react48.useState)(false);
+  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react48.useState)(false);
+  const [keyMentionsExpanded, setKeyMentionsState] = (0, import_react48.useState)(false);
+  const toggleHeader = (0, import_react48.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
+  const toggleKeyMentions = (0, import_react48.useCallback)(() => {
     setKeyMentionsState(!keyMentionsExpanded);
     setPriceChartState(false);
     setEventDetailsState(false);
   }, [keyMentionsExpanded]);
-  const toggleEventDetails = (0, import_react46.useCallback)(() => {
+  const toggleEventDetails = (0, import_react48.useCallback)(() => {
     setEventDetailsState(!eventDetailsExpanded);
     setPriceChartState(false);
     setKeyMentionsState(false);
   }, [eventDetailsExpanded]);
-  const togglePriceChart = (0, import_react46.useCallback)(() => {
+  const togglePriceChart = (0, import_react48.useCallback)(() => {
     setPriceChartState(!priceChartExpanded);
     setEventDetailsState(false);
     setKeyMentionsState(false);
   }, [priceChartExpanded]);
-  const headerRef = (0, import_react46.useRef)(null);
-  useOutsideClickHandler([headerRef], (0, import_react46.useCallback)(() => {
+  const headerRef = (0, import_react48.useRef)(null);
+  useOutsideClickHandler([headerRef], (0, import_react48.useCallback)(() => {
     if (headerExpanded) {
       toggleHeader();
     }
   }, [headerExpanded]));
-  return /* @__PURE__ */ import_react46.default.createElement(HeaderUI, {
+  return /* @__PURE__ */ import_react48.default.createElement(HeaderUI, {
     containerHeight,
     eventDetailsExpanded,
     eventQuery,
@@ -89383,82 +89365,82 @@ var TranscriptUI = (props) => {
     showSpeakers,
     speakerTurns
   } = props;
-  return /* @__PURE__ */ import_react47.default.createElement("div", {
+  return /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "h-full flex flex-col transcript bg-gray-50",
     ref: containerRef
-  }, /* @__PURE__ */ import_react47.default.createElement("div", null, /* @__PURE__ */ import_react47.default.createElement(Header, {
+  }, /* @__PURE__ */ import_react49.default.createElement("div", null, /* @__PURE__ */ import_react49.default.createElement(Header, {
     containerHeight,
     eventQuery,
     onBack,
     searchTerm,
     onChangeSearchTerm
-  }), searchTerm && /* @__PURE__ */ import_react47.default.createElement("div", {
+  }), searchTerm && /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow"
-  }, /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "text-sm"
-  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react47.default.createElement("span", {
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react49.default.createElement("span", {
     className: "font-semibold"
-  }, searchTerm), '"'), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, searchTerm), '"'), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
     onClick: nextMatch
-  }, /* @__PURE__ */ import_react47.default.createElement(Chevron, null)), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, /* @__PURE__ */ import_react49.default.createElement(Chevron, null)), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
-  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "w-2.5 cursor-pointer rotate-180 hover:text-gray-600",
     onClick: prevMatch
-  }, /* @__PURE__ */ import_react47.default.createElement(Chevron, null)))), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, /* @__PURE__ */ import_react49.default.createElement(Chevron, null)))), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "overflow-y-scroll flex-1 bg-gray-50",
     ref: scrollRef
-  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react49.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10"
-  }), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14"
-  }), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react47.default.createElement("div", {
+  }), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
   })))).with({ status: "empty" }, ({ data }) => {
-    return data.events[0] && /* @__PURE__ */ import_react47.default.createElement(EmptyMessage, {
+    return data.events[0] && /* @__PURE__ */ import_react49.default.createElement(EmptyMessage, {
       event: data.events[0]
     });
   }).with({ status: "success" }, () => {
     return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
-      return /* @__PURE__ */ import_react47.default.createElement("div", {
+      return /* @__PURE__ */ import_react49.default.createElement("div", {
         key: `speaker-turn-${id}`
-      }, showSpeakers && /* @__PURE__ */ import_react47.default.createElement("div", {
+      }, showSpeakers && /* @__PURE__ */ import_react49.default.createElement("div", {
         className: "p-3 pb-1 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50"
-      }, /* @__PURE__ */ import_react47.default.createElement("span", {
+      }, /* @__PURE__ */ import_react49.default.createElement("span", {
         className: "font-semibold"
-      }, speaker.name), speaker.title && /* @__PURE__ */ import_react47.default.createElement("span", {
+      }, speaker.name), speaker.title && /* @__PURE__ */ import_react49.default.createElement("span", {
         className: "text-gray-400"
       }, ", ", speaker.title)), paragraphs.map(({ chunks, paragraph }) => {
         const { id: id2, timestamp } = paragraph;
-        return /* @__PURE__ */ import_react47.default.createElement("div", {
+        return /* @__PURE__ */ import_react49.default.createElement("div", {
           key: id2,
           id: `paragraph-${id2}`,
           className: "relative p-3 pb-4",
           onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
           ref: id2 === currentParagraph ? currentParagraphRef : void 0
-        }, timestamp && /* @__PURE__ */ import_react47.default.createElement("div", {
+        }, timestamp && /* @__PURE__ */ import_react49.default.createElement("div", {
           className: "pb-2 font-semibold text-sm"
-        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react47.default.createElement("div", {
+        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react49.default.createElement("div", {
           className: "text-sm"
-        }, chunks.map(({ highlight, id: id3, text }) => highlight ? /* @__PURE__ */ import_react47.default.createElement("mark", {
+        }, chunks.map(({ highlight, id: id3, text }) => highlight ? /* @__PURE__ */ import_react49.default.createElement("mark", {
           ref: id3 === currentMatch ? currentMatchRef : void 0,
           className: (0, import_classnames29.default)({
             "bg-yellow-300": id3 === currentMatch
           }),
           key: id3
-        }, text) : /* @__PURE__ */ import_react47.default.createElement("span", {
+        }, text) : /* @__PURE__ */ import_react49.default.createElement("span", {
           key: id3
-        }, text))), id2 === currentParagraph && /* @__PURE__ */ import_react47.default.createElement("div", {
+        }, text))), id2 === currentParagraph && /* @__PURE__ */ import_react49.default.createElement("div", {
           className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
         }));
       }));
@@ -89466,7 +89448,7 @@ var TranscriptUI = (props) => {
   }).otherwise(() => null)), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, ({ data: { events } }) => {
     const event = events[0];
     const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
-    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react47.default.createElement(Playbar, {
+    return ((event == null ? void 0 : event.audioRecordingUrl) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react49.default.createElement(Playbar, {
       id: event == null ? void 0 : event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl || "",
       offset: ((event == null ? void 0 : event.audioRecordingOffsetMs) || 0) / 1e3,
@@ -89589,7 +89571,7 @@ function useEventData(eventId, eventUpdateQuery) {
       eventId
     }
   });
-  (0, import_react47.useEffect)(() => {
+  (0, import_react49.useEffect)(() => {
     var _a2, _b2;
     if ((_b2 = (_a2 = eventUpdateQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.hasTranscript) {
       eventQuery.refetch();
@@ -89626,8 +89608,8 @@ function useLatestTranscripts(eventId, eventQuery) {
     }
   });
   useInterval(() => latestParagraphsQuery.refetch(), ((_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.isLive) ? 2e3 : null);
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react47.useState)(new Map());
-  (0, import_react47.useEffect)(() => {
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react49.useState)(new Map());
+  (0, import_react49.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c2;
@@ -89639,7 +89621,7 @@ function useLatestTranscripts(eventId, eventQuery) {
       });
     }
   }, [latestParagraphsQuery.state.data]);
-  return (0, import_react47.useMemo)(() => {
+  return (0, import_react49.useMemo)(() => {
     var _a2, _b2, _c2;
     const speakerTurns = ((_c2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c2.sections.flatMap((section) => section.speakerTurns)) || [];
     const originalParagraphIds = new Set(speakerTurns.flatMap((s3) => s3.paragraphs.map((p2) => p2.id)));
@@ -89662,10 +89644,10 @@ function useLatestTranscripts(eventId, eventQuery) {
   }, [(_d = (_c = eventQuery.state.data) == null ? void 0 : _c.events[0]) == null ? void 0 : _d.transcripts, latestParagraphs]);
 }
 function useAudioSync(speakerTurns, eventQuery, audioPlayer) {
-  const [currentParagraph, setCurrentParagraph] = (0, import_react47.useState)(null);
+  const [currentParagraph, setCurrentParagraph] = (0, import_react49.useState)(null);
   const [scrollRef, currentParagraphRef] = useAutoScroll();
-  const paragraphs = (0, import_react47.useMemo)(() => speakerTurns.flatMap((s3) => s3.paragraphs), [speakerTurns]);
-  (0, import_react47.useEffect)(() => {
+  const paragraphs = (0, import_react49.useMemo)(() => speakerTurns.flatMap((s3) => s3.paragraphs), [speakerTurns]);
+  (0, import_react49.useEffect)(() => {
     var _a, _b, _c, _d;
     const eventId = (_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.id;
     let paragraph = eventId && audioPlayer.id && audioPlayer.id !== eventId ? null : [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3);
@@ -89682,14 +89664,14 @@ function useSearchState(speakerTurns) {
   const { state, handlers } = useChangeHandlers({
     searchTerm: ""
   });
-  const [currentMatch, setCurrentMatch] = (0, import_react47.useState)(null);
+  const [currentMatch, setCurrentMatch] = (0, import_react49.useState)(null);
   const [scrollRef, currentMatchRef] = useAutoScroll({
     pauseOnUserScroll: false,
     block: "center",
     inline: "center",
     behavior: "auto"
   });
-  const speakerTurnsWithMatches = (0, import_react47.useMemo)(() => speakerTurns.map((s3) => __spreadProps(__spreadValues({}, s3), {
+  const speakerTurnsWithMatches = (0, import_react49.useMemo)(() => speakerTurns.map((s3) => __spreadProps(__spreadValues({}, s3), {
     paragraphsWithMatches: s3.paragraphs.map((paragraph) => {
       if (!state.searchTerm) {
         return {
@@ -89718,18 +89700,18 @@ function useSearchState(speakerTurns) {
       };
     })
   })), [speakerTurns, state.searchTerm]);
-  const matches = (0, import_react47.useMemo)(() => speakerTurnsWithMatches.flatMap((s3) => s3.paragraphsWithMatches).flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
-  (0, import_react47.useEffect)(() => {
+  const matches = (0, import_react49.useMemo)(() => speakerTurnsWithMatches.flatMap((s3) => s3.paragraphsWithMatches).flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
+  (0, import_react49.useEffect)(() => {
     var _a;
     setCurrentMatch(((_a = matches[0]) == null ? void 0 : _a.id) || null);
   }, [state.searchTerm]);
-  const matchIndex = (0, import_react47.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
-  const nextMatch = (0, import_react47.useCallback)(() => {
+  const matchIndex = (0, import_react49.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react49.useCallback)(() => {
     const match9 = matches[(matchIndex + 1) % matches.length];
     if (match9)
       setCurrentMatch(match9.id);
   }, [matches, matchIndex]);
-  const prevMatch = (0, import_react47.useCallback)(() => {
+  const prevMatch = (0, import_react49.useCallback)(() => {
     const match9 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
     if (match9)
       setCurrentMatch(match9.id);
@@ -89756,14 +89738,14 @@ var Transcript = (props) => {
   const speakerTurns = useLatestTranscripts(eventId, eventQuery);
   const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(speakerTurns, eventQuery, audioPlayer);
   const searchState = useSearchState(speakerTurns);
-  const scrollRef = (0, import_react47.useCallback)((ref) => {
+  const scrollRef = (0, import_react49.useCallback)((ref) => {
     autoScrollRef(ref);
     searchState.scrollRef(ref);
   }, [autoScrollRef, searchState.scrollRef]);
   const onClickTranscript = (paragraph) => {
     audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
   };
-  const onClickBack = (0, import_react47.useCallback)((event) => {
+  const onClickBack = (0, import_react49.useCallback)((event) => {
     if (!audioPlayer.playing(null)) {
       audioPlayer.clear();
     }
@@ -89771,7 +89753,7 @@ var Transcript = (props) => {
   }, [onBack]);
   const { height: containerHeight, ref: containerRef } = useElementSize();
   useAutoTrack("View", "Event", { eventId }, [eventId]);
-  return /* @__PURE__ */ import_react47.default.createElement(TranscriptUI, {
+  return /* @__PURE__ */ import_react49.default.createElement(TranscriptUI, {
     containerRef,
     containerHeight,
     currentMatch: searchState.currentMatch,
@@ -89794,7 +89776,7 @@ var Transcript = (props) => {
 };
 
 // src/components/Tabs/index.tsx
-var import_react48 = __toModule(require_react());
+var import_react50 = __toModule(require_react());
 var import_classnames30 = __toModule(require_classnames());
 var import_ts_pattern7 = __toModule(require_lib());
 var Tabs = (props) => {
@@ -89814,13 +89796,13 @@ var Tabs = (props) => {
     tab__option: true,
     "tab__option--selected": val === value
   }, opStyles)).exhaustive();
-  return /* @__PURE__ */ import_react48.default.createElement("div", {
+  return /* @__PURE__ */ import_react50.default.createElement("div", {
     className: `flex tab relative ${className}`
-  }, options.map(({ value: opVal, label, className: opStyles = "" }) => /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, options.map(({ value: opVal, label, className: opStyles = "" }) => /* @__PURE__ */ import_react50.default.createElement("div", {
     key: `tab-option-${opVal}`,
     className: getClasses(opVal, opStyles),
     onClick: (event) => onChange && onChange(event, { value: opVal })
-  }, label, kind === "line" && /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, label, kind === "line" && /* @__PURE__ */ import_react50.default.createElement("div", {
     className: (0, import_classnames30.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": opVal === value,
       "-bottom-0.5": opVal !== value
@@ -89829,19 +89811,19 @@ var Tabs = (props) => {
 };
 
 // src/modules/EventList/FilterBy/index.tsx
-var import_react49 = __toModule(require_react());
+var import_react51 = __toModule(require_react());
 var import_classnames31 = __toModule(require_classnames());
 var FilterBy = (props) => {
   const { children, onChange, options = [], value = [] } = props;
-  return /* @__PURE__ */ import_react49.default.createElement("div", {
+  return /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow eventlist__filterby"
-  }, children || /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, children || /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "text-sm font-semibold"
-  }, "Filter By"), /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, "Filter By"), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex justify-end flex-1"
-  }, options.map((option) => /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, options.map((option) => /* @__PURE__ */ import_react51.default.createElement("div", {
     key: `filterby-option-${option.value}`,
-    className: (0, import_classnames31.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "rounded-md", "border", {
+    className: (0, import_classnames31.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "border", {
       "bg-blue-100": value == null ? void 0 : value.includes(option.value),
       "border-blue-300": value == null ? void 0 : value.includes(option.value),
       "border-gray-100": !(value == null ? void 0 : value.includes(option.value)),
@@ -89862,26 +89844,26 @@ var FilterBy = (props) => {
     onClick: (event) => onChange && onChange(event, {
       value: value.includes(option.value) ? value.filter((o2) => o2 !== option.value) : [...value, option.value]
     })
-  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react49.default.createElement(Check, {
+  }, option.label, (value == null ? void 0 : value.includes(option.value)) && /* @__PURE__ */ import_react51.default.createElement(Check, {
     className: "w-2 ml-1.5"
   })))));
 };
 
 // src/modules/EventList/PlayButton/index.tsx
-var import_react51 = __toModule(require_react());
+var import_react53 = __toModule(require_react());
 var import_classnames33 = __toModule(require_classnames());
 
 // src/components/Svg/Calendar.tsx
-var import_react50 = __toModule(require_react());
+var import_react52 = __toModule(require_react());
 var import_classnames32 = __toModule(require_classnames());
 function Calendar({ className, alt = "Calendar" }) {
-  return /* @__PURE__ */ import_react50.default.createElement("svg", {
+  return /* @__PURE__ */ import_react52.default.createElement("svg", {
     className: (0, import_classnames32.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react50.default.createElement("title", null, alt), /* @__PURE__ */ import_react50.default.createElement("path", {
+  }, /* @__PURE__ */ import_react52.default.createElement("title", null, alt), /* @__PURE__ */ import_react52.default.createElement("path", {
     d: "M6 5V1V5ZM14 5V1V5ZM5 9H15H5ZM3 19H17C17.5304 19 18.0391 18.7893 18.4142 18.4142C18.7893 18.0391 19 17.5304 19 17V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H3C2.46957 3 1.96086 3.21071 1.58579 3.58579C1.21071 3.96086 1 4.46957 1 5V17C1 17.5304 1.21071 18.0391 1.58579 18.4142C1.96086 18.7893 2.46957 19 3 19Z",
     strokeWidth: "2",
     strokeLinecap: "round",
@@ -89892,7 +89874,7 @@ function Calendar({ className, alt = "Calendar" }) {
 // src/modules/EventList/PlayButton/index.tsx
 function PlayButtonUI(props) {
   const { hasAudio, isPlaying, togglePlayback } = props;
-  return hasAudio ? /* @__PURE__ */ import_react51.default.createElement("div", {
+  return hasAudio ? /* @__PURE__ */ import_react53.default.createElement("div", {
     className: (0, import_classnames33.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm", {
       "hover:border-blue-500": !isPlaying,
       "active:border-blue-600": !isPlaying,
@@ -89909,13 +89891,13 @@ function PlayButtonUI(props) {
       "active:text-white": !isPlaying
     }),
     onClick: togglePlayback
-  }, isPlaying ? /* @__PURE__ */ import_react51.default.createElement(Pause, {
+  }, isPlaying ? /* @__PURE__ */ import_react53.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react51.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react53.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
-  })) : /* @__PURE__ */ import_react51.default.createElement("div", {
+  })) : /* @__PURE__ */ import_react53.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 group-hover:text-blue-300"
-  }, /* @__PURE__ */ import_react51.default.createElement(Calendar, {
+  }, /* @__PURE__ */ import_react53.default.createElement(Calendar, {
     className: "w-4"
   }));
 }
@@ -89924,7 +89906,7 @@ function PlayButton(props) {
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
-  const togglePlayback = (0, import_react51.useCallback)((event) => {
+  const togglePlayback = (0, import_react53.useCallback)((event) => {
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
@@ -89934,7 +89916,7 @@ function PlayButton(props) {
       void audioPlayer.play({ id, url, offset, metaData });
     }
   }, [isPlaying, id, url, offset]);
-  return /* @__PURE__ */ import_react51.default.createElement(PlayButtonUI, {
+  return /* @__PURE__ */ import_react53.default.createElement(PlayButtonUI, {
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
     togglePlayback
@@ -89964,46 +89946,46 @@ var EventListUI = (props) => {
     searchTerm
   } = props;
   if (event) {
-    return /* @__PURE__ */ import_react52.default.createElement(Transcript, {
+    return /* @__PURE__ */ import_react54.default.createElement(Transcript, {
       eventId: event.id,
       onBack: onBackFromTranscript
     });
   }
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react52.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react52.default.createElement("div", {
+  return /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "h-full flex flex-col eventlist"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react52.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react52.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react54.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react54.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onSearchChange,
-    placeholder: "Search Events & Transcripts",
+    placeholder: "Events & Transcripts...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react52.default.createElement("div", {
+  }), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react52.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react54.default.createElement(CompanyFilterButton, {
     onChange: onCompanyChange,
     value: company
-  })))), /* @__PURE__ */ import_react52.default.createElement("div", {
+  })), false)), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "sticky top-0 px-3 pt-3 pb-2 z-10 eventlist__tabs"
-  }, /* @__PURE__ */ import_react52.default.createElement(FilterBy, {
+  }, /* @__PURE__ */ import_react54.default.createElement(FilterBy, {
     onChange: onSelectFilterBy,
     options: [
       { value: 0, label: "Transcripts" },
       { value: 1, label: "Earnings" }
     ],
     value: filterByTypes
-  }, /* @__PURE__ */ import_react52.default.createElement(Tabs, {
+  }, /* @__PURE__ */ import_react54.default.createElement(Tabs, {
     className: "ml-1",
     kind: "line",
     onChange: onSelectListType,
@@ -90016,34 +89998,34 @@ var EventListUI = (props) => {
       { value: EventView.Recent, label: "Recent", className: "h-9 items-center" }
     ],
     value: listType
-  }))), /* @__PURE__ */ import_react52.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern8.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react52.default.createElement("ul", {
+  }, (0, import_ts_pattern8.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react54.default.createElement("ul", {
     className: "w-full EventList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react52.default.createElement("li", {
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react54.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "rounded-full bg-gray-300 w-9 h-9"
-  }), /* @__PURE__ */ import_react52.default.createElement("div", {
+  }), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "rounded-full bg-gray-500 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react52.default.createElement("div", {
+  }), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "rounded-full bg-gray-400 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react52.default.createElement("div", {
+  })), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react52.default.createElement("div", {
+  }), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react52.default.createElement("div", {
+  }), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react52.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react54.default.createElement("ul", {
     className: "w-full"
   }, events.map((event2) => {
     var _a, _b;
@@ -90053,22 +90035,22 @@ var EventListUI = (props) => {
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== eventDate.toFormat("MM/dd/yyyy")) {
       prevEventDate = eventDate;
-      divider = /* @__PURE__ */ import_react52.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react54.default.createElement("li", {
         className: "sticky top-[56px] px-3"
-      }, /* @__PURE__ */ import_react52.default.createElement("div", {
+      }, /* @__PURE__ */ import_react54.default.createElement("div", {
         className: "px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold"
-      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react52.default.createElement("div", {
+      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react54.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       })));
     }
-    return /* @__PURE__ */ import_react52.default.createElement(import_react52.Fragment, {
+    return /* @__PURE__ */ import_react54.default.createElement(import_react54.Fragment, {
       key: event2.id
-    }, divider, /* @__PURE__ */ import_react52.default.createElement("li", {
-      className: "group h-12 text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
+    }, divider, /* @__PURE__ */ import_react54.default.createElement("li", {
+      className: "group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
       onClick: (e) => onSelectEvent == null ? void 0 : onSelectEvent(e, { value: event2 })
-    }, /* @__PURE__ */ import_react52.default.createElement(Tooltip, {
+    }, /* @__PURE__ */ import_react54.default.createElement(Tooltip, {
       className: "h-12 flex flex-row",
-      content: /* @__PURE__ */ import_react52.default.createElement("div", {
+      content: /* @__PURE__ */ import_react54.default.createElement("div", {
         className: "max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9"
       }, prettyLineBreak(event2.title)),
       grow: "up-right",
@@ -90076,11 +90058,11 @@ var EventListUI = (props) => {
       position: "top-left",
       yOffset: 4,
       hideOnDocumentScroll: true
-    }, /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "flex items-center justify-center"
-    }, /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "flex items-center justify-center w-8 h-8"
-    }, /* @__PURE__ */ import_react52.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react54.default.createElement(PlayButton, {
       metaData: {
         quote: primaryQuote,
         eventType: event2.eventType
@@ -90088,30 +90070,30 @@ var EventListUI = (props) => {
       id: event2.id,
       url: event2.isLive ? `https://storage.media.aiera.com/${event2.id}` : event2.audioRecordingUrl,
       offset: audioOffset || 0
-    }))), /* @__PURE__ */ import_react52.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
-    }, /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "flex items-end"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) ? /* @__PURE__ */ import_react52.default.createElement(import_react52.default.Fragment, null, /* @__PURE__ */ import_react52.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) ? /* @__PURE__ */ import_react54.default.createElement(import_react54.default.Fragment, null, /* @__PURE__ */ import_react54.default.createElement("span", {
       className: "leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react52.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react54.default.createElement("span", {
       className: "leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"
-    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)) : /* @__PURE__ */ import_react52.default.createElement("span", {
+    }, (_b = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _b.shortName)) : /* @__PURE__ */ import_react54.default.createElement("span", {
       className: "leading-none text-sm text-black truncate font-bold"
-    }, event2.title)), /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, event2.title)), /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black"
-    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, event2.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event2.isLive ? /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, event2.isLive ? /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 font-semibold bg-red-50 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
-    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black"
-    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react52.default.createElement("div", {
+    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react54.default.createElement("div", {
       className: "leading-none mt-1 text-gray-300 group-hover:text-gray-500"
     }, eventDate.toFormat("MMM dd, yyyy"))))));
-  }))).exhaustive(), /* @__PURE__ */ import_react52.default.createElement("div", {
+  }))).exhaustive(), /* @__PURE__ */ import_react54.default.createElement("div", {
     className: "flex-1"
-  })))), /* @__PURE__ */ import_react52.default.createElement(Playbar, {
+  })))), /* @__PURE__ */ import_react54.default.createElement(Playbar, {
     onClickCalendar: onSelectEventById
   }));
 };
@@ -90134,7 +90116,7 @@ var EventList = (_props) => {
       }
     }
   }), "in");
-  const onSelectEvent = (0, import_react52.useCallback)((event, change) => {
+  const onSelectEvent = (0, import_react54.useCallback)((event, change) => {
     var _a2;
     const primaryQuote = getPrimaryQuote((_a2 = change.value) == null ? void 0 : _a2.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
@@ -90143,7 +90125,7 @@ var EventList = (_props) => {
       eventsQuery.refetch();
     }
   }, [state]);
-  const onSelectCompany = (0, import_react52.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react54.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
@@ -90195,8 +90177,8 @@ var EventList = (_props) => {
       }
     }
   });
-  useInterval((0, import_react52.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
-  const onSelectEventById = (0, import_react52.useCallback)((event, change) => {
+  useInterval((0, import_react54.useCallback)(() => eventsQuery.refetch({ requestPolicy: "cache-and-network" }), [eventsQuery.refetch]), 15e3);
+  const onSelectEventById = (0, import_react54.useCallback)((event, change) => {
     if (eventsQuery.status === "success") {
       const selectedEvent = eventsQuery.data.events.find((event2) => event2.id === change.value);
       if (selectedEvent) {
@@ -90206,7 +90188,7 @@ var EventList = (_props) => {
   }, [eventsQuery.status]);
   useAutoTrack("Click", "Event Filter By", { filterBy: state.filterByTypes }, [state.filterByTypes]);
   useAutoTrack("Submit", "Event Search", { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
-  return /* @__PURE__ */ import_react52.default.createElement(EventListUI, {
+  return /* @__PURE__ */ import_react54.default.createElement(EventListUI, {
     company: state.company,
     event: state.event,
     eventsQuery,
@@ -90228,17 +90210,17 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react53.default.createElement(import_react53.StrictMode, null, /* @__PURE__ */ import_react53.default.createElement(Provider, {
+  return /* @__PURE__ */ import_react55.default.createElement(import_react55.StrictMode, null, /* @__PURE__ */ import_react55.default.createElement(Provider, {
     config: { apiUrl: "https://api-dev.aiera.com/graphql", assetPath: "bundle/" }
-  }, /* @__PURE__ */ import_react53.default.createElement(Provider3, {
+  }, /* @__PURE__ */ import_react55.default.createElement(Provider3, {
     bus
-  }, /* @__PURE__ */ import_react53.default.createElement(Provider2, null, /* @__PURE__ */ import_react53.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react55.default.createElement(Provider2, null, /* @__PURE__ */ import_react55.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react53.default.createElement("div", {
+  }, /* @__PURE__ */ import_react55.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react53.default.createElement(EventList, null)))))));
+  }, /* @__PURE__ */ import_react55.default.createElement(EventList, null)))))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react53.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react55.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus
