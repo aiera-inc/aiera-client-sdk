@@ -2524,7 +2524,7 @@ var require_react_dom_development = __commonJS({
         var HostPortal = 4;
         var HostComponent = 5;
         var HostText = 6;
-        var Fragment2 = 7;
+        var Fragment3 = 7;
         var Mode = 8;
         var ContextConsumer = 9;
         var ContextProvider = 10;
@@ -11708,7 +11708,7 @@ var require_react_dom_development = __commonJS({
             }
           }
           function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-            if (current2 === null || current2.tag !== Fragment2) {
+            if (current2 === null || current2.tag !== Fragment3) {
               var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
               created.return = returnFiber;
               return created;
@@ -12076,7 +12076,7 @@ var require_react_dom_development = __commonJS({
             while (child !== null) {
               if (child.key === key) {
                 switch (child.tag) {
-                  case Fragment2: {
+                  case Fragment3: {
                     if (element.type === REACT_FRAGMENT_TYPE) {
                       deleteRemainingChildren(returnFiber, child.sibling);
                       var existing = useFiber(child, element.props.children);
@@ -15680,7 +15680,7 @@ var require_react_dom_development = __commonJS({
               var _resolvedProps2 = workInProgress2.elementType === type ? _unresolvedProps2 : resolveDefaultProps(type, _unresolvedProps2);
               return updateForwardRef(current2, workInProgress2, type, _resolvedProps2, renderLanes2);
             }
-            case Fragment2:
+            case Fragment3:
               return updateFragment(current2, workInProgress2, renderLanes2);
             case Mode:
               return updateMode(current2, workInProgress2, renderLanes2);
@@ -15847,7 +15847,7 @@ var require_react_dom_development = __commonJS({
             case SimpleMemoComponent:
             case FunctionComponent:
             case ForwardRef:
-            case Fragment2:
+            case Fragment3:
             case Mode:
             case Profiler:
             case ContextConsumer:
@@ -19551,7 +19551,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           return fiber;
         }
         function createFiberFromFragment(elements, mode, lanes, key) {
-          var fiber = createFiber(Fragment2, elements, key, mode);
+          var fiber = createFiber(Fragment3, elements, key, mode);
           fiber.lanes = lanes;
           return fiber;
         }
@@ -87167,6 +87167,14 @@ var TranscriptDocument = lib_default`
             sentences {
               id
               text
+              sentiment {
+                id
+                textual {
+                  id
+                  overThreshold
+                  basicSentiment
+                }
+              }
             }
           }
         }
@@ -89383,14 +89391,17 @@ var TranscriptUI = (props) => {
   }, searchTerm), '"'), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "flex-1"
   }), /* @__PURE__ */ import_react49.default.createElement("div", {
-    className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
-    onClick: nextMatch
+    className: "w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600",
+    onClick: prevMatch
   }, /* @__PURE__ */ import_react49.default.createElement(Chevron, null)), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
   }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react49.default.createElement("div", {
-    className: "w-2.5 cursor-pointer rotate-180 hover:text-gray-600",
-    onClick: prevMatch
-  }, /* @__PURE__ */ import_react49.default.createElement(Chevron, null)))), /* @__PURE__ */ import_react49.default.createElement("div", {
+    className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
+    onClick: nextMatch
+  }, /* @__PURE__ */ import_react49.default.createElement(Chevron, null)), /* @__PURE__ */ import_react49.default.createElement("div", {
+    className: "w-4 cursor-pointer text-gray-400 hover:text-gray-600",
+    onClick: (e) => onChangeSearchTerm(e, { value: "" })
+  }, /* @__PURE__ */ import_react49.default.createElement(Close, null)))), /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "overflow-y-scroll flex-1 bg-gray-50",
     ref: scrollRef
   }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react49.default.createElement("div", {
@@ -89420,7 +89431,7 @@ var TranscriptUI = (props) => {
         className: "font-semibold"
       }, speaker.name), speaker.title && /* @__PURE__ */ import_react49.default.createElement("span", {
         className: "text-gray-400"
-      }, ", ", speaker.title)), paragraphs.map(({ chunks, paragraph }) => {
+      }, ", ", speaker.title)), paragraphs.map(({ sentences, paragraph }) => {
         const { id: id2, timestamp } = paragraph;
         return /* @__PURE__ */ import_react49.default.createElement("div", {
           key: id2,
@@ -89432,15 +89443,21 @@ var TranscriptUI = (props) => {
           className: "pb-2 font-semibold text-sm"
         }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react49.default.createElement("div", {
           className: "text-sm"
-        }, chunks.map(({ highlight, id: id3, text }) => highlight ? /* @__PURE__ */ import_react49.default.createElement("mark", {
-          ref: id3 === currentMatch ? currentMatchRef : void 0,
+        }, sentences.map(({ chunks, id: sId }) => /* @__PURE__ */ import_react49.default.createElement(import_react49.Fragment, {
+          key: sId
+        }, chunks.map(({ highlight, id: sentenceId, text, textSentiment }) => highlight ? /* @__PURE__ */ import_react49.default.createElement("mark", {
+          ref: sentenceId === currentMatch ? currentMatchRef : void 0,
           className: (0, import_classnames29.default)({
-            "bg-yellow-300": id3 === currentMatch
+            "bg-yellow-300": sentenceId === currentMatch
           }),
-          key: id3
+          key: sentenceId
         }, text) : /* @__PURE__ */ import_react49.default.createElement("span", {
-          key: id3
-        }, text))), id2 === currentParagraph && /* @__PURE__ */ import_react49.default.createElement("div", {
+          key: sentenceId,
+          className: (0, import_classnames29.default)({
+            "text-green-600": textSentiment === "positive",
+            "text-red-600": textSentiment === "negative"
+          })
+        }, text)), "\xA0"))), id2 === currentParagraph && /* @__PURE__ */ import_react49.default.createElement("div", {
           className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
         }));
       }));
@@ -89558,6 +89575,14 @@ function useEventData(eventId, eventUpdateQuery) {
                                     sentences {
                                         id
                                         text
+                                        sentiment {
+                                            id
+                                            textual {
+                                                id
+                                                overThreshold
+                                                basicSentiment
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -89673,34 +89698,39 @@ function useSearchState(speakerTurns) {
   });
   const speakerTurnsWithMatches = (0, import_react49.useMemo)(() => speakerTurns.map((s3) => __spreadProps(__spreadValues({}, s3), {
     paragraphsWithMatches: s3.paragraphs.map((paragraph) => {
-      if (!state.searchTerm) {
-        return {
-          chunks: paragraph.sentences.map(({ text: text2 }, idx) => ({
-            highlight: false,
-            id: `${paragraph.id}-chunk-${idx}`,
-            text: text2
-          })),
-          paragraph
-        };
-      }
-      const text = paragraph.sentences.map((s4) => s4.text).join(" ");
-      const chunks = (0, import_highlight_words_core.findAll)({
-        autoEscape: true,
-        caseSensitive: false,
-        searchWords: [state.searchTerm],
-        textToHighlight: text
-      }).map(({ highlight, start, end }, idx) => ({
-        highlight,
-        id: `${paragraph.id}-chunk-${idx}`,
-        text: text.substr(start, end - start)
-      }));
       return {
-        chunks,
+        sentences: paragraph.sentences.map((sentence, idx) => {
+          var _a, _b, _c, _d, _e, _f;
+          return {
+            id: `primary-sentence-${sentence.id}-${idx}`,
+            chunks: state.searchTerm ? (0, import_highlight_words_core.findAll)({
+              autoEscape: true,
+              caseSensitive: false,
+              searchWords: [state.searchTerm],
+              textToHighlight: sentence.text
+            }).map(({ highlight, start, end }, index) => {
+              var _a2, _b2, _c2, _d2, _e2, _f2;
+              return {
+                highlight,
+                id: `${paragraph.id}-${sentence.id}-search-term-chunk-${index}`,
+                text: sentence.text.substr(start, end - start),
+                textSentiment: ((_b2 = (_a2 = sentence.sentiment) == null ? void 0 : _a2.textual) == null ? void 0 : _b2.overThreshold) && ((_d2 = (_c2 = sentence.sentiment) == null ? void 0 : _c2.textual) == null ? void 0 : _d2.basicSentiment) ? (_f2 = (_e2 = sentence.sentiment) == null ? void 0 : _e2.textual) == null ? void 0 : _f2.basicSentiment : void 0
+              };
+            }) : [
+              {
+                highlight: false,
+                id: `${paragraph.id}-${sentence.id}-sentence-chunk-${idx}`,
+                text: sentence.text,
+                textSentiment: ((_b = (_a = sentence.sentiment) == null ? void 0 : _a.textual) == null ? void 0 : _b.overThreshold) && ((_d = (_c = sentence.sentiment) == null ? void 0 : _c.textual) == null ? void 0 : _d.basicSentiment) ? (_f = (_e = sentence.sentiment) == null ? void 0 : _e.textual) == null ? void 0 : _f.basicSentiment : void 0
+              }
+            ]
+          };
+        }),
         paragraph
       };
     })
   })), [speakerTurns, state.searchTerm]);
-  const matches = (0, import_react49.useMemo)(() => speakerTurnsWithMatches.flatMap((s3) => s3.paragraphsWithMatches).flatMap((p2) => p2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
+  const matches = (0, import_react49.useMemo)(() => speakerTurnsWithMatches.flatMap((s3) => s3.paragraphsWithMatches).flatMap((p2) => p2.sentences).flatMap((s3) => s3.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
   (0, import_react49.useEffect)(() => {
     var _a;
     setCurrentMatch(((_a = matches[0]) == null ? void 0 : _a.id) || null);
