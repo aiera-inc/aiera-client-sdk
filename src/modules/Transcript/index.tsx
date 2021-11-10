@@ -10,6 +10,7 @@ import React, {
     useMemo,
     useEffect,
     useState,
+    Fragment,
 } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
@@ -34,6 +35,7 @@ import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
+import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
@@ -41,10 +43,14 @@ import './styles.css';
 
 type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
 type Paragraph = SpeakerTurn['paragraphs'][0];
-type Chunk = { text: string; id: string; highlight: boolean };
-interface ParagraphWithMatches {
-    paragraph: Paragraph;
+type Chunk = { text: string; id: string; highlight: boolean; textSentiment?: string };
+interface Sentence {
+    id: string;
     chunks: Chunk[];
+}
+interface ParagraphWithMatches {
+    sentences: Sentence[];
+    paragraph: Paragraph;
 }
 type SpeakerTurnsWithMatches = SpeakerTurn & { paragraphsWithMatches: ParagraphWithMatches[] };
 
@@ -110,14 +116,20 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             &quot;
                         </div>
                         <div className="flex-1" />
-                        <div className="w-2.5 mr-2 cursor-pointer hover:text-gray-600" onClick={nextMatch}>
+                        <div className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600" onClick={prevMatch}>
                             <Chevron />
                         </div>
                         <div className="min-w-[35px] mr-2 text-center">
                             {matchIndex + 1} / {matches.length}
                         </div>
-                        <div className="w-2.5 cursor-pointer rotate-180 hover:text-gray-600" onClick={prevMatch}>
+                        <div className="w-2.5 mr-2 cursor-pointer hover:text-gray-600" onClick={nextMatch}>
                             <Chevron />
+                        </div>
+                        <div
+                            className="w-4 cursor-pointer text-gray-400 hover:text-gray-600"
+                            onClick={(e) => onChangeSearchTerm(e, { value: '' })}
+                        >
+                            <Close />
                         </div>
                     </div>
                 )}
@@ -150,7 +162,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             {speaker.title && <span className="text-gray-400">, {speaker.title}</span>}
                                         </div>
                                     )}
-                                    {paragraphs.map(({ chunks, paragraph }) => {
+                                    {paragraphs.map(({ sentences, paragraph }) => {
                                         const { id, timestamp } = paragraph;
                                         return (
                                             <div
@@ -166,21 +178,42 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                     </div>
                                                 )}
                                                 <div className="text-sm">
-                                                    {chunks.map(({ highlight, id, text }) =>
-                                                        highlight ? (
-                                                            <mark
-                                                                ref={id === currentMatch ? currentMatchRef : undefined}
-                                                                className={classNames({
-                                                                    'bg-yellow-300': id === currentMatch,
-                                                                })}
-                                                                key={id}
-                                                            >
-                                                                {text}
-                                                            </mark>
-                                                        ) : (
-                                                            <span key={id}>{text}</span>
-                                                        )
-                                                    )}
+                                                    {sentences.map(({ chunks, id: sId }) => (
+                                                        <Fragment key={sId}>
+                                                            {chunks.map(
+                                                                ({ highlight, id: sentenceId, text, textSentiment }) =>
+                                                                    highlight ? (
+                                                                        <mark
+                                                                            ref={
+                                                                                sentenceId === currentMatch
+                                                                                    ? currentMatchRef
+                                                                                    : undefined
+                                                                            }
+                                                                            className={classNames({
+                                                                                'bg-yellow-300':
+                                                                                    sentenceId === currentMatch,
+                                                                            })}
+                                                                            key={sentenceId}
+                                                                        >
+                                                                            {text}
+                                                                        </mark>
+                                                                    ) : (
+                                                                        <span
+                                                                            key={sentenceId}
+                                                                            className={classNames({
+                                                                                'text-green-600':
+                                                                                    textSentiment === 'positive',
+                                                                                'text-red-600':
+                                                                                    textSentiment === 'negative',
+                                                                            })}
+                                                                        >
+                                                                            {text}
+                                                                        </span>
+                                                                    )
+                                                            )}
+                                                            &nbsp;
+                                                        </Fragment>
+                                                    ))}
                                                 </div>
                                                 {id === currentParagraph && (
                                                     <div className="w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm" />
@@ -321,6 +354,14 @@ function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdate
                                     sentences {
                                         id
                                         text
+                                        sentiment {
+                                            id
+                                            textual {
+                                                id
+                                                overThreshold
+                                                basicSentiment
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -499,32 +540,38 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
             speakerTurns.map((s) => ({
                 ...s,
                 paragraphsWithMatches: s.paragraphs.map((paragraph) => {
-                    if (!state.searchTerm) {
-                        return {
-                            chunks: paragraph.sentences.map(({ text }, idx) => ({
-                                highlight: false,
-                                id: `${paragraph.id}-chunk-${idx}`,
-                                text,
-                            })),
-                            paragraph,
-                        };
-                    }
-
-                    const text = paragraph.sentences.map((s) => s.text).join(' ');
-
-                    const chunks = findAll({
-                        autoEscape: true,
-                        caseSensitive: false,
-                        searchWords: [state.searchTerm],
-                        textToHighlight: text,
-                    }).map(({ highlight, start, end }, idx) => ({
-                        highlight,
-                        id: `${paragraph.id}-chunk-${idx}`,
-                        text: text.substr(start, end - start),
-                    }));
-
                     return {
-                        chunks,
+                        sentences: paragraph.sentences.map((sentence, idx) => ({
+                            id: `primary-sentence-${sentence.id}-${idx}`,
+                            chunks: state.searchTerm
+                                ? findAll({
+                                      autoEscape: true,
+                                      caseSensitive: false,
+                                      searchWords: [state.searchTerm],
+                                      textToHighlight: sentence.text,
+                                  }).map(({ highlight, start, end }, index) => ({
+                                      highlight,
+                                      id: `${paragraph.id}-${sentence.id}-search-term-chunk-${index}`,
+                                      text: sentence.text.substr(start, end - start),
+                                      textSentiment:
+                                          sentence.sentiment?.textual?.overThreshold &&
+                                          sentence.sentiment?.textual?.basicSentiment
+                                              ? sentence.sentiment?.textual?.basicSentiment
+                                              : undefined,
+                                  }))
+                                : [
+                                      {
+                                          highlight: false,
+                                          id: `${paragraph.id}-${sentence.id}-sentence-chunk-${idx}`,
+                                          text: sentence.text,
+                                          textSentiment:
+                                              sentence.sentiment?.textual?.overThreshold &&
+                                              sentence.sentiment?.textual?.basicSentiment
+                                                  ? sentence.sentiment?.textual?.basicSentiment
+                                                  : undefined,
+                                      },
+                                  ],
+                        })),
                         paragraph,
                     };
                 }),
@@ -538,7 +585,8 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
         () =>
             speakerTurnsWithMatches
                 .flatMap((s) => s.paragraphsWithMatches)
-                .flatMap((p) => p.chunks.filter((h) => h.highlight)),
+                .flatMap((p) => p.sentences)
+                .flatMap((s) => s.chunks.filter((h) => h.highlight)),
         [speakerTurnsWithMatches]
     );
 

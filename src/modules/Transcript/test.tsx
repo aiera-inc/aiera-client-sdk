@@ -39,6 +39,28 @@ describe('Transcript', () => {
         getByTextWithMarkup('Showing 1 result for "paragraph"');
     });
 
+    test('renders positive sentiment', () => {
+        const { rendered } = renderWithClient(<Transcript eventId={'1'} />, {
+            executeQuery: () =>
+                fromValue({
+                    data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'positive') },
+                }),
+        });
+
+        expect(rendered.container.querySelector('.text-green-600')).not.toBeNull();
+    });
+
+    test('renders negative sentiment', () => {
+        const { rendered } = renderWithClient(<Transcript eventId={'1'} />, {
+            executeQuery: () =>
+                fromValue({
+                    data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'negative') },
+                }),
+        });
+
+        expect(rendered.container.querySelector('.text-red-600')).not.toBeNull();
+    });
+
     test('renders updated paragraphs', () => {
         jest.useFakeTimers();
         // const { source, push } = makeSubject();
@@ -73,7 +95,7 @@ describe('Transcript', () => {
     });
 });
 
-function generateEventTranscripts(sentences: string[], startingIndex = 1, isLive = false) {
+function generateEventTranscripts(sentences: string[], startingIndex = 1, isLive = false, sentiment = 'positive') {
     return [
         {
             id: 1,
@@ -115,7 +137,20 @@ function generateEventTranscripts(sentences: string[], startingIndex = 1, isLive
                                     paragraphs: sentences.map((s, idx) => ({
                                         id: String(startingIndex + idx),
                                         timestamp: '',
-                                        sentences: [{ id: '1', text: s }],
+                                        sentences: [
+                                            {
+                                                id: '1',
+                                                text: s,
+                                                sentiment: {
+                                                    id: '21',
+                                                    textual: {
+                                                        id: '42',
+                                                        basicSentiment: sentiment,
+                                                        overThreshold: true,
+                                                    },
+                                                },
+                                            },
+                                        ],
                                     })),
                                 },
                             ],
