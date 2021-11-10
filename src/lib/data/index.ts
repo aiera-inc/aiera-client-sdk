@@ -7,12 +7,15 @@ import gql from 'graphql-tag';
 import { useClient } from 'urql';
 import { DeepPartial, Instrument, Maybe, Quote } from '@aiera/client-sdk/types';
 import {
+    AppConfigQuery,
+    AppConfigQueryVariables,
     CompanyResolutionQuery,
     CompanyResolutionQueryVariables,
     TrackMutation,
     TrackMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 
 /**
  * Utilities for working with quotes/instruments
@@ -87,6 +90,19 @@ export function useCompanyResolver(): (identifier: string) => Promise<CompanyRes
         },
         [client]
     );
+}
+
+export function useAppConfig(): QueryResult<AppConfigQuery, AppConfigQueryVariables> {
+    return useQuery<AppConfigQuery, AppConfigQueryVariables>({
+        query: gql`
+            query AppConfig {
+                configuration {
+                    pusherAppCluster
+                    pusherAppKey
+                }
+            }
+        `,
+    });
 }
 
 type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit';

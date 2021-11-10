@@ -19,11 +19,8 @@ type Mocked<T> = {
 };
 export type MockedClient = Mocked<Client>;
 
-export function renderWithClient(
-    children: ReactNode,
-    client?: Partial<Client>
-): { client: MockedClient; rerender: (el?: ReactElement) => void; rendered: ReturnType<typeof render>; reset: MockFn } {
-    const mockedClient = {
+export function getMockedClient(client?: Partial<Client>): MockedClient {
+    return {
         executeQuery: jest.fn(client?.executeQuery || (() => never)),
         executeMutation: jest.fn(client?.executeMutation || (() => never)),
         executeSubscription: jest.fn(client?.executeSubscription || (() => never)),
@@ -40,18 +37,43 @@ export function renderWithClient(
                 }))
         ),
     };
-    const reset = jest.fn();
+}
 
-    const renderComponent = (children: ReactNode) => (
+export function MockProvider({
+    children,
+    client,
+    reset = jest.fn(),
+}: {
+    children: ReactNode;
+    client: MockedClient;
+    reset?: () => void;
+}): ReactElement {
+    return (
         <ResetProvider value={{ reset }}>
             {/* 
                 // @ts-ignore */}
-            <Provider value={mockedClient}>{children}</Provider>
+            <Provider value={client}>{children}</Provider>
         </ResetProvider>
     );
+}
 
-    const rendered = render(renderComponent(children));
-    const rerender = (children: ReactNode) => rendered.rerender(renderComponent(children));
+export function renderWithClient(
+    children: ReactNode,
+    client?: Partial<Client>
+): { client: MockedClient; rerender: (el?: ReactElement) => void; rendered: ReturnType<typeof render>; reset: MockFn } {
+    const mockedClient = getMockedClient(client);
+    const reset = jest.fn();
+    const rendered = render(
+        <MockProvider client={mockedClient} reset={reset}>
+            {children}
+        </MockProvider>
+    );
+    const rerender = (children: ReactNode) =>
+        rendered.rerender(
+            <MockProvider client={mockedClient} reset={reset}>
+                {children}
+            </MockProvider>
+        );
 
     return { client: mockedClient, rerender, rendered, reset };
 }

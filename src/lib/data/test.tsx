@@ -1,7 +1,10 @@
-import React, { useEffect } from 'react';
-import { renderWithClient } from 'testUtils';
+import React, { ReactNode, useEffect } from 'react';
+import { renderHook } from '@testing-library/react-hooks';
+import { fromValue } from 'wonka';
 
-import { useAutoTrack, useTrack } from '.';
+import { getMockedClient, MockProvider, renderWithClient } from 'testUtils';
+
+import { useAppConfig, useAutoTrack, useTrack } from '.';
 
 describe('useTrack', () => {
     const TestComponent = () => {
@@ -84,5 +87,27 @@ describe('useAutoTrack', () => {
                 properties: { eventId: '2' },
             })
         );
+    });
+});
+
+describe('useAppConfig', () => {
+    test('returns the application configuration from the server', () => {
+        const data = {
+            configuration: {
+                pusherAppCluster: 'cluster',
+                pusherAppKey: 'key',
+            },
+        };
+        const mockedClient = getMockedClient({
+            executeQuery: () =>
+                fromValue({
+                    data,
+                }),
+        });
+        function TestProvider({ children }: { children: ReactNode }) {
+            return <MockProvider client={mockedClient}>{children}</MockProvider>;
+        }
+        const { result } = renderHook(() => useAppConfig(), { wrapper: TestProvider });
+        expect(result.current.state.data).toEqual(data);
     });
 });
