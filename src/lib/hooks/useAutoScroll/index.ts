@@ -29,8 +29,8 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         pauseOnUserScroll = true,
         initialBehavior = 'auto',
         behavior = 'smooth',
-        block = 'nearest',
-        inline = 'nearest',
+        block,
+        inline,
     } = opts || {};
     const [element, setElement] = useState<E | null>(null);
     const [target, setTarget] = useState<T | null>(null);
