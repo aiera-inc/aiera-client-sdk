@@ -62,10 +62,7 @@ describe('Transcript', () => {
     });
 
     test('renders updated paragraphs', () => {
-        jest.useFakeTimers();
-        // const { source, push } = makeSubject();
-
-        renderWithClient(<Transcript eventId={'1'} />, {
+        const { realtime } = renderWithClient(<Transcript eventId={'1'} />, {
             executeQuery: ({ query }) => {
                 const op = getQueryNames(query)[0];
                 if (op === 'Transcript') {
@@ -86,12 +83,69 @@ describe('Transcript', () => {
         screen.getByText('First paragraph');
 
         act(() => {
-            jest.advanceTimersByTime(2000);
+            realtime.trigger('scheduled_audio_call_1_events_changes', 'modified');
         });
 
         expect(screen.queryByText('First paragraph')).toBeNull();
         screen.getByText('Updated paragraph');
         screen.getByText('Latest paragraph');
+    });
+
+    test('renders partials', () => {
+        const { realtime } = renderWithClient(<Transcript eventId={'1'} />, {
+            executeQuery: ({ query }) => {
+                const op = getQueryNames(query)[0];
+                if (op === 'Transcript') {
+                    return fromValue({
+                        data: { events: generateEventTranscripts(['First paragraph'], 1, true) },
+                    });
+                }
+
+                if (op === 'LatestParagraphs') {
+                    return fromValue({
+                        data: { events: generateLatestParagraphs(['Latest paragraph']) },
+                    });
+                }
+
+                return never;
+            },
+        });
+        expect(screen.queryByText('First paragraph')).toBeTruthy();
+
+        act(() => {
+            realtime.trigger('scheduled_audio_call_1_events_changes', 'partial_transcript', {
+                pretty_transcript: 'Partial 2',
+                index: 2,
+            });
+        });
+        expect(screen.queryByText('Partial 2')).toBeTruthy();
+
+        // We shouldn't render a partial with a lower index
+        act(() => {
+            realtime.trigger('scheduled_audio_call_1_events_changes', 'partial_transcript', {
+                pretty_transcript: 'Partial 1',
+                index: 1,
+            });
+        });
+        expect(screen.queryByText('Partial 2')).toBeTruthy();
+        expect(screen.queryByText('Partial 1')).toBeNull();
+
+        // When we clear the partial, it should stay on the screen until we actually get new
+        // paragraphs from the server
+        act(() => {
+            realtime.trigger('scheduled_audio_call_1_events_changes', 'partial_transcript_clear', {
+                index: 2,
+            });
+        });
+        expect(screen.queryByText('Partial 2')).toBeTruthy();
+
+        act(() => {
+            realtime.trigger('scheduled_audio_call_1_events_changes', 'modified');
+        });
+
+        expect(screen.queryByText('First paragraph')).toBeTruthy();
+        expect(screen.queryByText('Latest paragraph')).toBeTruthy();
+        expect(screen.queryByText('Partial 2')).toBeNull();
     });
 });
 

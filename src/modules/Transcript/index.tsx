@@ -27,8 +27,10 @@ import {
     TranscriptQueryVariables,
 } from '@aiera/client-sdk/types/generated';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { hash } from '@aiera/client-sdk/lib/strings';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
 import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
@@ -53,6 +55,7 @@ interface ParagraphWithMatches {
     paragraph: Paragraph;
 }
 type SpeakerTurnsWithMatches = SpeakerTurn & { paragraphsWithMatches: ParagraphWithMatches[] };
+type Partial = { text: string; timestamp: number };
 
 /** @notExported */
 interface TranscriptUIProps {
@@ -69,6 +72,7 @@ interface TranscriptUIProps {
     onBack?: MouseEventHandler;
     onChangeSearchTerm: ChangeHandler<string>;
     onClickTranscript?: (paragraph: Paragraph) => void;
+    partial?: Partial;
     prevMatch: () => void;
     scrollRef: Ref<HTMLDivElement>;
     searchTerm: string;
@@ -91,6 +95,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         onBack,
         onChangeSearchTerm,
         onClickTranscript,
+        partial,
         prevMatch,
         scrollRef,
         searchTerm,
@@ -152,7 +157,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         // we need to make sure it's not undefined still
                         return data.events[0] && <EmptyMessage event={data.events[0]} />;
                     })
-                    .with({ status: 'success' }, () => {
+                    .with({ status: 'success' }, ({ data }) => {
                         return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
                             return (
                                 <div key={`speaker-turn-${id}`}>
@@ -221,6 +226,25 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             </div>
                                         );
                                     })}
+                                    {data.events[0]?.isLive && partial?.text && (
+                                        <div className="relative p-3 pb-4 mb-4">
+                                            {partial.timestamp && (
+                                                <div className="pb-2 font-semibold text-sm">
+                                                    {DateTime.fromMillis(partial.timestamp).toFormat('h:mm:ss a')}
+                                                </div>
+                                            )}
+                                            <div
+                                                ref={currentParagraph === 'partial' ? currentParagraphRef : undefined}
+                                                key={`${hash(partial.text)}-${paragraphs.length}`}
+                                                className="text-sm"
+                                            >
+                                                {partial.text}
+                                            </div>
+                                            {currentParagraph === 'partial' && (
+                                                <div className="w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm" />
+                                            )}
+                                        </div>
+                                    )}
                                 </div>
                             );
                         });
@@ -417,8 +441,13 @@ function useLatestTranscripts(
         },
     });
 
-    // Request the latest paragraphs every 2 seconds
-    useInterval(() => latestParagraphsQuery.refetch(), eventQuery.state.data?.events[0]?.isLive ? 2000 : null);
+    useRealtimeEvent<void>(
+        `scheduled_audio_call_${eventId}_events_changes`,
+        'modified',
+        useCallback(() => {
+            latestParagraphsQuery.refetch();
+        }, [latestParagraphsQuery.refetch])
+    );
 
     // Each time the latestParagraphs get updated, set them in state
     const [latestParagraphs, setLatestParagraphs] = useState<Map<string, Paragraph>>(new Map());
@@ -479,15 +508,96 @@ function useLatestTranscripts(
     }, [eventQuery.state.data?.events[0]?.transcripts, latestParagraphs]);
 }
 
+function usePartials(eventId: string, lastParagraphId?: string) {
+    const [partial, setPartial] = useState<{ timestamp: number; text: string; index: number }>({
+        timestamp: 0,
+        text: '',
+        index: -1,
+    });
+    const [lastCleared, setLastCleared] = useState<number>(-1);
+
+    // Listen for incoming partials via realtime websocket
+    useRealtimeEvent<{ start_timestamp_ms: number; pretty_transcript: string; index: number }>(
+        `scheduled_audio_call_${eventId}_events_changes`,
+        'partial_transcript',
+        useCallback(
+            (data) => {
+                const { start_timestamp_ms: timestamp = 0, pretty_transcript: text = '', index = -1 } = data || {};
+                setPartial((prevState) => {
+                    // Partials come in via webhooks which means they can be out of order, make sure the one we are
+                    // processing has a higher index than the last one we processed. Otherwise we should ignroe it.
+                    if (index >= prevState.index) {
+                        return {
+                            index,
+                            text,
+                            timestamp,
+                        };
+                    }
+                    return prevState;
+                });
+            },
+            [setPartial]
+        )
+    );
+
+    // Listen for when the partial is cleared out
+    //
+    // For this, we just set the index value that was cleared but we dont clear
+    // the text yet. We only want to clear it when we actually get the new paragraph
+    // from the server to avoid the text disappearing and reappearing.
+    useRealtimeEvent<{ index: number }>(
+        `scheduled_audio_call_${eventId}_events_changes`,
+        'partial_transcript_clear',
+        useCallback(
+            (data) => {
+                const { index = -1 } = data || {};
+                // Only set if the current index is higher than the last one we processed
+                setLastCleared((prevIndex) => (index > prevIndex ? index : prevIndex));
+            },
+            [setLastCleared]
+        )
+    );
+
+    // When we get new paragraphs from the server, see if we need to clear the partial
+    //
+    // This way when a partial ends and turns into a real transcript item, we'll wait
+    // until we load the transcript from the server to clear the partial which makes
+    // the text transition smooth.
+    useEffect(() => {
+        if (lastCleared >= partial.index) {
+            setPartial({
+                index: lastCleared,
+                timestamp: 0,
+                text: '',
+            });
+        }
+    }, [lastParagraphId]);
+
+    return partial;
+}
+
 function useAudioSync(
+    eventId: string,
     speakerTurns: SpeakerTurn[],
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>,
     audioPlayer: AudioPlayer
-): [string | null, Dispatch<SetStateAction<string | null>>, RefCallback<HTMLDivElement>, RefCallback<HTMLDivElement>] {
+): [
+    string | null,
+    Dispatch<SetStateAction<string | null>>,
+    RefCallback<HTMLDivElement>,
+    RefCallback<HTMLDivElement>,
+    Partial
+] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
     const [scrollRef, currentParagraphRef] = useAutoScroll<HTMLDivElement>();
 
     const paragraphs = useMemo(() => speakerTurns.flatMap((s) => s.paragraphs), [speakerTurns]);
+    // It's not the most efficient thing to load the partial here, since each partial change will trigger a re-render.
+    // However, we need to use the existence of partial text as a condition for deciding whether the partial text or
+    // the last paragraph from the server should be selected. If this becomes a performance issue we may need to
+    // revisit, but it will be ugly to fix to doing this the "cleaner" but less efficient way for now.
+    const partial = usePartials(eventId, paragraphs.slice(-1)[0]?.id);
+
     useEffect(() => {
         const eventId = eventQuery.state.data?.events[0]?.id;
 
@@ -495,26 +605,41 @@ function useAudioSync(
         // one the should be currently playing,
         //
         // If the audio player is playing a different event, dont search through.
-        let paragraph =
-            eventId && audioPlayer.id && audioPlayer.id !== eventId
-                ? null
-                : [...paragraphs].reverse().find((p) => p.syncMs && p.syncMs <= audioPlayer.rawCurrentTime * 1000);
+        const audioParagraph =
+            eventId && audioPlayer.id && audioPlayer.id === eventId
+                ? [...paragraphs].reverse().find((p) => p.syncMs && p.syncMs <= audioPlayer.rawCurrentTime * 1000)
+                : null;
 
-        // If we couldn't find one:
-        // - if the event is live default to the last paragraph
-        // - other default to the first paragraph
-        if (!paragraph) {
-            paragraph = eventQuery.state.data?.events[0]?.isLive ? paragraphs.slice(-1)[0] : paragraphs[0];
+        const lastSyncMs = paragraphs.slice(-1)[0]?.syncMs || 0;
+        const listeningAtLiveEdge = audioParagraph && audioPlayer.rawCurrentTime * 1000 > lastSyncMs;
+        const liveAndNotListening = !audioParagraph && eventQuery.state.data?.events[0]?.isLive;
+
+        // If we are audio is past the recorded transcripts, we are at the "live edge"
+        // and want to select the partials.
+        //
+        // If we aren't listening at all and the call is live, we also want to
+        // default to the partials
+        if (listeningAtLiveEdge || liveAndNotListening) {
+            if (partial.text) setCurrentParagraph('partial');
+            else {
+                const lastParagraph = paragraphs.slice(-1)[0];
+                if (lastParagraph) setCurrentParagraph(lastParagraph.id);
+            }
+        }
+        // If we found a paragraph for the current audio, use it
+        else if (audioParagraph) {
+            setCurrentParagraph(audioParagraph.id);
+        }
+        // If we don't have any audio to sync to and aren't live, go to the first paragraph
+        else if (paragraphs[0]) {
+            setCurrentParagraph(paragraphs[0].id);
         }
 
         // As long as we found one, set it so we can scroll to it and show
         // an indicator in the UI
-        if (paragraph) {
-            setCurrentParagraph(paragraph.id);
-        }
-    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime)]);
+    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text]);
 
-    return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef];
+    return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef, partial];
 }
 
 function useSearchState(speakerTurns: SpeakerTurn[]) {
@@ -641,7 +766,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const audioPlayer = useAudioPlayer();
 
     const speakerTurns = useLatestTranscripts(eventId, eventQuery);
-    const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef] = useAudioSync(
+    const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef, partial] = useAudioSync(
+        eventId,
         speakerTurns,
         eventQuery,
         audioPlayer
@@ -693,6 +819,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             nextMatch={searchState.nextMatch}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
+            partial={partial}
             prevMatch={searchState.prevMatch}
             scrollRef={scrollRef}
             searchTerm={searchState.searchTerm}
