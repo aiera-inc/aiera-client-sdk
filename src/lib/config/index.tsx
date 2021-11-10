@@ -1,6 +1,6 @@
 import React, { createContext, useContext, ReactNode, ReactElement } from 'react';
 
-type Module = 'EventList';
+type Module = 'EventList' | 'ContentList';
 type Platform = 'aiera-sdk-dev' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
 export interface EnvConfig {
