@@ -414,4 +414,62 @@ describe('Tooltip', () => {
         fireEvent.scroll(document);
         await waitFor(() => expect(screen.queryByText(tooltipContent)).toBeTruthy());
     });
+
+    test('calls onOpen after tooltip opens', async () => {
+        const onOpen = jest.fn();
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'hover',
+            onOpen,
+            position: 'top-left',
+            grow: 'up-right',
+            modal: false,
+            hideOnDocumentScroll: true,
+        });
+
+        const target = screen.getByText(targetContent);
+        userEvent.hover(target);
+        await waitFor(() => screen.getByText(tooltipContent));
+        expect(onOpen).toHaveBeenCalledTimes(1);
+    });
+
+    test('calls onClose after tooltip hides', async () => {
+        const onClose = jest.fn();
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'hover',
+            onClose,
+            position: 'top-left',
+            grow: 'up-right',
+            modal: false,
+            hideOnDocumentScroll: true,
+        });
+
+        const target = screen.getByText(targetContent);
+        userEvent.hover(target);
+        await waitFor(() => screen.getByText(tooltipContent));
+        fireEvent.scroll(document);
+        await waitFor(() => expect(screen.queryByText(tooltipContent)).toBeNull());
+        expect(onClose).toHaveBeenCalledTimes(1);
+    });
+
+    test('hides tooltip on ESC keydown event', async () => {
+        renderTooltip({
+            children: targetContent,
+            content: tooltipContent,
+            openOn: 'hover',
+            position: 'top-left',
+            grow: 'up-right',
+            modal: false,
+            hideOnDocumentScroll: true,
+        });
+
+        const target = screen.getByText(targetContent);
+        userEvent.hover(target);
+        await waitFor(() => screen.getByText(tooltipContent));
+        fireEvent.keyDown(window, { key: 'Escape' });
+        await waitFor(() => expect(screen.queryByText(tooltipContent)).toBeNull());
+    });
 });

@@ -8,7 +8,6 @@ import './styles.css';
 interface TabOption<T> {
     value: T;
     label: string;
-    className?: string;
 }
 
 type TabKind = 'button' | 'line';
@@ -27,54 +26,36 @@ interface TabsProps<T> {
 
 export const Tabs = <T extends string | number>(props: TabsProps<T>): ReactElement => {
     const { onChange, options = [], value, kind = 'button', className = '' } = props;
-    const getClasses = (val: string | number, opStyles: string) =>
+    const getClasses = (val: string | number) =>
         match(kind)
             .with('button', () =>
-                classNames(
-                    'py-2',
-                    'px-3',
-                    'text-sm',
-                    'cursor-pointer',
-                    'rounded-lg',
-                    {
-                        'bg-gray-100': val === value,
-                        'font-semibold': val === value,
-                        tab__option: true,
-                        'tab__option--selected': val === value,
-                    },
-                    opStyles
-                )
+                classNames('py-2', 'px-3', 'text-sm', 'cursor-pointer', 'rounded-lg', {
+                    'bg-gray-100': val === value,
+                    'font-semibold': val === value,
+                    tab__option: true,
+                    'tab__option--selected': val === value,
+                })
             )
             .with('line', () =>
-                classNames(
-                    'relative',
-                    'text-sm',
-                    'h-6',
-                    'flex',
-                    'mr-3',
-                    'pb-0.5',
-                    'overflow-hidden',
-                    {
-                        'cursor-pointer': val !== value,
-                        'text-gray-400': val !== value,
-                        'text-black': val === value,
-                        'font-semibold': val === value,
-                        'hover:text-gray-500': val !== value,
-                        'active:text-gray-800': val !== value,
-                        tab__option: true,
-                        'tab__option--selected': val === value,
-                    },
-                    opStyles
-                )
+                classNames('relative', 'text-sm', 'h-6', 'flex', 'mr-3', 'pb-0.5', 'overflow-hidden', {
+                    'cursor-pointer': val !== value,
+                    'text-gray-400': val !== value,
+                    'text-black': val === value,
+                    'font-semibold': val === value,
+                    'hover:text-gray-500': val !== value,
+                    'active:text-gray-800': val !== value,
+                    tab__option: true,
+                    'tab__option--selected': val === value,
+                })
             )
             .exhaustive();
 
     return (
         <div className={`flex tab relative ${className}`}>
-            {options.map(({ value: opVal, label, className: opStyles = '' }) => (
+            {options.map(({ value: opVal, label }) => (
                 <div
                     key={`tab-option-${opVal}`}
-                    className={getClasses(opVal, opStyles)}
+                    className={getClasses(opVal)}
                     onClick={(event) => onChange && onChange(event, { value: opVal })}
                 >
                     {label}

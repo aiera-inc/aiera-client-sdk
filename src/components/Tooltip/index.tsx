@@ -1,5 +1,6 @@
 import React, { RefObject, MouseEvent, ReactElement, ReactNode, useRef, useState, useCallback, useEffect } from 'react';
 import { match } from 'ts-pattern';
+import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { useDelayCallback } from '@aiera/client-sdk/lib/hooks/useDelayCallback';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import './styles.css';
@@ -167,6 +168,16 @@ export interface TooltipProps {
      * Hide tooltip when the document scrolls
      */
     hideOnDocumentScroll?: boolean;
+
+    /**
+     * Callback after tooltip closes
+     */
+    onClose?: () => void;
+
+    /**
+     * Callback after tooltip opens
+     */
+    onOpen?: () => void;
 
     /**
      * Delay showing the tooltip for [delay] millisenconds.
@@ -366,6 +377,8 @@ export function Tooltip(props: TooltipProps): ReactElement {
         hideOnDocumentScroll = false,
         matchWidth,
         modal = false,
+        onClose,
+        onOpen,
         openDelay = 0,
         openOn = 'hover',
         position,
@@ -387,12 +400,22 @@ export function Tooltip(props: TooltipProps): ReactElement {
 
     // Set up visible state and show/hide functions that can be delayed
     const [state, setState] = useState<TooltipState>({ visible: false });
-    const [delayedShowTooltip, cancelShow] = useDelayCallback((position: Position) => {
-        setState((s) => ({ ...s, position, visible: true }));
-    }, openDelay);
-    const [delayedHideTooltip, cancelHide] = useDelayCallback(() => {
-        setState((s) => ({ ...s, visible: false }));
-    }, closeDelay);
+    const [delayedShowTooltip, cancelShow] = useDelayCallback(
+        (position: Position) => {
+            setState((s) => ({ ...s, position, visible: true }));
+            if (onOpen) onOpen();
+        },
+        openDelay,
+        [onOpen]
+    );
+    const [delayedHideTooltip, cancelHide] = useDelayCallback(
+        () => {
+            setState((s) => ({ ...s, visible: false }));
+            if (onClose) onClose();
+        },
+        closeDelay,
+        [onClose]
+    );
 
     // The actual show/hide callbacks
     const showTooltip = useCallback(
@@ -452,6 +475,13 @@ export function Tooltip(props: TooltipProps): ReactElement {
 
         return () => document.removeEventListener('scroll', delayedHideTooltip, true);
     }, [delayedHideTooltip, hideOnDocumentScroll]);
+
+    // Hide tooltip on escape
+    useWindowListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            hideTooltip();
+        }
+    });
 
     return (
         <TooltipUI

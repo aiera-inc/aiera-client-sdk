@@ -7,6 +7,7 @@ import React, {
     FocusEventHandler,
     ReactElement,
     ReactNode,
+    Ref,
 } from 'react';
 import classNames from 'classnames';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -14,6 +15,7 @@ import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import './styles.css';
 
 interface InputSharedProps {
+    inputRef?: Ref<HTMLInputElement>;
     autoFocus?: boolean;
     icon?: ReactNode;
     placeholder?: string;
@@ -31,7 +33,19 @@ interface InputUIProps extends InputSharedProps {
 }
 
 export function InputUI(props: InputUIProps): ReactElement {
-    const { autoFocus, icon, clearable, clear, placeholder, onChange, onFocus, value, name, className = '' } = props;
+    const {
+        inputRef,
+        autoFocus,
+        icon,
+        clearable,
+        clear,
+        placeholder,
+        onChange,
+        onFocus,
+        value,
+        name,
+        className = '',
+    } = props;
     return (
         <div className={`group h-8 items-center w-full relative ${className} input__${name}`}>
             {React.isValidElement(icon) && (
@@ -43,6 +57,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                 </div>
             )}
             <input
+                ref={inputRef}
                 autoFocus={autoFocus}
                 className={classNames(
                     'w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400',
@@ -74,7 +89,18 @@ export interface InputProps extends InputSharedProps {
  * Renders Input
  */
 export function Input(props: InputProps): ReactElement {
-    const { autoFocus = false, icon, clearable = true, placeholder, onChange, onFocus, value, name, className } = props;
+    const {
+        inputRef,
+        autoFocus = false,
+        icon,
+        clearable = true,
+        placeholder,
+        onChange,
+        onFocus,
+        value,
+        name,
+        className,
+    } = props;
     return (
         <InputUI
             autoFocus={autoFocus}
@@ -90,6 +116,7 @@ export function Input(props: InputProps): ReactElement {
                     onChange?.(event, { name, value: event?.currentTarget?.value }),
                 [onChange]
             )}
+            inputRef={inputRef}
             onFocus={onFocus}
             value={value}
             className={className}

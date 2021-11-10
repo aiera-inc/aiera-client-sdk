@@ -91,7 +91,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">
                 <div className="flex flex-col flex-grow">
-                    <div className="sticky top-0 px-3 pt-3 pb-2 z-10 eventlist__tabs">
+                    <div className="sticky top-0 px-3 pt-3 pb-2 z-10">
                         <FilterBy
                             onChange={onSelectFilterBy}
                             options={[
@@ -101,16 +101,15 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             value={filterByTypes}
                         >
                             <Tabs<EventView>
-                                className="ml-1"
+                                className="ml-1 eventlist__tabs"
                                 kind="line"
                                 onChange={onSelectListType}
                                 options={[
                                     {
                                         value: EventView.LiveAndUpcoming,
                                         label: 'Live Events',
-                                        className: 'h-9 items-center',
                                     },
-                                    { value: EventView.Recent, label: 'Recent', className: 'h-9 items-center' },
+                                    { value: EventView.Recent, label: 'Recent' },
                                 ]}
                                 value={listType}
                             />
