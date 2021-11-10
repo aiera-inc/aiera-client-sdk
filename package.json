@@ -108,6 +108,7 @@
         "highcharts-react-official": "^3.1.0",
         "highlight-words-core": "1.2.2",
         "luxon": "2.0.2",
+        "pusher-js": "7.0.3",
         "tailwindcss-interaction-variants": "^5.0.0",
         "ts-pattern": "3.2.5",
         "urql": "2.0.4"
