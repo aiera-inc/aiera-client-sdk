@@ -1,23 +1,8 @@
 import React from 'react';
-import Pusher from 'pusher-js';
 import { renderWithClient } from '@aiera/client-sdk/testUtils';
-import { Provider, useRealtimeEvent } from '.';
+import { useRealtimeEvent } from '.';
 
 describe('realtime', () => {
-    const bind = jest.fn();
-    const unbind = jest.fn();
-    const unsubscribe = jest.fn();
-    const subscribe = jest.fn(() => ({ bind, unbind, unsubscribe }));
-
-    const mockClient = { subscribe } as unknown as Pusher;
-
-    afterEach(() => {
-        bind.mockClear();
-        unbind.mockClear();
-        subscribe.mockClear();
-        unsubscribe.mockClear();
-    });
-
     test('can render with no client', () => {
         const callback = jest.fn();
         function TestComponent() {
@@ -25,11 +10,7 @@ describe('realtime', () => {
             return null;
         }
 
-        renderWithClient(
-            <Provider>
-                <TestComponent />
-            </Provider>
-        );
+        renderWithClient(<TestComponent />);
     });
 
     test('subscribes and unsubscribes to channels', () => {
@@ -39,18 +20,18 @@ describe('realtime', () => {
             return null;
         }
 
-        const { rendered } = renderWithClient(
-            <Provider client={mockClient}>
-                <TestComponent />
-            </Provider>
-        );
+        const { realtime, rendered } = renderWithClient(<TestComponent />);
 
-        expect(subscribe).toHaveBeenCalledWith('channel');
-        expect(bind).toHaveBeenCalledWith('event', callback);
+        expect(realtime.subscribe).toHaveBeenCalledWith('channel');
+        realtime.trigger('channel', 'event', 'data');
+        expect(callback).toHaveBeenCalledWith('data');
+
+        callback.mockClear();
 
         rendered.unmount();
+        expect(callback).not.toHaveBeenCalled();
 
-        expect(unbind).toHaveBeenCalledWith('event', callback);
-        expect(unsubscribe).toHaveBeenCalled();
+        expect(realtime.mockedChannels['channel']?.unbind).toHaveBeenCalledWith('event', callback);
+        expect(realtime.mockedChannels['channel']?.unsubscribe).toHaveBeenCalled();
     });
 });

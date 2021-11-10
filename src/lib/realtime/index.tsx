@@ -13,12 +13,12 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
     const [client, setClient] = useState<Pusher | undefined>(passedClient);
     const configQuery = useAppConfig();
     useEffect(() => {
-        const appKey = configQuery.state.data?.configuration.pusherAppKey;
-        const cluster = configQuery.state.data?.configuration.pusherAppCluster;
+        const appKey = configQuery.state.data?.configuration?.pusherAppKey;
+        const cluster = configQuery.state.data?.configuration?.pusherAppCluster;
         if (!passedClient && appKey && cluster) {
             setClient(new Pusher(appKey, { cluster }));
         }
-    }, [configQuery.state.data?.configuration.pusherAppKey, configQuery.state.data?.configuration.pusherAppKey]);
+    }, [configQuery.state.data?.configuration?.pusherAppKey, configQuery.state.data?.configuration?.pusherAppKey]);
     return <Context.Provider value={{ client }}>{children}</Context.Provider>;
 }
 
