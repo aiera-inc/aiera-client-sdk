@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider as ClientProvider } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Provider as MessageBusProvider } from '@aiera/client-sdk/lib/msg';
 import { Provider as ConfigProvider } from '@aiera/client-sdk/lib/config';
+import { Provider as RealtimeProvider } from '@aiera/client-sdk/lib/realtime';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
 import '@aiera/client-sdk/css/styles.css';
@@ -28,11 +29,13 @@ const App: FC = (): ReactElement => {
             >
                 <MessageBusProvider bus={bus}>
                     <ClientProvider>
-                        <Auth showLogout>
-                            <div className="h-full border border-black">
-                                <EventList />
-                            </div>
-                        </Auth>
+                        <RealtimeProvider>
+                            <Auth showLogout>
+                                <div className="h-full border border-black">
+                                    <EventList />
+                                </div>
+                            </Auth>
+                        </RealtimeProvider>
                     </ClientProvider>
                 </MessageBusProvider>
             </ConfigProvider>
