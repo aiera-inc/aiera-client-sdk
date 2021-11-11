@@ -94,6 +94,12 @@
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
+							<h3>References</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-reference tsd-parent-kind-module"><a href="api_client.html#Client" class="tsd-kind-icon">Client</a></li>
+							</ul>
+						</section>
+						<section class="tsd-index-section ">
 							<h3>Interfaces</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/api_client.BaseQueryResult.html" class="tsd-kind-icon">Base<wbr>Query<wbr>Result</a></li>
@@ -126,7 +132,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/fd4c576/src/api/client.tsx#L46">src/api/client.tsx:46</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/db985e2/src/api/client.tsx#L46">src/api/client.tsx:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -152,13 +158,13 @@
 					<a name="Provider" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> Provider</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">Provider<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>config<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>children<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReactNode</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReactElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">JSXElementConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
+						<li class="tsd-signature tsd-kind-icon">Provider<span class="tsd-signature-symbol">(</span>options<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">{ </span>config<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>children<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReactNode</span><span class="tsd-signature-symbol">; </span>client<span class="tsd-signature-symbol">?: </span><a href="components_Provider.html#Client" class="tsd-signature-type" data-tsd-kind="Variable">Client</a><span class="tsd-signature-symbol">; </span>reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReactElement</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">JSXElementConstructor</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">&gt;</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/fd4c576/src/api/client.tsx#L116">src/api/client.tsx:116</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/db985e2/src/api/client.tsx#L118">src/api/client.tsx:118</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -169,13 +175,32 @@
 							<h4 class="tsd-parameters-title">Parameters</h4>
 							<ul class="tsd-parameters">
 								<li>
-									<h5>options: <span class="tsd-signature-symbol">{ </span>config<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>children<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReactNode</span><span class="tsd-signature-symbol"> }</span></h5>
+									<h5>options: <span class="tsd-signature-symbol">{ </span>config<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">; </span>children<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReactNode</span><span class="tsd-signature-symbol">; </span>client<span class="tsd-signature-symbol">?: </span><a href="components_Provider.html#Client" class="tsd-signature-type" data-tsd-kind="Variable">Client</a><span class="tsd-signature-symbol">; </span>reset<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol"> }</span></h5>
 									<ul class="tsd-parameters">
 										<li class="tsd-parameter">
 											<h5><span class="tsd-flag ts-flagOptional">Optional</span> config<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">Partial</span><span class="tsd-signature-symbol">&lt;</span><a href="../interfaces/Config.html" class="tsd-signature-type" data-tsd-kind="Interface">Config</a><span class="tsd-signature-symbol">&gt;</span></h5>
 										</li>
 										<li class="tsd-parameter">
 											<h5>children<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">ReactNode</span></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5><span class="tsd-flag ts-flagOptional">Optional</span> client<span class="tsd-signature-symbol">?: </span><a href="components_Provider.html#Client" class="tsd-signature-type" data-tsd-kind="Variable">Client</a></h5>
+										</li>
+										<li class="tsd-parameter">
+											<h5>reset<span class="tsd-signature-symbol">: </span>function</h5>
+											<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-type-literal">
+												<li class="tsd-signature tsd-kind-icon">reset<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+											</ul>
+											<ul class="tsd-descriptions">
+												<li class="tsd-description">
+													<aside class="tsd-sources">
+														<ul>
+															<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/db985e2/src/api/client.tsx#L127">src/api/client.tsx:127</a></li>
+														</ul>
+													</aside>
+													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+												</li>
+											</ul>
 										</li>
 									</ul>
 								</li>
@@ -188,16 +213,16 @@
 					<a name="useClient" class="tsd-anchor"></a>
 					<h3><span class="tsd-flag ts-flagConst">Const</span> use<wbr>Client</h3>
 					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">use<wbr>Client<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/ClientContext.html" class="tsd-signature-type" data-tsd-kind="Interface">ClientContext</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>client<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol"> }</span></li>
+						<li class="tsd-signature tsd-kind-icon">use<wbr>Client<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="../interfaces/ClientContext.html" class="tsd-signature-type" data-tsd-kind="Interface">ClientContext</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>client<span class="tsd-signature-symbol">: </span><a href="components_Provider.html#Client" class="tsd-signature-type" data-tsd-kind="Variable">Client</a><span class="tsd-signature-symbol"> }</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/fd4c576/src/api/client.tsx#L134">src/api/client.tsx:134</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/db985e2/src/api/client.tsx#L140">src/api/client.tsx:140</a></li>
 								</ul>
 							</aside>
-							<h4 class="tsd-returns-title">Returns <a href="../interfaces/ClientContext.html" class="tsd-signature-type" data-tsd-kind="Interface">ClientContext</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>client<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Client</span><span class="tsd-signature-symbol"> }</span></h4>
+							<h4 class="tsd-returns-title">Returns <a href="../interfaces/ClientContext.html" class="tsd-signature-type" data-tsd-kind="Interface">ClientContext</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>client<span class="tsd-signature-symbol">: </span><a href="components_Provider.html#Client" class="tsd-signature-type" data-tsd-kind="Variable">Client</a><span class="tsd-signature-symbol"> }</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -211,7 +236,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/fd4c576/src/api/client.tsx#L184">src/api/client.tsx:184</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/db985e2/src/api/client.tsx#L190">src/api/client.tsx:190</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -235,6 +260,14 @@
 				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
+				<h2>References</h2>
+				<section class="tsd-panel tsd-member tsd-kind-reference tsd-parent-kind-module">
+					<a name="Client" class="tsd-anchor"></a>
+					<h3>Client</h3>
+					Re-exports <a href="components_Provider.html#Client">Client</a>
+				</section>
+			</section>
+			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Type aliases</h2>
 				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 					<a name="QueryResult" class="tsd-anchor"></a>
@@ -242,7 +275,7 @@
 					<div class="tsd-signature tsd-kind-icon">Query<wbr>Result&lt;Data, Variables&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/api_client.LoadingQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">LoadingQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.ErrorQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">ErrorQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.PausedQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">PausedQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.EmptyQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">EmptyQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.SuccessQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">SuccessQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/fd4c576/src/api/client.tsx#L177">src/api/client.tsx:177</a></li>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/db985e2/src/api/client.tsx#L183">src/api/client.tsx:183</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -272,6 +305,9 @@
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="api_client.html#getQueryNames" class="tsd-kind-icon">get<wbr>Query<wbr>Names</a>
+					</li>
+					<li class=" tsd-kind-reference tsd-parent-kind-module">
+						<a href="api_client.html#Client" class="tsd-kind-icon">Client</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="api_client.html#Provider" class="tsd-kind-icon">Provider</a>

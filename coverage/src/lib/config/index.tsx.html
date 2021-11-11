@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/0</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/2</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>3/4</span>
+                <span class='fraction'>5/5</span>
             </div>
         
             
@@ -55,7 +55,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -92,7 +92,8 @@
 <a name='L33'></a><a href='#L33'>33</a>
 <a name='L34'></a><a href='#L34'>34</a>
 <a name='L35'></a><a href='#L35'>35</a>
-<a name='L36'></a><a href='#L36'>36</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L36'></a><a href='#L36'>36</a>
+<a name='L37'></a><a href='#L37'>37</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -105,61 +106,63 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">104x</span>
+<span class="cline-any cline-yes">167x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { createContext, useContext, ReactNode, ReactElement } from 'react';
 &nbsp;
 type Module = 'EventList';
 type Platform = 'aiera-sdk-dev' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 &nbsp;
-interface AppConfig {
+export interface EnvConfig {
     apiUrl: string;
     assetPath: string;
     moduleName?: Module;
     platform?: Platform;
 }
 &nbsp;
-// Setup default values for env
-const Env: AppConfig = {
-    apiUrl: '',
-    assetPath: 'assets/',
-};
+// Define this type just so it exists for typechecking.
+// This will be injected by build.
+const Env: { [key: string]: string } = {};
 &nbsp;
+// Setup default values for env
 // Leave these as Env.param instead of passing just Env,
 // so that the build system can inject values.
-export const Context = createContext&lt;AppConfig&gt;({
-    apiUrl: Env.apiUrl,
-    assetPath: Env.assetPath,
-});
+const defaultConfig: EnvConfig = {
+    apiUrl: Env.apiUrl || '',
+    assetPath: Env.assetPath || 'assets/',
+};
+&nbsp;
+export const Context = createContext&lt;EnvConfig&gt;(defaultConfig);
 &nbsp;
 /**
  * A React Provider to configure an app-level configuration
  */
-export function <span class="fstat-no" title="function not covered" >Provider(</span>{ config, children }: { config: Partial&lt;AppConfig&gt;; children: ReactNode }): ReactElement {
-<span class="cstat-no" title="statement not covered" >    return &lt;Context.Provider value={{ ...Env, ...config }}&gt;{children}&lt;/Context.Provider&gt;;</span>
+export function Provider({ config, children }: { config: Partial&lt;EnvConfig&gt;; children: ReactNode }): ReactElement {
+    return &lt;Context.Provider value={{ ...defaultConfig, ...config }}&gt;{children}&lt;/Context.Provider&gt;;
 }
 &nbsp;
-export function useConfig(): AppConfig {
+export function useConfig(): EnvConfig {
     return useContext(Context);
 }
 &nbsp;</pre></td></tr></table></pre>
@@ -169,7 +172,7 @@ export function useConfig(): AppConfig {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Nov 11 2021 15:44:57 GMT-0500 (Eastern Standard Time)
+                at Thu Nov 11 2021 16:37:26 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

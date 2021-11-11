@@ -443,6 +443,7 @@ video {
   position: relative;
 }
 .sticky {
+  position: -webkit-sticky;
   position: sticky;
 }
 .top-0 {
@@ -1807,3 +1808,5 @@ video {
   --tw-text-opacity: 1;
   color: rgba(255, 255, 255, var(--tw-text-opacity));
 }
+/*! modern-normalize v1.1.0 | MIT License | https://github.com/sindresorhus/modern-normalize */
+/*! tailwindcss v2.2.19 | MIT License | https://tailwindcss.com */

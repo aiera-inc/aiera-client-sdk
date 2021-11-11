@@ -2343,7 +2343,7 @@ export type CompanyResolutionQuery = { __typename?: 'Query', companies: Array&lt
 export type AppConfigQueryVariables = Exact&lt;{ [key: string]: never; }&gt;;
 &nbsp;
 &nbsp;
-export type AppConfigQuery = { __typename?: 'Query', configuration: { __typename?: 'ApplicationConfiguration', pusherAppCluster?: Maybe&lt;string&gt;, pusherAppKey?: Maybe&lt;string&gt; } };
+export type AppConfigQuery = { __typename?: 'Query', configuration: { __typename?: 'ApplicationConfiguration', pusherAppCluster?: string | null | undefined, pusherAppKey?: string | null | undefined } };
 &nbsp;
 export type TrackMutationVariables = Exact&lt;{
   event: Scalars['String'];
@@ -2356,7 +2356,7 @@ export type TrackMutation = { __typename?: 'Mutation', track: { __typename?: 'Tr
 export type CurrentUserQueryVariables = Exact&lt;{ [key: string]: never; }&gt;;
 &nbsp;
 &nbsp;
-export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, firstName?: Maybe&lt;string&gt;, lastName?: Maybe&lt;string&gt; } };
+export type CurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string, firstName?: string | null | undefined, lastName?: string | null | undefined } };
 &nbsp;
 export type LoginMutationVariables = Exact&lt;{
   email: Scalars['String'];
@@ -2372,28 +2372,28 @@ export type EventListQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type EventListQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, audioRecordingOffsetMs: number, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt; }&gt; };
+export type EventListQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined }&gt; };
 &nbsp;
 export type EventUpdatesQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
 }&gt;;
 &nbsp;
 &nbsp;
-export type EventUpdatesQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, eventDate: string, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, connectionStatus: EventConnectionStatus }&gt; };
+export type EventUpdatesQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, eventDate: string, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, connectionStatus: EventConnectionStatus }&gt; };
 &nbsp;
 export type TranscriptQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: Maybe&lt;string&gt;, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, webcastUrls: Array&lt;string&gt;, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: Maybe&lt;string&gt;, connectionStatus: EventConnectionStatus, primaryCompany?: Maybe&lt;{ __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, name: string, title?: Maybe&lt;string&gt; }, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;string&gt;, syncMs?: Maybe&lt;number&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: Maybe&lt;{ __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: Maybe&lt;{ __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, overThreshold: boolean, basicSentiment: BasicTextualSentiment }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, webcastUrls: Array&lt;string&gt;, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, connectionStatus: EventConnectionStatus, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, name: string, title?: string | null | undefined }, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: string | null | undefined, syncMs?: number | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, overThreshold: boolean, basicSentiment: BasicTextualSentiment } | null | undefined } | null | undefined }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 export type LatestParagraphsQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
 }&gt;;
 &nbsp;
 &nbsp;
-export type LatestParagraphsQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, latestParagraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: Maybe&lt;string&gt;, syncMs?: Maybe&lt;number&gt;, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; };
+export type LatestParagraphsQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, latestParagraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: string | null | undefined, syncMs?: number | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 &nbsp;
 export const RefreshDocument = gql`
@@ -2638,7 +2638,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Nov 11 2021 15:44:57 GMT-0500 (Eastern Standard Time)
+                at Thu Nov 11 2021 16:37:26 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

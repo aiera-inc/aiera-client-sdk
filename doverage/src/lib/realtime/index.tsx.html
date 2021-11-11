@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">42.86% </span>
+                <span class="strong">57.14% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>3/7</span>
+                <span class='fraction'>4/7</span>
             </div>
         
             
@@ -96,34 +96,30 @@
 <a name='L37'></a><a href='#L37'>37</a>
 <a name='L38'></a><a href='#L38'>38</a>
 <a name='L39'></a><a href='#L39'>39</a>
-<a name='L40'></a><a href='#L40'>40</a>
-<a name='L41'></a><a href='#L41'>41</a>
-<a name='L42'></a><a href='#L42'>42</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L40'></a><a href='#L40'>40</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-yes">60x</span>
-<span class="cline-any cline-yes">57x</span>
-<span class="cline-any cline-yes">57x</span>
-<span class="cline-any cline-yes">57x</span>
+<span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">60x</span>
+<span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">122x</span>
+<span class="cline-any cline-yes">123x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -144,31 +140,29 @@ import Pusher from 'pusher-js';
 &nbsp;
 import { useAppConfig } from '@aiera/client-sdk/lib/data';
 &nbsp;
-interface Realtime {
-    client?: Pusher;
-}
+export type Realtime = Pusher;
 &nbsp;
-export const Context = createContext&lt;Realtime&gt;({});
+export const Context = createContext&lt;Realtime | undefined&gt;(undefined);
 &nbsp;
 export function Provider({ children, client: passedClient }: { children: ReactNode; client?: Pusher }): ReactElement {
-    const [client, setClient] = useState&lt;Pusher | undefined&gt;(passedClient);
+    const [client, setClient] = useState&lt;Realtime | undefined&gt;(passedClient);
     const configQuery = useAppConfig();
     useEffect(() =&gt; {
         const appKey = configQuery.state.data?.configuration?.pusherAppKey;
         const cluster = configQuery.state.data?.configuration?.pusherAppCluster;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (!passedClient &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >appKey </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >cluster)</span> {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (!passedClient &amp;&amp; appKey &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >cluster)</span> {
 <span class="cstat-no" title="statement not covered" >            setClient(new Pusher(appKey, { cluster }));</span>
         }
     }, [configQuery.state.data?.configuration?.pusherAppKey, configQuery.state.data?.configuration?.pusherAppKey]);
-    return &lt;Context.Provider value={{ client }}&gt;{children}&lt;/Context.Provider&gt;;
+    return &lt;Context.Provider value={client}&gt;{children}&lt;/Context.Provider&gt;;
 }
 &nbsp;
-export function useRealtime(): Realtime {
+export function useRealtime(): Realtime | undefined {
     return useContext(Context);
 }
 &nbsp;
 export function useRealtimeEvent&lt;T&gt;(channelName: string, eventName: string, callback: (data?: T) =&gt; void): void {
-    const { client } = useRealtime();
+    const client = useRealtime();
     useEffect(() =&gt; {
         <span class="missing-if-branch" title="if path not taken" >I</span>if (!client) <span class="cstat-no" title="statement not covered" >return;</span>
         const channel = client.subscribe(channelName);
@@ -187,7 +181,7 @@ export function useRealtimeEvent&lt;T&gt;(channelName: string, eventName: string
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Nov 11 2021 15:44:57 GMT-0500 (Eastern Standard Time)
+                at Thu Nov 11 2021 16:37:26 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

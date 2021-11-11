@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.55% </span>
+                <span class="strong">93.75% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>29/31</span>
+                <span class='fraction'>30/32</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.12% </span>
+                <span class="strong">94.44% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/17</span>
+                <span class='fraction'>17/18</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">93.33% </span>
+                <span class="strong">93.54% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>28/30</span>
+                <span class='fraction'>29/31</span>
             </div>
         
             
@@ -191,7 +191,14 @@
 <a name='L132'></a><a href='#L132'>132</a>
 <a name='L133'></a><a href='#L133'>133</a>
 <a name='L134'></a><a href='#L134'>134</a>
-<a name='L135'></a><a href='#L135'>135</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a>
+<a name='L138'></a><a href='#L138'>138</a>
+<a name='L139'></a><a href='#L139'>139</a>
+<a name='L140'></a><a href='#L140'>140</a>
+<a name='L141'></a><a href='#L141'>141</a>
+<a name='L142'></a><a href='#L142'>142</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -220,12 +227,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">18x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">57x</span>
-<span class="cline-any cline-yes">57x</span>
-<span class="cline-any cline-yes">57x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -247,8 +257,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">57x</span>
-<span class="cline-any cline-yes">46x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">48x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -261,6 +271,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">23x</span>
 <span class="cline-any cline-yes">23x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,8 +310,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">56x</span>
 <span class="cline-any cline-yes">56x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">56x</span>
 <span class="cline-any cline-yes">56x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -331,29 +345,32 @@ import { DocumentNode } from 'graphql';
 import Pusher from 'pusher-js';
 import { screen, render } from '@testing-library/react';
 import { never } from 'wonka';
-import { Provider as GQLProvider } from 'urql';
 import EventEmitter from 'eventemitter3';
 &nbsp;
-import { ResetProvider } from '@aiera/client-sdk/api/client';
-import { Provider as RealtimeProvider } from '@aiera/client-sdk/lib/realtime';
+import { Provider, Client, EnvConfig, Realtime } from '@aiera/client-sdk/components/Provider';
 &nbsp;
 export type MockFn = ReturnType&lt;typeof jest.fn&gt;;
-export interface Client {
+type Mocked&lt;T&gt; = {
+    [P in keyof T]: MockFn;
+};
+export interface MockClient {
     executeQuery: (opts: { query: DocumentNode }) =&gt; unknown;
     executeMutation: () =&gt; unknown;
     executeSubscription: () =&gt; unknown;
     query: () =&gt; { toPromise: () =&gt; Promise&lt;unknown&gt; };
     mutation: () =&gt; { toPromise: () =&gt; Promise&lt;unknown&gt; };
 }
-type Mocked&lt;T&gt; = {
-    [P in keyof T]: MockFn;
-};
-export type MockedClient = Mocked&lt;Client&gt;;
+export type MockedClient = Mocked&lt;MockClient&gt;;
 &nbsp;
 type Channel = { bind: MockFn; unbind: MockFn; unsubscribe: MockFn };
 type MockedRealtime = Mocked&lt;Partial&lt;Pusher&gt;&gt; &amp; {
     trigger: (channelName: string, eventName: string, data?: unknown) =&gt; void;
     mockedChannels: { [name: string]: Channel };
+};
+&nbsp;
+const mockedConfig = {
+    apiUrl: 'test',
+    assetPath: 'assets',
 };
 &nbsp;
 export function getMockedRealtime(): MockedRealtime {
@@ -380,7 +397,7 @@ export function getMockedRealtime(): MockedRealtime {
     };
 }
 &nbsp;
-export function getMockedClient(client?: Partial&lt;Client&gt;): MockedClient {
+export function getMockedClient(client?: Partial&lt;MockClient&gt;): MockedClient {
     return {
         executeQuery: jest.fn(client?.executeQuery || (() =&gt; never)),
         executeMutation: jest.fn(client?.executeMutation || (<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >never)</span>),
@@ -403,28 +420,31 @@ export function getMockedClient(client?: Partial&lt;Client&gt;): MockedClient {
 export function MockProvider({
     children,
     client = <span class="branch-0 cbranch-no" title="branch not covered" >getMockedClient(),</span>
+    config = mockedConfig,
     realtime = getMockedRealtime(),
     reset = jest.fn(),
 }: {
     children: ReactNode;
     client?: MockedClient;
+    config?: EnvConfig;
     realtime?: MockedRealtime;
     reset?: () =&gt; void;
 }): ReactElement {
     return (
-        &lt;ResetProvider value={{ reset }}&gt;
-            {/* 
-                // @ts-ignore */}
-            &lt;GQLProvider value={client}&gt;
-                &lt;RealtimeProvider client={realtime as unknown as Pusher}&gt;{children}&lt;/RealtimeProvider&gt;
-            &lt;/GQLProvider&gt;
-        &lt;/ResetProvider&gt;
+        &lt;Provider
+            config={config}
+            client={client as unknown as Client}
+            realtime={realtime as unknown as Realtime}
+            reset={reset}
+        &gt;
+            {children}
+        &lt;/Provider&gt;
     );
 }
 &nbsp;
-export function renderWithClient(
+export function renderWithProvider(
     children: ReactNode,
-    client?: Partial&lt;Client&gt;
+    client?: Partial&lt;MockClient&gt;
 ): {
     client: MockedClient;
     realtime: MockedRealtime;
@@ -434,15 +454,16 @@ export function renderWithClient(
 } {
     const mockedClient = getMockedClient(client);
     const mockedRealtime = getMockedRealtime();
+&nbsp;
     const reset = jest.fn();
     const rendered = render(
-        &lt;MockProvider client={mockedClient} realtime={mockedRealtime} reset={reset}&gt;
+        &lt;MockProvider config={mockedConfig} client={mockedClient} realtime={mockedRealtime} reset={reset}&gt;
             {children}
         &lt;/MockProvider&gt;
     );
     const rerender = (children: ReactNode) =&gt;
         rendered.rerender(
-            &lt;MockProvider client={mockedClient} realtime={mockedRealtime} reset={reset}&gt;
+            &lt;MockProvider config={mockedConfig} client={mockedClient} realtime={mockedRealtime} reset={reset}&gt;
                 {children}
             &lt;/MockProvider&gt;
         );
@@ -466,7 +487,7 @@ export function getByTextWithMarkup(text: string): void {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Thu Nov 11 2021 15:44:57 GMT-0500 (Eastern Standard Time)
+                at Thu Nov 11 2021 16:37:26 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../prettify.js"></script>
