@@ -3,7 +3,7 @@ import { screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
 
-import { renderWithClient } from 'testUtils';
+import { renderWithProvider } from 'testUtils';
 import { CompanyFilterButton } from '.';
 
 const company = {
@@ -31,12 +31,12 @@ const company = {
 
 describe('CompanyFilterButton', () => {
     test('handles default state', () => {
-        renderWithClient(<CompanyFilterButton />);
+        renderWithProvider(<CompanyFilterButton />);
         screen.getByText('By Company');
     });
 
     test('handles loading state', async () => {
-        renderWithClient(<CompanyFilterButton />);
+        renderWithProvider(<CompanyFilterButton />);
         const button = screen.getByText('By Company');
         userEvent.click(button);
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
@@ -46,7 +46,7 @@ describe('CompanyFilterButton', () => {
     });
 
     test('handles no results state', async () => {
-        renderWithClient(<CompanyFilterButton />, {
+        renderWithProvider(<CompanyFilterButton />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -64,7 +64,7 @@ describe('CompanyFilterButton', () => {
 
     test('renders companies', async () => {
         const onChange = jest.fn();
-        renderWithClient(<CompanyFilterButton onChange={onChange} />, {
+        renderWithProvider(<CompanyFilterButton onChange={onChange} />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -85,7 +85,7 @@ describe('CompanyFilterButton', () => {
 
     test('renders selected company', () => {
         const onChange = jest.fn();
-        renderWithClient(<CompanyFilterButton onChange={onChange} value={company} />);
+        renderWithProvider(<CompanyFilterButton onChange={onChange} value={company} />);
         const button = screen.getByText('TICK');
         screen.getByText('Name');
         screen.getByTitle('Close');

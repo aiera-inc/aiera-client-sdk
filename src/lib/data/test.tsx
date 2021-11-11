@@ -2,7 +2,7 @@ import React, { ReactNode, useEffect } from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { fromValue } from 'wonka';
 
-import { getMockedClient, MockProvider, renderWithClient } from 'testUtils';
+import { getMockedClient, MockProvider, renderWithProvider } from 'testUtils';
 
 import { useAppConfig, useAutoTrack, useTrack } from '.';
 
@@ -16,7 +16,7 @@ describe('useTrack', () => {
     };
 
     test('calls the track mutation', () => {
-        const { client } = renderWithClient(<TestComponent />);
+        const { client } = renderWithProvider(<TestComponent />);
         expect(client.mutation).toHaveBeenCalledWith(expect.anything(), {
             event: 'View | Event',
             properties: { eventId: 1 },
@@ -31,7 +31,7 @@ describe('useAutoTrack', () => {
     };
 
     test('calls the track mutation, and calls it again on changes', () => {
-        const { client, rerender } = renderWithClient(<TestComponent id="1" />);
+        const { client, rerender } = renderWithProvider(<TestComponent id="1" />);
 
         expect(client.mutation).toHaveBeenLastCalledWith(
             expect.anything(),
@@ -52,7 +52,7 @@ describe('useAutoTrack', () => {
     });
 
     test('doesnt call it again if deps dont change', () => {
-        const { client, rerender } = renderWithClient(<TestComponent id="1" other="1" />);
+        const { client, rerender } = renderWithProvider(<TestComponent id="1" other="1" />);
 
         expect(client.mutation).toHaveBeenLastCalledWith(
             expect.anything(),
@@ -74,7 +74,7 @@ describe('useAutoTrack', () => {
     });
 
     test('handles "skip" option', () => {
-        const { client, rerender } = renderWithClient(<TestComponent id="1" skip />);
+        const { client, rerender } = renderWithProvider(<TestComponent id="1" skip />);
 
         expect(client.mutation).not.toHaveBeenCalled();
 

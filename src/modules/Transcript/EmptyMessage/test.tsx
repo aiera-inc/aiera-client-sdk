@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { EventConnectionStatus } from '@aiera/client-sdk/types/generated';
-import { renderWithClient } from 'testUtils';
+import { renderWithProvider } from 'testUtils';
 import { EmptyMessage, Event } from '.';
 
 const event = {
@@ -37,7 +37,7 @@ const event = {
 
 describe('EmptyMessage', () => {
     test('renders', () => {
-        renderWithClient(<EmptyMessage event={event as Event} />);
+        renderWithProvider(<EmptyMessage event={event as Event} />);
         screen.getByText('Event Title');
     });
 
@@ -46,7 +46,7 @@ describe('EmptyMessage', () => {
             ...event,
             connectionStatus: EventConnectionStatus.ConnectionNotExpected,
         };
-        renderWithClient(<EmptyMessage event={testEvent as Event} />);
+        renderWithProvider(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('no connection details');
     });
 
@@ -55,7 +55,7 @@ describe('EmptyMessage', () => {
             ...event,
             connectionStatus: EventConnectionStatus.ConnectionExpected,
         };
-        renderWithClient(<EmptyMessage event={testEvent as Event} />);
+        renderWithProvider(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('connection expected');
     });
 
@@ -64,7 +64,7 @@ describe('EmptyMessage', () => {
             ...event,
             connectionStatus: EventConnectionStatus.WaitingToConnect,
         };
-        renderWithClient(<EmptyMessage event={testEvent as Event} />);
+        renderWithProvider(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('waiting for connection');
     });
 
@@ -73,7 +73,7 @@ describe('EmptyMessage', () => {
             ...event,
             connectionStatus: EventConnectionStatus.Connected,
         };
-        renderWithClient(<EmptyMessage event={testEvent as Event} />);
+        renderWithProvider(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('connected');
     });
 
@@ -82,7 +82,7 @@ describe('EmptyMessage', () => {
             ...event,
             connectionStatus: EventConnectionStatus.Missed,
         };
-        renderWithClient(<EmptyMessage event={testEvent as Event} />);
+        renderWithProvider(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('missed');
     });
 
@@ -91,7 +91,7 @@ describe('EmptyMessage', () => {
             ...event,
             connectionStatus: EventConnectionStatus.Transcribing,
         };
-        renderWithClient(<EmptyMessage event={testEvent as Event} />);
+        renderWithProvider(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('This message should not appear');
     });
 
@@ -100,7 +100,7 @@ describe('EmptyMessage', () => {
             ...event,
             connectionStatus: EventConnectionStatus.Transcribed,
         };
-        renderWithClient(<EmptyMessage event={testEvent as Event} />);
+        renderWithProvider(<EmptyMessage event={testEvent as Event} />);
         screen.getByText('This message should not appear');
     });
 });

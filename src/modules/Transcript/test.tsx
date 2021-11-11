@@ -2,7 +2,7 @@ import React from 'react';
 import { act, screen, fireEvent } from '@testing-library/react';
 import { fromValue, never } from 'wonka';
 
-import { getByTextWithMarkup, renderWithClient } from '@aiera/client-sdk/testUtils';
+import { getByTextWithMarkup, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { Transcript } from '.';
 
@@ -13,7 +13,7 @@ describe('Transcript', () => {
     });
 
     test('renders', () => {
-        renderWithClient(<Transcript eventId={'1'} />, {
+        renderWithProvider(<Transcript eventId={'1'} />, {
             executeQuery: () =>
                 fromValue({
                     data: { events: generateEventTranscripts(['First paragraph']) },
@@ -28,7 +28,7 @@ describe('Transcript', () => {
     });
 
     test('renders search info', () => {
-        renderWithClient(<Transcript eventId={'1'} />, {
+        renderWithProvider(<Transcript eventId={'1'} />, {
             executeQuery: () =>
                 fromValue({
                     data: { events: generateEventTranscripts(['First paragraph']) },
@@ -40,7 +40,7 @@ describe('Transcript', () => {
     });
 
     test('renders positive sentiment', () => {
-        const { rendered } = renderWithClient(<Transcript eventId={'1'} />, {
+        const { rendered } = renderWithProvider(<Transcript eventId={'1'} />, {
             executeQuery: () =>
                 fromValue({
                     data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'positive') },
@@ -51,7 +51,7 @@ describe('Transcript', () => {
     });
 
     test('renders negative sentiment', () => {
-        const { rendered } = renderWithClient(<Transcript eventId={'1'} />, {
+        const { rendered } = renderWithProvider(<Transcript eventId={'1'} />, {
             executeQuery: () =>
                 fromValue({
                     data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'negative') },
@@ -62,7 +62,7 @@ describe('Transcript', () => {
     });
 
     test('renders updated paragraphs', () => {
-        const { realtime } = renderWithClient(<Transcript eventId={'1'} />, {
+        const { realtime } = renderWithProvider(<Transcript eventId={'1'} />, {
             executeQuery: ({ query }) => {
                 const op = getQueryNames(query)[0];
                 if (op === 'Transcript') {
@@ -92,7 +92,7 @@ describe('Transcript', () => {
     });
 
     test('renders partials', () => {
-        const { realtime } = renderWithClient(<Transcript eventId={'1'} />, {
+        const { realtime } = renderWithProvider(<Transcript eventId={'1'} />, {
             executeQuery: ({ query }) => {
                 const op = getQueryNames(query)[0];
                 if (op === 'Transcript') {

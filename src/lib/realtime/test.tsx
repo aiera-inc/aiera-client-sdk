@@ -1,5 +1,5 @@
 import React from 'react';
-import { renderWithClient } from '@aiera/client-sdk/testUtils';
+import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { useRealtimeEvent } from '.';
 
 describe('realtime', () => {
@@ -10,7 +10,7 @@ describe('realtime', () => {
             return null;
         }
 
-        renderWithClient(<TestComponent />);
+        renderWithProvider(<TestComponent />);
     });
 
     test('subscribes and unsubscribes to channels', () => {
@@ -20,7 +20,7 @@ describe('realtime', () => {
             return null;
         }
 
-        const { realtime, rendered } = renderWithClient(<TestComponent />);
+        const { realtime, rendered } = renderWithProvider(<TestComponent />);
 
         expect(realtime.subscribe).toHaveBeenCalledWith('channel');
         realtime.trigger('channel', 'event', 'data');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 
-import { renderWithClient } from 'testUtils';
+import { renderWithProvider } from 'testUtils';
 import { EventDetails, Event } from '.';
 
 const event = {
@@ -42,7 +42,7 @@ const event = {
 describe('EventDetails', () => {
     test('renders', () => {
         const toggle = jest.fn();
-        renderWithClient(<EventDetails event={event as Event} eventDetailsExpanded toggleEventDetails={toggle} />);
+        renderWithProvider(<EventDetails event={event as Event} eventDetailsExpanded toggleEventDetails={toggle} />);
         const eventDetails = screen.getByText('Event Details');
         fireEvent.click(eventDetails);
         screen.getByText('http://www.example.com/audio');

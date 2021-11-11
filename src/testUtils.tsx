@@ -101,7 +101,7 @@ export function MockProvider({
     );
 }
 
-export function renderWithClient(
+export function renderWithProvider(
     children: ReactNode,
     client?: Partial<MockClient>
 ): {

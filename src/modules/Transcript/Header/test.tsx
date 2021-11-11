@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 
-import { renderWithClient } from 'testUtils';
+import { renderWithProvider } from 'testUtils';
 import { Header, EventQuery } from '.';
 
 const eventQuery = {
@@ -68,13 +68,13 @@ const eventQuery = {
 describe('Header', () => {
     test('renders', () => {
         const onBack = jest.fn();
-        renderWithClient(<Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} />);
+        renderWithProvider(<Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} />);
         screen.getByText('VERB');
     });
 
     test('Back function is called', () => {
         const onBack = jest.fn();
-        renderWithClient(<Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} />);
+        renderWithProvider(<Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} />);
         const eventsBtn = screen.getByText('Events');
         fireEvent.click(eventsBtn);
         expect(onBack).toHaveBeenCalledTimes(1);
@@ -82,7 +82,7 @@ describe('Header', () => {
 
     test('Renders search term and fires search change events', () => {
         const onChangeSearchTerm = jest.fn();
-        renderWithClient(
+        renderWithProvider(
             <Header
                 containerHeight={500}
                 eventQuery={eventQuery as EventQuery}

@@ -6,7 +6,7 @@ import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
 
-import { renderWithClient } from '@aiera/client-sdk/testUtils';
+import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { EventList } from '.';
 
@@ -100,12 +100,12 @@ describe('EventList', () => {
     });
 
     test('handles loading state', () => {
-        const { rendered } = renderWithClient(<EventList />);
+        const { rendered } = renderWithProvider(<EventList />);
         expect(rendered.container.querySelector('.EventList__loading')).not.toBeNull();
     });
 
     test('handles empty state', () => {
-        renderWithClient(<EventList />, {
+        renderWithProvider(<EventList />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -117,7 +117,7 @@ describe('EventList', () => {
     });
 
     test('handles event list', () => {
-        renderWithClient(<EventList />, {
+        renderWithProvider(<EventList />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -145,13 +145,13 @@ describe('EventList', () => {
             );
         };
 
-        const { client } = renderWithClient(<TestComponent />);
+        const { client } = renderWithProvider(<TestComponent />);
         bus.emit('instrument-selected', { ticker: 'TICK' }, 'in');
         expect(client.query).toHaveBeenCalled();
     });
 
     test('renders calendar when there is no audio url', () => {
-        renderWithClient(<EventList />, {
+        renderWithProvider(<EventList />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -165,7 +165,7 @@ describe('EventList', () => {
     });
 
     test('renders play when there is an audio url', () => {
-        renderWithClient(<EventList />, {
+        renderWithProvider(<EventList />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -179,7 +179,7 @@ describe('EventList', () => {
     });
 
     test('handles selecting an event', () => {
-        renderWithClient(<EventList />, {
+        renderWithProvider(<EventList />, {
             executeQuery: ({ query }: { query: DocumentNode }) => {
                 // @ts-ignore
                 const queryName = query?.definitions[0]?.name as string;

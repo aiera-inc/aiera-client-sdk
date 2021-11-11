@@ -2,7 +2,7 @@ import React, { FormEvent } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
-import { renderWithClient } from '@aiera/client-sdk/testUtils';
+import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { AuthTokens, TokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import { Auth, AuthUI } from '.';
 
@@ -61,13 +61,13 @@ describe('Auth', () => {
         };
     }
     test('handles loading state', () => {
-        renderWithClient(<Auth />);
+        renderWithProvider(<Auth />);
         screen.getByText('Loading...');
     });
 
     test('handles logged in state with user', async () => {
         const config = createMockAuth();
-        const { reset } = renderWithClient(
+        const { reset } = renderWithProvider(
             <Auth config={config} showLogout>
                 <div>Hello World!</div>
             </Auth>,
@@ -91,7 +91,7 @@ describe('Auth', () => {
 
     test('handles logged in state with user and showLogout false', () => {
         const config = createMockAuth();
-        renderWithClient(
+        renderWithProvider(
             <Auth config={config}>
                 <div>Hello World!</div>
             </Auth>,
@@ -111,7 +111,7 @@ describe('Auth', () => {
 
     test('handles logging in when in logged out state', async () => {
         const config = createMockAuth();
-        const { client } = renderWithClient(<Auth config={config} />, {
+        const { client } = renderWithProvider(<Auth config={config} />, {
             executeQuery: () =>
                 fromValue({
                     data: {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
-import { renderWithClient } from 'testUtils';
+import { renderWithProvider } from 'testUtils';
 import '@testing-library/jest-dom/extend-expect';
 import { PriceChart } from '.';
 
@@ -43,7 +43,7 @@ const event = {
 describe('PriceChart', () => {
     test('renders', () => {
         const toggle = jest.fn();
-        const { rendered } = renderWithClient(
+        const { rendered } = renderWithProvider(
             <PriceChart headerExpanded={true} priceChartExpanded togglePriceChart={toggle} />
         );
         const label = screen.getByText('Price Reaction');
