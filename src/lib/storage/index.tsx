@@ -1,3 +1,5 @@
+import React, { ReactElement, ReactNode, createContext, useContext } from 'react';
+
 export interface Storage {
     put(key: string, value: string): Promise<void>;
     get(key: string): Promise<string | null>;
@@ -20,3 +22,13 @@ export const local: Storage = {
         return Promise.resolve();
     },
 };
+
+export const Context = createContext<Storage>(local);
+
+export function Provider({ children, storage = local }: { children: ReactNode; storage?: Storage }): ReactElement {
+    return <Context.Provider value={storage}>{children}</Context.Provider>;
+}
+
+export function useStorage(): Storage {
+    return useContext(Context);
+}

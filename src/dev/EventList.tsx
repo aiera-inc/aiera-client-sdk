@@ -5,6 +5,7 @@ import { Provider as ClientProvider } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Provider as MessageBusProvider } from '@aiera/client-sdk/lib/msg';
 import { Provider as ConfigProvider } from '@aiera/client-sdk/lib/config';
 import { Provider as RealtimeProvider } from '@aiera/client-sdk/lib/realtime';
+import { Provider as StorageProvider } from '@aiera/client-sdk/lib/storage';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
 import '@aiera/client-sdk/css/styles.css';
@@ -30,11 +31,13 @@ const App: FC = (): ReactElement => {
                 <MessageBusProvider bus={bus}>
                     <ClientProvider>
                         <RealtimeProvider>
-                            <Auth showLogout>
-                                <div className="h-full border border-black">
-                                    <EventList />
-                                </div>
-                            </Auth>
+                            <StorageProvider>
+                                <Auth showLogout>
+                                    <div className="h-full border border-black">
+                                        <EventList />
+                                    </div>
+                                </Auth>
+                            </StorageProvider>
                         </RealtimeProvider>
                     </ClientProvider>
                 </MessageBusProvider>
