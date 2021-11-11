@@ -4,29 +4,32 @@ import { DocumentNode } from 'graphql';
 import Pusher from 'pusher-js';
 import { screen, render } from '@testing-library/react';
 import { never } from 'wonka';
-import { Provider as GQLProvider } from 'urql';
 import EventEmitter from 'eventemitter3';
 
-import { ResetProvider } from '@aiera/client-sdk/api/client';
-import { Provider as RealtimeProvider } from '@aiera/client-sdk/lib/realtime';
+import { Provider, Client, EnvConfig, Realtime } from '@aiera/client-sdk/components/Provider';
 
 export type MockFn = ReturnType<typeof jest.fn>;
-export interface Client {
+type Mocked<T> = {
+    [P in keyof T]: MockFn;
+};
+export interface MockClient {
     executeQuery: (opts: { query: DocumentNode }) => unknown;
     executeMutation: () => unknown;
     executeSubscription: () => unknown;
     query: () => { toPromise: () => Promise<unknown> };
     mutation: () => { toPromise: () => Promise<unknown> };
 }
-type Mocked<T> = {
-    [P in keyof T]: MockFn;
-};
-export type MockedClient = Mocked<Client>;
+export type MockedClient = Mocked<MockClient>;
 
 type Channel = { bind: MockFn; unbind: MockFn; unsubscribe: MockFn };
 type MockedRealtime = Mocked<Partial<Pusher>> & {
     trigger: (channelName: string, eventName: string, data?: unknown) => void;
     mockedChannels: { [name: string]: Channel };
+};
+
+const mockedConfig = {
+    apiUrl: 'test',
+    assetPath: 'assets',
 };
 
 export function getMockedRealtime(): MockedRealtime {
@@ -53,7 +56,7 @@ export function getMockedRealtime(): MockedRealtime {
     };
 }
 
-export function getMockedClient(client?: Partial<Client>): MockedClient {
+export function getMockedClient(client?: Partial<MockClient>): MockedClient {
     return {
         executeQuery: jest.fn(client?.executeQuery || (() => never)),
         executeMutation: jest.fn(client?.executeMutation || (() => never)),
@@ -76,28 +79,31 @@ export function getMockedClient(client?: Partial<Client>): MockedClient {
 export function MockProvider({
     children,
     client = getMockedClient(),
+    config = mockedConfig,
     realtime = getMockedRealtime(),
     reset = jest.fn(),
 }: {
     children: ReactNode;
     client?: MockedClient;
+    config?: EnvConfig;
     realtime?: MockedRealtime;
     reset?: () => void;
 }): ReactElement {
     return (
-        <ResetProvider value={{ reset }}>
-            {/* 
-                // @ts-ignore */}
-            <GQLProvider value={client}>
-                <RealtimeProvider client={realtime as unknown as Pusher}>{children}</RealtimeProvider>
-            </GQLProvider>
-        </ResetProvider>
+        <Provider
+            config={config}
+            client={client as unknown as Client}
+            realtime={realtime as unknown as Realtime}
+            reset={reset}
+        >
+            {children}
+        </Provider>
     );
 }
 
 export function renderWithClient(
     children: ReactNode,
-    client?: Partial<Client>
+    client?: Partial<MockClient>
 ): {
     client: MockedClient;
     realtime: MockedRealtime;
@@ -107,15 +113,16 @@ export function renderWithClient(
 } {
     const mockedClient = getMockedClient(client);
     const mockedRealtime = getMockedRealtime();
+
     const reset = jest.fn();
     const rendered = render(
-        <MockProvider client={mockedClient} realtime={mockedRealtime} reset={reset}>
+        <MockProvider config={mockedConfig} client={mockedClient} realtime={mockedRealtime} reset={reset}>
             {children}
         </MockProvider>
     );
     const rerender = (children: ReactNode) =>
         rendered.rerender(
-            <MockProvider client={mockedClient} realtime={mockedRealtime} reset={reset}>
+            <MockProvider config={mockedConfig} client={mockedClient} realtime={mockedRealtime} reset={reset}>
                 {children}
             </MockProvider>
         );

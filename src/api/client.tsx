@@ -119,15 +119,17 @@ export const Provider = ({
     config = {},
     children,
     client: passedClient,
+    reset: passedReset,
 }: {
     config?: Partial<Config>;
     children: ReactNode;
     client?: Client;
+    reset?: () => void;
 }): ReactElement => {
     const envConfig = useConfig();
     const clientConfig = { ...config, url: config.url || envConfig.apiUrl };
     const [client, setClient] = useState(passedClient || createGQLClient(clientConfig));
-    const reset = () => setClient(passedClient || createGQLClient(clientConfig));
+    const reset = passedReset || (() => setClient(passedClient || createGQLClient(clientConfig)));
     return (
         <Context.Provider value={{ reset }}>
             <UrqlProvider value={client}>{children}</UrqlProvider>

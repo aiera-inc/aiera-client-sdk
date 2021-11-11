@@ -15,6 +15,7 @@ export interface ProviderProps {
     client?: Client;
     config: EnvConfig;
     realtime?: Realtime;
+    reset?: () => void;
     storage?: Storage;
 }
 
@@ -22,10 +23,10 @@ export interface ProviderProps {
  * Renders Provider
  */
 export function Provider(props: ProviderProps): ReactElement {
-    const { bus, children, client, config, realtime, storage } = props;
+    const { bus, children, client, config, realtime, reset, storage } = props;
     return (
         <ConfigProvider config={config}>
-            <ClientProvider client={client}>
+            <ClientProvider client={client} reset={reset}>
                 <MessageBusProvider bus={bus}>
                     <RealtimeProvider client={realtime}>
                         <StorageProvider storage={storage}>{children}</StorageProvider>
