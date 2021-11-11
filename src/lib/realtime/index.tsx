@@ -3,14 +3,12 @@ import Pusher from 'pusher-js';
 
 import { useAppConfig } from '@aiera/client-sdk/lib/data';
 
-interface Realtime {
-    client?: Pusher;
-}
+export type Realtime = Pusher;
 
-export const Context = createContext<Realtime>({});
+export const Context = createContext<Realtime | undefined>(undefined);
 
 export function Provider({ children, client: passedClient }: { children: ReactNode; client?: Pusher }): ReactElement {
-    const [client, setClient] = useState<Pusher | undefined>(passedClient);
+    const [client, setClient] = useState<Realtime | undefined>(passedClient);
     const configQuery = useAppConfig();
     useEffect(() => {
         const appKey = configQuery.state.data?.configuration?.pusherAppKey;
@@ -19,15 +17,15 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
             setClient(new Pusher(appKey, { cluster }));
         }
     }, [configQuery.state.data?.configuration?.pusherAppKey, configQuery.state.data?.configuration?.pusherAppKey]);
-    return <Context.Provider value={{ client }}>{children}</Context.Provider>;
+    return <Context.Provider value={client}>{children}</Context.Provider>;
 }
 
-export function useRealtime(): Realtime {
+export function useRealtime(): Realtime | undefined {
     return useContext(Context);
 }
 
 export function useRealtimeEvent<T>(channelName: string, eventName: string, callback: (data?: T) => void): void {
-    const { client } = useRealtime();
+    const client = useRealtime();
     useEffect(() => {
         if (!client) return;
         const channel = client.subscribe(channelName);

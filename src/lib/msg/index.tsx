@@ -67,22 +67,17 @@ export class MessageBus {
     }
 }
 
-/** @notExported */
-interface MessageBusContext {
-    bus: MessageBus;
-}
-const Context = createContext<MessageBusContext>({ bus: new MessageBus() });
+const Context = createContext<MessageBus>(new MessageBus());
 
 /**
  * A React Provider to configure an app-level MessageBus
  */
-export const Provider = ({ bus, children }: { bus: MessageBus; children: ReactNode }): ReactElement => {
-    return <Context.Provider value={{ bus }}>{children}</Context.Provider>;
+export const Provider = ({ bus, children }: { bus?: MessageBus; children: ReactNode }): ReactElement => {
+    return <Context.Provider value={bus || new MessageBus()}>{children}</Context.Provider>;
 };
 
 export const useMessageBus = (): MessageBus => {
-    const { bus } = useContext(Context);
-    return bus;
+    return useContext(Context);
 };
 
 /**

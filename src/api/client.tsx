@@ -104,6 +104,8 @@ function createGQLClient({ url, fetch, auth = defaultTokenAuthConfig }: Config):
     });
 }
 
+export type { Client };
+
 /** @notExported */
 interface ClientContext {
     reset: () => void;
@@ -116,14 +118,16 @@ const Context = createContext<ClientContext>({ reset: () => undefined });
 export const Provider = ({
     config = {},
     children,
+    client: passedClient,
 }: {
     config?: Partial<Config>;
     children: ReactNode;
+    client?: Client;
 }): ReactElement => {
-    const appConfig = useConfig();
-    const clientConfig = { ...config, url: config.url || appConfig.apiUrl };
-    const [client, setClient] = useState(createGQLClient(clientConfig));
-    const reset = () => setClient(createGQLClient(clientConfig));
+    const envConfig = useConfig();
+    const clientConfig = { ...config, url: config.url || envConfig.apiUrl };
+    const [client, setClient] = useState(passedClient || createGQLClient(clientConfig));
+    const reset = () => setClient(passedClient || createGQLClient(clientConfig));
     return (
         <Context.Provider value={{ reset }}>
             <UrqlProvider value={client}>{children}</UrqlProvider>
