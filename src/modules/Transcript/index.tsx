@@ -74,7 +74,7 @@ interface TranscriptUIProps {
     onClickTranscript?: (paragraph: Paragraph) => void;
     partial?: Partial;
     prevMatch: () => void;
-    scrollRef: Ref<HTMLDivElement>;
+    scrollContainerRef: Ref<HTMLDivElement>;
     searchTerm: string;
     showSpeakers: boolean;
     speakerTurns: SpeakerTurnsWithMatches[];
@@ -97,7 +97,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         onClickTranscript,
         partial,
         prevMatch,
-        scrollRef,
+        scrollContainerRef,
         searchTerm,
         showSpeakers,
         speakerTurns,
@@ -139,7 +139,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     </div>
                 )}
             </div>
-            <div className="overflow-y-scroll flex-1 bg-gray-50" ref={scrollRef}>
+            <div className="overflow-y-scroll flex-1 bg-gray-50" ref={scrollContainerRef}>
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
                         new Array(5).fill(0).map((_, idx) => (
@@ -589,7 +589,7 @@ function useAudioSync(
     Partial
 ] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
-    const [scrollRef, currentParagraphRef] = useAutoScroll<HTMLDivElement>();
+    const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll<HTMLDivElement>();
 
     const paragraphs = useMemo(() => speakerTurns.flatMap((s) => s.paragraphs), [speakerTurns]);
     // It's not the most efficient thing to load the partial here, since each partial change will trigger a re-render.
@@ -639,7 +639,7 @@ function useAudioSync(
         // an indicator in the UI
     }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text]);
 
-    return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef, partial];
+    return [currentParagraph, setCurrentParagraph, scrollContainerRef, currentParagraphRef, partial];
 }
 
 function useSearchState(speakerTurns: SpeakerTurn[]) {
@@ -649,7 +649,7 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
 
     // Track the current match id and use it to set the proper currentMatchRef for autoscrolling
     const [currentMatch, setCurrentMatch] = useState<string | null>(null);
-    const [scrollRef, currentMatchRef] = useAutoScroll<HTMLDivElement>({
+    const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
         pauseOnUserScroll: false,
         block: 'center',
         inline: 'center',
@@ -743,7 +743,7 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
         matchIndex,
         nextMatch,
         prevMatch,
-        scrollRef,
+        scrollContainerRef,
         currentMatch,
         currentMatchRef,
     };
@@ -766,7 +766,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const audioPlayer = useAudioPlayer();
 
     const speakerTurns = useLatestTranscripts(eventId, eventQuery);
-    const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef, partial] = useAudioSync(
+    const [currentParagraph, _setCurrentParagraph, autoscrollContainerRef, currentParagraphRef, partial] = useAudioSync(
         eventId,
         speakerTurns,
         eventQuery,
@@ -775,12 +775,12 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const searchState = useSearchState(speakerTurns);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
-    const scrollRef = useCallback(
-        (ref) => {
-            autoScrollRef(ref);
-            searchState.scrollRef(ref);
+    const scrollContainerRef = useCallback(
+        (ref: HTMLDivElement) => {
+            autoscrollContainerRef(ref);
+            searchState.scrollContainerRef(ref);
         },
-        [autoScrollRef, searchState.scrollRef]
+        [autoscrollContainerRef, searchState.scrollContainerRef]
     );
     const onClickTranscript = useCallback(
         (paragraph: Paragraph) => {
@@ -821,7 +821,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             onClickTranscript={onClickTranscript}
             partial={partial}
             prevMatch={searchState.prevMatch}
-            scrollRef={scrollRef}
+            scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
         />
     );

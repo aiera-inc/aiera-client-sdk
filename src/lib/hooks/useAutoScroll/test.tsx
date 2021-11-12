@@ -26,13 +26,13 @@ describe('useAutoScroll', () => {
 
     async function finishScrolling(result: ReturnType<typeof useAutoScroll>) {
         jest.advanceTimersByTime(200);
-        await result[2].current;
+        await result.isAutoScrolling.current;
     }
 
     test('calls scrollIntoView on the target ref when it changes', () => {
         const { result, rerender } = renderHook(() => useAutoScroll());
-        const [scrollRef, targetRef] = result.current;
-        refDiv(scrollRef);
+        const { scrollContainerRef, targetRef } = result.current;
+        refDiv(scrollContainerRef);
         let targetDiv = refDiv();
 
         // target ref was null so scroll shouldn't have been called
@@ -53,8 +53,8 @@ describe('useAutoScroll', () => {
 
     test('pauses auto scrolling after manual scroll', async () => {
         const { result } = renderHook(() => useAutoScroll({ log: true }));
-        const [scrollRef, targetRef] = result.current;
-        const scrollDiv = refDiv(scrollRef);
+        const { scrollContainerRef, targetRef } = result.current;
+        const scrollDiv = refDiv(scrollContainerRef);
         let targetDiv = refDiv();
 
         // target ref was null so scroll shouldn't have been called
@@ -128,8 +128,8 @@ describe('useAutoScroll', () => {
 
     test('does not pause auto scrolling after manual scroll when pauseOnUserScroll is false', () => {
         const { result } = renderHook(() => useAutoScroll({ pauseOnUserScroll: false }));
-        const [scrollRef, targetRef] = result.current;
-        const scrollDiv = refDiv(scrollRef);
+        const { scrollContainerRef, targetRef } = result.current;
+        const scrollDiv = refDiv(scrollContainerRef);
         let targetDiv = refDiv();
 
         // target ref was null so scroll shouldn't have been called
@@ -157,8 +157,8 @@ describe('useAutoScroll', () => {
 
     test('skips calling scrollIntoView if skip is set', () => {
         const { result, rerender } = renderHook(() => useAutoScroll());
-        const [scrollRef, targetRef] = result.current;
-        refDiv(scrollRef);
+        const { scrollContainerRef, targetRef } = result.current;
+        refDiv(scrollContainerRef);
         let targetDiv = refDiv();
 
         // target ref was null so scroll shouldn't have been called
@@ -181,8 +181,8 @@ describe('useAutoScroll', () => {
         const { result, rerender } = renderHook(() =>
             useAutoScroll({ initialBehavior: 'smooth', behavior: 'auto', block: 'start', inline: 'start' })
         );
-        const [scrollRef, targetRef] = result.current;
-        refDiv(scrollRef);
+        const { scrollContainerRef, targetRef } = result.current;
+        refDiv(scrollContainerRef);
         let targetDiv = refDiv();
 
         // target ref was null so scroll shouldn't have been called
@@ -207,8 +207,8 @@ describe('useAutoScroll', () => {
 
     test('does not pause autoscrolling while autoscrolling', async () => {
         const { result } = renderHook(() => useAutoScroll());
-        const [scrollRef, targetRef] = result.current;
-        const scrollDiv = refDiv(scrollRef);
+        const { scrollContainerRef, targetRef } = result.current;
+        const scrollDiv = refDiv(scrollContainerRef);
         const targetDiv = refDiv();
 
         // target ref was null so scroll shouldn't have been called
