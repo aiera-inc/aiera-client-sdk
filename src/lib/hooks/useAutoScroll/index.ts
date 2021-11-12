@@ -1,4 +1,30 @@
-import { useLayoutEffect, useRef, useState, RefCallback } from 'react';
+import { useLayoutEffect, useRef, useState, RefCallback, RefObject } from 'react';
+
+async function scrollIntoView(
+    scrollContainer: HTMLElement,
+    target: HTMLElement,
+    opts: ScrollIntoViewOptions,
+    delay = 200
+): Promise<void> {
+    let resetTimer: (() => void) | null = null;
+
+    const promise = new Promise<void>((resolve) => {
+        let timer: number;
+        resetTimer = () => {
+            window.clearTimeout(timer);
+            timer = window.setTimeout(resolve, delay);
+        };
+        scrollContainer.addEventListener('scroll', resetTimer);
+        resetTimer();
+        target.scrollIntoView?.(opts);
+    });
+
+    if (resetTimer) {
+        scrollContainer.removeEventListener('scroll', resetTimer);
+    }
+
+    return promise;
+}
 
 /**
  * Implementation of autoscroll that watches a `target` and autoscrolls anything the target
@@ -23,7 +49,9 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     behavior?: ScrollIntoViewOptions['behavior'];
     block?: ScrollIntoViewOptions['block'];
     inline?: ScrollIntoViewOptions['inline'];
-}): [RefCallback<E>, RefCallback<T>] {
+    track?: boolean;
+    log?: boolean;
+}): [RefCallback<E>, RefCallback<T>, RefObject<Promise<void> | null>] {
     const {
         skip = false,
         pauseOnUserScroll = true,
@@ -34,12 +62,13 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     } = opts || {};
     const [element, setElement] = useState<E | null>(null);
     const [target, setTarget] = useState<T | null>(null);
+    const isAutoScrolling = useRef<Promise<void> | null>(null);
     const pauseAutoScroll = useRef<boolean>(false);
     const initialScroll = useRef<boolean>(true);
 
     useLayoutEffect(() => {
         function checkPosition() {
-            if (target && element && !skip && pauseOnUserScroll) {
+            if (target && element && !isAutoScrolling.current && !skip && pauseOnUserScroll) {
                 const targetPosition = target.getBoundingClientRect();
                 const containerPosition = element.getBoundingClientRect();
 
@@ -55,13 +84,23 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         }
 
         // Whenever one of the refs changes, check if we should scroll to the current target
-        if (!skip && !pauseAutoScroll.current && element) {
-            // Dont smooth scroll for now, causes issues in chrome
-            target?.scrollIntoView?.({
-                behavior: initialScroll.current ? initialBehavior : behavior,
-                block,
-                inline,
-            });
+
+        if (!skip && !pauseAutoScroll.current && element && target) {
+            void (async function () {
+                isAutoScrolling.current = scrollIntoView(
+                    element,
+                    target,
+                    {
+                        behavior: initialScroll.current ? initialBehavior : behavior,
+                        block,
+                        inline,
+                    },
+                    200
+                );
+                await isAutoScrolling.current;
+                isAutoScrolling.current = null;
+            })();
+
             // If we scrolled, reset initial back so we start smooth scrolling from now on
             initialScroll.current = false;
         }
@@ -79,5 +118,5 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         return () => element?.removeEventListener('scroll', checkPosition);
     }, [element, target, skip, pauseOnUserScroll, initialBehavior, behavior, block, inline]);
 
-    return [setElement, setTarget];
+    return [setElement, setTarget, isAutoScrolling];
 }

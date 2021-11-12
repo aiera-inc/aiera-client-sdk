@@ -15,6 +15,20 @@ describe('useAutoScroll', () => {
         return div;
     }
 
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
+    afterEach(() => {
+        jest.clearAllTimers();
+        jest.useRealTimers();
+    });
+
+    async function finishScrolling(result: ReturnType<typeof useAutoScroll>) {
+        jest.advanceTimersByTime(200);
+        await result[2].current;
+    }
+
     test('calls scrollIntoView on the target ref when it changes', () => {
         const { result, rerender } = renderHook(() => useAutoScroll());
         const [scrollRef, targetRef] = result.current;
@@ -37,8 +51,8 @@ describe('useAutoScroll', () => {
         expect(targetDiv.scrollIntoView).toHaveBeenCalledWith(expect.objectContaining({ behavior: 'smooth' }));
     });
 
-    test('pauses auto scrolling after manual scroll', () => {
-        const { result } = renderHook(() => useAutoScroll());
+    test('pauses auto scrolling after manual scroll', async () => {
+        const { result } = renderHook(() => useAutoScroll({ log: true }));
         const [scrollRef, targetRef] = result.current;
         const scrollDiv = refDiv(scrollRef);
         let targetDiv = refDiv();
@@ -49,6 +63,7 @@ describe('useAutoScroll', () => {
         // Rerender with the refs set so we get to an initial autoscrolled state
         refDiv(targetRef, targetDiv);
         expect(targetDiv.scrollIntoView).toHaveBeenCalled();
+        await finishScrolling(result.current);
 
         // Set the target outside of the scroll container, meaning the user scrolled away
         // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
@@ -77,6 +92,7 @@ describe('useAutoScroll', () => {
         // Confirm that the target ref was scrolled into view
         targetDiv = refDiv(targetRef);
         expect(targetDiv.scrollIntoView).toHaveBeenCalled();
+        await finishScrolling(result.current);
 
         // Now check using bottom
 
@@ -107,6 +123,7 @@ describe('useAutoScroll', () => {
         // Confirm that the target ref was scrolled into view
         targetDiv = refDiv(targetRef);
         expect(targetDiv.scrollIntoView).toHaveBeenCalled();
+        await finishScrolling(result.current);
     });
 
     test('does not pause auto scrolling after manual scroll when pauseOnUserScroll is false', () => {
@@ -186,5 +203,35 @@ describe('useAutoScroll', () => {
         expect(targetDiv.scrollIntoView).toHaveBeenCalledWith(
             expect.objectContaining({ behavior: 'auto', block: 'start', inline: 'start' })
         );
+    });
+
+    test('does not pause autoscrolling while autoscrolling', async () => {
+        const { result } = renderHook(() => useAutoScroll());
+        const [scrollRef, targetRef] = result.current;
+        const scrollDiv = refDiv(scrollRef);
+        const targetDiv = refDiv();
+
+        // target ref was null so scroll shouldn't have been called
+        expect(targetDiv.scrollIntoView).not.toHaveBeenCalled();
+
+        // Rerender with the refs set so we get to an initial autoscrolled state
+        refDiv(targetRef, targetDiv);
+        expect(targetDiv.scrollIntoView).toHaveBeenCalled();
+
+        // Set the target outside of the scroll container, meaning the user scrolled away
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        targetDiv.getBoundingClientRect = jest.fn(() => ({ top: 50, height: 30 }));
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        scrollDiv.getBoundingClientRect = jest.fn(() => ({
+            top: 100,
+        }));
+        fireEvent.scroll(scrollDiv);
+        expect(targetDiv.getBoundingClientRect).not.toHaveBeenCalled();
+        expect(scrollDiv.getBoundingClientRect).not.toHaveBeenCalled();
+
+        await finishScrolling(result.current);
+        fireEvent.scroll(scrollDiv);
+        expect(targetDiv.getBoundingClientRect).toHaveBeenCalled();
+        expect(scrollDiv.getBoundingClientRect).toHaveBeenCalled();
     });
 });
