@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement, MouseEventHandler, useCallback } from 'react';
+import React, { Fragment, ReactElement, SyntheticEvent, MouseEventHandler, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
@@ -384,7 +384,10 @@ export const EventList = (_props: EventListProps): ReactElement => {
             eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}
             listType={state.listType}
-            onBackFromTranscript={useCallback((event) => onSelectEvent(event, { value: null }), [onSelectEvent])}
+            onBackFromTranscript={useCallback(
+                (event: SyntheticEvent<Element, Event>) => onSelectEvent(event, { value: null }),
+                [onSelectEvent]
+            )}
             onCompanyChange={onSelectCompany}
             onSearchChange={handlers.searchTerm}
             onSelectFilterBy={handlers.filterByTypes}

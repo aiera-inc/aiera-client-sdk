@@ -90,8 +90,8 @@ describe('Header', () => {
                 searchTerm={'test search'}
             />
         );
-        const searchInput = screen.getByPlaceholderText('Search Transcripts...') as HTMLInputElement;
-        expect(searchInput.value).toBe('test search');
+        const searchInput = screen.getByPlaceholderText('Search Transcripts...');
+        expect((searchInput as HTMLInputElement).value).toBe('test search');
         fireEvent.change(searchInput, { target: { value: 'new search' } });
         expect(onChangeSearchTerm).toHaveBeenCalledWith(
             expect.anything(),

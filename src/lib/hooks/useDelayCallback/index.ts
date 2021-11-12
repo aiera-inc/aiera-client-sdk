@@ -46,7 +46,7 @@ export function useDelayCallback<T extends (...args: any[]) => void>(
 
     return [
         useCallback(
-            ((...args) => {
+            ((...args: Parameters<T>) => {
                 if (ref.current && existing === 'cancel') {
                     window.clearTimeout(ref.current);
                     ref.current = null;
