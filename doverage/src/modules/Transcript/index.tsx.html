@@ -1789,7 +1789,7 @@ interface TranscriptUIProps {
     onClickTranscript?: (paragraph: Paragraph) =&gt; void;
     partial?: Partial;
     prevMatch: () =&gt; void;
-    scrollRef: Ref&lt;HTMLDivElement&gt;;
+    scrollContainerRef: Ref&lt;HTMLDivElement&gt;;
     searchTerm: string;
     showSpeakers: boolean;
     speakerTurns: SpeakerTurnsWithMatches[];
@@ -1812,7 +1812,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
         onClickTranscript,
         partial,
         prevMatch,
-        scrollRef,
+        scrollContainerRef,
         searchTerm,
         showSpeakers,
         speakerTurns,
@@ -1854,7 +1854,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
                     &lt;/div&gt;
                 )}
             &lt;/div&gt;
-            &lt;div className="overflow-y-scroll flex-1 bg-gray-50" ref={scrollRef}&gt;
+            &lt;div className="overflow-y-scroll flex-1 bg-gray-50" ref={scrollContainerRef}&gt;
                 {match(eventQuery)
                     .with({ status: 'loading' }, <span class="fstat-no" title="function not covered" >()</span> =&gt;
 <span class="cstat-no" title="statement not covered" >                        new Array(5).fill(0).map(<span class="fstat-no" title="function not covered" >(_</span>, idx) =&gt; (</span>
@@ -2304,7 +2304,7 @@ function useAudioSync(
     Partial
 ] {
     const [currentParagraph, setCurrentParagraph] = useState&lt;string | null&gt;(null);
-    const [scrollRef, currentParagraphRef] = useAutoScroll&lt;HTMLDivElement&gt;();
+    const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll&lt;HTMLDivElement&gt;();
 &nbsp;
     const paragraphs = useMemo(() =&gt; speakerTurns.flatMap((s) =&gt; s.paragraphs), [speakerTurns]);
     // It's not the most efficient thing to load the partial here, since each partial change will trigger a re-render.
@@ -2354,7 +2354,7 @@ function useAudioSync(
         // an indicator in the UI
     }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text]);
 &nbsp;
-    return [currentParagraph, setCurrentParagraph, scrollRef, currentParagraphRef, partial];
+    return [currentParagraph, setCurrentParagraph, scrollContainerRef, currentParagraphRef, partial];
 }
 &nbsp;
 function useSearchState(speakerTurns: SpeakerTurn[]) {
@@ -2364,7 +2364,7 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
 &nbsp;
     // Track the current match id and use it to set the proper currentMatchRef for autoscrolling
     const [currentMatch, setCurrentMatch] = useState&lt;string | null&gt;(null);
-    const [scrollRef, currentMatchRef] = useAutoScroll&lt;HTMLDivElement&gt;({
+    const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll&lt;HTMLDivElement&gt;({
         pauseOnUserScroll: false,
         block: 'center',
         inline: 'center',
@@ -2458,7 +2458,7 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
         matchIndex,
         nextMatch,
         prevMatch,
-        scrollRef,
+        scrollContainerRef,
         currentMatch,
         currentMatchRef,
     };
@@ -2481,7 +2481,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
     const audioPlayer = useAudioPlayer();
 &nbsp;
     const speakerTurns = useLatestTranscripts(eventId, eventQuery);
-    const [currentParagraph, _setCurrentParagraph, autoScrollRef, currentParagraphRef, partial] = useAudioSync(
+    const [currentParagraph, _setCurrentParagraph, autoscrollContainerRef, currentParagraphRef, partial] = useAudioSync(
         eventId,
         speakerTurns,
         eventQuery,
@@ -2490,12 +2490,12 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
     const searchState = useSearchState(speakerTurns);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
-    const scrollRef = useCallback(
-        (ref) =&gt; {
-            autoScrollRef(ref);
-            searchState.scrollRef(ref);
+    const scrollContainerRef = useCallback(
+        (ref: HTMLDivElement) =&gt; {
+            autoscrollContainerRef(ref);
+            searchState.scrollContainerRef(ref);
         },
-        [autoScrollRef, searchState.scrollRef]
+        [autoscrollContainerRef, searchState.scrollContainerRef]
     );
     const onClickTranscript = useCallback(
 <span class="fstat-no" title="function not covered" >        (p</span>aragraph: Paragraph) =&gt; {
@@ -2536,7 +2536,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             onClickTranscript={onClickTranscript}
             partial={partial}
             prevMatch={searchState.prevMatch}
-            scrollRef={scrollRef}
+            scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
         /&gt;
     );
@@ -2548,7 +2548,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Nov 12 2021 15:47:46 GMT-0500 (Eastern Standard Time)
+                at Fri Nov 12 2021 16:11:49 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
