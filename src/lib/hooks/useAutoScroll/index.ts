@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState, RefCallback, RefObject } from 'react';
+import { useLayoutEffect, useCallback, useRef, useState, RefCallback, RefObject } from 'react';
 
 function isVisible(container: HTMLElement, target: HTMLElement) {
     const targetPosition = target.getBoundingClientRect();
@@ -65,6 +65,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
 }): {
     scrollContainerRef: RefCallback<E>;
     targetRef: RefCallback<T>;
+    scroll: (opts?: { top?: number; onlyIfNeeded?: boolean }) => void;
     isAutoScrolling: RefObject<Promise<void> | null>;
 } {
     const {
@@ -130,5 +131,23 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         return () => scrollContainer?.removeEventListener('scroll', onScroll);
     }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, block, inline]);
 
-    return { scrollContainerRef, targetRef, isAutoScrolling };
+    const scroll = useCallback(
+        (opts?: { top?: number; onlyIfNeeded?: boolean }) => {
+            const { top, onlyIfNeeded = false } = opts || {};
+            if (top === undefined) {
+                if (!onlyIfNeeded || (scrollContainer && target && !isVisible(scrollContainer, target))) {
+                    target?.scrollIntoView({
+                        behavior: initialScroll.current ? initialBehavior : behavior,
+                        block,
+                        inline,
+                    });
+                }
+            } else {
+                scrollContainer?.scrollTo({ top });
+            }
+        },
+        [scrollContainer, target, initialBehavior, behavior, block, inline]
+    );
+
+    return { scrollContainerRef, targetRef, scroll, isAutoScrolling };
 }

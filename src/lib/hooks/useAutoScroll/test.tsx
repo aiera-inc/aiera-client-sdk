@@ -10,6 +10,7 @@ describe('useAutoScroll', () => {
         if (!div) {
             div = document.createElement('div');
             div.scrollIntoView = jest.fn();
+            div.scrollTo = jest.fn();
         }
         act(() => ref?.(div || null));
         return div;
@@ -139,7 +140,7 @@ describe('useAutoScroll', () => {
         refDiv(targetRef, targetDiv);
         expect(targetDiv.scrollIntoView).toHaveBeenCalled();
 
-        // Set the target inside of the scroll container, meaning the user scrolled back to the current target
+        // Set the target outside of the scroll container, meaning the user scrolled away
         // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
         targetDiv.getBoundingClientRect = jest.fn(() => ({ top: 50, height: 30 }));
         // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
@@ -233,5 +234,57 @@ describe('useAutoScroll', () => {
         fireEvent.scroll(scrollDiv);
         expect(targetDiv.getBoundingClientRect).toHaveBeenCalled();
         expect(scrollDiv.getBoundingClientRect).toHaveBeenCalled();
+    });
+
+    test('can manually scroll to specific position', () => {
+        const { result } = renderHook(() => useAutoScroll());
+        const { scrollContainerRef } = result.current;
+        const scrollDiv = refDiv(scrollContainerRef);
+
+        // target ref was null so scroll shouldn't have been called
+        expect(scrollDiv.scrollTo).not.toHaveBeenCalled();
+        result.current.scroll({ top: 10 });
+        expect(scrollDiv.scrollTo).toHaveBeenCalledWith({ top: 10 });
+    });
+
+    test('can manually scroll into view', () => {
+        const { result } = renderHook(() => useAutoScroll());
+        const { scrollContainerRef, targetRef } = result.current;
+        refDiv(scrollContainerRef);
+        const targetDiv = refDiv(targetRef);
+
+        expect(targetDiv.scrollIntoView).toHaveBeenCalledTimes(1);
+
+        result.current.scroll();
+        expect(targetDiv.scrollIntoView).toHaveBeenCalledTimes(2);
+    });
+
+    test('can manually scroll into view only if needed', () => {
+        const { result } = renderHook(() => useAutoScroll());
+        const { scrollContainerRef, targetRef } = result.current;
+        const scrollDiv = refDiv(scrollContainerRef);
+        const targetDiv = refDiv(targetRef);
+
+        expect(targetDiv.scrollIntoView).toHaveBeenCalledTimes(1);
+
+        // Set the target inside of the scroll container
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        targetDiv.getBoundingClientRect = jest.fn(() => ({ top: 100, height: 30 }));
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        scrollDiv.getBoundingClientRect = jest.fn(() => ({
+            top: 100,
+        }));
+        result.current.scroll({ onlyIfNeeded: true });
+        expect(targetDiv.scrollIntoView).toHaveBeenCalledTimes(1);
+
+        // Set the target outside of the scroll container
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        targetDiv.getBoundingClientRect = jest.fn(() => ({ top: 50, height: 30 }));
+        // @ts-ignore - DOMRect needs a toJSON() method but we dont use it so we can ignore for testing
+        scrollDiv.getBoundingClientRect = jest.fn(() => ({
+            top: 100,
+        }));
+        result.current.scroll({ onlyIfNeeded: true });
+        expect(targetDiv.scrollIntoView).toHaveBeenCalledTimes(2);
     });
 });
