@@ -1080,7 +1080,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context6, unstable_observedBits);
         }
-        function useState6(initialState) {
+        function useState7(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1088,15 +1088,15 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useReducer(reducer, initialArg, init);
         }
-        function useRef3(initialValue) {
+        function useRef5(initialValue) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect7(create, deps) {
+        function useEffect8(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
-        function useLayoutEffect(create, deps) {
+        function useLayoutEffect2(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create, deps);
         }
@@ -1662,13 +1662,13 @@ var require_react_development = __commonJS({
         exports2.useCallback = useCallback7;
         exports2.useContext = useContext6;
         exports2.useDebugValue = useDebugValue;
-        exports2.useEffect = useEffect7;
+        exports2.useEffect = useEffect8;
         exports2.useImperativeHandle = useImperativeHandle;
-        exports2.useLayoutEffect = useLayoutEffect;
+        exports2.useLayoutEffect = useLayoutEffect2;
         exports2.useMemo = useMemo2;
         exports2.useReducer = useReducer;
-        exports2.useRef = useRef3;
-        exports2.useState = useState6;
+        exports2.useRef = useRef5;
+        exports2.useState = useState7;
         exports2.version = ReactVersion;
       })();
     }
@@ -5463,7 +5463,7 @@ var require_react_dom_development = __commonJS({
         var ContentReset = 16;
         var Callback = 32;
         var DidCapture = 64;
-        var Ref = 128;
+        var Ref3 = 128;
         var Snapshot = 256;
         var Passive = 512;
         var PassiveUnmountPendingDev = 8192;
@@ -14542,7 +14542,7 @@ var require_react_dom_development = __commonJS({
         function markRef(current2, workInProgress2) {
           var ref = workInProgress2.ref;
           if (current2 === null && ref !== null || current2 !== null && current2.ref !== ref) {
-            workInProgress2.flags |= Ref;
+            workInProgress2.flags |= Ref3;
           }
         }
         function updateFunctionComponent(current2, workInProgress2, Component, nextProps, renderLanes2) {
@@ -15743,7 +15743,7 @@ var require_react_dom_development = __commonJS({
           workInProgress2.flags |= Update;
         }
         function markRef$1(workInProgress2) {
-          workInProgress2.flags |= Ref;
+          workInProgress2.flags |= Ref3;
         }
         var appendAllChildren;
         var updateHostContainer;
@@ -18335,7 +18335,7 @@ var require_react_dom_development = __commonJS({
             if (flags & ContentReset) {
               commitResetTextContent(nextEffect);
             }
-            if (flags & Ref) {
+            if (flags & Ref3) {
               var current2 = nextEffect.alternate;
               if (current2 !== null) {
                 commitDetachRef(current2);
@@ -18388,7 +18388,7 @@ var require_react_dom_development = __commonJS({
               commitLifeCycles(root2, current2, nextEffect);
             }
             {
-              if (flags & Ref) {
+              if (flags & Ref3) {
                 commitAttachRef(nextEffect);
               }
             }
@@ -30238,7 +30238,7 @@ var require_classnames = __commonJS({
 });
 
 // src/dev/ContentList.tsx
-var import_react22 = __toModule(require_react());
+var import_react23 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -36928,16 +36928,51 @@ var Auth = ({
 };
 
 // src/modules/ContentList/index.tsx
-var import_react21 = __toModule(require_react());
+var import_react22 = __toModule(require_react());
 var import_luxon = __toModule(require_luxon());
 
 // src/components/CompanyFilterButton/index.tsx
-var import_react19 = __toModule(require_react());
+var import_react20 = __toModule(require_react());
 var import_ts_pattern3 = __toModule(require_lib());
 var import_classnames5 = __toModule(require_classnames());
 
-// src/lib/hooks/useChangeHandlers/index.ts
+// src/lib/hooks/useEventListener/index.ts
 var import_react10 = __toModule(require_react());
+function useElementListener(eventName, handler, targetRef) {
+  const savedHandler = (0, import_react10.useRef)();
+  (0, import_react10.useEffect)(() => {
+    var _a;
+    savedHandler.current = handler;
+    const eventListener = (event) => {
+      if (!!(savedHandler == null ? void 0 : savedHandler.current)) {
+        savedHandler.current(event);
+      }
+    };
+    (_a = targetRef.current) == null ? void 0 : _a.addEventListener(eventName, eventListener);
+    return () => {
+      var _a2;
+      (_a2 = targetRef.current) == null ? void 0 : _a2.removeEventListener(eventName, eventListener);
+    };
+  }, [eventName, targetRef.current, handler]);
+}
+function useWindowListener(eventName, handler) {
+  const savedHandler = (0, import_react10.useRef)();
+  (0, import_react10.useEffect)(() => {
+    savedHandler.current = handler;
+    const eventListener = (event) => {
+      if (!!(savedHandler == null ? void 0 : savedHandler.current)) {
+        savedHandler.current(event);
+      }
+    };
+    window.addEventListener(eventName, eventListener);
+    return () => {
+      window.removeEventListener(eventName, eventListener);
+    };
+  }, [eventName, handler]);
+}
+
+// src/lib/hooks/useChangeHandlers/index.ts
+var import_react11 = __toModule(require_react());
 
 // src/types/generated.ts
 var BasicTextualSentiment;
@@ -37272,16 +37307,16 @@ var LatestParagraphsDocument = lib_default`
 
 // src/lib/hooks/useChangeHandlers/index.ts
 function useChangeHandlers(initialState) {
-  const [state, setState] = (0, import_react10.useState)(initialState);
+  const [state, setState] = (0, import_react11.useState)(initialState);
   const handlers = {};
-  const mergeState = (0, import_react10.useCallback)((newState) => setState((prevState) => {
+  const mergeState = (0, import_react11.useCallback)((newState) => setState((prevState) => {
     if (typeof newState === "function") {
       return __spreadValues(__spreadValues({}, prevState), newState(prevState));
     }
     return __spreadValues(__spreadValues({}, prevState), newState);
   }), [setState]);
   for (const key in state) {
-    handlers[key] = (0, import_react10.useCallback)((_2, change) => mergeState({ [key]: change.value }), [state]);
+    handlers[key] = (0, import_react11.useCallback)((_2, change) => mergeState({ [key]: change.value }), [state]);
   }
   return {
     state,
@@ -37292,28 +37327,28 @@ function useChangeHandlers(initialState) {
 }
 
 // src/components/Tooltip/index.tsx
-var import_react13 = __toModule(require_react());
+var import_react14 = __toModule(require_react());
 var import_ts_pattern = __toModule(require_lib());
 
 // src/lib/hooks/useDelayCallback/index.ts
-var import_react11 = __toModule(require_react());
+var import_react12 = __toModule(require_react());
 function useDelayCallback(callback, delay = 0, deps = void 0, existing = "cancel") {
-  const ref = (0, import_react11.useRef)(null);
-  (0, import_react11.useEffect)(() => {
+  const ref = (0, import_react12.useRef)(null);
+  (0, import_react12.useEffect)(() => {
     return () => {
       if (ref.current) {
         window.clearTimeout(ref.current);
       }
     };
   }, []);
-  const cancel = (0, import_react11.useCallback)(() => {
+  const cancel = (0, import_react12.useCallback)(() => {
     if (ref.current) {
       window.clearTimeout(ref.current);
       ref.current = null;
     }
   }, []);
   return [
-    (0, import_react11.useCallback)((...args) => {
+    (0, import_react12.useCallback)((...args) => {
       if (ref.current && existing === "cancel") {
         window.clearTimeout(ref.current);
         ref.current = null;
@@ -37326,9 +37361,9 @@ function useDelayCallback(callback, delay = 0, deps = void 0, existing = "cancel
 }
 
 // src/lib/hooks/useOutsideClickHandler/index.ts
-var import_react12 = __toModule(require_react());
+var import_react13 = __toModule(require_react());
 function useOutsideClickHandler(refs, outsideClickHandler) {
-  return (0, import_react12.useEffect)(() => {
+  return (0, import_react13.useEffect)(() => {
     const handler = (event) => {
       if ((event == null ? void 0 : event.target) instanceof Node) {
         const isInside = refs.some((ref) => {
@@ -37370,15 +37405,15 @@ function TooltipUI(props) {
     const render = children;
     target = render({ hideTooltip, showTooltip });
   }
-  return /* @__PURE__ */ import_react13.default.createElement(import_react13.default.Fragment, null, modal && visible && /* @__PURE__ */ import_react13.default.createElement("div", {
+  return /* @__PURE__ */ import_react14.default.createElement(import_react14.default.Fragment, null, modal && visible && /* @__PURE__ */ import_react14.default.createElement("div", {
     className: "fixed z-20 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal"
-  }), /* @__PURE__ */ import_react13.default.createElement("div", {
+  }), /* @__PURE__ */ import_react14.default.createElement("div", {
     className: `tooltip ${className}`,
     onClick: onTargetClick,
     onMouseEnter: onTargetMouseEnter,
     onMouseLeave: onTargetMouseLeave,
     ref: targetRef
-  }, target), visible && /* @__PURE__ */ import_react13.default.createElement("div", {
+  }, target), visible && /* @__PURE__ */ import_react14.default.createElement("div", {
     className: "fixed z-30 tooltip__content",
     style: { top, left, bottom, right, width },
     ref: tooltipRef
@@ -37450,6 +37485,8 @@ function Tooltip(props) {
     hideOnDocumentScroll = false,
     matchWidth,
     modal = false,
+    onClose,
+    onOpen,
     openDelay = 0,
     openOn = "hover",
     position,
@@ -37460,16 +37497,20 @@ function Tooltip(props) {
   if (closeOn === void 0) {
     closeOn = openOn;
   }
-  const tooltipRef = (0, import_react13.useRef)(null);
-  const targetRef = (0, import_react13.useRef)(null);
-  const [state, setState] = (0, import_react13.useState)({ visible: false });
+  const tooltipRef = (0, import_react14.useRef)(null);
+  const targetRef = (0, import_react14.useRef)(null);
+  const [state, setState] = (0, import_react14.useState)({ visible: false });
   const [delayedShowTooltip, cancelShow] = useDelayCallback((position2) => {
     setState((s2) => __spreadProps(__spreadValues({}, s2), { position: position2, visible: true }));
-  }, openDelay);
+    if (onOpen)
+      onOpen();
+  }, openDelay, [onOpen]);
   const [delayedHideTooltip, cancelHide] = useDelayCallback(() => {
     setState((s2) => __spreadProps(__spreadValues({}, s2), { visible: false }));
-  }, closeDelay);
-  const showTooltip = (0, import_react13.useCallback)((event) => {
+    if (onClose)
+      onClose();
+  }, closeDelay, [onClose]);
+  const showTooltip = (0, import_react14.useCallback)((event) => {
     if (!event || event.type === "mouseenter" && openOn === "hover" || event.type === "click" && openOn === "click") {
       cancelHide();
       delayedShowTooltip(getTooltipPosition({
@@ -37483,24 +37524,29 @@ function Tooltip(props) {
       }));
     }
   }, [cancelHide, delayedShowTooltip, openOn, matchWidth, position, grow, targetRef == null ? void 0 : targetRef.current, xOffset, yOffset]);
-  const hideTooltip = (0, import_react13.useCallback)((event) => {
+  const hideTooltip = (0, import_react14.useCallback)((event) => {
     if (!event || event.type === "mouseleave" && closeOn === "hover" || event.type === "click" && closeOn === "click") {
       cancelShow();
       delayedHideTooltip();
     }
   }, [cancelShow, delayedHideTooltip, closeOn]);
-  useOutsideClickHandler([tooltipRef, targetRef], (0, import_react13.useCallback)(() => {
+  useOutsideClickHandler([tooltipRef, targetRef], (0, import_react14.useCallback)(() => {
     if (closeOn && ["hover", "click"].includes(closeOn)) {
       hideTooltip();
     }
   }, [closeOn, hideTooltip]));
-  (0, import_react13.useEffect)(() => {
+  (0, import_react14.useEffect)(() => {
     if (hideOnDocumentScroll) {
       document.addEventListener("scroll", delayedHideTooltip, true);
     }
     return () => document.removeEventListener("scroll", delayedHideTooltip, true);
   }, [delayedHideTooltip, hideOnDocumentScroll]);
-  return /* @__PURE__ */ import_react13.default.createElement(TooltipUI, {
+  useWindowListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      hideTooltip();
+    }
+  });
+  return /* @__PURE__ */ import_react14.default.createElement(TooltipUI, {
     className,
     content,
     targetRef,
@@ -37517,19 +37563,19 @@ function Tooltip(props) {
 }
 
 // src/components/Input/index.tsx
-var import_react15 = __toModule(require_react());
+var import_react16 = __toModule(require_react());
 var import_classnames2 = __toModule(require_classnames());
 
 // src/components/Svg/Close.tsx
-var import_react14 = __toModule(require_react());
+var import_react15 = __toModule(require_react());
 var import_classnames = __toModule(require_classnames());
 function Close({ className, alt = "Close" }) {
-  return /* @__PURE__ */ import_react14.default.createElement("svg", {
+  return /* @__PURE__ */ import_react15.default.createElement("svg", {
     className: (0, import_classnames.default)(className, "fill-current", "Svg", "Svg__close"),
     width: "100%",
     viewBox: "0 0 16 16",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react14.default.createElement("title", null, alt), /* @__PURE__ */ import_react14.default.createElement("path", {
+  }, /* @__PURE__ */ import_react15.default.createElement("title", null, alt), /* @__PURE__ */ import_react15.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16ZM6.707 5.293C6.5184 5.11084 6.2658 5.01005 6.0036 5.01233C5.7414 5.0146 5.49059 5.11977 5.30518 5.30518C5.11977 5.49059 5.0146 5.7414 5.01233 6.0036C5.01005 6.2658 5.11084 6.5184 5.293 6.707L6.586 8L5.293 9.293C5.19749 9.38525 5.12131 9.49559 5.0689 9.6176C5.01649 9.7396 4.9889 9.87082 4.98775 10.0036C4.9866 10.1364 5.0119 10.2681 5.06218 10.391C5.11246 10.5139 5.18671 10.6255 5.2806 10.7194C5.3745 10.8133 5.48615 10.8875 5.60905 10.9378C5.73194 10.9881 5.86362 11.0134 5.9964 11.0123C6.12918 11.0111 6.2604 10.9835 6.3824 10.9311C6.50441 10.8787 6.61475 10.8025 6.707 10.707L8 9.414L9.293 10.707C9.4816 10.8892 9.7342 10.99 9.9964 10.9877C10.2586 10.9854 10.5094 10.8802 10.6948 10.6948C10.8802 10.5094 10.9854 10.2586 10.9877 9.9964C10.99 9.7342 10.8892 9.4816 10.707 9.293L9.414 8L10.707 6.707C10.8892 6.5184 10.99 6.2658 10.9877 6.0036C10.9854 5.7414 10.8802 5.49059 10.6948 5.30518C10.5094 5.11977 10.2586 5.0146 9.9964 5.01233C9.7342 5.01005 9.4816 5.11084 9.293 5.293L8 6.586L6.707 5.293Z"
@@ -37538,37 +37584,62 @@ function Close({ className, alt = "Close" }) {
 
 // src/components/Input/index.tsx
 function InputUI(props) {
-  const { autoFocus, icon, clearable, clear, placeholder, onChange, onFocus, value, name, className = "" } = props;
-  return /* @__PURE__ */ import_react15.default.createElement("div", {
+  const {
+    inputRef,
+    autoFocus,
+    icon,
+    clearable,
+    clear,
+    placeholder,
+    onChange,
+    onFocus,
+    value,
+    name,
+    className = ""
+  } = props;
+  return /* @__PURE__ */ import_react16.default.createElement("div", {
     className: `group h-8 items-center w-full relative ${className} input__${name}`
-  }, import_react15.default.isValidElement(icon) && /* @__PURE__ */ import_react15.default.createElement("div", {
+  }, import_react16.default.isValidElement(icon) && /* @__PURE__ */ import_react16.default.createElement("div", {
     className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
-  }, import_react15.default.cloneElement(icon, {
+  }, import_react16.default.cloneElement(icon, {
     className: "group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4"
-  })), /* @__PURE__ */ import_react15.default.createElement("input", {
+  })), /* @__PURE__ */ import_react16.default.createElement("input", {
+    ref: inputRef,
     autoFocus,
     className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400", { "pl-7": !!icon, "pl-3": !icon }),
     onChange,
     onFocus,
     placeholder,
     value
-  }), clearable && value && /* @__PURE__ */ import_react15.default.createElement("div", {
+  }), clearable && value && /* @__PURE__ */ import_react16.default.createElement("div", {
     className: "h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700",
     onClick: clear
-  }, /* @__PURE__ */ import_react15.default.createElement(Close, null)));
+  }, /* @__PURE__ */ import_react16.default.createElement(Close, null)));
 }
 function Input(props) {
-  const { autoFocus = false, icon, clearable = true, placeholder, onChange, onFocus, value, name, className } = props;
-  return /* @__PURE__ */ import_react15.default.createElement(InputUI, {
+  const {
+    inputRef,
+    autoFocus = false,
+    icon,
+    clearable = true,
+    placeholder,
+    onChange,
+    onFocus,
+    value,
+    name,
+    className
+  } = props;
+  return /* @__PURE__ */ import_react16.default.createElement(InputUI, {
     autoFocus,
     clearable,
-    clear: (0, import_react15.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
+    clear: (0, import_react16.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
     icon,
     placeholder,
-    onChange: (0, import_react15.useCallback)((event) => {
+    onChange: (0, import_react16.useCallback)((event) => {
       var _a;
       return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
     }, [onChange]),
+    inputRef,
     onFocus,
     value,
     className,
@@ -37577,19 +37648,19 @@ function Input(props) {
 }
 
 // src/components/Button/index.tsx
-var import_react16 = __toModule(require_react());
+var import_react17 = __toModule(require_react());
 var import_ts_pattern2 = __toModule(require_lib());
 function ButtonUI(props) {
   const { children, onClick, className = "", kind = "default" } = props;
   const buttonStyle = (0, import_ts_pattern2.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:text-white").with("secondary", () => "border-[1px] border-gray-300 hover:border-gray-400 active:bg-gray-400 active:text-white").with("default", () => "bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
-  return /* @__PURE__ */ import_react16.default.createElement("button", {
+  return /* @__PURE__ */ import_react17.default.createElement("button", {
     className: `group flex h-8 items-center px-2.5 font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`,
     onClick
   }, children);
 }
 function Button(props) {
   const { children, onClick, className, kind } = props;
-  return /* @__PURE__ */ import_react16.default.createElement(ButtonUI, {
+  return /* @__PURE__ */ import_react17.default.createElement(ButtonUI, {
     onClick,
     kind,
     className
@@ -37597,17 +37668,17 @@ function Button(props) {
 }
 
 // src/components/Svg/Building.tsx
-var import_react17 = __toModule(require_react());
+var import_react18 = __toModule(require_react());
 var import_classnames3 = __toModule(require_classnames());
 function Building({ className, alt = "Building" }) {
-  return /* @__PURE__ */ import_react17.default.createElement("svg", {
+  return /* @__PURE__ */ import_react18.default.createElement("svg", {
     className: (0, import_classnames3.default)(className, "fill-current", "Svg", "Svg__building"),
     width: "14",
     height: "16",
     viewBox: "0 0 14 16",
     fill: "black",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react17.default.createElement("title", null, alt), /* @__PURE__ */ import_react17.default.createElement("path", {
+  }, /* @__PURE__ */ import_react18.default.createElement("title", null, alt), /* @__PURE__ */ import_react18.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M1 2C1 1.46957 1.21071 0.960859 1.58579 0.585786C1.96086 0.210714 2.46957 0 3 0H11C11.5304 0 12.0391 0.210714 12.4142 0.585786C12.7893 0.960859 13 1.46957 13 2V14C13.2652 14 13.5196 14.1054 13.7071 14.2929C13.8946 14.4804 14 14.7348 14 15C14 15.2652 13.8946 15.5196 13.7071 15.7071C13.5196 15.8946 13.2652 16 13 16H10C9.73478 16 9.48043 15.8946 9.29289 15.7071C9.10536 15.5196 9 15.2652 9 15V13C9 12.7348 8.89464 12.4804 8.70711 12.2929C8.51957 12.1054 8.26522 12 8 12H6C5.73478 12 5.48043 12.1054 5.29289 12.2929C5.10536 12.4804 5 12.7348 5 13V15C5 15.2652 4.89464 15.5196 4.70711 15.7071C4.51957 15.8946 4.26522 16 4 16H1C0.734784 16 0.48043 15.8946 0.292893 15.7071C0.105357 15.5196 0 15.2652 0 15C0 14.7348 0.105357 14.4804 0.292893 14.2929C0.48043 14.1054 0.734784 14 1 14V2ZM4 3H6V5H4V3ZM6 7H4V9H6V7ZM8 3H10V5H8V3ZM10 7H8V9H10V7Z"
@@ -37615,20 +37686,20 @@ function Building({ className, alt = "Building" }) {
 }
 
 // src/components/Svg/MagnifyingGlass.tsx
-var import_react18 = __toModule(require_react());
+var import_react19 = __toModule(require_react());
 var import_classnames4 = __toModule(require_classnames());
 function MagnifyingGlass({
   className,
   alt = "Magnifying Glass"
 }) {
-  return /* @__PURE__ */ import_react18.default.createElement("svg", {
+  return /* @__PURE__ */ import_react19.default.createElement("svg", {
     className: (0, import_classnames4.default)(className, "Svg", "Svg__magnifyingGlass"),
     width: "100%",
     viewBox: "0 0 12 12",
     fill: "none",
     xmlns: "http://www.w3.org/2000/svg",
     stroke: "black"
-  }, /* @__PURE__ */ import_react18.default.createElement("title", null, alt), /* @__PURE__ */ import_react18.default.createElement("path", {
+  }, /* @__PURE__ */ import_react19.default.createElement("title", null, alt), /* @__PURE__ */ import_react19.default.createElement("path", {
     d: "M11 11L8.41379 8.41379L11 11ZM1 5.31034C1 2.92981 2.92981 1 5.31034 1C7.6909 1 9.62069 2.92981 9.62069 5.31034C9.62069 7.6909 7.6909 9.62069 5.31034 9.62069C2.92981 9.62069 1 7.6909 1 5.31034Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
@@ -37637,80 +37708,130 @@ function MagnifyingGlass({
 }
 
 // src/components/CompanyFilterButton/index.tsx
-function TooltipContent(props) {
-  const { companiesQuery, hideTooltip, onChange, onSearchChange } = props;
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react19.default.createElement("div", {
+function TooltipContentUI(props) {
+  const {
+    companiesQuery,
+    hideTooltip,
+    inputRef,
+    onChange,
+    onSearchChange,
+    scrollRef,
+    selectedIndex,
+    selectIndex,
+    searchTerm,
+    selectedOptionRef
+  } = props;
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600 mb-5"
   }, msg);
-  return /* @__PURE__ */ import_react19.default.createElement("div", {
+  return /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "shadow-md bg-white rounded-lg w-72 overflow-hidden"
-  }, /* @__PURE__ */ import_react19.default.createElement("div", {
+  }, /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "p-3 w-full"
-  }, /* @__PURE__ */ import_react19.default.createElement(Input, {
+  }, /* @__PURE__ */ import_react20.default.createElement(Input, {
+    clearable: true,
+    inputRef,
     autoFocus: true,
-    icon: /* @__PURE__ */ import_react19.default.createElement(MagnifyingGlass, null),
+    icon: /* @__PURE__ */ import_react20.default.createElement(MagnifyingGlass, null),
     name: "company-filter-button-search",
     placeholder: "Search...",
-    onChange: onSearchChange
-  })), /* @__PURE__ */ import_react19.default.createElement("div", {
-    className: "flex flex-col max-h-52 min-h-[80px] overflow-y-scroll"
-  }, (0, import_ts_pattern3.match)(companiesQuery).with({ status: "loading" }, () => wrapMsg("Loading...")).with({ status: "paused" }, () => wrapMsg("Type to search...")).with({ status: "error" }, () => wrapMsg("There was an error searching.")).with({ status: "empty" }, () => wrapMsg("No results.")).with({ status: "success" }, ({ data: { companies } }) => /* @__PURE__ */ import_react19.default.createElement("div", {
+    onChange: onSearchChange,
+    value: searchTerm
+  })), /* @__PURE__ */ import_react20.default.createElement("div", {
+    className: "flex flex-col max-h-[270px] min-h-[80px] overflow-y-scroll",
+    ref: scrollRef
+  }, (0, import_ts_pattern3.match)(companiesQuery).with({ status: "loading" }, () => wrapMsg("Loading...")).with({ status: "paused" }, () => wrapMsg("Type to search...")).with({ status: "error" }, () => wrapMsg("There was an error searching.")).with({ status: "empty" }, () => wrapMsg("No results.")).with({ status: "success" }, ({ data: { companies } }) => /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "flex-1"
-  }, companies.map((company) => {
+  }, companies.map((company, index) => {
     var _a;
     const primaryQuote = getPrimaryQuote(company);
-    return /* @__PURE__ */ import_react19.default.createElement("div", {
-      className: "flex items-center h-10 odd:bg-gray-100 text-gray-900 tracking-wide cursor-pointer",
+    return /* @__PURE__ */ import_react20.default.createElement("div", {
+      className: (0, import_classnames5.default)("flex items-center h-9 text-gray-900 tracking-wide cursor-pointer", {
+        "odd:bg-gray-100": selectedIndex !== index,
+        "bg-blue-500": selectedIndex === index,
+        "text-white": selectedIndex === index
+      }),
       key: company.id,
       onClick: (event) => {
         event.stopPropagation();
         onChange == null ? void 0 : onChange(event, { value: company });
         hideTooltip == null ? void 0 : hideTooltip();
-      }
-    }, /* @__PURE__ */ import_react19.default.createElement("div", {
-      className: "pl-4 truncate flex-1 text-md"
-    }, company.commonName), /* @__PURE__ */ import_react19.default.createElement("div", {
+      },
+      onMouseEnter: () => selectIndex(index),
+      ref: selectedIndex === index ? selectedOptionRef : void 0
+    }, /* @__PURE__ */ import_react20.default.createElement("div", {
+      className: "pl-4 truncate flex-1 text-base"
+    }, company.commonName), /* @__PURE__ */ import_react20.default.createElement("div", {
       className: "w-20 pl-3 truncate font-semibold text-right text-sm"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react19.default.createElement("div", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), /* @__PURE__ */ import_react20.default.createElement("div", {
       className: "w-20 pl-3 pr-4 truncate text-gray-300 text-sm"
     }, (_a = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _a.shortName));
   }))).exhaustive()));
 }
+function TooltipContent(props) {
+  const { hideTooltip, companiesQuery, selectedIndex, selectIndex, onChange, inputRef, setState } = props;
+  useElementListener("keydown", (event) => {
+    const key = event == null ? void 0 : event.key;
+    (0, import_ts_pattern3.match)(companiesQuery).with({ status: "success" }, ({ data: { companies } }) => {
+      (0, import_ts_pattern3.match)(key).with("ArrowUp", () => {
+        if (selectedIndex > 0)
+          selectIndex(selectedIndex - 1);
+      }).with("ArrowDown", () => {
+        if (selectedIndex < companies.length - 1)
+          selectIndex(selectedIndex + 1);
+      }).with("Enter", () => {
+        if (companies.length && companies[selectedIndex]) {
+          selectIndex(0);
+          onChange == null ? void 0 : onChange(event, { value: companies[selectedIndex] });
+          setState({ searchTerm: "" });
+          hideTooltip == null ? void 0 : hideTooltip();
+        }
+      }).otherwise(() => true);
+    }).otherwise(() => true);
+  }, inputRef);
+  return /* @__PURE__ */ import_react20.default.createElement(TooltipContentUI, __spreadValues({}, props));
+}
 function CompanyFilterButtonUI(props) {
   var _a;
-  const { onChange, value } = props;
-  return /* @__PURE__ */ import_react19.default.createElement("div", null, /* @__PURE__ */ import_react19.default.createElement(Tooltip, {
-    content: ({ hideTooltip }) => /* @__PURE__ */ import_react19.default.createElement(TooltipContent, __spreadValues({
+  const { onChange, setState, selectIndex, value } = props;
+  return /* @__PURE__ */ import_react20.default.createElement("div", null, /* @__PURE__ */ import_react20.default.createElement(Tooltip, {
+    content: ({ hideTooltip }) => /* @__PURE__ */ import_react20.default.createElement(TooltipContent, __spreadValues({
       hideTooltip
     }, props)),
     grow: "down-left",
     modal: true,
     openOn: "click",
+    onClose: () => {
+      selectIndex(0);
+      setState({ searchTerm: "" });
+    },
     position: "bottom-right",
     yOffset: 5
-  }, /* @__PURE__ */ import_react19.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react20.default.createElement(Button, {
     className: (0, import_classnames5.default)("max-w-[130px]"),
     kind: value ? "default" : "secondary",
     onClick: value ? (event) => {
       event.stopPropagation();
       onChange == null ? void 0 : onChange(event, { value: null });
     } : void 0
-  }, !value && /* @__PURE__ */ import_react19.default.createElement("div", {
+  }, !value && /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "flex items-center whitespace-nowrap text-sm font-normal"
-  }, /* @__PURE__ */ import_react19.default.createElement(Building, {
+  }, /* @__PURE__ */ import_react20.default.createElement(Building, {
     alt: "building",
     className: "mr-2"
-  }), "By Company"), value && /* @__PURE__ */ import_react19.default.createElement(import_react19.default.Fragment, null, /* @__PURE__ */ import_react19.default.createElement("div", {
+  }), "By Company"), value && /* @__PURE__ */ import_react20.default.createElement(import_react20.default.Fragment, null, /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "text-black font-bold"
-  }, (_a = getPrimaryQuote(value)) == null ? void 0 : _a.localTicker), /* @__PURE__ */ import_react19.default.createElement("div", {
+  }, (_a = getPrimaryQuote(value)) == null ? void 0 : _a.localTicker), /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "text-black font-light truncate mx-2"
-  }, value.commonName), /* @__PURE__ */ import_react19.default.createElement("div", {
+  }, value.commonName), /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "w-4 text-black flex-shrink-0"
-  }, /* @__PURE__ */ import_react19.default.createElement(Close, null))))));
+  }, /* @__PURE__ */ import_react20.default.createElement(Close, null))))));
 }
 function CompanyFilterButton(props) {
   const { onChange, value } = props;
-  const { state, handlers } = useChangeHandlers({ searchTerm: "" });
+  const [selectedIndex, selectIndex] = (0, import_react20.useState)(0);
+  const { state, handlers, setState } = useChangeHandlers({ searchTerm: "" });
+  const inputRef = (0, import_react20.useRef)(null);
   const companiesQuery = useQuery2({
     isEmpty: ({ companies }) => companies.length === 0,
     query: lib_default`
@@ -37743,26 +37864,45 @@ function CompanyFilterButton(props) {
     },
     pause: !state.searchTerm
   });
-  return /* @__PURE__ */ import_react19.default.createElement(CompanyFilterButtonUI, {
+  const selectedOptionRef = (0, import_react20.useRef)(null);
+  const scrollContainerRef = (0, import_react20.useRef)(null);
+  (0, import_react20.useLayoutEffect)(() => {
+    if (selectedOptionRef.current && scrollContainerRef.current) {
+      const containerPos = scrollContainerRef.current.getBoundingClientRect();
+      const optionPos = selectedOptionRef.current.getBoundingClientRect();
+      const optionTopObstructed = optionPos.top < containerPos.top;
+      const optionBottomObstructed = containerPos.top + containerPos.height < optionPos.top + optionPos.height;
+      if (optionTopObstructed || optionBottomObstructed)
+        selectedOptionRef.current.scrollIntoView();
+    }
+  }, [selectedOptionRef == null ? void 0 : selectedOptionRef.current, scrollContainerRef == null ? void 0 : scrollContainerRef.current]);
+  return /* @__PURE__ */ import_react20.default.createElement(CompanyFilterButtonUI, {
     companiesQuery,
+    inputRef,
     onChange,
     onSearchChange: handlers.searchTerm,
-    value
+    value,
+    scrollRef: scrollContainerRef,
+    searchTerm: state.searchTerm,
+    selectIndex,
+    selectedIndex,
+    selectedOptionRef,
+    setState
   });
 }
 
 // src/components/Tabs/index.tsx
-var import_react20 = __toModule(require_react());
+var import_react21 = __toModule(require_react());
 var import_classnames6 = __toModule(require_classnames());
 var import_ts_pattern4 = __toModule(require_lib());
 var Tabs = (props) => {
   const { onChange, options = [], value, kind = "button", className = "" } = props;
-  const getClasses = (val, opStyles) => (0, import_ts_pattern4.match)(kind).with("button", () => (0, import_classnames6.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val) => (0, import_ts_pattern4.match)(kind).with("button", () => (0, import_classnames6.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
     "tab__option--selected": val === value
-  }, opStyles)).with("line", () => (0, import_classnames6.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
+  })).with("line", () => (0, import_classnames6.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
     "cursor-pointer": val !== value,
     "text-gray-400": val !== value,
     "text-black": val === value,
@@ -37771,14 +37911,14 @@ var Tabs = (props) => {
     "active:text-gray-800": val !== value,
     tab__option: true,
     "tab__option--selected": val === value
-  }, opStyles)).exhaustive();
-  return /* @__PURE__ */ import_react20.default.createElement("div", {
+  })).exhaustive();
+  return /* @__PURE__ */ import_react21.default.createElement("div", {
     className: `flex tab relative ${className}`
-  }, options.map(({ value: opVal, label, className: opStyles = "" }) => /* @__PURE__ */ import_react20.default.createElement("div", {
+  }, options.map(({ value: opVal, label }) => /* @__PURE__ */ import_react21.default.createElement("div", {
     key: `tab-option-${opVal}`,
-    className: getClasses(opVal, opStyles),
+    className: getClasses(opVal),
     onClick: (event) => onChange && onChange(event, { value: opVal })
-  }, label, kind === "line" && /* @__PURE__ */ import_react20.default.createElement("div", {
+  }, label, kind === "line" && /* @__PURE__ */ import_react21.default.createElement("div", {
     className: (0, import_classnames6.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": opVal === value,
       "-bottom-0.5": opVal !== value
@@ -37885,87 +38025,85 @@ var mockData = [
 function ContentListUI(props) {
   const { company, onChangeSearch, onSelectCompany, onSelectContentType, searchTerm, selectedContentType } = props;
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react21.default.createElement("div", {
+  return /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "h-full flex flex-col content-list"
-  }, /* @__PURE__ */ import_react21.default.createElement("div", {
+  }, /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl content-list__header"
-  }, /* @__PURE__ */ import_react21.default.createElement("div", {
+  }, /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react21.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react21.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react22.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react22.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onChangeSearch,
     placeholder: "Search News & Corp. Activity...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react21.default.createElement("div", {
+  }), /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react21.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react22.default.createElement(CompanyFilterButton, {
     onChange: onSelectCompany,
     value: company
-  })))), /* @__PURE__ */ import_react21.default.createElement("div", {
+  })))), /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react21.default.createElement("div", {
+  }, /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react21.default.createElement("div", {
+  }, /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "sticky top-0 px-3 pt-3 pb-2 z-10 content-list__tabs"
-  }, /* @__PURE__ */ import_react21.default.createElement("div", {
+  }, /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow"
-  }, /* @__PURE__ */ import_react21.default.createElement(Tabs, {
+  }, /* @__PURE__ */ import_react22.default.createElement(Tabs, {
     className: "ml-1",
     kind: "line",
     onChange: onSelectContentType,
     options: [
       {
-        className: "h-9 items-center",
         label: "News",
         value: 0
       },
       {
-        className: "h-9 items-center",
         label: "Corp. Activity",
         value: 1
       }
     ],
     value: selectedContentType
-  }))), /* @__PURE__ */ import_react21.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, /* @__PURE__ */ import_react21.default.createElement("ul", {
+  }, /* @__PURE__ */ import_react22.default.createElement("ul", {
     className: "w-full"
   }, mockData.map((item) => {
     const date = import_luxon.DateTime.fromISO(item.date);
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== date.toFormat("MM/dd/yyyy")) {
       prevEventDate = date;
-      divider = /* @__PURE__ */ import_react21.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react22.default.createElement("li", {
         className: "sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"
-      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react21.default.createElement("div", {
+      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react22.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       }));
     }
-    return /* @__PURE__ */ import_react21.default.createElement(import_react21.Fragment, {
+    return /* @__PURE__ */ import_react22.default.createElement(import_react22.Fragment, {
       key: item.id
-    }, divider, /* @__PURE__ */ import_react21.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react22.default.createElement("li", {
       className: "group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
-    }, /* @__PURE__ */ import_react21.default.createElement("div", {
+    }, /* @__PURE__ */ import_react22.default.createElement("div", {
       className: "flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm"
-    }, /* @__PURE__ */ import_react21.default.createElement("span", {
+    }, /* @__PURE__ */ import_react22.default.createElement("span", {
       className: "mr-1 text-black"
-    }, item.title)), /* @__PURE__ */ import_react21.default.createElement("div", {
+    }, item.title)), /* @__PURE__ */ import_react22.default.createElement("div", {
       className: "flex flex-1 items-center min-w-0 p-2 pr-4 pt-0"
-    }, /* @__PURE__ */ import_react21.default.createElement("span", {
+    }, /* @__PURE__ */ import_react22.default.createElement("span", {
       className: "font-bold pr-1 text-blue-600 group-hover:text-yellow-600"
-    }, item.companyIdentifier), /* @__PURE__ */ import_react21.default.createElement("span", {
+    }, item.companyIdentifier), /* @__PURE__ */ import_react22.default.createElement("span", {
       className: "font-light text-gray-300 group-hover:text-gray-400"
-    }, item.exchangeName), /* @__PURE__ */ import_react21.default.createElement("span", {
+    }, item.exchangeName), /* @__PURE__ */ import_react22.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react21.default.createElement("span", {
+    }, "\u2022"), /* @__PURE__ */ import_react22.default.createElement("span", {
       className: "text-gray-400"
-    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react21.default.createElement("span", {
+    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react22.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react21.default.createElement("span", {
+    }, "\u2022"), /* @__PURE__ */ import_react22.default.createElement("span", {
       className: "text-indigo-300"
     }, item.sourceName))));
-  })), /* @__PURE__ */ import_react21.default.createElement("div", {
+  })), /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "flex-1"
   })))));
 }
@@ -37985,12 +38123,12 @@ function ContentList() {
       }
     }
   }), "in");
-  const onSelectCompany = (0, import_react21.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react22.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
   }, [state]);
-  return /* @__PURE__ */ import_react21.default.createElement(ContentListUI, {
+  return /* @__PURE__ */ import_react22.default.createElement(ContentListUI, {
     company: state.company,
     onSelectCompany,
     onSelectContentType: handlers.selectedContentType,
@@ -38005,7 +38143,7 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react22.default.createElement(import_react22.StrictMode, null, /* @__PURE__ */ import_react22.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react23.default.createElement(import_react23.StrictMode, null, /* @__PURE__ */ import_react23.default.createElement(Provider6, {
     bus,
     config: {
       apiUrl: "https://api-dev.aiera.com/graphql",
@@ -38013,13 +38151,13 @@ var App = () => {
       moduleName: "ContentList",
       platform: "aiera-sdk-dev"
     }
-  }, /* @__PURE__ */ import_react22.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react23.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react22.default.createElement("div", {
+  }, /* @__PURE__ */ import_react23.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react22.default.createElement(ContentList, null)))));
+  }, /* @__PURE__ */ import_react23.default.createElement(ContentList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react22.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react23.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus
