@@ -152,12 +152,10 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                                 onChange={onSelectContentType}
                                 options={[
                                     {
-                                        className: 'h-9 items-center',
                                         label: 'News',
                                         value: ContentType.news,
                                     },
                                     {
-                                        className: 'h-9 items-center',
                                         label: 'Corp. Activity',
                                         value: ContentType.corporateActivity,
                                     },

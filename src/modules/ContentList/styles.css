@@ -1,0 +1,3 @@
+.content-list__tabs .tab__option {
+    @apply h-9 items-center;
+}
