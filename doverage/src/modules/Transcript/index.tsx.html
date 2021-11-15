@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.09% </span>
+                <span class="strong">86.2% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>130/151</span>
+                <span class='fraction'>125/145</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.96% </span>
+                <span class="strong">68.9% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>87/128</span>
+                <span class='fraction'>82/119</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.25% </span>
+                <span class="strong">80.95% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>52/64</span>
+                <span class='fraction'>51/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.56% </span>
+                <span class="strong">86.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>116/134</span>
+                <span class='fraction'>112/130</span>
             </div>
         
             
@@ -878,15 +878,7 @@
 <a name='L819'></a><a href='#L819'>819</a>
 <a name='L820'></a><a href='#L820'>820</a>
 <a name='L821'></a><a href='#L821'>821</a>
-<a name='L822'></a><a href='#L822'>822</a>
-<a name='L823'></a><a href='#L823'>823</a>
-<a name='L824'></a><a href='#L824'>824</a>
-<a name='L825'></a><a href='#L825'>825</a>
-<a name='L826'></a><a href='#L826'>826</a>
-<a name='L827'></a><a href='#L827'>827</a>
-<a name='L828'></a><a href='#L828'>828</a>
-<a name='L829'></a><a href='#L829'>829</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L822'></a><a href='#L822'>822</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1190,17 +1182,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">40x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">40x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">40x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1748,7 +1734,6 @@ import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/us
 import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
 import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useAutoTrack } from '@aiera/client-sdk/lib/data';
-import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
@@ -2017,18 +2002,12 @@ function useEventUpdates(eventId: string) {
         },
     });
 &nbsp;
-    function isLiveOrBefore(event?: EventUpdatesQuery['events'][0], hoursAfterEvent = <span class="branch-0 cbranch-no" title="branch not covered" >0)</span>: boolean {
-        if (!event) return false;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (event.isLive) <span class="cstat-no" title="statement not covered" >return true;</span>
-        const eventDate = DateTime.fromISO(event.eventDate);
-        return (eventDate.diffNow('hours').toObject().hours || <span class="branch-1 cbranch-no" title="branch not covered" >0)</span> &gt; 0 - hoursAfterEvent;
-    }
-&nbsp;
     // From before the event to up to 1 hour after it starts, refresh the status/connection
     // details every 5 seconds
-    useInterval(
-<span class="fstat-no" title="function not covered" >        ()</span> =&gt; <span class="cstat-no" title="statement not covered" >eventUpdateQuery.refetch(),</span>
-        isLiveOrBefore(eventUpdateQuery.state.data?.events[0], 1) ? <span class="branch-0 cbranch-no" title="branch not covered" >5000 </span>: null
+    useRealtimeEvent(
+        `scheduled_audio_call_${eventId}_changes`,
+        'modified',
+        useCallback(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >eventUpdateQuery.refetch(),</span> [eventUpdateQuery.refetch])
     );
     return eventUpdateQuery;
 }
@@ -2548,7 +2527,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Nov 15 2021 14:20:26 GMT-0500 (Eastern Standard Time)
+                at Mon Nov 15 2021 14:43:55 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
