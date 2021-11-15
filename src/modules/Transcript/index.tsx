@@ -33,7 +33,6 @@ import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/us
 import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
 import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useAutoTrack } from '@aiera/client-sdk/lib/data';
-import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
@@ -302,18 +301,12 @@ function useEventUpdates(eventId: string) {
         },
     });
 
-    function isLiveOrBefore(event?: EventUpdatesQuery['events'][0], hoursAfterEvent = 0): boolean {
-        if (!event) return false;
-        if (event.isLive) return true;
-        const eventDate = DateTime.fromISO(event.eventDate);
-        return (eventDate.diffNow('hours').toObject().hours || 0) > 0 - hoursAfterEvent;
-    }
-
     // From before the event to up to 1 hour after it starts, refresh the status/connection
     // details every 5 seconds
-    useInterval(
-        () => eventUpdateQuery.refetch(),
-        isLiveOrBefore(eventUpdateQuery.state.data?.events[0], 1) ? 5000 : null
+    useRealtimeEvent(
+        `scheduled_audio_call_${eventId}_changes`,
+        'modified',
+        useCallback(() => eventUpdateQuery.refetch(), [eventUpdateQuery.refetch])
     );
     return eventUpdateQuery;
 }
