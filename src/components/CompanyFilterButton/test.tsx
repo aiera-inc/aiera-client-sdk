@@ -127,7 +127,7 @@ describe('CompanyFilterButton', () => {
         await waitFor(() => expect(screen.queryByPlaceholderText('Search...')).toBeNull());
     });
 
-    test('navigates company by keyboard', async () => {
+    test('navigates company by keyboard arrow', async () => {
         const onChange = jest.fn();
         renderWithProvider(<CompanyFilterButton onChange={onChange} />, {
             executeQuery: () =>
@@ -143,6 +143,28 @@ describe('CompanyFilterButton', () => {
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'tic');
         fireEvent.keyDown(input, { key: 'ArrowDown' });
+        fireEvent.keyDown(input, { key: 'Enter' });
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: companyTwo });
+        // Make sure the tooltip is hidden after the onchange
+        await waitFor(() => expect(screen.queryByPlaceholderText('Search...')).toBeNull());
+    });
+
+    test('navigates company by keyboard tab', async () => {
+        const onChange = jest.fn();
+        renderWithProvider(<CompanyFilterButton onChange={onChange} />, {
+            executeQuery: () =>
+                fromValue({
+                    data: {
+                        companies: [company, companyTwo],
+                    },
+                }),
+        });
+        const button = screen.getByText('By Company');
+        userEvent.click(button);
+        const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
+        expect(screen.queryByText('Loading...')).toBeNull();
+        userEvent.type(input, 'tic');
+        userEvent.tab();
         fireEvent.keyDown(input, { key: 'Enter' });
         expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: companyTwo });
         // Make sure the tooltip is hidden after the onchange

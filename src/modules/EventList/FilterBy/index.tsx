@@ -1,6 +1,7 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, useState, Dispatch, SetStateAction } from 'react';
 import classNames from 'classnames';
 
+import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { Check } from '@aiera/client-sdk/components/Svg/Check';
 import './styles.css';
@@ -19,19 +20,21 @@ export interface FilterByProps<T> {
     onChange?: ChangeHandler<T[]>;
     options?: FilterOption<T>[];
     value?: FilterValue<T>[];
+    setFocus?: Dispatch<SetStateAction<number>>;
 }
 
 /**
  * Renders FilterBy
  */
-export const FilterBy = <T extends string | number>(props: FilterByProps<T>): ReactElement => {
-    const { children, onChange, options = [], value = [] } = props;
+export const FilterByUI = <T extends string | number>(props: FilterByProps<T>): ReactElement => {
+    const { children, onChange, options = [], value = [], setFocus } = props;
     return (
         <div className="flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow eventlist__filterby">
             {children || <div className="text-sm font-semibold">Filter By</div>}
             <div className="flex justify-end flex-1">
-                {options.map((option) => (
+                {options.map((option, index) => (
                     <div
+                        tabIndex={0}
                         key={`filterby-option-${option.value}`}
                         className={classNames(
                             'flex',
@@ -70,6 +73,8 @@ export const FilterBy = <T extends string | number>(props: FilterByProps<T>): Re
                                     : [...value, option.value],
                             })
                         }
+                        onFocus={() => setFocus?.(index)}
+                        onBlur={() => setFocus?.(-1)}
                     >
                         {option.label}
                         {value?.includes(option.value) && <Check className="w-2 ml-1.5" />}
@@ -77,5 +82,29 @@ export const FilterBy = <T extends string | number>(props: FilterByProps<T>): Re
                 ))}
             </div>
         </div>
+    );
+};
+
+export const FilterBy = <T extends string | number>(props: FilterByProps<T>): ReactElement => {
+    const { children, onChange, options = [], value = [] } = props;
+    const [focusIndex, setFocus] = useState(-1);
+    if (onChange && options.length) {
+        useWindowListener('keydown', (event: KeyboardEvent) => {
+            const selectedOption = options[focusIndex];
+            // Focus is -1 on mount and on blur, so when >= 0, we actually want
+            // to handle the keyboard event
+            if (event.key === 'Enter' && focusIndex >= 0 && selectedOption && selectedOption?.value >= 0) {
+                if (value.includes(selectedOption.value)) {
+                    onChange(event, { value: value.filter((o) => o !== selectedOption.value) });
+                } else {
+                    onChange(event, { value: [...value, selectedOption.value] });
+                }
+            }
+        });
+    }
+    return (
+        <FilterByUI setFocus={setFocus} onChange={onChange} options={options} value={value}>
+            {children}
+        </FilterByUI>
     );
 };

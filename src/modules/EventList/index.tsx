@@ -1,8 +1,18 @@
-import React, { Fragment, ReactElement, SyntheticEvent, MouseEventHandler, useCallback } from 'react';
+import React, {
+    Fragment,
+    ReactElement,
+    SyntheticEvent,
+    MouseEventHandler,
+    useCallback,
+    useState,
+    Dispatch,
+    SetStateAction,
+} from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
 
+import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
@@ -46,6 +56,7 @@ export interface EventListUIProps {
     onSelectEvent?: ChangeHandler<EventListEvent>;
     onSelectEventById?: ChangeHandler<string>;
     searchTerm?: string;
+    setFocus?: Dispatch<SetStateAction<number>>;
 }
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
@@ -63,6 +74,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         onSelectEvent,
         onSelectEventById,
         searchTerm,
+        setFocus,
     } = props;
 
     if (event) {
@@ -144,7 +156,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'success' }, ({ data: { events } }) => (
                                 <ul className="w-full">
-                                    {events.map((event) => {
+                                    {events.map((event, index) => {
                                         const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                         const eventDate = DateTime.fromISO(event.eventDate);
                                         const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
@@ -167,8 +179,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                             <Fragment key={event.id}>
                                                 {divider}
                                                 <li
+                                                    tabIndex={0}
                                                     className="group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
                                                     onClick={(e) => onSelectEvent?.(e, { value: event })}
+                                                    onFocus={() => setFocus?.(index)}
+                                                    onBlur={() => setFocus?.(-1)}
                                                 >
                                                     <Tooltip
                                                         className="h-12 flex flex-row"
@@ -361,6 +376,24 @@ export const EventList = (_props: EventListProps): ReactElement => {
         15000
     );
 
+    const [focusIndex, setFocus] = useState(-1);
+
+    useWindowListener('keydown', (event: KeyboardEvent) => {
+        // Focus is -1 on mount and on blur, so when >= 0, we actually want
+        // to handle the keyboard event
+        if (focusIndex >= 0 && event.key === 'Enter') {
+            match(eventsQuery)
+                .with({ status: 'success' }, ({ data: { events } }) => {
+                    const selectedOption = events[focusIndex];
+                    if (selectedOption) {
+                        setFocus(-1);
+                        onSelectEvent(event, { value: selectedOption });
+                    }
+                })
+                .otherwise(() => true);
+        }
+    });
+
     const onSelectEventById = useCallback<ChangeHandler<string>>(
         (event, change) => {
             if (eventsQuery.status === 'success') {
@@ -394,6 +427,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             onSelectEvent={onSelectEvent}
             onSelectEventById={onSelectEventById}
             searchTerm={state.searchTerm}
+            setFocus={setFocus}
         />
     );
 };

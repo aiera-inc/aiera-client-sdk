@@ -144,50 +144,60 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     </span>
                 </div>
                 <div className="flex items-center pr-1.5 flex-shrink-0 flex-1 justify-center">
-                    <div
+                    <button
+                        id="playbar-toggleRate"
+                        tabIndex={0}
                         onClick={toggleRate}
                         className="select-none text-sm font-bold font-mono text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
                     >
                         {`${playbackRate.toFixed(2)}x`}
-                    </div>
-                    <div
+                    </button>
+                    <button
+                        id="playbar-seekToStart"
+                        tabIndex={0}
                         onClick={seekToStart}
                         className="rotate-180 text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
                     >
                         <End className="w-[12px]" />
-                    </div>
-                    <div
+                    </button>
+                    <button
+                        id="playbar-back15"
+                        tabIndex={0}
                         className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
                         onClick={rewind}
                     >
                         <Back15 className="w-[16px]" />
-                    </div>
-                    <div
-                        className={classNames(
-                            'flex items-center justify-center w-[30px] h-[30px] rounded-full bg-blue-600 text-white cursor-pointer mx-0.5 hover:bg-blue-700 active:bg-blue-800'
-                        )}
+                    </button>
+                    <Button
+                        kind="primary"
+                        className={classNames('flex items-center justify-center w-[30px] h-[30px] rounded-full mx-0.5')}
                         onClick={togglePlayback}
                     >
                         <div>{isPlaying ? <Pause className="w-2.5" /> : <Play className="ml-0.5 w-3" />}</div>
-                    </div>
-                    <div
+                    </Button>
+                    <button
+                        id="playbar-forward15"
+                        tabIndex={0}
                         className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
                         onClick={fastForward}
                     >
                         <Forward15 className="w-[16px]" />
-                    </div>
-                    <div
+                    </button>
+                    <button
+                        id="playbar-seekToEnd"
+                        tabIndex={0}
                         onClick={seekToEnd}
                         className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
                     >
                         <End className="w-[12px]" />
-                    </div>
+                    </button>
                     <Tooltip
                         yOffset={66}
                         xOffset={-53}
                         content={
                             <div className="flex items-center justify-center p-2 rounded-xl bg-white -rotate-90 player_timeline__volume_slider">
                                 <input
+                                    tabIndex={0}
                                     defaultValue={volume}
                                     onChange={(e) => setVolume(parseFloat(e.target.value))}
                                     type="range"
@@ -203,7 +213,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         openOn="click"
                         position="top-right"
                     >
-                        <div className="text-yellow-500 px-2 hover:text-yellow-600 active:text-yellow-800 cursor-pointer">
+                        <button className="text-yellow-500 px-2 hover:text-yellow-600 active:text-yellow-800 cursor-pointer">
                             {volume > 0.6 ? (
                                 <SpeakerLoud className="w-[18px]" />
                             ) : volume === 0 ? (
@@ -211,7 +221,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                             ) : (
                                 <Speaker className="w-[14px] mr-[4px]" />
                             )}
-                        </div>
+                        </button>
                     </Tooltip>
                 </div>
                 {error && !isPlaying && (

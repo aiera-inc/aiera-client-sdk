@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProvider } from 'testUtils';
+import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/extend-expect';
 import { PriceChart } from '.';
 
@@ -50,5 +51,16 @@ describe('PriceChart', () => {
         fireEvent.click(label);
         expect(rendered.container.querySelector('.highcharts-container')).not.toBeNull();
         expect(toggle).toHaveBeenCalledTimes(1);
+    });
+
+    test('tab to focus pin', () => {
+        const toggle = jest.fn();
+        const { rendered } = renderWithProvider(
+            <PriceChart headerExpanded={true} priceChartExpanded togglePriceChart={toggle} />
+        );
+        const pin = rendered.container.querySelector('.price_chart__pin');
+        expect(pin).not.toHaveFocus();
+        userEvent.tab();
+        expect(pin).toHaveFocus();
     });
 });

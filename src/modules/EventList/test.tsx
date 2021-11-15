@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React from 'react';
 import { DocumentNode } from 'graphql';
-import { screen } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
@@ -197,6 +197,39 @@ describe('EventList', () => {
             },
         });
         userEvent.click(screen.getByText('TICK'));
+        screen.getByText('Transcript for 1');
+    });
+
+    test('handles selecting an event by keyboard', () => {
+        renderWithProvider(<EventList />, {
+            executeQuery: ({ query }: { query: DocumentNode }) => {
+                // @ts-ignore
+                const queryName = query?.definitions[0]?.name as string;
+                return queryName === 'EventList'
+                    ? fromValue({
+                          data: {
+                              events: eventList,
+                          },
+                      })
+                    : fromValue({
+                          data: {
+                              events: eventTranscript,
+                          },
+                      });
+            },
+        });
+        const eventItem = screen.getByText('TICK');
+        if (eventItem.closest('li')) {
+            eventItem?.closest('li')?.focus();
+        }
+
+        // Select previous item
+        userEvent.tab({ shift: true });
+
+        // Select event item
+        userEvent.tab();
+
+        fireEvent.keyDown(document, { key: 'Enter' });
         screen.getByText('Transcript for 1');
     });
 });

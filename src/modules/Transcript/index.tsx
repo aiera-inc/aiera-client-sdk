@@ -120,21 +120,30 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             &quot;
                         </div>
                         <div className="flex-1" />
-                        <div className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600" onClick={prevMatch}>
+                        <button
+                            tabIndex={0}
+                            className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600"
+                            onClick={prevMatch}
+                        >
                             <Chevron />
-                        </div>
+                        </button>
                         <div className="min-w-[35px] mr-2 text-center">
                             {matchIndex + 1} / {matches.length}
                         </div>
-                        <div className="w-2.5 mr-2 cursor-pointer hover:text-gray-600" onClick={nextMatch}>
+                        <button
+                            tabIndex={0}
+                            className="w-2.5 mr-2 cursor-pointer hover:text-gray-600"
+                            onClick={nextMatch}
+                        >
                             <Chevron />
-                        </div>
-                        <div
+                        </button>
+                        <button
+                            tabIndex={0}
                             className="w-4 cursor-pointer text-gray-400 hover:text-gray-600"
                             onClick={(e) => onChangeSearchTerm(e, { value: '' })}
                         >
                             <Close />
-                        </div>
+                        </button>
                     </div>
                 )}
             </div>

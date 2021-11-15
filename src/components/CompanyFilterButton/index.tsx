@@ -3,7 +3,6 @@ import React, {
     useRef,
     useState,
     Ref,
-    RefObject,
     Dispatch,
     SetStateAction,
     useLayoutEffect,
@@ -13,7 +12,7 @@ import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import classNames from 'classnames';
 
-import { useElementListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
+import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
@@ -40,7 +39,6 @@ interface CompanyFilterButtonSharedProps {
 
 /** @notExported */
 interface CompanyFilterButtonUIProps extends CompanyFilterButtonSharedProps {
-    inputRef: RefObject<HTMLInputElement>;
     companiesQuery: QueryResult<CompanyFilterQuery, CompanyFilterQueryVariables>;
     companiesLoading?: boolean;
     hideTooltip?: (event?: MouseEvent) => void;
@@ -57,7 +55,6 @@ function TooltipContentUI(props: CompanyFilterButtonUIProps): ReactElement {
     const {
         companiesQuery,
         hideTooltip,
-        inputRef,
         onChange,
         onSearchChange,
         scrollRef,
@@ -76,7 +73,6 @@ function TooltipContentUI(props: CompanyFilterButtonUIProps): ReactElement {
             <div className="p-3 w-full">
                 <Input
                     clearable
-                    inputRef={inputRef}
                     autoFocus
                     icon={<MagnifyingGlass />}
                     name="company-filter-button-search"
@@ -98,11 +94,12 @@ function TooltipContentUI(props: CompanyFilterButtonUIProps): ReactElement {
                                 return (
                                     <div
                                         className={classNames(
-                                            'flex items-center h-9 text-gray-900 tracking-wide cursor-pointer',
+                                            'flex items-center h-9 tracking-wide cursor-pointer focus:outline-none',
                                             {
                                                 'odd:bg-gray-100': selectedIndex !== index,
                                                 'bg-blue-500': selectedIndex === index,
                                                 'text-white': selectedIndex === index,
+                                                'text-gray-900': selectedIndex !== index,
                                             }
                                         )}
                                         key={company.id}
@@ -112,6 +109,8 @@ function TooltipContentUI(props: CompanyFilterButtonUIProps): ReactElement {
                                             hideTooltip?.();
                                         }}
                                         onMouseEnter={() => selectIndex(index)}
+                                        tabIndex={0}
+                                        onFocus={() => selectIndex(index)}
                                         ref={selectedIndex === index ? selectedOptionRef : undefined}
                                     >
                                         <div className="pl-4 truncate flex-1 text-base">{company.commonName}</div>
@@ -133,17 +132,25 @@ function TooltipContentUI(props: CompanyFilterButtonUIProps): ReactElement {
 }
 
 function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
-    const { hideTooltip, companiesQuery, selectedIndex, selectIndex, onChange, inputRef, setState } = props;
+    const { hideTooltip, companiesQuery, selectedIndex, selectIndex, onChange, setState } = props;
 
     // Need to be able to hide the tooltip on keypress.
-    useElementListener(
-        'keydown',
-        (event) => {
-            const key = event?.key;
+    useWindowListener('keydown', (event) => {
+        const key = event?.key;
 
-            match(companiesQuery)
-                .with({ status: 'success' }, ({ data: { companies } }) => {
+        match(companiesQuery)
+            .with({ status: 'success' }, ({ data: { companies } }) => {
+                if (companies.length > 0) {
                     match(key)
+                        .with('Tab', () => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            if (event.shiftKey) {
+                                if (selectedIndex > 0) selectIndex(selectedIndex - 1);
+                            } else {
+                                if (selectedIndex < companies.length - 1) selectIndex(selectedIndex + 1);
+                            }
+                        })
                         .with('ArrowUp', () => {
                             if (selectedIndex > 0) selectIndex(selectedIndex - 1);
                         })
@@ -159,11 +166,10 @@ function TooltipContent(props: CompanyFilterButtonUIProps): ReactElement {
                             }
                         })
                         .otherwise(() => true);
-                })
-                .otherwise(() => true);
-        },
-        inputRef
-    );
+                }
+            })
+            .otherwise(() => true);
+    });
 
     return <TooltipContentUI {...props} />;
 }
@@ -228,7 +234,6 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
 
     const [selectedIndex, selectIndex] = useState(0);
     const { state, handlers, setState } = useChangeHandlers({ searchTerm: '' });
-    const inputRef = useRef<HTMLInputElement>(null);
     const companiesQuery = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
         isEmpty: ({ companies }) => companies.length === 0,
         query: gql`
@@ -287,7 +292,6 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
     return (
         <CompanyFilterButtonUI
             companiesQuery={companiesQuery}
-            inputRef={inputRef}
             onChange={onChange}
             onSearchChange={handlers.searchTerm}
             value={value}

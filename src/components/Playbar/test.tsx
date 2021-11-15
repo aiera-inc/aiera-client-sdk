@@ -49,4 +49,28 @@ describe('PlaybarUI', () => {
         userEvent.click(screen.getByTitle('Pause'));
         expect(mockedPause).toHaveBeenCalled();
     });
+
+    test('selected buttons on tab', () => {
+        const player = new AudioPlayer();
+        player.playing = jest.fn().mockReturnValue(true);
+        const mockedPause = jest.fn();
+        player.pause = mockedPause;
+        player.id = '1';
+        const { rendered } = renderWithProvider(
+            <AudioPlayerProvider audioPlayer={player}>
+                <Playbar />
+            </AudioPlayerProvider>
+        );
+        const toggleRate = rendered.container.querySelector('#playbar-toggleRate');
+        const seekStart = rendered.container.querySelector('#playbar-seekToStart');
+        const back15 = rendered.container.querySelector('#playbar-back15');
+        userEvent.tab();
+        // Selects X button
+        userEvent.tab();
+        expect(toggleRate).toHaveFocus();
+        userEvent.tab();
+        expect(seekStart).toHaveFocus();
+        userEvent.tab();
+        expect(back15).toHaveFocus();
+    });
 });

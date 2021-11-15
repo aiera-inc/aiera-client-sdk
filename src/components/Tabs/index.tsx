@@ -1,7 +1,8 @@
-import React, { ReactElement, ReactNode } from 'react';
+import React, { ReactElement, ReactNode, useState, Dispatch, SetStateAction } from 'react';
 import classNames from 'classnames';
 import { match } from 'ts-pattern';
 
+import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
@@ -22,10 +23,11 @@ interface TabsProps<T> {
     options?: TabOption<T>[];
     value?: TabOption<T>['value'];
     kind?: TabKind;
+    setFocus?: Dispatch<SetStateAction<number>>;
 }
 
-export const Tabs = <T extends string | number>(props: TabsProps<T>): ReactElement => {
-    const { onChange, options = [], value, kind = 'button', className = '' } = props;
+export const TabsUI = <T extends string | number>(props: TabsProps<T>): ReactElement => {
+    const { onChange, options = [], value, kind = 'button', className = '', setFocus } = props;
     const getClasses = (val: string | number) =>
         match(kind)
             .with('button', () =>
@@ -52,11 +54,14 @@ export const Tabs = <T extends string | number>(props: TabsProps<T>): ReactEleme
 
     return (
         <div className={`flex tab relative ${className}`}>
-            {options.map(({ value: opVal, label }) => (
+            {options.map(({ value: opVal, label }, index) => (
                 <div
+                    tabIndex={0}
                     key={`tab-option-${opVal}`}
                     className={getClasses(opVal)}
                     onClick={(event) => onChange && onChange(event, { value: opVal })}
+                    onFocus={() => setFocus?.(index)}
+                    onBlur={() => setFocus?.(-1)}
                 >
                     {label}
                     {kind === 'line' && (
@@ -80,5 +85,31 @@ export const Tabs = <T extends string | number>(props: TabsProps<T>): ReactEleme
                 </div>
             ))}
         </div>
+    );
+};
+
+export const Tabs = <T extends string | number>(props: TabsProps<T>): ReactElement => {
+    const { onChange, options = [], value, kind, className } = props;
+    const [focusIndex, setFocus] = useState(-1);
+    if (onChange && options.length) {
+        useWindowListener('keydown', (event: KeyboardEvent) => {
+            const selectedOption = options[focusIndex];
+            // Focus is -1 on mount and on blur, so when >= 0, we actually want
+            // to handle the keyboard event
+            if (event.key === 'Enter' && focusIndex >= 0 && selectedOption && selectedOption?.value) {
+                onChange(event, { value: options[focusIndex]?.value });
+            }
+        });
+    }
+
+    return (
+        <TabsUI
+            className={className}
+            setFocus={setFocus}
+            onChange={onChange}
+            options={options}
+            value={value}
+            kind={kind}
+        />
     );
 };

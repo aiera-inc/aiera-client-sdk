@@ -1,7 +1,8 @@
-import React, { ReactElement, useState, useCallback } from 'react';
+import React, { ReactElement, useState, useCallback, Dispatch, SetStateAction } from 'react';
 import classNames from 'classnames';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
+import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
 import { Pin } from '@aiera/client-sdk/components/Svg/Pin';
@@ -22,6 +23,7 @@ interface PriceChartUIProps extends PriceChartSharedProps {
     togglePin: () => void;
     currentPrice: number;
     setPrice: (price: number) => void;
+    setFocus: Dispatch<SetStateAction<boolean>>;
 }
 
 function addMin(min: number): number {
@@ -112,7 +114,7 @@ const chartData: { x: number; y: number }[] = [
 ];
 
 export function PriceChartUI(props: PriceChartUIProps): ReactElement {
-    const { togglePin, togglePriceChart, pinned, priceChartExpanded, currentPrice, setPrice } = props;
+    const { togglePin, togglePriceChart, pinned, priceChartExpanded, currentPrice, setFocus, setPrice } = props;
     const price: number = parseFloat(currentPrice?.toFixed(2));
     const originalPrice = 75.32;
     const absolutePriceChange: number = parseFloat((price - originalPrice).toFixed(2));
@@ -249,19 +251,26 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                         <MovementArrow className={classNames('ml-1 w-2', { 'rotate-180': absolutePriceChange < 0 })} />
                     </span>
                     <div
-                        className={classNames('flex mr-1 cursor-pointer', {
-                            'text-blue-600': pinned,
-                            'text-gray-400': !pinned,
-                            'hover:text-blue-700': pinned,
-                            'hover:text-gray-600': !pinned,
-                            'active:text-blue-900': pinned,
-                            'active:text-gray-900': !pinned,
-                        })}
+                        tabIndex={0}
+                        className={classNames(
+                            'flex mr-1 cursor-pointer',
+                            {
+                                'text-blue-600': pinned,
+                                'text-gray-400': !pinned,
+                                'hover:text-blue-700': pinned,
+                                'hover:text-gray-600': !pinned,
+                                'active:text-blue-900': pinned,
+                                'active:text-gray-900': !pinned,
+                            },
+                            'price_chart__pin'
+                        )}
                         onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
                             togglePin();
                         }}
+                        onFocus={() => setFocus?.(true)}
+                        onBlur={() => setFocus?.(false)}
                     >
                         {pinned ? <PinSolid className="w-[12px]" /> : <Pin className="w-[12px]" />}
                     </div>
@@ -298,7 +307,14 @@ export function PriceChart(props: PriceChartProps): ReactElement | null {
     const { headerExpanded, togglePriceChart, priceChartExpanded } = props;
     const [pinned, setPinState] = useState(false);
     const [currentPrice, setPrice] = useState(chartData[chartData.length - 1]?.y);
+    const [inFocus, setFocus] = useState(false);
     const togglePin = useCallback(() => setPinState(!pinned), [pinned]);
+
+    useWindowListener('keydown', (event: KeyboardEvent) => {
+        if (inFocus && event.key === 'Enter') {
+            togglePin();
+        }
+    });
 
     if ((!pinned && !headerExpanded) || typeof currentPrice !== 'number') return null;
 
@@ -307,6 +323,7 @@ export function PriceChart(props: PriceChartProps): ReactElement | null {
             togglePriceChart={togglePriceChart}
             togglePin={togglePin}
             currentPrice={currentPrice || 0}
+            setFocus={setFocus}
             setPrice={setPrice}
             pinned={pinned}
             priceChartExpanded={priceChartExpanded}
