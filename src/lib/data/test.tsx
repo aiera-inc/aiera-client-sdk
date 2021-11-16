@@ -2,9 +2,9 @@ import React, { ReactNode, useEffect } from 'react';
 import { renderHook } from '@testing-library/react-hooks';
 import { fromValue } from 'wonka';
 
-import { getMockedClient, MockProvider, renderWithProvider } from 'testUtils';
+import { actAndFlush, getMockedClient, MockProvider, renderWithProvider } from 'testUtils';
 
-import { useAppConfig, useAutoTrack, useTrack } from '.';
+import { useAppConfig, useAutoTrack, useTrack, useSettings, defaultSettings } from '.';
 
 describe('useTrack', () => {
     const TestComponent = () => {
@@ -109,5 +109,57 @@ describe('useAppConfig', () => {
         }
         const { result } = renderHook(() => useAppConfig(), { wrapper: TestProvider });
         expect(result.current.state.data).toEqual(data);
+    });
+});
+
+describe('useSettings', () => {
+    test('returns the default settings', async () => {
+        const { result } = await actAndFlush(() => renderHook(() => useSettings(), { wrapper: MockProvider }));
+        expect(result.current.settings).toEqual(defaultSettings);
+    });
+
+    test('returns the stored settings', async () => {
+        const storedSettings = {
+            darkMode: true,
+            textSentiment: true,
+            tonalSentiment: true,
+        };
+        jest.spyOn(window.localStorage.__proto__, 'getItem');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() => JSON.stringify(storedSettings));
+        const { result } = await actAndFlush(() => renderHook(() => useSettings(), { wrapper: MockProvider }));
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.getItem).toHaveBeenLastCalledWith('aiera:sdk:settings');
+        expect(result.current.settings).toEqual(storedSettings);
+    });
+
+    test('updates settings', async () => {
+        const initialSettings = {
+            darkMode: true,
+            textSentiment: true,
+            tonalSentiment: true,
+        };
+        jest.spyOn(window.localStorage.__proto__, 'getItem');
+        jest.spyOn(window.localStorage.__proto__, 'setItem');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() => JSON.stringify(initialSettings));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.setItem = jest.fn();
+        const hook = await actAndFlush(() => renderHook(() => useSettings(), { wrapper: MockProvider }));
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.getItem).toHaveBeenLastCalledWith('aiera:sdk:settings');
+        expect(hook?.result.current.settings).toEqual(initialSettings);
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() => JSON.stringify({ ...initialSettings, darkMode: false }));
+        await actAndFlush(() => {
+            hook?.result.current.updateSettings({ darkMode: false });
+        });
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.setItem).toHaveBeenLastCalledWith(
+            'aiera:sdk:settings',
+            JSON.stringify({ darkMode: false, textSentiment: true, tonalSentiment: true })
+        );
+        expect(hook?.result.current.settings).toEqual({ ...initialSettings, darkMode: false });
     });
 });

@@ -2,7 +2,7 @@
 import React, { ReactElement, ReactNode } from 'react';
 import { DocumentNode } from 'graphql';
 import Pusher from 'pusher-js';
-import { screen, render } from '@testing-library/react';
+import { act, screen, render } from '@testing-library/react';
 import { never } from 'wonka';
 import EventEmitter from 'eventemitter3';
 
@@ -83,7 +83,7 @@ export function MockProvider({
     realtime = getMockedRealtime(),
     reset = jest.fn(),
 }: {
-    children: ReactNode;
+    children?: ReactNode;
     client?: MockedClient;
     config?: EnvConfig;
     realtime?: MockedRealtime;
@@ -128,6 +128,15 @@ export function renderWithProvider(
         );
 
     return { client: mockedClient, realtime: mockedRealtime, rerender, rendered, reset };
+}
+
+export async function actAndFlush<T>(fn: () => T): Promise<T> {
+    let result = null as unknown as T;
+    await act(async () => {
+        result = fn();
+        await Promise.resolve();
+    });
+    return result;
 }
 
 export function getByTextWithMarkup(text: string): void {

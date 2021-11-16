@@ -2,10 +2,10 @@
  * Utilities for working with data from GQL Query responses.
  * @module
  */
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import gql from 'graphql-tag';
 import { useClient } from 'urql';
-import { DeepPartial, Instrument, Maybe, Quote } from '@aiera/client-sdk/types';
+import { ChangeHandlers, DeepPartial, Instrument, Maybe, Quote } from '@aiera/client-sdk/types';
 import {
     AppConfigQuery,
     AppConfigQueryVariables,
@@ -15,6 +15,7 @@ import {
     TrackMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useStorage } from '@aiera/client-sdk/lib/storage';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 
 /**
@@ -185,4 +186,70 @@ export function useAutoTrack(
             void track(event, object, properties);
         }
     }, [track, event, object, skip, ...deps]);
+}
+
+export interface Settings {
+    darkMode: boolean;
+    textSentiment: boolean;
+    tonalSentiment: boolean;
+}
+
+export const defaultSettings = {
+    darkMode: false,
+    textSentiment: true,
+    tonalSentiment: true,
+};
+
+export function useSettings(): {
+    settings: Settings;
+    updateSettings: (newSettings: Partial<Settings>) => void;
+    loadSettings: () => Promise<void>;
+    handlers: ChangeHandlers<Settings>;
+} {
+    const storage = useStorage();
+    const [settings, setSettings] = useState<Settings>(defaultSettings);
+
+    const updateSettings = useCallback(
+        (newSettings: Partial<Settings>) => {
+            setSettings((prevSettings) => {
+                const mergedSettings = { ...prevSettings, ...newSettings };
+                try {
+                    void storage.put('settings', JSON.stringify(mergedSettings));
+                } catch (_error) {
+                    // Nothing to do here, it just wont save
+                }
+                return mergedSettings;
+            });
+        },
+        [storage, setSettings]
+    );
+
+    const handlers = {} as ChangeHandlers<Settings>;
+    for (const key in settings) {
+        handlers[key as keyof Settings] = useCallback(
+            (_, change) => updateSettings({ [key]: change.value } as Partial<Settings>),
+            [settings]
+        );
+    }
+
+    const loadSettings = useCallback(async () => {
+        return storage.get('settings').then((value) => {
+            try {
+                setSettings((prevSettings) => ({ ...prevSettings, ...(JSON.parse(value || '{}') as Settings) }));
+            } catch (_error) {
+                // Nothing to do here, it just wont save
+            }
+        });
+    }, [storage, setSettings]);
+
+    useEffect(() => {
+        const listener = (key: string) => {
+            if (key === 'settings') void loadSettings();
+        };
+        storage.addListener?.(listener);
+        void loadSettings();
+        return () => storage.removeListener?.(listener);
+    }, [loadSettings, storage]);
+
+    return { settings, updateSettings, loadSettings, handlers };
 }
