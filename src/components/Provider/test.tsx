@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { ReactNode } from 'react';
 import { useClient } from 'urql';
 import { screen, render } from '@testing-library/react';
@@ -52,6 +53,9 @@ describe('Provider', () => {
         expect(result.current.client).toBe(client);
         expect(result.current.config).toEqual(config);
         expect(result.current.realtime).toBe(realtime);
-        expect(result.current.storage).toBe(storage);
+        // Implementation detail for storage class, but we want to confirm
+        // it is passing the correct object here so ignore the error for the test
+        // @ts-ignore
+        expect(result.current.storage.storage).toBe(storage);
     });
 });
