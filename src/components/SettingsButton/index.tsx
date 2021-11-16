@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
-import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { ChangeHandler } from '@aiera/client-sdk/types';
+import { useSettings } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
 import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
@@ -12,25 +11,12 @@ interface SettingsButtonSharedProps {}
 
 /** @notExported */
 interface SettingsButtonUIProps extends SettingsButtonSharedProps {
-    darkMode: boolean;
-    textSentiment: boolean;
-    tonalSentiment: boolean;
-    handleDarkMode: ChangeHandler<boolean>;
-    handleTextSentiment: ChangeHandler<boolean>;
-    handleTonalSentiment: ChangeHandler<boolean>;
     hideTooltip?: () => void;
 }
 
 function TooltipContent(props: SettingsButtonUIProps): ReactElement {
-    const {
-        hideTooltip,
-        darkMode,
-        textSentiment,
-        tonalSentiment,
-        handleDarkMode,
-        handleTextSentiment,
-        handleTonalSentiment,
-    } = props;
+    const { hideTooltip } = props;
+    const { settings, handlers } = useSettings();
     return (
         <div className="shadow-md bg-white rounded-lg w-44 overflow-hidden p-1">
             <div className="pt-2 pb-2 px-3 font-semibold text-base flex justify-between items-center">
@@ -39,47 +25,39 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     <XMark className="w-2" />
                 </div>
             </div>
+            {false && (
+                <div
+                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
+                    onClick={(e) => handlers.darkMode(e, { value: !settings.darkMode })}
+                >
+                    <Toggle on={settings.darkMode} onChange={handlers.darkMode} />
+                    <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Dark Mode</span>
+                </div>
+            )}
             <div
                 className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
-                onClick={(e) => handleDarkMode(e, { value: !darkMode })}
+                onClick={(e) => handlers.textSentiment(e, { value: !settings.textSentiment })}
             >
-                <Toggle on={darkMode} onChange={handleDarkMode} />
-                <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Dark Mode</span>
-            </div>
-            <div
-                className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
-                onClick={(e) => handleTextSentiment(e, { value: !textSentiment })}
-            >
-                <Toggle on={textSentiment} onChange={handleTextSentiment} />
+                <Toggle on={settings.textSentiment} onChange={handlers.textSentiment} />
                 <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Text Sentiment</span>
             </div>
-            <div
-                className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
-                onClick={(e) => handleTonalSentiment(e, { value: !tonalSentiment })}
-            >
-                <Toggle on={tonalSentiment} onChange={handleTonalSentiment} />
-                <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Tonal Sentiment</span>
-            </div>
+            {false && (
+                <div
+                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
+                    onClick={(e) => handlers.tonalSentiment(e, { value: !settings.tonalSentiment })}
+                >
+                    <Toggle on={settings.tonalSentiment} onChange={handlers.tonalSentiment} />
+                    <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Tonal Sentiment</span>
+                </div>
+            )}
         </div>
     );
 }
 
-export function SettingsButtonUI(props: SettingsButtonUIProps): ReactElement {
-    const { darkMode, textSentiment, tonalSentiment, handleDarkMode, handleTextSentiment, handleTonalSentiment } =
-        props;
+export function SettingsButtonUI(_props: SettingsButtonUIProps): ReactElement {
     return (
         <Tooltip
-            content={({ hideTooltip }) => (
-                <TooltipContent
-                    hideTooltip={hideTooltip}
-                    darkMode={darkMode}
-                    textSentiment={textSentiment}
-                    tonalSentiment={tonalSentiment}
-                    handleDarkMode={handleDarkMode}
-                    handleTextSentiment={handleTextSentiment}
-                    handleTonalSentiment={handleTonalSentiment}
-                />
-            )}
+            content={({ hideTooltip }) => <TooltipContent hideTooltip={hideTooltip} />}
             grow="down-left"
             modal
             openOn="click"
@@ -100,19 +78,5 @@ export interface SettingsButtonProps extends SettingsButtonSharedProps {}
  * Renders SettingsButton
  */
 export function SettingsButton(): ReactElement {
-    const { state, handlers } = useChangeHandlers({
-        darkMode: false,
-        textSentiment: false,
-        tonalSentiment: false,
-    });
-    return (
-        <SettingsButtonUI
-            darkMode={state.darkMode}
-            textSentiment={state.textSentiment}
-            tonalSentiment={state.tonalSentiment}
-            handleDarkMode={handlers.darkMode}
-            handleTextSentiment={handlers.textSentiment}
-            handleTonalSentiment={handlers.tonalSentiment}
-        />
-    );
+    return <SettingsButtonUI />;
 }

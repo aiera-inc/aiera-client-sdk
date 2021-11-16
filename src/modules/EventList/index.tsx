@@ -95,10 +95,10 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         placeholder="Events & Transcripts..."
                         value={searchTerm}
                     />
-                    <div className="ml-2">
+                    <div className="mx-2">
                         <CompanyFilterButton onChange={onCompanyChange} value={company} />
                     </div>
-                    {false && <SettingsButton />}
+                    <SettingsButton />
                 </div>
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">

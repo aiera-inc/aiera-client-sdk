@@ -2,7 +2,7 @@ import React from 'react';
 import { act, screen, fireEvent } from '@testing-library/react';
 import { fromValue, never } from 'wonka';
 
-import { getByTextWithMarkup, renderWithProvider } from '@aiera/client-sdk/testUtils';
+import { actAndFlush, getByTextWithMarkup, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { Transcript } from '.';
 
@@ -12,13 +12,15 @@ describe('Transcript', () => {
         jest.useRealTimers();
     });
 
-    test('renders', () => {
-        renderWithProvider(<Transcript eventId={'1'} />, {
-            executeQuery: () =>
-                fromValue({
-                    data: { events: generateEventTranscripts(['First paragraph']) },
-                }),
-        });
+    test('renders', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<Transcript eventId={'1'} />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { events: generateEventTranscripts(['First paragraph']) },
+                    }),
+            })
+        );
         screen.getByText('First paragraph');
         screen.getByText('Event Title');
         screen.getByText('TICK');
@@ -27,59 +29,67 @@ describe('Transcript', () => {
         screen.getByText(/earnings$/);
     });
 
-    test('renders search info', () => {
-        renderWithProvider(<Transcript eventId={'1'} />, {
-            executeQuery: () =>
-                fromValue({
-                    data: { events: generateEventTranscripts(['First paragraph']) },
-                }),
-        });
+    test('renders search info', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<Transcript eventId={'1'} />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { events: generateEventTranscripts(['First paragraph']) },
+                    }),
+            })
+        );
         const searchInput = screen.getByPlaceholderText('Search Transcripts...');
         fireEvent.change(searchInput, { target: { value: 'paragraph' } });
         getByTextWithMarkup('Showing 1 result for "paragraph"');
     });
 
-    test('renders positive sentiment', () => {
-        const { rendered } = renderWithProvider(<Transcript eventId={'1'} />, {
-            executeQuery: () =>
-                fromValue({
-                    data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'positive') },
-                }),
-        });
+    test('renders positive sentiment', async () => {
+        const { rendered } = await actAndFlush(() =>
+            renderWithProvider(<Transcript eventId={'1'} />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'positive') },
+                    }),
+            })
+        );
 
         expect(rendered.container.querySelector('.text-green-600')).not.toBeNull();
     });
 
-    test('renders negative sentiment', () => {
-        const { rendered } = renderWithProvider(<Transcript eventId={'1'} />, {
-            executeQuery: () =>
-                fromValue({
-                    data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'negative') },
-                }),
-        });
+    test('renders negative sentiment', async () => {
+        const { rendered } = await actAndFlush(() =>
+            renderWithProvider(<Transcript eventId={'1'} />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { events: generateEventTranscripts(['First paragraph'], 1, false, 'negative') },
+                    }),
+            })
+        );
 
         expect(rendered.container.querySelector('.text-red-600')).not.toBeNull();
     });
 
-    test('renders updated paragraphs', () => {
-        const { realtime } = renderWithProvider(<Transcript eventId={'1'} />, {
-            executeQuery: ({ query }) => {
-                const op = getQueryNames(query)[0];
-                if (op === 'Transcript') {
-                    return fromValue({
-                        data: { events: generateEventTranscripts(['First paragraph'], 1, true) },
-                    });
-                }
+    test('renders updated paragraphs', async () => {
+        const { realtime } = await actAndFlush(() =>
+            renderWithProvider(<Transcript eventId={'1'} />, {
+                executeQuery: ({ query }) => {
+                    const op = getQueryNames(query)[0];
+                    if (op === 'Transcript') {
+                        return fromValue({
+                            data: { events: generateEventTranscripts(['First paragraph'], 1, true) },
+                        });
+                    }
 
-                if (op === 'LatestParagraphs') {
-                    return fromValue({
-                        data: { events: generateLatestParagraphs(['Updated paragraph', 'Latest paragraph'], 1) },
-                    });
-                }
+                    if (op === 'LatestParagraphs') {
+                        return fromValue({
+                            data: { events: generateLatestParagraphs(['Updated paragraph', 'Latest paragraph'], 1) },
+                        });
+                    }
 
-                return never;
-            },
-        });
+                    return never;
+                },
+            })
+        );
         screen.getByText('First paragraph');
 
         act(() => {
@@ -91,25 +101,27 @@ describe('Transcript', () => {
         screen.getByText('Latest paragraph');
     });
 
-    test('renders partials', () => {
-        const { realtime } = renderWithProvider(<Transcript eventId={'1'} />, {
-            executeQuery: ({ query }) => {
-                const op = getQueryNames(query)[0];
-                if (op === 'Transcript') {
-                    return fromValue({
-                        data: { events: generateEventTranscripts(['First paragraph'], 1, true) },
-                    });
-                }
+    test('renders partials', async () => {
+        const { realtime } = await actAndFlush(() =>
+            renderWithProvider(<Transcript eventId={'1'} />, {
+                executeQuery: ({ query }) => {
+                    const op = getQueryNames(query)[0];
+                    if (op === 'Transcript') {
+                        return fromValue({
+                            data: { events: generateEventTranscripts(['First paragraph'], 1, true) },
+                        });
+                    }
 
-                if (op === 'LatestParagraphs') {
-                    return fromValue({
-                        data: { events: generateLatestParagraphs(['Latest paragraph']) },
-                    });
-                }
+                    if (op === 'LatestParagraphs') {
+                        return fromValue({
+                            data: { events: generateLatestParagraphs(['Latest paragraph']) },
+                        });
+                    }
 
-                return never;
-            },
-        });
+                    return never;
+                },
+            })
+        );
         expect(screen.queryByText('First paragraph')).toBeTruthy();
 
         act(() => {

@@ -6,7 +6,7 @@ import { within } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
 
-import { renderWithProvider } from '@aiera/client-sdk/testUtils';
+import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { EventList } from '.';
 
@@ -178,7 +178,7 @@ describe('EventList', () => {
         if (row) within(row).getByTitle('Play');
     });
 
-    test('handles selecting an event', () => {
+    test('handles selecting an event', async () => {
         renderWithProvider(<EventList />, {
             executeQuery: ({ query }: { query: DocumentNode }) => {
                 // @ts-ignore
@@ -196,7 +196,9 @@ describe('EventList', () => {
                       });
             },
         });
-        userEvent.click(screen.getByText('TICK'));
+        await actAndFlush(() => {
+            userEvent.click(screen.getByText('TICK'));
+        });
         screen.getByText('Transcript for 1');
     });
 

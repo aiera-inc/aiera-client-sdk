@@ -19,6 +19,7 @@ import { DateTime } from 'luxon';
 import { findAll } from 'highlight-words-core';
 
 import {
+    BasicTextualSentiment,
     EventUpdatesQuery,
     EventUpdatesQueryVariables,
     LatestParagraphsQuery,
@@ -32,7 +33,7 @@ import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
 import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
-import { useAutoTrack } from '@aiera/client-sdk/lib/data';
+import { useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
 import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
@@ -44,7 +45,7 @@ import './styles.css';
 
 type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
 type Paragraph = SpeakerTurn['paragraphs'][0];
-type Chunk = { text: string; id: string; highlight: boolean; textSentiment?: string };
+type Chunk = { text: string; id: string; highlight: boolean; textSentiment?: BasicTextualSentiment | false };
 interface Sentence {
     id: string;
     chunks: Chunk[];
@@ -657,6 +658,7 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
         inline: 'center',
         behavior: 'auto',
     });
+    const { settings } = useSettings();
 
     // when paragraphs or search term are updated, loop over the paragraphs
     // adding the search highlights to each as a separate `chunks` field. Then
@@ -681,10 +683,9 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
                                       id: `${paragraph.id}-${sentence.id}-search-term-chunk-${index}`,
                                       text: sentence.text.substr(start, end - start),
                                       textSentiment:
+                                          settings.textSentiment &&
                                           sentence.sentiment?.textual?.overThreshold &&
-                                          sentence.sentiment?.textual?.basicSentiment
-                                              ? sentence.sentiment?.textual?.basicSentiment
-                                              : undefined,
+                                          sentence.sentiment?.textual?.basicSentiment,
                                   }))
                                 : [
                                       {
@@ -692,10 +693,9 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
                                           id: `${paragraph.id}-${sentence.id}-sentence-chunk-${idx}`,
                                           text: sentence.text,
                                           textSentiment:
+                                              settings.textSentiment &&
                                               sentence.sentiment?.textual?.overThreshold &&
-                                              sentence.sentiment?.textual?.basicSentiment
-                                                  ? sentence.sentiment?.textual?.basicSentiment
-                                                  : undefined,
+                                              sentence.sentiment?.textual?.basicSentiment,
                                       },
                                   ],
                         })),
@@ -704,7 +704,7 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
                 }),
             })),
 
-        [speakerTurns, state.searchTerm]
+        [settings, speakerTurns, state.searchTerm]
     );
 
     // Get just the paragraphs with search matches

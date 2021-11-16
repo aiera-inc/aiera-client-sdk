@@ -81,13 +81,14 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                     </Button>
                 )}
                 <Input
+                    className="mr-2"
                     icon={<MagnifyingGlass />}
                     name="search"
                     placeholder="Search Transcripts..."
                     value={searchTerm}
                     onChange={onChangeSearchTerm}
                 />
-                {false && <SettingsButton />}
+                <SettingsButton />
             </div>
             {match(eventQuery)
                 .with({ status: 'loading' }, () => {
