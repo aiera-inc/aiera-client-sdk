@@ -5,3 +5,4 @@ postcss.config.js
 .codegen.js
 tailwind.config.js
 templates/
+src/types/generated.ts
