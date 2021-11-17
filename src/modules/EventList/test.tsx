@@ -202,7 +202,7 @@ describe('EventList', () => {
         screen.getByText('Transcript for 1');
     });
 
-    test('handles selecting an event by keyboard', () => {
+    test('handles selecting an event by keyboard', async () => {
         renderWithProvider(<EventList />, {
             executeQuery: ({ query }: { query: DocumentNode }) => {
                 // @ts-ignore
@@ -231,7 +231,7 @@ describe('EventList', () => {
         // Select event item
         userEvent.tab();
 
-        fireEvent.keyDown(document, { key: 'Enter' });
+        await actAndFlush(() => fireEvent.keyDown(document, { key: 'Enter' }));
         screen.getByText('Transcript for 1');
     });
 });
