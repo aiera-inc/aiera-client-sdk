@@ -1080,7 +1080,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context6, unstable_observedBits);
         }
-        function useState8(initialState) {
+        function useState9(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1104,7 +1104,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo2(create, deps) {
+        function useMemo3(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create, deps);
         }
@@ -1665,10 +1665,10 @@ var require_react_development = __commonJS({
         exports2.useEffect = useEffect8;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect2;
-        exports2.useMemo = useMemo2;
+        exports2.useMemo = useMemo3;
         exports2.useReducer = useReducer;
         exports2.useRef = useRef5;
-        exports2.useState = useState8;
+        exports2.useState = useState9;
         exports2.version = ReactVersion;
       })();
     }
@@ -20921,11 +20921,11 @@ var require_eventemitter3 = __commonJS({
       else
         delete emitter._events[evt];
     }
-    function EventEmitter2() {
+    function EventEmitter3() {
       this._events = new Events();
       this._eventsCount = 0;
     }
-    EventEmitter2.prototype.eventNames = function eventNames() {
+    EventEmitter3.prototype.eventNames = function eventNames() {
       var names = [], events, name;
       if (this._eventsCount === 0)
         return names;
@@ -20938,7 +20938,7 @@ var require_eventemitter3 = __commonJS({
       }
       return names;
     };
-    EventEmitter2.prototype.listeners = function listeners(event) {
+    EventEmitter3.prototype.listeners = function listeners(event) {
       var evt = prefix2 ? prefix2 + event : event, handlers = this._events[evt];
       if (!handlers)
         return [];
@@ -20949,7 +20949,7 @@ var require_eventemitter3 = __commonJS({
       }
       return ee;
     };
-    EventEmitter2.prototype.listenerCount = function listenerCount(event) {
+    EventEmitter3.prototype.listenerCount = function listenerCount(event) {
       var evt = prefix2 ? prefix2 + event : event, listeners = this._events[evt];
       if (!listeners)
         return 0;
@@ -20957,7 +20957,7 @@ var require_eventemitter3 = __commonJS({
         return 1;
       return listeners.length;
     };
-    EventEmitter2.prototype.emit = function emit(event, a1, a22, a3, a4, a5) {
+    EventEmitter3.prototype.emit = function emit(event, a1, a22, a3, a4, a5) {
       var evt = prefix2 ? prefix2 + event : event;
       if (!this._events[evt])
         return false;
@@ -21012,13 +21012,13 @@ var require_eventemitter3 = __commonJS({
       }
       return true;
     };
-    EventEmitter2.prototype.on = function on(event, fn, context) {
+    EventEmitter3.prototype.on = function on(event, fn, context) {
       return addListener(this, event, fn, context, false);
     };
-    EventEmitter2.prototype.once = function once(event, fn, context) {
+    EventEmitter3.prototype.once = function once(event, fn, context) {
       return addListener(this, event, fn, context, true);
     };
-    EventEmitter2.prototype.removeListener = function removeListener(event, fn, context, once) {
+    EventEmitter3.prototype.removeListener = function removeListener(event, fn, context, once) {
       var evt = prefix2 ? prefix2 + event : event;
       if (!this._events[evt])
         return this;
@@ -21044,7 +21044,7 @@ var require_eventemitter3 = __commonJS({
       }
       return this;
     };
-    EventEmitter2.prototype.removeAllListeners = function removeAllListeners(event) {
+    EventEmitter3.prototype.removeAllListeners = function removeAllListeners(event) {
       var evt;
       if (event) {
         evt = prefix2 ? prefix2 + event : event;
@@ -21056,12 +21056,12 @@ var require_eventemitter3 = __commonJS({
       }
       return this;
     };
-    EventEmitter2.prototype.off = EventEmitter2.prototype.removeListener;
-    EventEmitter2.prototype.addListener = EventEmitter2.prototype.on;
-    EventEmitter2.prefixed = prefix2;
-    EventEmitter2.EventEmitter = EventEmitter2;
+    EventEmitter3.prototype.off = EventEmitter3.prototype.removeListener;
+    EventEmitter3.prototype.addListener = EventEmitter3.prototype.on;
+    EventEmitter3.prefixed = prefix2;
+    EventEmitter3.EventEmitter = EventEmitter3;
     if (typeof module2 !== "undefined") {
-      module2.exports = EventEmitter2;
+      module2.exports = EventEmitter3;
     }
   }
 });
@@ -36482,6 +36482,7 @@ var lib_default = gql;
 
 // src/lib/storage/index.tsx
 var import_react3 = __toModule(require_react());
+var import_eventemitter3 = __toModule(require_eventemitter3());
 var prefix = "aiera:sdk";
 var local = {
   put(key, value) {
@@ -36502,10 +36503,39 @@ var local = {
     });
   }
 };
+var InternalStorage = class {
+  constructor(storage) {
+    this.events = new import_eventemitter3.default();
+    this.storage = storage;
+  }
+  get(key) {
+    return __async(this, null, function* () {
+      return this.storage.get(key);
+    });
+  }
+  put(key, value) {
+    return __async(this, null, function* () {
+      yield this.storage.put(key, value);
+      this.events.emit("modified", key, value);
+    });
+  }
+  del(key) {
+    return __async(this, null, function* () {
+      yield this.storage.del(key);
+      this.events.emit("modified", key, null);
+    });
+  }
+  addListener(listener) {
+    this.events.addListener("modified", listener);
+  }
+  removeListener(listener) {
+    this.events.addListener("modified", listener);
+  }
+};
 var Context2 = (0, import_react3.createContext)(local);
 function Provider2({ children, storage = local }) {
   return /* @__PURE__ */ import_react3.default.createElement(Context2.Provider, {
-    value: storage
+    value: (0, import_react3.useMemo)(() => new InternalStorage(storage), [storage])
   }, children);
 }
 
@@ -36672,10 +36702,10 @@ function useQuery2(args) {
 
 // src/lib/msg/index.tsx
 var import_react5 = __toModule(require_react());
-var import_eventemitter3 = __toModule(require_eventemitter3());
+var import_eventemitter32 = __toModule(require_eventemitter3());
 var MessageBus = class {
   constructor() {
-    this.emitter = new import_eventemitter3.default();
+    this.emitter = new import_eventemitter32.default();
   }
   on(event, listener, direction) {
     const directions = direction === "both" ? ["in", "out"] : [direction];
