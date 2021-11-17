@@ -36983,6 +36983,23 @@ var CompanyUrlType;
   CompanyUrlType2["IrNews"] = "ir_news";
   CompanyUrlType2["LogoIcon"] = "logo_icon";
 })(CompanyUrlType || (CompanyUrlType = {}));
+var ContentSource;
+(function(ContentSource2) {
+  ContentSource2["Eventvestor"] = "eventvestor";
+  ContentSource2["Lexisnexis"] = "lexisnexis";
+  ContentSource2["Media"] = "media";
+  ContentSource2["Refinitiv"] = "refinitiv";
+  ContentSource2["Streetaccount"] = "streetaccount";
+  ContentSource2["User"] = "user";
+})(ContentSource || (ContentSource = {}));
+var ContentType;
+(function(ContentType3) {
+  ContentType3["Document"] = "document";
+  ContentType3["Filing"] = "filing";
+  ContentType3["News"] = "news";
+  ContentType3["Spotlight"] = "spotlight";
+  ContentType3["Streetaccount"] = "streetaccount";
+})(ContentType || (ContentType = {}));
 var EventConnectionStatus;
 (function(EventConnectionStatus2) {
   EventConnectionStatus2["Connected"] = "connected";
@@ -37029,6 +37046,11 @@ var IdentifierType;
 (function(IdentifierType2) {
   IdentifierType2["Unknown"] = "unknown";
 })(IdentifierType || (IdentifierType = {}));
+var NewsLicense;
+(function(NewsLicense2) {
+  NewsLicense2["Lexisnexis"] = "lexisnexis";
+  NewsLicense2["Public"] = "public";
+})(NewsLicense || (NewsLicense = {}));
 var PasswordStatus;
 (function(PasswordStatus2) {
   PasswordStatus2["Generated"] = "generated";
@@ -37042,6 +37064,10 @@ var SpacStatus;
   SpacStatus2["TargetAnnounced"] = "target_announced";
   SpacStatus2["TargetRumored"] = "target_rumored";
 })(SpacStatus || (SpacStatus = {}));
+var TagType;
+(function(TagType2) {
+  TagType2["NewsSource"] = "news_source";
+})(TagType || (TagType = {}));
 var UserStatus;
 (function(UserStatus2) {
   UserStatus2["Active"] = "active";
@@ -37946,11 +37972,11 @@ var Tabs = (props) => {
 };
 
 // src/modules/ContentList/index.tsx
-var ContentType;
-(function(ContentType2) {
-  ContentType2[ContentType2["news"] = 0] = "news";
-  ContentType2[ContentType2["corporateActivity"] = 1] = "corporateActivity";
-})(ContentType || (ContentType = {}));
+var ContentType2;
+(function(ContentType3) {
+  ContentType3[ContentType3["news"] = 0] = "news";
+  ContentType3[ContentType3["corporateActivity"] = 1] = "corporateActivity";
+})(ContentType2 || (ContentType2 = {}));
 var mockData = [
   {
     id: 1,
