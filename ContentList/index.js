@@ -36833,11 +36833,12 @@ function Provider5({ children, client: passedClient }) {
 
 // src/components/Provider/index.tsx
 function Provider6(props) {
-  const { bus, children, client, config, realtime, reset, storage } = props;
+  const { bus, children, client, clientConfig, config, realtime, reset, storage } = props;
   return /* @__PURE__ */ import_react8.default.createElement(Provider, {
     config
   }, /* @__PURE__ */ import_react8.default.createElement(Provider3, {
     client,
+    config: clientConfig,
     reset
   }, /* @__PURE__ */ import_react8.default.createElement(Provider4, {
     bus
