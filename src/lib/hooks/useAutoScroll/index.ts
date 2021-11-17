@@ -1,8 +1,12 @@
 import { useLayoutEffect, useCallback, useRef, useState, RefCallback, RefObject } from 'react';
 
-function isVisible(container: HTMLElement, target: HTMLElement) {
+function isVisible(container: HTMLElement, target: HTMLElement, full = false) {
     const targetPosition = target.getBoundingClientRect();
     const containerPosition = container.getBoundingClientRect();
+
+    if (full) {
+        return targetPosition.top >= containerPosition.top && targetPosition.bottom <= containerPosition.bottom;
+    }
 
     if (targetPosition.top <= containerPosition.top) {
         return containerPosition.top - targetPosition.top < targetPosition.height;
@@ -65,6 +69,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
 }): {
     scrollContainerRef: RefCallback<E>;
     targetRef: RefCallback<T>;
+    target: T | null,
     scroll: (opts?: { top?: number; onlyIfNeeded?: boolean }) => void;
     isAutoScrolling: RefObject<Promise<void> | null>;
 } {
@@ -135,9 +140,9 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         (opts?: { top?: number; onlyIfNeeded?: boolean }) => {
             const { top, onlyIfNeeded = false } = opts || {};
             if (top === undefined) {
-                if (!onlyIfNeeded || (scrollContainer && target && !isVisible(scrollContainer, target))) {
+                if (!onlyIfNeeded || (scrollContainer && target && !isVisible(scrollContainer, target, true))) {
                     target?.scrollIntoView({
-                        behavior: initialScroll.current ? initialBehavior : behavior,
+                        behavior: 'smooth',
                         block,
                         inline,
                     });
@@ -149,5 +154,5 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         [scrollContainer, target, initialBehavior, behavior, block, inline]
     );
 
-    return { scrollContainerRef, targetRef, scroll, isAutoScrolling };
+    return { scrollContainerRef, targetRef, target, scroll, isAutoScrolling };
 }

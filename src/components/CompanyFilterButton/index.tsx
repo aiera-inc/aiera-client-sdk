@@ -17,6 +17,7 @@ import { useElementListener } from '@aiera/client-sdk/lib/hooks/useEventListener
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Input } from '@aiera/client-sdk/components/Input';
@@ -263,26 +264,24 @@ export function CompanyFilterButton(props: CompanyFilterButtonProps): ReactEleme
     });
 
     // Keep option in view when scrolling by keyboard
-    /*
-        const { scrollContainerRef, targetRef, scroll } = useAutoScroll<HTMLDivElement>({ skip: true });
+    const { scrollContainerRef, target, targetRef: selectedOptionRef, scroll } = useAutoScroll<HTMLDivElement>({ skip: true });
         useLayoutEffect(() => {
             scroll({ onlyIfNeeded: true });
-        }, [selectedIndex, targetRef]);
-        */
-    const selectedOptionRef = useRef<HTMLDivElement>(null);
-    const scrollContainerRef = useRef<HTMLDivElement>(null);
-    useLayoutEffect(() => {
-        if (selectedOptionRef.current && scrollContainerRef.current) {
-            const containerPos = scrollContainerRef.current.getBoundingClientRect();
-            const optionPos = selectedOptionRef.current.getBoundingClientRect();
+        }, [target]);
+    // const selectedOptionRef = useRef<HTMLDivElement>(null);
+    // const scrollContainerRef = useRef<HTMLDivElement>(null);
+    // useLayoutEffect(() => {
+    //     if (selectedOptionRef.current && scrollContainerRef.current) {
+    //         const containerPos = scrollContainerRef.current.getBoundingClientRect();
+    //         const optionPos = selectedOptionRef.current.getBoundingClientRect();
 
-            // Scroll into view if visibility is obstructed
-            const optionTopObstructed = optionPos.top < containerPos.top;
-            const optionBottomObstructed = containerPos.top + containerPos.height < optionPos.top + optionPos.height;
+    //         // Scroll into view if visibility is obstructed
+    //         const optionTopObstructed = optionPos.top < containerPos.top;
+    //         const optionBottomObstructed = containerPos.top + containerPos.height < optionPos.top + optionPos.height;
 
-            if (optionTopObstructed || optionBottomObstructed) selectedOptionRef.current.scrollIntoView();
-        }
-    }, [selectedOptionRef?.current, scrollContainerRef?.current]);
+    //         if (optionTopObstructed || optionBottomObstructed) selectedOptionRef.current.scrollIntoView();
+    //     }
+    // }, [selectedOptionRef?.current, scrollContainerRef?.current]);
 
     return (
         <CompanyFilterButtonUI
