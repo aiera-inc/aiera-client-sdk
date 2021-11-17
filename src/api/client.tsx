@@ -79,13 +79,13 @@ const opNameExchange: Exchange = ({ forward }) => {
 /**
  * @notExported
  */
-interface Config {
+export interface ClientConfig {
     url: string;
     auth?: AuthConfig<unknown> | null;
     fetch?: typeof window.fetch;
 }
 
-function createGQLClient({ url, fetch, auth = defaultTokenAuthConfig }: Config): Client {
+function createGQLClient({ url, fetch, auth = defaultTokenAuthConfig }: ClientConfig): Client {
     const exchanges = [
         devtoolsExchange,
         opNameExchange,
@@ -121,7 +121,7 @@ export const Provider = ({
     client: passedClient,
     reset: passedReset,
 }: {
-    config?: Partial<Config>;
+    config?: Partial<ClientConfig>;
     children: ReactNode;
     client?: Client;
     reset?: () => void;
