@@ -1080,7 +1080,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context6, unstable_observedBits);
         }
-        function useState7(initialState) {
+        function useState8(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1668,7 +1668,7 @@ var require_react_development = __commonJS({
         exports2.useMemo = useMemo2;
         exports2.useReducer = useReducer;
         exports2.useRef = useRef5;
-        exports2.useState = useState7;
+        exports2.useState = useState8;
         exports2.version = ReactVersion;
       })();
     }
@@ -36938,23 +36938,6 @@ var import_classnames5 = __toModule(require_classnames());
 
 // src/lib/hooks/useEventListener/index.ts
 var import_react10 = __toModule(require_react());
-function useElementListener(eventName, handler, targetRef) {
-  const savedHandler = (0, import_react10.useRef)();
-  (0, import_react10.useEffect)(() => {
-    var _a;
-    savedHandler.current = handler;
-    const eventListener = (event) => {
-      if (!!(savedHandler == null ? void 0 : savedHandler.current)) {
-        savedHandler.current(event);
-      }
-    };
-    (_a = targetRef.current) == null ? void 0 : _a.addEventListener(eventName, eventListener);
-    return () => {
-      var _a2;
-      (_a2 = targetRef.current) == null ? void 0 : _a2.removeEventListener(eventName, eventListener);
-    };
-  }, [eventName, targetRef.current, handler]);
-}
 function useWindowListener(eventName, handler) {
   const savedHandler = (0, import_react10.useRef)();
   (0, import_react10.useEffect)(() => {
@@ -37652,8 +37635,9 @@ var import_react17 = __toModule(require_react());
 var import_ts_pattern2 = __toModule(require_lib());
 function ButtonUI(props) {
   const { children, onClick, className = "", kind = "default" } = props;
-  const buttonStyle = (0, import_ts_pattern2.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:text-white").with("secondary", () => "border-[1px] border-gray-300 hover:border-gray-400 active:bg-gray-400 active:text-white").with("default", () => "bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
+  const buttonStyle = (0, import_ts_pattern2.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white").with("secondary", () => "border-[1px] border-gray-300 hover:border-gray-400 active:bg-gray-400 active:text-white").with("default", () => "bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
   return /* @__PURE__ */ import_react17.default.createElement("button", {
+    tabIndex: 0,
     className: `group flex h-8 items-center px-2.5 font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`,
     onClick
   }, children);
@@ -37712,7 +37696,6 @@ function TooltipContentUI(props) {
   const {
     companiesQuery,
     hideTooltip,
-    inputRef,
     onChange,
     onSearchChange,
     scrollRef,
@@ -37730,7 +37713,6 @@ function TooltipContentUI(props) {
     className: "p-3 w-full"
   }, /* @__PURE__ */ import_react20.default.createElement(Input, {
     clearable: true,
-    inputRef,
     autoFocus: true,
     icon: /* @__PURE__ */ import_react20.default.createElement(MagnifyingGlass, null),
     name: "company-filter-button-search",
@@ -37746,10 +37728,11 @@ function TooltipContentUI(props) {
     var _a;
     const primaryQuote = getPrimaryQuote(company);
     return /* @__PURE__ */ import_react20.default.createElement("div", {
-      className: (0, import_classnames5.default)("flex items-center h-9 text-gray-900 tracking-wide cursor-pointer", {
+      className: (0, import_classnames5.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
         "odd:bg-gray-100": selectedIndex !== index,
         "bg-blue-500": selectedIndex === index,
-        "text-white": selectedIndex === index
+        "text-white": selectedIndex === index,
+        "text-gray-900": selectedIndex !== index
       }),
       key: company.id,
       onClick: (event) => {
@@ -37758,6 +37741,8 @@ function TooltipContentUI(props) {
         hideTooltip == null ? void 0 : hideTooltip();
       },
       onMouseEnter: () => selectIndex(index),
+      tabIndex: 0,
+      onFocus: () => selectIndex(index),
       ref: selectedIndex === index ? selectedOptionRef : void 0
     }, /* @__PURE__ */ import_react20.default.createElement("div", {
       className: "pl-4 truncate flex-1 text-base"
@@ -37769,26 +37754,38 @@ function TooltipContentUI(props) {
   }))).exhaustive()));
 }
 function TooltipContent(props) {
-  const { hideTooltip, companiesQuery, selectedIndex, selectIndex, onChange, inputRef, setState } = props;
-  useElementListener("keydown", (event) => {
+  const { hideTooltip, companiesQuery, selectedIndex, selectIndex, onChange, setState } = props;
+  useWindowListener("keydown", (event) => {
     const key = event == null ? void 0 : event.key;
     (0, import_ts_pattern3.match)(companiesQuery).with({ status: "success" }, ({ data: { companies } }) => {
-      (0, import_ts_pattern3.match)(key).with("ArrowUp", () => {
-        if (selectedIndex > 0)
-          selectIndex(selectedIndex - 1);
-      }).with("ArrowDown", () => {
-        if (selectedIndex < companies.length - 1)
-          selectIndex(selectedIndex + 1);
-      }).with("Enter", () => {
-        if (companies.length && companies[selectedIndex]) {
-          selectIndex(0);
-          onChange == null ? void 0 : onChange(event, { value: companies[selectedIndex] });
-          setState({ searchTerm: "" });
-          hideTooltip == null ? void 0 : hideTooltip();
-        }
-      }).otherwise(() => true);
+      if (companies.length > 0) {
+        (0, import_ts_pattern3.match)(key).with("Tab", () => {
+          event.preventDefault();
+          event.stopPropagation();
+          if (event.shiftKey) {
+            if (selectedIndex > 0)
+              selectIndex(selectedIndex - 1);
+          } else {
+            if (selectedIndex < companies.length - 1)
+              selectIndex(selectedIndex + 1);
+          }
+        }).with("ArrowUp", () => {
+          if (selectedIndex > 0)
+            selectIndex(selectedIndex - 1);
+        }).with("ArrowDown", () => {
+          if (selectedIndex < companies.length - 1)
+            selectIndex(selectedIndex + 1);
+        }).with("Enter", () => {
+          if (companies.length && companies[selectedIndex]) {
+            selectIndex(0);
+            onChange == null ? void 0 : onChange(event, { value: companies[selectedIndex] });
+            setState({ searchTerm: "" });
+            hideTooltip == null ? void 0 : hideTooltip();
+          }
+        }).otherwise(() => true);
+      }
     }).otherwise(() => true);
-  }, inputRef);
+  });
   return /* @__PURE__ */ import_react20.default.createElement(TooltipContentUI, __spreadValues({}, props));
 }
 function CompanyFilterButtonUI(props) {
@@ -37831,7 +37828,6 @@ function CompanyFilterButton(props) {
   const { onChange, value } = props;
   const [selectedIndex, selectIndex] = (0, import_react20.useState)(0);
   const { state, handlers, setState } = useChangeHandlers({ searchTerm: "" });
-  const inputRef = (0, import_react20.useRef)(null);
   const companiesQuery = useQuery2({
     isEmpty: ({ companies }) => companies.length === 0,
     query: lib_default`
@@ -37878,7 +37874,6 @@ function CompanyFilterButton(props) {
   }, [selectedOptionRef == null ? void 0 : selectedOptionRef.current, scrollContainerRef == null ? void 0 : scrollContainerRef.current]);
   return /* @__PURE__ */ import_react20.default.createElement(CompanyFilterButtonUI, {
     companiesQuery,
-    inputRef,
     onChange,
     onSearchChange: handlers.searchTerm,
     value,
@@ -37895,8 +37890,8 @@ function CompanyFilterButton(props) {
 var import_react21 = __toModule(require_react());
 var import_classnames6 = __toModule(require_classnames());
 var import_ts_pattern4 = __toModule(require_lib());
-var Tabs = (props) => {
-  const { onChange, options = [], value, kind = "button", className = "" } = props;
+var TabsUI = (props) => {
+  const { onChange, options = [], value, kind = "button", className = "", setFocus } = props;
   const getClasses = (val) => (0, import_ts_pattern4.match)(kind).with("button", () => (0, import_classnames6.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
@@ -37914,16 +37909,40 @@ var Tabs = (props) => {
   })).exhaustive();
   return /* @__PURE__ */ import_react21.default.createElement("div", {
     className: `flex tab relative ${className}`
-  }, options.map(({ value: opVal, label }) => /* @__PURE__ */ import_react21.default.createElement("div", {
+  }, options.map(({ value: opVal, label }, index) => /* @__PURE__ */ import_react21.default.createElement("div", {
+    tabIndex: 0,
     key: `tab-option-${opVal}`,
     className: getClasses(opVal),
-    onClick: (event) => onChange && onChange(event, { value: opVal })
+    onClick: (event) => onChange && onChange(event, { value: opVal }),
+    onFocus: () => setFocus == null ? void 0 : setFocus(index),
+    onBlur: () => setFocus == null ? void 0 : setFocus(-1)
   }, label, kind === "line" && /* @__PURE__ */ import_react21.default.createElement("div", {
     className: (0, import_classnames6.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": opVal === value,
       "-bottom-0.5": opVal !== value
     })
   }))));
+};
+var Tabs = (props) => {
+  const { onChange, options = [], value, kind, className } = props;
+  const [focusIndex, setFocus] = (0, import_react21.useState)(-1);
+  if (onChange && options.length) {
+    useWindowListener("keydown", (event) => {
+      var _a;
+      const selectedOption = options[focusIndex];
+      if (event.key === "Enter" && focusIndex >= 0 && selectedOption && (selectedOption == null ? void 0 : selectedOption.value)) {
+        onChange(event, { value: (_a = options[focusIndex]) == null ? void 0 : _a.value });
+      }
+    });
+  }
+  return /* @__PURE__ */ import_react21.default.createElement(TabsUI, {
+    className,
+    setFocus,
+    onChange,
+    options,
+    value,
+    kind
+  });
 };
 
 // src/modules/ContentList/index.tsx
