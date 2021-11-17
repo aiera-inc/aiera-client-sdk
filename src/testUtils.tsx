@@ -130,11 +130,35 @@ export function renderWithProvider(
     return { client: mockedClient, realtime: mockedRealtime, rerender, rendered, reset };
 }
 
+/**
+ * With jest, if you have some async code and can't directly
+ * wait on the promise (ie. it happens as some side effect),
+ * you may need some other way to wait for those to run before
+ * moving on to expect/assert statements. The runtime handles promises
+ * in a queue, so this adds one to the end of the queue and waits for
+ * it, which ends up flushing all the current promises before returning.
+ *
+ * However, this will not handle when new promises are created in that chain.
+ */
+export async function flushPromises(): Promise<void> {
+    return await Promise.resolve();
+}
+
+/**
+ * Similar to flushPromises above, except this runs fn in act() so
+ * that setState and other react mutations can occur as part of the promises
+ * resolving. An example of when this is needed is a useEffect that loads
+ * some data asynchronously and then calls setState. Without this, the setState
+ * will happen outside of act() and log a warning. This waits until the promises
+ * resolve (the setStates get called) and only then returns from act().
+ *
+ * See https://reactjs.org/docs/test-utils.html#act for more detail.
+ */
 export async function actAndFlush<T>(fn: () => T): Promise<T> {
     let result = null as unknown as T;
     await act(async () => {
         result = fn();
-        await Promise.resolve();
+        await flushPromises();
     });
     return result;
 }
