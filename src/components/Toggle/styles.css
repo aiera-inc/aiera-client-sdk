@@ -5,6 +5,9 @@
     --toggle-off-gray: calc(var(--toggle-width) * -1) 0 0 var(--toggle-border) rgb(229, 231, 235) inset, 0 0 0 var(--toggle-border) rgb(229, 231, 235) inset;
     --toggle-off-gray-hover: calc(var(--toggle-width-hover) * -1) 0 0 var(--toggle-border) rgb(209, 213, 219) inset, 0 0 0 var(--toggle-border) rgb(209, 213, 219) inset;
     --toggle-off-gray-active: calc(var(--toggle-width) * -1) 0 0 var(--toggle-border) rgb(156, 163, 175) inset, 0 0 0 var(--toggle-border) rgb(156, 163, 175) inset;
+    --toggle-off-dark-gray: calc(var(--toggle-width) * -1) 0 0 var(--toggle-border) #242434 inset, 0 0 0 var(--toggle-border) #242434 inset;
+    --toggle-off-dark-gray-hover: calc(var(--toggle-width-hover) * -1) 0 0 var(--toggle-border) #242434 inset, 0 0 0 var(--toggle-border) #242434 inset;
+    --toggle-off-dark-gray-active: calc(var(--toggle-width) * -1) 0 0 var(--toggle-border) #000 inset, 0 0 0 var(--toggle-border) #000 inset;
     --toggle-on-green: var(--toggle-width) 0 0 var(--toggle-border) rgb(16, 185, 129) inset, 0 0 0 var(--toggle-border) rgb(16, 185, 129) inset;
     --toggle-on-green-hover: var(--toggle-width-hover) 0 0 var(--toggle-border) rgb(5, 150, 105) inset, 0 0 0 var(--toggle-border) rgb(5, 150, 105) inset;
     --toggle-on-green-active: var(--toggle-width) 0 0 var(--toggle-border) rgb(4, 120, 87) inset, 0 0 0 var(--toggle-border) rgb(4, 120, 87) inset;
@@ -31,12 +34,32 @@
 .group:active .toggle, .toggle:active {
     box-shadow: var(--toggle-off-gray-active);
 }
-.group .toggle:checked, .toggle:checked {
+.group .toggle:checked, .toggle:checked, .group .toggle_dark:checked, .toggle_dark:checked {
     box-shadow: var(--toggle-on-green);
 }
-.group:hover .toggle:checked, .toggle:checked:hover {
+.group:hover .toggle:checked, .toggle:checked:hover, .group:hover .toggle_dark:checked, .toggle_dark:checked:hover {
     box-shadow: var(--toggle-on-green-hover);
 }
-.group:active .toggle:checked, .toggle:checked:active {
+.group:active .toggle:checked, .toggle:checked:active, .group:active .toggle_dark:checked, .toggle_dark:checked:active {
     box-shadow: var(--toggle-on-green-active);
+}
+
+.toggle_dark {
+    appearance: none;
+    border-radius: 1.9rem;
+    height: 1.25rem;
+    width: 2.5rem;
+    cursor: pointer;
+    background-color: white;
+    transition-timing-function: cubic-bezier(.4,0,.2,1);
+    transition-duration: .3s;
+    transition: background, box-shadow 0.2s ease-in-out;
+    box-shadow: var(--toggle-off-dark-gray);
+}
+
+.group:hover .toggle_dark, .toggle_dark:hover {
+    box-shadow: var(--toggle-off-dark-gray-hover);
+}
+.group:active .toggle_dark, .toggle_dark:active {
+    box-shadow: var(--toggle-off-dark-gray-active);
 }

@@ -87,20 +87,20 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     } = props;
     return (
         <div className="relative h-13 w-full flex flex-col justify-center mt-[-6px] z-20">
-            <div className="bg-white absolute top-[9px] left-0 right-0 bottom-0" />
+            <div className="bg-white absolute top-[9px] left-0 right-0 bottom-0 dark:bg-bluegray-7 dark:top-[6px]" />
             <div
-                className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-80"
+                className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-80 dark:bg-opacity-50 dark:bg-bluegray-5"
                 style={{ width: `${percentPlayed}%` }}
             />
             <div className="flex z-20 player_timeline">
                 <div className="flex items-center justify-center px-2 text-xs select-none relative w-[65px]">
-                    <div className="absolute left-0 right-0 top-0 bottom-0 bg-white backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-r-md" />
-                    <span className="z-10 relative font-mono text-yellow-800 opacity-60">
+                    <div className="absolute left-0 right-0 top-0 bottom-0 backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-r-md" />
+                    <span className="z-10 relative font-mono text-yellow-800 opacity-60 dark:text-yellow-500">
                         {toDurationString(currentTime)}
                     </span>
                 </div>
                 <div className="flex flex-1 relative items-center" onClick={onClickTrack}>
-                    <div className="flex-1 h-[3px] bg-gray-200">
+                    <div className="flex-1 h-[3px] bg-gray-200 dark:bg-bluegray-5">
                         <div className="h-[3px] bg-yellow-400" style={{ width: knobLeft }} />
                     </div>
                     <div
@@ -111,20 +111,20 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 </div>
                 <div className="px-2 text-xs select-none relative flex items-center justify-center w-[65px]">
                     <div className="absolute left-0 right-0 top-0 bottom-0 backdrop-filter backdrop-blur-[2px] bg-opacity-60 rounded-l-md" />
-                    <span className="z-10 relative font-mono text-gray-500 opacity-60">
+                    <span className="z-10 relative font-mono text-gray-500 opacity-60 dark:text-bluegray-4">
                         {toDurationString(duration)}
                     </span>
                 </div>
             </div>
-            <div className="z-20 flex h-[44px] pb-[6px] items-center justify-center ml-2.5">
+            <div className="z-20 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 player_controls">
                 {!fixed && (
-                    <Button onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
-                        <XMark />
+                    <Button iconButton onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
+                        <XMark className="w-2.5" />
                     </Button>
                 )}
                 {showSwap && (
-                    <Button onClick={swap} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
-                        <Swap />
+                    <Button iconButton onClick={swap} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
+                        <Swap className="w-3" />
                     </Button>
                 )}
                 <div
@@ -148,7 +148,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         id="playbar-toggleRate"
                         tabIndex={0}
                         onClick={toggleRate}
-                        className="select-none text-sm font-bold font-mono text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
+                        className="select-none text-sm font-bold font-mono text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2 dark:text-bluegray-4"
                     >
                         {`${playbackRate.toFixed(2)}x`}
                     </button>
@@ -156,14 +156,14 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         id="playbar-seekToStart"
                         tabIndex={0}
                         onClick={seekToStart}
-                        className="rotate-180 text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
+                        className="rotate-180 text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2 dark:text-bluegray-4"
                     >
                         <End className="w-[12px]" />
                     </button>
                     <button
                         id="playbar-back15"
                         tabIndex={0}
-                        className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
+                        className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2 dark:text-bluegray-4"
                         onClick={rewind}
                     >
                         <Back15 className="w-[16px]" />
@@ -178,7 +178,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     <button
                         id="playbar-forward15"
                         tabIndex={0}
-                        className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
+                        className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2 dark:text-bluegray-4"
                         onClick={fastForward}
                     >
                         <Forward15 className="w-[16px]" />
@@ -187,7 +187,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         id="playbar-seekToEnd"
                         tabIndex={0}
                         onClick={seekToEnd}
-                        className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2"
+                        className="text-bluegray-1 hover:text-blue-600 active:text-blue-700 cursor-pointer px-2 dark:text-bluegray-4"
                     >
                         <End className="w-[12px]" />
                     </button>

@@ -51,7 +51,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         type,
     } = props;
     return (
-        <div className={`group h-8 items-center w-full relative ${className} input__${name}`}>
+        <div className={`group h-8 items-center w-full relative  dark:text-white ${className} input__${name}`}>
             {React.isValidElement(icon) && (
                 <div className="absolute pointer-events-none h-8 w-8 justify-center items-center flex">
                     {React.cloneElement(icon, {
@@ -65,7 +65,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                 ref={inputRef}
                 autoFocus={autoFocus}
                 className={classNames(
-                    'w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400',
+                    'w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5',
                     { 'pl-7': !!icon, 'pl-3': !icon }
                 )}
                 onChange={onChange}

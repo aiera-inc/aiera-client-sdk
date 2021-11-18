@@ -19,8 +19,8 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
 
     const { pillBgColor, pillTextColor, pillText, message } = match(event.connectionStatus)
         .with(EventConnectionStatus.ConnectionNotExpected, () => ({
-            pillBgColor: 'bg-gray-200',
-            pillTextColor: 'text-gray-700',
+            pillBgColor: 'bg-gray-200 dark:bg-bluegray-5',
+            pillTextColor: 'text-gray-700 dark:text-bluegray-4',
             pillText: 'no connection details',
             message: (
                 <div className="text-base text-gray-500">
@@ -93,7 +93,9 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
 
     return (
         <div className="w-full px-6 h-full flex flex-col text-center items-center justify-center">
-            <span className="text-xl font-semibold text-gray-600 line-clamp-2">{prettyLineBreak(event?.title)}</span>
+            <span className="text-xl font-semibold text-gray-600 line-clamp-2 dark:text-bluegray-4">
+                {prettyLineBreak(event?.title)}
+            </span>
             <div
                 className={`overflow-hidden relative text-xxs ${pillTextColor} uppercase tracking-widest px-1.5 py-0.5 rounded-xl mt-2 mb-8`}
             >

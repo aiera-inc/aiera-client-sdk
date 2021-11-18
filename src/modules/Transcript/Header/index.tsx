@@ -63,9 +63,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         <div
             ref={headerRef}
             className={classNames(
-                'bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all flex flex-col',
+                'bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all flex flex-col dark:bg-bluegray-6',
                 {
-                    'shadow-3xl': !headerExpanded,
+                    'shadow-3xl dark:shadow-3xl-dark': !headerExpanded,
                     'shadow-xl': headerExpanded,
                 },
                 'transcript__header'
@@ -76,12 +76,12 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
             <div className="flex items-center px-3">
                 {onBack && (
                     <Button className="mr-2" onClick={onBack}>
-                        <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
+                        <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                         Events
                     </Button>
                 )}
                 <Input
-                    className="mr-2"
+                    className="transcript__header-search"
                     icon={<MagnifyingGlass />}
                     name="search"
                     placeholder="Search Transcripts..."
@@ -96,13 +96,13 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                         <div className="flex flex-row p-3 items-center">
                             <div className="animate-pulse flex-1">
                                 <div className="flex">
-                                    <div className="rounded-md bg-gray-500 h-[10px] m-1 w-7" />
-                                    <div className="rounded-md bg-gray-400 h-[10px] m-1 w-10" />
-                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
-                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20" />
+                                    <div className="rounded-md bg-gray-500 h-[10px] m-1 w-7 dark:bg-bluegray-5" />
+                                    <div className="rounded-md bg-gray-400 h-[10px] m-1 w-10 dark:bg-bluegray-5" />
+                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7" />
+                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7" />
                                 </div>
                                 <div className="flex">
-                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 flex-1" />
+                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 flex-1 dark:bg-bluegray-7" />
                                 </div>
                             </div>
                             <ExpandButton
@@ -135,7 +135,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                 <div className="flex flex-col justify-center flex-1 min-w-0">
                                     <div className="text-xs">
                                         {primaryQuote?.localTicker && (
-                                            <span className="pr-1 font-semibold">{primaryQuote?.localTicker}</span>
+                                            <span className="pr-1 font-semibold dark:text-white">
+                                                {primaryQuote?.localTicker}
+                                            </span>
                                         )}
                                         {primaryQuote?.exchange?.shortName && (
                                             <span className="text-gray-400 group-hover:text-gray-500">
@@ -156,11 +158,10 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         )}
                                     </div>
                                     <div
-                                        className={
-                                            headerExpanded
-                                                ? 'text-sm'
-                                                : 'text-sm truncate whitespace-normal line-clamp-1'
-                                        }
+                                        className={classNames('dark:text-white', {
+                                            'text-sm': headerExpanded,
+                                            'text-sm truncate whitespace-normal line-clamp-1': !headerExpanded,
+                                        })}
                                     >
                                         {event?.title}
                                     </div>
@@ -168,9 +169,10 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                 {hasEventExtras && (
                                     <ExpandButton
                                         className={classNames('ml-2 mt-2 self-start', {
-                                            'group-hover:bg-gray-200': !headerExpanded,
+                                            'group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50':
+                                                !headerExpanded,
                                             'group-hover:bg-blue-700': headerExpanded,
-                                            'group-active:bg-gray-400': !headerExpanded,
+                                            'group-active:bg-gray-400 dark:group-active:bg-bluegray-7': !headerExpanded,
                                             'group-active:bg-blue-900': headerExpanded,
                                         })}
                                         onClick={toggleHeader}

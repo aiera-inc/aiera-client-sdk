@@ -29,7 +29,7 @@ export interface FilterByProps<T> {
 export const FilterByUI = <T extends string | number>(props: FilterByProps<T>): ReactElement => {
     const { children, onChange, options = [], value = [], setFocus } = props;
     return (
-        <div className="flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow eventlist__filterby">
+        <div className="flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__filterby">
             {children || <div className="text-sm font-semibold">Filter By</div>}
             <div className="flex justify-end flex-1">
                 {options.map((option, index) => (
@@ -47,18 +47,22 @@ export const FilterByUI = <T extends string | number>(props: FilterByProps<T>): 
                             'cursor-pointer',
                             'border',
                             {
-                                'bg-blue-100': value?.includes(option.value),
-                                'border-blue-300': value?.includes(option.value),
-                                'border-gray-100': !value?.includes(option.value),
-                                'text-blue-600': value?.includes(option.value),
-                                'text-gray-500': !value?.includes(option.value),
-                                'hover:border-gray-300': !value?.includes(option.value),
-                                'hover:text-gray-700': !value?.includes(option.value),
-                                'hover:bg-blue-200': value?.includes(option.value),
-                                'hover:border-blue-500': value?.includes(option.value),
-                                'active:bg-white': value?.includes(option.value),
-                                'active:border-blue-500': value?.includes(option.value),
-                                'active:bg-gray-200': !value?.includes(option.value),
+                                'bg-blue-100 dark:bg-blue-600': value?.includes(option.value),
+                                'border-blue-300 dark:border-blue-600': value?.includes(option.value),
+                                'border-gray-100 dark:border-bluegray-5': !value?.includes(option.value),
+                                'text-blue-600 dark:text-white': value?.includes(option.value),
+                                'text-gray-500 dark:text-bluegray-4': !value?.includes(option.value),
+                                'hover:border-gray-300 dark:hover:border-bluegray-4 dark:hover:border-opacity-30':
+                                    !value?.includes(option.value),
+                                'hover:text-gray-700 dark:hover:text-bluegray-4': !value?.includes(option.value),
+                                'dark:hover:bg-bluegray-5': !value?.includes(option.value),
+                                'dark:hover:text-white': value?.includes(option.value),
+                                'hover:bg-blue-200 dark:hover:bg-blue-500': value?.includes(option.value),
+                                'hover:border-blue-500 dark:hover:border-blue-500': value?.includes(option.value),
+                                'active:bg-white dark:active:text-white': value?.includes(option.value),
+                                'active:border-blue-500 dark:active:border-blue-700 dark:active:bg-blue-700':
+                                    value?.includes(option.value),
+                                'active:bg-gray-200 dark:active:bg-bluegray-7': !value?.includes(option.value),
                                 'active:border-gray-400': !value?.includes(option.value),
                                 'active:text-gray-900': !value?.includes(option.value),
                                 eventlist__filterby__option: true,

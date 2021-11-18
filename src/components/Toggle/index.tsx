@@ -1,4 +1,6 @@
 import React, { ReactElement } from 'react';
+import classNames from 'classnames';
+import { useSettings } from '@aiera/client-sdk/lib/data';
 import { ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import './styles.css';
@@ -6,13 +8,14 @@ import './styles.css';
 interface ToggleSharedProps {
     on?: boolean;
     onChange: ChangeHandler<boolean>;
+    darkMode?: boolean;
 }
 
 /** @notExported */
 interface ToggleUIProps extends ToggleSharedProps {}
 
 export function ToggleUI(props: ToggleUIProps): ReactElement {
-    const { on, onChange } = props;
+    const { on, onChange, darkMode = false } = props;
 
     return (
         <Tooltip
@@ -28,7 +31,12 @@ export function ToggleUI(props: ToggleUIProps): ReactElement {
             yOffset={0}
             xOffset={6}
         >
-            <input type="checkbox" checked={on} onChange={(e) => onChange(e, { value: !on })} className="toggle" />
+            <input
+                type="checkbox"
+                checked={on}
+                onChange={(e) => onChange(e, { value: !on })}
+                className={classNames({ toggle: !darkMode, toggle_dark: darkMode })}
+            />
         </Tooltip>
     );
 }
@@ -41,5 +49,6 @@ export interface ToggleProps extends ToggleSharedProps {}
  */
 export function Toggle(props: ToggleProps): ReactElement {
     const { on = false, onChange } = props;
-    return <ToggleUI on={on} onChange={onChange} />;
+    const { settings } = useSettings();
+    return <ToggleUI on={on} onChange={onChange} darkMode={settings.darkMode} />;
 }

@@ -69,7 +69,7 @@ function TooltipContentUI(props: CompanyFilterButtonUIProps): ReactElement {
     );
 
     return (
-        <div className="shadow-md bg-white rounded-lg w-72 overflow-hidden">
+        <div className="shadow-md bg-white rounded-lg w-72 overflow-hidden dark:bg-bluegray-6">
             <div className="p-3 w-full">
                 <Input
                     clearable
@@ -96,10 +96,10 @@ function TooltipContentUI(props: CompanyFilterButtonUIProps): ReactElement {
                                         className={classNames(
                                             'flex items-center h-9 tracking-wide cursor-pointer focus:outline-none',
                                             {
-                                                'odd:bg-gray-100': selectedIndex !== index,
+                                                'odd:bg-gray-100 dark:odd:bg-bluegray-5': selectedIndex !== index,
                                                 'bg-blue-500': selectedIndex === index,
                                                 'text-white': selectedIndex === index,
-                                                'text-gray-900': selectedIndex !== index,
+                                                'text-gray-900 dark:text-white': selectedIndex !== index,
                                             }
                                         )}
                                         key={company.id}
@@ -210,9 +210,9 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                     )}
                     {value && (
                         <>
-                            <div className="text-black font-bold">{getPrimaryQuote(value)?.localTicker}</div>
-                            <div className="text-black font-light truncate mx-2">{value.commonName}</div>
-                            <div className="w-4 text-black flex-shrink-0">
+                            <div className="font-bold">{getPrimaryQuote(value)?.localTicker}</div>
+                            <div className="font-light truncate mx-2">{value.commonName}</div>
+                            <div className="w-4 flex-shrink-0">
                                 <Close />
                             </div>
                         </>

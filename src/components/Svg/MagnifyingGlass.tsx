@@ -10,7 +10,7 @@ export function MagnifyingGlass({
 }): ReactElement {
     return (
         <svg
-            className={classNames(className, 'Svg', 'Svg__magnifyingGlass')}
+            className={classNames(className, 'stroke-current', 'Svg', 'Svg__magnifyingGlass')}
             width="100%"
             viewBox="0 0 12 12"
             fill="none"

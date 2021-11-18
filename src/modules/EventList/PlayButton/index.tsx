@@ -23,16 +23,17 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
     return hasAudio ? (
         <div
             className={classNames(
-                'group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm',
+                'group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600',
                 {
-                    'hover:border-blue-500': !isPlaying,
-                    'active:border-blue-600': !isPlaying,
+                    'hover:border-blue-500 dark:hover:border-blue-500': !isPlaying,
+                    'active:border-blue-600 dark:hover:border-blue-700': !isPlaying,
                     'border-blue-600': isPlaying,
-                    'text-blue-600': !isPlaying,
+                    'text-blue-600 dark:text-white': !isPlaying,
                     'text-white': isPlaying,
                     'bg-blue-600': isPlaying,
-                    'bg-white': !isPlaying,
-                    'hover:bg-blue-700': isPlaying,
+                    'bg-white dark:bg-blue-600': !isPlaying,
+                    'dark:hover:bg-blue-700': !isPlaying,
+                    'hover:bg-blue-700 dark:hover:bg-blue-700': isPlaying,
                     'hover:border-blue-700': isPlaying,
                     'active:bg-blue-800': isPlaying,
                     'active:border-blue-800': isPlaying,
@@ -45,7 +46,7 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
             {isPlaying ? <Pause className="w-3" /> : <Play className="ml-1 w-4 h-4 group-active:text-current" />}
         </div>
     ) : (
-        <div className="flex items-center justify-center w-full h-full text-blue-100 group-hover:text-blue-300">
+        <div className="flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4">
             <Calendar className="w-4" />
         </div>
     );

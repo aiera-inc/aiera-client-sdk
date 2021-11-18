@@ -65,6 +65,7 @@ interface TranscriptUIProps {
     currentMatchRef: Ref<HTMLDivElement>;
     currentParagraph?: string | null;
     currentParagraphRef: Ref<HTMLDivElement>;
+    darkMode?: boolean;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
     matchIndex: number;
     matches: Chunk[];
@@ -88,6 +89,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         currentMatchRef,
         currentParagraph,
         currentParagraphRef,
+        darkMode = false,
         eventQuery,
         matchIndex,
         matches,
@@ -104,8 +106,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     } = props;
 
     return (
-        <div className="h-full flex flex-col transcript bg-gray-50" ref={containerRef}>
-            <div>
+        <div
+            className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: darkMode })}
+            ref={containerRef}
+        >
+            <div className="dark:bg-bluegray-7">
                 <Header
                     containerHeight={containerHeight}
                     eventQuery={eventQuery}
@@ -114,7 +119,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     onChangeSearchTerm={onChangeSearchTerm}
                 />
                 {searchTerm && (
-                    <div className="flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow">
+                    <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
                         <div className="text-sm">
                             Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
                             <span className="font-semibold">{searchTerm}</span>
@@ -148,16 +153,16 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     </div>
                 )}
             </div>
-            <div className="overflow-y-scroll flex-1 bg-gray-50" ref={scrollContainerRef}>
+            <div className="overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7" ref={scrollContainerRef}>
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
                         new Array(5).fill(0).map((_, idx) => (
                             <div key={idx} className="animate-pulse p-2">
-                                <div className="rounded-md bg-gray-300 h-3 m-1 w-10" />
-                                <div className="rounded-md bg-gray-300 h-3 m-1 ml-14" />
-                                <div className="rounded-md bg-gray-300 h-3 m-1" />
-                                <div className="rounded-md bg-gray-300 h-3 m-1" />
-                                <div className="rounded-md bg-gray-300 h-3 m-1 mr-20" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1 w-10 dark:bg-bluegray-5" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1 ml-14 dark:bg-bluegray-5" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-5" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-6" />
+                                <div className="rounded-md bg-gray-300 h-3 m-1 mr-20 dark:bg-bluegray-6" />
                             </div>
                         ))
                     )
@@ -171,8 +176,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             return (
                                 <div key={`speaker-turn-${id}`}>
                                     {showSpeakers && (
-                                        <div className="p-3 pb-1 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50">
-                                            <span className="font-semibold">{speaker.name}</span>
+                                        <div className="p-3 pb-1 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50 dark:bg-bluegray-7 dark:text-gray-400">
+                                            <span className="font-semibold dark:text-white">{speaker.name}</span>
                                             {speaker.title && <span className="text-gray-400">, {speaker.title}</span>}
                                         </div>
                                     )}
@@ -187,11 +192,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                 ref={id === currentParagraph ? currentParagraphRef : undefined}
                                             >
                                                 {timestamp && (
-                                                    <div className="pb-2 font-semibold text-sm">
+                                                    <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
                                                         {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
                                                     </div>
                                                 )}
-                                                <div className="text-sm">
+                                                <div className="text-sm dark:text-bluegray-4">
                                                     {sentences.map(({ chunks, id: sId }) => (
                                                         <Fragment key={sId}>
                                                             {chunks.map(
@@ -238,14 +243,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     {data.events[0]?.isLive && partial?.text && (
                                         <div className="relative p-3 pb-4 mb-4">
                                             {partial.timestamp && (
-                                                <div className="pb-2 font-semibold text-sm">
+                                                <div className="pb-2 font-semibold text-sm dark:text-bluegray-5">
                                                     {DateTime.fromMillis(partial.timestamp).toFormat('h:mm:ss a')}
                                                 </div>
                                             )}
                                             <div
                                                 ref={currentParagraph === 'partial' ? currentParagraphRef : undefined}
                                                 key={`${hash(partial.text)}-${paragraphs.length}`}
-                                                className="text-sm"
+                                                className="text-sm dark:text-bluegray-4"
                                             >
                                                 {partial.text}
                                             </div>
@@ -762,6 +767,7 @@ export interface TranscriptProps {
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
     const { eventId, onBack } = props;
+    const { settings } = useSettings();
     const eventUpdateQuery = useEventUpdates(eventId);
     const eventQuery = useEventData(eventId, eventUpdateQuery);
 
@@ -806,25 +812,26 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     return (
         <TranscriptUI
-            containerRef={containerRef}
             containerHeight={containerHeight}
+            containerRef={containerRef}
             currentMatch={searchState.currentMatch}
             currentMatchRef={searchState.currentMatchRef}
             currentParagraph={currentParagraph}
             currentParagraphRef={currentParagraphRef}
-            speakerTurns={searchState.speakerTurnsWithMatches}
-            showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
-            onBack={onClickBack}
+            darkMode={settings.darkMode}
             eventQuery={eventQuery}
             matchIndex={searchState.matchIndex}
             matches={searchState.matches}
             nextMatch={searchState.nextMatch}
+            onBack={onClickBack}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
             partial={partial}
             prevMatch={searchState.prevMatch}
             scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
+            showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
+            speakerTurns={searchState.speakerTurnsWithMatches}
         />
     );
 };

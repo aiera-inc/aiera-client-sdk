@@ -4,7 +4,7 @@ import classNames from 'classnames';
 export function Swap({ className, alt = 'Swap' }: { className?: string; alt?: string }): ReactElement {
     return (
         <svg
-            className={classNames(className, 'stroke-current', 'Svg', 'Svg__swap')}
+            className={classNames(className, 'fill-current', 'Svg', 'Svg__swap')}
             width="100%"
             viewBox="0 0 14 14"
             xmlns="http://www.w3.org/2000/svg"

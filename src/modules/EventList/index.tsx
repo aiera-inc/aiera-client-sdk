@@ -11,6 +11,7 @@ import React, {
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { DateTime } from 'luxon';
+import classNames from 'classnames';
 
 import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -18,7 +19,7 @@ import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
-import { getPrimaryQuote, useCompanyResolver, useAutoTrack } from '@aiera/client-sdk/lib/data';
+import { getPrimaryQuote, useCompanyResolver, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
@@ -43,6 +44,7 @@ export type { CompanyFilterResult };
 
 export interface EventListUIProps {
     company?: CompanyFilterResult;
+    darkMode?: boolean;
     event?: EventListEvent;
     eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypes?: FilterByType[];
@@ -62,6 +64,7 @@ export interface EventListUIProps {
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
         company,
+        darkMode = false,
         event,
         eventsQuery,
         filterByTypes,
@@ -85,8 +88,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     let prevEventDate: DateTime | null = null;
 
     return (
-        <div className="h-full flex flex-col eventlist">
-            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl eventlist__header">
+        <div className={classNames('h-full flex flex-col eventlist', { dark: darkMode })}>
+            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header">
                 <div className="flex items-center mb-3">
                     <Input
                         icon={<MagnifyingGlass />}
@@ -101,7 +104,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     <SettingsButton />
                 </div>
             </div>
-            <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">
+            <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7">
                 <div className="flex flex-col flex-grow">
                     <div className="sticky top-0 px-3 pt-3 pb-2 z-10">
                         <FilterBy
@@ -134,16 +137,16 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                     {new Array(15).fill(0).map((_, idx) => (
                                         <li key={idx} className="p-2 animate-pulse mx-2">
                                             <div className="flex items-center">
-                                                <div className="rounded-full bg-gray-300 w-9 h-9" />
+                                                <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9" />
                                                 <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
                                                     <div className="flex">
-                                                        <div className="rounded-full bg-gray-500 h-[10px] mr-2 w-7" />
-                                                        <div className="rounded-full bg-gray-400 h-[10px] mr-2 w-12" />
+                                                        <div className="rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7" />
+                                                        <div className="rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12" />
                                                     </div>
                                                     <div className="flex">
-                                                        <div className="rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2" />
-                                                        <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2" />
-                                                        <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2" />
+                                                        <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2" />
+                                                        <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2" />
+                                                        <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -168,9 +171,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                             prevEventDate = eventDate;
                                             divider = (
                                                 <li className="sticky top-[56px] px-3">
-                                                    <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold">
+                                                    <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
                                                         {eventDate.toFormat('DDDD')}
-                                                        <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"></div>
+                                                        <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
                                                     </div>
                                                 </li>
                                             );
@@ -180,7 +183,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                 {divider}
                                                 <li
                                                     tabIndex={0}
-                                                    className="group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
+                                                    className="group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
                                                     onClick={(e) => onSelectEvent?.(e, { value: event })}
                                                     onFocus={() => setFocus?.(index)}
                                                     onBlur={() => setFocus?.(-1)}
@@ -188,7 +191,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                     <Tooltip
                                                         className="h-12 flex flex-row"
                                                         content={
-                                                            <div className="max-w-[300px] bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-white ml-9">
+                                                            <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9">
                                                                 {prettyLineBreak(event.title)}
                                                             </div>
                                                         }
@@ -219,7 +222,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                             <div className="flex items-end">
                                                                 {primaryQuote?.localTicker ? (
                                                                     <>
-                                                                        <span className="leading-none text-sm text-blue-600 pr-1 font-bold group-hover:text-yellow-600">
+                                                                        <span className="leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
                                                                             {primaryQuote?.localTicker}
                                                                         </span>
                                                                         <span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
@@ -227,22 +230,22 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                                         </span>
                                                                     </>
                                                                 ) : (
-                                                                    <span className="leading-none text-sm text-black truncate font-bold">
+                                                                    <span className="leading-none text-sm text-black dark:text-white truncate font-bold">
                                                                         {event.title}
                                                                     </span>
                                                                 )}
                                                             </div>
-                                                            <div className="leading-none flex text-sm capitalize items-center mt-1 text-black">
+                                                            <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
                                                                 {event.eventType.replace(/_/g, ' ')}
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col justify-center items-end">
                                                             {event.isLive ? (
-                                                                <div className="text-xs leading-none flex justify-center items-center text-red-600 font-semibold bg-red-50 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white">
+                                                                <div className="text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white">
                                                                     {`Live • ${eventDate.toFormat('h:mma')}`}
                                                                 </div>
                                                             ) : (
-                                                                <div className="leading-none text-gray-500 group-hover:text-black">
+                                                                <div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300">
                                                                     {eventDate.toFormat('h:mma')}
                                                                 </div>
                                                             )}
@@ -286,6 +289,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
         searchTerm: '',
     });
 
+    const { settings } = useSettings();
     const resolveCompany = useCompanyResolver();
     const bus = useMessageListener(
         'instrument-selected',
@@ -412,6 +416,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
     return (
         <EventListUI
             company={state.company}
+            darkMode={settings.darkMode}
             event={state.event}
             eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}

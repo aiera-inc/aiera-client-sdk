@@ -18,10 +18,10 @@ describe('SettingsButton', () => {
         if (button) fireEvent.click(button);
         await waitFor(() => screen.getByText('Widget Settings'));
         const toggle = rendered.container.querySelectorAll('.toggle')[0] as HTMLInputElement;
-        expect(toggle.checked).toEqual(true);
+        expect(toggle.checked).toEqual(false);
         await actAndFlush(() => {
             fireEvent.click(toggle);
         });
-        expect(toggle.checked).toEqual(false);
+        expect(toggle.checked).toEqual(true);
     });
 });

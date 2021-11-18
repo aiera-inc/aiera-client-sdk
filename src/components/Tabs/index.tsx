@@ -41,11 +41,11 @@ export const TabsUI = <T extends string | number>(props: TabsProps<T>): ReactEle
             .with('line', () =>
                 classNames('relative', 'text-sm', 'h-6', 'flex', 'mr-3', 'pb-0.5', 'overflow-hidden', {
                     'cursor-pointer': val !== value,
-                    'text-gray-400': val !== value,
-                    'text-black': val === value,
+                    'text-gray-400 dark:text-bluegray-4 dark:opacity-60': val !== value,
+                    'text-black dark:text-white': val === value,
                     'font-semibold': val === value,
-                    'hover:text-gray-500': val !== value,
-                    'active:text-gray-800': val !== value,
+                    'hover:text-gray-500 dark:hover:text-bluegray-4 dark:hover:opacity-80': val !== value,
+                    'active:text-gray-800 dark:active:text-bluegray-4 dark:active:opacity-100': val !== value,
                     tab__option: true,
                     'tab__option--selected': val === value,
                 })

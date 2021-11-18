@@ -18,36 +18,40 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
     const { hideTooltip } = props;
     const { settings, handlers } = useSettings();
     return (
-        <div className="shadow-md bg-white rounded-lg w-44 overflow-hidden p-1">
-            <div className="pt-2 pb-2 px-3 font-semibold text-base flex justify-between items-center">
+        <div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1">
+            <div className="pt-2 pb-2 px-3 font-semibold text-base flex justify-between items-center dark:text-white">
                 <span>Widget Settings</span>
                 <div className="cursor-pointer hover:text-blue-500" onClick={() => hideTooltip?.()}>
                     <XMark className="w-2" />
                 </div>
             </div>
-            {false && (
-                <div
-                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
-                    onClick={(e) => handlers.darkMode(e, { value: !settings.darkMode })}
-                >
-                    <Toggle on={settings.darkMode} onChange={handlers.darkMode} />
-                    <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Dark Mode</span>
-                </div>
-            )}
             <div
-                className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
+                className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
+                onClick={(e) => handlers.darkMode(e, { value: !settings.darkMode })}
+            >
+                <Toggle on={settings.darkMode} onChange={handlers.darkMode} />
+                <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
+                    Dark Mode
+                </span>
+            </div>
+            <div
+                className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                 onClick={(e) => handlers.textSentiment(e, { value: !settings.textSentiment })}
             >
                 <Toggle on={settings.textSentiment} onChange={handlers.textSentiment} />
-                <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Text Sentiment</span>
+                <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
+                    Text Sentiment
+                </span>
             </div>
             {false && (
                 <div
-                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50"
+                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={(e) => handlers.tonalSentiment(e, { value: !settings.tonalSentiment })}
                 >
                     <Toggle on={settings.tonalSentiment} onChange={handlers.tonalSentiment} />
-                    <span className="text-sm ml-2.5 text-gray-600 group-hover:text-gray-900">Tonal Sentiment</span>
+                    <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
+                        Tonal Sentiment
+                    </span>
                 </div>
             )}
         </div>
@@ -64,7 +68,7 @@ export function SettingsButtonUI(_props: SettingsButtonUIProps): ReactElement {
             position="bottom-right"
             yOffset={5}
         >
-            <Button className="items-center flex px-1.5 settings_button" kind="secondary">
+            <Button iconButton className="items-center flex w-[34px] settings_button" kind="secondary">
                 <Gear className="w-5" />
             </Button>
         </Tooltip>

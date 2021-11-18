@@ -122,6 +122,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
 
     const options: Highcharts.Options = {
         chart: {
+            backgroundColor: 'transparent',
             type: 'areaspline',
             spacing: [0, 0, 0, 0],
             height: 60,
@@ -228,9 +229,12 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
 
     return (
         <div>
-            <div className="flex flex-col justify-start border-t-[1px] border-gray-100">
+            <div className="flex flex-col justify-start border-t-[1px] border-gray-100 dark:border-bluegray-5">
                 <div className="flex items-center justify-start h-10 px-3">
-                    <span className="text-sm block font-semibold w-28 mr-1 cursor-pointer" onClick={togglePriceChart}>
+                    <span
+                        className="text-sm block font-semibold w-28 mr-1 cursor-pointer dark:text-white"
+                        onClick={togglePriceChart}
+                    >
                         Price Reaction
                     </span>
                     <span className="flex-1" />

@@ -22,18 +22,18 @@ export function ExpandButtonUI(props: ExpandButtonUIProps): ReactElement {
                 `transition-all flex-shrink-0 h-5 w-5 rounded-xl flex items-start justify-center ${className}`,
                 {
                     'bg-blue-600': expanded,
-                    'bg-gray-100': !expanded,
+                    'bg-gray-100 dark:bg-bluegray-4 dark:bg-opacity-20': !expanded,
                     'hover:bg-blue-700': expanded,
-                    'hover:bg-gray-200': !expanded,
+                    'hover:bg-gray-200 dark:hover:bg-bluegray-5': !expanded,
                     'active:bg-blue-800': expanded,
-                    'active:bg-gray-300': !expanded,
+                    'active:bg-gray-300 dark:active:bg-bluegray-7': !expanded,
                 }
             )}
         >
             <Chevron
                 className={classNames('flex-shrink-0 w-2 transition-all', {
                     'mt-[7px] rotate-180 fill-current text-white': expanded,
-                    'mt-[8px] opacity-30': !expanded,
+                    'mt-[8px] opacity-30 dark:opacity-100 dark:fill-current dark:text-white': !expanded,
                 })}
             />
         </button>
