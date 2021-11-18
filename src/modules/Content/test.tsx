@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 
-import { ContentListContent, ContentType, mockBody } from '@aiera/client-sdk/modules/ContentList';
+import { ContentListContent, ContentType } from '@aiera/client-sdk/modules/ContentList';
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { Content } from '.';
 
@@ -18,7 +18,6 @@ describe('Content', () => {
     test('renders content', () => {
         renderWithProvider(
             <Content
-                body={mockBody}
                 companyIdentifier={content.companyIdentifier}
                 contentType={ContentType.news}
                 date={content.date}
