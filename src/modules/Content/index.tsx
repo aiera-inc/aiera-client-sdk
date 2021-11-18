@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, ReactElement } from 'react';
+import React, { MouseEventHandler, ReactElement, useCallback } from 'react';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
@@ -6,7 +6,8 @@ import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { titleize } from '@aiera/client-sdk/lib/strings';
+import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { safeRegExp, titleize } from '@aiera/client-sdk/lib/strings';
 import { ContentType } from '@aiera/client-sdk/modules/ContentList';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
@@ -17,8 +18,6 @@ interface ContentSharedProps {
     date?: string;
     exchangeName?: string;
     onBack?: MouseEventHandler;
-    onChangeSearchTerm?: ChangeHandler<string>;
-    searchTerm?: string;
     sourceName?: string;
     title?: string;
 }
@@ -26,6 +25,8 @@ interface ContentSharedProps {
 /** @notExported */
 interface ContentUIProps extends ContentSharedProps {
     body?: string;
+    onChangeSearch?: ChangeHandler<string>;
+    searchTerm: string;
 }
 
 export function ContentUI(props: ContentUIProps): ReactElement {
@@ -36,7 +37,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
         date,
         exchangeName,
         onBack,
-        onChangeSearchTerm,
+        onChangeSearch,
         searchTerm,
         sourceName,
         title,
@@ -60,7 +61,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                                     name="search"
                                     placeholder="Search Content..."
                                     value={searchTerm}
-                                    onChange={onChangeSearchTerm}
+                                    onChange={onChangeSearch}
                                 />
                             </>
                         ))
@@ -88,7 +89,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
             )}
             {body && (
                 <div
-                    className="leading-4 overflow-y-auto pb-3 pl-5 pr-5 pt-3"
+                    className="leading-4 overflow-y-auto pb-3 pl-5 pr-5 pt-3 text-sm"
                     dangerouslySetInnerHTML={{ __html: body }}
                 />
             )}
@@ -99,13 +100,46 @@ export function ContentUI(props: ContentUIProps): ReactElement {
 /** @notExported */
 export interface ContentProps extends ContentSharedProps {}
 
+interface ContentState {
+    searchTerm: string;
+}
+
 /**
  * Renders Content
  */
 export function Content(props: ContentProps): ReactElement {
+    const { state, handlers } = useChangeHandlers<ContentState>({ searchTerm: '' });
+    const searchTerm: string = state.searchTerm;
+    /**
+     * Split the text and insert styled spans (yellow bg-color)
+     * when there are matches for the search term
+     *
+     * @param body - the Content HTML string
+     *
+     * @returns - a string
+     */
+    const highlightedBody = useCallback(
+        (body: string) => {
+            let highlighted = body;
+            const safeSearch: RegExp | null = safeRegExp(searchTerm);
+            if (safeSearch) {
+                const parts: string[] = body.split(safeSearch);
+                highlighted = parts
+                    .map((part: string) => {
+                        if (part.toLowerCase().includes(searchTerm.toLowerCase())) {
+                            return `<span class="bg-yellow-300">${part}</span>`;
+                        }
+                        return part;
+                    })
+                    .join('');
+            }
+            return highlighted;
+        },
+        [searchTerm]
+    );
     // TODO replace with body from content query
     const mockBody = `
-        <span class="text-sm">
+        <span>
             Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
             movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
             International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
@@ -117,26 +151,16 @@ export function Content(props: ContentProps): ReactElement {
             members in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
         </span>
     `;
-    const {
-        companyIdentifier,
-        contentType,
-        date,
-        exchangeName,
-        onBack,
-        onChangeSearchTerm,
-        searchTerm,
-        sourceName,
-        title,
-    } = props;
+    const { companyIdentifier, contentType, date, exchangeName, onBack, sourceName, title } = props;
     return (
         <ContentUI
-            body={mockBody}
+            body={highlightedBody(mockBody)}
             companyIdentifier={companyIdentifier}
             contentType={contentType}
             date={date}
             exchangeName={exchangeName}
             onBack={onBack}
-            onChangeSearchTerm={onChangeSearchTerm}
+            onChangeSearch={handlers.searchTerm}
             searchTerm={searchTerm}
             sourceName={sourceName}
             title={title}
