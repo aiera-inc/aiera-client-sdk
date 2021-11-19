@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement18 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement20 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement18(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement20(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement18(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement20(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement18(element.type, key, ref, self2, source, owner, props);
+          return ReactElement20(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -657,8 +657,8 @@ var require_react_development = __commonJS({
             "=": "=0",
             ":": "=2"
           };
-          var escapedString = key.replace(escapeRegex, function(match5) {
-            return escaperLookup[match5];
+          var escapedString = key.replace(escapeRegex, function(match6) {
+            return escaperLookup[match6];
           });
           return "$" + escapedString;
         }
@@ -1204,8 +1204,8 @@ var require_react_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match5 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match5 && match5[1] || "";
+                var match6 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match6 && match6[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React18 = require_react();
+        var React20 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React18.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React20.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React18) {
+        if (!React20) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3126,8 +3126,8 @@ var require_react_dom_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match5 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match5 && match5[1] || "";
+                var match6 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match6 && match6[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React18.Children.forEach(children, function(child) {
+          React20.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React18.Children.forEach(props.children, function(child) {
+              React20.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -6906,7 +6906,7 @@ var require_react_dom_development = __commonJS({
           defaultPrevented: 0,
           isTrusted: 0
         };
-        var SyntheticEvent = createSyntheticEvent(EventInterface);
+        var SyntheticEvent2 = createSyntheticEvent(EventInterface);
         var UIEventInterface = _assign({}, EventInterface, {
           view: 0,
           detail: 0
@@ -7367,7 +7367,7 @@ var require_react_dom_development = __commonJS({
           enqueueStateRestore(target);
           var listeners = accumulateTwoPhaseListeners(inst, "onChange");
           if (listeners.length > 0) {
-            var event = new SyntheticEvent("onChange", "change", null, nativeEvent, target);
+            var event = new SyntheticEvent2("onChange", "change", null, nativeEvent, target);
             dispatchQueue.push({
               event,
               listeners
@@ -7871,7 +7871,7 @@ var require_react_dom_development = __commonJS({
             lastSelection = currentSelection;
             var listeners = accumulateTwoPhaseListeners(activeElementInst$1, "onSelect");
             if (listeners.length > 0) {
-              var event = new SyntheticEvent("onSelect", "select", null, nativeEvent, nativeEventTarget);
+              var event = new SyntheticEvent2("onSelect", "select", null, nativeEvent, nativeEventTarget);
               dispatchQueue.push({
                 event,
                 listeners
@@ -7918,7 +7918,7 @@ var require_react_dom_development = __commonJS({
           if (reactName === void 0) {
             return;
           }
-          var SyntheticEventCtor = SyntheticEvent;
+          var SyntheticEventCtor = SyntheticEvent2;
           var reactEventType = domEventName;
           switch (domEventName) {
             case "keypress":
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React18.Component().refs;
+        var emptyRefsObject = new React20.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26661,7 +26661,7 @@ var require_luxon = __commonJS({
     function mapMonths(f2) {
       var ms = [];
       for (var i3 = 1; i3 <= 12; i3++) {
-        var dt = DateTime2.utc(2016, i3, 1);
+        var dt = DateTime3.utc(2016, i3, 1);
         ms.push(f2(dt));
       }
       return ms;
@@ -26669,7 +26669,7 @@ var require_luxon = __commonJS({
     function mapWeekdays(f2) {
       var ms = [];
       for (var i3 = 1; i3 <= 7; i3++) {
-        var dt = DateTime2.utc(2016, 11, 13 + i3);
+        var dt = DateTime3.utc(2016, 11, 13 + i3);
         ms.push(f2(dt));
       }
       return ms;
@@ -26731,7 +26731,7 @@ var require_luxon = __commonJS({
             if (opts.timeZoneName) {
               this.dt = dt;
             } else {
-              this.dt = dt.offset === 0 ? dt : DateTime2.fromMillis(dt.ts + dt.offset * 60 * 1e3);
+              this.dt = dt.offset === 0 ? dt : DateTime3.fromMillis(dt.ts + dt.offset * 60 * 1e3);
             }
           }
         } else if (dt.zone.type === "system") {
@@ -26917,7 +26917,7 @@ var require_luxon = __commonJS({
               hour: "numeric",
               hourCycle: "h12"
             };
-            _this3.meridiemCache = [DateTime2.utc(2016, 11, 13, 9), DateTime2.utc(2016, 11, 13, 19)].map(function(dt) {
+            _this3.meridiemCache = [DateTime3.utc(2016, 11, 13, 9), DateTime3.utc(2016, 11, 13, 19)].map(function(dt) {
               return _this3.extract(dt, intl, "dayperiod");
             });
           }
@@ -26934,7 +26934,7 @@ var require_luxon = __commonJS({
             era: length
           };
           if (!_this4.eraCache[length]) {
-            _this4.eraCache[length] = [DateTime2.utc(-40, 1, 1), DateTime2.utc(2017, 1, 1)].map(function(dt) {
+            _this4.eraCache[length] = [DateTime3.utc(-40, 1, 1), DateTime3.utc(2017, 1, 1)].map(function(dt) {
               return _this4.extract(dt, intl, "era");
             });
           }
@@ -27023,11 +27023,11 @@ var require_luxon = __commonJS({
       for (var _len4 = arguments.length, keys = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         keys[_key4] = arguments[_key4];
       }
-      return function(match6, cursor) {
+      return function(match7, cursor) {
         var ret = {};
         var i3;
         for (i3 = 0; i3 < keys.length; i3++) {
-          ret[keys[i3]] = parseInteger(match6[cursor + i3]);
+          ret[keys[i3]] = parseInteger(match7[cursor + i3]);
         }
         return [ret, null, cursor + i3];
       };
@@ -27044,39 +27044,39 @@ var require_luxon = __commonJS({
     var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
     var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
     var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
-    function int(match6, pos, fallback) {
-      var m2 = match6[pos];
+    function int(match7, pos, fallback) {
+      var m2 = match7[pos];
       return isUndefined(m2) ? fallback : parseInteger(m2);
     }
-    function extractISOYmd(match6, cursor) {
+    function extractISOYmd(match7, cursor) {
       var item = {
-        year: int(match6, cursor),
-        month: int(match6, cursor + 1, 1),
-        day: int(match6, cursor + 2, 1)
+        year: int(match7, cursor),
+        month: int(match7, cursor + 1, 1),
+        day: int(match7, cursor + 2, 1)
       };
       return [item, null, cursor + 3];
     }
-    function extractISOTime(match6, cursor) {
+    function extractISOTime(match7, cursor) {
       var item = {
-        hours: int(match6, cursor, 0),
-        minutes: int(match6, cursor + 1, 0),
-        seconds: int(match6, cursor + 2, 0),
-        milliseconds: parseMillis(match6[cursor + 3])
+        hours: int(match7, cursor, 0),
+        minutes: int(match7, cursor + 1, 0),
+        seconds: int(match7, cursor + 2, 0),
+        milliseconds: parseMillis(match7[cursor + 3])
       };
       return [item, null, cursor + 4];
     }
-    function extractISOOffset(match6, cursor) {
-      var local2 = !match6[cursor] && !match6[cursor + 1], fullOffset = signedOffset(match6[cursor + 1], match6[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
+    function extractISOOffset(match7, cursor) {
+      var local2 = !match7[cursor] && !match7[cursor + 1], fullOffset = signedOffset(match7[cursor + 1], match7[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
       return [{}, zone, cursor + 3];
     }
-    function extractIANAZone(match6, cursor) {
-      var zone = match6[cursor] ? IANAZone.create(match6[cursor]) : null;
+    function extractIANAZone(match7, cursor) {
+      var zone = match7[cursor] ? IANAZone.create(match7[cursor]) : null;
       return [{}, zone, cursor + 1];
     }
     var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$");
     var isoDuration = /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
-    function extractISODuration(match6) {
-      var s3 = match6[0], yearStr = match6[1], monthStr = match6[2], weekStr = match6[3], dayStr = match6[4], hourStr = match6[5], minuteStr = match6[6], secondStr = match6[7], millisecondsStr = match6[8];
+    function extractISODuration(match7) {
+      var s3 = match7[0], yearStr = match7[1], monthStr = match7[2], weekStr = match7[3], dayStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], millisecondsStr = match7[8];
       var hasNegativePrefix = s3[0] === "-";
       var negativeSeconds = secondStr && secondStr[0] === "-";
       var maybeNegate = function maybeNegate2(num, force) {
@@ -27123,8 +27123,8 @@ var require_luxon = __commonJS({
       return result;
     }
     var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
-    function extractRFC2822(match6) {
-      var weekdayStr = match6[1], dayStr = match6[2], monthStr = match6[3], yearStr = match6[4], hourStr = match6[5], minuteStr = match6[6], secondStr = match6[7], obsOffset = match6[8], milOffset = match6[9], offHourStr = match6[10], offMinuteStr = match6[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC2822(match7) {
+      var weekdayStr = match7[1], dayStr = match7[2], monthStr = match7[3], yearStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], obsOffset = match7[8], milOffset = match7[9], offHourStr = match7[10], offMinuteStr = match7[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       var offset2;
       if (obsOffset) {
         offset2 = obsOffsets[obsOffset];
@@ -27141,12 +27141,12 @@ var require_luxon = __commonJS({
     var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/;
     var rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/;
     var ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
-    function extractRFC1123Or850(match6) {
-      var weekdayStr = match6[1], dayStr = match6[2], monthStr = match6[3], yearStr = match6[4], hourStr = match6[5], minuteStr = match6[6], secondStr = match6[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC1123Or850(match7) {
+      var weekdayStr = match7[1], dayStr = match7[2], monthStr = match7[3], yearStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
-    function extractASCII(match6) {
-      var weekdayStr = match6[1], monthStr = match6[2], dayStr = match6[3], hourStr = match6[4], minuteStr = match6[5], secondStr = match6[6], yearStr = match6[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractASCII(match7) {
+      var weekdayStr = match7[1], monthStr = match7[2], dayStr = match7[3], hourStr = match7[4], minuteStr = match7[5], secondStr = match7[6], yearStr = match7[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
     var isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
@@ -27760,14 +27760,14 @@ var require_luxon = __commonJS({
         if (s3 && e) {
           var start, startIsValid;
           try {
-            start = DateTime2.fromISO(s3, opts);
+            start = DateTime3.fromISO(s3, opts);
             startIsValid = start.isValid;
           } catch (e2) {
             startIsValid = false;
           }
           var end, endIsValid;
           try {
-            end = DateTime2.fromISO(e, opts);
+            end = DateTime3.fromISO(e, opts);
             endIsValid = end.isValid;
           } catch (e2) {
             endIsValid = false;
@@ -28044,7 +28044,7 @@ var require_luxon = __commonJS({
         if (zone === void 0) {
           zone = Settings.defaultZone;
         }
-        var proto = DateTime2.now().setZone(zone).set({
+        var proto = DateTime3.now().setZone(zone).set({
           month: 12
         });
         return !zone.isUniversal && proto.offset !== proto.set({
@@ -28485,7 +28485,7 @@ var require_luxon = __commonJS({
       }, "");
       return ["^" + re + "$", units];
     }
-    function match5(input, regex, handlers) {
+    function match6(input, regex, handlers) {
       var matches = input.match(regex);
       if (matches) {
         var all = {};
@@ -28574,7 +28574,7 @@ var require_luxon = __commonJS({
     var dummyDateTimeCache = null;
     function getDummyDateTime() {
       if (!dummyDateTimeCache) {
-        dummyDateTimeCache = DateTime2.fromMillis(1555555555555);
+        dummyDateTimeCache = DateTime3.fromMillis(1555555555555);
       }
       return dummyDateTimeCache;
     }
@@ -28615,7 +28615,7 @@ var require_luxon = __commonJS({
           invalidReason: disqualifyingUnit.invalidReason
         };
       } else {
-        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match5(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
+        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match6(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
         if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
           throw new ConflictingSpecificationError("Can't include meridiem when specifying 24-hour format");
         }
@@ -28774,7 +28774,7 @@ var require_luxon = __commonJS({
         loc: inst.loc,
         invalid: inst.invalid
       };
-      return new DateTime2(_extends6({}, current, alts, {
+      return new DateTime3(_extends6({}, current, alts, {
         old: current
       }));
     }
@@ -28836,12 +28836,12 @@ var require_luxon = __commonJS({
     function parseDataToDateTime(parsed, parsedZone, opts, format, text) {
       var setZone = opts.setZone, zone = opts.zone;
       if (parsed && Object.keys(parsed).length !== 0) {
-        var interpretationZone = parsedZone || zone, inst = DateTime2.fromObject(parsed, _extends6({}, opts, {
+        var interpretationZone = parsedZone || zone, inst = DateTime3.fromObject(parsed, _extends6({}, opts, {
           zone: interpretationZone
         }));
         return setZone ? inst : inst.setZone(zone);
       } else {
-        return DateTime2.invalid(new Invalid("unparsable", 'the input "' + text + `" can't be parsed as ` + format));
+        return DateTime3.invalid(new Invalid("unparsable", 'the input "' + text + `" can't be parsed as ` + format));
       }
     }
     function toTechFormat(dt, format, allowZ) {
@@ -28945,7 +28945,7 @@ var require_luxon = __commonJS({
         }
         var invalid = hasInvalidGregorianData(obj) || hasInvalidTimeData(obj);
         if (invalid) {
-          return DateTime2.invalid(invalid);
+          return DateTime3.invalid(invalid);
         }
         var offsetProvis = zone.offset(tsNow);
         var _objToTS = objToTS(obj, offsetProvis, zone);
@@ -28954,7 +28954,7 @@ var require_luxon = __commonJS({
       } else {
         ts = tsNow;
       }
-      return new DateTime2({
+      return new DateTime3({
         ts,
         zone,
         loc,
@@ -28998,8 +28998,8 @@ var require_luxon = __commonJS({
       }
       return [opts, args];
     }
-    var DateTime2 = /* @__PURE__ */ function() {
-      function DateTime3(config) {
+    var DateTime3 = /* @__PURE__ */ function() {
+      function DateTime4(config) {
         var zone = config.zone || Settings.defaultZone;
         var invalid = config.invalid || (Number.isNaN(config.ts) ? new Invalid("invalid input") : null) || (!zone.isValid ? unsupportedZone(zone) : null);
         this.ts = isUndefined(config.ts) ? Settings.now() : config.ts;
@@ -29026,10 +29026,10 @@ var require_luxon = __commonJS({
         this.o = o2;
         this.isLuxonDateTime = true;
       }
-      DateTime3.now = function now2() {
-        return new DateTime3({});
+      DateTime4.now = function now2() {
+        return new DateTime4({});
       };
-      DateTime3.local = function local2() {
+      DateTime4.local = function local2() {
         var _lastOpts = lastOpts(arguments), opts = _lastOpts[0], args = _lastOpts[1], year = args[0], month = args[1], day = args[2], hour = args[3], minute = args[4], second = args[5], millisecond = args[6];
         return quickDT({
           year,
@@ -29041,7 +29041,7 @@ var require_luxon = __commonJS({
           millisecond
         }, opts);
       };
-      DateTime3.utc = function utc() {
+      DateTime4.utc = function utc() {
         var _lastOpts2 = lastOpts(arguments), opts = _lastOpts2[0], args = _lastOpts2[1], year = args[0], month = args[1], day = args[2], hour = args[3], minute = args[4], second = args[5], millisecond = args[6];
         opts.zone = FixedOffsetZone.utcInstance;
         return quickDT({
@@ -29054,62 +29054,62 @@ var require_luxon = __commonJS({
           millisecond
         }, opts);
       };
-      DateTime3.fromJSDate = function fromJSDate(date, options) {
+      DateTime4.fromJSDate = function fromJSDate(date, options) {
         if (options === void 0) {
           options = {};
         }
         var ts = isDate(date) ? date.valueOf() : NaN;
         if (Number.isNaN(ts)) {
-          return DateTime3.invalid("invalid input");
+          return DateTime4.invalid("invalid input");
         }
         var zoneToUse = normalizeZone(options.zone, Settings.defaultZone);
         if (!zoneToUse.isValid) {
-          return DateTime3.invalid(unsupportedZone(zoneToUse));
+          return DateTime4.invalid(unsupportedZone(zoneToUse));
         }
-        return new DateTime3({
+        return new DateTime4({
           ts,
           zone: zoneToUse,
           loc: Locale.fromObject(options)
         });
       };
-      DateTime3.fromMillis = function fromMillis(milliseconds, options) {
+      DateTime4.fromMillis = function fromMillis(milliseconds, options) {
         if (options === void 0) {
           options = {};
         }
         if (!isNumber(milliseconds)) {
           throw new InvalidArgumentError("fromMillis requires a numerical input, but received a " + typeof milliseconds + " with value " + milliseconds);
         } else if (milliseconds < -MAX_DATE || milliseconds > MAX_DATE) {
-          return DateTime3.invalid("Timestamp out of range");
+          return DateTime4.invalid("Timestamp out of range");
         } else {
-          return new DateTime3({
+          return new DateTime4({
             ts: milliseconds,
             zone: normalizeZone(options.zone, Settings.defaultZone),
             loc: Locale.fromObject(options)
           });
         }
       };
-      DateTime3.fromSeconds = function fromSeconds(seconds, options) {
+      DateTime4.fromSeconds = function fromSeconds(seconds, options) {
         if (options === void 0) {
           options = {};
         }
         if (!isNumber(seconds)) {
           throw new InvalidArgumentError("fromSeconds requires a numerical input");
         } else {
-          return new DateTime3({
+          return new DateTime4({
             ts: seconds * 1e3,
             zone: normalizeZone(options.zone, Settings.defaultZone),
             loc: Locale.fromObject(options)
           });
         }
       };
-      DateTime3.fromObject = function fromObject(obj, opts) {
+      DateTime4.fromObject = function fromObject(obj, opts) {
         if (opts === void 0) {
           opts = {};
         }
         obj = obj || {};
         var zoneToUse = normalizeZone(opts.zone, Settings.defaultZone);
         if (!zoneToUse.isValid) {
-          return DateTime3.invalid(unsupportedZone(zoneToUse));
+          return DateTime4.invalid(unsupportedZone(zoneToUse));
         }
         var tsNow = Settings.now(), offsetProvis = zoneToUse.offset(tsNow), normalized = normalizeObject(obj, normalizeUnit), containsOrdinal = !isUndefined(normalized.ordinal), containsGregorYear = !isUndefined(normalized.year), containsGregorMD = !isUndefined(normalized.month) || !isUndefined(normalized.day), containsGregor = containsGregorYear || containsGregorMD, definiteWeekDef = normalized.weekYear || normalized.weekNumber, loc = Locale.fromObject(opts);
         if ((containsGregor || containsOrdinal) && definiteWeekDef) {
@@ -29146,41 +29146,41 @@ var require_luxon = __commonJS({
         }
         var higherOrderInvalid = useWeekData ? hasInvalidWeekData(normalized) : containsOrdinal ? hasInvalidOrdinalData(normalized) : hasInvalidGregorianData(normalized), invalid = higherOrderInvalid || hasInvalidTimeData(normalized);
         if (invalid) {
-          return DateTime3.invalid(invalid);
+          return DateTime4.invalid(invalid);
         }
-        var gregorian = useWeekData ? weekToGregorian(normalized) : containsOrdinal ? ordinalToGregorian(normalized) : normalized, _objToTS2 = objToTS(gregorian, offsetProvis, zoneToUse), tsFinal = _objToTS2[0], offsetFinal = _objToTS2[1], inst = new DateTime3({
+        var gregorian = useWeekData ? weekToGregorian(normalized) : containsOrdinal ? ordinalToGregorian(normalized) : normalized, _objToTS2 = objToTS(gregorian, offsetProvis, zoneToUse), tsFinal = _objToTS2[0], offsetFinal = _objToTS2[1], inst = new DateTime4({
           ts: tsFinal,
           zone: zoneToUse,
           o: offsetFinal,
           loc
         });
         if (normalized.weekday && containsGregor && obj.weekday !== inst.weekday) {
-          return DateTime3.invalid("mismatched weekday", "you can't specify both a weekday of " + normalized.weekday + " and a date of " + inst.toISO());
+          return DateTime4.invalid("mismatched weekday", "you can't specify both a weekday of " + normalized.weekday + " and a date of " + inst.toISO());
         }
         return inst;
       };
-      DateTime3.fromISO = function fromISO(text, opts) {
+      DateTime4.fromISO = function fromISO(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseISODate = parseISODate(text), vals = _parseISODate[0], parsedZone = _parseISODate[1];
         return parseDataToDateTime(vals, parsedZone, opts, "ISO 8601", text);
       };
-      DateTime3.fromRFC2822 = function fromRFC2822(text, opts) {
+      DateTime4.fromRFC2822 = function fromRFC2822(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseRFC2822Date = parseRFC2822Date(text), vals = _parseRFC2822Date[0], parsedZone = _parseRFC2822Date[1];
         return parseDataToDateTime(vals, parsedZone, opts, "RFC 2822", text);
       };
-      DateTime3.fromHTTP = function fromHTTP(text, opts) {
+      DateTime4.fromHTTP = function fromHTTP(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseHTTPDate = parseHTTPDate(text), vals = _parseHTTPDate[0], parsedZone = _parseHTTPDate[1];
         return parseDataToDateTime(vals, parsedZone, opts, "HTTP", opts);
       };
-      DateTime3.fromFormat = function fromFormat(text, fmt, opts) {
+      DateTime4.fromFormat = function fromFormat(text, fmt, opts) {
         if (opts === void 0) {
           opts = {};
         }
@@ -29193,25 +29193,25 @@ var require_luxon = __commonJS({
           defaultToEN: true
         }), _parseFromTokens = parseFromTokens(localeToUse, text, fmt), vals = _parseFromTokens[0], parsedZone = _parseFromTokens[1], invalid = _parseFromTokens[2];
         if (invalid) {
-          return DateTime3.invalid(invalid);
+          return DateTime4.invalid(invalid);
         } else {
           return parseDataToDateTime(vals, parsedZone, opts, "format " + fmt, text);
         }
       };
-      DateTime3.fromString = function fromString(text, fmt, opts) {
+      DateTime4.fromString = function fromString(text, fmt, opts) {
         if (opts === void 0) {
           opts = {};
         }
-        return DateTime3.fromFormat(text, fmt, opts);
+        return DateTime4.fromFormat(text, fmt, opts);
       };
-      DateTime3.fromSQL = function fromSQL(text, opts) {
+      DateTime4.fromSQL = function fromSQL(text, opts) {
         if (opts === void 0) {
           opts = {};
         }
         var _parseSQL = parseSQL(text), vals = _parseSQL[0], parsedZone = _parseSQL[1];
         return parseDataToDateTime(vals, parsedZone, opts, "SQL", text);
       };
-      DateTime3.invalid = function invalid(reason, explanation) {
+      DateTime4.invalid = function invalid(reason, explanation) {
         if (explanation === void 0) {
           explanation = null;
         }
@@ -29222,15 +29222,15 @@ var require_luxon = __commonJS({
         if (Settings.throwOnInvalid) {
           throw new InvalidDateTimeError(invalid2);
         } else {
-          return new DateTime3({
+          return new DateTime4({
             invalid: invalid2
           });
         }
       };
-      DateTime3.isDateTime = function isDateTime(o2) {
+      DateTime4.isDateTime = function isDateTime(o2) {
         return o2 && o2.isLuxonDateTime || false;
       };
-      var _proto = DateTime3.prototype;
+      var _proto = DateTime4.prototype;
       _proto.get = function get(unit) {
         return this[unit];
       };
@@ -29263,7 +29263,7 @@ var require_luxon = __commonJS({
         if (zone.equals(this.zone)) {
           return this;
         } else if (!zone.isValid) {
-          return DateTime3.invalid(unsupportedZone(zone));
+          return DateTime4.invalid(unsupportedZone(zone));
         } else {
           var newTS = this.ts;
           if (keepLocalTime || keepCalendarTime) {
@@ -29503,7 +29503,7 @@ var require_luxon = __commonJS({
         if (opts === void 0) {
           opts = {};
         }
-        return this.diff(DateTime3.now(), unit, opts);
+        return this.diff(DateTime4.now(), unit, opts);
       };
       _proto.until = function until(otherDateTime) {
         return this.isValid ? Interval.fromDateTimes(this, otherDateTime) : this;
@@ -29526,7 +29526,7 @@ var require_luxon = __commonJS({
         }
         if (!this.isValid)
           return null;
-        var base = options.base || DateTime3.fromObject({}, {
+        var base = options.base || DateTime4.fromObject({}, {
           zone: this.zone
         }), padding = options.padding ? this < base ? -options.padding : options.padding : 0;
         var units = ["years", "months", "days", "hours", "minutes", "seconds"];
@@ -29547,7 +29547,7 @@ var require_luxon = __commonJS({
         }
         if (!this.isValid)
           return null;
-        return diffRelative(options.base || DateTime3.fromObject({}, {
+        return diffRelative(options.base || DateTime4.fromObject({}, {
           zone: this.zone
         }), this, _extends6({}, options, {
           numeric: "auto",
@@ -29555,29 +29555,29 @@ var require_luxon = __commonJS({
           calendary: true
         }));
       };
-      DateTime3.min = function min() {
+      DateTime4.min = function min() {
         for (var _len = arguments.length, dateTimes = new Array(_len), _key = 0; _key < _len; _key++) {
           dateTimes[_key] = arguments[_key];
         }
-        if (!dateTimes.every(DateTime3.isDateTime)) {
+        if (!dateTimes.every(DateTime4.isDateTime)) {
           throw new InvalidArgumentError("min requires all arguments be DateTimes");
         }
         return bestBy(dateTimes, function(i3) {
           return i3.valueOf();
         }, Math.min);
       };
-      DateTime3.max = function max() {
+      DateTime4.max = function max() {
         for (var _len2 = arguments.length, dateTimes = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
           dateTimes[_key2] = arguments[_key2];
         }
-        if (!dateTimes.every(DateTime3.isDateTime)) {
+        if (!dateTimes.every(DateTime4.isDateTime)) {
           throw new InvalidArgumentError("max requires all arguments be DateTimes");
         }
         return bestBy(dateTimes, function(i3) {
           return i3.valueOf();
         }, Math.max);
       };
-      DateTime3.fromFormatExplain = function fromFormatExplain(text, fmt, options) {
+      DateTime4.fromFormatExplain = function fromFormatExplain(text, fmt, options) {
         if (options === void 0) {
           options = {};
         }
@@ -29588,13 +29588,13 @@ var require_luxon = __commonJS({
         });
         return explainFromTokens(localeToUse, text, fmt);
       };
-      DateTime3.fromStringExplain = function fromStringExplain(text, fmt, options) {
+      DateTime4.fromStringExplain = function fromStringExplain(text, fmt, options) {
         if (options === void 0) {
           options = {};
         }
-        return DateTime3.fromFormatExplain(text, fmt, options);
+        return DateTime4.fromFormatExplain(text, fmt, options);
       };
-      _createClass3(DateTime3, [{
+      _createClass3(DateTime4, [{
         key: "isValid",
         get: function get() {
           return this.invalid === null;
@@ -29900,21 +29900,21 @@ var require_luxon = __commonJS({
           return DATETIME_HUGE_WITH_SECONDS;
         }
       }]);
-      return DateTime3;
+      return DateTime4;
     }();
     function friendlyDateTime(dateTimeish) {
-      if (DateTime2.isDateTime(dateTimeish)) {
+      if (DateTime3.isDateTime(dateTimeish)) {
         return dateTimeish;
       } else if (dateTimeish && dateTimeish.valueOf && isNumber(dateTimeish.valueOf())) {
-        return DateTime2.fromJSDate(dateTimeish);
+        return DateTime3.fromJSDate(dateTimeish);
       } else if (dateTimeish && typeof dateTimeish === "object") {
-        return DateTime2.fromObject(dateTimeish);
+        return DateTime3.fromObject(dateTimeish);
       } else {
         throw new InvalidArgumentError("Unknown datetime argument: " + dateTimeish + ", of type " + typeof dateTimeish);
       }
     }
     var VERSION = "2.1.1";
-    exports2.DateTime = DateTime2;
+    exports2.DateTime = DateTime3;
     exports2.Duration = Duration;
     exports2.FixedOffsetZone = FixedOffsetZone;
     exports2.IANAZone = IANAZone;
@@ -30042,8 +30042,8 @@ var require_lib = __commonJS({
     Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
       return wildcards_1.__;
     } });
-    var match5 = (value) => builder(value, []);
-    exports2.match = match5;
+    var match6 = (value) => builder(value, []);
+    exports2.match = match6;
     var builder = (value, cases) => {
       const run = () => {
         const entry = cases.find(({ test }) => test(value));
@@ -30193,7 +30193,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames7() {
+      function classNames8() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -30204,7 +30204,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames7.apply(null, arg);
+              var inner = classNames8.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -30224,21 +30224,21 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames7.default = classNames7;
-        module2.exports = classNames7;
+        classNames8.default = classNames8;
+        module2.exports = classNames8;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames7;
+          return classNames8;
         });
       } else {
-        window.classNames = classNames7;
+        window.classNames = classNames8;
       }
     })();
   }
 });
 
 // src/dev/ContentList.tsx
-var import_react23 = __toModule(require_react());
+var import_react25 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -30982,10 +30982,10 @@ function getLocation(source, position) {
   var lineRegexp = /\r\n|[\n\r]/g;
   var line = 1;
   var column = position + 1;
-  var match5;
-  while ((match5 = lineRegexp.exec(source.body)) && match5.index < position) {
+  var match6;
+  while ((match6 = lineRegexp.exec(source.body)) && match6.index < position) {
     line += 1;
-    column = position + 1 - (match5.index + match5[0].length);
+    column = position + 1 - (match6.index + match6[0].length);
   }
   return {
     line,
@@ -36959,8 +36959,8 @@ var Auth = ({
 };
 
 // src/modules/ContentList/index.tsx
-var import_react22 = __toModule(require_react());
-var import_luxon = __toModule(require_luxon());
+var import_react24 = __toModule(require_react());
+var import_luxon2 = __toModule(require_luxon());
 
 // src/components/CompanyFilterButton/index.tsx
 var import_react20 = __toModule(require_react());
@@ -38002,11 +38002,136 @@ var Tabs = (props) => {
   });
 };
 
+// src/modules/Content/index.tsx
+var import_react23 = __toModule(require_react());
+var import_luxon = __toModule(require_luxon());
+var import_ts_pattern5 = __toModule(require_lib());
+
+// src/components/Svg/ArrowLeft.tsx
+var import_react22 = __toModule(require_react());
+var import_classnames7 = __toModule(require_classnames());
+function ArrowLeft({ className, alt = "Arrow Left" }) {
+  return /* @__PURE__ */ import_react22.default.createElement("svg", {
+    className: (0, import_classnames7.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+    width: "100%",
+    viewBox: "0 0 12 10",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react22.default.createElement("title", null, alt), /* @__PURE__ */ import_react22.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M5.70679 9.69471C5.51926 9.88218 5.26495 9.9875 4.99979 9.9875C4.73462 9.9875 4.48031 9.88218 4.29279 9.69471L0.292787 5.69471C0.105316 5.50718 0 5.25288 0 4.98771C0 4.72255 0.105316 4.46824 0.292787 4.28071L4.29279 0.280712C4.48139 0.0985542 4.73399 -0.00224062 4.99619 3.78025e-05C5.25838 0.00231622 5.5092 0.107485 5.6946 0.292894C5.88001 0.478302 5.98518 0.729114 5.98746 0.991311C5.98974 1.25351 5.88894 1.50611 5.70679 1.69471L3.41379 3.98771H10.9998C11.265 3.98771 11.5194 4.09307 11.7069 4.28061C11.8944 4.46814 11.9998 4.7225 11.9998 4.98771C11.9998 5.25293 11.8944 5.50728 11.7069 5.69482C11.5194 5.88235 11.265 5.98771 10.9998 5.98771H3.41379L5.70679 8.28071C5.89426 8.46824 5.99957 8.72255 5.99957 8.98771C5.99957 9.25288 5.89426 9.50718 5.70679 9.69471V9.69471Z"
+  }));
+}
+
+// src/lib/strings/index.ts
+function titleize(str = "") {
+  const titleized = str.replace(/([a-z])([A-Z])/g, (_allMatches, firstMatch, secondMatch) => {
+    return `${firstMatch} ${secondMatch}`;
+  }).toLowerCase().replace(/([ -_]|^)(.)/g, (_allMatches, firstMatch, secondMatch) => {
+    return (firstMatch ? " " : "") + secondMatch.toUpperCase();
+  });
+  return titleized.trim();
+}
+
+// src/modules/Content/index.tsx
+function ContentUI(props) {
+  const {
+    body,
+    companyIdentifier,
+    contentType,
+    date,
+    exchangeName,
+    onBack,
+    onChangeSearchTerm,
+    searchTerm,
+    sourceName,
+    title
+  } = props;
+  const backButton = (contentType2) => /* @__PURE__ */ import_react23.default.createElement(Button, {
+    className: "mr-2",
+    onClick: onBack
+  }, /* @__PURE__ */ import_react23.default.createElement(ArrowLeft, {
+    className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
+  }), titleize(ContentType2[contentType2]));
+  return /* @__PURE__ */ import_react23.default.createElement("div", {
+    className: "h-full flex flex-col content"
+  }, /* @__PURE__ */ import_react23.default.createElement("div", {
+    className: "flex flex-col pl-3 pr-3 pt-3 shadow-3xl content__header"
+  }, /* @__PURE__ */ import_react23.default.createElement("div", {
+    className: "flex items-center mb-3"
+  }, (0, import_ts_pattern5.match)(contentType).with(ContentType2.news, () => /* @__PURE__ */ import_react23.default.createElement(import_react23.default.Fragment, null, onBack && backButton(ContentType2.news), /* @__PURE__ */ import_react23.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react23.default.createElement(MagnifyingGlass, null),
+    name: "search",
+    placeholder: "Search Content...",
+    value: searchTerm,
+    onChange: onChangeSearchTerm
+  }))).with(ContentType2.corporateActivity, () => onBack && backButton(ContentType2.corporateActivity)).exhaustive())), companyIdentifier && /* @__PURE__ */ import_react23.default.createElement("div", {
+    className: "flex items-center pl-5 pr-5 pt-5 text-sm"
+  }, /* @__PURE__ */ import_react23.default.createElement("span", {
+    className: "font-bold pr-1 text-blue-600"
+  }, companyIdentifier), /* @__PURE__ */ import_react23.default.createElement("span", {
+    className: "font-light text-gray-300"
+  }, exchangeName)), title && /* @__PURE__ */ import_react23.default.createElement("div", {
+    className: "leading-4 pl-5 pr-5 pt-3"
+  }, /* @__PURE__ */ import_react23.default.createElement("span", {
+    className: "font-bold text-base"
+  }, title)), (sourceName || date) && /* @__PURE__ */ import_react23.default.createElement("div", {
+    className: "flex items-center pl-5 pr-5 pt-2 text-sm"
+  }, sourceName && /* @__PURE__ */ import_react23.default.createElement("span", {
+    className: "text-indigo-300"
+  }, sourceName), sourceName && date && /* @__PURE__ */ import_react23.default.createElement("span", {
+    className: "pl-1 pr-1 text-gray-400"
+  }, "\u2022"), date && /* @__PURE__ */ import_react23.default.createElement("span", {
+    className: "text-gray-400"
+  }, import_luxon.DateTime.fromISO(date).toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react23.default.createElement("div", {
+    className: "leading-4 overflow-y-auto pb-3 pl-5 pr-5 pt-3",
+    dangerouslySetInnerHTML: { __html: body }
+  }));
+}
+function Content(props) {
+  const mockBody = `
+        <span class="text-sm">
+            Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
+            movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
+            International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
+            through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes
+            , and mobile devices.
+            <br />
+            <br />
+            The company also provides DVDs-by-mail membership services. It serves approximately 93 million streaming
+            members in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
+        </span>
+    `;
+  const {
+    companyIdentifier,
+    contentType,
+    date,
+    exchangeName,
+    onBack,
+    onChangeSearchTerm,
+    searchTerm,
+    sourceName,
+    title
+  } = props;
+  return /* @__PURE__ */ import_react23.default.createElement(ContentUI, {
+    body: mockBody,
+    companyIdentifier,
+    contentType,
+    date,
+    exchangeName,
+    onBack,
+    onChangeSearchTerm,
+    searchTerm,
+    sourceName,
+    title
+  });
+}
+
 // src/modules/ContentList/index.tsx
 var ContentType2;
 (function(ContentType3) {
-  ContentType3[ContentType3["news"] = 0] = "news";
-  ContentType3[ContentType3["corporateActivity"] = 1] = "corporateActivity";
+  ContentType3["news"] = "news";
+  ContentType3["corporateActivity"] = "corporateActivity";
 })(ContentType2 || (ContentType2 = {}));
 var mockData = [
   {
@@ -38099,95 +38224,118 @@ var mockData = [
   }
 ];
 function ContentListUI(props) {
-  const { company, onChangeSearch, onSelectCompany, onSelectContentType, searchTerm, selectedContentType } = props;
+  const {
+    company,
+    content,
+    onBackFromContent,
+    onChangeSearch,
+    onSelectCompany,
+    onSelectContent,
+    onSelectContentType,
+    searchTerm,
+    selectedContentType
+  } = props;
+  if (content) {
+    return /* @__PURE__ */ import_react24.default.createElement(Content, {
+      companyIdentifier: content.companyIdentifier,
+      contentType: selectedContentType,
+      date: content.date,
+      exchangeName: content.exchangeName,
+      onBack: onBackFromContent,
+      sourceName: content.sourceName,
+      title: content.title
+    });
+  }
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react22.default.createElement("div", {
+  return /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "h-full flex flex-col content-list"
-  }, /* @__PURE__ */ import_react22.default.createElement("div", {
+  }, /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl content-list__header"
-  }, /* @__PURE__ */ import_react22.default.createElement("div", {
+  }, /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react22.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react22.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react24.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react24.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onChangeSearch,
     placeholder: "Search News & Corp. Activity...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react22.default.createElement("div", {
+  }), /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react22.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react24.default.createElement(CompanyFilterButton, {
     onChange: onSelectCompany,
     value: company
-  })))), /* @__PURE__ */ import_react22.default.createElement("div", {
+  })))), /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react22.default.createElement("div", {
+  }, /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react22.default.createElement("div", {
+  }, /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "sticky top-0 px-3 pt-3 pb-2 z-10 content-list__tabs"
-  }, /* @__PURE__ */ import_react22.default.createElement("div", {
+  }, /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow"
-  }, /* @__PURE__ */ import_react22.default.createElement(Tabs, {
+  }, /* @__PURE__ */ import_react24.default.createElement(Tabs, {
     className: "ml-1",
     kind: "line",
     onChange: onSelectContentType,
     options: [
       {
         label: "News",
-        value: 0
+        value: ContentType2.news
       },
       {
         label: "Corp. Activity",
-        value: 1
+        value: ContentType2.corporateActivity
       }
     ],
     value: selectedContentType
-  }))), /* @__PURE__ */ import_react22.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, /* @__PURE__ */ import_react22.default.createElement("ul", {
+  }, /* @__PURE__ */ import_react24.default.createElement("ul", {
     className: "w-full"
   }, mockData.map((item) => {
-    const date = import_luxon.DateTime.fromISO(item.date);
+    const date = import_luxon2.DateTime.fromISO(item.date);
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== date.toFormat("MM/dd/yyyy")) {
       prevEventDate = date;
-      divider = /* @__PURE__ */ import_react22.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react24.default.createElement("li", {
         className: "sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"
-      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react22.default.createElement("div", {
+      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react24.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       }));
     }
-    return /* @__PURE__ */ import_react22.default.createElement(import_react22.Fragment, {
+    return /* @__PURE__ */ import_react24.default.createElement(import_react24.Fragment, {
       key: item.id
-    }, divider, /* @__PURE__ */ import_react22.default.createElement("li", {
-      className: "group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
-    }, /* @__PURE__ */ import_react22.default.createElement("div", {
+    }, divider, /* @__PURE__ */ import_react24.default.createElement("li", {
+      className: "group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
+      onClick: (e) => onSelectContent == null ? void 0 : onSelectContent(e, { value: item })
+    }, /* @__PURE__ */ import_react24.default.createElement("div", {
       className: "flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm"
-    }, /* @__PURE__ */ import_react22.default.createElement("span", {
+    }, /* @__PURE__ */ import_react24.default.createElement("span", {
       className: "mr-1 text-black"
-    }, item.title)), /* @__PURE__ */ import_react22.default.createElement("div", {
+    }, item.title)), /* @__PURE__ */ import_react24.default.createElement("div", {
       className: "flex flex-1 items-center min-w-0 p-2 pr-4 pt-0"
-    }, /* @__PURE__ */ import_react22.default.createElement("span", {
+    }, /* @__PURE__ */ import_react24.default.createElement("span", {
       className: "font-bold pr-1 text-blue-600 group-hover:text-yellow-600"
-    }, item.companyIdentifier), /* @__PURE__ */ import_react22.default.createElement("span", {
+    }, item.companyIdentifier), /* @__PURE__ */ import_react24.default.createElement("span", {
       className: "font-light text-gray-300 group-hover:text-gray-400"
-    }, item.exchangeName), /* @__PURE__ */ import_react22.default.createElement("span", {
+    }, item.exchangeName), /* @__PURE__ */ import_react24.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react22.default.createElement("span", {
+    }, "\u2022"), /* @__PURE__ */ import_react24.default.createElement("span", {
       className: "text-gray-400"
-    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react22.default.createElement("span", {
+    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react24.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react22.default.createElement("span", {
+    }, "\u2022"), /* @__PURE__ */ import_react24.default.createElement("span", {
       className: "text-indigo-300"
     }, item.sourceName))));
-  })), /* @__PURE__ */ import_react22.default.createElement("div", {
+  })), /* @__PURE__ */ import_react24.default.createElement("div", {
     className: "flex-1"
   })))));
 }
-function ContentList() {
+function ContentList(_props) {
   const { state, handlers, setState } = useChangeHandlers({
     company: void 0,
+    content: void 0,
     searchTerm: "",
-    selectedContentType: 0
+    selectedContentType: ContentType2.news
   });
   const resolveCompany = useCompanyResolver();
   const bus = useMessageListener("instrument-selected", (msg) => __async(this, null, function* () {
@@ -38199,14 +38347,23 @@ function ContentList() {
       }
     }
   }), "in");
-  const onSelectCompany = (0, import_react22.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react24.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
   }, [state]);
-  return /* @__PURE__ */ import_react22.default.createElement(ContentListUI, {
+  const onSelectContent = (0, import_react24.useCallback)((event, change) => {
+    var _a;
+    const companyIdentifier = (_a = change.value) == null ? void 0 : _a.companyIdentifier;
+    bus == null ? void 0 : bus.emit("instrument-selected", { ticker: companyIdentifier }, "out");
+    handlers.content(event, change);
+  }, [state]);
+  return /* @__PURE__ */ import_react24.default.createElement(ContentListUI, {
     company: state.company,
+    content: state.content,
+    onBackFromContent: (0, import_react24.useCallback)((event) => onSelectContent(event, { value: null }), [onSelectContent]),
     onSelectCompany,
+    onSelectContent,
     onSelectContentType: handlers.selectedContentType,
     onChangeSearch: handlers.searchTerm,
     searchTerm: state.searchTerm,
@@ -38219,7 +38376,7 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react23.default.createElement(import_react23.StrictMode, null, /* @__PURE__ */ import_react23.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react25.default.createElement(import_react25.StrictMode, null, /* @__PURE__ */ import_react25.default.createElement(Provider6, {
     bus,
     config: {
       apiUrl: "https://api-dev.aiera.com/graphql",
@@ -38227,13 +38384,13 @@ var App = () => {
       moduleName: "ContentList",
       platform: "aiera-sdk-dev"
     }
-  }, /* @__PURE__ */ import_react23.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react25.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react23.default.createElement("div", {
+  }, /* @__PURE__ */ import_react25.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react23.default.createElement(ContentList, null)))));
+  }, /* @__PURE__ */ import_react25.default.createElement(ContentList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react23.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react25.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus

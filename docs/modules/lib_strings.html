@@ -72,8 +72,9 @@
 						<section class="tsd-index-section ">
 							<h3>Functions</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-function tsd-parent-kind-module"><a href="lib_strings.html#prettyLineBreak" class="tsd-kind-icon">pretty<wbr>Line<wbr>Break</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="lib_strings.html#hash" class="tsd-kind-icon">hash</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="lib_strings.html#prettyLineBreak" class="tsd-kind-icon">pretty<wbr>Line<wbr>Break</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module"><a href="lib_strings.html#titleize" class="tsd-kind-icon">titleize</a></li>
 							</ul>
 						</section>
 					</div>
@@ -81,29 +82,6 @@
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>Functions</h2>
-				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
-					<a name="prettyLineBreak" class="tsd-anchor"></a>
-					<h3>pretty<wbr>Line<wbr>Break</h3>
-					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
-						<li class="tsd-signature tsd-kind-icon">pretty<wbr>Line<wbr>Break<span class="tsd-signature-symbol">(</span>line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/2a30103/src/lib/strings/index.ts#L1">src/lib/strings/index.ts:1</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-parameters-title">Parameters</h4>
-							<ul class="tsd-parameters">
-								<li>
-									<h5>line: <span class="tsd-signature-type">string</span></h5>
-								</li>
-							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
-						</li>
-					</ul>
-				</section>
 				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
 					<a name="hash" class="tsd-anchor"></a>
 					<h3>hash</h3>
@@ -114,7 +92,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/2a30103/src/lib/strings/index.ts#L17">src/lib/strings/index.ts:17</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/c4521a0/src/lib/strings/index.ts#L10">src/lib/strings/index.ts:10</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -127,11 +105,86 @@
 							<ul class="tsd-parameters">
 								<li>
 									<h5>str: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the string to hash</p>
+									</div>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">number</span></h4>
 							<ul>
 								<li>a 32 bit number</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="prettyLineBreak" class="tsd-anchor"></a>
+					<h3>pretty<wbr>Line<wbr>Break</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">pretty<wbr>Line<wbr>Break<span class="tsd-signature-symbol">(</span>line<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/c4521a0/src/lib/strings/index.ts#L25">src/lib/strings/index.ts:25</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>This util will replace the spaces in the last 5/9ths of the string with
+									nbsp;&#39;s and this will prevent those words from being orphaned</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>line: <span class="tsd-signature-type">string</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the string to prettify</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<ul>
+								<li>a string</li>
+							</ul>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module">
+					<a name="titleize" class="tsd-anchor"></a>
+					<h3>titleize</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module">
+						<li class="tsd-signature tsd-kind-icon">titleize<span class="tsd-signature-symbol">(</span>str<span class="tsd-signature-symbol">?: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/c4521a0/src/lib/strings/index.ts#L42">src/lib/strings/index.ts:42</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Takes a string, splits up the words that are separated
+										by a single whitespace or special character,
+										capitalizes each word and combines them into a single string.
+									Returns the combined string with leading and trailing whitespaces removed</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>str: <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> = &#x27;&#x27;</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>the string to titleize</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span></h4>
+							<ul>
+								<li>a string</li>
 							</ul>
 						</li>
 					</ul>
@@ -152,10 +205,13 @@
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
 					<li class=" tsd-kind-function tsd-parent-kind-module">
+						<a href="lib_strings.html#hash" class="tsd-kind-icon">hash</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module">
 						<a href="lib_strings.html#prettyLineBreak" class="tsd-kind-icon">pretty<wbr>Line<wbr>Break</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module">
-						<a href="lib_strings.html#hash" class="tsd-kind-icon">hash</a>
+						<a href="lib_strings.html#titleize" class="tsd-kind-icon">titleize</a>
 					</li>
 				</ul>
 			</nav>
