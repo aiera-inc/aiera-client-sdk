@@ -139,17 +139,15 @@ export function Content(props: ContentProps): ReactElement {
     );
     // TODO replace with body from content query
     const mockBody = `
-        <span>
-            Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
-            movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
-            International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
-            through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes
-            , and mobile devices.
-            <br />
-            <br />
-            The company also provides DVDs-by-mail membership services. It serves approximately 93 million streaming
-            members in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
-        </span>
+        Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
+        movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
+        International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
+        through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes,
+        and mobile devices.
+        <br />
+        <br />
+        The company also provides DVDs-by-mail membership services. It serves approximately 93 million streaming members
+        in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
     `;
     const { companyIdentifier, contentType, date, exchangeName, onBack, sourceName, title } = props;
     return (
