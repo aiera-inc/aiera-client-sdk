@@ -59,7 +59,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                                 <Input
                                     icon={<MagnifyingGlass />}
                                     name="search"
-                                    placeholder="Search Content..."
+                                    placeholder="Search News..."
                                     value={searchTerm}
                                     onChange={onChangeSearch}
                                 />
