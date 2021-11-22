@@ -32,7 +32,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>8/8</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -183,7 +183,17 @@
 <a name='L124'></a><a href='#L124'>124</a>
 <a name='L125'></a><a href='#L125'>125</a>
 <a name='L126'></a><a href='#L126'>126</a>
-<a name='L127'></a><a href='#L127'>127</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a>
+<a name='L132'></a><a href='#L132'>132</a>
+<a name='L133'></a><a href='#L133'>133</a>
+<a name='L134'></a><a href='#L134'>134</a>
+<a name='L135'></a><a href='#L135'>135</a>
+<a name='L136'></a><a href='#L136'>136</a>
+<a name='L137'></a><a href='#L137'>137</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -230,12 +240,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">103x</span>
-<span class="cline-any cline-yes">103x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">119x</span>
+<span class="cline-any cline-yes">119x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -285,8 +295,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">103x</span>
-<span class="cline-any cline-yes">103x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">119x</span>
+<span class="cline-any cline-yes">119x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -298,7 +316,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -329,12 +349,14 @@ interface InputSharedProps {
     inputRef?: Ref&lt;HTMLInputElement&gt;;
     autoFocus?: boolean;
     icon?: ReactNode;
+    id?: string;
     placeholder?: string;
     onFocus?: FocusEventHandler;
     value?: string;
     className?: string;
     clearable?: boolean;
     name: string;
+    type?: string;
 }
 &nbsp;
 /** @notExported */
@@ -348,6 +370,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         inputRef,
         autoFocus,
         icon,
+        id,
         clearable,
         clear,
         placeholder,
@@ -356,6 +379,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         value,
         name,
         className = '',
+        type,
     } = props;
     return (
         &lt;div className={`group h-8 items-center w-full relative ${className} input__${name}`}&gt;
@@ -368,6 +392,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                 &lt;/div&gt;
             )}
             &lt;input
+                id={id}
                 ref={inputRef}
                 autoFocus={autoFocus}
                 className={classNames(
@@ -378,6 +403,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                 onFocus={onFocus}
                 placeholder={placeholder}
                 value={value}
+                type={type}
             /&gt;
             {clearable &amp;&amp; value &amp;&amp; (
                 &lt;div
@@ -404,6 +430,7 @@ export function Input(props: InputProps): ReactElement {
         inputRef,
         autoFocus = false,
         icon,
+        id,
         clearable = true,
         placeholder,
         onChange,
@@ -411,6 +438,7 @@ export function Input(props: InputProps): ReactElement {
         value,
         name,
         className,
+        type = 'text',
     } = props;
     return (
         &lt;InputUI
@@ -421,6 +449,7 @@ export function Input(props: InputProps): ReactElement {
                 [onChange]
             )}
             icon={icon}
+            id={id}
             placeholder={placeholder}
             onChange={useCallback(
                 (event: ChangeEvent&lt;HTMLInputElement&gt;) =&gt;
@@ -432,6 +461,7 @@ export function Input(props: InputProps): ReactElement {
             value={value}
             className={className}
             name={name}
+            type={type}
         /&gt;
     );
 }
@@ -442,7 +472,7 @@ export function Input(props: InputProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Fri Nov 19 2021 16:50:46 GMT-0500 (Eastern Standard Time)
+                at Mon Nov 22 2021 12:37:57 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

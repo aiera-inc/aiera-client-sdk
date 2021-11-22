@@ -657,8 +657,8 @@ var require_react_development = __commonJS({
             "=": "=0",
             ":": "=2"
           };
-          var escapedString = key.replace(escapeRegex, function(match6) {
-            return escaperLookup[match6];
+          var escapedString = key.replace(escapeRegex, function(match7) {
+            return escaperLookup[match7];
           });
           return "$" + escapedString;
         }
@@ -1204,8 +1204,8 @@ var require_react_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match6 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match6 && match6[1] || "";
+                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match7 && match7[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -3126,8 +3126,8 @@ var require_react_dom_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match6 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match6 && match6[1] || "";
+                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match7 && match7[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -25108,6 +25108,315 @@ var require_pusher = __commonJS({
   }
 });
 
+// node_modules/ts-pattern/lib/symbols.js
+var require_symbols = __commonJS({
+  "node_modules/ts-pattern/lib/symbols.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.AnonymousSelect = exports2.NamedSelect = exports2.Not = exports2.Guard = exports2.PatternKind = void 0;
+    exports2.PatternKind = Symbol("@ts-pattern/pattern-kind");
+    exports2.Guard = Symbol("@ts-pattern/guard");
+    exports2.Not = Symbol("@ts-pattern/not");
+    exports2.NamedSelect = Symbol("@ts-pattern/named-select");
+    exports2.AnonymousSelect = Symbol("@ts-pattern/anonymous-select");
+  }
+});
+
+// node_modules/ts-pattern/lib/guards.js
+var require_guards = __commonJS({
+  "node_modules/ts-pattern/lib/guards.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.instanceOf = exports2.select = exports2.ANONYMOUS_SELECT_KEY = exports2.not = exports2.when = void 0;
+    var symbols = require_symbols();
+    var when = (predicate) => ({
+      [symbols.PatternKind]: symbols.Guard,
+      [symbols.Guard]: predicate
+    });
+    exports2.when = when;
+    var not = (pattern) => ({
+      [symbols.PatternKind]: symbols.Not,
+      [symbols.Not]: pattern
+    });
+    exports2.not = not;
+    exports2.ANONYMOUS_SELECT_KEY = "@ts-pattern/__anonymous-select-key";
+    function select(key) {
+      return key === void 0 ? {
+        [symbols.PatternKind]: symbols.AnonymousSelect
+      } : {
+        [symbols.PatternKind]: symbols.NamedSelect,
+        [symbols.NamedSelect]: key
+      };
+    }
+    exports2.select = select;
+    function isInstanceOf(classConstructor) {
+      return (val) => val instanceof classConstructor;
+    }
+    var instanceOf3 = (classConstructor) => (0, exports2.when)(isInstanceOf(classConstructor));
+    exports2.instanceOf = instanceOf3;
+  }
+});
+
+// node_modules/ts-pattern/lib/wildcards.js
+var require_wildcards = __commonJS({
+  "node_modules/ts-pattern/lib/wildcards.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.__ = void 0;
+    var guards_1 = require_guards();
+    function isUnknown(x3) {
+      return true;
+    }
+    function isNumber(x3) {
+      return typeof x3 === "number";
+    }
+    function numberIsNaN(x3) {
+      return Number.isNaN(x3);
+    }
+    function isString(x3) {
+      return typeof x3 === "string";
+    }
+    function isBoolean(x3) {
+      return typeof x3 === "boolean";
+    }
+    function isNullish(x3) {
+      return x3 === null || x3 === void 0;
+    }
+    var unknownGuard = (0, guards_1.when)(isUnknown);
+    var stringGuard = (0, guards_1.when)(isString);
+    var numberGuard = (0, guards_1.when)(isNumber);
+    var NaNGuard = (0, guards_1.when)(numberIsNaN);
+    var booleanGuard = (0, guards_1.when)(isBoolean);
+    var nullishGuard = (0, guards_1.when)(isNullish);
+    exports2.__ = Object.assign(unknownGuard, {
+      string: stringGuard,
+      number: numberGuard,
+      NaN: NaNGuard,
+      boolean: booleanGuard,
+      nullish: nullishGuard
+    });
+  }
+});
+
+// node_modules/ts-pattern/lib/index.js
+var require_lib = __commonJS({
+  "node_modules/ts-pattern/lib/index.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.isMatching = exports2.match = exports2.instanceOf = exports2.select = exports2.not = exports2.when = exports2.__ = void 0;
+    var symbols = require_symbols();
+    var guards_1 = require_guards();
+    Object.defineProperty(exports2, "when", { enumerable: true, get: function() {
+      return guards_1.when;
+    } });
+    Object.defineProperty(exports2, "not", { enumerable: true, get: function() {
+      return guards_1.not;
+    } });
+    Object.defineProperty(exports2, "select", { enumerable: true, get: function() {
+      return guards_1.select;
+    } });
+    Object.defineProperty(exports2, "instanceOf", { enumerable: true, get: function() {
+      return guards_1.instanceOf;
+    } });
+    var wildcards_1 = require_wildcards();
+    Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
+      return wildcards_1.__;
+    } });
+    var match7 = (value) => builder(value, []);
+    exports2.match = match7;
+    var builder = (value, cases) => {
+      const run = () => {
+        const entry = cases.find(({ test }) => test(value));
+        if (!entry) {
+          let displayedValue;
+          try {
+            displayedValue = JSON.stringify(value);
+          } catch (e) {
+            displayedValue = value;
+          }
+          throw new Error(`Pattern matching error: no pattern matches value ${displayedValue}`);
+        }
+        return entry.handler(entry.select(value), value);
+      };
+      return {
+        with(...args) {
+          const handler = args[args.length - 1];
+          const patterns = [];
+          const predicates = [];
+          for (let i3 = 0; i3 < args.length - 1; i3++) {
+            const arg = args[i3];
+            if (typeof arg === "function") {
+              predicates.push(arg);
+            } else {
+              patterns.push(arg);
+            }
+          }
+          let selected = {};
+          const doesMatch = (value2) => Boolean(patterns.some((pattern) => matchPattern(pattern, value2, (key, value3) => {
+            selected[key] = value3;
+          })) && predicates.every((predicate) => predicate(value2)));
+          return builder(value, cases.concat([
+            {
+              test: doesMatch,
+              handler,
+              select: (value2) => Object.keys(selected).length ? selected[guards_1.ANONYMOUS_SELECT_KEY] !== void 0 ? selected[guards_1.ANONYMOUS_SELECT_KEY] : selected : value2
+            }
+          ]));
+        },
+        when: (predicate, handler) => builder(value, cases.concat([
+          {
+            test: predicate,
+            handler,
+            select: (value2) => value2
+          }
+        ])),
+        otherwise: (handler) => builder(value, cases.concat([
+          {
+            test: () => true,
+            handler,
+            select: (value2) => value2
+          }
+        ])).run(),
+        exhaustive: () => run(),
+        run
+      };
+    };
+    var isObject = (value) => Boolean(value && typeof value === "object");
+    var isGuardPattern = (x3) => {
+      const pattern = x3;
+      return pattern && pattern[symbols.PatternKind] === symbols.Guard;
+    };
+    var isNotPattern = (x3) => {
+      const pattern = x3;
+      return pattern && pattern[symbols.PatternKind] === symbols.Not;
+    };
+    var isNamedSelectPattern = (x3) => {
+      const pattern = x3;
+      return pattern && pattern[symbols.PatternKind] === symbols.NamedSelect;
+    };
+    var isAnonymousSelectPattern = (x3) => {
+      const pattern = x3;
+      return pattern && pattern[symbols.PatternKind] === symbols.AnonymousSelect;
+    };
+    var matchPattern = (pattern, value, select) => {
+      if (isObject(pattern)) {
+        if (isGuardPattern(pattern))
+          return Boolean(pattern[symbols.Guard](value));
+        if (isNamedSelectPattern(pattern)) {
+          select(pattern[symbols.NamedSelect], value);
+          return true;
+        }
+        if (isAnonymousSelectPattern(pattern)) {
+          select(guards_1.ANONYMOUS_SELECT_KEY, value);
+          return true;
+        }
+        if (isNotPattern(pattern))
+          return !matchPattern(pattern[symbols.Not], value, select);
+        if (!isObject(value))
+          return false;
+        if (Array.isArray(pattern)) {
+          if (!Array.isArray(value))
+            return false;
+          if (pattern.length === 1) {
+            const selected = {};
+            const listSelect = (key, value2) => {
+              selected[key] = (selected[key] || []).concat([value2]);
+            };
+            const doesMatch = value.every((v) => matchPattern(pattern[0], v, listSelect));
+            if (doesMatch) {
+              Object.keys(selected).forEach((key) => select(key, selected[key]));
+            }
+            return doesMatch;
+          }
+          return pattern.length === value.length ? pattern.every((subPattern, i3) => matchPattern(subPattern, value[i3], select)) : false;
+        }
+        if (pattern instanceof Map) {
+          if (!(value instanceof Map))
+            return false;
+          return [...pattern.keys()].every((key) => matchPattern(pattern.get(key), value.get(key), select));
+        }
+        if (pattern instanceof Set) {
+          if (!(value instanceof Set))
+            return false;
+          if (pattern.size === 0)
+            return value.size === 0;
+          if (pattern.size === 1) {
+            const [subPattern] = [...pattern.values()];
+            return Object.values(wildcards_1.__).includes(subPattern) ? matchPattern([subPattern], [...value.values()], select) : value.has(subPattern);
+          }
+          return [...pattern.values()].every((subPattern) => value.has(subPattern));
+        }
+        return Object.keys(pattern).every((k2) => k2 in value && matchPattern(pattern[k2], value[k2], select));
+      }
+      return value === pattern;
+    };
+    function isMatching(...args) {
+      if (args.length === 1) {
+        const [pattern] = args;
+        return (value) => matchPattern(pattern, value, () => {
+        });
+      }
+      if (args.length === 2) {
+        const [pattern, value] = args;
+        return matchPattern(pattern, value, () => {
+        });
+      }
+      throw new Error(`isMatching wasn't given enough arguments: expected 1 or 2, received ${args.length}.`);
+    }
+    exports2.isMatching = isMatching;
+  }
+});
+
+// node_modules/classnames/index.js
+var require_classnames = __commonJS({
+  "node_modules/classnames/index.js"(exports2, module2) {
+    (function() {
+      "use strict";
+      var hasOwn = {}.hasOwnProperty;
+      function classNames8() {
+        var classes = [];
+        for (var i3 = 0; i3 < arguments.length; i3++) {
+          var arg = arguments[i3];
+          if (!arg)
+            continue;
+          var argType = typeof arg;
+          if (argType === "string" || argType === "number") {
+            classes.push(arg);
+          } else if (Array.isArray(arg)) {
+            if (arg.length) {
+              var inner = classNames8.apply(null, arg);
+              if (inner) {
+                classes.push(inner);
+              }
+            }
+          } else if (argType === "object") {
+            if (arg.toString === Object.prototype.toString) {
+              for (var key in arg) {
+                if (hasOwn.call(arg, key) && arg[key]) {
+                  classes.push(key);
+                }
+              }
+            } else {
+              classes.push(arg.toString());
+            }
+          }
+        }
+        return classes.join(" ");
+      }
+      if (typeof module2 !== "undefined" && module2.exports) {
+        classNames8.default = classNames8;
+        module2.exports = classNames8;
+      } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
+        define("classnames", [], function() {
+          return classNames8;
+        });
+      } else {
+        window.classNames = classNames8;
+      }
+    })();
+  }
+});
+
 // node_modules/luxon/build/cjs-browser/luxon.js
 var require_luxon = __commonJS({
   "node_modules/luxon/build/cjs-browser/luxon.js"(exports2) {
@@ -27023,11 +27332,11 @@ var require_luxon = __commonJS({
       for (var _len4 = arguments.length, keys = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         keys[_key4] = arguments[_key4];
       }
-      return function(match7, cursor) {
+      return function(match8, cursor) {
         var ret = {};
         var i3;
         for (i3 = 0; i3 < keys.length; i3++) {
-          ret[keys[i3]] = parseInteger(match7[cursor + i3]);
+          ret[keys[i3]] = parseInteger(match8[cursor + i3]);
         }
         return [ret, null, cursor + i3];
       };
@@ -27044,39 +27353,39 @@ var require_luxon = __commonJS({
     var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
     var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
     var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
-    function int(match7, pos, fallback) {
-      var m2 = match7[pos];
+    function int(match8, pos, fallback) {
+      var m2 = match8[pos];
       return isUndefined(m2) ? fallback : parseInteger(m2);
     }
-    function extractISOYmd(match7, cursor) {
+    function extractISOYmd(match8, cursor) {
       var item = {
-        year: int(match7, cursor),
-        month: int(match7, cursor + 1, 1),
-        day: int(match7, cursor + 2, 1)
+        year: int(match8, cursor),
+        month: int(match8, cursor + 1, 1),
+        day: int(match8, cursor + 2, 1)
       };
       return [item, null, cursor + 3];
     }
-    function extractISOTime(match7, cursor) {
+    function extractISOTime(match8, cursor) {
       var item = {
-        hours: int(match7, cursor, 0),
-        minutes: int(match7, cursor + 1, 0),
-        seconds: int(match7, cursor + 2, 0),
-        milliseconds: parseMillis(match7[cursor + 3])
+        hours: int(match8, cursor, 0),
+        minutes: int(match8, cursor + 1, 0),
+        seconds: int(match8, cursor + 2, 0),
+        milliseconds: parseMillis(match8[cursor + 3])
       };
       return [item, null, cursor + 4];
     }
-    function extractISOOffset(match7, cursor) {
-      var local2 = !match7[cursor] && !match7[cursor + 1], fullOffset = signedOffset(match7[cursor + 1], match7[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
+    function extractISOOffset(match8, cursor) {
+      var local2 = !match8[cursor] && !match8[cursor + 1], fullOffset = signedOffset(match8[cursor + 1], match8[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
       return [{}, zone, cursor + 3];
     }
-    function extractIANAZone(match7, cursor) {
-      var zone = match7[cursor] ? IANAZone.create(match7[cursor]) : null;
+    function extractIANAZone(match8, cursor) {
+      var zone = match8[cursor] ? IANAZone.create(match8[cursor]) : null;
       return [{}, zone, cursor + 1];
     }
     var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$");
     var isoDuration = /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
-    function extractISODuration(match7) {
-      var s3 = match7[0], yearStr = match7[1], monthStr = match7[2], weekStr = match7[3], dayStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], millisecondsStr = match7[8];
+    function extractISODuration(match8) {
+      var s3 = match8[0], yearStr = match8[1], monthStr = match8[2], weekStr = match8[3], dayStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], millisecondsStr = match8[8];
       var hasNegativePrefix = s3[0] === "-";
       var negativeSeconds = secondStr && secondStr[0] === "-";
       var maybeNegate = function maybeNegate2(num, force) {
@@ -27123,8 +27432,8 @@ var require_luxon = __commonJS({
       return result;
     }
     var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
-    function extractRFC2822(match7) {
-      var weekdayStr = match7[1], dayStr = match7[2], monthStr = match7[3], yearStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], obsOffset = match7[8], milOffset = match7[9], offHourStr = match7[10], offMinuteStr = match7[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC2822(match8) {
+      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], obsOffset = match8[8], milOffset = match8[9], offHourStr = match8[10], offMinuteStr = match8[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       var offset2;
       if (obsOffset) {
         offset2 = obsOffsets[obsOffset];
@@ -27141,12 +27450,12 @@ var require_luxon = __commonJS({
     var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/;
     var rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/;
     var ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
-    function extractRFC1123Or850(match7) {
-      var weekdayStr = match7[1], dayStr = match7[2], monthStr = match7[3], yearStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC1123Or850(match8) {
+      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
-    function extractASCII(match7) {
-      var weekdayStr = match7[1], monthStr = match7[2], dayStr = match7[3], hourStr = match7[4], minuteStr = match7[5], secondStr = match7[6], yearStr = match7[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractASCII(match8) {
+      var weekdayStr = match8[1], monthStr = match8[2], dayStr = match8[3], hourStr = match8[4], minuteStr = match8[5], secondStr = match8[6], yearStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
     var isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
@@ -28485,7 +28794,7 @@ var require_luxon = __commonJS({
       }, "");
       return ["^" + re + "$", units];
     }
-    function match6(input, regex, handlers) {
+    function match7(input, regex, handlers) {
       var matches = input.match(regex);
       if (matches) {
         var all = {};
@@ -28615,7 +28924,7 @@ var require_luxon = __commonJS({
           invalidReason: disqualifyingUnit.invalidReason
         };
       } else {
-        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match6(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
+        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match7(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
         if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
           throw new ConflictingSpecificationError("Can't include meridiem when specifying 24-hour format");
         }
@@ -29928,315 +30237,6 @@ var require_luxon = __commonJS({
   }
 });
 
-// node_modules/ts-pattern/lib/symbols.js
-var require_symbols = __commonJS({
-  "node_modules/ts-pattern/lib/symbols.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.AnonymousSelect = exports2.NamedSelect = exports2.Not = exports2.Guard = exports2.PatternKind = void 0;
-    exports2.PatternKind = Symbol("@ts-pattern/pattern-kind");
-    exports2.Guard = Symbol("@ts-pattern/guard");
-    exports2.Not = Symbol("@ts-pattern/not");
-    exports2.NamedSelect = Symbol("@ts-pattern/named-select");
-    exports2.AnonymousSelect = Symbol("@ts-pattern/anonymous-select");
-  }
-});
-
-// node_modules/ts-pattern/lib/guards.js
-var require_guards = __commonJS({
-  "node_modules/ts-pattern/lib/guards.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.instanceOf = exports2.select = exports2.ANONYMOUS_SELECT_KEY = exports2.not = exports2.when = void 0;
-    var symbols = require_symbols();
-    var when = (predicate) => ({
-      [symbols.PatternKind]: symbols.Guard,
-      [symbols.Guard]: predicate
-    });
-    exports2.when = when;
-    var not = (pattern) => ({
-      [symbols.PatternKind]: symbols.Not,
-      [symbols.Not]: pattern
-    });
-    exports2.not = not;
-    exports2.ANONYMOUS_SELECT_KEY = "@ts-pattern/__anonymous-select-key";
-    function select(key) {
-      return key === void 0 ? {
-        [symbols.PatternKind]: symbols.AnonymousSelect
-      } : {
-        [symbols.PatternKind]: symbols.NamedSelect,
-        [symbols.NamedSelect]: key
-      };
-    }
-    exports2.select = select;
-    function isInstanceOf(classConstructor) {
-      return (val) => val instanceof classConstructor;
-    }
-    var instanceOf3 = (classConstructor) => (0, exports2.when)(isInstanceOf(classConstructor));
-    exports2.instanceOf = instanceOf3;
-  }
-});
-
-// node_modules/ts-pattern/lib/wildcards.js
-var require_wildcards = __commonJS({
-  "node_modules/ts-pattern/lib/wildcards.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.__ = void 0;
-    var guards_1 = require_guards();
-    function isUnknown(x3) {
-      return true;
-    }
-    function isNumber(x3) {
-      return typeof x3 === "number";
-    }
-    function numberIsNaN(x3) {
-      return Number.isNaN(x3);
-    }
-    function isString(x3) {
-      return typeof x3 === "string";
-    }
-    function isBoolean(x3) {
-      return typeof x3 === "boolean";
-    }
-    function isNullish(x3) {
-      return x3 === null || x3 === void 0;
-    }
-    var unknownGuard = (0, guards_1.when)(isUnknown);
-    var stringGuard = (0, guards_1.when)(isString);
-    var numberGuard = (0, guards_1.when)(isNumber);
-    var NaNGuard = (0, guards_1.when)(numberIsNaN);
-    var booleanGuard = (0, guards_1.when)(isBoolean);
-    var nullishGuard = (0, guards_1.when)(isNullish);
-    exports2.__ = Object.assign(unknownGuard, {
-      string: stringGuard,
-      number: numberGuard,
-      NaN: NaNGuard,
-      boolean: booleanGuard,
-      nullish: nullishGuard
-    });
-  }
-});
-
-// node_modules/ts-pattern/lib/index.js
-var require_lib = __commonJS({
-  "node_modules/ts-pattern/lib/index.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.isMatching = exports2.match = exports2.instanceOf = exports2.select = exports2.not = exports2.when = exports2.__ = void 0;
-    var symbols = require_symbols();
-    var guards_1 = require_guards();
-    Object.defineProperty(exports2, "when", { enumerable: true, get: function() {
-      return guards_1.when;
-    } });
-    Object.defineProperty(exports2, "not", { enumerable: true, get: function() {
-      return guards_1.not;
-    } });
-    Object.defineProperty(exports2, "select", { enumerable: true, get: function() {
-      return guards_1.select;
-    } });
-    Object.defineProperty(exports2, "instanceOf", { enumerable: true, get: function() {
-      return guards_1.instanceOf;
-    } });
-    var wildcards_1 = require_wildcards();
-    Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
-      return wildcards_1.__;
-    } });
-    var match6 = (value) => builder(value, []);
-    exports2.match = match6;
-    var builder = (value, cases) => {
-      const run = () => {
-        const entry = cases.find(({ test }) => test(value));
-        if (!entry) {
-          let displayedValue;
-          try {
-            displayedValue = JSON.stringify(value);
-          } catch (e) {
-            displayedValue = value;
-          }
-          throw new Error(`Pattern matching error: no pattern matches value ${displayedValue}`);
-        }
-        return entry.handler(entry.select(value), value);
-      };
-      return {
-        with(...args) {
-          const handler = args[args.length - 1];
-          const patterns = [];
-          const predicates = [];
-          for (let i3 = 0; i3 < args.length - 1; i3++) {
-            const arg = args[i3];
-            if (typeof arg === "function") {
-              predicates.push(arg);
-            } else {
-              patterns.push(arg);
-            }
-          }
-          let selected = {};
-          const doesMatch = (value2) => Boolean(patterns.some((pattern) => matchPattern(pattern, value2, (key, value3) => {
-            selected[key] = value3;
-          })) && predicates.every((predicate) => predicate(value2)));
-          return builder(value, cases.concat([
-            {
-              test: doesMatch,
-              handler,
-              select: (value2) => Object.keys(selected).length ? selected[guards_1.ANONYMOUS_SELECT_KEY] !== void 0 ? selected[guards_1.ANONYMOUS_SELECT_KEY] : selected : value2
-            }
-          ]));
-        },
-        when: (predicate, handler) => builder(value, cases.concat([
-          {
-            test: predicate,
-            handler,
-            select: (value2) => value2
-          }
-        ])),
-        otherwise: (handler) => builder(value, cases.concat([
-          {
-            test: () => true,
-            handler,
-            select: (value2) => value2
-          }
-        ])).run(),
-        exhaustive: () => run(),
-        run
-      };
-    };
-    var isObject = (value) => Boolean(value && typeof value === "object");
-    var isGuardPattern = (x3) => {
-      const pattern = x3;
-      return pattern && pattern[symbols.PatternKind] === symbols.Guard;
-    };
-    var isNotPattern = (x3) => {
-      const pattern = x3;
-      return pattern && pattern[symbols.PatternKind] === symbols.Not;
-    };
-    var isNamedSelectPattern = (x3) => {
-      const pattern = x3;
-      return pattern && pattern[symbols.PatternKind] === symbols.NamedSelect;
-    };
-    var isAnonymousSelectPattern = (x3) => {
-      const pattern = x3;
-      return pattern && pattern[symbols.PatternKind] === symbols.AnonymousSelect;
-    };
-    var matchPattern = (pattern, value, select) => {
-      if (isObject(pattern)) {
-        if (isGuardPattern(pattern))
-          return Boolean(pattern[symbols.Guard](value));
-        if (isNamedSelectPattern(pattern)) {
-          select(pattern[symbols.NamedSelect], value);
-          return true;
-        }
-        if (isAnonymousSelectPattern(pattern)) {
-          select(guards_1.ANONYMOUS_SELECT_KEY, value);
-          return true;
-        }
-        if (isNotPattern(pattern))
-          return !matchPattern(pattern[symbols.Not], value, select);
-        if (!isObject(value))
-          return false;
-        if (Array.isArray(pattern)) {
-          if (!Array.isArray(value))
-            return false;
-          if (pattern.length === 1) {
-            const selected = {};
-            const listSelect = (key, value2) => {
-              selected[key] = (selected[key] || []).concat([value2]);
-            };
-            const doesMatch = value.every((v) => matchPattern(pattern[0], v, listSelect));
-            if (doesMatch) {
-              Object.keys(selected).forEach((key) => select(key, selected[key]));
-            }
-            return doesMatch;
-          }
-          return pattern.length === value.length ? pattern.every((subPattern, i3) => matchPattern(subPattern, value[i3], select)) : false;
-        }
-        if (pattern instanceof Map) {
-          if (!(value instanceof Map))
-            return false;
-          return [...pattern.keys()].every((key) => matchPattern(pattern.get(key), value.get(key), select));
-        }
-        if (pattern instanceof Set) {
-          if (!(value instanceof Set))
-            return false;
-          if (pattern.size === 0)
-            return value.size === 0;
-          if (pattern.size === 1) {
-            const [subPattern] = [...pattern.values()];
-            return Object.values(wildcards_1.__).includes(subPattern) ? matchPattern([subPattern], [...value.values()], select) : value.has(subPattern);
-          }
-          return [...pattern.values()].every((subPattern) => value.has(subPattern));
-        }
-        return Object.keys(pattern).every((k2) => k2 in value && matchPattern(pattern[k2], value[k2], select));
-      }
-      return value === pattern;
-    };
-    function isMatching(...args) {
-      if (args.length === 1) {
-        const [pattern] = args;
-        return (value) => matchPattern(pattern, value, () => {
-        });
-      }
-      if (args.length === 2) {
-        const [pattern, value] = args;
-        return matchPattern(pattern, value, () => {
-        });
-      }
-      throw new Error(`isMatching wasn't given enough arguments: expected 1 or 2, received ${args.length}.`);
-    }
-    exports2.isMatching = isMatching;
-  }
-});
-
-// node_modules/classnames/index.js
-var require_classnames = __commonJS({
-  "node_modules/classnames/index.js"(exports2, module2) {
-    (function() {
-      "use strict";
-      var hasOwn = {}.hasOwnProperty;
-      function classNames8() {
-        var classes = [];
-        for (var i3 = 0; i3 < arguments.length; i3++) {
-          var arg = arguments[i3];
-          if (!arg)
-            continue;
-          var argType = typeof arg;
-          if (argType === "string" || argType === "number") {
-            classes.push(arg);
-          } else if (Array.isArray(arg)) {
-            if (arg.length) {
-              var inner = classNames8.apply(null, arg);
-              if (inner) {
-                classes.push(inner);
-              }
-            }
-          } else if (argType === "object") {
-            if (arg.toString === Object.prototype.toString) {
-              for (var key in arg) {
-                if (hasOwn.call(arg, key) && arg[key]) {
-                  classes.push(key);
-                }
-              }
-            } else {
-              classes.push(arg.toString());
-            }
-          }
-        }
-        return classes.join(" ");
-      }
-      if (typeof module2 !== "undefined" && module2.exports) {
-        classNames8.default = classNames8;
-        module2.exports = classNames8;
-      } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
-        define("classnames", [], function() {
-          return classNames8;
-        });
-      } else {
-        window.classNames = classNames8;
-      }
-    })();
-  }
-});
-
 // src/dev/ContentList.tsx
 var import_react25 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
@@ -30982,10 +30982,10 @@ function getLocation(source, position) {
   var lineRegexp = /\r\n|[\n\r]/g;
   var line = 1;
   var column = position + 1;
-  var match6;
-  while ((match6 = lineRegexp.exec(source.body)) && match6.index < position) {
+  var match7;
+  while ((match7 = lineRegexp.exec(source.body)) && match7.index < position) {
     line += 1;
-    column = position + 1 - (match6.index + match6[0].length);
+    column = position + 1 - (match7.index + match7[0].length);
   }
   return {
     line,
@@ -36850,143 +36850,127 @@ function Provider6(props) {
 }
 
 // src/modules/Auth/index.tsx
-var import_react9 = __toModule(require_react());
-var AuthUI = (props) => {
-  const { children, user, loading, authForm, setAuthForm, login, logout, showLogout } = props;
-  if (loading) {
-    return /* @__PURE__ */ import_react9.default.createElement("div", null, "Loading...");
-  }
-  if (!user) {
-    return /* @__PURE__ */ import_react9.default.createElement("div", {
-      className: "flex flex-col items-center justify-center bg-white h-full"
-    }, /* @__PURE__ */ import_react9.default.createElement("h2", null, "Aiera"), /* @__PURE__ */ import_react9.default.createElement("form", {
-      className: "flex flex-col items-center justify-center",
-      action: "#",
-      onSubmit: login
-    }, /* @__PURE__ */ import_react9.default.createElement("div", {
-      className: "m-3"
-    }, /* @__PURE__ */ import_react9.default.createElement("label", {
-      className: "inline-block w-24 text-right mr-4",
-      htmlFor: "email"
-    }, "Email"), /* @__PURE__ */ import_react9.default.createElement("input", {
-      id: "email",
-      className: "rounded border border-gray-400",
-      type: "text",
-      "data-testid": "auth-email",
-      value: authForm.email,
-      onChange: (e) => setAuthForm(__spreadProps(__spreadValues({}, authForm), { email: e.target.value }))
-    })), /* @__PURE__ */ import_react9.default.createElement("div", {
-      className: "mb-4"
-    }, /* @__PURE__ */ import_react9.default.createElement("label", {
-      className: "inline-block w-24 text-right mr-4",
-      htmlFor: "password"
-    }, "Password"), /* @__PURE__ */ import_react9.default.createElement("input", {
-      id: "password",
-      className: "border border-gray-400 rounded",
-      type: "password",
-      "data-testid": "auth-password",
-      value: authForm.password,
-      onChange: (e) => setAuthForm(__spreadProps(__spreadValues({}, authForm), { password: e.target.value }))
-    })), /* @__PURE__ */ import_react9.default.createElement("button", {
-      className: "px-1 ml-2 text-white bg-blue-500 rounded",
-      type: "submit"
-    }, "Login")));
-  }
-  return /* @__PURE__ */ import_react9.default.createElement("div", {
-    className: "h-full"
-  }, (showLogout || !children) && /* @__PURE__ */ import_react9.default.createElement("div", {
-    className: "h-6"
-  }, "Logged in as ", user.firstName, " ", user.lastName, /* @__PURE__ */ import_react9.default.createElement("button", {
-    className: "px-1 ml-2 text-white bg-blue-500 rounded",
-    onClick: logout
-  }, "Logout")), children && /* @__PURE__ */ import_react9.default.createElement("div", {
-    className: "h-full pb-6"
-  }, children));
-};
-var Auth = ({
-  children,
-  config = defaultTokenAuthConfig,
-  showLogout = false
-}) => {
-  var _a;
-  const initialAuthform = { email: "", password: "" };
-  const [authForm, setAuthForm] = (0, import_react9.useState)(initialAuthform);
-  const [result, refetch] = useQuery({
-    query: lib_default`
-            query CurrentUser {
-                currentUser {
-                    id
-                    firstName
-                    lastName
-                }
-            }
-        `
-  });
-  const [_2, loginMutation] = useMutation(lib_default`
-        mutation Login($email: String!, $password: String!) {
-            login(email: $email, password: $password) {
-                accessToken
-                refreshToken
-            }
-        }
-    `);
-  const { reset } = useClient2();
-  const login = (event) => __async(void 0, null, function* () {
-    event.preventDefault();
-    return loginMutation(authForm).then((resp) => __async(void 0, null, function* () {
-      var _a2;
-      if ((_a2 = resp.data) == null ? void 0 : _a2.login) {
-        yield config.writeAuth(resp.data.login);
-        refetch({ requestPolicy: "cache-and-network" });
-      }
-    }));
-  });
-  const logout = () => __async(void 0, null, function* () {
-    yield config.clearAuth();
-    setAuthForm(initialAuthform);
-    reset();
-  });
-  return /* @__PURE__ */ import_react9.default.createElement(AuthUI, {
-    user: (_a = result.data) == null ? void 0 : _a.currentUser,
-    loading: result.fetching,
-    error: result.error,
-    authForm,
-    setAuthForm,
-    login,
-    logout,
-    showLogout
-  }, children);
-};
+var import_react13 = __toModule(require_react());
+var import_ts_pattern2 = __toModule(require_lib());
 
-// src/modules/ContentList/index.tsx
-var import_react24 = __toModule(require_react());
-var import_luxon2 = __toModule(require_luxon());
-
-// src/components/CompanyFilterButton/index.tsx
-var import_react20 = __toModule(require_react());
-var import_ts_pattern3 = __toModule(require_lib());
-var import_classnames5 = __toModule(require_classnames());
-
-// src/lib/hooks/useEventListener/index.ts
+// src/components/Input/index.tsx
 var import_react10 = __toModule(require_react());
-function useWindowListener(eventName, handler) {
-  const savedHandler = (0, import_react10.useRef)();
-  (0, import_react10.useEffect)(() => {
-    savedHandler.current = handler;
-    const eventListener = (event) => {
-      if (!!(savedHandler == null ? void 0 : savedHandler.current)) {
-        savedHandler.current(event);
-      }
-    };
-    window.addEventListener(eventName, eventListener);
-    return () => {
-      window.removeEventListener(eventName, eventListener);
-    };
-  }, [eventName, handler]);
+var import_classnames2 = __toModule(require_classnames());
+
+// src/components/Svg/Close.tsx
+var import_react9 = __toModule(require_react());
+var import_classnames = __toModule(require_classnames());
+function Close({ className, alt = "Close" }) {
+  return /* @__PURE__ */ import_react9.default.createElement("svg", {
+    className: (0, import_classnames.default)(className, "fill-current", "Svg", "Svg__close"),
+    width: "100%",
+    viewBox: "0 0 16 16",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react9.default.createElement("title", null, alt), /* @__PURE__ */ import_react9.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16ZM6.707 5.293C6.5184 5.11084 6.2658 5.01005 6.0036 5.01233C5.7414 5.0146 5.49059 5.11977 5.30518 5.30518C5.11977 5.49059 5.0146 5.7414 5.01233 6.0036C5.01005 6.2658 5.11084 6.5184 5.293 6.707L6.586 8L5.293 9.293C5.19749 9.38525 5.12131 9.49559 5.0689 9.6176C5.01649 9.7396 4.9889 9.87082 4.98775 10.0036C4.9866 10.1364 5.0119 10.2681 5.06218 10.391C5.11246 10.5139 5.18671 10.6255 5.2806 10.7194C5.3745 10.8133 5.48615 10.8875 5.60905 10.9378C5.73194 10.9881 5.86362 11.0134 5.9964 11.0123C6.12918 11.0111 6.2604 10.9835 6.3824 10.9311C6.50441 10.8787 6.61475 10.8025 6.707 10.707L8 9.414L9.293 10.707C9.4816 10.8892 9.7342 10.99 9.9964 10.9877C10.2586 10.9854 10.5094 10.8802 10.6948 10.6948C10.8802 10.5094 10.9854 10.2586 10.9877 9.9964C10.99 9.7342 10.8892 9.4816 10.707 9.293L9.414 8L10.707 6.707C10.8892 6.5184 10.99 6.2658 10.9877 6.0036C10.9854 5.7414 10.8802 5.49059 10.6948 5.30518C10.5094 5.11977 10.2586 5.0146 9.9964 5.01233C9.7342 5.01005 9.4816 5.11084 9.293 5.293L8 6.586L6.707 5.293Z"
+  }));
+}
+
+// src/components/Input/index.tsx
+function InputUI(props) {
+  const {
+    inputRef,
+    autoFocus,
+    icon,
+    id,
+    clearable,
+    clear,
+    placeholder,
+    onChange,
+    onFocus,
+    value,
+    name,
+    className = "",
+    type
+  } = props;
+  return /* @__PURE__ */ import_react10.default.createElement("div", {
+    className: `group h-8 items-center w-full relative ${className} input__${name}`
+  }, import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
+    className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
+  }, import_react10.default.cloneElement(icon, {
+    className: "group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4"
+  })), /* @__PURE__ */ import_react10.default.createElement("input", {
+    id,
+    ref: inputRef,
+    autoFocus,
+    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400", { "pl-7": !!icon, "pl-3": !icon }),
+    onChange,
+    onFocus,
+    placeholder,
+    value,
+    type
+  }), clearable && value && /* @__PURE__ */ import_react10.default.createElement("div", {
+    className: "h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700",
+    onClick: clear
+  }, /* @__PURE__ */ import_react10.default.createElement(Close, null)));
+}
+function Input(props) {
+  const {
+    inputRef,
+    autoFocus = false,
+    icon,
+    id,
+    clearable = true,
+    placeholder,
+    onChange,
+    onFocus,
+    value,
+    name,
+    className,
+    type = "text"
+  } = props;
+  return /* @__PURE__ */ import_react10.default.createElement(InputUI, {
+    autoFocus,
+    clearable,
+    clear: (0, import_react10.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
+    icon,
+    id,
+    placeholder,
+    onChange: (0, import_react10.useCallback)((event) => {
+      var _a;
+      return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
+    }, [onChange]),
+    inputRef,
+    onFocus,
+    value,
+    className,
+    name,
+    type
+  });
+}
+
+// src/components/Button/index.tsx
+var import_react11 = __toModule(require_react());
+var import_ts_pattern = __toModule(require_lib());
+function ButtonUI(props) {
+  const { children, onClick, className = "", kind = "default", type } = props;
+  const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white").with("secondary", () => "border-[1px] border-gray-300 hover:border-gray-400 active:bg-gray-400 active:text-white").with("default", () => "bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
+  return /* @__PURE__ */ import_react11.default.createElement("button", {
+    tabIndex: 0,
+    className: `group flex h-8 items-center px-2.5 font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`,
+    onClick,
+    type
+  }, children);
+}
+function Button(props) {
+  const { children, onClick, className, kind, type } = props;
+  return /* @__PURE__ */ import_react11.default.createElement(ButtonUI, {
+    onClick,
+    kind,
+    className,
+    type
+  }, children);
 }
 
 // src/lib/hooks/useChangeHandlers/index.ts
-var import_react11 = __toModule(require_react());
+var import_react12 = __toModule(require_react());
 
 // src/types/generated.ts
 var BasicTextualSentiment;
@@ -37347,16 +37331,16 @@ var LatestParagraphsDocument = lib_default`
 
 // src/lib/hooks/useChangeHandlers/index.ts
 function useChangeHandlers(initialState) {
-  const [state, setState] = (0, import_react11.useState)(initialState);
+  const [state, setState] = (0, import_react12.useState)(initialState);
   const handlers = {};
-  const mergeState = (0, import_react11.useCallback)((newState) => setState((prevState) => {
+  const mergeState = (0, import_react12.useCallback)((newState) => setState((prevState) => {
     if (typeof newState === "function") {
       return __spreadValues(__spreadValues({}, prevState), newState(prevState));
     }
     return __spreadValues(__spreadValues({}, prevState), newState);
   }), [setState]);
   for (const key in state) {
-    handlers[key] = (0, import_react11.useCallback)((_2, change) => mergeState({ [key]: change.value }), [state]);
+    handlers[key] = (0, import_react12.useCallback)((_2, change) => mergeState({ [key]: change.value }), [state]);
   }
   return {
     state,
@@ -37366,29 +37350,193 @@ function useChangeHandlers(initialState) {
   };
 }
 
-// src/components/Tooltip/index.tsx
+// src/modules/Auth/index.tsx
+var AuthUI = (props) => {
+  const {
+    children,
+    user,
+    loading,
+    login,
+    logout,
+    loginState,
+    showLogout,
+    email,
+    onChangeEmail,
+    password,
+    onChangePassword
+  } = props;
+  if (loading) {
+    return /* @__PURE__ */ import_react13.default.createElement("div", null, "Loading...");
+  }
+  if (!user) {
+    return /* @__PURE__ */ import_react13.default.createElement("div", {
+      className: "flex flex-col items-center justify-center bg-white h-full"
+    }, /* @__PURE__ */ import_react13.default.createElement("h2", null, "Aiera"), /* @__PURE__ */ import_react13.default.createElement("form", {
+      className: "flex flex-col items-center justify-center mt-4",
+      action: "#",
+      onSubmit: login
+    }, /* @__PURE__ */ import_react13.default.createElement("div", {
+      className: "flex w-full m-2"
+    }, /* @__PURE__ */ import_react13.default.createElement("label", {
+      className: "flex-1 text-right mr-4",
+      htmlFor: "email"
+    }, "Email"), /* @__PURE__ */ import_react13.default.createElement(Input, {
+      className: "w-44",
+      id: "email",
+      name: "email",
+      placeholder: "email",
+      value: email,
+      onChange: onChangeEmail
+    })), /* @__PURE__ */ import_react13.default.createElement("div", {
+      className: "flex w-full m-3 mb-4"
+    }, /* @__PURE__ */ import_react13.default.createElement("label", {
+      className: "flex-1 text-right mr-4",
+      htmlFor: "password"
+    }, "Password"), /* @__PURE__ */ import_react13.default.createElement(Input, {
+      className: "w-44",
+      id: "password",
+      name: "password",
+      type: "password",
+      placeholder: "password",
+      value: password,
+      onChange: onChangePassword
+    })), (0, import_ts_pattern2.match)(loginState).with("none", "error", () => {
+      return /* @__PURE__ */ import_react13.default.createElement(Button, {
+        kind: "primary",
+        type: "submit"
+      }, "Login");
+    }).with("loading", () => {
+      return /* @__PURE__ */ import_react13.default.createElement(Button, {
+        kind: "primary"
+      }, "Logging in...");
+    }).exhaustive()));
+  }
+  return /* @__PURE__ */ import_react13.default.createElement("div", {
+    className: "h-full"
+  }, (showLogout || !children) && /* @__PURE__ */ import_react13.default.createElement("div", {
+    className: "h-6"
+  }, "Logged in as ", user.firstName, " ", user.lastName, /* @__PURE__ */ import_react13.default.createElement("button", {
+    className: "px-1 ml-2 text-white bg-blue-500 rounded",
+    onClick: logout
+  }, "Logout")), children && /* @__PURE__ */ import_react13.default.createElement("div", {
+    className: "h-full pb-6"
+  }, children));
+};
+var Auth = ({
+  children,
+  config = defaultTokenAuthConfig,
+  showLogout = false
+}) => {
+  var _a;
+  const initialAuthform = { email: "", password: "" };
+  const { state, mergeState, handlers } = useChangeHandlers(initialAuthform);
+  const [loginState, setLoginState] = (0, import_react13.useState)("none");
+  const [result, refetch] = useQuery({
+    query: lib_default`
+            query CurrentUser {
+                currentUser {
+                    id
+                    firstName
+                    lastName
+                }
+            }
+        `
+  });
+  const [_2, loginMutation] = useMutation(lib_default`
+        mutation Login($email: String!, $password: String!) {
+            login(email: $email, password: $password) {
+                accessToken
+                refreshToken
+            }
+        }
+    `);
+  const { reset } = useClient2();
+  const login = (event) => __async(void 0, null, function* () {
+    event.preventDefault();
+    setLoginState("loading");
+    return loginMutation(state).then((resp) => __async(void 0, null, function* () {
+      var _a2;
+      if ((_a2 = resp.data) == null ? void 0 : _a2.login) {
+        yield config.writeAuth(resp.data.login);
+        refetch({ requestPolicy: "cache-and-network" });
+        setLoginState("none");
+      } else {
+        throw new Error("Error logging in");
+      }
+    })).catch((_e) => {
+      setLoginState("error");
+    });
+  });
+  const logout = () => __async(void 0, null, function* () {
+    yield config.clearAuth();
+    mergeState(initialAuthform);
+    reset();
+  });
+  return /* @__PURE__ */ import_react13.default.createElement(AuthUI, {
+    user: (_a = result.data) == null ? void 0 : _a.currentUser,
+    loading: result.fetching,
+    error: result.error,
+    email: state.email,
+    onChangeEmail: handlers.email,
+    password: state.password,
+    onChangePassword: handlers.password,
+    login,
+    logout,
+    showLogout,
+    loginState
+  }, children);
+};
+
+// src/modules/ContentList/index.tsx
+var import_react24 = __toModule(require_react());
+var import_luxon2 = __toModule(require_luxon());
+
+// src/components/CompanyFilterButton/index.tsx
+var import_react20 = __toModule(require_react());
+var import_ts_pattern4 = __toModule(require_lib());
+var import_classnames5 = __toModule(require_classnames());
+
+// src/lib/hooks/useEventListener/index.ts
 var import_react14 = __toModule(require_react());
-var import_ts_pattern = __toModule(require_lib());
+function useWindowListener(eventName, handler) {
+  const savedHandler = (0, import_react14.useRef)();
+  (0, import_react14.useEffect)(() => {
+    savedHandler.current = handler;
+    const eventListener = (event) => {
+      if (!!(savedHandler == null ? void 0 : savedHandler.current)) {
+        savedHandler.current(event);
+      }
+    };
+    window.addEventListener(eventName, eventListener);
+    return () => {
+      window.removeEventListener(eventName, eventListener);
+    };
+  }, [eventName, handler]);
+}
+
+// src/components/Tooltip/index.tsx
+var import_react17 = __toModule(require_react());
+var import_ts_pattern3 = __toModule(require_lib());
 
 // src/lib/hooks/useDelayCallback/index.ts
-var import_react12 = __toModule(require_react());
+var import_react15 = __toModule(require_react());
 function useDelayCallback(callback, delay = 0, deps = void 0, existing = "cancel") {
-  const ref = (0, import_react12.useRef)(null);
-  (0, import_react12.useEffect)(() => {
+  const ref = (0, import_react15.useRef)(null);
+  (0, import_react15.useEffect)(() => {
     return () => {
       if (ref.current) {
         window.clearTimeout(ref.current);
       }
     };
   }, []);
-  const cancel = (0, import_react12.useCallback)(() => {
+  const cancel = (0, import_react15.useCallback)(() => {
     if (ref.current) {
       window.clearTimeout(ref.current);
       ref.current = null;
     }
   }, []);
   return [
-    (0, import_react12.useCallback)((...args) => {
+    (0, import_react15.useCallback)((...args) => {
       if (ref.current && existing === "cancel") {
         window.clearTimeout(ref.current);
         ref.current = null;
@@ -37401,9 +37549,9 @@ function useDelayCallback(callback, delay = 0, deps = void 0, existing = "cancel
 }
 
 // src/lib/hooks/useOutsideClickHandler/index.ts
-var import_react13 = __toModule(require_react());
+var import_react16 = __toModule(require_react());
 function useOutsideClickHandler(refs, outsideClickHandler) {
-  return (0, import_react13.useEffect)(() => {
+  return (0, import_react16.useEffect)(() => {
     const handler = (event) => {
       if ((event == null ? void 0 : event.target) instanceof Node) {
         const isInside = refs.some((ref) => {
@@ -37445,15 +37593,15 @@ function TooltipUI(props) {
     const render = children;
     target = render({ hideTooltip, showTooltip });
   }
-  return /* @__PURE__ */ import_react14.default.createElement(import_react14.default.Fragment, null, modal && visible && /* @__PURE__ */ import_react14.default.createElement("div", {
+  return /* @__PURE__ */ import_react17.default.createElement(import_react17.default.Fragment, null, modal && visible && /* @__PURE__ */ import_react17.default.createElement("div", {
     className: "fixed z-20 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal"
-  }), /* @__PURE__ */ import_react14.default.createElement("div", {
+  }), /* @__PURE__ */ import_react17.default.createElement("div", {
     className: `tooltip ${className}`,
     onClick: onTargetClick,
     onMouseEnter: onTargetMouseEnter,
     onMouseLeave: onTargetMouseLeave,
     ref: targetRef
-  }, target), visible && /* @__PURE__ */ import_react14.default.createElement("div", {
+  }, target), visible && /* @__PURE__ */ import_react17.default.createElement("div", {
     className: "fixed z-30 tooltip__content",
     style: { top, left, bottom, right, width },
     ref: tooltipRef
@@ -37468,7 +37616,7 @@ function getTooltipPosition({
   xOffset = 0,
   yOffset = 0
 }) {
-  const anchorType = (0, import_ts_pattern.match)(grow).with("down-right", () => ({
+  const anchorType = (0, import_ts_pattern3.match)(grow).with("down-right", () => ({
     y: "top",
     x: "left"
   })).with("up-right", () => ({
@@ -37488,7 +37636,7 @@ function getTooltipPosition({
     if (matchWidth) {
       width = rect.width;
     }
-    anchorPoint = (0, import_ts_pattern.match)(position).with("top-left", () => ({
+    anchorPoint = (0, import_ts_pattern3.match)(position).with("top-left", () => ({
       y: anchorType.y === "top" ? rect.top : window.innerHeight - rect.top,
       x: anchorType.x === "left" ? rect.left : window.innerWidth - rect.left
     })).with("bottom-left", () => ({
@@ -37537,9 +37685,9 @@ function Tooltip(props) {
   if (closeOn === void 0) {
     closeOn = openOn;
   }
-  const tooltipRef = (0, import_react14.useRef)(null);
-  const targetRef = (0, import_react14.useRef)(null);
-  const [state, setState] = (0, import_react14.useState)({ visible: false });
+  const tooltipRef = (0, import_react17.useRef)(null);
+  const targetRef = (0, import_react17.useRef)(null);
+  const [state, setState] = (0, import_react17.useState)({ visible: false });
   const [delayedShowTooltip, cancelShow] = useDelayCallback((position2) => {
     setState((s2) => __spreadProps(__spreadValues({}, s2), { position: position2, visible: true }));
     if (onOpen)
@@ -37550,7 +37698,7 @@ function Tooltip(props) {
     if (onClose)
       onClose();
   }, closeDelay, [onClose]);
-  const showTooltip = (0, import_react14.useCallback)((event) => {
+  const showTooltip = (0, import_react17.useCallback)((event) => {
     if (!event || event.type === "mouseenter" && openOn === "hover" || event.type === "click" && openOn === "click") {
       cancelHide();
       delayedShowTooltip(getTooltipPosition({
@@ -37564,18 +37712,18 @@ function Tooltip(props) {
       }));
     }
   }, [cancelHide, delayedShowTooltip, openOn, matchWidth, position, grow, targetRef == null ? void 0 : targetRef.current, xOffset, yOffset]);
-  const hideTooltip = (0, import_react14.useCallback)((event) => {
+  const hideTooltip = (0, import_react17.useCallback)((event) => {
     if (!event || event.type === "mouseleave" && closeOn === "hover" || event.type === "click" && closeOn === "click") {
       cancelShow();
       delayedHideTooltip();
     }
   }, [cancelShow, delayedHideTooltip, closeOn]);
-  useOutsideClickHandler([tooltipRef, targetRef], (0, import_react14.useCallback)(() => {
+  useOutsideClickHandler([tooltipRef, targetRef], (0, import_react17.useCallback)(() => {
     if (closeOn && ["hover", "click"].includes(closeOn)) {
       hideTooltip();
     }
   }, [closeOn, hideTooltip]));
-  (0, import_react14.useEffect)(() => {
+  (0, import_react17.useEffect)(() => {
     if (hideOnDocumentScroll) {
       document.addEventListener("scroll", delayedHideTooltip, true);
     }
@@ -37586,7 +37734,7 @@ function Tooltip(props) {
       hideTooltip();
     }
   });
-  return /* @__PURE__ */ import_react14.default.createElement(TooltipUI, {
+  return /* @__PURE__ */ import_react17.default.createElement(TooltipUI, {
     className,
     content,
     targetRef,
@@ -37599,112 +37747,6 @@ function Tooltip(props) {
     showTooltip,
     tooltipRef,
     visible: state.visible
-  }, children);
-}
-
-// src/components/Input/index.tsx
-var import_react16 = __toModule(require_react());
-var import_classnames2 = __toModule(require_classnames());
-
-// src/components/Svg/Close.tsx
-var import_react15 = __toModule(require_react());
-var import_classnames = __toModule(require_classnames());
-function Close({ className, alt = "Close" }) {
-  return /* @__PURE__ */ import_react15.default.createElement("svg", {
-    className: (0, import_classnames.default)(className, "fill-current", "Svg", "Svg__close"),
-    width: "100%",
-    viewBox: "0 0 16 16",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react15.default.createElement("title", null, alt), /* @__PURE__ */ import_react15.default.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16ZM6.707 5.293C6.5184 5.11084 6.2658 5.01005 6.0036 5.01233C5.7414 5.0146 5.49059 5.11977 5.30518 5.30518C5.11977 5.49059 5.0146 5.7414 5.01233 6.0036C5.01005 6.2658 5.11084 6.5184 5.293 6.707L6.586 8L5.293 9.293C5.19749 9.38525 5.12131 9.49559 5.0689 9.6176C5.01649 9.7396 4.9889 9.87082 4.98775 10.0036C4.9866 10.1364 5.0119 10.2681 5.06218 10.391C5.11246 10.5139 5.18671 10.6255 5.2806 10.7194C5.3745 10.8133 5.48615 10.8875 5.60905 10.9378C5.73194 10.9881 5.86362 11.0134 5.9964 11.0123C6.12918 11.0111 6.2604 10.9835 6.3824 10.9311C6.50441 10.8787 6.61475 10.8025 6.707 10.707L8 9.414L9.293 10.707C9.4816 10.8892 9.7342 10.99 9.9964 10.9877C10.2586 10.9854 10.5094 10.8802 10.6948 10.6948C10.8802 10.5094 10.9854 10.2586 10.9877 9.9964C10.99 9.7342 10.8892 9.4816 10.707 9.293L9.414 8L10.707 6.707C10.8892 6.5184 10.99 6.2658 10.9877 6.0036C10.9854 5.7414 10.8802 5.49059 10.6948 5.30518C10.5094 5.11977 10.2586 5.0146 9.9964 5.01233C9.7342 5.01005 9.4816 5.11084 9.293 5.293L8 6.586L6.707 5.293Z"
-  }));
-}
-
-// src/components/Input/index.tsx
-function InputUI(props) {
-  const {
-    inputRef,
-    autoFocus,
-    icon,
-    clearable,
-    clear,
-    placeholder,
-    onChange,
-    onFocus,
-    value,
-    name,
-    className = ""
-  } = props;
-  return /* @__PURE__ */ import_react16.default.createElement("div", {
-    className: `group h-8 items-center w-full relative ${className} input__${name}`
-  }, import_react16.default.isValidElement(icon) && /* @__PURE__ */ import_react16.default.createElement("div", {
-    className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
-  }, import_react16.default.cloneElement(icon, {
-    className: "group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4"
-  })), /* @__PURE__ */ import_react16.default.createElement("input", {
-    ref: inputRef,
-    autoFocus,
-    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400", { "pl-7": !!icon, "pl-3": !icon }),
-    onChange,
-    onFocus,
-    placeholder,
-    value
-  }), clearable && value && /* @__PURE__ */ import_react16.default.createElement("div", {
-    className: "h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700",
-    onClick: clear
-  }, /* @__PURE__ */ import_react16.default.createElement(Close, null)));
-}
-function Input(props) {
-  const {
-    inputRef,
-    autoFocus = false,
-    icon,
-    clearable = true,
-    placeholder,
-    onChange,
-    onFocus,
-    value,
-    name,
-    className
-  } = props;
-  return /* @__PURE__ */ import_react16.default.createElement(InputUI, {
-    autoFocus,
-    clearable,
-    clear: (0, import_react16.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
-    icon,
-    placeholder,
-    onChange: (0, import_react16.useCallback)((event) => {
-      var _a;
-      return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
-    }, [onChange]),
-    inputRef,
-    onFocus,
-    value,
-    className,
-    name
-  });
-}
-
-// src/components/Button/index.tsx
-var import_react17 = __toModule(require_react());
-var import_ts_pattern2 = __toModule(require_lib());
-function ButtonUI(props) {
-  const { children, onClick, className = "", kind = "default" } = props;
-  const buttonStyle = (0, import_ts_pattern2.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white").with("secondary", () => "border-[1px] border-gray-300 hover:border-gray-400 active:bg-gray-400 active:text-white").with("default", () => "bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
-  return /* @__PURE__ */ import_react17.default.createElement("button", {
-    tabIndex: 0,
-    className: `group flex h-8 items-center px-2.5 font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`,
-    onClick
-  }, children);
-}
-function Button(props) {
-  const { children, onClick, className, kind } = props;
-  return /* @__PURE__ */ import_react17.default.createElement(ButtonUI, {
-    onClick,
-    kind,
-    className
   }, children);
 }
 
@@ -37779,7 +37821,7 @@ function TooltipContentUI(props) {
   })), /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "flex flex-col max-h-[270px] min-h-[80px] overflow-y-scroll",
     ref: scrollRef
-  }, (0, import_ts_pattern3.match)(companiesQuery).with({ status: "loading" }, () => wrapMsg("Loading...")).with({ status: "paused" }, () => wrapMsg("Type to search...")).with({ status: "error" }, () => wrapMsg("There was an error searching.")).with({ status: "empty" }, () => wrapMsg("No results.")).with({ status: "success" }, ({ data: { companies } }) => /* @__PURE__ */ import_react20.default.createElement("div", {
+  }, (0, import_ts_pattern4.match)(companiesQuery).with({ status: "loading" }, () => wrapMsg("Loading...")).with({ status: "paused" }, () => wrapMsg("Type to search...")).with({ status: "error" }, () => wrapMsg("There was an error searching.")).with({ status: "empty" }, () => wrapMsg("No results.")).with({ status: "success" }, ({ data: { companies } }) => /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "flex-1"
   }, companies.map((company, index) => {
     var _a;
@@ -37814,9 +37856,9 @@ function TooltipContent(props) {
   const { hideTooltip, companiesQuery, selectedIndex, selectIndex, onChange, setState } = props;
   useWindowListener("keydown", (event) => {
     const key = event == null ? void 0 : event.key;
-    (0, import_ts_pattern3.match)(companiesQuery).with({ status: "success" }, ({ data: { companies } }) => {
+    (0, import_ts_pattern4.match)(companiesQuery).with({ status: "success" }, ({ data: { companies } }) => {
       if (companies.length > 0) {
-        (0, import_ts_pattern3.match)(key).with("Tab", () => {
+        (0, import_ts_pattern4.match)(key).with("Tab", () => {
           event.preventDefault();
           event.stopPropagation();
           if (event.shiftKey) {
@@ -37946,10 +37988,10 @@ function CompanyFilterButton(props) {
 // src/components/Tabs/index.tsx
 var import_react21 = __toModule(require_react());
 var import_classnames6 = __toModule(require_classnames());
-var import_ts_pattern4 = __toModule(require_lib());
+var import_ts_pattern5 = __toModule(require_lib());
 var TabsUI = (props) => {
   const { onChange, options = [], value, kind = "button", className = "", setFocus } = props;
-  const getClasses = (val) => (0, import_ts_pattern4.match)(kind).with("button", () => (0, import_classnames6.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val) => (0, import_ts_pattern5.match)(kind).with("button", () => (0, import_classnames6.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
@@ -38005,7 +38047,7 @@ var Tabs = (props) => {
 // src/modules/Content/index.tsx
 var import_react23 = __toModule(require_react());
 var import_luxon = __toModule(require_luxon());
-var import_ts_pattern5 = __toModule(require_lib());
+var import_ts_pattern6 = __toModule(require_lib());
 
 // src/components/Svg/ArrowLeft.tsx
 var import_react22 = __toModule(require_react());
@@ -38059,7 +38101,7 @@ function ContentUI(props) {
     className: "flex flex-col pl-3 pr-3 pt-3 shadow-3xl content__header"
   }, /* @__PURE__ */ import_react23.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, (0, import_ts_pattern5.match)(contentType).with(ContentType2.news, () => /* @__PURE__ */ import_react23.default.createElement(import_react23.default.Fragment, null, onBack && backButton(ContentType2.news), /* @__PURE__ */ import_react23.default.createElement(Input, {
+  }, (0, import_ts_pattern6.match)(contentType).with(ContentType2.news, () => /* @__PURE__ */ import_react23.default.createElement(import_react23.default.Fragment, null, onBack && backButton(ContentType2.news), /* @__PURE__ */ import_react23.default.createElement(Input, {
     icon: /* @__PURE__ */ import_react23.default.createElement(MagnifyingGlass, null),
     name: "search",
     placeholder: "Search Content...",
