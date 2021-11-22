@@ -4,7 +4,7 @@ import { fromValue } from 'wonka';
 
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { AuthTokens, TokenAuthConfig } from '@aiera/client-sdk/api/auth';
-import { Auth, AuthUI } from '.';
+import { Auth, AuthUI, LoginState } from '.';
 
 const email = 'test@example.com';
 const password = 'password';
@@ -14,11 +14,14 @@ const defaultProps = {
     user: undefined,
     loading: false,
     error: undefined,
-    authForm: { email: '', password: '' },
-    setAuthForm: () => undefined,
     login: () => undefined,
     logout: () => undefined,
     showLogout: true,
+    email: '',
+    onChangeEmail: () => undefined,
+    password: '',
+    onChangePassword: () => undefined,
+    loginState: 'none' as LoginState,
 };
 
 describe('AuthUI', () => {
@@ -36,14 +39,17 @@ describe('AuthUI', () => {
 
     test('renders a logging form if the user is logged out', () => {
         const login = jest.fn((e: FormEvent) => e.preventDefault());
-        const setAuthForm = jest.fn();
-        render(<AuthUI {...defaultProps} setAuthForm={setAuthForm} login={login} />);
+        const onChangeEmail = jest.fn();
+        const onChangePassword = jest.fn();
+        render(
+            <AuthUI {...defaultProps} login={login} onChangeEmail={onChangeEmail} onChangePassword={onChangePassword} />
+        );
 
-        fireEvent.change(screen.getByTestId('auth-email'), { target: { value: email } });
-        expect(setAuthForm).toHaveBeenCalledWith({ email, password: '' });
+        fireEvent.change(screen.getByPlaceholderText('email'), { target: { value: email } });
+        expect(onChangeEmail).toHaveBeenCalledWith(expect.anything(), { name: 'email', value: email });
 
-        fireEvent.change(screen.getByTestId('auth-password'), { target: { value: password } });
-        expect(setAuthForm).toHaveBeenCalledWith({ email: '', password: password });
+        fireEvent.change(screen.getByPlaceholderText('password'), { target: { value: password } });
+        expect(onChangePassword).toHaveBeenCalledWith(expect.anything(), { name: 'password', value: password });
 
         fireEvent.click(screen.getByText('Login'));
         expect(login).toHaveBeenCalled();
@@ -126,8 +132,8 @@ describe('Auth', () => {
                 }),
         });
 
-        fireEvent.change(screen.getByTestId('auth-email'), { target: { value: email } });
-        fireEvent.change(screen.getByTestId('auth-password'), { target: { value: password } });
+        fireEvent.change(screen.getByPlaceholderText('email'), { target: { value: email } });
+        fireEvent.change(screen.getByPlaceholderText('password'), { target: { value: password } });
         fireEvent.click(screen.getByText('Login'));
         await waitFor(() => {
             expect(client.executeMutation).toHaveBeenCalledWith(
