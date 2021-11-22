@@ -18,12 +18,14 @@ interface InputSharedProps {
     inputRef?: Ref<HTMLInputElement>;
     autoFocus?: boolean;
     icon?: ReactNode;
+    id?: string;
     placeholder?: string;
     onFocus?: FocusEventHandler;
     value?: string;
     className?: string;
     clearable?: boolean;
     name: string;
+    type?: string;
 }
 
 /** @notExported */
@@ -37,6 +39,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         inputRef,
         autoFocus,
         icon,
+        id,
         clearable,
         clear,
         placeholder,
@@ -45,6 +48,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         value,
         name,
         className = '',
+        type,
     } = props;
     return (
         <div className={`group h-8 items-center w-full relative ${className} input__${name}`}>
@@ -57,6 +61,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                 </div>
             )}
             <input
+                id={id}
                 ref={inputRef}
                 autoFocus={autoFocus}
                 className={classNames(
@@ -67,6 +72,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                 onFocus={onFocus}
                 placeholder={placeholder}
                 value={value}
+                type={type}
             />
             {clearable && value && (
                 <div
@@ -93,6 +99,7 @@ export function Input(props: InputProps): ReactElement {
         inputRef,
         autoFocus = false,
         icon,
+        id,
         clearable = true,
         placeholder,
         onChange,
@@ -100,6 +107,7 @@ export function Input(props: InputProps): ReactElement {
         value,
         name,
         className,
+        type = 'text',
     } = props;
     return (
         <InputUI
@@ -110,6 +118,7 @@ export function Input(props: InputProps): ReactElement {
                 [onChange]
             )}
             icon={icon}
+            id={id}
             placeholder={placeholder}
             onChange={useCallback(
                 (event: ChangeEvent<HTMLInputElement>) =>
@@ -121,6 +130,7 @@ export function Input(props: InputProps): ReactElement {
             value={value}
             className={className}
             name={name}
+            type={type}
         />
     );
 }
