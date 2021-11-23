@@ -173,12 +173,22 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     })
                     .with({ status: 'success' }, ({ data }) => {
                         return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
+                            const speakerTime = paragraphs[0]?.paragraph?.timestamp;
                             return (
                                 <div key={`speaker-turn-${id}`}>
-                                    {showSpeakers && (
-                                        <div className="p-3 pb-1 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50 dark:bg-bluegray-7 dark:text-gray-400">
-                                            <span className="font-semibold dark:text-white">{speaker.name}</span>
-                                            {speaker.title && <span className="text-gray-400">, {speaker.title}</span>}
+                                    {showSpeakers && speaker.identified && (
+                                        <div className="p-3 pb-2 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50 dark:bg-bluegray-7 dark:text-gray-400">
+                                            <div>
+                                                <span className="font-semibold dark:text-white">{speaker.name}</span>
+                                                {speaker.title && (
+                                                    <span className="text-gray-400">, {speaker.title}</span>
+                                                )}
+                                            </div>
+                                            {speakerTime && (
+                                                <div className="text-xs dark:text-bluegray-4 dark:text-opacity-50">
+                                                    {DateTime.fromISO(speakerTime).toFormat('h:mm:ss a')}
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                     {paragraphs.map(({ sentences, paragraph }) => {
@@ -191,7 +201,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                 onClick={() => onClickTranscript?.(paragraph)}
                                                 ref={id === currentParagraph ? currentParagraphRef : undefined}
                                             >
-                                                {timestamp && (
+                                                {(!showSpeakers || !speaker.identified) && timestamp && (
                                                     <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
                                                         {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
                                                     </div>
@@ -378,6 +388,7 @@ function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdate
                                     id
                                     name
                                     title
+                                    identified
                                 }
                                 paragraphs {
                                     id
