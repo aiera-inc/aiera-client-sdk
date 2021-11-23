@@ -42,7 +42,7 @@ describe('Content', () => {
 
     test('highlightedBody', () => {
         const { rendered } = renderWithProvider(generateContent());
-        const searchInput = screen.getByPlaceholderText('Search News...');
+        const searchInput = screen.getByPlaceholderText('Search Article...');
         // When there's a search term but no matches, the body should not have any highlighted text
         fireEvent.change(searchInput, { target: { value: 'fitler' } });
         expect(rendered.container.querySelector('.bg-yellow-300')).toBeNull();

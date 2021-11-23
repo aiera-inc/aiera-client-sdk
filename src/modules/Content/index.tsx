@@ -1,16 +1,27 @@
-import React, { MouseEventHandler, ReactElement, useCallback } from 'react';
+import React, { MouseEventHandler, ReactElement, Ref, useCallback, useEffect, useMemo, useState } from 'react';
+import { findAll } from 'highlight-words-core';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
+import classNames from 'classnames';
 
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
+import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { safeRegExp, titleize } from '@aiera/client-sdk/lib/strings';
+import { titleize } from '@aiera/client-sdk/lib/strings';
 import { ContentType } from '@aiera/client-sdk/modules/ContentList';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
+
+interface ContentBody {
+    highlight: boolean;
+    id: string;
+    text: string;
+}
 
 interface ContentSharedProps {
     companyIdentifier?: string;
@@ -24,8 +35,15 @@ interface ContentSharedProps {
 
 /** @notExported */
 interface ContentUIProps extends ContentSharedProps {
-    body?: string;
-    onChangeSearch?: ChangeHandler<string>;
+    body?: ContentBody[];
+    currentMatch?: string | null;
+    currentMatchRef: Ref<HTMLDivElement>;
+    matchIndex: number;
+    matches: ContentBody[];
+    nextMatch: () => void;
+    onChangeSearch: ChangeHandler<string>;
+    prevMatch: () => void;
+    scrollContainerRef: Ref<HTMLDivElement>;
     searchTerm: string;
 }
 
@@ -34,10 +52,17 @@ export function ContentUI(props: ContentUIProps): ReactElement {
         body,
         companyIdentifier,
         contentType,
+        currentMatch,
+        currentMatchRef,
         date,
         exchangeName,
+        matches,
+        matchIndex,
+        nextMatch,
         onBack,
         onChangeSearch,
+        prevMatch,
+        scrollContainerRef,
         searchTerm,
         sourceName,
         title,
@@ -59,7 +84,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                                 <Input
                                     icon={<MagnifyingGlass />}
                                     name="search"
-                                    placeholder="Search News..."
+                                    placeholder="Search Article..."
                                     value={searchTerm}
                                     onChange={onChangeSearch}
                                 />
@@ -69,6 +94,36 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                         .exhaustive()}
                 </div>
             </div>
+            {searchTerm && (
+                <div className="bg-gray-50 flex h-10 items-center p-3 shadow sticky text-gray-500 text-sm top-3 z-10">
+                    <div className="text-sm">
+                        Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
+                        <span className="font-semibold">{searchTerm}</span>
+                        &quot;
+                    </div>
+                    <div className="flex-1" />
+                    <button
+                        tabIndex={0}
+                        className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600"
+                        onClick={prevMatch}
+                    >
+                        <Chevron />
+                    </button>
+                    <div className="min-w-[35px] mr-2 text-center">
+                        {matchIndex + 1} / {matches.length}
+                    </div>
+                    <button tabIndex={0} className="w-2.5 mr-2 cursor-pointer hover:text-gray-600" onClick={nextMatch}>
+                        <Chevron />
+                    </button>
+                    <button
+                        tabIndex={0}
+                        className="w-4 cursor-pointer text-gray-400 hover:text-gray-600"
+                        onClick={(e) => onChangeSearch(e, { value: '' })}
+                    >
+                        <Close />
+                    </button>
+                </div>
+            )}
             {companyIdentifier && (
                 <div className="flex items-center pl-5 pr-5 pt-5 text-sm">
                     <span className="font-bold pr-1 text-blue-600">{companyIdentifier}</span>
@@ -88,55 +143,116 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                 </div>
             )}
             {body && (
-                <div
-                    className="leading-4 overflow-y-auto pb-3 pl-5 pr-5 pt-3 text-sm"
-                    dangerouslySetInnerHTML={{ __html: body }}
-                />
+                <div className="overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm" ref={scrollContainerRef}>
+                    {body.map(({ highlight, id: chunkId, text }) =>
+                        highlight ? (
+                            <mark
+                                className={classNames({
+                                    'bg-yellow-300': chunkId === currentMatch,
+                                })}
+                                key={`content-body-chunk-${chunkId}-match`}
+                                ref={chunkId === currentMatch ? currentMatchRef : undefined}
+                            >
+                                <span dangerouslySetInnerHTML={{ __html: text }} />
+                            </mark>
+                        ) : (
+                            <span dangerouslySetInnerHTML={{ __html: text }} key={`content-body-chunk-${chunkId}`} />
+                        )
+                    )}
+                </div>
             )}
         </div>
     );
 }
 
-/** @notExported */
-export interface ContentProps extends ContentSharedProps {}
-
 interface ContentState {
     searchTerm: string;
 }
+
+function useSearchState(body: string) {
+    const { state, handlers } = useChangeHandlers<ContentState>({
+        searchTerm: '',
+    });
+    // Track the current match id and use it to set the proper currentMatchRef for auto-scrolling
+    const [currentMatch, setCurrentMatch] = useState<string | null>(null);
+    const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
+        pauseOnUserScroll: false,
+        block: 'center',
+        inline: 'center',
+        behavior: 'auto',
+    });
+    /**
+     * When the body or search term are updated,
+     * split the body into chunks with and without highlights,
+     * depending on the search matches
+     */
+    const bodyWithMatches: ContentBody[] = useMemo(
+        () =>
+            state.searchTerm
+                ? findAll({
+                      autoEscape: true,
+                      caseSensitive: false,
+                      searchWords: [state.searchTerm],
+                      textToHighlight: body,
+                  }).map(({ highlight, start, end }, index) => ({
+                      highlight,
+                      id: `content-body-search-term-chunk-${index}`,
+                      text: body.substr(start, end - start),
+                  }))
+                : [
+                      {
+                          highlight: false,
+                          id: 'content-body',
+                          text: body,
+                      },
+                  ],
+        [body, state.searchTerm]
+    );
+
+    // Get the body chunks with search matches only
+    const matches = useMemo(() => bodyWithMatches.filter((chunk) => chunk.highlight), [bodyWithMatches]);
+
+    // When the search term changes, reset the current match to the first hit on the new term
+    useEffect(() => {
+        setCurrentMatch(matches[0]?.id || null);
+    }, [state.searchTerm]);
+
+    // Grab the current match index
+    const matchIndex = useMemo(() => matches.findIndex((m) => m.id === currentMatch), [matches, currentMatch]);
+
+    // Jump to the next match
+    const nextMatch = useCallback(() => {
+        const match = matches[(matchIndex + 1) % matches.length];
+        if (match) setCurrentMatch(match.id);
+    }, [matches, matchIndex]);
+
+    // Jump to the previous match
+    const prevMatch = useCallback(() => {
+        const match = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
+        if (match) setCurrentMatch(match.id);
+    }, [matches, matchIndex]);
+
+    return {
+        bodyWithMatches,
+        currentMatch,
+        currentMatchRef,
+        matches,
+        matchIndex,
+        nextMatch,
+        onChangeSearchTerm: handlers.searchTerm,
+        prevMatch,
+        scrollContainerRef,
+        searchTerm: state.searchTerm,
+    };
+}
+
+/** @notExported */
+export interface ContentProps extends ContentSharedProps {}
 
 /**
  * Renders Content
  */
 export function Content(props: ContentProps): ReactElement {
-    const { state, handlers } = useChangeHandlers<ContentState>({ searchTerm: '' });
-    const searchTerm: string = state.searchTerm;
-    /**
-     * Split the text and insert styled spans (yellow bg-color)
-     * when there are matches for the search term
-     *
-     * @param body - the Content HTML string
-     *
-     * @returns - a string
-     */
-    const highlightedBody = useCallback(
-        (body: string) => {
-            let highlighted = body;
-            const safeSearch: RegExp | null = safeRegExp(searchTerm);
-            if (safeSearch) {
-                const parts: string[] = body.split(safeSearch);
-                highlighted = parts
-                    .map((part: string) => {
-                        if (part.toLowerCase().includes(searchTerm.toLowerCase())) {
-                            return `<span class="bg-yellow-300">${part}</span>`;
-                        }
-                        return part;
-                    })
-                    .join('');
-            }
-            return highlighted;
-        },
-        [searchTerm]
-    );
     // TODO replace with body from content query
     const mockBody = `
         Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
@@ -148,18 +264,44 @@ export function Content(props: ContentProps): ReactElement {
         <br />
         The company also provides DVDs-by-mail membership services. It serves approximately 93 million streaming members
         in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
+        <br />
+        <br />
+        Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
+        movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
+        International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
+        through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes,
+        and mobile devices.
+        <br />
+        <br />
+        The company also provides DVDs-by-mail membership services. It serves approximately 93 million streaming members
+        in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
+        <br />
+        <br />
+        Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
+        movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
+        International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
+        through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes,
+        and mobile devices.
     `;
+    const searchState = useSearchState(mockBody);
     const { companyIdentifier, contentType, date, exchangeName, onBack, sourceName, title } = props;
     return (
         <ContentUI
-            body={highlightedBody(mockBody)}
+            body={searchState.bodyWithMatches}
             companyIdentifier={companyIdentifier}
             contentType={contentType}
+            currentMatch={searchState.currentMatch}
+            currentMatchRef={searchState.currentMatchRef}
             date={date}
             exchangeName={exchangeName}
+            matches={searchState.matches}
+            matchIndex={searchState.matchIndex}
+            nextMatch={searchState.nextMatch}
             onBack={onBack}
-            onChangeSearch={handlers.searchTerm}
-            searchTerm={searchTerm}
+            onChangeSearch={searchState.onChangeSearchTerm}
+            prevMatch={searchState.prevMatch}
+            scrollContainerRef={searchState.scrollContainerRef}
+            searchTerm={searchState.searchTerm}
             sourceName={sourceName}
             title={title}
         />

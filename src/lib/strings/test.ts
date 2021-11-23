@@ -1,4 +1,4 @@
-import { hash, prettyLineBreak, safeRegExp, titleize } from '.';
+import { hash, prettyLineBreak, titleize } from '.';
 
 describe('Strings', () => {
     test('hash', () => {
@@ -11,16 +11,6 @@ describe('Strings', () => {
     test('prettyLineBreak', () => {
         const example = 'this is my test string, there are 11 spaces plus more words';
         expect(prettyLineBreak(example).match(/ /g)?.length).toBe(6);
-    });
-
-    test('safeRegExp', () => {
-        const text = 'how many bears could Bear Grylls grill?';
-        const unsafeText = 'how {many} bear$ could Bear Gry**s grill?';
-        const textRegExp = new RegExp(`(${text})`, 'gi');
-        const unsafeTextRegExp = new RegExp('(how \\{many\\} bear\\$ could Bear Gry\\*\\*s grill\\?)', 'gi');
-        expect(safeRegExp(text)).toStrictEqual(textRegExp);
-        expect(safeRegExp(unsafeText)).toStrictEqual(unsafeTextRegExp);
-        expect(safeRegExp(undefined)).toBeNull();
     });
 
     test('titleize', () => {

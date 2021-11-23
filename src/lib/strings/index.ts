@@ -30,28 +30,6 @@ export function prettyLineBreak(line: string): string {
 }
 
 /**
- * Converts the given string to a Regular Expression object
- * If creating a RegExp from the original string raises an exception,
- * escape special characters and try again
- *
- * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions#escaping|MDN Web Docs}
- * @param str - the string to convert to Regular Expression
- *
- * @returns - a new Regular Expression object or null
- */
-export function safeRegExp(str?: string): RegExp | null {
-    let regEx = null;
-    if (str) {
-        try {
-            regEx = new RegExp(`(${str})`, 'gi');
-        } catch {
-            regEx = safeRegExp(str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-        }
-    }
-    return regEx;
-}
-
-/**
  * Takes a string, splits up the words that are separated
  * by a single whitespace or special character,
  * capitalizes each word and combines them into a single string.
