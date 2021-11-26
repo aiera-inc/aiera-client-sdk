@@ -14,7 +14,7 @@ import { getMockedClient, getMockedRealtime } from 'testUtils';
 
 describe('Provider', () => {
     test('renders', () => {
-        const config: EnvConfig = { apiUrl: 'test', assetPath: 'assets' };
+        const config: EnvConfig = { assetPath: 'assets', gqlOptions: { clientOptions: { url: 'test' } } };
         render(
             <Provider config={config} client={getMockedClient() as unknown as Client}>
                 test
@@ -26,7 +26,7 @@ describe('Provider', () => {
     test('provides all contexts', () => {
         const bus = jest.fn() as unknown as MessageBus;
         const client = getMockedClient() as unknown as Client;
-        const config: EnvConfig = { apiUrl: 'test', assetPath: 'assets' };
+        const config: EnvConfig = { assetPath: 'assets', gqlOptions: { clientOptions: { url: 'test' } } };
         const realtime = getMockedRealtime() as unknown as Realtime;
         const storage = jest.fn() as unknown as Storage;
 

@@ -28,8 +28,12 @@ type MockedRealtime = Mocked<Partial<Pusher>> & {
 };
 
 const mockedConfig = {
-    apiUrl: 'test',
     assetPath: 'assets',
+    gqlOptions: {
+        clientOptions: {
+            url: 'test',
+        },
+    },
 };
 
 export function getMockedRealtime(): MockedRealtime {

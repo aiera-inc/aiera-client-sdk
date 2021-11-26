@@ -20,10 +20,14 @@ const App: FC = (): ReactElement => {
             <Provider
                 bus={bus}
                 config={{
-                    apiUrl: 'https://api-dev.aiera.com/graphql',
                     assetPath: 'bundle/',
                     moduleName: 'ContentList',
                     platform: 'aiera-sdk-dev',
+                    gqlOptions: {
+                        clientOptions: {
+                            url: 'https://api-dev.aiera.com/graphql',
+                        },
+                    },
                 }}
             >
                 <Auth showLogout>

@@ -7,6 +7,7 @@ import { makeOperation, CombinedError, OperationContext } from '@urql/core';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { Provider as ConfigProvider } from '@aiera/client-sdk/lib/config';
 import { Provider, useClient } from './client';
 import { createTokenAuthConfig } from './auth';
 
@@ -163,7 +164,7 @@ describe('default auth', () => {
     });
 
     test('provider resets the client on reset', () => {
-        const config = { url: 'http://domain.tld' };
+        const config = { assetPath: 'assets', gqlOptions: { clientOptions: { url: 'http://domain.tld' } } };
         let outerClient: unknown;
         function TestComponent() {
             const { client, reset } = useClient();
@@ -172,16 +173,20 @@ describe('default auth', () => {
         }
 
         const { rerender } = render(
-            <Provider config={config}>
-                <TestComponent />
-            </Provider>
+            <ConfigProvider config={config}>
+                <Provider>
+                    <TestComponent />
+                </Provider>
+            </ConfigProvider>
         );
 
         const client1 = outerClient;
         rerender(
-            <Provider config={config}>
-                <TestComponent />
-            </Provider>
+            <ConfigProvider config={config}>
+                <Provider>
+                    <TestComponent />
+                </Provider>
+            </ConfigProvider>
         );
 
         const client2 = outerClient;

@@ -31,10 +31,10 @@ import { pipe, map } from 'wonka';
 import { devtoolsExchange } from '@urql/devtools';
 import { DocumentNode } from 'graphql';
 
-import { AuthConfig, authExchange } from '@urql/exchange-auth';
+import { authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
-import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useConfig, EnvConfig } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 
 /**
@@ -76,16 +76,8 @@ const opNameExchange: Exchange = ({ forward }) => {
         );
 };
 
-/**
- * @notExported
- */
-export interface ClientConfig {
-    url: string;
-    auth?: AuthConfig<unknown> | null;
-    fetch?: typeof window.fetch;
-}
-
-function createGQLClient({ url, fetch, auth = defaultTokenAuthConfig }: ClientConfig): Client {
+function createGQLClient(config: EnvConfig): Client {
+    const { auth = defaultTokenAuthConfig } = config.gqlOptions.exchangeOptions || {};
     const exchanges = [
         devtoolsExchange,
         opNameExchange,
@@ -98,8 +90,7 @@ function createGQLClient({ url, fetch, auth = defaultTokenAuthConfig }: ClientCo
     ) as Exchange[];
 
     return createClient({
-        url,
-        fetch,
+        ...config.gqlOptions.clientOptions,
         exchanges,
     });
 }
@@ -116,20 +107,17 @@ const Context = createContext<ClientContext>({ reset: () => undefined });
  * A React Provider to configure an app-level graphql client...
  */
 export const Provider = ({
-    config = {},
     children,
     client: passedClient,
     reset: passedReset,
 }: {
-    config?: Partial<ClientConfig>;
     children: ReactNode;
     client?: Client;
     reset?: () => void;
 }): ReactElement => {
     const envConfig = useConfig();
-    const clientConfig = { ...config, url: config.url || envConfig.apiUrl };
-    const [client, setClient] = useState(passedClient || createGQLClient(clientConfig));
-    const reset = passedReset || (() => setClient(passedClient || createGQLClient(clientConfig)));
+    const [client, setClient] = useState(passedClient || createGQLClient(envConfig));
+    const reset = passedReset || (() => setClient(passedClient || createGQLClient(envConfig)));
     return (
         <Context.Provider value={{ reset }}>
             <UrqlProvider value={client}>{children}</UrqlProvider>
