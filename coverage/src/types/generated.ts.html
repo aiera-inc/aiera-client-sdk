@@ -1011,7 +1011,8 @@
 <a name='L952'></a><a href='#L952'>952</a>
 <a name='L953'></a><a href='#L953'>953</a>
 <a name='L954'></a><a href='#L954'>954</a>
-<a name='L955'></a><a href='#L955'>955</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L955'></a><a href='#L955'>955</a>
+<a name='L956'></a><a href='#L956'>956</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1875,6 +1876,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">9x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2674,7 +2676,7 @@ export type TranscriptQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, webcastUrls: Array&lt;string&gt;, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, connectionStatus: EventConnectionStatus, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, name: string, title?: string | null | undefined }, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: string | null | undefined, syncMs?: number | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, overThreshold: boolean, basicSentiment: BasicTextualSentiment } | null | undefined } | null | undefined }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, webcastUrls: Array&lt;string&gt;, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, connectionStatus: EventConnectionStatus, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, name: string, title?: string | null | undefined, identified: boolean }, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: string | null | undefined, syncMs?: number | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, overThreshold: boolean, basicSentiment: BasicTextualSentiment } | null | undefined } | null | undefined }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 export type LatestParagraphsQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
@@ -2877,6 +2879,7 @@ export const TranscriptDocument = gql`
             id
             name
             title
+            identified
           }
           paragraphs {
             id
@@ -2926,7 +2929,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Tue Nov 23 2021 15:46:47 GMT-0500 (Eastern Standard Time)
+                at Mon Nov 29 2021 14:13:10 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

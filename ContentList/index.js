@@ -25373,7 +25373,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames10() {
+      function classNames11() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -25384,7 +25384,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames10.apply(null, arg);
+              var inner = classNames11.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -25404,14 +25404,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames10.default = classNames10;
-        module2.exports = classNames10;
+        classNames11.default = classNames11;
+        module2.exports = classNames11;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames10;
+          return classNames11;
         });
       } else {
-        window.classNames = classNames10;
+        window.classNames = classNames11;
       }
     })();
   }
@@ -37049,7 +37049,7 @@ function InputUI(props) {
     type
   } = props;
   return /* @__PURE__ */ import_react10.default.createElement("div", {
-    className: `group h-8 items-center w-full relative ${className} input__${name}`
+    className: `group h-8 items-center w-full relative  dark:text-white ${className} input__${name}`
   }, import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
     className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
   }, import_react10.default.cloneElement(icon, {
@@ -37058,7 +37058,7 @@ function InputUI(props) {
     id,
     ref: inputRef,
     autoFocus,
-    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400", { "pl-7": !!icon, "pl-3": !icon }),
+    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5", { "pl-7": !!icon, "pl-3": !icon }),
     onChange,
     onFocus,
     placeholder,
@@ -37106,22 +37106,24 @@ function Input(props) {
 
 // src/components/Button/index.tsx
 var import_react11 = __toModule(require_react());
+var import_classnames3 = __toModule(require_classnames());
 var import_ts_pattern = __toModule(require_lib());
 function ButtonUI(props) {
-  const { children, onClick, className = "", kind = "default", type } = props;
-  const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white").with("secondary", () => "border-[1px] border-gray-300 hover:border-gray-400 active:bg-gray-400 active:text-white").with("default", () => "bg-gray-200 hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
+  const { children, onClick, className = "", kind = "default", type, iconButton = false } = props;
+  const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white").with("secondary", () => "border-[1px] border-gray-300 dark:border-bluegray-5 dark:text-white hover:border-gray-400 dark:hover:border-bluegray-4 dark:hover:border-opacity-20 active:bg-gray-400 dark:active:bg-bluegray-7 active:text-white").with("default", () => "bg-gray-200 dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
   return /* @__PURE__ */ import_react11.default.createElement("button", {
     tabIndex: 0,
-    className: `group flex h-8 items-center px-2.5 font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`,
+    className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`, { "px-2.5": !iconButton, "justify-center": iconButton }),
     onClick,
     type
   }, children);
 }
 function Button(props) {
-  const { children, onClick, className, kind, type } = props;
+  const { children, onClick, className, iconButton, kind, type } = props;
   return /* @__PURE__ */ import_react11.default.createElement(ButtonUI, {
     onClick,
     kind,
+    iconButton,
     className,
     type
   }, children);
@@ -37443,6 +37445,7 @@ var TranscriptDocument = lib_default`
             id
             name
             title
+            identified
           }
           paragraphs {
             id
@@ -37652,7 +37655,7 @@ var import_luxon2 = __toModule(require_luxon());
 // src/components/CompanyFilterButton/index.tsx
 var import_react20 = __toModule(require_react());
 var import_ts_pattern4 = __toModule(require_lib());
-var import_classnames5 = __toModule(require_classnames());
+var import_classnames6 = __toModule(require_classnames());
 
 // src/lib/hooks/useEventListener/index.ts
 var import_react14 = __toModule(require_react());
@@ -37752,7 +37755,7 @@ function TooltipUI(props) {
     target = render({ hideTooltip, showTooltip });
   }
   return /* @__PURE__ */ import_react17.default.createElement(import_react17.default.Fragment, null, modal && visible && /* @__PURE__ */ import_react17.default.createElement("div", {
-    className: "fixed z-20 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 tooltip__modal"
+    className: "fixed z-20 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 dark:opacity-60 tooltip__modal"
   }), /* @__PURE__ */ import_react17.default.createElement("div", {
     className: `tooltip ${className}`,
     onClick: onTargetClick,
@@ -37910,10 +37913,10 @@ function Tooltip(props) {
 
 // src/components/Svg/Building.tsx
 var import_react18 = __toModule(require_react());
-var import_classnames3 = __toModule(require_classnames());
+var import_classnames4 = __toModule(require_classnames());
 function Building({ className, alt = "Building" }) {
   return /* @__PURE__ */ import_react18.default.createElement("svg", {
-    className: (0, import_classnames3.default)(className, "fill-current", "Svg", "Svg__building"),
+    className: (0, import_classnames4.default)(className, "fill-current", "Svg", "Svg__building"),
     width: "14",
     height: "16",
     viewBox: "0 0 14 16",
@@ -37928,13 +37931,13 @@ function Building({ className, alt = "Building" }) {
 
 // src/components/Svg/MagnifyingGlass.tsx
 var import_react19 = __toModule(require_react());
-var import_classnames4 = __toModule(require_classnames());
+var import_classnames5 = __toModule(require_classnames());
 function MagnifyingGlass({
   className,
   alt = "Magnifying Glass"
 }) {
   return /* @__PURE__ */ import_react19.default.createElement("svg", {
-    className: (0, import_classnames4.default)(className, "Svg", "Svg__magnifyingGlass"),
+    className: (0, import_classnames5.default)(className, "stroke-current", "Svg", "Svg__magnifyingGlass"),
     width: "100%",
     viewBox: "0 0 12 12",
     fill: "none",
@@ -37965,7 +37968,7 @@ function TooltipContentUI(props) {
     className: "flex flex-1 items-center justify-center text-gray-600 mb-5"
   }, msg);
   return /* @__PURE__ */ import_react20.default.createElement("div", {
-    className: "shadow-md bg-white rounded-lg w-72 overflow-hidden"
+    className: "shadow-md bg-white rounded-lg w-72 overflow-hidden dark:bg-bluegray-6"
   }, /* @__PURE__ */ import_react20.default.createElement("div", {
     className: "p-3 w-full"
   }, /* @__PURE__ */ import_react20.default.createElement(Input, {
@@ -37985,11 +37988,11 @@ function TooltipContentUI(props) {
     var _a;
     const primaryQuote = getPrimaryQuote(company);
     return /* @__PURE__ */ import_react20.default.createElement("div", {
-      className: (0, import_classnames5.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
-        "odd:bg-gray-100": selectedIndex !== index,
+      className: (0, import_classnames6.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
+        "odd:bg-gray-100 dark:odd:bg-bluegray-5": selectedIndex !== index,
         "bg-blue-500": selectedIndex === index,
         "text-white": selectedIndex === index,
-        "text-gray-900": selectedIndex !== index
+        "text-gray-900 dark:text-white": selectedIndex !== index
       }),
       key: company.id,
       onClick: (event) => {
@@ -38062,7 +38065,7 @@ function CompanyFilterButtonUI(props) {
     position: "bottom-right",
     yOffset: 5
   }, /* @__PURE__ */ import_react20.default.createElement(Button, {
-    className: (0, import_classnames5.default)("max-w-[130px]"),
+    className: (0, import_classnames6.default)("max-w-[130px]"),
     kind: value ? "default" : "secondary",
     onClick: value ? (event) => {
       event.stopPropagation();
@@ -38074,11 +38077,11 @@ function CompanyFilterButtonUI(props) {
     alt: "building",
     className: "mr-2"
   }), "By Company"), value && /* @__PURE__ */ import_react20.default.createElement(import_react20.default.Fragment, null, /* @__PURE__ */ import_react20.default.createElement("div", {
-    className: "text-black font-bold"
+    className: "font-bold"
   }, (_a = getPrimaryQuote(value)) == null ? void 0 : _a.localTicker), /* @__PURE__ */ import_react20.default.createElement("div", {
-    className: "text-black font-light truncate mx-2"
+    className: "font-light truncate mx-2"
   }, value.commonName), /* @__PURE__ */ import_react20.default.createElement("div", {
-    className: "w-4 text-black flex-shrink-0"
+    className: "w-4 flex-shrink-0"
   }, /* @__PURE__ */ import_react20.default.createElement(Close, null))))));
 }
 function CompanyFilterButton(props) {
@@ -38145,22 +38148,22 @@ function CompanyFilterButton(props) {
 
 // src/components/Tabs/index.tsx
 var import_react21 = __toModule(require_react());
-var import_classnames6 = __toModule(require_classnames());
+var import_classnames7 = __toModule(require_classnames());
 var import_ts_pattern5 = __toModule(require_lib());
 var TabsUI = (props) => {
   const { onChange, options = [], value, kind = "button", className = "", setFocus } = props;
-  const getClasses = (val) => (0, import_ts_pattern5.match)(kind).with("button", () => (0, import_classnames6.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
+  const getClasses = (val) => (0, import_ts_pattern5.match)(kind).with("button", () => (0, import_classnames7.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
     "bg-gray-100": val === value,
     "font-semibold": val === value,
     tab__option: true,
     "tab__option--selected": val === value
-  })).with("line", () => (0, import_classnames6.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
+  })).with("line", () => (0, import_classnames7.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
     "cursor-pointer": val !== value,
-    "text-gray-400": val !== value,
-    "text-black": val === value,
+    "text-gray-400 dark:text-bluegray-4 dark:opacity-60": val !== value,
+    "text-black dark:text-white": val === value,
     "font-semibold": val === value,
-    "hover:text-gray-500": val !== value,
-    "active:text-gray-800": val !== value,
+    "hover:text-gray-500 dark:hover:text-bluegray-4 dark:hover:opacity-80": val !== value,
+    "active:text-gray-800 dark:active:text-bluegray-4 dark:active:opacity-100": val !== value,
     tab__option: true,
     "tab__option--selected": val === value
   })).exhaustive();
@@ -38174,7 +38177,7 @@ var TabsUI = (props) => {
     onFocus: () => setFocus == null ? void 0 : setFocus(index),
     onBlur: () => setFocus == null ? void 0 : setFocus(-1)
   }, label, kind === "line" && /* @__PURE__ */ import_react21.default.createElement("div", {
-    className: (0, import_classnames6.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
+    className: (0, import_classnames7.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
       "bottom-0": opVal === value,
       "-bottom-0.5": opVal !== value
     })
@@ -38207,14 +38210,14 @@ var import_react25 = __toModule(require_react());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon = __toModule(require_luxon());
 var import_ts_pattern6 = __toModule(require_lib());
-var import_classnames9 = __toModule(require_classnames());
+var import_classnames10 = __toModule(require_classnames());
 
 // src/components/Svg/ArrowLeft.tsx
 var import_react22 = __toModule(require_react());
-var import_classnames7 = __toModule(require_classnames());
+var import_classnames8 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
   return /* @__PURE__ */ import_react22.default.createElement("svg", {
-    className: (0, import_classnames7.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+    className: (0, import_classnames8.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -38227,10 +38230,10 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 
 // src/components/Svg/Chevron.tsx
 var import_react23 = __toModule(require_react());
-var import_classnames8 = __toModule(require_classnames());
+var import_classnames9 = __toModule(require_classnames());
 function Chevron({ className, alt = "Chevron" }) {
   return /* @__PURE__ */ import_react23.default.createElement("svg", {
-    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__chevron"),
+    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__chevron"),
     width: "100%",
     viewBox: "0 0 8 5",
     xmlns: "http://www.w3.org/2000/svg"
@@ -38428,7 +38431,7 @@ function ContentUI(props) {
     className: "overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm",
     ref: scrollContainerRef
   }, body.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react25.default.createElement("mark", {
-    className: (0, import_classnames9.default)({
+    className: (0, import_classnames10.default)({
       "bg-yellow-300": chunkId === currentMatch
     }),
     key: `content-body-chunk-${chunkId}-match`,
