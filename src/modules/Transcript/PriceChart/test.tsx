@@ -1,63 +1,116 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
-import { renderWithProvider } from 'testUtils';
 import userEvent from '@testing-library/user-event';
 import '@testing-library/jest-dom/extend-expect';
+import { fromValue } from 'wonka';
+import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { PriceChart } from '.';
 
-/*
-const event = {
-    id: '1',
-    eventDate: '2021-08-25T18:00:00+00:00',
-    title: 'Event Title',
-    eventType: 'earnings',
-    hasConnectionDetails: true,
-    connectionStatus: 'connected',
-    isLive: true,
-    publishedTranscriptExpected: true,
-    hasTranscript: true,
-    hasPublishedTranscript: true,
-    audioRecordingOffsetMs: 0,
-    dialInPin: '232323',
-    dialInPhoneNumbers: ['23131232', '213123123'],
-    webcastUrls: ['http://www.example.com'],
-    audioRecordingUrl: 'http://www.example.com/audio',
-    primaryCompany: {
-        instruments: [
-            {
-                isPrimary: true,
-                quotes: [
-                    {
-                        isPrimary: true,
-                        localTicker: 'TICK',
+const data = {
+    events: [
+        {
+            id: '1',
+            quotePrices: [
+                {
+                    currentDayClosePrice: 576.97,
+                    currentDayOpenPrice: 579.84,
+                    endPrice: null,
+                    id: '1998087:408',
+                    previousDayClosePrice: 577.19,
+                    quote: {
                         exchange: {
-                            country: { countryCode: 'US' },
-                            shortName: 'EXCH',
+                            id: '133',
+                            shortName: 'NYSE',
                         },
+                        id: '408',
+                        localTicker: 'RH',
                     },
-                ],
-            },
-        ],
-    },
-    };*/
+                    startPrice: 641.414,
+                    realtimePrices: [
+                        {
+                            date: '2021-12-08T22:46:28+00:00',
+                            id: '-5197890410824443545',
+                            price: 631,
+                            priceChangeFromStartPercent: -0.0006,
+                            priceChangeFromStartValue: -0.415,
+                            volume: 1187459,
+                            volumeChangeFromLastPercent: 0.0022,
+                            volumeChangeFromLastValue: 2548,
+                            volumeChangeFromStartPercent: 0.0148,
+                            volumeChangeFromStartValue: 17370,
+                        },
+                        {
+                            date: '2021-12-08T22:47:48+00:00',
+                            id: '-6197890410824443545',
+                            price: 641,
+                            priceChangeFromStartPercent: -0.0006,
+                            priceChangeFromStartValue: -0.415,
+                            volume: 1187459,
+                            volumeChangeFromLastPercent: 0.0022,
+                            volumeChangeFromLastValue: 2548,
+                            volumeChangeFromStartPercent: 0.0148,
+                            volumeChangeFromStartValue: 17370,
+                        },
+                        {
+                            date: '2021-12-08T22:48:58+00:00',
+                            id: '-7197890410824443545',
+                            price: 642,
+                            priceChangeFromStartPercent: -0.0006,
+                            priceChangeFromStartValue: -0.415,
+                            volume: 1187459,
+                            volumeChangeFromLastPercent: 0.0022,
+                            volumeChangeFromLastValue: 2548,
+                            volumeChangeFromStartPercent: 0.0148,
+                            volumeChangeFromStartValue: 17370,
+                        },
+                        {
+                            date: '2021-12-08T22:50:58+00:00',
+                            id: '-5197890410824443546',
+                            price: 641,
+                            priceChangeFromStartPercent: -0.0006,
+                            priceChangeFromStartValue: -0.415,
+                            volume: 1187459,
+                            volumeChangeFromLastPercent: 0.0022,
+                            volumeChangeFromLastValue: 2548,
+                            volumeChangeFromStartPercent: 0.0148,
+                            volumeChangeFromStartValue: 17370,
+                        },
+                    ],
+                },
+            ],
+        },
+    ],
+};
 
 describe('PriceChart', () => {
-    test('renders', () => {
+    test('renders', async () => {
         const toggle = jest.fn();
-        const { rendered } = renderWithProvider(
-            <PriceChart headerExpanded={true} priceChartExpanded togglePriceChart={toggle} />
+        const { rendered } = await actAndFlush(() =>
+            renderWithProvider(
+                <PriceChart eventId={'1'} headerExpanded={true} priceChartExpanded togglePriceChart={toggle} />,
+                {
+                    executeQuery: () => fromValue({ data: data }),
+                }
+            )
         );
-        const label = screen.getByText('Price Reaction');
+
+        const label = screen.getByTitle('Chevron');
         fireEvent.click(label);
-        expect(rendered.container.querySelector('.highcharts-container')).not.toBeNull();
         expect(toggle).toHaveBeenCalledTimes(1);
+        expect(rendered.container.querySelector('.highcharts-container')).not.toBeNull();
     });
 
-    test('tab to focus pin', () => {
+    test('tab to focus pin', async () => {
         const toggle = jest.fn();
-        const { rendered } = renderWithProvider(
-            <PriceChart headerExpanded={true} priceChartExpanded togglePriceChart={toggle} />
+        const { rendered } = await actAndFlush(() =>
+            renderWithProvider(
+                <PriceChart eventId={'1'} headerExpanded={true} priceChartExpanded togglePriceChart={toggle} />,
+                {
+                    executeQuery: () => fromValue({ data: data }),
+                }
+            )
         );
+
         const pin = rendered.container.querySelector('.price_chart__pin');
         expect(pin).not.toHaveFocus();
         userEvent.tab();

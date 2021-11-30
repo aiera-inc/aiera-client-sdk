@@ -22,10 +22,15 @@ import './styles.css';
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
     containerHeight: number;
+    currentParagraphTimestamp?: string | null;
+    endTime?: string | null;
+    eventId: string;
     eventQuery: EventQuery;
     onBack?: MouseEventHandler;
     searchTerm?: string;
     onChangeSearchTerm?: ChangeHandler<string>;
+    onSeekAudioByDate?: (date: string) => void;
+    startTime?: string | null;
 }
 
 /** @notExported */
@@ -44,26 +49,31 @@ interface HeaderUIProps extends HeaderSharedProps {
 export function HeaderUI(props: HeaderUIProps): ReactElement {
     const {
         containerHeight,
+        currentParagraphTimestamp,
+        endTime,
         eventDetailsExpanded,
+        eventId,
         eventQuery,
         headerExpanded,
         headerRef,
         keyMentionsExpanded,
         onBack,
         onChangeSearchTerm,
+        onSeekAudioByDate,
         priceChartExpanded,
         searchTerm,
         toggleEventDetails,
         toggleHeader,
         toggleKeyMentions,
         togglePriceChart,
+        startTime,
     } = props;
 
     return (
         <div
             ref={headerRef}
             className={classNames(
-                'bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all flex flex-col dark:bg-bluegray-6',
+                'bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6',
                 {
                     'shadow-3xl dark:shadow-3xl-dark': !headerExpanded,
                     'shadow-xl': headerExpanded,
@@ -194,9 +204,14 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                 />
                             )}
                             <PriceChart
+                                currentParagraphTimestamp={currentParagraphTimestamp}
+                                endTime={endTime}
+                                eventId={eventId}
                                 headerExpanded={headerExpanded}
                                 priceChartExpanded={priceChartExpanded}
                                 togglePriceChart={togglePriceChart}
+                                onSeekAudioByDate={onSeekAudioByDate}
+                                startTime={startTime}
                             />
                         </>
                     );
@@ -213,7 +228,18 @@ export interface HeaderProps extends HeaderSharedProps {}
  * Renders Header
  */
 export function Header(props: HeaderProps): ReactElement {
-    const { eventQuery, onBack, searchTerm, onChangeSearchTerm, containerHeight } = props;
+    const {
+        endTime,
+        eventId,
+        eventQuery,
+        onBack,
+        searchTerm,
+        onChangeSearchTerm,
+        onSeekAudioByDate,
+        containerHeight,
+        currentParagraphTimestamp,
+        startTime,
+    } = props;
     const [headerExpanded, setHeaderState] = useState(false);
     const [priceChartExpanded, setPriceChartState] = useState(false);
     const [eventDetailsExpanded, setEventDetailsState] = useState(false);
@@ -253,15 +279,20 @@ export function Header(props: HeaderProps): ReactElement {
     return (
         <HeaderUI
             containerHeight={containerHeight}
+            currentParagraphTimestamp={currentParagraphTimestamp}
             eventDetailsExpanded={eventDetailsExpanded}
+            endTime={endTime}
+            eventId={eventId}
             eventQuery={eventQuery}
             headerExpanded={headerExpanded}
             headerRef={headerRef}
             keyMentionsExpanded={keyMentionsExpanded}
             onBack={onBack}
             onChangeSearchTerm={onChangeSearchTerm}
+            onSeekAudioByDate={onSeekAudioByDate}
             priceChartExpanded={priceChartExpanded}
             searchTerm={searchTerm}
+            startTime={startTime}
             toggleEventDetails={toggleEventDetails}
             toggleHeader={toggleHeader}
             toggleKeyMentions={toggleKeyMentions}

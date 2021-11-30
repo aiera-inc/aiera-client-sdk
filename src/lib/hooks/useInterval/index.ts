@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
  * @param interval - The interval to run it on. If null it will cancel any existing
  *                   callback and no longer run.
  */
-export function useInterval(callback: () => void, interval: number | null): void {
+export function useInterval(callback: () => void | Promise<void>, interval: number | null): void {
     const savedCallback = useRef(callback);
 
     // Remember the latest callback if it changes.
@@ -24,7 +24,7 @@ export function useInterval(callback: () => void, interval: number | null): void
             return;
         }
 
-        const id = window.setInterval(() => savedCallback.current(), interval);
+        const id = window.setInterval(() => void savedCallback.current(), interval);
 
         return () => window.clearInterval(id);
     }, [interval]);

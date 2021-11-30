@@ -1,7 +1,13 @@
-import React, { ReactElement, useState, useCallback, Dispatch, SetStateAction } from 'react';
+import React, { ReactElement, useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from 'react';
 import classNames from 'classnames';
 import Highcharts from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
+import { useClient } from 'urql';
+import { useQuery } from '@aiera/client-sdk/api/client';
+import gql from 'graphql-tag';
+
+import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
+import { QuotePricesQuery, QuotePricesQueryVariables } from '@aiera/client-sdk/types/generated';
 import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
@@ -13,110 +19,46 @@ import './styles.css';
 export type Event = TranscriptQuery['events'][0];
 interface PriceChartSharedProps {
     //event: Event;
+    currentParagraphTimestamp?: string | null;
+    endTime?: string | null;
     priceChartExpanded: boolean;
     togglePriceChart: () => void;
+    onSeekAudioByDate?: (date: string) => void;
+    startTime?: string | null;
+}
+
+interface ChartData {
+    x: number;
+    y: number;
 }
 
 /** @notExported */
 interface PriceChartUIProps extends PriceChartSharedProps {
     pinned: boolean;
     togglePin: () => void;
+    chartData: ChartData[];
     currentPrice: number;
     setPrice: (price: number) => void;
     setFocus: Dispatch<SetStateAction<boolean>>;
 }
 
-function addMin(min: number): number {
-    return 1635266013785 + 60000 * min;
-}
-
-const chartData: { x: number; y: number }[] = [
-    {
-        x: addMin(1),
-        y: 76.32,
-    },
-    {
-        x: addMin(2),
-        y: 74.3,
-    },
-    {
-        x: addMin(3),
-        y: 73.3,
-    },
-    {
-        x: addMin(4),
-        y: 76.8,
-    },
-    {
-        x: addMin(5),
-        y: 76.5,
-    },
-    {
-        x: addMin(6),
-        y: 74.54,
-    },
-    {
-        x: addMin(7),
-        y: 76.75,
-    },
-    {
-        x: addMin(8),
-        y: 77.32,
-    },
-    {
-        x: addMin(9),
-        y: 75.23,
-    },
-    {
-        x: addMin(10),
-        y: 76.42,
-    },
-    {
-        x: addMin(11),
-        y: 78.43,
-    },
-    {
-        x: addMin(12),
-        y: 79.64,
-    },
-    {
-        x: addMin(13),
-        y: 82.32,
-    },
-    {
-        x: addMin(14),
-        y: 75.23,
-    },
-    {
-        x: addMin(15),
-        y: 74.42,
-    },
-    {
-        x: addMin(16),
-        y: 79.43,
-    },
-    {
-        x: addMin(17),
-        y: 76.64,
-    },
-    {
-        x: addMin(18),
-        y: 82.32,
-    },
-    {
-        x: addMin(19),
-        y: 84.42,
-    },
-    {
-        x: addMin(20),
-        y: 89.76,
-    },
-];
-
 export function PriceChartUI(props: PriceChartUIProps): ReactElement {
-    const { togglePin, togglePriceChart, pinned, priceChartExpanded, currentPrice, setFocus, setPrice } = props;
+    const {
+        endTime,
+        togglePin,
+        togglePriceChart,
+        pinned,
+        priceChartExpanded,
+        chartData,
+        currentPrice,
+        currentParagraphTimestamp,
+        onSeekAudioByDate,
+        setFocus,
+        setPrice,
+        startTime,
+    } = props;
     const price: number = parseFloat(currentPrice?.toFixed(2));
-    const originalPrice = 75.32;
+    const originalPrice = chartData[0]?.y || 0;
     const absolutePriceChange: number = parseFloat((price - originalPrice).toFixed(2));
     const percentPriceChange: number = parseFloat(((absolutePriceChange * 100) / originalPrice).toFixed(2));
 
@@ -132,14 +74,6 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
         series: [
             {
                 type: 'areaspline',
-                fillColor: 'rgb(135, 206, 235, 0.08)',
-                lineColor: '#0094FF',
-                shadow: {
-                    color: '#C1DFF0',
-                    opacity: 0.3,
-                    offsetY: 2,
-                    width: 5,
-                },
                 threshold: null,
                 point: {
                     events: {
@@ -168,6 +102,9 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                                 }
                             }
                         },
+                        click: (e) => {
+                            if (onSeekAudioByDate && e?.point?.x) onSeekAudioByDate(`${e?.point?.x}`);
+                        },
                         mouseOut: () => {
                             const newPrice = chartData[(chartData || []).length - 1]?.y;
                             if (typeof newPrice === 'number') {
@@ -183,6 +120,38 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
         rangeSelector: { enabled: false },
         tooltip: {
             enabled: false,
+        },
+        plotOptions: {
+            areaspline: {
+                threshold: null,
+                zoneAxis: 'x',
+                zones: [
+                    ...(startTime
+                        ? [
+                              {
+                                  value: new Date(startTime).getTime(),
+                                  color: '#bbc6cf',
+                                  fillColor: 'rgba(187, 198, 207, 0.22)',
+                              },
+                          ]
+                        : []),
+                    ...(endTime
+                        ? [
+                              {
+                                  value: new Date(endTime).getTime(),
+                                  color: absolutePriceChange > 0 ? '#15c13e' : '#d9155c',
+                                  fillColor:
+                                      absolutePriceChange > 0 ? 'rgba(22, 193, 62, 0.15)' : 'rgba(217, 21, 92, 0.10)',
+                              },
+                          ]
+                        : []),
+                    {
+                        value: new Date().getTime(),
+                        color: '#bbc6cf',
+                        fillColor: 'rgba(187, 198, 207, 0.22)',
+                    },
+                ],
+            },
         },
         xAxis: {
             gridLineColor: 'transparent',
@@ -200,9 +169,21 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             lineWidth: 0,
             plotLines: [
                 {
+                    color: 'black',
+                    width: 1,
+                    dashStyle: 'Dash',
+                    value: startTime ? new Date(startTime).getTime() : undefined,
+                },
+                {
                     color: 'orange',
-                    value: 1635267129890,
+                    value: currentParagraphTimestamp ? new Date(currentParagraphTimestamp).getTime() : undefined,
                     width: 3,
+                },
+                {
+                    color: 'black',
+                    width: 1,
+                    dashStyle: 'Dash',
+                    value: endTime ? new Date(endTime).getTime() : undefined,
                 },
             ],
             tickColor: 'transparent',
@@ -217,8 +198,8 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             endOnTick: true,
             tickPixelInterval: 30,
             showFirstLabel: false,
-            maxPadding: 0.0,
-            minPadding: 0.21, // Need to have enough space at the bottom to be above the xAxis label, so hover works
+            maxPadding: 0.1,
+            minPadding: 0.28, // Need to have enough space at the bottom to be above the xAxis label, so hover works
             height: 60,
             gridLineColor: 'transparent',
             labels: {
@@ -249,10 +230,14 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                         })}
                         onClick={togglePriceChart}
                     >
-                        {`$${price} ${
+                        {`$${price.toFixed(2)} ${
                             absolutePriceChange > 0 ? '+' : ''
                         }${absolutePriceChange} (${percentPriceChange}%)`}
-                        <MovementArrow className={classNames('ml-1 w-2', { 'rotate-180': absolutePriceChange < 0 })} />
+                        {absolutePriceChange !== 0 && (
+                            <MovementArrow
+                                className={classNames('ml-1 w-2', { 'rotate-180': absolutePriceChange < 0 })}
+                            />
+                        )}
                     </span>
                     <div
                         tabIndex={0}
@@ -301,16 +286,119 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
 
 /** @notExported */
 export interface PriceChartProps extends PriceChartSharedProps {
+    eventId: string;
     headerExpanded: boolean;
+}
+
+const PriceQuery = gql`
+    query QuotePrices($eventId: ID!, $after: DateTime) {
+        events(filter: { eventIds: [$eventId] }) {
+            id
+            quotePrices {
+                id
+                currentDayClosePrice
+                currentDayOpenPrice
+                endPrice
+                previousDayClosePrice
+                quote {
+                    id
+                    localTicker
+                    exchange {
+                        id
+                        shortName
+                    }
+                }
+                realtimePrices(after: $after) {
+                    id
+                    date
+                    price
+                    volume
+                    priceChangeFromStartValue
+                    priceChangeFromStartPercent
+                    volumeChangeFromStartValue
+                    volumeChangeFromStartPercent
+                    volumeChangeFromLastValue
+                    volumeChangeFromLastPercent
+                }
+                startPrice
+            }
+        }
+    }
+`;
+
+function useChartData(eventId: string) {
+    const [additionalPrices, setAdditionalPrices] = useState<ChartData[]>([]);
+    const [initialPrices, setInitialPrices] = useState<ChartData[]>([]);
+    const [startPrice, setStartPrice] = useState(0);
+    const client = useClient();
+    const initialPriceQuery = useQuery<QuotePricesQuery, QuotePricesQueryVariables>({
+        query: PriceQuery,
+        requestPolicy: 'network-only',
+        variables: {
+            eventId,
+        },
+    });
+
+    useEffect(() => {
+        if (initialPriceQuery.status === 'success') {
+            setInitialPrices(
+                initialPriceQuery?.data?.events?.[0]?.quotePrices?.[0]?.realtimePrices?.map(
+                    ({ date, price }: { date: string; price: number }) => ({
+                        x: new Date(date).getTime(),
+                        y: price,
+                    })
+                ) || []
+            );
+            setStartPrice(initialPriceQuery?.data?.events?.[0]?.quotePrices?.[0]?.startPrice || 0);
+        }
+    }, [initialPriceQuery.status]);
+
+    useInterval(async () => {
+        const lastPrice = additionalPrices.length ? additionalPrices.slice(-1)[0] : initialPrices.slice(-1)[0];
+        if (lastPrice?.x) {
+            const result = await client
+                .query<QuotePricesQuery, QuotePricesQueryVariables>(PriceQuery, {
+                    eventId,
+                    after: String(lastPrice.x),
+                })
+                .toPromise();
+            const newPrices =
+                result?.data?.events?.[0]?.quotePrices?.[0]?.realtimePrices?.map(
+                    ({ date, price }: { date: string; price: number }) => ({
+                        x: new Date(date).getTime(),
+                        y: price,
+                    })
+                ) || [];
+            setAdditionalPrices((s): ChartData[] => [...s, ...newPrices]);
+        }
+    }, 15000);
+
+    return useMemo(
+        () => ({
+            chartData: [...initialPrices, ...additionalPrices],
+            startPrice,
+        }),
+        [initialPrices, additionalPrices, startPrice]
+    );
 }
 
 /**
  * Renders PriceChart
  */
 export function PriceChart(props: PriceChartProps): ReactElement | null {
-    const { headerExpanded, togglePriceChart, priceChartExpanded } = props;
+    const {
+        headerExpanded,
+        endTime,
+        eventId,
+        togglePriceChart,
+        priceChartExpanded,
+        onSeekAudioByDate,
+        currentParagraphTimestamp,
+        startTime,
+    } = props;
+    const { chartData, startPrice } = useChartData(eventId);
     const [pinned, setPinState] = useState(false);
-    const [currentPrice, setPrice] = useState(chartData[chartData.length - 1]?.y);
+    const [currentPrice, setPrice] = useState(startPrice);
     const [inFocus, setFocus] = useState(false);
     const togglePin = useCallback(() => setPinState(!pinned), [pinned]);
 
@@ -320,15 +408,24 @@ export function PriceChart(props: PriceChartProps): ReactElement | null {
         }
     });
 
-    if ((!pinned && !headerExpanded) || typeof currentPrice !== 'number') return null;
+    useEffect(() => {
+        setPrice(chartData[chartData.length - 1]?.y || 0);
+    }, [chartData.length]);
+
+    if ((!pinned && !headerExpanded) || typeof currentPrice !== 'number' || chartData.length < 2) return null;
 
     return (
         <PriceChartUI
+            endTime={endTime}
             togglePriceChart={togglePriceChart}
             togglePin={togglePin}
+            chartData={chartData}
             currentPrice={currentPrice || 0}
+            currentParagraphTimestamp={currentParagraphTimestamp}
             setFocus={setFocus}
             setPrice={setPrice}
+            startTime={startTime}
+            onSeekAudioByDate={onSeekAudioByDate}
             pinned={pinned}
             priceChartExpanded={priceChartExpanded}
         />

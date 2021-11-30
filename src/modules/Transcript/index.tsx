@@ -64,8 +64,11 @@ interface TranscriptUIProps {
     currentMatch?: string | null;
     currentMatchRef: Ref<HTMLDivElement>;
     currentParagraph?: string | null;
+    currentParagraphTimestamp?: string | null;
     currentParagraphRef: Ref<HTMLDivElement>;
     darkMode?: boolean;
+    endTime?: string | null;
+    eventId: string;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
     matchIndex: number;
     matches: Chunk[];
@@ -73,12 +76,14 @@ interface TranscriptUIProps {
     onBack?: MouseEventHandler;
     onChangeSearchTerm: ChangeHandler<string>;
     onClickTranscript?: (paragraph: Paragraph) => void;
+    onSeekAudioByDate?: (date: string) => void;
     partial?: Partial;
     prevMatch: () => void;
     scrollContainerRef: Ref<HTMLDivElement>;
     searchTerm: string;
     showSpeakers: boolean;
     speakerTurns: SpeakerTurnsWithMatches[];
+    startTime?: string | null;
 }
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
@@ -89,7 +94,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         currentMatchRef,
         currentParagraph,
         currentParagraphRef,
+        currentParagraphTimestamp,
         darkMode = false,
+        endTime,
+        eventId,
         eventQuery,
         matchIndex,
         matches,
@@ -97,12 +105,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         onBack,
         onChangeSearchTerm,
         onClickTranscript,
+        onSeekAudioByDate,
         partial,
         prevMatch,
         scrollContainerRef,
         searchTerm,
         showSpeakers,
         speakerTurns,
+        startTime,
     } = props;
 
     return (
@@ -113,10 +123,15 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             <div className="dark:bg-bluegray-7">
                 <Header
                     containerHeight={containerHeight}
+                    currentParagraphTimestamp={currentParagraphTimestamp}
+                    endTime={endTime}
+                    eventId={eventId}
                     eventQuery={eventQuery}
                     onBack={onBack}
                     searchTerm={searchTerm}
                     onChangeSearchTerm={onChangeSearchTerm}
+                    onSeekAudioByDate={onSeekAudioByDate}
+                    startTime={startTime}
                 />
                 {searchTerm && (
                     <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
@@ -378,6 +393,32 @@ function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdate
                             }
                         }
                     }
+                    quotePrices {
+                        currentDayClosePrice
+                        currentDayOpenPrice
+                        endPrice
+                        previousDayClosePrice
+                        quote {
+                            id
+                            localTicker
+                            exchange {
+                                id
+                                shortName
+                            }
+                        }
+                        realtimePrices {
+                            date
+                            price
+                            volume
+                            priceChangeFromStartValue
+                            priceChangeFromStartPercent
+                            volumeChangeFromStartValue
+                            volumeChangeFromStartPercent
+                            volumeChangeFromLastValue
+                            volumeChangeFromLastPercent
+                        }
+                        startPrice
+                    }
                     transcripts {
                         id
                         sections {
@@ -393,6 +434,8 @@ function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdate
                                 paragraphs {
                                     id
                                     timestamp
+                                    displayTimestamp
+                                    syncTimestamp
                                     syncMs
                                     sentences {
                                         id
@@ -443,6 +486,8 @@ function useLatestTranscripts(
                         latestParagraphs {
                             id
                             timestamp
+                            displayTimestamp
+                            syncTimestamp
                             syncMs
                             sentences {
                                 id
@@ -605,7 +650,10 @@ function useAudioSync(
     Dispatch<SetStateAction<string | null>>,
     RefCallback<HTMLDivElement>,
     RefCallback<HTMLDivElement>,
-    Partial
+    Partial,
+    string | null,
+    string | null,
+    string | null
 ] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
     const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll<HTMLDivElement>();
@@ -642,7 +690,9 @@ function useAudioSync(
             if (partial.text) setCurrentParagraph('partial');
             else {
                 const lastParagraph = paragraphs.slice(-1)[0];
-                if (lastParagraph) setCurrentParagraph(lastParagraph.id);
+                if (lastParagraph) {
+                    setCurrentParagraph(lastParagraph.id);
+                }
             }
         }
         // If we found a paragraph for the current audio, use it
@@ -658,7 +708,30 @@ function useAudioSync(
         // an indicator in the UI
     }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text]);
 
-    return [currentParagraph, setCurrentParagraph, scrollContainerRef, currentParagraphRef, partial];
+    const currentParagraphTimestamp = useMemo(() => {
+        const currentIndex = paragraphs.findIndex(({ id }) => currentParagraph === id);
+        // Return first available time
+        return paragraphs.slice(currentIndex).find(({ syncTimestamp }) => !!syncTimestamp)?.syncTimestamp || null;
+    }, [currentParagraph, paragraphs]);
+
+    const startTime = useMemo(
+        () => paragraphs.find(({ syncTimestamp }) => !!syncTimestamp)?.syncTimestamp || null,
+        [paragraphs]
+    );
+    const endTime = useMemo(() => {
+        return [...paragraphs].reverse().find(({ syncTimestamp }) => !!syncTimestamp)?.syncTimestamp || null;
+    }, [paragraphs]);
+
+    return [
+        currentParagraph,
+        setCurrentParagraph,
+        scrollContainerRef,
+        currentParagraphRef,
+        partial,
+        currentParagraphTimestamp,
+        startTime,
+        endTime,
+    ];
 }
 
 function useSearchState(speakerTurns: SpeakerTurn[]) {
@@ -785,12 +858,16 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const audioPlayer = useAudioPlayer();
 
     const speakerTurns = useLatestTranscripts(eventId, eventQuery);
-    const [currentParagraph, _setCurrentParagraph, autoscrollContainerRef, currentParagraphRef, partial] = useAudioSync(
-        eventId,
-        speakerTurns,
-        eventQuery,
-        audioPlayer
-    );
+    const [
+        currentParagraph,
+        _setCurrentParagraph,
+        autoscrollContainerRef,
+        currentParagraphRef,
+        partial,
+        currentParagraphTimestamp,
+        startTime,
+        endTime,
+    ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
     const searchState = useSearchState(speakerTurns);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
@@ -806,6 +883,23 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
         },
         [audioPlayer]
+    );
+    const onSeekAudioByDate = useCallback(
+        (date: string) => {
+            const p = searchState.speakerTurnsWithMatches.flatMap(({ paragraphsWithMatches: paragraphs }) =>
+                paragraphs.flatMap(({ paragraph }) => paragraph)
+            );
+            const pastIndex = p.findIndex(({ syncTimestamp }) =>
+                syncTimestamp ? new Date(syncTimestamp).getTime() > parseFloat(date) : false
+            );
+            if (pastIndex > 0) {
+                const currentP = p[pastIndex - 1] || p[pastIndex];
+                if (currentP) {
+                    onClickTranscript(currentP);
+                }
+            }
+        },
+        [searchState.speakerTurnsWithMatches]
     );
     const onClickBack = useCallback(
         (event: MouseEvent) => {
@@ -828,8 +922,11 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             currentMatch={searchState.currentMatch}
             currentMatchRef={searchState.currentMatchRef}
             currentParagraph={currentParagraph}
+            currentParagraphTimestamp={currentParagraphTimestamp}
             currentParagraphRef={currentParagraphRef}
             darkMode={settings.darkMode}
+            endTime={endTime}
+            eventId={eventId}
             eventQuery={eventQuery}
             matchIndex={searchState.matchIndex}
             matches={searchState.matches}
@@ -837,12 +934,14 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             onBack={onClickBack}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
+            onSeekAudioByDate={onSeekAudioByDate}
             partial={partial}
             prevMatch={searchState.prevMatch}
             scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
             showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
             speakerTurns={searchState.speakerTurnsWithMatches}
+            startTime={startTime}
         />
     );
 };

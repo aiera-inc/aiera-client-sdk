@@ -92,6 +92,7 @@ function createGQLClient(config: EnvConfig): Client {
     return createClient({
         ...config.gqlOptions.clientOptions,
         exchanges,
+        requestPolicy: 'cache-and-network',
     });
 }
 
