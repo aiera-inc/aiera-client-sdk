@@ -157,9 +157,9 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                                                                 <span className="font-light text-gray-300 group-hover:text-gray-400">
                                                                     {primaryQuote.exchange?.shortName}
                                                                 </span>
+                                                                <span className="pl-1 pr-1 text-gray-400">•</span>
                                                             </>
                                                         )}
-                                                        <span className="pl-1 pr-1 text-gray-400">•</span>
                                                         <span className="text-gray-400">
                                                             {date.toFormat('MMM dd, yyyy')}
                                                         </span>
