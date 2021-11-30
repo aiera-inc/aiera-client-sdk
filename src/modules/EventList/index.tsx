@@ -274,6 +274,7 @@ export interface EventListProps {}
 
 interface EventListState {
     company?: CompanyFilterResult;
+    watchlist: string[];
     event?: EventListEvent;
     filterByTypes: FilterByType[];
     listType: EventView;
@@ -283,6 +284,7 @@ interface EventListState {
 export const EventList = (_props: EventListProps): ReactElement => {
     const { state, handlers, setState } = useChangeHandlers<EventListState>({
         company: undefined,
+        watchlist: [],
         event: undefined,
         filterByTypes: [],
         listType: EventView.LiveAndUpcoming,
@@ -301,6 +303,20 @@ export const EventList = (_props: EventListProps): ReactElement => {
                     setState((s) => ({ ...s, company, event: undefined }));
                 }
             }
+        },
+        'in'
+    );
+
+    useMessageListener(
+        'instruments-selected',
+        async (msg: Message<'instruments-selected'>) => {
+            const companyIds = (
+                await Promise.all(msg.data.map((d) => (d.ticker ? resolveCompany(d.ticker) : Promise.resolve([]))))
+            )
+                .flat()
+                .map((c) => c?.id)
+                .filter((n) => n) as string[];
+            setState((s) => ({ ...s, watchlist: companyIds }));
         },
         'in'
     );
@@ -370,7 +386,11 @@ export const EventList = (_props: EventListProps): ReactElement => {
                 hasTranscript: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
                 eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
                 title: state.searchTerm || undefined,
-                companyIds: state.company?.id ? [state.company.id] : undefined,
+                companyIds: state.company?.id
+                    ? [state.company.id]
+                    : state.watchlist?.length
+                    ? state.watchlist
+                    : undefined,
             },
         },
     });

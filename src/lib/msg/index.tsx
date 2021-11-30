@@ -6,6 +6,7 @@ type Direction = 'in' | 'out';
 
 interface MessageBusEvents {
     'instrument-selected': InstrumentID;
+    'instruments-selected': InstrumentID[];
 }
 
 export interface Message<E extends keyof MessageBusEvents> {
