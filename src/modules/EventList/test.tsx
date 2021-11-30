@@ -99,32 +99,36 @@ describe('EventList', () => {
         jest.clearAllTimers();
     });
 
-    test('handles loading state', () => {
-        const { rendered } = renderWithProvider(<EventList />);
+    test('handles loading state', async () => {
+        const { rendered } = await actAndFlush(() => renderWithProvider(<EventList />));
         expect(rendered.container.querySelector('.EventList__loading')).not.toBeNull();
     });
 
-    test('handles empty state', () => {
-        renderWithProvider(<EventList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        events: [],
-                    },
-                }),
-        });
+    test('handles empty state', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<EventList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            events: [],
+                        },
+                    }),
+            })
+        );
         screen.getByText('There are no events.');
     });
 
-    test('handles event list', () => {
-        renderWithProvider(<EventList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        events: eventList,
-                    },
-                }),
-        });
+    test('handles event list', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<EventList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            events: eventList,
+                        },
+                    }),
+            })
+        );
         //screen.getByText('Event Title'); would like to add this back as hint
         screen.getByText('TICK');
         screen.getByText('EXCH');
@@ -135,7 +139,7 @@ describe('EventList', () => {
         screen.getByText('2:00PM');
     });
 
-    test('handles company selection via message bus', () => {
+    test('handles company selection via message bus', async () => {
         const bus = new MessageBus();
         const TestComponent = () => {
             return (
@@ -145,57 +149,63 @@ describe('EventList', () => {
             );
         };
 
-        const { client } = renderWithProvider(<TestComponent />);
+        const { client } = await actAndFlush(() => renderWithProvider(<TestComponent />));
         bus.emit('instrument-selected', { ticker: 'TICK' }, 'in');
         expect(client.query).toHaveBeenCalled();
     });
 
-    test('renders calendar when there is no audio url', () => {
-        renderWithProvider(<EventList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        events: eventList,
-                    },
-                }),
-        });
+    test('renders calendar when there is no audio url', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<EventList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            events: eventList,
+                        },
+                    }),
+            })
+        );
         const row = screen.getByText('TICK').closest('li');
         expect(row).toBeTruthy();
         if (row) within(row).getByTitle('Calendar');
     });
 
-    test('renders play when there is an audio url', () => {
-        renderWithProvider(<EventList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        events: [{ ...eventList[0], audioRecordingUrl: 'mp3!' }],
-                    },
-                }),
-        });
+    test('renders play when there is an audio url', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<EventList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            events: [{ ...eventList[0], audioRecordingUrl: 'mp3!' }],
+                        },
+                    }),
+            })
+        );
         const row = screen.getByText('TICK').closest('li');
         expect(row).toBeTruthy();
         if (row) within(row).getByTitle('Play');
     });
 
     test('handles selecting an event', async () => {
-        renderWithProvider(<EventList />, {
-            executeQuery: ({ query }: { query: DocumentNode }) => {
-                // @ts-ignore
-                const queryName = query?.definitions[0]?.name as string;
-                return queryName === 'EventList'
-                    ? fromValue({
-                          data: {
-                              events: eventList,
-                          },
-                      })
-                    : fromValue({
-                          data: {
-                              events: eventTranscript,
-                          },
-                      });
-            },
-        });
+        await actAndFlush(() =>
+            renderWithProvider(<EventList />, {
+                executeQuery: ({ query }: { query: DocumentNode }) => {
+                    // @ts-ignore
+                    const queryName = query?.definitions[0]?.name as string;
+                    return queryName === 'EventList'
+                        ? fromValue({
+                              data: {
+                                  events: eventList,
+                              },
+                          })
+                        : fromValue({
+                              data: {
+                                  events: eventTranscript,
+                              },
+                          });
+                },
+            })
+        );
         await actAndFlush(() => {
             userEvent.click(screen.getByText('TICK'));
         });
@@ -203,23 +213,25 @@ describe('EventList', () => {
     });
 
     test('handles selecting an event by keyboard', async () => {
-        renderWithProvider(<EventList />, {
-            executeQuery: ({ query }: { query: DocumentNode }) => {
-                // @ts-ignore
-                const queryName = query?.definitions[0]?.name as string;
-                return queryName === 'EventList'
-                    ? fromValue({
-                          data: {
-                              events: eventList,
-                          },
-                      })
-                    : fromValue({
-                          data: {
-                              events: eventTranscript,
-                          },
-                      });
-            },
-        });
+        await actAndFlush(() =>
+            renderWithProvider(<EventList />, {
+                executeQuery: ({ query }: { query: DocumentNode }) => {
+                    // @ts-ignore
+                    const queryName = query?.definitions[0]?.name as string;
+                    return queryName === 'EventList'
+                        ? fromValue({
+                              data: {
+                                  events: eventList,
+                              },
+                          })
+                        : fromValue({
+                              data: {
+                                  events: eventTranscript,
+                              },
+                          });
+                },
+            })
+        );
         const eventItem = screen.getByText('TICK');
         if (eventItem.closest('li')) {
             eventItem?.closest('li')?.focus();
