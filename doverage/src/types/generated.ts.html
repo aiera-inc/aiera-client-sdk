@@ -1012,7 +1012,67 @@
 <a name='L953'></a><a href='#L953'>953</a>
 <a name='L954'></a><a href='#L954'>954</a>
 <a name='L955'></a><a href='#L955'>955</a>
-<a name='L956'></a><a href='#L956'>956</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L956'></a><a href='#L956'>956</a>
+<a name='L957'></a><a href='#L957'>957</a>
+<a name='L958'></a><a href='#L958'>958</a>
+<a name='L959'></a><a href='#L959'>959</a>
+<a name='L960'></a><a href='#L960'>960</a>
+<a name='L961'></a><a href='#L961'>961</a>
+<a name='L962'></a><a href='#L962'>962</a>
+<a name='L963'></a><a href='#L963'>963</a>
+<a name='L964'></a><a href='#L964'>964</a>
+<a name='L965'></a><a href='#L965'>965</a>
+<a name='L966'></a><a href='#L966'>966</a>
+<a name='L967'></a><a href='#L967'>967</a>
+<a name='L968'></a><a href='#L968'>968</a>
+<a name='L969'></a><a href='#L969'>969</a>
+<a name='L970'></a><a href='#L970'>970</a>
+<a name='L971'></a><a href='#L971'>971</a>
+<a name='L972'></a><a href='#L972'>972</a>
+<a name='L973'></a><a href='#L973'>973</a>
+<a name='L974'></a><a href='#L974'>974</a>
+<a name='L975'></a><a href='#L975'>975</a>
+<a name='L976'></a><a href='#L976'>976</a>
+<a name='L977'></a><a href='#L977'>977</a>
+<a name='L978'></a><a href='#L978'>978</a>
+<a name='L979'></a><a href='#L979'>979</a>
+<a name='L980'></a><a href='#L980'>980</a>
+<a name='L981'></a><a href='#L981'>981</a>
+<a name='L982'></a><a href='#L982'>982</a>
+<a name='L983'></a><a href='#L983'>983</a>
+<a name='L984'></a><a href='#L984'>984</a>
+<a name='L985'></a><a href='#L985'>985</a>
+<a name='L986'></a><a href='#L986'>986</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2163,6 +2223,7 @@ export type Event = {
   isLive: Scalars['Boolean'];
   primaryCompany?: Maybe&lt;Company&gt;;
   publishedTranscriptExpected: Scalars['Boolean'];
+  quotePrices: Array&lt;EventQuotePriceInfo&gt;;
   title: Scalars['String'];
   transcripts: Array&lt;EventTranscript&gt;;
   webcastUrls: Array&lt;Scalars['String']&gt;;
@@ -2195,6 +2256,35 @@ export type EventGroup = {
   numEvents: Scalars['Int'];
   start?: Maybe&lt;Scalars['DateTime']&gt;;
   title: Scalars['String'];
+};
+&nbsp;
+export type EventQuotePriceInfo = {
+  __typename?: 'EventQuotePriceInfo';
+  currentDayClosePrice?: Maybe&lt;Scalars['Float']&gt;;
+  currentDayOpenPrice?: Maybe&lt;Scalars['Float']&gt;;
+  endPrice?: Maybe&lt;Scalars['Float']&gt;;
+  previousDayClosePrice?: Maybe&lt;Scalars['Float']&gt;;
+  quote: Quote;
+  realtimePrices: Array&lt;EventQuoteRealtimePrice&gt;;
+  startPrice?: Maybe&lt;Scalars['Float']&gt;;
+};
+&nbsp;
+&nbsp;
+export type EventQuotePriceInfoRealtimePricesArgs = {
+  after?: InputMaybe&lt;Scalars['DateTime']&gt;;
+};
+&nbsp;
+export type EventQuoteRealtimePrice = {
+  __typename?: 'EventQuoteRealtimePrice';
+  date: Scalars['DateTime'];
+  price: Scalars['Float'];
+  priceChangeFromStartPercent?: Maybe&lt;Scalars['Float']&gt;;
+  priceChangeFromStartValue?: Maybe&lt;Scalars['Float']&gt;;
+  volume: Scalars['Int'];
+  volumeChangeFromLastPercent?: Maybe&lt;Scalars['Float']&gt;;
+  volumeChangeFromLastValue?: Maybe&lt;Scalars['Int']&gt;;
+  volumeChangeFromStartPercent?: Maybe&lt;Scalars['Float']&gt;;
+  volumeChangeFromStartValue?: Maybe&lt;Scalars['Int']&gt;;
 };
 &nbsp;
 export type EventTranscript = {
@@ -2929,7 +3019,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon Nov 29 2021 14:13:10 GMT-0500 (Eastern Standard Time)
+                at Tue Nov 30 2021 16:03:33 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
