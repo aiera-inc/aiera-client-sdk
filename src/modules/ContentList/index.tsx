@@ -216,7 +216,9 @@ export function ContentList(_props: ContentListProps): ReactElement {
         },
         'in'
     );
-
+    // TODO replace with search api query
+    // The content query requires an array of contentIds,
+    // meant to be used to retrieve specific content
     const contentListQuery = useQuery<ContentListQuery, ContentListQueryVariables>({
         isEmpty: ({ content }) => (content || []).length === 0,
         query: gql`

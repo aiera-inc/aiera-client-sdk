@@ -15,7 +15,6 @@ import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlas
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { titleize } from '@aiera/client-sdk/lib/strings';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { ContentQuery, ContentQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
 import './styles.css';
@@ -33,10 +32,19 @@ interface ContentSharedProps {
     onBack?: MouseEventHandler;
 }
 
+const CONTENT_TYPE_MAP = {
+    [ContentType.Document]: 'Document',
+    [ContentType.Filing]: 'Filing',
+    [ContentType.News]: 'News',
+    [ContentType.Spotlight]: 'Corp. Activity',
+    [ContentType.Streetaccount]: 'Street Account',
+};
+
 /** @notExported */
 interface ContentUIProps extends ContentSharedProps {
     body?: ContentBody[];
     contentQuery: QueryResult<ContentQuery, ContentQueryVariables>;
+    contentTypeLabel: string;
     currentMatch?: string | null;
     currentMatchRef: Ref<HTMLDivElement>;
     matchIndex: number;
@@ -53,6 +61,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
         body,
         contentQuery,
         contentType,
+        contentTypeLabel,
         currentMatch,
         currentMatchRef,
         matches,
@@ -64,31 +73,25 @@ export function ContentUI(props: ContentUIProps): ReactElement {
         scrollContainerRef,
         searchTerm,
     } = props;
-    const backButton = (contentType: ContentType): ReactElement => (
-        <Button className="mr-2" onClick={onBack}>
-            <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-            {titleize(contentType as string)}
-        </Button>
-    );
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
         <div className="h-full flex flex-col content">
             <div className="flex flex-col pl-3 pr-3 pt-3 shadow-3xl content__header">
                 <div className="flex items-center mb-3">
+                    <Button className="mr-2" onClick={onBack}>
+                        <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
+                        {contentTypeLabel}
+                    </Button>
                     {match(contentType)
                         .with(ContentType.News, () => (
-                            <>
-                                {onBack && backButton(ContentType.News)}
-                                <Input
-                                    icon={<MagnifyingGlass />}
-                                    name="search"
-                                    placeholder="Search Article..."
-                                    value={searchTerm}
-                                    onChange={onChangeSearch}
-                                />
-                            </>
+                            <Input
+                                icon={<MagnifyingGlass />}
+                                name="search"
+                                placeholder="Search Article..."
+                                value={searchTerm}
+                                onChange={onChangeSearch}
+                            />
                         ))
-                        .with(ContentType.Spotlight, () => onBack && backButton(ContentType.Spotlight))
                         .otherwise(() => null)}
                 </div>
             </div>
@@ -320,11 +323,13 @@ export function Content(props: ContentProps): ReactElement {
         },
     });
     const searchState = useSearchState(contentQuery);
+    const contentTypeLabel = useMemo(() => CONTENT_TYPE_MAP[contentType] || contentType, [contentType]);
     return (
         <ContentUI
             body={searchState.bodyWithMatches}
             contentQuery={contentQuery}
             contentType={contentType}
+            contentTypeLabel={contentTypeLabel}
             currentMatch={searchState.currentMatch}
             currentMatchRef={searchState.currentMatchRef}
             matches={searchState.matches}
