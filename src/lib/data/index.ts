@@ -108,6 +108,8 @@ export function useAppConfig(): QueryResult<AppConfigQuery, AppConfigQueryVariab
 
 type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit';
 type TrackingObject =
+    | 'Content'
+    | 'Content Search'
     | 'Event'
     | 'Event Filter By'
     | 'Event Search'

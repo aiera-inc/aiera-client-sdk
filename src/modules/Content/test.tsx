@@ -1,56 +1,76 @@
 import React from 'react';
-import { fireEvent, screen } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
+import { fromValue } from 'wonka';
 
-import { ContentListContent, ContentType } from '@aiera/client-sdk/modules/ContentList';
-import { renderWithProvider } from '@aiera/client-sdk/testUtils';
+import { ContentType } from '@aiera/client-sdk/types/generated';
+import { actAndFlush, getByTextWithMarkup, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { Content } from '.';
 
-const content: ContentListContent = {
-    id: 1,
-    date: '2021-10-21',
-    companyIdentifier: 'GME',
-    exchangeName: 'NYSE',
-    sourceName: 'Benzinga',
-    title: 'Famous Stonk Stonking Again As Retail Investors (aka Ape) Stop Eyeing the Moon and Shoot for Andromeda',
-};
-
-function generateContent() {
-    return (
-        <Content
-            companyIdentifier={content.companyIdentifier}
-            contentType={ContentType.news}
-            date={content.date}
-            exchangeName={content.exchangeName}
-            onBack={jest.fn()}
-            sourceName={content.sourceName}
-            title={content.title}
-        />
-    );
-}
+const content = [
+    {
+        id: '1',
+        body: 'This is a paragraph',
+        contentType: 'news',
+        primaryCompany: {
+            instruments: [
+                {
+                    isPrimary: true,
+                    quotes: [
+                        {
+                            isPrimary: true,
+                            localTicker: 'GME',
+                            exchange: {
+                                country: { countryCode: 'US' },
+                                shortName: 'NYSE',
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+        publishedDate: '2021-11-30T09:00:00+00:00',
+        source: 'lexisnexis',
+        title: 'Article Title',
+    },
+];
 
 describe('Content', () => {
-    test('renders content', () => {
-        renderWithProvider(generateContent());
-        screen.getByText('News');
-        screen.getByText('GME');
-        screen.getByText('NYSE');
-        screen.getByText('Famous Stonk', { exact: false });
-        screen.getByText('Benzinga');
-        screen.getByText('Oct 21, 2021');
-        screen.getByText('Netflix, Inc.', { exact: false });
+    beforeEach(() => {
+        jest.useFakeTimers();
     });
 
-    test('highlightedBody', () => {
-        const { rendered } = renderWithProvider(generateContent());
+    afterEach(() => {
+        jest.clearAllTimers();
+        jest.useRealTimers();
+    });
+
+    test('renders Content', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<Content contentId="1" contentType={ContentType.News} onBack={jest.fn()} />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { content },
+                    }),
+            })
+        );
+        screen.getByText('Article Title');
+        screen.getByText('GME');
+        screen.getByText('NYSE');
+        screen.getByText('Nov 30, 2021');
+        screen.getByText('lexisnexis');
+    });
+
+    test('renders search matches', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<Content contentId="1" contentType={ContentType.News} onBack={jest.fn()} />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { content },
+                    }),
+            })
+        );
         const searchInput = screen.getByPlaceholderText('Search Article...');
-        // When there's a search term but no matches, the body should not have any highlighted text
-        fireEvent.change(searchInput, { target: { value: 'fitler' } });
-        expect(rendered.container.querySelector('.bg-yellow-300')).toBeNull();
-        // When there's a search term and at least one match, the body should have highlighted text
-        fireEvent.change(searchInput, { target: { value: 'television' } });
-        expect(rendered.container.querySelector('.bg-yellow-300')).not.toBeNull();
-        // When there's no search term, the body should not have any highlighted text
-        fireEvent.change(searchInput, { target: { value: '' } });
-        expect(rendered.container.querySelector('.bg-yellow-300')).toBeNull();
+        fireEvent.change(searchInput, { target: { value: 'paragraph' } });
+        getByTextWithMarkup('Showing 1 result for "paragraph"');
     });
 });

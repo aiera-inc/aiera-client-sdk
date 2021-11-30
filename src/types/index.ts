@@ -12,7 +12,7 @@ export type QueryError = CombinedError;
 export interface ChangeEvent<T = unknown> {
     /**
      * The name for this input, used so that a single change handler can be used
-     *for many inputs.
+     * for many inputs.
      */
     name?: string;
     /**
