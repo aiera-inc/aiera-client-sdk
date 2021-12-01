@@ -11,12 +11,25 @@ import {
     AppConfigQueryVariables,
     CompanyResolutionQuery,
     CompanyResolutionQueryVariables,
+    ContentSource,
     TrackMutation,
     TrackMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useStorage } from '@aiera/client-sdk/lib/storage';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+
+/**
+ * Display labels for ContentSource types
+ */
+export const CONTENT_SOURCE_LABELS = {
+    [ContentSource.Eventvestor]: 'EventVestor',
+    [ContentSource.Lexisnexis]: 'LexisNexis',
+    [ContentSource.Media]: 'Media',
+    [ContentSource.Refinitiv]: 'Refinitiv',
+    [ContentSource.Streetaccount]: 'StreetAccount',
+    [ContentSource.User]: 'User',
+};
 
 /**
  * Utilities for working with quotes/instruments

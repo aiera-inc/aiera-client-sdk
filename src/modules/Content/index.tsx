@@ -12,7 +12,7 @@ import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { CONTENT_SOURCE_LABELS, getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -144,7 +144,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                     const content = contentData[0];
                     const primaryQuote = getPrimaryQuote(content?.primaryCompany);
                     const date = content?.publishedDate ? DateTime.fromISO(content.publishedDate) : DateTime.now();
-                    return (
+                    return content ? (
                         <>
                             {!!primaryQuote && (
                                 <div className="flex items-center pl-5 pr-5 pt-5 text-sm">
@@ -153,10 +153,10 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                                 </div>
                             )}
                             <div className="leading-4 pl-5 pr-5 pt-3">
-                                <span className="font-bold text-base">{content?.title}</span>
+                                <span className="font-bold text-base">{content.title}</span>
                             </div>
                             <div className="flex items-center pl-5 pr-5 pt-2 text-sm">
-                                <span className="text-indigo-300">{content?.source}</span>
+                                <span className="text-indigo-300">{CONTENT_SOURCE_LABELS[content.source]}</span>
                                 <span className="pl-1 pr-1 text-gray-400">•</span>
                                 {date && <span className="text-gray-400">{date.toFormat('MMM dd, yyyy')}</span>}
                             </div>
@@ -183,7 +183,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                                 </div>
                             )}
                         </>
-                    );
+                    ) : null;
                 })
                 .otherwise(() => null)}
         </div>

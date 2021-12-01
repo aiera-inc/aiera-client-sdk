@@ -6,12 +6,14 @@ import userEvent from '@testing-library/user-event';
 
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
+import { ContentSource, ContentType } from '@aiera/client-sdk/types/generated';
 import { ContentList } from '.';
+import { CONTENT_SOURCE_LABELS } from '@aiera/client-sdk/lib/data';
 
 const contentList = [
     {
         id: '1',
-        contentType: 'news',
+        contentType: ContentType.News,
         primaryCompany: {
             instruments: [
                 {
@@ -30,7 +32,7 @@ const contentList = [
             ],
         },
         publishedDate: '2021-11-30T09:00:00+00:00',
-        source: 'lexisnexis',
+        source: ContentSource.Lexisnexis,
         title: 'Article Title',
     },
 ];
@@ -84,7 +86,7 @@ describe('ContentList', () => {
         expect(row).toBeTruthy();
         if (row) {
             within(row).getByText('Nov 30, 2021');
-            within(row).getByText('lexisnexis');
+            within(row).getByText(CONTENT_SOURCE_LABELS[ContentSource.Lexisnexis]);
         }
     });
 

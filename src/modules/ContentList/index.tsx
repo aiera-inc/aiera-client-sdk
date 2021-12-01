@@ -8,7 +8,7 @@ import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/comp
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
-import { getPrimaryQuote, useAutoTrack, useCompanyResolver } from '@aiera/client-sdk/lib/data';
+import { CONTENT_SOURCE_LABELS, getPrimaryQuote, useAutoTrack, useCompanyResolver } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
@@ -164,7 +164,9 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                                                             {date.toFormat('MMM dd, yyyy')}
                                                         </span>
                                                         <span className="pl-1 pr-1 text-gray-400">•</span>
-                                                        <span className="text-indigo-300">{item.source}</span>
+                                                        <span className="text-indigo-300">
+                                                            {CONTENT_SOURCE_LABELS[item.source] || item.source}
+                                                        </span>
                                                     </div>
                                                 </li>
                                             </Fragment>
