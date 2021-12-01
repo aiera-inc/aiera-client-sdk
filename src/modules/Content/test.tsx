@@ -10,7 +10,7 @@ import { Content } from '.';
 const content = [
     {
         id: '1',
-        body: 'This is a paragraph',
+        body: '<p>This is a paragraph</p>',
         contentType: ContentType.News,
         primaryCompany: {
             instruments: [

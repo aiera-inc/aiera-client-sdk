@@ -42,7 +42,7 @@ const CONTENT_TYPE_MAP = {
 
 /** @notExported */
 interface ContentUIProps extends ContentSharedProps {
-    body?: ContentBody[];
+    body?: ContentBody[][] | null;
     contentQuery: QueryResult<ContentQuery, ContentQueryVariables>;
     contentTypeLabel: string;
     currentMatch?: string | null;
@@ -161,25 +161,29 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                                 {date && <span className="text-gray-400">{date.toFormat('MMM dd, yyyy')}</span>}
                             </div>
                             {body && (
-                                <div className="overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm" ref={scrollContainerRef}>
-                                    {body.map(({ highlight, id: chunkId, text }) =>
-                                        highlight ? (
-                                            <mark
-                                                className={classNames({
-                                                    'bg-yellow-300': chunkId === currentMatch,
-                                                })}
-                                                key={`content-body-chunk-${chunkId}-match`}
-                                                ref={chunkId === currentMatch ? currentMatchRef : undefined}
-                                            >
-                                                <span dangerouslySetInnerHTML={{ __html: text }} />
-                                            </mark>
-                                        ) : (
-                                            <span
-                                                dangerouslySetInnerHTML={{ __html: text }}
-                                                key={`content-body-chunk-${chunkId}`}
-                                            />
-                                        )
-                                    )}
+                                <div
+                                    className="overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm content__body"
+                                    ref={scrollContainerRef}
+                                >
+                                    {body.map((paragraph, pIdx) => (
+                                        <p className="leading-5 mb-4" key={`content-body-paragraph-${pIdx}`}>
+                                            {paragraph.map(({ highlight, id: chunkId, text }) =>
+                                                highlight ? (
+                                                    <mark
+                                                        className={classNames({
+                                                            'bg-yellow-300': chunkId === currentMatch,
+                                                        })}
+                                                        key={`content-body-chunk-${chunkId}-match`}
+                                                        ref={chunkId === currentMatch ? currentMatchRef : undefined}
+                                                    >
+                                                        {text}
+                                                    </mark>
+                                                ) : (
+                                                    <span key={`content-body-chunk-${chunkId}`}>{text}</span>
+                                                )
+                                            )}
+                                        </p>
+                                    ))}
                                 </div>
                             )}
                         </>
@@ -212,31 +216,49 @@ function useSearchState(contentQuery: QueryResult<ContentQuery, ContentQueryVari
      * depending on the search matches
      */
     const body = contentQuery.state.data?.content[0]?.body;
-    const bodyWithMatches: ContentBody[] = useMemo(
-        () =>
-            state.searchTerm && body
-                ? findAll({
-                      autoEscape: true,
-                      caseSensitive: false,
-                      searchWords: [state.searchTerm],
-                      textToHighlight: body,
-                  }).map(({ highlight, start, end }, index) => ({
-                      highlight,
-                      id: `content-body-search-term-chunk-${index}`,
-                      text: body.substr(start, end - start),
-                  }))
-                : [
-                      {
-                          highlight: false,
-                          id: 'content-body',
-                          text: body || '',
-                      },
-                  ],
-        [body, state.searchTerm]
-    );
+    const bodyWithMatches: ContentBody[][] | null = useMemo(() => {
+        if (body) {
+            const nodes: NodeListOf<ChildNode> = new DOMParser().parseFromString(body, 'text/html').body.childNodes;
+            // Each ContentBody array inside this 2D array represents a paragraph
+            const chunks: ContentBody[][] = [];
+            // Map and filter methods are not available for NodeListOf
+            nodes.forEach((node, nodeIndex) => {
+                if (node.nodeName === 'P' && node.textContent?.length) {
+                    const text = node.textContent;
+                    if (state.searchTerm) {
+                        chunks.push(
+                            findAll({
+                                autoEscape: true,
+                                caseSensitive: false,
+                                searchWords: [state.searchTerm],
+                                textToHighlight: text,
+                            }).map(({ highlight, start, end }, index) => ({
+                                highlight,
+                                id: `content-body-chunk-${nodeIndex}-${index}`,
+                                text: text.substr(start, end - start),
+                            }))
+                        );
+                    } else {
+                        chunks.push([
+                            {
+                                highlight: false,
+                                id: `content-body-chunk-${nodeIndex}`,
+                                text,
+                            },
+                        ]);
+                    }
+                }
+            });
+            return chunks;
+        }
+        return null;
+    }, [body, state.searchTerm]);
 
     // Get the body chunks with search matches only
-    const matches = useMemo(() => bodyWithMatches.filter((chunk) => chunk.highlight), [bodyWithMatches]);
+    const matches = useMemo(
+        () => (bodyWithMatches || []).flatMap((part) => part).filter((chunk) => chunk.highlight),
+        [bodyWithMatches]
+    );
 
     // When the search term changes, reset the current match to the first hit on the new term
     useEffect(() => {
