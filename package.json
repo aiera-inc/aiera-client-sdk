@@ -7,7 +7,7 @@
     "main": "index.js",
     "types": "index.d.ts",
     "scripts": {
-        "build": "npm run clean && npm run codegen && concurrently npm:build:lib:* && cd dist && npm pack",
+        "build": "npm run clean && npm run codegen && concurrently npm:build:lib:* && cd dist && npm pack && mv aiera-client-sdk-$npm_package_version.tgz aiera-client-sdk.tgz",
         "build:watch": "npm run clean && npm run codegen && concurrently -k npm:build:watch:* npm:test:watch",
         "build:docs": "typedoc",
         "build:watch:docs": "typedoc --watch --preserveWatchOutput",
@@ -27,7 +27,8 @@
         "new:svg": "plop --plopfile templates/plopfile.ts svg",
         "new:hook": "plop --plopfile templates/plopfile.ts hook",
         "new": "plop --plopfile templates/plopfile.ts",
-        "release": "NODE_ENV=production npm run build && hub release create -m v$npm_package_version -a dist/aiera-client-sdk-$npm_package_version.tgz v$npm_package_version",
+        "release": "NODE_ENV=production npm run build && hub release create -m v$npm_package_version -a dist/aiera-client-sdk.tgz v$npm_package_version",
+        "prerelease": "export VERSION=pre-$(date '+%Y-%m-%dT%H-%M-%S')-$(git rev-parse HEAD | cut -c -7) && NODE_ENV=production npm run build && hub release create -m $VERSION -a dist/aiera-client-sdk.tgz $VERSION",
         "start": "npm run build:watch",
         "test": "jest --config .jest/jest.config.js --coverage",
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
