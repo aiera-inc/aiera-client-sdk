@@ -218,12 +218,15 @@ function useSearchState(contentQuery: QueryResult<ContentQuery, ContentQueryVari
     const body = contentQuery.state.data?.content[0]?.body;
     const bodyWithMatches: ContentBody[][] | null = useMemo(() => {
         if (body) {
+            // This may not be performant enough for content with large bodies (e.g. filings)
+            // See https://github.com/aiera-inc/aiera-desktop/blob/master/src/floatingTabs/Filing/FilingSidebar/container.js#L90
+            // for a possible alternate solution
             const nodes: NodeListOf<ChildNode> = new DOMParser().parseFromString(body, 'text/html').body.childNodes;
             // Each ContentBody array inside this 2D array represents a paragraph
             const chunks: ContentBody[][] = [];
             // Map and filter methods are not available for NodeListOf
             nodes.forEach((node, nodeIndex) => {
-                if (node.nodeName === 'P' && node.textContent?.length) {
+                if (node.textContent?.length) {
                     const text = node.textContent;
                     if (state.searchTerm) {
                         chunks.push(
