@@ -657,8 +657,8 @@ var require_react_development = __commonJS({
             "=": "=0",
             ":": "=2"
           };
-          var escapedString = key.replace(escapeRegex, function(match7) {
-            return escaperLookup[match7];
+          var escapedString = key.replace(escapeRegex, function(match8) {
+            return escaperLookup[match8];
           });
           return "$" + escapedString;
         }
@@ -1088,11 +1088,11 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useReducer(reducer, initialArg, init);
         }
-        function useRef6(initialValue) {
+        function useRef7(initialValue) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect9(create, deps) {
+        function useEffect10(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1204,8 +1204,8 @@ var require_react_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match7 && match7[1] || "";
+                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match8 && match8[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -1662,12 +1662,12 @@ var require_react_development = __commonJS({
         exports2.useCallback = useCallback9;
         exports2.useContext = useContext6;
         exports2.useDebugValue = useDebugValue;
-        exports2.useEffect = useEffect9;
+        exports2.useEffect = useEffect10;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect3;
         exports2.useMemo = useMemo5;
         exports2.useReducer = useReducer;
-        exports2.useRef = useRef6;
+        exports2.useRef = useRef7;
         exports2.useState = useState11;
         exports2.version = ReactVersion;
       })();
@@ -3126,8 +3126,8 @@ var require_react_dom_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match7 && match7[1] || "";
+                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match8 && match8[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -25938,8 +25938,8 @@ var require_lib = __commonJS({
     Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
       return wildcards_1.__;
     } });
-    var match7 = (value) => builder(value, []);
-    exports2.match = match7;
+    var match8 = (value) => builder(value, []);
+    exports2.match = match8;
     var builder = (value, cases) => {
       const run = () => {
         const entry = cases.find(({ test }) => test(value));
@@ -28048,11 +28048,11 @@ var require_luxon = __commonJS({
       for (var _len4 = arguments.length, keys = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         keys[_key4] = arguments[_key4];
       }
-      return function(match8, cursor) {
+      return function(match9, cursor) {
         var ret = {};
         var i3;
         for (i3 = 0; i3 < keys.length; i3++) {
-          ret[keys[i3]] = parseInteger(match8[cursor + i3]);
+          ret[keys[i3]] = parseInteger(match9[cursor + i3]);
         }
         return [ret, null, cursor + i3];
       };
@@ -28069,39 +28069,39 @@ var require_luxon = __commonJS({
     var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
     var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
     var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
-    function int(match8, pos, fallback) {
-      var m2 = match8[pos];
+    function int(match9, pos, fallback) {
+      var m2 = match9[pos];
       return isUndefined(m2) ? fallback : parseInteger(m2);
     }
-    function extractISOYmd(match8, cursor) {
+    function extractISOYmd(match9, cursor) {
       var item = {
-        year: int(match8, cursor),
-        month: int(match8, cursor + 1, 1),
-        day: int(match8, cursor + 2, 1)
+        year: int(match9, cursor),
+        month: int(match9, cursor + 1, 1),
+        day: int(match9, cursor + 2, 1)
       };
       return [item, null, cursor + 3];
     }
-    function extractISOTime(match8, cursor) {
+    function extractISOTime(match9, cursor) {
       var item = {
-        hours: int(match8, cursor, 0),
-        minutes: int(match8, cursor + 1, 0),
-        seconds: int(match8, cursor + 2, 0),
-        milliseconds: parseMillis(match8[cursor + 3])
+        hours: int(match9, cursor, 0),
+        minutes: int(match9, cursor + 1, 0),
+        seconds: int(match9, cursor + 2, 0),
+        milliseconds: parseMillis(match9[cursor + 3])
       };
       return [item, null, cursor + 4];
     }
-    function extractISOOffset(match8, cursor) {
-      var local2 = !match8[cursor] && !match8[cursor + 1], fullOffset = signedOffset(match8[cursor + 1], match8[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
+    function extractISOOffset(match9, cursor) {
+      var local2 = !match9[cursor] && !match9[cursor + 1], fullOffset = signedOffset(match9[cursor + 1], match9[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
       return [{}, zone, cursor + 3];
     }
-    function extractIANAZone(match8, cursor) {
-      var zone = match8[cursor] ? IANAZone.create(match8[cursor]) : null;
+    function extractIANAZone(match9, cursor) {
+      var zone = match9[cursor] ? IANAZone.create(match9[cursor]) : null;
       return [{}, zone, cursor + 1];
     }
     var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$");
     var isoDuration = /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
-    function extractISODuration(match8) {
-      var s3 = match8[0], yearStr = match8[1], monthStr = match8[2], weekStr = match8[3], dayStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], millisecondsStr = match8[8];
+    function extractISODuration(match9) {
+      var s3 = match9[0], yearStr = match9[1], monthStr = match9[2], weekStr = match9[3], dayStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], millisecondsStr = match9[8];
       var hasNegativePrefix = s3[0] === "-";
       var negativeSeconds = secondStr && secondStr[0] === "-";
       var maybeNegate = function maybeNegate2(num, force) {
@@ -28148,8 +28148,8 @@ var require_luxon = __commonJS({
       return result;
     }
     var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
-    function extractRFC2822(match8) {
-      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], obsOffset = match8[8], milOffset = match8[9], offHourStr = match8[10], offMinuteStr = match8[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC2822(match9) {
+      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], obsOffset = match9[8], milOffset = match9[9], offHourStr = match9[10], offMinuteStr = match9[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       var offset2;
       if (obsOffset) {
         offset2 = obsOffsets[obsOffset];
@@ -28166,12 +28166,12 @@ var require_luxon = __commonJS({
     var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/;
     var rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/;
     var ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
-    function extractRFC1123Or850(match8) {
-      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC1123Or850(match9) {
+      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
-    function extractASCII(match8) {
-      var weekdayStr = match8[1], monthStr = match8[2], dayStr = match8[3], hourStr = match8[4], minuteStr = match8[5], secondStr = match8[6], yearStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractASCII(match9) {
+      var weekdayStr = match9[1], monthStr = match9[2], dayStr = match9[3], hourStr = match9[4], minuteStr = match9[5], secondStr = match9[6], yearStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
     var isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
@@ -29510,7 +29510,7 @@ var require_luxon = __commonJS({
       }, "");
       return ["^" + re + "$", units];
     }
-    function match7(input, regex, handlers) {
+    function match8(input, regex, handlers) {
       var matches = input.match(regex);
       if (matches) {
         var all = {};
@@ -29640,7 +29640,7 @@ var require_luxon = __commonJS({
           invalidReason: disqualifyingUnit.invalidReason
         };
       } else {
-        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match7(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
+        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match8(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
         if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
           throw new ConflictingSpecificationError("Can't include meridiem when specifying 24-hour format");
         }
@@ -31060,14 +31060,14 @@ var require_dist = __commonJS({
               searchWord = escapeRegExpFn(searchWord);
             }
             var regex = new RegExp(searchWord, caseSensitive ? "g" : "gi");
-            var match7 = void 0;
-            while (match7 = regex.exec(textToHighlight)) {
-              var _start = match7.index;
+            var match8 = void 0;
+            while (match8 = regex.exec(textToHighlight)) {
+              var _start = match8.index;
               var _end = regex.lastIndex;
               if (_end > _start) {
                 chunks.push({ highlight: false, start: _start, end: _end });
               }
-              if (match7.index === regex.lastIndex) {
+              if (match8.index === regex.lastIndex) {
                 regex.lastIndex++;
               }
             }
@@ -31112,7 +31112,7 @@ var require_dist = __commonJS({
 });
 
 // src/dev/ContentList.tsx
-var import_react27 = __toModule(require_react());
+var import_react28 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -31856,10 +31856,10 @@ function getLocation(source, position) {
   var lineRegexp = /\r\n|[\n\r]/g;
   var line = 1;
   var column = position + 1;
-  var match7;
-  while ((match7 = lineRegexp.exec(source.body)) && match7.index < position) {
+  var match8;
+  while ((match8 = lineRegexp.exec(source.body)) && match8.index < position) {
     line += 1;
-    column = position + 1 - (match7.index + match7[0].length);
+    column = position + 1 - (match8.index + match8[0].length);
   }
   return {
     line,
@@ -37633,221 +37633,6 @@ var import_lodash2 = __toModule(require_lodash());
 
 // src/lib/data/index.ts
 var import_react6 = __toModule(require_react());
-function sortByPrimary(a3, b3) {
-  return Number(b3.isPrimary) - Number(a3.isPrimary);
-}
-function getPrimaryQuote(company) {
-  var _a;
-  const quotes = (_a = company == null ? void 0 : company.instruments) == null ? void 0 : _a.sort(sortByPrimary).flatMap((instrument) => instrument.quotes).sort(sortByPrimary);
-  const primaryQuote = quotes == null ? void 0 : quotes.find((quote) => quote.exchange.country.countryCode === "US");
-  return primaryQuote || (quotes == null ? void 0 : quotes[0]);
-}
-function useCompanyResolver() {
-  const client = useClient();
-  return (0, import_react6.useCallback)((identifier) => __async(this, null, function* () {
-    var _a;
-    const result = yield client.query(lib_default`
-                        query CompanyResolution($identifier: String!) {
-                            companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
-                                id
-                                commonName
-                                instruments {
-                                    id
-                                    isPrimary
-                                    quotes {
-                                        id
-                                        isPrimary
-                                        localTicker
-                                        exchange {
-                                            id
-                                            shortName
-                                            country {
-                                                id
-                                                countryCode
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    `, { identifier }).toPromise();
-    return (_a = result == null ? void 0 : result.data) == null ? void 0 : _a.companies;
-  }), [client]);
-}
-function useAppConfig() {
-  return useQuery2({
-    query: lib_default`
-            query AppConfig {
-                configuration {
-                    pusherAppCluster
-                    pusherAppKey
-                }
-            }
-        `
-  });
-}
-
-// src/lib/realtime/index.tsx
-var Context5 = (0, import_react7.createContext)(void 0);
-function Provider5({ children, client: passedClient }) {
-  var _a, _b, _c, _d;
-  const [client, setClient] = (0, import_react7.useState)(passedClient);
-  const configQuery = useAppConfig();
-  const { realtimeOptions } = useConfig();
-  (0, import_react7.useEffect)(() => {
-    var _a2, _b2, _c2, _d2;
-    const appKey = (_b2 = (_a2 = configQuery.state.data) == null ? void 0 : _a2.configuration) == null ? void 0 : _b2.pusherAppKey;
-    const cluster = (_d2 = (_c2 = configQuery.state.data) == null ? void 0 : _c2.configuration) == null ? void 0 : _d2.pusherAppCluster;
-    if (!passedClient && appKey && cluster) {
-      setClient(new import_pusher_js.default(appKey, (0, import_lodash2.default)({ cluster }, realtimeOptions)));
-    }
-  }, [(_b = (_a = configQuery.state.data) == null ? void 0 : _a.configuration) == null ? void 0 : _b.pusherAppKey, (_d = (_c = configQuery.state.data) == null ? void 0 : _c.configuration) == null ? void 0 : _d.pusherAppKey]);
-  return /* @__PURE__ */ import_react7.default.createElement(Context5.Provider, {
-    value: client
-  }, children);
-}
-
-// src/components/Provider/index.tsx
-function Provider6(props) {
-  const { bus, children, client, config, realtime, reset, storage } = props;
-  return /* @__PURE__ */ import_react8.default.createElement(Provider, {
-    config
-  }, /* @__PURE__ */ import_react8.default.createElement(Provider3, {
-    client,
-    reset
-  }, /* @__PURE__ */ import_react8.default.createElement(Provider4, {
-    bus
-  }, /* @__PURE__ */ import_react8.default.createElement(Provider5, {
-    client: realtime
-  }, /* @__PURE__ */ import_react8.default.createElement(Provider2, {
-    storage
-  }, children)))));
-}
-
-// src/modules/Auth/index.tsx
-var import_react13 = __toModule(require_react());
-var import_ts_pattern2 = __toModule(require_lib());
-
-// src/components/Input/index.tsx
-var import_react10 = __toModule(require_react());
-var import_classnames2 = __toModule(require_classnames());
-
-// src/components/Svg/Close.tsx
-var import_react9 = __toModule(require_react());
-var import_classnames = __toModule(require_classnames());
-function Close({ className, alt = "Close" }) {
-  return /* @__PURE__ */ import_react9.default.createElement("svg", {
-    className: (0, import_classnames.default)(className, "fill-current", "Svg", "Svg__close"),
-    width: "100%",
-    viewBox: "0 0 16 16",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react9.default.createElement("title", null, alt), /* @__PURE__ */ import_react9.default.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16ZM6.707 5.293C6.5184 5.11084 6.2658 5.01005 6.0036 5.01233C5.7414 5.0146 5.49059 5.11977 5.30518 5.30518C5.11977 5.49059 5.0146 5.7414 5.01233 6.0036C5.01005 6.2658 5.11084 6.5184 5.293 6.707L6.586 8L5.293 9.293C5.19749 9.38525 5.12131 9.49559 5.0689 9.6176C5.01649 9.7396 4.9889 9.87082 4.98775 10.0036C4.9866 10.1364 5.0119 10.2681 5.06218 10.391C5.11246 10.5139 5.18671 10.6255 5.2806 10.7194C5.3745 10.8133 5.48615 10.8875 5.60905 10.9378C5.73194 10.9881 5.86362 11.0134 5.9964 11.0123C6.12918 11.0111 6.2604 10.9835 6.3824 10.9311C6.50441 10.8787 6.61475 10.8025 6.707 10.707L8 9.414L9.293 10.707C9.4816 10.8892 9.7342 10.99 9.9964 10.9877C10.2586 10.9854 10.5094 10.8802 10.6948 10.6948C10.8802 10.5094 10.9854 10.2586 10.9877 9.9964C10.99 9.7342 10.8892 9.4816 10.707 9.293L9.414 8L10.707 6.707C10.8892 6.5184 10.99 6.2658 10.9877 6.0036C10.9854 5.7414 10.8802 5.49059 10.6948 5.30518C10.5094 5.11977 10.2586 5.0146 9.9964 5.01233C9.7342 5.01005 9.4816 5.11084 9.293 5.293L8 6.586L6.707 5.293Z"
-  }));
-}
-
-// src/components/Input/index.tsx
-function InputUI(props) {
-  const {
-    inputRef,
-    autoFocus,
-    icon,
-    id,
-    clearable,
-    clear,
-    placeholder,
-    onChange,
-    onFocus,
-    value,
-    name,
-    className = "",
-    type
-  } = props;
-  return /* @__PURE__ */ import_react10.default.createElement("div", {
-    className: `group h-8 items-center w-full relative  dark:text-white ${className} input__${name}`
-  }, import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
-    className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
-  }, import_react10.default.cloneElement(icon, {
-    className: "group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4"
-  })), /* @__PURE__ */ import_react10.default.createElement("input", {
-    id,
-    ref: inputRef,
-    autoFocus,
-    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5", { "pl-7": !!icon, "pl-3": !icon }),
-    onChange,
-    onFocus,
-    placeholder,
-    value,
-    type
-  }), clearable && value && /* @__PURE__ */ import_react10.default.createElement("div", {
-    className: "h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700",
-    onClick: clear
-  }, /* @__PURE__ */ import_react10.default.createElement(Close, null)));
-}
-function Input(props) {
-  const {
-    inputRef,
-    autoFocus = false,
-    icon,
-    id,
-    clearable = true,
-    placeholder,
-    onChange,
-    onFocus,
-    value,
-    name,
-    className,
-    type = "text"
-  } = props;
-  return /* @__PURE__ */ import_react10.default.createElement(InputUI, {
-    autoFocus,
-    clearable,
-    clear: (0, import_react10.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
-    icon,
-    id,
-    placeholder,
-    onChange: (0, import_react10.useCallback)((event) => {
-      var _a;
-      return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
-    }, [onChange]),
-    inputRef,
-    onFocus,
-    value,
-    className,
-    name,
-    type
-  });
-}
-
-// src/components/Button/index.tsx
-var import_react11 = __toModule(require_react());
-var import_classnames3 = __toModule(require_classnames());
-var import_ts_pattern = __toModule(require_lib());
-function ButtonUI(props) {
-  const { children, onClick, className = "", kind = "default", type, iconButton = false } = props;
-  const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white").with("secondary", () => "border-[1px] border-gray-300 dark:border-bluegray-5 dark:text-white hover:border-gray-400 dark:hover:border-bluegray-4 dark:hover:border-opacity-20 active:bg-gray-400 dark:active:bg-bluegray-7 active:text-white").with("default", () => "bg-gray-200 dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
-  return /* @__PURE__ */ import_react11.default.createElement("button", {
-    tabIndex: 0,
-    className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`, { "px-2.5": !iconButton, "justify-center": iconButton }),
-    onClick,
-    type
-  }, children);
-}
-function Button(props) {
-  const { children, onClick, className, iconButton, kind, type } = props;
-  return /* @__PURE__ */ import_react11.default.createElement(ButtonUI, {
-    onClick,
-    kind,
-    iconButton,
-    className,
-    type
-  }, children);
-}
-
-// src/lib/hooks/useChangeHandlers/index.ts
-var import_react12 = __toModule(require_react());
 
 // src/types/generated.ts
 var BasicTextualSentiment;
@@ -37885,12 +37670,12 @@ var ContentSource;
   ContentSource2["User"] = "user";
 })(ContentSource || (ContentSource = {}));
 var ContentType;
-(function(ContentType3) {
-  ContentType3["Document"] = "document";
-  ContentType3["Filing"] = "filing";
-  ContentType3["News"] = "news";
-  ContentType3["Spotlight"] = "spotlight";
-  ContentType3["Streetaccount"] = "streetaccount";
+(function(ContentType2) {
+  ContentType2["Document"] = "document";
+  ContentType2["Filing"] = "filing";
+  ContentType2["News"] = "news";
+  ContentType2["Spotlight"] = "spotlight";
+  ContentType2["Streetaccount"] = "streetaccount";
 })(ContentType || (ContentType = {}));
 var EventConnectionStatus;
 (function(EventConnectionStatus2) {
@@ -38063,6 +37848,71 @@ var LoginDocument = lib_default`
   }
 }
     `;
+var ContentDocument = lib_default`
+    query Content($filter: ContentFilter!) {
+  content(filter: $filter) {
+    id
+    body
+    contentType
+    primaryCompany {
+      id
+      commonName
+      instruments {
+        id
+        isPrimary
+        quotes {
+          id
+          isPrimary
+          localTicker
+          exchange {
+            id
+            shortName
+            country {
+              id
+              countryCode
+            }
+          }
+        }
+      }
+    }
+    publishedDate
+    source
+    title
+  }
+}
+    `;
+var ContentListDocument = lib_default`
+    query ContentList($filter: ContentFilter!) {
+  content(filter: $filter) {
+    id
+    contentType
+    primaryCompany {
+      id
+      commonName
+      instruments {
+        id
+        isPrimary
+        quotes {
+          id
+          isPrimary
+          localTicker
+          exchange {
+            id
+            shortName
+            country {
+              id
+              countryCode
+            }
+          }
+        }
+      }
+    }
+    publishedDate
+    source
+    title
+  }
+}
+    `;
 var EventListDocument = lib_default`
     query EventList($filter: EventFilter, $view: EventView) {
   events(filter: $filter, view: $view) {
@@ -38207,7 +38057,258 @@ var LatestParagraphsDocument = lib_default`
 }
     `;
 
+// src/lib/data/index.ts
+var CONTENT_SOURCE_LABELS = {
+  [ContentSource.Eventvestor]: "EventVestor",
+  [ContentSource.Lexisnexis]: "LexisNexis",
+  [ContentSource.Media]: "Media",
+  [ContentSource.Refinitiv]: "Refinitiv",
+  [ContentSource.Streetaccount]: "StreetAccount",
+  [ContentSource.User]: "User"
+};
+function sortByPrimary(a3, b3) {
+  return Number(b3.isPrimary) - Number(a3.isPrimary);
+}
+function getPrimaryQuote(company) {
+  var _a;
+  const quotes = (_a = company == null ? void 0 : company.instruments) == null ? void 0 : _a.sort(sortByPrimary).flatMap((instrument) => instrument.quotes).sort(sortByPrimary);
+  const primaryQuote = quotes == null ? void 0 : quotes.find((quote) => quote.exchange.country.countryCode === "US");
+  return primaryQuote || (quotes == null ? void 0 : quotes[0]);
+}
+function useCompanyResolver() {
+  const client = useClient();
+  return (0, import_react6.useCallback)((identifier) => __async(this, null, function* () {
+    var _a;
+    const result = yield client.query(lib_default`
+                        query CompanyResolution($identifier: String!) {
+                            companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
+                                id
+                                commonName
+                                instruments {
+                                    id
+                                    isPrimary
+                                    quotes {
+                                        id
+                                        isPrimary
+                                        localTicker
+                                        exchange {
+                                            id
+                                            shortName
+                                            country {
+                                                id
+                                                countryCode
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    `, { identifier }).toPromise();
+    return (_a = result == null ? void 0 : result.data) == null ? void 0 : _a.companies;
+  }), [client]);
+}
+function useAppConfig() {
+  return useQuery2({
+    query: lib_default`
+            query AppConfig {
+                configuration {
+                    pusherAppCluster
+                    pusherAppKey
+                }
+            }
+        `
+  });
+}
+function useTrack() {
+  const client = useClient();
+  const config = useConfig();
+  const track = (0, import_react6.useCallback)((event, object, properties) => __async(this, null, function* () {
+    yield client.mutation(lib_default`
+                        mutation Track($event: String!, $properties: GenericObjectScalar!) {
+                            track(event: $event, properties: $properties) {
+                                success
+                            }
+                        }
+                    `, {
+      event: `${event} | ${object}`,
+      properties: __spreadValues({
+        moduleName: config.moduleName,
+        platform: config.platform
+      }, properties)
+    }).toPromise();
+  }), [client]);
+  return track;
+}
+function useAutoTrack(event, object, properties, deps = [], skip = false) {
+  const track = useTrack();
+  (0, import_react6.useEffect)(() => {
+    if (!skip) {
+      void track(event, object, properties);
+    }
+  }, [track, event, object, skip, ...deps]);
+}
+
+// src/lib/realtime/index.tsx
+var Context5 = (0, import_react7.createContext)(void 0);
+function Provider5({ children, client: passedClient }) {
+  var _a, _b, _c, _d;
+  const [client, setClient] = (0, import_react7.useState)(passedClient);
+  const configQuery = useAppConfig();
+  const { realtimeOptions } = useConfig();
+  (0, import_react7.useEffect)(() => {
+    var _a2, _b2, _c2, _d2;
+    const appKey = (_b2 = (_a2 = configQuery.state.data) == null ? void 0 : _a2.configuration) == null ? void 0 : _b2.pusherAppKey;
+    const cluster = (_d2 = (_c2 = configQuery.state.data) == null ? void 0 : _c2.configuration) == null ? void 0 : _d2.pusherAppCluster;
+    if (!passedClient && appKey && cluster) {
+      setClient(new import_pusher_js.default(appKey, (0, import_lodash2.default)({ cluster }, realtimeOptions)));
+    }
+  }, [(_b = (_a = configQuery.state.data) == null ? void 0 : _a.configuration) == null ? void 0 : _b.pusherAppKey, (_d = (_c = configQuery.state.data) == null ? void 0 : _c.configuration) == null ? void 0 : _d.pusherAppKey]);
+  return /* @__PURE__ */ import_react7.default.createElement(Context5.Provider, {
+    value: client
+  }, children);
+}
+
+// src/components/Provider/index.tsx
+function Provider6(props) {
+  const { bus, children, client, config, realtime, reset, storage } = props;
+  return /* @__PURE__ */ import_react8.default.createElement(Provider, {
+    config
+  }, /* @__PURE__ */ import_react8.default.createElement(Provider3, {
+    client,
+    reset
+  }, /* @__PURE__ */ import_react8.default.createElement(Provider4, {
+    bus
+  }, /* @__PURE__ */ import_react8.default.createElement(Provider5, {
+    client: realtime
+  }, /* @__PURE__ */ import_react8.default.createElement(Provider2, {
+    storage
+  }, children)))));
+}
+
+// src/modules/Auth/index.tsx
+var import_react13 = __toModule(require_react());
+var import_ts_pattern2 = __toModule(require_lib());
+
+// src/components/Input/index.tsx
+var import_react10 = __toModule(require_react());
+var import_classnames2 = __toModule(require_classnames());
+
+// src/components/Svg/Close.tsx
+var import_react9 = __toModule(require_react());
+var import_classnames = __toModule(require_classnames());
+function Close({ className, alt = "Close" }) {
+  return /* @__PURE__ */ import_react9.default.createElement("svg", {
+    className: (0, import_classnames.default)(className, "fill-current", "Svg", "Svg__close"),
+    width: "100%",
+    viewBox: "0 0 16 16",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react9.default.createElement("title", null, alt), /* @__PURE__ */ import_react9.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M8 16C10.1217 16 12.1566 15.1571 13.6569 13.6569C15.1571 12.1566 16 10.1217 16 8C16 5.87827 15.1571 3.84344 13.6569 2.34315C12.1566 0.842855 10.1217 0 8 0C5.87827 0 3.84344 0.842855 2.34315 2.34315C0.842855 3.84344 0 5.87827 0 8C0 10.1217 0.842855 12.1566 2.34315 13.6569C3.84344 15.1571 5.87827 16 8 16ZM6.707 5.293C6.5184 5.11084 6.2658 5.01005 6.0036 5.01233C5.7414 5.0146 5.49059 5.11977 5.30518 5.30518C5.11977 5.49059 5.0146 5.7414 5.01233 6.0036C5.01005 6.2658 5.11084 6.5184 5.293 6.707L6.586 8L5.293 9.293C5.19749 9.38525 5.12131 9.49559 5.0689 9.6176C5.01649 9.7396 4.9889 9.87082 4.98775 10.0036C4.9866 10.1364 5.0119 10.2681 5.06218 10.391C5.11246 10.5139 5.18671 10.6255 5.2806 10.7194C5.3745 10.8133 5.48615 10.8875 5.60905 10.9378C5.73194 10.9881 5.86362 11.0134 5.9964 11.0123C6.12918 11.0111 6.2604 10.9835 6.3824 10.9311C6.50441 10.8787 6.61475 10.8025 6.707 10.707L8 9.414L9.293 10.707C9.4816 10.8892 9.7342 10.99 9.9964 10.9877C10.2586 10.9854 10.5094 10.8802 10.6948 10.6948C10.8802 10.5094 10.9854 10.2586 10.9877 9.9964C10.99 9.7342 10.8892 9.4816 10.707 9.293L9.414 8L10.707 6.707C10.8892 6.5184 10.99 6.2658 10.9877 6.0036C10.9854 5.7414 10.8802 5.49059 10.6948 5.30518C10.5094 5.11977 10.2586 5.0146 9.9964 5.01233C9.7342 5.01005 9.4816 5.11084 9.293 5.293L8 6.586L6.707 5.293Z"
+  }));
+}
+
+// src/components/Input/index.tsx
+function InputUI(props) {
+  const {
+    inputRef,
+    autoFocus,
+    icon,
+    id,
+    clearable,
+    clear,
+    placeholder,
+    onChange,
+    onFocus,
+    value,
+    name,
+    className = "",
+    type
+  } = props;
+  return /* @__PURE__ */ import_react10.default.createElement("div", {
+    className: `group h-8 items-center w-full relative  dark:text-white ${className} input__${name}`
+  }, import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
+    className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
+  }, import_react10.default.cloneElement(icon, {
+    className: "group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4"
+  })), /* @__PURE__ */ import_react10.default.createElement("input", {
+    id,
+    ref: inputRef,
+    autoFocus,
+    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5", { "pl-7": !!icon, "pl-3": !icon }),
+    onChange,
+    onFocus,
+    placeholder,
+    value,
+    type
+  }), clearable && value && /* @__PURE__ */ import_react10.default.createElement("div", {
+    className: "h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700",
+    onClick: clear
+  }, /* @__PURE__ */ import_react10.default.createElement(Close, null)));
+}
+function Input(props) {
+  const {
+    inputRef,
+    autoFocus = false,
+    icon,
+    id,
+    clearable = true,
+    placeholder,
+    onChange,
+    onFocus,
+    value,
+    name,
+    className,
+    type = "text"
+  } = props;
+  return /* @__PURE__ */ import_react10.default.createElement(InputUI, {
+    autoFocus,
+    clearable,
+    clear: (0, import_react10.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
+    icon,
+    id,
+    placeholder,
+    onChange: (0, import_react10.useCallback)((event) => {
+      var _a;
+      return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
+    }, [onChange]),
+    inputRef,
+    onFocus,
+    value,
+    className,
+    name,
+    type
+  });
+}
+
+// src/components/Button/index.tsx
+var import_react11 = __toModule(require_react());
+var import_classnames3 = __toModule(require_classnames());
+var import_ts_pattern = __toModule(require_lib());
+function ButtonUI(props) {
+  const { children, onClick, className = "", kind = "default", type, iconButton = false } = props;
+  const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white").with("secondary", () => "border-[1px] border-gray-300 dark:border-bluegray-5 dark:text-white hover:border-gray-400 dark:hover:border-bluegray-4 dark:hover:border-opacity-20 active:bg-gray-400 dark:active:bg-bluegray-7 active:text-white").with("default", () => "bg-gray-200 dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white hover:bg-gray-300 active:bg-gray-400 active:text-white").exhaustive();
+  return /* @__PURE__ */ import_react11.default.createElement("button", {
+    tabIndex: 0,
+    className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base ${buttonStyle} ${className}`, { "px-2.5": !iconButton, "justify-center": iconButton }),
+    onClick,
+    type
+  }, children);
+}
+function Button(props) {
+  const { children, onClick, className, iconButton, kind, type } = props;
+  return /* @__PURE__ */ import_react11.default.createElement(ButtonUI, {
+    onClick,
+    kind,
+    iconButton,
+    className,
+    type
+  }, children);
+}
+
 // src/lib/hooks/useChangeHandlers/index.ts
+var import_react12 = __toModule(require_react());
 function useChangeHandlers(initialState) {
   const [state, setState] = (0, import_react12.useState)(initialState);
   const handlers = {};
@@ -38366,8 +38467,9 @@ var Auth = ({
 };
 
 // src/modules/ContentList/index.tsx
-var import_react26 = __toModule(require_react());
+var import_react27 = __toModule(require_react());
 var import_luxon2 = __toModule(require_luxon());
+var import_ts_pattern7 = __toModule(require_lib());
 
 // src/components/CompanyFilterButton/index.tsx
 var import_react20 = __toModule(require_react());
@@ -38922,23 +39024,39 @@ var Tabs = (props) => {
   });
 };
 
+// src/lib/hooks/useInterval/index.ts
+var import_react22 = __toModule(require_react());
+function useInterval(callback, interval) {
+  const savedCallback = (0, import_react22.useRef)(callback);
+  (0, import_react22.useEffect)(() => {
+    savedCallback.current = callback;
+  }, [callback]);
+  (0, import_react22.useEffect)(() => {
+    if (interval === null) {
+      return;
+    }
+    const id = window.setInterval(() => savedCallback.current(), interval);
+    return () => window.clearInterval(id);
+  }, [interval]);
+}
+
 // src/modules/Content/index.tsx
-var import_react25 = __toModule(require_react());
+var import_react26 = __toModule(require_react());
+var import_classnames10 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon = __toModule(require_luxon());
 var import_ts_pattern6 = __toModule(require_lib());
-var import_classnames10 = __toModule(require_classnames());
 
 // src/components/Svg/ArrowLeft.tsx
-var import_react22 = __toModule(require_react());
+var import_react23 = __toModule(require_react());
 var import_classnames8 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
-  return /* @__PURE__ */ import_react22.default.createElement("svg", {
+  return /* @__PURE__ */ import_react23.default.createElement("svg", {
     className: (0, import_classnames8.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react22.default.createElement("title", null, alt), /* @__PURE__ */ import_react22.default.createElement("path", {
+  }, /* @__PURE__ */ import_react23.default.createElement("title", null, alt), /* @__PURE__ */ import_react23.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M5.70679 9.69471C5.51926 9.88218 5.26495 9.9875 4.99979 9.9875C4.73462 9.9875 4.48031 9.88218 4.29279 9.69471L0.292787 5.69471C0.105316 5.50718 0 5.25288 0 4.98771C0 4.72255 0.105316 4.46824 0.292787 4.28071L4.29279 0.280712C4.48139 0.0985542 4.73399 -0.00224062 4.99619 3.78025e-05C5.25838 0.00231622 5.5092 0.107485 5.6946 0.292894C5.88001 0.478302 5.98518 0.729114 5.98746 0.991311C5.98974 1.25351 5.88894 1.50611 5.70679 1.69471L3.41379 3.98771H10.9998C11.265 3.98771 11.5194 4.09307 11.7069 4.28061C11.8944 4.46814 11.9998 4.7225 11.9998 4.98771C11.9998 5.25293 11.8944 5.50728 11.7069 5.69482C11.5194 5.88235 11.265 5.98771 10.9998 5.98771H3.41379L5.70679 8.28071C5.89426 8.46824 5.99957 8.72255 5.99957 8.98771C5.99957 9.25288 5.89426 9.50718 5.70679 9.69471V9.69471Z"
@@ -38946,15 +39064,15 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 }
 
 // src/components/Svg/Chevron.tsx
-var import_react23 = __toModule(require_react());
+var import_react24 = __toModule(require_react());
 var import_classnames9 = __toModule(require_classnames());
 function Chevron({ className, alt = "Chevron" }) {
-  return /* @__PURE__ */ import_react23.default.createElement("svg", {
+  return /* @__PURE__ */ import_react24.default.createElement("svg", {
     className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__chevron"),
     width: "100%",
     viewBox: "0 0 8 5",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react23.default.createElement("title", null, alt), /* @__PURE__ */ import_react23.default.createElement("path", {
+  }, /* @__PURE__ */ import_react24.default.createElement("title", null, alt), /* @__PURE__ */ import_react24.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L4 2.58579L6.29289 0.292893C6.68342 -0.0976311 7.31658 -0.0976311 7.70711 0.292893C8.09763 0.683417 8.09763 1.31658 7.70711 1.70711L4.70711 4.70711C4.31658 5.09763 3.68342 5.09763 3.29289 4.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z"
@@ -38962,7 +39080,7 @@ function Chevron({ className, alt = "Chevron" }) {
 }
 
 // src/lib/hooks/useAutoScroll/index.ts
-var import_react24 = __toModule(require_react());
+var import_react25 = __toModule(require_react());
 function isVisible(container, target) {
   const targetPosition = target.getBoundingClientRect();
   const containerPosition = container.getBoundingClientRect();
@@ -39001,12 +39119,12 @@ function useAutoScroll(opts) {
     block: block2,
     inline
   } = opts || {};
-  const [scrollContainer, scrollContainerRef] = (0, import_react24.useState)(null);
-  const [target, targetRef] = (0, import_react24.useState)(null);
-  const isAutoScrolling = (0, import_react24.useRef)(null);
-  const pauseAutoScroll = (0, import_react24.useRef)(false);
-  const initialScroll = (0, import_react24.useRef)(true);
-  (0, import_react24.useLayoutEffect)(() => {
+  const [scrollContainer, scrollContainerRef] = (0, import_react25.useState)(null);
+  const [target, targetRef] = (0, import_react25.useState)(null);
+  const isAutoScrolling = (0, import_react25.useRef)(null);
+  const pauseAutoScroll = (0, import_react25.useRef)(false);
+  const initialScroll = (0, import_react25.useRef)(true);
+  (0, import_react25.useLayoutEffect)(() => {
     function onScroll() {
       maybePauseAutoScroll();
     }
@@ -39038,7 +39156,7 @@ function useAutoScroll(opts) {
     }
     return () => scrollContainer == null ? void 0 : scrollContainer.removeEventListener("scroll", onScroll);
   }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, block2, inline]);
-  const scroll = (0, import_react24.useCallback)((opts2) => {
+  const scroll = (0, import_react25.useCallback)((opts2) => {
     const { top, onlyIfNeeded = false } = opts2 || {};
     if (top === void 0) {
       if (!onlyIfNeeded || scrollContainer && target && !isVisible(scrollContainer, target)) {
@@ -39055,26 +39173,22 @@ function useAutoScroll(opts) {
   return { scrollContainerRef, targetRef, scroll, isAutoScrolling };
 }
 
-// src/lib/strings/index.ts
-function titleize(str = "") {
-  const titleized = str.replace(/([a-z])([A-Z])/g, (_allMatches, firstMatch, secondMatch) => {
-    return `${firstMatch} ${secondMatch}`;
-  }).toLowerCase().replace(/([ -_]|^)(.)/g, (_allMatches, firstMatch, secondMatch) => {
-    return (firstMatch ? " " : "") + secondMatch.toUpperCase();
-  });
-  return titleized.trim();
-}
-
 // src/modules/Content/index.tsx
+var CONTENT_TYPE_MAP = {
+  [ContentType.Document]: "Document",
+  [ContentType.Filing]: "Filing",
+  [ContentType.News]: "News",
+  [ContentType.Spotlight]: "Corp. Activity",
+  [ContentType.Streetaccount]: "Street Account"
+};
 function ContentUI(props) {
   const {
     body,
-    companyIdentifier,
+    contentQuery,
     contentType,
+    contentTypeLabel,
     currentMatch,
     currentMatchRef,
-    date,
-    exchangeName,
     matches,
     matchIndex,
     nextMatch,
@@ -39082,96 +39196,117 @@ function ContentUI(props) {
     onChangeSearch,
     prevMatch,
     scrollContainerRef,
-    searchTerm,
-    sourceName,
-    title
+    searchTerm
   } = props;
-  const backButton = (contentType2) => /* @__PURE__ */ import_react25.default.createElement(Button, {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "flex flex-1 items-center justify-center text-gray-600"
+  }, msg);
+  return /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "h-full flex flex-col content"
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "flex flex-col pl-3 pr-3 pt-3 shadow-3xl content__header"
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "flex items-center mb-3"
+  }, /* @__PURE__ */ import_react26.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react25.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react26.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), titleize(ContentType2[contentType2]));
-  return /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: "h-full flex flex-col content"
-  }, /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: "flex flex-col pl-3 pr-3 pt-3 shadow-3xl content__header"
-  }, /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: "flex items-center mb-3"
-  }, (0, import_ts_pattern6.match)(contentType).with(ContentType2.news, () => /* @__PURE__ */ import_react25.default.createElement(import_react25.default.Fragment, null, onBack && backButton(ContentType2.news), /* @__PURE__ */ import_react25.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react25.default.createElement(MagnifyingGlass, null),
+  }), contentTypeLabel), (0, import_ts_pattern6.match)(contentType).with(ContentType.News, () => /* @__PURE__ */ import_react26.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react26.default.createElement(MagnifyingGlass, null),
     name: "search",
     placeholder: "Search Article...",
     value: searchTerm,
     onChange: onChangeSearch
-  }))).with(ContentType2.corporateActivity, () => onBack && backButton(ContentType2.corporateActivity)).exhaustive())), searchTerm && /* @__PURE__ */ import_react25.default.createElement("div", {
+  })).otherwise(() => null))), searchTerm && /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "bg-gray-50 flex h-10 items-center p-3 shadow sticky text-gray-500 text-sm top-3 z-10"
-  }, /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "text-sm"
-  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react25.default.createElement("span", {
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react26.default.createElement("span", {
     className: "font-semibold"
-  }, searchTerm), '"'), /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, searchTerm), '"'), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react25.default.createElement("button", {
+  }), /* @__PURE__ */ import_react26.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600",
     onClick: prevMatch
-  }, /* @__PURE__ */ import_react25.default.createElement(Chevron, null)), /* @__PURE__ */ import_react25.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Chevron, null)), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
-  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react25.default.createElement("button", {
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react26.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
     onClick: nextMatch
-  }, /* @__PURE__ */ import_react25.default.createElement(Chevron, null)), /* @__PURE__ */ import_react25.default.createElement("button", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Chevron, null)), /* @__PURE__ */ import_react26.default.createElement("button", {
     tabIndex: 0,
     className: "w-4 cursor-pointer text-gray-400 hover:text-gray-600",
     onClick: (e) => onChangeSearch(e, { value: "" })
-  }, /* @__PURE__ */ import_react25.default.createElement(Close, null))), companyIdentifier && /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: "flex items-center pl-5 pr-5 pt-5 text-sm"
-  }, /* @__PURE__ */ import_react25.default.createElement("span", {
-    className: "font-bold pr-1 text-blue-600"
-  }, companyIdentifier), /* @__PURE__ */ import_react25.default.createElement("span", {
-    className: "font-light text-gray-300"
-  }, exchangeName)), title && /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: "leading-4 pl-5 pr-5 pt-3"
-  }, /* @__PURE__ */ import_react25.default.createElement("span", {
-    className: "font-bold text-base"
-  }, title)), (sourceName || date) && /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: "flex items-center pl-5 pr-5 pt-2 text-sm"
-  }, sourceName && /* @__PURE__ */ import_react25.default.createElement("span", {
-    className: "text-indigo-300"
-  }, sourceName), sourceName && date && /* @__PURE__ */ import_react25.default.createElement("span", {
-    className: "pl-1 pr-1 text-gray-400"
-  }, "\u2022"), date && /* @__PURE__ */ import_react25.default.createElement("span", {
-    className: "text-gray-400"
-  }, import_luxon.DateTime.fromISO(date).toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react25.default.createElement("div", {
-    className: "overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm",
-    ref: scrollContainerRef
-  }, body.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react25.default.createElement("mark", {
-    className: (0, import_classnames10.default)({
-      "bg-yellow-300": chunkId === currentMatch
-    }),
-    key: `content-body-chunk-${chunkId}-match`,
-    ref: chunkId === currentMatch ? currentMatchRef : void 0
-  }, /* @__PURE__ */ import_react25.default.createElement("span", {
-    dangerouslySetInnerHTML: { __html: text }
-  })) : /* @__PURE__ */ import_react25.default.createElement("span", {
-    dangerouslySetInnerHTML: { __html: text },
-    key: `content-body-chunk-${chunkId}`
-  }))));
+  }, /* @__PURE__ */ import_react26.default.createElement(Close, null))), (0, import_ts_pattern6.match)(contentQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react26.default.createElement("div", {
+    key: idx,
+    className: "animate-pulse p-2"
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "rounded-md bg-gray-300 h-3 m-1 w-10"
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "rounded-md bg-gray-300 h-3 m-1 ml-14"
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "rounded-md bg-gray-300 h-3 m-1"
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "rounded-md bg-gray-300 h-3 m-1"
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
+  })))).with({ status: "paused" }, () => wrapMsg("Content not found. We're sorry for any inconvenience.")).with({ status: "error" }, () => wrapMsg("There was an error loading content.")).with({ status: "empty" }, () => wrapMsg("Content not found. We're sorry for any inconvenience.")).with({ status: "success" }, ({ data: { content: contentData } }) => {
+    var _a;
+    const content = contentData[0];
+    const primaryQuote = getPrimaryQuote(content == null ? void 0 : content.primaryCompany);
+    const date = (content == null ? void 0 : content.publishedDate) ? import_luxon.DateTime.fromISO(content.publishedDate) : import_luxon.DateTime.now();
+    return content ? /* @__PURE__ */ import_react26.default.createElement(import_react26.default.Fragment, null, !!primaryQuote && /* @__PURE__ */ import_react26.default.createElement("div", {
+      className: "flex items-center pl-5 pr-5 pt-5 text-sm"
+    }, /* @__PURE__ */ import_react26.default.createElement("span", {
+      className: "font-bold pr-1 text-blue-600"
+    }, primaryQuote.localTicker), /* @__PURE__ */ import_react26.default.createElement("span", {
+      className: "font-light text-gray-300"
+    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName)), /* @__PURE__ */ import_react26.default.createElement("div", {
+      className: "leading-4 pl-5 pr-5 pt-3"
+    }, /* @__PURE__ */ import_react26.default.createElement("span", {
+      className: "font-bold text-base"
+    }, content.title)), /* @__PURE__ */ import_react26.default.createElement("div", {
+      className: "flex items-center pl-5 pr-5 pt-2 text-sm"
+    }, /* @__PURE__ */ import_react26.default.createElement("span", {
+      className: "text-indigo-300"
+    }, CONTENT_SOURCE_LABELS[content.source]), /* @__PURE__ */ import_react26.default.createElement("span", {
+      className: "pl-1 pr-1 text-gray-400"
+    }, "\u2022"), date && /* @__PURE__ */ import_react26.default.createElement("span", {
+      className: "text-gray-400"
+    }, date.toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react26.default.createElement("div", {
+      className: "overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm",
+      ref: scrollContainerRef
+    }, body.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react26.default.createElement("mark", {
+      className: (0, import_classnames10.default)({
+        "bg-yellow-300": chunkId === currentMatch
+      }),
+      key: `content-body-chunk-${chunkId}-match`,
+      ref: chunkId === currentMatch ? currentMatchRef : void 0
+    }, /* @__PURE__ */ import_react26.default.createElement("span", {
+      dangerouslySetInnerHTML: { __html: text }
+    })) : /* @__PURE__ */ import_react26.default.createElement("span", {
+      dangerouslySetInnerHTML: { __html: text },
+      key: `content-body-chunk-${chunkId}`
+    })))) : null;
+  }).otherwise(() => null));
 }
-function useSearchState(body) {
+function useSearchState(contentQuery) {
+  var _a, _b;
   const { state, handlers } = useChangeHandlers({
     searchTerm: ""
   });
-  const [currentMatch, setCurrentMatch] = (0, import_react25.useState)(null);
+  const [currentMatch, setCurrentMatch] = (0, import_react26.useState)(null);
   const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll({
     pauseOnUserScroll: false,
     block: "center",
     inline: "center",
     behavior: "auto"
   });
-  const bodyWithMatches = (0, import_react25.useMemo)(() => state.searchTerm ? (0, import_highlight_words_core.findAll)({
+  const body = (_b = (_a = contentQuery.state.data) == null ? void 0 : _a.content[0]) == null ? void 0 : _b.body;
+  const bodyWithMatches = (0, import_react26.useMemo)(() => state.searchTerm && body ? (0, import_highlight_words_core.findAll)({
     autoEscape: true,
     caseSensitive: false,
     searchWords: [state.searchTerm],
@@ -39184,24 +39319,24 @@ function useSearchState(body) {
     {
       highlight: false,
       id: "content-body",
-      text: body
+      text: body || ""
     }
   ], [body, state.searchTerm]);
-  const matches = (0, import_react25.useMemo)(() => bodyWithMatches.filter((chunk) => chunk.highlight), [bodyWithMatches]);
-  (0, import_react25.useEffect)(() => {
-    var _a;
-    setCurrentMatch(((_a = matches[0]) == null ? void 0 : _a.id) || null);
+  const matches = (0, import_react26.useMemo)(() => bodyWithMatches.filter((chunk) => chunk.highlight), [bodyWithMatches]);
+  (0, import_react26.useEffect)(() => {
+    var _a2;
+    setCurrentMatch(((_a2 = matches[0]) == null ? void 0 : _a2.id) || null);
   }, [state.searchTerm]);
-  const matchIndex = (0, import_react25.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
-  const nextMatch = (0, import_react25.useCallback)(() => {
-    const match7 = matches[(matchIndex + 1) % matches.length];
-    if (match7)
-      setCurrentMatch(match7.id);
+  const matchIndex = (0, import_react26.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react26.useCallback)(() => {
+    const match8 = matches[(matchIndex + 1) % matches.length];
+    if (match8)
+      setCurrentMatch(match8.id);
   }, [matches, matchIndex]);
-  const prevMatch = (0, import_react25.useCallback)(() => {
-    const match7 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
-    if (match7)
-      setCurrentMatch(match7.id);
+  const prevMatch = (0, import_react26.useCallback)(() => {
+    const match8 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
+    if (match8)
+      setCurrentMatch(match8.id);
   }, [matches, matchIndex]);
   return {
     bodyWithMatches,
@@ -39217,45 +39352,56 @@ function useSearchState(body) {
   };
 }
 function Content(props) {
-  const mockBody = `
-        Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
-        movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
-        International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
-        through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes,
-        and mobile devices.
-        <br />
-        <br />
-        The company also provides DVDs-by-mail membership services. It serves approximately 93 million streaming members
-        in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
-        <br />
-        <br />
-        Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
-        movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
-        International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
-        through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes,
-        and mobile devices.
-        <br />
-        <br />
-        The company also provides DVDs-by-mail membership services. It serves approximately 93 million streaming members
-        in 190 countries. Netflix, Inc. was founded in 1997 and is headquartered in Los Gatos, California.
-        <br />
-        <br />
-        Netflix, Inc., an Internet television network, engages in the Internet delivery of television (TV) shows and
-        movies on various Internet-connected screens. The company operates in three segments: Domestic Streaming,
-        International Streaming, and Domestic DVD. It offers members with the ability to receive streaming content
-        through a host of Internet-connected screens, including TVs, digital video players, television set-top boxes,
-        and mobile devices.
-    `;
-  const searchState = useSearchState(mockBody);
-  const { companyIdentifier, contentType, date, exchangeName, onBack, sourceName, title } = props;
-  return /* @__PURE__ */ import_react25.default.createElement(ContentUI, {
+  const { contentId, contentType, onBack } = props;
+  const contentQuery = useQuery2({
+    isEmpty: ({ content }) => (content || []).length === 0,
+    query: lib_default`
+            query Content($filter: ContentFilter!) {
+                content(filter: $filter) {
+                    id
+                    body
+                    contentType
+                    primaryCompany {
+                        id
+                        commonName
+                        instruments {
+                            id
+                            isPrimary
+                            quotes {
+                                id
+                                isPrimary
+                                localTicker
+                                exchange {
+                                    id
+                                    shortName
+                                    country {
+                                        id
+                                        countryCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    publishedDate
+                    source
+                    title
+                }
+            }
+        `,
+    requestPolicy: "cache-first",
+    variables: {
+      filter: { contentIds: [contentId] }
+    }
+  });
+  const searchState = useSearchState(contentQuery);
+  const contentTypeLabel = (0, import_react26.useMemo)(() => CONTENT_TYPE_MAP[contentType] || contentType, [contentType]);
+  return /* @__PURE__ */ import_react26.default.createElement(ContentUI, {
     body: searchState.bodyWithMatches,
-    companyIdentifier,
+    contentQuery,
     contentType,
+    contentTypeLabel,
     currentMatch: searchState.currentMatch,
     currentMatchRef: searchState.currentMatchRef,
-    date,
-    exchangeName,
     matches: searchState.matches,
     matchIndex: searchState.matchIndex,
     nextMatch: searchState.nextMatch,
@@ -39263,112 +39409,16 @@ function Content(props) {
     onChangeSearch: searchState.onChangeSearchTerm,
     prevMatch: searchState.prevMatch,
     scrollContainerRef: searchState.scrollContainerRef,
-    searchTerm: searchState.searchTerm,
-    sourceName,
-    title
+    searchTerm: searchState.searchTerm
   });
 }
 
 // src/modules/ContentList/index.tsx
-var ContentType2;
-(function(ContentType3) {
-  ContentType3["news"] = "news";
-  ContentType3["corporateActivity"] = "corporateActivity";
-})(ContentType2 || (ContentType2 = {}));
-var mockData = [
-  {
-    id: 1,
-    date: "2021-10-22",
-    companyIdentifier: "NFLX",
-    exchangeName: "NASDAQ",
-    sourceName: "Alliance",
-    title: "BBC and Netflix Form Partnership to Develop and Co-Produce Shows From Disabled Creatives"
-  },
-  {
-    id: 2,
-    date: "2021-10-22",
-    companyIdentifier: "TSLA",
-    exchangeName: "NYSE",
-    sourceName: "Lexus Nexus",
-    title: "Elon Musk Bets Entire Equity Position of Tesla Against Gourd Futures"
-  },
-  {
-    id: 3,
-    date: "2021-10-22",
-    companyIdentifier: "FB",
-    exchangeName: "NASDAQ",
-    sourceName: "Refinitiv",
-    title: "Zuckbot Caught eSurfing Off the Cost of Belize"
-  },
-  {
-    id: 4,
-    date: "2021-10-21",
-    companyIdentifier: "GME",
-    exchangeName: "NYSE",
-    sourceName: "Benzinga",
-    title: "Famous Stonk Stonking Again As Retail Investors (aka Ape) Stop Eyeing the Moon and Shoot for Andromeda"
-  },
-  {
-    id: 5,
-    date: "2021-10-21",
-    companyIdentifier: "AMC",
-    exchangeName: "NASDAQ",
-    sourceName: "Alliance",
-    title: "Aging Theater Chain Saved Again as Retail Investors Continue to Pour Millions of Dollars into Stock"
-  },
-  {
-    id: 6,
-    date: "2021-10-20",
-    companyIdentifier: "UBER",
-    exchangeName: "NASDAQ",
-    sourceName: "Reuters",
-    title: "Uber Bans Eating Inside Vehicles In Continued Effort to Minimize Vomiting Incidents"
-  },
-  {
-    id: 7,
-    date: "2021-10-20",
-    companyIdentifier: "BARK",
-    exchangeName: "NYSE",
-    sourceName: "Benzinga",
-    title: "Why does Barkbox stock continue to slide, despite strong earnings?"
-  },
-  {
-    id: 8,
-    date: "2021-10-18",
-    companyIdentifier: "TLRY",
-    exchangeName: "TORONTO",
-    sourceName: "Alliance",
-    title: "Tilray Looking to Breakout Out of Sideways Trading as Cannabis Superstonk Beats Market for Second Straight Week"
-  },
-  {
-    id: 9,
-    date: "2021-10-18",
-    companyIdentifier: "NFLX",
-    exchangeName: "NASDAQ",
-    sourceName: "Alliance",
-    title: "Netflix Buys Rights to Ted Lasso from Apple"
-  },
-  {
-    id: 10,
-    date: "2021-10-18",
-    companyIdentifier: "AAPL",
-    exchangeName: "NASDAQ",
-    sourceName: "Alliance",
-    title: "How much wood could Tim Apple chuck if Tim Apple could chuck wood?"
-  },
-  {
-    id: 11,
-    date: "2021-10-15",
-    companyIdentifier: "DIS",
-    exchangeName: "NYSE",
-    sourceName: "Lexus Nexus",
-    title: "Disney Buys HBO Max to Release Streaming Megasite, Disney MAX"
-  }
-];
 function ContentListUI(props) {
   const {
     company,
     content,
+    contentListQuery,
     onBackFromContent,
     onChangeSearch,
     onSelectCompany,
@@ -39378,97 +39428,123 @@ function ContentListUI(props) {
     selectedContentType
   } = props;
   if (content) {
-    return /* @__PURE__ */ import_react26.default.createElement(Content, {
-      companyIdentifier: content.companyIdentifier,
+    return /* @__PURE__ */ import_react27.default.createElement(Content, {
+      contentId: content.id,
       contentType: selectedContentType,
-      date: content.date,
-      exchangeName: content.exchangeName,
-      onBack: onBackFromContent,
-      sourceName: content.sourceName,
-      title: content.title
+      onBack: onBackFromContent
     });
   }
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "flex flex-1 items-center justify-center text-gray-600"
+  }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react26.default.createElement("div", {
+  return /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "h-full flex flex-col content-list"
-  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl content-list__header"
-  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react26.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react26.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react27.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react27.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onChangeSearch,
     placeholder: "Search News & Corp. Activity...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react26.default.createElement("div", {
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react26.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react27.default.createElement(CompanyFilterButton, {
     onChange: onSelectCompany,
     value: company
-  })))), /* @__PURE__ */ import_react26.default.createElement("div", {
+  })))), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "sticky top-0 px-3 pt-3 pb-2 z-10 content-list__tabs"
-  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow"
-  }, /* @__PURE__ */ import_react26.default.createElement(Tabs, {
+  }, /* @__PURE__ */ import_react27.default.createElement(Tabs, {
     className: "ml-1",
     kind: "line",
     onChange: onSelectContentType,
     options: [
       {
         label: "News",
-        value: ContentType2.news
+        value: ContentType.News
       },
       {
         label: "Corp. Activity",
-        value: ContentType2.corporateActivity
+        value: ContentType.Spotlight
       }
     ],
     value: selectedContentType
-  }))), /* @__PURE__ */ import_react26.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, /* @__PURE__ */ import_react26.default.createElement("ul", {
+  }, (0, import_ts_pattern7.match)(contentListQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react27.default.createElement("ul", {
+    className: "w-full ContentList__loading"
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react27.default.createElement("li", {
+    key: idx,
+    className: "p-2 animate-pulse mx-2"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "flex items-center"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "rounded-full bg-gray-300 w-9 h-9"
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "flex"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "rounded-full bg-gray-500 h-[10px] mr-2 w-7"
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "rounded-full bg-gray-400 h-[10px] mr-2 w-12"
+  })), /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "flex"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2"
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2"
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2"
+  })))))))).with({ status: "paused" }, () => wrapMsg("There is no content.")).with({ status: "error" }, () => wrapMsg("There was an error loading content.")).with({ status: "empty" }, () => wrapMsg("There is no content.")).with({ status: "success" }, ({ data: { content: content2 } }) => /* @__PURE__ */ import_react27.default.createElement("ul", {
     className: "w-full"
-  }, mockData.map((item) => {
-    const date = import_luxon2.DateTime.fromISO(item.date);
+  }, content2.map((item) => {
+    var _a;
+    const primaryQuote = getPrimaryQuote(item.primaryCompany);
+    const date = import_luxon2.DateTime.fromISO(item.publishedDate);
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== date.toFormat("MM/dd/yyyy")) {
       prevEventDate = date;
-      divider = /* @__PURE__ */ import_react26.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react27.default.createElement("li", {
         className: "sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"
-      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react26.default.createElement("div", {
+      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react27.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       }));
     }
-    return /* @__PURE__ */ import_react26.default.createElement(import_react26.Fragment, {
+    return /* @__PURE__ */ import_react27.default.createElement(import_react27.Fragment, {
       key: item.id
-    }, divider, /* @__PURE__ */ import_react26.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react27.default.createElement("li", {
       className: "group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
       onClick: (e) => onSelectContent == null ? void 0 : onSelectContent(e, { value: item })
-    }, /* @__PURE__ */ import_react26.default.createElement("div", {
+    }, /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm"
-    }, /* @__PURE__ */ import_react26.default.createElement("span", {
+    }, /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "mr-1 text-black"
-    }, item.title)), /* @__PURE__ */ import_react26.default.createElement("div", {
+    }, item.title)), /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex flex-1 items-center min-w-0 p-2 pr-4 pt-0"
-    }, /* @__PURE__ */ import_react26.default.createElement("span", {
+    }, !!primaryQuote && /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Fragment, null, /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "font-bold pr-1 text-blue-600 group-hover:text-yellow-600"
-    }, item.companyIdentifier), /* @__PURE__ */ import_react26.default.createElement("span", {
+    }, primaryQuote.localTicker), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "font-light text-gray-300 group-hover:text-gray-400"
-    }, item.exchangeName), /* @__PURE__ */ import_react26.default.createElement("span", {
+    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react26.default.createElement("span", {
+    }, "\u2022")), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "text-gray-400"
-    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react26.default.createElement("span", {
+    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react26.default.createElement("span", {
+    }, "\u2022"), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "text-indigo-300"
-    }, item.sourceName))));
-  })), /* @__PURE__ */ import_react26.default.createElement("div", {
+    }, CONTENT_SOURCE_LABELS[item.source] || item.source))));
+  }))).exhaustive(), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex-1"
   })))));
 }
@@ -39477,7 +39553,7 @@ function ContentList(_props) {
     company: void 0,
     content: void 0,
     searchTerm: "",
-    selectedContentType: ContentType2.news
+    selectedContentType: ContentType.News
   });
   const resolveCompany = useCompanyResolver();
   const bus = useMessageListener("instrument-selected", (msg) => __async(this, null, function* () {
@@ -39489,21 +39565,99 @@ function ContentList(_props) {
       }
     }
   }), "in");
-  const onSelectCompany = (0, import_react26.useCallback)((event, change) => {
+  const contentListQuery = useQuery2({
+    isEmpty: ({ content }) => (content || []).length === 0,
+    query: lib_default`
+            query ContentList($filter: ContentFilter!) {
+                content(filter: $filter) {
+                    id
+                    contentType
+                    primaryCompany {
+                        id
+                        commonName
+                        instruments {
+                            id
+                            isPrimary
+                            quotes {
+                                id
+                                isPrimary
+                                localTicker
+                                exchange {
+                                    id
+                                    shortName
+                                    country {
+                                        id
+                                        countryCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    publishedDate
+                    source
+                    title
+                }
+            }
+        `,
+    requestPolicy: "cache-and-network",
+    variables: {
+      filter: {
+        contentIds: [
+          "10486627",
+          "10486626",
+          "10486625",
+          "10486624",
+          "10486623",
+          "10486622",
+          "10486621",
+          "10486620",
+          "10486619",
+          "10486618",
+          "10486617",
+          "10486616",
+          "10486615",
+          "10486614",
+          "10486613",
+          "10486612",
+          "10486611",
+          "10486610",
+          "10486609",
+          "10486608",
+          "10486607",
+          "10486606",
+          "10486605",
+          "10486604",
+          "10486603",
+          "10486602",
+          "10486601",
+          "10486600",
+          "10486599",
+          "10486598"
+        ]
+      }
+    }
+  });
+  const onSelectCompany = (0, import_react27.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
   }, [state]);
-  const onSelectContent = (0, import_react26.useCallback)((event, change) => {
+  const onSelectContent = (0, import_react27.useCallback)((event, change) => {
     var _a;
-    const companyIdentifier = (_a = change.value) == null ? void 0 : _a.companyIdentifier;
-    bus == null ? void 0 : bus.emit("instrument-selected", { ticker: companyIdentifier }, "out");
+    const primaryQuote = getPrimaryQuote((_a = change.value) == null ? void 0 : _a.primaryCompany);
+    bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.content(event, change);
+    if (!change.value) {
+      contentListQuery.refetch();
+    }
   }, [state]);
-  return /* @__PURE__ */ import_react26.default.createElement(ContentListUI, {
+  useAutoTrack("Submit", "Content Search", { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
+  useInterval((0, import_react27.useCallback)(() => contentListQuery.refetch({ requestPolicy: "cache-and-network" }), [contentListQuery.refetch]), 15e3);
+  return /* @__PURE__ */ import_react27.default.createElement(ContentListUI, {
     company: state.company,
     content: state.content,
-    onBackFromContent: (0, import_react26.useCallback)((event) => onSelectContent(event, { value: null }), [onSelectContent]),
+    contentListQuery,
+    onBackFromContent: (0, import_react27.useCallback)((event) => onSelectContent(event, { value: null }), [onSelectContent]),
     onSelectCompany,
     onSelectContent,
     onSelectContentType: handlers.selectedContentType,
@@ -39518,7 +39672,7 @@ var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react27.default.createElement(import_react27.StrictMode, null, /* @__PURE__ */ import_react27.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react28.default.createElement(import_react28.StrictMode, null, /* @__PURE__ */ import_react28.default.createElement(Provider6, {
     bus,
     config: {
       assetPath: "bundle/",
@@ -39530,13 +39684,13 @@ var App = () => {
         }
       }
     }
-  }, /* @__PURE__ */ import_react27.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react28.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react27.default.createElement(ContentList, null)))));
+  }, /* @__PURE__ */ import_react28.default.createElement(ContentList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react27.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react28.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus
