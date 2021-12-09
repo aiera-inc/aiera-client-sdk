@@ -34,6 +34,17 @@ const content = [
         title: 'Article Title',
     },
 ];
+const contentWithBodyMarkup = [
+    {
+        ...content[0],
+        id: '2',
+        body: `
+            <p>Hello World!</p>
+            <p>This is a paragraph.</p>
+            <p>This is a paragraph with <span>markup</span></p>
+        `,
+    },
+];
 
 describe('Content', () => {
     beforeEach(() => {
@@ -82,6 +93,26 @@ describe('Content', () => {
         expect(rendered.container.querySelector('.bg-yellow-300')).not.toBeNull();
         // When there's no search term, the body should not have any highlighted text
         fireEvent.change(searchInput, { target: { value: '' } });
+        expect(rendered.container.querySelector('.bg-yellow-300')).toBeNull();
+    });
+
+    test('renders body with markup and search highlights', async () => {
+        const { rendered } = await actAndFlush(() =>
+            renderWithProvider(<Content contentId="2" contentType={ContentType.News} onBack={jest.fn()} />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { content: contentWithBodyMarkup },
+                    }),
+            })
+        );
+        const searchInput = screen.getByPlaceholderText('Search Article...');
+        fireEvent.change(searchInput, { target: { value: 'markup' } });
+        getByTextWithMarkup('Showing 1 result for "markup"');
+        const span = screen.getByText('markup', { selector: 'span' });
+        expect(span).toBeTruthy();
+        expect(rendered.container.querySelector('.bg-yellow-300')).not.toBeNull();
+        // Matches inside html tags should be ignored
+        fireEvent.change(searchInput, { target: { value: 'span' } });
         expect(rendered.container.querySelector('.bg-yellow-300')).toBeNull();
     });
 
