@@ -39174,20 +39174,20 @@ function ContentUI(props) {
     }, "\u2022"), date && /* @__PURE__ */ import_react26.default.createElement("span", {
       className: "text-gray-400"
     }, date.toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react26.default.createElement("div", {
-      className: "overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm",
+      className: "overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm content__body",
       ref: scrollContainerRef
-    }, body.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react26.default.createElement("mark", {
+    }, body.map((paragraph, pIdx) => /* @__PURE__ */ import_react26.default.createElement("p", {
+      className: "leading-5 mb-4",
+      key: `content-body-paragraph-${pIdx}`
+    }, paragraph.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react26.default.createElement("mark", {
       className: (0, import_classnames10.default)({
         "bg-yellow-300": chunkId === currentMatch
       }),
       key: `content-body-chunk-${chunkId}-match`,
       ref: chunkId === currentMatch ? currentMatchRef : void 0
-    }, /* @__PURE__ */ import_react26.default.createElement("span", {
-      dangerouslySetInnerHTML: { __html: text }
-    })) : /* @__PURE__ */ import_react26.default.createElement("span", {
-      dangerouslySetInnerHTML: { __html: text },
+    }, text) : /* @__PURE__ */ import_react26.default.createElement("span", {
       key: `content-body-chunk-${chunkId}`
-    })))) : null;
+    }, text)))))) : null;
   }).otherwise(() => null));
 }
 function useSearchState(contentQuery) {
@@ -39203,23 +39203,41 @@ function useSearchState(contentQuery) {
     behavior: "auto"
   });
   const body = (_b = (_a = contentQuery.state.data) == null ? void 0 : _a.content[0]) == null ? void 0 : _b.body;
-  const bodyWithMatches = (0, import_react26.useMemo)(() => state.searchTerm && body ? (0, import_highlight_words_core.findAll)({
-    autoEscape: true,
-    caseSensitive: false,
-    searchWords: [state.searchTerm],
-    textToHighlight: body
-  }).map(({ highlight, start, end }, index) => ({
-    highlight,
-    id: `content-body-search-term-chunk-${index}`,
-    text: body.substr(start, end - start)
-  })) : [
-    {
-      highlight: false,
-      id: "content-body",
-      text: body || ""
+  const bodyWithMatches = (0, import_react26.useMemo)(() => {
+    if (body) {
+      const nodes = new DOMParser().parseFromString(body, "text/html").body.childNodes;
+      const chunks = [];
+      nodes.forEach((node, nodeIndex) => {
+        var _a2;
+        if ((_a2 = node.textContent) == null ? void 0 : _a2.length) {
+          const text = node.textContent;
+          if (state.searchTerm) {
+            chunks.push((0, import_highlight_words_core.findAll)({
+              autoEscape: true,
+              caseSensitive: false,
+              searchWords: [state.searchTerm],
+              textToHighlight: text
+            }).map(({ highlight, start, end }, index) => ({
+              highlight,
+              id: `content-body-chunk-${nodeIndex}-${index}`,
+              text: text.substr(start, end - start)
+            })));
+          } else {
+            chunks.push([
+              {
+                highlight: false,
+                id: `content-body-chunk-${nodeIndex}`,
+                text
+              }
+            ]);
+          }
+        }
+      });
+      return chunks;
     }
-  ], [body, state.searchTerm]);
-  const matches = (0, import_react26.useMemo)(() => bodyWithMatches.filter((chunk) => chunk.highlight), [bodyWithMatches]);
+    return null;
+  }, [body, state.searchTerm]);
+  const matches = (0, import_react26.useMemo)(() => (bodyWithMatches || []).flatMap((part) => part).filter((chunk) => chunk.highlight), [bodyWithMatches]);
   (0, import_react26.useEffect)(() => {
     var _a2;
     setCurrentMatch(((_a2 = matches[0]) == null ? void 0 : _a2.id) || null);
