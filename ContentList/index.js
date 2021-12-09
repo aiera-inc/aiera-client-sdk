@@ -1631,8 +1631,8 @@ var require_react_development = __commonJS({
         {
           try {
             var frozenObject = Object.freeze({});
-            new Map([[frozenObject, null]]);
-            new Set([frozenObject]);
+            /* @__PURE__ */ new Map([[frozenObject, null]]);
+            /* @__PURE__ */ new Set([frozenObject]);
           } catch (e) {
           }
         }
@@ -2189,7 +2189,7 @@ var require_scheduler_tracing_development = __commonJS({
         exports2.__subscriberRef = null;
         {
           exports2.__interactionsRef = {
-            current: new Set()
+            current: /* @__PURE__ */ new Set()
           };
           exports2.__subscriberRef = {
             current: null
@@ -2197,7 +2197,7 @@ var require_scheduler_tracing_development = __commonJS({
         }
         function unstable_clear(callback) {
           var prevInteractions = exports2.__interactionsRef.current;
-          exports2.__interactionsRef.current = new Set();
+          exports2.__interactionsRef.current = /* @__PURE__ */ new Set();
           try {
             return callback();
           } finally {
@@ -2318,7 +2318,7 @@ var require_scheduler_tracing_development = __commonJS({
         }
         var subscribers = null;
         {
-          subscribers = new Set();
+          subscribers = /* @__PURE__ */ new Set();
         }
         function unstable_subscribe(subscriber) {
           {
@@ -2546,7 +2546,7 @@ var require_react_dom_development = __commonJS({
         var enableFundamentalAPI = false;
         var enableNewReconciler = false;
         var warnAboutStringRefs = false;
-        var allNativeEvents = new Set();
+        var allNativeEvents = /* @__PURE__ */ new Set();
         var registrationNameDependencies = {};
         var possibleRegistrationNames = {};
         function registerTwoPhaseEvent(registrationName, dependencies) {
@@ -5741,8 +5741,8 @@ var require_react_dom_development = __commonJS({
         var queuedFocus = null;
         var queuedDrag = null;
         var queuedMouse = null;
-        var queuedPointers = new Map();
-        var queuedPointerCaptures = new Map();
+        var queuedPointers = /* @__PURE__ */ new Map();
+        var queuedPointerCaptures = /* @__PURE__ */ new Map();
         var queuedExplicitHydrationTargets = [];
         function hasQueuedDiscreteEvents() {
           return queuedDiscreteEvents.length > 0;
@@ -6059,8 +6059,8 @@ var require_react_dom_development = __commonJS({
         var ANIMATION_ITERATION = getVendorPrefixedEventName("animationiteration");
         var ANIMATION_START = getVendorPrefixedEventName("animationstart");
         var TRANSITION_END = getVendorPrefixedEventName("transitionend");
-        var topLevelEventsToReactNames = new Map();
-        var eventPriorities = new Map();
+        var topLevelEventsToReactNames = /* @__PURE__ */ new Map();
+        var eventPriorities = /* @__PURE__ */ new Map();
         var discreteEventPairsForSimpleEventPlugin = [
           "cancel",
           "cancel",
@@ -8858,7 +8858,7 @@ var require_react_dom_development = __commonJS({
           }
           assertValidProps(tag, rawProps);
           {
-            extraAttributeNames = new Set();
+            extraAttributeNames = /* @__PURE__ */ new Set();
             var attributes = domElement.attributes;
             for (var _i = 0; _i < attributes.length; _i++) {
               var name = attributes[_i].name.toLowerCase();
@@ -9743,7 +9743,7 @@ var require_react_dom_development = __commonJS({
         function getEventListenerSet(node) {
           var elementListenerSet = node[internalEventHandlersKey];
           if (elementListenerSet === void 0) {
-            elementListenerSet = node[internalEventHandlersKey] = new Set();
+            elementListenerSet = node[internalEventHandlersKey] = /* @__PURE__ */ new Set();
           }
           return elementListenerSet;
         }
@@ -10252,7 +10252,7 @@ var require_react_dom_development = __commonJS({
           var pendingUNSAFE_ComponentWillReceivePropsWarnings = [];
           var pendingComponentWillUpdateWarnings = [];
           var pendingUNSAFE_ComponentWillUpdateWarnings = [];
-          var didWarnAboutUnsafeLifecycles = new Set();
+          var didWarnAboutUnsafeLifecycles = /* @__PURE__ */ new Set();
           ReactStrictModeWarnings.recordUnsafeLifecycleWarnings = function(fiber, instance) {
             if (didWarnAboutUnsafeLifecycles.has(fiber.type)) {
               return;
@@ -10277,7 +10277,7 @@ var require_react_dom_development = __commonJS({
             }
           };
           ReactStrictModeWarnings.flushPendingUnsafeLifecycleWarnings = function() {
-            var componentWillMountUniqueNames = new Set();
+            var componentWillMountUniqueNames = /* @__PURE__ */ new Set();
             if (pendingComponentWillMountWarnings.length > 0) {
               pendingComponentWillMountWarnings.forEach(function(fiber) {
                 componentWillMountUniqueNames.add(getComponentName(fiber.type) || "Component");
@@ -10285,7 +10285,7 @@ var require_react_dom_development = __commonJS({
               });
               pendingComponentWillMountWarnings = [];
             }
-            var UNSAFE_componentWillMountUniqueNames = new Set();
+            var UNSAFE_componentWillMountUniqueNames = /* @__PURE__ */ new Set();
             if (pendingUNSAFE_ComponentWillMountWarnings.length > 0) {
               pendingUNSAFE_ComponentWillMountWarnings.forEach(function(fiber) {
                 UNSAFE_componentWillMountUniqueNames.add(getComponentName(fiber.type) || "Component");
@@ -10293,7 +10293,7 @@ var require_react_dom_development = __commonJS({
               });
               pendingUNSAFE_ComponentWillMountWarnings = [];
             }
-            var componentWillReceivePropsUniqueNames = new Set();
+            var componentWillReceivePropsUniqueNames = /* @__PURE__ */ new Set();
             if (pendingComponentWillReceivePropsWarnings.length > 0) {
               pendingComponentWillReceivePropsWarnings.forEach(function(fiber) {
                 componentWillReceivePropsUniqueNames.add(getComponentName(fiber.type) || "Component");
@@ -10301,7 +10301,7 @@ var require_react_dom_development = __commonJS({
               });
               pendingComponentWillReceivePropsWarnings = [];
             }
-            var UNSAFE_componentWillReceivePropsUniqueNames = new Set();
+            var UNSAFE_componentWillReceivePropsUniqueNames = /* @__PURE__ */ new Set();
             if (pendingUNSAFE_ComponentWillReceivePropsWarnings.length > 0) {
               pendingUNSAFE_ComponentWillReceivePropsWarnings.forEach(function(fiber) {
                 UNSAFE_componentWillReceivePropsUniqueNames.add(getComponentName(fiber.type) || "Component");
@@ -10309,7 +10309,7 @@ var require_react_dom_development = __commonJS({
               });
               pendingUNSAFE_ComponentWillReceivePropsWarnings = [];
             }
-            var componentWillUpdateUniqueNames = new Set();
+            var componentWillUpdateUniqueNames = /* @__PURE__ */ new Set();
             if (pendingComponentWillUpdateWarnings.length > 0) {
               pendingComponentWillUpdateWarnings.forEach(function(fiber) {
                 componentWillUpdateUniqueNames.add(getComponentName(fiber.type) || "Component");
@@ -10317,7 +10317,7 @@ var require_react_dom_development = __commonJS({
               });
               pendingComponentWillUpdateWarnings = [];
             }
-            var UNSAFE_componentWillUpdateUniqueNames = new Set();
+            var UNSAFE_componentWillUpdateUniqueNames = /* @__PURE__ */ new Set();
             if (pendingUNSAFE_ComponentWillUpdateWarnings.length > 0) {
               pendingUNSAFE_ComponentWillUpdateWarnings.forEach(function(fiber) {
                 UNSAFE_componentWillUpdateUniqueNames.add(getComponentName(fiber.type) || "Component");
@@ -10350,8 +10350,8 @@ var require_react_dom_development = __commonJS({
               warn2("componentWillUpdate has been renamed, and is not recommended for use. See https://reactjs.org/link/unsafe-component-lifecycles for details.\n\n* Move data fetching code or side effects to componentDidUpdate.\n* Rename componentWillUpdate to UNSAFE_componentWillUpdate to suppress this warning in non-strict mode. In React 18.x, only the UNSAFE_ name will work. To rename all deprecated lifecycles to their new names, you can run `npx react-codemod rename-unsafe-lifecycles` in your project source folder.\n\nPlease update the following components: %s", _sortedNames5);
             }
           };
-          var pendingLegacyContextWarning = new Map();
-          var didWarnAboutLegacyContext = new Set();
+          var pendingLegacyContextWarning = /* @__PURE__ */ new Map();
+          var didWarnAboutLegacyContext = /* @__PURE__ */ new Set();
           ReactStrictModeWarnings.recordLegacyContextWarning = function(fiber, instance) {
             var strictRoot = findStrictRoot(fiber);
             if (strictRoot === null) {
@@ -10376,7 +10376,7 @@ var require_react_dom_development = __commonJS({
                 return;
               }
               var firstFiber = fiberArray[0];
-              var uniqueNames = new Set();
+              var uniqueNames = /* @__PURE__ */ new Set();
               fiberArray.forEach(function(fiber) {
                 uniqueNames.add(getComponentName(fiber.type) || "Component");
                 didWarnAboutLegacyContext.add(fiber.type);
@@ -10397,7 +10397,7 @@ var require_react_dom_development = __commonJS({
             pendingUNSAFE_ComponentWillReceivePropsWarnings = [];
             pendingComponentWillUpdateWarnings = [];
             pendingUNSAFE_ComponentWillUpdateWarnings = [];
-            pendingLegacyContextWarning = new Map();
+            pendingLegacyContextWarning = /* @__PURE__ */ new Map();
           };
         }
         function resolveDefaultProps(Component, baseProps) {
@@ -10944,15 +10944,15 @@ var require_react_dom_development = __commonJS({
         var didWarnAboutContextTypeAndContextTypes;
         var didWarnAboutInvalidateContextType;
         {
-          didWarnAboutStateAssignmentForComponent = new Set();
-          didWarnAboutUninitializedState = new Set();
-          didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate = new Set();
-          didWarnAboutLegacyLifecyclesAndDerivedState = new Set();
-          didWarnAboutDirectlyAssigningPropsToState = new Set();
-          didWarnAboutUndefinedDerivedState = new Set();
-          didWarnAboutContextTypeAndContextTypes = new Set();
-          didWarnAboutInvalidateContextType = new Set();
-          var didWarnOnInvalidCallback = new Set();
+          didWarnAboutStateAssignmentForComponent = /* @__PURE__ */ new Set();
+          didWarnAboutUninitializedState = /* @__PURE__ */ new Set();
+          didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate = /* @__PURE__ */ new Set();
+          didWarnAboutLegacyLifecyclesAndDerivedState = /* @__PURE__ */ new Set();
+          didWarnAboutDirectlyAssigningPropsToState = /* @__PURE__ */ new Set();
+          didWarnAboutUndefinedDerivedState = /* @__PURE__ */ new Set();
+          didWarnAboutContextTypeAndContextTypes = /* @__PURE__ */ new Set();
+          didWarnAboutInvalidateContextType = /* @__PURE__ */ new Set();
+          var didWarnOnInvalidCallback = /* @__PURE__ */ new Set();
           warnOnInvalidCallback = function(callback, callerName) {
             if (callback === null || typeof callback === "function") {
               return;
@@ -11624,7 +11624,7 @@ var require_react_dom_development = __commonJS({
             return null;
           }
           function mapRemainingChildren(returnFiber, currentFirstChild) {
-            var existingChildren = new Map();
+            var existingChildren = /* @__PURE__ */ new Map();
             var existingChild = currentFirstChild;
             while (existingChild !== null) {
               if (existingChild.key !== null) {
@@ -11841,7 +11841,7 @@ var require_react_dom_development = __commonJS({
                     break;
                   }
                   if (knownKeys === null) {
-                    knownKeys = new Set();
+                    knownKeys = /* @__PURE__ */ new Set();
                     knownKeys.add(key);
                     break;
                   }
@@ -12623,7 +12623,7 @@ var require_react_dom_development = __commonJS({
         var didWarnAboutUseOpaqueIdentifier;
         {
           didWarnAboutUseOpaqueIdentifier = {};
-          didWarnAboutMismatchedHooksForComponent = new Set();
+          didWarnAboutMismatchedHooksForComponent = /* @__PURE__ */ new Set();
         }
         var renderLanes = NoLanes;
         var currentlyRenderingFiber$1 = null;
@@ -16342,12 +16342,12 @@ var require_react_dom_development = __commonJS({
           var threadIDs;
           if (pingCache === null) {
             pingCache = root2.pingCache = new PossiblyWeakMap$1();
-            threadIDs = new Set();
+            threadIDs = /* @__PURE__ */ new Set();
             pingCache.set(wakeable, threadIDs);
           } else {
             threadIDs = pingCache.get(wakeable);
             if (threadIDs === void 0) {
-              threadIDs = new Set();
+              threadIDs = /* @__PURE__ */ new Set();
               pingCache.set(wakeable, threadIDs);
             }
           }
@@ -16379,7 +16379,7 @@ var require_react_dom_development = __commonJS({
               if (_workInProgress.tag === SuspenseComponent && shouldCaptureSuspense(_workInProgress, hasInvisibleParentBoundary)) {
                 var wakeables = _workInProgress.updateQueue;
                 if (wakeables === null) {
-                  var updateQueue = new Set();
+                  var updateQueue = /* @__PURE__ */ new Set();
                   updateQueue.add(wakeable);
                   _workInProgress.updateQueue = updateQueue;
                 } else {
@@ -16444,7 +16444,7 @@ var require_react_dom_development = __commonJS({
         }
         var didWarnAboutUndefinedSnapshotBeforeUpdate = null;
         {
-          didWarnAboutUndefinedSnapshotBeforeUpdate = new Set();
+          didWarnAboutUndefinedSnapshotBeforeUpdate = /* @__PURE__ */ new Set();
         }
         var PossiblyWeakSet = typeof WeakSet === "function" ? WeakSet : Set;
         var callComponentWillUnmountWithTimer = function(current2, instance) {
@@ -17432,7 +17432,7 @@ var require_react_dom_development = __commonJS({
           } else {
             if ((executionContext & DiscreteEventContext) !== NoContext && (priorityLevel === UserBlockingPriority$2 || priorityLevel === ImmediatePriority$1)) {
               if (rootsWithPendingDiscreteUpdates === null) {
-                rootsWithPendingDiscreteUpdates = new Set([root2]);
+                rootsWithPendingDiscreteUpdates = /* @__PURE__ */ new Set([root2]);
               } else {
                 rootsWithPendingDiscreteUpdates.add(root2);
               }
@@ -18537,7 +18537,7 @@ var require_react_dom_development = __commonJS({
         }
         function markLegacyErrorBoundaryAsFailed(instance) {
           if (legacyErrorBoundariesThatAlreadyFailed === null) {
-            legacyErrorBoundariesThatAlreadyFailed = new Set([instance]);
+            legacyErrorBoundariesThatAlreadyFailed = /* @__PURE__ */ new Set([instance]);
           } else {
             legacyErrorBoundariesThatAlreadyFailed.add(instance);
           }
@@ -18686,7 +18686,7 @@ var require_react_dom_development = __commonJS({
               }
               didWarnStateUpdateForNotYetMountedComponent.add(componentName);
             } else {
-              didWarnStateUpdateForNotYetMountedComponent = new Set([componentName]);
+              didWarnStateUpdateForNotYetMountedComponent = /* @__PURE__ */ new Set([componentName]);
             }
             var previousFiber = current;
             try {
@@ -18718,7 +18718,7 @@ var require_react_dom_development = __commonJS({
               }
               didWarnStateUpdateForUnmountedComponent.add(componentName);
             } else {
-              didWarnStateUpdateForUnmountedComponent = new Set([componentName]);
+              didWarnStateUpdateForUnmountedComponent = /* @__PURE__ */ new Set([componentName]);
             }
             if (isFlushingPassiveEffects)
               ;
@@ -18768,7 +18768,7 @@ var require_react_dom_development = __commonJS({
         var didWarnAboutUpdateInRender = false;
         var didWarnAboutUpdateInRenderForAnotherComponent;
         {
-          didWarnAboutUpdateInRenderForAnotherComponent = new Set();
+          didWarnAboutUpdateInRenderForAnotherComponent = /* @__PURE__ */ new Set();
         }
         function warnAboutRenderPhaseUpdatesInDEV(fiber) {
           {
@@ -18894,7 +18894,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           scheduleInteractions(root2, lane, tracing.__interactionsRef.current);
         }
         function startWorkOnPendingInteractions(root2, lanes) {
-          var interactions = new Set();
+          var interactions = /* @__PURE__ */ new Set();
           root2.pendingInteractionMap.forEach(function(scheduledInteractions, scheduledLane) {
             if (includesSomeLane(lanes, scheduledLane)) {
               scheduledInteractions.forEach(function(interaction) {
@@ -19150,7 +19150,7 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         }
         var findHostInstancesForRefresh = function(root2, families) {
           {
-            var hostInstances = new Set();
+            var hostInstances = /* @__PURE__ */ new Set();
             var types = new Set(families.map(function(family) {
               return family.current;
             }));
@@ -19249,8 +19249,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           hasBadMapPolyfill = false;
           try {
             var nonExtensibleObject = Object.preventExtensions({});
-            new Map([[nonExtensibleObject, null]]);
-            new Set([nonExtensibleObject]);
+            /* @__PURE__ */ new Map([[nonExtensibleObject, null]]);
+            /* @__PURE__ */ new Set([nonExtensibleObject]);
           } catch (e) {
             hasBadMapPolyfill = true;
           }
@@ -19697,8 +19697,8 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           }
           {
             this.interactionThreadID = tracing.unstable_getThreadID();
-            this.memoizedInteractions = new Set();
-            this.pendingInteractionMap = new Map();
+            this.memoizedInteractions = /* @__PURE__ */ new Set();
+            this.pendingInteractionMap = /* @__PURE__ */ new Map();
           }
           {
             switch (tag) {
@@ -26222,7 +26222,7 @@ var require_luxon = __commonJS({
       return Function.toString.call(fn).indexOf("[native code]") !== -1;
     }
     function _wrapNativeSuper2(Class) {
-      var _cache = typeof Map === "function" ? new Map() : void 0;
+      var _cache = typeof Map === "function" ? /* @__PURE__ */ new Map() : void 0;
       _wrapNativeSuper2 = function _wrapNativeSuper3(Class2) {
         if (Class2 === null || !_isNativeFunction2(Class2))
           return Class2;
@@ -31991,7 +31991,7 @@ function _assertThisInitialized(self2) {
   return self2;
 }
 function _wrapNativeSuper(Class) {
-  var _cache = typeof Map === "function" ? new Map() : void 0;
+  var _cache = typeof Map === "function" ? /* @__PURE__ */ new Map() : void 0;
   _wrapNativeSuper = function _wrapNativeSuper2(Class2) {
     if (Class2 === null || !_isNativeFunction(Class2))
       return Class2;
@@ -34059,7 +34059,7 @@ function phash(e, r3) {
 function hash(e) {
   return phash(5381, e) >>> 0;
 }
-var i = new Set();
+var i = /* @__PURE__ */ new Set();
 var s = new WeakMap();
 function stringify(e) {
   if (e === null || i.has(e)) {
@@ -34128,7 +34128,7 @@ function stringifyDocument(e) {
   }
   return r3;
 }
-var u2 = new Map();
+var u2 = /* @__PURE__ */ new Map();
 function keyDocument(e) {
   var r3;
   var n2;
@@ -34439,7 +34439,7 @@ var formatNode = function(e) {
     });
   }
 };
-var Q = new Map();
+var Q = /* @__PURE__ */ new Map();
 function formatDocument(r3) {
   var n2 = keyDocument(r3);
   var a3 = Q.get(n2.__key);
@@ -34512,7 +34512,7 @@ function cacheExchange(e) {
   var r3 = e.forward;
   var n2 = e.client;
   var t2 = e.dispatchDebug;
-  var a3 = new Map();
+  var a3 = /* @__PURE__ */ new Map();
   var i3 = Object.create(null);
   function mapTypeNames(e2) {
     var r4 = makeOperation(e2.kind, e2);
@@ -34556,7 +34556,7 @@ function cacheExchange(e) {
       }
       var o2 = collectTypesFromResponse(e3.data).concat(r4.context.additionalTypenames || []);
       if (e3.operation.kind === "mutation") {
-        var u5 = new Set();
+        var u5 = /* @__PURE__ */ new Set();
         t2({
           type: "cacheInvalidation",
           message: "The following typenames have been invalidated: " + o2,
@@ -34569,7 +34569,7 @@ function cacheExchange(e) {
         });
         for (var c4 = 0; c4 < o2.length; c4++) {
           var s3 = o2[c4];
-          var f2 = i3[s3] || (i3[s3] = new Set());
+          var f2 = i3[s3] || (i3[s3] = /* @__PURE__ */ new Set());
           f2.forEach(function(e4) {
             u5.add(e4);
           });
@@ -34586,7 +34586,7 @@ function cacheExchange(e) {
         a3.set(r4.key, e3);
         for (var p2 = 0; p2 < o2.length; p2++) {
           var l3 = o2[p2];
-          (i3[l3] || (i3[l3] = new Set())).add(r4.key);
+          (i3[l3] || (i3[l3] = /* @__PURE__ */ new Set())).add(r4.key);
         }
       }
     })(r3(filter$1(function(e3) {
@@ -34608,11 +34608,10 @@ function reexecuteOperation(e, r3) {
     requestPolicy: "network-only"
   })));
 }
-var G = new Set();
 function dedupExchange(e) {
   var r3 = e.forward;
   var n2 = e.dispatchDebug;
-  var t2 = new Set();
+  var t2 = /* @__PURE__ */ new Set();
   function filterIncomingOperation(e2) {
     var r4 = e2.key;
     var a3 = e2.kind;
@@ -34736,8 +34735,8 @@ var W = function Client(e) {
   if (!e.url) {
     throw new Error("You are creating an urql-client without a url.");
   }
-  var r3 = new Map();
-  var n2 = new Map();
+  var r3 = /* @__PURE__ */ new Map();
+  var n2 = /* @__PURE__ */ new Map();
   var t2 = [];
   var a3 = makeSubject$1();
   var i3 = a3.source;
@@ -35035,8 +35034,8 @@ function useQuery(e) {
   var t2 = useClient();
   var n2 = function getCacheForClient(e2) {
     if (!e2._react) {
-      var t3 = new Set();
-      var n3 = new Map();
+      var t3 = /* @__PURE__ */ new Set();
+      var n3 = /* @__PURE__ */ new Map();
       if (e2.operations$) {
         N(function(e3) {
           if (e3.kind === "teardown" && t3.has(e3.key)) {
@@ -35473,7 +35472,7 @@ function authExchange(v) {
   return function(v2) {
     var x3 = v2.client;
     var y2 = v2.forward;
-    var O3 = new Map();
+    var O3 = /* @__PURE__ */ new Map();
     var S2 = makeSubject$1();
     var w2 = S2.source;
     var g2 = S2.next;
@@ -35645,7 +35644,7 @@ function normalizeVariables(e, t2) {
   return r3;
 }
 var N2 = "\nhttps://bit.ly/2XbVrpR#";
-var k = new Set();
+var k = /* @__PURE__ */ new Set();
 var O2 = [];
 function popDebugNode() {
   return O2.pop();
@@ -35819,7 +35818,7 @@ var S = false;
 function makeNodeMap() {
   return {
     optimistic: makeDict(),
-    base: new Map()
+    base: /* @__PURE__ */ new Map()
   };
 }
 function makeData(e) {
@@ -35840,8 +35839,8 @@ function ownsData(e) {
   return !!e && _.has(e);
 }
 function initDataState(e, t2, r3, i3) {
-  _ = new Set();
-  E2 = new Map();
+  _ = /* @__PURE__ */ new Set();
+  E2 = /* @__PURE__ */ new Map();
   b2 = e;
   D2 = t2;
   w = makeDict();
@@ -35864,8 +35863,8 @@ function initDataState(e, t2, r3, i3) {
       }
       if (!e2.refLock[t3]) {
         e2.refLock[t3] = makeDict();
-        e2.links.optimistic[t3] = new Map();
-        e2.records.optimistic[t3] = new Map();
+        e2.links.optimistic[t3] = /* @__PURE__ */ new Map();
+        e2.records.optimistic[t3] = /* @__PURE__ */ new Map();
       }
     }(t2, r3);
   } else {
@@ -36143,7 +36142,7 @@ function inspectFields(e) {
   var t2 = D2.links;
   var r3 = D2.records;
   var i3 = [];
-  var n2 = new Set();
+  var n2 = /* @__PURE__ */ new Set();
   updateDependencies(e);
   extractNodeMapFields(i3, n2, e, t2);
   extractNodeMapFields(i3, n2, e, r3);
@@ -36489,15 +36488,15 @@ function Store(e) {
   this.data = function make(e2) {
     return {
       defer: false,
-      gc: new Set(),
-      persist: new Set(),
+      gc: /* @__PURE__ */ new Set(),
+      persist: /* @__PURE__ */ new Set(),
       queryRootKey: e2,
       refCount: makeDict(),
       refLock: makeDict(),
       links: makeNodeMap(),
       records: makeNodeMap(),
-      deferredKeys: new Set(),
-      commutativeKeys: new Set(),
+      deferredKeys: /* @__PURE__ */ new Set(),
+      commutativeKeys: /* @__PURE__ */ new Set(),
       optimisticOrder: [],
       storage: null
     };
@@ -36974,12 +36973,12 @@ function cacheExchange2(e) {
         }(h3.data, e.storage, t3);
       });
     }
-    var N3 = new Map();
+    var N3 = /* @__PURE__ */ new Map();
     var k2 = [];
-    var O3 = new Map();
-    var _2 = new Map();
+    var O3 = /* @__PURE__ */ new Map();
+    var _2 = /* @__PURE__ */ new Map();
     var E3 = makeDict();
-    var b3 = new Set();
+    var b3 = /* @__PURE__ */ new Set();
     var D3 = makeDict();
     function isBlockedByOptimisticUpdate(e2) {
       for (var t3 in e2) {
@@ -37045,7 +37044,7 @@ function cacheExchange2(e) {
             E3[n2] = true;
           }
           N3.set(e2.key, t3);
-          var a3 = new Set();
+          var a3 = /* @__PURE__ */ new Set();
           collectPendingOperations(a3, t3);
           executePendingOperations(e2, a3);
         }
@@ -37160,7 +37159,7 @@ function cacheExchange2(e) {
       })(i3));
       var w2 = share$1(v(map$1(prepareForwardedOperation)(merge$1([O4, _3]))));
       var F2 = map$1(function(e3) {
-        var t4 = new Set();
+        var t4 = /* @__PURE__ */ new Set();
         var r4 = updateCacheWithResult(e3, t4);
         executePendingOperations(e3.operation, t4);
         return r4;
@@ -37178,7 +37177,7 @@ function cacheExchange2(e) {
           delete E3[r4];
         }
         var i4 = [];
-        var n2 = new Set();
+        var n2 = /* @__PURE__ */ new Set();
         var a3;
         while (a3 = k2.shift()) {
           i4.push(updateCacheWithResult(a3, n2));
@@ -37243,8 +37242,8 @@ var {
 } = import_tslib.default;
 
 // node_modules/graphql-tag/lib/index.js
-var docCache = new Map();
-var fragmentSourceMap = new Map();
+var docCache = /* @__PURE__ */ new Map();
+var fragmentSourceMap = /* @__PURE__ */ new Map();
 var printFragmentWarnings = true;
 var experimentalFragmentVariables = false;
 function normalize(string) {
@@ -37254,7 +37253,7 @@ function cacheKeyFromLoc(loc) {
   return normalize(loc.source.body.substring(loc.start, loc.end));
 }
 function processFragments(ast) {
-  var seenKeys = new Set();
+  var seenKeys = /* @__PURE__ */ new Set();
   var definitions = [];
   ast.definitions.forEach(function(fragmentDefinition) {
     if (fragmentDefinition.kind === "FragmentDefinition") {
@@ -37266,7 +37265,7 @@ function processFragments(ast) {
           console.warn("Warning: fragment with name " + fragmentName + " already exists.\ngraphql-tag enforces all fragment names across your application to be unique; read more about\nthis in the docs: http://dev.apollodata.com/core/fragments.html#unique-names");
         }
       } else if (!sourceKeySet) {
-        fragmentSourceMap.set(fragmentName, sourceKeySet = new Set());
+        fragmentSourceMap.set(fragmentName, sourceKeySet = /* @__PURE__ */ new Set());
       }
       sourceKeySet.add(sourceKey);
       if (!seenKeys.has(sourceKey)) {
@@ -37635,125 +37634,23 @@ var import_lodash2 = __toModule(require_lodash());
 var import_react6 = __toModule(require_react());
 
 // src/types/generated.ts
-var BasicTextualSentiment;
-(function(BasicTextualSentiment2) {
-  BasicTextualSentiment2["Negative"] = "negative";
-  BasicTextualSentiment2["Neutral"] = "neutral";
-  BasicTextualSentiment2["Positive"] = "positive";
-})(BasicTextualSentiment || (BasicTextualSentiment = {}));
-var BillingSource;
-(function(BillingSource2) {
-  BillingSource2["Manual"] = "manual";
-  BillingSource2["StripeLive"] = "stripe_live";
-  BillingSource2["StripeTest"] = "stripe_test";
-})(BillingSource || (BillingSource = {}));
-var CompanyOwnership;
-(function(CompanyOwnership2) {
-  CompanyOwnership2["Private"] = "private";
-  CompanyOwnership2["Public"] = "public";
-})(CompanyOwnership || (CompanyOwnership = {}));
-var CompanyUrlType;
-(function(CompanyUrlType2) {
-  CompanyUrlType2["Home"] = "home";
-  CompanyUrlType2["IrEvents"] = "ir_events";
-  CompanyUrlType2["IrHome"] = "ir_home";
-  CompanyUrlType2["IrNews"] = "ir_news";
-  CompanyUrlType2["LogoIcon"] = "logo_icon";
-})(CompanyUrlType || (CompanyUrlType = {}));
-var ContentSource;
-(function(ContentSource2) {
+var ContentSource = /* @__PURE__ */ ((ContentSource2) => {
   ContentSource2["Eventvestor"] = "eventvestor";
   ContentSource2["Lexisnexis"] = "lexisnexis";
   ContentSource2["Media"] = "media";
   ContentSource2["Refinitiv"] = "refinitiv";
   ContentSource2["Streetaccount"] = "streetaccount";
   ContentSource2["User"] = "user";
-})(ContentSource || (ContentSource = {}));
-var ContentType;
-(function(ContentType2) {
+  return ContentSource2;
+})(ContentSource || {});
+var ContentType = /* @__PURE__ */ ((ContentType2) => {
   ContentType2["Document"] = "document";
   ContentType2["Filing"] = "filing";
   ContentType2["News"] = "news";
   ContentType2["Spotlight"] = "spotlight";
   ContentType2["Streetaccount"] = "streetaccount";
-})(ContentType || (ContentType = {}));
-var EventConnectionStatus;
-(function(EventConnectionStatus2) {
-  EventConnectionStatus2["Connected"] = "connected";
-  EventConnectionStatus2["ConnectionExpected"] = "connection_expected";
-  EventConnectionStatus2["ConnectionNotExpected"] = "connection_not_expected";
-  EventConnectionStatus2["Missed"] = "missed";
-  EventConnectionStatus2["Transcribed"] = "transcribed";
-  EventConnectionStatus2["Transcribing"] = "transcribing";
-  EventConnectionStatus2["WaitingToConnect"] = "waiting_to_connect";
-})(EventConnectionStatus || (EventConnectionStatus = {}));
-var EventTranscriptSectionType;
-(function(EventTranscriptSectionType2) {
-  EventTranscriptSectionType2["Presentation"] = "presentation";
-  EventTranscriptSectionType2["QAndA"] = "q_and_a";
-  EventTranscriptSectionType2["Unknown"] = "unknown";
-})(EventTranscriptSectionType || (EventTranscriptSectionType = {}));
-var EventType;
-(function(EventType2) {
-  EventType2["Custom"] = "custom";
-  EventType2["Earnings"] = "earnings";
-  EventType2["EarningsRelease"] = "earnings_release";
-  EventType2["InvestorMeeting"] = "investor_meeting";
-  EventType2["Presentation"] = "presentation";
-  EventType2["ShareholderMeeting"] = "shareholder_meeting";
-  EventType2["SpecialSituation"] = "special_situation";
-  EventType2["Test"] = "test";
-})(EventType || (EventType = {}));
-var EventView;
-(function(EventView2) {
-  EventView2["LiveAndUpcoming"] = "live_and_upcoming";
-  EventView2["Recent"] = "recent";
-})(EventView || (EventView = {}));
-var ExchangePriceDelay;
-(function(ExchangePriceDelay2) {
-  ExchangePriceDelay2["Eod"] = "eod";
-  ExchangePriceDelay2["FifteenMinute"] = "fifteen_minute";
-})(ExchangePriceDelay || (ExchangePriceDelay = {}));
-var IdentifierResolutionUniverse;
-(function(IdentifierResolutionUniverse2) {
-  IdentifierResolutionUniverse2["Default"] = "default";
-  IdentifierResolutionUniverse2["UsOnly"] = "us_only";
-})(IdentifierResolutionUniverse || (IdentifierResolutionUniverse = {}));
-var IdentifierType;
-(function(IdentifierType2) {
-  IdentifierType2["Unknown"] = "unknown";
-})(IdentifierType || (IdentifierType = {}));
-var NewsLicense;
-(function(NewsLicense2) {
-  NewsLicense2["Lexisnexis"] = "lexisnexis";
-  NewsLicense2["Public"] = "public";
-})(NewsLicense || (NewsLicense = {}));
-var PasswordStatus;
-(function(PasswordStatus2) {
-  PasswordStatus2["Generated"] = "generated";
-  PasswordStatus2["User"] = "user";
-})(PasswordStatus || (PasswordStatus = {}));
-var SpacStatus;
-(function(SpacStatus2) {
-  SpacStatus2["Ipo"] = "ipo";
-  SpacStatus2["Merged"] = "merged";
-  SpacStatus2["None"] = "none";
-  SpacStatus2["TargetAnnounced"] = "target_announced";
-  SpacStatus2["TargetRumored"] = "target_rumored";
-})(SpacStatus || (SpacStatus = {}));
-var TagType;
-(function(TagType2) {
-  TagType2["NewsSource"] = "news_source";
-})(TagType || (TagType = {}));
-var UserStatus;
-(function(UserStatus2) {
-  UserStatus2["Active"] = "active";
-  UserStatus2["Deactivated"] = "deactivated";
-  UserStatus2["Duplicate"] = "duplicate";
-  UserStatus2["Invited"] = "invited";
-  UserStatus2["New"] = "new";
-  UserStatus2["Verified"] = "verified";
-})(UserStatus || (UserStatus = {}));
+  return ContentType2;
+})(ContentType || {});
 var RefreshDocument = lib_default`
     mutation Refresh {
   __typename
