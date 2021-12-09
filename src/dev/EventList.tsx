@@ -27,7 +27,6 @@ const App: FC = (): ReactElement => {
                         clientOptions: {
                             url: 'https://api-dev.aiera.com/graphql',
                             fetch: (...args) => {
-                                console.log(...args);
                                 return window.fetch(...args);
                             },
                         },
