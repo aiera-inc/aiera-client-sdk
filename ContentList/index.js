@@ -37529,7 +37529,8 @@ function createGQLClient(config) {
     fetchExchange
   ].filter((t2) => t2);
   return z(__spreadProps(__spreadValues({}, config.gqlOptions.clientOptions), {
-    exchanges
+    exchanges,
+    requestPolicy: "cache-and-network"
   }));
 }
 var Context3 = (0, import_react4.createContext)({ reset: () => void 0 });
@@ -37844,6 +37845,41 @@ var EventListDocument = lib_default`
   }
 }
     `;
+var QuotePricesDocument = lib_default`
+    query QuotePrices($eventId: ID!, $after: DateTime) {
+  events(filter: {eventIds: [$eventId]}) {
+    id
+    quotePrices {
+      id
+      currentDayClosePrice
+      currentDayOpenPrice
+      endPrice
+      previousDayClosePrice
+      quote {
+        id
+        localTicker
+        exchange {
+          id
+          shortName
+        }
+      }
+      realtimePrices(after: $after) {
+        id
+        date
+        price
+        volume
+        priceChangeFromStartValue
+        priceChangeFromStartPercent
+        volumeChangeFromStartValue
+        volumeChangeFromStartPercent
+        volumeChangeFromLastValue
+        volumeChangeFromLastPercent
+      }
+      startPrice
+    }
+  }
+}
+    `;
 var EventUpdatesDocument = lib_default`
     query EventUpdates($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
@@ -37899,6 +37935,32 @@ var TranscriptDocument = lib_default`
         }
       }
     }
+    quotePrices {
+      currentDayClosePrice
+      currentDayOpenPrice
+      endPrice
+      previousDayClosePrice
+      quote {
+        id
+        localTicker
+        exchange {
+          id
+          shortName
+        }
+      }
+      realtimePrices {
+        date
+        price
+        volume
+        priceChangeFromStartValue
+        priceChangeFromStartPercent
+        volumeChangeFromStartValue
+        volumeChangeFromStartPercent
+        volumeChangeFromLastValue
+        volumeChangeFromLastPercent
+      }
+      startPrice
+    }
     transcripts {
       id
       sections {
@@ -37914,6 +37976,8 @@ var TranscriptDocument = lib_default`
           paragraphs {
             id
             timestamp
+            displayTimestamp
+            syncTimestamp
             syncMs
             sentences {
               id
@@ -37943,6 +38007,8 @@ var LatestParagraphsDocument = lib_default`
       latestParagraphs {
         id
         timestamp
+        displayTimestamp
+        syncTimestamp
         syncMs
         sentences {
           id
@@ -38932,7 +38998,7 @@ function useInterval(callback, interval) {
     if (interval === null) {
       return;
     }
-    const id = window.setInterval(() => savedCallback.current(), interval);
+    const id = window.setInterval(() => void savedCallback.current(), interval);
     return () => window.clearInterval(id);
   }, [interval]);
 }
