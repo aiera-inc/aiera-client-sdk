@@ -50,6 +50,7 @@ module.exports = {
             fill: ['hover', 'active', 'group-active', 'group-focus-within'],
             stroke: ['hover', 'active', 'group-active', 'group-focus-within'],
             margin: ['first', 'last'],
+            opacity: ['disabled'],
             padding: ['first', 'last'],
             textColor: ['hover', 'active', 'group-active', 'group-focus-within'],
         },

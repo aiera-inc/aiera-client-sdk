@@ -1,3 +1,29 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+    .animation-delay-100 {
+        animation-delay: 100ms;
+    }
+
+    .animation-delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .animation-delay-250 {
+        animation-delay: 250ms;
+    }
+
+    .animation-delay-500 {
+        animation-delay: 500ms;
+    }
+
+    .animation-delay-750 {
+        animation-delay: 750ms;
+    }
+
+    .animation-delay-1000 {
+        animation-delay: 1s;
+    }
+}
