@@ -208,6 +208,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                                     metaData={{
                                                                         quote: primaryQuote,
                                                                         eventType: event.eventType,
+                                                                        eventDate: eventDate
+                                                                            ? eventDate.toString()
+                                                                            : undefined,
                                                                     }}
                                                                     id={event.id}
                                                                     url={

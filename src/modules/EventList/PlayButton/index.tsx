@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import { useAudioPlayer, EventMetaData } from '@aiera/client-sdk/lib/audio';
 import { useTrack } from '@aiera/client-sdk/lib/data';
 import { Bell } from '@aiera/client-sdk/components/Svg/Bell';
+import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
 import { Play } from '@aiera/client-sdk/components/Svg/Play';
 import { Pause } from '@aiera/client-sdk/components/Svg/Pause';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
@@ -15,6 +16,7 @@ interface PlayButtonSharedProps {
 
 /** @notExported */
 interface PlayButtonUIProps extends PlayButtonSharedProps {
+    eventStarted: boolean;
     hasAudio: boolean;
     isPlaying: boolean;
     toggleAlert: (event: MouseEvent) => void;
@@ -22,7 +24,7 @@ interface PlayButtonUIProps extends PlayButtonSharedProps {
 }
 
 export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
-    const { alertOnLive, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+    const { alertOnLive, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
     return hasAudio ? (
         <div
             className={classNames(
@@ -48,18 +50,24 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
         >
             {isPlaying ? <Pause className="w-3" /> : <Play className="ml-1 w-4 h-4 group-active:text-current" />}
         </div>
+    ) : eventStarted ? (
+        <div className="flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4">
+            <Calendar className="w-4" />
+        </div>
     ) : (
         <Tooltip
             content={
-                <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9">
-                    Alert on Start
-                    <br />A chime will ring after the audio is connected
+                <div className="bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7">
+                    {alertOnLive
+                        ? 'A chime will ring after the audio is connected'
+                        : 'Play a chime when the event is about to begin'}
                 </div>
             }
             grow="up-right"
             openOn="hover"
-            position="bottom-left"
-            yOffset={4}
+            position="bottom-right"
+            yOffset={6}
+            xOffset={4}
             hideOnDocumentScroll
             className={classNames('border flex items-center justify-center w-full h-full rounded-full', {
                 'dark:bg-yellow-400 dark:text-yellow-800': alertOnLive,
@@ -117,9 +125,11 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
         },
         [id]
     );
+    const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
     return (
         <PlayButtonUI
             alertOnLive={alertOnLive}
+            eventStarted={eventStarted}
             hasAudio={!!url}
             isPlaying={audioPlayer.playing(id)}
             toggleAlert={toggleAlert}
