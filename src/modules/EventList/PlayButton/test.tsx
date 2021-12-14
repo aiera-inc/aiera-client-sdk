@@ -46,7 +46,7 @@ describe('PlayButtonUI', () => {
         expect(mockedPause).toHaveBeenCalled();
     });
 
-    test('renders calendar icon when there is no url', () => {
+    test('renders bell icon when there is no url', () => {
         const player = new AudioPlayer();
         player.playing = jest.fn().mockReturnValue(true);
         renderWithProvider(
@@ -54,6 +54,6 @@ describe('PlayButtonUI', () => {
                 <PlayButton id="1" metaData={{ eventType: EventType.Earnings, quote: quote as Quote }} />
             </AudioPlayerProvider>
         );
-        screen.getByTitle('Calendar');
+        screen.getByTitle('Bell');
     });
 });

@@ -154,7 +154,7 @@ describe('EventList', () => {
         expect(client.query).toHaveBeenCalled();
     });
 
-    test('renders calendar when there is no audio url', async () => {
+    test('renders Bell when there is no audio url', async () => {
         await actAndFlush(() =>
             renderWithProvider(<EventList />, {
                 executeQuery: () =>
@@ -167,7 +167,7 @@ describe('EventList', () => {
         );
         const row = screen.getByText('TICK').closest('li');
         expect(row).toBeTruthy();
-        if (row) within(row).getByTitle('Calendar');
+        if (row) within(row).getByTitle('Bell');
     });
 
     test('renders play when there is an audio url', async () => {
