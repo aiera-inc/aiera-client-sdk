@@ -25,7 +25,15 @@ describe('PlayButtonUI', () => {
         player.play = mockedPlay;
         renderWithProvider(
             <AudioPlayerProvider audioPlayer={player}>
-                <PlayButton id="1" url="mp3!" metaData={{ eventType: EventType.Earnings, quote: quote as Quote }} />
+                <PlayButton
+                    id="1"
+                    url="mp3!"
+                    metaData={{
+                        eventType: EventType.Earnings,
+                        quote: quote as Quote,
+                        eventDate: new Date().toString(),
+                    }}
+                />
             </AudioPlayerProvider>
         );
         userEvent.click(screen.getByTitle('Play'));
@@ -39,7 +47,15 @@ describe('PlayButtonUI', () => {
         player.pause = mockedPause;
         renderWithProvider(
             <AudioPlayerProvider audioPlayer={player}>
-                <PlayButton id="1" url="mp3!" metaData={{ eventType: EventType.Earnings, quote: quote as Quote }} />
+                <PlayButton
+                    id="1"
+                    url="mp3!"
+                    metaData={{
+                        eventType: EventType.Earnings,
+                        quote: quote as Quote,
+                        eventDate: new Date().toString(),
+                    }}
+                />
             </AudioPlayerProvider>
         );
         userEvent.click(screen.getByTitle('Pause'));
@@ -51,7 +67,14 @@ describe('PlayButtonUI', () => {
         player.playing = jest.fn().mockReturnValue(true);
         renderWithProvider(
             <AudioPlayerProvider audioPlayer={player}>
-                <PlayButton id="1" metaData={{ eventType: EventType.Earnings, quote: quote as Quote }} />
+                <PlayButton
+                    id="1"
+                    metaData={{
+                        eventType: EventType.Earnings,
+                        quote: quote as Quote,
+                        eventDate: new Date().toString(),
+                    }}
+                />
             </AudioPlayerProvider>
         );
         screen.getByTitle('Calendar');

@@ -6,6 +6,7 @@ import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
 export interface EventMetaData {
     quote?: Maybe<DeepPartial<Quote>>;
     eventType?: EventType;
+    eventDate?: string;
 }
 
 export class AudioPlayer {

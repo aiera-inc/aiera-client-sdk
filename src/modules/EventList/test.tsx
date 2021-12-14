@@ -154,7 +154,7 @@ describe('EventList', () => {
         expect(client.query).toHaveBeenCalled();
     });
 
-    test('renders calendar when there is no audio url', async () => {
+    test('renders Calendar when there is no audio url', async () => {
         await actAndFlush(() =>
             renderWithProvider(<EventList />, {
                 executeQuery: () =>
