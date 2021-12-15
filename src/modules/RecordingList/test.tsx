@@ -8,7 +8,7 @@ import { RecordingList } from '.';
 describe('RecordingList', () => {
     test('renders new recording button', () => {
         renderWithProvider(<RecordingList />);
-        screen.getByText('+ Schedule Recording');
+        screen.getByText('Schedule Recording');
     });
 
     test('handles loading state', () => {

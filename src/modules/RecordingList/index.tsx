@@ -1,16 +1,19 @@
 import React, { Fragment, ReactElement } from 'react';
 import gql from 'graphql-tag';
+import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
 import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
-import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types';
-import { DateTime } from 'luxon';
+import { Button } from '@aiera/client-sdk/components/Button';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import { Playbar } from '@aiera/client-sdk/components/Playbar';
+import { Plus } from '@aiera/client-sdk/components/Svg/Plus';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { PlayButton } from '@aiera/client-sdk/modules/EventList/PlayButton';
+import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface RecordingListSharedProps {}
@@ -37,7 +40,13 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                         placeholder="Search Recordings..."
                         value={searchTerm}
                     />
-                    <div className="mx-2">+ Schedule Recording</div>
+                    <Button
+                        className="bg-blue-500 cursor-pointer flex items-center mx-2 px-2 rounded-0.375 shrink-0 active:bg-blue-700 hover:bg-blue-600"
+                        onClick={undefined}
+                    >
+                        <Plus className="h-4 mb-0.5 text-white w-2.5" />
+                        <span className="font-light ml-1.5 text-sm text-white">Schedule Recording</span>
+                    </Button>
                 </div>
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7">
@@ -81,7 +90,7 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                                         ) {
                                             prevEventDate = eventDate;
                                             divider = (
-                                                <li className="sticky top-[56px] px-3">
+                                                <li className="sticky top-[8px] px-3 first-of-type:pb-2">
                                                     <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
                                                         {eventDate.toFormat('DDDD')}
                                                         <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
@@ -159,6 +168,7 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                     </div>
                 </div>
             </div>
+            <Playbar />
         </div>
     );
 }
@@ -195,7 +205,7 @@ export function RecordingList(_props: RecordingListProps): ReactElement {
             }
         `,
         variables: {
-            view: EventView.LiveAndUpcoming,
+            view: EventView.Recent,
             filter: {
                 eventTypes: [EventType.Custom],
                 title: state.searchTerm || undefined,
