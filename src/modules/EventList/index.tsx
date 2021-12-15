@@ -19,7 +19,13 @@ import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
-import { getPrimaryQuote, useCompanyResolver, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
+import {
+    getPrimaryQuote,
+    useCompanyResolver,
+    useAutoTrack,
+    useSettings,
+    useAlertList,
+} from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
@@ -294,6 +300,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
     });
 
     const { settings } = useSettings();
+    const { alertList } = useAlertList();
     const resolveCompany = useCompanyResolver();
     const bus = useMessageListener(
         'instrument-selected',

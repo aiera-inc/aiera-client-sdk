@@ -268,3 +268,89 @@ export function useSettings(): {
 
     return { settings, updateSettings, loadSettings, handlers };
 }
+
+export interface AlertList {
+    dateKeys: string[];
+    [date: string]: string[];
+}
+
+export const defaultAlertList = {
+    dateKeys: [],
+};
+
+export function useAlertList(): {
+    alertList: AlertList;
+    addAlert: (date: string, id: string) => void;
+    removeAlert: (date: string, id: string) => void;
+    loadAlertList: () => Promise<void>;
+} {
+    const storage = useStorage();
+    const [alertList, setAlertList] = useState<AlertList>(defaultAlertList);
+
+    const updateAlertList = useCallback(
+        (date: string, id: string, action) => {
+            setAlertList((state) => {
+                const dateKeys = new Set(state.dateKeys);
+                const ids = state[date] ? new Set(state[date]) : new Set();
+                const cleanState: AlertList = { ...defaultAlertList};
+
+                if (action === 'add') {
+                    ids.add(id);
+                    if (!dateKeys?.has(date)) {
+                        dateKeys.add(date);
+                    }
+                } else {
+                    ids.delete(id);
+                    if (ids.size === 0) {
+                        dateKeys.delete(date);
+                    }
+                }
+
+                // The dateKeys are the source of truth
+                // because it seems as though the local state gets out of sync.
+                // so we only pick the data where the dates are
+                dateKeys.forEach((dk: string) => {
+                    if (state[dk] && dk !== date) {
+                        cleanState[dk] = state[dk];
+                    } else if (dk === date && ids.size > 0) {
+                        cleanState[date] = [...ids];
+                    }
+                });
+
+                cleanState.dateKeys = [...dateKeys];
+
+                try {
+                    void storage.put('alertList', JSON.stringify(cleanState));
+                } catch (_error) {
+                    // Nothing to do here, it just wont save
+                }
+                return cleanState;
+            });
+        },
+        [alertList, storage, setAlertList]
+    );
+
+    const addAlert = (date: string, id: string) => updateAlertList(date, id, 'add');
+    const removeAlert = (date: string, id: string) => updateAlertList(date, id, 'remove');
+
+    const loadAlertList = useCallback(async () => {
+        return storage.get('alertList').then((value) => {
+            try {
+                setAlertList((state) => ({ ...state, ...(JSON.parse(value || '{}') as AlertList) }));
+            } catch (_error) {
+                // Nothing to do here, it just wont save
+            }
+        });
+    }, [storage, setAlertList]);
+
+    useEffect(() => {
+        const listener = (key: string) => {
+            if (key === 'alertList') void loadAlertList();
+        };
+        storage.addListener?.(listener);
+        void loadAlertList();
+        return () => storage.removeListener?.(listener);
+    }, [loadAlertList, storage]);
+
+    return { alertList, addAlert, removeAlert, loadAlertList };
+}
