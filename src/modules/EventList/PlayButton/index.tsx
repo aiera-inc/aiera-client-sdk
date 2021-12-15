@@ -1,7 +1,7 @@
 import React, { useCallback, MouseEvent, ReactElement, ReactNode } from 'react';
 import classNames from 'classnames';
 import { useAudioPlayer, EventMetaData } from '@aiera/client-sdk/lib/audio';
-import { useTrack } from '@aiera/client-sdk/lib/data';
+import { useTrack, useAlertList } from '@aiera/client-sdk/lib/data';
 import { Bell } from '@aiera/client-sdk/components/Svg/Bell';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
 import { Play } from '@aiera/client-sdk/components/Svg/Play';
@@ -10,12 +10,12 @@ import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import './styles.css';
 
 interface PlayButtonSharedProps {
-    alertOnLive?: boolean;
     children?: ReactNode;
 }
 
 /** @notExported */
 interface PlayButtonUIProps extends PlayButtonSharedProps {
+    alertOnLive: boolean;
     eventStarted: boolean;
     hasAudio: boolean;
     isPlaying: boolean;
@@ -83,7 +83,7 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
                 'dark:active:bg-yellow-400 dark:active:border-yellow-400 dark:active:text-yellow-800': !alertOnLive,
             })}
         >
-            <div onClick={toggleAlert}>
+            <div onClick={toggleAlert} className="w-full h-full rounded-full flex items-center justify-center">
                 <Bell className="w-3.5" />
             </div>
         </Tooltip>
@@ -102,7 +102,8 @@ export interface PlayButtonProps extends PlayButtonSharedProps {
  * Renders PlayButton
  */
 export function PlayButton(props: PlayButtonProps): ReactElement {
-    const { alertOnLive = false, id, url, offset = 0, metaData } = props;
+    const { id, url, offset = 0, metaData } = props;
+    const { addAlert, removeAlert, alertList } = useAlertList();
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
     const isPlaying = audioPlayer.playing(id);
@@ -119,11 +120,21 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
         },
         [isPlaying, id, url, offset]
     );
+    const eventDate = metaData.eventDate;
+    const alertDateIds = eventDate ? alertList[eventDate] : null;
+    const alertOnLive = alertDateIds ? alertDateIds.indexOf(id) >= 0 : false;
     const toggleAlert = useCallback(
         (event: MouseEvent) => {
             event.stopPropagation();
+            if (metaData.eventDate && id) {
+                if (!alertOnLive) {
+                    addAlert(metaData.eventDate, id);
+                } else {
+                    removeAlert(metaData.eventDate, id);
+                }
+            }
         },
-        [id]
+        [id, alertOnLive]
     );
     const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
     return (

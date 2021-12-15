@@ -7,6 +7,7 @@ import React, {
     useState,
     Dispatch,
     SetStateAction,
+    useEffect,
 } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
@@ -22,6 +23,7 @@ import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { getPrimaryQuote, useCompanyResolver, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
+import { useAlertList } from '@aiera/client-sdk/lib/data';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
@@ -204,7 +206,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         <div className="flex items-center justify-center">
                                                             <div className="flex items-center justify-center w-8 h-8">
                                                                 <PlayButton
-                                                                    alertOnLive={!event.isLive && index % 2 === 0}
                                                                     metaData={{
                                                                         quote: primaryQuote,
                                                                         eventType: event.eventType,
@@ -436,6 +437,29 @@ export const EventList = (_props: EventListProps): ReactElement => {
 
     useAutoTrack('Click', 'Event Filter By', { filterBy: state.filterByTypes }, [state.filterByTypes]);
     useAutoTrack('Submit', 'Event Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
+
+    const { alertList, removeDateKey } = useAlertList();
+    useEffect(() => {
+        const dateKeys = alertList.dateKeys?.map((dk) => new Date(dk).getTime());
+        const checkAlerts = setInterval(() => {
+            const currentTime = new Date().getTime();
+            let fireAlert = false;
+            dateKeys.forEach((dk, index) => {
+                if (currentTime > dk) {
+                    fireAlert = true;
+                    const dateString = alertList.dateKeys[index];
+                    if (typeof dateString === 'string') {
+                        removeDateKey(dateString);
+                    }
+                }
+            });
+            if (fireAlert) {
+                // fire alert
+            }
+            console.log(currentTime, dateKeys, alertList);
+        }, 3000);
+        return () => clearInterval(checkAlerts);
+    }, [alertList.dateKeys, alertList]);
 
     return (
         <EventListUI
