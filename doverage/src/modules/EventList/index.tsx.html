@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75.36% </span>
+                <span class="strong">69.73% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>52/69</span>
+                <span class='fraction'>53/76</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.53% </span>
+                <span class="strong">55.55% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>24/41</span>
+                <span class='fraction'>25/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64% </span>
+                <span class="strong">53.33% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>16/25</span>
+                <span class='fraction'>16/30</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">77.27% </span>
+                <span class="strong">72.22% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>51/66</span>
+                <span class='fraction'>52/72</span>
             </div>
         
             
@@ -501,7 +501,27 @@
 <a name='L436'></a><a href='#L436'>436</a>
 <a name='L437'></a><a href='#L437'>437</a>
 <a name='L438'></a><a href='#L438'>438</a>
-<a name='L439'></a><a href='#L439'>439</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -783,8 +803,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -804,6 +826,20 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">21x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -832,6 +868,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">21x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1215,6 +1255,7 @@ export interface EventListProps {}
 &nbsp;
 interface EventListState {
     company?: CompanyFilterResult;
+    watchlist: string[];
     event?: EventListEvent;
     filterByTypes: FilterByType[];
     listType: EventView;
@@ -1224,6 +1265,7 @@ interface EventListState {
 export const EventList = (_props: EventListProps): ReactElement =&gt; {
     const { state, handlers, setState } = useChangeHandlers&lt;EventListState&gt;({
         company: undefined,
+        watchlist: [],
         event: undefined,
         filterByTypes: [],
         listType: EventView.LiveAndUpcoming,
@@ -1242,6 +1284,20 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
 <span class="cstat-no" title="statement not covered" >                    setState(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...s, company, event: undefined })</span>);</span>
                 }
             }
+        },
+        'in'
+    );
+&nbsp;
+    useMessageListener(
+        'instruments-selected',
+<span class="fstat-no" title="function not covered" >        as</span>ync (msg: Message&lt;'instruments-selected'&gt;) =&gt; {
+            const companyIds = <span class="cstat-no" title="statement not covered" >(</span>
+                await Promise.all(msg.data.map(<span class="fstat-no" title="function not covered" >(d</span>) =&gt; (<span class="cstat-no" title="statement not covered" >d.ticker ? resolveCompany(d.ticker) : Promise.resolve([]))</span>))
+            )
+                .flat()
+                .map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c?.id)</span>
+                .filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n)</span> as string[];
+<span class="cstat-no" title="statement not covered" >            setState(<span class="fstat-no" title="function not covered" >(s</span>) =&gt; (<span class="cstat-no" title="statement not covered" >{ ...s, watchlist: companyIds })</span>);</span>
         },
         'in'
     );
@@ -1311,7 +1367,11 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
                 hasTranscript: state.filterByTypes.includes(FilterByType.transcript) ? <span class="branch-0 cbranch-no" title="branch not covered" >true </span>: undefined,
                 eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? <span class="branch-0 cbranch-no" title="branch not covered" >[EventType.Earnings] </span>: undefined,
                 title: state.searchTerm || undefined,
-                companyIds: state.company?.id ? <span class="branch-0 cbranch-no" title="branch not covered" >[state.company.id] </span>: undefined,
+                companyIds: state.company?.id
+                    ? <span class="branch-0 cbranch-no" title="branch not covered" >[state.company.id]</span>
+                    : state.watchlist?.length
+                    ? <span class="branch-0 cbranch-no" title="branch not covered" >state.watchlist</span>
+                    : undefined,
             },
         },
     });
@@ -1384,7 +1444,7 @@ export const EventList = (_props: EventListProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Dec 16 2021 10:47:44 GMT-0500 (Eastern Standard Time)
+                at Thu Dec 16 2021 11:05:40 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
