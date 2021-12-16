@@ -288,43 +288,48 @@ export function useAlertList(): {
     const [alertList, setAlertList] = useState<AlertList>(defaultAlertList);
 
     const updateAlertList = useCallback(
-        (date: string, id: string, action) => {
-            setAlertList((state) => {
-                const dateKeys = new Set(state.dateKeys);
-                const ids = state[date] ? new Set(state[date]) : new Set();
-                const cleanState: AlertList = { ...defaultAlertList};
-
-                if (action === 'add') {
-                    ids.add(id);
-                    if (!dateKeys?.has(date)) {
-                        dateKeys.add(date);
-                    }
-                } else {
-                    ids.delete(id);
-                    if (ids.size === 0) {
-                        dateKeys.delete(date);
-                    }
-                }
-
-                // The dateKeys are the source of truth
-                // because it seems as though the local state gets out of sync.
-                // so we only pick the data where the dates are
-                dateKeys.forEach((dk: string) => {
-                    if (state[dk] && dk !== date) {
-                        cleanState[dk] = state[dk];
-                    } else if (dk === date && ids.size > 0) {
-                        cleanState[date] = [...ids];
-                    }
-                });
-
-                cleanState.dateKeys = [...dateKeys];
-
+        async (date: string, id: string, action) => {
+            return storage.get('alertList').then((value) => {
                 try {
-                    void storage.put('alertList', JSON.stringify(cleanState));
+                    const state = JSON.parse(value || '{}') as AlertList;
+                    const dateKeys = new Set<string>(state.dateKeys);
+                    const ids = state[date] ? new Set<string>(state[date]) : new Set<string>();
+                    const cleanState: AlertList = { ...defaultAlertList };
+
+                    if (action === 'add') {
+                        ids.add(id);
+                        if (!dateKeys?.has(date)) {
+                            dateKeys.add(date);
+                        }
+                    } else {
+                        ids.delete(id);
+                        if (ids.size === 0) {
+                            dateKeys.delete(date);
+                        }
+                    }
+
+                    // The dateKeys are the source of truth
+                    // so we only pick the data where the dates are
+                    dateKeys.forEach((dk: string) => {
+                        if (dk !== date && state[dk]) {
+                            cleanState[dk] = state[dk] || [];
+                        } else if (dk === date && ids.size > 0) {
+                            // For the current date, we'll use our new IDs set
+                            cleanState[date] = [...ids];
+                        }
+                    });
+
+                    cleanState.dateKeys = [...dateKeys];
+
+                    try {
+                        setAlertList(cleanState);
+                        void storage.put('alertList', JSON.stringify(cleanState));
+                    } catch (_error) {
+                        // Nothing to do here, it just wont save
+                    }
                 } catch (_error) {
                     // Nothing to do here, it just wont save
                 }
-                return cleanState;
             });
         },
         [alertList, storage, setAlertList]
@@ -350,7 +355,6 @@ export function useAlertList(): {
         storage.addListener?.(listener);
         void loadAlertList();
         return () => storage.removeListener?.(listener);
-    }, [loadAlertList, storage]);
-
+    }, []);
     return { alertList, addAlert, removeAlert, loadAlertList };
 }

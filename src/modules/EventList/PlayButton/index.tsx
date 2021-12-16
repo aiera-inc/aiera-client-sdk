@@ -120,7 +120,9 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
         },
         [isPlaying, id, url, offset]
     );
-    const alertOnLive = alertList?.[metaData?.eventDate]?.indexOf(id) >= 0;
+    const eventDate = metaData.eventDate;
+    const alertDateIds = eventDate ? alertList[eventDate] : null;
+    const alertOnLive = alertDateIds ? alertDateIds.indexOf(id) >= 0 : false;
     const toggleAlert = useCallback(
         (event: MouseEvent) => {
             event.stopPropagation();
