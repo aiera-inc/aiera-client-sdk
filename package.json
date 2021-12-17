@@ -112,6 +112,7 @@
         "luxon": "2.1.1",
         "pusher-js": "7.0.3",
         "tailwindcss-interaction-variants": "^5.0.0",
+        "timeago.js": "^4.0.2",
         "ts-pattern": "3.3.3",
         "urql": "2.0.5"
     },

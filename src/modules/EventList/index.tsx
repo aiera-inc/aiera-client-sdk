@@ -17,6 +17,7 @@ import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener'
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { isToday } from '@aiera/client-sdk/lib/datetime';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { getPrimaryQuote, useCompanyResolver, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
@@ -27,6 +28,7 @@ import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/comp
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
+import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
@@ -251,7 +253,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                                 </div>
                                                             ) : (
                                                                 <div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300">
-                                                                    {eventDate.toFormat('h:mma')}
+                                                                    {isToday(event.eventDate) ? (
+                                                                        <TimeAgo date={event.eventDate} />
+                                                                    ) : (
+                                                                        eventDate.toFormat('h:mma')
+                                                                    )}
                                                                 </div>
                                                             )}
                                                             <div className="leading-none mt-1 text-gray-300 group-hover:text-gray-500">
