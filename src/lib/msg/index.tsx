@@ -4,7 +4,14 @@ import EventEmitter from 'eventemitter3';
 
 type Direction = 'in' | 'out';
 
+interface EventAlert {
+    description: string;
+    tickerList: string[];
+    eventIds: string[];
+}
+
 interface MessageBusEvents {
+    'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
 }

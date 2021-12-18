@@ -15,6 +15,7 @@ import {
     TrackMutation,
     TrackMutationVariables,
 } from '@aiera/client-sdk/types/generated';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useStorage } from '@aiera/client-sdk/lib/storage';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
@@ -269,18 +270,34 @@ export function useSettings(): {
     return { settings, updateSettings, loadSettings, handlers };
 }
 
-export interface AlertList {
-    dateKeys: string[];
+interface AlertHash {
     [date: string]: string[];
 }
 
+interface AlertEventMetaData {
+    ticker: string;
+}
+
+interface AlertEvents {
+    [id: string]: AlertEventMetaData;
+}
+
+export interface AlertList {
+    dates: AlertHash;
+    events: AlertEvents;
+}
+
 export const defaultAlertList = {
-    dateKeys: [],
+    dates: {},
+    events: {},
 };
 
-export function useAlertList(): {
+export function useAlertList(
+    poll = false,
+    interval = 3000
+): {
     alertList: AlertList;
-    addAlert: (date: string, id: string) => void;
+    addAlert: (date: string, id: string, metaData?: AlertEventMetaData) => void;
     removeAlert: (date: string, id: string) => void;
     removeDateKey: (date: string) => void;
     loadAlertList: () => Promise<void>;
@@ -288,23 +305,19 @@ export function useAlertList(): {
     const storage = useStorage();
     const [alertList, setAlertList] = useState<AlertList>(defaultAlertList);
 
+    // The time of the event(s) has come (most likely),
+    // so we are being told to remove the dynamic date (as an obj property)
     const removeDateKey = useCallback(
         (date: string) => {
             setAlertList((state) => {
-                const dateKeys = new Set<string>(state.dateKeys);
-                const cleanState: AlertList = { ...defaultAlertList };
-
-                dateKeys.delete(date);
-
-                dateKeys.forEach((dk: string) => {
-                    // We're picking all the dateKeys not including the current one
-                    if (state[dk] && dk !== date) {
-                        cleanState[dk] = state[dk] || [];
-                    }
-                });
-
-                cleanState.dateKeys = [...dateKeys];
-
+                const cleanState: AlertList = { dates: { ...state.dates }, events: { ...state.events } };
+                const eventIds = cleanState.dates[date];
+                if (eventIds?.length) {
+                    eventIds.forEach((id: number | string) => {
+                        delete cleanState.events[id];
+                    });
+                    delete cleanState.dates[date];
+                }
                 try {
                     void storage.put('alertList', JSON.stringify(cleanState));
                 } catch (_error) {
@@ -313,40 +326,43 @@ export function useAlertList(): {
                 return cleanState;
             });
         },
-        [alertList, storage, setAlertList]
+        [storage, setAlertList]
     );
 
     const updateAlertList = useCallback(
-        (date: string, id: string, action) => {
-            setAlertList((state) => {
-                const dateKeys = new Set<string>(state.dateKeys);
-                const ids = state[date] ? new Set<string>(state[date]) : new Set<string>();
-                const cleanState: AlertList = { ...defaultAlertList };
+        (date: string, id: string, action, metaData?: AlertEventMetaData) => {
+            setAlertList((state: AlertList) => {
+                const cleanState: AlertList = {
+                    dates: {
+                        ...state.dates,
+                    },
+                    events: {
+                        ...state.events,
+                    },
+                };
 
                 if (action === 'add') {
-                    ids.add(id);
-                    if (!dateKeys?.has(date)) {
-                        dateKeys.add(date);
+                    const dates = cleanState.dates[date];
+                    if (dates?.length) {
+                        cleanState.dates[date] = [...new Set<string>([...dates, id])];
+                    } else {
+                        cleanState.dates[date] = [id];
+                    }
+                    if (metaData) {
+                        cleanState.events[id] = { ...metaData };
                     }
                 } else {
-                    ids.delete(id);
-                    if (ids.size === 0) {
-                        dateKeys.delete(date);
+                    if (cleanState.dates[date]) {
+                        const ids = new Set<string>(cleanState.dates[date]);
+                        ids.delete(id);
+                        if (ids.size === 0) {
+                            delete cleanState.dates[date];
+                        } else {
+                            cleanState.dates[date] = [...ids];
+                        }
                     }
+                    delete cleanState.events[id];
                 }
-
-                // The dateKeys are the source of truth
-                // because it seems as though the local state gets out of sync.
-                // so we only pick the data where the dates are
-                dateKeys.forEach((dk: string) => {
-                    if (state[dk] && dk !== date) {
-                        cleanState[dk] = state[dk] || [];
-                    } else if (dk === date && ids.size > 0) {
-                        cleanState[date] = [...ids];
-                    }
-                });
-
-                cleanState.dateKeys = [...dateKeys];
 
                 try {
                     void storage.put('alertList', JSON.stringify(cleanState));
@@ -356,16 +372,22 @@ export function useAlertList(): {
                 return cleanState;
             });
         },
-        [alertList, storage, setAlertList]
+        [storage, setAlertList]
     );
 
-    const addAlert = (date: string, id: string) => updateAlertList(date, id, 'add');
+    const addAlert = (date: string, id: string, metaData?: AlertEventMetaData) =>
+        updateAlertList(date, id, 'add', metaData);
     const removeAlert = (date: string, id: string) => updateAlertList(date, id, 'remove');
 
     const loadAlertList = useCallback(async () => {
         return storage.get('alertList').then((value) => {
+            let newValue = JSON.parse(value || '{}') as AlertList;
+            const dateKeys = Object.keys(newValue.dates || {});
+            if (!dateKeys || dateKeys.length === 0) {
+                newValue = defaultAlertList;
+            }
             try {
-                setAlertList(JSON.parse(value || '{}') as AlertList);
+                setAlertList(newValue);
             } catch (_error) {
                 // Nothing to do here, it just wont save
             }
@@ -381,5 +403,71 @@ export function useAlertList(): {
         return () => storage.removeListener?.(listener);
     }, []);
 
+    // Check AlertList against current time
+    // and fire events
+    const bus = useMessageBus();
+    useEffect(() => {
+        if (poll) {
+            const dateKeys = Object.keys(alertList.dates);
+            //const events = eventsQuery.data.events;
+
+            const checkAlerts = setInterval(() => {
+                const currentTime = new Date().getTime();
+                let fireAlert = false;
+                let eventIds: string[] = [];
+                dateKeys.forEach((dk) => {
+                    if (currentTime > new Date(dk).getTime()) {
+                        const difference = currentTime - new Date(dk).getTime();
+                        // We'll only fire an alert if the event started within 2 hours
+                        if (!fireAlert && difference < 7200000) fireAlert = true;
+                        const ids = alertList.dates[dk];
+                        if (ids?.length) eventIds = eventIds.concat(ids);
+                        removeDateKey(dk);
+                    }
+                });
+
+                const tickerList: string[] = [];
+                eventIds.forEach((id) => {
+                    const localTicker = alertList.events[id]?.ticker;
+                    if (localTicker) {
+                        tickerList.push(localTicker);
+                    }
+                });
+
+                // Fire alert with description
+                // tickers, and eventIds
+                if (fireAlert) {
+                    bus?.emit(
+                        'event-alert',
+                        {
+                            description: `${tickerList.length > 1 ? 'Events' : 'Event'} starting for ${tickerList.join(
+                                ', '
+                            )}`,
+                            tickerList,
+                            eventIds,
+                        },
+                        'out'
+                    );
+                }
+            }, interval);
+
+            return () => clearInterval(checkAlerts);
+        }
+
+        return () => true;
+    }, [poll, alertList]);
+
     return { alertList, addAlert, removeAlert, removeDateKey, loadAlertList };
+}
+
+export function usePlaySound(url = 'https://public.aiera.com/notification.wav'): { playSound: () => void } {
+    const audioObj = new Audio(url);
+
+    const playSound = () => {
+        if (audioObj.readyState > 2) {
+            void audioObj.play();
+        }
+    };
+
+    return { playSound };
 }

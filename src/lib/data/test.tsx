@@ -4,7 +4,7 @@ import { fromValue } from 'wonka';
 
 import { actAndFlush, getMockedClient, MockProvider, renderWithProvider } from 'testUtils';
 
-import { useAppConfig, useAutoTrack, useTrack, useSettings, defaultSettings } from '.';
+import { useAppConfig, useAutoTrack, useTrack, useSettings, useAlertList, defaultSettings, defaultAlertList } from '.';
 
 describe('useTrack', () => {
     const TestComponent = () => {
@@ -113,6 +113,13 @@ describe('useAppConfig', () => {
 });
 
 describe('useSettings', () => {
+    afterEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = () => null;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.setItem = () => null;
+    });
+
     test('returns the default settings', async () => {
         const { result } = await actAndFlush(() => renderHook(() => useSettings(), { wrapper: MockProvider }));
         expect(result.current.settings).toEqual(defaultSettings);
@@ -161,5 +168,179 @@ describe('useSettings', () => {
             JSON.stringify({ darkMode: false, textSentiment: true, tonalSentiment: true })
         );
         expect(hook?.result.current.settings).toEqual({ ...initialSettings, darkMode: false });
+    });
+});
+
+describe('useAlertList', () => {
+    afterEach(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = () => null;
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.setItem = () => null;
+    });
+
+    test('returns the default alertList', async () => {
+        const { result } = await actAndFlush(() => renderHook(() => useAlertList(), { wrapper: MockProvider }));
+        expect(result.current.alertList).toEqual(defaultAlertList);
+    });
+
+    test('returns the stored alertList', async () => {
+        const storedAlertList = {
+            events: {
+                '2003019': {
+                    ticker: 'BYND',
+                },
+            },
+            dates: {
+                '2022-01-04T16:30:00.000-05:00': ['2003019'],
+            },
+        };
+        jest.spyOn(window.localStorage.__proto__, 'getItem');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() => JSON.stringify(storedAlertList));
+        const { result } = await actAndFlush(() => renderHook(() => useAlertList(), { wrapper: MockProvider }));
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.getItem).toHaveBeenLastCalledWith('aiera:sdk:alertList');
+        expect(result.current.alertList).toEqual(storedAlertList);
+    });
+
+    test('add to alertList', async () => {
+        const initialAlertList = {
+            events: {
+                '2003019': {
+                    ticker: 'BYND',
+                },
+            },
+            dates: {
+                '2022-01-04T16:30:00.000-05:00': ['2003019'],
+            },
+        };
+        jest.spyOn(window.localStorage.__proto__, 'getItem');
+        jest.spyOn(window.localStorage.__proto__, 'setItem');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() => JSON.stringify(initialAlertList));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.setItem = jest.fn();
+        const hook = await actAndFlush(() => renderHook(() => useAlertList(), { wrapper: MockProvider }));
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.getItem).toHaveBeenLastCalledWith('aiera:sdk:alertList');
+        expect(hook?.result.current.alertList).toEqual(initialAlertList);
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() =>
+            JSON.stringify({
+                events: {
+                    ...initialAlertList.events,
+                    '2015016': {
+                        ticker: 'FB',
+                    },
+                },
+                dates: {
+                    ...initialAlertList.dates,
+                    '2022-01-05T05:59:00.000-05:00': ['2015016'],
+                },
+            })
+        );
+        await actAndFlush(() => {
+            hook?.result.current.addAlert('2022-01-05T05:59:00.000-05:00', '2015016', { ticker: 'FB' });
+        });
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.setItem).toHaveBeenLastCalledWith(
+            'aiera:sdk:alertList',
+            JSON.stringify({
+                dates: {
+                    '2022-01-04T16:30:00.000-05:00': ['2003019'],
+                    '2022-01-05T05:59:00.000-05:00': ['2015016'],
+                },
+                events: {
+                    '2003019': {
+                        ticker: 'BYND',
+                    },
+                    '2015016': {
+                        ticker: 'FB',
+                    },
+                },
+            })
+        );
+        expect(hook?.result.current.alertList).toEqual({
+            dates: {
+                ...initialAlertList.dates,
+                '2022-01-05T05:59:00.000-05:00': ['2015016'],
+            },
+            events: {
+                ...initialAlertList.events,
+                '2015016': {
+                    ticker: 'FB',
+                },
+            },
+        });
+    });
+
+    test('remove from alertList', async () => {
+        const initialAlertList = {
+            dates: {
+                '2022-01-04T16:30:00.000-05:00': ['2003019'],
+                '2022-01-05T05:59:00.000-05:00': ['2015016'],
+            },
+            events: {
+                '2003019': {
+                    ticker: 'FB',
+                },
+                '2015016': {
+                    ticker: 'BYND',
+                },
+            },
+        };
+        jest.spyOn(window.localStorage.__proto__, 'getItem');
+        jest.spyOn(window.localStorage.__proto__, 'setItem');
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() => JSON.stringify(initialAlertList));
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.setItem = jest.fn();
+        const hook = await actAndFlush(() => renderHook(() => useAlertList(), { wrapper: MockProvider }));
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.getItem).toHaveBeenLastCalledWith('aiera:sdk:alertList');
+        expect(hook?.result.current.alertList).toEqual(initialAlertList);
+
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        window.localStorage.__proto__.getItem = jest.fn(() =>
+            JSON.stringify({
+                dates: {
+                    '2022-01-04T16:30:00.000-05:00': ['2003019'],
+                },
+                events: {
+                    '2003019': {
+                        ticker: 'FB',
+                    },
+                },
+            })
+        );
+        await actAndFlush(() => {
+            hook?.result.current.removeAlert('2022-01-05T05:59:00.000-05:00', '2015016');
+        });
+        // eslint-disable-next-line @typescript-eslint/unbound-method
+        expect(window.localStorage.setItem).toHaveBeenLastCalledWith(
+            'aiera:sdk:alertList',
+            JSON.stringify({
+                dates: {
+                    '2022-01-04T16:30:00.000-05:00': ['2003019'],
+                },
+                events: {
+                    '2003019': {
+                        ticker: 'FB',
+                    },
+                },
+            })
+        );
+        expect(hook?.result.current.alertList).toEqual({
+            dates: {
+                '2022-01-04T16:30:00.000-05:00': ['2003019'],
+            },
+            events: {
+                '2003019': {
+                    ticker: 'FB',
+                },
+            },
+        });
     });
 });

@@ -7,6 +7,7 @@ export interface EventMetaData {
     quote?: Maybe<DeepPartial<Quote>>;
     eventType?: EventType;
     eventDate?: string;
+    localTicker?: string;
 }
 
 export class AudioPlayer {

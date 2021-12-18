@@ -44,7 +44,8 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
                     'active:border-blue-800': isPlaying,
                     'active:bg-blue-600': !isPlaying,
                     'active:text-white': !isPlaying,
-                }
+                },
+                'playButton'
             )}
             onClick={togglePlayback}
         >
@@ -69,19 +70,23 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
             yOffset={6}
             xOffset={4}
             hideOnDocumentScroll
-            className={classNames('border flex items-center justify-center w-full h-full rounded-full', {
-                'dark:bg-yellow-400 dark:text-yellow-800': alertOnLive,
-                'dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20':
-                    alertOnLive || !alertOnLive,
-                'dark:active:bg-bluegray-5 dark:active:text-bluegray-4': alertOnLive,
-                'bg-yellow-400 border-yellow-400 text-yellow-800': alertOnLive,
-                'hover:bg-yellow-200 hover:border-yellow-400 hover:text-yellow-800': alertOnLive || !alertOnLive,
-                'active:bg-yellow-50 active:border-yellow-400 active:text-yellow-600': alertOnLive,
-                'bg-white border-gray-200 text-gray-400': !alertOnLive,
-                'active:bg-yellow-400 active:border-yellow-400 active:text-yellow-800': !alertOnLive,
-                'dark:bg-bluegray-7 dark:border-bluegray-6 dark:text-bluegray-4': !alertOnLive,
-                'dark:active:bg-yellow-400 dark:active:border-yellow-400 dark:active:text-yellow-800': !alertOnLive,
-            })}
+            className={classNames(
+                'border flex items-center justify-center w-full h-full rounded-full',
+                {
+                    'dark:bg-yellow-400 dark:text-yellow-800': alertOnLive,
+                    'dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20':
+                        alertOnLive || !alertOnLive,
+                    'dark:active:bg-bluegray-5 dark:active:text-bluegray-4': alertOnLive,
+                    'bg-yellow-400 border-yellow-400 text-yellow-800': alertOnLive,
+                    'hover:bg-yellow-200 hover:border-yellow-400 hover:text-yellow-800': alertOnLive || !alertOnLive,
+                    'active:bg-yellow-50 active:border-yellow-400 active:text-yellow-600': alertOnLive,
+                    'bg-white border-gray-200 text-gray-400': !alertOnLive,
+                    'active:bg-yellow-400 active:border-yellow-400 active:text-yellow-800': !alertOnLive,
+                    'dark:bg-bluegray-7 dark:border-bluegray-6 dark:text-bluegray-4': !alertOnLive,
+                    'dark:active:bg-yellow-400 dark:active:border-yellow-400 dark:active:text-yellow-800': !alertOnLive,
+                },
+                'alertButton'
+            )}
         >
             <div onClick={toggleAlert} className="w-full h-full rounded-full flex items-center justify-center">
                 <Bell className="w-3.5" />
@@ -121,14 +126,20 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
         [isPlaying, id, url, offset]
     );
     const eventDate = metaData.eventDate;
-    const alertDateIds = eventDate ? alertList[eventDate] : null;
+    const alertDateIds = eventDate ? alertList.dates[eventDate] : null;
     const alertOnLive = alertDateIds ? alertDateIds.indexOf(id) >= 0 : false;
     const toggleAlert = useCallback(
         (event: MouseEvent) => {
             event.stopPropagation();
             if (metaData.eventDate && id) {
                 if (!alertOnLive) {
-                    addAlert(metaData.eventDate, id);
+                    if (metaData.localTicker) {
+                        addAlert(metaData.eventDate, id, {
+                            ticker: metaData.localTicker,
+                        });
+                    } else {
+                        addAlert(metaData.eventDate, id);
+                    }
                 } else {
                     removeAlert(metaData.eventDate, id);
                 }

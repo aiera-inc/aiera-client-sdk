@@ -7,7 +7,6 @@ import React, {
     useState,
     Dispatch,
     SetStateAction,
-    useEffect,
 } from 'react';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
@@ -210,8 +209,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                                         quote: primaryQuote,
                                                                         eventType: event.eventType,
                                                                         eventDate: eventDate
-                                                                            ? eventDate.toString()
+                                                                            ? eventDate.toISO()
                                                                             : undefined,
+                                                                        localTicker: primaryQuote?.localTicker,
                                                                     }}
                                                                     id={event.id}
                                                                     url={
@@ -438,28 +438,8 @@ export const EventList = (_props: EventListProps): ReactElement => {
     useAutoTrack('Click', 'Event Filter By', { filterBy: state.filterByTypes }, [state.filterByTypes]);
     useAutoTrack('Submit', 'Event Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
 
-    const { alertList, removeDateKey } = useAlertList();
-    useEffect(() => {
-        const dateKeys = alertList.dateKeys?.map((dk) => new Date(dk).getTime());
-        const checkAlerts = setInterval(() => {
-            const currentTime = new Date().getTime();
-            let fireAlert = false;
-            dateKeys.forEach((dk, index) => {
-                if (currentTime > dk) {
-                    fireAlert = true;
-                    const dateString = alertList.dateKeys[index];
-                    if (typeof dateString === 'string') {
-                        removeDateKey(dateString);
-                    }
-                }
-            });
-            if (fireAlert) {
-                // fire alert
-            }
-            console.log(currentTime, dateKeys, alertList);
-        }, 3000);
-        return () => clearInterval(checkAlerts);
-    }, [alertList.dateKeys, alertList]);
+    // Will poll alerts when passing true
+    useAlertList(true);
 
     return (
         <EventListUI

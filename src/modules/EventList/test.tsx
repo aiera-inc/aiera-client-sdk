@@ -34,6 +34,29 @@ const eventList = [
             ],
         },
     },
+    {
+        id: '2',
+        title: 'Event Title 2',
+        eventType: 'presentation',
+        eventDate: new Date(new Date().getTime() + 3000).toISOString(),
+        primaryCompany: {
+            instruments: [
+                {
+                    isPrimary: true,
+                    quotes: [
+                        {
+                            isPrimary: true,
+                            localTicker: 'TOCK',
+                            exchange: {
+                                country: { countryCode: 'USA' },
+                                shortName: 'NOPE',
+                            },
+                        },
+                    ],
+                },
+            ],
+        },
+    },
 ];
 
 const eventTranscript = [
@@ -152,6 +175,38 @@ describe('EventList', () => {
         const { client } = await actAndFlush(() => renderWithProvider(<TestComponent />));
         bus.emit('instrument-selected', { ticker: 'TICK' }, 'in');
         expect(client.query).toHaveBeenCalled();
+    });
+
+    test('handles event alert via message bus', async () => {
+        const bus = new MessageBus();
+        const onAlert = jest.fn();
+        bus.on('event-alert', onAlert, 'both');
+        const TestComponent = () => {
+            return (
+                <Provider bus={bus}>
+                    <EventList />
+                </Provider>
+            );
+        };
+
+        await actAndFlush(() =>
+            renderWithProvider(<TestComponent />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            events: eventList,
+                        },
+                    }),
+            })
+        );
+        await actAndFlush(() => {
+            userEvent.click(screen.getByTitle('Bell'));
+        });
+
+        await actAndFlush(() => {
+            jest.advanceTimersByTime(10000);
+        });
+        expect(onAlert).toHaveBeenCalled();
     });
 
     test('renders Calendar when there is no audio url', async () => {
