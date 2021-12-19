@@ -37845,6 +37845,19 @@ var EventListDocument = lib_default`
   }
 }
     `;
+var RecordingListDocument = lib_default`
+    query RecordingList($filter: EventFilter, $view: EventView) {
+  events(filter: $filter, view: $view) {
+    id
+    title
+    eventDate
+    eventType
+    isLive
+    audioRecordingUrl
+    audioRecordingOffsetMs
+  }
+}
+    `;
 var QuotePricesDocument = lib_default`
     query QuotePrices($eventId: ID!, $after: DateTime) {
   events(filter: {eventIds: [$eventId]}) {
