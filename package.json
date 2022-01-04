@@ -28,7 +28,7 @@
         "new:hook": "plop --plopfile templates/plopfile.ts hook",
         "new": "plop --plopfile templates/plopfile.ts",
         "release": "NODE_ENV=production npm run build && hub release create -m v$npm_package_version -a dist/aiera-client-sdk.tgz v$npm_package_version",
-        "prerelease": "export VERSION=pre-$(date '+%Y-%m-%dT%H-%M-%S')-$(git rev-parse HEAD | cut -c -7) && NODE_ENV=production npm run build && hub release create -m $VERSION -a dist/aiera-client-sdk.tgz $VERSION",
+        "pre-release": "export VERSION=pre-$(date '+%Y-%m-%dT%H-%M-%S')-$(git rev-parse HEAD | cut -c -7) && NODE_ENV=production npm run build && hub release create -m $VERSION -a dist/aiera-client-sdk.tgz $VERSION",
         "start": "npm run build:watch",
         "test": "jest --config .jest/jest.config.js --coverage",
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
