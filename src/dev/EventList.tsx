@@ -7,8 +7,11 @@ import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
 import '@aiera/client-sdk/css/styles.css';
+import { usePlaySound } from '../lib/data';
 
 const useMessageBus = () => {
+    const { playSound } = usePlaySound();
+
     const bus = useMessageListener(
         'instrument-selected',
         (msg) => {
@@ -21,6 +24,15 @@ const useMessageBus = () => {
                 };
                 void window.fdc3.broadcast(context);
             }
+        },
+        'out'
+    );
+
+    // Play chime when events are starting!
+    bus.on(
+        'event-alert',
+        () => {
+            playSound();
         },
         'out'
     );
