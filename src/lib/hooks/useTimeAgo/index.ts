@@ -15,26 +15,26 @@ export function useTimeAgo(date: TDate, realtime?: boolean): TDate {
     const [timeAgo, setTimeAgo] = useState<TDate>(format(date));
 
     useEffect(() => {
-        let timeout: NodeJS.Timeout;
+        let timeout: number;
         if (realtime) {
-            // Get number of seconds between now and the date we're working with
+            // Get number of milliseconds between now and the date we're working with
             const diff = Math.abs(new Date().getTime() - new Date(date).getTime());
-            // Default to every hour
-            let next = 3600;
-            if (diff <= 60) {
+            // Default to every hour (in milliseconds)
+            let next = 3600000;
+            if (diff <= 60000) {
                 // If less than a minute, run every second
-                next = 1;
-            } else if (diff <= 3600) {
+                next = 1000;
+            } else if (diff <= 3600000) {
                 // If less than 1 hour, run every minute
-                next = 60;
-            } else if (diff <= 86400) {
+                next = 60000;
+            } else if (diff <= 8640000) {
                 // If less than 24 hours, run every 30 minutes
-                next = 1800;
+                next = 1800000;
             }
-            timeout = setTimeout(() => setTimeAgo(format(date)), next * 1000);
+            timeout = window.setTimeout(() => setTimeAgo(format(date)), next);
         }
         return () => {
-            // Cancel all realtime render tasks
+            // Cancel realtime render task
             if (timeout) {
                 clearTimeout(timeout);
             }

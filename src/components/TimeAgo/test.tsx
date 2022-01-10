@@ -29,8 +29,8 @@ describe('TimeAgo', () => {
         renderWithProvider(<TimeAgo date={date} realtime />);
         screen.getByText('50 seconds ago');
         act(() => {
-            jest.runOnlyPendingTimers(); // fast-forward timeout
+            jest.advanceTimersByTime(1000); // fast-forward 1 second
         });
-        screen.getByText('30 minutes ago');
+        screen.getByText('51 seconds ago');
     });
 });

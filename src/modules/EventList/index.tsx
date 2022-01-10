@@ -17,7 +17,7 @@ import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener'
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
-import { isToday } from '@aiera/client-sdk/lib/datetime';
+import { isToday } from '@aiera/client-sdk/lib/datetimes';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { getPrimaryQuote, useCompanyResolver, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
@@ -254,7 +254,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                             ) : (
                                                                 <div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300">
                                                                     {isToday(event.eventDate) ? (
-                                                                        <TimeAgo date={event.eventDate} />
+                                                                        <TimeAgo date={event.eventDate} realtime />
                                                                     ) : (
                                                                         eventDate.toFormat('h:mma')
                                                                     )}
