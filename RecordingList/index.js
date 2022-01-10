@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement31 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement32 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement31(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement32(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement31(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement32(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement31(element.type, key, ref, self2, source, owner, props);
+          return ReactElement32(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React31 = require_react();
+        var React32 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React31.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React32.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React31) {
+        if (!React32) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React31.Children.forEach(children, function(child) {
+          React32.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React31.Children.forEach(props.children, function(child) {
+              React32.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React31.Component().refs;
+        var emptyRefsObject = new React32.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26089,7 +26089,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames20() {
+      function classNames21() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26100,7 +26100,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames20.apply(null, arg);
+              var inner = classNames21.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26120,14 +26120,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames20.default = classNames20;
-        module2.exports = classNames20;
+        classNames21.default = classNames21;
+        module2.exports = classNames21;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames20;
+          return classNames21;
         });
       } else {
-        window.classNames = classNames20;
+        window.classNames = classNames21;
       }
     })();
   }
@@ -73259,7 +73259,7 @@ var require_dash_all_debug = __commonJS({
 });
 
 // src/dev/RecordingList.tsx
-var import_react38 = __toModule(require_react());
+var import_react39 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -79561,6 +79561,9 @@ function Provider2({ children, storage = local }) {
     value: (0, import_react3.useMemo)(() => new InternalStorage(storage), [storage])
   }, children);
 }
+function useStorage() {
+  return (0, import_react3.useContext)(Context2);
+}
 
 // src/api/auth.ts
 function createTokenAuthConfig(store = local) {
@@ -79755,6 +79758,9 @@ var Provider4 = ({ bus, children }) => {
   return /* @__PURE__ */ import_react5.default.createElement(Context4.Provider, {
     value: bus || new MessageBus()
   }, children);
+};
+var useMessageBus = () => {
+  return (0, import_react5.useContext)(Context4);
 };
 
 // src/lib/realtime/index.tsx
@@ -80213,6 +80219,134 @@ function useTrack() {
   }), [client]);
   return track;
 }
+var defaultAlertList = {
+  dates: {},
+  events: {}
+};
+function useAlertList(poll = false, interval = 3e3) {
+  const storage = useStorage();
+  const [alertList, setAlertList] = (0, import_react6.useState)(defaultAlertList);
+  const removeDateKey = (0, import_react6.useCallback)((date) => {
+    setAlertList((state) => {
+      const cleanState = { dates: __spreadValues({}, state.dates), events: __spreadValues({}, state.events) };
+      const eventIds = cleanState.dates[date];
+      if (eventIds == null ? void 0 : eventIds.length) {
+        eventIds.forEach((id) => {
+          delete cleanState.events[id];
+        });
+        delete cleanState.dates[date];
+      }
+      try {
+        void storage.put("alertList", JSON.stringify(cleanState));
+      } catch (_error) {
+      }
+      return cleanState;
+    });
+  }, [storage, setAlertList]);
+  const updateAlertList = (0, import_react6.useCallback)((date, id, action, metaData) => {
+    setAlertList((state) => {
+      const cleanState = {
+        dates: __spreadValues({}, state.dates),
+        events: __spreadValues({}, state.events)
+      };
+      if (action === "add") {
+        const dates = cleanState.dates[date];
+        if (dates == null ? void 0 : dates.length) {
+          cleanState.dates[date] = [.../* @__PURE__ */ new Set([...dates, id])];
+        } else {
+          cleanState.dates[date] = [id];
+        }
+        if (metaData) {
+          cleanState.events[id] = __spreadValues({}, metaData);
+        }
+      } else {
+        if (cleanState.dates[date]) {
+          const ids = new Set(cleanState.dates[date]);
+          ids.delete(id);
+          if (ids.size === 0) {
+            delete cleanState.dates[date];
+          } else {
+            cleanState.dates[date] = [...ids];
+          }
+        }
+        delete cleanState.events[id];
+      }
+      try {
+        void storage.put("alertList", JSON.stringify(cleanState));
+      } catch (_error) {
+      }
+      return cleanState;
+    });
+  }, [storage, setAlertList]);
+  const addAlert = (date, id, metaData) => updateAlertList(date, id, "add", metaData);
+  const removeAlert = (date, id) => updateAlertList(date, id, "remove");
+  const loadAlertList = (0, import_react6.useCallback)(() => __async(this, null, function* () {
+    return storage.get("alertList").then((value) => {
+      let newValue = JSON.parse(value || "{}");
+      const dateKeys = Object.keys(newValue.dates || {});
+      if (!dateKeys || dateKeys.length === 0) {
+        newValue = defaultAlertList;
+      }
+      try {
+        setAlertList(newValue);
+      } catch (_error) {
+      }
+    });
+  }), [storage, setAlertList]);
+  (0, import_react6.useEffect)(() => {
+    var _a;
+    const listener = (key) => {
+      if (key === "alertList")
+        void loadAlertList();
+    };
+    (_a = storage.addListener) == null ? void 0 : _a.call(storage, listener);
+    void loadAlertList();
+    return () => {
+      var _a2;
+      return (_a2 = storage.removeListener) == null ? void 0 : _a2.call(storage, listener);
+    };
+  }, []);
+  const bus = useMessageBus();
+  (0, import_react6.useEffect)(() => {
+    if (poll) {
+      const dateKeys = Object.keys(alertList.dates);
+      const checkAlerts = setInterval(() => {
+        const currentTime = new Date().getTime();
+        let fireAlert = false;
+        let eventIds = [];
+        dateKeys.forEach((dk) => {
+          if (currentTime > new Date(dk).getTime()) {
+            const difference = currentTime - new Date(dk).getTime();
+            if (!fireAlert && difference < 72e5)
+              fireAlert = true;
+            const ids = alertList.dates[dk];
+            if (ids == null ? void 0 : ids.length)
+              eventIds = eventIds.concat(ids);
+            removeDateKey(dk);
+          }
+        });
+        const tickerList = [];
+        eventIds.forEach((id) => {
+          var _a;
+          const localTicker = (_a = alertList.events[id]) == null ? void 0 : _a.ticker;
+          if (localTicker) {
+            tickerList.push(localTicker);
+          }
+        });
+        if (fireAlert) {
+          bus == null ? void 0 : bus.emit("event-alert", {
+            description: `${tickerList.length > 1 ? "Events" : "Event"} starting for ${tickerList.join(", ")}`,
+            tickerList,
+            eventIds
+          }, "out");
+        }
+      }, interval);
+      return () => clearInterval(checkAlerts);
+    }
+    return () => true;
+  }, [poll, alertList]);
+  return { alertList, addAlert, removeAlert, removeDateKey, loadAlertList };
+}
 
 // src/lib/realtime/index.tsx
 var Context5 = (0, import_react7.createContext)(void 0);
@@ -80613,7 +80747,7 @@ var Auth = ({
 };
 
 // src/modules/RecordingList/index.tsx
-var import_react37 = __toModule(require_react());
+var import_react38 = __toModule(require_react());
 var import_luxon = __toModule(require_luxon());
 var import_ts_pattern4 = __toModule(require_lib());
 
@@ -81693,20 +81827,36 @@ function prettyLineBreak(line) {
 }
 
 // src/modules/EventList/PlayButton/index.tsx
-var import_react36 = __toModule(require_react());
-var import_classnames19 = __toModule(require_classnames());
+var import_react37 = __toModule(require_react());
+var import_classnames20 = __toModule(require_classnames());
 
-// src/components/Svg/Calendar.tsx
+// src/components/Svg/Bell.tsx
 var import_react35 = __toModule(require_react());
 var import_classnames18 = __toModule(require_classnames());
-function Calendar({ className, alt = "Calendar" }) {
+function Bell({ className, alt = "Bell" }) {
   return /* @__PURE__ */ import_react35.default.createElement("svg", {
-    className: (0, import_classnames18.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
+    className: (0, import_classnames18.default)(className, "fill-current", "Svg", "Svg__bell"),
+    width: "100%",
+    viewBox: "0 0 16 18",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react35.default.createElement("title", null, alt), /* @__PURE__ */ import_react35.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M6.30708 0.70639C6.75607 0.254096 7.36503 0 8 0C8.63497 0 9.24393 0.254096 9.69292 0.70639C10.1323 1.14897 10.3832 1.74586 10.3938 2.3706C11.4413 2.8183 12.3469 3.55191 13.0065 4.49196C13.7385 5.53518 14.1315 6.78132 14.1314 8.05882C14.1314 8.05885 14.1314 8.0588 14.1314 8.05882V11.0311C14.1313 11.2127 14.1668 11.3926 14.2358 11.5605C14.3048 11.7283 14.4059 11.8807 14.5334 12.0092C14.5334 12.0092 14.5333 12.0092 14.5334 12.0092L15.8461 13.3315C15.9964 13.4829 16.0413 13.7107 15.96 13.9085C15.8786 14.1063 15.687 14.2353 15.4744 14.2353H11.3285V14.6471C11.3285 15.5363 10.9778 16.3891 10.3536 17.0179C9.72937 17.6467 8.88276 18 8 18C7.11724 18 6.27063 17.6467 5.64642 17.0179C5.02221 16.3891 4.67154 15.5363 4.67154 14.6471V14.2353H0.525562C0.312998 14.2353 0.121365 14.1063 0.0400202 13.9085C-0.0413244 13.7107 0.00363912 13.4829 0.153944 13.3315L1.46664 12.0092C1.72406 11.7499 1.86862 11.3979 1.86862 11.032V8.05882C1.86862 5.50287 3.41034 3.31005 5.60619 2.37064C5.61676 1.74588 5.86772 1.14898 6.30708 0.70639ZM5.72263 14.2353V14.6471C5.72263 15.2555 5.96257 15.839 6.38966 16.2692C6.81675 16.6995 7.396 16.9412 8 16.9412C8.604 16.9412 9.18325 16.6995 9.61034 16.2692C10.0374 15.839 10.2774 15.2555 10.2774 14.6471V14.2353H5.72263ZM14.2057 13.1765L13.7901 12.7579C13.565 12.5311 13.3865 12.2618 13.2647 11.9655C13.1429 11.6693 13.0802 11.3517 13.0803 11.0311C13.0803 11.031 13.0803 11.0311 13.0803 11.0311V8.05882C13.0804 7.00023 12.7548 5.96757 12.1482 5.10312C11.5417 4.23868 10.684 3.5849 9.69331 3.2318C9.48339 3.15698 9.34306 2.95702 9.34306 2.73271V2.41176C9.34306 2.05294 9.20156 1.70882 8.94969 1.45509C8.69782 1.20137 8.3562 1.05882 8 1.05882C7.6438 1.05882 7.30218 1.20137 7.05031 1.45509C6.79844 1.70882 6.65694 2.05294 6.65694 2.41176V2.73271C6.65694 2.95705 6.51657 3.15703 6.30661 3.23183C4.333 3.93492 2.91972 5.83183 2.91972 8.05882V11.032C2.91972 11.6788 2.6644 12.3 2.20988 12.7579L1.79434 13.1765H14.2057Z"
+  }));
+}
+
+// src/components/Svg/Calendar.tsx
+var import_react36 = __toModule(require_react());
+var import_classnames19 = __toModule(require_classnames());
+function Calendar({ className, alt = "Calendar" }) {
+  return /* @__PURE__ */ import_react36.default.createElement("svg", {
+    className: (0, import_classnames19.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react35.default.createElement("title", null, alt), /* @__PURE__ */ import_react35.default.createElement("path", {
+  }, /* @__PURE__ */ import_react36.default.createElement("title", null, alt), /* @__PURE__ */ import_react36.default.createElement("path", {
     d: "M6 5V1V5ZM14 5V1V5ZM5 9H15H5ZM3 19H17C17.5304 19 18.0391 18.7893 18.4142 18.4142C18.7893 18.0391 19 17.5304 19 17V5C19 4.46957 18.7893 3.96086 18.4142 3.58579C18.0391 3.21071 17.5304 3 17 3H3C2.46957 3 1.96086 3.21071 1.58579 3.58579C1.21071 3.96086 1 4.46957 1 5V17C1 17.5304 1.21071 18.0391 1.58579 18.4142C1.96086 18.7893 2.46957 19 3 19Z",
     strokeWidth: "2",
     strokeLinecap: "round",
@@ -81716,9 +81866,9 @@ function Calendar({ className, alt = "Calendar" }) {
 
 // src/modules/EventList/PlayButton/index.tsx
 function PlayButtonUI(props) {
-  const { hasAudio, isPlaying, togglePlayback } = props;
-  return hasAudio ? /* @__PURE__ */ import_react36.default.createElement("div", {
-    className: (0, import_classnames19.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+  const { alertOnLive, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+  return hasAudio ? /* @__PURE__ */ import_react37.default.createElement("div", {
+    className: (0, import_classnames20.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -81733,24 +81883,52 @@ function PlayButtonUI(props) {
       "active:border-blue-800": isPlaying,
       "active:bg-blue-600": !isPlaying,
       "active:text-white": !isPlaying
-    }),
+    }, "playButton"),
     onClick: togglePlayback
-  }, isPlaying ? /* @__PURE__ */ import_react36.default.createElement(Pause, {
+  }, isPlaying ? /* @__PURE__ */ import_react37.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react36.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react37.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
-  })) : /* @__PURE__ */ import_react36.default.createElement("div", {
+  })) : eventStarted ? /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4"
-  }, /* @__PURE__ */ import_react36.default.createElement(Calendar, {
+  }, /* @__PURE__ */ import_react37.default.createElement(Calendar, {
     className: "w-4"
-  }));
+  })) : /* @__PURE__ */ import_react37.default.createElement(Tooltip, {
+    content: /* @__PURE__ */ import_react37.default.createElement("div", {
+      className: "bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7"
+    }, alertOnLive ? "A chime will ring after the audio is connected" : "Play a chime when the event is about to begin"),
+    grow: "up-right",
+    openOn: "hover",
+    position: "bottom-right",
+    yOffset: 6,
+    xOffset: 4,
+    hideOnDocumentScroll: true,
+    className: (0, import_classnames20.default)("border flex items-center justify-center w-full h-full rounded-full", {
+      "dark:bg-yellow-400 dark:text-yellow-800": alertOnLive,
+      "dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20": alertOnLive || !alertOnLive,
+      "dark:active:bg-bluegray-5 dark:active:text-bluegray-4": alertOnLive,
+      "bg-yellow-400 border-yellow-400 text-yellow-800": alertOnLive,
+      "hover:bg-yellow-200 hover:border-yellow-400 hover:text-yellow-800": alertOnLive || !alertOnLive,
+      "active:bg-yellow-50 active:border-yellow-400 active:text-yellow-600": alertOnLive,
+      "bg-white border-gray-200 text-gray-400": !alertOnLive,
+      "active:bg-yellow-400 active:border-yellow-400 active:text-yellow-800": !alertOnLive,
+      "dark:bg-bluegray-7 dark:border-bluegray-6 dark:text-bluegray-4": !alertOnLive,
+      "dark:active:bg-yellow-400 dark:active:border-yellow-400 dark:active:text-yellow-800": !alertOnLive
+    }, "alertButton")
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+    onClick: toggleAlert,
+    className: "w-full h-full rounded-full flex items-center justify-center"
+  }, /* @__PURE__ */ import_react37.default.createElement(Bell, {
+    className: "w-3.5"
+  })));
 }
 function PlayButton(props) {
   const { id, url, offset = 0, metaData } = props;
+  const { addAlert, removeAlert, alertList } = useAlertList();
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
-  const togglePlayback = (0, import_react36.useCallback)((event) => {
+  const togglePlayback = (0, import_react37.useCallback)((event) => {
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
@@ -81760,9 +81938,32 @@ function PlayButton(props) {
       void audioPlayer.play({ id, url, offset, metaData });
     }
   }, [isPlaying, id, url, offset]);
-  return /* @__PURE__ */ import_react36.default.createElement(PlayButtonUI, {
+  const eventDate = metaData.eventDate;
+  const alertDateIds = eventDate ? alertList.dates[eventDate] : null;
+  const alertOnLive = alertDateIds ? alertDateIds.indexOf(id) >= 0 : false;
+  const toggleAlert = (0, import_react37.useCallback)((event) => {
+    event.stopPropagation();
+    if (metaData.eventDate && id) {
+      if (!alertOnLive) {
+        if (metaData.localTicker) {
+          addAlert(metaData.eventDate, id, {
+            ticker: metaData.localTicker
+          });
+        } else {
+          addAlert(metaData.eventDate, id);
+        }
+      } else {
+        removeAlert(metaData.eventDate, id);
+      }
+    }
+  }, [id, alertOnLive]);
+  const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
+  return /* @__PURE__ */ import_react37.default.createElement(PlayButtonUI, {
+    alertOnLive,
+    eventStarted,
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
+    toggleAlert,
     togglePlayback
   });
 }
@@ -81770,61 +81971,61 @@ function PlayButton(props) {
 // src/modules/RecordingList/index.tsx
 function RecordingListUI(props) {
   const { onSearchChange, recordingsQuery, searchTerm } = props;
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react37.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react37.default.createElement("div", {
+  return /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "h-full flex flex-col recordinglist"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recordinglist__header"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react37.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react37.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react38.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react38.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onSearchChange,
     placeholder: "Search Recordings...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react37.default.createElement(Button, {
+  }), /* @__PURE__ */ import_react38.default.createElement(Button, {
     className: "bg-blue-500 cursor-pointer flex items-center mx-2 px-2 rounded-0.375 shrink-0 active:bg-blue-700 hover:bg-blue-600",
     onClick: void 0
-  }, /* @__PURE__ */ import_react37.default.createElement(Plus, {
+  }, /* @__PURE__ */ import_react38.default.createElement(Plus, {
     className: "h-4 mb-0.5 text-white w-2.5"
-  }), /* @__PURE__ */ import_react37.default.createElement("span", {
+  }), /* @__PURE__ */ import_react38.default.createElement("span", {
     className: "font-light ml-1.5 text-sm text-white"
-  }, "Schedule Recording")))), /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, "Schedule Recording")))), /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern4.match)(recordingsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react37.default.createElement("ul", {
+  }, (0, import_ts_pattern4.match)(recordingsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react38.default.createElement("ul", {
     className: "w-full RecordingList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react37.default.createElement("li", {
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react38.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9"
-  }), /* @__PURE__ */ import_react37.default.createElement("div", {
+  }), /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react37.default.createElement("div", {
+  }), /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react37.default.createElement("div", {
+  })), /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react37.default.createElement("div", {
+  }), /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react37.default.createElement("div", {
+  }), /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no recordings.")).with({ status: "error" }, () => wrapMsg("There was an error loading recordings.")).with({ status: "empty" }, () => wrapMsg("There are no recordings.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react37.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There are no recordings.")).with({ status: "error" }, () => wrapMsg("There was an error loading recordings.")).with({ status: "empty" }, () => wrapMsg("There are no recordings.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react38.default.createElement("ul", {
     className: "w-full"
   }, events.map((event) => {
     var _a;
@@ -81833,22 +82034,22 @@ function RecordingListUI(props) {
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== eventDate.toFormat("MM/dd/yyyy")) {
       prevEventDate = eventDate;
-      divider = /* @__PURE__ */ import_react37.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react38.default.createElement("li", {
         className: "sticky top-[8px] px-3 first-of-type:pb-2"
-      }, /* @__PURE__ */ import_react37.default.createElement("div", {
+      }, /* @__PURE__ */ import_react38.default.createElement("div", {
         className: "px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70"
-      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react37.default.createElement("div", {
+      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react38.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"
       })));
     }
-    return /* @__PURE__ */ import_react37.default.createElement(import_react37.Fragment, {
+    return /* @__PURE__ */ import_react38.default.createElement(import_react38.Fragment, {
       key: event.id
-    }, divider, /* @__PURE__ */ import_react37.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react38.default.createElement("li", {
       tabIndex: 0,
       className: "group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
-    }, /* @__PURE__ */ import_react37.default.createElement(Tooltip, {
+    }, /* @__PURE__ */ import_react38.default.createElement(Tooltip, {
       className: "h-12 flex flex-row",
-      content: /* @__PURE__ */ import_react37.default.createElement("div", {
+      content: /* @__PURE__ */ import_react38.default.createElement("div", {
         className: "max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9"
       }, prettyLineBreak(event.title)),
       grow: "up-right",
@@ -81856,35 +82057,35 @@ function RecordingListUI(props) {
       position: "top-left",
       yOffset: 4,
       hideOnDocumentScroll: true
-    }, /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "flex items-center justify-center"
-    }, /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "flex items-center justify-center w-8 h-8"
-    }, /* @__PURE__ */ import_react37.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react38.default.createElement(PlayButton, {
       metaData: { eventType: event.eventType },
       id: event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl,
       offset: audioOffset || 0
-    }))), /* @__PURE__ */ import_react37.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
-    }, /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "flex items-end"
-    }, /* @__PURE__ */ import_react37.default.createElement("span", {
+    }, /* @__PURE__ */ import_react38.default.createElement("span", {
       className: "leading-none text-sm text-black dark:text-white truncate font-bold"
-    }, event.title)), /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, event.title)), /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white"
-    }, event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event.isLive ? /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, event.isLive ? /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
-    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300"
-    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react37.default.createElement("div", {
+    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react38.default.createElement("div", {
       className: "leading-none mt-1 text-gray-300 group-hover:text-gray-500"
     }, eventDate.toFormat("MMM dd, yyyy"))))));
-  }))).exhaustive(), /* @__PURE__ */ import_react37.default.createElement("div", {
+  }))).exhaustive(), /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex-1"
-  })))), /* @__PURE__ */ import_react37.default.createElement(Playbar, null));
+  })))), /* @__PURE__ */ import_react38.default.createElement(Playbar, null));
 }
 function RecordingList(_props) {
   const { handlers, state } = useChangeHandlers({
@@ -81914,7 +82115,7 @@ function RecordingList(_props) {
       }
     }
   });
-  return /* @__PURE__ */ import_react37.default.createElement(RecordingListUI, {
+  return /* @__PURE__ */ import_react38.default.createElement(RecordingListUI, {
     onSearchChange: handlers.searchTerm,
     recordingsQuery,
     searchTerm: state.searchTerm
@@ -81923,7 +82124,7 @@ function RecordingList(_props) {
 
 // src/dev/RecordingList.tsx
 var App = () => {
-  return /* @__PURE__ */ import_react38.default.createElement(import_react38.StrictMode, null, /* @__PURE__ */ import_react38.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react39.default.createElement(import_react39.StrictMode, null, /* @__PURE__ */ import_react39.default.createElement(Provider6, {
     config: {
       assetPath: "bundle/",
       moduleName: "RecordingList",
@@ -81937,13 +82138,13 @@ var App = () => {
         }
       }
     }
-  }, /* @__PURE__ */ import_react38.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react39.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react38.default.createElement("div", {
+  }, /* @__PURE__ */ import_react39.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react38.default.createElement(RecordingList, null)))));
+  }, /* @__PURE__ */ import_react39.default.createElement(RecordingList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react38.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react39.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus

@@ -1,0 +1,146 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/components/Svg/Bell.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Svg</a> Bell.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a>
+<a name='L18'></a><a href='#L18'>18</a>
+<a name='L19'></a><a href='#L19'>19</a>
+<a name='L20'></a><a href='#L20'>20</a>
+<a name='L21'></a><a href='#L21'>21</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">10x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
+import classNames from 'classnames';
+&nbsp;
+export function Bell({ className, alt = 'Bell' }: { className?: string; alt?: string }): ReactElement {
+    return (
+        &lt;svg
+            className={classNames(className, 'fill-current', 'Svg', 'Svg__bell')}
+            width="100%"
+            viewBox="0 0 16 18"
+            xmlns="http://www.w3.org/2000/svg"
+        &gt;
+            &lt;title&gt;{alt}&lt;/title&gt;
+            &lt;path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M6.30708 0.70639C6.75607 0.254096 7.36503 0 8 0C8.63497 0 9.24393 0.254096 9.69292 0.70639C10.1323 1.14897 10.3832 1.74586 10.3938 2.3706C11.4413 2.8183 12.3469 3.55191 13.0065 4.49196C13.7385 5.53518 14.1315 6.78132 14.1314 8.05882C14.1314 8.05885 14.1314 8.0588 14.1314 8.05882V11.0311C14.1313 11.2127 14.1668 11.3926 14.2358 11.5605C14.3048 11.7283 14.4059 11.8807 14.5334 12.0092C14.5334 12.0092 14.5333 12.0092 14.5334 12.0092L15.8461 13.3315C15.9964 13.4829 16.0413 13.7107 15.96 13.9085C15.8786 14.1063 15.687 14.2353 15.4744 14.2353H11.3285V14.6471C11.3285 15.5363 10.9778 16.3891 10.3536 17.0179C9.72937 17.6467 8.88276 18 8 18C7.11724 18 6.27063 17.6467 5.64642 17.0179C5.02221 16.3891 4.67154 15.5363 4.67154 14.6471V14.2353H0.525562C0.312998 14.2353 0.121365 14.1063 0.0400202 13.9085C-0.0413244 13.7107 0.00363912 13.4829 0.153944 13.3315L1.46664 12.0092C1.72406 11.7499 1.86862 11.3979 1.86862 11.032V8.05882C1.86862 5.50287 3.41034 3.31005 5.60619 2.37064C5.61676 1.74588 5.86772 1.14898 6.30708 0.70639ZM5.72263 14.2353V14.6471C5.72263 15.2555 5.96257 15.839 6.38966 16.2692C6.81675 16.6995 7.396 16.9412 8 16.9412C8.604 16.9412 9.18325 16.6995 9.61034 16.2692C10.0374 15.839 10.2774 15.2555 10.2774 14.6471V14.2353H5.72263ZM14.2057 13.1765L13.7901 12.7579C13.565 12.5311 13.3865 12.2618 13.2647 11.9655C13.1429 11.6693 13.0802 11.3517 13.0803 11.0311C13.0803 11.031 13.0803 11.0311 13.0803 11.0311V8.05882C13.0804 7.00023 12.7548 5.96757 12.1482 5.10312C11.5417 4.23868 10.684 3.5849 9.69331 3.2318C9.48339 3.15698 9.34306 2.95702 9.34306 2.73271V2.41176C9.34306 2.05294 9.20156 1.70882 8.94969 1.45509C8.69782 1.20137 8.3562 1.05882 8 1.05882C7.6438 1.05882 7.30218 1.20137 7.05031 1.45509C6.79844 1.70882 6.65694 2.05294 6.65694 2.41176V2.73271C6.65694 2.95705 6.51657 3.15703 6.30661 3.23183C4.333 3.93492 2.91972 5.83183 2.91972 8.05882V11.032C2.91972 11.6788 2.6644 12.3 2.20988 12.7579L1.79434 13.1765H14.2057Z"
+            /&gt;
+        &lt;/svg&gt;
+    );
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
+                at Mon Jan 10 2022 14:05:06 GMT-0500 (Eastern Standard Time)
+            </div>
+        </div>
+        <script src="../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
+    </body>
+</html>
+    
