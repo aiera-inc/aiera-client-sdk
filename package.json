@@ -1,6 +1,6 @@
 {
     "name": "@aiera/client-sdk",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
@@ -117,6 +117,8 @@
         "urql": "2.0.5"
     },
     "lint-staged": {
-        "*.{ts,tsx}": ["eslint --no-error-on-unmatched-pattern --fix"]
+        "*.{ts,tsx}": [
+            "eslint --no-error-on-unmatched-pattern --fix"
+        ]
     }
 }
