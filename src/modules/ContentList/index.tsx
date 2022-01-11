@@ -269,7 +269,7 @@ export function ContentList(_props: ContentListProps): ReactElement {
         requestPolicy: 'cache-and-network',
         variables: {
             filter: {
-                companyIds: [],
+                companyIds: state.company ? [state.company.id] : undefined,
                 contentTypes: [state.selectedContentType],
                 searchTerm: state.searchTerm,
             },

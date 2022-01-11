@@ -137,7 +137,7 @@ describe('ContentList', () => {
                           })
                         : fromValue({
                               data: {
-                                  content: contentWithBody,
+                                  content: [contentWithBody],
                               },
                           });
                 },
@@ -146,5 +146,6 @@ describe('ContentList', () => {
         await actAndFlush(() => {
             userEvent.click(screen.getByText('GME'));
         });
+        screen.getByText('Hello world');
     });
 });
