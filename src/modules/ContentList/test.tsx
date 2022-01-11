@@ -1,41 +1,45 @@
 import React from 'react';
+import { DocumentNode } from 'graphql';
 import { fromValue } from 'wonka';
 import { within } from '@testing-library/dom';
 import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
+import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ContentSource, ContentType } from '@aiera/client-sdk/types/generated';
 import { ContentList } from '.';
 import { CONTENT_SOURCE_LABELS } from '@aiera/client-sdk/lib/data';
 
-const contentList = [
-    {
-        id: '1',
-        contentType: ContentType.News,
-        primaryCompany: {
-            instruments: [
-                {
-                    isPrimary: true,
-                    quotes: [
-                        {
-                            isPrimary: true,
-                            localTicker: 'GME',
-                            exchange: {
-                                country: { countryCode: 'US' },
-                                shortName: 'NYSE',
-                            },
+const content = {
+    id: '1',
+    contentType: ContentType.News,
+    primaryCompany: {
+        instruments: [
+            {
+                isPrimary: true,
+                quotes: [
+                    {
+                        isPrimary: true,
+                        localTicker: 'GME',
+                        exchange: {
+                            country: { countryCode: 'US' },
+                            shortName: 'NYSE',
                         },
-                    ],
-                },
-            ],
-        },
-        publishedDate: '2021-11-30T09:00:00+00:00',
-        source: ContentSource.Lexisnexis,
-        title: 'Article Title',
+                    },
+                ],
+            },
+        ],
     },
-];
+    publishedDate: '2021-11-30T09:00:00+00:00',
+    source: ContentSource.Lexisnexis,
+    title: 'Article Title',
+};
+const contentWithBody = {
+    ...content,
+    body: '<p>Hello world</p>',
+};
 
 describe('ContentList', () => {
     beforeEach(() => {
@@ -63,7 +67,12 @@ describe('ContentList', () => {
             executeQuery: () =>
                 fromValue({
                     data: {
-                        content: [],
+                        search: {
+                            content: {
+                                hits: [],
+                                numTotalHits: 0,
+                            },
+                        },
                     },
                 }),
         });
@@ -75,7 +84,12 @@ describe('ContentList', () => {
             executeQuery: () =>
                 fromValue({
                     data: {
-                        content: contentList,
+                        search: {
+                            content: {
+                                hits: [{ id: '1', content }],
+                                numTotalHits: 1,
+                            },
+                        },
                     },
                 }),
         });
@@ -105,17 +119,32 @@ describe('ContentList', () => {
     });
 
     test('handles selecting content', async () => {
-        const { rendered } = renderWithProvider(<ContentList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        content: contentList,
-                    },
-                }),
-        });
+        await actAndFlush(() =>
+            renderWithProvider(<ContentList />, {
+                executeQuery: ({ query }: { query: DocumentNode }) => {
+                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                    // @ts-ignore
+                    return getQueryNames(query).includes('ContentList')
+                        ? fromValue({
+                              data: {
+                                  search: {
+                                      content: {
+                                          hits: [{ id: '1', content }],
+                                          numTotalHits: 1,
+                                      },
+                                  },
+                              },
+                          })
+                        : fromValue({
+                              data: {
+                                  content: contentWithBody,
+                              },
+                          });
+                },
+            })
+        );
         await actAndFlush(() => {
             userEvent.click(screen.getByText('GME'));
         });
-        expect(rendered.container.querySelector('.content__header')).not.toBeNull();
     });
 });

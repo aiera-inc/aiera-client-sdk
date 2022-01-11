@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
-import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
@@ -14,22 +14,27 @@ import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Content } from '@aiera/client-sdk/modules/Content';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { ContentListQuery, ContentListQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
+import {
+    Content as ContentModel,
+    ContentListQuery,
+    ContentListQueryVariables,
+    ContentSearchResultHit,
+    ContentType,
+    Search,
+} from '@aiera/client-sdk/types/generated';
 import './styles.css';
-
-export type ContentListContent = ContentListQuery['content'][0];
 
 interface ContentListSharedProps {}
 
 /** @notExported */
 export interface ContentListUIProps extends ContentListSharedProps {
     company?: CompanyFilterResult;
-    content?: ContentListContent;
+    content?: ContentModel;
     contentListQuery: QueryResult<ContentListQuery, ContentListQueryVariables>;
     onBackFromContent?: MouseEventHandler;
     onChangeSearch?: ChangeHandler<string>;
     onSelectCompany?: ChangeHandler<CompanyFilterResult>;
-    onSelectContent?: ChangeHandler<ContentListContent>;
+    onSelectContent?: ChangeHandler<ContentModel>;
     onSelectContentType?: ChangeHandler<ContentType>;
     searchTerm?: string;
     selectedContentType: ContentType;
@@ -120,11 +125,12 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                             .with({ status: 'paused' }, () => wrapMsg('There is no content.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading content.'))
                             .with({ status: 'empty' }, () => wrapMsg('There is no content.'))
-                            .with({ status: 'success' }, ({ data: { content } }) => (
+                            .with({ status: 'success' }, ({ data: { search } }) => (
                                 <ul className="w-full">
-                                    {content.map((item) => {
-                                        const primaryQuote = getPrimaryQuote(item.primaryCompany);
-                                        const date = DateTime.fromISO(item.publishedDate);
+                                    {(search as Search).content.hits.map((hit: ContentSearchResultHit) => {
+                                        const { content, id: contentId } = hit;
+                                        const primaryQuote = getPrimaryQuote(content.primaryCompany);
+                                        const date = DateTime.fromISO(content.publishedDate);
                                         let divider = null;
                                         if (
                                             !prevEventDate ||
@@ -139,14 +145,14 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                                             );
                                         }
                                         return (
-                                            <Fragment key={item.id}>
+                                            <Fragment key={contentId}>
                                                 {divider}
                                                 <li
                                                     className="group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
-                                                    onClick={(e) => onSelectContent?.(e, { value: item })}
+                                                    onClick={(e) => onSelectContent?.(e, { value: content })}
                                                 >
                                                     <div className="flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm">
-                                                        <span className="mr-1 text-black">{item.title}</span>
+                                                        <span className="mr-1 text-black">{content.title}</span>
                                                     </div>
                                                     <div className="flex flex-1 items-center min-w-0 p-2 pr-4 pt-0">
                                                         {!!primaryQuote && (
@@ -165,7 +171,7 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                                                         </span>
                                                         <span className="pl-1 pr-1 text-gray-400">•</span>
                                                         <span className="text-indigo-300">
-                                                            {CONTENT_SOURCE_LABELS[item.source] || item.source}
+                                                            {CONTENT_SOURCE_LABELS[content.source] || content.source}
                                                         </span>
                                                     </div>
                                                 </li>
@@ -188,7 +194,7 @@ export interface ContentListProps extends ContentListSharedProps {}
 
 interface ContentListState {
     company?: CompanyFilterResult;
-    content?: ContentListContent;
+    content?: ContentModel;
     searchTerm: string;
     selectedContentType: ContentType;
 }
@@ -203,7 +209,6 @@ export function ContentList(_props: ContentListProps): ReactElement {
         searchTerm: '',
         selectedContentType: ContentType.News,
     });
-
     const resolveCompany = useCompanyResolver();
     const bus = useMessageListener(
         'instrument-selected',
@@ -218,78 +223,55 @@ export function ContentList(_props: ContentListProps): ReactElement {
         },
         'in'
     );
-    // TODO replace with search api query
-    // The content query requires an array of contentIds,
-    // meant to be used to retrieve specific content
     const contentListQuery = useQuery<ContentListQuery, ContentListQueryVariables>({
-        isEmpty: ({ content }) => (content || []).length === 0,
+        isEmpty: ({ search }) => (search as Search).content.numTotalHits === 0,
         query: gql`
-            query ContentList($filter: ContentFilter!) {
-                content(filter: $filter) {
-                    id
-                    contentType
-                    primaryCompany {
+            query ContentList($filter: ContentSearchFilter!) {
+                search {
+                    content(filter: $filter) {
                         id
-                        commonName
-                        instruments {
+                        numTotalHits
+                        hits {
                             id
-                            isPrimary
-                            quotes {
+                            content {
                                 id
-                                isPrimary
-                                localTicker
-                                exchange {
+                                contentType
+                                primaryCompany {
                                     id
-                                    shortName
-                                    country {
+                                    commonName
+                                    instruments {
                                         id
-                                        countryCode
+                                        isPrimary
+                                        quotes {
+                                            id
+                                            isPrimary
+                                            localTicker
+                                            exchange {
+                                                id
+                                                shortName
+                                                country {
+                                                    id
+                                                    countryCode
+                                                }
+                                            }
+                                        }
                                     }
                                 }
+                                publishedDate
+                                source
+                                title
                             }
                         }
                     }
-                    publishedDate
-                    source
-                    title
                 }
             }
         `,
         requestPolicy: 'cache-and-network',
         variables: {
             filter: {
-                contentIds: [
-                    '10486627',
-                    '10486626',
-                    '10486625',
-                    '10486624',
-                    '10486623',
-                    '10486622',
-                    '10486621',
-                    '10486620',
-                    '10486619',
-                    '10486618',
-                    '10486617',
-                    '10486616',
-                    '10486615',
-                    '10486614',
-                    '10486613',
-                    '10486612',
-                    '10486611',
-                    '10486610',
-                    '10486609',
-                    '10486608',
-                    '10486607',
-                    '10486606',
-                    '10486605',
-                    '10486604',
-                    '10486603',
-                    '10486602',
-                    '10486601',
-                    '10486600',
-                    '10486599',
-                    '10486598',
-                ],
+                companyIds: [],
+                contentTypes: [state.selectedContentType],
+                searchTerm: state.searchTerm,
             },
         },
     });
@@ -303,7 +285,7 @@ export function ContentList(_props: ContentListProps): ReactElement {
         [state]
     );
 
-    const onSelectContent = useCallback<ChangeHandler<ContentListContent>>(
+    const onSelectContent = useCallback<ChangeHandler<ContentModel>>(
         (event, change) => {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
