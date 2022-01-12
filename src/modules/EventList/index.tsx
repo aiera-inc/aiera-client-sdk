@@ -4,6 +4,7 @@ import React, {
     SyntheticEvent,
     MouseEventHandler,
     useCallback,
+    useMemo,
     useState,
     Dispatch,
     SetStateAction,
@@ -53,6 +54,7 @@ export interface EventListUIProps {
     filterByTypes?: FilterByType[];
     listType?: EventView;
     loading?: boolean;
+    maxHits?: number;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler<CompanyFilterResult>;
     onSearchChange?: ChangeHandler<string>;
@@ -72,6 +74,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         eventsQuery,
         filterByTypes,
         listType,
+        maxHits = 0,
         onBackFromTranscript,
         onCompanyChange,
         onSearchChange,
@@ -164,6 +167,16 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                 <ul className="w-full">
                                     {data.search.events.hits.map((hit, index) => {
                                         const event = hit.event;
+                                        const hitRatio = (hit.numMentions || 0) / maxHits;
+                                        // Need to include these hardcoded to
+                                        // make sure tailwind doesn't purge
+                                        // w-1/12 w-2/12 w-3/12 w-4/12 w-5/12 w-6/12 w-7/12 w-8/12 w-9/12 w-10/12 w-11/12
+                                        const hitRatioClass =
+                                            hitRatio === 1
+                                                ? 'full'
+                                                : hitRatio === 0
+                                                ? '0'
+                                                : `${Math.ceil(hitRatio * 12)}/12`;
                                         const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                         const eventDate = DateTime.fromISO(event.eventDate);
                                         const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
@@ -187,13 +200,22 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                 {divider}
                                                 <li
                                                     tabIndex={0}
-                                                    className="group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
+                                                    className={classNames(
+                                                        'group text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5',
+                                                        {
+                                                            'h-12': !searchTerm,
+                                                            'h-14': !!searchTerm,
+                                                        }
+                                                    )}
                                                     onClick={(e) => onSelectEvent?.(e, { value: event })}
                                                     onFocus={() => setFocus?.(index)}
                                                     onBlur={() => setFocus?.(-1)}
                                                 >
                                                     <Tooltip
-                                                        className="h-12 flex flex-row"
+                                                        className={classNames('flex flex-row', {
+                                                            'h-12': !searchTerm,
+                                                            'h-14': !!searchTerm,
+                                                        })}
                                                         content={
                                                             <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9">
                                                                 {prettyLineBreak(event.title)}
@@ -246,6 +268,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                             <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
                                                                 {event.eventType.replace(/_/g, ' ')}
                                                             </div>
+                                                            {searchTerm && (
+                                                                <div className="flex items-center mt-[2px]">
+                                                                    <div className="rounded-full h-[6px] w-20 bg-gray-200">
+                                                                        <div
+                                                                            className={`rounded-full h-[6px] bg-blue-500 w-${hitRatioClass}`}
+                                                                        />
+                                                                    </div>
+                                                                    <div className="uppercase font-semibold ml-2 text-black tracking-wide text-xs">
+                                                                        {hit.numMentions || 0} hit
+                                                                        {hit.numMentions !== 1 && 's'}
+                                                                    </div>
+                                                                </div>
+                                                            )}
                                                         </div>
                                                         <div className="flex flex-col justify-center items-end">
                                                             {event.isLive ? (
@@ -417,6 +452,16 @@ export const EventList = (_props: EventListProps): ReactElement => {
         },
     });
 
+    const maxHits = useMemo(
+        () =>
+            match(eventsQuery)
+                .with({ status: 'success' }, ({ data: { search } }) =>
+                    Math.max(...search.events.hits.map((h) => h.numMentions || 0))
+                )
+                .otherwise(() => 0),
+        [eventsQuery.state]
+    );
+
     useInterval(
         useCallback(() => eventsQuery.refetch({ requestPolicy: 'cache-and-network' }), [eventsQuery.refetch]),
         15000
@@ -468,6 +513,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}
             listType={state.listType}
+            maxHits={maxHits}
             onBackFromTranscript={useCallback(
                 (event: SyntheticEvent<Element, Event>) => onSelectEvent(event, { value: null }),
                 [onSelectEvent]
