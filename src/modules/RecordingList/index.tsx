@@ -13,7 +13,7 @@ import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { PlayButton } from '@aiera/client-sdk/modules/EventList/PlayButton';
-import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types';
+import { RecordingListQuery, RecordingListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface RecordingListSharedProps {}
@@ -21,7 +21,7 @@ interface RecordingListSharedProps {}
 /** @notExported */
 interface RecordingListUIProps extends RecordingListSharedProps {
     onSearchChange: ChangeHandler<string>;
-    recordingsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
+    recordingsQuery: QueryResult<RecordingListQuery, RecordingListQueryVariables>;
     searchTerm: string;
 }
 
@@ -187,7 +187,7 @@ export function RecordingList(_props: RecordingListProps): ReactElement {
     const { handlers, state } = useChangeHandlers<RecordingListState>({
         searchTerm: '',
     });
-    const recordingsQuery = useQuery<EventListQuery, EventListQueryVariables>({
+    const recordingsQuery = useQuery<RecordingListQuery, RecordingListQueryVariables>({
         isEmpty: ({ events }) => events.length === 0,
         requestPolicy: 'cache-and-network',
         // TODO replace with recordings query (once written)

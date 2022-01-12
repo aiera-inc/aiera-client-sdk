@@ -42,7 +42,7 @@ enum FilterByType {
     earningsOnly,
 }
 
-export type EventListEvent = EventListQuery['events'][0];
+export type EventListEvent = EventListQuery['search']['events']['hits'][0]['event'];
 export type { CompanyFilterResult };
 
 export interface EventListUIProps {
@@ -160,9 +160,10 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
-                            .with({ status: 'success' }, ({ data: { events } }) => (
+                            .with({ status: 'success' }, ({ data }) => (
                                 <ul className="w-full">
-                                    {events.map((event, index) => {
+                                    {data.search.events.hits.map((hit, index) => {
+                                        const event = hit.event;
                                         const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                         const eventDate = DateTime.fromISO(event.eventDate);
                                         const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
@@ -355,34 +356,44 @@ export const EventList = (_props: EventListProps): ReactElement => {
     );
 
     const eventsQuery = useQuery<EventListQuery, EventListQueryVariables>({
-        isEmpty: ({ events }) => events.length === 0,
+        isEmpty: (data) => data.search.events.numTotalHits === 0,
         requestPolicy: 'cache-and-network',
         query: gql`
-            query EventList($filter: EventFilter, $view: EventView) {
-                events(filter: $filter, view: $view) {
-                    id
-                    title
-                    eventDate
-                    eventType
-                    isLive
-                    audioRecordingUrl
-                    audioRecordingOffsetMs
-                    primaryCompany {
+            query EventList($filter: EventSearchFilter!, $view: EventView) {
+                search {
+                    events(filter: $filter, view: $view) {
                         id
-                        commonName
-                        instruments {
+                        numTotalHits
+                        hits {
                             id
-                            isPrimary
-                            quotes {
+                            numMentions
+                            event {
                                 id
-                                isPrimary
-                                localTicker
-                                exchange {
+                                title
+                                eventDate
+                                eventType
+                                isLive
+                                audioRecordingUrl
+                                audioRecordingOffsetMs
+                                primaryCompany {
                                     id
-                                    shortName
-                                    country {
+                                    commonName
+                                    instruments {
                                         id
-                                        countryCode
+                                        isPrimary
+                                        quotes {
+                                            id
+                                            isPrimary
+                                            localTicker
+                                            exchange {
+                                                id
+                                                shortName
+                                                country {
+                                                    id
+                                                    countryCode
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             }
@@ -394,9 +405,9 @@ export const EventList = (_props: EventListProps): ReactElement => {
         variables: {
             view: state.listType,
             filter: {
-                hasTranscript: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
+                hasTranscripts: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
                 eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
-                title: state.searchTerm || undefined,
+                searchTerm: state.searchTerm || undefined,
                 companyIds: state.company?.id
                     ? [state.company.id]
                     : state.watchlist?.length
@@ -418,8 +429,8 @@ export const EventList = (_props: EventListProps): ReactElement => {
         // to handle the keyboard event
         if (focusIndex >= 0 && event.key === 'Enter') {
             match(eventsQuery)
-                .with({ status: 'success' }, ({ data: { events } }) => {
-                    const selectedOption = events[focusIndex];
+                .with({ status: 'success' }, ({ data }) => {
+                    const selectedOption = data.search.events.hits[focusIndex]?.event;
                     if (selectedOption) {
                         setFocus(-1);
                         onSelectEvent(event, { value: selectedOption });
@@ -432,7 +443,9 @@ export const EventList = (_props: EventListProps): ReactElement => {
     const onSelectEventById = useCallback<ChangeHandler<string>>(
         (event, change) => {
             if (eventsQuery.status === 'success') {
-                const selectedEvent = eventsQuery.data.events.find((event) => event.id === change.value);
+                const selectedEvent = eventsQuery.data.search.events.hits.find(
+                    ({ event }) => event.id === change.value
+                )?.event;
                 if (selectedEvent) {
                     onSelectEvent(event, { value: selectedEvent });
                 }

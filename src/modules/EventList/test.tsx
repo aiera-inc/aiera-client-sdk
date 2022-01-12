@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 import { fromValue } from 'wonka';
 
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
+import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { EventList } from '.';
 
@@ -57,7 +58,7 @@ const eventList = [
             ],
         },
     },
-];
+].map((event) => ({ id: event.id, numTotalHits: 1, event }));
 
 const eventTranscript = [
     {
@@ -133,7 +134,7 @@ describe('EventList', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            events: [],
+                            search: { events: { numTotalHits: 0, hits: [] } },
                         },
                     }),
             })
@@ -147,7 +148,7 @@ describe('EventList', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            events: eventList,
+                            search: { events: { numTotalHits: eventList.length, hits: eventList } },
                         },
                     }),
             })
@@ -194,7 +195,7 @@ describe('EventList', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            events: eventList,
+                            search: { events: { numTotalHits: eventList.length, hits: eventList } },
                         },
                     }),
             })
@@ -215,7 +216,7 @@ describe('EventList', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            events: eventList,
+                            search: { events: { numTotalHits: eventList.length, hits: eventList } },
                         },
                     }),
             })
@@ -231,7 +232,17 @@ describe('EventList', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            events: [{ ...eventList[0], audioRecordingUrl: 'mp3!' }],
+                            search: {
+                                events: {
+                                    numTotalHits: eventList.length,
+                                    hits: [
+                                        {
+                                            ...eventList[0],
+                                            event: { ...eventList[0]?.event, audioRecordingUrl: 'mp3!' },
+                                        },
+                                    ],
+                                },
+                            },
                         },
                     }),
             })
@@ -245,12 +256,11 @@ describe('EventList', () => {
         await actAndFlush(() =>
             renderWithProvider(<EventList />, {
                 executeQuery: ({ query }: { query: DocumentNode }) => {
-                    // @ts-ignore
-                    const queryName = query?.definitions[0]?.name as string;
+                    const queryName = getQueryNames(query)[0];
                     return queryName === 'EventList'
                         ? fromValue({
                               data: {
-                                  events: eventList,
+                                  search: { events: { numTotalHits: eventList.length, hits: eventList } },
                               },
                           })
                         : fromValue({
@@ -271,12 +281,11 @@ describe('EventList', () => {
         await actAndFlush(() =>
             renderWithProvider(<EventList />, {
                 executeQuery: ({ query }: { query: DocumentNode }) => {
-                    // @ts-ignore
-                    const queryName = query?.definitions[0]?.name as string;
+                    const queryName = getQueryNames(query)[0];
                     return queryName === 'EventList'
                         ? fromValue({
                               data: {
-                                  events: eventList,
+                                  search: { events: { numTotalHits: eventList.length, hits: eventList } },
                               },
                           })
                         : fromValue({
@@ -308,7 +317,20 @@ describe('EventList', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            events: [{ ...eventList[0], eventDate: new Date(new Date().getTime() - 3600000) }],
+                            search: {
+                                events: {
+                                    numTotalHits: 1,
+                                    hits: [
+                                        {
+                                            ...eventList[0],
+                                            event: {
+                                                ...eventList[0]?.event,
+                                                eventDate: new Date(new Date().getTime() - 3600000),
+                                            },
+                                        },
+                                    ],
+                                },
+                            },
                         },
                     }),
             })
