@@ -79925,34 +79925,43 @@ var ContentDocument = lib_default`
 }
     `;
 var ContentListDocument = lib_default`
-    query ContentList($filter: ContentFilter!) {
-  content(filter: $filter) {
-    id
-    contentType
-    primaryCompany {
+    query ContentList($filter: ContentSearchFilter!) {
+  search {
+    content(filter: $filter) {
       id
-      commonName
-      instruments {
+      numTotalHits
+      hits {
         id
-        isPrimary
-        quotes {
+        content {
           id
-          isPrimary
-          localTicker
-          exchange {
+          contentType
+          primaryCompany {
             id
-            shortName
-            country {
+            commonName
+            instruments {
               id
-              countryCode
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
             }
           }
+          publishedDate
+          source
+          title
         }
       }
     }
-    publishedDate
-    source
-    title
   }
 }
     `;

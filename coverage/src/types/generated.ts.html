@@ -1353,7 +1353,16 @@
 <a name='L1288'></a><a href='#L1288'>1288</a>
 <a name='L1289'></a><a href='#L1289'>1289</a>
 <a name='L1290'></a><a href='#L1290'>1290</a>
-<a name='L1291'></a><a href='#L1291'>1291</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1291'></a><a href='#L1291'>1291</a>
+<a name='L1292'></a><a href='#L1292'>1292</a>
+<a name='L1293'></a><a href='#L1293'>1293</a>
+<a name='L1294'></a><a href='#L1294'>1294</a>
+<a name='L1295'></a><a href='#L1295'>1295</a>
+<a name='L1296'></a><a href='#L1296'>1296</a>
+<a name='L1297'></a><a href='#L1297'>1297</a>
+<a name='L1298'></a><a href='#L1298'>1298</a>
+<a name='L1299'></a><a href='#L1299'>1299</a>
+<a name='L1300'></a><a href='#L1300'>1300</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2382,6 +2391,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3492,11 +3510,11 @@ export type ContentQueryVariables = Exact&lt;{
 export type ContentQuery = { __typename?: 'Query', content: Array&lt;{ __typename?: 'FilingContent', id: string, body: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, body: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined }&gt; };
 &nbsp;
 export type ContentListQueryVariables = Exact&lt;{
-  filter: ContentFilter;
+  filter: ContentSearchFilter;
 }&gt;;
 &nbsp;
 &nbsp;
-export type ContentListQuery = { __typename?: 'Query', content: Array&lt;{ __typename?: 'FilingContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined }&gt; };
+export type ContentListQuery = { __typename?: 'Query', search: { __typename?: 'Search', content: { __typename?: 'ContentSearchResult', id: string, numTotalHits: number, hits: Array&lt;{ __typename?: 'ContentSearchResultHit', id: string, content: { __typename?: 'FilingContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } }&gt; } } };
 &nbsp;
 export type EventListQueryVariables = Exact&lt;{
   filter: EventSearchFilter;
@@ -3672,34 +3690,43 @@ export const ContentDocument = gql`
 }
     `;
 export const ContentListDocument = gql`
-    query ContentList($filter: ContentFilter!) {
-  content(filter: $filter) {
-    id
-    contentType
-    primaryCompany {
+    query ContentList($filter: ContentSearchFilter!) {
+  search {
+    content(filter: $filter) {
       id
-      commonName
-      instruments {
+      numTotalHits
+      hits {
         id
-        isPrimary
-        quotes {
+        content {
           id
-          isPrimary
-          localTicker
-          exchange {
+          contentType
+          primaryCompany {
             id
-            shortName
-            country {
+            commonName
+            instruments {
               id
-              countryCode
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
             }
           }
+          publishedDate
+          source
+          title
         }
       }
     }
-    publishedDate
-    source
-    title
   }
 }
     `;
@@ -3940,7 +3967,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Jan 13 2022 14:13:28 GMT-0500 (Eastern Standard Time)
+                at Thu Jan 13 2022 14:51:03 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

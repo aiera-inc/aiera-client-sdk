@@ -37780,34 +37780,43 @@ var ContentDocument = lib_default`
 }
     `;
 var ContentListDocument = lib_default`
-    query ContentList($filter: ContentFilter!) {
-  content(filter: $filter) {
-    id
-    contentType
-    primaryCompany {
+    query ContentList($filter: ContentSearchFilter!) {
+  search {
+    content(filter: $filter) {
       id
-      commonName
-      instruments {
+      numTotalHits
+      hits {
         id
-        isPrimary
-        quotes {
+        content {
           id
-          isPrimary
-          localTicker
-          exchange {
+          contentType
+          primaryCompany {
             id
-            shortName
-            country {
+            commonName
+            instruments {
               id
-              countryCode
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
             }
           }
+          publishedDate
+          source
+          title
         }
       }
     }
-    publishedDate
-    source
-    title
   }
 }
     `;
@@ -39589,12 +39598,13 @@ function ContentListUI(props) {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2"
   }), /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There is no content.")).with({ status: "error" }, () => wrapMsg("There was an error loading content.")).with({ status: "empty" }, () => wrapMsg("There is no content.")).with({ status: "success" }, ({ data: { content: content2 } }) => /* @__PURE__ */ import_react28.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There is no content.")).with({ status: "error" }, () => wrapMsg("There was an error loading content.")).with({ status: "empty" }, () => wrapMsg("There is no content.")).with({ status: "success" }, ({ data }) => /* @__PURE__ */ import_react28.default.createElement("ul", {
     className: "w-full"
-  }, content2.map((item) => {
+  }, data.search.content.hits.map((hit) => {
     var _a;
-    const primaryQuote = getPrimaryQuote(item.primaryCompany);
-    const date = import_luxon2.DateTime.fromISO(item.publishedDate);
+    const { content: content2, id: contentId } = hit;
+    const primaryQuote = getPrimaryQuote(content2.primaryCompany);
+    const date = import_luxon2.DateTime.fromISO(content2.publishedDate);
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== date.toFormat("MM/dd/yyyy")) {
       prevEventDate = date;
@@ -39605,15 +39615,15 @@ function ContentListUI(props) {
       }));
     }
     return /* @__PURE__ */ import_react28.default.createElement(import_react28.Fragment, {
-      key: item.id
+      key: contentId
     }, divider, /* @__PURE__ */ import_react28.default.createElement("li", {
       className: "group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
-      onClick: (e) => onSelectContent == null ? void 0 : onSelectContent(e, { value: item })
+      onClick: (e) => onSelectContent == null ? void 0 : onSelectContent(e, { value: content2 })
     }, /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm"
     }, /* @__PURE__ */ import_react28.default.createElement("span", {
       className: "mr-1 text-black"
-    }, item.title)), /* @__PURE__ */ import_react28.default.createElement("div", {
+    }, content2.title)), /* @__PURE__ */ import_react28.default.createElement("div", {
       className: "flex flex-1 items-center min-w-0 p-2 pr-4 pt-0"
     }, !!primaryQuote && /* @__PURE__ */ import_react28.default.createElement(import_react28.default.Fragment, null, /* @__PURE__ */ import_react28.default.createElement("span", {
       className: "font-bold pr-1 text-blue-600 group-hover:text-yellow-600"
@@ -39627,7 +39637,7 @@ function ContentListUI(props) {
       className: "pl-1 pr-1 text-gray-400"
     }, "\u2022"), /* @__PURE__ */ import_react28.default.createElement("span", {
       className: "text-indigo-300"
-    }, CONTENT_SOURCE_LABELS[item.source] || item.source))));
+    }, CONTENT_SOURCE_LABELS[content2.source] || content2.source))));
   }))).exhaustive(), /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "flex-1"
   })))));
@@ -39650,74 +39660,54 @@ function ContentList(_props) {
     }
   }), "in");
   const contentListQuery = useQuery2({
-    isEmpty: ({ content }) => (content || []).length === 0,
+    isEmpty: ({ search }) => search.content.numTotalHits === 0,
     query: lib_default`
-            query ContentList($filter: ContentFilter!) {
-                content(filter: $filter) {
-                    id
-                    contentType
-                    primaryCompany {
+            query ContentList($filter: ContentSearchFilter!) {
+                search {
+                    content(filter: $filter) {
                         id
-                        commonName
-                        instruments {
+                        numTotalHits
+                        hits {
                             id
-                            isPrimary
-                            quotes {
+                            content {
                                 id
-                                isPrimary
-                                localTicker
-                                exchange {
+                                contentType
+                                primaryCompany {
                                     id
-                                    shortName
-                                    country {
+                                    commonName
+                                    instruments {
                                         id
-                                        countryCode
+                                        isPrimary
+                                        quotes {
+                                            id
+                                            isPrimary
+                                            localTicker
+                                            exchange {
+                                                id
+                                                shortName
+                                                country {
+                                                    id
+                                                    countryCode
+                                                }
+                                            }
+                                        }
                                     }
                                 }
+                                publishedDate
+                                source
+                                title
                             }
                         }
                     }
-                    publishedDate
-                    source
-                    title
                 }
             }
         `,
     requestPolicy: "cache-and-network",
     variables: {
       filter: {
-        contentIds: [
-          "10486627",
-          "10486626",
-          "10486625",
-          "10486624",
-          "10486623",
-          "10486622",
-          "10486621",
-          "10486620",
-          "10486619",
-          "10486618",
-          "10486617",
-          "10486616",
-          "10486615",
-          "10486614",
-          "10486613",
-          "10486612",
-          "10486611",
-          "10486610",
-          "10486609",
-          "10486608",
-          "10486607",
-          "10486606",
-          "10486605",
-          "10486604",
-          "10486603",
-          "10486602",
-          "10486601",
-          "10486600",
-          "10486599",
-          "10486598"
-        ]
+        companyIds: state.company ? [state.company.id] : void 0,
+        contentTypes: [state.selectedContentType],
+        searchTerm: state.searchTerm
       }
     }
   });
