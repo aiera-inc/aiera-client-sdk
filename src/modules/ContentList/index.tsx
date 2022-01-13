@@ -14,27 +14,22 @@ import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Content } from '@aiera/client-sdk/modules/Content';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import {
-    Content as ContentModel,
-    ContentListQuery,
-    ContentListQueryVariables,
-    ContentSearchResultHit,
-    ContentType,
-    Search,
-} from '@aiera/client-sdk/types/generated';
+import { ContentListQuery, ContentListQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
 import './styles.css';
+
+export type ContentListContent = ContentListQuery['search']['content']['hits'][0]['content'];
 
 interface ContentListSharedProps {}
 
 /** @notExported */
 export interface ContentListUIProps extends ContentListSharedProps {
     company?: CompanyFilterResult;
-    content?: ContentModel;
+    content?: ContentListContent;
     contentListQuery: QueryResult<ContentListQuery, ContentListQueryVariables>;
     onBackFromContent?: MouseEventHandler;
     onChangeSearch?: ChangeHandler<string>;
     onSelectCompany?: ChangeHandler<CompanyFilterResult>;
-    onSelectContent?: ChangeHandler<ContentModel>;
+    onSelectContent?: ChangeHandler<ContentListContent>;
     onSelectContentType?: ChangeHandler<ContentType>;
     searchTerm?: string;
     selectedContentType: ContentType;
@@ -125,9 +120,9 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                             .with({ status: 'paused' }, () => wrapMsg('There is no content.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading content.'))
                             .with({ status: 'empty' }, () => wrapMsg('There is no content.'))
-                            .with({ status: 'success' }, ({ data: { search } }) => (
+                            .with({ status: 'success' }, ({ data }) => (
                                 <ul className="w-full">
-                                    {(search as Search).content.hits.map((hit: ContentSearchResultHit) => {
+                                    {data.search.content.hits.map((hit) => {
                                         const { content, id: contentId } = hit;
                                         const primaryQuote = getPrimaryQuote(content.primaryCompany);
                                         const date = DateTime.fromISO(content.publishedDate);
@@ -194,7 +189,7 @@ export interface ContentListProps extends ContentListSharedProps {}
 
 interface ContentListState {
     company?: CompanyFilterResult;
-    content?: ContentModel;
+    content?: ContentListContent;
     searchTerm: string;
     selectedContentType: ContentType;
 }
@@ -224,7 +219,7 @@ export function ContentList(_props: ContentListProps): ReactElement {
         'in'
     );
     const contentListQuery = useQuery<ContentListQuery, ContentListQueryVariables>({
-        isEmpty: ({ search }) => (search as Search).content.numTotalHits === 0,
+        isEmpty: ({ search }) => search.content.numTotalHits === 0,
         query: gql`
             query ContentList($filter: ContentSearchFilter!) {
                 search {
@@ -285,7 +280,7 @@ export function ContentList(_props: ContentListProps): ReactElement {
         [state]
     );
 
-    const onSelectContent = useCallback<ChangeHandler<ContentModel>>(
+    const onSelectContent = useCallback<ChangeHandler<ContentListContent>>(
         (event, change) => {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');

@@ -122,8 +122,6 @@ describe('ContentList', () => {
         await actAndFlush(() =>
             renderWithProvider(<ContentList />, {
                 executeQuery: ({ query }: { query: DocumentNode }) => {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
                     return getQueryNames(query).includes('ContentList')
                         ? fromValue({
                               data: {
