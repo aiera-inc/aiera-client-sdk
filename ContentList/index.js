@@ -37812,31 +37812,41 @@ var ContentListDocument = lib_default`
 }
     `;
 var EventListDocument = lib_default`
-    query EventList($filter: EventFilter, $view: EventView) {
-  events(filter: $filter, view: $view) {
-    id
-    title
-    eventDate
-    eventType
-    isLive
-    audioRecordingUrl
-    audioRecordingOffsetMs
-    primaryCompany {
+    query EventList($filter: EventSearchFilter!, $view: EventView) {
+  search {
+    events(filter: $filter, view: $view) {
       id
-      commonName
-      instruments {
+      numTotalHits
+      hits {
         id
-        isPrimary
-        quotes {
+        numMentions
+        event {
           id
-          isPrimary
-          localTicker
-          exchange {
+          title
+          eventDate
+          eventType
+          isLive
+          audioRecordingUrl
+          audioRecordingOffsetMs
+          primaryCompany {
             id
-            shortName
-            country {
+            commonName
+            instruments {
               id
-              countryCode
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
             }
           }
         }

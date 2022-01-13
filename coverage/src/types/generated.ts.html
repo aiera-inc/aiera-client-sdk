@@ -1343,7 +1343,17 @@
 <a name='L1278'></a><a href='#L1278'>1278</a>
 <a name='L1279'></a><a href='#L1279'>1279</a>
 <a name='L1280'></a><a href='#L1280'>1280</a>
-<a name='L1281'></a><a href='#L1281'>1281</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1281'></a><a href='#L1281'>1281</a>
+<a name='L1282'></a><a href='#L1282'>1282</a>
+<a name='L1283'></a><a href='#L1283'>1283</a>
+<a name='L1284'></a><a href='#L1284'>1284</a>
+<a name='L1285'></a><a href='#L1285'>1285</a>
+<a name='L1286'></a><a href='#L1286'>1286</a>
+<a name='L1287'></a><a href='#L1287'>1287</a>
+<a name='L1288'></a><a href='#L1288'>1288</a>
+<a name='L1289'></a><a href='#L1289'>1289</a>
+<a name='L1290'></a><a href='#L1290'>1290</a>
+<a name='L1291'></a><a href='#L1291'>1291</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2404,6 +2414,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2704,7 +2724,7 @@ export enum CompanyOwnership {
 }
 &nbsp;
 export type CompanySearchFilter = {
-  companyIds?: InputMaybe&lt;Array&lt;Scalars['Int']&gt;&gt;;
+  companyIds?: InputMaybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
   searchTerm?: InputMaybe&lt;Scalars['String']&gt;;
 };
 &nbsp;
@@ -2769,8 +2789,8 @@ export type ContentFilter = {
 };
 &nbsp;
 export type ContentSearchFilter = {
-  companyIds?: InputMaybe&lt;Array&lt;Scalars['Int']&gt;&gt;;
-  contentIds?: InputMaybe&lt;Array&lt;Scalars['Int']&gt;&gt;;
+  companyIds?: InputMaybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
+  contentIds?: InputMaybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
   contentTypes?: InputMaybe&lt;Array&lt;ContentType&gt;&gt;;
   searchTerm?: InputMaybe&lt;Scalars['String']&gt;;
 };
@@ -2925,9 +2945,9 @@ export type EventQuoteRealtimePrice = {
 };
 &nbsp;
 export type EventSearchFilter = {
-  companyIds?: InputMaybe&lt;Array&lt;Scalars['Int']&gt;&gt;;
-  eventGroupIds?: InputMaybe&lt;Array&lt;Scalars['Int']&gt;&gt;;
-  eventIds?: InputMaybe&lt;Array&lt;Scalars['Int']&gt;&gt;;
+  companyIds?: InputMaybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
+  eventGroupIds?: InputMaybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
+  eventIds?: InputMaybe&lt;Array&lt;Scalars['ID']&gt;&gt;;
   eventTypes?: InputMaybe&lt;Array&lt;EventType&gt;&gt;;
   hasTranscripts?: InputMaybe&lt;Scalars['Boolean']&gt;;
   searchTerm?: InputMaybe&lt;Scalars['String']&gt;;
@@ -3479,12 +3499,12 @@ export type ContentListQueryVariables = Exact&lt;{
 export type ContentListQuery = { __typename?: 'Query', content: Array&lt;{ __typename?: 'FilingContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined }&gt; };
 &nbsp;
 export type EventListQueryVariables = Exact&lt;{
-  filter?: InputMaybe&lt;EventFilter&gt;;
+  filter: EventSearchFilter;
   view?: InputMaybe&lt;EventView&gt;;
 }&gt;;
 &nbsp;
 &nbsp;
-export type EventListQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined }&gt; };
+export type EventListQuery = { __typename?: 'Query', search: { __typename?: 'Search', events: { __typename?: 'EventSearchResult', id: string, numTotalHits: number, hits: Array&lt;{ __typename?: 'EventSearchResultHit', id: string, numMentions?: number | null | undefined, event: { __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } }&gt; } } };
 &nbsp;
 export type RecordingListQueryVariables = Exact&lt;{
   filter?: InputMaybe&lt;EventFilter&gt;;
@@ -3684,31 +3704,41 @@ export const ContentListDocument = gql`
 }
     `;
 export const EventListDocument = gql`
-    query EventList($filter: EventFilter, $view: EventView) {
-  events(filter: $filter, view: $view) {
-    id
-    title
-    eventDate
-    eventType
-    isLive
-    audioRecordingUrl
-    audioRecordingOffsetMs
-    primaryCompany {
+    query EventList($filter: EventSearchFilter!, $view: EventView) {
+  search {
+    events(filter: $filter, view: $view) {
       id
-      commonName
-      instruments {
+      numTotalHits
+      hits {
         id
-        isPrimary
-        quotes {
+        numMentions
+        event {
           id
-          isPrimary
-          localTicker
-          exchange {
+          title
+          eventDate
+          eventType
+          isLive
+          audioRecordingUrl
+          audioRecordingOffsetMs
+          primaryCompany {
             id
-            shortName
-            country {
+            commonName
+            instruments {
               id
-              countryCode
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
             }
           }
         }
@@ -3910,7 +3940,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Jan 11 2022 12:17:15 GMT-0500 (Eastern Standard Time)
+                at Thu Jan 13 2022 14:11:25 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
