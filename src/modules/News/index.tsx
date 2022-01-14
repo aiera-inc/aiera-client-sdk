@@ -32,11 +32,11 @@ interface NewsSharedProps {
 /** @notExported */
 interface NewsUIProps extends NewsSharedProps {
     body?: Body[][] | null;
-    newsQuery: QueryResult<NewsQuery, NewsQueryVariables>;
     currentMatch?: string | null;
     currentMatchRef: Ref<HTMLDivElement>;
     matchIndex: number;
     matches: Body[];
+    newsQuery: QueryResult<NewsQuery, NewsQueryVariables>;
     nextMatch: () => void;
     onChangeSearch: ChangeHandler<string>;
     prevMatch: () => void;

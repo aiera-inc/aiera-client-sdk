@@ -8,6 +8,7 @@ import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/comp
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { CONTENT_SOURCE_LABELS, getPrimaryQuote, useAutoTrack, useCompanyResolver } from '@aiera/client-sdk/lib/data';
+import { areDatesSameDay } from '@aiera/client-sdk/lib/datetimes';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
@@ -49,7 +50,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
     }
 
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
-    let prevEventDate: DateTime | null = null;
+    let prevEventDate = DateTime.now();
     return (
         <div className="h-full flex flex-col news-list">
             <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl news-list__header">
@@ -96,19 +97,16 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading news.'))
                             .with({ status: 'empty' }, () => wrapMsg('There is no news.'))
                             .with({ status: 'success' }, ({ data }) => (
-                                <ul className="w-full">
+                                <ul className="pt-1.5 w-full">
                                     {data.search.content.hits.map((hit) => {
                                         const { content, id: newsId } = hit;
                                         const primaryQuote = getPrimaryQuote(content.primaryCompany);
                                         const date = DateTime.fromISO(content.publishedDate);
                                         let divider = null;
-                                        if (
-                                            !prevEventDate ||
-                                            prevEventDate.toFormat('MM/dd/yyyy') !== date.toFormat('MM/dd/yyyy')
-                                        ) {
+                                        if (!areDatesSameDay(prevEventDate.toJSDate(), date.toJSDate())) {
                                             prevEventDate = date;
                                             divider = (
-                                                <li className="sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3">
+                                                <li className="sticky top-[12px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3">
                                                     {date.toFormat('DDDD')}
                                                     <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200" />
                                                 </li>
