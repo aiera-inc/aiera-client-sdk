@@ -9,7 +9,7 @@ import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ContentSource, ContentType } from '@aiera/client-sdk/types/generated';
-import { ContentList } from '.';
+import { NewsList } from '.';
 import { CONTENT_SOURCE_LABELS } from '@aiera/client-sdk/lib/data';
 
 const content = {
@@ -41,7 +41,7 @@ const contentWithBody = {
     body: '<p>Hello world</p>',
 };
 
-describe('ContentList', () => {
+describe('NewsList', () => {
     beforeEach(() => {
         jest.useFakeTimers();
     });
@@ -51,19 +51,13 @@ describe('ContentList', () => {
         jest.clearAllTimers();
     });
 
-    test('renders tabs', () => {
-        renderWithProvider(<ContentList />);
-        screen.getByText('News');
-        screen.getByText('Corp. Activity');
-    });
-
     test('handles loading state', () => {
-        const { rendered } = renderWithProvider(<ContentList />);
-        expect(rendered.container.querySelector('.ContentList__loading')).not.toBeNull();
+        const { rendered } = renderWithProvider(<NewsList />);
+        expect(rendered.container.querySelector('.NewsList__loading')).not.toBeNull();
     });
 
     test('handles empty state', () => {
-        renderWithProvider(<ContentList />, {
+        renderWithProvider(<NewsList />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -76,11 +70,11 @@ describe('ContentList', () => {
                     },
                 }),
         });
-        screen.getByText('There is no content.');
+        screen.getByText('There is no news.');
     });
 
-    test('handles content list', () => {
-        renderWithProvider(<ContentList />, {
+    test('handles news list', () => {
+        renderWithProvider(<NewsList />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -109,7 +103,7 @@ describe('ContentList', () => {
         const TestComponent = () => {
             return (
                 <Provider bus={bus}>
-                    <ContentList />
+                    <NewsList />
                 </Provider>
             );
         };
@@ -118,11 +112,11 @@ describe('ContentList', () => {
         expect(client.query).toHaveBeenCalled();
     });
 
-    test('handles selecting content', async () => {
+    test('handles selecting news', async () => {
         await actAndFlush(() =>
-            renderWithProvider(<ContentList />, {
+            renderWithProvider(<NewsList />, {
                 executeQuery: ({ query }: { query: DocumentNode }) => {
-                    return getQueryNames(query).includes('ContentList')
+                    return getQueryNames(query)[0] === 'NewsList'
                         ? fromValue({
                               data: {
                                   search: {

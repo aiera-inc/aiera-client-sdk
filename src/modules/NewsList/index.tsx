@@ -7,63 +7,58 @@ import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { CONTENT_SOURCE_LABELS, getPrimaryQuote, useAutoTrack, useCompanyResolver } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
-import { Content } from '@aiera/client-sdk/modules/Content';
+import { News } from '@aiera/client-sdk/modules/News';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { ContentListQuery, ContentListQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
+import { NewsListQuery, NewsListQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
-export type ContentListContent = ContentListQuery['search']['content']['hits'][0]['content'];
+export type NewsListNews = NewsListQuery['search']['content']['hits'][0]['content'];
 
-interface ContentListSharedProps {}
+interface NewsListSharedProps {}
 
 /** @notExported */
-export interface ContentListUIProps extends ContentListSharedProps {
+export interface NewsListUIProps extends NewsListSharedProps {
     company?: CompanyFilterResult;
-    content?: ContentListContent;
-    contentListQuery: QueryResult<ContentListQuery, ContentListQueryVariables>;
-    onBackFromContent?: MouseEventHandler;
+    newsListQuery: QueryResult<NewsListQuery, NewsListQueryVariables>;
+    onBackFromNews?: MouseEventHandler;
     onChangeSearch?: ChangeHandler<string>;
     onSelectCompany?: ChangeHandler<CompanyFilterResult>;
-    onSelectContent?: ChangeHandler<ContentListContent>;
-    onSelectContentType?: ChangeHandler<ContentType>;
+    onSelectNews?: ChangeHandler<NewsListNews>;
     searchTerm?: string;
-    selectedContentType: ContentType;
+    selectedNews?: NewsListNews;
 }
 
-export function ContentListUI(props: ContentListUIProps): ReactElement {
+export function NewsListUI(props: NewsListUIProps): ReactElement {
     const {
         company,
-        content,
-        contentListQuery,
-        onBackFromContent,
+        newsListQuery,
+        onBackFromNews,
         onChangeSearch,
         onSelectCompany,
-        onSelectContent,
-        onSelectContentType,
+        onSelectNews,
         searchTerm,
-        selectedContentType,
+        selectedNews,
     } = props;
 
-    if (content) {
-        return <Content contentId={content.id} contentType={selectedContentType} onBack={onBackFromContent} />;
+    if (selectedNews) {
+        return <News newsId={selectedNews.id} onBack={onBackFromNews} />;
     }
 
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     let prevEventDate: DateTime | null = null;
     return (
-        <div className="h-full flex flex-col content-list">
-            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl content-list__header">
+        <div className="h-full flex flex-col news-list">
+            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl news-list__header">
                 <div className="flex items-center mb-3">
                     <Input
                         icon={<MagnifyingGlass />}
                         name="search"
                         onChange={onChangeSearch}
-                        placeholder="Search News & Corp. Activity..."
+                        placeholder="Search News..."
                         value={searchTerm}
                     />
                     <div className="ml-2">
@@ -73,30 +68,10 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">
                 <div className="flex flex-col flex-grow">
-                    <div className="sticky top-0 px-3 pt-3 pb-2 z-10 content-list__tabs">
-                        <div className="flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow">
-                            <Tabs<ContentType>
-                                className="ml-1"
-                                kind="line"
-                                onChange={onSelectContentType}
-                                options={[
-                                    {
-                                        label: 'News',
-                                        value: ContentType.News,
-                                    },
-                                    {
-                                        label: 'Corp. Activity',
-                                        value: ContentType.Spotlight,
-                                    },
-                                ]}
-                                value={selectedContentType}
-                            />
-                        </div>
-                    </div>
                     <div className="flex flex-col items-center justify-center flex-1">
-                        {match(contentListQuery)
+                        {match(newsListQuery)
                             .with({ status: 'loading' }, () => (
-                                <ul className="w-full ContentList__loading">
+                                <ul className="w-full NewsList__loading">
                                     {new Array(15).fill(0).map((_, idx) => (
                                         <li key={idx} className="p-2 animate-pulse mx-2">
                                             <div className="flex items-center">
@@ -117,13 +92,13 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                                     ))}
                                 </ul>
                             ))
-                            .with({ status: 'paused' }, () => wrapMsg('There is no content.'))
-                            .with({ status: 'error' }, () => wrapMsg('There was an error loading content.'))
-                            .with({ status: 'empty' }, () => wrapMsg('There is no content.'))
+                            .with({ status: 'paused' }, () => wrapMsg('There is no news.'))
+                            .with({ status: 'error' }, () => wrapMsg('There was an error loading news.'))
+                            .with({ status: 'empty' }, () => wrapMsg('There is no news.'))
                             .with({ status: 'success' }, ({ data }) => (
                                 <ul className="w-full">
                                     {data.search.content.hits.map((hit) => {
-                                        const { content, id: contentId } = hit;
+                                        const { content, id: newsId } = hit;
                                         const primaryQuote = getPrimaryQuote(content.primaryCompany);
                                         const date = DateTime.fromISO(content.publishedDate);
                                         let divider = null;
@@ -140,11 +115,11 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
                                             );
                                         }
                                         return (
-                                            <Fragment key={contentId}>
+                                            <Fragment key={newsId}>
                                                 {divider}
                                                 <li
                                                     className="group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
-                                                    onClick={(e) => onSelectContent?.(e, { value: content })}
+                                                    onClick={(e) => onSelectNews?.(e, { value: content })}
                                                 >
                                                     <div className="flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm">
                                                         <span className="mr-1 text-black">{content.title}</span>
@@ -185,24 +160,22 @@ export function ContentListUI(props: ContentListUIProps): ReactElement {
 }
 
 /** @notExported */
-export interface ContentListProps extends ContentListSharedProps {}
+export interface NewsListProps extends NewsListSharedProps {}
 
-interface ContentListState {
+interface NewsListState {
     company?: CompanyFilterResult;
-    content?: ContentListContent;
     searchTerm: string;
-    selectedContentType: ContentType;
+    selectedNews?: NewsListNews;
 }
 
 /**
- * Renders ContentList
+ * Renders NewsList
  */
-export function ContentList(_props: ContentListProps): ReactElement {
-    const { state, handlers, setState } = useChangeHandlers<ContentListState>({
+export function NewsList(_props: NewsListProps): ReactElement {
+    const { state, handlers, setState } = useChangeHandlers<NewsListState>({
         company: undefined,
-        content: undefined,
         searchTerm: '',
-        selectedContentType: ContentType.News,
+        selectedNews: undefined,
     });
     const resolveCompany = useCompanyResolver();
     const bus = useMessageListener(
@@ -218,10 +191,10 @@ export function ContentList(_props: ContentListProps): ReactElement {
         },
         'in'
     );
-    const contentListQuery = useQuery<ContentListQuery, ContentListQueryVariables>({
+    const newsListQuery = useQuery<NewsListQuery, NewsListQueryVariables>({
         isEmpty: ({ search }) => search.content.numTotalHits === 0,
         query: gql`
-            query ContentList($filter: ContentSearchFilter!) {
+            query NewsList($filter: ContentSearchFilter!) {
                 search {
                     content(filter: $filter) {
                         id
@@ -265,7 +238,7 @@ export function ContentList(_props: ContentListProps): ReactElement {
         variables: {
             filter: {
                 companyIds: state.company ? [state.company.id] : undefined,
-                contentTypes: [state.selectedContentType],
+                contentTypes: [ContentType.News],
                 searchTerm: state.searchTerm,
             },
         },
@@ -280,40 +253,38 @@ export function ContentList(_props: ContentListProps): ReactElement {
         [state]
     );
 
-    const onSelectContent = useCallback<ChangeHandler<ContentListContent>>(
+    const onSelectNews = useCallback<ChangeHandler<NewsListNews>>(
         (event, change) => {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
-            handlers.content(event, change);
-            // If we are going back to the content list, refresh immediately
+            handlers.selectedNews(event, change);
+            // If we are going back to the news list, refresh immediately
             if (!change.value) {
-                contentListQuery.refetch();
+                newsListQuery.refetch();
             }
         },
         [state]
     );
 
-    useAutoTrack('Submit', 'Content Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
+    useAutoTrack('Submit', 'News Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
     useInterval(
-        useCallback(() => contentListQuery.refetch({ requestPolicy: 'cache-and-network' }), [contentListQuery.refetch]),
+        useCallback(() => newsListQuery.refetch({ requestPolicy: 'cache-and-network' }), [newsListQuery.refetch]),
         15000
     );
 
     return (
-        <ContentListUI
+        <NewsListUI
             company={state.company}
-            content={state.content}
-            contentListQuery={contentListQuery}
-            onBackFromContent={useCallback(
-                (event: SyntheticEvent<Element, Event>) => onSelectContent(event, { value: null }),
-                [onSelectContent]
+            newsListQuery={newsListQuery}
+            onBackFromNews={useCallback(
+                (event: SyntheticEvent<Element, Event>) => onSelectNews(event, { value: null }),
+                [onSelectNews]
             )}
             onSelectCompany={onSelectCompany}
-            onSelectContent={onSelectContent}
-            onSelectContentType={handlers.selectedContentType}
+            onSelectNews={onSelectNews}
             onChangeSearch={handlers.searchTerm}
             searchTerm={state.searchTerm}
-            selectedContentType={state.selectedContentType}
+            selectedNews={state.selectedNews}
         />
     );
 }

@@ -122,8 +122,6 @@ export function useAppConfig(): QueryResult<AppConfigQuery, AppConfigQueryVariab
 
 type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit';
 type TrackingObject =
-    | 'Content'
-    | 'Content Search'
     | 'Event'
     | 'Event Filter By'
     | 'Event Search'
@@ -134,7 +132,9 @@ type TrackingObject =
     | 'Audio Playback Rate'
     | 'Audio Start'
     | 'Audio Over'
-    | 'Audio Stop';
+    | 'Audio Stop'
+    | 'News'
+    | 'News Search';
 
 /**
  * Returns a function that can be used tp track specific events with the app.

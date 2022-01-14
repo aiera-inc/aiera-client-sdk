@@ -16,39 +16,27 @@ import { CONTENT_SOURCE_LABELS, getPrimaryQuote } from '@aiera/client-sdk/lib/da
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { ContentQuery, ContentQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
+import { NewsQuery, NewsQueryVariables } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
-export type ContentItem = ContentQuery['content'][0];
-
-interface ContentBody {
+interface Body {
     highlight: boolean;
     id: string;
     text: string;
 }
 
-interface ContentSharedProps {
-    contentType: ContentType;
+interface NewsSharedProps {
     onBack?: MouseEventHandler;
 }
 
-const CONTENT_TYPE_MAP = {
-    [ContentType.Document]: 'Document',
-    [ContentType.Filing]: 'Filing',
-    [ContentType.News]: 'News',
-    [ContentType.Spotlight]: 'Corp. Activity',
-    [ContentType.Streetaccount]: 'Street Account',
-};
-
 /** @notExported */
-interface ContentUIProps extends ContentSharedProps {
-    body?: ContentBody[][] | null;
-    contentQuery: QueryResult<ContentQuery, ContentQueryVariables>;
-    contentTypeLabel: string;
+interface NewsUIProps extends NewsSharedProps {
+    body?: Body[][] | null;
+    newsQuery: QueryResult<NewsQuery, NewsQueryVariables>;
     currentMatch?: string | null;
     currentMatchRef: Ref<HTMLDivElement>;
     matchIndex: number;
-    matches: ContentBody[];
+    matches: Body[];
     nextMatch: () => void;
     onChangeSearch: ChangeHandler<string>;
     prevMatch: () => void;
@@ -56,12 +44,10 @@ interface ContentUIProps extends ContentSharedProps {
     searchTerm: string;
 }
 
-export function ContentUI(props: ContentUIProps): ReactElement {
+export function NewsUI(props: NewsUIProps): ReactElement {
     const {
         body,
-        contentQuery,
-        contentType,
-        contentTypeLabel,
+        newsQuery,
         currentMatch,
         currentMatchRef,
         matches,
@@ -75,24 +61,20 @@ export function ContentUI(props: ContentUIProps): ReactElement {
     } = props;
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
-        <div className="h-full flex flex-col content">
-            <div className="flex flex-col pl-3 pr-3 pt-3 shadow-3xl content__header">
+        <div className="h-full flex flex-col news">
+            <div className="flex flex-col pl-3 pr-3 pt-3 shadow-3xl news__header">
                 <div className="flex items-center mb-3">
                     <Button className="mr-2" onClick={onBack}>
                         <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-                        {contentTypeLabel}
+                        News
                     </Button>
-                    {match(contentType)
-                        .with(ContentType.News, () => (
-                            <Input
-                                icon={<MagnifyingGlass />}
-                                name="search"
-                                placeholder="Search Article..."
-                                value={searchTerm}
-                                onChange={onChangeSearch}
-                            />
-                        ))
-                        .otherwise(() => null)}
+                    <Input
+                        icon={<MagnifyingGlass />}
+                        name="search"
+                        placeholder="Search Article..."
+                        value={searchTerm}
+                        onChange={onChangeSearch}
+                    />
                 </div>
             </div>
             {searchTerm && (
@@ -125,7 +107,7 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                     </button>
                 </div>
             )}
-            {match(contentQuery)
+            {match(newsQuery)
                 .with({ status: 'loading' }, () =>
                     new Array(5).fill(0).map((_, idx) => (
                         <div key={idx} className="animate-pulse p-2">
@@ -137,14 +119,14 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                         </div>
                     ))
                 )
-                .with({ status: 'paused' }, () => wrapMsg("Content not found. We're sorry for any inconvenience."))
-                .with({ status: 'error' }, () => wrapMsg('There was an error loading content.'))
-                .with({ status: 'empty' }, () => wrapMsg("Content not found. We're sorry for any inconvenience."))
+                .with({ status: 'paused' }, () => wrapMsg("News not found. We're sorry for any inconvenience."))
+                .with({ status: 'error' }, () => wrapMsg('There was an error loading news.'))
+                .with({ status: 'empty' }, () => wrapMsg("News not found. We're sorry for any inconvenience."))
                 .with({ status: 'success' }, ({ data: { content: contentData } }) => {
-                    const content = contentData[0];
-                    const primaryQuote = getPrimaryQuote(content?.primaryCompany);
-                    const date = content?.publishedDate ? DateTime.fromISO(content.publishedDate) : DateTime.now();
-                    return content ? (
+                    const news = contentData[0];
+                    const primaryQuote = getPrimaryQuote(news?.primaryCompany);
+                    const date = news?.publishedDate ? DateTime.fromISO(news.publishedDate) : DateTime.now();
+                    return news ? (
                         <>
                             {!!primaryQuote && (
                                 <div className="flex items-center pl-5 pr-5 pt-5 text-sm">
@@ -153,33 +135,33 @@ export function ContentUI(props: ContentUIProps): ReactElement {
                                 </div>
                             )}
                             <div className="leading-4 pl-5 pr-5 pt-3">
-                                <span className="font-bold text-base">{content.title}</span>
+                                <span className="font-bold text-base">{news.title}</span>
                             </div>
                             <div className="flex items-center pl-5 pr-5 pt-2 text-sm">
-                                <span className="text-indigo-300">{CONTENT_SOURCE_LABELS[content.source]}</span>
+                                <span className="text-indigo-300">{CONTENT_SOURCE_LABELS[news.source]}</span>
                                 <span className="pl-1 pr-1 text-gray-400">•</span>
                                 {date && <span className="text-gray-400">{date.toFormat('MMM dd, yyyy')}</span>}
                             </div>
                             {body && (
                                 <div
-                                    className="overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm content__body"
+                                    className="overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm news__body"
                                     ref={scrollContainerRef}
                                 >
                                     {body.map((paragraph, pIdx) => (
-                                        <p className="leading-5 mb-4" key={`content-body-paragraph-${pIdx}`}>
+                                        <p className="leading-5 mb-4" key={`news-body-paragraph-${pIdx}`}>
                                             {paragraph.map(({ highlight, id: chunkId, text }) =>
                                                 highlight ? (
                                                     <mark
                                                         className={classNames({
                                                             'bg-yellow-300': chunkId === currentMatch,
                                                         })}
-                                                        key={`content-body-chunk-${chunkId}-match`}
+                                                        key={`news-body-chunk-${chunkId}-match`}
                                                         ref={chunkId === currentMatch ? currentMatchRef : undefined}
                                                     >
                                                         {text}
                                                     </mark>
                                                 ) : (
-                                                    <span key={`content-body-chunk-${chunkId}`}>{text}</span>
+                                                    <span key={`news-body-chunk-${chunkId}`}>{text}</span>
                                                 )
                                             )}
                                         </p>
@@ -194,12 +176,12 @@ export function ContentUI(props: ContentUIProps): ReactElement {
     );
 }
 
-interface ContentState {
+interface NewsState {
     searchTerm: string;
 }
 
-function useSearchState(contentQuery: QueryResult<ContentQuery, ContentQueryVariables>) {
-    const { state, handlers } = useChangeHandlers<ContentState>({
+function useSearchState(newsQuery: QueryResult<NewsQuery, NewsQueryVariables>) {
+    const { state, handlers } = useChangeHandlers<NewsState>({
         searchTerm: '',
     });
     // Track the current match id and use it to set the proper currentMatchRef for auto-scrolling
@@ -215,15 +197,15 @@ function useSearchState(contentQuery: QueryResult<ContentQuery, ContentQueryVari
      * split the body into chunks with and without highlights,
      * depending on the search matches
      */
-    const body = contentQuery.state.data?.content[0]?.body;
-    const bodyWithMatches: ContentBody[][] | null = useMemo(() => {
+    const body = newsQuery.state.data?.content[0]?.body;
+    const bodyWithMatches: Body[][] | null = useMemo(() => {
         if (body) {
             // This may not be performant enough for content with large bodies (e.g. filings)
             // See https://github.com/aiera-inc/aiera-desktop/blob/master/src/floatingTabs/Filing/FilingSidebar/container.js#L90
             // for a possible alternate solution
             const nodes: NodeListOf<ChildNode> = new DOMParser().parseFromString(body, 'text/html').body.childNodes;
-            // Each ContentBody array inside this 2D array represents a paragraph
-            const chunks: ContentBody[][] = [];
+            // Each Body array inside this 2D array represents a paragraph
+            const chunks: Body[][] = [];
             // Map and filter methods are not available for NodeListOf
             nodes.forEach((node, nodeIndex) => {
                 if (node.textContent?.length) {
@@ -237,7 +219,7 @@ function useSearchState(contentQuery: QueryResult<ContentQuery, ContentQueryVari
                                 textToHighlight: text,
                             }).map(({ highlight, start, end }, index) => ({
                                 highlight,
-                                id: `content-body-chunk-${nodeIndex}-${index}`,
+                                id: `news-body-chunk-${nodeIndex}-${index}`,
                                 text: text.substr(start, end - start),
                             }))
                         );
@@ -245,7 +227,7 @@ function useSearchState(contentQuery: QueryResult<ContentQuery, ContentQueryVari
                         chunks.push([
                             {
                                 highlight: false,
-                                id: `content-body-chunk-${nodeIndex}`,
+                                id: `news-body-chunk-${nodeIndex}`,
                                 text,
                             },
                         ]);
@@ -298,19 +280,19 @@ function useSearchState(contentQuery: QueryResult<ContentQuery, ContentQueryVari
 }
 
 /** @notExported */
-export interface ContentProps extends ContentSharedProps {
-    contentId: string;
+export interface NewsProps extends NewsSharedProps {
+    newsId: string;
 }
 
 /**
- * Renders Content
+ * Renders News
  */
-export function Content(props: ContentProps): ReactElement {
-    const { contentId, contentType, onBack } = props;
-    const contentQuery = useQuery<ContentQuery, ContentQueryVariables>({
+export function News(props: NewsProps): ReactElement {
+    const { newsId, onBack } = props;
+    const newsQuery = useQuery<NewsQuery, NewsQueryVariables>({
         isEmpty: ({ content }) => (content || []).length === 0,
         query: gql`
-            query Content($filter: ContentFilter!) {
+            query News($filter: ContentFilter!) {
                 content(filter: $filter) {
                     id
                     body
@@ -344,21 +326,18 @@ export function Content(props: ContentProps): ReactElement {
         `,
         requestPolicy: 'cache-first',
         variables: {
-            filter: { contentIds: [contentId] },
+            filter: { contentIds: [newsId] },
         },
     });
-    const searchState = useSearchState(contentQuery);
-    const contentTypeLabel = useMemo(() => CONTENT_TYPE_MAP[contentType] || contentType, [contentType]);
+    const searchState = useSearchState(newsQuery);
     return (
-        <ContentUI
+        <NewsUI
             body={searchState.bodyWithMatches}
-            contentQuery={contentQuery}
-            contentType={contentType}
-            contentTypeLabel={contentTypeLabel}
             currentMatch={searchState.currentMatch}
             currentMatchRef={searchState.currentMatchRef}
             matches={searchState.matches}
             matchIndex={searchState.matchIndex}
+            newsQuery={newsQuery}
             nextMatch={searchState.nextMatch}
             onBack={onBack}
             onChangeSearch={searchState.onChangeSearchTerm}

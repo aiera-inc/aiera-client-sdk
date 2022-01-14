@@ -5,7 +5,7 @@ import { fromValue } from 'wonka';
 import { CONTENT_SOURCE_LABELS } from '@aiera/client-sdk/lib/data';
 import { actAndFlush, getByTextWithMarkup, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ContentSource, ContentType } from '@aiera/client-sdk/types/generated';
-import { Content } from '.';
+import { News } from '.';
 
 const content = [
     {
@@ -46,7 +46,7 @@ const contentWithBodyMarkup = [
     },
 ];
 
-describe('Content', () => {
+describe('News', () => {
     beforeEach(() => {
         jest.useFakeTimers();
     });
@@ -56,9 +56,9 @@ describe('Content', () => {
         jest.useRealTimers();
     });
 
-    test('renders Content', async () => {
+    test('renders News', async () => {
         await actAndFlush(() =>
-            renderWithProvider(<Content contentId="1" contentType={ContentType.News} onBack={jest.fn()} />, {
+            renderWithProvider(<News newsId="1" onBack={jest.fn()} />, {
                 executeQuery: () =>
                     fromValue({
                         data: { content },
@@ -74,7 +74,7 @@ describe('Content', () => {
 
     test('renders search matches', async () => {
         const { rendered } = await actAndFlush(() =>
-            renderWithProvider(<Content contentId="1" contentType={ContentType.News} onBack={jest.fn()} />, {
+            renderWithProvider(<News newsId="1" onBack={jest.fn()} />, {
                 executeQuery: () =>
                     fromValue({
                         data: { content },
@@ -98,7 +98,7 @@ describe('Content', () => {
 
     test('renders body with markup and search highlights', async () => {
         const { rendered } = await actAndFlush(() =>
-            renderWithProvider(<Content contentId="2" contentType={ContentType.News} onBack={jest.fn()} />, {
+            renderWithProvider(<News newsId="2" onBack={jest.fn()} />, {
                 executeQuery: () =>
                     fromValue({
                         data: { content: contentWithBodyMarkup },
@@ -114,17 +114,5 @@ describe('Content', () => {
         // Matches inside html tags should be ignored
         fireEvent.change(searchInput, { target: { value: 'span' } });
         expect(rendered.container.querySelector('.bg-yellow-300')).toBeNull();
-    });
-
-    test('renders Content without search', async () => {
-        const { rendered } = await actAndFlush(() =>
-            renderWithProvider(<Content contentId="1" contentType={ContentType.Spotlight} onBack={jest.fn()} />, {
-                executeQuery: () =>
-                    fromValue({
-                        data: { content },
-                    }),
-            })
-        );
-        expect(rendered.container.querySelector('.input__search')).toBeNull();
     });
 });

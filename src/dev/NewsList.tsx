@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom';
 import { Provider } from '@aiera/client-sdk/components/Provider';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
-import { ContentList } from '@aiera/client-sdk/modules/ContentList';
+import { NewsList } from '@aiera/client-sdk/modules/NewsList';
 import '@aiera/client-sdk/css/styles.css';
 
 const App: FC = (): ReactElement => {
@@ -21,7 +21,7 @@ const App: FC = (): ReactElement => {
                 bus={bus}
                 config={{
                     assetPath: 'bundle/',
-                    moduleName: 'ContentList',
+                    moduleName: 'NewsList',
                     platform: 'aiera-sdk-dev',
                     gqlOptions: {
                         clientOptions: {
@@ -32,7 +32,7 @@ const App: FC = (): ReactElement => {
             >
                 <Auth showLogout>
                     <div className="h-full border border-black">
-                        <ContentList />
+                        <NewsList />
                     </div>
                 </Auth>
             </Provider>
