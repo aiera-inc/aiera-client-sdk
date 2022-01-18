@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement22 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement21 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement22(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement21(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement22(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement21(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement22(element.type, key, ref, self2, source, owner, props);
+          return ReactElement21(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -657,8 +657,8 @@ var require_react_development = __commonJS({
             "=": "=0",
             ":": "=2"
           };
-          var escapedString = key.replace(escapeRegex, function(match8) {
-            return escaperLookup[match8];
+          var escapedString = key.replace(escapeRegex, function(match7) {
+            return escaperLookup[match7];
           });
           return "$" + escapedString;
         }
@@ -1080,7 +1080,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context6, unstable_observedBits);
         }
-        function useState11(initialState) {
+        function useState10(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1204,8 +1204,8 @@ var require_react_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match8 && match8[1] || "";
+                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match7 && match7[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -1668,7 +1668,7 @@ var require_react_development = __commonJS({
         exports2.useMemo = useMemo5;
         exports2.useReducer = useReducer;
         exports2.useRef = useRef7;
-        exports2.useState = useState11;
+        exports2.useState = useState10;
         exports2.version = ReactVersion;
       })();
     }
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React22 = require_react();
+        var React21 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React22.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React21.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React22) {
+        if (!React21) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3126,8 +3126,8 @@ var require_react_dom_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match8 && match8[1] || "";
+                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match7 && match7[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React22.Children.forEach(children, function(child) {
+          React21.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React22.Children.forEach(props.children, function(child) {
+              React21.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React22.Component().refs;
+        var emptyRefsObject = new React21.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -25938,8 +25938,8 @@ var require_lib = __commonJS({
     Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
       return wildcards_1.__;
     } });
-    var match8 = (value) => builder(value, []);
-    exports2.match = match8;
+    var match7 = (value) => builder(value, []);
+    exports2.match = match7;
     var builder = (value, cases) => {
       const run = () => {
         const entry = cases.find(({ test }) => test(value));
@@ -26089,7 +26089,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames12() {
+      function classNames11() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26100,7 +26100,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames12.apply(null, arg);
+              var inner = classNames11.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26120,14 +26120,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames12.default = classNames12;
-        module2.exports = classNames12;
+        classNames11.default = classNames11;
+        module2.exports = classNames11;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames12;
+          return classNames11;
         });
       } else {
-        window.classNames = classNames12;
+        window.classNames = classNames11;
       }
     })();
   }
@@ -28048,11 +28048,11 @@ var require_luxon = __commonJS({
       for (var _len4 = arguments.length, keys = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         keys[_key4] = arguments[_key4];
       }
-      return function(match9, cursor) {
+      return function(match8, cursor) {
         var ret = {};
         var i3;
         for (i3 = 0; i3 < keys.length; i3++) {
-          ret[keys[i3]] = parseInteger(match9[cursor + i3]);
+          ret[keys[i3]] = parseInteger(match8[cursor + i3]);
         }
         return [ret, null, cursor + i3];
       };
@@ -28069,39 +28069,39 @@ var require_luxon = __commonJS({
     var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
     var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
     var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
-    function int(match9, pos, fallback) {
-      var m2 = match9[pos];
+    function int(match8, pos, fallback) {
+      var m2 = match8[pos];
       return isUndefined(m2) ? fallback : parseInteger(m2);
     }
-    function extractISOYmd(match9, cursor) {
+    function extractISOYmd(match8, cursor) {
       var item = {
-        year: int(match9, cursor),
-        month: int(match9, cursor + 1, 1),
-        day: int(match9, cursor + 2, 1)
+        year: int(match8, cursor),
+        month: int(match8, cursor + 1, 1),
+        day: int(match8, cursor + 2, 1)
       };
       return [item, null, cursor + 3];
     }
-    function extractISOTime(match9, cursor) {
+    function extractISOTime(match8, cursor) {
       var item = {
-        hours: int(match9, cursor, 0),
-        minutes: int(match9, cursor + 1, 0),
-        seconds: int(match9, cursor + 2, 0),
-        milliseconds: parseMillis(match9[cursor + 3])
+        hours: int(match8, cursor, 0),
+        minutes: int(match8, cursor + 1, 0),
+        seconds: int(match8, cursor + 2, 0),
+        milliseconds: parseMillis(match8[cursor + 3])
       };
       return [item, null, cursor + 4];
     }
-    function extractISOOffset(match9, cursor) {
-      var local2 = !match9[cursor] && !match9[cursor + 1], fullOffset = signedOffset(match9[cursor + 1], match9[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
+    function extractISOOffset(match8, cursor) {
+      var local2 = !match8[cursor] && !match8[cursor + 1], fullOffset = signedOffset(match8[cursor + 1], match8[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
       return [{}, zone, cursor + 3];
     }
-    function extractIANAZone(match9, cursor) {
-      var zone = match9[cursor] ? IANAZone.create(match9[cursor]) : null;
+    function extractIANAZone(match8, cursor) {
+      var zone = match8[cursor] ? IANAZone.create(match8[cursor]) : null;
       return [{}, zone, cursor + 1];
     }
     var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$");
     var isoDuration = /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
-    function extractISODuration(match9) {
-      var s3 = match9[0], yearStr = match9[1], monthStr = match9[2], weekStr = match9[3], dayStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], millisecondsStr = match9[8];
+    function extractISODuration(match8) {
+      var s3 = match8[0], yearStr = match8[1], monthStr = match8[2], weekStr = match8[3], dayStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], millisecondsStr = match8[8];
       var hasNegativePrefix = s3[0] === "-";
       var negativeSeconds = secondStr && secondStr[0] === "-";
       var maybeNegate = function maybeNegate2(num, force) {
@@ -28148,8 +28148,8 @@ var require_luxon = __commonJS({
       return result;
     }
     var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
-    function extractRFC2822(match9) {
-      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], obsOffset = match9[8], milOffset = match9[9], offHourStr = match9[10], offMinuteStr = match9[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC2822(match8) {
+      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], obsOffset = match8[8], milOffset = match8[9], offHourStr = match8[10], offMinuteStr = match8[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       var offset2;
       if (obsOffset) {
         offset2 = obsOffsets[obsOffset];
@@ -28166,12 +28166,12 @@ var require_luxon = __commonJS({
     var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/;
     var rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/;
     var ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
-    function extractRFC1123Or850(match9) {
-      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC1123Or850(match8) {
+      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
-    function extractASCII(match9) {
-      var weekdayStr = match9[1], monthStr = match9[2], dayStr = match9[3], hourStr = match9[4], minuteStr = match9[5], secondStr = match9[6], yearStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractASCII(match8) {
+      var weekdayStr = match8[1], monthStr = match8[2], dayStr = match8[3], hourStr = match8[4], minuteStr = match8[5], secondStr = match8[6], yearStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
     var isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
@@ -29510,7 +29510,7 @@ var require_luxon = __commonJS({
       }, "");
       return ["^" + re + "$", units];
     }
-    function match8(input, regex, handlers) {
+    function match7(input, regex, handlers) {
       var matches = input.match(regex);
       if (matches) {
         var all = {};
@@ -29640,7 +29640,7 @@ var require_luxon = __commonJS({
           invalidReason: disqualifyingUnit.invalidReason
         };
       } else {
-        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match8(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
+        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match7(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
         if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
           throw new ConflictingSpecificationError("Can't include meridiem when specifying 24-hour format");
         }
@@ -31060,14 +31060,14 @@ var require_dist = __commonJS({
               searchWord = escapeRegExpFn(searchWord);
             }
             var regex = new RegExp(searchWord, caseSensitive ? "g" : "gi");
-            var match8 = void 0;
-            while (match8 = regex.exec(textToHighlight)) {
-              var _start = match8.index;
+            var match7 = void 0;
+            while (match7 = regex.exec(textToHighlight)) {
+              var _start = match7.index;
               var _end = regex.lastIndex;
               if (_end > _start) {
                 chunks.push({ highlight: false, start: _start, end: _end });
               }
-              if (match8.index === regex.lastIndex) {
+              if (match7.index === regex.lastIndex) {
                 regex.lastIndex++;
               }
             }
@@ -31111,8 +31111,8 @@ var require_dist = __commonJS({
   }
 });
 
-// src/dev/ContentList.tsx
-var import_react29 = __toModule(require_react());
+// src/dev/NewsList.tsx
+var import_react28 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -31856,10 +31856,10 @@ function getLocation(source, position) {
   var lineRegexp = /\r\n|[\n\r]/g;
   var line = 1;
   var column = position + 1;
-  var match8;
-  while ((match8 = lineRegexp.exec(source.body)) && match8.index < position) {
+  var match7;
+  while ((match7 = lineRegexp.exec(source.body)) && match7.index < position) {
     line += 1;
-    column = position + 1 - (match8.index + match8[0].length);
+    column = position + 1 - (match7.index + match7[0].length);
   }
   return {
     line,
@@ -37746,80 +37746,6 @@ var LoginDocument = lib_default`
   }
 }
     `;
-var ContentDocument = lib_default`
-    query Content($filter: ContentFilter!) {
-  content(filter: $filter) {
-    id
-    body
-    contentType
-    primaryCompany {
-      id
-      commonName
-      instruments {
-        id
-        isPrimary
-        quotes {
-          id
-          isPrimary
-          localTicker
-          exchange {
-            id
-            shortName
-            country {
-              id
-              countryCode
-            }
-          }
-        }
-      }
-    }
-    publishedDate
-    source
-    title
-  }
-}
-    `;
-var ContentListDocument = lib_default`
-    query ContentList($filter: ContentSearchFilter!) {
-  search {
-    content(filter: $filter) {
-      id
-      numTotalHits
-      hits {
-        id
-        content {
-          id
-          contentType
-          primaryCompany {
-            id
-            commonName
-            instruments {
-              id
-              isPrimary
-              quotes {
-                id
-                isPrimary
-                localTicker
-                exchange {
-                  id
-                  shortName
-                  country {
-                    id
-                    countryCode
-                  }
-                }
-              }
-            }
-          }
-          publishedDate
-          source
-          title
-        }
-      }
-    }
-  }
-}
-    `;
 var EventListDocument = lib_default`
     query EventList($filter: EventSearchFilter!, $view: EventView) {
   search {
@@ -37858,6 +37784,80 @@ var EventListDocument = lib_default`
               }
             }
           }
+        }
+      }
+    }
+  }
+}
+    `;
+var NewsDocument = lib_default`
+    query News($filter: ContentFilter!) {
+  content(filter: $filter) {
+    id
+    body
+    contentType
+    primaryCompany {
+      id
+      commonName
+      instruments {
+        id
+        isPrimary
+        quotes {
+          id
+          isPrimary
+          localTicker
+          exchange {
+            id
+            shortName
+            country {
+              id
+              countryCode
+            }
+          }
+        }
+      }
+    }
+    publishedDate
+    source
+    title
+  }
+}
+    `;
+var NewsListDocument = lib_default`
+    query NewsList($filter: ContentSearchFilter!) {
+  search {
+    content(filter: $filter) {
+      id
+      numTotalHits
+      hits {
+        id
+        content {
+          id
+          contentType
+          primaryCompany {
+            id
+            commonName
+            instruments {
+              id
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
+            }
+          }
+          publishedDate
+          source
+          title
         }
       }
     }
@@ -38541,10 +38541,10 @@ var Auth = ({
   }, children);
 };
 
-// src/modules/ContentList/index.tsx
-var import_react28 = __toModule(require_react());
+// src/modules/NewsList/index.tsx
+var import_react27 = __toModule(require_react());
 var import_luxon2 = __toModule(require_luxon());
-var import_ts_pattern7 = __toModule(require_lib());
+var import_ts_pattern6 = __toModule(require_lib());
 
 // src/components/CompanyFilterButton/index.tsx
 var import_react21 = __toModule(require_react());
@@ -39040,73 +39040,21 @@ function CompanyFilterButton(props) {
   });
 }
 
-// src/components/Tabs/index.tsx
-var import_react22 = __toModule(require_react());
-var import_classnames8 = __toModule(require_classnames());
-var import_ts_pattern5 = __toModule(require_lib());
-var TabsUI = (props) => {
-  const { onChange, options = [], value, kind = "button", className = "", setFocus } = props;
-  const getClasses = (val) => (0, import_ts_pattern5.match)(kind).with("button", () => (0, import_classnames8.default)("py-2", "px-3", "text-sm", "cursor-pointer", "rounded-lg", {
-    "bg-gray-100": val === value,
-    "font-semibold": val === value,
-    tab__option: true,
-    "tab__option--selected": val === value
-  })).with("line", () => (0, import_classnames8.default)("relative", "text-sm", "h-6", "flex", "mr-3", "pb-0.5", "overflow-hidden", {
-    "cursor-pointer": val !== value,
-    "text-gray-400 dark:text-bluegray-4 dark:opacity-60": val !== value,
-    "text-black dark:text-white": val === value,
-    "font-semibold": val === value,
-    "hover:text-gray-500 dark:hover:text-bluegray-4 dark:hover:opacity-80": val !== value,
-    "active:text-gray-800 dark:active:text-bluegray-4 dark:active:opacity-100": val !== value,
-    tab__option: true,
-    "tab__option--selected": val === value
-  })).exhaustive();
-  return /* @__PURE__ */ import_react22.default.createElement("div", {
-    className: `flex tab relative ${className}`
-  }, options.map(({ value: opVal, label }, index) => /* @__PURE__ */ import_react22.default.createElement("div", {
-    tabIndex: 0,
-    key: `tab-option-${opVal}`,
-    className: getClasses(opVal),
-    onClick: (event) => onChange && onChange(event, { value: opVal }),
-    onFocus: () => setFocus == null ? void 0 : setFocus(index),
-    onBlur: () => setFocus == null ? void 0 : setFocus(-1)
-  }, label, kind === "line" && /* @__PURE__ */ import_react22.default.createElement("div", {
-    className: (0, import_classnames8.default)("h-0.5", "bg-blue-600", "absolute", "left-0", "right-0", "duration-200", "ease-in-out", "rounded-t-sm", {
-      "bottom-0": opVal === value,
-      "-bottom-0.5": opVal !== value
-    })
-  }))));
-};
-var Tabs = (props) => {
-  const { onChange, options = [], value, kind, className } = props;
-  const [focusIndex, setFocus] = (0, import_react22.useState)(-1);
-  if (onChange && options.length) {
-    useWindowListener("keydown", (event) => {
-      var _a;
-      const selectedOption = options[focusIndex];
-      if (event.key === "Enter" && focusIndex >= 0 && selectedOption && (selectedOption == null ? void 0 : selectedOption.value)) {
-        onChange(event, { value: (_a = options[focusIndex]) == null ? void 0 : _a.value });
-      }
-    });
-  }
-  return /* @__PURE__ */ import_react22.default.createElement(TabsUI, {
-    className,
-    setFocus,
-    onChange,
-    options,
-    value,
-    kind
-  });
-};
+// src/lib/datetimes/index.ts
+function areDatesSameDay(date, otherDate) {
+  const date1 = typeof date === "string" ? new Date(date) : date;
+  const date2 = typeof otherDate === "string" ? new Date(otherDate) : otherDate;
+  return date1.getDate() === date2.getDate() && date1.getMonth() === date2.getMonth() && date1.getFullYear() === date2.getFullYear();
+}
 
 // src/lib/hooks/useInterval/index.ts
-var import_react23 = __toModule(require_react());
+var import_react22 = __toModule(require_react());
 function useInterval(callback, interval) {
-  const savedCallback = (0, import_react23.useRef)(callback);
-  (0, import_react23.useEffect)(() => {
+  const savedCallback = (0, import_react22.useRef)(callback);
+  (0, import_react22.useEffect)(() => {
     savedCallback.current = callback;
   }, [callback]);
-  (0, import_react23.useEffect)(() => {
+  (0, import_react22.useEffect)(() => {
     if (interval === null) {
       return;
     }
@@ -39115,23 +39063,23 @@ function useInterval(callback, interval) {
   }, [interval]);
 }
 
-// src/modules/Content/index.tsx
-var import_react27 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
+// src/modules/News/index.tsx
+var import_react26 = __toModule(require_react());
+var import_classnames10 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon = __toModule(require_luxon());
-var import_ts_pattern6 = __toModule(require_lib());
+var import_ts_pattern5 = __toModule(require_lib());
 
 // src/components/Svg/ArrowLeft.tsx
-var import_react24 = __toModule(require_react());
-var import_classnames9 = __toModule(require_classnames());
+var import_react23 = __toModule(require_react());
+var import_classnames8 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
-  return /* @__PURE__ */ import_react24.default.createElement("svg", {
-    className: (0, import_classnames9.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+  return /* @__PURE__ */ import_react23.default.createElement("svg", {
+    className: (0, import_classnames8.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react24.default.createElement("title", null, alt), /* @__PURE__ */ import_react24.default.createElement("path", {
+  }, /* @__PURE__ */ import_react23.default.createElement("title", null, alt), /* @__PURE__ */ import_react23.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M5.70679 9.69471C5.51926 9.88218 5.26495 9.9875 4.99979 9.9875C4.73462 9.9875 4.48031 9.88218 4.29279 9.69471L0.292787 5.69471C0.105316 5.50718 0 5.25288 0 4.98771C0 4.72255 0.105316 4.46824 0.292787 4.28071L4.29279 0.280712C4.48139 0.0985542 4.73399 -0.00224062 4.99619 3.78025e-05C5.25838 0.00231622 5.5092 0.107485 5.6946 0.292894C5.88001 0.478302 5.98518 0.729114 5.98746 0.991311C5.98974 1.25351 5.88894 1.50611 5.70679 1.69471L3.41379 3.98771H10.9998C11.265 3.98771 11.5194 4.09307 11.7069 4.28061C11.8944 4.46814 11.9998 4.7225 11.9998 4.98771C11.9998 5.25293 11.8944 5.50728 11.7069 5.69482C11.5194 5.88235 11.265 5.98771 10.9998 5.98771H3.41379L5.70679 8.28071C5.89426 8.46824 5.99957 8.72255 5.99957 8.98771C5.99957 9.25288 5.89426 9.50718 5.70679 9.69471V9.69471Z"
@@ -39139,15 +39087,15 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 }
 
 // src/components/Svg/Chevron.tsx
-var import_react25 = __toModule(require_react());
-var import_classnames10 = __toModule(require_classnames());
+var import_react24 = __toModule(require_react());
+var import_classnames9 = __toModule(require_classnames());
 function Chevron({ className, alt = "Chevron" }) {
-  return /* @__PURE__ */ import_react25.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__chevron"),
+  return /* @__PURE__ */ import_react24.default.createElement("svg", {
+    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__chevron"),
     width: "100%",
     viewBox: "0 0 8 5",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react25.default.createElement("title", null, alt), /* @__PURE__ */ import_react25.default.createElement("path", {
+  }, /* @__PURE__ */ import_react24.default.createElement("title", null, alt), /* @__PURE__ */ import_react24.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L4 2.58579L6.29289 0.292893C6.68342 -0.0976311 7.31658 -0.0976311 7.70711 0.292893C8.09763 0.683417 8.09763 1.31658 7.70711 1.70711L4.70711 4.70711C4.31658 5.09763 3.68342 5.09763 3.29289 4.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z"
@@ -39155,7 +39103,7 @@ function Chevron({ className, alt = "Chevron" }) {
 }
 
 // src/lib/hooks/useAutoScroll/index.ts
-var import_react26 = __toModule(require_react());
+var import_react25 = __toModule(require_react());
 function isVisible(container, target) {
   const targetPosition = target.getBoundingClientRect();
   const containerPosition = container.getBoundingClientRect();
@@ -39194,12 +39142,12 @@ function useAutoScroll(opts) {
     block: block2,
     inline
   } = opts || {};
-  const [scrollContainer, scrollContainerRef] = (0, import_react26.useState)(null);
-  const [target, targetRef] = (0, import_react26.useState)(null);
-  const isAutoScrolling = (0, import_react26.useRef)(null);
-  const pauseAutoScroll = (0, import_react26.useRef)(false);
-  const initialScroll = (0, import_react26.useRef)(true);
-  (0, import_react26.useLayoutEffect)(() => {
+  const [scrollContainer, scrollContainerRef] = (0, import_react25.useState)(null);
+  const [target, targetRef] = (0, import_react25.useState)(null);
+  const isAutoScrolling = (0, import_react25.useRef)(null);
+  const pauseAutoScroll = (0, import_react25.useRef)(false);
+  const initialScroll = (0, import_react25.useRef)(true);
+  (0, import_react25.useLayoutEffect)(() => {
     function onScroll() {
       maybePauseAutoScroll();
     }
@@ -39231,7 +39179,7 @@ function useAutoScroll(opts) {
     }
     return () => scrollContainer == null ? void 0 : scrollContainer.removeEventListener("scroll", onScroll);
   }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, block2, inline]);
-  const scroll = (0, import_react26.useCallback)((opts2) => {
+  const scroll = (0, import_react25.useCallback)((opts2) => {
     const { top, onlyIfNeeded = false } = opts2 || {};
     if (top === void 0) {
       if (!onlyIfNeeded || scrollContainer && target && !isVisible(scrollContainer, target)) {
@@ -39248,20 +39196,11 @@ function useAutoScroll(opts) {
   return { scrollContainerRef, targetRef, scroll, isAutoScrolling };
 }
 
-// src/modules/Content/index.tsx
-var CONTENT_TYPE_MAP = {
-  [ContentType.Document]: "Document",
-  [ContentType.Filing]: "Filing",
-  [ContentType.News]: "News",
-  [ContentType.Spotlight]: "Corp. Activity",
-  [ContentType.Streetaccount]: "Street Account"
-};
-function ContentUI(props) {
+// src/modules/News/index.tsx
+function NewsUI(props) {
   const {
     body,
-    contentQuery,
-    contentType,
-    contentTypeLabel,
+    newsQuery,
     currentMatch,
     currentMatchRef,
     matches,
@@ -39273,115 +39212,115 @@ function ContentUI(props) {
     scrollContainerRef,
     searchTerm
   } = props;
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react27.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
-  return /* @__PURE__ */ import_react27.default.createElement("div", {
-    className: "h-full flex flex-col content"
-  }, /* @__PURE__ */ import_react27.default.createElement("div", {
-    className: "flex flex-col pl-3 pr-3 pt-3 shadow-3xl content__header"
-  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+  return /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "h-full flex flex-col news"
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
+    className: "flex flex-col pl-3 pr-3 pt-3 shadow-3xl news__header"
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react27.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react26.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react27.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react26.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), contentTypeLabel), (0, import_ts_pattern6.match)(contentType).with(ContentType.News, () => /* @__PURE__ */ import_react27.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react27.default.createElement(MagnifyingGlass, null),
+  }), "News"), /* @__PURE__ */ import_react26.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react26.default.createElement(MagnifyingGlass, null),
     name: "search",
     placeholder: "Search Article...",
     value: searchTerm,
     onChange: onChangeSearch
-  })).otherwise(() => null))), searchTerm && /* @__PURE__ */ import_react27.default.createElement("div", {
+  }))), searchTerm && /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "bg-gray-50 flex h-10 items-center p-3 shadow sticky text-gray-500 text-sm top-3 z-10"
-  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "text-sm"
-  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react27.default.createElement("span", {
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react26.default.createElement("span", {
     className: "font-semibold"
-  }, searchTerm), '"'), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, searchTerm), '"'), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react27.default.createElement("button", {
+  }), /* @__PURE__ */ import_react26.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600",
     onClick: prevMatch
-  }, /* @__PURE__ */ import_react27.default.createElement(Chevron, null)), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Chevron, null)), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
-  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react27.default.createElement("button", {
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react26.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
     onClick: nextMatch
-  }, /* @__PURE__ */ import_react27.default.createElement(Chevron, null)), /* @__PURE__ */ import_react27.default.createElement("button", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Chevron, null)), /* @__PURE__ */ import_react26.default.createElement("button", {
     tabIndex: 0,
     className: "w-4 cursor-pointer text-gray-400 hover:text-gray-600",
     onClick: (e) => onChangeSearch(e, { value: "" })
-  }, /* @__PURE__ */ import_react27.default.createElement(Close, null))), (0, import_ts_pattern6.match)(contentQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement(Close, null))), (0, import_ts_pattern5.match)(newsQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react26.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+  }, /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10"
-  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14"
-  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1"
-  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+  }), /* @__PURE__ */ import_react26.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20"
-  })))).with({ status: "paused" }, () => wrapMsg("Content not found. We're sorry for any inconvenience.")).with({ status: "error" }, () => wrapMsg("There was an error loading content.")).with({ status: "empty" }, () => wrapMsg("Content not found. We're sorry for any inconvenience.")).with({ status: "success" }, ({ data: { content: contentData } }) => {
+  })))).with({ status: "paused" }, () => wrapMsg("News not found. We're sorry for any inconvenience.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("News not found. We're sorry for any inconvenience.")).with({ status: "success" }, ({ data: { content: contentData } }) => {
     var _a;
-    const content = contentData[0];
-    const primaryQuote = getPrimaryQuote(content == null ? void 0 : content.primaryCompany);
-    const date = (content == null ? void 0 : content.publishedDate) ? import_luxon.DateTime.fromISO(content.publishedDate) : import_luxon.DateTime.now();
-    return content ? /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Fragment, null, !!primaryQuote && /* @__PURE__ */ import_react27.default.createElement("div", {
+    const news = contentData[0];
+    const primaryQuote = getPrimaryQuote(news == null ? void 0 : news.primaryCompany);
+    const date = (news == null ? void 0 : news.publishedDate) ? import_luxon.DateTime.fromISO(news.publishedDate) : import_luxon.DateTime.now();
+    return news ? /* @__PURE__ */ import_react26.default.createElement(import_react26.default.Fragment, null, !!primaryQuote && /* @__PURE__ */ import_react26.default.createElement("div", {
       className: "flex items-center pl-5 pr-5 pt-5 text-sm"
-    }, /* @__PURE__ */ import_react27.default.createElement("span", {
+    }, /* @__PURE__ */ import_react26.default.createElement("span", {
       className: "font-bold pr-1 text-blue-600"
-    }, primaryQuote.localTicker), /* @__PURE__ */ import_react27.default.createElement("span", {
+    }, primaryQuote.localTicker), /* @__PURE__ */ import_react26.default.createElement("span", {
       className: "font-light text-gray-300"
-    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName)), /* @__PURE__ */ import_react27.default.createElement("div", {
+    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName)), /* @__PURE__ */ import_react26.default.createElement("div", {
       className: "leading-4 pl-5 pr-5 pt-3"
-    }, /* @__PURE__ */ import_react27.default.createElement("span", {
+    }, /* @__PURE__ */ import_react26.default.createElement("span", {
       className: "font-bold text-base"
-    }, content.title)), /* @__PURE__ */ import_react27.default.createElement("div", {
+    }, news.title)), /* @__PURE__ */ import_react26.default.createElement("div", {
       className: "flex items-center pl-5 pr-5 pt-2 text-sm"
-    }, /* @__PURE__ */ import_react27.default.createElement("span", {
+    }, /* @__PURE__ */ import_react26.default.createElement("span", {
       className: "text-indigo-300"
-    }, CONTENT_SOURCE_LABELS[content.source]), /* @__PURE__ */ import_react27.default.createElement("span", {
+    }, CONTENT_SOURCE_LABELS[news.source]), /* @__PURE__ */ import_react26.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), date && /* @__PURE__ */ import_react27.default.createElement("span", {
+    }, "\u2022"), date && /* @__PURE__ */ import_react26.default.createElement("span", {
       className: "text-gray-400"
-    }, date.toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react27.default.createElement("div", {
-      className: "overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm content__body",
+    }, date.toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react26.default.createElement("div", {
+      className: "overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm news__body",
       ref: scrollContainerRef
-    }, body.map((paragraph, pIdx) => /* @__PURE__ */ import_react27.default.createElement("p", {
+    }, body.map((paragraph, pIdx) => /* @__PURE__ */ import_react26.default.createElement("p", {
       className: "leading-5 mb-4",
-      key: `content-body-paragraph-${pIdx}`
-    }, paragraph.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react27.default.createElement("mark", {
-      className: (0, import_classnames11.default)({
+      key: `news-body-paragraph-${pIdx}`
+    }, paragraph.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react26.default.createElement("mark", {
+      className: (0, import_classnames10.default)({
         "bg-yellow-300": chunkId === currentMatch
       }),
-      key: `content-body-chunk-${chunkId}-match`,
+      key: `news-body-chunk-${chunkId}-match`,
       ref: chunkId === currentMatch ? currentMatchRef : void 0
-    }, text) : /* @__PURE__ */ import_react27.default.createElement("span", {
-      key: `content-body-chunk-${chunkId}`
+    }, text) : /* @__PURE__ */ import_react26.default.createElement("span", {
+      key: `news-body-chunk-${chunkId}`
     }, text)))))) : null;
   }).otherwise(() => null));
 }
-function useSearchState(contentQuery) {
+function useSearchState(newsQuery) {
   var _a, _b;
   const { state, handlers } = useChangeHandlers({
     searchTerm: ""
   });
-  const [currentMatch, setCurrentMatch] = (0, import_react27.useState)(null);
+  const [currentMatch, setCurrentMatch] = (0, import_react26.useState)(null);
   const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll({
     pauseOnUserScroll: false,
     block: "center",
     inline: "center",
     behavior: "auto"
   });
-  const body = (_b = (_a = contentQuery.state.data) == null ? void 0 : _a.content[0]) == null ? void 0 : _b.body;
-  const bodyWithMatches = (0, import_react27.useMemo)(() => {
+  const body = (_b = (_a = newsQuery.state.data) == null ? void 0 : _a.content[0]) == null ? void 0 : _b.body;
+  const bodyWithMatches = (0, import_react26.useMemo)(() => {
     if (body) {
       const nodes = new DOMParser().parseFromString(body, "text/html").body.childNodes;
       const chunks = [];
@@ -39397,14 +39336,14 @@ function useSearchState(contentQuery) {
               textToHighlight: text
             }).map(({ highlight, start, end }, index) => ({
               highlight,
-              id: `content-body-chunk-${nodeIndex}-${index}`,
+              id: `news-body-chunk-${nodeIndex}-${index}`,
               text: text.substr(start, end - start)
             })));
           } else {
             chunks.push([
               {
                 highlight: false,
-                id: `content-body-chunk-${nodeIndex}`,
+                id: `news-body-chunk-${nodeIndex}`,
                 text
               }
             ]);
@@ -39415,21 +39354,21 @@ function useSearchState(contentQuery) {
     }
     return null;
   }, [body, state.searchTerm]);
-  const matches = (0, import_react27.useMemo)(() => (bodyWithMatches || []).flatMap((part) => part).filter((chunk) => chunk.highlight), [bodyWithMatches]);
-  (0, import_react27.useEffect)(() => {
+  const matches = (0, import_react26.useMemo)(() => (bodyWithMatches || []).flatMap((part) => part).filter((chunk) => chunk.highlight), [bodyWithMatches]);
+  (0, import_react26.useEffect)(() => {
     var _a2;
     setCurrentMatch(((_a2 = matches[0]) == null ? void 0 : _a2.id) || null);
   }, [state.searchTerm]);
-  const matchIndex = (0, import_react27.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
-  const nextMatch = (0, import_react27.useCallback)(() => {
-    const match8 = matches[(matchIndex + 1) % matches.length];
-    if (match8)
-      setCurrentMatch(match8.id);
+  const matchIndex = (0, import_react26.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react26.useCallback)(() => {
+    const match7 = matches[(matchIndex + 1) % matches.length];
+    if (match7)
+      setCurrentMatch(match7.id);
   }, [matches, matchIndex]);
-  const prevMatch = (0, import_react27.useCallback)(() => {
-    const match8 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
-    if (match8)
-      setCurrentMatch(match8.id);
+  const prevMatch = (0, import_react26.useCallback)(() => {
+    const match7 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
+    if (match7)
+      setCurrentMatch(match7.id);
   }, [matches, matchIndex]);
   return {
     bodyWithMatches,
@@ -39444,12 +39383,12 @@ function useSearchState(contentQuery) {
     searchTerm: state.searchTerm
   };
 }
-function Content(props) {
-  const { contentId, contentType, onBack } = props;
-  const contentQuery = useQuery2({
+function News(props) {
+  const { newsId, onBack } = props;
+  const newsQuery = useQuery2({
     isEmpty: ({ content }) => (content || []).length === 0,
     query: lib_default`
-            query Content($filter: ContentFilter!) {
+            query News($filter: ContentFilter!) {
                 content(filter: $filter) {
                     id
                     body
@@ -39483,20 +39422,17 @@ function Content(props) {
         `,
     requestPolicy: "cache-first",
     variables: {
-      filter: { contentIds: [contentId] }
+      filter: { contentIds: [newsId] }
     }
   });
-  const searchState = useSearchState(contentQuery);
-  const contentTypeLabel = (0, import_react27.useMemo)(() => CONTENT_TYPE_MAP[contentType] || contentType, [contentType]);
-  return /* @__PURE__ */ import_react27.default.createElement(ContentUI, {
+  const searchState = useSearchState(newsQuery);
+  return /* @__PURE__ */ import_react26.default.createElement(NewsUI, {
     body: searchState.bodyWithMatches,
-    contentQuery,
-    contentType,
-    contentTypeLabel,
     currentMatch: searchState.currentMatch,
     currentMatchRef: searchState.currentMatchRef,
     matches: searchState.matches,
     matchIndex: searchState.matchIndex,
+    newsQuery,
     nextMatch: searchState.nextMatch,
     onBack,
     onChangeSearch: searchState.onChangeSearchTerm,
@@ -39506,148 +39442,125 @@ function Content(props) {
   });
 }
 
-// src/modules/ContentList/index.tsx
-function ContentListUI(props) {
+// src/modules/NewsList/index.tsx
+function NewsListUI(props) {
   const {
     company,
-    content,
-    contentListQuery,
-    onBackFromContent,
+    newsListQuery,
+    onBackFromNews,
     onChangeSearch,
     onSelectCompany,
-    onSelectContent,
-    onSelectContentType,
+    onSelectNews,
     searchTerm,
-    selectedContentType
+    selectedNews
   } = props;
-  if (content) {
-    return /* @__PURE__ */ import_react28.default.createElement(Content, {
-      contentId: content.id,
-      contentType: selectedContentType,
-      onBack: onBackFromContent
+  if (selectedNews) {
+    return /* @__PURE__ */ import_react27.default.createElement(News, {
+      newsId: selectedNews.id,
+      onBack: onBackFromNews
     });
   }
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react28.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
-  let prevEventDate = null;
-  return /* @__PURE__ */ import_react28.default.createElement("div", {
-    className: "h-full flex flex-col content-list"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
-    className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl content-list__header"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
+  let prevEventDate = import_luxon2.DateTime.now();
+  return /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "h-full flex flex-col news-list"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl news-list__header"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react28.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react28.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react27.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react27.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onChangeSearch,
-    placeholder: "Search News & Corp. Activity...",
+    placeholder: "Search News...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react28.default.createElement("div", {
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react28.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react27.default.createElement(CompanyFilterButton, {
     onChange: onSelectCompany,
     value: company
-  })))), /* @__PURE__ */ import_react28.default.createElement("div", {
+  })))), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
-    className: "sticky top-0 px-3 pt-3 pb-2 z-10 content-list__tabs"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
-    className: "flex items-center pl-3 pr-1.5 h-9 bg-white rounded-lg shadow"
-  }, /* @__PURE__ */ import_react28.default.createElement(Tabs, {
-    className: "ml-1",
-    kind: "line",
-    onChange: onSelectContentType,
-    options: [
-      {
-        label: "News",
-        value: ContentType.News
-      },
-      {
-        label: "Corp. Activity",
-        value: ContentType.Spotlight
-      }
-    ],
-    value: selectedContentType
-  }))), /* @__PURE__ */ import_react28.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern7.match)(contentListQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react28.default.createElement("ul", {
-    className: "w-full ContentList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react28.default.createElement("li", {
+  }, (0, import_ts_pattern6.match)(newsListQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react27.default.createElement("ul", {
+    className: "w-full NewsList__loading"
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react27.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "rounded-full bg-gray-300 w-9 h-9"
-  }), /* @__PURE__ */ import_react28.default.createElement("div", {
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "rounded-full bg-gray-500 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react28.default.createElement("div", {
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "rounded-full bg-gray-400 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react28.default.createElement("div", {
+  })), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react28.default.createElement("div", {
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react28.default.createElement("div", {
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react28.default.createElement("div", {
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There is no content.")).with({ status: "error" }, () => wrapMsg("There was an error loading content.")).with({ status: "empty" }, () => wrapMsg("There is no content.")).with({ status: "success" }, ({ data }) => /* @__PURE__ */ import_react28.default.createElement("ul", {
-    className: "w-full"
+  })))))))).with({ status: "paused" }, () => wrapMsg("There is no news.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("There is no news.")).with({ status: "success" }, ({ data }) => /* @__PURE__ */ import_react27.default.createElement("ul", {
+    className: "pt-1.5 w-full"
   }, data.search.content.hits.map((hit) => {
     var _a;
-    const { content: content2, id: contentId } = hit;
-    const primaryQuote = getPrimaryQuote(content2.primaryCompany);
-    const date = import_luxon2.DateTime.fromISO(content2.publishedDate);
+    const { content, id: newsId } = hit;
+    const primaryQuote = getPrimaryQuote(content.primaryCompany);
+    const date = import_luxon2.DateTime.fromISO(content.publishedDate);
     let divider = null;
-    if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== date.toFormat("MM/dd/yyyy")) {
+    if (!areDatesSameDay(prevEventDate.toJSDate(), date.toJSDate())) {
       prevEventDate = date;
-      divider = /* @__PURE__ */ import_react28.default.createElement("li", {
-        className: "sticky top-[56px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"
-      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react28.default.createElement("div", {
+      divider = /* @__PURE__ */ import_react27.default.createElement("li", {
+        className: "sticky top-[12px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3"
+      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react27.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200"
       }));
     }
-    return /* @__PURE__ */ import_react28.default.createElement(import_react28.Fragment, {
-      key: contentId
-    }, divider, /* @__PURE__ */ import_react28.default.createElement("li", {
+    return /* @__PURE__ */ import_react27.default.createElement(import_react27.Fragment, {
+      key: newsId
+    }, divider, /* @__PURE__ */ import_react27.default.createElement("li", {
       className: "group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100",
-      onClick: (e) => onSelectContent == null ? void 0 : onSelectContent(e, { value: content2 })
-    }, /* @__PURE__ */ import_react28.default.createElement("div", {
+      onClick: (e) => onSelectNews == null ? void 0 : onSelectNews(e, { value: content })
+    }, /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm"
-    }, /* @__PURE__ */ import_react28.default.createElement("span", {
+    }, /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "mr-1 text-black"
-    }, content2.title)), /* @__PURE__ */ import_react28.default.createElement("div", {
+    }, content.title)), /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex flex-1 items-center min-w-0 p-2 pr-4 pt-0"
-    }, !!primaryQuote && /* @__PURE__ */ import_react28.default.createElement(import_react28.default.Fragment, null, /* @__PURE__ */ import_react28.default.createElement("span", {
+    }, !!primaryQuote && /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Fragment, null, /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "font-bold pr-1 text-blue-600 group-hover:text-yellow-600"
-    }, primaryQuote.localTicker), /* @__PURE__ */ import_react28.default.createElement("span", {
+    }, primaryQuote.localTicker), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "font-light text-gray-300 group-hover:text-gray-400"
-    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName), /* @__PURE__ */ import_react28.default.createElement("span", {
+    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022")), /* @__PURE__ */ import_react28.default.createElement("span", {
+    }, "\u2022")), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "text-gray-400"
-    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react28.default.createElement("span", {
+    }, date.toFormat("MMM dd, yyyy")), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react28.default.createElement("span", {
+    }, "\u2022"), /* @__PURE__ */ import_react27.default.createElement("span", {
       className: "text-indigo-300"
-    }, CONTENT_SOURCE_LABELS[content2.source] || content2.source))));
-  }))).exhaustive(), /* @__PURE__ */ import_react28.default.createElement("div", {
+    }, CONTENT_SOURCE_LABELS[content.source] || content.source))));
+  }))).exhaustive(), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex-1"
   })))));
 }
-function ContentList(_props) {
+function NewsList(_props) {
   const { state, handlers, setState } = useChangeHandlers({
     company: void 0,
-    content: void 0,
     searchTerm: "",
-    selectedContentType: ContentType.News
+    selectedNews: void 0
   });
   const resolveCompany = useCompanyResolver();
   const bus = useMessageListener("instrument-selected", (msg) => __async(this, null, function* () {
@@ -39659,10 +39572,10 @@ function ContentList(_props) {
       }
     }
   }), "in");
-  const contentListQuery = useQuery2({
+  const newsListQuery = useQuery2({
     isEmpty: ({ search }) => search.content.numTotalHits === 0,
     query: lib_default`
-            query ContentList($filter: ContentSearchFilter!) {
+            query NewsList($filter: ContentSearchFilter!) {
                 search {
                     content(filter: $filter) {
                         id
@@ -39706,51 +39619,49 @@ function ContentList(_props) {
     variables: {
       filter: {
         companyIds: state.company ? [state.company.id] : void 0,
-        contentTypes: [state.selectedContentType],
+        contentTypes: [ContentType.News],
         searchTerm: state.searchTerm
       }
     }
   });
-  const onSelectCompany = (0, import_react28.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react27.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
   }, [state]);
-  const onSelectContent = (0, import_react28.useCallback)((event, change) => {
+  const onSelectNews = (0, import_react27.useCallback)((event, change) => {
     var _a;
     const primaryQuote = getPrimaryQuote((_a = change.value) == null ? void 0 : _a.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
-    handlers.content(event, change);
+    handlers.selectedNews(event, change);
     if (!change.value) {
-      contentListQuery.refetch();
+      newsListQuery.refetch();
     }
   }, [state]);
-  useAutoTrack("Submit", "Content Search", { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
-  useInterval((0, import_react28.useCallback)(() => contentListQuery.refetch({ requestPolicy: "cache-and-network" }), [contentListQuery.refetch]), 15e3);
-  return /* @__PURE__ */ import_react28.default.createElement(ContentListUI, {
+  useAutoTrack("Submit", "News Search", { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
+  useInterval((0, import_react27.useCallback)(() => newsListQuery.refetch({ requestPolicy: "cache-and-network" }), [newsListQuery.refetch]), 15e3);
+  return /* @__PURE__ */ import_react27.default.createElement(NewsListUI, {
     company: state.company,
-    content: state.content,
-    contentListQuery,
-    onBackFromContent: (0, import_react28.useCallback)((event) => onSelectContent(event, { value: null }), [onSelectContent]),
+    newsListQuery,
+    onBackFromNews: (0, import_react27.useCallback)((event) => onSelectNews(event, { value: null }), [onSelectNews]),
     onSelectCompany,
-    onSelectContent,
-    onSelectContentType: handlers.selectedContentType,
+    onSelectNews,
     onChangeSearch: handlers.searchTerm,
     searchTerm: state.searchTerm,
-    selectedContentType: state.selectedContentType
+    selectedNews: state.selectedNews
   });
 }
 
-// src/dev/ContentList.tsx
+// src/dev/NewsList.tsx
 var App = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
     console.log(`Sending ${JSON.stringify(msg)} to platform`);
   }, "out");
-  return /* @__PURE__ */ import_react29.default.createElement(import_react29.StrictMode, null, /* @__PURE__ */ import_react29.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react28.default.createElement(import_react28.StrictMode, null, /* @__PURE__ */ import_react28.default.createElement(Provider6, {
     bus,
     config: {
       assetPath: "bundle/",
-      moduleName: "ContentList",
+      moduleName: "NewsList",
       platform: "aiera-sdk-dev",
       gqlOptions: {
         clientOptions: {
@@ -39758,13 +39669,13 @@ var App = () => {
         }
       }
     }
-  }, /* @__PURE__ */ import_react29.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react28.default.createElement(Auth, {
     showLogout: true
-  }, /* @__PURE__ */ import_react29.default.createElement("div", {
+  }, /* @__PURE__ */ import_react28.default.createElement("div", {
     className: "h-full border border-black"
-  }, /* @__PURE__ */ import_react29.default.createElement(ContentList, null)))));
+  }, /* @__PURE__ */ import_react28.default.createElement(NewsList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react29.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react28.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus

@@ -2390,36 +2390,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2435,6 +2405,36 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3502,20 +3502,6 @@ export type LoginMutationVariables = Exact&lt;{
 &nbsp;
 export type LoginMutation = { __typename?: 'Mutation', login: { __typename?: 'LoginResponse', accessToken: string, refreshToken: string } };
 &nbsp;
-export type ContentQueryVariables = Exact&lt;{
-  filter: ContentFilter;
-}&gt;;
-&nbsp;
-&nbsp;
-export type ContentQuery = { __typename?: 'Query', content: Array&lt;{ __typename?: 'FilingContent', id: string, body: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, body: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined }&gt; };
-&nbsp;
-export type ContentListQueryVariables = Exact&lt;{
-  filter: ContentSearchFilter;
-}&gt;;
-&nbsp;
-&nbsp;
-export type ContentListQuery = { __typename?: 'Query', search: { __typename?: 'Search', content: { __typename?: 'ContentSearchResult', id: string, numTotalHits: number, hits: Array&lt;{ __typename?: 'ContentSearchResultHit', id: string, content: { __typename?: 'FilingContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } }&gt; } } };
-&nbsp;
 export type EventListQueryVariables = Exact&lt;{
   filter: EventSearchFilter;
   view?: InputMaybe&lt;EventView&gt;;
@@ -3523,6 +3509,20 @@ export type EventListQueryVariables = Exact&lt;{
 &nbsp;
 &nbsp;
 export type EventListQuery = { __typename?: 'Query', search: { __typename?: 'Search', events: { __typename?: 'EventSearchResult', id: string, numTotalHits: number, hits: Array&lt;{ __typename?: 'EventSearchResultHit', id: string, numMentions?: number | null | undefined, event: { __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } }&gt; } } };
+&nbsp;
+export type NewsQueryVariables = Exact&lt;{
+  filter: ContentFilter;
+}&gt;;
+&nbsp;
+&nbsp;
+export type NewsQuery = { __typename?: 'Query', content: Array&lt;{ __typename?: 'FilingContent', id: string, body: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, body: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined }&gt; };
+&nbsp;
+export type NewsListQueryVariables = Exact&lt;{
+  filter: ContentSearchFilter;
+}&gt;;
+&nbsp;
+&nbsp;
+export type NewsListQuery = { __typename?: 'Query', search: { __typename?: 'Search', content: { __typename?: 'ContentSearchResult', id: string, numTotalHits: number, hits: Array&lt;{ __typename?: 'ContentSearchResultHit', id: string, content: { __typename?: 'FilingContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } | { __typename?: 'NewsContent', id: string, contentType: ContentType, publishedDate: string, source: ContentSource, title: string, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined } }&gt; } } };
 &nbsp;
 export type RecordingListQueryVariables = Exact&lt;{
   filter?: InputMaybe&lt;EventFilter&gt;;
@@ -3656,80 +3656,6 @@ export const LoginDocument = gql`
   }
 }
     `;
-export const ContentDocument = gql`
-    query Content($filter: ContentFilter!) {
-  content(filter: $filter) {
-    id
-    body
-    contentType
-    primaryCompany {
-      id
-      commonName
-      instruments {
-        id
-        isPrimary
-        quotes {
-          id
-          isPrimary
-          localTicker
-          exchange {
-            id
-            shortName
-            country {
-              id
-              countryCode
-            }
-          }
-        }
-      }
-    }
-    publishedDate
-    source
-    title
-  }
-}
-    `;
-export const ContentListDocument = gql`
-    query ContentList($filter: ContentSearchFilter!) {
-  search {
-    content(filter: $filter) {
-      id
-      numTotalHits
-      hits {
-        id
-        content {
-          id
-          contentType
-          primaryCompany {
-            id
-            commonName
-            instruments {
-              id
-              isPrimary
-              quotes {
-                id
-                isPrimary
-                localTicker
-                exchange {
-                  id
-                  shortName
-                  country {
-                    id
-                    countryCode
-                  }
-                }
-              }
-            }
-          }
-          publishedDate
-          source
-          title
-        }
-      }
-    }
-  }
-}
-    `;
 export const EventListDocument = gql`
     query EventList($filter: EventSearchFilter!, $view: EventView) {
   search {
@@ -3768,6 +3694,80 @@ export const EventListDocument = gql`
               }
             }
           }
+        }
+      }
+    }
+  }
+}
+    `;
+export const NewsDocument = gql`
+    query News($filter: ContentFilter!) {
+  content(filter: $filter) {
+    id
+    body
+    contentType
+    primaryCompany {
+      id
+      commonName
+      instruments {
+        id
+        isPrimary
+        quotes {
+          id
+          isPrimary
+          localTicker
+          exchange {
+            id
+            shortName
+            country {
+              id
+              countryCode
+            }
+          }
+        }
+      }
+    }
+    publishedDate
+    source
+    title
+  }
+}
+    `;
+export const NewsListDocument = gql`
+    query NewsList($filter: ContentSearchFilter!) {
+  search {
+    content(filter: $filter) {
+      id
+      numTotalHits
+      hits {
+        id
+        content {
+          id
+          contentType
+          primaryCompany {
+            id
+            commonName
+            instruments {
+              id
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
+            }
+          }
+          publishedDate
+          source
+          title
         }
       }
     }
@@ -3967,7 +3967,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Jan 14 2022 10:20:37 GMT-0500 (Eastern Standard Time)
+                at Tue Jan 18 2022 10:38:48 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

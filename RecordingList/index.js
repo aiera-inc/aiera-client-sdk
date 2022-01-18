@@ -79891,80 +79891,6 @@ var LoginDocument = lib_default`
   }
 }
     `;
-var ContentDocument = lib_default`
-    query Content($filter: ContentFilter!) {
-  content(filter: $filter) {
-    id
-    body
-    contentType
-    primaryCompany {
-      id
-      commonName
-      instruments {
-        id
-        isPrimary
-        quotes {
-          id
-          isPrimary
-          localTicker
-          exchange {
-            id
-            shortName
-            country {
-              id
-              countryCode
-            }
-          }
-        }
-      }
-    }
-    publishedDate
-    source
-    title
-  }
-}
-    `;
-var ContentListDocument = lib_default`
-    query ContentList($filter: ContentSearchFilter!) {
-  search {
-    content(filter: $filter) {
-      id
-      numTotalHits
-      hits {
-        id
-        content {
-          id
-          contentType
-          primaryCompany {
-            id
-            commonName
-            instruments {
-              id
-              isPrimary
-              quotes {
-                id
-                isPrimary
-                localTicker
-                exchange {
-                  id
-                  shortName
-                  country {
-                    id
-                    countryCode
-                  }
-                }
-              }
-            }
-          }
-          publishedDate
-          source
-          title
-        }
-      }
-    }
-  }
-}
-    `;
 var EventListDocument = lib_default`
     query EventList($filter: EventSearchFilter!, $view: EventView) {
   search {
@@ -80003,6 +79929,80 @@ var EventListDocument = lib_default`
               }
             }
           }
+        }
+      }
+    }
+  }
+}
+    `;
+var NewsDocument = lib_default`
+    query News($filter: ContentFilter!) {
+  content(filter: $filter) {
+    id
+    body
+    contentType
+    primaryCompany {
+      id
+      commonName
+      instruments {
+        id
+        isPrimary
+        quotes {
+          id
+          isPrimary
+          localTicker
+          exchange {
+            id
+            shortName
+            country {
+              id
+              countryCode
+            }
+          }
+        }
+      }
+    }
+    publishedDate
+    source
+    title
+  }
+}
+    `;
+var NewsListDocument = lib_default`
+    query NewsList($filter: ContentSearchFilter!) {
+  search {
+    content(filter: $filter) {
+      id
+      numTotalHits
+      hits {
+        id
+        content {
+          id
+          contentType
+          primaryCompany {
+            id
+            commonName
+            instruments {
+              id
+              isPrimary
+              quotes {
+                id
+                isPrimary
+                localTicker
+                exchange {
+                  id
+                  shortName
+                  country {
+                    id
+                    countryCode
+                  }
+                }
+              }
+            }
+          }
+          publishedDate
+          source
+          title
         }
       }
     }
