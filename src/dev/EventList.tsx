@@ -1,9 +1,9 @@
-import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
+import React, { FC, ReactElement, StrictMode, useEffect, useCallback, useState } from 'react';
 import ReactDOM from 'react-dom';
 import type { Instrument, InstrumentList, Listener } from '@finos/fdc3';
 
 import { Provider } from '@aiera/client-sdk/components/Provider';
-import { useMessageListener } from '@aiera/client-sdk/lib/msg';
+import { useMessageListener, MessageBus } from '@aiera/client-sdk/lib/msg';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
 import '@aiera/client-sdk/css/styles.css';
@@ -65,11 +65,33 @@ const useMessageBus = () => {
             listeners.forEach((listener) => listener.unsubscribe());
         };
     }, [bus]);
+
     return bus;
+};
+
+const useUrlSettings = (bus: MessageBus) => {
+    const [moduleReady, setModuleRef] = useState(false);
+
+    useEffect(() => {
+        if (window.location && moduleReady) {
+            const url = new URL(window.location.href);
+            const tickers = (url.searchParams.get('tickers') || '').split(',');
+            if (tickers.length) {
+                bus.emit(
+                    'instruments-selected',
+                    tickers.map((ticker) => ({ ticker })),
+                    'in'
+                );
+            }
+        }
+    }, [bus, moduleReady]);
+
+    return useCallback(() => setModuleRef(true), []);
 };
 
 const App: FC = (): ReactElement => {
     const bus = useMessageBus();
+    const setModuleRef = useUrlSettings(bus);
     return (
         <StrictMode>
             <Provider
@@ -81,15 +103,12 @@ const App: FC = (): ReactElement => {
                     gqlOptions: {
                         clientOptions: {
                             url: 'https://api-dev.aiera.com/graphql',
-                            fetch: (...args) => {
-                                return window.fetch(...args);
-                            },
                         },
                     },
                 }}
             >
                 <Auth showLogout>
-                    <div className="h-full border border-black">
+                    <div className="h-full border border-black" ref={setModuleRef}>
                         <EventList />
                     </div>
                 </Auth>
