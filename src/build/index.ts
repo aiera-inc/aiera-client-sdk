@@ -88,6 +88,7 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
         modules.map(async (module) => {
             await build({
                 ...sharedConfig,
+                sourcemap: 'inline',
                 entryPoints: [module],
                 bundle: true,
                 outfile: `dist/site/${basename(module, '.tsx')}/index.js`,
