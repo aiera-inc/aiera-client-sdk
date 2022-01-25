@@ -29,6 +29,7 @@
         "new": "plop --plopfile templates/plopfile.ts",
         "release": "NODE_ENV=production npm run build && hub release create -m v$npm_package_version -a dist/aiera-client-sdk.tgz v$npm_package_version",
         "pre-release": "export VERSION=pre-$(date '+%Y-%m-%dT%H-%M-%S')-$(git rev-parse HEAD | cut -c -7) && NODE_ENV=production npm run build && hub release create -m $VERSION -a dist/aiera-client-sdk.tgz $VERSION",
+        "publish-demo": "aws s3 sync --acl=public-read ./dist/site s3://aiera-public-assets/aiera-sdk/demos/$npm_package_version",
         "start": "npm run build:watch",
         "test": "jest --config .jest/jest.config.js --coverage",
         "test:watch": "jest --config .jest/jest.config.js --watchAll",
