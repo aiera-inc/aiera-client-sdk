@@ -12,7 +12,7 @@
  * ```
  * @module
  */
-import React, { createContext, ReactElement, ReactNode, useContext, useMemo, useState } from 'react';
+import React, { createContext, ReactElement, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import {
     Client,
     createClient,
@@ -81,7 +81,14 @@ function createGQLClient(config: EnvConfig): Client {
     const exchanges = [
         devtoolsExchange,
         opNameExchange,
-        cacheExchange(),
+        cacheExchange({
+            // Silence Graphcache warning about missing id fields for non-keyable types
+            // See: https://formidable.com/open-source/urql/docs/graphcache/normalized-caching/#custom-keys-and-non-keyable-entities
+            keys: {
+                ApplicationConfiguration: () => null,
+                Search: () => null,
+            },
+        }),
         auth ? authExchange(auth) : null,
         fetchExchange,
     ].filter(
@@ -165,6 +172,11 @@ export interface SuccessQueryResult<Data, Variables> extends BaseQueryResult<Dat
     data: Data;
 }
 
+export interface RefetchingQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
+    status: 'refetching';
+    data: Data;
+}
+
 export interface QueryResultEmptyCheck<Data> {
     isEmpty?: (data: Data) => boolean;
 }
@@ -175,6 +187,18 @@ export type QueryResult<Data, Variables> =
     | PausedQueryResult<Data, Variables>
     | EmptyQueryResult<Data, Variables>
     | SuccessQueryResult<Data, Variables>;
+
+export type PaginatedQueryResult<Data, Variables> =
+    | QueryResult<Data, Variables>
+    | RefetchingQueryResult<Data, Variables>;
+
+export interface PaginatedQueryArgs<Variables, Data> extends UseQueryArgs<Variables, Data> {
+    mergeResults: (prevResults: Data, newResults: Data) => Data;
+    variables: Variables & {
+        fromIndex: number;
+        size?: number;
+    };
+}
 
 export function useQuery<Data, Variables>(
     args: UseQueryArgs<Variables, Data> & QueryResultEmptyCheck<Data>
@@ -200,4 +224,50 @@ export function useQuery<Data, Variables>(
 
         return { status: 'success', state, data: state.data as Data, refetch };
     }, [state, refetch]);
+}
+
+export function usePaginatedQuery<Data, Variables>(
+    args: PaginatedQueryArgs<Variables, Data> & QueryResultEmptyCheck<Data>
+): PaginatedQueryResult<Data, Variables> {
+    const { mergeResults, variables } = args;
+    const queryResult: QueryResult<Data, Variables> = useQuery<Data, Variables>(args);
+
+    // Map of the query results where fromIndex is the key
+    const [results, setResults] = useState<{ [key: number]: Data } | undefined>(undefined);
+
+    const data = useMemo(() => {
+        let data = undefined;
+        // Return data when the query finishes or while paginating
+        if (
+            queryResult.state.data &&
+            (queryResult.status === 'success' || (queryResult.status === 'loading' && variables.fromIndex > 0))
+        ) {
+            data = results
+                ? mergeResults(
+                      Object.values(results).reduce((res, r) => mergeResults(res, r), {} as Data),
+                      queryResult.state.data
+                  )
+                : queryResult.state.data;
+        }
+        return data;
+    }, [queryResult.state.data, queryResult.status, results, variables.fromIndex]);
+
+    useEffect(() => {
+        if (queryResult.state.data) {
+            setResults({
+                ...results,
+                [variables.fromIndex]: queryResult.state.data,
+            });
+        }
+    }, [queryResult.state.data, variables.fromIndex]);
+
+    return useMemo(() => {
+        if (queryResult.status === 'loading' && variables.fromIndex > 0 && data) {
+            return { ...queryResult, data, status: 'refetching' };
+        }
+        if (queryResult.status === 'success') {
+            return { ...queryResult, data: data as Data };
+        }
+        return queryResult;
+    }, [data, queryResult, variables.fromIndex]);
 }

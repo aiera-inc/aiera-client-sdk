@@ -1,32 +1,39 @@
 import React, { Fragment, MouseEventHandler, ReactElement, SyntheticEvent, useCallback } from 'react';
+import classNames from 'classnames';
 import gql from 'graphql-tag';
+import get from 'lodash/get';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
-import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
+import { PaginatedQueryResult, usePaginatedQuery } from '@aiera/client-sdk/api/client';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { CONTENT_SOURCE_LABELS, getPrimaryQuote, useAutoTrack, useCompanyResolver } from '@aiera/client-sdk/lib/data';
+import { getPrimaryQuote, useAutoTrack, useCompanyResolver } from '@aiera/client-sdk/lib/data';
 import { areDatesSameDay } from '@aiera/client-sdk/lib/datetimes';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { News } from '@aiera/client-sdk/modules/News';
-import { ChangeHandler } from '@aiera/client-sdk/types';
-import { NewsListQuery, NewsListQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
+import { ChangeHandler, ContentSearchResultHit } from '@aiera/client-sdk/types';
+import { NewsListQuery, NewsListQueryVariables, ContentType, NewsContent } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
 export type NewsListNews = NewsListQuery['search']['content']['hits'][0]['content'];
 
 interface NewsListSharedProps {}
 
+const DEFAULT_LIST_SIZE = 20;
+
 /** @notExported */
 export interface NewsListUIProps extends NewsListSharedProps {
+    canRefetch: boolean;
     company?: CompanyFilterResult;
-    newsListQuery: QueryResult<NewsListQuery, NewsListQueryVariables>;
+    loadMore: MouseEventHandler;
+    newsListQuery: PaginatedQueryResult<NewsListQuery, NewsListQueryVariables>;
     onBackFromNews?: MouseEventHandler;
     onChangeSearch?: ChangeHandler<string>;
+    onRefetch: MouseEventHandler;
     onSelectCompany?: ChangeHandler<CompanyFilterResult>;
     onSelectNews?: ChangeHandler<NewsListNews>;
     searchTerm?: string;
@@ -35,10 +42,13 @@ export interface NewsListUIProps extends NewsListSharedProps {
 
 export function NewsListUI(props: NewsListUIProps): ReactElement {
     const {
+        canRefetch,
         company,
+        loadMore,
         newsListQuery,
         onBackFromNews,
         onChangeSearch,
+        onRefetch,
         onSelectCompany,
         onSelectNews,
         searchTerm,
@@ -49,6 +59,25 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
         return <News newsId={selectedNews.id} onBack={onBackFromNews} />;
     }
 
+    const loader = (numHits: number) =>
+        new Array(numHits).fill(0).map((_, idx) => (
+            <li key={idx} className="p-2 animate-pulse mx-2">
+                <div className="flex items-center">
+                    <div className="rounded-full bg-gray-300 w-9 h-9" />
+                    <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
+                        <div className="flex">
+                            <div className="rounded-full bg-gray-500 h-[10px] mr-2 w-7" />
+                            <div className="rounded-full bg-gray-400 h-[10px] mr-2 w-12" />
+                        </div>
+                        <div className="flex">
+                            <div className="rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2" />
+                            <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2" />
+                            <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2" />
+                        </div>
+                    </div>
+                </div>
+            </li>
+        ));
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     let prevEventDate = DateTime.now();
     return (
@@ -72,34 +101,33 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                     <div className="flex flex-col items-center justify-center flex-1">
                         {match(newsListQuery)
                             .with({ status: 'loading' }, () => (
-                                <ul className="w-full NewsList__loading">
-                                    {new Array(15).fill(0).map((_, idx) => (
-                                        <li key={idx} className="p-2 animate-pulse mx-2">
-                                            <div className="flex items-center">
-                                                <div className="rounded-full bg-gray-300 w-9 h-9" />
-                                                <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
-                                                    <div className="flex">
-                                                        <div className="rounded-full bg-gray-500 h-[10px] mr-2 w-7" />
-                                                        <div className="rounded-full bg-gray-400 h-[10px] mr-2 w-12" />
-                                                    </div>
-                                                    <div className="flex">
-                                                        <div className="rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2" />
-                                                        <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2" />
-                                                        <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2" />
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
+                                <ul className="w-full NewsList__loading">{loader(15)}</ul>
                             ))
                             .with({ status: 'paused' }, () => wrapMsg('There is no news.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading news.'))
                             .with({ status: 'empty' }, () => wrapMsg('There is no news.'))
-                            .with({ status: 'success' }, ({ data }) => (
-                                <ul className="pt-1.5 w-full">
+                            .with({ status: 'success' }, { status: 'refetching' }, ({ data, status }) => (
+                                <ul className="py-1.5 w-full">
+                                    <div
+                                        className={classNames(
+                                            'animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center transition-h hover:animate-none',
+                                            {
+                                                invisible: !canRefetch,
+                                                'h-0': !canRefetch,
+                                                'pb-3': canRefetch,
+                                                'pt-2': canRefetch,
+                                            }
+                                        )}
+                                        onClick={onRefetch}
+                                    >
+                                        <div className="ml-2 w-full flex h-[1px] bg-gradient-to-l from-gray-200 group-hover:from-gray-300" />
+                                        <p className="px-3 text-gray-500 text-sm whitespace-nowrap group-hover:text-gray-700">
+                                            Check for new articles
+                                        </p>
+                                        <div className="mr-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 group-hover:from-gray-300" />
+                                    </div>
                                     {data.search.content.hits.map((hit) => {
-                                        const { content, id: newsId } = hit;
+                                        const content = hit.content as NewsContent;
                                         const primaryQuote = getPrimaryQuote(content.primaryCompany);
                                         const date = DateTime.fromISO(content.publishedDate);
                                         let divider = null;
@@ -113,7 +141,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                             );
                                         }
                                         return (
-                                            <Fragment key={newsId}>
+                                            <Fragment key={hit.id}>
                                                 {divider}
                                                 <li
                                                     className="group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
@@ -137,19 +165,30 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                                         <span className="text-gray-400">
                                                             {date.toFormat('MMM dd, yyyy')}
                                                         </span>
-                                                        <span className="pl-1 pr-1 text-gray-400">•</span>
-                                                        <span className="text-indigo-300">
-                                                            {CONTENT_SOURCE_LABELS[content.source] || content.source}
-                                                        </span>
+                                                        {!!content.newsSource?.name && (
+                                                            <>
+                                                                <span className="pl-1 pr-1 text-gray-400">•</span>
+                                                                <span className="text-indigo-300">
+                                                                    {content.newsSource.name}
+                                                                </span>
+                                                            </>
+                                                        )}
                                                     </div>
                                                 </li>
                                             </Fragment>
                                         );
                                     })}
+                                    {status === 'refetching' && loader(3)}
                                 </ul>
                             ))
                             .exhaustive()}
                         <div className="flex-1" />
+                        <div
+                            className="bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center pb-1 pt-3 shadow-inner text-gray-500 w-full hover:text-black"
+                            onClick={loadMore}
+                        >
+                            <p className="text-sm tracking-wider uppercase">load more</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -158,10 +197,15 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
 }
 
 /** @notExported */
-export interface NewsListProps extends NewsListSharedProps {}
+export interface NewsListProps extends NewsListSharedProps {
+    listSize?: number;
+}
 
 interface NewsListState {
+    canRefetch: boolean;
     company?: CompanyFilterResult;
+    fromIndex: number;
+    lastRefetch?: DateTime;
     searchTerm: string;
     selectedNews?: NewsListNews;
 }
@@ -169,12 +213,16 @@ interface NewsListState {
 /**
  * Renders NewsList
  */
-export function NewsList(_props: NewsListProps): ReactElement {
+export function NewsList(props: NewsListProps): ReactElement {
     const { state, handlers, setState } = useChangeHandlers<NewsListState>({
+        canRefetch: false,
         company: undefined,
+        fromIndex: 0,
+        lastRefetch: DateTime.now(),
         searchTerm: '',
         selectedNews: undefined,
     });
+    const listSize: number = props.listSize || DEFAULT_LIST_SIZE;
     const resolveCompany = useCompanyResolver();
     const bus = useMessageListener(
         'instrument-selected',
@@ -183,18 +231,42 @@ export function NewsList(_props: NewsListProps): ReactElement {
                 const companies = await resolveCompany(msg.data.ticker);
                 if (companies?.[0]) {
                     const company = companies[0];
-                    setState((s) => ({ ...s, company }));
+                    // Set the selected company and reset fromIndex in state
+                    setState((s) => ({ ...s, company, fromIndex: 0 }));
                 }
             }
         },
         'in'
     );
-    const newsListQuery = useQuery<NewsListQuery, NewsListQueryVariables>({
-        isEmpty: ({ search }) => search.content.numTotalHits === 0,
+
+    /**
+     * Takes two NewsList queries, merges the hits together,
+     * removes duplicates, and returns the new query with the combined hits
+     *
+     * @param prevQuery - a NewsListQuery result
+     * @param newQuery  - another NewsListQuery result
+     * @returns         - the second NewsListQuery with the hits merged in from previous query
+     */
+    const mergeResults = (prevQuery: NewsListQuery, newQuery: NewsListQuery): NewsListQuery => {
+        const prevHits = get(prevQuery, 'search.content.hits', []) as ContentSearchResultHit[];
+        const newHits = get(newQuery, 'search.content.hits', []) as ContentSearchResultHit[];
+        const prevIds = new Set(prevHits.map((hit) => hit.id));
+        return {
+            search: {
+                content: {
+                    ...newQuery.search.content,
+                    hits: [...prevHits, ...newHits.filter((h) => !prevIds.has(h.id))],
+                },
+            },
+        };
+    };
+
+    const newsListQuery = usePaginatedQuery<NewsListQuery, NewsListQueryVariables>({
+        isEmpty: (data) => (get(data, 'search.content.hits', []) as NewsListNews[]).length === 0,
         query: gql`
-            query NewsList($filter: ContentSearchFilter!) {
+            query NewsList($filter: ContentSearchFilter!, $fromIndex: Int, $size: Int) {
                 search {
-                    content(filter: $filter) {
+                    content(filter: $filter, fromIndex: $fromIndex, size: $size) {
                         id
                         numTotalHits
                         hits {
@@ -224,14 +296,20 @@ export function NewsList(_props: NewsListProps): ReactElement {
                                     }
                                 }
                                 publishedDate
-                                source
                                 title
+                                ... on NewsContent {
+                                    newsSource {
+                                        id
+                                        name
+                                    }
+                                }
                             }
                         }
                     }
                 }
             }
         `,
+        mergeResults,
         requestPolicy: 'cache-and-network',
         variables: {
             filter: {
@@ -239,14 +317,58 @@ export function NewsList(_props: NewsListProps): ReactElement {
                 contentTypes: [ContentType.News],
                 searchTerm: state.searchTerm,
             },
+            fromIndex: state.fromIndex,
+            size: listSize,
         },
     });
 
+    const onChangeSearch = useCallback<ChangeHandler<string>>(
+        (_event, change) => {
+            setState((s) => ({
+                ...s,
+                canRefetch: false,
+                fromIndex: 0,
+                lastRefetch: DateTime.now(),
+                searchTerm: change.value || '',
+            }));
+        },
+        [state]
+    );
+
+    const onLoadMore = useCallback<ChangeHandler<number>>(
+        (event, change) => handlers.fromIndex(event, change),
+        [state]
+    );
+
+    const onRefetch = useCallback(() => {
+        const isPaginating = state.fromIndex > 0;
+        setState((s) => ({
+            ...s,
+            canRefetch: false,
+            fromIndex: 0, // if the user paginated, resetting to 0 will fire a new query
+            lastRefetch: DateTime.now(),
+        }));
+        // Refetch if not paginating
+        if (!isPaginating) {
+            newsListQuery.refetch({ requestPolicy: 'cache-and-network' });
+        }
+    }, [state.fromIndex]);
+
     const onSelectCompany = useCallback<ChangeHandler<CompanyFilterResult>>(
-        (event, change) => {
+        (_event, change) => {
             const primaryQuote = getPrimaryQuote(change.value);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
-            handlers.company(event, change);
+            setState((s) => ({
+                ...s,
+                canRefetch: false,
+                company: change.value || undefined,
+                fromIndex: 0,
+                lastRefetch: DateTime.now(),
+            }));
+            // If we are unselecting a company, refresh immediately
+            if (!change.value) {
+                newsListQuery.refetch();
+            }
         },
         [state]
     );
@@ -265,22 +387,37 @@ export function NewsList(_props: NewsListProps): ReactElement {
     );
 
     useAutoTrack('Submit', 'News Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
-    useInterval(
-        useCallback(() => newsListQuery.refetch({ requestPolicy: 'cache-and-network' }), [newsListQuery.refetch]),
-        15000
-    );
+    // Every 30 seconds, check if it's been 5 minutes since last refetch
+    useInterval(() => {
+        if (!state.canRefetch && state.lastRefetch && DateTime.now().diff(state.lastRefetch, ['minutes']).minutes > 5) {
+            setState((s) => ({
+                ...s,
+                canRefetch: true,
+            }));
+        }
+    }, 30000);
 
     return (
         <NewsListUI
+            canRefetch={state.canRefetch}
             company={state.company}
+            loadMore={useCallback(
+                (event: SyntheticEvent<Element, Event>) => onLoadMore(event, { value: state.fromIndex + listSize }),
+                [onLoadMore]
+            )}
             newsListQuery={newsListQuery}
             onBackFromNews={useCallback(
                 (event: SyntheticEvent<Element, Event>) => onSelectNews(event, { value: null }),
                 [onSelectNews]
             )}
+            onRefetch={onRefetch}
             onSelectCompany={onSelectCompany}
             onSelectNews={onSelectNews}
-            onChangeSearch={handlers.searchTerm}
+            onChangeSearch={useCallback(
+                (event: Event | SyntheticEvent<Element, Event>) =>
+                    onChangeSearch(event, { value: (event.target as HTMLInputElement).value }),
+                [onChangeSearch]
+            )}
             searchTerm={state.searchTerm}
             selectedNews={state.selectedNews}
         />

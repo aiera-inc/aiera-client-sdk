@@ -8,13 +8,16 @@ import userEvent from '@testing-library/user-event';
 import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
-import { ContentSource, ContentType } from '@aiera/client-sdk/types/generated';
+import { ContentType } from '@aiera/client-sdk/types/generated';
 import { NewsList } from '.';
-import { CONTENT_SOURCE_LABELS } from '@aiera/client-sdk/lib/data';
 
 const content = {
     id: '1',
     contentType: ContentType.News,
+    newsSource: {
+        id: '1',
+        name: 'MSN',
+    },
     primaryCompany: {
         instruments: [
             {
@@ -33,7 +36,6 @@ const content = {
         ],
     },
     publishedDate: '2021-11-30T09:00:00+00:00',
-    source: ContentSource.Lexisnexis,
     title: 'Article Title',
 };
 const contentWithBody = {
@@ -94,7 +96,7 @@ describe('NewsList', () => {
         expect(row).toBeTruthy();
         if (row) {
             within(row).getByText('Nov 30, 2021');
-            within(row).getByText(CONTENT_SOURCE_LABELS[ContentSource.Lexisnexis]);
+            within(row).getByText('MSN');
         }
     });
 

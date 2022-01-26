@@ -1,14 +1,16 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-import React from 'react';
+import React, { ReactNode } from 'react';
 import gql from 'graphql-tag';
 import { GraphQLError } from 'graphql';
-import { makeOperation, CombinedError, OperationContext } from '@urql/core';
-
 import { render, screen } from '@testing-library/react';
+import { renderHook } from '@testing-library/react-hooks';
 import userEvent from '@testing-library/user-event';
+import { makeOperation, CombinedError, GraphQLRequest, OperationContext } from '@urql/core';
+import { fromValue } from 'wonka';
 
 import { Provider as ConfigProvider } from '@aiera/client-sdk/lib/config';
-import { Provider, useClient } from './client';
+import { MockProvider, actAndFlush, getMockedClient } from 'testUtils';
+import { Provider, SuccessQueryResult, useClient, usePaginatedQuery } from './client';
 import { createTokenAuthConfig } from './auth';
 
 const tokens = {
@@ -194,5 +196,73 @@ describe('default auth', () => {
         const client3 = outerClient;
         expect(client1).toBe(client2);
         expect(client1).not.toBe(client3);
+    });
+});
+
+describe('usePaginatedQuery', () => {
+    type QueryVariables = {
+        fromIndex: number;
+    };
+    type TestData = {
+        id: string;
+        hits: Array<{ id: string }>;
+    };
+    const query = gql`
+        query PaginatedQuery($fromIndex: Int) {
+            test(fromIndex: $fromIndex) {
+                id
+                hits {
+                    id
+                }
+            }
+        }
+    `;
+    const data: TestData = {
+        id: '1',
+        hits: [{ id: '1' }],
+    };
+    const refetchData: TestData = {
+        id: '2',
+        hits: [{ id: '2' }],
+    };
+    const mockedClient = getMockedClient({
+        executeQuery: (request) => {
+            const variables = (request as GraphQLRequest)?.variables as QueryVariables;
+            return fromValue({
+                data: variables?.fromIndex === 0 ? data : refetchData,
+            });
+        },
+    });
+    const mergeResults = (prevData: TestData, data: TestData) => {
+        const prevHits = prevData?.hits || [];
+        const prevIds = new Set(prevHits.map((hit) => hit.id));
+        return {
+            ...data,
+            hits: [...prevHits, ...data.hits.filter((h) => !prevIds.has(h.id))],
+        };
+    };
+    function TestProvider({ children }: { children?: ReactNode }) {
+        return <MockProvider client={mockedClient}>{children}</MockProvider>;
+    }
+    test('handles merging query results', async () => {
+        const { result, rerender } = await actAndFlush(() =>
+            renderHook(
+                (props) =>
+                    usePaginatedQuery({
+                        mergeResults,
+                        query,
+                        variables: { fromIndex: props.fromIndex },
+                    }),
+                {
+                    initialProps: { fromIndex: 0 },
+                    wrapper: TestProvider,
+                }
+            )
+        );
+        expect((result.current as SuccessQueryResult<TestData, QueryVariables>).data).toEqual(data);
+        rerender({ fromIndex: 1 });
+        expect((result.current as SuccessQueryResult<TestData, QueryVariables>).data.hits).toEqual(
+            expect.arrayContaining([expect.objectContaining({ id: '1' }), expect.objectContaining({ id: '2' })])
+        );
     });
 });

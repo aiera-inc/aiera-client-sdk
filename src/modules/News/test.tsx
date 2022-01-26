@@ -2,9 +2,8 @@ import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
-import { CONTENT_SOURCE_LABELS } from '@aiera/client-sdk/lib/data';
 import { actAndFlush, getByTextWithMarkup, renderWithProvider } from '@aiera/client-sdk/testUtils';
-import { ContentSource, ContentType } from '@aiera/client-sdk/types/generated';
+import { ContentType } from '@aiera/client-sdk/types/generated';
 import { News } from '.';
 
 const content = [
@@ -12,6 +11,10 @@ const content = [
         id: '1',
         body: '<p>This is a paragraph</p>',
         contentType: ContentType.News,
+        newsSource: {
+            id: '1',
+            name: 'MSN',
+        },
         primaryCompany: {
             instruments: [
                 {
@@ -30,7 +33,6 @@ const content = [
             ],
         },
         publishedDate: '2021-11-30T09:00:00+00:00',
-        source: ContentSource.Lexisnexis,
         title: 'Article Title',
     },
 ];
@@ -69,7 +71,7 @@ describe('News', () => {
         screen.getByText('GME');
         screen.getByText('NYSE');
         screen.getByText('Nov 30, 2021');
-        screen.getByText(CONTENT_SOURCE_LABELS[ContentSource.Lexisnexis]);
+        screen.getByText('MSN');
     });
 
     test('renders search matches', async () => {
