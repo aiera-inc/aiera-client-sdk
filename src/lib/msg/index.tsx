@@ -10,10 +10,16 @@ interface EventAlert {
     eventIds: string[];
 }
 
+interface AudioEvent {
+    command: 'play' | 'pause' | 'seek';
+    seekTo?: number;
+}
+
 interface MessageBusEvents {
     'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
+    'audio-event': AudioEvent;
 }
 
 export interface Message<E extends keyof MessageBusEvents> {

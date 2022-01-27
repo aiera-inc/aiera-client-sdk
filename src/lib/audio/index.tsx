@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState, ReactElement, Re
 import { MediaPlayer, MediaPlayerClass } from 'dashjs';
 import { EventType, Quote } from '@aiera/client-sdk/types/generated';
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 
 export interface EventMetaData {
     quote?: Maybe<DeepPartial<Quote>>;
@@ -287,9 +288,14 @@ export function AudioPlayerProvider({
 
 export function useAudioPlayer(withUpdates = true): AudioPlayer {
     const audioPlayer = useContext(AudioPlayerContext);
+    const bus = useMessageBus();
 
     const [_, update] = useState<Record<string, never> | null>(null);
     useEffect(() => {
+        audioPlayer.audio.addEventListener('timeupdate', () =>
+            bus.emit('audio', { event: 'timeupdate', position: audioPlayer.currentTime })
+        );
+
         function onUpdate() {
             update({});
         }
