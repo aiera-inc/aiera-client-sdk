@@ -1,4 +1,4 @@
-import React, { Fragment, ReactElement } from 'react';
+import React, { Fragment, MouseEventHandler, ReactElement, SyntheticEvent, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
@@ -12,7 +12,8 @@ import { Plus } from '@aiera/client-sdk/components/Svg/Plus';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
-import { PlayButton } from '@aiera/client-sdk/modules/EventList/PlayButton';
+import { PlayButton } from '@aiera/client-sdk/modules/EventList/PlayButton'; // TODO this should probably be a component
+import { RecordingForm } from '@aiera/client-sdk/modules/RecordingForm';
 import { RecordingListQuery, RecordingListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types';
 import './styles.css';
 
@@ -23,10 +24,15 @@ interface RecordingListUIProps extends RecordingListSharedProps {
     onSearchChange: ChangeHandler<string>;
     recordingsQuery: QueryResult<RecordingListQuery, RecordingListQueryVariables>;
     searchTerm: string;
+    showForm: boolean;
+    toggleForm: MouseEventHandler;
 }
 
 export function RecordingListUI(props: RecordingListUIProps): ReactElement {
-    const { onSearchChange, recordingsQuery, searchTerm } = props;
+    const { onSearchChange, recordingsQuery, searchTerm, showForm, toggleForm } = props;
+    if (showForm) {
+        return <RecordingForm onBack={toggleForm} />;
+    }
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     let prevEventDate: DateTime | null = null;
     return (
@@ -41,8 +47,8 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                         value={searchTerm}
                     />
                     <Button
-                        className="bg-blue-500 cursor-pointer flex items-center mx-2 px-2 rounded-0.375 shrink-0 active:bg-blue-700 hover:bg-blue-600"
-                        onClick={undefined}
+                        className="bg-blue-500 cursor-pointer flex flex-shrink-0 items-center ml-2 rounded-0.375 active:bg-blue-700 hover:bg-blue-600"
+                        onClick={toggleForm}
                     >
                         <Plus className="h-4 mb-0.5 text-white w-2.5" />
                         <span className="font-light ml-1.5 text-sm text-white">Schedule Recording</span>
@@ -178,6 +184,7 @@ export interface RecordingListProps extends RecordingListSharedProps {}
 
 interface RecordingListState {
     searchTerm: string;
+    showForm: boolean;
 }
 
 /**
@@ -186,7 +193,9 @@ interface RecordingListState {
 export function RecordingList(_props: RecordingListProps): ReactElement {
     const { handlers, state } = useChangeHandlers<RecordingListState>({
         searchTerm: '',
+        showForm: false,
     });
+
     const recordingsQuery = useQuery<RecordingListQuery, RecordingListQueryVariables>({
         isEmpty: ({ events }) => events.length === 0,
         requestPolicy: 'cache-and-network',
@@ -218,6 +227,11 @@ export function RecordingList(_props: RecordingListProps): ReactElement {
             onSearchChange={handlers.searchTerm}
             recordingsQuery={recordingsQuery}
             searchTerm={state.searchTerm}
+            showForm={state.showForm}
+            toggleForm={useCallback(
+                (event: SyntheticEvent<Element, Event>) => handlers.showForm(event, { value: !state.showForm }),
+                [state.showForm]
+            )}
         />
     );
 }
