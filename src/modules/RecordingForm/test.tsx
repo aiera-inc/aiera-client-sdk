@@ -72,4 +72,20 @@ describe('RecordingForm', () => {
             expect(rendered.container.querySelector('.prev-step')).toBeNull();
         }
     });
+
+    test('renders sub-module for step', () => {
+        const { rendered } = renderWithProvider(<RecordingForm onBack={onBack} />);
+        const nextButton = rendered.container.querySelector('.next-step');
+        expect(rendered.container.querySelector('.connection-type')).not.toBeNull();
+        if (nextButton) {
+            userEvent.click(nextButton);
+            expect(rendered.container.querySelector('.connection-details')).not.toBeNull();
+            userEvent.click(nextButton);
+            expect(rendered.container.querySelector('.scheduling')).not.toBeNull();
+            userEvent.click(nextButton);
+            expect(rendered.container.querySelector('.troubleshooting')).not.toBeNull();
+            userEvent.click(nextButton);
+            expect(rendered.container.querySelector('.recording-details')).not.toBeNull();
+        }
+    });
 });
