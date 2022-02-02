@@ -407,6 +407,7 @@ function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdate
                             }
                         }
                         realtimePrices {
+                            id
                             date
                             price
                             volume
@@ -656,7 +657,8 @@ function useAudioSync(
     string | null
 ] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
-    const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll<HTMLDivElement>();
+    const stickyOffset = eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? 55 : 0;
+    const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll<HTMLDivElement>({ stickyOffset });
 
     const paragraphs = useMemo(() => speakerTurns.flatMap((s) => s.paragraphs), [speakerTurns]);
     // It's not the most efficient thing to load the partial here, since each partial change will trigger a re-render.
@@ -743,8 +745,6 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
     const [currentMatch, setCurrentMatch] = useState<string | null>(null);
     const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
         pauseOnUserScroll: false,
-        block: 'center',
-        inline: 'center',
         behavior: 'auto',
     });
     const { settings } = useSettings();
@@ -939,7 +939,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             prevMatch={searchState.prevMatch}
             scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
-            showSpeakers={!eventQuery.state.data?.events[0]?.isLive}
+            showSpeakers={!!eventQuery.state.data?.events[0]?.hasPublishedTranscript}
             speakerTurns={searchState.speakerTurnsWithMatches}
             startTime={startTime}
         />

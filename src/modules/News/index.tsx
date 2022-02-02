@@ -188,8 +188,6 @@ function useSearchState(newsQuery: QueryResult<NewsQuery, NewsQueryVariables>) {
     const [currentMatch, setCurrentMatch] = useState<string | null>(null);
     const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
         pauseOnUserScroll: false,
-        block: 'center',
-        inline: 'center',
         behavior: 'auto',
     });
     /**

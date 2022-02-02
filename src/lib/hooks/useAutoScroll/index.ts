@@ -1,4 +1,4 @@
-import { useLayoutEffect, useCallback, useRef, useState, RefCallback, RefObject } from 'react';
+import { useEffect, useCallback, useRef, useState, RefCallback, RefObject } from 'react';
 
 function isVisible(container: HTMLElement, target: HTMLElement) {
     const targetPosition = target.getBoundingClientRect();
@@ -15,7 +15,8 @@ async function scrollIntoView(
     scrollContainer: HTMLElement,
     target: HTMLElement,
     opts: ScrollIntoViewOptions,
-    delay = 200
+    delay = 200,
+    stickyOffset = 0
 ): Promise<void> {
     let resetTimer: (() => void) | null = null;
 
@@ -27,14 +28,25 @@ async function scrollIntoView(
         };
         scrollContainer.addEventListener('scroll', resetTimer);
         resetTimer();
-        target.scrollIntoView?.(opts);
+        const { height: targetHeight, top: targetTop, bottom: targetBottom } = target.getBoundingClientRect();
+        const { top: containerTop, bottom: containerBottom } = scrollContainer.getBoundingClientRect();
+        const currentScrollTop = scrollContainer.scrollTop;
+        if (targetHeight) {
+            if (targetTop < containerTop) {
+                const scrollDiff = containerTop - targetTop + stickyOffset;
+                scrollContainer.scrollTo({ ...opts, top: currentScrollTop - scrollDiff });
+            } else if (targetBottom > containerBottom) {
+                const scrollDiff = targetBottom - containerBottom;
+                scrollContainer.scrollTo({ ...opts, top: currentScrollTop + scrollDiff });
+            }
+        }
     });
 
-    if (resetTimer) {
-        scrollContainer.removeEventListener('scroll', resetTimer);
-    }
-
-    return promise;
+    return promise.then(() => {
+        if (resetTimer) {
+            scrollContainer.removeEventListener('scroll', resetTimer);
+        }
+    });
 }
 
 /**
@@ -47,8 +59,6 @@ async function scrollIntoView(
  * @param   opts.pauseOnUserScroll - set to true to stop autoscrolling when the user manually scrolls
  * @param   opts.initialBehavior   - see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
  * @param   opts.behavior          - see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
- * @param   opts.block             - see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
- * @param   opts.inline            - see https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView
  *
  * @returns A React ref object that should be set on the scroll container, and another ref that should be
  *          the target to scroll into view.
@@ -58,9 +68,8 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     pauseOnUserScroll?: boolean;
     initialBehavior?: ScrollIntoViewOptions['behavior'];
     behavior?: ScrollIntoViewOptions['behavior'];
-    block?: ScrollIntoViewOptions['block'];
-    inline?: ScrollIntoViewOptions['inline'];
     track?: boolean;
+    stickyOffset?: number;
     log?: boolean;
 }): {
     scrollContainerRef: RefCallback<E>;
@@ -73,8 +82,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         pauseOnUserScroll = true,
         initialBehavior = 'auto',
         behavior = 'smooth',
-        block,
-        inline,
+        stickyOffset = 0,
     } = opts || {};
     const [scrollContainer, scrollContainerRef] = useState<E | null>(null);
     const [target, targetRef] = useState<T | null>(null);
@@ -82,7 +90,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     const pauseAutoScroll = useRef<boolean>(false);
     const initialScroll = useRef<boolean>(true);
 
-    useLayoutEffect(() => {
+    useEffect(() => {
         function onScroll() {
             maybePauseAutoScroll();
         }
@@ -103,12 +111,9 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
                 isAutoScrolling.current = scrollIntoView(
                     scrollContainer,
                     target,
-                    {
-                        behavior: initialScroll.current ? initialBehavior : behavior,
-                        block,
-                        inline,
-                    },
-                    200
+                    { behavior: initialScroll.current ? initialBehavior : behavior },
+                    200,
+                    stickyOffset
                 );
                 await isAutoScrolling.current;
                 isAutoScrolling.current = null;
@@ -129,24 +134,26 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
             scrollContainer.addEventListener('scroll', onScroll);
         }
         return () => scrollContainer?.removeEventListener('scroll', onScroll);
-    }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, block, inline]);
+    }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, stickyOffset]);
 
     const scroll = useCallback(
         (opts?: { top?: number; onlyIfNeeded?: boolean }) => {
             const { top, onlyIfNeeded = false } = opts || {};
             if (top === undefined) {
-                if (!onlyIfNeeded || (scrollContainer && target && !isVisible(scrollContainer, target))) {
-                    target?.scrollIntoView({
-                        behavior: initialScroll.current ? initialBehavior : behavior,
-                        block,
-                        inline,
-                    });
+                if (scrollContainer && target && (!onlyIfNeeded || !isVisible(scrollContainer, target))) {
+                    void scrollIntoView(
+                        scrollContainer,
+                        target,
+                        { behavior: initialScroll.current ? initialBehavior : behavior },
+                        0,
+                        stickyOffset
+                    );
                 }
             } else {
                 scrollContainer?.scrollTo({ top });
             }
         },
-        [scrollContainer, target, initialBehavior, behavior, block, inline]
+        [scrollContainer, target, initialBehavior, behavior, stickyOffset]
     );
 
     return { scrollContainerRef, targetRef, scroll, isAutoScrolling };
