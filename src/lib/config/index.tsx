@@ -4,7 +4,7 @@ import { ClientOptions } from 'urql';
 import { AuthConfig } from '@urql/exchange-auth';
 import { Options as RealtimeOptions } from 'pusher-js';
 
-type Module = 'EventList' | 'NewsList' | 'RecordingList';
+type Module = 'EventList' | 'NewsList' | 'RecordingList' | 'Monitors';
 type Platform = 'aiera-sdk-dev' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
 export interface EnvConfig {
