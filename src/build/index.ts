@@ -66,7 +66,7 @@ function getEnv(): { [key: string]: string } {
 }
 
 const sharedConfig: BuildOptions = {
-    sourcemap: 'external',
+    sourcemap: true,
     target: 'es6',
     tsconfig: 'tsconfig.json',
     define: getEnv(),
