@@ -7,3 +7,4 @@ node_modules/
 .nvmrc
 .jest/coverage
 .idea
+.vimspector.json
