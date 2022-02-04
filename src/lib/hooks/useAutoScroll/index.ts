@@ -16,7 +16,7 @@ async function scrollIntoView(
     target: HTMLElement,
     opts: ScrollIntoViewOptions,
     delay = 200,
-    stickyOffset = 0
+    offset: { top: number; bottom: number } = { top: 0, bottom: 0 }
 ): Promise<void> {
     let resetTimer: (() => void) | null = null;
 
@@ -33,10 +33,10 @@ async function scrollIntoView(
         const currentScrollTop = scrollContainer.scrollTop;
         if (targetHeight) {
             if (targetTop < containerTop) {
-                const scrollDiff = containerTop - targetTop + stickyOffset;
+                const scrollDiff = containerTop - targetTop + (offset.top || 0);
                 scrollContainer.scrollTo({ ...opts, top: currentScrollTop - scrollDiff });
             } else if (targetBottom > containerBottom) {
-                const scrollDiff = targetBottom - containerBottom;
+                const scrollDiff = targetBottom - containerBottom + (offset.bottom || 0);
                 scrollContainer.scrollTo({ ...opts, top: currentScrollTop + scrollDiff });
             }
         }
@@ -69,7 +69,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     initialBehavior?: ScrollIntoViewOptions['behavior'];
     behavior?: ScrollIntoViewOptions['behavior'];
     track?: boolean;
-    stickyOffset?: number;
+    offset?: { top: number; bottom: number };
     log?: boolean;
 }): {
     scrollContainerRef: RefCallback<E>;
@@ -82,7 +82,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         pauseOnUserScroll = true,
         initialBehavior = 'auto',
         behavior = 'smooth',
-        stickyOffset = 0,
+        offset = { top: 0, bottom: 0 },
     } = opts || {};
     const [scrollContainer, scrollContainerRef] = useState<E | null>(null);
     const [target, targetRef] = useState<T | null>(null);
@@ -113,7 +113,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
                     target,
                     { behavior: initialScroll.current ? initialBehavior : behavior },
                     200,
-                    stickyOffset
+                    offset
                 );
                 await isAutoScrolling.current;
                 isAutoScrolling.current = null;
@@ -134,7 +134,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
             scrollContainer.addEventListener('scroll', onScroll);
         }
         return () => scrollContainer?.removeEventListener('scroll', onScroll);
-    }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, stickyOffset]);
+    }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, offset.top, offset.bottom]);
 
     const scroll = useCallback(
         (opts?: { top?: number; onlyIfNeeded?: boolean }) => {
@@ -146,14 +146,14 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
                         target,
                         { behavior: initialScroll.current ? initialBehavior : behavior },
                         0,
-                        stickyOffset
+                        offset
                     );
                 }
             } else {
                 scrollContainer?.scrollTo({ top });
             }
         },
-        [scrollContainer, target, initialBehavior, behavior, stickyOffset]
+        [scrollContainer, target, initialBehavior, behavior, offset.top, offset.bottom]
     );
 
     return { scrollContainerRef, targetRef, scroll, isAutoScrolling };

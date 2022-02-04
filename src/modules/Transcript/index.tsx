@@ -657,8 +657,8 @@ function useAudioSync(
     string | null
 ] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
-    const stickyOffset = eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? 55 : 0;
-    const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll<HTMLDivElement>({ stickyOffset });
+    const offset = { top: eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? 55 : 5, bottom: 15 };
+    const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll<HTMLDivElement>({ offset });
 
     const paragraphs = useMemo(() => speakerTurns.flatMap((s) => s.paragraphs), [speakerTurns]);
     // It's not the most efficient thing to load the partial here, since each partial change will trigger a re-render.
@@ -746,6 +746,7 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
     const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
         pauseOnUserScroll: false,
         behavior: 'auto',
+        offset: { top: 5, bottom: 5 },
     });
     const { settings } = useSettings();
 
