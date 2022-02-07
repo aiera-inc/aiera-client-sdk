@@ -1362,7 +1362,8 @@
 <a name='L1297'></a><a href='#L1297'>1297</a>
 <a name='L1298'></a><a href='#L1298'>1298</a>
 <a name='L1299'></a><a href='#L1299'>1299</a>
-<a name='L1300'></a><a href='#L1300'>1300</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1300'></a><a href='#L1300'>1300</a>
+<a name='L1301'></a><a href='#L1301'>1301</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2540,6 +2541,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">31x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3552,7 +3554,7 @@ export type TranscriptQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, webcastUrls: Array&lt;string&gt;, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, connectionStatus: EventConnectionStatus, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, quotePrices: Array&lt;{ __typename?: 'EventQuotePriceInfo', currentDayClosePrice?: number | null | undefined, currentDayOpenPrice?: number | null | undefined, endPrice?: number | null | undefined, previousDayClosePrice?: number | null | undefined, startPrice?: number | null | undefined, quote: { __typename?: 'Quote', id: string, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string } }, realtimePrices: Array&lt;{ __typename?: 'EventQuoteRealtimePrice', date: string, price: number, volume: number, priceChangeFromStartValue?: number | null | undefined, priceChangeFromStartPercent?: number | null | undefined, volumeChangeFromStartValue?: number | null | undefined, volumeChangeFromStartPercent?: number | null | undefined, volumeChangeFromLastValue?: number | null | undefined, volumeChangeFromLastPercent?: number | null | undefined }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, name: string, title?: string | null | undefined, identified: boolean }, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: string | null | undefined, displayTimestamp?: string | null | undefined, syncTimestamp?: string | null | undefined, syncMs?: number | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, overThreshold: boolean, basicSentiment: BasicTextualSentiment } | null | undefined } | null | undefined }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, title: string, eventDate: string, eventType: EventType, hasConnectionDetails: boolean, isLive: boolean, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, publishedTranscriptExpected: boolean, hasTranscript: boolean, hasPublishedTranscript: boolean, webcastUrls: Array&lt;string&gt;, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, connectionStatus: EventConnectionStatus, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, quotePrices: Array&lt;{ __typename?: 'EventQuotePriceInfo', currentDayClosePrice?: number | null | undefined, currentDayOpenPrice?: number | null | undefined, endPrice?: number | null | undefined, previousDayClosePrice?: number | null | undefined, startPrice?: number | null | undefined, quote: { __typename?: 'Quote', id: string, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string } }, realtimePrices: Array&lt;{ __typename?: 'EventQuoteRealtimePrice', id: string, date: string, price: number, volume: number, priceChangeFromStartValue?: number | null | undefined, priceChangeFromStartPercent?: number | null | undefined, volumeChangeFromStartValue?: number | null | undefined, volumeChangeFromStartPercent?: number | null | undefined, volumeChangeFromLastValue?: number | null | undefined, volumeChangeFromLastPercent?: number | null | undefined }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, name: string, title?: string | null | undefined, identified: boolean }, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, timestamp?: string | null | undefined, displayTimestamp?: string | null | undefined, syncTimestamp?: string | null | undefined, syncMs?: number | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, overThreshold: boolean, basicSentiment: BasicTextualSentiment } | null | undefined } | null | undefined }&gt; }&gt; }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 export type LatestParagraphsQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
@@ -3891,6 +3893,7 @@ export const TranscriptDocument = gql`
         }
       }
       realtimePrices {
+        id
         date
         price
         volume
@@ -3967,7 +3970,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Feb 04 2022 12:39:47 GMT-0500 (Eastern Standard Time)
+                at Mon Feb 07 2022 10:06:59 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
