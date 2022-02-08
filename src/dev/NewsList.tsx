@@ -30,7 +30,7 @@ const App: FC = (): ReactElement => {
                     },
                 }}
             >
-                <Auth showLogout>
+                <Auth>
                     <div className="h-full border border-black">
                         <NewsList />
                     </div>

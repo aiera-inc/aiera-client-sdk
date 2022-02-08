@@ -4,6 +4,7 @@ import { fromValue } from 'wonka';
 
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { AuthTokens, TokenAuthConfig } from '@aiera/client-sdk/api/auth';
+import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import { Auth, AuthUI, LoginState } from '.';
 
 const email = 'test@example.com';
@@ -15,8 +16,6 @@ const defaultProps = {
     loading: false,
     error: undefined,
     login: () => undefined,
-    logout: () => undefined,
-    showLogout: true,
     email: '',
     onChangeEmail: () => undefined,
     password: '',
@@ -27,14 +26,8 @@ const defaultProps = {
 describe('AuthUI', () => {
     test('renders a loading state', () => {
         render(<AuthUI {...defaultProps} loading />);
-        screen.getByText('Loading...');
-    });
-
-    test('renders the user and a logout button if logged in', () => {
-        const logout = jest.fn();
-        render(<AuthUI {...defaultProps} user={{ id: 'id', firstName: 'Test', lastName: 'User' }} logout={logout} />);
-        fireEvent.click(screen.getByText('Logout'));
-        expect(logout).toHaveBeenCalled();
+        screen.getByTitle('Logo');
+        expect(screen.queryByPlaceholderText('email')).toBeNull();
     });
 
     test('renders a logging form if the user is logged out', () => {
@@ -68,14 +61,20 @@ describe('Auth', () => {
     }
     test('handles loading state', () => {
         renderWithProvider(<Auth />);
-        screen.getByText('Loading...');
+        screen.getByTitle('Logo');
+        expect(screen.queryByPlaceholderText('email')).toBeNull();
     });
 
     test('handles logged in state with user', async () => {
         const config = createMockAuth();
+        const AuthButton = () => {
+            const { logout } = useAuthContext();
+            return <button onClick={logout}>Logout</button>;
+        };
         const { reset } = renderWithProvider(
-            <Auth config={config} showLogout>
+            <Auth config={config}>
                 <div>Hello World!</div>
+                <AuthButton />
             </Auth>,
             {
                 executeQuery: () =>
@@ -86,33 +85,12 @@ describe('Auth', () => {
                     }),
             }
         );
-        screen.queryByText('Logged in as Test User');
         screen.getByText('Hello World!');
         fireEvent.click(screen.getByText('Logout'));
         await waitFor(() => {
             expect(config.clearAuth).toHaveBeenCalled();
             expect(reset).toHaveBeenCalled();
         });
-    });
-
-    test('handles logged in state with user and showLogout false', () => {
-        const config = createMockAuth();
-        renderWithProvider(
-            <Auth config={config}>
-                <div>Hello World!</div>
-            </Auth>,
-            {
-                executeQuery: () =>
-                    fromValue({
-                        data: {
-                            currentUser: { id: 1, firstName: 'Test', lastName: 'User' },
-                        },
-                    }),
-            }
-        );
-        expect(screen.queryByText('Logged in as Test User')).toBeNull();
-        expect(screen.queryByText('Logout')).toBeNull();
-        screen.getByText('Hello World!');
     });
 
     test('handles logging in when in logged out state', async () => {

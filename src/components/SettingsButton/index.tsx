@@ -5,6 +5,7 @@ import { Toggle } from '@aiera/client-sdk/components/Toggle';
 import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import './styles.css';
 
 interface SettingsButtonSharedProps {}
@@ -12,10 +13,11 @@ interface SettingsButtonSharedProps {}
 /** @notExported */
 interface SettingsButtonUIProps extends SettingsButtonSharedProps {
     hideTooltip?: () => void;
+    logout?: () => void;
 }
 
 function TooltipContent(props: SettingsButtonUIProps): ReactElement {
-    const { hideTooltip } = props;
+    const { hideTooltip, logout } = props;
     const { settings, handlers } = useSettings();
     return (
         <div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1">
@@ -54,14 +56,21 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     </span>
                 </div>
             )}
+            {logout && (
+                <div className="m-2 flex justify-end">
+                    <Button kind="primary" onClick={logout}>
+                        Logout
+                    </Button>
+                </div>
+            )}
         </div>
     );
 }
 
-export function SettingsButtonUI(_props: SettingsButtonUIProps): ReactElement {
+export function SettingsButtonUI({ logout }: SettingsButtonUIProps): ReactElement {
     return (
         <Tooltip
-            content={({ hideTooltip }) => <TooltipContent hideTooltip={hideTooltip} />}
+            content={({ hideTooltip }) => <TooltipContent hideTooltip={hideTooltip} logout={logout} />}
             grow="down-left"
             modal
             openOn="click"
@@ -82,5 +91,6 @@ export interface SettingsButtonProps extends SettingsButtonSharedProps {}
  * Renders SettingsButton
  */
 export function SettingsButton(): ReactElement {
-    return <SettingsButtonUI />;
+    const { logout } = useAuthContext();
+    return <SettingsButtonUI logout={logout} />;
 }
