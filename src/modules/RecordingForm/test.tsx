@@ -3,6 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProvider } from 'testUtils';
+import { CONNECTION_TYPE_OPTIONS, ConnectionType as ConnectionTypeEnum } from '@aiera/client-sdk/modules/RecordingForm';
 import { RecordingForm } from '.';
 
 describe('RecordingForm', () => {
@@ -24,6 +25,10 @@ describe('RecordingForm', () => {
         const { rendered } = renderWithProvider(<RecordingForm onBack={onBack} />);
         const nextButton = rendered.container.querySelector('.next-step');
         expect(nextButton).not.toBeNull();
+        expect(nextButton).toBeDisabled();
+        // Select an option to enable the next button
+        userEvent.click(screen.getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.Zoom].label));
+        expect(nextButton).not.toBeDisabled();
         if (nextButton) {
             userEvent.click(nextButton);
             screen.getByText('Step 2 of 5');
@@ -47,6 +52,8 @@ describe('RecordingForm', () => {
         expect(rendered.container.querySelector('.prev-step')).toBeNull();
         // Click the next step button 4 times to get to last step
         if (nextButton) {
+            // Select an option to enable the next button
+            userEvent.click(screen.getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.Zoom].label));
             userEvent.click(nextButton);
             userEvent.click(nextButton);
             userEvent.click(nextButton);
@@ -78,6 +85,8 @@ describe('RecordingForm', () => {
         const nextButton = rendered.container.querySelector('.next-step');
         expect(rendered.container.querySelector('.connection-type')).not.toBeNull();
         if (nextButton) {
+            // Select an option to enable the next button
+            userEvent.click(screen.getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.Zoom].label));
             userEvent.click(nextButton);
             expect(rendered.container.querySelector('.connection-details')).not.toBeNull();
             userEvent.click(nextButton);

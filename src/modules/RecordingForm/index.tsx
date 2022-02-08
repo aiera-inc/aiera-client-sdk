@@ -1,11 +1,18 @@
-import React, { Dispatch, MouseEventHandler, ReactElement, SetStateAction, useCallback, useState } from 'react';
+import React, {
+    Dispatch,
+    MouseEventHandler,
+    ReactElement,
+    SetStateAction,
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
 import { match } from 'ts-pattern';
 
 import { Button } from '@aiera/client-sdk/components/Button';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { CONNECTION_TYPE_OPTIONS, ConnectionType } from './consts';
 import { ConnectionType as ConnectionTypeComponent } from './ConnectionType';
 import { ConnectionDetails } from './ConnectionDetails';
 import { RecordingDetails } from './RecordingDetails';
@@ -14,6 +21,50 @@ import { Troubleshooting } from './Troubleshooting';
 import './styles.css';
 
 const STEPS = 5;
+
+/**
+ * BEGIN TEMPORARY TYPES
+ * TODO: remove these once the server generates them
+ */
+export enum ConnectionType {
+    GoogleMeet = 'google_meet',
+    PhoneNumber = 'phone',
+    Webcast = 'webcast',
+    Zoom = 'zoom',
+}
+/**
+ * END TEMPORARY TYPES
+ */
+
+export const CONNECTION_TYPE_OPTIONS = {
+    [ConnectionType.Zoom]: {
+        label: 'Zoom',
+        value: ConnectionType.Zoom,
+        description: 'Connect to a Zoom dial-in number',
+    },
+    [ConnectionType.GoogleMeet]: {
+        label: 'Google Meet',
+        value: ConnectionType.GoogleMeet,
+        description: 'Connect to a Google Meet dial-in number',
+    },
+    [ConnectionType.Webcast]: {
+        label: 'Webcast URL',
+        value: ConnectionType.Webcast,
+        description: 'Connect to a webcast url',
+    },
+    [ConnectionType.PhoneNumber]: {
+        label: 'Phone Number',
+        value: ConnectionType.PhoneNumber,
+        description: 'Connect to any phone number, with optional pin',
+    },
+};
+export type ConnectionTypeOption = {
+    [key in ConnectionType]: {
+        description: string;
+        label: string;
+        value: ConnectionType;
+    };
+};
 
 export type RecordingFormFieldValue = boolean | string | ConnectionType;
 
@@ -43,6 +94,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectPin: string;
     connectUrl: string;
     errors: RecordingFormFields;
+    isNextButtonDisabled: boolean;
     meetingType: string;
     onChange: ChangeHandler<RecordingFormFieldValue>;
     onConnectDialNumber: string;
@@ -56,7 +108,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
 }
 
 export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
-    const { connectionType, onBack, onChange, onNextStep, onPrevStep, onSubmit, step } = props;
+    const { connectionType, isNextButtonDisabled, onBack, onChange, onNextStep, onPrevStep, onSubmit, step } = props;
     return (
         <div className="bg-[#F7F8FB] h-full flex flex-col justify-between recording-form">
             <div className="bg-white flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header">
@@ -72,7 +124,13 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
             </div>
             <div className="h-full pb-3 px-3 shadow-3xl">
                 {match(step)
-                    .with(1, () => <ConnectionTypeComponent connectionType={connectionType} onChange={onChange} />)
+                    .with(1, () => (
+                        <ConnectionTypeComponent
+                            connectionType={connectionType}
+                            connectionTypeOptions={CONNECTION_TYPE_OPTIONS}
+                            onChange={onChange}
+                        />
+                    ))
                     .with(2, () => <ConnectionDetails />)
                     .with(3, () => <Scheduling />)
                     .with(4, () => <Troubleshooting />)
@@ -99,6 +157,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     )}
                     <Button
                         className="bg-blue-500 cursor-pointer flex items-center ml-auto rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step"
+                        disabled={isNextButtonDisabled}
                         onClick={(event) => (step === STEPS ? onSubmit(event) : onNextStep(step + 1))}
                     >
                         <span className="font-light text-sm text-white">
@@ -177,6 +236,8 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         [state]
     );
 
+    const isNextButtonDisabled = useMemo(() => step >= 1 && !state.connectionType, [step, state.connectionType]);
+
     return (
         <RecordingFormUI
             connectAccessId={state.connectAccessId}
@@ -186,6 +247,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
             errors={state.errors}
+            isNextButtonDisabled={isNextButtonDisabled}
             meetingType={state.meetingType}
             onBack={onBack}
             onChange={onChange}
