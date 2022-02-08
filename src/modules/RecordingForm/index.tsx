@@ -1,9 +1,12 @@
-import React, { Dispatch, MouseEventHandler, ReactElement, SetStateAction, useState } from 'react';
+import React, { Dispatch, MouseEventHandler, ReactElement, SetStateAction, useCallback, useState } from 'react';
 import { match } from 'ts-pattern';
 
 import { Button } from '@aiera/client-sdk/components/Button';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
-import { ConnectionType } from './ConnectionType';
+import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { ChangeHandler } from '@aiera/client-sdk/types';
+import { CONNECTION_TYPE_OPTIONS, ConnectionType } from './consts';
+import { ConnectionType as ConnectionTypeComponent } from './ConnectionType';
 import { ConnectionDetails } from './ConnectionDetails';
 import { RecordingDetails } from './RecordingDetails';
 import { Scheduling } from './Scheduling';
@@ -12,23 +15,51 @@ import './styles.css';
 
 const STEPS = 5;
 
+export type RecordingFormFieldValue = boolean | string | ConnectionType;
+
+export interface RecordingFormFields {
+    connectAccessId?: string;
+    connectCallerId?: string;
+    connectionType?: ConnectionType;
+    connectPhoneNumber?: string;
+    connectPin?: string;
+    connectUrl?: string;
+    meetingType?: string;
+    onConnectDialNumber?: string;
+    participationType?: string;
+    smsAlertBeforeCall?: boolean;
+}
+
 interface RecordingFormSharedProps {
     onBack: MouseEventHandler;
 }
 
 /** @notExported */
 interface RecordingFormUIProps extends RecordingFormSharedProps {
+    connectAccessId: string;
+    connectCallerId: string;
+    connectionType?: ConnectionType;
+    connectPhoneNumber: string;
+    connectPin: string;
+    connectUrl: string;
+    errors: RecordingFormFields;
+    meetingType: string;
+    onChange: ChangeHandler<RecordingFormFieldValue>;
+    onConnectDialNumber: string;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
     onSubmit: MouseEventHandler;
+    participationType: string;
+    smsAlertBeforeCall: boolean;
     step: number;
+    touched: RecordingFormFields;
 }
 
 export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
-    const { onBack, onNextStep, onPrevStep, onSubmit, step } = props;
+    const { connectionType, onBack, onChange, onNextStep, onPrevStep, onSubmit, step } = props;
     return (
-        <div className="h-full flex flex-col recording-form">
-            <div className="flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header">
+        <div className="bg-[#F7F8FB] h-full flex flex-col justify-between recording-form">
+            <div className="bg-white flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header">
                 <div className="flex items-center mb-3">
                     <Button className="mr-2" onClick={onBack}>
                         <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
@@ -39,16 +70,16 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     </p>
                 </div>
             </div>
-            <div className="px-3">
+            <div className="h-full pb-3 px-3 shadow-3xl">
                 {match(step)
-                    .with(1, () => <ConnectionType />)
+                    .with(1, () => <ConnectionTypeComponent connectionType={connectionType} onChange={onChange} />)
                     .with(2, () => <ConnectionDetails />)
                     .with(3, () => <Scheduling />)
                     .with(4, () => <Troubleshooting />)
                     .with(5, () => <RecordingDetails />)
                     .otherwise(() => null)}
             </div>
-            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__footer">
+            <div className="bg-white border-gray-200 border-opacity-80 border-t flex flex-col pt-3 px-3 shadow-inner recording-form__footer">
                 <div className="flex items-center mb-3">
                     {step > 1 && (
                         <div
@@ -72,7 +103,13 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     >
                         <span className="font-light text-sm text-white">
                             {match(step)
-                                .with(1, () => 'Configure')
+                                .with(
+                                    1,
+                                    () =>
+                                        `Configure ${
+                                            connectionType ? CONNECTION_TYPE_OPTIONS[connectionType].label : ''
+                                        }`
+                                )
                                 .with(2, () => 'Scheduling')
                                 .with(3, () => 'Troubleshooting')
                                 .with(4, () => 'Recording Details')
@@ -90,19 +127,76 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
 /** @notExported */
 export interface RecordingFormProps extends RecordingFormSharedProps {}
 
+interface InputField {
+    [key: string]: boolean | number | string;
+}
+
+interface RecordingFormState {
+    connectAccessId: string;
+    connectCallerId: string;
+    connectionType?: ConnectionType;
+    connectPhoneNumber: string;
+    connectPin: string;
+    connectUrl: string;
+    errors: InputField;
+    meetingType: string;
+    onConnectDialNumber: string;
+    participationType: string;
+    smsAlertBeforeCall: boolean;
+    touched: InputField;
+}
+
 /**
  * Renders RecordingForm
  */
 export function RecordingForm(props: RecordingFormProps): ReactElement {
-    const [step, setStep] = useState<number>(1);
     const { onBack } = props;
+    const { state, setState } = useChangeHandlers<RecordingFormState>({
+        connectAccessId: '',
+        connectCallerId: '',
+        connectionType: undefined,
+        connectPhoneNumber: '',
+        connectPin: '',
+        connectUrl: '',
+        errors: {},
+        meetingType: '',
+        onConnectDialNumber: '',
+        participationType: '',
+        smsAlertBeforeCall: false,
+        touched: {},
+    });
+    const [step, setStep] = useState<number>(1);
+
+    const onChange = useCallback<ChangeHandler<RecordingFormFieldValue>>(
+        (_event, change) => {
+            setState((s) => ({
+                ...s,
+                [change.name as string]: change.value,
+            }));
+        },
+        [state]
+    );
+
     return (
         <RecordingFormUI
+            connectAccessId={state.connectAccessId}
+            connectCallerId={state.connectCallerId}
+            connectionType={state.connectionType}
+            connectPhoneNumber={state.connectPhoneNumber}
+            connectPin={state.connectPin}
+            connectUrl={state.connectUrl}
+            errors={state.errors}
+            meetingType={state.meetingType}
             onBack={onBack}
+            onChange={onChange}
+            onConnectDialNumber={state.onConnectDialNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={() => console.log('SUBMITTED')}
+            participationType={state.participationType}
+            smsAlertBeforeCall={state.smsAlertBeforeCall}
             step={step}
+            touched={state.touched}
         />
     );
 }
