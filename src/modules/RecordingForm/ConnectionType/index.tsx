@@ -1,7 +1,6 @@
 import React, { ReactElement } from 'react';
 
 import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
-import { RecordingFormFieldValue } from '@aiera/client-sdk/modules/RecordingForm';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { ConnectionType as ConnectionTypeEnum, ConnectionTypeOption } from '@aiera/client-sdk/modules/RecordingForm';
 import './styles.css';
@@ -9,7 +8,7 @@ import './styles.css';
 interface ConnectionTypeSharedProps {
     connectionType?: ConnectionTypeEnum;
     connectionTypeOptions: ConnectionTypeOption;
-    onChange: ChangeHandler<RecordingFormFieldValue>;
+    onChange: ChangeHandler<ConnectionTypeEnum>;
 }
 
 /** @notExported */

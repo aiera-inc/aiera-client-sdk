@@ -1,12 +1,4 @@
-import React, {
-    Dispatch,
-    MouseEventHandler,
-    ReactElement,
-    SetStateAction,
-    useCallback,
-    useMemo,
-    useState,
-} from 'react';
+import React, { Dispatch, MouseEventHandler, ReactElement, SetStateAction, useMemo, useState } from 'react';
 import { match } from 'ts-pattern';
 
 import { Button } from '@aiera/client-sdk/components/Button';
@@ -20,7 +12,7 @@ import { Scheduling } from './Scheduling';
 import { Troubleshooting } from './Troubleshooting';
 import './styles.css';
 
-const STEPS = 5;
+const NUM_STEPS = 5;
 
 /**
  * BEGIN TEMPORARY TYPES
@@ -58,6 +50,7 @@ export const CONNECTION_TYPE_OPTIONS = {
         description: 'Connect to any phone number, with optional pin',
     },
 };
+
 export type ConnectionTypeOption = {
     [key in ConnectionType]: {
         description: string;
@@ -65,21 +58,6 @@ export type ConnectionTypeOption = {
         value: ConnectionType;
     };
 };
-
-export type RecordingFormFieldValue = boolean | string | ConnectionType;
-
-export interface RecordingFormFields {
-    connectAccessId?: string;
-    connectCallerId?: string;
-    connectionType?: ConnectionType;
-    connectPhoneNumber?: string;
-    connectPin?: string;
-    connectUrl?: string;
-    meetingType?: string;
-    onConnectDialNumber?: string;
-    participationType?: string;
-    smsAlertBeforeCall?: boolean;
-}
 
 interface RecordingFormSharedProps {
     onBack: MouseEventHandler;
@@ -93,10 +71,9 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
-    errors: RecordingFormFields;
     isNextButtonDisabled: boolean;
     meetingType: string;
-    onChange: ChangeHandler<RecordingFormFieldValue>;
+    onChangeConnectionType: ChangeHandler<ConnectionType>;
     onConnectDialNumber: string;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
@@ -104,11 +81,19 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     participationType: string;
     smsAlertBeforeCall: boolean;
     step: number;
-    touched: RecordingFormFields;
 }
 
 export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
-    const { connectionType, isNextButtonDisabled, onBack, onChange, onNextStep, onPrevStep, onSubmit, step } = props;
+    const {
+        connectionType,
+        isNextButtonDisabled,
+        onBack,
+        onChangeConnectionType,
+        onNextStep,
+        onPrevStep,
+        onSubmit,
+        step,
+    } = props;
     return (
         <div className="bg-[#F7F8FB] h-full flex flex-col justify-between recording-form">
             <div className="bg-white flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header">
@@ -118,7 +103,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                         Recordings
                     </Button>
                     <p className="ml-auto text-gray-400 text-sm">
-                        Step {step} of {STEPS}
+                        Step {step} of {NUM_STEPS}
                     </p>
                 </div>
             </div>
@@ -128,7 +113,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                         <ConnectionTypeComponent
                             connectionType={connectionType}
                             connectionTypeOptions={CONNECTION_TYPE_OPTIONS}
-                            onChange={onChange}
+                            onChange={onChangeConnectionType}
                         />
                     ))
                     .with(2, () => <ConnectionDetails />)
@@ -158,7 +143,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     <Button
                         className="bg-blue-500 cursor-pointer flex items-center ml-auto rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step"
                         disabled={isNextButtonDisabled}
-                        onClick={(event) => (step === STEPS ? onSubmit(event) : onNextStep(step + 1))}
+                        onClick={(event) => (step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1))}
                     >
                         <span className="font-light text-sm text-white">
                             {match(step)
@@ -186,10 +171,6 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
 /** @notExported */
 export interface RecordingFormProps extends RecordingFormSharedProps {}
 
-interface InputField {
-    [key: string]: boolean | number | string;
-}
-
 interface RecordingFormState {
     connectAccessId: string;
     connectCallerId: string;
@@ -197,12 +178,10 @@ interface RecordingFormState {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
-    errors: InputField;
     meetingType: string;
     onConnectDialNumber: string;
     participationType: string;
     smsAlertBeforeCall: boolean;
-    touched: InputField;
 }
 
 /**
@@ -210,33 +189,21 @@ interface RecordingFormState {
  */
 export function RecordingForm(props: RecordingFormProps): ReactElement {
     const { onBack } = props;
-    const { state, setState } = useChangeHandlers<RecordingFormState>({
+    const { handlers, state } = useChangeHandlers<RecordingFormState>({
         connectAccessId: '',
         connectCallerId: '',
         connectionType: undefined,
         connectPhoneNumber: '',
         connectPin: '',
         connectUrl: '',
-        errors: {},
         meetingType: '',
         onConnectDialNumber: '',
         participationType: '',
         smsAlertBeforeCall: false,
-        touched: {},
     });
     const [step, setStep] = useState<number>(1);
 
-    const onChange = useCallback<ChangeHandler<RecordingFormFieldValue>>(
-        (_event, change) => {
-            setState((s) => ({
-                ...s,
-                [change.name as string]: change.value,
-            }));
-        },
-        [state]
-    );
-
-    const isNextButtonDisabled = useMemo(() => step >= 1 && !state.connectionType, [step, state.connectionType]);
+    const isNextButtonDisabled = useMemo(() => step >= 1 && !state.connectionType, [state, step]);
 
     return (
         <RecordingFormUI
@@ -246,11 +213,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPhoneNumber={state.connectPhoneNumber}
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
-            errors={state.errors}
             isNextButtonDisabled={isNextButtonDisabled}
             meetingType={state.meetingType}
             onBack={onBack}
-            onChange={onChange}
+            onChangeConnectionType={handlers.connectionType}
             onConnectDialNumber={state.onConnectDialNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
@@ -258,7 +224,6 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             participationType={state.participationType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
             step={step}
-            touched={state.touched}
         />
     );
 }
