@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import classNames from 'classnames';
 
 import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -20,19 +21,18 @@ export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
         <div className="py-3 connection-type">
             <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Connection Type</p>
             <div className="bg-white border border-gray-100 mt-2 rounded shadow-xl">
-                {Object.values(connectionTypeOptions).map((option, idx) => (
+                {Object.values(connectionTypeOptions).map((option) => (
                     <div
-                        className={`${
-                            idx === Object.keys(connectionTypeOptions).length - 1 ? '' : 'border-b'
-                        } border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50`}
+                        className="border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 last:border-0"
                         key={option.value}
                         onClick={(e) => onChange(e, { name: 'connectionType', value: option.value })}
                     >
                         <div>
                             <p
-                                className={`${
-                                    connectionType === option.value ? 'font-semibold' : ''
-                                } text-black text-base`}
+                                className={classNames([
+                                    'text-black text-base',
+                                    { 'font-semibold': connectionType === option.value },
+                                ])}
                             >
                                 {option.label}
                             </p>
