@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/10</span>
+                <span class='fraction'>8/11</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/2</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70% </span>
+                <span class="strong">72.72% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/10</span>
+                <span class='fraction'>8/11</span>
             </div>
         
             
@@ -149,7 +149,19 @@
 <a name='L84'></a><a href='#L84'>84</a>
 <a name='L85'></a><a href='#L85'>85</a>
 <a name='L86'></a><a href='#L86'>86</a>
-<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -210,6 +222,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">90x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -234,6 +253,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">90x</span>
+<span class="cline-any cline-yes">90x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
 import { useSettings } from '@aiera/client-sdk/lib/data';
@@ -242,6 +262,7 @@ import { Toggle } from '@aiera/client-sdk/components/Toggle';
 import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import './styles.css';
 &nbsp;
 interface SettingsButtonSharedProps {}
@@ -249,10 +270,11 @@ interface SettingsButtonSharedProps {}
 /** @notExported */
 interface SettingsButtonUIProps extends SettingsButtonSharedProps {
     hideTooltip?: () =&gt; void;
+    logout?: () =&gt; void;
 }
 &nbsp;
 function TooltipContent(props: SettingsButtonUIProps): ReactElement {
-    const { hideTooltip } = props;
+    const { hideTooltip, logout } = props;
     const { settings, handlers } = useSettings();
     return (
         &lt;div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1"&gt;
@@ -291,14 +313,21 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     &lt;/span&gt;
                 &lt;/div&gt;
             )}
+            {logout &amp;&amp; (
+<span class="branch-1 cbranch-no" title="branch not covered" >                &lt;div className="m-2 flex justify-end"&gt;</span>
+                    &lt;Button kind="primary" onClick={logout}&gt;
+                        Logout
+                    &lt;/Button&gt;
+                &lt;/div&gt;
+            )}
         &lt;/div&gt;
     );
 }
 &nbsp;
-export function SettingsButtonUI(_props: SettingsButtonUIProps): ReactElement {
+export function SettingsButtonUI({ logout }: SettingsButtonUIProps): ReactElement {
     return (
         &lt;Tooltip
-            content={({ hideTooltip }) =&gt; &lt;TooltipContent hideTooltip={hideTooltip} /&gt;}
+            content={({ hideTooltip }) =&gt; &lt;TooltipContent hideTooltip={hideTooltip} logout={logout} /&gt;}
             grow="down-left"
             modal
             openOn="click"
@@ -319,7 +348,8 @@ export interface SettingsButtonProps extends SettingsButtonSharedProps {}
  * Renders SettingsButton
  */
 export function SettingsButton(): ReactElement {
-    return &lt;SettingsButtonUI /&gt;;
+    const { logout } = useAuthContext();
+    return &lt;SettingsButtonUI logout={logout} /&gt;;
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -328,7 +358,7 @@ export function SettingsButton(): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Feb 08 2022 11:13:11 GMT-0500 (Eastern Standard Time)
+                at Thu Feb 10 2022 13:13:03 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
