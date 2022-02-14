@@ -258,7 +258,7 @@ export function usePaginatedQuery<Data, Variables>(
         if (fromIndex !== variables.fromIndex) {
             setFromIndex(variables.fromIndex);
         }
-        // If the user already paginated and the fromIndex query variable is changed back 0,
+        // If the user already paginated and the fromIndex query variable is changed back to 0,
         // then reset fromIndex and results in state
         if (fromIndex > 0 && variables.fromIndex === 0) {
             setResults(undefined);

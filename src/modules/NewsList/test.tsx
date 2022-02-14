@@ -2,7 +2,7 @@ import React from 'react';
 import { DocumentNode } from 'graphql';
 import { fromValue } from 'wonka';
 import { within } from '@testing-library/dom';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { getQueryNames } from '@aiera/client-sdk/api/client';
@@ -141,5 +141,39 @@ describe('NewsList', () => {
             userEvent.click(screen.getByText('GME'));
         });
         screen.getByText('Hello world');
+    });
+
+    test('renders refetch button after 5 minutes', async () => {
+        renderWithProvider(<NewsList />, {
+            executeQuery: () =>
+                fromValue({
+                    data: {
+                        search: {
+                            content: {
+                                hits: [{ id: '1', content }],
+                                numTotalHits: 1,
+                            },
+                        },
+                    },
+                }),
+        });
+
+        // Fast-forward 6 minutes
+        await actAndFlush(() => {
+            jest.advanceTimersByTime(360000);
+        });
+        const refetchButton = screen.getByText('Check for new articles')?.parentNode;
+        expect(refetchButton).toBeInTheDocument(); // we animate the button transition so it's always rendered
+        expect(refetchButton).not.toHaveClass('invisible');
+        if (refetchButton) {
+            await actAndFlush(() => {
+                // Click on the parent div
+                fireEvent.click(refetchButton);
+                // Fast-forward 1 second
+                jest.advanceTimersByTime(1000);
+            });
+            // Refetch button should now be invisible
+            expect(refetchButton).toHaveClass('invisible');
+        }
     });
 });
