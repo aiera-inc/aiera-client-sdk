@@ -232,6 +232,7 @@ export function usePaginatedQuery<Data, Variables>(
     const { mergeResults, variables } = args;
     const queryResult: QueryResult<Data, Variables> = useQuery<Data, Variables>(args);
 
+    const [fromIndex, setFromIndex] = useState<number>(0);
     // Map of the query results where fromIndex is the key
     const [results, setResults] = useState<{ [key: number]: Data } | undefined>(undefined);
 
@@ -253,13 +254,21 @@ export function usePaginatedQuery<Data, Variables>(
     }, [queryResult.state.data, queryResult.status, results, variables.fromIndex]);
 
     useEffect(() => {
-        if (queryResult.state.data) {
+        // Set fromIndex in state when the query variable changes
+        if (fromIndex !== variables.fromIndex) {
+            setFromIndex(variables.fromIndex);
+        }
+        // If the user already paginated and the fromIndex query variable is changed back 0,
+        // then reset fromIndex and results in state
+        if (fromIndex > 0 && variables.fromIndex === 0) {
+            setResults(undefined);
+        } else if (queryResult.state.data) {
             setResults({
                 ...results,
                 [variables.fromIndex]: queryResult.state.data,
             });
         }
-    }, [queryResult.state.data, variables.fromIndex]);
+    }, [fromIndex, queryResult.state.data, variables.fromIndex]);
 
     return useMemo(() => {
         if (queryResult.status === 'loading' && variables.fromIndex > 0 && data) {
