@@ -1,13 +1,13 @@
-import React, { FC, ReactElement, StrictMode, useEffect, useCallback, useState } from 'react';
+import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import type { Instrument, InstrumentList, Listener } from '@finos/fdc3';
 
 import { Provider } from '@aiera/client-sdk/components/Provider';
-import { useMessageListener, MessageBus } from '@aiera/client-sdk/lib/msg';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
 import '@aiera/client-sdk/css/styles.css';
-import { usePlaySound } from '../lib/data';
+import { usePlaySound } from '@aiera/client-sdk/lib/data';
 
 const useMessageBus = () => {
     const { playSound } = usePlaySound();
@@ -38,6 +38,8 @@ const useMessageBus = () => {
     );
 
     useEffect(() => {
+        bus.setupWindowMessaging(window.parent, window.location.origin);
+
         const listeners: Listener[] = [];
         if (window.fdc3) {
             listeners.push(
@@ -62,6 +64,7 @@ const useMessageBus = () => {
         }
 
         return () => {
+            bus.cleanupWindowMessaging();
             listeners.forEach((listener) => listener.unsubscribe());
         };
     }, [bus]);
@@ -69,29 +72,8 @@ const useMessageBus = () => {
     return bus;
 };
 
-const useUrlSettings = (bus: MessageBus) => {
-    const [moduleReady, setModuleRef] = useState(false);
-
-    useEffect(() => {
-        if (window.location && moduleReady) {
-            const url = new URL(window.location.href);
-            const tickers = (url.searchParams.get('tickers') || '').split(',');
-            if (tickers.length) {
-                bus.emit(
-                    'instruments-selected',
-                    tickers.map((ticker) => ({ ticker })),
-                    'in'
-                );
-            }
-        }
-    }, [bus, moduleReady]);
-
-    return useCallback(() => setModuleRef(true), []);
-};
-
 const App: FC = (): ReactElement => {
     const bus = useMessageBus();
-    const setModuleRef = useUrlSettings(bus);
     return (
         <StrictMode>
             <Provider
@@ -108,7 +90,7 @@ const App: FC = (): ReactElement => {
                 }}
             >
                 <Auth>
-                    <div className="h-full border border-black" ref={setModuleRef}>
+                    <div className="h-full border border-black">
                         <EventList />
                     </div>
                 </Auth>

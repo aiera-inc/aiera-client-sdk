@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            iframe {
+                border: none;
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            const newsList = new Aiera.Module('http://localhost:8000/modules/NewsList', 'aiera');
+            newsList.load();
+        </script>
+    </body>
+</html>

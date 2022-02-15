@@ -1,5 +1,5 @@
 import minimatch from 'minimatch';
-import { basename, join } from 'path';
+import { basename, dirname, join } from 'path';
 import { readFile } from 'fs/promises';
 import copy from 'cpy';
 import { build, BuildOptions, OnLoadResult, Plugin, serve } from 'esbuild';
@@ -49,7 +49,7 @@ async function copyAssets(watchers: Watchers | null) {
     return await Promise.all([
         copy('src/assets/**/*', 'dist/assets'),
         copy('package.json', 'dist'),
-        watchers ? copy(['src/dev/*.html'], 'dist') : null,
+        copy(['src/dev/*.html'], 'dist/site'),
     ]);
 }
 
@@ -83,25 +83,33 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
         plugins,
     });
 
-    const modules = await globby('src/dev/*.tsx');
+    const modulePaths = await globby('src/dev/modules/**/index.tsx');
     await Promise.all(
-        modules.map(async (module) => {
+        modulePaths.map(async (modulePath) => {
+            const moduleName = basename(dirname(modulePath));
             await build({
                 ...sharedConfig,
-                sourcemap: 'inline',
-                entryPoints: [module],
+                sourcemap: true,
+                entryPoints: [modulePath],
                 bundle: true,
-                outfile: `dist/site/${basename(module, '.tsx')}/index.js`,
+                outfile: `dist/site/modules/${moduleName}/index.js`,
                 format: 'cjs',
                 plugins,
                 loader: {
                     '.svg': 'file',
                 },
             });
-
-            await copy('src/dev/index.html', `dist/site/${basename(module, '.tsx')}`);
+            await copy(`src/dev/modules/${moduleName}/*.html`, `dist/site/modules/${moduleName}`);
         })
     );
+
+    await build({
+        ...sharedConfig,
+        entryPoints: ['src/dev/embed.ts'],
+        sourcemap: true,
+        bundle: true,
+        outfile: `dist/site/embed.js`,
+    });
 
     if (watchers) {
         watchers.src.on('all', () => void buildAll(null, plugins));
@@ -112,7 +120,8 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
     return buildResult;
 }
 
-async function serveAll(port: number, module: string, plugins: Plugin[]) {
+async function serveAll(port: number, plugins: Plugin[]) {
+    const modules = await globby('src/dev/**/index.tsx');
     const serveResult = await serve(
         {
             port,
@@ -123,9 +132,9 @@ async function serveAll(port: number, module: string, plugins: Plugin[]) {
         },
         {
             ...sharedConfig,
-            entryPoints: [`src/dev/${module}.tsx`],
+            entryPoints: [...modules, 'src/dev/embed.ts'],
             bundle: true,
-            outfile: 'src/dev/index.js',
+            outdir: 'src/dev',
             plugins,
             incremental: true,
             write: false,
@@ -139,14 +148,12 @@ async function serveAll(port: number, module: string, plugins: Plugin[]) {
 }
 
 interface Arguments {
-    module: string;
     port: number;
     watch: boolean;
 }
 
 async function cli() {
     const args: Arguments = await yargs(process.argv.slice(2)).options({
-        module: { type: 'string', default: 'EventList' },
         port: { type: 'number', default: 8001 },
         watch: { type: 'boolean', default: false },
     }).argv;
@@ -159,7 +166,7 @@ async function cli() {
             assets: chokidar.watch(['package.json', 'src/**/*.{html,svg,png}'], { ignoreInitial: true }),
             tailwind: tailwindWatcher,
         };
-        await serveAll(args.port, args.module, plugins);
+        await serveAll(args.port, plugins);
         await buildAll(watchers, plugins);
         await copyAssets(watchers);
     } else {

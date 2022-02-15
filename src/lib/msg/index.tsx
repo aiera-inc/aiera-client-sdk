@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, ReactNode, ReactElement } from 'react';
 import type { InstrumentID } from '@finos/fdc3';
 import EventEmitter from 'eventemitter3';
+import type { ValueOf } from '@aiera/client-sdk/types';
 
 type Direction = 'in' | 'out';
 
@@ -10,15 +11,20 @@ interface EventAlert {
     eventIds: string[];
 }
 
-interface MessageBusEvents {
+export interface MessageBusEvents {
     'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
 }
 
 export interface Message<E extends keyof MessageBusEvents> {
+    event: E;
     direction: Direction;
     data: MessageBusEvents[E];
+}
+
+export interface AieraMessageEvent extends MessageEvent {
+    data: { ns: 'aiera'; event: keyof MessageBusEvents; data: ValueOf<MessageBusEvents> };
 }
 
 /**
@@ -27,6 +33,8 @@ export interface Message<E extends keyof MessageBusEvents> {
  */
 export class MessageBus {
     emitter: EventEmitter;
+    parent?: Window;
+    parentOrigin?: string;
 
     constructor() {
         this.emitter = new EventEmitter();
@@ -66,12 +74,62 @@ export class MessageBus {
      * Emit an event.
      */
     emit<E extends keyof MessageBusEvents>(event: E, data: Message<E>['data'], direction: Direction): boolean {
-        return this.emitter.emit(`${direction}-${event}`, { data, direction });
+        this.sendWindowMessage(event, data, direction);
+        return this.emitter.emit(`${direction}-${event}`, { event, data, direction });
     }
 
     removeAllListeners(): MessageBus {
         this.emitter.removeAllListeners();
         return this;
+    }
+
+    /**
+     * Setups up messaging between this instance/module and a parent window.
+     * Used for embedding modules into other web platforms.
+     *
+     * @param parent - The parent window that will be embedding the widget and communicating
+     *                 with it.
+     */
+    setupWindowMessaging(parent: Window, origin: string) {
+        this.parent = parent;
+        this.parentOrigin = origin;
+        window.addEventListener('message', this.onWindowMessage);
+    }
+
+    /**
+     * Cleans up the listeners and removes the parent/module communication channel.
+     */
+    cleanupWindowMessaging() {
+        window.removeEventListener('message', this.onWindowMessage);
+        delete this.parent;
+    }
+
+    /**
+     * Listens for incoming messages from the parent window, checks that we are the intended
+     * target, and dispatches the message to the local message bus.
+     */
+    onWindowMessage = (windowEvent: AieraMessageEvent) => {
+        // Check to make sure it's actually an Aiera message before moving on
+        if (windowEvent.origin === this.parentOrigin && windowEvent.data?.ns === 'aiera') {
+            const { event, data } = windowEvent.data;
+            this.emitter.emit(`in-${event}`, { direction: 'in', event, data });
+        }
+    };
+
+    /**
+     * Sends a message out to the parent window.
+     */
+    sendWindowMessage<E extends keyof MessageBusEvents>(event: E, data: Message<E>['data'], direction: Direction) {
+        if (direction === 'out') {
+            this.parent?.postMessage(
+                {
+                    ns: 'aiera',
+                    event,
+                    data,
+                },
+                this.parent.location?.origin
+            );
+        }
     }
 }
 
