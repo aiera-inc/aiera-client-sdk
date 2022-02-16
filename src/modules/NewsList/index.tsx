@@ -24,7 +24,7 @@ import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { News } from '@aiera/client-sdk/modules/News';
 import { ChangeHandler, ContentSearchResultHit } from '@aiera/client-sdk/types';
-import { NewsListQuery, NewsListQueryVariables, ContentType, NewsContent } from '@aiera/client-sdk/types/generated';
+import { NewsListQuery, NewsListQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
 export type NewsListNews = NewsListQuery['search']['content']['hits'][0]['content'];
@@ -135,7 +135,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                         <div className="mr-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 group-hover:from-gray-300" />
                                     </div>
                                     {data.search.content.hits.map((hit) => {
-                                        const content = hit.content as NewsContent;
+                                        const content = hit.content;
                                         const primaryQuote = getPrimaryQuote(content.primaryCompany);
                                         const date = DateTime.fromISO(content.publishedDate);
                                         let divider = null;
@@ -173,7 +173,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                                         <span className="text-gray-400">
                                                             {date.toFormat('MMM dd, yyyy')}
                                                         </span>
-                                                        {!!content.newsSource?.name && (
+                                                        {content.__typename === 'NewsContent' && (
                                                             <>
                                                                 <span className="pl-1 pr-1 text-gray-400">•</span>
                                                                 <span className="text-indigo-300">

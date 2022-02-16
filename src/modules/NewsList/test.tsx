@@ -12,6 +12,7 @@ import { ContentType } from '@aiera/client-sdk/types/generated';
 import { NewsList } from '.';
 
 const content = {
+    __typename: 'NewsContent',
     id: '1',
     contentType: ContentType.News,
     newsSource: {
