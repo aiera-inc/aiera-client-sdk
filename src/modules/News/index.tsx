@@ -16,7 +16,7 @@ import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { NewsContent, NewsQuery, NewsQueryVariables } from '@aiera/client-sdk/types/generated';
+import { NewsQuery, NewsQueryVariables } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
 interface Body {
@@ -123,7 +123,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                 .with({ status: 'error' }, () => wrapMsg('There was an error loading news.'))
                 .with({ status: 'empty' }, () => wrapMsg("News not found. We're sorry for any inconvenience."))
                 .with({ status: 'success' }, ({ data: { content: contentData } }) => {
-                    const news = contentData[0] as NewsContent;
+                    const news = contentData[0];
                     const primaryQuote = getPrimaryQuote(news?.primaryCompany);
                     const date = news?.publishedDate ? DateTime.fromISO(news.publishedDate) : DateTime.now();
                     return news ? (
@@ -138,7 +138,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                                 <span className="font-bold text-base">{news.title}</span>
                             </div>
                             <div className="flex items-center pl-5 pr-5 pt-2 text-sm">
-                                {!!news.newsSource?.name && (
+                                {news.__typename === 'NewsContent' && (
                                     <>
                                         <span className="text-indigo-300">{news.newsSource.name}</span>
                                         <span className="pl-1 pr-1 text-gray-400">•</span>

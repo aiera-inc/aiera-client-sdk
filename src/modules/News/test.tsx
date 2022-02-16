@@ -8,6 +8,7 @@ import { News } from '.';
 
 const content = [
     {
+        __typename: 'NewsContent',
         id: '1',
         body: '<p>This is a paragraph</p>',
         contentType: ContentType.News,

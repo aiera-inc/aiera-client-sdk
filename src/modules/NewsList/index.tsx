@@ -9,7 +9,6 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
-import get from 'lodash/get';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
@@ -23,7 +22,7 @@ import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { News } from '@aiera/client-sdk/modules/News';
-import { ChangeHandler, ContentSearchResultHit } from '@aiera/client-sdk/types';
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import { NewsListQuery, NewsListQueryVariables, ContentType } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
@@ -256,8 +255,8 @@ export function NewsList(props: NewsListProps): ReactElement {
      * @returns         - the second NewsListQuery with the hits merged in from previous query
      */
     const mergeResults = (prevQuery: NewsListQuery, newQuery: NewsListQuery): NewsListQuery => {
-        const prevHits = get(prevQuery, 'search.content.hits', []) as ContentSearchResultHit[];
-        const newHits = get(newQuery, 'search.content.hits', []) as ContentSearchResultHit[];
+        const prevHits = prevQuery.search?.content?.hits || [];
+        const newHits = newQuery.search?.content?.hits || [];
         const prevIds = new Set(prevHits.map((hit) => hit.id));
         return {
             search: {
@@ -270,7 +269,7 @@ export function NewsList(props: NewsListProps): ReactElement {
     };
 
     const newsListQuery = usePaginatedQuery<NewsListQuery, NewsListQueryVariables>({
-        isEmpty: (data) => (get(data, 'search.content.hits', []) as NewsListNews[]).length === 0,
+        isEmpty: (data) => (data.search?.content?.hits || []).length === 0,
         query: gql`
             query NewsList($filter: ContentSearchFilter!, $fromIndex: Int, $size: Int) {
                 search {
