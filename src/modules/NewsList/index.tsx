@@ -6,6 +6,7 @@ import React, {
     SyntheticEvent,
     useCallback,
     useEffect,
+    useMemo,
 } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
@@ -36,6 +37,7 @@ const DEFAULT_LIST_SIZE = 20;
 export interface NewsListUIProps extends NewsListSharedProps {
     canRefetch: boolean;
     company?: CompanyFilterResult;
+    hasMoreResults: boolean;
     loadMore: (event: MouseEvent) => void;
     newsListQuery: PaginatedQueryResult<NewsListQuery, NewsListQueryVariables>;
     onBackFromNews?: MouseEventHandler;
@@ -51,6 +53,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
     const {
         canRefetch,
         company,
+        hasMoreResults,
         loadMore,
         newsListQuery,
         onBackFromNews,
@@ -190,12 +193,14 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                             ))
                             .exhaustive()}
                         <div className="flex-1" />
-                        <div
-                            className="bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center pb-1 pt-3 shadow-inner text-gray-500 w-full hover:text-black"
-                            onClick={loadMore}
-                        >
-                            <p className="text-sm tracking-wider uppercase">load more</p>
-                        </div>
+                        {hasMoreResults && (
+                            <div
+                                className="bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center pb-1 pt-3 shadow-inner text-gray-500 w-full hover:text-black"
+                                onClick={loadMore}
+                            >
+                                <p className="text-sm tracking-wider uppercase">load more</p>
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
@@ -329,6 +334,15 @@ export function NewsList(props: NewsListProps): ReactElement {
         },
     });
 
+    const hasMoreResults = useMemo(() => {
+        let hasMore = false;
+        if (newsListQuery.status === 'success') {
+            const numTotalHits = newsListQuery.data.search.content.numTotalHits;
+            hasMore = numTotalHits > newsListQuery.data.search.content.hits.length;
+        }
+        return hasMore;
+    }, [newsListQuery]);
+
     const onRefetch = useCallback(() => {
         const isPaginating = state.fromIndex > 0;
         setState((s) => ({
@@ -369,6 +383,7 @@ export function NewsList(props: NewsListProps): ReactElement {
         [state]
     );
 
+    // Reset pagination state when the search term or selected company changes
     useEffect(() => {
         mergeState({
             canRefetch: false,
@@ -392,6 +407,7 @@ export function NewsList(props: NewsListProps): ReactElement {
         <NewsListUI
             canRefetch={state.canRefetch}
             company={state.company}
+            hasMoreResults={hasMoreResults}
             loadMore={useCallback(
                 (event: SyntheticEvent<Element, Event>) =>
                     handlers.fromIndex(event, { value: state.fromIndex + listSize }),

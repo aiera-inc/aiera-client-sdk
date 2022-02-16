@@ -177,4 +177,38 @@ describe('NewsList', () => {
             expect(refetchButton).toHaveClass('invisible');
         }
     });
+
+    test('renders load more button when there are more results', () => {
+        renderWithProvider(<NewsList />, {
+            executeQuery: () =>
+                fromValue({
+                    data: {
+                        search: {
+                            content: {
+                                hits: [{ id: '1', content }],
+                                numTotalHits: 2,
+                            },
+                        },
+                    },
+                }),
+        });
+        screen.getByText('load more');
+    });
+
+    test('does not render load more button when there are no more results', () => {
+        renderWithProvider(<NewsList />, {
+            executeQuery: () =>
+                fromValue({
+                    data: {
+                        search: {
+                            content: {
+                                hits: [{ id: '1', content }],
+                                numTotalHits: 1,
+                            },
+                        },
+                    },
+                }),
+        });
+        expect(screen.queryByText('load more')).toBeNull();
+    });
 });
