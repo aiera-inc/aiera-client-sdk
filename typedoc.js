@@ -38,6 +38,6 @@ module.exports = {
     name: '@aiera/client-sdk',
     sort: ['source-order'],
     readme: 'none',
-    out: 'dist/site/docs',
+    out: 'dist/web/docs',
     entryPoints: entryPoints,
 };

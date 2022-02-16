@@ -49,7 +49,7 @@ async function copyAssets(watchers: Watchers | null) {
     return await Promise.all([
         copy('src/assets/**/*', 'dist/assets'),
         copy('package.json', 'dist'),
-        copy(['src/dev/*.html'], 'dist/site'),
+        copy(['src/web/demo/*.html'], 'dist/web/demo'),
     ]);
 }
 
@@ -83,7 +83,7 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
         plugins,
     });
 
-    const modulePaths = await globby('src/dev/modules/**/index.tsx');
+    const modulePaths = await globby('src/web/modules/**/index.tsx');
     await Promise.all(
         modulePaths.map(async (modulePath) => {
             const moduleName = basename(dirname(modulePath));
@@ -92,23 +92,23 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
                 sourcemap: true,
                 entryPoints: [modulePath],
                 bundle: true,
-                outfile: `dist/site/modules/${moduleName}/index.js`,
+                outfile: `dist/web/modules/${moduleName}/index.js`,
                 format: 'cjs',
                 plugins,
                 loader: {
                     '.svg': 'file',
                 },
             });
-            await copy(`src/dev/modules/${moduleName}/*.html`, `dist/site/modules/${moduleName}`);
+            await copy(`src/web/modules/${moduleName}/*.html`, `dist/web/modules/${moduleName}`);
         })
     );
 
     await build({
         ...sharedConfig,
-        entryPoints: ['src/dev/embed.ts'],
+        entryPoints: ['src/web/embed.ts'],
         sourcemap: true,
         bundle: true,
-        outfile: `dist/site/embed.js`,
+        outfile: `dist/web/embed.js`,
     });
 
     if (watchers) {
@@ -121,20 +121,21 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
 }
 
 async function serveAll(port: number, plugins: Plugin[]) {
-    const modules = await globby('src/dev/**/index.tsx');
+    console.log(sharedConfig);
+    const modules = await globby('src/web/modules/**/index.tsx');
     const serveResult = await serve(
         {
             port,
-            servedir: 'src/dev',
+            servedir: 'src/web',
             onRequest: ({ method, path, timeInMS }) => {
                 console.log(`${method} ${path} ${timeInMS}ms`);
             },
         },
         {
             ...sharedConfig,
-            entryPoints: [...modules, 'src/dev/embed.ts'],
+            entryPoints: [...modules, 'src/web/embed.ts'],
             bundle: true,
-            outdir: 'src/dev',
+            outdir: 'src/web',
             plugins,
             incremental: true,
             write: false,

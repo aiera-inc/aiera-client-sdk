@@ -24,10 +24,10 @@ jobs:
       - run: npm run build
       - run: npm test
       - run: npm run build:docs
-      - run: cp -r .jest/coverage/lcov-report dist/site/coverage
-      - run: cp -r .jest/coverage/lcov-report dist/site/doverage
+      - run: cp -r .jest/coverage/lcov-report dist/web/coverage
+      - run: cp -r .jest/coverage/lcov-report dist/web/doverage
 
       - uses: JamesIves/github-pages-deploy-action@4.1.5
         with:
           branch: gh-pages
-          folder: dist/site
+          folder: dist/web
