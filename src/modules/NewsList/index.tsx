@@ -1,4 +1,12 @@
-import React, { Fragment, MouseEventHandler, ReactElement, SyntheticEvent, useCallback } from 'react';
+import React, {
+    Fragment,
+    MouseEvent,
+    MouseEventHandler,
+    ReactElement,
+    SyntheticEvent,
+    useCallback,
+    useEffect,
+} from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import get from 'lodash/get';
@@ -29,7 +37,7 @@ const DEFAULT_LIST_SIZE = 20;
 export interface NewsListUIProps extends NewsListSharedProps {
     canRefetch: boolean;
     company?: CompanyFilterResult;
-    loadMore: MouseEventHandler;
+    loadMore: (event: MouseEvent) => void;
     newsListQuery: PaginatedQueryResult<NewsListQuery, NewsListQueryVariables>;
     onBackFromNews?: MouseEventHandler;
     onChangeSearch?: ChangeHandler<string>;
@@ -214,7 +222,7 @@ interface NewsListState {
  * Renders NewsList
  */
 export function NewsList(props: NewsListProps): ReactElement {
-    const { state, handlers, setState } = useChangeHandlers<NewsListState>({
+    const { state, handlers, mergeState, setState } = useChangeHandlers<NewsListState>({
         canRefetch: false,
         company: undefined,
         fromIndex: 0,
@@ -322,24 +330,6 @@ export function NewsList(props: NewsListProps): ReactElement {
         },
     });
 
-    const onChangeSearch = useCallback<ChangeHandler<string>>(
-        (_event, change) => {
-            setState((s) => ({
-                ...s,
-                canRefetch: false,
-                fromIndex: 0,
-                lastRefetch: DateTime.now(),
-                searchTerm: change.value || '',
-            }));
-        },
-        [state]
-    );
-
-    const onLoadMore = useCallback<ChangeHandler<number>>(
-        (event, change) => handlers.fromIndex(event, change),
-        [state]
-    );
-
     const onRefetch = useCallback(() => {
         const isPaginating = state.fromIndex > 0;
         setState((s) => ({
@@ -355,16 +345,10 @@ export function NewsList(props: NewsListProps): ReactElement {
     }, [state.fromIndex]);
 
     const onSelectCompany = useCallback<ChangeHandler<CompanyFilterResult>>(
-        (_event, change) => {
+        (event, change) => {
             const primaryQuote = getPrimaryQuote(change.value);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
-            setState((s) => ({
-                ...s,
-                canRefetch: false,
-                company: change.value || undefined,
-                fromIndex: 0,
-                lastRefetch: DateTime.now(),
-            }));
+            handlers.company(event, change);
             // If we are unselecting a company, refresh immediately
             if (!change.value) {
                 newsListQuery.refetch();
@@ -386,6 +370,14 @@ export function NewsList(props: NewsListProps): ReactElement {
         [state]
     );
 
+    useEffect(() => {
+        mergeState({
+            canRefetch: false,
+            fromIndex: 0,
+            lastRefetch: DateTime.now(),
+        });
+    }, [state.company, state.searchTerm]);
+
     useAutoTrack('Submit', 'News Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
     // Every 30 seconds, check if it's been 5 minutes since last refetch
     useInterval(() => {
@@ -402,8 +394,9 @@ export function NewsList(props: NewsListProps): ReactElement {
             canRefetch={state.canRefetch}
             company={state.company}
             loadMore={useCallback(
-                (event: SyntheticEvent<Element, Event>) => onLoadMore(event, { value: state.fromIndex + listSize }),
-                [onLoadMore]
+                (event: SyntheticEvent<Element, Event>) =>
+                    handlers.fromIndex(event, { value: state.fromIndex + listSize }),
+                [handlers.fromIndex, state.fromIndex]
             )}
             newsListQuery={newsListQuery}
             onBackFromNews={useCallback(
@@ -413,11 +406,7 @@ export function NewsList(props: NewsListProps): ReactElement {
             onRefetch={onRefetch}
             onSelectCompany={onSelectCompany}
             onSelectNews={onSelectNews}
-            onChangeSearch={useCallback(
-                (event: Event | SyntheticEvent<Element, Event>) =>
-                    onChangeSearch(event, { value: (event.target as HTMLInputElement).value }),
-                [onChangeSearch]
-            )}
+            onChangeSearch={handlers.searchTerm}
             searchTerm={state.searchTerm}
             selectedNews={state.selectedNews}
         />
