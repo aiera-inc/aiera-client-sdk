@@ -91,6 +91,7 @@
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="api_client.html#Provider" class="tsd-kind-icon">Provider</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module"><a href="api_client.html#useClient" class="tsd-kind-icon">use<wbr>Client</a></li>
 								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="api_client.html#useQuery" class="tsd-kind-icon">use<wbr>Query</a></li>
+								<li class="tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter"><a href="api_client.html#usePaginatedQuery" class="tsd-kind-icon">use<wbr>Paginated<wbr>Query</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -108,13 +109,16 @@
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/api_client.PausedQueryResult.html" class="tsd-kind-icon">Paused<wbr>Query<wbr>Result</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/api_client.EmptyQueryResult.html" class="tsd-kind-icon">Empty<wbr>Query<wbr>Result</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/api_client.SuccessQueryResult.html" class="tsd-kind-icon">Success<wbr>Query<wbr>Result</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/api_client.RefetchingQueryResult.html" class="tsd-kind-icon">Refetching<wbr>Query<wbr>Result</a></li>
 								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/api_client.QueryResultEmptyCheck.html" class="tsd-kind-icon">Query<wbr>Result<wbr>Empty<wbr>Check</a></li>
+								<li class="tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter"><a href="../interfaces/api_client.PaginatedQueryArgs.html" class="tsd-kind-icon">Paginated<wbr>Query<wbr>Args</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Type aliases</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="api_client.html#QueryResult" class="tsd-kind-icon">Query<wbr>Result</a></li>
+								<li class="tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter"><a href="api_client.html#PaginatedQueryResult" class="tsd-kind-icon">Paginated<wbr>Query<wbr>Result</a></li>
 							</ul>
 						</section>
 					</div>
@@ -132,7 +136,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/8c9b686/src/api/client.tsx#L46">src/api/client.tsx:46</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L46">src/api/client.tsx:46</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -164,7 +168,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/8c9b686/src/api/client.tsx#L110">src/api/client.tsx:110</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L117">src/api/client.tsx:117</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -192,7 +196,7 @@
 												<li class="tsd-description">
 													<aside class="tsd-sources">
 														<ul>
-															<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/8c9b686/src/api/client.tsx#L117">src/api/client.tsx:117</a></li>
+															<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L124">src/api/client.tsx:124</a></li>
 														</ul>
 													</aside>
 													<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
@@ -216,7 +220,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/8c9b686/src/api/client.tsx#L129">src/api/client.tsx:129</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L136">src/api/client.tsx:136</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="../interfaces/ClientContext.html" class="tsd-signature-type" data-tsd-kind="Interface">ClientContext</a><span class="tsd-signature-symbol"> &amp; </span><span class="tsd-signature-symbol">{ </span>client<span class="tsd-signature-symbol">: </span><a href="components_Provider.html#Client" class="tsd-signature-type" data-tsd-kind="Variable">Client</a><span class="tsd-signature-symbol"> }</span></h4>
@@ -233,7 +237,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/8c9b686/src/api/client.tsx#L179">src/api/client.tsx:179</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L203">src/api/client.tsx:203</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -255,6 +259,38 @@
 						</li>
 					</ul>
 				</section>
+				<section class="tsd-panel tsd-member tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="usePaginatedQuery" class="tsd-anchor"></a>
+					<h3>use<wbr>Paginated<wbr>Query</h3>
+					<ul class="tsd-signatures tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">use<wbr>Paginated<wbr>Query&lt;Data, Variables&gt;<span class="tsd-signature-symbol">(</span>args<span class="tsd-signature-symbol">: </span><a href="../interfaces/api_client.PaginatedQueryArgs.html" class="tsd-signature-type" data-tsd-kind="Interface">PaginatedQueryArgs</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/api_client.QueryResultEmptyCheck.html" class="tsd-signature-type" data-tsd-kind="Interface">QueryResultEmptyCheck</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="api_client.html#PaginatedQueryResult" class="tsd-signature-type" data-tsd-kind="Type alias">PaginatedQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L229">src/api/client.tsx:229</a></li>
+								</ul>
+							</aside>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>Data</h4>
+								</li>
+								<li>
+									<h4>Variables</h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>args: <a href="../interfaces/api_client.PaginatedQueryArgs.html" class="tsd-signature-type" data-tsd-kind="Interface">PaginatedQueryArgs</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> &amp; </span><a href="../interfaces/api_client.QueryResultEmptyCheck.html" class="tsd-signature-type" data-tsd-kind="Interface">QueryResultEmptyCheck</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">&gt;</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <a href="api_client.html#PaginatedQueryResult" class="tsd-signature-type" data-tsd-kind="Type alias">PaginatedQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span></h4>
+						</li>
+					</ul>
+				</section>
 			</section>
 			<section class="tsd-panel-group tsd-member-group ">
 				<h2>References</h2>
@@ -272,7 +308,26 @@
 					<div class="tsd-signature tsd-kind-icon">Query<wbr>Result&lt;Data, Variables&gt;<span class="tsd-signature-symbol">:</span> <a href="../interfaces/api_client.LoadingQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">LoadingQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.ErrorQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">ErrorQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.PausedQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">PausedQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.EmptyQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">EmptyQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.SuccessQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">SuccessQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/8c9b686/src/api/client.tsx#L172">src/api/client.tsx:172</a></li>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L184">src/api/client.tsx:184</a></li>
+						</ul>
+					</aside>
+					<h4 class="tsd-type-parameters-title">Type parameters</h4>
+					<ul class="tsd-type-parameters">
+						<li>
+							<h4>Data</h4>
+						</li>
+						<li>
+							<h4>Variables</h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+					<a name="PaginatedQueryResult" class="tsd-anchor"></a>
+					<h3>Paginated<wbr>Query<wbr>Result</h3>
+					<div class="tsd-signature tsd-kind-icon">Paginated<wbr>Query<wbr>Result&lt;Data, Variables&gt;<span class="tsd-signature-symbol">:</span> <a href="api_client.html#QueryResult" class="tsd-signature-type" data-tsd-kind="Type alias">QueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><a href="../interfaces/api_client.RefetchingQueryResult.html" class="tsd-signature-type" data-tsd-kind="Interface">RefetchingQueryResult</a><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">&gt;</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/250473d/src/api/client.tsx#L191">src/api/client.tsx:191</a></li>
 						</ul>
 					</aside>
 					<h4 class="tsd-type-parameters-title">Type parameters</h4>
@@ -331,13 +386,25 @@
 						<a href="../interfaces/api_client.SuccessQueryResult.html" class="tsd-kind-icon">Success<wbr>Query<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/api_client.RefetchingQueryResult.html" class="tsd-kind-icon">Refetching<wbr>Query<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/api_client.QueryResultEmptyCheck.html" class="tsd-kind-icon">Query<wbr>Result<wbr>Empty<wbr>Check</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="api_client.html#QueryResult" class="tsd-kind-icon">Query<wbr>Result</a>
 					</li>
+					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="api_client.html#PaginatedQueryResult" class="tsd-kind-icon">Paginated<wbr>Query<wbr>Result</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="../interfaces/api_client.PaginatedQueryArgs.html" class="tsd-kind-icon">Paginated<wbr>Query<wbr>Args</a>
+					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="api_client.html#useQuery" class="tsd-kind-icon">use<wbr>Query</a>
+					</li>
+					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
+						<a href="api_client.html#usePaginatedQuery" class="tsd-kind-icon">use<wbr>Paginated<wbr>Query</a>
 					</li>
 				</ul>
 			</nav>
