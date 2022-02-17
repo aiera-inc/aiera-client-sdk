@@ -56,12 +56,13 @@ describe('message bus', () => {
     });
 
     test('useMessageListener sets up a listener in a component', () => {
-        const componentCallback = jest.fn();
+        const componentCallback1 = jest.fn();
+        const componentCallback2 = jest.fn();
         const appCallback = jest.fn();
         const bus = new MessageBus();
         bus.on('instrument-selected', appCallback, 'out');
 
-        function TestComponent() {
+        function TestComponent({ componentCallback }: { componentCallback: () => void }) {
             const bus = useMessageListener('instrument-selected', componentCallback, 'out');
             return (
                 <button data-testid="button" onClick={() => bus.emit('instrument-selected', { ticker: 'TICK' }, 'out')}>
@@ -70,14 +71,14 @@ describe('message bus', () => {
             );
         }
 
-        const { unmount } = render(
+        const { rerender, unmount } = render(
             <Provider bus={bus}>
-                <TestComponent />
+                <TestComponent componentCallback={componentCallback1} />
             </Provider>
         );
 
         userEvent.click(screen.getByTestId('button'));
-        expect(componentCallback).toHaveBeenCalledWith({
+        expect(componentCallback1).toHaveBeenCalledWith({
             event: 'instrument-selected',
             direction: 'out',
             data: { ticker: 'TICK' },
@@ -87,11 +88,30 @@ describe('message bus', () => {
             direction: 'out',
             data: { ticker: 'TICK' },
         });
-        componentCallback.mockClear();
+        componentCallback1.mockClear();
         appCallback.mockClear();
+
+        rerender(
+            <Provider bus={bus}>
+                <TestComponent componentCallback={componentCallback2} />
+            </Provider>
+        );
+        userEvent.click(screen.getByTestId('button'));
+        expect(componentCallback1).not.toHaveBeenCalled();
+        expect(componentCallback2).toHaveBeenCalledWith({
+            event: 'instrument-selected',
+            direction: 'out',
+            data: { ticker: 'TICK' },
+        });
+        expect(appCallback).toHaveBeenCalledWith({
+            event: 'instrument-selected',
+            direction: 'out',
+            data: { ticker: 'TICK' },
+        });
+
         unmount();
         bus.emit('instrument-selected', { ticker: 'TICK' }, 'out');
-        expect(componentCallback).not.toHaveBeenCalled();
+        expect(componentCallback1).not.toHaveBeenCalled();
         expect(appCallback).toHaveBeenCalledWith({
             event: 'instrument-selected',
             direction: 'out',

@@ -167,6 +167,6 @@ export function useMessageListener<E extends keyof MessageBusEvents>(
         return () => {
             bus.off(type, wrappedListener, direction);
         };
-    }, []);
+    }, [listener]);
     return bus;
 }
