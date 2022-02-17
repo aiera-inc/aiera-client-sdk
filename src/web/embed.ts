@@ -1,5 +1,6 @@
 import EventEmitter from 'eventemitter3';
 import type { AieraMessageEvent, Message, MessageBusEvents } from '@aiera/client-sdk/lib/msg';
+import type { AuthTokens } from '@aiera/client-sdk/api/auth';
 
 /**
  * Utility to embed modules as iframe into a parent web application and set up
@@ -47,9 +48,13 @@ class Module {
      * Load the module into the frame and set up messaging.
      */
     load() {
-        this.frame = document.getElementById(this.frameId) as HTMLIFrameElement;
-        this.frame.src = this.module.toString();
+        const frame = (this.frame = document.getElementById(this.frameId) as HTMLIFrameElement);
+        frame.src = this.module.toString();
         window.addEventListener('message', this.onWindowMessage);
+        return new Promise<void>((resolve, reject) => {
+            frame.onload = () => resolve();
+            frame.onerror = reject;
+        });
     }
 
     /**
@@ -66,6 +71,10 @@ class Module {
     on<E extends keyof MessageBusEvents>(event: E, listener: (msg: Message<E>) => void): Module {
         this.emitter.on(event, listener);
         return this;
+    }
+
+    authenticate(tokens: AuthTokens) {
+        this.emit('authenticate', tokens);
     }
 }
 

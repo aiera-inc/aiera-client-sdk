@@ -11,6 +11,7 @@ import { QueryError } from '@aiera/client-sdk/types';
 import { useClient } from '@aiera/client-sdk/api/client';
 import { AuthProvider } from '@aiera/client-sdk/lib/auth';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import './styles.css';
 
@@ -183,6 +184,8 @@ export const Auth = ({
             }
         `,
     });
+
+    useMessageListener('authenticate', () => refetch(), 'in');
 
     const [_, loginMutation] = useMutation<LoginMutation, LoginMutationVariables>(gql`
         mutation Login($email: String!, $password: String!) {

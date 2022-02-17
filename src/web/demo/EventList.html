@@ -18,7 +18,13 @@
         <iframe id="aiera"></iframe>
         <script>
             const eventList = new Aiera.Module('http://localhost:8000/modules/EventList', 'aiera');
-            eventList.load();
+            eventList.load().then(() => {
+                // To try out authentication
+                // eventList.authenticate({
+                //     accessToken: '[accesstoken]',
+                //     refreshToken: '[refreshToken]',
+                // });
+            });
         </script>
     </body>
 </html>
