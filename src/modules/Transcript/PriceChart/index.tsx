@@ -69,6 +69,9 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             spacing: [0, 0, 0, 0],
             height: 60,
         },
+        time: {
+            useUTC: false,
+        },
         credits: { enabled: false },
         scrollbar: { enabled: false },
         series: [
