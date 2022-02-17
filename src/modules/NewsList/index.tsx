@@ -16,8 +16,9 @@ import { match } from 'ts-pattern';
 import { PaginatedQueryResult, usePaginatedQuery } from '@aiera/client-sdk/api/client';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Input } from '@aiera/client-sdk/components/Input';
+import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { getPrimaryQuote, useAutoTrack, useCompanyResolver } from '@aiera/client-sdk/lib/data';
+import { getPrimaryQuote, useAutoTrack, useCompanyResolver, useSettings } from '@aiera/client-sdk/lib/data';
 import { areDatesSameDay } from '@aiera/client-sdk/lib/datetimes';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
@@ -37,6 +38,7 @@ const DEFAULT_LIST_SIZE = 20;
 export interface NewsListUIProps extends NewsListSharedProps {
     canRefetch: boolean;
     company?: CompanyFilterResult;
+    darkMode?: boolean;
     hasMoreResults: boolean;
     loadMore: (event: MouseEvent) => void;
     newsListQuery: PaginatedQueryResult<NewsListQuery, NewsListQueryVariables>;
@@ -53,6 +55,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
     const {
         canRefetch,
         company,
+        darkMode = false,
         hasMoreResults,
         loadMore,
         newsListQuery,
@@ -73,16 +76,16 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
         new Array(numHits).fill(0).map((_, idx) => (
             <li key={idx} className="p-2 animate-pulse mx-2">
                 <div className="flex items-center">
-                    <div className="rounded-full bg-gray-300 w-9 h-9" />
+                    <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9" />
                     <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
                         <div className="flex">
-                            <div className="rounded-full bg-gray-500 h-[10px] mr-2 w-7" />
-                            <div className="rounded-full bg-gray-400 h-[10px] mr-2 w-12" />
+                            <div className="rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7" />
+                            <div className="rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12" />
                         </div>
                         <div className="flex">
-                            <div className="rounded-full bg-gray-300 h-[10px] mr-2 w-28 mt-2" />
-                            <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-16 mt-2" />
-                            <div className="rounded-full bg-gray-200 h-[10px] mr-2 w-10 mt-2" />
+                            <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2" />
+                            <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2" />
+                            <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2" />
                         </div>
                     </div>
                 </div>
@@ -91,8 +94,8 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     let prevEventDate = DateTime.now();
     return (
-        <div className="h-full flex flex-col news-list">
-            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl news-list__header">
+        <div className={classNames('h-full flex flex-col news-list', { dark: darkMode })}>
+            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 news-list__header">
                 <div className="flex items-center mb-3">
                     <Input
                         icon={<MagnifyingGlass />}
@@ -101,12 +104,13 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                         placeholder="Search News..."
                         value={searchTerm}
                     />
-                    <div className="ml-2">
+                    <div className="mx-2">
                         <CompanyFilterButton onChange={onSelectCompany} value={company} />
                     </div>
+                    <SettingsButton />
                 </div>
             </div>
-            <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll">
+            <div className="flex flex-col flex-1 pt-0 overflow-y-scroll dark:bg-bluegray-7">
                 <div className="flex flex-col flex-grow">
                     <div className="flex flex-col items-center justify-center flex-1">
                         {match(newsListQuery)
@@ -146,7 +150,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                             divider = (
                                                 <li className="sticky top-[12px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3">
                                                     {date.toFormat('DDDD')}
-                                                    <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200" />
+                                                    <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5" />
                                                 </li>
                                             );
                                         }
@@ -154,16 +158,18 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                             <Fragment key={hit.id}>
                                                 {divider}
                                                 <li
-                                                    className="group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100"
+                                                    className="group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
                                                     onClick={(e) => onSelectNews?.(e, { value: content })}
                                                 >
                                                     <div className="flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm">
-                                                        <span className="mr-1 text-black">{content.title}</span>
+                                                        <span className="mr-1 text-black dark:text-white">
+                                                            {content.title}
+                                                        </span>
                                                     </div>
-                                                    <div className="flex flex-1 items-center min-w-0 p-2 pr-4 pt-0">
+                                                    <div className="flex flex-1 group items-center min-w-0 p-2 pr-4 pt-0">
                                                         {!!primaryQuote && (
                                                             <>
-                                                                <span className="font-bold pr-1 text-blue-600 group-hover:text-yellow-600">
+                                                                <span className="leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
                                                                     {primaryQuote.localTicker}
                                                                 </span>
                                                                 <span className="font-light text-gray-300 group-hover:text-gray-400">
@@ -172,13 +178,13 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                                                 <span className="pl-1 pr-1 text-gray-400">•</span>
                                                             </>
                                                         )}
-                                                        <span className="text-gray-400">
+                                                        <span className="text-gray-400 dark:group-hover:text-gray-300 group-hover:text-gray-500">
                                                             {date.toFormat('MMM dd, yyyy')}
                                                         </span>
                                                         {content.__typename === 'NewsContent' && (
                                                             <>
                                                                 <span className="pl-1 pr-1 text-gray-400">•</span>
-                                                                <span className="text-indigo-300">
+                                                                <span className="text-indigo-300 group-hover:text-indigo-400">
                                                                     {content.newsSource.name}
                                                                 </span>
                                                             </>
@@ -195,7 +201,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                         <div className="flex-1" />
                         {hasMoreResults && (
                             <div
-                                className="bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center pb-1 pt-3 shadow-inner text-gray-500 w-full hover:text-black"
+                                className="bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center py-3 shadow-inner text-gray-500 w-full dark:bg-bluegray-6 dark:hover:bg-bluegray-7 dark:hover:text-gray-400 hover:bg-gray-50 hover:text-black"
                                 onClick={loadMore}
                             >
                                 <p className="text-sm tracking-wider uppercase">load more</p>
@@ -250,6 +256,7 @@ export function NewsList(props: NewsListProps): ReactElement {
         },
         'in'
     );
+    const { settings } = useSettings();
 
     /**
      * Takes two NewsList queries, merges the hits together,
@@ -407,6 +414,7 @@ export function NewsList(props: NewsListProps): ReactElement {
         <NewsListUI
             canRefetch={state.canRefetch}
             company={state.company}
+            darkMode={settings.darkMode}
             hasMoreResults={hasMoreResults}
             loadMore={useCallback(
                 (event: SyntheticEvent<Element, Event>) =>
