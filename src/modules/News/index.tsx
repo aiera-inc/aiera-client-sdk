@@ -8,11 +8,12 @@ import { match } from 'ts-pattern';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { Input } from '@aiera/client-sdk/components/Input';
+import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
-import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { getPrimaryQuote, useSettings } from '@aiera/client-sdk/lib/data';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -34,6 +35,7 @@ interface NewsUIProps extends NewsSharedProps {
     body?: Body[][] | null;
     currentMatch?: string | null;
     currentMatchRef: Ref<HTMLDivElement>;
+    darkMode?: boolean;
     matchIndex: number;
     matches: Body[];
     newsQuery: QueryResult<NewsQuery, NewsQueryVariables>;
@@ -50,6 +52,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
         newsQuery,
         currentMatch,
         currentMatchRef,
+        darkMode = false,
         matches,
         matchIndex,
         nextMatch,
@@ -61,61 +64,69 @@ export function NewsUI(props: NewsUIProps): ReactElement {
     } = props;
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     return (
-        <div className="h-full flex flex-col news">
-            <div className="flex flex-col pl-3 pr-3 pt-3 shadow-3xl news__header">
-                <div className="flex items-center mb-3">
-                    <Button className="mr-2" onClick={onBack}>
-                        <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-                        News
-                    </Button>
-                    <Input
-                        icon={<MagnifyingGlass />}
-                        name="search"
-                        placeholder="Search Article..."
-                        value={searchTerm}
-                        onChange={onChangeSearch}
-                    />
+        <div className={classNames('h-full flex flex-col news', { dark: darkMode })}>
+            <div className="dark:bg-bluegray-7">
+                <div className="flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 news__header">
+                    <div className="flex group items-center mb-3">
+                        <Button onClick={onBack}>
+                            <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
+                            News
+                        </Button>
+                        <Input
+                            className="mx-2"
+                            icon={<MagnifyingGlass />}
+                            name="search"
+                            placeholder="Search Article..."
+                            value={searchTerm}
+                            onChange={onChangeSearch}
+                        />
+                        <SettingsButton />
+                    </div>
                 </div>
+                {searchTerm && (
+                    <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
+                        <div className="text-sm">
+                            Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
+                            <span className="font-semibold">{searchTerm}</span>
+                            &quot;
+                        </div>
+                        <div className="flex-1" />
+                        <button
+                            tabIndex={0}
+                            className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600"
+                            onClick={prevMatch}
+                        >
+                            <Chevron />
+                        </button>
+                        <div className="min-w-[35px] mr-2 text-center">
+                            {matchIndex + 1} / {matches.length}
+                        </div>
+                        <button
+                            tabIndex={0}
+                            className="w-2.5 mr-2 cursor-pointer hover:text-gray-600"
+                            onClick={nextMatch}
+                        >
+                            <Chevron />
+                        </button>
+                        <button
+                            tabIndex={0}
+                            className="w-4 cursor-pointer text-gray-400 hover:text-gray-600"
+                            onClick={(e) => onChangeSearch(e, { value: '' })}
+                        >
+                            <Close />
+                        </button>
+                    </div>
+                )}
             </div>
-            {searchTerm && (
-                <div className="bg-gray-50 flex h-10 items-center p-3 shadow sticky text-gray-500 text-sm top-3 z-10">
-                    <div className="text-sm">
-                        Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
-                        <span className="font-semibold">{searchTerm}</span>
-                        &quot;
-                    </div>
-                    <div className="flex-1" />
-                    <button
-                        tabIndex={0}
-                        className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600"
-                        onClick={prevMatch}
-                    >
-                        <Chevron />
-                    </button>
-                    <div className="min-w-[35px] mr-2 text-center">
-                        {matchIndex + 1} / {matches.length}
-                    </div>
-                    <button tabIndex={0} className="w-2.5 mr-2 cursor-pointer hover:text-gray-600" onClick={nextMatch}>
-                        <Chevron />
-                    </button>
-                    <button
-                        tabIndex={0}
-                        className="w-4 cursor-pointer text-gray-400 hover:text-gray-600"
-                        onClick={(e) => onChangeSearch(e, { value: '' })}
-                    >
-                        <Close />
-                    </button>
-                </div>
-            )}
             {match(newsQuery)
                 .with({ status: 'loading' }, () =>
                     new Array(5).fill(0).map((_, idx) => (
-                        <div key={idx} className="animate-pulse p-2">
-                            <div className="rounded-md bg-gray-300 h-3 m-1 w-10" />
-                            <div className="rounded-md bg-gray-300 h-3 m-1 ml-14" />
-                            <div className="rounded-md bg-gray-300 h-3 m-1" />
-                            <div className="rounded-md bg-gray-300 h-3 m-1" />
-                            <div className="rounded-md bg-gray-300 h-3 m-1 mr-20" />
+                        <div key={idx} className="animate-pulse bg-gray-50 p-2 dark:bg-bluegray-7">
+                            <div className="rounded-md bg-gray-300 h-3 m-1 w-10 dark:bg-bluegray-5" />
+                            <div className="rounded-md bg-gray-300 h-3 m-1 ml-14 dark:bg-bluegray-5" />
+                            <div className="rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-5" />
+                            <div className="rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-6" />
+                            <div className="rounded-md bg-gray-300 h-3 m-1 mr-20 dark:bg-bluegray-6" />
                         </div>
                     ))
                 )
@@ -129,15 +140,15 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                     return news ? (
                         <>
                             {!!primaryQuote && (
-                                <div className="flex items-center pl-5 pr-5 pt-5 text-sm">
+                                <div className="flex items-center pl-5 pr-5 pt-5 text-sm dark:bg-bluegray-7">
                                     <span className="font-bold pr-1 text-blue-600">{primaryQuote.localTicker}</span>
                                     <span className="font-light text-gray-300">{primaryQuote.exchange?.shortName}</span>
                                 </div>
                             )}
-                            <div className="leading-4 pl-5 pr-5 pt-3">
+                            <div className="leading-4 pl-5 pr-5 pt-3 dark:text-white dark:bg-bluegray-7">
                                 <span className="font-bold text-base">{news.title}</span>
                             </div>
-                            <div className="flex items-center pl-5 pr-5 pt-2 text-sm">
+                            <div className="flex items-center px-5 py-2 text-sm dark:bg-bluegray-7">
                                 {news.__typename === 'NewsContent' && (
                                     <>
                                         <span className="text-indigo-300">{news.newsSource.name}</span>
@@ -148,7 +159,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                             </div>
                             {body && (
                                 <div
-                                    className="overflow-y-scroll pb-3 pl-5 pr-5 pt-3 text-sm news__body"
+                                    className="overflow-y-scroll py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body"
                                     ref={scrollContainerRef}
                                 >
                                     {body.map((paragraph, pIdx) => (
@@ -337,11 +348,13 @@ export function News(props: NewsProps): ReactElement {
         },
     });
     const searchState = useSearchState(newsQuery);
+    const { settings } = useSettings();
     return (
         <NewsUI
             body={searchState.bodyWithMatches}
             currentMatch={searchState.currentMatch}
             currentMatchRef={searchState.currentMatchRef}
+            darkMode={settings.darkMode}
             matches={searchState.matches}
             matchIndex={searchState.matchIndex}
             newsQuery={newsQuery}

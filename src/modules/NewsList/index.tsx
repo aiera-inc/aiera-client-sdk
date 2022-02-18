@@ -95,7 +95,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
     let prevEventDate = DateTime.now();
     return (
         <div className={classNames('h-full flex flex-col news-list', { dark: darkMode })}>
-            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 news-list__header">
+            <div className="flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 news-list__header">
                 <div className="flex items-center mb-3">
                     <Input
                         icon={<MagnifyingGlass />}
@@ -121,21 +121,20 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading news.'))
                             .with({ status: 'empty' }, () => wrapMsg('There is no news.'))
                             .with({ status: 'success' }, { status: 'refetching' }, ({ data, status }) => (
-                                <ul className="py-1.5 w-full">
+                                <ul className="w-full">
                                     <div
                                         className={classNames(
-                                            'animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center transition-h hover:animate-none',
+                                            'animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none',
                                             {
                                                 invisible: !canRefetch,
                                                 'h-0': !canRefetch,
-                                                'pb-3': canRefetch,
-                                                'pt-2': canRefetch,
+                                                'py-3': canRefetch,
                                             }
                                         )}
                                         onClick={onRefetch}
                                     >
                                         <div className="ml-2 w-full flex h-[1px] bg-gradient-to-l from-gray-200 group-hover:from-gray-300" />
-                                        <p className="px-3 text-gray-500 text-sm whitespace-nowrap group-hover:text-gray-700">
+                                        <p className="px-3 text-gray-500 text-sm whitespace-nowrap dark:text-gray-300 dark:group-hover:text-gray-400 group-hover:text-gray-700">
                                             Check for new articles
                                         </p>
                                         <div className="mr-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 group-hover:from-gray-300" />
@@ -148,7 +147,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                         if (!areDatesSameDay(prevEventDate.toJSDate(), date.toJSDate())) {
                                             prevEventDate = date;
                                             divider = (
-                                                <li className="sticky top-[12px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3">
+                                                <li className="sticky top-[12px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3 dark:bg-bluegray-7 dark:bg-opacity-70">
                                                     {date.toFormat('DDDD')}
                                                     <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5" />
                                                 </li>
@@ -158,7 +157,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                             <Fragment key={hit.id}>
                                                 {divider}
                                                 <li
-                                                    className="group text-xs text-gray-300 px-3 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
+                                                    className="cursor-pointer group mx-1 px-1 rounded-lg text-gray-300 text-xs hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
                                                     onClick={(e) => onSelectNews?.(e, { value: content })}
                                                 >
                                                     <div className="flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm">
@@ -201,7 +200,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                         <div className="flex-1" />
                         {hasMoreResults && (
                             <div
-                                className="bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center py-3 shadow-inner text-gray-500 w-full dark:bg-bluegray-6 dark:hover:bg-bluegray-7 dark:hover:text-gray-400 hover:bg-gray-50 hover:text-black"
+                                className="bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center mt-1 py-3 shadow-inner text-gray-500 w-full dark:bg-bluegray-5 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-bluegray-6 dark:hover:text-gray-300 hover:bg-gray-50 hover:text-black"
                                 onClick={loadMore}
                             >
                                 <p className="text-sm tracking-wider uppercase">load more</p>
