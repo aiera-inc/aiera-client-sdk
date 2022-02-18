@@ -107,7 +107,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                     <div className="mx-2">
                         <CompanyFilterButton onChange={onSelectCompany} value={company} />
                     </div>
-                    <SettingsButton />
+                    <SettingsButton showTextSentiment={false} />
                 </div>
             </div>
             <div className="flex flex-col flex-1 pt-0 overflow-y-scroll dark:bg-bluegray-7">

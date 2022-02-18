@@ -24,4 +24,24 @@ describe('SettingsButton', () => {
         });
         expect(toggle.checked).toEqual(true);
     });
+
+    test('when showTextSentiment is true, render text sentiment toggle', async () => {
+        const { rendered, rerender } = renderWithProvider(<SettingsButton />);
+        const button = rendered.container.querySelector('.settings_button');
+        if (button) fireEvent.click(button);
+        await waitFor(() => screen.getByText('Widget Settings'));
+        screen.getByText('Text Sentiment'); // visible by default
+        rerender(<SettingsButton showTextSentiment={false} />);
+        expect(screen.queryByText('Text Sentiment')).toBeNull();
+    });
+
+    test('when showTonalSentiment is true, render tonal sentiment toggle', async () => {
+        const { rendered, rerender } = renderWithProvider(<SettingsButton />);
+        const button = rendered.container.querySelector('.settings_button');
+        if (button) fireEvent.click(button);
+        await waitFor(() => screen.getByText('Widget Settings'));
+        expect(screen.queryByText('Tonal Sentiment')).toBeNull(); // hidden by default
+        rerender(<SettingsButton showTonalSentiment />);
+        screen.getByText('Tonal Sentiment');
+    });
 });

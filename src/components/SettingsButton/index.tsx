@@ -8,7 +8,10 @@ import { Button } from '@aiera/client-sdk/components/Button';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import './styles.css';
 
-interface SettingsButtonSharedProps {}
+interface SettingsButtonSharedProps {
+    showTextSentiment?: boolean;
+    showTonalSentiment?: boolean;
+}
 
 /** @notExported */
 interface SettingsButtonUIProps extends SettingsButtonSharedProps {
@@ -17,7 +20,7 @@ interface SettingsButtonUIProps extends SettingsButtonSharedProps {
 }
 
 function TooltipContent(props: SettingsButtonUIProps): ReactElement {
-    const { hideTooltip, logout } = props;
+    const { hideTooltip, logout, showTextSentiment = true, showTonalSentiment = false } = props;
     const { settings, handlers } = useSettings();
     return (
         <div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1">
@@ -36,16 +39,18 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     Dark Mode
                 </span>
             </div>
-            <div
-                className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
-                onClick={(e) => handlers.textSentiment(e, { value: !settings.textSentiment })}
-            >
-                <Toggle on={settings.textSentiment} onChange={handlers.textSentiment} />
-                <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
-                    Text Sentiment
-                </span>
-            </div>
-            {false && (
+            {showTextSentiment && (
+                <div
+                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
+                    onClick={(e) => handlers.textSentiment(e, { value: !settings.textSentiment })}
+                >
+                    <Toggle on={settings.textSentiment} onChange={handlers.textSentiment} />
+                    <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
+                        Text Sentiment
+                    </span>
+                </div>
+            )}
+            {showTonalSentiment && (
                 <div
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={(e) => handlers.tonalSentiment(e, { value: !settings.tonalSentiment })}
@@ -67,10 +72,21 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
     );
 }
 
-export function SettingsButtonUI({ logout }: SettingsButtonUIProps): ReactElement {
+export function SettingsButtonUI({
+    logout,
+    showTextSentiment,
+    showTonalSentiment,
+}: SettingsButtonUIProps): ReactElement {
     return (
         <Tooltip
-            content={({ hideTooltip }) => <TooltipContent hideTooltip={hideTooltip} logout={logout} />}
+            content={({ hideTooltip }) => (
+                <TooltipContent
+                    hideTooltip={hideTooltip}
+                    logout={logout}
+                    showTextSentiment={showTextSentiment}
+                    showTonalSentiment={showTonalSentiment}
+                />
+            )}
             grow="down-left"
             modal
             openOn="click"
@@ -90,7 +106,14 @@ export interface SettingsButtonProps extends SettingsButtonSharedProps {}
 /**
  * Renders SettingsButton
  */
-export function SettingsButton(): ReactElement {
+export function SettingsButton(props: SettingsButtonProps): ReactElement {
+    const { showTextSentiment, showTonalSentiment } = props;
     const { logout } = useAuthContext();
-    return <SettingsButtonUI logout={logout} />;
+    return (
+        <SettingsButtonUI
+            logout={logout}
+            showTextSentiment={showTextSentiment}
+            showTonalSentiment={showTonalSentiment}
+        />
+    );
 }

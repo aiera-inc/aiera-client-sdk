@@ -80,7 +80,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                             value={searchTerm}
                             onChange={onChangeSearch}
                         />
-                        <SettingsButton />
+                        <SettingsButton showTextSentiment={false} />
                     </div>
                 </div>
                 {searchTerm && (
