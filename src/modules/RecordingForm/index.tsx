@@ -116,7 +116,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             onChange={onChangeConnectionType}
                         />
                     ))
-                    .with(2, () => <ConnectionDetails />)
+                    .with(2, () => <ConnectionDetails connectionType={connectionType} />)
                     .with(3, () => <Scheduling />)
                     .with(4, () => <Troubleshooting />)
                     .with(5, () => <RecordingDetails />)
