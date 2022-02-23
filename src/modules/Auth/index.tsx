@@ -1,13 +1,13 @@
-import React, { ReactElement, ReactNode, useState, useCallback, FormEvent, FormEventHandler } from 'react';
-import { useMutation, useQuery } from 'urql';
+import React, { ReactElement, ReactNode, useEffect, useState, useCallback, FormEvent, FormEventHandler } from 'react';
+import { useMutation } from 'urql';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 
 import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from '@aiera/client-sdk/types/generated';
+import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { Logo } from '@aiera/client-sdk/components/Svg/Logo';
-import { QueryError } from '@aiera/client-sdk/types';
 import { useClient } from '@aiera/client-sdk/api/client';
 import { AuthProvider } from '@aiera/client-sdk/lib/auth';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
@@ -22,35 +22,39 @@ export type LoginState = 'none' | 'loading' | 'error';
  */
 interface AuthProps {
     children?: ReactNode;
-    error?: QueryError;
-    loading: boolean;
     login: FormEventHandler;
     loginState: LoginState;
-    user?: CurrentUserQuery['currentUser'] | null;
+    userQuery: QueryResult<CurrentUserQuery>;
     email: string;
     onChangeEmail: ChangeHandler<string>;
     password: string;
     onChangePassword: ChangeHandler<string>;
 }
 
-export const AuthUI = (props: AuthProps): ReactElement => {
-    const { children, user, loading, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
+export const AuthUI = (props: AuthProps) => {
+    const { children, userQuery, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
 
-    if (!user) {
-        return (
-            <div className="relative flex flex-col items-center justify-center w-full h-full">
-                <div className="absolute w-32 top-10 right-10">
-                    <Logo />
-                </div>
-                {match(loading)
-                    .with(true, () => (
+    return (
+        <>
+            {match(userQuery.status)
+                .with('loading', 'paused', () => (
+                    <div className="relative flex flex-col items-center justify-center w-full h-full">
+                        <div className="absolute w-32 top-10 right-10">
+                            <Logo />
+                        </div>
                         <div className="flex">
                             <div className="w-2 h-2 bg-[#FE590C] rounded-full animate-bounce animation" />
                             <div className="w-2 h-2 ml-1 bg-[#FE590C] rounded-full animate-bounce animation-delay-100" />
                             <div className="w-2 h-2 ml-1 bg-[#FE590C] rounded-full animate-bounce animation-delay-200" />
                         </div>
-                    ))
-                    .with(false, () => (
+                    </div>
+                ))
+                .with('error', 'empty', () => (
+                    <div className="relative flex flex-col items-center justify-center w-full h-full">
+                        <div className="absolute w-32 top-10 right-10">
+                            <Logo />
+                        </div>
+
                         <div className="bg-white">
                             <h1 className="text-3xl font-semibold text-left">Sign In</h1>
                             <form className="mt-4" action="#" onSubmit={login}>
@@ -153,13 +157,12 @@ export const AuthUI = (props: AuthProps): ReactElement => {
                                 </div>
                             </form>
                         </div>
-                    ))
-                    .exhaustive()}
-            </div>
-        );
-    }
-
-    return <div className="h-full">{children}</div>;
+                    </div>
+                ))
+                .with('success', () => children || <div />)
+                .exhaustive()}
+        </>
+    );
 };
 
 export const Auth = ({
@@ -173,7 +176,7 @@ export const Auth = ({
     const { state, mergeState, handlers } = useChangeHandlers(initialAuthform);
     const [loginState, setLoginState] = useState<'none' | 'loading' | 'error'>('none');
 
-    const [result, refetch] = useQuery<CurrentUserQuery>({
+    const userQuery = useQuery<CurrentUserQuery>({
         query: gql`
             query CurrentUser {
                 currentUser {
@@ -185,7 +188,12 @@ export const Auth = ({
         `,
     });
 
-    useMessageListener('authenticate', () => refetch(), 'in');
+    const bus = useMessageListener('authenticate', () => userQuery.refetch(), 'in');
+    useEffect(() => {
+        if (userQuery.status === 'success') {
+            bus.emit('authenticated', null, 'out');
+        }
+    }, [userQuery.status]);
 
     const [_, loginMutation] = useMutation<LoginMutation, LoginMutationVariables>(gql`
         mutation Login($email: String!, $password: String!) {
@@ -206,7 +214,7 @@ export const Auth = ({
                 .then(async (resp) => {
                     if (resp.data?.login) {
                         await config.writeAuth(resp.data.login);
-                        refetch({ requestPolicy: 'cache-and-network' });
+                        userQuery.refetch({ requestPolicy: 'cache-and-network' });
                         setLoginState('none');
                     } else {
                         throw new Error('Error logging in');
@@ -216,7 +224,7 @@ export const Auth = ({
                     setLoginState('error');
                 });
         },
-        [loginMutation, config, refetch, state, setLoginState]
+        [loginMutation, config, userQuery.refetch, state, setLoginState]
     );
 
     const logout = useCallback(async () => {
@@ -228,9 +236,7 @@ export const Auth = ({
     return (
         <AuthProvider logout={logout}>
             <AuthUI
-                user={result.data?.currentUser}
-                loading={result.fetching}
-                error={result.error}
+                userQuery={userQuery}
                 email={state.email}
                 onChangeEmail={handlers.email}
                 password={state.password}

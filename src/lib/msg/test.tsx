@@ -12,6 +12,7 @@ describe('message bus', () => {
 
         bus.on('instrument-selected', incomingListener, 'in');
         bus.on('instrument-selected', outgoingListener, 'out');
+
         bus.emit('instrument-selected', { ticker: 'TICK' }, 'out');
         expect(incomingListener).not.toHaveBeenCalled();
         expect(outgoingListener).toHaveBeenCalledWith({
@@ -28,6 +29,21 @@ describe('message bus', () => {
         expect(incomingListener).toHaveBeenCalledWith({
             event: 'instrument-selected',
             direction: 'in',
+            data: { ticker: 'TICK' },
+        });
+
+        incomingListener.mockReset();
+        outgoingListener.mockReset();
+
+        bus.emit('instrument-selected', { ticker: 'TICK' }, 'both');
+        expect(incomingListener).toHaveBeenCalledWith({
+            event: 'instrument-selected',
+            direction: 'in',
+            data: { ticker: 'TICK' },
+        });
+        expect(outgoingListener).toHaveBeenCalledWith({
+            event: 'instrument-selected',
+            direction: 'out',
             data: { ticker: 'TICK' },
         });
 

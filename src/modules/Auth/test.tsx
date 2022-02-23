@@ -2,19 +2,22 @@ import React, { FormEvent } from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { fromValue } from 'wonka';
 
+import { CurrentUserQuery } from '@aiera/client-sdk/types/generated';
+import { QueryResult } from '@aiera/client-sdk/api/client';
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { AuthTokens, TokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import { Auth, AuthUI, LoginState } from '.';
+import { CombinedError } from 'urql';
 
 const email = 'test@example.com';
 const password = 'password';
 const accessToken = 'accessToken';
 const refreshToken = 'refreshToken';
+const errorUserQuery = { status: 'error' } as QueryResult<CurrentUserQuery>;
+const loadingUserQuery = { status: 'loading' } as QueryResult<CurrentUserQuery>;
+
 const defaultProps = {
-    user: undefined,
-    loading: false,
-    error: undefined,
     login: () => undefined,
     email: '',
     onChangeEmail: () => undefined,
@@ -25,7 +28,7 @@ const defaultProps = {
 
 describe('AuthUI', () => {
     test('renders a loading state', () => {
-        render(<AuthUI {...defaultProps} loading />);
+        render(<AuthUI {...defaultProps} userQuery={loadingUserQuery} />);
         screen.getByTitle('Logo');
         expect(screen.queryByPlaceholderText('email')).toBeNull();
     });
@@ -35,7 +38,13 @@ describe('AuthUI', () => {
         const onChangeEmail = jest.fn();
         const onChangePassword = jest.fn();
         render(
-            <AuthUI {...defaultProps} login={login} onChangeEmail={onChangeEmail} onChangePassword={onChangePassword} />
+            <AuthUI
+                {...defaultProps}
+                userQuery={errorUserQuery}
+                login={login}
+                onChangeEmail={onChangeEmail}
+                onChangePassword={onChangePassword}
+            />
         );
 
         fireEvent.change(screen.getByPlaceholderText('email'), { target: { value: email } });
@@ -98,9 +107,7 @@ describe('Auth', () => {
         const { client } = renderWithProvider(<Auth config={config} />, {
             executeQuery: () =>
                 fromValue({
-                    data: {
-                        currentUser: null,
-                    },
+                    error: new CombinedError({ graphQLErrors: ['Not Authenticated'] }),
                 }),
             executeMutation: () =>
                 fromValue({

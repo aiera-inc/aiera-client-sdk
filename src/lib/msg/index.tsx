@@ -14,6 +14,7 @@ interface EventAlert {
 
 export interface MessageBusEvents {
     authenticate: AuthTokens;
+    authenticated: null;
     'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
@@ -75,9 +76,14 @@ export class MessageBus {
     /**
      * Emit an event.
      */
-    emit<E extends keyof MessageBusEvents>(event: E, data: Message<E>['data'], direction: Direction): boolean {
-        this.sendWindowMessage(event, data, direction);
-        return this.emitter.emit(`${direction}-${event}`, { event, data, direction });
+    emit<E extends keyof MessageBusEvents>(event: E, data: Message<E>['data'], direction: Direction | 'both'): boolean {
+        const directions: Direction[] = direction === 'both' ? ['in', 'out'] : [direction];
+        return directions
+            .map((dir) => {
+                this.sendWindowMessage(event, data, dir);
+                return this.emitter.emit(`${dir}-${event}`, { event, data, direction: dir });
+            })
+            .reduce((prev, curr) => prev && curr);
     }
 
     removeAllListeners(): MessageBus {

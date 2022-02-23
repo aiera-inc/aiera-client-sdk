@@ -181,7 +181,7 @@ export interface QueryResultEmptyCheck<Data> {
     isEmpty?: (data: Data) => boolean;
 }
 
-export type QueryResult<Data, Variables> =
+export type QueryResult<Data, Variables = undefined> =
     | LoadingQueryResult<Data, Variables>
     | ErrorQueryResult<Data, Variables>
     | PausedQueryResult<Data, Variables>
@@ -200,7 +200,7 @@ export interface PaginatedQueryArgs<Variables, Data> extends UseQueryArgs<Variab
     };
 }
 
-export function useQuery<Data, Variables>(
+export function useQuery<Data, Variables = undefined>(
     args: UseQueryArgs<Variables, Data> & QueryResultEmptyCheck<Data>
 ): QueryResult<Data, Variables> {
     const { isEmpty } = args;

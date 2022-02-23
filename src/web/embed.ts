@@ -1,4 +1,5 @@
 import EventEmitter from 'eventemitter3';
+import type { InstrumentID } from '@finos/fdc3';
 import type { AieraMessageEvent, Message, MessageBusEvents } from '@aiera/client-sdk/lib/msg';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
 
@@ -75,6 +76,10 @@ class Module {
 
     authenticate(tokens: AuthTokens) {
         this.emit('authenticate', tokens);
+    }
+
+    setWatchlist(instruments: InstrumentID[]) {
+        this.emit('instruments-selected', instruments);
     }
 }
 
