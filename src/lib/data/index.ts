@@ -195,12 +195,14 @@ export interface Settings {
     darkMode: boolean;
     textSentiment: boolean;
     tonalSentiment: boolean;
+    syncWatchlist: boolean;
 }
 
 export const defaultSettings = {
     darkMode: false,
     textSentiment: true,
     tonalSentiment: true,
+    syncWatchlist: true,
 };
 
 export function useSettings(): {

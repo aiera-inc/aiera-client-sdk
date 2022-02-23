@@ -130,6 +130,7 @@ describe('useSettings', () => {
             darkMode: true,
             textSentiment: true,
             tonalSentiment: true,
+            syncWatchlist: true,
         };
         jest.spyOn(window.localStorage.__proto__, 'getItem');
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -145,6 +146,7 @@ describe('useSettings', () => {
             darkMode: true,
             textSentiment: true,
             tonalSentiment: true,
+            syncWatchlist: true,
         };
         jest.spyOn(window.localStorage.__proto__, 'getItem');
         jest.spyOn(window.localStorage.__proto__, 'setItem');
@@ -165,7 +167,7 @@ describe('useSettings', () => {
         // eslint-disable-next-line @typescript-eslint/unbound-method
         expect(window.localStorage.setItem).toHaveBeenLastCalledWith(
             'aiera:sdk:settings',
-            JSON.stringify({ darkMode: false, textSentiment: true, tonalSentiment: true })
+            JSON.stringify({ darkMode: false, textSentiment: true, tonalSentiment: true, syncWatchlist: true })
         );
         expect(hook?.result.current.settings).toEqual({ ...initialSettings, darkMode: false });
     });
