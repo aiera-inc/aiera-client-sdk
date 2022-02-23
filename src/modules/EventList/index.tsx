@@ -107,7 +107,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     <div className="mx-2">
                         <CompanyFilterButton onChange={onCompanyChange} value={company} />
                     </div>
-                    <SettingsButton />
+                    <SettingsButton showTonalSentiment={false} />
                 </div>
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7">

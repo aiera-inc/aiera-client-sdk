@@ -98,7 +98,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                     value={searchTerm}
                     onChange={onChangeSearchTerm}
                 />
-                <SettingsButton />
+                <SettingsButton showTonalSentiment={false} />
             </div>
             {match(eventQuery)
                 .with({ status: 'loading' }, () => {

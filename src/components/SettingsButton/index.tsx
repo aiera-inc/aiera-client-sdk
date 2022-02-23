@@ -20,7 +20,7 @@ interface SettingsButtonUIProps extends SettingsButtonSharedProps {
 }
 
 function TooltipContent(props: SettingsButtonUIProps): ReactElement {
-    const { hideTooltip, logout, showTextSentiment = true, showTonalSentiment = false } = props;
+    const { hideTooltip, logout, showTextSentiment = true, showTonalSentiment = true } = props;
     const { settings, handlers } = useSettings();
     return (
         <div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1">
