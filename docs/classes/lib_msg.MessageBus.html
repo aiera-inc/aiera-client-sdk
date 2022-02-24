@@ -98,6 +98,7 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="lib_msg.MessageBus.html#emitter" class="tsd-kind-icon">emitter</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="lib_msg.MessageBus.html#parent" class="tsd-kind-icon">parent</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -107,6 +108,10 @@
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="lib_msg.MessageBus.html#off" class="tsd-kind-icon">off</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="lib_msg.MessageBus.html#emit" class="tsd-kind-icon">emit</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="lib_msg.MessageBus.html#removeAllListeners" class="tsd-kind-icon">remove<wbr>All<wbr>Listeners</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="lib_msg.MessageBus.html#setupWindowMessaging" class="tsd-kind-icon">setup<wbr>Window<wbr>Messaging</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="lib_msg.MessageBus.html#cleanupWindowMessaging" class="tsd-kind-icon">cleanup<wbr>Window<wbr>Messaging</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="lib_msg.MessageBus.html#onWindowMessage" class="tsd-kind-icon">on<wbr>Window<wbr>Message</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter"><a href="lib_msg.MessageBus.html#sendWindowMessage" class="tsd-kind-icon">send<wbr>Window<wbr>Message</a></li>
 							</ul>
 						</section>
 					</div>
@@ -124,7 +129,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/a3a349f/src/lib/msg/index.tsx#L31">src/lib/msg/index.tsx:31</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L41">src/lib/msg/index.tsx:41</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="lib_msg.MessageBus.html" class="tsd-signature-type" data-tsd-kind="Class">MessageBus</a></h4>
@@ -140,7 +145,17 @@
 					<div class="tsd-signature tsd-kind-icon">emitter<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">EventEmitter</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">symbol</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">&gt;</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/a3a349f/src/lib/msg/index.tsx#L29">src/lib/msg/index.tsx:29</a></li>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L38">src/lib/msg/index.tsx:38</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="parent" class="tsd-anchor"></a>
+					<h3><span class="tsd-flag ts-flagOptional">Optional</span> parent</h3>
+					<div class="tsd-signature tsd-kind-icon">parent<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">Window</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L39">src/lib/msg/index.tsx:39</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -157,7 +172,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/a3a349f/src/lib/msg/index.tsx#L38">src/lib/msg/index.tsx:38</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L48">src/lib/msg/index.tsx:48</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -168,7 +183,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">MessageBusEvents</span></h4>
+									<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -215,7 +230,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/a3a349f/src/lib/msg/index.tsx#L53">src/lib/msg/index.tsx:53</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L63">src/lib/msg/index.tsx:63</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -226,7 +241,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">MessageBusEvents</span></h4>
+									<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -267,13 +282,13 @@
 					<a name="emit" class="tsd-anchor"></a>
 					<h3>emit</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
-						<li class="tsd-signature tsd-kind-icon">emit&lt;E&gt;<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">E</span>, data<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">MessageBusEvents</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">]</span>, direction<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Direction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
+						<li class="tsd-signature tsd-kind-icon">emit&lt;E&gt;<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">E</span>, data<span class="tsd-signature-symbol">: </span><a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">]</span>, direction<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Direction</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;both&quot;</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">boolean</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/a3a349f/src/lib/msg/index.tsx#L68">src/lib/msg/index.tsx:68</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L78">src/lib/msg/index.tsx:78</a></li>
 								</ul>
 							</aside>
 							<div class="tsd-comment tsd-typography">
@@ -284,7 +299,7 @@
 							<h4 class="tsd-type-parameters-title">Type parameters</h4>
 							<ul class="tsd-type-parameters">
 								<li>
-									<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><span class="tsd-signature-type">MessageBusEvents</span></h4>
+									<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a></h4>
 								</li>
 							</ul>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -293,10 +308,10 @@
 									<h5>event: <span class="tsd-signature-type">E</span></h5>
 								</li>
 								<li>
-									<h5>data: <span class="tsd-signature-type">MessageBusEvents</span><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">]</span></h5>
+									<h5>data: <a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">]</span></h5>
 								</li>
 								<li>
-									<h5>direction: <span class="tsd-signature-type">Direction</span></h5>
+									<h5>direction: <span class="tsd-signature-type">Direction</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">&quot;both&quot;</span></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">boolean</span></h4>
@@ -313,10 +328,134 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/a3a349f/src/lib/msg/index.tsx#L72">src/lib/msg/index.tsx:72</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L88">src/lib/msg/index.tsx:88</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-returns-title">Returns <a href="lib_msg.MessageBus.html" class="tsd-signature-type" data-tsd-kind="Class">MessageBus</a></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="setupWindowMessaging" class="tsd-anchor"></a>
+					<h3>setup<wbr>Window<wbr>Messaging</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">setup<wbr>Window<wbr>Messaging<span class="tsd-signature-symbol">(</span>parent<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Window</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L100">src/lib/msg/index.tsx:100</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Setups up messaging between this instance/module and a parent window.
+									Used for embedding modules into other web platforms.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>parent: <span class="tsd-signature-type">Window</span></h5>
+									<div class="tsd-comment tsd-typography">
+										<p>The parent window that will be embedding the widget and communicating
+										with it.</p>
+									</div>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="cleanupWindowMessaging" class="tsd-anchor"></a>
+					<h3>cleanup<wbr>Window<wbr>Messaging</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">cleanup<wbr>Window<wbr>Messaging<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L108">src/lib/msg/index.tsx:108</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Cleans up the listeners and removes the parent/module communication channel.</p>
+								</div>
+							</div>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
+					<a name="onWindowMessage" class="tsd-anchor"></a>
+					<h3>on<wbr>Window<wbr>Message</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
+						<li class="tsd-signature tsd-kind-icon">on<wbr>Window<wbr>Message<span class="tsd-signature-symbol">(</span>windowEvent<span class="tsd-signature-symbol">: </span><a href="../interfaces/lib_msg.AieraMessageEvent.html" class="tsd-signature-type" data-tsd-kind="Interface">AieraMessageEvent</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L117">src/lib/msg/index.tsx:117</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Listens for incoming messages from the parent window, checks that we are the intended
+									target, and dispatches the message to the local message bus.</p>
+								</div>
+							</div>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>windowEvent: <a href="../interfaces/lib_msg.AieraMessageEvent.html" class="tsd-signature-type" data-tsd-kind="Interface">AieraMessageEvent</a></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
+						</li>
+					</ul>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+					<a name="sendWindowMessage" class="tsd-anchor"></a>
+					<h3>send<wbr>Window<wbr>Message</h3>
+					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+						<li class="tsd-signature tsd-kind-icon">send<wbr>Window<wbr>Message&lt;E&gt;<span class="tsd-signature-symbol">(</span>event<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">E</span>, data<span class="tsd-signature-symbol">: </span><a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">]</span>, direction<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Direction</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">void</span></li>
+					</ul>
+					<ul class="tsd-descriptions">
+						<li class="tsd-description">
+							<aside class="tsd-sources">
+								<ul>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/4f215ea/src/lib/msg/index.tsx#L128">src/lib/msg/index.tsx:128</a></li>
+								</ul>
+							</aside>
+							<div class="tsd-comment tsd-typography">
+								<div class="lead">
+									<p>Sends a message out to the parent window.</p>
+								</div>
+							</div>
+							<h4 class="tsd-type-parameters-title">Type parameters</h4>
+							<ul class="tsd-type-parameters">
+								<li>
+									<h4>E<span class="tsd-signature-symbol">: </span><span class="tsd-signature-symbol">keyof </span><a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a></h4>
+								</li>
+							</ul>
+							<h4 class="tsd-parameters-title">Parameters</h4>
+							<ul class="tsd-parameters">
+								<li>
+									<h5>event: <span class="tsd-signature-type">E</span></h5>
+								</li>
+								<li>
+									<h5>data: <a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-signature-type" data-tsd-kind="Interface">MessageBusEvents</a><span class="tsd-signature-symbol">[</span><span class="tsd-signature-type">E</span><span class="tsd-signature-symbol">]</span></h5>
+								</li>
+								<li>
+									<h5>direction: <span class="tsd-signature-type">Direction</span></h5>
+								</li>
+							</ul>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">void</span></h4>
 						</li>
 					</ul>
 				</section>
@@ -335,8 +474,14 @@
 			</nav>
 			<nav class="tsd-navigation secondary menu-sticky">
 				<ul class="before-current">
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/lib_msg.MessageBusEvents.html" class="tsd-kind-icon">Message<wbr>Bus<wbr>Events</a>
+					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../interfaces/lib_msg.Message.html" class="tsd-kind-icon">Message</a>
+					</li>
+					<li class=" tsd-kind-interface tsd-parent-kind-module">
+						<a href="../interfaces/lib_msg.AieraMessageEvent.html" class="tsd-kind-icon">Aiera<wbr>Message<wbr>Event</a>
 					</li>
 				</ul>
 				<ul class="current">
@@ -349,6 +494,9 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="lib_msg.MessageBus.html#emitter" class="tsd-kind-icon">emitter</a>
 							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="lib_msg.MessageBus.html#parent" class="tsd-kind-icon">parent</a>
+							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
 								<a href="lib_msg.MessageBus.html#on" class="tsd-kind-icon">on</a>
 							</li>
@@ -360,6 +508,18 @@
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="lib_msg.MessageBus.html#removeAllListeners" class="tsd-kind-icon">remove<wbr>All<wbr>Listeners</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="lib_msg.MessageBus.html#setupWindowMessaging" class="tsd-kind-icon">setup<wbr>Window<wbr>Messaging</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="lib_msg.MessageBus.html#cleanupWindowMessaging" class="tsd-kind-icon">cleanup<wbr>Window<wbr>Messaging</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class">
+								<a href="lib_msg.MessageBus.html#onWindowMessage" class="tsd-kind-icon">on<wbr>Window<wbr>Message</a>
+							</li>
+							<li class=" tsd-kind-method tsd-parent-kind-class tsd-has-type-parameter">
+								<a href="lib_msg.MessageBus.html#sendWindowMessage" class="tsd-kind-icon">send<wbr>Window<wbr>Message</a>
 							</li>
 						</ul>
 					</li>

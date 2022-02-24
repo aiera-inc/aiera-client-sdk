@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.71% </span>
+                <span class="strong">81.15% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>55/69</span>
+                <span class='fraction'>56/69</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.67% </span>
+                <span class="strong">84.31% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>41/49</span>
+                <span class='fraction'>43/51</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.59% </span>
+                <span class="strong">82.08% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>54/67</span>
+                <span class='fraction'>55/67</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -550,15 +550,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">599x</span>
-<span class="cline-any cline-yes">599x</span>
-<span class="cline-any cline-yes">599x</span>
-<span class="cline-any cline-yes">227x</span>
-<span class="cline-any cline-yes">94x</span>
+<span class="cline-any cline-yes">609x</span>
+<span class="cline-any cline-yes">609x</span>
+<span class="cline-any cline-yes">609x</span>
+<span class="cline-any cline-yes">231x</span>
+<span class="cline-any cline-yes">95x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">133x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">136x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">133x</span>
@@ -663,7 +663,7 @@ import { DocumentNode } from 'graphql';
 import { authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 &nbsp;
-import { useConfig, EnvConfig } from '@aiera/client-sdk/lib/config';
+import { useConfig, Config } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 &nbsp;
 /**
@@ -705,8 +705,8 @@ const opNameExchange: Exchange = ({ forward }) =&gt; {
         );
 };
 &nbsp;
-function createGQLClient(config: EnvConfig): Client {
-    const { auth = defaultTokenAuthConfig } = config.gqlOptions.exchangeOptions || {};
+function createGQLClient(config: Config): Client {
+    const { auth = defaultTokenAuthConfig } = config.gqlOptions?.exchangeOptions || {};
     const exchanges = [
         devtoolsExchange,
         opNameExchange,
@@ -726,7 +726,7 @@ function createGQLClient(config: EnvConfig): Client {
     ) as Exchange[];
 &nbsp;
     return createClient({
-        ...config.gqlOptions.clientOptions,
+        ...(config.gqlOptions?.clientOptions || <span class="branch-1 cbranch-no" title="branch not covered" >{ url: '' })</span>,
         exchanges,
         requestPolicy: 'cache-and-network',
     });
@@ -752,9 +752,9 @@ export const Provider = ({
     client?: Client;
     reset?: () =&gt; void;
 }): ReactElement =&gt; {
-    const envConfig = useConfig();
-    const [client, setClient] = useState(passedClient || createGQLClient(envConfig));
-    const reset = passedReset || (() =&gt; setClient(passedClient || createGQLClient(envConfig)));
+    const Config = useConfig();
+    const [client, setClient] = useState(passedClient || createGQLClient(Config));
+    const reset = passedReset || (() =&gt; setClient(passedClient || createGQLClient(Config)));
     return (
         &lt;Context.Provider value={{ reset }}&gt;
             &lt;UrqlProvider value={client}&gt;{children}&lt;/UrqlProvider&gt;
@@ -810,7 +810,7 @@ export interface QueryResultEmptyCheck&lt;Data&gt; {
     isEmpty?: (data: Data) =&gt; boolean;
 }
 &nbsp;
-export type QueryResult&lt;Data, Variables&gt; =
+export type QueryResult&lt;Data, Variables = undefined&gt; =
     | LoadingQueryResult&lt;Data, Variables&gt;
     | ErrorQueryResult&lt;Data, Variables&gt;
     | PausedQueryResult&lt;Data, Variables&gt;
@@ -829,7 +829,7 @@ export interface PaginatedQueryArgs&lt;Variables, Data&gt; extends UseQueryArgs&
     };
 }
 &nbsp;
-export function useQuery&lt;Data, Variables&gt;(
+export function useQuery&lt;Data, Variables = undefined&gt;(
     args: UseQueryArgs&lt;Variables, Data&gt; &amp; QueryResultEmptyCheck&lt;Data&gt;
 ): QueryResult&lt;Data, Variables&gt; {
     const { isEmpty } = args;
@@ -839,8 +839,8 @@ export function useQuery&lt;Data, Variables&gt;(
             return { status: 'loading', state, refetch };
         }
 &nbsp;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (state.error) {
-<span class="cstat-no" title="statement not covered" >            return { status: 'error', state, error: state.error, refetch };</span>
+        if (state.error) {
+            return { status: 'error', state, error: state.error, refetch };
         }
 &nbsp;
         if (args.pause) {
@@ -916,7 +916,7 @@ export function usePaginatedQuery&lt;Data, Variables&gt;(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Feb 24 2022 12:23:33 GMT-0500 (Eastern Standard Time)
+                at Thu Feb 24 2022 16:09:04 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

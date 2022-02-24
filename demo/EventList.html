@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            iframe {
+                border: none;
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            const eventList = new Aiera.Module('/modules/EventList/', 'aiera');
+            eventList.load().then(() => {
+                // To try out authentication
+                // eventList.authenticate({
+                //     accessToken: '[accesstoken]',
+                //     refreshToken: '[refreshToken]',
+                // });
+            });
+
+            eventList.on('authenticated', () => {
+                // Set up a watchlist after authentication
+                // eventList.setWatchlist([
+                //     { ticker: 'AAPL' },
+                //     { ticker: 'GOOGL' },
+                //     { ticker: 'TLSA' },
+                //     { ticker: 'PTON' },
+                // ]);
+            });
+
+        </script>
+    </body>
+</html
