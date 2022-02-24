@@ -10,7 +10,7 @@ describe('useTrack', () => {
     const TestComponent = () => {
         const track = useTrack();
         useEffect(() => {
-            void track('View', 'Event', { eventId: 1 });
+            void track('View', 'Event', { eventId: '1' });
         }, []);
         return null;
     };
@@ -19,7 +19,7 @@ describe('useTrack', () => {
         const { client } = renderWithProvider(<TestComponent />);
         expect(client.mutation).toHaveBeenCalledWith(expect.anything(), {
             event: 'View | Event',
-            properties: { eventId: 1 },
+            properties: expect.objectContaining({ eventId: '1' }) as { [key: string]: string },
         });
     });
 });
@@ -33,20 +33,17 @@ describe('useAutoTrack', () => {
     test('calls the track mutation, and calls it again on changes', () => {
         const { client, rerender } = renderWithProvider(<TestComponent id="1" />);
 
-        expect(client.mutation).toHaveBeenLastCalledWith(
-            expect.anything(),
-            expect.objectContaining({
-                event: 'View | Event',
-                properties: { eventId: '1' },
-            })
-        );
+        expect(client.mutation).toHaveBeenLastCalledWith(expect.anything(), {
+            event: 'View | Event',
+            properties: expect.objectContaining({ eventId: '1' }) as { [key: string]: string },
+        });
 
         rerender(<TestComponent id="2" />);
         expect(client.mutation).toHaveBeenLastCalledWith(
             expect.anything(),
             expect.objectContaining({
                 event: 'View | Event',
-                properties: { eventId: '2' },
+                properties: expect.objectContaining({ eventId: '2' }) as { [key: string]: string },
             })
         );
     });
@@ -58,7 +55,7 @@ describe('useAutoTrack', () => {
             expect.anything(),
             expect.objectContaining({
                 event: 'View | Event',
-                properties: { eventId: '1' },
+                properties: expect.objectContaining({ eventId: '1' }) as { [key: string]: string },
             })
         );
 
@@ -68,7 +65,7 @@ describe('useAutoTrack', () => {
             expect.anything(),
             expect.objectContaining({
                 event: 'View | Event',
-                properties: { eventId: '1' },
+                properties: expect.objectContaining({ eventId: '1' }) as { [key: string]: string },
             })
         );
     });
@@ -84,7 +81,7 @@ describe('useAutoTrack', () => {
             expect.anything(),
             expect.objectContaining({
                 event: 'View | Event',
-                properties: { eventId: '2' },
+                properties: expect.objectContaining({ eventId: '2' }) as { [key: string]: string },
             })
         );
     });

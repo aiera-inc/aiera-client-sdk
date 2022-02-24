@@ -17,19 +17,7 @@ const App: FC = (): ReactElement => {
     );
     return (
         <StrictMode>
-            <Provider
-                bus={bus}
-                config={{
-                    assetPath: 'bundle/',
-                    moduleName: 'NewsList',
-                    platform: 'aiera-sdk-dev',
-                    gqlOptions: {
-                        clientOptions: {
-                            url: 'https://api-dev.aiera.com/graphql',
-                        },
-                    },
-                }}
-            >
+            <Provider bus={bus} config={{ moduleName: 'NewsList' }}>
                 <Auth>
                     <div className="h-full border border-black">
                         <NewsList />

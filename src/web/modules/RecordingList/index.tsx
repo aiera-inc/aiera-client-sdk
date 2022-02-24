@@ -9,21 +9,7 @@ import '@aiera/client-sdk/css/styles.css';
 const App: FC = (): ReactElement => {
     return (
         <StrictMode>
-            <Provider
-                config={{
-                    assetPath: 'bundle/',
-                    moduleName: 'RecordingList',
-                    platform: 'aiera-sdk-dev',
-                    gqlOptions: {
-                        clientOptions: {
-                            url: 'https://api-dev.aiera.com/graphql',
-                            fetch: (...args) => {
-                                return window.fetch(...args);
-                            },
-                        },
-                    },
-                }}
-            >
+            <Provider config={{ moduleName: 'RecordingList' }}>
                 <Auth>
                     <div className="h-full border border-black">
                         <RecordingList />

@@ -34,7 +34,7 @@ import { DocumentNode } from 'graphql';
 import { authExchange } from '@urql/exchange-auth';
 import { cacheExchange } from '@urql/exchange-graphcache';
 
-import { useConfig, EnvConfig } from '@aiera/client-sdk/lib/config';
+import { useConfig, Config } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 
 /**
@@ -76,8 +76,8 @@ const opNameExchange: Exchange = ({ forward }) => {
         );
 };
 
-function createGQLClient(config: EnvConfig): Client {
-    const { auth = defaultTokenAuthConfig } = config.gqlOptions.exchangeOptions || {};
+function createGQLClient(config: Config): Client {
+    const { auth = defaultTokenAuthConfig } = config.gqlOptions?.exchangeOptions || {};
     const exchanges = [
         devtoolsExchange,
         opNameExchange,
@@ -97,7 +97,7 @@ function createGQLClient(config: EnvConfig): Client {
     ) as Exchange[];
 
     return createClient({
-        ...config.gqlOptions.clientOptions,
+        ...(config.gqlOptions?.clientOptions || { url: '' }),
         exchanges,
         requestPolicy: 'cache-and-network',
     });
@@ -123,9 +123,9 @@ export const Provider = ({
     client?: Client;
     reset?: () => void;
 }): ReactElement => {
-    const envConfig = useConfig();
-    const [client, setClient] = useState(passedClient || createGQLClient(envConfig));
-    const reset = passedReset || (() => setClient(passedClient || createGQLClient(envConfig)));
+    const Config = useConfig();
+    const [client, setClient] = useState(passedClient || createGQLClient(Config));
+    const reset = passedReset || (() => setClient(passedClient || createGQLClient(Config)));
     return (
         <Context.Provider value={{ reset }}>
             <UrqlProvider value={client}>{children}</UrqlProvider>

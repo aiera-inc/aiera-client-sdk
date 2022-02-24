@@ -88,19 +88,7 @@ const App: FC = (): ReactElement => {
     const bus = useMessageBus();
     return (
         <StrictMode>
-            <Provider
-                bus={bus}
-                config={{
-                    assetPath: 'bundle/',
-                    moduleName: 'EventList',
-                    platform: 'aiera-sdk-dev',
-                    gqlOptions: {
-                        clientOptions: {
-                            url: 'https://api-dev.aiera.com/graphql',
-                        },
-                    },
-                }}
-            >
+            <Provider bus={bus} config={{ moduleName: 'EventList' }}>
                 <Auth>
                     <div className="h-full border border-black">
                         <EventList />

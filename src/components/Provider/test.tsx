@@ -8,13 +8,17 @@ import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useRealtime } from '@aiera/client-sdk/lib/realtime';
 import { useStorage } from '@aiera/client-sdk/lib/storage';
-import { Provider, Client, MessageBus, EnvConfig, Realtime, Storage } from '.';
+import { Provider, Client, MessageBus, Config, Realtime, Storage } from '.';
 
 import { getMockedClient, getMockedRealtime } from 'testUtils';
 
 describe('Provider', () => {
     test('renders', () => {
-        const config: EnvConfig = { assetPath: 'assets', gqlOptions: { clientOptions: { url: 'test' } } };
+        const config: Config = {
+            assetPath: 'assets',
+            platform: 'aiera-sdk-dev',
+            gqlOptions: { clientOptions: { url: 'test' } },
+        };
         render(
             <Provider config={config} client={getMockedClient() as unknown as Client}>
                 test
@@ -26,7 +30,11 @@ describe('Provider', () => {
     test('provides all contexts', () => {
         const bus = jest.fn() as unknown as MessageBus;
         const client = getMockedClient() as unknown as Client;
-        const config: EnvConfig = { assetPath: 'assets', gqlOptions: { clientOptions: { url: 'test' } } };
+        const config: Config = {
+            assetPath: 'assets',
+            platform: 'aiera-sdk-dev',
+            gqlOptions: { clientOptions: { url: 'test' } },
+        };
         const realtime = getMockedRealtime() as unknown as Realtime;
         const storage = jest.fn() as unknown as Storage;
 

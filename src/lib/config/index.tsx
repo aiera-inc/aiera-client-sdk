@@ -3,15 +3,16 @@ import merge from 'lodash.merge';
 import { ClientOptions } from 'urql';
 import { AuthConfig } from '@urql/exchange-auth';
 import { Options as RealtimeOptions } from 'pusher-js';
+import { defaultEnv } from '@aiera/client-sdk/lib/config/env';
 
 type Module = 'EventList' | 'NewsList' | 'RecordingList';
-type Platform = 'aiera-sdk-dev' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
+type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
-export interface EnvConfig {
-    assetPath: string;
+export interface Config {
+    assetPath?: string;
     moduleName?: Module;
     platform?: Platform;
-    gqlOptions: {
+    gqlOptions?: {
         clientOptions: ClientOptions;
         exchangeOptions?: {
             auth?: AuthConfig<unknown> | null;
@@ -20,26 +21,23 @@ export interface EnvConfig {
     realtimeOptions?: RealtimeOptions;
 }
 
-// Define this type just so it exists for typechecking.
-// This will be injected by build.
-const Env: { [key: string]: string } = {};
-
 // Setup default values for env
 // Leave these as Env.param instead of passing just Env,
 // so that the build system can inject values.
-const defaultConfig: EnvConfig = {
-    assetPath: Env.assetPath || 'assets/',
+const defaultConfig: Config = {
+    assetPath: defaultEnv.assetPath,
+    platform: defaultEnv.platform as Platform,
     gqlOptions: {
-        clientOptions: { url: Env.apiUrl || '' },
+        clientOptions: { url: defaultEnv.apiUrl },
     },
 };
 
-export const Context = createContext<EnvConfig>(defaultConfig);
+export const Context = createContext<Config>(defaultConfig);
 
 /**
  * A React Provider to configure an app-level configuration
  */
-export function Provider({ config, children }: { config: Partial<EnvConfig>; children: ReactNode }): ReactElement {
+export function Provider({ config, children }: { config: Config; children: ReactNode }): ReactElement {
     return (
         <Context.Provider value={useMemo(() => merge(defaultConfig, config), [defaultConfig, config])}>
             {children}
@@ -47,6 +45,6 @@ export function Provider({ config, children }: { config: Partial<EnvConfig>; chi
     );
 }
 
-export function useConfig(): EnvConfig {
+export function useConfig(): Config {
     return useContext(Context);
 }

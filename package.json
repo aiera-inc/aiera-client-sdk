@@ -72,6 +72,7 @@
         "chokidar": "^3.5.2",
         "concurrently": "^6.4.0",
         "cpy": "^8.1.2",
+        "dotenv": "^16.0.0",
         "esbuild": "^0.14.2",
         "esbuild-register": "^3.0.0",
         "eslint": "^8.2.0",

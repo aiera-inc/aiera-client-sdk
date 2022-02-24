@@ -8,6 +8,8 @@ import { globby } from 'globby';
 import chokidar, { FSWatcher } from 'chokidar';
 import postcss from 'postcss';
 import postcssLoadConfig from 'postcss-load-config';
+import './env';
+import { defaultEnv } from '../lib/config/env';
 
 interface Watchers {
     src: FSWatcher;
@@ -53,15 +55,16 @@ async function copyAssets(watchers: Watchers | null) {
     ]);
 }
 
-function toCamelCase(snakeCase: string): string {
-    return snakeCase.toLowerCase().replace(/_[a-z]/g, (char) => `${char[1]?.toUpperCase() || ''}`);
+function toSnakeCase(camelCase: string): string {
+    return camelCase.replace(/[a-z][A-Z]/g, (match) => `${match[0] || ''}_${match[1] || ''}`).toUpperCase();
 }
 
 function getEnv(): { [key: string]: string } {
     return Object.fromEntries(
-        Object.entries(process.env)
-            .filter(([key]) => key.startsWith('AIERA_SDK_'))
-            .map(([key, value]) => [`Env.${toCamelCase(key.replace('AIERA_SDK_', ''))}`, `"${value || ''}"`])
+        Object.entries(defaultEnv).map(([key, value]) => {
+            const envKey = `AIERA_SDK_${toSnakeCase(key)}`;
+            return [`process.env.${envKey}`, `"${process.env[envKey] || value}"`];
+        })
     );
 }
 

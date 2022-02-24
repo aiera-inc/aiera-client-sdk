@@ -6,7 +6,7 @@ import { act, screen, render } from '@testing-library/react';
 import { never } from 'wonka';
 import EventEmitter from 'eventemitter3';
 
-import { Provider, Client, EnvConfig, Realtime } from '@aiera/client-sdk/components/Provider';
+import { Provider, Client, Config, Realtime } from '@aiera/client-sdk/components/Provider';
 
 export type MockFn = ReturnType<typeof jest.fn>;
 type Mocked<T> = {
@@ -29,12 +29,14 @@ type MockedRealtime = Mocked<Partial<Pusher>> & {
 
 const mockedConfig = {
     assetPath: 'assets',
+    platform: 'test',
+    moduleName: 'test',
     gqlOptions: {
         clientOptions: {
             url: 'test',
         },
     },
-};
+} as unknown as Config;
 
 export function getMockedRealtime(): MockedRealtime {
     const events = new EventEmitter();
@@ -89,7 +91,7 @@ export function MockProvider({
 }: {
     children?: ReactNode;
     client?: MockedClient;
-    config?: EnvConfig;
+    config?: Config;
     realtime?: MockedRealtime;
     reset?: () => void;
 }): ReactElement {
