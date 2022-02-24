@@ -50,7 +50,7 @@ const useMessageBus = () => {
     );
 
     useEffect(() => {
-        bus.setupWindowMessaging(window.parent, window.location.origin);
+        bus.setupWindowMessaging(window.parent);
 
         const listeners: Listener[] = [];
         if (window.fdc3) {

@@ -37,7 +37,6 @@ export interface AieraMessageEvent extends MessageEvent {
 export class MessageBus {
     emitter: EventEmitter;
     parent?: Window;
-    parentOrigin?: string;
 
     constructor() {
         this.emitter = new EventEmitter();
@@ -98,9 +97,8 @@ export class MessageBus {
      * @param parent - The parent window that will be embedding the widget and communicating
      *                 with it.
      */
-    setupWindowMessaging(parent: Window, origin: string) {
+    setupWindowMessaging(parent: Window) {
         this.parent = parent;
-        this.parentOrigin = origin;
         window.addEventListener('message', this.onWindowMessage);
     }
 
@@ -118,7 +116,7 @@ export class MessageBus {
      */
     onWindowMessage = (windowEvent: AieraMessageEvent) => {
         // Check to make sure it's actually an Aiera message before moving on
-        if (windowEvent.origin === this.parentOrigin && windowEvent.data?.ns === 'aiera') {
+        if (windowEvent.data?.ns === 'aiera') {
             const { event, data } = windowEvent.data;
             this.emitter.emit(`in-${event}`, { direction: 'in', event, data });
         }
@@ -135,7 +133,7 @@ export class MessageBus {
                     event,
                     data,
                 },
-                this.parent.location?.origin
+                '*'
             );
         }
     }
