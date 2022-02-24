@@ -14,10 +14,10 @@
         </style>
     </head>
     <body>
-        <script src="embed.js"></script>
+        <script src="../embed.js"></script>
         <iframe id="aiera"></iframe>
         <script>
-            const newsList = new Aiera.Module('http://localhost:8000/modules/NewsList', 'aiera');
+            const newsList = new Aiera.Module('/modules/NewsList/', 'aiera');
             newsList.load();
         </script>
     </body>
