@@ -54,42 +54,46 @@ describe('NewsList', () => {
         jest.clearAllTimers();
     });
 
-    test('handles loading state', () => {
-        const { rendered } = renderWithProvider(<NewsList />);
+    test('handles loading state', async () => {
+        const { rendered } = await actAndFlush(() => renderWithProvider(<NewsList />));
         expect(rendered.container.querySelector('.NewsList__loading')).not.toBeNull();
     });
 
-    test('handles empty state', () => {
-        renderWithProvider(<NewsList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        search: {
-                            content: {
-                                hits: [],
-                                numTotalHits: 0,
+    test('handles empty state', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<NewsList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            search: {
+                                content: {
+                                    hits: [],
+                                    numTotalHits: 0,
+                                },
                             },
                         },
-                    },
-                }),
-        });
+                    }),
+            })
+        );
         screen.getByText('There is no news.');
     });
 
-    test('handles news list', () => {
-        renderWithProvider(<NewsList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        search: {
-                            content: {
-                                hits: [{ id: '1', content }],
-                                numTotalHits: 1,
+    test('handles news list', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<NewsList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            search: {
+                                content: {
+                                    hits: [{ id: '1', content }],
+                                    numTotalHits: 1,
+                                },
                             },
                         },
-                    },
-                }),
-        });
+                    }),
+            })
+        );
         screen.getByText('Article Title');
         screen.getByText('GME');
         screen.getByText('NYSE');
@@ -101,7 +105,7 @@ describe('NewsList', () => {
         }
     });
 
-    test('handles company selection via message bus', () => {
+    test('handles company selection via message bus', async () => {
         const bus = new MessageBus();
         const TestComponent = () => {
             return (
@@ -110,7 +114,7 @@ describe('NewsList', () => {
                 </Provider>
             );
         };
-        const { client } = renderWithProvider(<TestComponent />);
+        const { client } = await actAndFlush(() => renderWithProvider(<TestComponent />));
         bus.emit('instrument-selected', { ticker: 'GME' }, 'in');
         expect(client.query).toHaveBeenCalled();
     });
@@ -145,19 +149,21 @@ describe('NewsList', () => {
     });
 
     test('renders refetch button after 5 minutes', async () => {
-        renderWithProvider(<NewsList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        search: {
-                            content: {
-                                hits: [{ id: '1', content }],
-                                numTotalHits: 1,
+        await actAndFlush(() =>
+            renderWithProvider(<NewsList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            search: {
+                                content: {
+                                    hits: [{ id: '1', content }],
+                                    numTotalHits: 1,
+                                },
                             },
                         },
-                    },
-                }),
-        });
+                    }),
+            })
+        );
 
         // Fast-forward 6 minutes
         await actAndFlush(() => {
@@ -178,37 +184,41 @@ describe('NewsList', () => {
         }
     });
 
-    test('renders load more button when there are more results', () => {
-        renderWithProvider(<NewsList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        search: {
-                            content: {
-                                hits: [{ id: '1', content }],
-                                numTotalHits: 2,
+    test('renders load more button when there are more results', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<NewsList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            search: {
+                                content: {
+                                    hits: [{ id: '1', content }],
+                                    numTotalHits: 2,
+                                },
                             },
                         },
-                    },
-                }),
-        });
+                    }),
+            })
+        );
         screen.getByText('load more');
     });
 
-    test('does not render load more button when there are no more results', () => {
-        renderWithProvider(<NewsList />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        search: {
-                            content: {
-                                hits: [{ id: '1', content }],
-                                numTotalHits: 1,
+    test('does not render load more button when there are no more results', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<NewsList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            search: {
+                                content: {
+                                    hits: [{ id: '1', content }],
+                                    numTotalHits: 1,
+                                },
                             },
                         },
-                    },
-                }),
-        });
+                    }),
+            })
+        );
         expect(screen.queryByText('load more')).toBeNull();
     });
 });

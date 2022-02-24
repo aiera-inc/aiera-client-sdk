@@ -138,7 +138,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                     const primaryQuote = getPrimaryQuote(news?.primaryCompany);
                     const date = news?.publishedDate ? DateTime.fromISO(news.publishedDate) : DateTime.now();
                     return news ? (
-                        <>
+                        <div className="h-full overflow-y-scroll">
                             {!!primaryQuote && (
                                 <div className="flex items-center pl-5 pr-5 pt-5 text-sm dark:bg-bluegray-7">
                                     <span className="font-bold pr-1 text-blue-600">{primaryQuote.localTicker}</span>
@@ -159,7 +159,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                             </div>
                             {body && (
                                 <div
-                                    className="overflow-y-scroll py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body"
+                                    className="py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body"
                                     ref={scrollContainerRef}
                                 >
                                     {body.map((paragraph, pIdx) => (
@@ -183,7 +183,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                                     ))}
                                 </div>
                             )}
-                        </>
+                        </div>
                     ) : null;
                 })
                 .otherwise(() => null)}

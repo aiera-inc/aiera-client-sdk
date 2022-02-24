@@ -381,9 +381,12 @@ export function NewsList(props: NewsListProps): ReactElement {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
             handlers.selectedNews(event, change);
-            // If we are going back to the news list, refresh immediately
+            // Show refetch button if we are going back to the news list
             if (!change.value) {
-                newsListQuery.refetch();
+                setState((s) => ({
+                    ...s,
+                    canRefetch: true,
+                }));
             }
         },
         [state]
