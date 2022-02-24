@@ -23,6 +23,7 @@ function Monitor() {
                     <p className="text-sm truncate text-slate-400">
                         Tesla, Elon Musk, Self Driving, Autonomous, Chevy Cruise, another one
                     </p>
+                    <div>chart</div>
                 </div>
                 <div className="flex h-6">
                     <Gear className="w-4" />
@@ -50,7 +51,7 @@ export function MonitorsUI(props: MonitorsUIProps): ReactElement {
                     <SettingsButton />
                 </div>
             </div>
-            <div className="bg-slate-50 p-3 flex justify-between items-center">
+            <div className="bg-slate-100 p-3 flex justify-between items-center">
                 <div className="flex justify-between items-baseline text-slate-400 pl-1">
                     <p className="text-sm font-semibold text-slate-900">1 Week</p>
                     <p className="text-sm mx-4">1 Month</p>
@@ -58,7 +59,7 @@ export function MonitorsUI(props: MonitorsUIProps): ReactElement {
                 </div>
                 <CompanyFilterButton />
             </div>
-            <div className="bg-slate-50 px-3 pb-3 flex-1 flex flex-col relative overflow-y-auto">
+            <div className="bg-slate-100 px-3 pb-3 flex-1 flex flex-col relative overflow-y-auto">
                 <Monitor />
                 <Monitor />
                 <Monitor />
