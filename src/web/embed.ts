@@ -194,9 +194,25 @@
  * @module
  */
 import EventEmitter from 'eventemitter3';
-import type { InstrumentID } from '@finos/fdc3';
 import type { AieraMessageEvent, Message, MessageBusEvents } from '@aiera/client-sdk/lib/msg';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
+
+//
+// import type { InstrumentID } from '@finos/fdc3';
+// Normally this would be imported from FDC3 but pulling it in here
+// so that the full definition gets generated into the public docs,
+// and limited to the types we actually support.
+export interface InstrumentID {
+    // BBG?: string;
+    CUSIP?: string;
+    // FDS_ID?: string;
+    // FIGI?: string;
+    ISIN?: string;
+    // PERMID?: string;
+    RIC?: string;
+    // SEDOL?: string;
+    ticker?: string;
+}
 
 /**
  * This module exposes utilities that can be used to embed individual
