@@ -39770,28 +39770,22 @@ function NewsListUI(props) {
   }
   const loader = (numHits) => new Array(numHits).fill(0).map((_2, idx) => /* @__PURE__ */ import_react32.default.createElement("li", {
     key: idx,
-    className: "p-2 animate-pulse mx-2"
+    className: "p-2 animate-pulse mx-2 my-2"
   }, /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "flex items-center"
-  }, /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9"
+    className: "rounded-full bg-gray-400 dark:bg-bluegray-5 h-[10px] mr-4 mb-1 w-full"
   }), /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react32.default.createElement("div", {
+    className: "rounded-full bg-gray-400 dark:bg-bluegray-5 h-[10px] mr-2 mb-2 w-20"
+  }), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "flex"
   }, /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7"
+    className: "rounded-full bg-blue-600 dark:bg-blue-500 h-[10px] mr-2 w-6"
   }), /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "flex"
-  }, /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2"
+    className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-8"
   }), /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2"
+    className: "rounded-full bg-gray-400 h-[10px] mr-2 w-10"
   }), /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2"
-  }))))));
+    className: "rounded-full bg-gray-400 dark:bg-indigo-400 h-[10px] mr-2 w-12"
+  }))));
   const wrapMsg = (msg) => /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
