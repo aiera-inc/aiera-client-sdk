@@ -1,6 +1,11 @@
-import type { InstrumentID } from '@finos/fdc3';
 import type { AieraMessageEvent, Message, MessageBusEvents } from '@aiera/client-sdk/lib/msg';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
+export interface InstrumentID {
+    CUSIP?: string;
+    ISIN?: string;
+    RIC?: string;
+    ticker?: string;
+}
 /**
  * This module exposes utilities that can be used to embed individual
  * Aiera modules into another web application via iframe.
