@@ -1,7 +1,7 @@
 /**
  * # Embeded Aiera Modules
  *
- * This file is meant to loaded via the `<script/>` tag into a web application
+ * This file (`embed.js`) is meant to be loaded via the `<script/>` tag into a web application
  * that would like to embed Aiera modules. It exposes a global `window.Aiera` namespace
  * with utilities for loading Aiera modules into iframes inside the web application and
  * communicating with them.
@@ -60,6 +60,60 @@
  * creation on their own and would prefer to automatically log those users into the module.
  * For that use case, you can exchange user credentials for auth tokens and then call [[Module.authenticate]]
  * with the tokens to bypass the login screen.
+ *
+ * <br />
+ *
+ * To exchange credentials for auth tokens, you must make a request to Aiera's graphql endpoint with
+ * the following:
+ *
+ * <br />
+ * <table>
+ *     <tr>
+ *         <td><b>URL</b></td>
+ *         <td>https://api.aiera.com/graphql</td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Method</b></td>
+ *         <td>POST</td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Headers</b></td>
+ *         <td>Content-Type: application/json</td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Body</b></td>
+ *         <td><pre>
+ *  {
+ *      "query":
+ *          "mutation Login($email: String!, $password: String!) {
+ *             login(email: $email, password: $password) {
+ *                 accessToken
+ *                 refreshToken
+ *             }
+ *         }",
+ *      "variables": {
+ *          "email": [email address],
+ *          "password": [password]
+ *      }
+ *  }
+ *         </pre></td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Response</b></td>
+ *         <td><pre>
+ *  {
+ *      "data": {
+ *          "login": {
+ *              "accessToken": [access token],
+ *              "refreshToken": [refresh token],
+ *          }
+ *      }
+ *  }
+ *         </pre></td>
+ *     </tr>
+ * </table>
+ *
+ * <br />
  *
  * ### Examples of getting user auth tokens
  *
