@@ -343,12 +343,10 @@ export const EventList = (_props: EventListProps): ReactElement => {
     const bus = useMessageListener(
         'instrument-selected',
         async (msg: Message<'instrument-selected'>) => {
-            if (msg.data.ticker) {
-                const companies = await resolveCompany(msg.data.ticker);
-                if (companies?.[0]) {
-                    const company = companies[0];
-                    setState((s) => ({ ...s, company, event: undefined }));
-                }
+            const companies = await resolveCompany(msg.data);
+            if (companies?.[0]) {
+                const company = companies[0];
+                setState((s) => ({ ...s, company, event: undefined }));
             }
         },
         'in'
@@ -357,9 +355,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
     useMessageListener(
         'instruments-selected',
         async (msg: Message<'instruments-selected'>) => {
-            const companyIds = (
-                await Promise.all(msg.data.map((d) => (d.ticker ? resolveCompany(d.ticker) : Promise.resolve([]))))
-            )
+            const companyIds = (await Promise.all(msg.data.map(resolveCompany)))
                 .flat()
                 .map((c) => c?.id)
                 .filter((n) => n) as string[];

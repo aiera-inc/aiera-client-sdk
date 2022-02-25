@@ -107,7 +107,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                     <div className="mx-2">
                         <CompanyFilterButton onChange={onSelectCompany} value={company} />
                     </div>
-                    <SettingsButton showTextSentiment={false} showTonalSentiment={false} />
+                    <SettingsButton showSyncWatchlist showTextSentiment={false} showTonalSentiment={false} />
                 </div>
             </div>
             <div className="flex flex-col flex-1 pt-0 overflow-y-scroll dark:bg-bluegray-7">
@@ -221,6 +221,7 @@ export interface NewsListProps extends NewsListSharedProps {
 interface NewsListState {
     canRefetch: boolean;
     company?: CompanyFilterResult;
+    watchlist: string[];
     fromIndex: number;
     lastRefetch?: DateTime;
     searchTerm: string;
@@ -234,6 +235,7 @@ export function NewsList(props: NewsListProps): ReactElement {
     const { state, handlers, mergeState, setState } = useChangeHandlers<NewsListState>({
         canRefetch: false,
         company: undefined,
+        watchlist: [],
         fromIndex: 0,
         lastRefetch: DateTime.now(),
         searchTerm: '',
@@ -244,17 +246,28 @@ export function NewsList(props: NewsListProps): ReactElement {
     const bus = useMessageListener(
         'instrument-selected',
         async (msg: Message<'instrument-selected'>) => {
-            if (msg.data.ticker) {
-                const companies = await resolveCompany(msg.data.ticker);
-                if (companies?.[0]) {
-                    const company = companies[0];
-                    // Set the selected company and reset fromIndex in state
-                    setState((s) => ({ ...s, company, fromIndex: 0 }));
-                }
+            const companies = await resolveCompany(msg.data);
+            if (companies?.[0]) {
+                const company = companies[0];
+                // Set the selected company and reset fromIndex in state
+                setState((s) => ({ ...s, company, fromIndex: 0 }));
             }
         },
         'in'
     );
+
+    useMessageListener(
+        'instruments-selected',
+        async (msg: Message<'instruments-selected'>) => {
+            const companyIds = (await Promise.all(msg.data.map(resolveCompany)))
+                .flat()
+                .map((c) => c?.id)
+                .filter((n) => n) as string[];
+            setState((s) => ({ ...s, watchlist: companyIds }));
+        },
+        'in'
+    );
+
     const { settings } = useSettings();
 
     /**
@@ -331,7 +344,11 @@ export function NewsList(props: NewsListProps): ReactElement {
         requestPolicy: 'cache-and-network',
         variables: {
             filter: {
-                companyIds: state.company ? [state.company.id] : undefined,
+                companyIds: state.company?.id
+                    ? [state.company.id]
+                    : state.watchlist?.length && settings.syncWatchlist
+                    ? state.watchlist
+                    : undefined,
                 contentTypes: [ContentType.News],
                 searchTerm: state.searchTerm,
             },

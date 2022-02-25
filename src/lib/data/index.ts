@@ -5,7 +5,8 @@
 import { useCallback, useEffect, useState } from 'react';
 import gql from 'graphql-tag';
 import { useClient } from 'urql';
-import { ChangeHandlers, DeepPartial, Instrument, Maybe, Quote } from '@aiera/client-sdk/types';
+import type { InstrumentID } from '@finos/fdc3';
+import { ChangeHandlers, DeepPartial, Instrument, Maybe, Quote, ValueOf } from '@aiera/client-sdk/types';
 import {
     AppConfigQuery,
     AppConfigQueryVariables,
@@ -54,10 +55,17 @@ export function getPrimaryQuote(
     return primaryQuote || quotes?.[0];
 }
 
-export function useCompanyResolver(): (identifier: string) => Promise<CompanyResolutionQuery['companies'] | undefined> {
+export function useCompanyResolver(): (
+    identifier: InstrumentID
+) => Promise<CompanyResolutionQuery['companies'] | undefined> {
     const client = useClient();
     return useCallback(
-        async (identifier: string) => {
+        async (identifier: InstrumentID) => {
+            // InstrumentID can support a bunch of different identifiers, but just grab
+            // the first one we find and use it.
+            const id = Object.values(identifier)[0] as ValueOf<InstrumentID>;
+            if (!id) return Promise.reject('No identifier to resolve');
+
             const result = await client
                 .query<CompanyResolutionQuery, CompanyResolutionQueryVariables>(
                     gql`
@@ -85,7 +93,7 @@ export function useCompanyResolver(): (identifier: string) => Promise<CompanyRes
                             }
                         }
                     `,
-                    { identifier }
+                    { identifier: id }
                 )
                 .toPromise();
             return result?.data?.companies;

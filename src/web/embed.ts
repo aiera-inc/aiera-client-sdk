@@ -44,7 +44,7 @@
  *                 // Set up a watchlist after authentication
  *                 // eventList.setWatchlist([
  *                 //     { ticker: 'AAPL' },
- *                 //     { ticker: 'GOOGL' },
+ *                 //     { ISIN: 'US02079K1079' },
  *                 //     { ticker: 'TLSA' },
  *                 //     { ticker: 'PTON' },
  *                 // ]);
