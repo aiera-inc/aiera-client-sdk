@@ -1,0 +1,276 @@
+<!doctype html>
+<html class="default no-js">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>web/embed | @aiera/client-sdk</title>
+	<meta name="description" content="Documentation for @aiera/client-sdk">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="../assets/css/main.css">
+	<script async src="../assets/js/search.js" id="search-script"></script>
+</head>
+<body>
+<header>
+	<div class="tsd-page-toolbar">
+		<div class="container">
+			<div class="table-wrap">
+				<div class="table-cell" id="tsd-search" data-index="../assets/js/search.json" data-base="..">
+					<div class="field">
+						<label for="tsd-search-field" class="tsd-widget search no-caption">Search</label>
+						<input id="tsd-search-field" type="text" />
+					</div>
+					<ul class="results">
+						<li class="state loading">Preparing search index...</li>
+						<li class="state failure">The search index is not available</li>
+					</ul>
+					<a href="../index.html" class="title">@aiera/client-sdk</a>
+				</div>
+				<div class="table-cell" id="tsd-widgets">
+					<div id="tsd-filter">
+						<a href="#" class="tsd-widget options no-caption" data-toggle="options">Options</a>
+						<div class="tsd-filter-group">
+							<div class="tsd-select" id="tsd-filter-visibility">
+								<span class="tsd-select-label">All</span>
+								<ul class="tsd-select-list">
+									<li data-value="public">Public</li>
+									<li data-value="protected">Public/Protected</li>
+									<li data-value="private" class="selected">All</li>
+								</ul>
+							</div>
+							<input type="checkbox" id="tsd-filter-inherited" checked />
+							<label class="tsd-widget" for="tsd-filter-inherited">Inherited</label>
+							<input type="checkbox" id="tsd-filter-externals" checked />
+							<label class="tsd-widget" for="tsd-filter-externals">Externals</label>
+						</div>
+					</div>
+					<a href="#" class="tsd-widget menu no-caption" data-toggle="menu">Menu</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="tsd-page-title">
+		<div class="container">
+			<ul class="tsd-breadcrumb">
+				<li>
+					<a href="../index.html">@aiera/client-sdk</a>
+				</li>
+				<li>
+					<a href="web_embed.html">web/embed</a>
+				</li>
+			</ul>
+			<h1>Module web/embed</h1>
+		</div>
+	</div>
+</header>
+<div class="container container-main">
+	<div class="row">
+		<div class="col-8 col-content">
+			<section class="tsd-panel tsd-comment">
+				<div class="tsd-comment tsd-typography">
+					<div class="lead">
+						<a href="#embeded-aiera-modules" id="embeded-aiera-modules" style="color: inherit; text-decoration: none;">
+							<h1>Embeded Aiera Modules</h1>
+						</a>
+					</div>
+					<p>This file is meant to loaded via the <code>&lt;script/&gt;</code> tag into a web application
+						that would like to embed Aiera modules. It exposes a global <code>window.Aiera</code> namespace
+						with utilities for loading Aiera modules into iframes inside the web application and
+					communicating with them.</p>
+					<p>See <a href="../classes/web_embed.Module.html">Module</a> for more details.</p>
+					<a href="#example-usage" id="example-usage" style="color: inherit; text-decoration: none;">
+						<h2>Example usage</h2>
+					</a>
+					<dl class="tsd-comment-tags">
+						<dt>example</dt>
+						<dd><p>index.html</p>
+							<pre><code><span style="color: #000000">&lt;</span><span style="color: #267F99">html</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">    &lt;</span><span style="color: #267F99">head</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">        &lt;</span><span style="color: #001080">script</span><span style="color: #000000"> </span><span style="color: #001080">src</span><span style="color: #000000">=</span><span style="color: #A31515">&quot;https://aiera-inc.github.io/aiera-client-sdk/embed.js&quot;</span><span style="color: #000000">&gt;&lt;/</span><span style="color: #267F99">script</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">    &lt;/</span><span style="color: #001080">head</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">    &lt;</span><span style="color: #267F99">body</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">        &lt;</span><span style="color: #001080">iframe</span><span style="color: #000000"> </span><span style="color: #001080">height</span><span style="color: #000000">=</span><span style="color: #A31515">&quot;575&quot;</span><span style="color: #000000"> </span><span style="color: #001080">width</span><span style="color: #000000">=</span><span style="color: #A31515">&quot;375&quot;</span><span style="color: #000000"> </span><span style="color: #001080">id</span><span style="color: #000000">=</span><span style="color: #A31515">&quot;aiera-event-list&quot;</span><span style="color: #000000">&gt;&lt;/</span><span style="color: #267F99">iframe</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">        &lt;</span><span style="color: #267F99">script</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">            </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">eventList</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">Aiera</span><span style="color: #000000">.</span><span style="color: #795E26">Module</span><span style="color: #000000">(</span>
+<span style="color: #000000">                </span><span style="color: #A31515">&#039;https://aiera-inc.github.io/aiera-client-sdk/modules/EventList/index.html&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">                </span><span style="color: #A31515">&#039;aiera-event-list&#039;</span>
+<span style="color: #000000">            );</span>
+
+<span style="color: #000000">            </span><span style="color: #001080">eventList</span><span style="color: #000000">.</span><span style="color: #795E26">load</span><span style="color: #000000">().</span><span style="color: #795E26">then</span><span style="color: #000000">(() </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">                 </span><span style="color: #008000">// If you want to bypass the login screen, you must get credentials</span>
+<span style="color: #000000">                 </span><span style="color: #008000">// via the API and then pass them here. This is optional.</span>
+
+<span style="color: #000000">                 </span><span style="color: #008000">// See [[web/embed#authenticate]] for examples of how to get tokens.</span>
+
+<span style="color: #000000">                 </span><span style="color: #008000">// eventList.authenticate({</span>
+<span style="color: #000000">                 </span><span style="color: #008000">//     accessToken: &#039;[accesstoken]&#039;,</span>
+<span style="color: #000000">                 </span><span style="color: #008000">//     refreshToken: &#039;[refreshToken]&#039;,</span>
+<span style="color: #000000">                 </span><span style="color: #008000">// });</span>
+<span style="color: #000000">            });</span>
+
+<span style="color: #000000">            </span><span style="color: #008000">// Once authenticated, you can pass data to the module, such as setting</span>
+<span style="color: #000000">            </span><span style="color: #008000">// up a watchlist</span>
+<span style="color: #000000">            </span><span style="color: #001080">eventList</span><span style="color: #000000">.</span><span style="color: #795E26">on</span><span style="color: #000000">(</span><span style="color: #A31515">&#039;authenticated&#039;</span><span style="color: #000000">, () </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> {</span>
+<span style="color: #000000">                </span><span style="color: #008000">// Set up a watchlist after authentication</span>
+<span style="color: #000000">                </span><span style="color: #008000">// eventList.setWatchlist([</span>
+<span style="color: #000000">                </span><span style="color: #008000">//     { ticker: &#039;AAPL&#039; },</span>
+<span style="color: #000000">                </span><span style="color: #008000">//     { ticker: &#039;GOOGL&#039; },</span>
+<span style="color: #000000">                </span><span style="color: #008000">//     { ticker: &#039;TLSA&#039; },</span>
+<span style="color: #000000">                </span><span style="color: #008000">//     { ticker: &#039;PTON&#039; },</span>
+<span style="color: #000000">                </span><span style="color: #008000">// ]);</span>
+<span style="color: #000000">            });</span>
+<span style="color: #000000">        &lt;/</span><span style="color: #001080">script</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">    &lt;/</span><span style="color: #001080">body</span><span style="color: #000000">&gt;</span>
+<span style="color: #000000">&lt;/</span><span style="color: #001080">html</span><span style="color: #000000">&gt;</span>
+</code></pre>
+							<a href="#authentication" id="authentication" style="color: inherit; text-decoration: none;">
+								<h2>Authentication</h2>
+							</a>
+							<p>By default Aiera modules will display a login screen and ask for existing user credentials
+								in order to login and gain access to the module. However, some applications may handle user
+								creation on their own and would prefer to automatically log those users into the module.
+								For that use case, you can exchange user credentials for auth tokens and then call <a href="../classes/web_embed.Module.html#authenticate">Module.authenticate</a>
+							with the tokens to bypass the login screen.</p>
+							<a href="#examples-of-getting-user-auth-tokens" id="examples-of-getting-user-auth-tokens" style="color: inherit; text-decoration: none;">
+								<h3>Examples of getting user auth tokens</h3>
+							</a>
+							<p>These are examples of how to exchange user credentials for tokens that can be passed to
+							<a href="../classes/web_embed.Module.html#authenticate">Module.authenticate</a>.</p>
+							<br/>
+							<br/>
+						</dd>
+						<dt>example</dt>
+						<dd>
+							<a href="#bash" id="bash" style="color: inherit; text-decoration: none;">
+								<h4>bash</h4>
+							</a>
+							<pre><code class="language-bash"><span style="color: #008000"># Exchange username/password for auth tokens using curl</span>
+<span style="color: #000000">curl -v \</span>
+<span style="color: #000000">     -X POST \</span>
+<span style="color: #000000">     -H </span><span style="color: #A31515">&#039;Content-Type: application/json&#039;</span><span style="color: #000000"> \</span>
+<span style="color: #000000">     -d </span><span style="color: #A31515">&#039;{&quot;query&quot;:&quot;mutation Login($email: String!, $password: String!){login(email: $email, password: $password){accessToken,refreshToken}}&quot;,&quot;variables&quot;:{&quot;email&quot;: &quot;[email]&quot;, &quot;password&quot;: &quot;[password]&quot;}}&#039;</span><span style="color: #000000"> \</span>
+<span style="color: #000000">     https://api.aiera.com/graphql \</span>
+<span style="color: #000000">     | jq </span><span style="color: #A31515">&#039;.data.login&#039;</span>
+</code></pre>
+							<br/>
+							<br/>
+							<a href="#javascript" id="javascript" style="color: inherit; text-decoration: none;">
+								<h4>javascript</h4>
+							</a>
+							<pre><code class="language-javascript"><span style="color: #001080">email</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">;</span>
+<span style="color: #001080">password</span><span style="color: #000000"> = </span><span style="color: #A31515">&#039;&#039;</span><span style="color: #000000">;</span>
+
+<span style="color: #001080">authTokens</span><span style="color: #000000"> = </span><span style="color: #AF00DB">await</span><span style="color: #000000"> </span><span style="color: #795E26">fetch</span><span style="color: #000000">(</span>
+<span style="color: #000000">   </span><span style="color: #A31515">&#039;https://api.aiera.com/graphql&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">   {</span>
+<span style="color: #000000">       </span><span style="color: #001080">method:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;POST&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">       </span><span style="color: #001080">headers:</span><span style="color: #000000"> {</span><span style="color: #A31515">&#039;Content-Type&#039;</span><span style="color: #001080">:</span><span style="color: #000000"> </span><span style="color: #A31515">&#039;application/json&#039;</span><span style="color: #000000">},</span>
+<span style="color: #000000">       </span><span style="color: #001080">body:</span><span style="color: #000000"> </span><span style="color: #267F99">JSON</span><span style="color: #000000">.</span><span style="color: #795E26">stringify</span><span style="color: #000000">({</span>
+<span style="color: #000000">          </span><span style="color: #001080">query:</span><span style="color: #000000"> </span><span style="color: #A31515">`</span>
+<span style="color: #A31515">          mutation Login($email: String!, $password: String!) {</span>
+<span style="color: #A31515">              login(email: $email, password: $password) {</span>
+<span style="color: #A31515">                  accessToken</span>
+<span style="color: #A31515">                  refreshToken</span>
+<span style="color: #A31515">              }</span>
+<span style="color: #A31515">          }</span>
+<span style="color: #A31515">          `</span><span style="color: #000000">,</span>
+<span style="color: #000000">          </span><span style="color: #001080">variables:</span><span style="color: #000000"> {</span>
+<span style="color: #000000">              </span><span style="color: #001080">email:</span><span style="color: #000000"> </span><span style="color: #001080">email</span><span style="color: #000000">,</span>
+<span style="color: #000000">              </span><span style="color: #001080">password:</span><span style="color: #000000"> </span><span style="color: #001080">password</span>
+<span style="color: #000000">          }</span>
+<span style="color: #000000">       })</span>
+<span style="color: #000000">   }</span>
+<span style="color: #000000">).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">resp</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">resp</span><span style="color: #000000">.</span><span style="color: #795E26">json</span><span style="color: #000000">()).</span><span style="color: #795E26">then</span><span style="color: #000000">(</span><span style="color: #001080">json</span><span style="color: #000000"> </span><span style="color: #0000FF">=&gt;</span><span style="color: #000000"> </span><span style="color: #001080">json</span><span style="color: #000000">.</span><span style="color: #001080">data</span><span style="color: #000000">.</span><span style="color: #001080">login</span><span style="color: #000000">);</span>
+</code></pre>
+							<br/>
+							<br/>
+							<a href="#python" id="python" style="color: inherit; text-decoration: none;">
+								<h4>python</h4>
+							</a>
+							<pre><code class="language-python"><span style="color: #AF00DB">import</span><span style="color: #000000"> requests</span>
+
+<span style="color: #000000">query = </span><span style="color: #A31515">&quot;&quot;&quot;</span>
+<span style="color: #A31515">mutation Login($email: String!, $password: String!) {</span>
+<span style="color: #A31515">    login(email: $email, password: $password) {</span>
+<span style="color: #A31515">        accessToken</span>
+<span style="color: #A31515">        refreshToken</span>
+<span style="color: #A31515">    }</span>
+<span style="color: #A31515">}</span>
+<span style="color: #A31515">&quot;&quot;&quot;</span>
+<span style="color: #000000">email = </span><span style="color: #A31515">&quot;&quot;</span>
+<span style="color: #000000">password = </span><span style="color: #A31515">&quot;&quot;</span>
+
+<span style="color: #000000">req = requests.post( </span><span style="color: #A31515">&quot;https://api.aiera.com/graphql&quot;</span><span style="color: #000000">, </span><span style="color: #001080">json</span><span style="color: #000000">={</span><span style="color: #A31515">&quot;query&quot;</span><span style="color: #000000">:query, </span><span style="color: #A31515">&quot;variables&quot;</span><span style="color: #000000">:{</span><span style="color: #A31515">&quot;email&quot;</span><span style="color: #000000">: email, </span><span style="color: #A31515">&quot;password&quot;</span><span style="color: #000000">: password}})</span>
+<span style="color: #000000">auth_tokens = tokens = req.json()[</span><span style="color: #A31515">&#039;data&#039;</span><span style="color: #000000">][</span><span style="color: #A31515">&#039;login&#039;</span><span style="color: #000000">]</span>
+</code></pre>
+						</dd>
+					</dl>
+				</div>
+			</section>
+			<section class="tsd-panel-group tsd-index-group">
+				<h2>Index</h2>
+				<section class="tsd-panel tsd-index-panel">
+					<div class="tsd-index-content">
+						<section class="tsd-index-section ">
+							<h3>Classes</h3>
+							<ul class="tsd-index-list">
+								<li class="tsd-kind-class tsd-parent-kind-module"><a href="../classes/web_embed.Module.html" class="tsd-kind-icon">Module</a></li>
+							</ul>
+						</section>
+					</div>
+				</section>
+			</section>
+		</div>
+		<div class="col-4 col-menu menu-sticky-wrap menu-highlight">
+			<nav class="tsd-navigation primary">
+				<ul>
+					<li class=" ">
+						<a href="../index.html">Modules</a>
+					</li>
+					<li class="current tsd-kind-module">
+						<a href="web_embed.html">web/embed</a>
+					</li>
+				</ul>
+			</nav>
+			<nav class="tsd-navigation secondary menu-sticky">
+				<ul class="before-current">
+					<li class=" tsd-kind-class tsd-parent-kind-module">
+						<a href="../classes/web_embed.Module.html" class="tsd-kind-icon">Module</a>
+					</li>
+				</ul>
+			</nav>
+		</div>
+	</div>
+</div>
+<footer class="with-border-bottom">
+	<div class="container">
+		<h2>Legend</h2>
+		<div class="tsd-legend-group">
+			<ul class="tsd-legend">
+				<li class="tsd-kind-variable"><span class="tsd-kind-icon">Variable</span></li>
+				<li class="tsd-kind-function"><span class="tsd-kind-icon">Function</span></li>
+				<li class="tsd-kind-function tsd-has-type-parameter"><span class="tsd-kind-icon">Function with type parameter</span></li>
+				<li class="tsd-kind-type-alias"><span class="tsd-kind-icon">Type alias</span></li>
+				<li class="tsd-kind-type-alias tsd-has-type-parameter"><span class="tsd-kind-icon">Type alias with type parameter</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-interface"><span class="tsd-kind-icon">Interface</span></li>
+				<li class="tsd-kind-interface tsd-has-type-parameter"><span class="tsd-kind-icon">Interface with type parameter</span></li>
+				<li class="tsd-kind-property tsd-parent-kind-interface"><span class="tsd-kind-icon">Property</span></li>
+				<li class="tsd-kind-method tsd-parent-kind-interface"><span class="tsd-kind-icon">Method</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-enum"><span class="tsd-kind-icon">Enumeration</span></li>
+			</ul>
+			<ul class="tsd-legend">
+				<li class="tsd-kind-class"><span class="tsd-kind-icon">Class</span></li>
+			</ul>
+		</div>
+	</div>
+</footer>
+<div class="container tsd-generator">
+	<p>Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p>
+</div>
+<div class="overlay"></div>
+<script src="../assets/js/main.js"></script>
+</body>
+</html>

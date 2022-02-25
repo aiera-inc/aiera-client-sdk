@@ -217,14 +217,6 @@
       this.frameId = frameId;
       this.module = new URL(modulePath, window.location.toString());
     }
-    emit(event, data) {
-      var _a, _b;
-      (_b = (_a = this.frame) == null ? void 0 : _a.contentWindow) == null ? void 0 : _b.postMessage({
-        ns: "aiera",
-        event,
-        data
-      }, this.module.origin);
-    }
     load() {
       const frame = this.frame = document.getElementById(this.frameId);
       frame.src = this.module.toString();
@@ -234,10 +226,13 @@
         frame.onerror = reject;
       });
     }
-    unload() {
-      if (this.frame)
-        this.frame.src = "";
-      window.removeEventListener("message", this.onWindowMessage);
+    emit(event, data) {
+      var _a, _b;
+      (_b = (_a = this.frame) == null ? void 0 : _a.contentWindow) == null ? void 0 : _b.postMessage({
+        ns: "aiera",
+        event,
+        data
+      }, this.module.origin);
     }
     on(event, listener) {
       this.emitter.on(event, listener);
@@ -248,6 +243,11 @@
     }
     setWatchlist(instruments) {
       this.emit("instruments-selected", instruments);
+    }
+    unload() {
+      if (this.frame)
+        this.frame.src = "";
+      window.removeEventListener("message", this.onWindowMessage);
     }
   };
   window.Aiera = { Module };
