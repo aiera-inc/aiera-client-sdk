@@ -74,20 +74,14 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
 
     const loader = (numHits: number) =>
         new Array(numHits).fill(0).map((_, idx) => (
-            <li key={idx} className="p-2 animate-pulse mx-2">
-                <div className="flex items-center">
-                    <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9" />
-                    <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
-                        <div className="flex">
-                            <div className="rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7" />
-                            <div className="rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12" />
-                        </div>
-                        <div className="flex">
-                            <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2" />
-                            <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2" />
-                            <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2" />
-                        </div>
-                    </div>
+            <li key={idx} className="p-2 animate-pulse mx-2 my-2">
+                <div className="rounded-full bg-gray-400 dark:bg-bluegray-5 h-[10px] mr-4 mb-1 w-full" />
+                <div className="rounded-full bg-gray-400 dark:bg-bluegray-5 h-[10px] mr-2 mb-2 w-20" />
+                <div className="flex">
+                    <div className="rounded-full bg-blue-600 dark:bg-blue-500 h-[10px] mr-2 w-6" />
+                    <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-8" />
+                    <div className="rounded-full bg-gray-400 h-[10px] mr-2 w-10" />
+                    <div className="rounded-full bg-gray-400 dark:bg-indigo-400 h-[10px] mr-2 w-12" />
                 </div>
             </li>
         ));
