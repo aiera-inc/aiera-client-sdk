@@ -1,6 +1,6 @@
 import React, { ReactElement, useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from 'react';
 import classNames from 'classnames';
-import Highcharts from 'highcharts/highstock';
+import Highcharts, { ChartClickEventObject } from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import { useClient } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
@@ -67,7 +67,16 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             backgroundColor: 'transparent',
             type: 'areaspline',
             spacing: [0, 0, 0, 0],
-            height: 60,
+            height: 80,
+            events: {
+                click: (event) => {
+                    const e = event as ChartClickEventObject;
+                    if (e?.xAxis && e.xAxis.length > 0) {
+                        const value = e?.xAxis[0]?.value;
+                        if (value && onSeekAudioByDate) onSeekAudioByDate(`${value}`);
+                    }
+                },
+            },
         },
         time: {
             useUTC: false,
@@ -78,6 +87,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             {
                 type: 'areaspline',
                 threshold: null,
+                zIndex: 3,
                 point: {
                     events: {
                         mouseOver: (e) => {
@@ -157,10 +167,13 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             },
         },
         xAxis: {
+            height: 0,
             gridLineColor: 'transparent',
             labels: {
                 enabled: true,
+                format: '{value:%I:%M}',
                 style: {
+                    pointerEvents: 'none',
                     fontFamily:
                         'ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
                     fontSize: '10px',
@@ -168,7 +181,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                     color: 'rgb(156, 163, 175)',
                 },
             },
-            top: -6,
+            top: 34,
             lineWidth: 0,
             plotLines: [
                 {
@@ -278,7 +291,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                     />
                 </div>
                 {priceChartExpanded && (
-                    <div className="overflow-hidden relative">
+                    <div className="overflow-hidden relative h-[60px]">
                         <HighchartsReact options={options} highcharts={Highcharts} constructorType={'stockChart'} />
                     </div>
                 )}
