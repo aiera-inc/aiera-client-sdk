@@ -6,6 +6,7 @@ const ignore = [
     'src/css',
     'src/components/Svg',
     'src/testUtils.tsx',
+    'src/types/svg.d.ts',
     '**/*test.{ts,tsx}',
     '**/styles.css',
 ];
@@ -27,7 +28,15 @@ const entryPoints = [
             deep: 3,
             ignore,
         }),
+        ...glob.sync(['src/web/**/*'], {
+            deep: 2,
+            ignore,
+        }),
         ...glob.sync(['src/**/*'], {
+            deep: 2,
+            ignore,
+        }),
+        ...glob.sync(['src/web/embed.ts'], {
             deep: 2,
             ignore,
         }),
