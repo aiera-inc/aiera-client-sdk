@@ -124,7 +124,6 @@ async function buildAll(watchers: Watchers | null, plugins: Plugin[]) {
 }
 
 async function serveAll(port: number, plugins: Plugin[]) {
-    console.log(sharedConfig);
     const modules = await globby('src/web/modules/**/index.tsx');
     const serveResult = await serve(
         {
