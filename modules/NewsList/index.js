@@ -1092,7 +1092,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect14(create, deps) {
+        function useEffect15(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1662,7 +1662,7 @@ var require_react_development = __commonJS({
         exports2.useCallback = useCallback10;
         exports2.useContext = useContext7;
         exports2.useDebugValue = useDebugValue;
-        exports2.useEffect = useEffect14;
+        exports2.useEffect = useEffect15;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect2;
         exports2.useMemo = useMemo7;
@@ -37727,6 +37727,9 @@ function useCompanyResolver() {
   const client = useClient();
   return (0, import_react6.useCallback)((identifier) => __async(this, null, function* () {
     var _a;
+    const id = Object.values(identifier)[0];
+    if (!id)
+      return Promise.reject("No identifier to resolve");
     const result = yield client.query(lib_default`
                         query CompanyResolution($identifier: String!) {
                             companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
@@ -37751,7 +37754,7 @@ function useCompanyResolver() {
                                 }
                             }
                         }
-                    `, { identifier }).toPromise();
+                    `, { identifier: id }).toPromise();
     return (_a = result == null ? void 0 : result.data) == null ? void 0 : _a.companies;
   }), [client]);
 }
@@ -39811,6 +39814,7 @@ function NewsListUI(props) {
     onChange: onSelectCompany,
     value: company
   })), /* @__PURE__ */ import_react32.default.createElement(SettingsButton, {
+    showSyncWatchlist: true,
     showTextSentiment: false,
     showTonalSentiment: false
   }))), /* @__PURE__ */ import_react32.default.createElement("div", {
@@ -39884,9 +39888,11 @@ function NewsListUI(props) {
   }, "load more"))))));
 }
 function NewsList(props) {
+  var _a, _b;
   const { state, handlers, mergeState, setState } = useChangeHandlers({
     canRefetch: false,
     company: void 0,
+    watchlist: [],
     fromIndex: 0,
     lastRefetch: import_luxon2.DateTime.now(),
     searchTerm: "",
@@ -39895,18 +39901,20 @@ function NewsList(props) {
   const listSize = props.listSize || DEFAULT_LIST_SIZE;
   const resolveCompany = useCompanyResolver();
   const bus = useMessageListener("instrument-selected", (msg) => __async(this, null, function* () {
-    if (msg.data.ticker) {
-      const companies = yield resolveCompany(msg.data.ticker);
-      if (companies == null ? void 0 : companies[0]) {
-        const company = companies[0];
-        setState((s2) => __spreadProps(__spreadValues({}, s2), { company, fromIndex: 0 }));
-      }
+    const companies = yield resolveCompany(msg.data);
+    if (companies == null ? void 0 : companies[0]) {
+      const company = companies[0];
+      setState((s2) => __spreadProps(__spreadValues({}, s2), { company, fromIndex: 0 }));
     }
+  }), "in");
+  useMessageListener("instruments-selected", (msg) => __async(this, null, function* () {
+    const companyIds = (yield Promise.all(msg.data.map(resolveCompany))).flat().map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
+    setState((s2) => __spreadProps(__spreadValues({}, s2), { watchlist: companyIds }));
   }), "in");
   const { settings } = useSettings();
   const mergeResults = (prevQuery, newQuery) => {
-    var _a, _b, _c, _d;
-    const prevHits = ((_b = (_a = prevQuery.search) == null ? void 0 : _a.content) == null ? void 0 : _b.hits) || [];
+    var _a2, _b2, _c, _d;
+    const prevHits = ((_b2 = (_a2 = prevQuery.search) == null ? void 0 : _a2.content) == null ? void 0 : _b2.hits) || [];
     const newHits = ((_d = (_c = newQuery.search) == null ? void 0 : _c.content) == null ? void 0 : _d.hits) || [];
     const prevIds = new Set(prevHits.map((hit) => hit.id));
     return {
@@ -39919,8 +39927,8 @@ function NewsList(props) {
   };
   const newsListQuery = usePaginatedQuery({
     isEmpty: (data) => {
-      var _a, _b;
-      return (((_b = (_a = data.search) == null ? void 0 : _a.content) == null ? void 0 : _b.hits) || []).length === 0;
+      var _a2, _b2;
+      return (((_b2 = (_a2 = data.search) == null ? void 0 : _a2.content) == null ? void 0 : _b2.hits) || []).length === 0;
     },
     query: lib_default`
             query NewsList($filter: ContentSearchFilter!, $fromIndex: Int, $size: Int) {
@@ -39972,7 +39980,7 @@ function NewsList(props) {
     requestPolicy: "cache-and-network",
     variables: {
       filter: {
-        companyIds: state.company ? [state.company.id] : void 0,
+        companyIds: ((_a = state.company) == null ? void 0 : _a.id) ? [state.company.id] : ((_b = state.watchlist) == null ? void 0 : _b.length) && settings.syncWatchlist ? state.watchlist : void 0,
         contentTypes: [ContentType.News],
         searchTerm: state.searchTerm
       },
@@ -40008,8 +40016,8 @@ function NewsList(props) {
     }
   }, [state]);
   const onSelectNews = (0, import_react32.useCallback)((event, change) => {
-    var _a;
-    const primaryQuote = getPrimaryQuote((_a = change.value) == null ? void 0 : _a.primaryCompany);
+    var _a2;
+    const primaryQuote = getPrimaryQuote((_a2 = change.value) == null ? void 0 : _a2.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.selectedNews(event, change);
     if (!change.value) {
@@ -40051,10 +40059,45 @@ function NewsList(props) {
 }
 
 // src/web/modules/NewsList/index.tsx
-var App = () => {
+var useMessageBus2 = () => {
   const bus = useMessageListener("instrument-selected", (msg) => {
-    console.log(`Sending ${JSON.stringify(msg)} to platform`);
+    if (window.fdc3 && msg.data) {
+      const context = {
+        type: "fdc3.instrument",
+        id: msg.data
+      };
+      void window.fdc3.broadcast(context);
+    }
   }, "out");
+  const { reset } = useClient2();
+  bus.on("authenticate", (msg) => {
+    void defaultTokenAuthConfig.writeAuth(msg.data);
+    reset();
+  }, "in");
+  (0, import_react33.useEffect)(() => {
+    bus.setupWindowMessaging(window.parent);
+    const listeners = [];
+    if (window.fdc3) {
+      listeners.push(window.fdc3.addContextListener("fdc3.instrument", (_context) => {
+        const context = _context;
+        bus.emit("instrument-selected", context.id, "in");
+      }));
+      listeners.push(window.fdc3.addContextListener("fdc3.instrumentList", (_context) => {
+        const context = _context;
+        if (context.instruments) {
+          bus.emit("instruments-selected", context.instruments.map((i3) => i3.id), "in");
+        }
+      }));
+    }
+    return () => {
+      bus.cleanupWindowMessaging();
+      listeners.forEach((listener) => listener.unsubscribe());
+    };
+  }, [bus]);
+  return bus;
+};
+var App = () => {
+  const bus = useMessageBus2();
   return /* @__PURE__ */ import_react33.default.createElement(import_react33.StrictMode, null, /* @__PURE__ */ import_react33.default.createElement(Provider6, {
     bus,
     config: { moduleName: "NewsList" }
