@@ -73,7 +73,12 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectUrl: string;
     isNextButtonDisabled: boolean;
     meetingType: string;
+    onChangeConnectAccessId: ChangeHandler<string>;
+    onChangeConnectCallerId: ChangeHandler<string>;
     onChangeConnectionType: ChangeHandler<ConnectionType>;
+    onChangeConnectPhoneNumber: ChangeHandler<string>;
+    onChangeConnectPin: ChangeHandler<string>;
+    onChangeConnectUrl: ChangeHandler<string>;
     onConnectDialNumber: string;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
@@ -85,10 +90,20 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
 
 export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
     const {
+        connectAccessId,
+        connectCallerId,
         connectionType,
+        connectPhoneNumber,
+        connectPin,
+        connectUrl,
         isNextButtonDisabled,
         onBack,
+        onChangeConnectAccessId,
+        onChangeConnectCallerId,
         onChangeConnectionType,
+        onChangeConnectPhoneNumber,
+        onChangeConnectPin,
+        onChangeConnectUrl,
         onNextStep,
         onPrevStep,
         onSubmit,
@@ -96,7 +111,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
     } = props;
     return (
         <div className="bg-[#F7F8FB] h-full flex flex-col justify-between recording-form">
-            <div className="bg-white flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header">
+            <div className="bg-white flex flex-col pt-3 px-3 shadow-3xl z-10 dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header">
                 <div className="flex items-center mb-3">
                     <Button className="mr-2" onClick={onBack}>
                         <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
@@ -107,7 +122,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     </p>
                 </div>
             </div>
-            <div className="h-full pb-3 px-3 shadow-3xl">
+            <div className="h-full overflow-y-scroll pb-3 px-3 shadow-3xl">
                 {match(step)
                     .with(1, () => (
                         <ConnectionTypeComponent
@@ -116,7 +131,21 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             onChange={onChangeConnectionType}
                         />
                     ))
-                    .with(2, () => <ConnectionDetails connectionType={connectionType} />)
+                    .with(2, () => (
+                        <ConnectionDetails
+                            connectAccessId={connectAccessId}
+                            connectCallerId={connectCallerId}
+                            connectionType={connectionType}
+                            connectPhoneNumber={connectPhoneNumber}
+                            connectPin={connectPin}
+                            connectUrl={connectUrl}
+                            onChangeConnectAccessId={onChangeConnectAccessId}
+                            onChangeConnectCallerId={onChangeConnectCallerId}
+                            onChangeConnectPhoneNumber={onChangeConnectPhoneNumber}
+                            onChangeConnectPin={onChangeConnectPin}
+                            onChangeConnectUrl={onChangeConnectUrl}
+                        />
+                    ))
                     .with(3, () => <Scheduling />)
                     .with(4, () => <Troubleshooting />)
                     .with(5, () => <RecordingDetails />)
@@ -216,7 +245,12 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             isNextButtonDisabled={isNextButtonDisabled}
             meetingType={state.meetingType}
             onBack={onBack}
+            onChangeConnectAccessId={handlers.connectAccessId}
+            onChangeConnectCallerId={handlers.connectCallerId}
             onChangeConnectionType={handlers.connectionType}
+            onChangeConnectPhoneNumber={handlers.connectPhoneNumber}
+            onChangeConnectPin={handlers.connectPin}
+            onChangeConnectUrl={handlers.connectUrl}
             onConnectDialNumber={state.onConnectDialNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
