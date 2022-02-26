@@ -23,7 +23,7 @@ export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
             <div className="bg-white border border-gray-200 mt-2 rounded shadow-xl">
                 {Object.values(connectionTypeOptions).map((option) => (
                     <div
-                        className="border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 hover:rounded last:border-0"
+                        className="border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 first:hover:rounded-t last:hover:rounded-b last:border-0"
                         key={option.value}
                         onClick={(e) => onChange(e, { name: 'connectionType', value: option.value })}
                     >
@@ -36,7 +36,7 @@ export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
                             >
                                 {option.label}
                             </p>
-                            <p className="font-light pt-0.25 text-[#ABB2C7] text-sm">{option.description}</p>
+                            <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">{option.description}</p>
                         </div>
                         <Checkbox checked={connectionType === option.value} className="ml-auto flex-shrink-0" />
                     </div>
