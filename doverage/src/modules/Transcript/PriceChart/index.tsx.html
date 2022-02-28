@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">52.23% </span>
+                <span class="strong">48.61% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>35/67</span>
+                <span class='fraction'>35/72</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.66% </span>
+                <span class="strong">39.24% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>31/71</span>
+                <span class='fraction'>31/79</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">47.36% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/18</span>
+                <span class='fraction'>9/19</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.83% </span>
+                <span class="strong">51.51% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>34/62</span>
+                <span class='fraction'>34/66</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line medium'></div>
+    <div class='status-line low'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -499,7 +499,20 @@
 <a name='L434'></a><a href='#L434'>434</a>
 <a name='L435'></a><a href='#L435'>435</a>
 <a name='L436'></a><a href='#L436'>436</a>
-<a name='L437'></a><a href='#L437'>437</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L437'></a><a href='#L437'>437</a>
+<a name='L438'></a><a href='#L438'>438</a>
+<a name='L439'></a><a href='#L439'>439</a>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -571,6 +584,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -613,6 +636,9 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -937,7 +963,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement, useEffect, useState, useCallback, useMemo, Dispatch, SetStateAction } from 'react';
 import classNames from 'classnames';
-import Highcharts from 'highcharts/highstock';
+import Highcharts, { ChartClickEventObject } from 'highcharts/highstock';
 import HighchartsReact from 'highcharts-react-official';
 import { useClient } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
@@ -1004,7 +1030,16 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             backgroundColor: 'transparent',
             type: 'areaspline',
             spacing: [0, 0, 0, 0],
-            height: 60,
+            height: 80,
+            events: {
+                click: <span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; {
+                    const e = <span class="cstat-no" title="statement not covered" >event as ChartClickEventObject;</span>
+<span class="cstat-no" title="statement not covered" >                    if (e?.xAxis &amp;&amp; e.xAxis.length &gt; 0) {</span>
+                        const value = <span class="cstat-no" title="statement not covered" >e?.xAxis[0]?.value;</span>
+<span class="cstat-no" title="statement not covered" >                        if (value &amp;&amp; onSeekAudioByDate) <span class="cstat-no" title="statement not covered" >onSeekAudioByDate(`${value}`);</span></span>
+                    }
+                },
+            },
         },
         time: {
             useUTC: false,
@@ -1015,6 +1050,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             {
                 type: 'areaspline',
                 threshold: null,
+                zIndex: 3,
                 point: {
                     events: {
                         mouseOver: <span class="fstat-no" title="function not covered" >(e</span>) =&gt; {
@@ -1094,10 +1130,13 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
             },
         },
         xAxis: {
+            height: 0,
             gridLineColor: 'transparent',
             labels: {
                 enabled: true,
+                format: '{value:%I:%M}',
                 style: {
+                    pointerEvents: 'none',
                     fontFamily:
                         'ui-sans-serif, system-ui, -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"',
                     fontSize: '10px',
@@ -1105,7 +1144,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                     color: 'rgb(156, 163, 175)',
                 },
             },
-            top: -6,
+            top: 34,
             lineWidth: 0,
             plotLines: [
                 {
@@ -1215,7 +1254,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                     /&gt;
                 &lt;/div&gt;
                 {priceChartExpanded &amp;&amp; (
-                    &lt;div className="overflow-hidden relative"&gt;
+                    &lt;div className="overflow-hidden relative h-[60px]"&gt;
                         &lt;HighchartsReact options={options} highcharts={Highcharts} constructorType={'stockChart'} /&gt;
                     &lt;/div&gt;
                 )}
@@ -1378,7 +1417,7 @@ export function PriceChart(props: PriceChartProps): ReactElement | null {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Feb 25 2022 16:50:26 GMT-0500 (Eastern Standard Time)
+                at Mon Feb 28 2022 11:20:54 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

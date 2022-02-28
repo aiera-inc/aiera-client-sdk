@@ -724,6 +724,9 @@ video {
 .h-3 {
   height: 0.75rem;
 }
+.h-\[60px\] {
+  height: 60px;
+}
 .max-h-\[270px\] {
   max-height: 270px;
 }
