@@ -1,7 +1,6 @@
-import React, { ReactElement } from 'react';
-import classNames from 'classnames';
+import React, { ReactElement, SyntheticEvent, useCallback } from 'react';
 
-import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
+import { FormFieldSelect } from '@aiera/client-sdk/components/FormField';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { ConnectionType as ConnectionTypeEnum, ConnectionTypeOption } from '@aiera/client-sdk/modules/RecordingForm';
 import './styles.css';
@@ -9,56 +8,52 @@ import './styles.css';
 interface ConnectionTypeSharedProps {
     connectionType?: ConnectionTypeEnum;
     connectionTypeOptions: ConnectionTypeOption;
-    onChange: ChangeHandler<ConnectionTypeEnum>;
 }
 
 /** @notExported */
-interface ConnectionTypeUIProps extends ConnectionTypeSharedProps {}
+interface ConnectionTypeUIProps extends ConnectionTypeSharedProps {
+    onChange: ChangeHandler<string>; // should be using T (generic type)
+}
 
 export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
     const { connectionType, connectionTypeOptions, onChange } = props;
     return (
         <div className="py-3 connection-type">
             <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Connection Type</p>
-            <div className="bg-white border border-gray-200 mt-2 rounded shadow-xl">
-                {Object.values(connectionTypeOptions).map((option) => (
-                    <div
-                        className="border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 first:hover:rounded-t last:hover:rounded-b last:border-0"
-                        key={option.value}
-                        onClick={(e) => onChange(e, { name: 'connectionType', value: option.value })}
-                    >
-                        <div>
-                            <p
-                                className={classNames([
-                                    'text-black text-base',
-                                    { 'font-semibold': connectionType === option.value },
-                                ])}
-                            >
-                                {option.label}
-                            </p>
-                            <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">{option.description}</p>
-                        </div>
-                        <Checkbox checked={connectionType === option.value} className="ml-auto flex-shrink-0" />
-                    </div>
-                ))}
-            </div>
+            <FormFieldSelect
+                className="mt-2"
+                name="connectionType"
+                onChange={onChange}
+                options={Object.values(connectionTypeOptions)}
+                value={connectionType}
+            />
         </div>
     );
 }
 
 /** @notExported */
-export interface ConnectionTypeProps extends ConnectionTypeSharedProps {}
+export interface ConnectionTypeProps extends ConnectionTypeSharedProps {
+    onChange: ChangeHandler<ConnectionTypeEnum>;
+}
 
 /**
  * Renders ConnectionType
  */
 export function ConnectionType(props: ConnectionTypeProps): ReactElement {
+    const connectionTypeStringToEnum = (connectionType?: string | null): ConnectionTypeEnum | null =>
+        connectionType
+            ? Object.keys(ConnectionTypeEnum)[Object.values(ConnectionTypeEnum).indexOf(connectionType)]
+            : null;
     const { connectionType, connectionTypeOptions, onChange } = props;
     return (
         <ConnectionTypeUI
             connectionType={connectionType}
             connectionTypeOptions={connectionTypeOptions}
-            onChange={onChange}
+            onChange={useCallback(
+                (event, { value }: { value?: string | null }) =>
+                    onChange(event as SyntheticEvent<Element, Event>, { value: connectionTypeStringToEnum(value) }),
+                [onChange]
+            )}
         />
     );
 }

@@ -16,12 +16,6 @@ interface SharedProps {
     className?: string;
     name: string;
     onChange?: ChangeHandler<string>;
-    value: string;
-}
-
-interface FormFieldSharedProps {
-    children?: ReactNode;
-    className?: string;
 }
 
 /** @notExported */
@@ -30,6 +24,7 @@ export interface FormFieldInputProps extends SharedProps {
     description?: string;
     label?: string;
     placeholder?: string;
+    value: string;
 }
 
 export function FormFieldInput(props: FormFieldInputProps) {
@@ -59,6 +54,7 @@ export function FormFieldInput(props: FormFieldInputProps) {
 /** @notExported */
 export interface FormFieldSelectProps extends SharedProps {
     options: FormFieldSelectOption[];
+    value?: string;
 }
 
 export function FormFieldSelect(props: FormFieldSelectProps): ReactElement {
@@ -89,6 +85,11 @@ export function FormFieldSelect(props: FormFieldSelectProps): ReactElement {
             ))}
         </FormField>
     );
+}
+
+interface FormFieldSharedProps {
+    children?: ReactNode;
+    className?: string;
 }
 
 /** @notExported */
