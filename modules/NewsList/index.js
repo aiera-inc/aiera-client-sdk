@@ -37588,10 +37588,17 @@ function useQuery2(args) {
     if (isEmpty && state.data && isEmpty(state.data)) {
       return { status: "empty", state, data: state.data, refetch };
     }
-    return { status: "success", state, data: state.data, refetch };
+    return {
+      status: "success",
+      state,
+      data: state.data,
+      refetch,
+      isRefetching: state.stale,
+      isPaging: false
+    };
   }, [state, refetch]);
 }
-function usePaginatedQuery(args) {
+function usePagingQuery(args) {
   const { mergeResults, variables } = args;
   const queryResult = useQuery2(args);
   const [fromIndex, setFromIndex] = (0, import_react4.useState)(0);
@@ -37617,7 +37624,7 @@ function usePaginatedQuery(args) {
   }, [fromIndex, queryResult.state.data, variables.fromIndex]);
   return (0, import_react4.useMemo)(() => {
     if (queryResult.status === "loading" && variables.fromIndex > 0 && data) {
-      return __spreadProps(__spreadValues({}, queryResult), { data, status: "refetching" });
+      return __spreadProps(__spreadValues({}, queryResult), { data, status: "success", isPaging: true, isRefetching: false });
     }
     if (queryResult.status === "success") {
       return __spreadProps(__spreadValues({}, queryResult), { data });
@@ -38159,9 +38166,9 @@ var LoginDocument = lib_default`
 }
     `;
 var EventListDocument = lib_default`
-    query EventList($filter: EventSearchFilter!, $view: EventView) {
+    query EventList($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
   search {
-    events(filter: $filter, view: $view) {
+    events(filter: $filter, view: $view, fromIndex: $fromIndex, size: $size) {
       id
       numTotalHits
       hits {
@@ -39819,7 +39826,7 @@ function NewsListUI(props) {
     className: "flex flex-col items-center justify-center flex-1"
   }, (0, import_ts_pattern6.match)(newsListQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react32.default.createElement("ul", {
     className: "w-full NewsList__loading"
-  }, loader(15))).with({ status: "paused" }, () => wrapMsg("There is no news.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("There is no news.")).with({ status: "success" }, { status: "refetching" }, ({ data, status }) => /* @__PURE__ */ import_react32.default.createElement("ul", {
+  }, loader(15))).with({ status: "paused" }, () => wrapMsg("There is no news.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("There is no news.")).with({ status: "success" }, ({ data, isPaging }) => /* @__PURE__ */ import_react32.default.createElement("ul", {
     className: "w-full"
   }, /* @__PURE__ */ import_react32.default.createElement("div", {
     className: (0, import_classnames14.default)("animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none", {
@@ -39872,7 +39879,7 @@ function NewsListUI(props) {
     }, "\u2022"), /* @__PURE__ */ import_react32.default.createElement("span", {
       className: "text-indigo-300 group-hover:text-indigo-400"
     }, content.newsSource.name)))));
-  }), status === "refetching" && loader(3))).exhaustive(), /* @__PURE__ */ import_react32.default.createElement("div", {
+  }), isPaging && loader(3))).exhaustive(), /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "flex-1"
   }), hasMoreResults && /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center mt-1 py-3 shadow-inner text-gray-500 w-full dark:bg-bluegray-5 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-bluegray-6 dark:hover:text-gray-300 hover:bg-gray-50 hover:text-black",
@@ -39910,16 +39917,16 @@ function NewsList(props) {
     var _a2, _b2, _c, _d;
     const prevHits = ((_b2 = (_a2 = prevQuery.search) == null ? void 0 : _a2.content) == null ? void 0 : _b2.hits) || [];
     const newHits = ((_d = (_c = newQuery.search) == null ? void 0 : _c.content) == null ? void 0 : _d.hits) || [];
-    const prevIds = new Set(prevHits.map((hit) => hit.id));
+    const prevIds = new Set(prevHits.map((hit) => hit.content.id));
     return {
       search: {
         content: __spreadProps(__spreadValues({}, newQuery.search.content), {
-          hits: [...prevHits, ...newHits.filter((h3) => !prevIds.has(h3.id))]
+          hits: [...prevHits, ...newHits.filter((h3) => !prevIds.has(h3.content.id))]
         })
       }
     };
   };
-  const newsListQuery = usePaginatedQuery({
+  const newsListQuery = usePagingQuery({
     isEmpty: (data) => {
       var _a2, _b2;
       return (((_b2 = (_a2 = data.search) == null ? void 0 : _a2.content) == null ? void 0 : _b2.hits) || []).length === 0;

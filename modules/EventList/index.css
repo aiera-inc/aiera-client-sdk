@@ -712,6 +712,9 @@ video {
 .h-\[1px\] {
   height: 1px;
 }
+.h-1 {
+  height: 0.25rem;
+}
 .h-12 {
   height: 3rem;
 }
@@ -720,6 +723,9 @@ video {
 }
 .h-\[6px\] {
   height: 6px;
+}
+.h-\[15px\] {
+  height: 15px;
 }
 .h-3 {
   height: 0.75rem;
@@ -840,6 +846,12 @@ video {
 }
 .w-11\/12 {
   width: 91.666667%;
+}
+.w-\[50px\] {
+  width: 50px;
+}
+.w-1 {
+  width: 0.25rem;
 }
 .w-3\.5 {
   width: 0.875rem;
@@ -2017,6 +2029,10 @@ video {
 }
 .group:hover .group-hover\:flex {
   display: flex;
+}
+.group:hover .group-hover\:bg-gray-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(107 114 128 / var(--tw-bg-opacity));
 }
 .group:hover .group-hover\:bg-red-500 {
   --tw-bg-opacity: 1;

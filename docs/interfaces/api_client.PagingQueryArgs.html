@@ -3,7 +3,7 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<title>PaginatedQueryArgs | @aiera/client-sdk</title>
+	<title>PagingQueryArgs | @aiera/client-sdk</title>
 	<meta name="description" content="Documentation for @aiera/client-sdk">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="../assets/css/main.css">
@@ -58,10 +58,10 @@
 					<a href="../modules/api_client.html">api/client</a>
 				</li>
 				<li>
-					<a href="api_client.PaginatedQueryArgs.html">PaginatedQueryArgs</a>
+					<a href="api_client.PagingQueryArgs.html">PagingQueryArgs</a>
 				</li>
 			</ul>
-			<h1>Interface PaginatedQueryArgs&lt;Variables, Data&gt;</h1>
+			<h1>Interface PagingQueryArgs&lt;Variables, Data&gt;</h1>
 		</div>
 	</div>
 </header>
@@ -86,7 +86,7 @@
 						<span class="tsd-signature-type">UseQueryArgs</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">Variables</span><span class="tsd-signature-symbol">, </span><span class="tsd-signature-type">Data</span><span class="tsd-signature-symbol">&gt;</span>
 						<ul class="tsd-hierarchy">
 							<li>
-								<span class="target">PaginatedQueryArgs</span>
+								<span class="target">PagingQueryArgs</span>
 							</li>
 						</ul>
 					</li>
@@ -99,17 +99,17 @@
 						<section class="tsd-index-section ">
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PaginatedQueryArgs.html#query" class="tsd-kind-icon">query</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PaginatedQueryArgs.html#requestPolicy" class="tsd-kind-icon">request<wbr>Policy</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PaginatedQueryArgs.html#context" class="tsd-kind-icon">context</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PaginatedQueryArgs.html#pause" class="tsd-kind-icon">pause</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="api_client.PaginatedQueryArgs.html#variables" class="tsd-kind-icon">variables</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PagingQueryArgs.html#query" class="tsd-kind-icon">query</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PagingQueryArgs.html#requestPolicy" class="tsd-kind-icon">request<wbr>Policy</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PagingQueryArgs.html#context" class="tsd-kind-icon">context</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external"><a href="api_client.PagingQueryArgs.html#pause" class="tsd-kind-icon">pause</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite"><a href="api_client.PagingQueryArgs.html#variables" class="tsd-kind-icon">variables</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
 							<h3>Methods</h3>
 							<ul class="tsd-index-list">
-								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="api_client.PaginatedQueryArgs.html#mergeResults" class="tsd-kind-icon">merge<wbr>Results</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-interface"><a href="api_client.PagingQueryArgs.html#mergeResults" class="tsd-kind-icon">merge<wbr>Results</a></li>
 							</ul>
 						</section>
 					</div>
@@ -168,7 +168,7 @@
 					<aside class="tsd-sources">
 						<p>Overrides UseQueryArgs.variables</p>
 						<ul>
-							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/7b1a285/src/api/client.tsx#L197">src/api/client.tsx:197</a></li>
+							<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/3d60410/src/api/client.tsx#L190">src/api/client.tsx:190</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -185,7 +185,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/7b1a285/src/api/client.tsx#L196">src/api/client.tsx:196</a></li>
+									<li>Defined in <a href="https://github.com/aiera-inc/aiera-client-sdk/blob/3d60410/src/api/client.tsx#L189">src/api/client.tsx:189</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -247,39 +247,33 @@
 						<a href="api_client.SuccessQueryResult.html" class="tsd-kind-icon">Success<wbr>Query<wbr>Result</a>
 					</li>
 					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="api_client.RefetchingQueryResult.html" class="tsd-kind-icon">Refetching<wbr>Query<wbr>Result</a>
-					</li>
-					<li class=" tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="api_client.QueryResultEmptyCheck.html" class="tsd-kind-icon">Query<wbr>Result<wbr>Empty<wbr>Check</a>
 					</li>
 					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
 						<a href="../modules/api_client.html#QueryResult" class="tsd-kind-icon">Query<wbr>Result</a>
 					</li>
-					<li class=" tsd-kind-type-alias tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/api_client.html#PaginatedQueryResult" class="tsd-kind-icon">Paginated<wbr>Query<wbr>Result</a>
-					</li>
 				</ul>
 				<ul class="current">
 					<li class="current tsd-kind-interface tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="api_client.PaginatedQueryArgs.html" class="tsd-kind-icon">Paginated<wbr>Query<wbr>Args</a>
+						<a href="api_client.PagingQueryArgs.html" class="tsd-kind-icon">Paging<wbr>Query<wbr>Args</a>
 						<ul>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="api_client.PaginatedQueryArgs.html#query" class="tsd-kind-icon">query</a>
+								<a href="api_client.PagingQueryArgs.html#query" class="tsd-kind-icon">query</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="api_client.PaginatedQueryArgs.html#requestPolicy" class="tsd-kind-icon">request<wbr>Policy</a>
+								<a href="api_client.PagingQueryArgs.html#requestPolicy" class="tsd-kind-icon">request<wbr>Policy</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="api_client.PaginatedQueryArgs.html#context" class="tsd-kind-icon">context</a>
+								<a href="api_client.PagingQueryArgs.html#context" class="tsd-kind-icon">context</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-inherited tsd-is-external">
-								<a href="api_client.PaginatedQueryArgs.html#pause" class="tsd-kind-icon">pause</a>
+								<a href="api_client.PagingQueryArgs.html#pause" class="tsd-kind-icon">pause</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-interface">
-								<a href="api_client.PaginatedQueryArgs.html#mergeResults" class="tsd-kind-icon">merge<wbr>Results</a>
+								<a href="api_client.PagingQueryArgs.html#mergeResults" class="tsd-kind-icon">merge<wbr>Results</a>
 							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-interface tsd-is-overwrite">
-								<a href="api_client.PaginatedQueryArgs.html#variables" class="tsd-kind-icon">variables</a>
+								<a href="api_client.PagingQueryArgs.html#variables" class="tsd-kind-icon">variables</a>
 							</li>
 						</ul>
 					</li>
@@ -289,7 +283,7 @@
 						<a href="../modules/api_client.html#useQuery" class="tsd-kind-icon">use<wbr>Query</a>
 					</li>
 					<li class=" tsd-kind-function tsd-parent-kind-module tsd-has-type-parameter">
-						<a href="../modules/api_client.html#usePaginatedQuery" class="tsd-kind-icon">use<wbr>Paginated<wbr>Query</a>
+						<a href="../modules/api_client.html#usePagingQuery" class="tsd-kind-icon">use<wbr>Paging<wbr>Query</a>
 					</li>
 				</ul>
 			</nav>

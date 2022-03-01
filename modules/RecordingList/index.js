@@ -79735,7 +79735,14 @@ function useQuery2(args) {
     if (isEmpty && state.data && isEmpty(state.data)) {
       return { status: "empty", state, data: state.data, refetch };
     }
-    return { status: "success", state, data: state.data, refetch };
+    return {
+      status: "success",
+      state,
+      data: state.data,
+      refetch,
+      isRefetching: state.stale,
+      isPaging: false
+    };
   }, [state, refetch]);
 }
 
@@ -80307,9 +80314,9 @@ var LoginDocument = lib_default`
 }
     `;
 var EventListDocument = lib_default`
-    query EventList($filter: EventSearchFilter!, $view: EventView) {
+    query EventList($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
   search {
-    events(filter: $filter, view: $view) {
+    events(filter: $filter, view: $view, fromIndex: $fromIndex, size: $size) {
       id
       numTotalHits
       hits {
