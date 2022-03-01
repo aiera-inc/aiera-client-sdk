@@ -2,6 +2,7 @@ import React, {
     Fragment,
     ReactElement,
     SyntheticEvent,
+    MouseEvent,
     MouseEventHandler,
     useCallback,
     useMemo,
@@ -17,7 +18,7 @@ import classNames from 'classnames';
 import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
-import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { PaginatedQueryResult, usePaginatedQuery } from '@aiera/client-sdk/api/client';
 import { isToday } from '@aiera/client-sdk/lib/datetimes';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
@@ -47,11 +48,14 @@ export type EventListEvent = EventListQuery['search']['events']['hits'][0]['even
 export type { CompanyFilterResult };
 
 export interface EventListUIProps {
+    canRefetch: boolean;
+    refetch?: () => void;
     company?: CompanyFilterResult;
     darkMode?: boolean;
     event?: EventListEvent;
-    eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
+    eventsQuery: PaginatedQueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypes?: FilterByType[];
+    loadMore?: (event: MouseEvent) => void;
     listType?: EventView;
     loading?: boolean;
     maxHits?: number;
@@ -68,11 +72,14 @@ export interface EventListUIProps {
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
+        canRefetch,
+        refetch,
         company,
         darkMode = false,
         event,
         eventsQuery,
         filterByTypes,
+        loadMore,
         listType,
         maxHits = 0,
         onBackFromTranscript,
@@ -163,8 +170,25 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
-                            .with({ status: 'success' }, ({ data }) => (
+                            .with({ status: 'success' }, { status: 'refetching' }, ({ data }) => (
                                 <ul className="w-full">
+                                    <div
+                                        className={classNames(
+                                            'animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none',
+                                            {
+                                                invisible: !canRefetch,
+                                                'h-0': !canRefetch,
+                                                'py-3': canRefetch,
+                                            }
+                                        )}
+                                        onClick={refetch}
+                                    >
+                                        <div className="ml-2 w-full flex h-[1px] bg-gradient-to-l from-gray-200 group-hover:from-gray-300" />
+                                        <p className="px-3 text-gray-500 text-sm whitespace-nowrap dark:text-gray-300 dark:group-hover:text-gray-400 group-hover:text-gray-700">
+                                            Check for new events
+                                        </p>
+                                        <div className="mr-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 group-hover:from-gray-300" />
+                                    </div>
                                     {data.search.events.hits.map((hit, index) => {
                                         const event = hit.event;
                                         const hitRatio = (hit.numMentions || 0) / maxHits;
@@ -305,6 +329,15 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                             </Fragment>
                                         );
                                     })}
+                                    {loadMore && (
+                                        <li className="px-3 cursor-pointer" onClick={loadMore}>
+                                            <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
+                                                <div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"></div>
+                                                Load more
+                                                <div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
+                                            </div>
+                                        </li>
+                                    )}
                                 </ul>
                             ))
                             .exhaustive()}
@@ -321,6 +354,9 @@ export interface EventListProps {}
 
 interface EventListState {
     company?: CompanyFilterResult;
+    fromIndex: number;
+    pageSize: number;
+    canRefetch: boolean;
     watchlist: string[];
     event?: EventListEvent;
     filterByTypes: FilterByType[];
@@ -329,8 +365,11 @@ interface EventListState {
 }
 
 export const EventList = (_props: EventListProps): ReactElement => {
-    const { state, handlers, setState } = useChangeHandlers<EventListState>({
+    const { state, handlers, mergeState } = useChangeHandlers<EventListState>({
         company: undefined,
+        fromIndex: 0,
+        pageSize: 30,
+        canRefetch: false,
         watchlist: [],
         event: undefined,
         filterByTypes: [],
@@ -346,7 +385,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             const companies = await resolveCompany(msg.data);
             if (companies?.[0]) {
                 const company = companies[0];
-                setState((s) => ({ ...s, company, event: undefined }));
+                mergeState({ company, event: undefined });
             }
         },
         'in'
@@ -359,7 +398,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
                 .flat()
                 .map((c) => c?.id)
                 .filter((n) => n) as string[];
-            setState((s) => ({ ...s, watchlist: companyIds }));
+            mergeState({ watchlist: companyIds });
         },
         'in'
     );
@@ -369,7 +408,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
             handlers.event(event, change);
-            // If we are going back to the event list, refresh immediately
+            // If we are going back to the event list, refetch immediately
             if (!change.value) {
                 eventsQuery.refetch();
             }
@@ -386,13 +425,27 @@ export const EventList = (_props: EventListProps): ReactElement => {
         [state]
     );
 
-    const eventsQuery = useQuery<EventListQuery, EventListQueryVariables>({
+    const mergeResults = (prevQuery: EventListQuery, newQuery: EventListQuery) => {
+        const prevHits = prevQuery.search?.events.hits || [];
+        const newHits = newQuery.search.events.hits || [];
+        const prevIds = new Set(prevHits.map((hit) => hit.event.id));
+        return {
+            search: {
+                events: {
+                    ...newQuery.search.events,
+                    hits: [...prevHits, ...newHits.filter((h) => !prevIds.has(h.event.id))],
+                },
+            },
+        };
+    };
+
+    const eventsQuery = usePaginatedQuery<EventListQuery, EventListQueryVariables>({
         isEmpty: (data) => data.search.events.numTotalHits === 0,
         requestPolicy: 'cache-and-network',
         query: gql`
-            query EventList($filter: EventSearchFilter!, $view: EventView) {
+            query EventList($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
                 search {
-                    events(filter: $filter, view: $view) {
+                    events(filter: $filter, view: $view, fromIndex: $fromIndex, size: $size) {
                         id
                         numTotalHits
                         hits {
@@ -433,8 +486,11 @@ export const EventList = (_props: EventListProps): ReactElement => {
                 }
             }
         `,
+        mergeResults,
         variables: {
             view: state.listType,
+            fromIndex: state.fromIndex,
+            size: state.pageSize,
             filter: {
                 hasTranscripts: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
                 eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
@@ -448,6 +504,18 @@ export const EventList = (_props: EventListProps): ReactElement => {
         },
     });
 
+    const hasMoreResults = useMemo(() => {
+        if (eventsQuery.status === 'success') {
+            return eventsQuery.data.search.events.hits.length < eventsQuery.data.search.events.numTotalHits;
+        }
+        return false;
+    }, [eventsQuery.status]);
+
+    const loadMore = useCallback(
+        (event: MouseEvent) => handlers.fromIndex(event, { value: state.fromIndex + state.pageSize }),
+        [handlers.fromIndex, state.fromIndex]
+    );
+
     const maxHits = useMemo(
         () =>
             match(eventsQuery)
@@ -458,10 +526,22 @@ export const EventList = (_props: EventListProps): ReactElement => {
         [eventsQuery.state]
     );
 
-    useInterval(
-        useCallback(() => eventsQuery.refetch({ requestPolicy: 'cache-and-network' }), [eventsQuery.refetch]),
-        15000
-    );
+    const lastQueryTime = useMemo(() => {
+        if (eventsQuery.status === 'success') return Date.now();
+        return 0;
+    }, [eventsQuery.state.data]);
+
+    useInterval(() => {
+        if (lastQueryTime && lastQueryTime + 15000 < Date.now()) {
+            mergeState({ canRefetch: true });
+        }
+    }, 1000);
+
+    const refetch = useCallback(() => {
+        const hasPaged = state.fromIndex > 0;
+        mergeState({ canRefetch: false, fromIndex: 0 });
+        if (!hasPaged) eventsQuery.refetch();
+    }, [eventsQuery.refetch, state.fromIndex]);
 
     const [focusIndex, setFocus] = useState(-1);
 
@@ -508,6 +588,9 @@ export const EventList = (_props: EventListProps): ReactElement => {
             event={state.event}
             eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}
+            loadMore={hasMoreResults ? loadMore : undefined}
+            canRefetch={state.canRefetch}
+            refetch={refetch}
             listType={state.listType}
             maxHits={maxHits}
             onBackFromTranscript={useCallback(
