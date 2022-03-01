@@ -11,7 +11,7 @@ const App: FC = (): ReactElement => {
         <StrictMode>
             <Provider config={{ moduleName: 'RecordingList' }}>
                 <Auth>
-                    <div className="h-full border border-black">
+                    <div className="h-full">
                         <RecordingList />
                     </div>
                 </Auth>

@@ -1,6 +1,6 @@
 {
     "name": "@aiera/client-sdk",
-    "version": "0.0.15",
+    "version": "0.0.16",
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
@@ -29,7 +29,7 @@
         "new": "plop --plopfile templates/plopfile.ts",
         "release": "NODE_ENV=production npm run build && hub release create -m v$npm_package_version -a dist/aiera-client-sdk.tgz v$npm_package_version",
         "pre-release": "export VERSION=pre-$(date '+%Y-%m-%dT%H-%M-%S')-$(git rev-parse HEAD | cut -c -7) && NODE_ENV=production npm run build && hub release create -m $VERSION -a dist/aiera-client-sdk.tgz $VERSION",
-        "publish-demo": "aws s3 sync --acl=public-read ./dist/site s3://aiera-public-assets/aiera-sdk/demos/$npm_package_version",
+        "publish-web": "NODE_ENV=production npm run build && npm run build:docs && npm run test && aws s3 sync --acl=public-read ./dist/web s3://aiera-public-assets/aiera-sdk/$npm_package_version",
         "start": "npm run build:watch",
         "test": "jest --config .jest/jest.config.js --coverage",
         "test:watch": "jest --config .jest/jest.config.js --watchAll",

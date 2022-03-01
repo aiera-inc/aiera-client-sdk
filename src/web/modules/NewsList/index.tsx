@@ -77,7 +77,7 @@ const App: FC = (): ReactElement => {
         <StrictMode>
             <Provider bus={bus} config={{ moduleName: 'NewsList' }}>
                 <Auth>
-                    <div className="h-full border border-black">
+                    <div className="h-full">
                         <NewsList />
                     </div>
                 </Auth>
