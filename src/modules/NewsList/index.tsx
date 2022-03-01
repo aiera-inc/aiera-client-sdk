@@ -13,7 +13,7 @@ import gql from 'graphql-tag';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
-import { PaginatedQueryResult, usePaginatedQuery } from '@aiera/client-sdk/api/client';
+import { QueryResult, usePagingQuery } from '@aiera/client-sdk/api/client';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
@@ -41,7 +41,7 @@ export interface NewsListUIProps extends NewsListSharedProps {
     darkMode?: boolean;
     hasMoreResults: boolean;
     loadMore: (event: MouseEvent) => void;
-    newsListQuery: PaginatedQueryResult<NewsListQuery, NewsListQueryVariables>;
+    newsListQuery: QueryResult<NewsListQuery, NewsListQueryVariables>;
     onBackFromNews?: MouseEventHandler;
     onChangeSearch?: ChangeHandler<string>;
     onRefetch: MouseEventHandler;
@@ -114,7 +114,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                             .with({ status: 'paused' }, () => wrapMsg('There is no news.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading news.'))
                             .with({ status: 'empty' }, () => wrapMsg('There is no news.'))
-                            .with({ status: 'success' }, { status: 'refetching' }, ({ data, status }) => (
+                            .with({ status: 'success' }, ({ data, isPaging }) => (
                                 <ul className="w-full">
                                     <div
                                         className={classNames(
@@ -187,7 +187,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                             </Fragment>
                                         );
                                     })}
-                                    {status === 'refetching' && loader(3)}
+                                    {isPaging && loader(3)}
                                 </ul>
                             ))
                             .exhaustive()}
@@ -275,18 +275,18 @@ export function NewsList(props: NewsListProps): ReactElement {
     const mergeResults = (prevQuery: NewsListQuery, newQuery: NewsListQuery): NewsListQuery => {
         const prevHits = prevQuery.search?.content?.hits || [];
         const newHits = newQuery.search?.content?.hits || [];
-        const prevIds = new Set(prevHits.map((hit) => hit.id));
+        const prevIds = new Set(prevHits.map((hit) => hit.content.id));
         return {
             search: {
                 content: {
                     ...newQuery.search.content,
-                    hits: [...prevHits, ...newHits.filter((h) => !prevIds.has(h.id))],
+                    hits: [...prevHits, ...newHits.filter((h) => !prevIds.has(h.content.id))],
                 },
             },
         };
     };
 
-    const newsListQuery = usePaginatedQuery<NewsListQuery, NewsListQueryVariables>({
+    const newsListQuery = usePagingQuery<NewsListQuery, NewsListQueryVariables>({
         isEmpty: (data) => (data.search?.content?.hits || []).length === 0,
         query: gql`
             query NewsList($filter: ContentSearchFilter!, $fromIndex: Int, $size: Int) {
@@ -365,7 +365,7 @@ export function NewsList(props: NewsListProps): ReactElement {
         setState((s) => ({
             ...s,
             canRefetch: false,
-            fromIndex: 0, // if the user paginated, resetting to 0 will fire a new query
+            fromIndex: 0, // if the user Paging, resetting to 0 will fire a new query
             lastRefetch: DateTime.now(),
         }));
         // Refetch if not paginating

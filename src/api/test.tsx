@@ -10,7 +10,7 @@ import { fromValue } from 'wonka';
 
 import { Provider as ConfigProvider } from '@aiera/client-sdk/lib/config';
 import { MockProvider, actAndFlush, getMockedClient } from 'testUtils';
-import { Provider, SuccessQueryResult, useClient, usePaginatedQuery } from './client';
+import { Provider, SuccessQueryResult, useClient, usePagingQuery } from './client';
 import { createTokenAuthConfig } from './auth';
 
 const tokens = {
@@ -199,7 +199,7 @@ describe('default auth', () => {
     });
 });
 
-describe('usePaginatedQuery', () => {
+describe('usePagingQuery', () => {
     type QueryVariables = {
         fromIndex: number;
     };
@@ -208,7 +208,7 @@ describe('usePaginatedQuery', () => {
         hits: Array<{ id: string }>;
     };
     const query = gql`
-        query PaginatedQuery($fromIndex: Int) {
+        query PagingQuery($fromIndex: Int) {
             test(fromIndex: $fromIndex) {
                 id
                 hits {
@@ -248,7 +248,7 @@ describe('usePaginatedQuery', () => {
         const { result, rerender } = await actAndFlush(() =>
             renderHook(
                 (props) =>
-                    usePaginatedQuery({
+                    usePagingQuery({
                         mergeResults,
                         query,
                         variables: { fromIndex: props.fromIndex },

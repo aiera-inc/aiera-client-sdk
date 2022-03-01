@@ -7,6 +7,8 @@ import React, {
     useCallback,
     useMemo,
     useState,
+    useRef,
+    RefObject,
     Dispatch,
     SetStateAction,
 } from 'react';
@@ -18,7 +20,7 @@ import classNames from 'classnames';
 import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
-import { PaginatedQueryResult, usePaginatedQuery } from '@aiera/client-sdk/api/client';
+import { QueryResult, usePagingQuery } from '@aiera/client-sdk/api/client';
 import { isToday } from '@aiera/client-sdk/lib/datetimes';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
@@ -48,12 +50,11 @@ export type EventListEvent = EventListQuery['search']['events']['hits'][0]['even
 export type { CompanyFilterResult };
 
 export interface EventListUIProps {
-    canRefetch: boolean;
     refetch?: () => void;
     company?: CompanyFilterResult;
     darkMode?: boolean;
     event?: EventListEvent;
-    eventsQuery: PaginatedQueryResult<EventListQuery, EventListQueryVariables>;
+    eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypes?: FilterByType[];
     loadMore?: (event: MouseEvent) => void;
     listType?: EventView;
@@ -66,13 +67,13 @@ export interface EventListUIProps {
     onSelectListType?: ChangeHandler<EventView>;
     onSelectEvent?: ChangeHandler<EventListEvent>;
     onSelectEventById?: ChangeHandler<string>;
+    scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
 }
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
-        canRefetch,
         refetch,
         company,
         darkMode = false,
@@ -89,6 +90,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         onSelectListType,
         onSelectEvent,
         onSelectEventById,
+        scrollRef,
         searchTerm,
         setFocus,
     } = props;
@@ -99,6 +101,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     let prevEventDate: DateTime | null = null;
+    let renderedRefetch = false;
 
     return (
         <div className={classNames('h-full flex flex-col eventlist', { dark: darkMode })}>
@@ -117,7 +120,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     <SettingsButton showSyncWatchlist showTonalSentiment={false} />
                 </div>
             </div>
-            <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7">
+            <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}>
                 <div className="flex flex-col flex-grow">
                     <div className="sticky top-0 px-3 pt-3 pb-2 z-10">
                         <FilterBy
@@ -170,25 +173,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
-                            .with({ status: 'success' }, { status: 'refetching' }, ({ data }) => (
+                            .with({ status: 'success' }, ({ data, isPaging, isRefetching }) => (
                                 <ul className="w-full">
-                                    <div
-                                        className={classNames(
-                                            'animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none',
-                                            {
-                                                invisible: !canRefetch,
-                                                'h-0': !canRefetch,
-                                                'py-3': canRefetch,
-                                            }
-                                        )}
-                                        onClick={refetch}
-                                    >
-                                        <div className="ml-2 w-full flex h-[1px] bg-gradient-to-l from-gray-200 group-hover:from-gray-300" />
-                                        <p className="px-3 text-gray-500 text-sm whitespace-nowrap dark:text-gray-300 dark:group-hover:text-gray-400 group-hover:text-gray-700">
-                                            Check for new events
-                                        </p>
-                                        <div className="mr-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 group-hover:from-gray-300" />
-                                    </div>
                                     {data.search.events.hits.map((hit, index) => {
                                         const event = hit.event;
                                         const hitRatio = (hit.numMentions || 0) / maxHits;
@@ -214,10 +200,27 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                 <li className="sticky top-[56px] px-3">
                                                     <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
                                                         {eventDate.toFormat('DDDD')}
-                                                        <div className="ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
+                                                        <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
+                                                        {!renderedRefetch && (
+                                                            <div
+                                                                onClick={!isRefetching ? refetch : undefined}
+                                                                className="text-gray-400 cursor-pointer hover:text-gray-500 w-[50px]"
+                                                            >
+                                                                {isRefetching ? (
+                                                                    <div className="flex justify-center group">
+                                                                        <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
+                                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
+                                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                                                                    </div>
+                                                                ) : (
+                                                                    'Refresh'
+                                                                )}
+                                                            </div>
+                                                        )}
                                                     </div>
                                                 </li>
                                             );
+                                            renderedRefetch = true;
                                         }
                                         return (
                                             <Fragment key={event.id}>
@@ -330,10 +333,18 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         );
                                     })}
                                     {loadMore && (
-                                        <li className="px-3 cursor-pointer" onClick={loadMore}>
+                                        <li className="px-3 cursor-pointer" onClick={!isPaging ? loadMore : undefined}>
                                             <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
                                                 <div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"></div>
-                                                Load more
+                                                {isPaging ? (
+                                                    <div className="flex justify-center items-center group h-[15px]">
+                                                        <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
+                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
+                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                                                    </div>
+                                                ) : (
+                                                    'Load more'
+                                                )}
                                                 <div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
                                             </div>
                                         </li>
@@ -356,7 +367,6 @@ interface EventListState {
     company?: CompanyFilterResult;
     fromIndex: number;
     pageSize: number;
-    canRefetch: boolean;
     watchlist: string[];
     event?: EventListEvent;
     filterByTypes: FilterByType[];
@@ -369,7 +379,6 @@ export const EventList = (_props: EventListProps): ReactElement => {
         company: undefined,
         fromIndex: 0,
         pageSize: 30,
-        canRefetch: false,
         watchlist: [],
         event: undefined,
         filterByTypes: [],
@@ -439,7 +448,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
         };
     };
 
-    const eventsQuery = usePaginatedQuery<EventListQuery, EventListQueryVariables>({
+    const eventsQuery = usePagingQuery<EventListQuery, EventListQueryVariables>({
         isEmpty: (data) => data.search.events.numTotalHits === 0,
         requestPolicy: 'cache-and-network',
         query: gql`
@@ -526,22 +535,20 @@ export const EventList = (_props: EventListProps): ReactElement => {
         [eventsQuery.state]
     );
 
-    const lastQueryTime = useMemo(() => {
-        if (eventsQuery.status === 'success') return Date.now();
-        return 0;
-    }, [eventsQuery.state.data]);
-
-    useInterval(() => {
-        if (lastQueryTime && lastQueryTime + 15000 < Date.now()) {
-            mergeState({ canRefetch: true });
-        }
-    }, 1000);
-
+    const scrollRef = useRef<HTMLDivElement>(null);
     const refetch = useCallback(() => {
         const hasPaged = state.fromIndex > 0;
-        mergeState({ canRefetch: false, fromIndex: 0 });
+        mergeState({ fromIndex: 0 });
         if (!hasPaged) eventsQuery.refetch();
     }, [eventsQuery.refetch, state.fromIndex]);
+
+    // Refresh every 15 seconds, but only if the user is at the top of the list,
+    // if they are on another page we dont want to wipe out their results.
+    useInterval(() => {
+        if ((scrollRef.current?.scrollTop || 0) <= 10) {
+            refetch();
+        }
+    }, 15000);
 
     const [focusIndex, setFocus] = useState(-1);
 
@@ -589,7 +596,6 @@ export const EventList = (_props: EventListProps): ReactElement => {
             eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}
             loadMore={hasMoreResults ? loadMore : undefined}
-            canRefetch={state.canRefetch}
             refetch={refetch}
             listType={state.listType}
             maxHits={maxHits}
@@ -603,6 +609,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}
             onSelectEventById={onSelectEventById}
+            scrollRef={scrollRef}
             searchTerm={state.searchTerm}
             setFocus={setFocus}
         />

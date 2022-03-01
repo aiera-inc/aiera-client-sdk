@@ -170,11 +170,8 @@ export interface EmptyQueryResult<Data, Variables> extends BaseQueryResult<Data,
 export interface SuccessQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
     status: 'success';
     data: Data;
-}
-
-export interface RefetchingQueryResult<Data, Variables> extends BaseQueryResult<Data, Variables> {
-    status: 'refetching';
-    data: Data;
+    isRefetching: boolean;
+    isPaging: boolean;
 }
 
 export interface QueryResultEmptyCheck<Data> {
@@ -188,11 +185,7 @@ export type QueryResult<Data, Variables = undefined> =
     | EmptyQueryResult<Data, Variables>
     | SuccessQueryResult<Data, Variables>;
 
-export type PaginatedQueryResult<Data, Variables> =
-    | QueryResult<Data, Variables>
-    | RefetchingQueryResult<Data, Variables>;
-
-export interface PaginatedQueryArgs<Variables, Data> extends UseQueryArgs<Variables, Data> {
+export interface PagingQueryArgs<Variables, Data> extends UseQueryArgs<Variables, Data> {
     mergeResults: (prevResults: Data, newResults: Data) => Data;
     variables: Variables & {
         fromIndex: number;
@@ -222,13 +215,20 @@ export function useQuery<Data, Variables = undefined>(
             return { status: 'empty', state, data: state.data, refetch };
         }
 
-        return { status: 'success', state, data: state.data as Data, refetch };
+        return {
+            status: 'success',
+            state,
+            data: state.data as Data,
+            refetch,
+            isRefetching: state.stale,
+            isPaging: false,
+        };
     }, [state, refetch]);
 }
 
-export function usePaginatedQuery<Data, Variables>(
-    args: PaginatedQueryArgs<Variables, Data> & QueryResultEmptyCheck<Data>
-): PaginatedQueryResult<Data, Variables> {
+export function usePagingQuery<Data, Variables>(
+    args: PagingQueryArgs<Variables, Data> & QueryResultEmptyCheck<Data>
+): QueryResult<Data, Variables> {
     const { mergeResults, variables } = args;
     const queryResult: QueryResult<Data, Variables> = useQuery<Data, Variables>(args);
 
@@ -258,7 +258,7 @@ export function usePaginatedQuery<Data, Variables>(
         if (fromIndex !== variables.fromIndex) {
             setFromIndex(variables.fromIndex);
         }
-        // If the user already paginated and the fromIndex query variable is changed back to 0,
+        // If the user already paging and the fromIndex query variable is changed back to 0,
         // then reset fromIndex and results in state
         if (fromIndex > 0 && variables.fromIndex === 0) {
             setResults(undefined);
@@ -272,7 +272,7 @@ export function usePaginatedQuery<Data, Variables>(
 
     return useMemo(() => {
         if (queryResult.status === 'loading' && variables.fromIndex > 0 && data) {
-            return { ...queryResult, data, status: 'refetching' };
+            return { ...queryResult, data, status: 'success', isPaging: true, isRefetching: false };
         }
         if (queryResult.status === 'success') {
             return { ...queryResult, data: data as Data };
