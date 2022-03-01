@@ -4,6 +4,7 @@ import React, {
     SyntheticEvent,
     MouseEvent,
     MouseEventHandler,
+    useEffect,
     useCallback,
     useMemo,
     useState,
@@ -447,6 +448,10 @@ export const EventList = (_props: EventListProps): ReactElement => {
             },
         };
     };
+
+    useEffect(() => {
+        if (state.fromIndex) mergeState({ fromIndex: 0 });
+    }, [state.listType, state.listType, state.company, state.filterByTypes, state.searchTerm, state.event]);
 
     const eventsQuery = usePagingQuery<EventListQuery, EventListQueryVariables>({
         isEmpty: (data) => data.search.events.numTotalHits === 0,
