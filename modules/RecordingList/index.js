@@ -82463,7 +82463,7 @@ var App = () => {
   return /* @__PURE__ */ import_react49.default.createElement(import_react49.StrictMode, null, /* @__PURE__ */ import_react49.default.createElement(Provider6, {
     config: { moduleName: "RecordingList" }
   }, /* @__PURE__ */ import_react49.default.createElement(Auth, null, /* @__PURE__ */ import_react49.default.createElement("div", {
-    className: "h-full border border-black"
+    className: "h-full"
   }, /* @__PURE__ */ import_react49.default.createElement(RecordingList, null)))));
 };
 import_react_dom.default.render(/* @__PURE__ */ import_react49.default.createElement(App, null), document.getElementById("root"));

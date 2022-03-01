@@ -40103,7 +40103,7 @@ var App = () => {
     bus,
     config: { moduleName: "NewsList" }
   }, /* @__PURE__ */ import_react33.default.createElement(Auth, null, /* @__PURE__ */ import_react33.default.createElement("div", {
-    className: "h-full border border-black"
+    className: "h-full"
   }, /* @__PURE__ */ import_react33.default.createElement(NewsList, null)))));
 };
 import_react_dom.default.render(/* @__PURE__ */ import_react33.default.createElement(App, null), document.getElementById("root"));
