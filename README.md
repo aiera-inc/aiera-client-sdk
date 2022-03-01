@@ -13,6 +13,11 @@ Documentation for this repo can be found [here](https://aiera-inc.github.io/aier
 #### Documentation
 https://aiera-inc.github.io/aiera-client-sdk/docs/index.html
 
+#### Demos
+[Event List](https://aiera-inc.github.io/aiera-client-sdk/demo/EventList.html)
+[News](https://aiera-inc.github.io/aiera-client-sdk/demo/NewsList.html)
+[Recordings](https://aiera-inc.github.io/aiera-client-sdk/demo/RecordingList.html)
+
 #### Prerequisites
 - node v16+
 
