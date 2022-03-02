@@ -7,7 +7,6 @@ import userEvent from '@testing-library/user-event';
 
 import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
-import * as hooks from '@aiera/client-sdk/lib/data';
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ContentType } from '@aiera/client-sdk/types/generated';
 import { NewsList } from '.';
@@ -164,35 +163,6 @@ describe('NewsList', () => {
     });
 
     test('go back to list if company changes via message bus', async () => {
-        jest.spyOn(hooks, 'useCompanyResolver').mockReturnValue(() =>
-            Promise.resolve([
-                {
-                    id: '2',
-                    commonName: 'Apple, Inc.',
-                    instruments: [
-                        {
-                            id: '2',
-                            isPrimary: true,
-                            quotes: [
-                                {
-                                    id: '2',
-                                    isPrimary: true,
-                                    localTicker: 'AAPL',
-                                    exchange: {
-                                        id: '2',
-                                        country: {
-                                            id: '2',
-                                            countryCode: 'US',
-                                        },
-                                        shortName: 'NYSE',
-                                    },
-                                },
-                            ],
-                        },
-                    ],
-                },
-            ])
-        );
         const bus = new MessageBus();
         const TestComponent = () => {
             return (
@@ -221,6 +191,40 @@ describe('NewsList', () => {
                               },
                           });
                 },
+                query: () => ({
+                    toPromise: () =>
+                        Promise.resolve({
+                            data: {
+                                companies: [
+                                    {
+                                        id: '2',
+                                        commonName: 'Apple, Inc.',
+                                        instruments: [
+                                            {
+                                                id: '2',
+                                                isPrimary: true,
+                                                quotes: [
+                                                    {
+                                                        id: '2',
+                                                        isPrimary: true,
+                                                        localTicker: 'AAPL',
+                                                        exchange: {
+                                                            id: '2',
+                                                            country: {
+                                                                id: '2',
+                                                                countryCode: 'US',
+                                                            },
+                                                            shortName: 'NYSE',
+                                                        },
+                                                    },
+                                                ],
+                                            },
+                                        ],
+                                    },
+                                ],
+                            },
+                        }),
+                }),
             })
         );
         await actAndFlush(() => {
