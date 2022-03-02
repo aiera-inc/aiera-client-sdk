@@ -244,7 +244,12 @@ export function NewsList(props: NewsListProps): ReactElement {
             if (companies?.[0]) {
                 const company = companies[0];
                 // Set the selected company and reset fromIndex in state
-                setState((s) => ({ ...s, company, fromIndex: 0 }));
+                setState((s) => ({
+                    ...s,
+                    company,
+                    fromIndex: 0,
+                    selectedNews: undefined,
+                }));
             }
         },
         'in'
@@ -257,7 +262,11 @@ export function NewsList(props: NewsListProps): ReactElement {
                 .flat()
                 .map((c) => c?.id)
                 .filter((n) => n) as string[];
-            setState((s) => ({ ...s, watchlist: companyIds }));
+            setState((s) => ({
+                ...s,
+                selectedNews: undefined,
+                watchlist: companyIds,
+            }));
         },
         'in'
     );

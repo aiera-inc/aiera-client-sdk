@@ -7,6 +7,7 @@ import userEvent from '@testing-library/user-event';
 
 import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
+import * as hooks from '@aiera/client-sdk/lib/data';
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ContentType } from '@aiera/client-sdk/types/generated';
 import { NewsList } from '.';
@@ -119,6 +120,20 @@ describe('NewsList', () => {
         expect(client.query).toHaveBeenCalled();
     });
 
+    test('handles multiple instruments via message bus', async () => {
+        const bus = new MessageBus();
+        const TestComponent = () => {
+            return (
+                <Provider bus={bus}>
+                    <NewsList />
+                </Provider>
+            );
+        };
+        const { client } = await actAndFlush(() => renderWithProvider(<TestComponent />));
+        bus.emit('instruments-selected', [{ ticker: 'GME' }, { ticker: 'AAPL' }], 'in');
+        expect(client.query).toHaveBeenCalled();
+    });
+
     test('handles selecting news', async () => {
         await actAndFlush(() =>
             renderWithProvider(<NewsList />, {
@@ -146,6 +161,76 @@ describe('NewsList', () => {
             userEvent.click(screen.getByText('GME'));
         });
         screen.getByText('Hello world');
+    });
+
+    test.only('go back to list if company changes via message bus', async () => {
+        jest.spyOn(hooks, 'useCompanyResolver').mockReturnValue(() =>
+            Promise.resolve([
+                {
+                    id: '2',
+                    commonName: 'Apple, Inc.',
+                    instruments: [
+                        {
+                            id: '2',
+                            isPrimary: true,
+                            quotes: [
+                                {
+                                    id: '2',
+                                    isPrimary: true,
+                                    localTicker: 'AAPL',
+                                    exchange: {
+                                        id: '2',
+                                        country: {
+                                            id: '2',
+                                            countryCode: 'US',
+                                        },
+                                        shortName: 'NYSE',
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ])
+        );
+        const bus = new MessageBus();
+        const TestComponent = () => {
+            return (
+                <Provider bus={bus}>
+                    <NewsList />
+                </Provider>
+            );
+        };
+        await actAndFlush(() =>
+            renderWithProvider(<TestComponent />, {
+                executeQuery: ({ query }: { query: DocumentNode }) => {
+                    return getQueryNames(query)[0] === 'NewsList'
+                        ? fromValue({
+                              data: {
+                                  search: {
+                                      content: {
+                                          hits: [{ id: '1', content }],
+                                          numTotalHits: 1,
+                                      },
+                                  },
+                              },
+                          })
+                        : fromValue({
+                              data: {
+                                  content: [contentWithBody],
+                              },
+                          });
+                },
+            })
+        );
+        await actAndFlush(() => {
+            userEvent.click(screen.getByText('GME'));
+        });
+        screen.getByText('Hello world');
+        await actAndFlush(() => {
+            bus.emit('instrument-selected', { ticker: 'AAPL' }, 'in');
+        });
+        expect(screen.queryByText('Hello world')).toBeNull();
     });
 
     test('renders refetch button after 5 minutes', async () => {
