@@ -130,7 +130,7 @@ describe('NewsList', () => {
             );
         };
         const { client } = await actAndFlush(() => renderWithProvider(<TestComponent />));
-        bus.emit('instruments-selected', [{ ticker: 'GME' }, { ticker: 'AAPL' }], 'in');
+        await actAndFlush(() => bus.emit('instruments-selected', [{ ticker: 'GME' }, { ticker: 'AAPL' }], 'in'));
         expect(client.query).toHaveBeenCalled();
     });
 
@@ -163,7 +163,7 @@ describe('NewsList', () => {
         screen.getByText('Hello world');
     });
 
-    test.only('go back to list if company changes via message bus', async () => {
+    test('go back to list if company changes via message bus', async () => {
         jest.spyOn(hooks, 'useCompanyResolver').mockReturnValue(() =>
             Promise.resolve([
                 {

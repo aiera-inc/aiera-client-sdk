@@ -28,6 +28,7 @@ interface Body {
 
 interface NewsSharedProps {
     onBack?: MouseEventHandler;
+    searchTerm?: string;
 }
 
 /** @notExported */
@@ -43,7 +44,6 @@ interface NewsUIProps extends NewsSharedProps {
     onChangeSearch: ChangeHandler<string>;
     prevMatch: () => void;
     scrollContainerRef: Ref<HTMLDivElement>;
-    searchTerm: string;
 }
 
 export function NewsUI(props: NewsUIProps): ReactElement {
@@ -138,7 +138,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                     const primaryQuote = getPrimaryQuote(news?.primaryCompany);
                     const date = news?.publishedDate ? DateTime.fromISO(news.publishedDate) : DateTime.now();
                     return news ? (
-                        <div className="h-full overflow-y-scroll">
+                        <div className="h-full overflow-y-scroll" ref={scrollContainerRef}>
                             {!!primaryQuote && (
                                 <div className="flex items-center pl-5 pr-5 pt-5 text-sm dark:bg-bluegray-7">
                                     <span className="font-bold pr-1 text-blue-600">{primaryQuote.localTicker}</span>
@@ -158,10 +158,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                                 {date && <span className="text-gray-400">{date.toFormat('MMM dd, yyyy')}</span>}
                             </div>
                             {body && (
-                                <div
-                                    className="py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body"
-                                    ref={scrollContainerRef}
-                                >
+                                <div className="py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body">
                                     {body.map((paragraph, pIdx) => (
                                         <p className="leading-5 mb-4" key={`news-body-paragraph-${pIdx}`}>
                                             {paragraph.map(({ highlight, id: chunkId, text }) =>
@@ -195,10 +192,8 @@ interface NewsState {
     searchTerm: string;
 }
 
-function useSearchState(newsQuery: QueryResult<NewsQuery, NewsQueryVariables>) {
-    const { state, handlers } = useChangeHandlers<NewsState>({
-        searchTerm: '',
-    });
+function useSearchState(newsQuery: QueryResult<NewsQuery, NewsQueryVariables>, searchTerm = '') {
+    const { state, handlers } = useChangeHandlers<NewsState>({ searchTerm });
     // Track the current match id and use it to set the proper currentMatchRef for auto-scrolling
     const [currentMatch, setCurrentMatch] = useState<string | null>(null);
     const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
@@ -347,7 +342,7 @@ export function News(props: NewsProps): ReactElement {
             filter: { contentIds: [newsId] },
         },
     });
-    const searchState = useSearchState(newsQuery);
+    const searchState = useSearchState(newsQuery, props.searchTerm);
     const { settings } = useSettings();
     return (
         <NewsUI

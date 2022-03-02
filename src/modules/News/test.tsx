@@ -118,4 +118,20 @@ describe('News', () => {
         fireEvent.change(searchInput, { target: { value: 'span' } });
         expect(rendered.container.querySelector('.bg-yellow-300')).toBeNull();
     });
+
+    test('when searchTerm prop is supplied, sets input value and renders body with markup and highlights', async () => {
+        const { rendered } = await actAndFlush(() =>
+            renderWithProvider(<News newsId="2" onBack={jest.fn()} searchTerm="markup" />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: { content: contentWithBodyMarkup },
+                    }),
+            })
+        );
+        screen.getByDisplayValue('markup');
+        getByTextWithMarkup('Showing 1 result for "markup"');
+        const span = screen.getByText('markup', { selector: 'span' });
+        expect(span).toBeTruthy();
+        expect(rendered.container.querySelector('.bg-yellow-300')).not.toBeNull();
+    });
 });

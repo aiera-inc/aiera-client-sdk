@@ -69,7 +69,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
     } = props;
 
     if (selectedNews) {
-        return <News newsId={selectedNews.id} onBack={onBackFromNews} />;
+        return <News newsId={selectedNews.id} onBack={onBackFromNews} searchTerm={searchTerm} />;
     }
 
     const loader = (numHits: number) =>
