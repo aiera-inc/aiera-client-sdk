@@ -37673,8 +37673,10 @@ var MessageBus = class {
     return this;
   }
   setupWindowMessaging(parent) {
-    this.parent = parent;
-    window.addEventListener("message", this.onWindowMessage);
+    if (window !== parent) {
+      this.parent = parent;
+      window.addEventListener("message", this.onWindowMessage);
+    }
   }
   cleanupWindowMessaging() {
     window.removeEventListener("message", this.onWindowMessage);
