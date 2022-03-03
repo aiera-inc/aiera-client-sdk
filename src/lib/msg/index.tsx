@@ -98,8 +98,10 @@ export class MessageBus {
      *                 with it.
      */
     setupWindowMessaging(parent: Window) {
-        this.parent = parent;
-        window.addEventListener('message', this.onWindowMessage);
+        if (window !== parent) {
+            this.parent = parent;
+            window.addEventListener('message', this.onWindowMessage);
+        }
     }
 
     /**
