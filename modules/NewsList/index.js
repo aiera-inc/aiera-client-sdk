@@ -39575,7 +39575,8 @@ function NewsUI(props) {
     const primaryQuote = getPrimaryQuote(news == null ? void 0 : news.primaryCompany);
     const date = (news == null ? void 0 : news.publishedDate) ? import_luxon.DateTime.fromISO(news.publishedDate) : import_luxon.DateTime.now();
     return news ? /* @__PURE__ */ import_react31.default.createElement("div", {
-      className: "h-full overflow-y-scroll"
+      className: "h-full overflow-y-scroll",
+      ref: scrollContainerRef
     }, !!primaryQuote && /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex items-center pl-5 pr-5 pt-5 text-sm dark:bg-bluegray-7"
     }, /* @__PURE__ */ import_react31.default.createElement("span", {
@@ -39595,8 +39596,7 @@ function NewsUI(props) {
     }, "\u2022")), date && /* @__PURE__ */ import_react31.default.createElement("span", {
       className: "text-gray-400"
     }, date.toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react31.default.createElement("div", {
-      className: "py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body",
-      ref: scrollContainerRef
+      className: "py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body"
     }, body.map((paragraph, pIdx) => /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "leading-5 mb-4",
       key: `news-body-paragraph-${pIdx}`
@@ -39611,11 +39611,9 @@ function NewsUI(props) {
     }, text)))))) : null;
   }).otherwise(() => null));
 }
-function useSearchState(newsQuery) {
+function useSearchState(newsQuery, searchTerm = "") {
   var _a, _b;
-  const { state, handlers } = useChangeHandlers({
-    searchTerm: ""
-  });
+  const { state, handlers } = useChangeHandlers({ searchTerm });
   const [currentMatch, setCurrentMatch] = (0, import_react31.useState)(null);
   const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll({
     pauseOnUserScroll: false,
@@ -39732,7 +39730,7 @@ function News(props) {
       filter: { contentIds: [newsId] }
     }
   });
-  const searchState = useSearchState(newsQuery);
+  const searchState = useSearchState(newsQuery, props.searchTerm);
   const { settings } = useSettings();
   return /* @__PURE__ */ import_react31.default.createElement(NewsUI, {
     body: searchState.bodyWithMatches,
@@ -39772,7 +39770,8 @@ function NewsListUI(props) {
   if (selectedNews) {
     return /* @__PURE__ */ import_react32.default.createElement(News, {
       newsId: selectedNews.id,
-      onBack: onBackFromNews
+      onBack: onBackFromNews,
+      searchTerm
     });
   }
   const loader = (numHits) => new Array(numHits).fill(0).map((_2, idx) => /* @__PURE__ */ import_react32.default.createElement("li", {
@@ -39905,12 +39904,19 @@ function NewsList(props) {
     const companies = yield resolveCompany(msg.data);
     if (companies == null ? void 0 : companies[0]) {
       const company = companies[0];
-      setState((s2) => __spreadProps(__spreadValues({}, s2), { company, fromIndex: 0 }));
+      setState((s2) => __spreadProps(__spreadValues({}, s2), {
+        company,
+        fromIndex: 0,
+        selectedNews: void 0
+      }));
     }
   }), "in");
   useMessageListener("instruments-selected", (msg) => __async(this, null, function* () {
     const companyIds = (yield Promise.all(msg.data.map(resolveCompany))).flat().map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
-    setState((s2) => __spreadProps(__spreadValues({}, s2), { watchlist: companyIds }));
+    setState((s2) => __spreadProps(__spreadValues({}, s2), {
+      selectedNews: void 0,
+      watchlist: companyIds
+    }));
   }), "in");
   const { settings } = useSettings();
   const mergeResults = (prevQuery, newQuery) => {
