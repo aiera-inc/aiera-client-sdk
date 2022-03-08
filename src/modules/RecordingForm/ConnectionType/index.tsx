@@ -1,4 +1,4 @@
-import React, { ReactElement, SyntheticEvent, useCallback } from 'react';
+import React, { ReactElement } from 'react';
 
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -8,12 +8,11 @@ import './styles.css';
 interface ConnectionTypeSharedProps {
     connectionType?: ConnectionTypeEnum;
     connectionTypeOptions: ConnectionTypeOption;
+    onChange: ChangeHandler<ConnectionTypeEnum>;
 }
 
 /** @notExported */
-interface ConnectionTypeUIProps extends ConnectionTypeSharedProps {
-    onChange: ChangeHandler<string>; // should be using T (generic type)
-}
+interface ConnectionTypeUIProps extends ConnectionTypeSharedProps {}
 
 export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
     const { connectionType, connectionTypeOptions, onChange } = props;
@@ -32,28 +31,18 @@ export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
 }
 
 /** @notExported */
-export interface ConnectionTypeProps extends ConnectionTypeSharedProps {
-    onChange: ChangeHandler<ConnectionTypeEnum>;
-}
+export interface ConnectionTypeProps extends ConnectionTypeSharedProps {}
 
 /**
  * Renders ConnectionType
  */
 export function ConnectionType(props: ConnectionTypeProps): ReactElement {
-    const connectionTypeStringToEnum = (connectionType?: string | null): ConnectionTypeEnum | null =>
-        connectionType
-            ? Object.keys(ConnectionTypeEnum)[Object.values(ConnectionTypeEnum).indexOf(connectionType)]
-            : null;
     const { connectionType, connectionTypeOptions, onChange } = props;
     return (
         <ConnectionTypeUI
             connectionType={connectionType}
             connectionTypeOptions={connectionTypeOptions}
-            onChange={useCallback(
-                (event, { value }: { value?: string | null }) =>
-                    onChange(event as SyntheticEvent<Element, Event>, { value: connectionTypeStringToEnum(value) }),
-                [onChange]
-            )}
+            onChange={onChange}
         />
     );
 }
