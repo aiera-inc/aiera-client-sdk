@@ -6,16 +6,15 @@ import { Input } from '@aiera/client-sdk/components/Input';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
-type FormFieldSelectOption = {
+type FormFieldSelectOption<T> = {
     label: string;
     description?: string;
-    value: string;
+    value: T;
 };
 
 interface SharedProps {
     className?: string;
     name: string;
-    onChange?: ChangeHandler<string>;
 }
 
 /** @notExported */
@@ -23,6 +22,7 @@ export interface FormFieldInputProps extends SharedProps {
     autoFocus?: boolean;
     description?: string;
     label?: string;
+    onChange?: ChangeHandler<string>;
     placeholder?: string;
     value: string;
 }
@@ -52,19 +52,20 @@ export function FormFieldInput(props: FormFieldInputProps) {
 }
 
 /** @notExported */
-export interface FormFieldSelectProps extends SharedProps {
-    options: FormFieldSelectOption[];
-    value?: string;
+export interface FormFieldSelectProps<T> extends SharedProps {
+    onChange?: ChangeHandler<T>;
+    options: FormFieldSelectOption<T>[];
+    value?: T;
 }
 
-export function FormFieldSelect(props: FormFieldSelectProps): ReactElement {
+export function FormFieldSelect<T>(props: FormFieldSelectProps<T>): ReactElement {
     const { className, name, onChange, options, value } = props;
     return (
         <FormField className={className}>
             {options.map((option) => (
                 <div
                     className="border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 first:hover:rounded-t last:hover:rounded-b last:border-0"
-                    key={option.value}
+                    key={option.value as unknown as string}
                     onClick={(e) => (onChange ? onChange(e, { name, value: option.value }) : {})}
                 >
                     <div>
@@ -97,7 +98,7 @@ interface FormFieldUIProps extends FormFieldSharedProps {}
 
 export function FormFieldUI(props: FormFieldUIProps): ReactElement {
     const { className = 'form-field', children } = props;
-    return <div className={`bg-white border border-gray-200 px-4 py-3 rounded shadow-xl ${className}`}>{children}</div>;
+    return <div className={`bg-white border border-gray-200 rounded shadow-xl ${className}`}>{children}</div>;
 }
 
 /** @notExported */
