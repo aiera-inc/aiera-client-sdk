@@ -1,6 +1,6 @@
 import React, { ReactElement } from 'react';
 
-import { FormFieldSelect } from '@aiera/client-sdk/components/FormField';
+import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { ConnectionType as ConnectionTypeEnum, ConnectionTypeOption } from '@aiera/client-sdk/modules/RecordingForm';
 import './styles.css';
