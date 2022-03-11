@@ -49,6 +49,9 @@ const useMessageBus = () => {
         'in'
     );
 
+    // Open generic url
+    bus.on('open-url', (msg) => window.open(msg.data), 'out');
+
     useEffect(() => {
         bus.setupWindowMessaging(window.parent);
 
@@ -88,7 +91,7 @@ const App: FC = (): ReactElement => {
     const bus = useMessageBus();
     return (
         <StrictMode>
-            <Provider bus={bus} config={{ moduleName: 'EventList' }}>
+            <Provider bus={bus} config={{ moduleName: 'EventList', showDashButton: true }}>
                 <Auth>
                     <div className="h-full">
                         <EventList />

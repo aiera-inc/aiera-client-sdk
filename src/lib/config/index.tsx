@@ -19,6 +19,7 @@ export interface Config {
         };
     };
     realtimeOptions?: RealtimeOptions;
+    showDashButton?: boolean;
 }
 
 // Setup default values for env
@@ -30,6 +31,7 @@ const defaultConfig: Config = {
     gqlOptions: {
         clientOptions: { url: defaultEnv.apiUrl },
     },
+    showDashButton: true,
 };
 
 export const Context = createContext<Config>(defaultConfig);

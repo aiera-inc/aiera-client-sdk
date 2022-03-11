@@ -1,4 +1,6 @@
-import React, { ReactElement } from 'react';
+import React, { MouseEventHandler, ReactElement, useCallback } from 'react';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useSettings } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
@@ -8,7 +10,10 @@ import { Button } from '@aiera/client-sdk/components/Button';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import './styles.css';
 
+const AIERA_DASH_URL = 'https://dashboard.aiera.com';
+
 interface SettingsButtonSharedProps {
+    showDashButton?: boolean;
     showTextSentiment?: boolean;
     showTonalSentiment?: boolean;
     showSyncWatchlist?: boolean;
@@ -18,10 +23,19 @@ interface SettingsButtonSharedProps {
 interface SettingsButtonUIProps extends SettingsButtonSharedProps {
     hideTooltip?: () => void;
     logout?: () => void;
+    onClickDashButton: MouseEventHandler;
 }
 
 function TooltipContent(props: SettingsButtonUIProps): ReactElement {
-    const { hideTooltip, logout, showSyncWatchlist, showTextSentiment = true, showTonalSentiment = true } = props;
+    const {
+        hideTooltip,
+        logout,
+        onClickDashButton,
+        showDashButton,
+        showSyncWatchlist,
+        showTextSentiment = true,
+        showTonalSentiment = true,
+    } = props;
     const { settings, handlers } = useSettings();
     return (
         <div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1">
@@ -73,6 +87,13 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     </span>
                 </div>
             )}
+            {showDashButton && (
+                <div className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5">
+                    <Button kind="primary" onClick={onClickDashButton}>
+                        Open Aiera Dash
+                    </Button>
+                </div>
+            )}
             {logout && (
                 <div className="m-2 flex justify-end">
                     <Button kind="primary" onClick={logout}>
@@ -86,6 +107,8 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
 
 export function SettingsButtonUI({
     logout,
+    onClickDashButton,
+    showDashButton,
     showSyncWatchlist,
     showTextSentiment,
     showTonalSentiment,
@@ -96,6 +119,8 @@ export function SettingsButtonUI({
                 <TooltipContent
                     hideTooltip={hideTooltip}
                     logout={logout}
+                    onClickDashButton={onClickDashButton}
+                    showDashButton={showDashButton}
                     showSyncWatchlist={showSyncWatchlist}
                     showTextSentiment={showTextSentiment}
                     showTonalSentiment={showTonalSentiment}
@@ -123,9 +148,16 @@ export interface SettingsButtonProps extends SettingsButtonSharedProps {}
 export function SettingsButton(props: SettingsButtonProps): ReactElement {
     const { showSyncWatchlist, showTextSentiment, showTonalSentiment } = props;
     const { logout } = useAuthContext();
+    const { showDashButton } = useConfig();
+    const bus = useMessageBus();
+    const emitOpenDash = useCallback(() => {
+        bus?.emit('open-url', AIERA_DASH_URL, 'out');
+    }, []);
     return (
         <SettingsButtonUI
             logout={logout}
+            onClickDashButton={emitOpenDash}
+            showDashButton={showDashButton}
             showSyncWatchlist={showSyncWatchlist}
             showTextSentiment={showTextSentiment}
             showTonalSentiment={showTonalSentiment}

@@ -18,6 +18,7 @@ export interface MessageBusEvents {
     'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
+    'open-url': string;
 }
 
 export interface Message<E extends keyof MessageBusEvents> {

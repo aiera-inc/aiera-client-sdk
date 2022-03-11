@@ -18,6 +18,7 @@ describe('Provider', () => {
             assetPath: 'assets',
             platform: 'aiera-sdk-dev',
             gqlOptions: { clientOptions: { url: 'test' } },
+            showDashButton: true,
         };
         render(
             <Provider config={config} client={getMockedClient() as unknown as Client}>
@@ -34,6 +35,7 @@ describe('Provider', () => {
             assetPath: 'assets',
             platform: 'aiera-sdk-dev',
             gqlOptions: { clientOptions: { url: 'test' } },
+            showDashButton: true,
         };
         const realtime = getMockedRealtime() as unknown as Realtime;
         const storage = jest.fn() as unknown as Storage;
