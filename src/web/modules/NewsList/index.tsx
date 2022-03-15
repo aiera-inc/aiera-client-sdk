@@ -36,6 +36,9 @@ const useMessageBus = () => {
         'in'
     );
 
+    // Open generic url
+    bus.on('open-url', (msg) => window.open(msg.data), 'out');
+
     useEffect(() => {
         bus.setupWindowMessaging(window.parent);
 
