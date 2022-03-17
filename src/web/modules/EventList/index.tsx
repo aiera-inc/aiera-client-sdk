@@ -1,4 +1,4 @@
-import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
+import React, { FC, ReactElement, StrictMode, useCallback, useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import type { Instrument, InstrumentList, Listener } from '@finos/fdc3';
 
@@ -49,11 +49,14 @@ const useMessageBus = () => {
         'in'
     );
 
+    const [isFDC3Ready, setFDC3Ready] = useState(!!window.fdc3);
+    const onFDC3Ready = useCallback(() => setFDC3Ready(true), [setFDC3Ready]);
+
     useEffect(() => {
         bus.setupWindowMessaging(window.parent);
 
         const listeners: Listener[] = [];
-        if (window.fdc3) {
+        if (isFDC3Ready) {
             listeners.push(
                 window.fdc3.addContextListener('fdc3.instrument', (_context) => {
                     const context = _context as Instrument;
@@ -73,13 +76,16 @@ const useMessageBus = () => {
                     }
                 })
             );
+        } else {
+            window.addEventListener('fdc3Ready', onFDC3Ready);
         }
 
         return () => {
             bus.cleanupWindowMessaging();
+            window.removeEventListener('fdc3Ready', onFDC3Ready);
             listeners.forEach((listener) => listener.unsubscribe());
         };
-    }, [bus]);
+    }, [bus, isFDC3Ready, onFDC3Ready]);
 
     return bus;
 };

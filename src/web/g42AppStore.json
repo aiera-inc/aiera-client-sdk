@@ -1,0 +1,26 @@
+[
+    {
+        "name": "Aiera Event List Dev",
+        "appId": "aiera-event-list-dev",
+        "manifestType": "fdc3.glue42-core.demo",
+        "manifest": "{\"url\":\"http://localhost:8000/modules/EventList/index.html\"}",
+        "intents": [
+            {
+                "name": "fdc3.MyIntent",
+                "contexts": ["fdc3.Instrument"]
+            }
+        ]
+    },
+    {
+        "name": "Aiera News Dev",
+        "appId": "aiera-news-dev",
+        "manifestType": "fdc3.glue42-core.demo",
+        "manifest": "{\"url\":\"http://localhost:8000/modules/NewsList/index.html\"}",
+        "intents": [
+            {
+                "name": "fdc3.MyIntent",
+                "contexts": ["fdc3.Instrument"]
+            }
+        ]
+    }
+]
