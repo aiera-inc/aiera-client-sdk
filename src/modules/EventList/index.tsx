@@ -97,7 +97,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     } = props;
 
     if (event) {
-        return <Transcript eventId={event.id} onBack={onBackFromTranscript} />;
+        return <Transcript eventId={event.id} onBack={onBackFromTranscript} initialSearchTerm={searchTerm} />;
     }
 
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;

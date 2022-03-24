@@ -736,9 +736,9 @@ function useAudioSync(
     ];
 }
 
-function useSearchState(speakerTurns: SpeakerTurn[]) {
+function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
     const { state, handlers } = useChangeHandlers({
-        searchTerm: '',
+        searchTerm: initialSearchTerm,
     });
 
     // Track the current match id and use it to set the proper currentMatchRef for autoscrolling
@@ -845,13 +845,14 @@ function useSearchState(speakerTurns: SpeakerTurn[]) {
 export interface TranscriptProps {
     eventId: string;
     onBack?: MouseEventHandler;
+    initialSearchTerm?: string;
 }
 
 /**
  * Renders Transcript
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
-    const { eventId, onBack } = props;
+    const { eventId, onBack, initialSearchTerm } = props;
     const { settings } = useSettings();
     const eventUpdateQuery = useEventUpdates(eventId);
     const eventQuery = useEventData(eventId, eventUpdateQuery);
@@ -869,7 +870,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         startTime,
         endTime,
     ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
-    const searchState = useSearchState(speakerTurns);
+    const searchState = useSearchState(speakerTurns, initialSearchTerm);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
     const scrollContainerRef = useCallback(
