@@ -7,6 +7,7 @@ import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 interface SettingsButtonSharedProps {
     showTextSentiment?: boolean;
@@ -107,7 +108,7 @@ export function SettingsButtonUI({
             position="bottom-right"
             yOffset={5}
         >
-            <Button iconButton className="items-center flex w-[34px] settings_button" kind="secondary">
+            <Button iconButton className="items-center flex w-[34px] settings_button ml-2" kind="secondary">
                 <Gear className="w-5" />
             </Button>
         </Tooltip>
@@ -120,9 +121,14 @@ export interface SettingsButtonProps extends SettingsButtonSharedProps {}
 /**
  * Renders SettingsButton
  */
-export function SettingsButton(props: SettingsButtonProps): ReactElement {
+export function SettingsButton(props: SettingsButtonProps): ReactElement | null {
     const { showSyncWatchlist, showTextSentiment, showTonalSentiment } = props;
     const { logout } = useAuthContext();
+    const config = useConfig();
+
+    if (config.hideSettings) {
+        return null;
+    }
     return (
         <SettingsButtonUI
             logout={logout}

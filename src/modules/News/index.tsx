@@ -73,7 +73,7 @@ export function NewsUI(props: NewsUIProps): ReactElement {
                             News
                         </Button>
                         <Input
-                            className="mx-2"
+                            className="ml-2"
                             icon={<MagnifyingGlass />}
                             name="search"
                             placeholder="Search Article..."

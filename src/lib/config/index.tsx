@@ -1,9 +1,10 @@
-import React, { createContext, useContext, useMemo, ReactNode, ReactElement } from 'react';
+import React, { createContext, useContext, useMemo, ReactNode, ReactElement, useState, useCallback } from 'react';
 import merge from 'lodash.merge';
 import { ClientOptions } from 'urql';
 import { AuthConfig } from '@urql/exchange-auth';
 import { Options as RealtimeOptions } from 'pusher-js';
 import { defaultEnv } from '@aiera/client-sdk/lib/config/env';
+import { useMessageListener } from '../msg';
 
 type Module = 'EventList' | 'NewsList' | 'RecordingList';
 type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
@@ -19,6 +20,7 @@ export interface Config {
         };
     };
     realtimeOptions?: RealtimeOptions;
+    hideSettings?: boolean;
 }
 
 // Setup default values for env
@@ -38,11 +40,19 @@ export const Context = createContext<Config>(defaultConfig);
  * A React Provider to configure an app-level configuration
  */
 export function Provider({ config, children }: { config: Config; children: ReactNode }): ReactElement {
-    return (
-        <Context.Provider value={useMemo(() => merge(defaultConfig, config), [defaultConfig, config])}>
-            {children}
-        </Context.Provider>
+    const baseConfig = useMemo(() => merge(defaultConfig, config), [defaultConfig, config]);
+    const [stateConfig, setStateConfig] = useState<Config>(baseConfig);
+    const setConfig = useCallback(
+        (newConfig: Config) => {
+            setStateConfig({
+                ...baseConfig,
+                ...newConfig,
+            });
+        },
+        [baseConfig, setStateConfig]
     );
+    useMessageListener('configure', ({ data }) => setConfig(data), 'in');
+    return <Context.Provider value={stateConfig}>{children}</Context.Provider>;
 }
 
 export function useConfig(): Config {

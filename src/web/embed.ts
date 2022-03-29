@@ -36,6 +36,10 @@
  *                  //     accessToken: '[accesstoken]',
  *                  //     refreshToken: '[refreshToken]',
  *                  // });
+ *
+ *                  // eventList.configure({
+ *                  //      hideSettings: true
+ *                  // })
  *             });
  *
  *             // Once authenticated, you can pass data to the module, such as setting
@@ -196,6 +200,7 @@
 import EventEmitter from 'eventemitter3';
 import type { AieraMessageEvent, Message, MessageBusEvents } from '@aiera/client-sdk/lib/msg';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
+import { Config } from '../lib/config';
 
 //
 // import type { InstrumentID } from '@finos/fdc3';
@@ -312,6 +317,17 @@ export class Module {
      */
     authenticate(tokens: AuthTokens) {
         this.emit('authenticate', tokens);
+    }
+
+    /**
+     * This method can be used to pass a config object
+     * directly to the module
+     *
+     * Generally it should be used in the <module>.load().then(-here-) callback
+     * so the settings are used from initialization
+     */
+    configure(config: Config) {
+        this.emit('configure', config);
     }
 
     setWatchlist(instruments: InstrumentID[]) {

@@ -115,7 +115,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         placeholder="Events & Transcripts..."
                         value={searchTerm}
                     />
-                    <div className="mx-2">
+                    <div className="ml-2">
                         <CompanyFilterButton onChange={onCompanyChange} value={company} />
                     </div>
                     <SettingsButton showSyncWatchlist showTonalSentiment={false} />

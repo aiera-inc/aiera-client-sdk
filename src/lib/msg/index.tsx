@@ -3,6 +3,7 @@ import type { InstrumentID } from '@finos/fdc3';
 import EventEmitter from 'eventemitter3';
 import type { ValueOf } from '@aiera/client-sdk/types';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
+import { Config } from '../config';
 
 type Direction = 'in' | 'out';
 
@@ -15,6 +16,7 @@ interface EventAlert {
 export interface MessageBusEvents {
     authenticate: AuthTokens;
     authenticated: null;
+    configure: Config;
     'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];

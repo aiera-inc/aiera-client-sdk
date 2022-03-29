@@ -91,7 +91,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                     </Button>
                 )}
                 <Input
-                    className="mr-2 transcript__header-search"
+                    className="transcript__header-search"
                     icon={<MagnifyingGlass />}
                     name="search"
                     placeholder="Search Transcripts..."

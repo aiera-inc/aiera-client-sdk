@@ -98,7 +98,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                         placeholder="Search News..."
                         value={searchTerm}
                     />
-                    <div className="mx-2">
+                    <div className="ml-2">
                         <CompanyFilterButton onChange={onSelectCompany} value={company} />
                     </div>
                     <SettingsButton showSyncWatchlist showTextSentiment={false} showTonalSentiment={false} />
