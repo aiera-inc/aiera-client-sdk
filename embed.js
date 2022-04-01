@@ -241,6 +241,9 @@
     authenticate(tokens) {
       this.emit("authenticate", tokens);
     }
+    configure(config) {
+      this.emit("configure", config);
+    }
     setWatchlist(instruments) {
       this.emit("instruments-selected", instruments);
     }

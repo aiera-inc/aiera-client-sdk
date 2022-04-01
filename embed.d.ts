@@ -1,5 +1,6 @@
 import type { AieraMessageEvent, Message, MessageBusEvents } from '@aiera/client-sdk/lib/msg';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
+import { Config } from '../lib/config';
 export interface InstrumentID {
     CUSIP?: string;
     ISIN?: string;
@@ -68,6 +69,14 @@ export declare class Module {
      *
      */
     authenticate(tokens: AuthTokens): void;
+    /**
+     * This method can be used to pass a config object
+     * directly to the module
+     *
+     * Generally it should be used in the <module>.load().then(-here-) callback
+     * so the settings are used from initialization
+     */
+    configure(config: Config): void;
     setWatchlist(instruments: InstrumentID[]): void;
     /**
      * Unloads the module and remove message listeners.

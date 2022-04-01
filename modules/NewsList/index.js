@@ -1080,7 +1080,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context7, unstable_observedBits);
         }
-        function useState10(initialState) {
+        function useState11(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1100,7 +1100,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create, deps);
         }
-        function useCallback10(callback, deps) {
+        function useCallback11(callback, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
@@ -1659,7 +1659,7 @@ var require_react_development = __commonJS({
         exports2.isValidElement = isValidElement;
         exports2.lazy = lazy;
         exports2.memo = memo;
-        exports2.useCallback = useCallback10;
+        exports2.useCallback = useCallback11;
         exports2.useContext = useContext7;
         exports2.useDebugValue = useDebugValue;
         exports2.useEffect = useEffect15;
@@ -1668,7 +1668,7 @@ var require_react_development = __commonJS({
         exports2.useMemo = useMemo7;
         exports2.useReducer = useReducer;
         exports2.useRef = useRef7;
-        exports2.useState = useState10;
+        exports2.useState = useState11;
         exports2.version = ReactVersion;
       })();
     }
@@ -21171,6 +21171,188 @@ var require_lodash = __commonJS({
   }
 });
 
+// node_modules/eventemitter3/index.js
+var require_eventemitter3 = __commonJS({
+  "node_modules/eventemitter3/index.js"(exports2, module2) {
+    "use strict";
+    var has = Object.prototype.hasOwnProperty;
+    var prefix2 = "~";
+    function Events() {
+    }
+    if (Object.create) {
+      Events.prototype = Object.create(null);
+      if (!new Events().__proto__)
+        prefix2 = false;
+    }
+    function EE(fn, context, once) {
+      this.fn = fn;
+      this.context = context;
+      this.once = once || false;
+    }
+    function addListener(emitter, event, fn, context, once) {
+      if (typeof fn !== "function") {
+        throw new TypeError("The listener must be a function");
+      }
+      var listener = new EE(fn, context || emitter, once), evt = prefix2 ? prefix2 + event : event;
+      if (!emitter._events[evt])
+        emitter._events[evt] = listener, emitter._eventsCount++;
+      else if (!emitter._events[evt].fn)
+        emitter._events[evt].push(listener);
+      else
+        emitter._events[evt] = [emitter._events[evt], listener];
+      return emitter;
+    }
+    function clearEvent(emitter, evt) {
+      if (--emitter._eventsCount === 0)
+        emitter._events = new Events();
+      else
+        delete emitter._events[evt];
+    }
+    function EventEmitter3() {
+      this._events = new Events();
+      this._eventsCount = 0;
+    }
+    EventEmitter3.prototype.eventNames = function eventNames() {
+      var names = [], events, name;
+      if (this._eventsCount === 0)
+        return names;
+      for (name in events = this._events) {
+        if (has.call(events, name))
+          names.push(prefix2 ? name.slice(1) : name);
+      }
+      if (Object.getOwnPropertySymbols) {
+        return names.concat(Object.getOwnPropertySymbols(events));
+      }
+      return names;
+    };
+    EventEmitter3.prototype.listeners = function listeners(event) {
+      var evt = prefix2 ? prefix2 + event : event, handlers = this._events[evt];
+      if (!handlers)
+        return [];
+      if (handlers.fn)
+        return [handlers.fn];
+      for (var i3 = 0, l3 = handlers.length, ee = new Array(l3); i3 < l3; i3++) {
+        ee[i3] = handlers[i3].fn;
+      }
+      return ee;
+    };
+    EventEmitter3.prototype.listenerCount = function listenerCount(event) {
+      var evt = prefix2 ? prefix2 + event : event, listeners = this._events[evt];
+      if (!listeners)
+        return 0;
+      if (listeners.fn)
+        return 1;
+      return listeners.length;
+    };
+    EventEmitter3.prototype.emit = function emit(event, a1, a22, a3, a4, a5) {
+      var evt = prefix2 ? prefix2 + event : event;
+      if (!this._events[evt])
+        return false;
+      var listeners = this._events[evt], len = arguments.length, args, i3;
+      if (listeners.fn) {
+        if (listeners.once)
+          this.removeListener(event, listeners.fn, void 0, true);
+        switch (len) {
+          case 1:
+            return listeners.fn.call(listeners.context), true;
+          case 2:
+            return listeners.fn.call(listeners.context, a1), true;
+          case 3:
+            return listeners.fn.call(listeners.context, a1, a22), true;
+          case 4:
+            return listeners.fn.call(listeners.context, a1, a22, a3), true;
+          case 5:
+            return listeners.fn.call(listeners.context, a1, a22, a3, a4), true;
+          case 6:
+            return listeners.fn.call(listeners.context, a1, a22, a3, a4, a5), true;
+        }
+        for (i3 = 1, args = new Array(len - 1); i3 < len; i3++) {
+          args[i3 - 1] = arguments[i3];
+        }
+        listeners.fn.apply(listeners.context, args);
+      } else {
+        var length = listeners.length, j;
+        for (i3 = 0; i3 < length; i3++) {
+          if (listeners[i3].once)
+            this.removeListener(event, listeners[i3].fn, void 0, true);
+          switch (len) {
+            case 1:
+              listeners[i3].fn.call(listeners[i3].context);
+              break;
+            case 2:
+              listeners[i3].fn.call(listeners[i3].context, a1);
+              break;
+            case 3:
+              listeners[i3].fn.call(listeners[i3].context, a1, a22);
+              break;
+            case 4:
+              listeners[i3].fn.call(listeners[i3].context, a1, a22, a3);
+              break;
+            default:
+              if (!args)
+                for (j = 1, args = new Array(len - 1); j < len; j++) {
+                  args[j - 1] = arguments[j];
+                }
+              listeners[i3].fn.apply(listeners[i3].context, args);
+          }
+        }
+      }
+      return true;
+    };
+    EventEmitter3.prototype.on = function on(event, fn, context) {
+      return addListener(this, event, fn, context, false);
+    };
+    EventEmitter3.prototype.once = function once(event, fn, context) {
+      return addListener(this, event, fn, context, true);
+    };
+    EventEmitter3.prototype.removeListener = function removeListener(event, fn, context, once) {
+      var evt = prefix2 ? prefix2 + event : event;
+      if (!this._events[evt])
+        return this;
+      if (!fn) {
+        clearEvent(this, evt);
+        return this;
+      }
+      var listeners = this._events[evt];
+      if (listeners.fn) {
+        if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
+          clearEvent(this, evt);
+        }
+      } else {
+        for (var i3 = 0, events = [], length = listeners.length; i3 < length; i3++) {
+          if (listeners[i3].fn !== fn || once && !listeners[i3].once || context && listeners[i3].context !== context) {
+            events.push(listeners[i3]);
+          }
+        }
+        if (events.length)
+          this._events[evt] = events.length === 1 ? events[0] : events;
+        else
+          clearEvent(this, evt);
+      }
+      return this;
+    };
+    EventEmitter3.prototype.removeAllListeners = function removeAllListeners(event) {
+      var evt;
+      if (event) {
+        evt = prefix2 ? prefix2 + event : event;
+        if (this._events[evt])
+          clearEvent(this, evt);
+      } else {
+        this._events = new Events();
+        this._eventsCount = 0;
+      }
+      return this;
+    };
+    EventEmitter3.prototype.off = EventEmitter3.prototype.removeListener;
+    EventEmitter3.prototype.addListener = EventEmitter3.prototype.on;
+    EventEmitter3.prefixed = prefix2;
+    EventEmitter3.EventEmitter = EventEmitter3;
+    if (typeof module2 !== "undefined") {
+      module2.exports = EventEmitter3;
+    }
+  }
+});
+
 // node_modules/tslib/tslib.js
 var require_tslib = __commonJS({
   "node_modules/tslib/tslib.js"(exports2, module2) {
@@ -21597,188 +21779,6 @@ var require_tslib = __commonJS({
       exporter("__classPrivateFieldGet", __classPrivateFieldGet2);
       exporter("__classPrivateFieldSet", __classPrivateFieldSet2);
     });
-  }
-});
-
-// node_modules/eventemitter3/index.js
-var require_eventemitter3 = __commonJS({
-  "node_modules/eventemitter3/index.js"(exports2, module2) {
-    "use strict";
-    var has = Object.prototype.hasOwnProperty;
-    var prefix2 = "~";
-    function Events() {
-    }
-    if (Object.create) {
-      Events.prototype = Object.create(null);
-      if (!new Events().__proto__)
-        prefix2 = false;
-    }
-    function EE(fn, context, once) {
-      this.fn = fn;
-      this.context = context;
-      this.once = once || false;
-    }
-    function addListener(emitter, event, fn, context, once) {
-      if (typeof fn !== "function") {
-        throw new TypeError("The listener must be a function");
-      }
-      var listener = new EE(fn, context || emitter, once), evt = prefix2 ? prefix2 + event : event;
-      if (!emitter._events[evt])
-        emitter._events[evt] = listener, emitter._eventsCount++;
-      else if (!emitter._events[evt].fn)
-        emitter._events[evt].push(listener);
-      else
-        emitter._events[evt] = [emitter._events[evt], listener];
-      return emitter;
-    }
-    function clearEvent(emitter, evt) {
-      if (--emitter._eventsCount === 0)
-        emitter._events = new Events();
-      else
-        delete emitter._events[evt];
-    }
-    function EventEmitter3() {
-      this._events = new Events();
-      this._eventsCount = 0;
-    }
-    EventEmitter3.prototype.eventNames = function eventNames() {
-      var names = [], events, name;
-      if (this._eventsCount === 0)
-        return names;
-      for (name in events = this._events) {
-        if (has.call(events, name))
-          names.push(prefix2 ? name.slice(1) : name);
-      }
-      if (Object.getOwnPropertySymbols) {
-        return names.concat(Object.getOwnPropertySymbols(events));
-      }
-      return names;
-    };
-    EventEmitter3.prototype.listeners = function listeners(event) {
-      var evt = prefix2 ? prefix2 + event : event, handlers = this._events[evt];
-      if (!handlers)
-        return [];
-      if (handlers.fn)
-        return [handlers.fn];
-      for (var i3 = 0, l3 = handlers.length, ee = new Array(l3); i3 < l3; i3++) {
-        ee[i3] = handlers[i3].fn;
-      }
-      return ee;
-    };
-    EventEmitter3.prototype.listenerCount = function listenerCount(event) {
-      var evt = prefix2 ? prefix2 + event : event, listeners = this._events[evt];
-      if (!listeners)
-        return 0;
-      if (listeners.fn)
-        return 1;
-      return listeners.length;
-    };
-    EventEmitter3.prototype.emit = function emit(event, a1, a22, a3, a4, a5) {
-      var evt = prefix2 ? prefix2 + event : event;
-      if (!this._events[evt])
-        return false;
-      var listeners = this._events[evt], len = arguments.length, args, i3;
-      if (listeners.fn) {
-        if (listeners.once)
-          this.removeListener(event, listeners.fn, void 0, true);
-        switch (len) {
-          case 1:
-            return listeners.fn.call(listeners.context), true;
-          case 2:
-            return listeners.fn.call(listeners.context, a1), true;
-          case 3:
-            return listeners.fn.call(listeners.context, a1, a22), true;
-          case 4:
-            return listeners.fn.call(listeners.context, a1, a22, a3), true;
-          case 5:
-            return listeners.fn.call(listeners.context, a1, a22, a3, a4), true;
-          case 6:
-            return listeners.fn.call(listeners.context, a1, a22, a3, a4, a5), true;
-        }
-        for (i3 = 1, args = new Array(len - 1); i3 < len; i3++) {
-          args[i3 - 1] = arguments[i3];
-        }
-        listeners.fn.apply(listeners.context, args);
-      } else {
-        var length = listeners.length, j;
-        for (i3 = 0; i3 < length; i3++) {
-          if (listeners[i3].once)
-            this.removeListener(event, listeners[i3].fn, void 0, true);
-          switch (len) {
-            case 1:
-              listeners[i3].fn.call(listeners[i3].context);
-              break;
-            case 2:
-              listeners[i3].fn.call(listeners[i3].context, a1);
-              break;
-            case 3:
-              listeners[i3].fn.call(listeners[i3].context, a1, a22);
-              break;
-            case 4:
-              listeners[i3].fn.call(listeners[i3].context, a1, a22, a3);
-              break;
-            default:
-              if (!args)
-                for (j = 1, args = new Array(len - 1); j < len; j++) {
-                  args[j - 1] = arguments[j];
-                }
-              listeners[i3].fn.apply(listeners[i3].context, args);
-          }
-        }
-      }
-      return true;
-    };
-    EventEmitter3.prototype.on = function on(event, fn, context) {
-      return addListener(this, event, fn, context, false);
-    };
-    EventEmitter3.prototype.once = function once(event, fn, context) {
-      return addListener(this, event, fn, context, true);
-    };
-    EventEmitter3.prototype.removeListener = function removeListener(event, fn, context, once) {
-      var evt = prefix2 ? prefix2 + event : event;
-      if (!this._events[evt])
-        return this;
-      if (!fn) {
-        clearEvent(this, evt);
-        return this;
-      }
-      var listeners = this._events[evt];
-      if (listeners.fn) {
-        if (listeners.fn === fn && (!once || listeners.once) && (!context || listeners.context === context)) {
-          clearEvent(this, evt);
-        }
-      } else {
-        for (var i3 = 0, events = [], length = listeners.length; i3 < length; i3++) {
-          if (listeners[i3].fn !== fn || once && !listeners[i3].once || context && listeners[i3].context !== context) {
-            events.push(listeners[i3]);
-          }
-        }
-        if (events.length)
-          this._events[evt] = events.length === 1 ? events[0] : events;
-        else
-          clearEvent(this, evt);
-      }
-      return this;
-    };
-    EventEmitter3.prototype.removeAllListeners = function removeAllListeners(event) {
-      var evt;
-      if (event) {
-        evt = prefix2 ? prefix2 + event : event;
-        if (this._events[evt])
-          clearEvent(this, evt);
-      } else {
-        this._events = new Events();
-        this._eventsCount = 0;
-      }
-      return this;
-    };
-    EventEmitter3.prototype.off = EventEmitter3.prototype.removeListener;
-    EventEmitter3.prototype.addListener = EventEmitter3.prototype.on;
-    EventEmitter3.prefixed = prefix2;
-    EventEmitter3.EventEmitter = EventEmitter3;
-    if (typeof module2 !== "undefined") {
-      module2.exports = EventEmitter3;
-    }
   }
 });
 
@@ -31119,7 +31119,7 @@ var import_react_dom = __toModule(require_react_dom());
 var import_react8 = __toModule(require_react());
 
 // src/api/client.tsx
-var import_react4 = __toModule(require_react());
+var import_react5 = __toModule(require_react());
 
 // node_modules/graphql/jsutils/nodejsCustomInspectSymbol.mjs
 var nodejsCustomInspectSymbol = typeof Symbol === "function" && typeof Symbol.for === "function" ? Symbol.for("nodejs.util.inspect.custom") : void 0;
@@ -37193,7 +37193,7 @@ function cacheExchange2(e) {
 }
 
 // src/lib/config/index.tsx
-var import_react2 = __toModule(require_react());
+var import_react3 = __toModule(require_react());
 var import_lodash = __toModule(require_lodash());
 
 // src/lib/config/env.ts
@@ -37203,6 +37203,89 @@ var defaultEnv = {
   platform: "aiera-sdk-dev"
 };
 
+// src/lib/msg/index.tsx
+var import_react2 = __toModule(require_react());
+var import_eventemitter3 = __toModule(require_eventemitter3());
+var MessageBus = class {
+  constructor() {
+    this.onWindowMessage = (windowEvent) => {
+      var _a;
+      if (((_a = windowEvent.data) == null ? void 0 : _a.ns) === "aiera") {
+        const { event, data } = windowEvent.data;
+        this.emitter.emit(`in-${event}`, { direction: "in", event, data });
+      }
+    };
+    this.emitter = new import_eventemitter3.default();
+  }
+  on(event, listener, direction) {
+    const directions = direction === "both" ? ["in", "out"] : [direction];
+    directions.forEach((dir) => {
+      this.emitter.on(`${dir}-${event}`, listener);
+    });
+    return this;
+  }
+  off(event, listener, direction) {
+    const directions = direction === "both" ? ["in", "out"] : [direction];
+    directions.forEach((dir) => {
+      this.emitter.off(`${dir}-${event}`, listener);
+    });
+    return this;
+  }
+  emit(event, data, direction) {
+    const directions = direction === "both" ? ["in", "out"] : [direction];
+    return directions.map((dir) => {
+      this.sendWindowMessage(event, data, dir);
+      return this.emitter.emit(`${dir}-${event}`, { event, data, direction: dir });
+    }).reduce((prev, curr) => prev && curr);
+  }
+  removeAllListeners() {
+    this.emitter.removeAllListeners();
+    return this;
+  }
+  setupWindowMessaging(parent) {
+    if (window !== parent) {
+      this.parent = parent;
+      window.addEventListener("message", this.onWindowMessage);
+    }
+  }
+  cleanupWindowMessaging() {
+    window.removeEventListener("message", this.onWindowMessage);
+    delete this.parent;
+  }
+  sendWindowMessage(event, data, direction) {
+    var _a;
+    if (direction === "out") {
+      (_a = this.parent) == null ? void 0 : _a.postMessage({
+        ns: "aiera",
+        event,
+        data
+      }, "*");
+    }
+  }
+};
+var Context = (0, import_react2.createContext)(new MessageBus());
+var Provider = ({ bus, children }) => {
+  return /* @__PURE__ */ import_react2.default.createElement(Context.Provider, {
+    value: bus || new MessageBus()
+  }, children);
+};
+var useMessageBus = () => {
+  return (0, import_react2.useContext)(Context);
+};
+function useMessageListener(type, listener, direction) {
+  const bus = useMessageBus();
+  (0, import_react2.useEffect)(() => {
+    const wrappedListener = (msg) => {
+      void listener(msg);
+    };
+    bus.on(type, wrappedListener, direction);
+    return () => {
+      bus.off(type, wrappedListener, direction);
+    };
+  }, [listener]);
+  return bus;
+}
+
 // src/lib/config/index.tsx
 var defaultConfig = {
   assetPath: defaultEnv.assetPath,
@@ -37211,14 +37294,20 @@ var defaultConfig = {
     clientOptions: { url: defaultEnv.apiUrl }
   }
 };
-var Context = (0, import_react2.createContext)(defaultConfig);
-function Provider({ config, children }) {
-  return /* @__PURE__ */ import_react2.default.createElement(Context.Provider, {
-    value: (0, import_react2.useMemo)(() => (0, import_lodash.default)(defaultConfig, config), [defaultConfig, config])
+var Context2 = (0, import_react3.createContext)(defaultConfig);
+function Provider2({ config, children }) {
+  const baseConfig = (0, import_react3.useMemo)(() => (0, import_lodash.default)(defaultConfig, config), [defaultConfig, config]);
+  const [stateConfig, setStateConfig] = (0, import_react3.useState)(baseConfig);
+  const setConfig = (0, import_react3.useCallback)((newConfig) => {
+    setStateConfig(__spreadValues(__spreadValues({}, baseConfig), newConfig));
+  }, [baseConfig, setStateConfig]);
+  useMessageListener("configure", ({ data }) => setConfig(data), "in");
+  return /* @__PURE__ */ import_react3.default.createElement(Context2.Provider, {
+    value: stateConfig
   }, children);
 }
 function useConfig() {
-  return (0, import_react2.useContext)(Context);
+  return (0, import_react3.useContext)(Context2);
 }
 
 // node_modules/tslib/modules/index.js
@@ -37366,8 +37455,8 @@ gql["default"] = gql;
 var lib_default = gql;
 
 // src/lib/storage/index.tsx
-var import_react3 = __toModule(require_react());
-var import_eventemitter3 = __toModule(require_eventemitter3());
+var import_react4 = __toModule(require_react());
+var import_eventemitter32 = __toModule(require_eventemitter3());
 var prefix = "aiera:sdk";
 var local = {
   put(key, value) {
@@ -37390,7 +37479,7 @@ var local = {
 };
 var InternalStorage = class {
   constructor(storage) {
-    this.events = new import_eventemitter3.default();
+    this.events = new import_eventemitter32.default();
     this.storage = storage;
   }
   get(key) {
@@ -37417,14 +37506,14 @@ var InternalStorage = class {
     this.events.addListener("modified", listener);
   }
 };
-var Context2 = (0, import_react3.createContext)(local);
-function Provider2({ children, storage = local }) {
-  return /* @__PURE__ */ import_react3.default.createElement(Context2.Provider, {
-    value: (0, import_react3.useMemo)(() => new InternalStorage(storage), [storage])
+var Context3 = (0, import_react4.createContext)(local);
+function Provider3({ children, storage = local }) {
+  return /* @__PURE__ */ import_react4.default.createElement(Context3.Provider, {
+    value: (0, import_react4.useMemo)(() => new InternalStorage(storage), [storage])
   }, children);
 }
 function useStorage() {
-  return (0, import_react3.useContext)(Context2);
+  return (0, import_react4.useContext)(Context3);
 }
 
 // src/api/auth.ts
@@ -37551,31 +37640,31 @@ function createGQLClient(config) {
     requestPolicy: "cache-and-network"
   }));
 }
-var Context3 = (0, import_react4.createContext)({ reset: () => void 0 });
-var Provider3 = ({
+var Context4 = (0, import_react5.createContext)({ reset: () => void 0 });
+var Provider4 = ({
   children,
   client: passedClient,
   reset: passedReset
 }) => {
   const Config3 = useConfig();
-  const [client, setClient] = (0, import_react4.useState)(passedClient || createGQLClient(Config3));
+  const [client, setClient] = (0, import_react5.useState)(passedClient || createGQLClient(Config3));
   const reset = passedReset || (() => setClient(passedClient || createGQLClient(Config3)));
-  return /* @__PURE__ */ import_react4.default.createElement(Context3.Provider, {
+  return /* @__PURE__ */ import_react5.default.createElement(Context4.Provider, {
     value: { reset }
-  }, /* @__PURE__ */ import_react4.default.createElement(h2, {
+  }, /* @__PURE__ */ import_react5.default.createElement(h2, {
     value: client
   }, children));
 };
 var useClient2 = () => {
   const client = useClient();
-  const { reset } = (0, import_react4.useContext)(Context3);
+  const { reset } = (0, import_react5.useContext)(Context4);
   return { client, reset };
 };
-var ResetProvider = Context3.Provider;
+var ResetProvider = Context4.Provider;
 function useQuery2(args) {
   const { isEmpty } = args;
   const [state, refetch] = useQuery(args);
-  return (0, import_react4.useMemo)(() => {
+  return (0, import_react5.useMemo)(() => {
     if (state.fetching) {
       return { status: "loading", state, refetch };
     }
@@ -37601,16 +37690,16 @@ function useQuery2(args) {
 function usePagingQuery(args) {
   const { mergeResults, variables } = args;
   const queryResult = useQuery2(args);
-  const [fromIndex, setFromIndex] = (0, import_react4.useState)(0);
-  const [results, setResults] = (0, import_react4.useState)(void 0);
-  const data = (0, import_react4.useMemo)(() => {
+  const [fromIndex, setFromIndex] = (0, import_react5.useState)(0);
+  const [results, setResults] = (0, import_react5.useState)(void 0);
+  const data = (0, import_react5.useMemo)(() => {
     let data2 = void 0;
     if (queryResult.state.data && (queryResult.status === "success" || queryResult.status === "loading" && variables.fromIndex > 0)) {
       data2 = results ? mergeResults(Object.values(results).reduce((res, r3) => mergeResults(res, r3), {}), queryResult.state.data) : queryResult.state.data;
     }
     return data2;
   }, [queryResult.state.data, queryResult.status, results, variables.fromIndex]);
-  (0, import_react4.useEffect)(() => {
+  (0, import_react5.useEffect)(() => {
     if (fromIndex !== variables.fromIndex) {
       setFromIndex(variables.fromIndex);
     }
@@ -37622,7 +37711,7 @@ function usePagingQuery(args) {
       }));
     }
   }, [fromIndex, queryResult.state.data, variables.fromIndex]);
-  return (0, import_react4.useMemo)(() => {
+  return (0, import_react5.useMemo)(() => {
     if (queryResult.status === "loading" && variables.fromIndex > 0 && data) {
       return __spreadProps(__spreadValues({}, queryResult), { data, status: "success", isPaging: true, isRefetching: false });
     }
@@ -37631,89 +37720,6 @@ function usePagingQuery(args) {
     }
     return queryResult;
   }, [data, queryResult, variables.fromIndex]);
-}
-
-// src/lib/msg/index.tsx
-var import_react5 = __toModule(require_react());
-var import_eventemitter32 = __toModule(require_eventemitter3());
-var MessageBus = class {
-  constructor() {
-    this.onWindowMessage = (windowEvent) => {
-      var _a;
-      if (((_a = windowEvent.data) == null ? void 0 : _a.ns) === "aiera") {
-        const { event, data } = windowEvent.data;
-        this.emitter.emit(`in-${event}`, { direction: "in", event, data });
-      }
-    };
-    this.emitter = new import_eventemitter32.default();
-  }
-  on(event, listener, direction) {
-    const directions = direction === "both" ? ["in", "out"] : [direction];
-    directions.forEach((dir) => {
-      this.emitter.on(`${dir}-${event}`, listener);
-    });
-    return this;
-  }
-  off(event, listener, direction) {
-    const directions = direction === "both" ? ["in", "out"] : [direction];
-    directions.forEach((dir) => {
-      this.emitter.off(`${dir}-${event}`, listener);
-    });
-    return this;
-  }
-  emit(event, data, direction) {
-    const directions = direction === "both" ? ["in", "out"] : [direction];
-    return directions.map((dir) => {
-      this.sendWindowMessage(event, data, dir);
-      return this.emitter.emit(`${dir}-${event}`, { event, data, direction: dir });
-    }).reduce((prev, curr) => prev && curr);
-  }
-  removeAllListeners() {
-    this.emitter.removeAllListeners();
-    return this;
-  }
-  setupWindowMessaging(parent) {
-    if (window !== parent) {
-      this.parent = parent;
-      window.addEventListener("message", this.onWindowMessage);
-    }
-  }
-  cleanupWindowMessaging() {
-    window.removeEventListener("message", this.onWindowMessage);
-    delete this.parent;
-  }
-  sendWindowMessage(event, data, direction) {
-    var _a;
-    if (direction === "out") {
-      (_a = this.parent) == null ? void 0 : _a.postMessage({
-        ns: "aiera",
-        event,
-        data
-      }, "*");
-    }
-  }
-};
-var Context4 = (0, import_react5.createContext)(new MessageBus());
-var Provider4 = ({ bus, children }) => {
-  return /* @__PURE__ */ import_react5.default.createElement(Context4.Provider, {
-    value: bus || new MessageBus()
-  }, children);
-};
-var useMessageBus = () => {
-  return (0, import_react5.useContext)(Context4);
-};
-function useMessageListener(type, listener, direction) {
-  const bus = useMessageBus();
-  (0, import_react5.useEffect)(() => {
-    const wrappedListener = (msg) => {
-      void listener(msg);
-    };
-    bus.on(type, wrappedListener, direction);
-    return () => {
-      bus.off(type, wrappedListener, direction);
-    };
-  }, [listener]);
-  return bus;
 }
 
 // src/lib/realtime/index.tsx
@@ -37877,16 +37883,16 @@ function Provider5({ children, client: passedClient }) {
 // src/components/Provider/index.tsx
 function Provider6(props) {
   const { bus, children, client, config, realtime, reset, storage } = props;
-  return /* @__PURE__ */ import_react8.default.createElement(Provider, {
+  return /* @__PURE__ */ import_react8.default.createElement(Provider2, {
     config
-  }, /* @__PURE__ */ import_react8.default.createElement(Provider3, {
+  }, /* @__PURE__ */ import_react8.default.createElement(Provider4, {
     client,
     reset
-  }, /* @__PURE__ */ import_react8.default.createElement(Provider4, {
+  }, /* @__PURE__ */ import_react8.default.createElement(Provider, {
     bus
   }, /* @__PURE__ */ import_react8.default.createElement(Provider5, {
     client: realtime
-  }, /* @__PURE__ */ import_react8.default.createElement(Provider2, {
+  }, /* @__PURE__ */ import_react8.default.createElement(Provider3, {
     storage
   }, children)))));
 }
@@ -39319,7 +39325,7 @@ function SettingsButtonUI({
     yOffset: 5
   }, /* @__PURE__ */ import_react26.default.createElement(Button, {
     iconButton: true,
-    className: "items-center flex w-[34px] settings_button",
+    className: "items-center flex w-[34px] settings_button ml-2",
     kind: "secondary"
   }, /* @__PURE__ */ import_react26.default.createElement(Gear, {
     className: "w-5"
@@ -39328,6 +39334,10 @@ function SettingsButtonUI({
 function SettingsButton(props) {
   const { showSyncWatchlist, showTextSentiment, showTonalSentiment } = props;
   const { logout } = useAuthContext();
+  const config = useConfig();
+  if (config.hideSettings) {
+    return null;
+  }
   return /* @__PURE__ */ import_react26.default.createElement(SettingsButtonUI, {
     logout,
     showSyncWatchlist,
@@ -39527,7 +39537,7 @@ function NewsUI(props) {
   }, /* @__PURE__ */ import_react31.default.createElement(ArrowLeft, {
     className: "fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
   }), "News"), /* @__PURE__ */ import_react31.default.createElement(Input, {
-    className: "mx-2",
+    className: "ml-2",
     icon: /* @__PURE__ */ import_react31.default.createElement(MagnifyingGlass, null),
     name: "search",
     placeholder: "Search Article...",
@@ -39811,7 +39821,7 @@ function NewsListUI(props) {
     placeholder: "Search News...",
     value: searchTerm
   }), /* @__PURE__ */ import_react32.default.createElement("div", {
-    className: "mx-2"
+    className: "ml-2"
   }, /* @__PURE__ */ import_react32.default.createElement(CompanyFilterButton, {
     onChange: onSelectCompany,
     value: company
