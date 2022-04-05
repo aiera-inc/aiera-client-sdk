@@ -6,6 +6,8 @@ import { actAndFlush, getByTextWithMarkup, renderWithProvider } from '@aiera/cli
 import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { Transcript } from '.';
 
+const EVENT_DATE_TIME = '2021-08-25T18:00:00+00:00';
+
 describe('Transcript', () => {
     afterEach(() => {
         jest.clearAllTimers();
@@ -25,7 +27,13 @@ describe('Transcript', () => {
         screen.getByText('Event Title');
         screen.getByText('TICK');
         screen.getByText('EXCH');
-        screen.getByText(/2:00PM 8\/25\/2021$/);
+        screen.getByText(
+            new RegExp(
+                `${new Date(EVENT_DATE_TIME)
+                    .toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+                    .replace(/\s/, '')} 8/25/2021$`
+            )
+        );
         screen.getByText(/earnings$/);
     });
 
@@ -165,7 +173,7 @@ function generateEventTranscripts(sentences: string[], startingIndex = 1, isLive
     return [
         {
             id: 1,
-            eventDate: '2021-08-25T18:00:00+00:00',
+            eventDate: EVENT_DATE_TIME,
             title: 'Event Title',
             eventType: 'earnings',
             isLive,

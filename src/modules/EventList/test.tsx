@@ -11,12 +11,14 @@ import { getQueryNames } from '@aiera/client-sdk/api/client';
 import { MessageBus, Provider } from '@aiera/client-sdk/lib/msg';
 import { EventList } from '.';
 
+const EVENT_DATE_TIME = '2021-08-25T18:00:00+00:00';
+
 const eventList = [
     {
         id: '1',
         title: 'Event Title',
         eventType: 'earnings',
-        eventDate: '2021-08-25T18:00:00+00:00',
+        eventDate: EVENT_DATE_TIME,
         primaryCompany: {
             instruments: [
                 {
@@ -63,7 +65,7 @@ const eventList = [
 const eventTranscript = [
     {
         id: 1,
-        eventDate: '2021-08-25T18:00:00+00:00',
+        eventDate: EVENT_DATE_TIME,
         title: 'Event Title',
         eventType: 'earnings',
         primaryCompany: {
@@ -160,7 +162,11 @@ describe('EventList', () => {
         expect(row).toBeTruthy();
         if (row) within(row).getByText('Aug 25, 2021');
         if (row) within(row).getByText('earnings');
-        screen.getByText('2:00PM');
+        screen.getByText(
+            new Date(EVENT_DATE_TIME)
+                .toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+                .replace(/\s/, '')
+        );
     });
 
     test('handles company selection via message bus', async () => {
