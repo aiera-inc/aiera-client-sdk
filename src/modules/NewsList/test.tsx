@@ -254,9 +254,9 @@ describe('NewsList', () => {
             })
         );
 
-        // Fast-forward 6 minutes
+        // Fast-forward 11 minutes
         await actAndFlush(() => {
-            jest.advanceTimersByTime(360000);
+            jest.advanceTimersByTime(660000);
         });
         const refetchButton = screen.getByText('Check for new articles')?.parentNode;
         expect(refetchButton).toBeInTheDocument(); // we animate the button transition so it's always rendered

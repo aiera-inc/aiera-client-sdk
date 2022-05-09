@@ -11,6 +11,7 @@ import React, {
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import { DateTime } from 'luxon';
+import { useIdleTimer } from 'react-idle-timer';
 import { match } from 'ts-pattern';
 
 import { QueryResult, usePagingQuery } from '@aiera/client-sdk/api/client';
@@ -32,7 +33,9 @@ export type NewsListNews = NewsListQuery['search']['content']['hits'][0]['conten
 
 interface NewsListSharedProps {}
 
+const DEFAULT_IDLE_TIMEOUT = 60000; // in milliseconds
 const DEFAULT_LIST_SIZE = 20;
+const INACTIVE_TIMEOUT = 1000 * 60 * 10; // 10 minutes
 
 /** @notExported */
 export interface NewsListUIProps extends NewsListSharedProps {
@@ -215,11 +218,10 @@ export interface NewsListProps extends NewsListSharedProps {
 interface NewsListState {
     canRefetch: boolean;
     company?: CompanyFilterResult;
-    watchlist: string[];
     fromIndex: number;
-    lastRefetch?: DateTime;
     searchTerm: string;
     selectedNews?: NewsListNews;
+    watchlist: string[];
 }
 
 /**
@@ -229,11 +231,10 @@ export function NewsList(props: NewsListProps): ReactElement {
     const { state, handlers, mergeState, setState } = useChangeHandlers<NewsListState>({
         canRefetch: false,
         company: undefined,
-        watchlist: [],
         fromIndex: 0,
-        lastRefetch: DateTime.now(),
         searchTerm: '',
         selectedNews: undefined,
+        watchlist: [],
     });
     const listSize: number = props.listSize || DEFAULT_LIST_SIZE;
     const resolveCompany = useCompanyResolver();
@@ -374,13 +375,13 @@ export function NewsList(props: NewsListProps): ReactElement {
         setState((s) => ({
             ...s,
             canRefetch: false,
-            fromIndex: 0, // if the user Paging, resetting to 0 will fire a new query
-            lastRefetch: DateTime.now(),
+            fromIndex: 0, // if the user paging, resetting to 0 will fire a new query
         }));
         // Refetch if not paginating
         if (!isPaginating) {
             newsListQuery.refetch({ requestPolicy: 'cache-and-network' });
         }
+        IdleTimer.start(); // restore initial state and restart timer
     }, [state.fromIndex]);
 
     const onSelectCompany = useCallback<ChangeHandler<CompanyFilterResult>>(
@@ -407,30 +408,60 @@ export function NewsList(props: NewsListProps): ReactElement {
                     ...s,
                     canRefetch: true,
                 }));
+                IdleTimer.start(); // restore initial state and restart timer
             }
         },
         [state]
     );
 
-    // Reset pagination state when the search term or selected company changes
+    const IdleTimer = useIdleTimer({
+        // These are default, but including for visibility
+        events: [
+            'mousemove',
+            'keydown',
+            'wheel',
+            'DOMMouseScroll',
+            'mousewheel',
+            'mousedown',
+            'touchstart',
+            'touchmove',
+            'MSPointerDown',
+            'MSPointerMove',
+            'visibilitychange',
+        ],
+        onIdle: onRefetch,
+        timeout: DEFAULT_IDLE_TIMEOUT,
+    });
+
+    // Check if the user has been inactive for at least 10 minutes
+    const isUserInactive = () => {
+        return Date.now() - (IdleTimer.getLastActiveTime()?.getTime() || 0) >= INACTIVE_TIMEOUT;
+    };
+
+    // Reset pagination state and idle timer when the search term or selected company changes
     useEffect(() => {
         mergeState({
             canRefetch: false,
             fromIndex: 0,
-            lastRefetch: DateTime.now(),
         });
+        IdleTimer.start(); // restore initial state and restart timer
     }, [state.company, state.searchTerm]);
 
     useAutoTrack('Submit', 'News Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
-    // Every 30 seconds, check if it's been 5 minutes since last refetch
+
+    // Every minute, check if it's been 10 minutes since the user was last active
+    // To prevent listening to various DOM events indefinitely,
+    // we disable the idle timer after 10 minutes of inactivity
+    // After 10 minutes, show the button to refresh the results, which will restart the timer
     useInterval(() => {
-        if (!state.canRefetch && state.lastRefetch && DateTime.now().diff(state.lastRefetch, ['minutes']).minutes > 5) {
+        if (!state.canRefetch && isUserInactive()) {
             setState((s) => ({
                 ...s,
                 canRefetch: true,
             }));
+            IdleTimer.pause();
         }
-    }, 30000);
+    }, 60000);
 
     return (
         <NewsListUI

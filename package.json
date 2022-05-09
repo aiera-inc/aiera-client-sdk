@@ -1,6 +1,6 @@
 {
     "name": "@aiera/client-sdk",
-    "version": "0.0.18",
+    "version": "0.0.19",
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
@@ -96,6 +96,7 @@
         "typedoc-plugin-not-exported": "^0.1.6",
         "typedoc-plugin-param-names": "^3.0.1",
         "typescript": "4.4.4",
+        "utility-types": "3.10.0",
         "yargs": "^17.0.1"
     },
     "dependencies": {
@@ -113,6 +114,7 @@
         "lodash.merge": "4.6.2",
         "luxon": "2.1.1",
         "pusher-js": "7.0.3",
+        "react-idle-timer": "5.1.2",
         "tailwindcss-interaction-variants": "^5.0.0",
         "timeago.js": "^4.0.2",
         "ts-pattern": "3.3.3",
