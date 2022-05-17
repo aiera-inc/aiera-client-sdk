@@ -33,9 +33,9 @@ export type NewsListNews = NewsListQuery['search']['content']['hits'][0]['conten
 
 interface NewsListSharedProps {}
 
-const DEFAULT_IDLE_TIMEOUT = 60000; // in milliseconds
+const DEFAULT_IDLE_TIMEOUT = 60000; // 1 minute, in milliseconds
 const DEFAULT_LIST_SIZE = 20;
-const INACTIVE_TIMEOUT = 1000 * 60 * 10; // 10 minutes
+const INACTIVE_TIMEOUT = 1000 * 60 * 10; // 10 minutes, in milliseconds
 
 /** @notExported */
 export interface NewsListUIProps extends NewsListSharedProps {
@@ -47,7 +47,7 @@ export interface NewsListUIProps extends NewsListSharedProps {
     newsListQuery: QueryResult<NewsListQuery, NewsListQueryVariables>;
     onBackFromNews?: MouseEventHandler;
     onChangeSearch?: ChangeHandler<string>;
-    onRefetch: MouseEventHandler;
+    onRefetch: (resetTimer: boolean) => void;
     onSelectCompany?: ChangeHandler<CompanyFilterResult>;
     onSelectNews?: ChangeHandler<NewsListNews>;
     searchTerm?: string;
@@ -128,7 +128,7 @@ export function NewsListUI(props: NewsListUIProps): ReactElement {
                                                 'py-3': canRefetch,
                                             }
                                         )}
-                                        onClick={onRefetch}
+                                        onClick={() => onRefetch(true)}
                                     >
                                         <div className="ml-2 w-full flex h-[1px] bg-gradient-to-l from-gray-200 group-hover:from-gray-300" />
                                         <p className="px-3 text-gray-500 text-sm whitespace-nowrap dark:text-gray-300 dark:group-hover:text-gray-400 group-hover:text-gray-700">
@@ -370,19 +370,26 @@ export function NewsList(props: NewsListProps): ReactElement {
         return hasMore;
     }, [newsListQuery]);
 
-    const onRefetch = useCallback(() => {
-        const isPaginating = state.fromIndex > 0;
-        setState((s) => ({
-            ...s,
-            canRefetch: false,
-            fromIndex: 0, // if the user paging, resetting to 0 will fire a new query
-        }));
-        // Refetch if not paginating
-        if (!isPaginating) {
-            newsListQuery.refetch({ requestPolicy: 'cache-and-network' });
-        }
-        IdleTimer.start(); // restore initial state and restart timer
-    }, [state.fromIndex]);
+    const onRefetch = useMemo(
+        () =>
+            (resetTimer = false) => {
+                const isPaginating = state.fromIndex > 0;
+                setState((s) => ({
+                    ...s,
+                    canRefetch: false,
+                    fromIndex: 0, // if the user paging, resetting to 0 will fire a new query
+                }));
+                // Refetch if not paginating
+                if (!isPaginating) {
+                    newsListQuery.refetch({ requestPolicy: 'cache-and-network' });
+                }
+                // Restore IdleTimer initial state and restart timer
+                if (resetTimer) {
+                    IdleTimer.start();
+                }
+            },
+        [state.fromIndex]
+    );
 
     const onSelectCompany = useCallback<ChangeHandler<CompanyFilterResult>>(
         (event, change) => {
@@ -402,13 +409,11 @@ export function NewsList(props: NewsListProps): ReactElement {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
             handlers.selectedNews(event, change);
-            // Show refetch button if we are going back to the news list
+            // When going back to the list, refresh immediately
             if (!change.value) {
-                setState((s) => ({
-                    ...s,
-                    canRefetch: true,
-                }));
-                IdleTimer.start(); // restore initial state and restart timer
+                newsListQuery.refetch();
+                // Restore IdleTimer initial state and restart timer
+                IdleTimer.start();
             }
         },
         [state]
@@ -434,9 +439,7 @@ export function NewsList(props: NewsListProps): ReactElement {
     });
 
     // Check if the user has been inactive for at least 10 minutes
-    const isUserInactive = () => {
-        return Date.now() - (IdleTimer.getLastActiveTime()?.getTime() || 0) >= INACTIVE_TIMEOUT;
-    };
+    const isUserInactive = () => Date.now() - (IdleTimer.getLastActiveTime()?.getTime() || 0) >= INACTIVE_TIMEOUT;
 
     // Reset pagination state and idle timer when the search term or selected company changes
     useEffect(() => {
@@ -449,7 +452,7 @@ export function NewsList(props: NewsListProps): ReactElement {
 
     useAutoTrack('Submit', 'News Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
 
-    // Every minute, check if it's been 10 minutes since the user was last active
+    // Every 30 seconds, check if it's been 10 minutes since the user was last active
     // To prevent listening to various DOM events indefinitely,
     // we disable the idle timer after 10 minutes of inactivity
     // After 10 minutes, show the button to refresh the results, which will restart the timer
@@ -461,7 +464,7 @@ export function NewsList(props: NewsListProps): ReactElement {
             }));
             IdleTimer.pause();
         }
-    }, 60000);
+    }, 30000);
 
     return (
         <NewsListUI

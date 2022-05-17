@@ -237,7 +237,7 @@ describe('NewsList', () => {
         expect(screen.queryByText('Hello world')).toBeNull();
     });
 
-    test('renders refetch button after 5 minutes', async () => {
+    test('renders refetch button after 10 minutes of inactivity', async () => {
         await actAndFlush(() =>
             renderWithProvider(<NewsList />, {
                 executeQuery: () =>
@@ -253,10 +253,9 @@ describe('NewsList', () => {
                     }),
             })
         );
-
-        // Fast-forward 11 minutes
+        // Fast-forward 30 seconds to trigger inactivity timeout
         await actAndFlush(() => {
-            jest.advanceTimersByTime(660000);
+            jest.advanceTimersByTime(30000);
         });
         const refetchButton = screen.getByText('Check for new articles')?.parentNode;
         expect(refetchButton).toBeInTheDocument(); // we animate the button transition so it's always rendered
