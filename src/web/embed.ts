@@ -22,7 +22,7 @@
  *         <iframe height="575" width="375" id="aiera-event-list"></iframe>
  *         <script>
  *             const eventList = new Aiera.Module(
- *                 'https://aiera-inc.github.io/aiera-client-sdk/modules/EventList/index.html',
+ *                 'https://public.aiera.com/aiera-sdk/0.0.20/modules/EventList/index.html',
  *                 'aiera-event-list'
  *             );
  *
@@ -68,7 +68,7 @@
  * <br />
  *
  * To exchange credentials for auth tokens, you must make a request to Aiera's graphql endpoint with
- * the following:
+ * the following (*skip* to next section if logging in using an API key):
  *
  * <br />
  * <table>
@@ -108,6 +108,57 @@
  *  {
  *      "data": {
  *          "login": {
+ *              "accessToken": [access token],
+ *              "refreshToken": [refresh token],
+ *          }
+ *      }
+ *  }
+ *         </pre></td>
+ *     </tr>
+ * </table>
+ *
+ * <br />
+ *
+ * ### Logging in using an API key
+ *
+ * <br />
+ * <table>
+ *     <tr>
+ *         <td><b>URL</b></td>
+ *         <td>https://api.aiera.com/graphql</td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Method</b></td>
+ *         <td>POST</td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Headers</b></td>
+ *         <td>Content-Type: application/json</td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Body</b></td>
+ *         <td><pre>
+ *  {
+ *      "query":
+ *          "mutation LoginWithApiKey($email: String!, $apiKey: String!) {
+ *             loginWithApiKey(email: $email, apiKey: $apiKey) {
+ *                 accessToken
+ *                 refreshToken
+ *             }
+ *         }",
+ *      "variables": {
+ *          "email": [email address],
+ *          "apiKey": [api key]
+ *      }
+ *  }
+ *         </pre></td>
+ *     </tr>
+ *     <tr>
+ *         <td><b>Response</b></td>
+ *         <td><pre>
+ *  {
+ *      "data": {
+ *          "loginWithApiKey": {
  *              "accessToken": [access token],
  *              "refreshToken": [refresh token],
  *          }
