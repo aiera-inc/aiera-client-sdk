@@ -68,7 +68,7 @@
  * <br />
  *
  * To exchange credentials for auth tokens, you must make a request to Aiera's graphql endpoint with
- * the following (*skip* to next section if logging in using an API key):
+ * the following (**skip to next section if logging in using an API key**):
  *
  * <br />
  * <table>
@@ -121,7 +121,6 @@
  *
  * ### Logging in using an API key
  *
- * <br />
  * <table>
  *     <tr>
  *         <td><b>URL</b></td>
