@@ -91,7 +91,7 @@
 <span style="color: #000000">        &lt;</span><span style="color: #001080">iframe</span><span style="color: #000000"> </span><span style="color: #001080">height</span><span style="color: #000000">=</span><span style="color: #A31515">&quot;575&quot;</span><span style="color: #000000"> </span><span style="color: #001080">width</span><span style="color: #000000">=</span><span style="color: #A31515">&quot;375&quot;</span><span style="color: #000000"> </span><span style="color: #001080">id</span><span style="color: #000000">=</span><span style="color: #A31515">&quot;aiera-event-list&quot;</span><span style="color: #000000">&gt;&lt;/</span><span style="color: #267F99">iframe</span><span style="color: #000000">&gt;</span>
 <span style="color: #000000">        &lt;</span><span style="color: #267F99">script</span><span style="color: #000000">&gt;</span>
 <span style="color: #000000">            </span><span style="color: #0000FF">const</span><span style="color: #000000"> </span><span style="color: #0070C1">eventList</span><span style="color: #000000"> = </span><span style="color: #0000FF">new</span><span style="color: #000000"> </span><span style="color: #001080">Aiera</span><span style="color: #000000">.</span><span style="color: #795E26">Module</span><span style="color: #000000">(</span>
-<span style="color: #000000">                </span><span style="color: #A31515">&#039;https://aiera-inc.github.io/aiera-client-sdk/modules/EventList/index.html&#039;</span><span style="color: #000000">,</span>
+<span style="color: #000000">                </span><span style="color: #A31515">&#039;https://public.aiera.com/aiera-sdk/0.0.20/modules/EventList/index.html&#039;</span><span style="color: #000000">,</span>
 <span style="color: #000000">                </span><span style="color: #A31515">&#039;aiera-event-list&#039;</span>
 <span style="color: #000000">            );</span>
 
@@ -136,7 +136,7 @@
 							with the tokens to bypass the login screen.</p>
 							<br />
 							<p>To exchange credentials for auth tokens, you must make a request to Aiera&#39;s graphql endpoint with
-							the following:</p>
+							the following (<em>skip</em> to next section if logging in using an API key):</p>
 							<br />
 							<table>
 								<tr>
@@ -175,6 +175,56 @@
  {
      "data": {
          "login": {
+             "accessToken": [access token],
+             "refreshToken": [refresh token],
+         }
+     }
+ }
+        </pre></td>
+								</tr>
+							</table>
+							<br />
+							<a href="#logging-in-using-an-api-key" id="logging-in-using-an-api-key" style="color: inherit; text-decoration: none;">
+								<h3>Logging in using an API key</h3>
+							</a>
+							<br />
+							<table>
+								<tr>
+									<td><b>URL</b></td>
+									<td>https://api.aiera.com/graphql</td>
+								</tr>
+								<tr>
+									<td><b>Method</b></td>
+									<td>POST</td>
+								</tr>
+								<tr>
+									<td><b>Headers</b></td>
+									<td>Content-Type: application/json</td>
+								</tr>
+								<tr>
+									<td><b>Body</b></td>
+									<td><pre>
+ {
+     "query":
+         "mutation LoginWithApiKey($email: String!, $apiKey: String!) {
+            loginWithApiKey(email: $email, apiKey: $apiKey) {
+                accessToken
+                refreshToken
+            }
+        }",
+     "variables": {
+         "email": [email address],
+         "apiKey": [api key]
+     }
+ }
+        </pre></td>
+								</tr>
+								<tr>
+									<td><b>Response</b></td>
+									<td><pre>
+ {
+     "data": {
+         "loginWithApiKey": {
              "accessToken": [access token],
              "refreshToken": [refresh token],
          }
