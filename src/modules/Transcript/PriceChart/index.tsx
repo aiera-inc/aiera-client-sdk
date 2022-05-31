@@ -243,6 +243,7 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
                             'text-red-500': absolutePriceChange < 0,
                             'hover:text-red-600': absolutePriceChange < 0,
                             'active:text-red-800': absolutePriceChange < 0,
+                            'text-black dark:text-gray-200': absolutePriceChange === 0,
                         })}
                         onClick={togglePriceChart}
                     >
