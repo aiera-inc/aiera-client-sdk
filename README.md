@@ -33,5 +33,3 @@ https://aiera-inc.github.io/aiera-client-sdk/docs/index.html
 > npm start
 > # open browser to localhost:8000/demo/EventList.html
 ```
-
-test
