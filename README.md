@@ -11,15 +11,18 @@ Documentation for this repo can be found [here](https://aiera-inc.github.io/aier
 ### Getting started for developers
 
 #### Documentation
+
 https://aiera-inc.github.io/aiera-client-sdk/docs/index.html
 
 #### Demos
+
 [Event List](https://aiera-inc.github.io/aiera-client-sdk/demo/EventList.html)
 [News](https://aiera-inc.github.io/aiera-client-sdk/demo/NewsList.html)
 [Recordings](https://aiera-inc.github.io/aiera-client-sdk/demo/RecordingList.html)
 
 #### Prerequisites
-- node v16+
+
+-   node v16+
 
 #### Installation
 
@@ -30,3 +33,5 @@ https://aiera-inc.github.io/aiera-client-sdk/docs/index.html
 > npm start
 > # open browser to localhost:8000/demo/EventList.html
 ```
+
+test
