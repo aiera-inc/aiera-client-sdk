@@ -4,6 +4,7 @@ import { useSettings } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
 import { Gear } from '@aiera/client-sdk/components/Svg/Gear';
+import { WindowPopout } from '@aiera/client-sdk/components/Svg/WindowPopout';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
@@ -87,6 +88,7 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={openDash}
                 >
+                    <WindowPopout className="ml-auto text-black h-4 w-10 dark:text-white" />
                     <span className="text-sm text-gray-600 whitespace-nowrap dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
                         Open Aiera Dash
                     </span>
