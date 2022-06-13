@@ -1,6 +1,7 @@
 import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
 
+import { Config, Provider } from '@aiera/client-sdk/lib/config';
 import { actAndFlush, renderWithProvider } from 'testUtils';
 import { SettingsButton } from '.';
 
@@ -35,5 +36,44 @@ describe('SettingsButton', () => {
         rerender(<SettingsButton showTextSentiment={false} showTonalSentiment={false} />);
         expect(screen.queryByText('Text Sentiment')).toBeNull();
         expect(screen.queryByText('Tonal Sentiment')).toBeNull();
+    });
+
+    test('renders Open Aiera Dash link when openDash config is defined', async () => {
+        const config: Config = {
+            assetPath: 'assets',
+            platform: 'aiera-sdk-dev',
+            gqlOptions: { clientOptions: { url: 'test' } },
+            openDash: jest.fn(),
+        };
+        const TestComponent = () => {
+            return (
+                <Provider config={config}>
+                    <SettingsButton />
+                </Provider>
+            );
+        };
+        const { rendered } = await actAndFlush(() => renderWithProvider(<TestComponent />));
+        const button = rendered.container.querySelector('.settings_button');
+        if (button) fireEvent.click(button);
+        await waitFor(() => screen.getByText('Open Aiera Dash'));
+    });
+
+    test('does not render Open Aiera Dash link when openDash config is undefined', async () => {
+        const config: Config = {
+            assetPath: 'assets',
+            platform: 'aiera-sdk-dev',
+            gqlOptions: { clientOptions: { url: 'test' } },
+        };
+        const TestComponent = () => {
+            return (
+                <Provider config={config}>
+                    <SettingsButton />
+                </Provider>
+            );
+        };
+        const { rendered } = await actAndFlush(() => renderWithProvider(<TestComponent />));
+        const button = rendered.container.querySelector('.settings_button');
+        if (button) fireEvent.click(button);
+        await waitFor(() => expect(screen.queryByText('Open Aiera Dash')).toBeNull());
     });
 });

@@ -1,4 +1,5 @@
 import React, { ReactElement } from 'react';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useSettings } from '@aiera/client-sdk/lib/data';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
@@ -7,9 +8,9 @@ import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import './styles.css';
-import { useConfig } from '@aiera/client-sdk/lib/config';
 
 interface SettingsButtonSharedProps {
+    openDash?: () => void;
     showTextSentiment?: boolean;
     showTonalSentiment?: boolean;
     showSyncWatchlist?: boolean;
@@ -22,7 +23,14 @@ interface SettingsButtonUIProps extends SettingsButtonSharedProps {
 }
 
 function TooltipContent(props: SettingsButtonUIProps): ReactElement {
-    const { hideTooltip, logout, showSyncWatchlist, showTextSentiment = true, showTonalSentiment = true } = props;
+    const {
+        hideTooltip,
+        logout,
+        openDash,
+        showSyncWatchlist,
+        showTextSentiment = true,
+        showTonalSentiment = true,
+    } = props;
     const { settings, handlers } = useSettings();
     return (
         <div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1">
@@ -74,6 +82,16 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     </span>
                 </div>
             )}
+            {!!openDash && (
+                <div
+                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
+                    onClick={openDash}
+                >
+                    <span className="text-sm text-gray-600 whitespace-nowrap dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
+                        Open Aiera Dash
+                    </span>
+                </div>
+            )}
             {logout && (
                 <div className="m-2 flex justify-end">
                     <Button kind="primary" onClick={logout}>
@@ -87,6 +105,7 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
 
 export function SettingsButtonUI({
     logout,
+    openDash,
     showSyncWatchlist,
     showTextSentiment,
     showTonalSentiment,
@@ -97,6 +116,7 @@ export function SettingsButtonUI({
                 <TooltipContent
                     hideTooltip={hideTooltip}
                     logout={logout}
+                    openDash={openDash}
                     showSyncWatchlist={showSyncWatchlist}
                     showTextSentiment={showTextSentiment}
                     showTonalSentiment={showTonalSentiment}
@@ -132,6 +152,7 @@ export function SettingsButton(props: SettingsButtonProps): ReactElement | null 
     return (
         <SettingsButtonUI
             logout={logout}
+            openDash={config.openDash}
             showSyncWatchlist={showSyncWatchlist}
             showTextSentiment={showTextSentiment}
             showTonalSentiment={showTonalSentiment}

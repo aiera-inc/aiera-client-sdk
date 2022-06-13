@@ -21,6 +21,7 @@ export interface Config {
     };
     realtimeOptions?: RealtimeOptions;
     hideSettings?: boolean;
+    openDash?: () => void;
 }
 
 // Setup default values for env
