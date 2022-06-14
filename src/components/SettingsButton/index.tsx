@@ -85,18 +85,18 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
             )}
             {!!openDash && (
                 <div
-                    className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
+                    className="border-y border-gray-100 cursor-pointer group mt-0.5 py-2.5 flex items-center hover:bg-gray-50 dark:border-gray-100/10 dark:hover:bg-bluegray-5"
                     onClick={openDash}
                 >
-                    <WindowPopout className="ml-auto text-black h-4 w-10 dark:text-white" />
+                    <WindowPopout className="text-black h-5 w-10 dark:text-white" />
                     <span className="text-sm text-gray-600 whitespace-nowrap dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
                         Open Aiera Dash
                     </span>
                 </div>
             )}
             {logout && (
-                <div className="m-2 flex justify-end">
-                    <Button kind="primary" onClick={logout}>
+                <div className="m-2 mt-3 flex items-center justify-center">
+                    <Button className="justify-center w-full" kind="primary" onClick={logout}>
                         Logout
                     </Button>
                 </div>
