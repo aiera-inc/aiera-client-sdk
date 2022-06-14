@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement26 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement27 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement26(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement27(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement26(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement27(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement26(element.type, key, ref, self2, source, owner, props);
+          return ReactElement27(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React26 = require_react();
+        var React27 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React26.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React27.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React26) {
+        if (!React27) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React26.Children.forEach(children, function(child) {
+          React27.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React26.Children.forEach(props.children, function(child) {
+              React27.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React26.Component().refs;
+        var emptyRefsObject = new React27.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26089,7 +26089,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames15() {
+      function classNames16() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26100,7 +26100,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames15.apply(null, arg);
+              var inner = classNames16.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26120,14 +26120,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames15.default = classNames15;
-        module2.exports = classNames15;
+        classNames16.default = classNames16;
+        module2.exports = classNames16;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames15;
+          return classNames16;
         });
       } else {
-        window.classNames = classNames15;
+        window.classNames = classNames16;
       }
     })();
   }
@@ -31112,7 +31112,7 @@ var require_dist = __commonJS({
 });
 
 // src/web/modules/NewsList/index.tsx
-var import_react37 = __toModule(require_react());
+var import_react38 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -38681,8 +38681,8 @@ var Auth = ({
 };
 
 // src/modules/NewsList/index.tsx
-var import_react36 = __toModule(require_react());
-var import_classnames14 = __toModule(require_classnames());
+var import_react37 = __toModule(require_react());
+var import_classnames15 = __toModule(require_classnames());
 var import_luxon2 = __toModule(require_luxon());
 
 // node_modules/react-idle-timer/dist/index.esm.js
@@ -39683,7 +39683,7 @@ function CompanyFilterButton(props) {
 }
 
 // src/components/SettingsButton/index.tsx
-var import_react30 = __toModule(require_react());
+var import_react31 = __toModule(require_react());
 
 // src/components/Toggle/index.tsx
 var import_react27 = __toModule(require_react());
@@ -39740,82 +39740,117 @@ function Gear({ className, alt = "Gear" }) {
   }));
 }
 
-// src/components/Svg/XMark.tsx
+// src/components/Svg/WindowPopout.tsx
 var import_react29 = __toModule(require_react());
 var import_classnames10 = __toModule(require_classnames());
-function XMark({ className, alt = "XMark" }) {
+function WindowPopout({ className, alt = "Window Popout" }) {
   return /* @__PURE__ */ import_react29.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__xMark"),
+    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__popOut"),
+    width: "20",
+    height: "20",
+    viewBox: "0 0 20 20",
+    fill: "black",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react29.default.createElement("title", null, alt), /* @__PURE__ */ import_react29.default.createElement("path", {
+    d: "M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z"
+  }), /* @__PURE__ */ import_react29.default.createElement("path", {
+    d: "M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z"
+  }));
+}
+
+// src/components/Svg/XMark.tsx
+var import_react30 = __toModule(require_react());
+var import_classnames11 = __toModule(require_classnames());
+function XMark({ className, alt = "XMark" }) {
+  return /* @__PURE__ */ import_react30.default.createElement("svg", {
+    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__xMark"),
     width: "100%",
     viewBox: "0 0 10 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react29.default.createElement("title", null, alt), /* @__PURE__ */ import_react29.default.createElement("path", {
+  }, /* @__PURE__ */ import_react30.default.createElement("title", null, alt), /* @__PURE__ */ import_react30.default.createElement("path", {
     d: "M6.41425 5.00025C6.41425 5.00025 9.55325 8.13925 9.70725 8.29325C10.0983 8.68425 10.0983 9.31725 9.70725 9.70725C9.31625 10.0983 8.68325 10.0983 8.29325 9.70725C8.13925 9.55425 5.00025 6.41425 5.00025 6.41425C5.00025 6.41425 1.86125 9.55325 1.70725 9.70725C1.31625 10.0983 0.68325 10.0983 0.29325 9.70725C-0.09775 9.31625 -0.09775 8.68325 0.29325 8.29325C0.44625 8.13925 3.58625 5.00025 3.58625 5.00025C3.58625 5.00025 0.44725 1.86125 0.29325 1.70725C-0.09775 1.31625 -0.09775 0.68325 0.29325 0.29325C0.68425 -0.09775 1.31725 -0.09775 1.70725 0.29325C1.86125 0.44625 5.00025 3.58625 5.00025 3.58625C5.00025 3.58625 8.13925 0.44725 8.29325 0.29325C8.68425 -0.09775 9.31725 -0.09775 9.70725 0.29325C10.0983 0.68425 10.0983 1.31725 9.70725 1.70725C9.55425 1.86125 6.41425 5.00025 6.41425 5.00025Z"
   }));
 }
 
 // src/components/SettingsButton/index.tsx
 function TooltipContent2(props) {
-  const { hideTooltip, logout, showSyncWatchlist, showTextSentiment = true, showTonalSentiment = true } = props;
+  const {
+    hideTooltip,
+    logout,
+    openDash,
+    showSyncWatchlist,
+    showTextSentiment = true,
+    showTonalSentiment = true
+  } = props;
   const { settings, handlers } = useSettings();
-  return /* @__PURE__ */ import_react30.default.createElement("div", {
+  return /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "pt-2 pb-2 px-3 font-semibold text-base flex justify-between items-center dark:text-white"
-  }, /* @__PURE__ */ import_react30.default.createElement("span", null, "Widget Settings"), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("span", null, "Widget Settings"), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "cursor-pointer hover:text-blue-500",
     onClick: () => hideTooltip == null ? void 0 : hideTooltip()
-  }, /* @__PURE__ */ import_react30.default.createElement(XMark, {
+  }, /* @__PURE__ */ import_react31.default.createElement(XMark, {
     className: "w-2"
-  }))), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5",
     onClick: (e) => handlers.darkMode(e, { value: !settings.darkMode })
-  }, /* @__PURE__ */ import_react30.default.createElement(Toggle, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Toggle, {
     on: settings.darkMode,
     onChange: handlers.darkMode
-  }), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
-  }, "Dark Mode")), showTextSentiment && /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, "Dark Mode")), showTextSentiment && /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5",
     onClick: (e) => handlers.textSentiment(e, { value: !settings.textSentiment })
-  }, /* @__PURE__ */ import_react30.default.createElement(Toggle, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Toggle, {
     on: settings.textSentiment,
     onChange: handlers.textSentiment
-  }), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
-  }, "Text Sentiment")), showTonalSentiment && /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, "Text Sentiment")), showTonalSentiment && /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5",
     onClick: (e) => handlers.tonalSentiment(e, { value: !settings.tonalSentiment })
-  }, /* @__PURE__ */ import_react30.default.createElement(Toggle, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Toggle, {
     on: settings.tonalSentiment,
     onChange: handlers.tonalSentiment
-  }), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
-  }, "Tonal Sentiment")), showSyncWatchlist && /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, "Tonal Sentiment")), showSyncWatchlist && /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5",
     onClick: (e) => handlers.syncWatchlist(e, { value: !settings.syncWatchlist })
-  }, /* @__PURE__ */ import_react30.default.createElement(Toggle, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Toggle, {
     on: settings.syncWatchlist,
     onChange: handlers.syncWatchlist
-  }), /* @__PURE__ */ import_react30.default.createElement("span", {
+  }), /* @__PURE__ */ import_react31.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
-  }, "Sync Watchlist")), logout && /* @__PURE__ */ import_react30.default.createElement("div", {
-    className: "m-2 flex justify-end"
-  }, /* @__PURE__ */ import_react30.default.createElement(Button, {
+  }, "Sync Watchlist")), !!openDash && /* @__PURE__ */ import_react31.default.createElement("div", {
+    className: "border-y border-gray-100 cursor-pointer group mt-0.5 py-2.5 flex items-center hover:bg-gray-50 dark:border-gray-100/10 dark:hover:bg-bluegray-5",
+    onClick: openDash
+  }, /* @__PURE__ */ import_react31.default.createElement(WindowPopout, {
+    className: "text-black h-5 w-10 dark:text-white"
+  }), /* @__PURE__ */ import_react31.default.createElement("span", {
+    className: "text-sm text-gray-600 whitespace-nowrap dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
+  }, "Open Aiera Dash")), logout && /* @__PURE__ */ import_react31.default.createElement("div", {
+    className: "m-2 mt-3 flex items-center justify-center"
+  }, /* @__PURE__ */ import_react31.default.createElement(Button, {
+    className: "justify-center w-full",
     kind: "primary",
     onClick: logout
   }, "Logout")));
 }
 function SettingsButtonUI({
   logout,
+  openDash,
   showSyncWatchlist,
   showTextSentiment,
   showTonalSentiment
 }) {
-  return /* @__PURE__ */ import_react30.default.createElement(Tooltip, {
-    content: ({ hideTooltip }) => /* @__PURE__ */ import_react30.default.createElement(TooltipContent2, {
+  return /* @__PURE__ */ import_react31.default.createElement(Tooltip, {
+    content: ({ hideTooltip }) => /* @__PURE__ */ import_react31.default.createElement(TooltipContent2, {
       hideTooltip,
       logout,
+      openDash,
       showSyncWatchlist,
       showTextSentiment,
       showTonalSentiment
@@ -39825,11 +39860,11 @@ function SettingsButtonUI({
     openOn: "click",
     position: "bottom-right",
     yOffset: 5
-  }, /* @__PURE__ */ import_react30.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Button, {
     iconButton: true,
     className: "items-center flex w-[34px] settings_button ml-2",
     kind: "secondary"
-  }, /* @__PURE__ */ import_react30.default.createElement(Gear, {
+  }, /* @__PURE__ */ import_react31.default.createElement(Gear, {
     className: "w-5"
   })));
 }
@@ -39840,8 +39875,9 @@ function SettingsButton(props) {
   if (config.hideSettings) {
     return null;
   }
-  return /* @__PURE__ */ import_react30.default.createElement(SettingsButtonUI, {
+  return /* @__PURE__ */ import_react31.default.createElement(SettingsButtonUI, {
     logout,
+    openDash: config.openDash,
     showSyncWatchlist,
     showTextSentiment,
     showTonalSentiment
@@ -39856,13 +39892,13 @@ function areDatesSameDay(date, otherDate) {
 }
 
 // src/lib/hooks/useInterval/index.ts
-var import_react31 = __toModule(require_react());
+var import_react32 = __toModule(require_react());
 function useInterval(callback, interval) {
-  const savedCallback = (0, import_react31.useRef)(callback);
-  (0, import_react31.useEffect)(() => {
+  const savedCallback = (0, import_react32.useRef)(callback);
+  (0, import_react32.useEffect)(() => {
     savedCallback.current = callback;
   }, [callback]);
-  (0, import_react31.useEffect)(() => {
+  (0, import_react32.useEffect)(() => {
     if (interval === null) {
       return;
     }
@@ -39872,22 +39908,22 @@ function useInterval(callback, interval) {
 }
 
 // src/modules/News/index.tsx
-var import_react35 = __toModule(require_react());
-var import_classnames13 = __toModule(require_classnames());
+var import_react36 = __toModule(require_react());
+var import_classnames14 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon = __toModule(require_luxon());
 var import_ts_pattern5 = __toModule(require_lib());
 
 // src/components/Svg/ArrowLeft.tsx
-var import_react32 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
+var import_react33 = __toModule(require_react());
+var import_classnames12 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
-  return /* @__PURE__ */ import_react32.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+  return /* @__PURE__ */ import_react33.default.createElement("svg", {
+    className: (0, import_classnames12.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react32.default.createElement("title", null, alt), /* @__PURE__ */ import_react32.default.createElement("path", {
+  }, /* @__PURE__ */ import_react33.default.createElement("title", null, alt), /* @__PURE__ */ import_react33.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M5.70679 9.69471C5.51926 9.88218 5.26495 9.9875 4.99979 9.9875C4.73462 9.9875 4.48031 9.88218 4.29279 9.69471L0.292787 5.69471C0.105316 5.50718 0 5.25288 0 4.98771C0 4.72255 0.105316 4.46824 0.292787 4.28071L4.29279 0.280712C4.48139 0.0985542 4.73399 -0.00224062 4.99619 3.78025e-05C5.25838 0.00231622 5.5092 0.107485 5.6946 0.292894C5.88001 0.478302 5.98518 0.729114 5.98746 0.991311C5.98974 1.25351 5.88894 1.50611 5.70679 1.69471L3.41379 3.98771H10.9998C11.265 3.98771 11.5194 4.09307 11.7069 4.28061C11.8944 4.46814 11.9998 4.7225 11.9998 4.98771C11.9998 5.25293 11.8944 5.50728 11.7069 5.69482C11.5194 5.88235 11.265 5.98771 10.9998 5.98771H3.41379L5.70679 8.28071C5.89426 8.46824 5.99957 8.72255 5.99957 8.98771C5.99957 9.25288 5.89426 9.50718 5.70679 9.69471V9.69471Z"
@@ -39895,15 +39931,15 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 }
 
 // src/components/Svg/Chevron.tsx
-var import_react33 = __toModule(require_react());
-var import_classnames12 = __toModule(require_classnames());
+var import_react34 = __toModule(require_react());
+var import_classnames13 = __toModule(require_classnames());
 function Chevron({ className, alt = "Chevron" }) {
-  return /* @__PURE__ */ import_react33.default.createElement("svg", {
-    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__chevron"),
+  return /* @__PURE__ */ import_react34.default.createElement("svg", {
+    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__chevron"),
     width: "100%",
     viewBox: "0 0 8 5",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react33.default.createElement("title", null, alt), /* @__PURE__ */ import_react33.default.createElement("path", {
+  }, /* @__PURE__ */ import_react34.default.createElement("title", null, alt), /* @__PURE__ */ import_react34.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L4 2.58579L6.29289 0.292893C6.68342 -0.0976311 7.31658 -0.0976311 7.70711 0.292893C8.09763 0.683417 8.09763 1.31658 7.70711 1.70711L4.70711 4.70711C4.31658 5.09763 3.68342 5.09763 3.29289 4.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z"
@@ -39911,7 +39947,7 @@ function Chevron({ className, alt = "Chevron" }) {
 }
 
 // src/lib/hooks/useAutoScroll/index.ts
-var import_react34 = __toModule(require_react());
+var import_react35 = __toModule(require_react());
 function isVisible(container, target) {
   const targetPosition = target.getBoundingClientRect();
   const containerPosition = container.getBoundingClientRect();
@@ -39960,12 +39996,12 @@ function useAutoScroll(opts) {
     behavior = "smooth",
     offset = { top: 0, bottom: 0 }
   } = opts || {};
-  const [scrollContainer, scrollContainerRef] = (0, import_react34.useState)(null);
-  const [target, targetRef] = (0, import_react34.useState)(null);
-  const isAutoScrolling = (0, import_react34.useRef)(null);
-  const pauseAutoScroll = (0, import_react34.useRef)(false);
-  const initialScroll = (0, import_react34.useRef)(true);
-  (0, import_react34.useEffect)(() => {
+  const [scrollContainer, scrollContainerRef] = (0, import_react35.useState)(null);
+  const [target, targetRef] = (0, import_react35.useState)(null);
+  const isAutoScrolling = (0, import_react35.useRef)(null);
+  const pauseAutoScroll = (0, import_react35.useRef)(false);
+  const initialScroll = (0, import_react35.useRef)(true);
+  (0, import_react35.useEffect)(() => {
     function onScroll() {
       maybePauseAutoScroll();
     }
@@ -39993,7 +40029,7 @@ function useAutoScroll(opts) {
     }
     return () => scrollContainer == null ? void 0 : scrollContainer.removeEventListener("scroll", onScroll);
   }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, offset.top, offset.bottom]);
-  const scroll = (0, import_react34.useCallback)((opts2) => {
+  const scroll = (0, import_react35.useCallback)((opts2) => {
     const { top, onlyIfNeeded = false } = opts2 || {};
     if (top === void 0) {
       if (scrollContainer && target && (!onlyIfNeeded || !isVisible(scrollContainer, target))) {
@@ -40023,104 +40059,104 @@ function NewsUI(props) {
     scrollContainerRef,
     searchTerm
   } = props;
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react35.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
-  return /* @__PURE__ */ import_react35.default.createElement("div", {
-    className: (0, import_classnames13.default)("h-full flex flex-col news", { dark: darkMode })
-  }, /* @__PURE__ */ import_react35.default.createElement("div", {
+  return /* @__PURE__ */ import_react36.default.createElement("div", {
+    className: (0, import_classnames14.default)("h-full flex flex-col news", { dark: darkMode })
+  }, /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "dark:bg-bluegray-7"
-  }, /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 news__header"
-  }, /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "flex group items-center mb-3"
-  }, /* @__PURE__ */ import_react35.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react36.default.createElement(Button, {
     onClick: onBack
-  }, /* @__PURE__ */ import_react35.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react36.default.createElement(ArrowLeft, {
     className: "fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "News"), /* @__PURE__ */ import_react35.default.createElement(Input, {
+  }), "News"), /* @__PURE__ */ import_react36.default.createElement(Input, {
     className: "ml-2",
-    icon: /* @__PURE__ */ import_react35.default.createElement(MagnifyingGlass, null),
+    icon: /* @__PURE__ */ import_react36.default.createElement(MagnifyingGlass, null),
     name: "search",
     placeholder: "Search Article...",
     value: searchTerm,
     onChange: onChangeSearch
-  }), /* @__PURE__ */ import_react35.default.createElement(SettingsButton, {
+  }), /* @__PURE__ */ import_react36.default.createElement(SettingsButton, {
     showTextSentiment: false,
     showTonalSentiment: false
-  }))), searchTerm && /* @__PURE__ */ import_react35.default.createElement("div", {
+  }))), searchTerm && /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow"
-  }, /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "text-sm"
-  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react35.default.createElement("span", {
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react36.default.createElement("span", {
     className: "font-semibold"
-  }, searchTerm), '"'), /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, searchTerm), '"'), /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react35.default.createElement("button", {
+  }), /* @__PURE__ */ import_react36.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600",
     onClick: prevMatch
-  }, /* @__PURE__ */ import_react35.default.createElement(Chevron, null)), /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react36.default.createElement(Chevron, null)), /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
-  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react35.default.createElement("button", {
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react36.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
     onClick: nextMatch
-  }, /* @__PURE__ */ import_react35.default.createElement(Chevron, null)), /* @__PURE__ */ import_react35.default.createElement("button", {
+  }, /* @__PURE__ */ import_react36.default.createElement(Chevron, null)), /* @__PURE__ */ import_react36.default.createElement("button", {
     tabIndex: 0,
     className: "w-4 cursor-pointer text-gray-400 hover:text-gray-600",
     onClick: (e) => onChangeSearch(e, { value: "" })
-  }, /* @__PURE__ */ import_react35.default.createElement(Close, null)))), (0, import_ts_pattern5.match)(newsQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_3, idx) => /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react36.default.createElement(Close, null)))), (0, import_ts_pattern5.match)(newsQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_3, idx) => /* @__PURE__ */ import_react36.default.createElement("div", {
     key: idx,
     className: "animate-pulse bg-gray-50 p-2 dark:bg-bluegray-7"
-  }, /* @__PURE__ */ import_react35.default.createElement("div", {
+  }, /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react35.default.createElement("div", {
+  }), /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react35.default.createElement("div", {
+  }), /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react35.default.createElement("div", {
+  }), /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-6"
-  }), /* @__PURE__ */ import_react35.default.createElement("div", {
+  }), /* @__PURE__ */ import_react36.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20 dark:bg-bluegray-6"
   })))).with({ status: "paused" }, () => wrapMsg("News not found. We're sorry for any inconvenience.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("News not found. We're sorry for any inconvenience.")).with({ status: "success" }, ({ data: { content: contentData } }) => {
     var _a;
     const news = contentData[0];
     const primaryQuote = getPrimaryQuote(news == null ? void 0 : news.primaryCompany);
     const date = (news == null ? void 0 : news.publishedDate) ? import_luxon.DateTime.fromISO(news.publishedDate) : import_luxon.DateTime.now();
-    return news ? /* @__PURE__ */ import_react35.default.createElement("div", {
+    return news ? /* @__PURE__ */ import_react36.default.createElement("div", {
       className: "h-full overflow-y-scroll",
       ref: scrollContainerRef
-    }, !!primaryQuote && /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, !!primaryQuote && /* @__PURE__ */ import_react36.default.createElement("div", {
       className: "flex items-center pl-5 pr-5 pt-5 text-sm dark:bg-bluegray-7"
-    }, /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, /* @__PURE__ */ import_react36.default.createElement("span", {
       className: "font-bold pr-1 text-blue-600"
-    }, primaryQuote.localTicker), /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, primaryQuote.localTicker), /* @__PURE__ */ import_react36.default.createElement("span", {
       className: "font-light text-gray-300"
-    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName)), /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName)), /* @__PURE__ */ import_react36.default.createElement("div", {
       className: "leading-4 pl-5 pr-5 pt-3 dark:text-white dark:bg-bluegray-7"
-    }, /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, /* @__PURE__ */ import_react36.default.createElement("span", {
       className: "font-bold text-base"
-    }, news.title)), /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, news.title)), /* @__PURE__ */ import_react36.default.createElement("div", {
       className: "flex items-center px-5 py-2 text-sm dark:bg-bluegray-7"
-    }, news.__typename === "NewsContent" && /* @__PURE__ */ import_react35.default.createElement(import_react35.default.Fragment, null, /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, news.__typename === "NewsContent" && /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Fragment, null, /* @__PURE__ */ import_react36.default.createElement("span", {
       className: "text-indigo-300"
-    }, news.newsSource.name), /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, news.newsSource.name), /* @__PURE__ */ import_react36.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022")), date && /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, "\u2022")), date && /* @__PURE__ */ import_react36.default.createElement("span", {
       className: "text-gray-400"
-    }, date.toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react35.default.createElement("div", {
+    }, date.toFormat("MMM dd, yyyy"))), body && /* @__PURE__ */ import_react36.default.createElement("div", {
       className: "py-3 px-5 text-black text-sm dark:bg-bluegray-7 dark:text-bluegray-4 news__body"
-    }, body.map((paragraph, pIdx) => /* @__PURE__ */ import_react35.default.createElement("p", {
+    }, body.map((paragraph, pIdx) => /* @__PURE__ */ import_react36.default.createElement("p", {
       className: "leading-5 mb-4",
       key: `news-body-paragraph-${pIdx}`
-    }, paragraph.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react35.default.createElement("mark", {
-      className: (0, import_classnames13.default)({
+    }, paragraph.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react36.default.createElement("mark", {
+      className: (0, import_classnames14.default)({
         "bg-yellow-300": chunkId === currentMatch
       }),
       key: `news-body-chunk-${chunkId}-match`,
       ref: chunkId === currentMatch ? currentMatchRef : void 0
-    }, text) : /* @__PURE__ */ import_react35.default.createElement("span", {
+    }, text) : /* @__PURE__ */ import_react36.default.createElement("span", {
       key: `news-body-chunk-${chunkId}`
     }, text)))))) : null;
   }).otherwise(() => null));
@@ -40128,13 +40164,13 @@ function NewsUI(props) {
 function useSearchState(newsQuery, searchTerm = "") {
   var _a, _b;
   const { state, handlers } = useChangeHandlers({ searchTerm });
-  const [currentMatch, setCurrentMatch] = (0, import_react35.useState)(null);
+  const [currentMatch, setCurrentMatch] = (0, import_react36.useState)(null);
   const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll({
     pauseOnUserScroll: false,
     behavior: "auto"
   });
   const body = (_b = (_a = newsQuery.state.data) == null ? void 0 : _a.content[0]) == null ? void 0 : _b.body;
-  const bodyWithMatches = (0, import_react35.useMemo)(() => {
+  const bodyWithMatches = (0, import_react36.useMemo)(() => {
     if (body) {
       const nodes = new DOMParser().parseFromString(body, "text/html").body.childNodes;
       const chunks = [];
@@ -40168,18 +40204,18 @@ function useSearchState(newsQuery, searchTerm = "") {
     }
     return null;
   }, [body, state.searchTerm]);
-  const matches = (0, import_react35.useMemo)(() => (bodyWithMatches || []).flatMap((part) => part).filter((chunk) => chunk.highlight), [bodyWithMatches]);
-  (0, import_react35.useEffect)(() => {
+  const matches = (0, import_react36.useMemo)(() => (bodyWithMatches || []).flatMap((part) => part).filter((chunk) => chunk.highlight), [bodyWithMatches]);
+  (0, import_react36.useEffect)(() => {
     var _a2;
     setCurrentMatch(((_a2 = matches[0]) == null ? void 0 : _a2.id) || null);
   }, [state.searchTerm]);
-  const matchIndex = (0, import_react35.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
-  const nextMatch = (0, import_react35.useCallback)(() => {
+  const matchIndex = (0, import_react36.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react36.useCallback)(() => {
     const match7 = matches[(matchIndex + 1) % matches.length];
     if (match7)
       setCurrentMatch(match7.id);
   }, [matches, matchIndex]);
-  const prevMatch = (0, import_react35.useCallback)(() => {
+  const prevMatch = (0, import_react36.useCallback)(() => {
     const match7 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
     if (match7)
       setCurrentMatch(match7.id);
@@ -40246,7 +40282,7 @@ function News(props) {
   });
   const searchState = useSearchState(newsQuery, props.searchTerm);
   const { settings } = useSettings();
-  return /* @__PURE__ */ import_react35.default.createElement(NewsUI, {
+  return /* @__PURE__ */ import_react36.default.createElement(NewsUI, {
     body: searchState.bodyWithMatches,
     currentMatch: searchState.currentMatch,
     currentMatchRef: searchState.currentMatchRef,
@@ -40284,77 +40320,77 @@ function NewsListUI(props) {
     selectedNews
   } = props;
   if (selectedNews) {
-    return /* @__PURE__ */ import_react36.default.createElement(News, {
+    return /* @__PURE__ */ import_react37.default.createElement(News, {
       newsId: selectedNews.id,
       onBack: onBackFromNews,
       searchTerm
     });
   }
-  const loader = (numHits) => new Array(numHits).fill(0).map((_3, idx) => /* @__PURE__ */ import_react36.default.createElement("li", {
+  const loader = (numHits) => new Array(numHits).fill(0).map((_3, idx) => /* @__PURE__ */ import_react37.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2 my-2"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-400 dark:bg-bluegray-5 h-[10px] mr-4 mb-1 w-full"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-400 dark:bg-bluegray-5 h-[10px] mr-2 mb-2 w-20"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-blue-600 dark:bg-blue-500 h-[10px] mr-2 w-6"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-8"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-400 h-[10px] mr-2 w-10"
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "rounded-full bg-gray-400 dark:bg-indigo-400 h-[10px] mr-2 w-12"
   }))));
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react36.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = import_luxon2.DateTime.now();
-  return /* @__PURE__ */ import_react36.default.createElement("div", {
-    className: (0, import_classnames14.default)("h-full flex flex-col news-list", { dark: darkMode })
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  return /* @__PURE__ */ import_react37.default.createElement("div", {
+    className: (0, import_classnames15.default)("h-full flex flex-col news-list", { dark: darkMode })
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 news-list__header"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react36.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react36.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react37.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react37.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onChangeSearch,
     placeholder: "Search News...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "ml-2"
-  }, /* @__PURE__ */ import_react36.default.createElement(CompanyFilterButton, {
+  }, /* @__PURE__ */ import_react37.default.createElement(CompanyFilterButton, {
     onChange: onSelectCompany,
     value: company
-  })), /* @__PURE__ */ import_react36.default.createElement(SettingsButton, {
+  })), /* @__PURE__ */ import_react37.default.createElement(SettingsButton, {
     showSyncWatchlist: true,
     showTextSentiment: false,
     showTonalSentiment: false
-  }))), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }))), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col flex-1 pt-0 overflow-y-scroll dark:bg-bluegray-7"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern6.match)(newsListQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react36.default.createElement("ul", {
+  }, (0, import_ts_pattern6.match)(newsListQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react37.default.createElement("ul", {
     className: "w-full NewsList__loading"
-  }, loader(15))).with({ status: "paused" }, () => wrapMsg("There is no news.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("There is no news.")).with({ status: "success" }, ({ data, isPaging }) => /* @__PURE__ */ import_react36.default.createElement("ul", {
+  }, loader(15))).with({ status: "paused" }, () => wrapMsg("There is no news.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("There is no news.")).with({ status: "success" }, ({ data, isPaging }) => /* @__PURE__ */ import_react37.default.createElement("ul", {
     className: "w-full"
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
-    className: (0, import_classnames14.default)("animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
+    className: (0, import_classnames15.default)("animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none", {
       invisible: !canRefetch,
       "h-0": !canRefetch,
       "py-3": canRefetch
     }),
     onClick: () => onRefetch(true)
-  }, /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "ml-2 w-full flex h-[1px] bg-gradient-to-l from-gray-200 group-hover:from-gray-300"
-  }), /* @__PURE__ */ import_react36.default.createElement("p", {
+  }), /* @__PURE__ */ import_react37.default.createElement("p", {
     className: "px-3 text-gray-500 text-sm whitespace-nowrap dark:text-gray-300 dark:group-hover:text-gray-400 group-hover:text-gray-700"
-  }, "Check for new articles"), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }, "Check for new articles"), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "mr-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 group-hover:from-gray-300"
   })), data.search.content.hits.map((hit) => {
     var _a;
@@ -40364,42 +40400,42 @@ function NewsListUI(props) {
     let divider = null;
     if (!areDatesSameDay(prevEventDate.toJSDate(), date.toJSDate())) {
       prevEventDate = date;
-      divider = /* @__PURE__ */ import_react36.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react37.default.createElement("li", {
         className: "sticky top-[12px] backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 px-1 py-2 font-semibold mx-3 dark:bg-bluegray-7 dark:bg-opacity-70"
-      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react36.default.createElement("div", {
+      }, date.toFormat("DDDD"), /* @__PURE__ */ import_react37.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"
       }));
     }
-    return /* @__PURE__ */ import_react36.default.createElement(import_react36.Fragment, {
+    return /* @__PURE__ */ import_react37.default.createElement(import_react37.Fragment, {
       key: hit.id
-    }, divider, /* @__PURE__ */ import_react36.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react37.default.createElement("li", {
       className: "cursor-pointer group mx-1 px-1 rounded-lg text-gray-300 text-xs hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5",
       onClick: (e) => onSelectNews == null ? void 0 : onSelectNews(e, { value: content })
-    }, /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "flex flex-1 flex-col justify-center min-w-0 p-2 pb-[2px] pr-4 text-sm"
-    }, /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "mr-1 text-black dark:text-white"
-    }, content.title)), /* @__PURE__ */ import_react36.default.createElement("div", {
+    }, content.title)), /* @__PURE__ */ import_react37.default.createElement("div", {
       className: "flex flex-1 group items-center min-w-0 p-2 pr-4 pt-0"
-    }, !!primaryQuote && /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Fragment, null, /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, !!primaryQuote && /* @__PURE__ */ import_react37.default.createElement(import_react37.default.Fragment, null, /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400"
-    }, primaryQuote.localTicker), /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, primaryQuote.localTicker), /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "font-light text-gray-300 group-hover:text-gray-400"
-    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName), /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, (_a = primaryQuote.exchange) == null ? void 0 : _a.shortName), /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022")), /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, "\u2022")), /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "text-gray-400 dark:group-hover:text-gray-300 group-hover:text-gray-500"
-    }, date.toFormat("MMM dd, yyyy")), content.__typename === "NewsContent" && /* @__PURE__ */ import_react36.default.createElement(import_react36.default.Fragment, null, /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, date.toFormat("MMM dd, yyyy")), content.__typename === "NewsContent" && /* @__PURE__ */ import_react37.default.createElement(import_react37.default.Fragment, null, /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "pl-1 pr-1 text-gray-400"
-    }, "\u2022"), /* @__PURE__ */ import_react36.default.createElement("span", {
+    }, "\u2022"), /* @__PURE__ */ import_react37.default.createElement("span", {
       className: "text-indigo-300 group-hover:text-indigo-400"
     }, content.newsSource.name)))));
-  }), isPaging && loader(3))).exhaustive(), /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), isPaging && loader(3))).exhaustive(), /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "flex-1"
-  }), hasMoreResults && /* @__PURE__ */ import_react36.default.createElement("div", {
+  }), hasMoreResults && /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "bg-white border-gray-200 border-opacity-80 border-t cursor-pointer flex flex-col items-center mt-1 py-3 shadow-inner text-gray-500 w-full dark:bg-bluegray-5 dark:border-gray-600 dark:text-gray-200 dark:hover:bg-bluegray-6 dark:hover:text-gray-300 hover:bg-gray-50 hover:text-black",
     onClick: loadMore
-  }, /* @__PURE__ */ import_react36.default.createElement("p", {
+  }, /* @__PURE__ */ import_react37.default.createElement("p", {
     className: "text-sm tracking-wider uppercase"
   }, "load more"))))));
 }
@@ -40510,7 +40546,7 @@ function NewsList(props) {
       size: listSize
     }
   });
-  const hasMoreResults = (0, import_react36.useMemo)(() => {
+  const hasMoreResults = (0, import_react37.useMemo)(() => {
     let hasMore = false;
     if (newsListQuery.status === "success") {
       const numTotalHits = newsListQuery.data.search.content.numTotalHits;
@@ -40518,7 +40554,7 @@ function NewsList(props) {
     }
     return hasMore;
   }, [newsListQuery]);
-  const onRefetch = (0, import_react36.useMemo)(() => (resetTimer = false) => {
+  const onRefetch = (0, import_react37.useMemo)(() => (resetTimer = false) => {
     const isPaginating = state.fromIndex > 0;
     setState((s2) => __spreadProps(__spreadValues({}, s2), {
       canRefetch: false,
@@ -40531,7 +40567,7 @@ function NewsList(props) {
       IdleTimer.start();
     }
   }, [state.fromIndex]);
-  const onSelectCompany = (0, import_react36.useCallback)((event, change) => {
+  const onSelectCompany = (0, import_react37.useCallback)((event, change) => {
     const primaryQuote = getPrimaryQuote(change.value);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
     handlers.company(event, change);
@@ -40539,7 +40575,7 @@ function NewsList(props) {
       newsListQuery.refetch();
     }
   }, [state]);
-  const onSelectNews = (0, import_react36.useCallback)((event, change) => {
+  const onSelectNews = (0, import_react37.useCallback)((event, change) => {
     var _a2;
     const primaryQuote = getPrimaryQuote((_a2 = change.value) == null ? void 0 : _a2.primaryCompany);
     bus == null ? void 0 : bus.emit("instrument-selected", { ticker: primaryQuote == null ? void 0 : primaryQuote.localTicker }, "out");
@@ -40570,7 +40606,7 @@ function NewsList(props) {
     var _a2;
     return Date.now() - (((_a2 = IdleTimer.getLastActiveTime()) == null ? void 0 : _a2.getTime()) || 0) >= INACTIVE_TIMEOUT;
   };
-  (0, import_react36.useEffect)(() => {
+  (0, import_react37.useEffect)(() => {
     mergeState({
       canRefetch: false,
       fromIndex: 0
@@ -40586,14 +40622,14 @@ function NewsList(props) {
       IdleTimer.pause();
     }
   }, 3e4);
-  return /* @__PURE__ */ import_react36.default.createElement(NewsListUI, {
+  return /* @__PURE__ */ import_react37.default.createElement(NewsListUI, {
     canRefetch: state.canRefetch,
     company: state.company,
     darkMode: settings.darkMode,
     hasMoreResults,
-    loadMore: (0, import_react36.useCallback)((event) => handlers.fromIndex(event, { value: state.fromIndex + listSize }), [handlers.fromIndex, state.fromIndex]),
+    loadMore: (0, import_react37.useCallback)((event) => handlers.fromIndex(event, { value: state.fromIndex + listSize }), [handlers.fromIndex, state.fromIndex]),
     newsListQuery,
-    onBackFromNews: (0, import_react36.useCallback)((event) => onSelectNews(event, { value: null }), [onSelectNews]),
+    onBackFromNews: (0, import_react37.useCallback)((event) => onSelectNews(event, { value: null }), [onSelectNews]),
     onRefetch,
     onSelectCompany,
     onSelectNews,
@@ -40619,7 +40655,7 @@ var useMessageBus2 = () => {
     void defaultTokenAuthConfig.writeAuth(msg.data);
     reset();
   }, "in");
-  (0, import_react37.useEffect)(() => {
+  (0, import_react38.useEffect)(() => {
     bus.setupWindowMessaging(window.parent);
     const listeners = [];
     if (window.fdc3) {
@@ -40643,14 +40679,14 @@ var useMessageBus2 = () => {
 };
 var App = () => {
   const bus = useMessageBus2();
-  return /* @__PURE__ */ import_react37.default.createElement(import_react37.StrictMode, null, /* @__PURE__ */ import_react37.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react38.default.createElement(import_react38.StrictMode, null, /* @__PURE__ */ import_react38.default.createElement(Provider6, {
     bus,
     config: { moduleName: "NewsList" }
-  }, /* @__PURE__ */ import_react37.default.createElement(Auth, null, /* @__PURE__ */ import_react37.default.createElement("div", {
+  }, /* @__PURE__ */ import_react38.default.createElement(Auth, null, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "h-full"
-  }, /* @__PURE__ */ import_react37.default.createElement(NewsList, null)))));
+  }, /* @__PURE__ */ import_react38.default.createElement(NewsList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react37.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react38.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus

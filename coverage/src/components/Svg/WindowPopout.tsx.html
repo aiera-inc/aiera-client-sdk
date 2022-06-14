@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>Code coverage report for src/components/Svg/SpeakerMute.tsx</title>
+    <title>Code coverage report for src/components/Svg/WindowPopout.tsx</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../../../prettify.css" />
     <link rel="stylesheet" href="../../../base.css" />
@@ -19,34 +19,34 @@
 <body>
 <div class='wrapper'>
     <div class='pad1'>
-        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Svg</a> SpeakerMute.tsx</h1>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Svg</a> WindowPopout.tsx</h1>
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/1</span>
+                <span class='fraction'>1/1</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -82,15 +82,11 @@
 <a name='L17'></a><a href='#L17'>17</a>
 <a name='L18'></a><a href='#L18'>18</a>
 <a name='L19'></a><a href='#L19'>19</a>
-<a name='L20'></a><a href='#L20'>20</a>
-<a name='L21'></a><a href='#L21'>21</a>
-<a name='L22'></a><a href='#L22'>22</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L20'></a><a href='#L20'>20</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -108,21 +104,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
 import classNames from 'classnames';
 &nbsp;
-export function <span class="fstat-no" title="function not covered" >SpeakerMute(</span>{ className, alt = <span class="branch-0 cbranch-no" title="branch not covered" >'SpeakerMute' </span>}: { className?: string; alt?: string }): ReactElement {
-<span class="cstat-no" title="statement not covered" >    return (</span>
+export function WindowPopout({ className, alt = 'Window Popout' }: { className?: string; alt?: string }): ReactElement {
+    return (
         &lt;svg
-            className={classNames(className, 'fill-current', 'Svg', 'Svg__speakerMute')}
-            width="100%"
-            viewBox="0 0 18 14"
-            fill="none"
+            className={classNames(className, 'fill-current', 'Svg', 'Svg__popOut')}
+            width="20"
+            height="20"
+            viewBox="0 0 20 20"
+            fill="black"
             xmlns="http://www.w3.org/2000/svg"
         &gt;
             &lt;title&gt;{alt}&lt;/title&gt;
-            &lt;path
-                fillRule="evenodd"
-                clipRule="evenodd"
-                d="M8.80792 0.180887C8.95097 0.0568191 9.12627 0 9.29833 0C9.65847 0 10.0037 0.243918 10.0037 0.612628V13.3874C10.0037 13.7561 9.65847 14 9.29833 14C9.12627 14 8.95097 13.9441 8.80792 13.8191L4.00147 9.62116H2.00073C0.895329 9.62116 0 8.83918 0 7.87372V6.12628C0 5.16082 0.895329 4.37884 2.00073 4.37884H4.00147L8.80792 0.180887ZM12.5226 4.22368C12.6418 4.14337 12.7824 4.10045 12.9261 4.10041C13.0227 4.10042 13.1183 4.11978 13.2073 4.15736C13.2963 4.19495 13.3769 4.24998 13.4442 4.31922L15.1015 5.97651L16.7588 4.31922C16.8897 4.18448 17.0679 4.10601 17.2557 4.10041C17.4013 4.09612 17.5448 4.13591 17.6674 4.21457C17.7899 4.29322 17.8859 4.40708 17.9427 4.54122C17.9994 4.67535 18.0144 4.82351 17.9855 4.96627C17.9566 5.10903 17.8853 5.23974 17.7808 5.34126L16.1235 6.99855L17.7808 8.65583C17.8502 8.72243 17.9056 8.8022 17.9437 8.89047C17.9819 8.97875 18.002 9.07374 18.003 9.1699C18.004 9.26606 17.9858 9.36144 17.9494 9.45047C17.9131 9.5395 17.8593 9.62038 17.7913 9.68838C17.7233 9.75638 17.6425 9.81013 17.5534 9.84647C17.4644 9.88282 17.369 9.90104 17.2729 9.90006C17.1767 9.89908 17.0817 9.87893 16.9934 9.84077C16.9052 9.80262 16.8254 9.74724 16.7588 9.67787L15.1015 8.02059L13.4442 9.67787C13.3776 9.74724 13.2978 9.80262 13.2096 9.84077C13.1213 9.87893 13.0263 9.89908 12.9301 9.90006C12.834 9.90104 12.7386 9.88282 12.6496 9.84647C12.5605 9.81013 12.4797 9.75638 12.4117 9.68838C12.3437 9.62038 12.2899 9.5395 12.2536 9.45047C12.2172 9.36144 12.199 9.26606 12.2 9.1699C12.201 9.07374 12.2211 8.97875 12.2593 8.89047C12.2974 8.8022 12.3528 8.72243 12.4222 8.65583L14.0795 6.99855L12.4222 5.34126C12.3191 5.24098 12.2483 5.11224 12.2189 4.97152C12.1894 4.83079 12.2025 4.68447 12.2566 4.55125C12.3107 4.41804 12.4033 4.30399 12.5226 4.22368Z"
-            /&gt;
+            &lt;path d="M11 3a1 1 0 100 2h2.586l-6.293 6.293a1 1 0 101.414 1.414L15 6.414V9a1 1 0 102 0V4a1 1 0 00-1-1h-5z" /&gt;
+            &lt;path d="M5 5a2 2 0 00-2 2v8a2 2 0 002 2h8a2 2 0 002-2v-3a1 1 0 10-2 0v3H5V7h3a1 1 0 000-2H5z" /&gt;
         &lt;/svg&gt;
     );
 }
