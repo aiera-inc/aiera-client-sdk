@@ -59,6 +59,7 @@ type Partial = { text: string; timestamp: number };
 
 /** @notExported */
 interface TranscriptUIProps {
+    asrMode: boolean;
     containerHeight: number;
     containerRef: Ref<HTMLDivElement>;
     currentMatch?: string | null;
@@ -88,6 +89,7 @@ interface TranscriptUIProps {
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const {
+        asrMode,
         containerHeight,
         containerRef,
         currentMatch,
@@ -122,6 +124,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         >
             <div className="dark:bg-bluegray-7">
                 <Header
+                    asrMode={asrMode}
                     containerHeight={containerHeight}
                     currentParagraphTimestamp={currentParagraphTimestamp}
                     endTime={endTime}
@@ -843,6 +846,7 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
 
 /** @notExported */
 export interface TranscriptProps {
+    asrMode?: boolean;
     eventId: string;
     onBack?: MouseEventHandler;
     initialSearchTerm?: string;
@@ -852,7 +856,7 @@ export interface TranscriptProps {
  * Renders Transcript
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
-    const { eventId, onBack, initialSearchTerm } = props;
+    const { eventId, onBack, initialSearchTerm, asrMode = false } = props;
     const { settings } = useSettings();
     const eventUpdateQuery = useEventUpdates(eventId);
     const eventQuery = useEventData(eventId, eventUpdateQuery);
@@ -919,6 +923,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     return (
         <TranscriptUI
+            asrMode={asrMode}
             containerHeight={containerHeight}
             containerRef={containerRef}
             currentMatch={searchState.currentMatch}

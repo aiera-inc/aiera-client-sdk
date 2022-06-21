@@ -46,7 +46,7 @@ describe('Transcript', () => {
                     }),
             })
         );
-        const searchInput = screen.getByPlaceholderText('Search Transcripts...');
+        const searchInput = screen.getByPlaceholderText('Search Transcript...');
         fireEvent.change(searchInput, { target: { value: 'paragraph' } });
         getByTextWithMarkup('Showing 1 result for "paragraph"');
     });

@@ -21,6 +21,7 @@ import './styles.css';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
+    asrMode: boolean;
     containerHeight: number;
     currentParagraphTimestamp?: string | null;
     endTime?: string | null;
@@ -48,6 +49,7 @@ interface HeaderUIProps extends HeaderSharedProps {
 
 export function HeaderUI(props: HeaderUIProps): ReactElement {
     const {
+        asrMode,
         containerHeight,
         currentParagraphTimestamp,
         endTime,
@@ -84,7 +86,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
             style={{ maxHeight: containerHeight > 0 ? containerHeight - 53 : 'calc(100% - 53px)' }}
         >
             <div className="flex items-center px-3">
-                {onBack && (
+                {onBack && !asrMode && (
                     <Button className="mr-2" onClick={onBack}>
                         <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                         Events
@@ -94,11 +96,11 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                     className="transcript__header-search"
                     icon={<MagnifyingGlass />}
                     name="search"
-                    placeholder="Search Transcripts..."
+                    placeholder="Search Transcript..."
                     value={searchTerm}
                     onChange={onChangeSearchTerm}
                 />
-                <SettingsButton showTonalSentiment={false} />
+                {!asrMode && <SettingsButton showTonalSentiment={false} />}
             </div>
             {match(eventQuery)
                 .with({ status: 'loading' }, () => {
@@ -229,6 +231,7 @@ export interface HeaderProps extends HeaderSharedProps {}
  */
 export function Header(props: HeaderProps): ReactElement {
     const {
+        asrMode,
         endTime,
         eventId,
         eventQuery,
@@ -278,6 +281,7 @@ export function Header(props: HeaderProps): ReactElement {
 
     return (
         <HeaderUI
+            asrMode={asrMode}
             containerHeight={containerHeight}
             currentParagraphTimestamp={currentParagraphTimestamp}
             eventDetailsExpanded={eventDetailsExpanded}
