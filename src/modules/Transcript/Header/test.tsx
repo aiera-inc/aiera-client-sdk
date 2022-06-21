@@ -69,7 +69,13 @@ describe('Header', () => {
     test('renders', () => {
         const onBack = jest.fn();
         renderWithProvider(
-            <Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} eventId="1928914" />
+            <Header
+                asrMode={false}
+                containerHeight={500}
+                eventQuery={eventQuery as EventQuery}
+                onBack={onBack}
+                eventId="1928914"
+            />
         );
         screen.getByText('VERB');
     });
@@ -77,7 +83,13 @@ describe('Header', () => {
     test('Back function is called', () => {
         const onBack = jest.fn();
         renderWithProvider(
-            <Header containerHeight={500} eventQuery={eventQuery as EventQuery} onBack={onBack} eventId="1928914" />
+            <Header
+                asrMode={false}
+                containerHeight={500}
+                eventQuery={eventQuery as EventQuery}
+                onBack={onBack}
+                eventId="1928914"
+            />
         );
         const eventsBtn = screen.getByText('Events');
         fireEvent.click(eventsBtn);
@@ -88,6 +100,7 @@ describe('Header', () => {
         const onChangeSearchTerm = jest.fn();
         renderWithProvider(
             <Header
+                asrMode={false}
                 eventId="1928914"
                 containerHeight={500}
                 eventQuery={eventQuery as EventQuery}
@@ -95,7 +108,7 @@ describe('Header', () => {
                 searchTerm={'test search'}
             />
         );
-        const searchInput = screen.getByPlaceholderText('Search Transcripts...');
+        const searchInput = screen.getByPlaceholderText('Search Transcript...');
         expect((searchInput as HTMLInputElement).value).toBe('test search');
         fireEvent.change(searchInput, { target: { value: 'new search' } });
         expect(onChangeSearchTerm).toHaveBeenCalledWith(

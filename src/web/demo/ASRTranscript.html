@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            iframe {
+                border: none;
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            const asrTranscript = new Aiera.Module('../modules/ASRTranscript/index.html', 'aiera');
+            asrTranscript.load().then(() => {
+                // To try out authentication
+                // eventList.authenticate({
+                //     accessToken: '[accesstoken]',
+                //     refreshToken: '[refreshToken]',
+                // });
+                // To update the configuration
+                asrTranscript.configure({
+                    asrOptions: {
+                        eventId: '2191898',
+                        darkMode: true,
+                        showTitleInfo: true,
+                        showRecordingDetails: true,
+                        showPriceReaction: true,
+                        showSearch: true,
+                        showAudioPlayer: true,
+                    },
+                });
+            });
+        </script>
+    </body>
+</html>

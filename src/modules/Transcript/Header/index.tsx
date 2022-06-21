@@ -18,9 +18,11 @@ import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
 import { KeyMentions } from '../KeyMentions';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
+    asrMode: boolean;
     containerHeight: number;
     currentParagraphTimestamp?: string | null;
     endTime?: string | null;
@@ -48,6 +50,7 @@ interface HeaderUIProps extends HeaderSharedProps {
 
 export function HeaderUI(props: HeaderUIProps): ReactElement {
     const {
+        asrMode,
         containerHeight,
         currentParagraphTimestamp,
         endTime,
@@ -69,154 +72,170 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         startTime,
     } = props;
 
+    const config = useConfig();
+    const showPriceReaction = !asrMode || (asrMode && config.asrOptions?.showPriceReaction);
+    const showTitleInfo = !asrMode || (asrMode && config.asrOptions?.showTitleInfo);
+    const showRecordingDetails = !asrMode || (asrMode && config.asrOptions?.showRecordingDetails);
+    const showSearch = !asrMode || (asrMode && config.asrOptions?.showSearch);
+
     return (
         <div
             ref={headerRef}
             className={classNames(
-                'bg-white relative pt-3 rounded-b-lg -mb-1 z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6',
+                'bg-white relative rounded-b-lg -mb-1 z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6',
                 {
                     'shadow-3xl dark:shadow-3xl-dark': !headerExpanded,
                     'shadow-xl': headerExpanded,
+                    'pb-3': !showTitleInfo,
+                    'pt-3': showSearch,
                 },
                 'transcript__header'
             )}
             // Height can grow, but should not overlap the audio player (53px)
             style={{ maxHeight: containerHeight > 0 ? containerHeight - 53 : 'calc(100% - 53px)' }}
         >
-            <div className="flex items-center px-3">
-                {onBack && (
-                    <Button className="mr-2" onClick={onBack}>
-                        <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-                        Events
-                    </Button>
-                )}
-                <Input
-                    className="transcript__header-search"
-                    icon={<MagnifyingGlass />}
-                    name="search"
-                    placeholder="Search Transcripts..."
-                    value={searchTerm}
-                    onChange={onChangeSearchTerm}
-                />
-                <SettingsButton showTonalSentiment={false} />
-            </div>
-            {match(eventQuery)
-                .with({ status: 'loading' }, () => {
-                    return (
-                        <div className="flex flex-row p-3 items-center">
-                            <div className="animate-pulse flex-1">
-                                <div className="flex">
-                                    <div className="rounded-md bg-gray-500 h-[10px] m-1 w-7 dark:bg-bluegray-5" />
-                                    <div className="rounded-md bg-gray-400 h-[10px] m-1 w-10 dark:bg-bluegray-5" />
-                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7" />
-                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7" />
-                                </div>
-                                <div className="flex">
-                                    <div className="rounded-md bg-gray-300 h-[10px] m-1 flex-1 dark:bg-bluegray-7" />
-                                </div>
-                            </div>
-                            <ExpandButton
-                                className="ml-2 mt-2 self-start"
-                                onClick={toggleHeader}
-                                expanded={headerExpanded}
-                            />
-                        </div>
-                    );
-                })
-                .with({ status: 'empty' }, { status: 'success' }, ({ data }) => {
-                    const event = data.events[0];
-                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
-                    const eventDate = data.events[0]?.eventDate && DateTime.fromISO(data.events[0].eventDate);
-                    const hasEventExtras =
-                        event?.dialInPhoneNumbers?.length ||
-                        event?.dialInPin ||
-                        event?.webcastUrls?.length ||
-                        event?.audioRecordingUrl;
-
-                    return (
-                        <>
-                            <div
-                                className={classNames('flex flex-row p-3 items-center', {
-                                    'cursor-pointer': hasEventExtras,
-                                    group: hasEventExtras,
-                                })}
-                                onClick={hasEventExtras ? toggleHeader : undefined}
-                            >
-                                <div className="flex flex-col justify-center flex-1 min-w-0">
-                                    <div className="text-xs">
-                                        {primaryQuote?.localTicker && (
-                                            <span className="pr-1 font-semibold dark:text-white">
-                                                {primaryQuote?.localTicker}
-                                            </span>
-                                        )}
-                                        {primaryQuote?.exchange?.shortName && (
-                                            <span className="text-gray-400 group-hover:text-gray-500">
-                                                {primaryQuote?.exchange?.shortName}
-                                            </span>
-                                        )}
-                                        {event?.eventType && (
-                                            <span className="text-gray-300 group-hover:text-gray-400 capitalize">
-                                                {' '}
-                                                • {event?.eventType.replace(/_/g, ' ')}
-                                            </span>
-                                        )}
-                                        {eventDate && (
-                                            <span className="text-gray-300 group-hover:text-gray-400">
-                                                {' '}
-                                                • {eventDate.toFormat('h:mma M/dd/yyyy')}
-                                            </span>
-                                        )}
+            {showSearch && (
+                <div className="flex items-center px-3">
+                    {onBack && !asrMode && (
+                        <Button className="mr-2" onClick={onBack}>
+                            <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
+                            Events
+                        </Button>
+                    )}
+                    <Input
+                        className="transcript__header-search"
+                        icon={<MagnifyingGlass />}
+                        name="search"
+                        placeholder="Search Transcript..."
+                        value={searchTerm}
+                        onChange={onChangeSearchTerm}
+                    />
+                    {!asrMode && <SettingsButton showTonalSentiment={false} />}
+                </div>
+            )}
+            {showTitleInfo &&
+                match(eventQuery)
+                    .with({ status: 'loading' }, () => {
+                        return (
+                            <div className="flex flex-row p-3 items-center">
+                                <div className="animate-pulse flex-1">
+                                    <div className="flex">
+                                        <div className="rounded-md bg-gray-500 h-[10px] m-1 w-7 dark:bg-bluegray-5" />
+                                        <div className="rounded-md bg-gray-400 h-[10px] m-1 w-10 dark:bg-bluegray-5" />
+                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7" />
+                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7" />
                                     </div>
-                                    <div
-                                        className={classNames('dark:text-white', {
-                                            'text-sm': headerExpanded,
-                                            'text-sm truncate whitespace-normal line-clamp-1': !headerExpanded,
-                                        })}
-                                    >
-                                        {event?.title}
+                                    <div className="flex">
+                                        <div className="rounded-md bg-gray-300 h-[10px] m-1 flex-1 dark:bg-bluegray-7" />
                                     </div>
                                 </div>
-                                {hasEventExtras && (
+                                {(showPriceReaction || showRecordingDetails) && (
                                     <ExpandButton
-                                        className={classNames('ml-2 mt-2 self-start', {
-                                            'group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50':
-                                                !headerExpanded,
-                                            'group-hover:bg-blue-700': headerExpanded,
-                                            'group-active:bg-gray-400 dark:group-active:bg-bluegray-7': !headerExpanded,
-                                            'group-active:bg-blue-900': headerExpanded,
-                                        })}
+                                        className="ml-2 mt-2 self-start"
                                         onClick={toggleHeader}
                                         expanded={headerExpanded}
                                     />
                                 )}
                             </div>
-                            {headerExpanded && event && (
-                                <EventDetails
-                                    event={event}
-                                    eventDetailsExpanded={eventDetailsExpanded}
-                                    toggleEventDetails={toggleEventDetails}
-                                />
-                            )}
-                            {false && headerExpanded && (
-                                <KeyMentions
-                                    toggleKeyMentions={toggleKeyMentions}
-                                    keyMentionsExpanded={keyMentionsExpanded}
-                                />
-                            )}
-                            <PriceChart
-                                currentParagraphTimestamp={currentParagraphTimestamp}
-                                endTime={endTime}
-                                eventId={eventId}
-                                headerExpanded={headerExpanded}
-                                priceChartExpanded={priceChartExpanded}
-                                togglePriceChart={togglePriceChart}
-                                onSeekAudioByDate={onSeekAudioByDate}
-                                startTime={startTime}
-                            />
-                        </>
-                    );
-                })
-                .otherwise(() => null)}
+                        );
+                    })
+                    .with({ status: 'empty' }, { status: 'success' }, ({ data }) => {
+                        const event = data.events[0];
+                        const primaryQuote = getPrimaryQuote(event?.primaryCompany);
+                        const eventDate = data.events[0]?.eventDate && DateTime.fromISO(data.events[0].eventDate);
+                        const hasEventExtras =
+                            event?.dialInPhoneNumbers?.length ||
+                            event?.dialInPin ||
+                            event?.webcastUrls?.length ||
+                            event?.audioRecordingUrl;
+
+                        return (
+                            <>
+                                <div
+                                    className={classNames('flex flex-row p-3 items-center', {
+                                        'cursor-pointer': hasEventExtras && (showPriceReaction || showRecordingDetails),
+                                        group: hasEventExtras,
+                                    })}
+                                    onClick={hasEventExtras ? toggleHeader : undefined}
+                                >
+                                    <div className="flex flex-col justify-center flex-1 min-w-0">
+                                        <div className="text-xs">
+                                            {primaryQuote?.localTicker && (
+                                                <span className="pr-1 font-semibold dark:text-white">
+                                                    {primaryQuote?.localTicker}
+                                                </span>
+                                            )}
+                                            {primaryQuote?.exchange?.shortName && (
+                                                <span className="text-gray-400 group-hover:text-gray-500">
+                                                    {primaryQuote?.exchange?.shortName}
+                                                </span>
+                                            )}
+                                            {event?.eventType && (
+                                                <span className="text-gray-300 group-hover:text-gray-400 capitalize">
+                                                    {' '}
+                                                    • {event?.eventType.replace(/_/g, ' ')}
+                                                </span>
+                                            )}
+                                            {eventDate && (
+                                                <span className="text-gray-300 group-hover:text-gray-400">
+                                                    {' '}
+                                                    • {eventDate.toFormat('h:mma M/dd/yyyy')}
+                                                </span>
+                                            )}
+                                        </div>
+                                        <div
+                                            className={classNames('dark:text-white', {
+                                                'text-sm': headerExpanded,
+                                                'text-sm truncate whitespace-normal line-clamp-1': !headerExpanded,
+                                            })}
+                                        >
+                                            {event?.title}
+                                        </div>
+                                    </div>
+                                    {hasEventExtras && (showPriceReaction || showRecordingDetails) && (
+                                        <ExpandButton
+                                            className={classNames('ml-2 mt-2 self-start', {
+                                                'group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50':
+                                                    !headerExpanded,
+                                                'group-hover:bg-blue-700': headerExpanded,
+                                                'group-active:bg-gray-400 dark:group-active:bg-bluegray-7':
+                                                    !headerExpanded,
+                                                'group-active:bg-blue-900': headerExpanded,
+                                            })}
+                                            onClick={toggleHeader}
+                                            expanded={headerExpanded}
+                                        />
+                                    )}
+                                </div>
+                                {showRecordingDetails && headerExpanded && event && (
+                                    <EventDetails
+                                        event={event}
+                                        eventDetailsExpanded={eventDetailsExpanded}
+                                        toggleEventDetails={toggleEventDetails}
+                                    />
+                                )}
+                                {false && headerExpanded && (
+                                    <KeyMentions
+                                        toggleKeyMentions={toggleKeyMentions}
+                                        keyMentionsExpanded={keyMentionsExpanded}
+                                    />
+                                )}
+                                {showPriceReaction && (
+                                    <PriceChart
+                                        currentParagraphTimestamp={currentParagraphTimestamp}
+                                        endTime={endTime}
+                                        eventId={eventId}
+                                        headerExpanded={headerExpanded}
+                                        priceChartExpanded={priceChartExpanded}
+                                        togglePriceChart={togglePriceChart}
+                                        onSeekAudioByDate={onSeekAudioByDate}
+                                        startTime={startTime}
+                                    />
+                                )}
+                            </>
+                        );
+                    })
+                    .otherwise(() => null)}
         </div>
     );
 }
@@ -229,6 +248,7 @@ export interface HeaderProps extends HeaderSharedProps {}
  */
 export function Header(props: HeaderProps): ReactElement {
     const {
+        asrMode,
         endTime,
         eventId,
         eventQuery,
@@ -278,6 +298,7 @@ export function Header(props: HeaderProps): ReactElement {
 
     return (
         <HeaderUI
+            asrMode={asrMode}
             containerHeight={containerHeight}
             currentParagraphTimestamp={currentParagraphTimestamp}
             eventDetailsExpanded={eventDetailsExpanded}

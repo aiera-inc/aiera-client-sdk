@@ -42,6 +42,7 @@ import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
 type Paragraph = SpeakerTurn['paragraphs'][0];
@@ -59,6 +60,7 @@ type Partial = { text: string; timestamp: number };
 
 /** @notExported */
 interface TranscriptUIProps {
+    asrMode: boolean;
     containerHeight: number;
     containerRef: Ref<HTMLDivElement>;
     currentMatch?: string | null;
@@ -88,6 +90,7 @@ interface TranscriptUIProps {
 
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const {
+        asrMode,
         containerHeight,
         containerRef,
         currentMatch,
@@ -115,24 +118,31 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         startTime,
     } = props;
 
+    // Show the player when its not asrMode, or if it is enabled with asrMode
+    const config = useConfig();
+    const showPlayer = !asrMode || (asrMode && config.asrOptions?.showAudioPlayer);
+    const showTitleInfo = !asrMode || (asrMode && config.asrOptions?.showTitleInfo);
+    const showSearch = !asrMode || (asrMode && config.asrOptions?.showSearch);
+    const theme = !asrMode ? darkMode : (asrMode && config.asrOptions?.darkMode) || false;
+
     return (
-        <div
-            className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: darkMode })}
-            ref={containerRef}
-        >
+        <div className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: theme })} ref={containerRef}>
             <div className="dark:bg-bluegray-7">
-                <Header
-                    containerHeight={containerHeight}
-                    currentParagraphTimestamp={currentParagraphTimestamp}
-                    endTime={endTime}
-                    eventId={eventId}
-                    eventQuery={eventQuery}
-                    onBack={onBack}
-                    searchTerm={searchTerm}
-                    onChangeSearchTerm={onChangeSearchTerm}
-                    onSeekAudioByDate={onSeekAudioByDate}
-                    startTime={startTime}
-                />
+                {(showTitleInfo || showSearch) && (
+                    <Header
+                        asrMode={asrMode}
+                        containerHeight={containerHeight}
+                        currentParagraphTimestamp={currentParagraphTimestamp}
+                        endTime={endTime}
+                        eventId={eventId}
+                        eventQuery={eventQuery}
+                        onBack={onBack}
+                        searchTerm={searchTerm}
+                        onChangeSearchTerm={onChangeSearchTerm}
+                        onSeekAudioByDate={onSeekAudioByDate}
+                        startTime={startTime}
+                    />
+                )}
                 {searchTerm && (
                     <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
                         <div className="text-sm">
@@ -290,29 +300,31 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     })
                     .otherwise(() => null)}
             </div>
-            {match(eventQuery)
-                .with({ status: 'success' }, ({ data: { events } }) => {
-                    const event = events[0];
-                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
-                    return (
-                        (event?.audioRecordingUrl || event?.isLive) && (
-                            <Playbar
-                                id={event?.id}
-                                url={
-                                    event.isLive
-                                        ? `https://storage.media.aiera.com/${event.id}`
-                                        : event.audioRecordingUrl || ''
-                                }
-                                offset={(event?.audioRecordingOffsetMs || 0) / 1000}
-                                metaData={{
-                                    quote: primaryQuote,
-                                    eventType: event?.eventType,
-                                }}
-                            />
-                        )
-                    );
-                })
-                .otherwise(() => null)}
+            {showPlayer &&
+                match(eventQuery)
+                    .with({ status: 'success' }, ({ data: { events } }) => {
+                        const event = events[0];
+                        const primaryQuote = getPrimaryQuote(event?.primaryCompany);
+                        return (
+                            (event?.audioRecordingUrl || event?.isLive) && (
+                                <Playbar
+                                    asrMode={asrMode}
+                                    id={event?.id}
+                                    url={
+                                        event.isLive
+                                            ? `https://storage.media.aiera.com/${event.id}`
+                                            : event.audioRecordingUrl || ''
+                                    }
+                                    offset={(event?.audioRecordingOffsetMs || 0) / 1000}
+                                    metaData={{
+                                        quote: primaryQuote,
+                                        eventType: event?.eventType,
+                                    }}
+                                />
+                            )
+                        );
+                    })
+                    .otherwise(() => null)}
         </div>
     );
 };
@@ -843,7 +855,8 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
 
 /** @notExported */
 export interface TranscriptProps {
-    eventId: string;
+    asrMode?: boolean;
+    eventId?: string;
     onBack?: MouseEventHandler;
     initialSearchTerm?: string;
 }
@@ -852,7 +865,18 @@ export interface TranscriptProps {
  * Renders Transcript
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
-    const { eventId, onBack, initialSearchTerm } = props;
+    const { eventId: eventListEventId, onBack, initialSearchTerm, asrMode = false } = props;
+    const config = useConfig();
+    let eventId = eventListEventId;
+
+    if (!eventId && config?.asrOptions?.eventId) {
+        eventId = config.asrOptions.eventId;
+    }
+
+    if (typeof eventId === 'undefined') {
+        return <div>No event found</div>;
+    }
+
     const { settings } = useSettings();
     const eventUpdateQuery = useEventUpdates(eventId);
     const eventQuery = useEventData(eventId, eventUpdateQuery);
@@ -919,6 +943,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     return (
         <TranscriptUI
+            asrMode={asrMode}
             containerHeight={containerHeight}
             containerRef={containerRef}
             currentMatch={searchState.currentMatch}
