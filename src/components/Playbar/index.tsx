@@ -30,7 +30,9 @@ function toDurationString(totalSeconds: number) {
         .padStart(2, '0')}`;
 }
 
-interface PlaybarSharedProps {}
+interface PlaybarSharedProps {
+    asrMode?: boolean;
+}
 
 /** @notExported */
 interface PlaybarUIProps extends PlaybarSharedProps {
@@ -61,6 +63,7 @@ interface PlaybarUIProps extends PlaybarSharedProps {
 
 export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     const {
+        asrMode,
         clear,
         currentTime,
         duration,
@@ -116,7 +119,11 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     </span>
                 </div>
             </div>
-            <div className="z-20 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 player_controls">
+            <div
+                className={classNames('z-20 flex h-[44px] pb-[6px] items-center justify-center player_controls', {
+                    'ml-2.5': !asrMode,
+                })}
+            >
                 {!fixed && (
                     <Button iconButton onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1">
                         <XMark className="w-2.5" />
@@ -127,23 +134,29 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         <Swap className="w-3" />
                     </Button>
                 )}
-                <div
-                    className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
-                    onClick={onClickCalendar}
-                >
-                    <div className="flex items-end h-[12px] mt-[1px]">
-                        <span className="select-none leading-none text-sm text-blue-600 font-bold uppercase group-hover:text-blue-800 group-active:text-blue-900">
-                            {eventMetaData?.quote?.localTicker || 'Instrument'}
-                        </span>
-                        <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
-                            {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                {!asrMode && (
+                    <div
+                        className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
+                        onClick={onClickCalendar}
+                    >
+                        <div className="flex items-end h-[12px] mt-[1px]">
+                            <span className="select-none leading-none text-sm text-blue-600 font-bold uppercase group-hover:text-blue-800 group-active:text-blue-900">
+                                {eventMetaData?.quote?.localTicker || 'Instrument'}
+                            </span>
+                            <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
+                                {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                            </span>
+                        </div>
+                        <span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900">
+                            {eventMetaData?.eventType?.replace(/_/g, ' ') || 'No Type Found'}
                         </span>
                     </div>
-                    <span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900">
-                        {eventMetaData?.eventType?.replace(/_/g, ' ') || 'No Type Found'}
-                    </span>
-                </div>
-                <div className="flex items-center pr-1.5 flex-shrink-0 flex-1 justify-center">
+                )}
+                <div
+                    className={classNames('flex items-center flex-shrink-0 flex-1 justify-center', {
+                        'pr-1.5': !asrMode,
+                    })}
+                >
                     <button
                         id="playbar-toggleRate"
                         tabIndex={0}
@@ -354,7 +367,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
  * Renders Playbar
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { id, url, offset = 0, metaData } = props;
+    const { asrMode, id, url, offset = 0, metaData } = props;
 
     const {
         audioPlayer,
@@ -380,6 +393,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
     if (!isActive) return null;
     return (
         <PlaybarUI
+            asrMode={asrMode}
             clear={clear}
             currentTime={audioPlayer.displayCurrentTime}
             duration={audioPlayer.displayDuration}
