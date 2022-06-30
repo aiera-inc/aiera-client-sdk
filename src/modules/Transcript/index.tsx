@@ -42,6 +42,7 @@ import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
 type Paragraph = SpeakerTurn['paragraphs'][0];
@@ -300,6 +301,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     return (
                         (event?.audioRecordingUrl || event?.isLive) && (
                             <Playbar
+                                asrMode={asrMode}
                                 id={event?.id}
                                 url={
                                     event.isLive
@@ -847,7 +849,7 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
 /** @notExported */
 export interface TranscriptProps {
     asrMode?: boolean;
-    eventId: string;
+    eventId?: string;
     onBack?: MouseEventHandler;
     initialSearchTerm?: string;
 }
@@ -856,7 +858,18 @@ export interface TranscriptProps {
  * Renders Transcript
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
-    const { eventId, onBack, initialSearchTerm, asrMode = false } = props;
+    const { eventId: eventListEventId, onBack, initialSearchTerm, asrMode = false } = props;
+    const config = useConfig();
+    let eventId = eventListEventId;
+
+    if (!eventId && config?.options?.eventId) {
+        eventId = config.options.eventId;
+    }
+
+    if (typeof eventId === 'undefined') {
+        return <div>No event found</div>;
+    }
+
     const { settings } = useSettings();
     const eventUpdateQuery = useEventUpdates(eventId);
     const eventQuery = useEventData(eventId, eventUpdateQuery);

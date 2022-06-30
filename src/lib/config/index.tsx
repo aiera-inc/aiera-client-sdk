@@ -9,6 +9,10 @@ import { useMessageListener } from '../msg';
 type Module = 'EventList' | 'NewsList' | 'RecordingList';
 type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
+interface ConfigOptions {
+    [key: string]: string;
+}
+
 export interface Config {
     assetPath?: string;
     moduleName?: Module;
@@ -22,6 +26,7 @@ export interface Config {
     realtimeOptions?: RealtimeOptions;
     hideSettings?: boolean;
     openDash?: () => void;
+    options?: ConfigOptions;
 }
 
 // Setup default values for env
