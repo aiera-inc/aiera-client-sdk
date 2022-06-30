@@ -118,6 +118,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         startTime,
     } = props;
 
+    // Show the player when its not asrMode, or if it is enabled with asrMode
+    const config = useConfig();
+    const showPlayer = !asrMode || (asrMode && config.asrOptions?.showAudioPlayer);
+
     return (
         <div
             className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: darkMode })}
@@ -294,30 +298,31 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     })
                     .otherwise(() => null)}
             </div>
-            {match(eventQuery)
-                .with({ status: 'success' }, ({ data: { events } }) => {
-                    const event = events[0];
-                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
-                    return (
-                        (event?.audioRecordingUrl || event?.isLive) && (
-                            <Playbar
-                                asrMode={asrMode}
-                                id={event?.id}
-                                url={
-                                    event.isLive
-                                        ? `https://storage.media.aiera.com/${event.id}`
-                                        : event.audioRecordingUrl || ''
-                                }
-                                offset={(event?.audioRecordingOffsetMs || 0) / 1000}
-                                metaData={{
-                                    quote: primaryQuote,
-                                    eventType: event?.eventType,
-                                }}
-                            />
-                        )
-                    );
-                })
-                .otherwise(() => null)}
+            {showPlayer &&
+                match(eventQuery)
+                    .with({ status: 'success' }, ({ data: { events } }) => {
+                        const event = events[0];
+                        const primaryQuote = getPrimaryQuote(event?.primaryCompany);
+                        return (
+                            (event?.audioRecordingUrl || event?.isLive) && (
+                                <Playbar
+                                    asrMode={asrMode}
+                                    id={event?.id}
+                                    url={
+                                        event.isLive
+                                            ? `https://storage.media.aiera.com/${event.id}`
+                                            : event.audioRecordingUrl || ''
+                                    }
+                                    offset={(event?.audioRecordingOffsetMs || 0) / 1000}
+                                    metaData={{
+                                        quote: primaryQuote,
+                                        eventType: event?.eventType,
+                                    }}
+                                />
+                            )
+                        );
+                    })
+                    .otherwise(() => null)}
         </div>
     );
 };
@@ -862,8 +867,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const config = useConfig();
     let eventId = eventListEventId;
 
-    if (!eventId && config?.options?.eventId) {
-        eventId = config.options.eventId;
+    if (!eventId && config?.asrOptions?.eventId) {
+        eventId = config.asrOptions.eventId;
     }
 
     if (typeof eventId === 'undefined') {
