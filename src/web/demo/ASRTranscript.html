@@ -19,12 +19,9 @@
         <script>
             const asrTranscript = new Aiera.Module('../modules/ASRTranscript/index.html', 'aiera');
             asrTranscript.load().then(() => {
-                // To try out authentication
-                // eventList.authenticate({
-                //     accessToken: '[accesstoken]',
-                //     refreshToken: '[refreshToken]',
+                // asrTranscript.authenticate({
+                //     apiKey: 'myPublicApiKeyHash',
                 // });
-                // To update the configuration
                 asrTranscript.configure({
                     asrOptions: {
                         eventId: '2191898',
