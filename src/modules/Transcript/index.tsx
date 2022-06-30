@@ -121,6 +121,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     // Show the player when its not asrMode, or if it is enabled with asrMode
     const config = useConfig();
     const showPlayer = !asrMode || (asrMode && config.asrOptions?.showAudioPlayer);
+    const showTitleInfo = !asrMode || (asrMode && config.asrOptions?.showTitleInfo);
+    const showSearch = !asrMode || (asrMode && config.asrOptions?.showSearch);
 
     return (
         <div
@@ -128,19 +130,21 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             ref={containerRef}
         >
             <div className="dark:bg-bluegray-7">
-                <Header
-                    asrMode={asrMode}
-                    containerHeight={containerHeight}
-                    currentParagraphTimestamp={currentParagraphTimestamp}
-                    endTime={endTime}
-                    eventId={eventId}
-                    eventQuery={eventQuery}
-                    onBack={onBack}
-                    searchTerm={searchTerm}
-                    onChangeSearchTerm={onChangeSearchTerm}
-                    onSeekAudioByDate={onSeekAudioByDate}
-                    startTime={startTime}
-                />
+                {(showTitleInfo || showSearch) && (
+                    <Header
+                        asrMode={asrMode}
+                        containerHeight={containerHeight}
+                        currentParagraphTimestamp={currentParagraphTimestamp}
+                        endTime={endTime}
+                        eventId={eventId}
+                        eventQuery={eventQuery}
+                        onBack={onBack}
+                        searchTerm={searchTerm}
+                        onChangeSearchTerm={onChangeSearchTerm}
+                        onSeekAudioByDate={onSeekAudioByDate}
+                        startTime={startTime}
+                    />
+                )}
                 {searchTerm && (
                     <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
                         <div className="text-sm">
