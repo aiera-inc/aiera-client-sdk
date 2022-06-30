@@ -123,12 +123,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const showPlayer = !asrMode || (asrMode && config.asrOptions?.showAudioPlayer);
     const showTitleInfo = !asrMode || (asrMode && config.asrOptions?.showTitleInfo);
     const showSearch = !asrMode || (asrMode && config.asrOptions?.showSearch);
+    const theme = !asrMode ? darkMode : (asrMode && config.asrOptions?.darkMode) || false;
 
     return (
-        <div
-            className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: darkMode })}
-            ref={containerRef}
-        >
+        <div className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: theme })} ref={containerRef}>
             <div className="dark:bg-bluegray-7">
                 {(showTitleInfo || showSearch) && (
                     <Header

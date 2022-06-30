@@ -11,6 +11,7 @@ type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finse
 
 interface ASROptions {
     eventId: string;
+    darkMode?: boolean;
     showTitleInfo?: boolean;
     showRecordingDetails?: boolean;
     showPriceReaction?: boolean;
