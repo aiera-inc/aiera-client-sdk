@@ -25,17 +25,16 @@
                 //     refreshToken: '[refreshToken]',
                 // });
                 // To update the configuration
-                // eventList.configure({ hideSettings: true });
-            });
-
-            asrTranscript.on('authenticated', () => {
-                // Set up a watchlist after authentication
-                // eventList.setWatchlist([
-                //     { ticker: 'AAPL' },
-                //     { ticker: 'GOOGL' },
-                //     { ticker: 'TLSA' },
-                //     { ticker: 'PTON' },
-                // ]);
+                asrTranscript.configure({
+                    options: {
+                        eventId: '2191898',
+                        showTitleInfo: false,
+                        showRecordingDetails: false,
+                        showPriceReaction: false,
+                        showSearch: false,
+                        showAudioPlayer: false,
+                    },
+                });
             });
         </script>
     </body>
