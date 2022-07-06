@@ -9,7 +9,11 @@ import { AuthConfig as UrqlAuthConfig } from '@urql/exchange-auth';
 import gql from 'graphql-tag';
 import { useMutation } from 'urql';
 
-import { Exact, RefreshMutation, Scalars } from '@aiera/client-sdk/types/generated';
+import {
+    LoginWithPublicApiKeyMutation,
+    LoginWithPublicApiKeyMutationVariables,
+    RefreshMutation,
+} from '@aiera/client-sdk/types/generated';
 import { local as storage, Storage } from '@aiera/client-sdk/lib/storage';
 
 /**
@@ -35,15 +39,6 @@ export type AuthTokens = {
     /** A bearer token to be passed in HTTP Authorization header,
      * only when requesting a new accessToken */
     refreshToken: string;
-};
-
-export type LoginWithApiKeyMutationVariables = Exact<{
-    apiKey: Scalars['String'];
-}>;
-
-export type LoginWithApiKeyMutation = {
-    __typename?: 'Mutation';
-    loginWithApiKey: { __typename?: 'LoginResponse'; accessToken: string; refreshToken: string };
 };
 
 /**
@@ -147,17 +142,20 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
         },
 
         loginWithApiKey: async (apiKey: string) => {
-            const [_, loginMutation] = useMutation<LoginWithApiKeyMutation, LoginWithApiKeyMutationVariables>(gql`
-                mutation LoginWithApiKey($apiKey: String!) {
-                    loginWithApiKey(apiKey: $apiKey) {
+            const [_, loginMutation] = useMutation<
+                LoginWithPublicApiKeyMutation,
+                LoginWithPublicApiKeyMutationVariables
+            >(gql`
+                mutation LoginWithPublicApiKey($apiKey: String!) {
+                    loginWithPublicApiKey(apiKey: $apiKey) {
                         accessToken
                         refreshToken
                     }
                 }
             `);
             return loginMutation({ apiKey }).then(async (resp) => {
-                if (resp.data?.loginWithApiKey) {
-                    await authConfig.writeAuth(resp.data.loginWithApiKey);
+                if (resp.data?.loginWithPublicApiKey) {
+                    await authConfig.writeAuth(resp.data.loginWithPublicApiKey);
                 } else {
                     throw new Error('Error logging in');
                 }
