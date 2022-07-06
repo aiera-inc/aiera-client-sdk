@@ -7,7 +7,6 @@ import { useClient } from '@aiera/client-sdk/api/client';
 import { Provider } from '@aiera/client-sdk/components/Provider';
 import '@aiera/client-sdk/css/styles.css';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
-import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 
 const useMessageBus = () => {
@@ -29,9 +28,9 @@ const useMessageBus = () => {
 
     const { reset } = useClient();
     bus.on(
-        'authenticate',
+        'authenticateApiKey',
         (msg) => {
-            void defaultTokenAuthConfig.writeAuth(msg.data);
+            void defaultTokenAuthConfig.loginWithApiKey(msg.data);
             reset();
         },
         'in'
@@ -56,11 +55,9 @@ const App: FC = (): ReactElement => {
     return (
         <StrictMode>
             <Provider bus={bus} config={{ moduleName: 'EventList' }}>
-                <Auth>
-                    <div className="h-full">
-                        <Transcript asrMode />
-                    </div>
-                </Auth>
+                <div className="h-full">
+                    <Transcript asrMode />
+                </div>
             </Provider>
         </StrictMode>
     );

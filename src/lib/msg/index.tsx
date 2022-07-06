@@ -15,6 +15,7 @@ interface EventAlert {
 
 export interface MessageBusEvents {
     authenticate: AuthTokens;
+    authenticateApiKey: string;
     authenticated: null;
     configure: Config;
     'event-alert': EventAlert;
