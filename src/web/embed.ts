@@ -369,6 +369,10 @@ export class Module {
         this.emit('authenticate', tokens);
     }
 
+    authenticateApiKey(apiKey: string) {
+        this.emit('authenticateApiKey', apiKey);
+    }
+
     /**
      * This method can be used to pass a config object
      * directly to the module

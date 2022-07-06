@@ -7,8 +7,9 @@
 import { makeOperation } from '@urql/core';
 import { AuthConfig as UrqlAuthConfig } from '@urql/exchange-auth';
 import gql from 'graphql-tag';
+import { useMutation } from 'urql';
 
-import { RefreshMutation } from '@aiera/client-sdk/types/generated';
+import { Exact, RefreshMutation, Scalars } from '@aiera/client-sdk/types/generated';
 import { local as storage, Storage } from '@aiera/client-sdk/lib/storage';
 
 /**
@@ -25,6 +26,7 @@ export interface TokenAuthConfig<T> extends UrqlAuthConfig<T> {
     readAuth: () => Promise<T | null>;
     writeAuth: (authState: T) => Promise<void>;
     clearAuth: () => Promise<void>;
+    loginWithApiKey: (apiKey: string) => Promise<void>;
 }
 
 export type AuthTokens = {
@@ -33,6 +35,15 @@ export type AuthTokens = {
     /** A bearer token to be passed in HTTP Authorization header,
      * only when requesting a new accessToken */
     refreshToken: string;
+};
+
+export type LoginWithApiKeyMutationVariables = Exact<{
+    apiKey: Scalars['String'];
+}>;
+
+export type LoginWithApiKeyMutation = {
+    __typename?: 'Mutation';
+    loginWithApiKey: { __typename?: 'LoginResponse'; accessToken: string; refreshToken: string };
 };
 
 /**
@@ -133,6 +144,24 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
                 return resp.status === 401;
             }
             return false;
+        },
+
+        loginWithApiKey: async (apiKey: string) => {
+            const [_, loginMutation] = useMutation<LoginWithApiKeyMutation, LoginWithApiKeyMutationVariables>(gql`
+                mutation LoginWithApiKey($apiKey: String!) {
+                    loginWithApiKey(apiKey: $apiKey) {
+                        accessToken
+                        refreshToken
+                    }
+                }
+            `);
+            return loginMutation({ apiKey }).then(async (resp) => {
+                if (resp.data?.loginWithApiKey) {
+                    await authConfig.writeAuth(resp.data.loginWithApiKey);
+                } else {
+                    throw new Error('Error logging in');
+                }
+            });
         },
     };
 

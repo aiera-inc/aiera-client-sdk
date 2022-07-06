@@ -66,6 +66,7 @@ describe('Auth', () => {
             clearAuth: jest.fn(),
             getAuth: jest.fn(),
             addAuthToOperation: jest.fn(),
+            loginWithApiKey: jest.fn(),
         };
     }
     test('handles loading state', () => {
