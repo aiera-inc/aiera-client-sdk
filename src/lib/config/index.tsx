@@ -6,7 +6,7 @@ import { Options as RealtimeOptions } from 'pusher-js';
 import { defaultEnv } from '@aiera/client-sdk/lib/config/env';
 import { useMessageListener } from '../msg';
 
-type Module = 'EventList' | 'NewsList' | 'RecordingList';
+type Module = 'ASR' | 'EventList' | 'NewsList' | 'RecordingList';
 type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
 interface ASROptions {

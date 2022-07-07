@@ -2,11 +2,10 @@ import type { Listener } from '@finos/fdc3';
 import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 
-import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
-import { useClient } from '@aiera/client-sdk/api/client';
 import { Provider } from '@aiera/client-sdk/components/Provider';
 import '@aiera/client-sdk/css/styles.css';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
+import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 
 const useMessageBus = () => {
@@ -24,16 +23,6 @@ const useMessageBus = () => {
             }
         },
         'out'
-    );
-
-    const { reset } = useClient();
-    bus.on(
-        'authenticateApiKey',
-        (msg) => {
-            void defaultTokenAuthConfig.loginWithApiKey(msg.data);
-            reset();
-        },
-        'in'
     );
 
     useEffect(() => {
@@ -54,10 +43,12 @@ const App: FC = (): ReactElement => {
     const bus = useMessageBus();
     return (
         <StrictMode>
-            <Provider bus={bus} config={{ moduleName: 'EventList' }}>
-                <div className="h-full">
-                    <Transcript asrMode />
-                </div>
+            <Provider bus={bus} config={{ moduleName: 'ASR' }}>
+                <Auth>
+                    <div className="h-full">
+                        <Transcript asrMode />
+                    </div>
+                </Auth>
             </Provider>
         </StrictMode>
     );
