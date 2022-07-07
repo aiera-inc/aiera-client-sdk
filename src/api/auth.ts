@@ -7,13 +7,8 @@
 import { makeOperation } from '@urql/core';
 import { AuthConfig as UrqlAuthConfig } from '@urql/exchange-auth';
 import gql from 'graphql-tag';
-import { useMutation } from 'urql';
 
-import {
-    LoginWithPublicApiKeyMutation,
-    LoginWithPublicApiKeyMutationVariables,
-    RefreshMutation,
-} from '@aiera/client-sdk/types/generated';
+import { RefreshMutation } from '@aiera/client-sdk/types/generated';
 import { local as storage, Storage } from '@aiera/client-sdk/lib/storage';
 
 /**
@@ -30,7 +25,6 @@ export interface TokenAuthConfig<T> extends UrqlAuthConfig<T> {
     readAuth: () => Promise<T | null>;
     writeAuth: (authState: T) => Promise<void>;
     clearAuth: () => Promise<void>;
-    loginWithApiKey: (apiKey: string) => Promise<void>;
 }
 
 export type AuthTokens = {
@@ -139,27 +133,6 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
                 return resp.status === 401;
             }
             return false;
-        },
-
-        loginWithApiKey: async (apiKey: string) => {
-            const [_, loginMutation] = useMutation<
-                LoginWithPublicApiKeyMutation,
-                LoginWithPublicApiKeyMutationVariables
-            >(gql`
-                mutation LoginWithPublicApiKey($apiKey: String!) {
-                    loginWithPublicApiKey(apiKey: $apiKey) {
-                        accessToken
-                        refreshToken
-                    }
-                }
-            `);
-            return loginMutation({ apiKey }).then(async (resp) => {
-                if (resp.data?.loginWithPublicApiKey) {
-                    await authConfig.writeAuth(resp.data.loginWithPublicApiKey);
-                } else {
-                    throw new Error('Error logging in');
-                }
-            });
         },
     };
 

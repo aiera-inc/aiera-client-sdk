@@ -3,7 +3,13 @@ import { useMutation } from 'urql';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 
-import { CurrentUserQuery, LoginMutation, LoginMutationVariables } from '@aiera/client-sdk/types/generated';
+import {
+    CurrentUserQuery,
+    LoginMutation,
+    LoginMutationVariables,
+    LoginWithPublicApiKeyMutation,
+    LoginWithPublicApiKeyMutationVariables,
+} from '@aiera/client-sdk/types/generated';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { Button } from '@aiera/client-sdk/components/Button';
@@ -188,14 +194,42 @@ export const Auth = ({
         `,
     });
 
+    const [_, loginWithPublicApiMutation] = useMutation<
+        LoginWithPublicApiKeyMutation,
+        LoginWithPublicApiKeyMutationVariables
+    >(gql`
+        mutation LoginWithPublicApiKey($apiKey: String!) {
+            loginWithPublicApiKey(apiKey: $apiKey) {
+                accessToken
+                refreshToken
+            }
+        }
+    `);
+
+    const loginWithApiKey = useCallback(
+        async (apiKey: string) => {
+            setLoginState('loading');
+            const result = await loginWithPublicApiMutation({ apiKey });
+            if (result?.data?.loginWithPublicApiKey) {
+                await config.writeAuth(result.data.loginWithPublicApiKey);
+                userQuery.refetch({ requestPolicy: 'cache-and-network' });
+                setLoginState('none');
+            } else {
+                setLoginState('error');
+            }
+        },
+        [loginWithPublicApiMutation, config, userQuery.refetch, state, setLoginState]
+    );
+
     const bus = useMessageListener('authenticate', () => userQuery.refetch(), 'in');
+    bus.on('authenticateWithApiKey', (msg) => void loginWithApiKey(msg?.data), 'in');
     useEffect(() => {
         if (userQuery.status === 'success') {
             bus.emit('authenticated', null, 'out');
         }
     }, [userQuery.status]);
 
-    const [_, loginMutation] = useMutation<LoginMutation, LoginMutationVariables>(gql`
+    const [__, loginMutation] = useMutation<LoginMutation, LoginMutationVariables>(gql`
         mutation Login($email: String!, $password: String!) {
             login(email: $email, password: $password) {
                 accessToken

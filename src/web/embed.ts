@@ -370,7 +370,7 @@ export class Module {
     }
 
     authenticateApiKey(apiKey: string) {
-        this.emit('authenticateApiKey', apiKey);
+        this.emit('authenticateWithApiKey', apiKey);
     }
 
     /**

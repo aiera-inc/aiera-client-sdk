@@ -19,9 +19,7 @@
         <script>
             const asrTranscript = new Aiera.Module('../modules/ASRTranscript/index.html', 'aiera');
             asrTranscript.load().then(() => {
-                asrTranscript.authenticateApiKey({
-                    apiKey: 'myPublicApiKeyHash',
-                });
+                asrTranscript.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
                 asrTranscript.configure({
                     asrOptions: {
                         eventId: '2191898',
