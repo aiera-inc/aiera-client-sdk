@@ -221,6 +221,7 @@ export const Auth = ({
     const initialAuthform = { email: '', password: '' };
     const { state, mergeState, handlers } = useChangeHandlers(initialAuthform);
     const [loginState, setLoginState] = useState<'none' | 'loading' | 'error'>('none');
+    const { reset } = useClient();
 
     const userQuery = useQuery<CurrentUserQuery>({
         query: gql`
@@ -234,35 +235,7 @@ export const Auth = ({
         `,
     });
 
-    const [_, loginWithPublicApiMutation] = useMutation<
-        LoginWithPublicApiKeyMutation,
-        LoginWithPublicApiKeyMutationVariables
-    >(gql`
-        mutation LoginWithPublicApiKey($apiKey: String!) {
-            loginWithPublicApiKey(apiKey: $apiKey) {
-                accessToken
-                refreshToken
-            }
-        }
-    `);
-
-    const loginWithApiKey = useCallback(
-        async (apiKey: string) => {
-            setLoginState('loading');
-            const result = await loginWithPublicApiMutation({ apiKey });
-            if (result?.data?.loginWithPublicApiKey) {
-                await config.writeAuth(result.data.loginWithPublicApiKey);
-                userQuery.refetch({ requestPolicy: 'cache-and-network' });
-                setLoginState('none');
-            } else {
-                setLoginState('error');
-            }
-        },
-        [loginWithPublicApiMutation, config, userQuery.refetch, state, setLoginState]
-    );
-
     const bus = useMessageListener('authenticate', () => userQuery.refetch(), 'in');
-    bus.on('authenticateWithApiKey', (msg) => void loginWithApiKey(msg?.data), 'in');
     useEffect(() => {
         if (userQuery.status === 'success') {
             bus.emit('authenticated', null, 'out');
@@ -277,9 +250,6 @@ export const Auth = ({
             }
         }
     `);
-
-    const { reset } = useClient();
-
     const login = useCallback(
         async (event: FormEvent) => {
             event.preventDefault();
@@ -306,6 +276,35 @@ export const Auth = ({
         mergeState(initialAuthform);
         reset();
     }, [config, mergeState, reset]);
+
+    // Login with public api key
+    const [_, loginWithPublicApiMutation] = useMutation<
+        LoginWithPublicApiKeyMutation,
+        LoginWithPublicApiKeyMutationVariables
+    >(gql`
+        mutation LoginWithPublicApiKey($apiKey: String!) {
+            loginWithPublicApiKey(apiKey: $apiKey) {
+                accessToken
+                refreshToken
+            }
+        }
+    `);
+    const loginWithApiKey = useCallback(
+        async (apiKey: string) => {
+            setLoginState('loading');
+            const result = await loginWithPublicApiMutation({ apiKey });
+            if (result?.data?.loginWithPublicApiKey) {
+                await config.writeAuth(result.data.loginWithPublicApiKey);
+                userQuery.refetch({ requestPolicy: 'cache-and-network' });
+                setLoginState('none');
+            } else {
+                setLoginState('error');
+                await logout();
+            }
+        },
+        [loginWithPublicApiMutation, config, userQuery.refetch, state, setLoginState]
+    );
+    bus.on('authenticateWithApiKey', (msg) => void loginWithApiKey(msg?.data), 'in');
 
     return (
         <AuthProvider logout={logout}>
