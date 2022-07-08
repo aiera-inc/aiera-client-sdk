@@ -376,7 +376,7 @@ function useChartData(eventId: string) {
             const result = await client
                 .query<QuotePricesQuery, QuotePricesQueryVariables>(PriceQuery, {
                     eventId,
-                    after: String(lastPrice.x),
+                    after: new Date(lastPrice.x).toISOString(),
                 })
                 .toPromise();
             const newPrices =
