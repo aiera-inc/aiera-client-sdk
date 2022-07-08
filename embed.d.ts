@@ -69,6 +69,7 @@ export declare class Module {
      *
      */
     authenticate(tokens: AuthTokens): void;
+    authenticateApiKey(apiKey: string): void;
     /**
      * This method can be used to pass a config object
      * directly to the module

@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">63.63% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>40/64</span>
+                <span class='fraction'>42/66</span>
             </div>
         
             
@@ -471,7 +471,21 @@
 <a name='L406'></a><a href='#L406'>406</a>
 <a name='L407'></a><a href='#L407'>407</a>
 <a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L409'></a><a href='#L409'>409</a>
+<a name='L410'></a><a href='#L410'>410</a>
+<a name='L411'></a><a href='#L411'>411</a>
+<a name='L412'></a><a href='#L412'>412</a>
+<a name='L413'></a><a href='#L413'>413</a>
+<a name='L414'></a><a href='#L414'>414</a>
+<a name='L415'></a><a href='#L415'>415</a>
+<a name='L416'></a><a href='#L416'>416</a>
+<a name='L417'></a><a href='#L417'>417</a>
+<a name='L418'></a><a href='#L418'>418</a>
+<a name='L419'></a><a href='#L419'>419</a>
+<a name='L420'></a><a href='#L420'>420</a>
+<a name='L421'></a><a href='#L421'>421</a>
+<a name='L422'></a><a href='#L422'>422</a>
+<a name='L423'></a><a href='#L423'>423</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -499,6 +513,9 @@
 <span class="cline-any cline-yes">54x</span>
 <span class="cline-any cline-yes">54x</span>
 <span class="cline-any cline-yes">54x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -559,6 +576,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-yes">27x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -879,6 +906,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject } from 'react';
 import classNames from 'classnames';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -911,7 +939,9 @@ function toDurationString(totalSeconds: number) {
         .padStart(2, '0')}`;
 }
 &nbsp;
-interface PlaybarSharedProps {}
+interface PlaybarSharedProps {
+    asrMode?: boolean;
+}
 &nbsp;
 /** @notExported */
 interface PlaybarUIProps extends PlaybarSharedProps {
@@ -942,6 +972,7 @@ interface PlaybarUIProps extends PlaybarSharedProps {
 &nbsp;
 export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     const {
+        asrMode,
         clear,
         currentTime,
         duration,
@@ -997,7 +1028,11 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     &lt;/span&gt;
                 &lt;/div&gt;
             &lt;/div&gt;
-            &lt;div className="z-20 flex h-[44px] pb-[6px] items-center justify-center ml-2.5 player_controls"&gt;
+            &lt;div
+                className={classNames('z-20 flex h-[44px] pb-[6px] items-center justify-center player_controls', {
+                    'ml-2.5': !asrMode,
+                })}
+            &gt;
                 {!fixed &amp;&amp; (
                     &lt;Button iconButton onClick={clear} className="flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1"&gt;
                         &lt;XMark className="w-2.5" /&gt;
@@ -1008,23 +1043,29 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         &lt;Swap className="w-3" /&gt;
                     &lt;/Button&gt;
                 )}
-                &lt;div
-                    className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
-                    onClick={onClickCalendar}
-                &gt;
-                    &lt;div className="flex items-end h-[12px] mt-[1px]"&gt;
-                        &lt;span className="select-none leading-none text-sm text-blue-600 font-bold uppercase group-hover:text-blue-800 group-active:text-blue-900"&gt;
-                            {eventMetaData?.quote?.localTicker || 'Instrument'}
-                        &lt;/span&gt;
-                        &lt;span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800"&gt;
-                            {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                {!asrMode &amp;&amp; (
+                    &lt;div
+                        className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
+                        onClick={onClickCalendar}
+                    &gt;
+                        &lt;div className="flex items-end h-[12px] mt-[1px]"&gt;
+                            &lt;span className="select-none leading-none text-sm text-blue-600 font-bold uppercase group-hover:text-blue-800 group-active:text-blue-900"&gt;
+                                {eventMetaData?.quote?.localTicker || 'Instrument'}
+                            &lt;/span&gt;
+                            &lt;span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800"&gt;
+                                {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                            &lt;/span&gt;
+                        &lt;/div&gt;
+                        &lt;span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900"&gt;
+                            {eventMetaData?.eventType?.replace(/_/g, ' ') || 'No Type Found'}
                         &lt;/span&gt;
                     &lt;/div&gt;
-                    &lt;span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900"&gt;
-                        {eventMetaData?.eventType?.replace(/_/g, ' ') || 'No Type Found'}
-                    &lt;/span&gt;
-                &lt;/div&gt;
-                &lt;div className="flex items-center pr-1.5 flex-shrink-0 flex-1 justify-center"&gt;
+                )}
+                &lt;div
+                    className={classNames('flex items-center flex-shrink-0 flex-1 justify-center', {
+                        'pr-1.5': !asrMode,
+                    })}
+                &gt;
                     &lt;button
                         id="playbar-toggleRate"
                         tabIndex={0}
@@ -1235,7 +1276,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
  * Renders Playbar
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { id, url, offset = 0, metaData } = props;
+    const { asrMode, id, url, offset = 0, metaData } = props;
 &nbsp;
     const {
         audioPlayer,
@@ -1261,6 +1302,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
     if (!isActive) return null;
     return (
         &lt;PlaybarUI
+            asrMode={asrMode}
             clear={clear}
             currentTime={audioPlayer.displayCurrentTime}
             duration={audioPlayer.displayDuration}
@@ -1294,7 +1336,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Jul 08 2022 10:49:01 GMT-0400 (Eastern Daylight Time)
+                at Fri Jul 08 2022 13:42:40 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -37629,6 +37629,7 @@ function createGQLClient(config) {
     cacheExchange2({
       keys: {
         ApplicationConfiguration: () => null,
+        EventQuotePriceInfo: () => null,
         Search: () => null
       }
     }),
@@ -38173,6 +38174,14 @@ var LoginDocument = lib_default`
   }
 }
     `;
+var LoginWithPublicApiKeyDocument = lib_default`
+    mutation LoginWithPublicApiKey($apiKey: String!) {
+  loginWithPublicApiKey(apiKey: $apiKey) {
+    accessToken
+    refreshToken
+  }
+}
+    `;
 var EventListDocument = lib_default`
     query EventList($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
   search {
@@ -38613,13 +38622,45 @@ var AuthUI = (props) => {
     }, "Sign Up");
   }).exhaustive()))))).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
 };
+var ApiAuthUI = (props) => {
+  const { children, userQuery, loginState } = props;
+  return /* @__PURE__ */ import_react15.default.createElement(import_react15.default.Fragment, null, (0, import_ts_pattern2.match)(userQuery.status).with("loading", "paused", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "relative flex flex-col items-center justify-center w-full h-full"
+  }, /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "flex"
+  }, /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
+  }), /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
+  }), /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
+  })))).with("error", "empty", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "bg-white relative flex flex-col items-center justify-center w-full h-full"
+  }, (0, import_ts_pattern2.match)(loginState).with("error", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+    className: "text-sm text-slate-500"
+  }, "Unable to connect")).with("none", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+    className: "text-sm text-slate-500"
+  }, "Waiting for API key...")).with("loading", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "relative flex flex-col items-center justify-center w-full h-full"
+  }, /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "flex"
+  }, /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
+  }), /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
+  }), /* @__PURE__ */ import_react15.default.createElement("div", {
+    className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
+  })))).exhaustive())).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
+};
 var Auth = ({
+  apiMode,
   children,
   config = defaultTokenAuthConfig
 }) => {
   const initialAuthform = { email: "", password: "" };
   const { state, mergeState, handlers } = useChangeHandlers(initialAuthform);
   const [loginState, setLoginState] = (0, import_react15.useState)("none");
+  const { reset } = useClient2();
   const userQuery = useQuery2({
     query: lib_default`
             query CurrentUser {
@@ -38637,7 +38678,7 @@ var Auth = ({
       bus.emit("authenticated", null, "out");
     }
   }, [userQuery.status]);
-  const [_3, loginMutation] = useMutation(lib_default`
+  const [__, loginMutation] = useMutation(lib_default`
         mutation Login($email: String!, $password: String!) {
             login(email: $email, password: $password) {
                 accessToken
@@ -38645,7 +38686,6 @@ var Auth = ({
             }
         }
     `);
-  const { reset } = useClient2();
   const login = (0, import_react15.useCallback)((event) => __async(void 0, null, function* () {
     event.preventDefault();
     setLoginState("loading");
@@ -38667,9 +38707,39 @@ var Auth = ({
     mergeState(initialAuthform);
     reset();
   }), [config, mergeState, reset]);
+  const [_3, loginWithPublicApiMutation] = useMutation(lib_default`
+        mutation LoginWithPublicApiKey($apiKey: String!) {
+            loginWithPublicApiKey(apiKey: $apiKey) {
+                accessToken
+                refreshToken
+            }
+        }
+    `);
+  const loginWithApiKey = (0, import_react15.useCallback)((apiKey) => __async(void 0, null, function* () {
+    var _a;
+    setLoginState("loading");
+    const result = yield loginWithPublicApiMutation({ apiKey });
+    if ((_a = result == null ? void 0 : result.data) == null ? void 0 : _a.loginWithPublicApiKey) {
+      yield config.writeAuth(result.data.loginWithPublicApiKey);
+      userQuery.refetch({ requestPolicy: "cache-and-network" });
+      setLoginState("none");
+    } else {
+      setLoginState("error");
+      yield logout();
+    }
+  }), [loginWithPublicApiMutation, config, userQuery.refetch, state, setLoginState]);
+  bus.on("authenticateWithApiKey", (msg) => void loginWithApiKey(msg == null ? void 0 : msg.data), "in");
   return /* @__PURE__ */ import_react15.default.createElement(AuthProvider, {
     logout
-  }, /* @__PURE__ */ import_react15.default.createElement(AuthUI, {
+  }, apiMode ? /* @__PURE__ */ import_react15.default.createElement(ApiAuthUI, {
+    userQuery,
+    email: state.email,
+    onChangeEmail: handlers.email,
+    password: state.password,
+    onChangePassword: handlers.password,
+    login,
+    loginState
+  }, children) : /* @__PURE__ */ import_react15.default.createElement(AuthUI, {
     userQuery,
     email: state.email,
     onChangeEmail: handlers.email,

@@ -241,6 +241,9 @@
     authenticate(tokens) {
       this.emit("authenticate", tokens);
     }
+    authenticateApiKey(apiKey) {
+      this.emit("authenticateWithApiKey", apiKey);
+    }
     configure(config) {
       this.emit("configure", config);
     }
