@@ -44,7 +44,7 @@ const App: FC = (): ReactElement => {
     return (
         <StrictMode>
             <Provider bus={bus} config={{ moduleName: 'ASR' }}>
-                <Auth>
+                <Auth apiMode>
                     <div className="h-full">
                         <Transcript asrMode />
                     </div>

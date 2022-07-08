@@ -171,10 +171,50 @@ export const AuthUI = (props: AuthProps) => {
     );
 };
 
+export const ApiAuthUI = (props: AuthProps) => {
+    const { children, userQuery, loginState } = props;
+
+    return (
+        <>
+            {match(userQuery.status)
+                .with('loading', 'paused', () => (
+                    <div className="relative flex flex-col items-center justify-center w-full h-full">
+                        <div className="flex">
+                            <div className="w-2 h-2 bg-slate-600 rounded-full animate-bounce animation" />
+                            <div className="w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100" />
+                            <div className="w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200" />
+                        </div>
+                    </div>
+                ))
+                .with('error', 'empty', () => (
+                    <div className="bg-white relative flex flex-col items-center justify-center w-full h-full">
+                        {match(loginState)
+                            .with('error', () => <p className="text-sm text-slate-500">Unable to connect</p>)
+                            .with('none', () => <p className="text-sm text-slate-500">Waiting for API key...</p>)
+                            .with('loading', () => (
+                                <div className="relative flex flex-col items-center justify-center w-full h-full">
+                                    <div className="flex">
+                                        <div className="w-2 h-2 bg-slate-600 rounded-full animate-bounce animation" />
+                                        <div className="w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100" />
+                                        <div className="w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200" />
+                                    </div>
+                                </div>
+                            ))
+                            .exhaustive()}
+                    </div>
+                ))
+                .with('success', () => children || <div />)
+                .exhaustive()}
+        </>
+    );
+};
+
 export const Auth = ({
+    apiMode,
     children,
     config = defaultTokenAuthConfig,
 }: {
+    apiMode?: boolean;
     children?: ReactNode;
     config?: TokenAuthConfig<AuthTokens>;
 }): ReactElement => {
@@ -269,17 +309,31 @@ export const Auth = ({
 
     return (
         <AuthProvider logout={logout}>
-            <AuthUI
-                userQuery={userQuery}
-                email={state.email}
-                onChangeEmail={handlers.email}
-                password={state.password}
-                onChangePassword={handlers.password}
-                login={login}
-                loginState={loginState}
-            >
-                {children}
-            </AuthUI>
+            {apiMode ? (
+                <ApiAuthUI
+                    userQuery={userQuery}
+                    email={state.email}
+                    onChangeEmail={handlers.email}
+                    password={state.password}
+                    onChangePassword={handlers.password}
+                    login={login}
+                    loginState={loginState}
+                >
+                    {children}
+                </ApiAuthUI>
+            ) : (
+                <AuthUI
+                    userQuery={userQuery}
+                    email={state.email}
+                    onChangeEmail={handlers.email}
+                    password={state.password}
+                    onChangePassword={handlers.password}
+                    login={login}
+                    loginState={loginState}
+                >
+                    {children}
+                </AuthUI>
+            )}
         </AuthProvider>
     );
 };
