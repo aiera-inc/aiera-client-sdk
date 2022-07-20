@@ -63,12 +63,25 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         zoomMeetingType,
         zoomMeetingTypeOptions,
     } = props;
-    const passcodeField = (
+    const dialInField = (
+        <FormFieldInput
+            autoFocus
+            className="mt-5 px-4 py-3"
+            clearable
+            description="Enter the dial-in number"
+            label="Dial-in number*"
+            name="connectPhoneNumber"
+            onChange={onChangeConnectPhoneNumber}
+            placeholder="(888)-123-4567"
+            value={connectPhoneNumber}
+        />
+    );
+    const renderPasscodeField = (label = 'Passcode', description = 'Enter the passcode (optional)') => (
         <FormFieldInput
             className="mt-5 px-4 py-3"
             clearable
-            description="Enter the passcode (optional)"
-            label="Passcode"
+            description={description}
+            label={label}
             name="connectPin"
             onChange={onChangeConnectPin}
             value={connectPin}
@@ -103,7 +116,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                                 placeholder="https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5"
                                                 value={connectUrl}
                                             />
-                                            {passcodeField}
+                                            {renderPasscodeField()}
                                             <FormFieldInput
                                                 className="mt-5 px-4 py-3"
                                                 clearable
@@ -117,22 +130,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                     ))
                                     .with('phone', () => (
                                         <>
-                                            <div className="bg-white border border-gray-200 mt-5 px-4 py-3 rounded shadow-xl">
-                                                <p className="font-semibold text-base text-black">Dial-in number*</p>
-                                                <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">
-                                                    Enter the dial-in number
-                                                </p>
-                                                <div className="mt-3 w-full">
-                                                    <Input
-                                                        autoFocus
-                                                        clearable
-                                                        name="connectPhoneNumber"
-                                                        onChange={onChangeConnectPhoneNumber}
-                                                        placeholder="(888)-123-4567"
-                                                        value={connectPhoneNumber}
-                                                    />
-                                                </div>
-                                            </div>
+                                            {dialInField}
                                             <div className="bg-white border border-gray-200 mt-5 px-4 py-3 rounded shadow-xl">
                                                 <p className="font-semibold text-base text-black">Meeting ID*</p>
                                                 <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">
@@ -148,26 +146,26 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                                     />
                                                 </div>
                                             </div>
-                                            {passcodeField}
+                                            {renderPasscodeField()}
+                                            <FormFieldSelect
+                                                className="mt-2.5"
+                                                name="zoomMeetingType"
+                                                onChange={onChangeZoomMeetingType}
+                                                options={participationTypeOptions}
+                                                value={zoomMeetingType}
+                                            />
                                         </>
                                     ))
                                     .otherwise(() => null)}
-                                <FormFieldSelect
-                                    className="mt-2.5"
-                                    name="zoomMeetingType"
-                                    onChange={onChangeZoomMeetingType}
-                                    options={participationTypeOptions}
-                                    value={zoomMeetingType}
-                                />
                             </>
                         )}
                     </>
                 ))
                 .with(ConnectionType.GoogleMeet, () => (
-                    <div className="bg-white border border-gray-200 mt-2 px-4 py-3 rounded shadow-xl">
-                        <p className="font-semibold text-base text-black">Dial-in number</p>
-                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">Enter the dial-in number</p>
-                    </div>
+                    <>
+                        {dialInField}
+                        {renderPasscodeField('PIN', 'Enter a PIN (optional)')}
+                    </>
                 ))
                 .with(ConnectionType.Webcast, () => (
                     <div className="bg-white border border-gray-200 mt-2 px-4 py-3 rounded shadow-xl">
@@ -175,12 +173,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                         <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">Enter the dial-in number</p>
                     </div>
                 ))
-                .with(ConnectionType.PhoneNumber, () => (
-                    <div className="bg-white border border-gray-200 mt-2 px-4 py-3 rounded shadow-xl">
-                        <p className="font-semibold text-base text-black">Dial-in number</p>
-                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">Enter the dial-in number</p>
-                    </div>
-                ))
+                .with(ConnectionType.PhoneNumber, () => <>{dialInField}</>)
                 .otherwise(() => null)}
         </div>
     );

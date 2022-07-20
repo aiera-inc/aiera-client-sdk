@@ -49,6 +49,8 @@ describe('ConnectionDetails', () => {
             // Do not render phone fields
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeNull();
             expect(screen.queryByPlaceholderText('1234567890')).toBeNull();
+            expect(screen.queryByText('Call me')).toBeNull();
+            expect(screen.queryByText('Set it & forget it')).toBeNull();
         });
 
         test('when meeting type is phone, render fields for phone only', () => {
@@ -58,9 +60,23 @@ describe('ConnectionDetails', () => {
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
             expect(screen.queryByPlaceholderText('1234567890')).toBeInTheDocument();
             expect(screen.queryByDisplayValue(props.connectPin)).toBeInTheDocument();
+            screen.getByText('Call me');
+            screen.getByText('Set it & forget it');
             // Do not render web fields
             expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeNull();
             expect(screen.queryByDisplayValue(props.connectCallerId)).toBeNull();
+        });
+    });
+
+    describe('when connection type is Google Meet', () => {
+        const googleProps = {
+            ...props,
+            connectionType: ConnectionType.GoogleMeet,
+        };
+        test('renders fields for Google Meet', () => {
+            renderWithProvider(<ConnectionDetails {...googleProps} />);
+            screen.getByText('Dial-in number*');
+            expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
         });
     });
 });
