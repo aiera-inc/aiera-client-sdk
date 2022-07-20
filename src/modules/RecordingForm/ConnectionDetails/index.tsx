@@ -1,31 +1,25 @@
-import React, { Dispatch, ReactElement, SetStateAction, useState } from 'react';
-import classNames from 'classnames';
+import React, { ReactElement } from 'react';
 import { match } from 'ts-pattern';
 
-import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
+import { FormFieldInput } from '@aiera/client-sdk/components/FormField/FormFieldInput';
+import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { Input } from '@aiera/client-sdk/components/Input';
-import { ConnectionType } from '@aiera/client-sdk/modules/RecordingForm';
-import { ChangeHandler } from '@aiera/client-sdk/types';
+import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { ConnectionType, ParticipationType } from '@aiera/client-sdk/modules/RecordingForm';
+import { SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
 
-const ZOOM_MEETING_TYPE_OPTIONS = [
-    {
-        label: 'Web URL',
-        value: 'web',
-        description: 'Connect to Zoom meeting via web url',
-    },
-    {
-        label: 'Dial-in number',
-        value: 'phone',
-        description: 'Connect to Zoom meeting via dial-in number',
-    },
-];
-
-interface ZoomMeetingTypeOption {
-    description: string;
-    label: string;
-    value: string;
-}
+const ZOOM_MEETING_TYPE_OPTION_PHONE = {
+    label: 'Dial-in number',
+    value: 'phone',
+    description: 'Connect to Zoom meeting via dial-in number',
+};
+const ZOOM_MEETING_TYPE_OPTION_WEB = {
+    label: 'Web URL',
+    value: 'web',
+    description: 'Connect to Zoom meeting via web url',
+};
+const ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_PHONE, ZOOM_MEETING_TYPE_OPTION_WEB];
 
 interface ConnectionDetailsSharedProps {
     connectAccessId: string;
@@ -39,13 +33,16 @@ interface ConnectionDetailsSharedProps {
     onChangeConnectPhoneNumber: ChangeHandler<string>;
     onChangeConnectPin: ChangeHandler<string>;
     onChangeConnectUrl: ChangeHandler<string>;
+    onChangeParticipationType: ChangeHandler<ParticipationType>;
+    participationType?: ParticipationType;
+    participationTypeOptions: SelectOption<ParticipationType>[];
 }
 
 /** @notExported */
 interface ConnectionDetailsUIProps extends ConnectionDetailsSharedProps {
-    onChangeZoomMeetingType: Dispatch<SetStateAction<string | undefined>>;
+    onChangeZoomMeetingType: ChangeHandler<string>;
     zoomMeetingType?: string;
-    zoomMeetingTypeOptions: ZoomMeetingTypeOption[];
+    zoomMeetingTypeOptions: SelectOption<string>[];
 }
 
 export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactElement {
@@ -62,78 +59,60 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         onChangeConnectPin,
         onChangeConnectUrl,
         onChangeZoomMeetingType,
+        participationTypeOptions,
         zoomMeetingType,
         zoomMeetingTypeOptions,
     } = props;
+    const passcodeField = (
+        <FormFieldInput
+            className="mt-5 px-4 py-3"
+            clearable
+            description="Enter the passcode (optional)"
+            label="Passcode"
+            name="connectPin"
+            onChange={onChangeConnectPin}
+            value={connectPin}
+        />
+    );
     return (
         <div className="py-3 connection-details">
             <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Configure Connection</p>
             {match(connectionType)
                 .with(ConnectionType.Zoom, () => (
                     <>
-                        <div className="bg-white border border-gray-200 mt-2 rounded shadow-xl">
-                            {zoomMeetingTypeOptions.map((option) => (
-                                <div
-                                    className="border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 first:hover:rounded-t last:hover:rounded-b last:border-0"
-                                    key={option.value}
-                                    onClick={() => onChangeZoomMeetingType(option.value)}
-                                >
-                                    <div>
-                                        <p
-                                            className={classNames([
-                                                'text-black text-base',
-                                                { 'font-semibold': zoomMeetingType === option.value },
-                                            ])}
-                                        >
-                                            {option.label}
-                                        </p>
-                                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">
-                                            {option.description}
-                                        </p>
-                                    </div>
-                                    <Checkbox
-                                        checked={zoomMeetingType === option.value}
-                                        className="ml-auto flex-shrink-0"
-                                    />
-                                </div>
-                            ))}
-                        </div>
+                        <FormFieldSelect
+                            className="mt-2.5"
+                            name="zoomMeetingType"
+                            onChange={onChangeZoomMeetingType}
+                            options={zoomMeetingTypeOptions}
+                            value={zoomMeetingType}
+                        />
                         {!!zoomMeetingType && (
                             <>
                                 {match(zoomMeetingType)
                                     .with('web', () => (
                                         <>
-                                            <div className="bg-white border border-gray-200 mt-5 px-4 py-3 rounded shadow-xl">
-                                                <p className="font-semibold text-base text-black">Meeting URL*</p>
-                                                <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">
-                                                    Enter the Zoom meeting url
-                                                </p>
-                                                <div className="mt-3 w-full">
-                                                    <Input
-                                                        autoFocus
-                                                        clearable
-                                                        name="connectUrl"
-                                                        onChange={onChangeConnectUrl}
-                                                        placeholder="https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5"
-                                                        value={connectUrl}
-                                                    />
-                                                </div>
-                                            </div>
-                                            <div className="bg-white border border-gray-200 mt-5 px-4 py-3 rounded shadow-xl">
-                                                <p className="font-semibold text-base text-black">Caller ID</p>
-                                                <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">
-                                                    Enter the name of the caller ID Aiera should use when connecting
-                                                    (optional)
-                                                </p>
-                                                <div className="mt-3 w-full">
-                                                    <Input
-                                                        clearable
-                                                        name="connectCallerId"
-                                                        onChange={onChangeConnectCallerId}
-                                                        value={connectCallerId}
-                                                    />
-                                                </div>
-                                            </div>
+                                            <FormFieldInput
+                                                autoFocus
+                                                className="mt-5 px-4 py-3"
+                                                clearable
+                                                description="Enter the Zoom meeting url"
+                                                label="Meeting URL*"
+                                                name="connectUrl"
+                                                onChange={onChangeConnectUrl}
+                                                placeholder="https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5"
+                                                value={connectUrl}
+                                            />
+                                            {passcodeField}
+                                            <FormFieldInput
+                                                className="mt-5 px-4 py-3"
+                                                clearable
+                                                description="Enter the name of the caller ID Aiera should use when connecting (optional)"
+                                                label="Caller ID"
+                                                name="connectCallerId"
+                                                onChange={onChangeConnectCallerId}
+                                                value={connectCallerId}
+                                            />
                                         </>
                                     ))
                                     .with('phone', () => (
@@ -169,23 +148,17 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                                     />
                                                 </div>
                                             </div>
+                                            {passcodeField}
                                         </>
                                     ))
                                     .otherwise(() => null)}
-                                <div className="bg-white border border-gray-200 mt-5 px-4 py-3 rounded shadow-xl">
-                                    <p className="font-semibold text-base text-black">Passcode</p>
-                                    <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">
-                                        Enter the passcode (optional)
-                                    </p>
-                                    <div className="mt-3 w-full">
-                                        <Input
-                                            clearable
-                                            name="connectPin"
-                                            onChange={onChangeConnectPin}
-                                            value={connectPin}
-                                        />
-                                    </div>
-                                </div>
+                                <FormFieldSelect
+                                    className="mt-2.5"
+                                    name="zoomMeetingType"
+                                    onChange={onChangeZoomMeetingType}
+                                    options={participationTypeOptions}
+                                    value={zoomMeetingType}
+                                />
                             </>
                         )}
                     </>
@@ -220,7 +193,7 @@ export interface ConnectionDetailsProps extends ConnectionDetailsSharedProps {}
  * Renders ConnectionDetails
  */
 export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
-    const [zoomMeetingType, setZoomMeetingType] = useState<string | undefined>(undefined);
+    const { state, handlers } = useChangeHandlers({ zoomMeetingType: '' });
     const {
         connectAccessId,
         connectCallerId,
@@ -233,6 +206,9 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
         onChangeConnectPhoneNumber,
         onChangeConnectPin,
         onChangeConnectUrl,
+        onChangeParticipationType,
+        participationType,
+        participationTypeOptions,
     } = props;
     return (
         <ConnectionDetailsUI
@@ -247,8 +223,11 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             onChangeConnectPhoneNumber={onChangeConnectPhoneNumber}
             onChangeConnectPin={onChangeConnectPin}
             onChangeConnectUrl={onChangeConnectUrl}
-            onChangeZoomMeetingType={setZoomMeetingType}
-            zoomMeetingType={zoomMeetingType}
+            onChangeParticipationType={onChangeParticipationType}
+            onChangeZoomMeetingType={handlers.zoomMeetingType}
+            participationType={participationType}
+            participationTypeOptions={participationTypeOptions}
+            zoomMeetingType={state.zoomMeetingType}
             zoomMeetingTypeOptions={ZOOM_MEETING_TYPE_OPTIONS}
         />
     );

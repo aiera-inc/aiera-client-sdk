@@ -3,7 +3,14 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
-import { CONNECTION_TYPE_OPTIONS, ConnectionType as ConnectionTypeEnum } from '@aiera/client-sdk/modules/RecordingForm';
+import {
+    CONNECTION_TYPE_OPTIONS,
+    CONNECTION_TYPE_OPTION_GOOGLE,
+    CONNECTION_TYPE_OPTION_PHONE,
+    CONNECTION_TYPE_OPTION_WEBCAST,
+    CONNECTION_TYPE_OPTION_ZOOM,
+    ConnectionType as ConnectionTypeEnum,
+} from '@aiera/client-sdk/modules/RecordingForm';
 import { ConnectionType } from './index';
 
 describe('ConnectionType', () => {
@@ -16,10 +23,10 @@ describe('ConnectionType', () => {
 
     test('renders options with checkboxes', () => {
         renderWithProvider(<ConnectionType connectionTypeOptions={CONNECTION_TYPE_OPTIONS} onChange={onChange} />);
-        screen.getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.Zoom].label);
-        screen.getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.GoogleMeet].label);
-        screen.getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.Webcast].label);
-        screen.getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.PhoneNumber].label);
+        screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label);
+        screen.getByText(CONNECTION_TYPE_OPTION_GOOGLE.label);
+        screen.getByText(CONNECTION_TYPE_OPTION_WEBCAST.label);
+        screen.getByText(CONNECTION_TYPE_OPTION_PHONE.label);
     });
 
     test('when connectionType is set, renders selected option', () => {
@@ -31,9 +38,7 @@ describe('ConnectionType', () => {
             />
         );
         expect(rendered.container.querySelector('svg')).not.toBeNull();
-        const otherOption = screen
-            .getByText(CONNECTION_TYPE_OPTIONS[ConnectionTypeEnum.GoogleMeet].label)
-            .closest('div');
+        const otherOption = screen.getByText(CONNECTION_TYPE_OPTION_GOOGLE.label).closest('div');
         if (otherOption) {
             // Click on another option
             userEvent.click(otherOption);

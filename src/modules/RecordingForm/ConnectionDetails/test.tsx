@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 
-import { ConnectionType } from '@aiera/client-sdk/modules/RecordingForm';
+import { ConnectionType, PARTICIPATION_TYPE_OPTIONS } from '@aiera/client-sdk/modules/RecordingForm';
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ConnectionDetails } from './index';
 
@@ -19,6 +19,8 @@ describe('ConnectionDetails', () => {
         onChangeConnectPhoneNumber: onChange,
         onChangeConnectPin: onChange,
         onChangeConnectUrl: onChange,
+        onChangeParticipationType: onChange,
+        participationTypeOptions: PARTICIPATION_TYPE_OPTIONS,
     };
 
     describe('when connection type is Zoom', () => {

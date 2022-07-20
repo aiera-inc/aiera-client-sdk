@@ -12,6 +12,7 @@ interface SharedProps {
 /** @notExported */
 export interface FormFieldInputProps extends SharedProps {
     autoFocus?: boolean;
+    clearable?: boolean;
     description?: string;
     label?: string;
     onChange?: ChangeHandler<string>;
@@ -20,7 +21,7 @@ export interface FormFieldInputProps extends SharedProps {
 }
 
 export function FormFieldInput(props: FormFieldInputProps) {
-    const { autoFocus, className, description, label, name, onChange, placeholder, value } = props;
+    const { autoFocus, className, clearable, description, label, name, onChange, placeholder, value } = props;
     return (
         <FormField className={className}>
             {!!label && <p className="font-semibold text-base text-black form-field__label">{label}</p>}
@@ -32,7 +33,7 @@ export function FormFieldInput(props: FormFieldInputProps) {
             <div className="mt-3 w-full">
                 <Input
                     autoFocus={autoFocus}
-                    clearable
+                    clearable={clearable}
                     name={name}
                     onChange={onChange}
                     placeholder={placeholder}

@@ -63,4 +63,10 @@ export type DeepPartial<T> = {
     [P in keyof T]?: DeepPartial<T[P]>;
 };
 
+export type SelectOption<T> = {
+    description: string;
+    label: string;
+    value: T;
+};
+
 export type ValueOf<T> = T[keyof T];
