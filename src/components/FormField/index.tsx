@@ -22,6 +22,6 @@ export interface FormFieldProps extends FormFieldSharedProps {}
  * Renders FormField
  */
 export function FormField(props: FormFieldProps): ReactElement {
-    const { children } = props;
-    return <FormFieldUI>{children}</FormFieldUI>;
+    const { children, className } = props;
+    return <FormFieldUI className={className}>{children}</FormFieldUI>;
 }

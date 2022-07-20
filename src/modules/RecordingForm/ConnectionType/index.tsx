@@ -1,13 +1,13 @@
 import React, { ReactElement } from 'react';
 
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
-import { ChangeHandler } from '@aiera/client-sdk/types';
-import { ConnectionType as ConnectionTypeEnum, ConnectionTypeOption } from '@aiera/client-sdk/modules/RecordingForm';
+import { ConnectionType as ConnectionTypeEnum } from '@aiera/client-sdk/modules/RecordingForm';
+import { ChangeHandler, SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface ConnectionTypeSharedProps {
     connectionType?: ConnectionTypeEnum;
-    connectionTypeOptions: ConnectionTypeOption;
+    connectionTypeOptions: SelectOption<ConnectionTypeEnum>[];
     onChange: ChangeHandler<ConnectionTypeEnum>;
 }
 
@@ -20,10 +20,10 @@ export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
         <div className="py-3 connection-type">
             <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Connection Type</p>
             <FormFieldSelect
-                className="mt-2"
+                className="mt-2.5"
                 name="connectionType"
                 onChange={onChange}
-                options={Object.values(connectionTypeOptions)}
+                options={connectionTypeOptions}
                 value={connectionType}
             />
         </div>
