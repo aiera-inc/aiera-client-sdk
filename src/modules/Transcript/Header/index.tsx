@@ -22,7 +22,7 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
-    asrMode: boolean;
+    useConfigOptions: boolean;
     containerHeight: number;
     currentParagraphTimestamp?: string | null;
     endTime?: string | null;
@@ -50,7 +50,6 @@ interface HeaderUIProps extends HeaderSharedProps {
 
 export function HeaderUI(props: HeaderUIProps): ReactElement {
     const {
-        asrMode,
         containerHeight,
         currentParagraphTimestamp,
         endTime,
@@ -69,14 +68,15 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         toggleHeader,
         toggleKeyMentions,
         togglePriceChart,
+        useConfigOptions,
         startTime,
     } = props;
 
     const config = useConfig();
-    const showPriceReaction = !asrMode || (asrMode && config.asrOptions?.showPriceReaction);
-    const showTitleInfo = !asrMode || (asrMode && config.asrOptions?.showTitleInfo);
-    const showRecordingDetails = !asrMode || (asrMode && config.asrOptions?.showRecordingDetails);
-    const showSearch = !asrMode || (asrMode && config.asrOptions?.showSearch);
+    const showPriceReaction = !useConfigOptions || (useConfigOptions && config.options?.showPriceReaction);
+    const showTitleInfo = !useConfigOptions || (useConfigOptions && config.options?.showTitleInfo);
+    const showRecordingDetails = !useConfigOptions || (useConfigOptions && config.options?.showRecordingDetails);
+    const showSearch = !useConfigOptions || (useConfigOptions && config.options?.showSearch);
 
     return (
         <div
@@ -96,7 +96,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         >
             {showSearch && (
                 <div className="flex items-center px-3">
-                    {onBack && !asrMode && (
+                    {onBack && !useConfigOptions && (
                         <Button className="mr-2" onClick={onBack}>
                             <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                             Events
@@ -110,7 +110,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                         value={searchTerm}
                         onChange={onChangeSearchTerm}
                     />
-                    {!asrMode && <SettingsButton showTonalSentiment={false} />}
+                    {!useConfigOptions && <SettingsButton showTonalSentiment={false} />}
                 </div>
             )}
             {showTitleInfo &&
@@ -248,7 +248,7 @@ export interface HeaderProps extends HeaderSharedProps {}
  */
 export function Header(props: HeaderProps): ReactElement {
     const {
-        asrMode,
+        useConfigOptions,
         endTime,
         eventId,
         eventQuery,
@@ -298,7 +298,7 @@ export function Header(props: HeaderProps): ReactElement {
 
     return (
         <HeaderUI
-            asrMode={asrMode}
+            useConfigOptions={useConfigOptions}
             containerHeight={containerHeight}
             currentParagraphTimestamp={currentParagraphTimestamp}
             eventDetailsExpanded={eventDetailsExpanded}

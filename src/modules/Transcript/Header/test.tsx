@@ -70,7 +70,7 @@ describe('Header', () => {
         const onBack = jest.fn();
         renderWithProvider(
             <Header
-                asrMode={false}
+                useConfigOptions={false}
                 containerHeight={500}
                 eventQuery={eventQuery as EventQuery}
                 onBack={onBack}
@@ -84,7 +84,7 @@ describe('Header', () => {
         const onBack = jest.fn();
         renderWithProvider(
             <Header
-                asrMode={false}
+                useConfigOptions={false}
                 containerHeight={500}
                 eventQuery={eventQuery as EventQuery}
                 onBack={onBack}
@@ -100,7 +100,7 @@ describe('Header', () => {
         const onChangeSearchTerm = jest.fn();
         renderWithProvider(
             <Header
-                asrMode={false}
+                useConfigOptions={false}
                 eventId="1928914"
                 containerHeight={500}
                 eventQuery={eventQuery as EventQuery}

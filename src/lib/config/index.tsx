@@ -6,11 +6,12 @@ import { Options as RealtimeOptions } from 'pusher-js';
 import { defaultEnv } from '@aiera/client-sdk/lib/config/env';
 import { useMessageListener } from '../msg';
 
-type Module = 'ASR' | 'EventList' | 'NewsList' | 'RecordingList';
+type Module = 'ASR' | 'EventList' | 'NewsList' | 'RecordingList' | 'EventByTicker';
 type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
-interface ASROptions {
-    eventId: string;
+interface Options {
+    ticker?: string;
+    eventId?: string;
     darkMode?: boolean;
     showTitleInfo?: boolean;
     showRecordingDetails?: boolean;
@@ -32,7 +33,7 @@ export interface Config {
     realtimeOptions?: RealtimeOptions;
     hideSettings?: boolean;
     openDash?: () => void;
-    asrOptions?: ASROptions;
+    options?: Options;
 }
 
 // Setup default values for env

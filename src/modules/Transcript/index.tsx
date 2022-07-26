@@ -22,6 +22,8 @@ import {
     BasicTextualSentiment,
     EventUpdatesQuery,
     EventUpdatesQueryVariables,
+    LatestEventForTickerQuery,
+    LatestEventForTickerQueryVariables,
     LatestParagraphsQuery,
     LatestParagraphsQueryVariables,
     TranscriptQuery,
@@ -60,7 +62,7 @@ type Partial = { text: string; timestamp: number };
 
 /** @notExported */
 interface TranscriptUIProps {
-    asrMode: boolean;
+    useConfigOptions: boolean;
     containerHeight: number;
     containerRef: Ref<HTMLDivElement>;
     currentMatch?: string | null;
@@ -70,7 +72,7 @@ interface TranscriptUIProps {
     currentParagraphRef: Ref<HTMLDivElement>;
     darkMode?: boolean;
     endTime?: string | null;
-    eventId: string;
+    eventId?: string;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
     matchIndex: number;
     matches: Chunk[];
@@ -88,9 +90,16 @@ interface TranscriptUIProps {
     startTime?: string | null;
 }
 
+function NoEventFound() {
+    return (
+        <div className={classNames('h-full flex flex-col flex-1 justify-center items-center')}>
+            <p className="text-sm text-slate-500 dark:text-slate-300">No Event Found</p>
+        </div>
+    );
+}
+
 export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const {
-        asrMode,
         containerHeight,
         containerRef,
         currentMatch,
@@ -100,7 +109,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         currentParagraphTimestamp,
         darkMode = false,
         endTime,
-        eventId,
+        eventId = '',
         eventQuery,
         matchIndex,
         matches,
@@ -116,68 +125,73 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         showSpeakers,
         speakerTurns,
         startTime,
+        useConfigOptions,
     } = props;
 
-    // Show the player when its not asrMode, or if it is enabled with asrMode
+    // Show the player when its not useConfigOptions, or if it is enabled with useConfigOptions
     const config = useConfig();
-    const showPlayer = !asrMode || (asrMode && config.asrOptions?.showAudioPlayer);
-    const showTitleInfo = !asrMode || (asrMode && config.asrOptions?.showTitleInfo);
-    const showSearch = !asrMode || (asrMode && config.asrOptions?.showSearch);
-    const theme = !asrMode ? darkMode : (asrMode && config.asrOptions?.darkMode) || false;
+    const showPlayer = !useConfigOptions || (useConfigOptions && config.options?.showAudioPlayer);
+    const showTitleInfo = !useConfigOptions || (useConfigOptions && config.options?.showTitleInfo);
+    const showSearch = !useConfigOptions || (useConfigOptions && config.options?.showSearch);
+    const theme = !useConfigOptions ? darkMode : (useConfigOptions && config.options?.darkMode) || false;
 
     return (
         <div className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: theme })} ref={containerRef}>
-            <div className="dark:bg-bluegray-7">
-                {(showTitleInfo || showSearch) && (
-                    <Header
-                        asrMode={asrMode}
-                        containerHeight={containerHeight}
-                        currentParagraphTimestamp={currentParagraphTimestamp}
-                        endTime={endTime}
-                        eventId={eventId}
-                        eventQuery={eventQuery}
-                        onBack={onBack}
-                        searchTerm={searchTerm}
-                        onChangeSearchTerm={onChangeSearchTerm}
-                        onSeekAudioByDate={onSeekAudioByDate}
-                        startTime={startTime}
-                    />
-                )}
-                {searchTerm && (
-                    <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
-                        <div className="text-sm">
-                            Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
-                            <span className="font-semibold">{searchTerm}</span>
-                            &quot;
-                        </div>
-                        <div className="flex-1" />
-                        <button
-                            tabIndex={0}
-                            className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600"
-                            onClick={prevMatch}
-                        >
-                            <Chevron />
-                        </button>
-                        <div className="min-w-[35px] mr-2 text-center">
-                            {matchIndex + 1} / {matches.length}
-                        </div>
-                        <button
-                            tabIndex={0}
-                            className="w-2.5 mr-2 cursor-pointer hover:text-gray-600"
-                            onClick={nextMatch}
-                        >
-                            <Chevron />
-                        </button>
-                        <button
-                            tabIndex={0}
-                            className="w-4 cursor-pointer text-gray-400 hover:text-gray-600"
-                            onClick={(e) => onChangeSearchTerm(e, { value: '' })}
-                        >
-                            <Close />
-                        </button>
+            {match(eventQuery)
+                .with({ status: 'loading' }, { status: 'success' }, { status: 'empty' }, () => (
+                    <div className="dark:bg-bluegray-7">
+                        {(showTitleInfo || showSearch) && (
+                            <Header
+                                useConfigOptions={useConfigOptions}
+                                containerHeight={containerHeight}
+                                currentParagraphTimestamp={currentParagraphTimestamp}
+                                endTime={endTime}
+                                eventId={eventId}
+                                eventQuery={eventQuery}
+                                onBack={onBack}
+                                searchTerm={searchTerm}
+                                onChangeSearchTerm={onChangeSearchTerm}
+                                onSeekAudioByDate={onSeekAudioByDate}
+                                startTime={startTime}
+                            />
+                        )}
+                        {searchTerm && (
+                            <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
+                                <div className="text-sm">
+                                    Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
+                                    <span className="font-semibold">{searchTerm}</span>
+                                    &quot;
+                                </div>
+                                <div className="flex-1" />
+                                <button
+                                    tabIndex={0}
+                                    className="w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600"
+                                    onClick={prevMatch}
+                                >
+                                    <Chevron />
+                                </button>
+                                <div className="min-w-[35px] mr-2 text-center">
+                                    {matchIndex + 1} / {matches.length}
+                                </div>
+                                <button
+                                    tabIndex={0}
+                                    className="w-2.5 mr-2 cursor-pointer hover:text-gray-600"
+                                    onClick={nextMatch}
+                                >
+                                    <Chevron />
+                                </button>
+                                <button
+                                    tabIndex={0}
+                                    className="w-4 cursor-pointer text-gray-400 hover:text-gray-600"
+                                    onClick={(e) => onChangeSearchTerm(e, { value: '' })}
+                                >
+                                    <Close />
+                                </button>
+                            </div>
+                        )}
                     </div>
-                )}
-            </div>
+                ))
+                .otherwise(() => null)}
             <div className="overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7" ref={scrollContainerRef}>
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
@@ -298,7 +312,9 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             );
                         });
                     })
-                    .otherwise(() => null)}
+                    .with({ status: 'error' }, () => <NoEventFound />)
+                    .with({ status: 'paused' }, () => <NoEventFound />)
+                    .exhaustive()}
             </div>
             {showPlayer &&
                 match(eventQuery)
@@ -308,7 +324,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         return (
                             (event?.audioRecordingUrl || event?.isLive) && (
                                 <Playbar
-                                    asrMode={asrMode}
+                                    hideEventDetails={useConfigOptions}
                                     id={event?.id}
                                     url={
                                         event.isLive
@@ -329,7 +345,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     );
 };
 
-function useEventUpdates(eventId: string) {
+function useEventUpdates(eventId = '') {
     const eventUpdateQuery = useQuery<EventUpdatesQuery, EventUpdatesQueryVariables>({
         query: gql`
             query EventUpdates($eventId: ID!) {
@@ -347,6 +363,7 @@ function useEventUpdates(eventId: string) {
                 }
             }
         `,
+        pause: !eventId,
         requestPolicy: 'network-only',
         variables: {
             eventId,
@@ -363,7 +380,29 @@ function useEventUpdates(eventId: string) {
     return eventUpdateQuery;
 }
 
-function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdatesQuery, EventUpdatesQueryVariables>) {
+function useLatestEventForTicker(ticker = '') {
+    const latestEventForTickerQuery = useQuery<LatestEventForTickerQuery, LatestEventForTickerQueryVariables>({
+        query: gql`
+            query LatestEventForTicker($filter: LatestEventFilter!) {
+                latestEventForTicker(filter: $filter) {
+                    id
+                }
+            }
+        `,
+        pause: !ticker,
+        requestPolicy: 'cache-first',
+        variables: {
+            filter: {
+                ticker,
+                earningsOnly: true,
+            },
+        },
+    });
+
+    return latestEventForTickerQuery;
+}
+
+function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQuery, EventUpdatesQueryVariables>) {
     const eventQuery = useQuery<TranscriptQuery, TranscriptQueryVariables>({
         isEmpty: ({ events }) => !events[0]?.transcripts[0]?.sections?.length && !events[0]?.hasTranscript,
         query: gql`
@@ -469,6 +508,7 @@ function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdate
                 }
             }
         `,
+        pause: !eventId,
         requestPolicy: 'cache-and-network',
         variables: {
             eventId,
@@ -486,7 +526,7 @@ function useEventData(eventId: string, eventUpdateQuery: QueryResult<EventUpdate
 }
 
 function useLatestTranscripts(
-    eventId: string,
+    eventId = '',
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>
 ): SpeakerTurn[] {
     const latestParagraphsQuery = useQuery<LatestParagraphsQuery, LatestParagraphsQueryVariables>({
@@ -654,7 +694,7 @@ function usePartials(eventId: string, lastParagraphId?: string) {
 }
 
 function useAudioSync(
-    eventId: string,
+    eventId = '',
     speakerTurns: SpeakerTurn[],
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>,
     audioPlayer: AudioPlayer
@@ -855,7 +895,7 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
 
 /** @notExported */
 export interface TranscriptProps {
-    asrMode?: boolean;
+    useConfigOptions?: boolean;
     eventId?: string;
     onBack?: MouseEventHandler;
     initialSearchTerm?: string;
@@ -865,17 +905,18 @@ export interface TranscriptProps {
  * Renders Transcript
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
-    const { eventId: eventListEventId, onBack, initialSearchTerm, asrMode = false } = props;
+    const { eventId: eventListEventId, onBack, initialSearchTerm, useConfigOptions = false } = props;
+    const [eventId, setEventId] = useState(eventListEventId);
     const config = useConfig();
-    let eventId = eventListEventId;
+    const eventIdFromTicker = useLatestEventForTicker(config?.options?.ticker);
 
-    if (!eventId && config?.asrOptions?.eventId) {
-        eventId = config.asrOptions.eventId;
-    }
-
-    if (typeof eventId === 'undefined') {
-        return <div>No event found</div>;
-    }
+    useEffect(() => {
+        if (!eventId && config?.options?.eventId) {
+            setEventId(config.options.eventId);
+        } else if (!eventId && eventIdFromTicker.status === 'success') {
+            setEventId(eventIdFromTicker.state.data?.latestEventForTicker.id);
+        }
+    }, [setEventId, eventId, config, config?.options, eventIdFromTicker.status, eventIdFromTicker]);
 
     const { settings } = useSettings();
     const eventUpdateQuery = useEventUpdates(eventId);
@@ -943,7 +984,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     return (
         <TranscriptUI
-            asrMode={asrMode}
+            useConfigOptions={useConfigOptions}
             containerHeight={containerHeight}
             containerRef={containerRef}
             currentMatch={searchState.currentMatch}

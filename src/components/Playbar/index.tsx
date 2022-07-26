@@ -31,7 +31,7 @@ function toDurationString(totalSeconds: number) {
 }
 
 interface PlaybarSharedProps {
-    asrMode?: boolean;
+    hideEventDetails?: boolean;
 }
 
 /** @notExported */
@@ -63,7 +63,6 @@ interface PlaybarUIProps extends PlaybarSharedProps {
 
 export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     const {
-        asrMode,
         clear,
         currentTime,
         duration,
@@ -73,6 +72,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         fastForward,
         fixed,
         isPlaying,
+        hideEventDetails,
         knobLeft = 0,
         knobRef,
         onClickCalendar,
@@ -121,7 +121,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
             </div>
             <div
                 className={classNames('z-20 flex h-[44px] pb-[6px] items-center justify-center player_controls', {
-                    'ml-2.5': !asrMode,
+                    'ml-2.5': !hideEventDetails,
                 })}
             >
                 {!fixed && (
@@ -134,7 +134,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         <Swap className="w-3" />
                     </Button>
                 )}
-                {!asrMode && (
+                {!hideEventDetails && (
                     <div
                         className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
                         onClick={onClickCalendar}
@@ -154,7 +154,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 )}
                 <div
                     className={classNames('flex items-center flex-shrink-0 flex-1 justify-center', {
-                        'pr-1.5': !asrMode,
+                        'pr-1.5': !hideEventDetails,
                     })}
                 >
                     <button
@@ -367,7 +367,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
  * Renders Playbar
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { asrMode, id, url, offset = 0, metaData } = props;
+    const { hideEventDetails, id, url, offset = 0, metaData } = props;
 
     const {
         audioPlayer,
@@ -393,7 +393,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
     if (!isActive) return null;
     return (
         <PlaybarUI
-            asrMode={asrMode}
+            hideEventDetails={hideEventDetails}
             clear={clear}
             currentTime={audioPlayer.displayCurrentTime}
             duration={audioPlayer.displayDuration}
