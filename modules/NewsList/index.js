@@ -38374,6 +38374,13 @@ var EventUpdatesDocument = lib_default`
   }
 }
     `;
+var LatestEventForTickerDocument = lib_default`
+    query LatestEventForTicker($filter: LatestEventFilter!) {
+  latestEventForTicker(filter: $filter) {
+    id
+  }
+}
+    `;
 var TranscriptDocument = lib_default`
     query Transcript($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {

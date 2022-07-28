@@ -80522,6 +80522,13 @@ var EventUpdatesDocument = lib_default`
   }
 }
     `;
+var LatestEventForTickerDocument = lib_default`
+    query LatestEventForTicker($filter: LatestEventFilter!) {
+  latestEventForTicker(filter: $filter) {
+    id
+  }
+}
+    `;
 var TranscriptDocument = lib_default`
     query Transcript($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
@@ -81650,7 +81657,6 @@ function toDurationString(totalSeconds) {
 function PlaybarUI(props) {
   var _a, _b, _c, _d;
   const {
-    asrMode,
     clear,
     currentTime,
     duration,
@@ -81660,6 +81666,7 @@ function PlaybarUI(props) {
     fastForward,
     fixed,
     isPlaying,
+    hideEventDetails,
     knobLeft = 0,
     knobRef,
     onClickCalendar,
@@ -81710,7 +81717,7 @@ function PlaybarUI(props) {
     className: "z-10 relative font-mono text-gray-500 opacity-60 dark:text-bluegray-4"
   }, toDurationString(duration)))), /* @__PURE__ */ import_react34.default.createElement("div", {
     className: (0, import_classnames16.default)("z-20 flex h-[44px] pb-[6px] items-center justify-center player_controls", {
-      "ml-2.5": !asrMode
+      "ml-2.5": !hideEventDetails
     })
   }, !fixed && /* @__PURE__ */ import_react34.default.createElement(Button, {
     iconButton: true,
@@ -81724,7 +81731,7 @@ function PlaybarUI(props) {
     className: "flex-shrink-0 h-[30px] w-[30px] text-gray-500 mr-1"
   }, /* @__PURE__ */ import_react34.default.createElement(Swap, {
     className: "w-3"
-  })), !asrMode && /* @__PURE__ */ import_react34.default.createElement("div", {
+  })), !hideEventDetails && /* @__PURE__ */ import_react34.default.createElement("div", {
     className: "flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group",
     onClick: onClickCalendar
   }, /* @__PURE__ */ import_react34.default.createElement("div", {
@@ -81737,7 +81744,7 @@ function PlaybarUI(props) {
     className: "select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900"
   }, ((_d = eventMetaData == null ? void 0 : eventMetaData.eventType) == null ? void 0 : _d.replace(/_/g, " ")) || "No Type Found")), /* @__PURE__ */ import_react34.default.createElement("div", {
     className: (0, import_classnames16.default)("flex items-center flex-shrink-0 flex-1 justify-center", {
-      "pr-1.5": !asrMode
+      "pr-1.5": !hideEventDetails
     })
   }, /* @__PURE__ */ import_react34.default.createElement("button", {
     id: "playbar-toggleRate",
@@ -81910,7 +81917,7 @@ function usePlayer(id, url, offset = 0, metaData) {
   };
 }
 function Playbar(props) {
-  const { asrMode, id, url, offset = 0, metaData } = props;
+  const { hideEventDetails, id, url, offset = 0, metaData } = props;
   const {
     audioPlayer,
     isActive,
@@ -81933,7 +81940,7 @@ function Playbar(props) {
   if (!isActive)
     return null;
   return /* @__PURE__ */ import_react34.default.createElement(PlaybarUI, {
-    asrMode,
+    hideEventDetails,
     clear,
     currentTime: audioPlayer.displayCurrentTime,
     duration: audioPlayer.displayDuration,
