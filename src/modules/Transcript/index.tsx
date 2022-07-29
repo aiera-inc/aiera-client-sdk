@@ -341,6 +341,15 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         );
                     })
                     .otherwise(() => null)}
+            {match(eventQuery)
+                .with({ status: 'success' }, () => (
+                    <div className="z-20 -mt-1 bg-white">
+                        <p className="text-xs text-center text-slate-500">
+                            Transcription powered by <span className="font-medium text-orange-600">Aiera</span>
+                        </p>
+                    </div>
+                ))
+                .otherwise(() => null)}
         </div>
     );
 };
