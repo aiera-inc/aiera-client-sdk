@@ -1,3 +1,4 @@
+import type { Context } from '@finos/fdc3';
 import { SyntheticEvent } from 'react';
 import { CombinedError } from 'urql';
 
@@ -20,6 +21,11 @@ export interface ChangeEvent<T = unknown> {
      */
     value?: T;
 }
+
+export interface AudioOffsetMs extends Context {
+    offsetMs: number;
+}
+
 /**
  * Implements a consistent change handler interface for all inputs that
  * is backwards compatible with browser change handler but has an optional

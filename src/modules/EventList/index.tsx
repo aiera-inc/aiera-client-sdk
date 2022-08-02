@@ -51,23 +51,24 @@ export type EventListEvent = EventListQuery['search']['events']['hits'][0]['even
 export type { CompanyFilterResult };
 
 export interface EventListUIProps {
-    refetch?: () => void;
+    audioOffsetMs: number;
     company?: CompanyFilterResult;
     darkMode?: boolean;
     event?: EventListEvent;
     eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypes?: FilterByType[];
-    loadMore?: (event: MouseEvent) => void;
     listType?: EventView;
     loading?: boolean;
+    loadMore?: (event: MouseEvent) => void;
     maxHits?: number;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler<CompanyFilterResult>;
     onSearchChange?: ChangeHandler<string>;
-    onSelectFilterBy?: ChangeHandler<FilterByType[]>;
-    onSelectListType?: ChangeHandler<EventView>;
     onSelectEvent?: ChangeHandler<EventListEvent>;
     onSelectEventById?: ChangeHandler<string>;
+    onSelectFilterBy?: ChangeHandler<FilterByType[]>;
+    onSelectListType?: ChangeHandler<EventView>;
+    refetch?: () => void;
     scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
@@ -75,22 +76,23 @@ export interface EventListUIProps {
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
-        refetch,
+        audioOffsetMs,
         company,
         darkMode = false,
         event,
         eventsQuery,
         filterByTypes,
-        loadMore,
         listType,
+        loadMore,
         maxHits = 0,
         onBackFromTranscript,
         onCompanyChange,
         onSearchChange,
-        onSelectFilterBy,
-        onSelectListType,
         onSelectEvent,
         onSelectEventById,
+        onSelectFilterBy,
+        onSelectListType,
+        refetch,
         scrollRef,
         searchTerm,
         setFocus,
@@ -190,7 +192,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                 : `${Math.ceil(hitRatio * 12)}/12`;
                                         const primaryQuote = getPrimaryQuote(event.primaryCompany);
                                         const eventDate = DateTime.fromISO(event.eventDate);
-                                        const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
+                                        const audioOffset = (audioOffsetMs ?? event.audioRecordingOffsetMs ?? 0) / 1000;
                                         let divider = null;
                                         if (
                                             !prevEventDate ||
@@ -365,26 +367,28 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 export interface EventListProps {}
 
 interface EventListState {
+    audioOffsetMs: number;
     company?: CompanyFilterResult;
-    fromIndex: number;
-    pageSize: number;
-    watchlist: string[];
     event?: EventListEvent;
     filterByTypes: FilterByType[];
+    fromIndex: number;
     listType: EventView;
+    pageSize: number;
     searchTerm: string;
+    watchlist: string[];
 }
 
 export const EventList = (_props: EventListProps): ReactElement => {
     const { state, handlers, mergeState } = useChangeHandlers<EventListState>({
+        audioOffsetMs: 0,
         company: undefined,
-        fromIndex: 0,
-        pageSize: 30,
-        watchlist: [],
         event: undefined,
         filterByTypes: [],
+        fromIndex: 0,
         listType: EventView.LiveAndUpcoming,
+        pageSize: 30,
         searchTerm: '',
+        watchlist: [],
     });
 
     const { settings } = useSettings();
@@ -409,6 +413,14 @@ export const EventList = (_props: EventListProps): ReactElement => {
                 .map((c) => c?.id)
                 .filter((n) => n) as string[];
             mergeState({ watchlist: companyIds });
+        },
+        'in'
+    );
+
+    useMessageListener(
+        'audioOffsetMs',
+        (msg: Message<'audioOffsetMs'>) => {
+            mergeState({ audioOffsetMs: msg.data });
         },
         'in'
     );
@@ -595,14 +607,14 @@ export const EventList = (_props: EventListProps): ReactElement => {
 
     return (
         <EventListUI
+            audioOffsetMs={state.audioOffsetMs}
             company={state.company}
             darkMode={settings.darkMode}
             event={state.event}
             eventsQuery={eventsQuery}
             filterByTypes={state.filterByTypes}
-            loadMore={hasMoreResults ? loadMore : undefined}
-            refetch={refetch}
             listType={state.listType}
+            loadMore={hasMoreResults ? loadMore : undefined}
             maxHits={maxHits}
             onBackFromTranscript={useCallback(
                 (event: SyntheticEvent<Element, Event>) => onSelectEvent(event, { value: null }),
@@ -610,10 +622,11 @@ export const EventList = (_props: EventListProps): ReactElement => {
             )}
             onCompanyChange={onSelectCompany}
             onSearchChange={handlers.searchTerm}
-            onSelectFilterBy={handlers.filterByTypes}
-            onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}
             onSelectEventById={onSelectEventById}
+            onSelectFilterBy={handlers.filterByTypes}
+            onSelectListType={handlers.listType}
+            refetch={refetch}
             scrollRef={scrollRef}
             searchTerm={state.searchTerm}
             setFocus={setFocus}

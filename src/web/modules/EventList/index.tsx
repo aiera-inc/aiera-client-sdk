@@ -2,14 +2,15 @@ import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import type { Instrument, InstrumentList, Listener } from '@finos/fdc3';
 
-import { Provider } from '@aiera/client-sdk/components/Provider';
-import { useMessageListener } from '@aiera/client-sdk/lib/msg';
-import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import { useClient } from '@aiera/client-sdk/api/client';
-import { EventList } from '@aiera/client-sdk/modules/EventList';
-import '@aiera/client-sdk/css/styles.css';
+import { Provider } from '@aiera/client-sdk/components/Provider';
 import { usePlaySound } from '@aiera/client-sdk/lib/data';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
+import { Auth } from '@aiera/client-sdk/modules/Auth';
+import { EventList } from '@aiera/client-sdk/modules/EventList';
+import { AudioOffsetMs } from '@aiera/client-sdk/types';
+import '@aiera/client-sdk/css/styles.css';
 
 const useMessageBus = () => {
     const { playSound } = usePlaySound();
@@ -60,7 +61,6 @@ const useMessageBus = () => {
                     bus.emit('instrument-selected', context.id, 'in');
                 })
             );
-
             listeners.push(
                 window.fdc3.addContextListener('fdc3.instrumentList', (_context) => {
                     const context = _context as InstrumentList;
@@ -70,6 +70,14 @@ const useMessageBus = () => {
                             context.instruments.map((i) => i.id),
                             'in'
                         );
+                    }
+                })
+            );
+            listeners.push(
+                window.fdc3.addIntentListener('audioOffsetMs', (_context) => {
+                    const context = _context as AudioOffsetMs;
+                    if (context.offsetMs) {
+                        bus.emit('audioOffsetMs', context.offsetMs, 'in');
                     }
                 })
             );

@@ -14,6 +14,7 @@ interface EventAlert {
 }
 
 export interface MessageBusEvents {
+    audioOffsetMs: number;
     authenticate: AuthTokens;
     authenticateWithApiKey: string;
     authenticated: null;
