@@ -170,7 +170,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                     {primaryQuote?.exchange?.shortName}
                                                 </span>
                                             )}
-                                            {event?.eventType && (
+                                            {event?.eventType && primaryQuote?.localTicker && (
                                                 <span className="text-gray-300 group-hover:text-gray-400 capitalize">
                                                     {' '}
                                                     • {event?.eventType.replace(/_/g, ' ')}
@@ -178,8 +178,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                             )}
                                             {eventDate && (
                                                 <span className="text-gray-300 group-hover:text-gray-400">
-                                                    {' '}
-                                                    • {eventDate.toFormat('h:mma M/dd/yyyy')}
+                                                    {primaryQuote?.localTicker && ' • '}
+                                                    {eventDate.toFormat('h:mma M/dd/yyyy')}
                                                 </span>
                                             )}
                                         </div>
@@ -187,6 +187,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                             className={classNames('dark:text-white', {
                                                 'text-sm': headerExpanded,
                                                 'text-sm truncate whitespace-normal line-clamp-1': !headerExpanded,
+                                                'font-semibold': !primaryQuote?.localTicker,
                                             })}
                                         >
                                             {event?.title}
