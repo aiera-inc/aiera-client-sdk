@@ -282,17 +282,22 @@ export const Auth = ({
         LoginWithPublicApiKeyMutation,
         LoginWithPublicApiKeyMutationVariables
     >(gql`
-        mutation LoginWithPublicApiKey($apiKey: String!) {
-            loginWithPublicApiKey(apiKey: $apiKey) {
+        mutation LoginWithPublicApiKey($apiKey: String!, $origin: String) {
+            loginWithPublicApiKey(apiKey: $apiKey, origin: $origin) {
                 accessToken
                 refreshToken
             }
         }
     `);
+
+    // We need the parent origin, as the window origin will default to the iframe
+    // which will always be an aiera URL
+    const parentOrigin = window.location != window.parent.location ? document.referrer : document.location.href;
+
     const loginWithApiKey = useCallback(
         async (apiKey: string) => {
             setLoginState('loading');
-            const result = await loginWithPublicApiMutation({ apiKey });
+            const result = await loginWithPublicApiMutation({ apiKey, origin: parentOrigin });
             if (result?.data?.loginWithPublicApiKey) {
                 await config.writeAuth(result.data.loginWithPublicApiKey);
                 userQuery.refetch({ requestPolicy: 'cache-and-network' });
