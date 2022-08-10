@@ -88,6 +88,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         toggleRate,
         volume,
     } = props;
+
     return (
         <div className="relative h-13 w-full flex flex-col justify-center mt-[-6px] z-20">
             <div className="bg-white absolute top-[9px] left-0 right-0 bottom-0 dark:bg-bluegray-7 dark:top-[6px]" />
@@ -356,6 +357,7 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
 
 /** @notExported */
 export interface PlaybarProps extends PlaybarSharedProps {
+    hidePlayer?: boolean;
     id?: string;
     offset?: number;
     onClickCalendar?: ChangeHandler<string>;
@@ -367,7 +369,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
  * Renders Playbar
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { hideEventDetails, id, url, offset = 0, metaData } = props;
+    const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData } = props;
 
     const {
         audioPlayer,
@@ -390,7 +392,12 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
         [audioPlayer.id]
     );
 
-    if (!isActive) return null;
+    // We need control hiding the player in here
+    // because we're still initiating it, which lets
+    // the transcript receive audio seek events
+    // to scroll the text
+    if (!isActive || hidePlayer) return null;
+
     return (
         <PlaybarUI
             hideEventDetails={hideEventDetails}

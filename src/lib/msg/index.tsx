@@ -21,6 +21,7 @@ export interface MessageBusEvents {
     'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
+    seekTranscriptSeconds: number;
 }
 
 export interface Message<E extends keyof MessageBusEvents> {

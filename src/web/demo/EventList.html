@@ -24,9 +24,10 @@
                 //     accessToken: '[accesstoken]',
                 //     refreshToken: '[refreshToken]',
                 // });
-                
+
                 // To update the configuration
-                 eventList.configure({ hideSettings: true });
+                event.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+                eventList.configure({ hideSettings: false });
             });
 
             eventList.on('authenticated', () => {
@@ -38,7 +39,6 @@
                 //     { ticker: 'PTON' },
                 // ]);
             });
-
         </script>
     </body>
 </html>

@@ -45,6 +45,7 @@ import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
 import './styles.css';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 
 type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
 type Paragraph = SpeakerTurn['paragraphs'][0];
@@ -316,31 +317,31 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     .with({ status: 'paused' }, () => <NoEventFound />)
                     .exhaustive()}
             </div>
-            {showPlayer &&
-                match(eventQuery)
-                    .with({ status: 'success' }, ({ data: { events } }) => {
-                        const event = events[0];
-                        const primaryQuote = getPrimaryQuote(event?.primaryCompany);
-                        return (
-                            (event?.audioRecordingUrl || event?.isLive) && (
-                                <Playbar
-                                    hideEventDetails={useConfigOptions}
-                                    id={event?.id}
-                                    url={
-                                        event.isLive
-                                            ? `https://storage.media.aiera.com/${event.id}`
-                                            : event.audioRecordingUrl || ''
-                                    }
-                                    offset={(event?.audioRecordingOffsetMs || 0) / 1000}
-                                    metaData={{
-                                        quote: primaryQuote,
-                                        eventType: event?.eventType,
-                                    }}
-                                />
-                            )
-                        );
-                    })
-                    .otherwise(() => null)}
+            {match(eventQuery)
+                .with({ status: 'success' }, ({ data: { events } }) => {
+                    const event = events[0];
+                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
+                    return (
+                        (event?.audioRecordingUrl || event?.isLive) && (
+                            <Playbar
+                                hidePlayer={!showPlayer}
+                                hideEventDetails={useConfigOptions}
+                                id={event?.id}
+                                url={
+                                    event.isLive
+                                        ? `https://storage.media.aiera.com/${event.id}`
+                                        : event.audioRecordingUrl || ''
+                                }
+                                offset={(event?.audioRecordingOffsetMs || 0) / 1000}
+                                metaData={{
+                                    quote: primaryQuote,
+                                    eventType: event?.eventType,
+                                }}
+                            />
+                        )
+                    );
+                })
+                .otherwise(() => null)}
         </div>
     );
 };
@@ -968,6 +969,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         },
         [searchState.speakerTurnsWithMatches]
     );
+    const onSeekAudioSeconds = useCallback((seconds: number) => audioPlayer.rawSeek(seconds), [audioPlayer]);
     const onClickBack = useCallback(
         (event: MouseEvent) => {
             if (!audioPlayer.playing(null)) {
@@ -980,6 +982,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     const { height: containerHeight, ref: containerRef } = useElementSize();
 
+    useMessageListener('seekTranscriptSeconds', ({ data }) => void onSeekAudioSeconds(data), 'in');
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 
     return (

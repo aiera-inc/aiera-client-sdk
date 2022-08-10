@@ -388,6 +388,10 @@ export class Module {
         this.emit('instruments-selected', instruments);
     }
 
+    seekTranscriptSeconds(seconds: number) {
+        this.emit('seekTranscriptSeconds', seconds);
+    }
+
     /**
      * Unloads the module and remove message listeners.
      */
