@@ -80323,8 +80323,8 @@ var LoginDocument = lib_default`
 }
     `;
 var LoginWithPublicApiKeyDocument = lib_default`
-    mutation LoginWithPublicApiKey($apiKey: String!) {
-  loginWithPublicApiKey(apiKey: $apiKey) {
+    mutation LoginWithPublicApiKey($apiKey: String!, $origin: String) {
+  loginWithPublicApiKey(apiKey: $apiKey, origin: $origin) {
     accessToken
     refreshToken
   }
@@ -80863,17 +80863,18 @@ var Auth = ({
     reset();
   }), [config, mergeState, reset]);
   const [_2, loginWithPublicApiMutation] = useMutation(lib_default`
-        mutation LoginWithPublicApiKey($apiKey: String!) {
-            loginWithPublicApiKey(apiKey: $apiKey) {
+        mutation LoginWithPublicApiKey($apiKey: String!, $origin: String) {
+            loginWithPublicApiKey(apiKey: $apiKey, origin: $origin) {
                 accessToken
                 refreshToken
             }
         }
     `);
+  const parentOrigin = window.location != window.parent.location ? document.referrer : document.location.href;
   const loginWithApiKey = (0, import_react15.useCallback)((apiKey) => __async(void 0, null, function* () {
     var _a;
     setLoginState("loading");
-    const result = yield loginWithPublicApiMutation({ apiKey });
+    const result = yield loginWithPublicApiMutation({ apiKey, origin: parentOrigin });
     if ((_a = result == null ? void 0 : result.data) == null ? void 0 : _a.loginWithPublicApiKey) {
       yield config.writeAuth(result.data.loginWithPublicApiKey);
       userQuery.refetch({ requestPolicy: "cache-and-network" });
