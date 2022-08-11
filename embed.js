@@ -250,6 +250,9 @@
     setWatchlist(instruments) {
       this.emit("instruments-selected", instruments);
     }
+    seekTranscriptSeconds(seconds) {
+      this.emit("seekTranscriptSeconds", seconds);
+    }
     unload() {
       if (this.frame)
         this.frame.src = "";

@@ -81918,7 +81918,7 @@ function usePlayer(id, url, offset = 0, metaData) {
   };
 }
 function Playbar(props) {
-  const { hideEventDetails, id, url, offset = 0, metaData } = props;
+  const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData } = props;
   const {
     audioPlayer,
     isActive,
@@ -81938,7 +81938,7 @@ function Playbar(props) {
     var _a;
     return (_a = props.onClickCalendar) == null ? void 0 : _a.call(props, event, { value: audioPlayer.id });
   }, [audioPlayer.id]);
-  if (!isActive)
+  if (!isActive || hidePlayer)
     return null;
   return /* @__PURE__ */ import_react34.default.createElement(PlaybarUI, {
     hideEventDetails,
