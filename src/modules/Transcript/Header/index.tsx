@@ -96,7 +96,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         >
             {showSearch && (
                 <div className="flex items-center px-3">
-                    {onBack && !useConfigOptions && (
+                    {onBack && (
                         <Button className="mr-2" onClick={onBack}>
                             <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                             Events

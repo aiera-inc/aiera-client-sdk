@@ -41,6 +41,8 @@ import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { FilterBy } from './FilterBy';
 import { PlayButton } from './PlayButton';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { InstrumentID } from '@aiera/client-sdk/web/embed';
 
 enum FilterByType {
     transcript,
@@ -56,6 +58,7 @@ export interface EventListUIProps {
     darkMode?: boolean;
     event?: EventListEvent;
     eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
+    eventsQueryUpcoming: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypes?: FilterByType[];
     loadMore?: (event: MouseEvent) => void;
     listType?: EventView;
@@ -71,7 +74,177 @@ export interface EventListUIProps {
     scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
+    useConfigOptions: boolean;
 }
+
+interface EventRowProps {
+    refetch?: () => void;
+    event: EventListEvent;
+    maxHits?: number;
+    numMentions: number | null | undefined;
+    index: number;
+    isRefetching: boolean;
+    onSelectEvent?: ChangeHandler<EventListEvent>;
+    renderedRefetch: boolean;
+    searchTerm?: string;
+    setFocus?: Dispatch<SetStateAction<number>>;
+    showDivider: boolean;
+}
+
+const EventRow = ({
+    event,
+    numMentions,
+    maxHits = 0,
+    isRefetching,
+    onSelectEvent,
+    refetch,
+    renderedRefetch,
+    searchTerm,
+    index,
+    setFocus,
+    showDivider,
+}: EventRowProps) => {
+    const hitRatio = (numMentions || 0) / maxHits;
+    // Need to include these hardcoded to
+    // make sure tailwind doesn't purge
+    // w-1/12 w-2/12 w-3/12 w-4/12 w-5/12 w-6/12 w-7/12 w-8/12 w-9/12 w-10/12 w-11/12
+    const hitRatioClass = hitRatio === 1 ? 'full' : hitRatio === 0 ? '0' : `${Math.ceil(hitRatio * 12)}/12`;
+    const primaryQuote = getPrimaryQuote(event.primaryCompany);
+    const eventDate = DateTime.fromISO(event.eventDate);
+    const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
+    let divider = null;
+    if (showDivider) {
+        divider = (
+            <li className={classNames('sticky px-3 top-[56px]')}>
+                <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
+                    {eventDate.toFormat('DDDD')}
+                    <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
+                    {!renderedRefetch && (
+                        <div
+                            onClick={!isRefetching ? refetch : undefined}
+                            className="text-gray-400 cursor-pointer hover:text-gray-500 w-[50px]"
+                        >
+                            {isRefetching ? (
+                                <div className="flex justify-center group">
+                                    <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
+                                    <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
+                                    <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                                </div>
+                            ) : (
+                                'Refresh'
+                            )}
+                        </div>
+                    )}
+                </div>
+            </li>
+        );
+    }
+    return (
+        <Fragment key={event.id}>
+            {divider}
+            <li
+                tabIndex={0}
+                className={classNames(
+                    'group text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5',
+                    {
+                        'h-12': !searchTerm,
+                        'h-14': !!searchTerm,
+                    }
+                )}
+                onClick={(e) => onSelectEvent?.(e, { value: event })}
+                onFocus={() => setFocus?.(index)}
+                onBlur={() => setFocus?.(-1)}
+            >
+                <Tooltip
+                    className={classNames('flex flex-row', {
+                        'h-12': !searchTerm,
+                        'h-14': !!searchTerm,
+                    })}
+                    content={
+                        <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9">
+                            {prettyLineBreak(event.title)}
+                        </div>
+                    }
+                    grow="up-right"
+                    openOn="hover"
+                    position="top-left"
+                    yOffset={4}
+                    hideOnDocumentScroll
+                >
+                    <div className="flex items-center justify-center">
+                        <div className="flex items-center justify-center w-8 h-8">
+                            <PlayButton
+                                metaData={{
+                                    quote: primaryQuote,
+                                    eventType: event.eventType,
+                                    eventDate: eventDate ? eventDate.toISO() : undefined,
+                                    localTicker: primaryQuote?.localTicker,
+                                }}
+                                id={event.id}
+                                url={
+                                    event.isLive
+                                        ? `https://storage.media.aiera.com/${event.id}`
+                                        : event.audioRecordingUrl
+                                }
+                                offset={audioOffset || 0}
+                            />
+                        </div>
+                    </div>
+                    <div className="flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4">
+                        <div className="flex items-end">
+                            {primaryQuote?.localTicker ? (
+                                <>
+                                    <span className="leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
+                                        {primaryQuote?.localTicker}
+                                    </span>
+                                    <span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
+                                        {primaryQuote?.exchange?.shortName}
+                                    </span>
+                                </>
+                            ) : (
+                                <span className="leading-none text-sm text-black dark:text-white truncate font-bold">
+                                    {event.title}
+                                </span>
+                            )}
+                        </div>
+                        <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
+                            {event.eventType.replace(/_/g, ' ')}
+                        </div>
+                        {searchTerm && (
+                            <div className="flex items-center mt-[2px]">
+                                <div className="rounded-full h-[6px] w-20 bg-gray-200">
+                                    <div className={`rounded-full h-[6px] bg-blue-500 w-${hitRatioClass}`} />
+                                </div>
+                                <div className="uppercase font-semibold ml-2 text-black tracking-wide text-xs">
+                                    {numMentions || 0} hit
+                                    {numMentions !== 1 && 's'}
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div className="flex flex-col justify-center items-end">
+                        {event.isLive ? (
+                            <div className="text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white">
+                                {`Live • ${eventDate.toFormat('h:mma')}`}
+                            </div>
+                        ) : (
+                            <div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300">
+                                {isToday(event.eventDate) ? (
+                                    <TimeAgo date={event.eventDate} realtime />
+                                ) : (
+                                    eventDate.toFormat('h:mma')
+                                )}
+                            </div>
+                        )}
+                        <div className="leading-none mt-1 text-gray-300 group-hover:text-gray-500">
+                            {eventDate.toFormat('MMM dd, yyyy')}
+                        </div>
+                    </div>
+                </Tooltip>
+            </li>
+        </Fragment>
+    );
+};
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
@@ -80,6 +253,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         darkMode = false,
         event,
         eventsQuery,
+        eventsQueryUpcoming,
         filterByTypes,
         loadMore,
         listType,
@@ -94,18 +268,28 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         scrollRef,
         searchTerm,
         setFocus,
+        useConfigOptions,
     } = props;
 
     if (event) {
-        return <Transcript eventId={event.id} onBack={onBackFromTranscript} initialSearchTerm={searchTerm} />;
+        return (
+            <Transcript
+                eventId={event.id}
+                onBack={onBackFromTranscript}
+                initialSearchTerm={searchTerm}
+                useConfigOptions={useConfigOptions}
+            />
+        );
     }
 
+    const config = useConfig();
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
+    const theme = !useConfigOptions ? darkMode : (useConfigOptions && config.options?.darkMode) || false;
     let prevEventDate: DateTime | null = null;
     let renderedRefetch = false;
 
     return (
-        <div className={classNames('h-full flex flex-col eventlist', { dark: darkMode })}>
+        <div className={classNames('h-full flex flex-col eventlist', { dark: theme })}>
             <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header">
                 <div className="flex items-center mb-3">
                     <Input
@@ -115,10 +299,14 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         placeholder="Events & Transcripts..."
                         value={searchTerm}
                     />
-                    <div className="ml-2">
-                        <CompanyFilterButton onChange={onCompanyChange} value={company} />
-                    </div>
-                    <SettingsButton showSyncWatchlist showTonalSentiment={false} />
+                    {!useConfigOptions && (
+                        <>
+                            <div className="ml-2">
+                                <CompanyFilterButton onChange={onCompanyChange} value={company} />
+                            </div>
+                            <SettingsButton showSyncWatchlist showTonalSentiment={false} />
+                        </>
+                    )}
                 </div>
             </div>
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}>
@@ -132,22 +320,26 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             ]}
                             value={filterByTypes}
                         >
-                            <Tabs<EventView>
-                                className="ml-1 eventlist__tabs"
-                                kind="line"
-                                onChange={onSelectListType}
-                                options={[
-                                    {
-                                        value: EventView.LiveAndUpcoming,
-                                        label: 'Live Events',
-                                    },
-                                    { value: EventView.Recent, label: 'Recent' },
-                                ]}
-                                value={listType}
-                            />
+                            {company ? (
+                                <p className="text-sm font-semibold dark:text-white">All Events</p>
+                            ) : (
+                                <Tabs<EventView>
+                                    className="ml-1 eventlist__tabs"
+                                    kind="line"
+                                    onChange={onSelectListType}
+                                    options={[
+                                        {
+                                            value: EventView.LiveAndUpcoming,
+                                            label: 'Live Events',
+                                        },
+                                        { value: EventView.Recent, label: 'Recent' },
+                                    ]}
+                                    value={listType}
+                                />
+                            )}
                         </FilterBy>
                     </div>
-                    <div className="flex flex-col items-center justify-center flex-1">
+                    <div className={classNames('flex flex-col items-center justify-center flex-1')}>
                         {match(eventsQuery)
                             .with({ status: 'loading' }, () => (
                                 <ul className="w-full EventList__loading">
@@ -176,161 +368,72 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'success' }, ({ data, isPaging, isRefetching }) => (
                                 <ul className="w-full">
+                                    {company &&
+                                        match(eventsQueryUpcoming)
+                                            .with(
+                                                { status: 'success' },
+                                                ({ data: dataUpcoming, isRefetching: isUpcomingRefetching }) =>
+                                                    dataUpcoming.search.events.hits.map((hit, index) => {
+                                                        const eventDate = DateTime.fromISO(hit.event.eventDate);
+                                                        let showDivider = false;
+                                                        if (
+                                                            !prevEventDate ||
+                                                            prevEventDate.toFormat('MM/dd/yyyy') !==
+                                                                eventDate.toFormat('MM/dd/yyyy')
+                                                        ) {
+                                                            prevEventDate = eventDate;
+                                                            showDivider = true;
+                                                        }
+                                                        if (!renderedRefetch) {
+                                                            renderedRefetch = true;
+                                                        }
+                                                        return (
+                                                            <EventRow
+                                                                key={`${hit.event.id}-${index}`}
+                                                                event={hit.event}
+                                                                numMentions={hit.numMentions}
+                                                                index={index}
+                                                                isRefetching={isUpcomingRefetching}
+                                                                maxHits={maxHits}
+                                                                showDivider={showDivider}
+                                                                refetch={refetch}
+                                                                renderedRefetch={index !== 0}
+                                                                searchTerm={searchTerm}
+                                                                setFocus={setFocus}
+                                                                onSelectEvent={onSelectEvent}
+                                                            />
+                                                        );
+                                                    })
+                                            )
+                                            .otherwise(() => null)}
                                     {data.search.events.hits.map((hit, index) => {
-                                        const event = hit.event;
-                                        const hitRatio = (hit.numMentions || 0) / maxHits;
-                                        // Need to include these hardcoded to
-                                        // make sure tailwind doesn't purge
-                                        // w-1/12 w-2/12 w-3/12 w-4/12 w-5/12 w-6/12 w-7/12 w-8/12 w-9/12 w-10/12 w-11/12
-                                        const hitRatioClass =
-                                            hitRatio === 1
-                                                ? 'full'
-                                                : hitRatio === 0
-                                                ? '0'
-                                                : `${Math.ceil(hitRatio * 12)}/12`;
-                                        const primaryQuote = getPrimaryQuote(event.primaryCompany);
-                                        const eventDate = DateTime.fromISO(event.eventDate);
-                                        const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
-                                        let divider = null;
+                                        const eventDate = DateTime.fromISO(hit.event.eventDate);
+                                        let showDivider = false;
                                         if (
                                             !prevEventDate ||
                                             prevEventDate.toFormat('MM/dd/yyyy') !== eventDate.toFormat('MM/dd/yyyy')
                                         ) {
                                             prevEventDate = eventDate;
-                                            divider = (
-                                                <li className="sticky top-[56px] px-3">
-                                                    <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
-                                                        {eventDate.toFormat('DDDD')}
-                                                        <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
-                                                        {!renderedRefetch && (
-                                                            <div
-                                                                onClick={!isRefetching ? refetch : undefined}
-                                                                className="text-gray-400 cursor-pointer hover:text-gray-500 w-[50px]"
-                                                            >
-                                                                {isRefetching ? (
-                                                                    <div className="flex justify-center group">
-                                                                        <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
-                                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
-                                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
-                                                                    </div>
-                                                                ) : (
-                                                                    'Refresh'
-                                                                )}
-                                                            </div>
-                                                        )}
-                                                    </div>
-                                                </li>
-                                            );
+                                            showDivider = true;
+                                        }
+                                        if (index > 0 && !renderedRefetch) {
                                             renderedRefetch = true;
                                         }
                                         return (
-                                            <Fragment key={event.id}>
-                                                {divider}
-                                                <li
-                                                    tabIndex={0}
-                                                    className={classNames(
-                                                        'group text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5',
-                                                        {
-                                                            'h-12': !searchTerm,
-                                                            'h-14': !!searchTerm,
-                                                        }
-                                                    )}
-                                                    onClick={(e) => onSelectEvent?.(e, { value: event })}
-                                                    onFocus={() => setFocus?.(index)}
-                                                    onBlur={() => setFocus?.(-1)}
-                                                >
-                                                    <Tooltip
-                                                        className={classNames('flex flex-row', {
-                                                            'h-12': !searchTerm,
-                                                            'h-14': !!searchTerm,
-                                                        })}
-                                                        content={
-                                                            <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9">
-                                                                {prettyLineBreak(event.title)}
-                                                            </div>
-                                                        }
-                                                        grow="up-right"
-                                                        openOn="hover"
-                                                        position="top-left"
-                                                        yOffset={4}
-                                                        hideOnDocumentScroll
-                                                    >
-                                                        <div className="flex items-center justify-center">
-                                                            <div className="flex items-center justify-center w-8 h-8">
-                                                                <PlayButton
-                                                                    metaData={{
-                                                                        quote: primaryQuote,
-                                                                        eventType: event.eventType,
-                                                                        eventDate: eventDate
-                                                                            ? eventDate.toISO()
-                                                                            : undefined,
-                                                                        localTicker: primaryQuote?.localTicker,
-                                                                    }}
-                                                                    id={event.id}
-                                                                    url={
-                                                                        event.isLive
-                                                                            ? `https://storage.media.aiera.com/${event.id}`
-                                                                            : event.audioRecordingUrl
-                                                                    }
-                                                                    offset={audioOffset || 0}
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div className="flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4">
-                                                            <div className="flex items-end">
-                                                                {primaryQuote?.localTicker ? (
-                                                                    <>
-                                                                        <span className="leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
-                                                                            {primaryQuote?.localTicker}
-                                                                        </span>
-                                                                        <span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
-                                                                            {primaryQuote?.exchange?.shortName}
-                                                                        </span>
-                                                                    </>
-                                                                ) : (
-                                                                    <span className="leading-none text-sm text-black dark:text-white truncate font-bold">
-                                                                        {event.title}
-                                                                    </span>
-                                                                )}
-                                                            </div>
-                                                            <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
-                                                                {event.eventType.replace(/_/g, ' ')}
-                                                            </div>
-                                                            {searchTerm && (
-                                                                <div className="flex items-center mt-[2px]">
-                                                                    <div className="rounded-full h-[6px] w-20 bg-gray-200">
-                                                                        <div
-                                                                            className={`rounded-full h-[6px] bg-blue-500 w-${hitRatioClass}`}
-                                                                        />
-                                                                    </div>
-                                                                    <div className="uppercase font-semibold ml-2 text-black tracking-wide text-xs">
-                                                                        {hit.numMentions || 0} hit
-                                                                        {hit.numMentions !== 1 && 's'}
-                                                                    </div>
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        <div className="flex flex-col justify-center items-end">
-                                                            {event.isLive ? (
-                                                                <div className="text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white">
-                                                                    {`Live • ${eventDate.toFormat('h:mma')}`}
-                                                                </div>
-                                                            ) : (
-                                                                <div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300">
-                                                                    {isToday(event.eventDate) ? (
-                                                                        <TimeAgo date={event.eventDate} realtime />
-                                                                    ) : (
-                                                                        eventDate.toFormat('h:mma')
-                                                                    )}
-                                                                </div>
-                                                            )}
-                                                            <div className="leading-none mt-1 text-gray-300 group-hover:text-gray-500">
-                                                                {eventDate.toFormat('MMM dd, yyyy')}
-                                                            </div>
-                                                        </div>
-                                                    </Tooltip>
-                                                </li>
-                                            </Fragment>
+                                            <EventRow
+                                                key={`${hit.event.id}-${index}`}
+                                                event={hit.event}
+                                                numMentions={hit.numMentions}
+                                                index={index}
+                                                isRefetching={isRefetching}
+                                                maxHits={maxHits}
+                                                showDivider={showDivider}
+                                                refetch={refetch}
+                                                renderedRefetch={renderedRefetch}
+                                                searchTerm={searchTerm}
+                                                setFocus={setFocus}
+                                                onSelectEvent={onSelectEvent}
+                                            />
                                         );
                                     })}
                                     {loadMore && (
@@ -362,7 +465,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     );
 };
 
-export interface EventListProps {}
+export interface EventListProps {
+    useConfigOptions?: boolean;
+}
 
 interface EventListState {
     company?: CompanyFilterResult;
@@ -375,7 +480,7 @@ interface EventListState {
     searchTerm: string;
 }
 
-export const EventList = (_props: EventListProps): ReactElement => {
+export const EventList = ({ useConfigOptions = false }: EventListProps): ReactElement => {
     const { state, handlers, mergeState } = useChangeHandlers<EventListState>({
         company: undefined,
         fromIndex: 0,
@@ -383,12 +488,29 @@ export const EventList = (_props: EventListProps): ReactElement => {
         watchlist: [],
         event: undefined,
         filterByTypes: [],
-        listType: EventView.LiveAndUpcoming,
+        listType: useConfigOptions ? EventView.Recent : EventView.LiveAndUpcoming,
         searchTerm: '',
     });
 
     const { settings } = useSettings();
     const resolveCompany = useCompanyResolver();
+
+    const config = useConfig();
+
+    const loadTicker = async (ticker: InstrumentID) => {
+        const companies = await resolveCompany(ticker);
+        if (companies?.[0]) {
+            const company = companies[0];
+            mergeState({ company, event: undefined });
+        }
+    };
+
+    useEffect(() => {
+        if (!state.company && config.options?.ticker) {
+            void loadTicker([config.options.ticker] as InstrumentID);
+        }
+    }, [loadTicker, state, state.company, config, config?.options]);
+
     const bus = useMessageListener(
         'instrument-selected',
         async (msg: Message<'instrument-selected'>) => {
@@ -453,43 +575,39 @@ export const EventList = (_props: EventListProps): ReactElement => {
         if (state.fromIndex) mergeState({ fromIndex: 0 });
     }, [state.listType, state.listType, state.company, state.filterByTypes, state.searchTerm, state.event]);
 
-    const eventsQuery = usePagingQuery<EventListQuery, EventListQueryVariables>({
-        isEmpty: (data) => data.search.events.numTotalHits === 0,
-        requestPolicy: 'cache-and-network',
-        query: gql`
-            query EventList($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
-                search {
-                    events(filter: $filter, view: $view, fromIndex: $fromIndex, size: $size) {
+    const eventsGQL = gql`
+        query EventList($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
+            search {
+                events(filter: $filter, view: $view, fromIndex: $fromIndex, size: $size) {
+                    id
+                    numTotalHits
+                    hits {
                         id
-                        numTotalHits
-                        hits {
+                        numMentions
+                        event {
                             id
-                            numMentions
-                            event {
+                            title
+                            eventDate
+                            eventType
+                            isLive
+                            audioRecordingUrl
+                            audioRecordingOffsetMs
+                            primaryCompany {
                                 id
-                                title
-                                eventDate
-                                eventType
-                                isLive
-                                audioRecordingUrl
-                                audioRecordingOffsetMs
-                                primaryCompany {
+                                commonName
+                                instruments {
                                     id
-                                    commonName
-                                    instruments {
+                                    isPrimary
+                                    quotes {
                                         id
                                         isPrimary
-                                        quotes {
+                                        localTicker
+                                        exchange {
                                             id
-                                            isPrimary
-                                            localTicker
-                                            exchange {
+                                            shortName
+                                            country {
                                                 id
-                                                shortName
-                                                country {
-                                                    id
-                                                    countryCode
-                                                }
+                                                countryCode
                                             }
                                         }
                                     }
@@ -499,10 +617,38 @@ export const EventList = (_props: EventListProps): ReactElement => {
                     }
                 }
             }
-        `,
+        }
+    `;
+
+    const eventsQuery = usePagingQuery<EventListQuery, EventListQueryVariables>({
+        isEmpty: (data) => data.search.events.numTotalHits === 0,
+        requestPolicy: 'cache-and-network',
+        query: eventsGQL,
         mergeResults,
         variables: {
-            view: state.listType,
+            view: state.company ? EventView.Recent : state.listType,
+            fromIndex: state.fromIndex,
+            size: state.pageSize,
+            filter: {
+                hasTranscripts: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
+                eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
+                searchTerm: state.searchTerm || undefined,
+                companyIds: state.company?.id
+                    ? [state.company.id]
+                    : state.watchlist?.length && settings.syncWatchlist
+                    ? state.watchlist
+                    : undefined,
+            },
+        },
+    });
+
+    const eventsQueryUpcoming = usePagingQuery<EventListQuery, EventListQueryVariables>({
+        isEmpty: (data) => data.search.events.numTotalHits === 0,
+        requestPolicy: 'cache-and-network',
+        query: eventsGQL,
+        mergeResults,
+        variables: {
+            view: EventView.LiveAndUpcoming,
             fromIndex: state.fromIndex,
             size: state.pageSize,
             filter: {
@@ -599,6 +745,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             darkMode={settings.darkMode}
             event={state.event}
             eventsQuery={eventsQuery}
+            eventsQueryUpcoming={eventsQueryUpcoming}
             filterByTypes={state.filterByTypes}
             loadMore={hasMoreResults ? loadMore : undefined}
             refetch={refetch}
@@ -617,6 +764,7 @@ export const EventList = (_props: EventListProps): ReactElement => {
             scrollRef={scrollRef}
             searchTerm={state.searchTerm}
             setFocus={setFocus}
+            useConfigOptions={useConfigOptions}
         />
     );
 };

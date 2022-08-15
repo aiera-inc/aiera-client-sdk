@@ -1002,7 +1002,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             matchIndex={searchState.matchIndex}
             matches={searchState.matches}
             nextMatch={searchState.nextMatch}
-            onBack={onClickBack}
+            onBack={onBack ? onClickBack : undefined}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
             onSeekAudioByDate={onSeekAudioByDate}

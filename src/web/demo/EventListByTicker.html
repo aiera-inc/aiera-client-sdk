@@ -17,27 +17,22 @@
         <script src="../embed.js"></script>
         <iframe id="aiera"></iframe>
         <script>
-            const eventList = new Aiera.Module('../modules/EventList/index.html', 'aiera');
+            const eventList = new Aiera.Module('../modules/EventListByTicker/index.html', 'aiera');
             eventList.load().then(() => {
-                // To try out authentication
-                // eventList.authenticate({
-                //     accessToken: '[accesstoken]',
-                //     refreshToken: '[refreshToken]',
-                // });
-
-                // To update the configuration
                 eventList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
-                eventList.configure({ hideSettings: false });
             });
-
             eventList.on('authenticated', () => {
-                // Set up a watchlist after authentication
-                // eventList.setWatchlist([
-                //     { ticker: 'AAPL' },
-                //     { ticker: 'GOOGL' },
-                //     { ticker: 'TLSA' },
-                //     { ticker: 'PTON' },
-                // ]);
+                eventList.configure({
+                    options: {
+                        ticker: 'meta',
+                        darkMode: false,
+                        showTitleInfo: true,
+                        showRecordingDetails: true,
+                        showPriceReaction: true,
+                        showAudioPlayer: true,
+                        showSearch: true,
+                    },
+                });
             });
         </script>
     </body>
