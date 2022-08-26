@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.34% </span>
+                <span class="strong">80.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>157/193</span>
+                <span class='fraction'>157/194</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.55% </span>
+                <span class="strong">57.38% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>99/172</span>
+                <span class='fraction'>101/176</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.97% </span>
+                <span class="strong">81.5% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>141/172</span>
+                <span class='fraction'>141/173</span>
             </div>
         
             
@@ -1081,7 +1081,8 @@
 <a name='L1016'></a><a href='#L1016'>1016</a>
 <a name='L1017'></a><a href='#L1017'>1017</a>
 <a name='L1018'></a><a href='#L1018'>1018</a>
-<a name='L1019'></a><a href='#L1019'>1019</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1019'></a><a href='#L1019'>1019</a>
+<a name='L1020'></a><a href='#L1020'>1020</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2032,12 +2033,6 @@
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">59x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -2066,6 +2061,13 @@
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
@@ -2195,7 +2197,7 @@ interface TranscriptUIProps {
 function <span class="fstat-no" title="function not covered" >NoEventFound(</span>) {
 <span class="cstat-no" title="statement not covered" >    return (</span>
         &lt;div className={classNames('h-full flex flex-col flex-1 justify-center items-center')}&gt;
-            &lt;p className="text-sm text-slate-500 dark:text-slate-300"&gt;No Event Found&lt;/p&gt;
+            &lt;p className="text-sm text-slate-500 dark:text-slate-300"&gt;Transcript Failed to Load&lt;/p&gt;
         &lt;/div&gt;
     );
 }
@@ -2310,7 +2312,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
                     .with({ status: 'empty' }, <span class="fstat-no" title="function not covered" >({</span> data }) =&gt; {
                         // We'll always have one event here, but to satisify the strict array index check
                         // we need to make sure it's not undefined still
-<span class="cstat-no" title="statement not covered" >                        return data.events[0] &amp;&amp; &lt;EmptyMessage event={data.events[0]} /&gt;;</span>
+<span class="cstat-no" title="statement not covered" >                        return data.events[0] ? &lt;EmptyMessage event={data.events[0]} /&gt; : &lt;NoEventFound /&gt;;</span>
                     })
                     .with({ status: 'success' }, ({ data }) =&gt; {
                         return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) =&gt; {
@@ -3047,12 +3049,6 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
         },
         [autoscrollContainerRef, searchState.scrollContainerRef]
     );
-    const onClickTranscript = useCallback(
-<span class="fstat-no" title="function not covered" >        (p</span>aragraph: Paragraph) =&gt; {
-<span class="cstat-no" title="statement not covered" >            audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);</span>
-        },
-        [audioPlayer]
-    );
     const onSeekAudioByDate = useCallback(
 <span class="fstat-no" title="function not covered" >        (d</span>ate: string) =&gt; {
             const p = <span class="cstat-no" title="statement not covered" >searchState.speakerTurnsWithMatches.flatMap(<span class="fstat-no" title="function not covered" >({</span> paragraphsWithMatches: paragraphs }) =&gt;</span>
@@ -3083,7 +3079,14 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
 &nbsp;
     const { height: containerHeight, ref: containerRef } = useElementSize();
 &nbsp;
-    useMessageListener('seekTranscriptSeconds', <span class="fstat-no" title="function not covered" >({</span> data }) =&gt; <span class="cstat-no" title="statement not covered" >void onSeekAudioSeconds(data),</span> 'in');
+    const bus = useMessageListener('seek-transcript-seconds', <span class="fstat-no" title="function not covered" >({</span> data }) =&gt; <span class="cstat-no" title="statement not covered" >void onSeekAudioSeconds(data),</span> 'in');
+    const onClickTranscript = useCallback(
+<span class="fstat-no" title="function not covered" >        (p</span>aragraph: Paragraph) =&gt; {
+<span class="cstat-no" title="statement not covered" >            audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);</span>
+<span class="cstat-no" title="statement not covered" >            bus.emit('seek-audio-seconds', (paragraph.syncMs || 0) / 1000, 'out');</span>
+        },
+        [audioPlayer]
+    );
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 &nbsp;
     return (
@@ -3103,7 +3106,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             matchIndex={searchState.matchIndex}
             matches={searchState.matches}
             nextMatch={searchState.nextMatch}
-            onBack={onClickBack}
+            onBack={onBack ? onClickBack : undefined}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
             onSeekAudioByDate={onSeekAudioByDate}
@@ -3124,7 +3127,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Aug 11 2022 13:24:51 GMT-0400 (Eastern Daylight Time)
+                at Fri Aug 26 2022 13:44:44 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            iframe {
+                border: none;
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            const eventList = new Aiera.Module('../modules/EventListByTicker/index.html', 'aiera');
+            eventList.load().then(() => {
+                eventList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+            });
+            eventList.on('authenticated', () => {
+                eventList.configure({
+                    options: {
+                        ticker: 'meta',
+                        darkMode: false,
+                        showTitleInfo: true,
+                        showRecordingDetails: true,
+                        showPriceReaction: true,
+                        showAudioPlayer: true,
+                        showSearch: true,
+                    },
+                });
+            });
+        </script>
+    </body>
+</html>

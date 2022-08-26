@@ -251,7 +251,7 @@
       this.emit("instruments-selected", instruments);
     }
     seekTranscriptSeconds(seconds) {
-      this.emit("seekTranscriptSeconds", seconds);
+      this.emit("seek-transcript-seconds", seconds);
     }
     unload() {
       if (this.frame)
