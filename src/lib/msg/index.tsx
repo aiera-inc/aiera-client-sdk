@@ -14,6 +14,7 @@ interface EventAlert {
 }
 
 export interface MessageBusEvents {
+    'seek-audio-seconds': number;
     authenticate: AuthTokens;
     authenticateWithApiKey: string;
     authenticated: null;
@@ -21,7 +22,7 @@ export interface MessageBusEvents {
     'event-alert': EventAlert;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
-    seekTranscriptSeconds: number;
+    'seek-transcript-seconds': number;
 }
 
 export interface Message<E extends keyof MessageBusEvents> {

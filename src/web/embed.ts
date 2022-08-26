@@ -389,7 +389,7 @@ export class Module {
     }
 
     seekTranscriptSeconds(seconds: number) {
-        this.emit('seekTranscriptSeconds', seconds);
+        this.emit('seek-transcript-seconds', seconds);
     }
 
     /**

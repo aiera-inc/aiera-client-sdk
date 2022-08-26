@@ -946,12 +946,6 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         },
         [autoscrollContainerRef, searchState.scrollContainerRef]
     );
-    const onClickTranscript = useCallback(
-        (paragraph: Paragraph) => {
-            audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
-        },
-        [audioPlayer]
-    );
     const onSeekAudioByDate = useCallback(
         (date: string) => {
             const p = searchState.speakerTurnsWithMatches.flatMap(({ paragraphsWithMatches: paragraphs }) =>
@@ -982,7 +976,14 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     const { height: containerHeight, ref: containerRef } = useElementSize();
 
-    useMessageListener('seekTranscriptSeconds', ({ data }) => void onSeekAudioSeconds(data), 'in');
+    const bus = useMessageListener('seek-transcript-seconds', ({ data }) => void onSeekAudioSeconds(data), 'in');
+    const onClickTranscript = useCallback(
+        (paragraph: Paragraph) => {
+            audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
+            bus.emit('seek-audio-seconds', (paragraph.syncMs || 0) / 1000, 'out');
+        },
+        [audioPlayer]
+    );
     useAutoTrack('View', 'Event', { eventId }, [eventId]);
 
     return (
