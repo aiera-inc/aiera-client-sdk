@@ -94,7 +94,7 @@ interface TranscriptUIProps {
 function NoEventFound() {
     return (
         <div className={classNames('h-full flex flex-col flex-1 justify-center items-center')}>
-            <p className="text-sm text-slate-500 dark:text-slate-300">No Event Found</p>
+            <p className="text-sm text-slate-500 dark:text-slate-300">Transcript Failed to Load</p>
         </div>
     );
 }
@@ -209,7 +209,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     .with({ status: 'empty' }, ({ data }) => {
                         // We'll always have one event here, but to satisify the strict array index check
                         // we need to make sure it's not undefined still
-                        return data.events[0] && <EmptyMessage event={data.events[0]} />;
+                        return data.events[0] ? <EmptyMessage event={data.events[0]} /> : <NoEventFound />;
                     })
                     .with({ status: 'success' }, ({ data }) => {
                         return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {

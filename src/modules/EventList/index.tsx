@@ -145,13 +145,17 @@ const EventRow = ({
             <li
                 tabIndex={0}
                 className={classNames(
-                    'group text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5',
+                    'group text-xs text-gray-300 mx-1 rounded-lg px-2 hover:bg-blue-50 dark:hover:bg-bluegray-6',
                     {
+                        'cursor-pointer active:bg-blue-100 dark:active:bg-bluegray-5':
+                            event.eventType !== 'earnings_release',
                         'h-12': !searchTerm,
                         'h-14': !!searchTerm,
                     }
                 )}
-                onClick={(e) => onSelectEvent?.(e, { value: event })}
+                onClick={
+                    event.eventType !== 'earnings_release' ? (e) => onSelectEvent?.(e, { value: event }) : undefined
+                }
                 onFocus={() => setFocus?.(index)}
                 onBlur={() => setFocus?.(-1)}
             >
