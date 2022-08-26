@@ -20,6 +20,8 @@
             const event = new Aiera.Module('../modules/EventByTicker/index.html', 'aiera');
             event.load().then(() => {
                 event.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+            });
+            event.on('authenticated', () => {
                 event.configure({
                     options: {
                         ticker: 'meta',

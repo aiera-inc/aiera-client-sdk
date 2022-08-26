@@ -20,6 +20,8 @@
             const asrTranscript = new Aiera.Module('../modules/ASRTranscript/index.html', 'aiera');
             asrTranscript.load().then(() => {
                 asrTranscript.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+            });
+            asrTranscript.on('authenticated', () => {
                 asrTranscript.configure({
                     options: {
                         eventId: '2191898',
