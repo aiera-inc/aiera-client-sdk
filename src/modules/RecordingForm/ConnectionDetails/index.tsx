@@ -181,6 +181,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                         {dialInField}
                         {renderMeetingIdField('Meeting ID / Access Code', 'Enter the meeting ID or access code')}
                         {renderPasscodeField('PIN', 'Enter a PIN (optional)')}
+                        {participationTypeField}
                     </>
                 ))
                 .otherwise(() => null)}

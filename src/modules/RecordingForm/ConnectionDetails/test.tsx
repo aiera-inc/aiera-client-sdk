@@ -77,6 +77,37 @@ describe('ConnectionDetails', () => {
             renderWithProvider(<ConnectionDetails {...googleProps} />);
             screen.getByText('Dial-in number*');
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue(props.connectPin)).toBeInTheDocument();
+            screen.getByText('Call me');
+            screen.getByText('Set it & forget it');
+        });
+    });
+
+    describe('when connection type is Webcast URL', () => {
+        const webcastProps = {
+            ...props,
+            connectionType: ConnectionType.Webcast,
+        };
+        test('renders fields for Webcast URL', () => {
+            renderWithProvider(<ConnectionDetails {...webcastProps} />);
+            screen.getByText('Host URL*');
+            expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeInTheDocument();
+        });
+    });
+
+    describe('when connection type is Phone Number', () => {
+        const webcastProps = {
+            ...props,
+            connectionType: ConnectionType.PhoneNumber,
+        };
+        test('renders fields for Phone Number', () => {
+            renderWithProvider(<ConnectionDetails {...webcastProps} />);
+            screen.getByText('Dial-in number*');
+            expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
+            expect(screen.queryByPlaceholderText('1234567890')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue(props.connectPin)).toBeInTheDocument();
+            screen.getByText('Call me');
+            screen.getByText('Set it & forget it');
         });
     });
 });
