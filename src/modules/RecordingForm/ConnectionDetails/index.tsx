@@ -3,7 +3,6 @@ import { match } from 'ts-pattern';
 
 import { FormFieldInput } from '@aiera/client-sdk/components/FormField/FormFieldInput';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
-import { Input } from '@aiera/client-sdk/components/Input';
 import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { ConnectionType, ParticipationType } from '@aiera/client-sdk/modules/RecordingForm';
 import { SelectOption } from '@aiera/client-sdk/types';
@@ -19,7 +18,7 @@ const ZOOM_MEETING_TYPE_OPTION_WEB = {
     value: 'web',
     description: 'Connect to Zoom meeting via web url',
 };
-const ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_PHONE, ZOOM_MEETING_TYPE_OPTION_WEB];
+const ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_WEB, ZOOM_MEETING_TYPE_OPTION_PHONE];
 
 interface ConnectionDetailsSharedProps {
     connectAccessId: string;
@@ -58,7 +57,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         onChangeConnectPhoneNumber,
         onChangeConnectPin,
         onChangeConnectUrl,
+        onChangeParticipationType,
         onChangeZoomMeetingType,
+        participationType,
         participationTypeOptions,
         zoomMeetingType,
         zoomMeetingTypeOptions,
@@ -74,6 +75,40 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             onChange={onChangeConnectPhoneNumber}
             placeholder="(888)-123-4567"
             value={connectPhoneNumber}
+        />
+    );
+    const participationTypeField = (
+        <FormFieldSelect
+            className="mt-2.5"
+            name="participationType"
+            onChange={onChangeParticipationType}
+            options={participationTypeOptions}
+            value={participationType}
+        />
+    );
+    const renderConnectUrlField = (description: string, label: string) => (
+        <FormFieldInput
+            autoFocus
+            className="mt-5 px-4 py-3"
+            clearable
+            description={description}
+            label={label}
+            name="connectUrl"
+            onChange={onChangeConnectUrl}
+            placeholder="https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5"
+            value={connectUrl}
+        />
+    );
+    const renderMeetingIdField = (label: string, description: string) => (
+        <FormFieldInput
+            className="mt-5 px-4 py-3"
+            clearable
+            description={description}
+            label={label}
+            name="connectAccessId"
+            onChange={onChangeConnectAccessId}
+            placeholder="1234567890"
+            value={connectAccessId}
         />
     );
     const renderPasscodeField = (label = 'Passcode', description = 'Enter the passcode (optional)') => (
@@ -105,17 +140,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                 {match(zoomMeetingType)
                                     .with('web', () => (
                                         <>
-                                            <FormFieldInput
-                                                autoFocus
-                                                className="mt-5 px-4 py-3"
-                                                clearable
-                                                description="Enter the Zoom meeting url"
-                                                label="Meeting URL*"
-                                                name="connectUrl"
-                                                onChange={onChangeConnectUrl}
-                                                placeholder="https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5"
-                                                value={connectUrl}
-                                            />
+                                            {renderConnectUrlField('Enter the Zoom meeting url', 'Meeting URL*')}
                                             {renderPasscodeField()}
                                             <FormFieldInput
                                                 className="mt-5 px-4 py-3"
@@ -131,29 +156,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                     .with('phone', () => (
                                         <>
                                             {dialInField}
-                                            <div className="bg-white border border-gray-200 mt-5 px-4 py-3 rounded shadow-xl">
-                                                <p className="font-semibold text-base text-black">Meeting ID*</p>
-                                                <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">
-                                                    Enter the meeting ID
-                                                </p>
-                                                <div className="mt-3 w-full">
-                                                    <Input
-                                                        clearable
-                                                        name="connectAccessId"
-                                                        onChange={onChangeConnectAccessId}
-                                                        placeholder="1234567890"
-                                                        value={connectAccessId}
-                                                    />
-                                                </div>
-                                            </div>
+                                            {renderMeetingIdField('Meeting ID*', 'Enter the meeting ID')}
                                             {renderPasscodeField()}
-                                            <FormFieldSelect
-                                                className="mt-2.5"
-                                                name="zoomMeetingType"
-                                                onChange={onChangeZoomMeetingType}
-                                                options={participationTypeOptions}
-                                                value={zoomMeetingType}
-                                            />
+                                            {participationTypeField}
                                         </>
                                     ))
                                     .otherwise(() => null)}
@@ -165,15 +170,19 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                     <>
                         {dialInField}
                         {renderPasscodeField('PIN', 'Enter a PIN (optional)')}
+                        {participationTypeField}
                     </>
                 ))
                 .with(ConnectionType.Webcast, () => (
-                    <div className="bg-white border border-gray-200 mt-2 px-4 py-3 rounded shadow-xl">
-                        <p className="font-semibold text-base text-black">Dial-in number</p>
-                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm">Enter the dial-in number</p>
-                    </div>
+                    <>{renderConnectUrlField('Enter the url to access recording', 'Host URL*')}</>
                 ))
-                .with(ConnectionType.PhoneNumber, () => <>{dialInField}</>)
+                .with(ConnectionType.PhoneNumber, () => (
+                    <>
+                        {dialInField}
+                        {renderMeetingIdField('Meeting ID / Access Code', 'Enter the meeting ID or access code')}
+                        {renderPasscodeField('PIN', 'Enter a PIN (optional)')}
+                    </>
+                ))
                 .otherwise(() => null)}
         </div>
     );

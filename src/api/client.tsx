@@ -259,7 +259,7 @@ export function usePagingQuery<Data, Variables>(
         if (fromIndex !== variables.fromIndex) {
             setFromIndex(variables.fromIndex);
         }
-        // If the user already paging and the fromIndex query variable is changed back to 0,
+        // If the user is already paging and the fromIndex query variable is changed back to 0,
         // then reset fromIndex and results in state
         if (fromIndex > 0 && variables.fromIndex === 0) {
             setResults(undefined);
