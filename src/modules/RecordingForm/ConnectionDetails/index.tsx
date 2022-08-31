@@ -4,21 +4,13 @@ import { match } from 'ts-pattern';
 import { FormFieldInput } from '@aiera/client-sdk/components/FormField/FormFieldInput';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { ConnectionType, ParticipationType } from '@aiera/client-sdk/modules/RecordingForm';
+import {
+    ZOOM_MEETING_TYPE_OPTIONS,
+    ConnectionType,
+    ParticipationType,
+} from '@aiera/client-sdk/modules/RecordingForm/types';
 import { SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
-
-const ZOOM_MEETING_TYPE_OPTION_PHONE = {
-    label: 'Dial-in number',
-    value: 'phone',
-    description: 'Connect to Zoom meeting via dial-in number',
-};
-const ZOOM_MEETING_TYPE_OPTION_WEB = {
-    label: 'Web URL',
-    value: 'web',
-    description: 'Connect to Zoom meeting via web url',
-};
-const ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_WEB, ZOOM_MEETING_TYPE_OPTION_PHONE];
 
 interface ConnectionDetailsSharedProps {
     connectAccessId: string;
@@ -41,7 +33,6 @@ interface ConnectionDetailsSharedProps {
 interface ConnectionDetailsUIProps extends ConnectionDetailsSharedProps {
     onChangeZoomMeetingType: ChangeHandler<string>;
     zoomMeetingType?: string;
-    zoomMeetingTypeOptions: SelectOption<string>[];
 }
 
 export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactElement {
@@ -62,7 +53,6 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         participationType,
         participationTypeOptions,
         zoomMeetingType,
-        zoomMeetingTypeOptions,
     } = props;
     const dialInField = (
         <FormFieldInput
@@ -132,7 +122,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                             className="mt-2.5"
                             name="zoomMeetingType"
                             onChange={onChangeZoomMeetingType}
-                            options={zoomMeetingTypeOptions}
+                            options={ZOOM_MEETING_TYPE_OPTIONS}
                             value={zoomMeetingType}
                         />
                         {!!zoomMeetingType && (
@@ -231,7 +221,6 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             participationType={participationType}
             participationTypeOptions={participationTypeOptions}
             zoomMeetingType={state.zoomMeetingType}
-            zoomMeetingTypeOptions={ZOOM_MEETING_TYPE_OPTIONS}
         />
     );
 }

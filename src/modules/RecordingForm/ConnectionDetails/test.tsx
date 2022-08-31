@@ -1,7 +1,7 @@
 import React from 'react';
 import { fireEvent, screen } from '@testing-library/react';
 
-import { ConnectionType, PARTICIPATION_TYPE_OPTIONS } from '@aiera/client-sdk/modules/RecordingForm';
+import { ConnectionType, PARTICIPATION_TYPE_OPTIONS } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ConnectionDetails } from './index';
 

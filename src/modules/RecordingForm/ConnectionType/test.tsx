@@ -10,7 +10,7 @@ import {
     CONNECTION_TYPE_OPTION_WEBCAST,
     CONNECTION_TYPE_OPTION_ZOOM,
     ConnectionType as ConnectionTypeEnum,
-} from '@aiera/client-sdk/modules/RecordingForm';
+} from '@aiera/client-sdk/modules/RecordingForm/types';
 import { ConnectionType } from './index';
 
 describe('ConnectionType', () => {

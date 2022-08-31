@@ -5,8 +5,11 @@ import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { Scheduling } from './index';
 
 describe('Scheduling', () => {
-    test('renders', () => {
-        renderWithProvider(<Scheduling />);
+    const onChange = jest.fn();
+    test('renders scheduling fields', () => {
+        renderWithProvider(<Scheduling onChangeScheduleType={onChange} />);
         screen.getByText('Scheduling');
+        screen.getByText('Now');
+        screen.getByText('In the future');
     });
 });

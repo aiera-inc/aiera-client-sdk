@@ -10,80 +10,17 @@ import { ConnectionDetails } from './ConnectionDetails';
 import { RecordingDetails } from './RecordingDetails';
 import { Scheduling } from './Scheduling';
 import { Troubleshooting } from './Troubleshooting';
+import {
+    CONNECTION_TYPE_OPTIONS,
+    CONNECTION_TYPE_OPTIONS_MAP,
+    PARTICIPATION_TYPE_OPTIONS,
+    ConnectionType,
+    ParticipationType,
+    ScheduleType,
+} from './types';
 import './styles.css';
 
 const NUM_STEPS = 5;
-
-/**
- * BEGIN TEMPORARY TYPES
- * TODO: remove these once the server generates them
- */
-export enum ConnectionType {
-    GoogleMeet = 'google_meet',
-    PhoneNumber = 'phone',
-    Webcast = 'webcast',
-    Zoom = 'zoom',
-}
-/**
- * END TEMPORARY TYPES
- */
-
-export enum ParticipationType {
-    NotParticipating = 'not_participating',
-    Participating = 'participating',
-}
-
-export const CONNECTION_TYPE_OPTION_GOOGLE = {
-    label: 'Google Meet',
-    value: ConnectionType.GoogleMeet,
-    description: 'Connect to a Google Meet dial-in number',
-};
-export const CONNECTION_TYPE_OPTION_PHONE = {
-    label: 'Phone Number',
-    value: ConnectionType.PhoneNumber,
-    description: 'Connect to any phone number, with optional pin',
-};
-export const CONNECTION_TYPE_OPTION_WEBCAST = {
-    label: 'Webcast URL',
-    value: ConnectionType.Webcast,
-    description: 'Connect to a webcast url',
-};
-export const CONNECTION_TYPE_OPTION_ZOOM = {
-    label: 'Zoom',
-    value: ConnectionType.Zoom,
-    description: 'Connect to a Zoom dial-in number',
-};
-export const CONNECTION_TYPE_OPTIONS = [
-    CONNECTION_TYPE_OPTION_ZOOM,
-    CONNECTION_TYPE_OPTION_GOOGLE,
-    CONNECTION_TYPE_OPTION_WEBCAST,
-    CONNECTION_TYPE_OPTION_PHONE,
-];
-export const CONNECTION_TYPE_OPTIONS_MAP = {
-    [CONNECTION_TYPE_OPTION_GOOGLE.value]: CONNECTION_TYPE_OPTION_GOOGLE,
-    [CONNECTION_TYPE_OPTION_PHONE.value]: CONNECTION_TYPE_OPTION_PHONE,
-    [CONNECTION_TYPE_OPTION_WEBCAST.value]: CONNECTION_TYPE_OPTION_WEBCAST,
-    [CONNECTION_TYPE_OPTION_ZOOM.value]: CONNECTION_TYPE_OPTION_ZOOM,
-};
-export const PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING = {
-    label: 'Set it & forget it',
-    value: ParticipationType.NotParticipating,
-    description:
-        "We'll automatically connect, then transcribe and record the call for you. You can join later if you " +
-        'change your mind.',
-};
-export const PARTICIPATION_TYPE_OPTION_PARTICIPATING = {
-    label: 'Call me',
-    value: ParticipationType.Participating,
-    description:
-        "We'll call you, and then connect you to the call. Please enter any required pins, or speak to an " +
-        'operator, if needed. The call will continue to record & transcribe even after you disconnect. You may ' +
-        'end the recording manually from the transcript in Aiera.',
-};
-export const PARTICIPATION_TYPE_OPTIONS = [
-    PARTICIPATION_TYPE_OPTION_PARTICIPATING,
-    PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING,
-];
 
 interface RecordingFormSharedProps {
     onBack: MouseEventHandler;
@@ -106,11 +43,13 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectPin: ChangeHandler<string>;
     onChangeConnectUrl: ChangeHandler<string>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
+    onChangeScheduleType: ChangeHandler<ScheduleType>;
     onConnectDialNumber: string;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
     onSubmit: MouseEventHandler;
     participationType?: ParticipationType;
+    scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
     step: number;
 }
@@ -132,10 +71,12 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectPin,
         onChangeConnectUrl,
         onChangeParticipationType,
+        onChangeScheduleType,
         onNextStep,
         onPrevStep,
         onSubmit,
         participationType,
+        scheduleType,
         step,
     } = props;
     return (
@@ -178,7 +119,9 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             participationTypeOptions={PARTICIPATION_TYPE_OPTIONS}
                         />
                     ))
-                    .with(3, () => <Scheduling />)
+                    .with(3, () => (
+                        <Scheduling onChangeScheduleType={onChangeScheduleType} scheduleType={scheduleType} />
+                    ))
                     .with(4, () => <Troubleshooting />)
                     .with(5, () => <RecordingDetails />)
                     .otherwise(() => null)}
@@ -241,6 +184,7 @@ interface RecordingFormState {
     meetingType: string;
     onConnectDialNumber: string;
     participationType?: ParticipationType;
+    scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
 }
 
@@ -259,6 +203,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         meetingType: '',
         onConnectDialNumber: '',
         participationType: undefined,
+        scheduleType: undefined,
         smsAlertBeforeCall: false,
     });
     const [step, setStep] = useState<number>(1);
@@ -283,11 +228,13 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectPin={handlers.connectPin}
             onChangeConnectUrl={handlers.connectUrl}
             onChangeParticipationType={handlers.participationType}
+            onChangeScheduleType={handlers.scheduleType}
             onConnectDialNumber={state.onConnectDialNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={() => console.log('SUBMITTED')}
             participationType={state.participationType}
+            scheduleType={state.scheduleType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
             step={step}
         />

@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
-import { ConnectionType as ConnectionTypeEnum } from '@aiera/client-sdk/modules/RecordingForm';
+import { ConnectionType as ConnectionTypeEnum } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { ChangeHandler, SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
 

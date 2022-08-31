@@ -3,7 +3,7 @@ import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProvider } from 'testUtils';
-import { CONNECTION_TYPE_OPTION_ZOOM } from '@aiera/client-sdk/modules/RecordingForm';
+import { CONNECTION_TYPE_OPTION_ZOOM } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { RecordingForm } from '.';
 
 describe('RecordingForm', () => {

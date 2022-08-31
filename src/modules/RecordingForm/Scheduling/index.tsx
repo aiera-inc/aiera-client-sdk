@@ -1,15 +1,30 @@
 import React, { ReactElement } from 'react';
+
+import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
+import { SCHEDULE_TYPE_OPTIONS, ScheduleType } from '@aiera/client-sdk/modules/RecordingForm/types';
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
-interface SchedulingSharedProps {}
+interface SchedulingSharedProps {
+    onChangeScheduleType: ChangeHandler<ScheduleType>;
+    scheduleType?: ScheduleType;
+}
 
 /** @notExported */
 interface SchedulingUIProps extends SchedulingSharedProps {}
 
-export function SchedulingUI(_props: SchedulingUIProps): ReactElement {
+export function SchedulingUI(props: SchedulingUIProps): ReactElement {
+    const { onChangeScheduleType, scheduleType } = props;
     return (
-        <div className="font-medium py-3 text-gray-400 text-xs tracking-wide uppercase scheduling">
-            <p>Scheduling</p>
+        <div className="py-3 scheduling">
+            <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Scheduling</p>
+            <FormFieldSelect
+                className="mt-2.5"
+                name="scheduleType"
+                onChange={onChangeScheduleType}
+                options={SCHEDULE_TYPE_OPTIONS}
+                value={scheduleType}
+            />
         </div>
     );
 }
@@ -20,6 +35,7 @@ export interface SchedulingProps extends SchedulingSharedProps {}
 /**
  * Renders Scheduling
  */
-export function Scheduling(_props: SchedulingProps): ReactElement {
-    return <SchedulingUI />;
+export function Scheduling(props: SchedulingProps): ReactElement {
+    const { onChangeScheduleType, scheduleType } = props;
+    return <SchedulingUI onChangeScheduleType={onChangeScheduleType} scheduleType={scheduleType} />;
 }
