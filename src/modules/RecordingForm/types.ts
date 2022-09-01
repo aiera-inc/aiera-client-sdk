@@ -81,7 +81,7 @@ export const PARTICIPATION_TYPE_OPTIONS = [
 const SCHEDULE_TYPE_OPTION_NOW = {
     label: 'Now',
     value: ScheduleType.Now,
-    description: 'Aiera will attempt connection when you create the recording',
+    description: 'Aiera will attempt to connect when you create the recording',
 };
 const SCHEDULE_TYPE_OPTION_FUTURE = {
     label: 'In the future',

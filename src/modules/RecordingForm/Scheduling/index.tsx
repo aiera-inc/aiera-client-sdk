@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-
+import { FormFieldDateInput } from '@aiera/client-sdk/components/FormField/FormFieldDateInput';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { SCHEDULE_TYPE_OPTIONS, ScheduleType } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -25,6 +25,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                 options={SCHEDULE_TYPE_OPTIONS}
                 value={scheduleType}
             />
+            {scheduleType === ScheduleType.Future && <FormFieldDateInput name="" />}
         </div>
     );
 }

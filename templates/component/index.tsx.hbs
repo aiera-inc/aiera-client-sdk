@@ -6,12 +6,12 @@ interface {{name}}SharedProps {
 }
 
 /** @notExported */
-interface {{name}}UIProps  extends {{name}}SharedProps {}
+interface {{name}}UIProps extends {{name}}SharedProps {}
 
 export function {{name}}UI(props: {{{name}}}UIProps): ReactElement {
     const { children } = props;
     return <div>{children || '{{name}}UI'}</div>;
-};
+}
 
 /** @notExported */
 export interface {{name}}Props extends {{name}}SharedProps {}
@@ -22,4 +22,4 @@ export interface {{name}}Props extends {{name}}SharedProps {}
 export function {{name}}(props: {{{name}}}Props): ReactElement {
     const { children } = props;
     return <{{name}}UI>{children}</{{name}}UI>;
-};
+}
