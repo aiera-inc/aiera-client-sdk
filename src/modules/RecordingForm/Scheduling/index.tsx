@@ -6,7 +6,9 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface SchedulingSharedProps {
+    onChangeScheduleDate: ChangeHandler<Date>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
+    scheduleDate?: Date;
     scheduleType?: ScheduleType;
 }
 
@@ -14,7 +16,7 @@ interface SchedulingSharedProps {
 interface SchedulingUIProps extends SchedulingSharedProps {}
 
 export function SchedulingUI(props: SchedulingUIProps): ReactElement {
-    const { onChangeScheduleType, scheduleType } = props;
+    const { onChangeScheduleDate, onChangeScheduleType, scheduleDate, scheduleType } = props;
     return (
         <div className="py-3 scheduling">
             <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Scheduling</p>
@@ -25,7 +27,9 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                 options={SCHEDULE_TYPE_OPTIONS}
                 value={scheduleType}
             />
-            {scheduleType === ScheduleType.Future && <FormFieldDateInput name="" />}
+            {scheduleType === ScheduleType.Future && (
+                <FormFieldDateInput name="scheduleDate" onChange={onChangeScheduleDate} value={scheduleDate} />
+            )}
         </div>
     );
 }
@@ -37,6 +41,13 @@ export interface SchedulingProps extends SchedulingSharedProps {}
  * Renders Scheduling
  */
 export function Scheduling(props: SchedulingProps): ReactElement {
-    const { onChangeScheduleType, scheduleType } = props;
-    return <SchedulingUI onChangeScheduleType={onChangeScheduleType} scheduleType={scheduleType} />;
+    const { onChangeScheduleDate, onChangeScheduleType, scheduleDate, scheduleType } = props;
+    return (
+        <SchedulingUI
+            onChangeScheduleDate={onChangeScheduleDate}
+            onChangeScheduleType={onChangeScheduleType}
+            scheduleDate={scheduleDate}
+            scheduleType={scheduleType}
+        />
+    );
 }

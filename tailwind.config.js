@@ -1,6 +1,6 @@
 module.exports = {
     mode: 'jit',
-    purge: ['./src/**/*.html', './src/**/*.css', './src/**/*.ts*'],
+    content: ['./src/**/*.html', './src/**/*.css', './src/**/*.ts*'],
     darkMode: 'class', // or 'media' or 'class'
     theme: {
         fontSize: {

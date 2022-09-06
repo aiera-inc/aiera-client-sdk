@@ -11,7 +11,7 @@ interface FormFieldDateInputSharedProps {
     description?: string;
     label?: string;
     name: string;
-    onChange?: ChangeHandler<string>;
+    onChange?: ChangeHandler<Date>;
     placeholder?: string;
     value?: Date;
 }
@@ -47,13 +47,12 @@ export function FormFieldDateInputUI(props: FormFieldDateInputUIProps) {
             <div className="mt-3 w-full">
                 <Input
                     name={name}
-                    onChange={onChange}
                     onFocus={showCalendar}
                     placeholder={placeholder}
                     value={value ? value.toLocaleDateString() : ''}
                 />
             </div>
-            {isCalendarVisible && <DatePicker calendarRef={calendarRef} name={name} />}
+            {isCalendarVisible && <DatePicker calendarRef={calendarRef} name={name} onChange={onChange} />}
         </FormField>
     );
 }

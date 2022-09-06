@@ -1,6 +1,7 @@
 import React, { ChangeEvent, ReactElement, Ref, useCallback, useState } from 'react';
 import { Calendar, Detail, OnChangeDateCallback, OnChangeDateRangeCallback } from 'react-calendar';
 import { ChangeHandler } from '@aiera/client-sdk/types';
+import 'react-calendar/dist/Calendar.css';
 import './styles.css';
 
 interface DatePickerSharedProps {

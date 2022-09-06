@@ -43,12 +43,14 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectPin: ChangeHandler<string>;
     onChangeConnectUrl: ChangeHandler<string>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
+    onChangeScheduleDate: ChangeHandler<Date>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
     onConnectDialNumber: string;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
     onSubmit: MouseEventHandler;
     participationType?: ParticipationType;
+    scheduleDate?: Date;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
     step: number;
@@ -71,11 +73,13 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectPin,
         onChangeConnectUrl,
         onChangeParticipationType,
+        onChangeScheduleDate,
         onChangeScheduleType,
         onNextStep,
         onPrevStep,
         onSubmit,
         participationType,
+        scheduleDate,
         scheduleType,
         step,
     } = props;
@@ -120,7 +124,12 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                         />
                     ))
                     .with(3, () => (
-                        <Scheduling onChangeScheduleType={onChangeScheduleType} scheduleType={scheduleType} />
+                        <Scheduling
+                            onChangeScheduleDate={onChangeScheduleDate}
+                            onChangeScheduleType={onChangeScheduleType}
+                            scheduleDate={scheduleDate}
+                            scheduleType={scheduleType}
+                        />
                     ))
                     .with(4, () => <Troubleshooting />)
                     .with(5, () => <RecordingDetails />)
@@ -184,6 +193,7 @@ interface RecordingFormState {
     meetingType: string;
     onConnectDialNumber: string;
     participationType?: ParticipationType;
+    scheduleDate?: Date;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
 }
@@ -203,6 +213,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         meetingType: '',
         onConnectDialNumber: '',
         participationType: undefined,
+        scheduleDate: new Date(),
         scheduleType: undefined,
         smsAlertBeforeCall: false,
     });
@@ -228,12 +239,14 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectPin={handlers.connectPin}
             onChangeConnectUrl={handlers.connectUrl}
             onChangeParticipationType={handlers.participationType}
+            onChangeScheduleDate={handlers.scheduleDate}
             onChangeScheduleType={handlers.scheduleType}
             onConnectDialNumber={state.onConnectDialNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={() => console.log('SUBMITTED')}
             participationType={state.participationType}
+            scheduleDate={state.scheduleDate}
             scheduleType={state.scheduleType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
             step={step}

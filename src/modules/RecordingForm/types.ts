@@ -2,9 +2,9 @@
  * Consts, types, and interfaces for RecordingForm and its sub-components
  */
 
+// TODO: remove these once the server generates them
 /**
  * BEGIN TEMPORARY TYPES
- * TODO: remove these once the server generates them
  */
 export enum ConnectionType {
     GoogleMeet = 'google_meet',
