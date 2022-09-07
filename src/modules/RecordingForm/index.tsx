@@ -16,6 +16,7 @@ import {
     PARTICIPATION_TYPE_OPTIONS,
     ConnectionType,
     ParticipationType,
+    ScheduleMeridiem,
     ScheduleType,
 } from './types';
 import './styles.css';
@@ -44,6 +45,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectUrl: ChangeHandler<string>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
     onChangeScheduleDate: ChangeHandler<Date>;
+    onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
     onChangeScheduleTime: ChangeHandler<string>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
     onConnectDialNumber: string;
@@ -52,6 +54,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onSubmit: MouseEventHandler;
     participationType?: ParticipationType;
     scheduleDate?: Date;
+    scheduleMeridiem: ScheduleMeridiem;
     scheduleTime?: string;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
@@ -76,6 +79,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectUrl,
         onChangeParticipationType,
         onChangeScheduleDate,
+        onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
         onNextStep,
@@ -83,6 +87,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onSubmit,
         participationType,
         scheduleDate,
+        scheduleMeridiem,
         scheduleTime,
         scheduleType,
         step,
@@ -130,9 +135,11 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     .with(3, () => (
                         <Scheduling
                             onChangeScheduleDate={onChangeScheduleDate}
+                            onChangeScheduleMeridiem={onChangeScheduleMeridiem}
                             onChangeScheduleTime={onChangeScheduleTime}
                             onChangeScheduleType={onChangeScheduleType}
                             scheduleDate={scheduleDate}
+                            scheduleMeridiem={scheduleMeridiem}
                             scheduleTime={scheduleTime}
                             scheduleType={scheduleType}
                         />
@@ -199,7 +206,8 @@ interface RecordingFormState {
     meetingType: string;
     onConnectDialNumber: string;
     participationType?: ParticipationType;
-    scheduleDate?: Date;
+    scheduleDate: Date;
+    scheduleMeridiem: ScheduleMeridiem;
     scheduleTime?: string;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
@@ -221,6 +229,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         onConnectDialNumber: '',
         participationType: undefined,
         scheduleDate: new Date(),
+        scheduleMeridiem: ScheduleMeridiem.AM,
         scheduleTime: '',
         scheduleType: undefined,
         smsAlertBeforeCall: false,
@@ -248,6 +257,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectUrl={handlers.connectUrl}
             onChangeParticipationType={handlers.participationType}
             onChangeScheduleDate={handlers.scheduleDate}
+            onChangeScheduleMeridiem={handlers.scheduleMeridiem}
             onChangeScheduleTime={handlers.scheduleTime}
             onChangeScheduleType={handlers.scheduleType}
             onConnectDialNumber={state.onConnectDialNumber}
@@ -256,6 +266,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onSubmit={() => console.log('SUBMITTED')}
             participationType={state.participationType}
             scheduleDate={state.scheduleDate}
+            scheduleMeridiem={state.scheduleMeridiem}
             scheduleTime={state.scheduleTime}
             scheduleType={state.scheduleType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}

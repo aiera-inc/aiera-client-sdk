@@ -1,18 +1,32 @@
 import React, { ReactElement, Ref, useCallback, useRef, useState } from 'react';
 import { DatePicker } from '@aiera/client-sdk/components/DatePicker';
+import { Dropdown } from '@aiera/client-sdk/components/Dropdown';
 import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
-import { SCHEDULE_TYPE_OPTIONS, ScheduleType } from '@aiera/client-sdk/modules/RecordingForm/types';
+import { SCHEDULE_TYPE_OPTIONS, ScheduleMeridiem, ScheduleType } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
+const MERIDIEM_OPTIONS = [
+    {
+        label: 'AM',
+        value: ScheduleMeridiem.AM,
+    },
+    {
+        label: 'PM',
+        value: ScheduleMeridiem.PM,
+    },
+];
+
 interface SchedulingSharedProps {
     onChangeScheduleDate: ChangeHandler<Date>;
+    onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
     onChangeScheduleTime: ChangeHandler<string>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
-    scheduleDate?: Date;
+    scheduleDate: Date;
+    scheduleMeridiem: ScheduleMeridiem;
     scheduleTime?: string;
     scheduleType?: ScheduleType;
 }
@@ -29,9 +43,11 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
         calendarRef,
         isCalendarVisible,
         onChangeScheduleDate,
+        onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
         scheduleDate,
+        scheduleMeridiem,
         scheduleTime,
         scheduleType,
         showCalendar,
@@ -52,20 +68,23 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                     <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm  form-field__description">
                         Aiera will automatically connect at this time
                     </p>
-                    <div className="flex items-center mt-3 w-full">
+                    <div className="flex items-center mt-3 space-between w-full">
                         <Input
-                            className="max-w-[90px]"
                             clearable={false}
                             name="scheduleDate"
                             onFocus={showCalendar}
                             value={scheduleDate ? scheduleDate.toLocaleDateString() : ''}
                         />
                         <Input
-                            className="max-w-[90px]"
                             name="scheduleTime"
                             onChange={onChangeScheduleTime}
                             placeholder="10:00"
                             value={scheduleTime}
+                        />
+                        <Dropdown
+                            onChange={onChangeScheduleMeridiem}
+                            options={MERIDIEM_OPTIONS}
+                            value={scheduleMeridiem}
                         />
                     </div>
                     {isCalendarVisible && (
@@ -86,7 +105,7 @@ export interface SchedulingProps extends SchedulingSharedProps {}
 export function Scheduling(props: SchedulingProps): ReactElement {
     const [isCalendarVisible, setCalendarVisibility] = useState(false);
 
-    // Collapse Expanded Header on Outside Click
+    // Collapse calendar on outside click
     const calendarRef = useRef<HTMLDivElement>(null);
     useOutsideClickHandler(
         [calendarRef],
@@ -99,9 +118,11 @@ export function Scheduling(props: SchedulingProps): ReactElement {
 
     const {
         onChangeScheduleDate,
+        onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
         scheduleDate,
+        scheduleMeridiem,
         scheduleTime,
         scheduleType,
     } = props;
@@ -110,9 +131,11 @@ export function Scheduling(props: SchedulingProps): ReactElement {
             calendarRef={calendarRef}
             isCalendarVisible={isCalendarVisible}
             onChangeScheduleDate={onChangeScheduleDate}
+            onChangeScheduleMeridiem={onChangeScheduleMeridiem}
             onChangeScheduleTime={onChangeScheduleTime}
             onChangeScheduleType={onChangeScheduleType}
             scheduleDate={scheduleDate}
+            scheduleMeridiem={scheduleMeridiem}
             scheduleTime={scheduleTime}
             scheduleType={scheduleType}
             showCalendar={useCallback(() => setCalendarVisibility(true), [setCalendarVisibility])}

@@ -21,6 +21,11 @@ export enum ParticipationType {
     Participating = 'participating',
 }
 
+export enum ScheduleMeridiem {
+    AM = 'AM',
+    PM = 'PM',
+}
+
 export enum ScheduleType {
     Now = 'now',
     Future = 'future',

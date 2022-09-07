@@ -64,7 +64,7 @@ export type DeepPartial<T> = {
 };
 
 export type SelectOption<T> = {
-    description: string;
+    description?: string;
     label: string;
     value: T;
 };
