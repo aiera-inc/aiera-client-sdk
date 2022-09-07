@@ -7,7 +7,13 @@ import { Scheduling } from './index';
 describe('Scheduling', () => {
     const onChange = jest.fn();
     test('renders scheduling fields', () => {
-        renderWithProvider(<Scheduling onChangeScheduleDate={onChange} onChangeScheduleType={onChange} />);
+        renderWithProvider(
+            <Scheduling
+                onChangeScheduleTime={onChange}
+                onChangeScheduleDate={onChange}
+                onChangeScheduleType={onChange}
+            />
+        );
         screen.getByText('Scheduling');
         screen.getByText('Now');
         screen.getByText('In the future');

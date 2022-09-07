@@ -44,6 +44,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectUrl: ChangeHandler<string>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
     onChangeScheduleDate: ChangeHandler<Date>;
+    onChangeScheduleTime: ChangeHandler<string>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
     onConnectDialNumber: string;
     onNextStep: Dispatch<SetStateAction<number>>;
@@ -51,6 +52,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onSubmit: MouseEventHandler;
     participationType?: ParticipationType;
     scheduleDate?: Date;
+    scheduleTime?: string;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
     step: number;
@@ -74,12 +76,14 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectUrl,
         onChangeParticipationType,
         onChangeScheduleDate,
+        onChangeScheduleTime,
         onChangeScheduleType,
         onNextStep,
         onPrevStep,
         onSubmit,
         participationType,
         scheduleDate,
+        scheduleTime,
         scheduleType,
         step,
     } = props;
@@ -126,8 +130,10 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     .with(3, () => (
                         <Scheduling
                             onChangeScheduleDate={onChangeScheduleDate}
+                            onChangeScheduleTime={onChangeScheduleTime}
                             onChangeScheduleType={onChangeScheduleType}
                             scheduleDate={scheduleDate}
+                            scheduleTime={scheduleTime}
                             scheduleType={scheduleType}
                         />
                     ))
@@ -194,6 +200,7 @@ interface RecordingFormState {
     onConnectDialNumber: string;
     participationType?: ParticipationType;
     scheduleDate?: Date;
+    scheduleTime?: string;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
 }
@@ -214,6 +221,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         onConnectDialNumber: '',
         participationType: undefined,
         scheduleDate: new Date(),
+        scheduleTime: '',
         scheduleType: undefined,
         smsAlertBeforeCall: false,
     });
@@ -240,6 +248,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectUrl={handlers.connectUrl}
             onChangeParticipationType={handlers.participationType}
             onChangeScheduleDate={handlers.scheduleDate}
+            onChangeScheduleTime={handlers.scheduleTime}
             onChangeScheduleType={handlers.scheduleType}
             onConnectDialNumber={state.onConnectDialNumber}
             onNextStep={setStep}
@@ -247,6 +256,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onSubmit={() => console.log('SUBMITTED')}
             participationType={state.participationType}
             scheduleDate={state.scheduleDate}
+            scheduleTime={state.scheduleTime}
             scheduleType={state.scheduleType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
             step={step}
