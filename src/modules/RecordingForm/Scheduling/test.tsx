@@ -5,6 +5,7 @@ import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { Scheduling } from './index';
 
 describe('Scheduling', () => {
+    const connectOffsetSeconds = 0;
     const onChange = jest.fn();
     const scheduleDate = new Date();
     const scheduleMeridiem = ScheduleMeridiem.AM;
@@ -12,6 +13,8 @@ describe('Scheduling', () => {
     test('renders scheduling fields', () => {
         renderWithProvider(
             <Scheduling
+                connectOffsetSeconds={connectOffsetSeconds}
+                onChangeConnectOffsetSeconds={onChange}
                 onChangeScheduleDate={onChange}
                 onChangeScheduleMeridiem={onChange}
                 onChangeScheduleTime={onChange}
@@ -28,6 +31,8 @@ describe('Scheduling', () => {
     test('when scheduleType is now, do not show date & time fields', () => {
         renderWithProvider(
             <Scheduling
+                connectOffsetSeconds={connectOffsetSeconds}
+                onChangeConnectOffsetSeconds={onChange}
                 onChangeScheduleDate={onChange}
                 onChangeScheduleMeridiem={onChange}
                 onChangeScheduleTime={onChange}
@@ -43,6 +48,8 @@ describe('Scheduling', () => {
     test('when scheduleType is future, show date & time fields', () => {
         renderWithProvider(
             <Scheduling
+                connectOffsetSeconds={connectOffsetSeconds}
+                onChangeConnectOffsetSeconds={onChange}
                 onChangeScheduleDate={onChange}
                 onChangeScheduleMeridiem={onChange}
                 onChangeScheduleTime={onChange}

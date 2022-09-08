@@ -5,22 +5,19 @@ import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
-import { SCHEDULE_TYPE_OPTIONS, ScheduleMeridiem, ScheduleType } from '@aiera/client-sdk/modules/RecordingForm/types';
+import {
+    CONNECT_OFFSET_SECONDS_OPTIONS,
+    SCHEDULE_MERIDIEM_OPTIONS,
+    SCHEDULE_TYPE_OPTIONS,
+    ScheduleMeridiem,
+    ScheduleType,
+} from '@aiera/client-sdk/modules/RecordingForm/types';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
-const MERIDIEM_OPTIONS = [
-    {
-        label: 'AM',
-        value: ScheduleMeridiem.AM,
-    },
-    {
-        label: 'PM',
-        value: ScheduleMeridiem.PM,
-    },
-];
-
 interface SchedulingSharedProps {
+    connectOffsetSeconds: number;
+    onChangeConnectOffsetSeconds: ChangeHandler<number>;
     onChangeScheduleDate: ChangeHandler<Date>;
     onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
     onChangeScheduleTime: ChangeHandler<string>;
@@ -41,7 +38,9 @@ interface SchedulingUIProps extends SchedulingSharedProps {
 export function SchedulingUI(props: SchedulingUIProps): ReactElement {
     const {
         calendarRef,
+        connectOffsetSeconds,
         isCalendarVisible,
+        onChangeConnectOffsetSeconds,
         onChangeScheduleDate,
         onChangeScheduleMeridiem,
         onChangeScheduleTime,
@@ -63,36 +62,50 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                 value={scheduleType}
             />
             {scheduleType === ScheduleType.Future && (
-                <FormField className="mt-5 px-4 py-3">
-                    <p className="font-semibold text-base text-black form-field__label">Date & Time</p>
-                    <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm  form-field__description">
-                        Aiera will automatically connect at this time
-                    </p>
-                    <div className="flex items-center mt-3 space-between w-full">
-                        <Input
-                            clearable={false}
-                            name="scheduleDate"
-                            onFocus={showCalendar}
-                            value={scheduleDate ? scheduleDate.toLocaleDateString() : ''}
-                        />
-                        <Input
-                            className="ml-2"
-                            name="scheduleTime"
-                            onChange={onChangeScheduleTime}
-                            placeholder="10:00"
-                            value={scheduleTime}
-                        />
+                <>
+                    <FormField className="mt-5 px-4 py-3">
+                        <p className="font-semibold text-base text-black form-field__label">Date & Time</p>
+                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm  form-field__description">
+                            Aiera will automatically connect at this time
+                        </p>
+                        <div className="flex items-center mt-3 space-between w-full">
+                            <Input
+                                clearable={false}
+                                name="scheduleDate"
+                                onFocus={showCalendar}
+                                value={scheduleDate ? scheduleDate.toLocaleDateString() : ''}
+                            />
+                            <Input
+                                className="ml-2"
+                                name="scheduleTime"
+                                onChange={onChangeScheduleTime}
+                                placeholder="10:00"
+                                value={scheduleTime}
+                            />
+                            <Dropdown
+                                className="ml-2"
+                                onChange={onChangeScheduleMeridiem}
+                                options={SCHEDULE_MERIDIEM_OPTIONS}
+                                value={scheduleMeridiem}
+                            />
+                        </div>
+                        {isCalendarVisible && (
+                            <DatePicker calendarRef={calendarRef} name="scheduleDate" onChange={onChangeScheduleDate} />
+                        )}
+                    </FormField>
+                    <FormField className="mt-5 px-4 py-3">
+                        <p className="font-semibold text-base text-black form-field__label">When should we connect?</p>
+                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm  form-field__description">
+                            How soon before the call starts should we connect?
+                        </p>
                         <Dropdown
-                            className="ml-2"
-                            onChange={onChangeScheduleMeridiem}
-                            options={MERIDIEM_OPTIONS}
-                            value={scheduleMeridiem}
+                            className="ml-2 mt-3"
+                            onChange={onChangeConnectOffsetSeconds}
+                            options={CONNECT_OFFSET_SECONDS_OPTIONS}
+                            value={connectOffsetSeconds}
                         />
-                    </div>
-                    {isCalendarVisible && (
-                        <DatePicker calendarRef={calendarRef} name="scheduleDate" onChange={onChangeScheduleDate} />
-                    )}
-                </FormField>
+                    </FormField>
+                </>
             )}
         </div>
     );
@@ -119,6 +132,8 @@ export function Scheduling(props: SchedulingProps): ReactElement {
     );
 
     const {
+        connectOffsetSeconds,
+        onChangeConnectOffsetSeconds,
         onChangeScheduleDate,
         onChangeScheduleMeridiem,
         onChangeScheduleTime,
@@ -131,7 +146,9 @@ export function Scheduling(props: SchedulingProps): ReactElement {
     return (
         <SchedulingUI
             calendarRef={calendarRef}
+            connectOffsetSeconds={connectOffsetSeconds}
             isCalendarVisible={isCalendarVisible}
+            onChangeConnectOffsetSeconds={onChangeConnectOffsetSeconds}
             onChangeScheduleDate={onChangeScheduleDate}
             onChangeScheduleMeridiem={onChangeScheduleMeridiem}
             onChangeScheduleTime={onChangeScheduleTime}

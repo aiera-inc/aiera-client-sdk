@@ -32,6 +32,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectAccessId: string;
     connectCallerId: string;
     connectionType?: ConnectionType;
+    connectOffsetSeconds: number;
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
@@ -40,6 +41,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectAccessId: ChangeHandler<string>;
     onChangeConnectCallerId: ChangeHandler<string>;
     onChangeConnectionType: ChangeHandler<ConnectionType>;
+    onChangeConnectOffsetSeconds: ChangeHandler<number>;
     onChangeConnectPhoneNumber: ChangeHandler<string>;
     onChangeConnectPin: ChangeHandler<string>;
     onChangeConnectUrl: ChangeHandler<string>;
@@ -66,6 +68,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         connectAccessId,
         connectCallerId,
         connectionType,
+        connectOffsetSeconds,
         connectPhoneNumber,
         connectPin,
         connectUrl,
@@ -74,6 +77,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectAccessId,
         onChangeConnectCallerId,
         onChangeConnectionType,
+        onChangeConnectOffsetSeconds,
         onChangeConnectPhoneNumber,
         onChangeConnectPin,
         onChangeConnectUrl,
@@ -134,6 +138,8 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     ))
                     .with(3, () => (
                         <Scheduling
+                            connectOffsetSeconds={connectOffsetSeconds}
+                            onChangeConnectOffsetSeconds={onChangeConnectOffsetSeconds}
                             onChangeScheduleDate={onChangeScheduleDate}
                             onChangeScheduleMeridiem={onChangeScheduleMeridiem}
                             onChangeScheduleTime={onChangeScheduleTime}
@@ -200,6 +206,7 @@ interface RecordingFormState {
     connectAccessId: string;
     connectCallerId: string;
     connectionType?: ConnectionType;
+    connectOffsetSeconds: number;
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
@@ -222,6 +229,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         connectAccessId: '',
         connectCallerId: '',
         connectionType: undefined,
+        connectOffsetSeconds: 0,
         connectPhoneNumber: '',
         connectPin: '',
         connectUrl: '',
@@ -243,6 +251,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectAccessId={state.connectAccessId}
             connectCallerId={state.connectCallerId}
             connectionType={state.connectionType}
+            connectOffsetSeconds={state.connectOffsetSeconds}
             connectPhoneNumber={state.connectPhoneNumber}
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
@@ -252,6 +261,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectAccessId={handlers.connectAccessId}
             onChangeConnectCallerId={handlers.connectCallerId}
             onChangeConnectionType={handlers.connectionType}
+            onChangeConnectOffsetSeconds={handlers.connectOffsetSeconds}
             onChangeConnectPhoneNumber={handlers.connectPhoneNumber}
             onChangeConnectPin={handlers.connectPin}
             onChangeConnectUrl={handlers.connectUrl}
