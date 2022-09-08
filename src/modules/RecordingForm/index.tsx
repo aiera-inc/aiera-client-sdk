@@ -53,7 +53,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onPrevStep: Dispatch<SetStateAction<number>>;
     onSubmit: MouseEventHandler;
     participationType?: ParticipationType;
-    scheduleDate?: Date;
+    scheduleDate: Date;
     scheduleMeridiem: ScheduleMeridiem;
     scheduleTime?: string;
     scheduleType?: ScheduleType;

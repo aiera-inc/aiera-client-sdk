@@ -76,12 +76,14 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                             value={scheduleDate ? scheduleDate.toLocaleDateString() : ''}
                         />
                         <Input
+                            className="ml-2"
                             name="scheduleTime"
                             onChange={onChangeScheduleTime}
                             placeholder="10:00"
                             value={scheduleTime}
                         />
                         <Dropdown
+                            className="ml-2"
                             onChange={onChangeScheduleMeridiem}
                             options={MERIDIEM_OPTIONS}
                             value={scheduleMeridiem}
