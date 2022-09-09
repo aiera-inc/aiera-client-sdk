@@ -18,7 +18,7 @@ export function ConnectionTypeUI(props: ConnectionTypeUIProps): ReactElement {
     const { connectionType, connectionTypeOptions, onChange } = props;
     return (
         <div className="py-3 connection-type">
-            <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Connection Type</p>
+            <p className="font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase">Connection Type</p>
             <FormFieldSelect
                 className="mt-2.5"
                 name="connectionType"

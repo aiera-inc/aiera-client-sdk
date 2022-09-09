@@ -124,7 +124,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
     );
     return (
         <div className="py-3 connection-details">
-            <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Configure Connection</p>
+            <p className="font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase">Configure Connection</p>
             {match(connectionType)
                 .with(ConnectionType.Zoom, () => (
                     <>

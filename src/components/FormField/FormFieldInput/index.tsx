@@ -26,7 +26,7 @@ export function FormFieldInput(props: FormFieldInputProps) {
         <FormField className={className}>
             {!!label && <p className="font-semibold text-base text-black form-field__label">{label}</p>}
             {!!description && (
-                <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm  form-field__description">
+                <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
                     {description}
                 </p>
             )}

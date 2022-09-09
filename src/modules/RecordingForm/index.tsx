@@ -139,7 +139,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         step,
     } = props;
     return (
-        <div className="bg-[#F7F8FB] h-full flex flex-col justify-between recording-form">
+        <div className="bg-slate-50 h-full flex flex-col justify-between recording-form">
             <div className="bg-white flex flex-col pt-3 px-3 shadow-3xl z-10 dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header">
                 <div className="flex items-center mb-3">
                     <Button className="mr-2" onClick={onBack}>
