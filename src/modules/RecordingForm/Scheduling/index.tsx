@@ -99,9 +99,10 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                             How soon before the call starts should we connect?
                         </p>
                         <Dropdown
-                            className="ml-2 mt-3"
+                            className="mt-3"
                             onChange={onChangeConnectOffsetSeconds}
                             options={CONNECT_OFFSET_SECONDS_OPTIONS}
+                            tooltipGrow="up-left"
                             value={connectOffsetSeconds}
                         />
                     </FormField>

@@ -2,7 +2,7 @@ import React, { MouseEvent, ReactElement, Ref, useLayoutEffect, useMemo, useRef,
 import classNames from 'classnames';
 import { match } from 'ts-pattern';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
-import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { Tooltip, TooltipProps } from '@aiera/client-sdk/components/Tooltip';
 import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { ChangeHandler, SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
@@ -11,6 +11,8 @@ interface DropdownSharedProps<T> {
     className?: string;
     onChange?: ChangeHandler<T>;
     options: SelectOption<T>[];
+    tooltipGrow?: TooltipProps['grow'];
+    tooltipPosition?: TooltipProps['position'];
     value?: T;
 }
 
@@ -81,7 +83,13 @@ function TooltipContent<T>(props: DropdownUIProps<T>): ReactElement {
 }
 
 export function DropdownUI<T>(props: DropdownUIProps<T>): ReactElement {
-    const { className = '', selectIndex, selectedLabel } = props;
+    const {
+        className = '',
+        selectIndex,
+        selectedLabel,
+        tooltipGrow = 'down-left',
+        tooltipPosition = 'bottom-right',
+    } = props;
     return (
         <Tooltip
             className={
@@ -90,12 +98,12 @@ export function DropdownUI<T>(props: DropdownUIProps<T>): ReactElement {
                 `focus:outline-none focus:shadow-input hover:border-blue-400 dropdown ${className}`
             }
             content={({ hideTooltip }) => <TooltipContent hideTooltip={hideTooltip} {...props} />}
-            grow="down-left"
+            grow={tooltipGrow}
             onClose={() => {
                 selectIndex(0);
             }}
             openOn="click"
-            position="bottom-right"
+            position={tooltipPosition}
             yOffset={5}
         >
             <div className="flex-1">{selectedLabel}</div>
@@ -128,7 +136,7 @@ export function Dropdown<T>(props: DropdownProps<T>): ReactElement {
         }
     }, [selectedOptionRef?.current, scrollContainerRef?.current]);
 
-    const { className, onChange, options, value } = props;
+    const { className, onChange, options, tooltipGrow, tooltipPosition, value } = props;
     const selectedLabel = useMemo(() => options.find((o) => o.value === value)?.label, [options, value]);
     return (
         <DropdownUI
@@ -140,6 +148,8 @@ export function Dropdown<T>(props: DropdownProps<T>): ReactElement {
             selectedLabel={selectedLabel}
             selectedOptionRef={selectedOptionRef}
             selectIndex={selectIndex}
+            tooltipGrow={tooltipGrow}
+            tooltipPosition={tooltipPosition}
             value={value}
         />
     );
