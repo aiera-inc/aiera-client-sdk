@@ -301,14 +301,14 @@ var require_react_development = __commonJS({
         {
           Object.freeze(emptyObject);
         }
-        function Component(props, context, updater) {
+        function Component3(props, context, updater) {
           this.props = props;
           this.context = context;
           this.refs = emptyObject;
           this.updater = updater || ReactNoopUpdateQueue;
         }
-        Component.prototype.isReactComponent = {};
-        Component.prototype.setState = function(partialState, callback) {
+        Component3.prototype.isReactComponent = {};
+        Component3.prototype.setState = function(partialState, callback) {
           if (!(typeof partialState === "object" || typeof partialState === "function" || partialState == null)) {
             {
               throw Error("setState(...): takes an object of state variables to update or a function which returns an object of state variables.");
@@ -316,7 +316,7 @@ var require_react_development = __commonJS({
           }
           this.updater.enqueueSetState(this, partialState, callback, "setState");
         };
-        Component.prototype.forceUpdate = function(callback) {
+        Component3.prototype.forceUpdate = function(callback) {
           this.updater.enqueueForceUpdate(this, callback, "forceUpdate");
         };
         {
@@ -325,7 +325,7 @@ var require_react_development = __commonJS({
             replaceState: ["replaceState", "Refactor your code to use setState instead (see https://github.com/facebook/react/issues/3236)."]
           };
           var defineDeprecationWarning = function(methodName, info) {
-            Object.defineProperty(Component.prototype, methodName, {
+            Object.defineProperty(Component3.prototype, methodName, {
               get: function() {
                 warn2("%s(...) is deprecated in plain JavaScript React classes. %s", info[0], info[1]);
                 return void 0;
@@ -340,7 +340,7 @@ var require_react_development = __commonJS({
         }
         function ComponentDummy() {
         }
-        ComponentDummy.prototype = Component.prototype;
+        ComponentDummy.prototype = Component3.prototype;
         function PureComponent(props, context, updater) {
           this.props = props;
           this.context = context;
@@ -349,7 +349,7 @@ var require_react_development = __commonJS({
         }
         var pureComponentPrototype = PureComponent.prototype = new ComponentDummy();
         pureComponentPrototype.constructor = PureComponent;
-        _assign(pureComponentPrototype, Component.prototype);
+        _assign(pureComponentPrototype, Component3.prototype);
         pureComponentPrototype.isPureReactComponent = true;
         function createRef() {
           var refObject = {
@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement44 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement47 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement44(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement47(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement44(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement47(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement44(element.type, key, ref, self2, source, owner, props);
+          return ReactElement47(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -657,8 +657,8 @@ var require_react_development = __commonJS({
             "=": "=0",
             ":": "=2"
           };
-          var escapedString = key.replace(escapeRegex, function(match7) {
-            return escaperLookup[match7];
+          var escapedString = key.replace(escapeRegex, function(match8) {
+            return escaperLookup[match8];
           });
           return "$" + escapedString;
         }
@@ -1080,7 +1080,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context7, unstable_observedBits);
         }
-        function useState12(initialState) {
+        function useState15(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1088,7 +1088,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useReducer(reducer, initialArg, init);
         }
-        function useRef5(initialValue) {
+        function useRef7(initialValue) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
@@ -1096,15 +1096,15 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
-        function useLayoutEffect2(create, deps) {
+        function useLayoutEffect3(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create, deps);
         }
-        function useCallback12(callback, deps) {
+        function useCallback14(callback, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo6(create, deps) {
+        function useMemo7(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create, deps);
         }
@@ -1204,8 +1204,8 @@ var require_react_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match7 && match7[1] || "";
+                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match8 && match8[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -1322,8 +1322,8 @@ var require_react_development = __commonJS({
             return describeNativeComponentFrame(fn, false);
           }
         }
-        function shouldConstruct(Component2) {
-          var prototype = Component2.prototype;
+        function shouldConstruct(Component4) {
+          var prototype = Component4.prototype;
           return !!(prototype && prototype.isReactComponent);
         }
         function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
@@ -1647,7 +1647,7 @@ var require_react_development = __commonJS({
           only: onlyChild
         };
         exports2.Children = Children;
-        exports2.Component = Component;
+        exports2.Component = Component3;
         exports2.PureComponent = PureComponent;
         exports2.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactSharedInternals;
         exports2.cloneElement = cloneElement$1;
@@ -1659,16 +1659,16 @@ var require_react_development = __commonJS({
         exports2.isValidElement = isValidElement;
         exports2.lazy = lazy;
         exports2.memo = memo;
-        exports2.useCallback = useCallback12;
+        exports2.useCallback = useCallback14;
         exports2.useContext = useContext8;
         exports2.useDebugValue = useDebugValue;
         exports2.useEffect = useEffect13;
         exports2.useImperativeHandle = useImperativeHandle;
-        exports2.useLayoutEffect = useLayoutEffect2;
-        exports2.useMemo = useMemo6;
+        exports2.useLayoutEffect = useLayoutEffect3;
+        exports2.useMemo = useMemo7;
         exports2.useReducer = useReducer;
-        exports2.useRef = useRef5;
-        exports2.useState = useState12;
+        exports2.useRef = useRef7;
+        exports2.useState = useState15;
         exports2.version = ReactVersion;
       })();
     }
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React45 = require_react();
+        var React68 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React45.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React68.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React45) {
+        if (!React68) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3126,8 +3126,8 @@ var require_react_dom_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match7 && match7[1] || "";
+                var match8 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match8 && match8[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -3249,8 +3249,8 @@ var require_react_dom_development = __commonJS({
             return describeNativeComponentFrame(fn, false);
           }
         }
-        function shouldConstruct(Component) {
-          var prototype = Component.prototype;
+        function shouldConstruct(Component3) {
+          var prototype = Component3.prototype;
           return !!(prototype && prototype.isReactComponent);
         }
         function describeUnknownElementTypeFrameInDEV(type, source, ownerFn) {
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React45.Children.forEach(children, function(child) {
+          React68.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React45.Children.forEach(props.children, function(child) {
+              React68.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -5463,7 +5463,7 @@ var require_react_dom_development = __commonJS({
         var ContentReset = 16;
         var Callback = 32;
         var DidCapture = 64;
-        var Ref2 = 128;
+        var Ref5 = 128;
         var Snapshot = 256;
         var Passive = 512;
         var PassiveUnmountPendingDev = 8192;
@@ -9840,9 +9840,9 @@ var require_react_dom_development = __commonJS({
         var contextStackCursor = createCursor(emptyContextObject);
         var didPerformWorkStackCursor = createCursor(false);
         var previousContext = emptyContextObject;
-        function getUnmaskedContext(workInProgress2, Component, didPushOwnContextIfProvider) {
+        function getUnmaskedContext(workInProgress2, Component3, didPushOwnContextIfProvider) {
           {
-            if (didPushOwnContextIfProvider && isContextProvider(Component)) {
+            if (didPushOwnContextIfProvider && isContextProvider(Component3)) {
               return previousContext;
             }
             return contextStackCursor.current;
@@ -9987,8 +9987,8 @@ var require_react_dom_development = __commonJS({
                 case HostRoot:
                   return node.stateNode.context;
                 case ClassComponent: {
-                  var Component = node.type;
-                  if (isContextProvider(Component)) {
+                  var Component3 = node.type;
+                  if (isContextProvider(Component3)) {
                     return node.stateNode.__reactInternalMemoizedMergedChildContext;
                   }
                   break;
@@ -10400,10 +10400,10 @@ var require_react_dom_development = __commonJS({
             pendingLegacyContextWarning = /* @__PURE__ */ new Map();
           };
         }
-        function resolveDefaultProps(Component, baseProps) {
-          if (Component && Component.defaultProps) {
+        function resolveDefaultProps(Component3, baseProps) {
+          if (Component3 && Component3.defaultProps) {
             var props = _assign({}, baseProps);
-            var defaultProps = Component.defaultProps;
+            var defaultProps = Component3.defaultProps;
             for (var propName in defaultProps) {
               if (props[propName] === void 0) {
                 props[propName] = defaultProps[propName];
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React45.Component().refs;
+        var emptyRefsObject = new React68.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -12719,7 +12719,7 @@ var require_react_dom_development = __commonJS({
           }
           return true;
         }
-        function renderWithHooks(current2, workInProgress2, Component, props, secondArg, nextRenderLanes) {
+        function renderWithHooks(current2, workInProgress2, Component3, props, secondArg, nextRenderLanes) {
           renderLanes = nextRenderLanes;
           currentlyRenderingFiber$1 = workInProgress2;
           {
@@ -12739,7 +12739,7 @@ var require_react_dom_development = __commonJS({
               ReactCurrentDispatcher$1.current = HooksDispatcherOnMountInDEV;
             }
           }
-          var children = Component(props, secondArg);
+          var children = Component3(props, secondArg);
           if (didScheduleRenderPhaseUpdateDuringThisPass) {
             var numberOfReRenders = 0;
             do {
@@ -12760,7 +12760,7 @@ var require_react_dom_development = __commonJS({
                 hookTypesUpdateIndexDev = -1;
               }
               ReactCurrentDispatcher$1.current = HooksDispatcherOnRerenderInDEV;
-              children = Component(props, secondArg);
+              children = Component3(props, secondArg);
             } while (didScheduleRenderPhaseUpdateDuringThisPass);
           }
           ReactCurrentDispatcher$1.current = ContextOnlyDispatcher;
@@ -14347,16 +14347,16 @@ var require_react_dom_development = __commonJS({
           workInProgress2.child = reconcileChildFibers(workInProgress2, current2.child, null, renderLanes2);
           workInProgress2.child = reconcileChildFibers(workInProgress2, null, nextChildren, renderLanes2);
         }
-        function updateForwardRef(current2, workInProgress2, Component, nextProps, renderLanes2) {
+        function updateForwardRef(current2, workInProgress2, Component3, nextProps, renderLanes2) {
           {
             if (workInProgress2.type !== workInProgress2.elementType) {
-              var innerPropTypes = Component.propTypes;
+              var innerPropTypes = Component3.propTypes;
               if (innerPropTypes) {
-                checkPropTypes(innerPropTypes, nextProps, "prop", getComponentName(Component));
+                checkPropTypes(innerPropTypes, nextProps, "prop", getComponentName(Component3));
               }
             }
           }
-          var render2 = Component.render;
+          var render2 = Component3.render;
           var ref = workInProgress2.ref;
           var nextChildren;
           prepareToReadContext(workInProgress2, renderLanes2);
@@ -14382,10 +14382,10 @@ var require_react_dom_development = __commonJS({
           reconcileChildren(current2, workInProgress2, nextChildren, renderLanes2);
           return workInProgress2.child;
         }
-        function updateMemoComponent(current2, workInProgress2, Component, nextProps, updateLanes, renderLanes2) {
+        function updateMemoComponent(current2, workInProgress2, Component3, nextProps, updateLanes, renderLanes2) {
           if (current2 === null) {
-            var type = Component.type;
-            if (isSimpleFunctionComponent(type) && Component.compare === null && Component.defaultProps === void 0) {
+            var type = Component3.type;
+            if (isSimpleFunctionComponent(type) && Component3.compare === null && Component3.defaultProps === void 0) {
               var resolvedType = type;
               {
                 resolvedType = resolveFunctionForHotReloading(type);
@@ -14403,14 +14403,14 @@ var require_react_dom_development = __commonJS({
                 checkPropTypes(innerPropTypes, nextProps, "prop", getComponentName(type));
               }
             }
-            var child = createFiberFromTypeAndProps(Component.type, null, nextProps, workInProgress2, workInProgress2.mode, renderLanes2);
+            var child = createFiberFromTypeAndProps(Component3.type, null, nextProps, workInProgress2, workInProgress2.mode, renderLanes2);
             child.ref = workInProgress2.ref;
             child.return = workInProgress2;
             workInProgress2.child = child;
             return child;
           }
           {
-            var _type = Component.type;
+            var _type = Component3.type;
             var _innerPropTypes = _type.propTypes;
             if (_innerPropTypes) {
               checkPropTypes(_innerPropTypes, nextProps, "prop", getComponentName(_type));
@@ -14419,7 +14419,7 @@ var require_react_dom_development = __commonJS({
           var currentChild = current2.child;
           if (!includesSomeLane(updateLanes, renderLanes2)) {
             var prevProps = currentChild.memoizedProps;
-            var compare = Component.compare;
+            var compare = Component3.compare;
             compare = compare !== null ? compare : shallowEqual;
             if (compare(prevProps, nextProps) && current2.ref === workInProgress2.ref) {
               return bailoutOnAlreadyFinishedWork(current2, workInProgress2, renderLanes2);
@@ -14432,7 +14432,7 @@ var require_react_dom_development = __commonJS({
           workInProgress2.child = newChild;
           return newChild;
         }
-        function updateSimpleMemoComponent(current2, workInProgress2, Component, nextProps, updateLanes, renderLanes2) {
+        function updateSimpleMemoComponent(current2, workInProgress2, Component3, nextProps, updateLanes, renderLanes2) {
           {
             if (workInProgress2.type !== workInProgress2.elementType) {
               var outerMemoType = workInProgress2.elementType;
@@ -14464,7 +14464,7 @@ var require_react_dom_development = __commonJS({
               }
             }
           }
-          return updateFunctionComponent(current2, workInProgress2, Component, nextProps, renderLanes2);
+          return updateFunctionComponent(current2, workInProgress2, Component3, nextProps, renderLanes2);
         }
         function updateOffscreenComponent(current2, workInProgress2, renderLanes2) {
           var nextProps = workInProgress2.pendingProps;
@@ -14542,21 +14542,21 @@ var require_react_dom_development = __commonJS({
         function markRef(current2, workInProgress2) {
           var ref = workInProgress2.ref;
           if (current2 === null && ref !== null || current2 !== null && current2.ref !== ref) {
-            workInProgress2.flags |= Ref2;
+            workInProgress2.flags |= Ref5;
           }
         }
-        function updateFunctionComponent(current2, workInProgress2, Component, nextProps, renderLanes2) {
+        function updateFunctionComponent(current2, workInProgress2, Component3, nextProps, renderLanes2) {
           {
             if (workInProgress2.type !== workInProgress2.elementType) {
-              var innerPropTypes = Component.propTypes;
+              var innerPropTypes = Component3.propTypes;
               if (innerPropTypes) {
-                checkPropTypes(innerPropTypes, nextProps, "prop", getComponentName(Component));
+                checkPropTypes(innerPropTypes, nextProps, "prop", getComponentName(Component3));
               }
             }
           }
           var context;
           {
-            var unmaskedContext = getUnmaskedContext(workInProgress2, Component, true);
+            var unmaskedContext = getUnmaskedContext(workInProgress2, Component3, true);
             context = getMaskedContext(workInProgress2, unmaskedContext);
           }
           var nextChildren;
@@ -14564,11 +14564,11 @@ var require_react_dom_development = __commonJS({
           {
             ReactCurrentOwner$1.current = workInProgress2;
             setIsRendering(true);
-            nextChildren = renderWithHooks(current2, workInProgress2, Component, nextProps, context, renderLanes2);
+            nextChildren = renderWithHooks(current2, workInProgress2, Component3, nextProps, context, renderLanes2);
             if (workInProgress2.mode & StrictMode2) {
               disableLogs();
               try {
-                nextChildren = renderWithHooks(current2, workInProgress2, Component, nextProps, context, renderLanes2);
+                nextChildren = renderWithHooks(current2, workInProgress2, Component3, nextProps, context, renderLanes2);
               } finally {
                 reenableLogs();
               }
@@ -14583,17 +14583,17 @@ var require_react_dom_development = __commonJS({
           reconcileChildren(current2, workInProgress2, nextChildren, renderLanes2);
           return workInProgress2.child;
         }
-        function updateClassComponent(current2, workInProgress2, Component, nextProps, renderLanes2) {
+        function updateClassComponent(current2, workInProgress2, Component3, nextProps, renderLanes2) {
           {
             if (workInProgress2.type !== workInProgress2.elementType) {
-              var innerPropTypes = Component.propTypes;
+              var innerPropTypes = Component3.propTypes;
               if (innerPropTypes) {
-                checkPropTypes(innerPropTypes, nextProps, "prop", getComponentName(Component));
+                checkPropTypes(innerPropTypes, nextProps, "prop", getComponentName(Component3));
               }
             }
           }
           var hasContext;
-          if (isContextProvider(Component)) {
+          if (isContextProvider(Component3)) {
             hasContext = true;
             pushContextProvider(workInProgress2);
           } else {
@@ -14608,15 +14608,15 @@ var require_react_dom_development = __commonJS({
               workInProgress2.alternate = null;
               workInProgress2.flags |= Placement;
             }
-            constructClassInstance(workInProgress2, Component, nextProps);
-            mountClassInstance(workInProgress2, Component, nextProps, renderLanes2);
+            constructClassInstance(workInProgress2, Component3, nextProps);
+            mountClassInstance(workInProgress2, Component3, nextProps, renderLanes2);
             shouldUpdate = true;
           } else if (current2 === null) {
-            shouldUpdate = resumeMountClassInstance(workInProgress2, Component, nextProps, renderLanes2);
+            shouldUpdate = resumeMountClassInstance(workInProgress2, Component3, nextProps, renderLanes2);
           } else {
-            shouldUpdate = updateClassInstance(current2, workInProgress2, Component, nextProps, renderLanes2);
+            shouldUpdate = updateClassInstance(current2, workInProgress2, Component3, nextProps, renderLanes2);
           }
-          var nextUnitOfWork = finishClassComponent(current2, workInProgress2, Component, shouldUpdate, hasContext, renderLanes2);
+          var nextUnitOfWork = finishClassComponent(current2, workInProgress2, Component3, shouldUpdate, hasContext, renderLanes2);
           {
             var inst = workInProgress2.stateNode;
             if (shouldUpdate && inst.props !== nextProps) {
@@ -14628,19 +14628,19 @@ var require_react_dom_development = __commonJS({
           }
           return nextUnitOfWork;
         }
-        function finishClassComponent(current2, workInProgress2, Component, shouldUpdate, hasContext, renderLanes2) {
+        function finishClassComponent(current2, workInProgress2, Component3, shouldUpdate, hasContext, renderLanes2) {
           markRef(current2, workInProgress2);
           var didCaptureError = (workInProgress2.flags & DidCapture) !== NoFlags;
           if (!shouldUpdate && !didCaptureError) {
             if (hasContext) {
-              invalidateContextProvider(workInProgress2, Component, false);
+              invalidateContextProvider(workInProgress2, Component3, false);
             }
             return bailoutOnAlreadyFinishedWork(current2, workInProgress2, renderLanes2);
           }
           var instance = workInProgress2.stateNode;
           ReactCurrentOwner$1.current = workInProgress2;
           var nextChildren;
-          if (didCaptureError && typeof Component.getDerivedStateFromError !== "function") {
+          if (didCaptureError && typeof Component3.getDerivedStateFromError !== "function") {
             nextChildren = null;
             {
               stopProfilerTimerIfRunning();
@@ -14668,7 +14668,7 @@ var require_react_dom_development = __commonJS({
           }
           workInProgress2.memoizedState = instance.state;
           if (hasContext) {
-            invalidateContextProvider(workInProgress2, Component, true);
+            invalidateContextProvider(workInProgress2, Component3, true);
           }
           return workInProgress2.child;
         }
@@ -14760,60 +14760,60 @@ var require_react_dom_development = __commonJS({
           var lazyComponent = elementType;
           var payload = lazyComponent._payload;
           var init = lazyComponent._init;
-          var Component = init(payload);
-          workInProgress2.type = Component;
-          var resolvedTag = workInProgress2.tag = resolveLazyComponentTag(Component);
-          var resolvedProps = resolveDefaultProps(Component, props);
+          var Component3 = init(payload);
+          workInProgress2.type = Component3;
+          var resolvedTag = workInProgress2.tag = resolveLazyComponentTag(Component3);
+          var resolvedProps = resolveDefaultProps(Component3, props);
           var child;
           switch (resolvedTag) {
             case FunctionComponent: {
               {
-                validateFunctionComponentInDev(workInProgress2, Component);
-                workInProgress2.type = Component = resolveFunctionForHotReloading(Component);
+                validateFunctionComponentInDev(workInProgress2, Component3);
+                workInProgress2.type = Component3 = resolveFunctionForHotReloading(Component3);
               }
-              child = updateFunctionComponent(null, workInProgress2, Component, resolvedProps, renderLanes2);
+              child = updateFunctionComponent(null, workInProgress2, Component3, resolvedProps, renderLanes2);
               return child;
             }
             case ClassComponent: {
               {
-                workInProgress2.type = Component = resolveClassForHotReloading(Component);
+                workInProgress2.type = Component3 = resolveClassForHotReloading(Component3);
               }
-              child = updateClassComponent(null, workInProgress2, Component, resolvedProps, renderLanes2);
+              child = updateClassComponent(null, workInProgress2, Component3, resolvedProps, renderLanes2);
               return child;
             }
             case ForwardRef: {
               {
-                workInProgress2.type = Component = resolveForwardRefForHotReloading(Component);
+                workInProgress2.type = Component3 = resolveForwardRefForHotReloading(Component3);
               }
-              child = updateForwardRef(null, workInProgress2, Component, resolvedProps, renderLanes2);
+              child = updateForwardRef(null, workInProgress2, Component3, resolvedProps, renderLanes2);
               return child;
             }
             case MemoComponent: {
               {
                 if (workInProgress2.type !== workInProgress2.elementType) {
-                  var outerPropTypes = Component.propTypes;
+                  var outerPropTypes = Component3.propTypes;
                   if (outerPropTypes) {
-                    checkPropTypes(outerPropTypes, resolvedProps, "prop", getComponentName(Component));
+                    checkPropTypes(outerPropTypes, resolvedProps, "prop", getComponentName(Component3));
                   }
                 }
               }
-              child = updateMemoComponent(null, workInProgress2, Component, resolveDefaultProps(Component.type, resolvedProps), updateLanes, renderLanes2);
+              child = updateMemoComponent(null, workInProgress2, Component3, resolveDefaultProps(Component3.type, resolvedProps), updateLanes, renderLanes2);
               return child;
             }
           }
           var hint = "";
           {
-            if (Component !== null && typeof Component === "object" && Component.$$typeof === REACT_LAZY_TYPE) {
+            if (Component3 !== null && typeof Component3 === "object" && Component3.$$typeof === REACT_LAZY_TYPE) {
               hint = " Did you wrap a component in React.lazy() more than once?";
             }
           }
           {
             {
-              throw Error("Element type is invalid. Received a promise that resolves to: " + Component + ". Lazy element type must resolve to a class or function." + hint);
+              throw Error("Element type is invalid. Received a promise that resolves to: " + Component3 + ". Lazy element type must resolve to a class or function." + hint);
             }
           }
         }
-        function mountIncompleteClassComponent(_current, workInProgress2, Component, nextProps, renderLanes2) {
+        function mountIncompleteClassComponent(_current, workInProgress2, Component3, nextProps, renderLanes2) {
           if (_current !== null) {
             _current.alternate = null;
             workInProgress2.alternate = null;
@@ -14821,18 +14821,18 @@ var require_react_dom_development = __commonJS({
           }
           workInProgress2.tag = ClassComponent;
           var hasContext;
-          if (isContextProvider(Component)) {
+          if (isContextProvider(Component3)) {
             hasContext = true;
             pushContextProvider(workInProgress2);
           } else {
             hasContext = false;
           }
           prepareToReadContext(workInProgress2, renderLanes2);
-          constructClassInstance(workInProgress2, Component, nextProps);
-          mountClassInstance(workInProgress2, Component, nextProps, renderLanes2);
-          return finishClassComponent(null, workInProgress2, Component, true, hasContext, renderLanes2);
+          constructClassInstance(workInProgress2, Component3, nextProps);
+          mountClassInstance(workInProgress2, Component3, nextProps, renderLanes2);
+          return finishClassComponent(null, workInProgress2, Component3, true, hasContext, renderLanes2);
         }
-        function mountIndeterminateComponent(_current, workInProgress2, Component, renderLanes2) {
+        function mountIndeterminateComponent(_current, workInProgress2, Component3, renderLanes2) {
           if (_current !== null) {
             _current.alternate = null;
             workInProgress2.alternate = null;
@@ -14841,14 +14841,14 @@ var require_react_dom_development = __commonJS({
           var props = workInProgress2.pendingProps;
           var context;
           {
-            var unmaskedContext = getUnmaskedContext(workInProgress2, Component, false);
+            var unmaskedContext = getUnmaskedContext(workInProgress2, Component3, false);
             context = getMaskedContext(workInProgress2, unmaskedContext);
           }
           prepareToReadContext(workInProgress2, renderLanes2);
           var value;
           {
-            if (Component.prototype && typeof Component.prototype.render === "function") {
-              var componentName = getComponentName(Component) || "Unknown";
+            if (Component3.prototype && typeof Component3.prototype.render === "function") {
+              var componentName = getComponentName(Component3) || "Unknown";
               if (!didWarnAboutBadClass[componentName]) {
                 error("The <%s /> component appears to have a render method, but doesn't extend React.Component. This is likely to cause errors. Change %s to extend React.Component instead.", componentName, componentName);
                 didWarnAboutBadClass[componentName] = true;
@@ -14859,13 +14859,13 @@ var require_react_dom_development = __commonJS({
             }
             setIsRendering(true);
             ReactCurrentOwner$1.current = workInProgress2;
-            value = renderWithHooks(null, workInProgress2, Component, props, context, renderLanes2);
+            value = renderWithHooks(null, workInProgress2, Component3, props, context, renderLanes2);
             setIsRendering(false);
           }
           workInProgress2.flags |= PerformedWork;
           {
             if (typeof value === "object" && value !== null && typeof value.render === "function" && value.$$typeof === void 0) {
-              var _componentName = getComponentName(Component) || "Unknown";
+              var _componentName = getComponentName(Component3) || "Unknown";
               if (!didWarnAboutModulePatternComponent[_componentName]) {
                 error("The <%s /> component appears to be a function component that returns a class instance. Change %s to a class that extends React.Component instead. If you can't use a class try assigning the prototype on the function as a workaround. `%s.prototype = React.Component.prototype`. Don't use an arrow function since it cannot be called with `new` by React.", _componentName, _componentName, _componentName);
                 didWarnAboutModulePatternComponent[_componentName] = true;
@@ -14874,7 +14874,7 @@ var require_react_dom_development = __commonJS({
           }
           if (typeof value === "object" && value !== null && typeof value.render === "function" && value.$$typeof === void 0) {
             {
-              var _componentName2 = getComponentName(Component) || "Unknown";
+              var _componentName2 = getComponentName(Component3) || "Unknown";
               if (!didWarnAboutModulePatternComponent[_componentName2]) {
                 error("The <%s /> component appears to be a function component that returns a class instance. Change %s to a class that extends React.Component instead. If you can't use a class try assigning the prototype on the function as a workaround. `%s.prototype = React.Component.prototype`. Don't use an arrow function since it cannot be called with `new` by React.", _componentName2, _componentName2, _componentName2);
                 didWarnAboutModulePatternComponent[_componentName2] = true;
@@ -14884,7 +14884,7 @@ var require_react_dom_development = __commonJS({
             workInProgress2.memoizedState = null;
             workInProgress2.updateQueue = null;
             var hasContext = false;
-            if (isContextProvider(Component)) {
+            if (isContextProvider(Component3)) {
               hasContext = true;
               pushContextProvider(workInProgress2);
             } else {
@@ -14892,20 +14892,20 @@ var require_react_dom_development = __commonJS({
             }
             workInProgress2.memoizedState = value.state !== null && value.state !== void 0 ? value.state : null;
             initializeUpdateQueue(workInProgress2);
-            var getDerivedStateFromProps = Component.getDerivedStateFromProps;
+            var getDerivedStateFromProps = Component3.getDerivedStateFromProps;
             if (typeof getDerivedStateFromProps === "function") {
-              applyDerivedStateFromProps(workInProgress2, Component, getDerivedStateFromProps, props);
+              applyDerivedStateFromProps(workInProgress2, Component3, getDerivedStateFromProps, props);
             }
             adoptClassInstance(workInProgress2, value);
-            mountClassInstance(workInProgress2, Component, props, renderLanes2);
-            return finishClassComponent(null, workInProgress2, Component, true, hasContext, renderLanes2);
+            mountClassInstance(workInProgress2, Component3, props, renderLanes2);
+            return finishClassComponent(null, workInProgress2, Component3, true, hasContext, renderLanes2);
           } else {
             workInProgress2.tag = FunctionComponent;
             {
               if (workInProgress2.mode & StrictMode2) {
                 disableLogs();
                 try {
-                  value = renderWithHooks(null, workInProgress2, Component, props, context, renderLanes2);
+                  value = renderWithHooks(null, workInProgress2, Component3, props, context, renderLanes2);
                 } finally {
                   reenableLogs();
                 }
@@ -14913,16 +14913,16 @@ var require_react_dom_development = __commonJS({
             }
             reconcileChildren(null, workInProgress2, value, renderLanes2);
             {
-              validateFunctionComponentInDev(workInProgress2, Component);
+              validateFunctionComponentInDev(workInProgress2, Component3);
             }
             return workInProgress2.child;
           }
         }
-        function validateFunctionComponentInDev(workInProgress2, Component) {
+        function validateFunctionComponentInDev(workInProgress2, Component3) {
           {
-            if (Component) {
-              if (Component.childContextTypes) {
-                error("%s(...): childContextTypes cannot be defined on a function component.", Component.displayName || Component.name || "Component");
+            if (Component3) {
+              if (Component3.childContextTypes) {
+                error("%s(...): childContextTypes cannot be defined on a function component.", Component3.displayName || Component3.name || "Component");
               }
             }
             if (workInProgress2.ref !== null) {
@@ -14941,15 +14941,15 @@ var require_react_dom_development = __commonJS({
                 error("Function components cannot be given refs. Attempts to access this ref will fail. Did you mean to use React.forwardRef()?%s", info);
               }
             }
-            if (typeof Component.getDerivedStateFromProps === "function") {
-              var _componentName3 = getComponentName(Component) || "Unknown";
+            if (typeof Component3.getDerivedStateFromProps === "function") {
+              var _componentName3 = getComponentName(Component3) || "Unknown";
               if (!didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3]) {
                 error("%s: Function components do not support getDerivedStateFromProps.", _componentName3);
                 didWarnAboutGetDerivedStateOnFunctionComponent[_componentName3] = true;
               }
             }
-            if (typeof Component.contextType === "object" && Component.contextType !== null) {
-              var _componentName4 = getComponentName(Component) || "Unknown";
+            if (typeof Component3.contextType === "object" && Component3.contextType !== null) {
+              var _componentName4 = getComponentName(Component3) || "Unknown";
               if (!didWarnAboutContextTypeOnFunctionComponent[_componentName4]) {
                 error("%s: Function components do not support contextType.", _componentName4);
                 didWarnAboutContextTypeOnFunctionComponent[_componentName4] = true;
@@ -15558,8 +15558,8 @@ var require_react_dom_development = __commonJS({
                   pushHostContext(workInProgress2);
                   break;
                 case ClassComponent: {
-                  var Component = workInProgress2.type;
-                  if (isContextProvider(Component)) {
+                  var Component3 = workInProgress2.type;
+                  if (isContextProvider(Component3)) {
                     pushContextProvider(workInProgress2);
                   }
                   break;
@@ -15743,7 +15743,7 @@ var require_react_dom_development = __commonJS({
           workInProgress2.flags |= Update;
         }
         function markRef$1(workInProgress2) {
-          workInProgress2.flags |= Ref2;
+          workInProgress2.flags |= Ref5;
         }
         var appendAllChildren;
         var updateHostContainer;
@@ -15854,8 +15854,8 @@ var require_react_dom_development = __commonJS({
             case MemoComponent:
               return null;
             case ClassComponent: {
-              var Component = workInProgress2.type;
-              if (isContextProvider(Component)) {
+              var Component3 = workInProgress2.type;
+              if (isContextProvider(Component3)) {
                 popContext(workInProgress2);
               }
               return null;
@@ -16137,8 +16137,8 @@ var require_react_dom_development = __commonJS({
         function unwindWork(workInProgress2, renderLanes2) {
           switch (workInProgress2.tag) {
             case ClassComponent: {
-              var Component = workInProgress2.type;
-              if (isContextProvider(Component)) {
+              var Component3 = workInProgress2.type;
+              if (isContextProvider(Component3)) {
                 popContext(workInProgress2);
               }
               var flags = workInProgress2.flags;
@@ -18335,7 +18335,7 @@ var require_react_dom_development = __commonJS({
             if (flags & ContentReset) {
               commitResetTextContent(nextEffect);
             }
-            if (flags & Ref2) {
+            if (flags & Ref5) {
               var current2 = nextEffect.alternate;
               if (current2 !== null) {
                 commitDetachRef(current2);
@@ -18388,7 +18388,7 @@ var require_react_dom_development = __commonJS({
               commitLifeCycles(root2, current2, nextEffect);
             }
             {
-              if (flags & Ref2) {
+              if (flags & Ref5) {
                 commitAttachRef(nextEffect);
               }
             }
@@ -19304,18 +19304,18 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
         var createFiber = function(tag, pendingProps, key, mode) {
           return new FiberNode(tag, pendingProps, key, mode);
         };
-        function shouldConstruct$1(Component) {
-          var prototype = Component.prototype;
+        function shouldConstruct$1(Component3) {
+          var prototype = Component3.prototype;
           return !!(prototype && prototype.isReactComponent);
         }
         function isSimpleFunctionComponent(type) {
           return typeof type === "function" && !shouldConstruct$1(type) && type.defaultProps === void 0;
         }
-        function resolveLazyComponentTag(Component) {
-          if (typeof Component === "function") {
-            return shouldConstruct$1(Component) ? ClassComponent : FunctionComponent;
-          } else if (Component !== void 0 && Component !== null) {
-            var $$typeof = Component.$$typeof;
+        function resolveLazyComponentTag(Component3) {
+          if (typeof Component3 === "function") {
+            return shouldConstruct$1(Component3) ? ClassComponent : FunctionComponent;
+          } else if (Component3 !== void 0 && Component3 !== null) {
+            var $$typeof = Component3.$$typeof;
             if ($$typeof === REACT_FORWARD_REF_TYPE) {
               return ForwardRef;
             }
@@ -19754,9 +19754,9 @@ For more info, visit https://reactjs.org/link/mock-scheduler`);
           var fiber = get(parentComponent);
           var parentContext = findCurrentUnmaskedContext(fiber);
           if (fiber.tag === ClassComponent) {
-            var Component = fiber.type;
-            if (isContextProvider(Component)) {
-              return processChildContext(fiber, Component, parentContext);
+            var Component3 = fiber.type;
+            if (isContextProvider(Component3)) {
+              return processChildContext(fiber, Component3, parentContext);
             }
           }
           return parentContext;
@@ -20541,7 +20541,7 @@ var require_lodash = __commonJS({
         return func(value);
       };
     }
-    function getValue(object, key) {
+    function getValue3(object, key) {
       return object == null ? void 0 : object[key];
     }
     function overArg(func, transform) {
@@ -20987,7 +20987,7 @@ var require_lodash = __commonJS({
       return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
     }
     function getNative(object, key) {
-      var value = getValue(object, key);
+      var value = getValue3(object, key);
       return baseIsNative(value) ? value : void 0;
     }
     function getRawTag(value) {
@@ -25938,8 +25938,8 @@ var require_lib = __commonJS({
     Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
       return wildcards_1.__;
     } });
-    var match7 = (value) => builder(value, []);
-    exports2.match = match7;
+    var match8 = (value) => builder(value, []);
+    exports2.match = match8;
     var builder = (value, cases) => {
       const run = () => {
         const entry = cases.find(({ test }) => test(value));
@@ -26089,7 +26089,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames24() {
+      function classNames26() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26100,7 +26100,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames24.apply(null, arg);
+              var inner = classNames26.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26120,14 +26120,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames24.default = classNames24;
-        module2.exports = classNames24;
+        classNames26.default = classNames26;
+        module2.exports = classNames26;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames24;
+          return classNames26;
         });
       } else {
-        window.classNames = classNames24;
+        window.classNames = classNames26;
       }
     })();
   }
@@ -26138,7 +26138,7 @@ var require_luxon = __commonJS({
   "node_modules/luxon/build/cjs-browser/luxon.js"(exports2) {
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
-    function _defineProperties3(target, props) {
+    function _defineProperties5(target, props) {
       for (var i3 = 0; i3 < props.length; i3++) {
         var descriptor = props[i3];
         descriptor.enumerable = descriptor.enumerable || false;
@@ -26148,15 +26148,15 @@ var require_luxon = __commonJS({
         Object.defineProperty(target, descriptor.key, descriptor);
       }
     }
-    function _createClass3(Constructor, protoProps, staticProps) {
+    function _createClass5(Constructor, protoProps, staticProps) {
       if (protoProps)
-        _defineProperties3(Constructor.prototype, protoProps);
+        _defineProperties5(Constructor.prototype, protoProps);
       if (staticProps)
-        _defineProperties3(Constructor, staticProps);
+        _defineProperties5(Constructor, staticProps);
       return Constructor;
     }
-    function _extends6() {
-      _extends6 = Object.assign || function(target) {
+    function _extends19() {
+      _extends19 = Object.assign || function(target) {
         for (var i3 = 1; i3 < arguments.length; i3++) {
           var source = arguments[i3];
           for (var key in source) {
@@ -26167,27 +26167,27 @@ var require_luxon = __commonJS({
         }
         return target;
       };
-      return _extends6.apply(this, arguments);
+      return _extends19.apply(this, arguments);
     }
     function _inheritsLoose(subClass, superClass) {
       subClass.prototype = Object.create(superClass.prototype);
       subClass.prototype.constructor = subClass;
-      _setPrototypeOf2(subClass, superClass);
+      _setPrototypeOf4(subClass, superClass);
     }
-    function _getPrototypeOf2(o2) {
-      _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+    function _getPrototypeOf4(o2) {
+      _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
         return o3.__proto__ || Object.getPrototypeOf(o3);
       };
-      return _getPrototypeOf2(o2);
+      return _getPrototypeOf4(o2);
     }
-    function _setPrototypeOf2(o2, p2) {
-      _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+    function _setPrototypeOf4(o2, p2) {
+      _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
         o3.__proto__ = p3;
         return o3;
       };
-      return _setPrototypeOf2(o2, p2);
+      return _setPrototypeOf4(o2, p2);
     }
-    function _isNativeReflectConstruct2() {
+    function _isNativeReflectConstruct4() {
       if (typeof Reflect === "undefined" || !Reflect.construct)
         return false;
       if (Reflect.construct.sham)
@@ -26203,7 +26203,7 @@ var require_luxon = __commonJS({
       }
     }
     function _construct2(Parent, args, Class) {
-      if (_isNativeReflectConstruct2()) {
+      if (_isNativeReflectConstruct4()) {
         _construct2 = Reflect.construct;
       } else {
         _construct2 = function _construct3(Parent2, args2, Class2) {
@@ -26212,7 +26212,7 @@ var require_luxon = __commonJS({
           var Constructor = Function.bind.apply(Parent2, a4);
           var instance = new Constructor();
           if (Class2)
-            _setPrototypeOf2(instance, Class2.prototype);
+            _setPrototypeOf4(instance, Class2.prototype);
           return instance;
         };
       }
@@ -26235,7 +26235,7 @@ var require_luxon = __commonJS({
           _cache.set(Class2, Wrapper);
         }
         function Wrapper() {
-          return _construct2(Class2, arguments, _getPrototypeOf2(this).constructor);
+          return _construct2(Class2, arguments, _getPrototypeOf4(this).constructor);
         }
         Wrapper.prototype = Object.create(Class2.prototype, {
           constructor: {
@@ -26245,11 +26245,11 @@ var require_luxon = __commonJS({
             configurable: true
           }
         });
-        return _setPrototypeOf2(Wrapper, Class2);
+        return _setPrototypeOf4(Wrapper, Class2);
       };
       return _wrapNativeSuper2(Class);
     }
-    function _objectWithoutPropertiesLoose(source, excluded) {
+    function _objectWithoutPropertiesLoose11(source, excluded) {
       if (source == null)
         return {};
       var target = {};
@@ -26263,20 +26263,20 @@ var require_luxon = __commonJS({
       }
       return target;
     }
-    function _unsupportedIterableToArray(o2, minLen) {
+    function _unsupportedIterableToArray4(o2, minLen) {
       if (!o2)
         return;
       if (typeof o2 === "string")
-        return _arrayLikeToArray(o2, minLen);
+        return _arrayLikeToArray4(o2, minLen);
       var n3 = Object.prototype.toString.call(o2).slice(8, -1);
       if (n3 === "Object" && o2.constructor)
         n3 = o2.constructor.name;
       if (n3 === "Map" || n3 === "Set")
         return Array.from(o2);
       if (n3 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n3))
-        return _arrayLikeToArray(o2, minLen);
+        return _arrayLikeToArray4(o2, minLen);
     }
-    function _arrayLikeToArray(arr, len) {
+    function _arrayLikeToArray4(arr, len) {
       if (len == null || len > arr.length)
         len = arr.length;
       for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++)
@@ -26287,7 +26287,7 @@ var require_luxon = __commonJS({
       var it = typeof Symbol !== "undefined" && o2[Symbol.iterator] || o2["@@iterator"];
       if (it)
         return (it = it.call(o2)).next.bind(it);
-      if (Array.isArray(o2) || (it = _unsupportedIterableToArray(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
+      if (Array.isArray(o2) || (it = _unsupportedIterableToArray4(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
         if (it)
           o2 = it;
         var i3 = 0;
@@ -26655,7 +26655,7 @@ var require_luxon = __commonJS({
       if (timeZone) {
         intlOpts.timeZone = timeZone;
       }
-      var modified = _extends6({
+      var modified = _extends19({
         timeZoneName: offsetFormat
       }, intlOpts);
       var parsed = new Intl.DateTimeFormat(locale, modified).formatToParts(date).find(function(m2) {
@@ -26894,28 +26894,28 @@ var require_luxon = __commonJS({
         if (this.systemLoc === null) {
           this.systemLoc = this.loc.redefaultToSystem();
         }
-        var df = this.systemLoc.dtFormatter(dt, _extends6({}, this.opts, opts));
+        var df = this.systemLoc.dtFormatter(dt, _extends19({}, this.opts, opts));
         return df.format();
       };
       _proto.formatDateTime = function formatDateTime(dt, opts) {
         if (opts === void 0) {
           opts = {};
         }
-        var df = this.loc.dtFormatter(dt, _extends6({}, this.opts, opts));
+        var df = this.loc.dtFormatter(dt, _extends19({}, this.opts, opts));
         return df.format();
       };
       _proto.formatDateTimeParts = function formatDateTimeParts(dt, opts) {
         if (opts === void 0) {
           opts = {};
         }
-        var df = this.loc.dtFormatter(dt, _extends6({}, this.opts, opts));
+        var df = this.loc.dtFormatter(dt, _extends19({}, this.opts, opts));
         return df.formatToParts();
       };
       _proto.resolvedOptions = function resolvedOptions(dt, opts) {
         if (opts === void 0) {
           opts = {};
         }
-        var df = this.loc.dtFormatter(dt, _extends6({}, this.opts, opts));
+        var df = this.loc.dtFormatter(dt, _extends19({}, this.opts, opts));
         return df.resolvedOptions();
       };
       _proto.num = function num(n3, p2) {
@@ -26925,7 +26925,7 @@ var require_luxon = __commonJS({
         if (this.opts.forceSimple) {
           return padStart(n3, p2);
         }
-        var opts = _extends6({}, this.opts);
+        var opts = _extends19({}, this.opts);
         if (p2 > 0) {
           opts.padTo = p2;
         }
@@ -27200,7 +27200,7 @@ var require_luxon = __commonJS({
       _proto.equals = function equals(otherZone) {
         throw new ZoneIsAbstractError();
       };
-      _createClass3(Zone2, [{
+      _createClass5(Zone2, [{
         key: "type",
         get: function get() {
           throw new ZoneIsAbstractError();
@@ -27243,7 +27243,7 @@ var require_luxon = __commonJS({
       _proto.equals = function equals(otherZone) {
         return otherZone.type === "system";
       };
-      _createClass3(SystemZone2, [{
+      _createClass5(SystemZone2, [{
         key: "type",
         get: function get() {
           return "system";
@@ -27380,7 +27380,7 @@ var require_luxon = __commonJS({
       _proto.equals = function equals(otherZone) {
         return otherZone.type === "iana" && otherZone.name === this.name;
       };
-      _createClass3(IANAZone2, [{
+      _createClass5(IANAZone2, [{
         key: "type",
         get: function get() {
           return "iana";
@@ -27437,7 +27437,7 @@ var require_luxon = __commonJS({
       _proto.equals = function equals(otherZone) {
         return otherZone.type === "fixed" && otherZone.fixed === this.fixed;
       };
-      _createClass3(FixedOffsetZone2, [{
+      _createClass5(FixedOffsetZone2, [{
         key: "type",
         get: function get() {
           return "fixed";
@@ -27489,7 +27489,7 @@ var require_luxon = __commonJS({
       _proto.equals = function equals() {
         return false;
       };
-      _createClass3(InvalidZone2, [{
+      _createClass5(InvalidZone2, [{
         key: "type",
         get: function get() {
           return "invalid";
@@ -27550,7 +27550,7 @@ var require_luxon = __commonJS({
         Locale.resetCache();
         IANAZone.resetCache();
       };
-      _createClass3(Settings2, null, [{
+      _createClass5(Settings2, null, [{
         key: "now",
         get: function get() {
           return now;
@@ -27601,7 +27601,7 @@ var require_luxon = __commonJS({
       }]);
       return Settings2;
     }();
-    var _excluded = ["base"];
+    var _excluded11 = ["base"];
     var intlDTCache = {};
     function getCachedDTF(locString, opts) {
       if (opts === void 0) {
@@ -27635,7 +27635,7 @@ var require_luxon = __commonJS({
       }
       var _opts = opts;
       _opts.base;
-      var cacheKeyOpts = _objectWithoutPropertiesLoose(_opts, _excluded);
+      var cacheKeyOpts = _objectWithoutPropertiesLoose11(_opts, _excluded11);
       var key = JSON.stringify([locString, cacheKeyOpts]);
       var inf = intlRelCache[key];
       if (!inf) {
@@ -27765,7 +27765,7 @@ var require_luxon = __commonJS({
           this.dt = dt;
           z2 = dt.zone.name;
         }
-        var intlOpts = _extends6({}, this.opts);
+        var intlOpts = _extends19({}, this.opts);
         if (z2) {
           intlOpts.timeZone = z2;
         }
@@ -27785,7 +27785,7 @@ var require_luxon = __commonJS({
     }();
     var PolyRelFormatter = /* @__PURE__ */ function() {
       function PolyRelFormatter2(intl, isEnglish, opts) {
-        this.opts = _extends6({
+        this.opts = _extends19({
           style: "long"
         }, opts);
         if (!isEnglish && hasRelative()) {
@@ -27869,7 +27869,7 @@ var require_luxon = __commonJS({
         if (alts === void 0) {
           alts = {};
         }
-        return this.clone(_extends6({}, alts, {
+        return this.clone(_extends19({}, alts, {
           defaultToEN: true
         }));
       };
@@ -27877,7 +27877,7 @@ var require_luxon = __commonJS({
         if (alts === void 0) {
           alts = {};
         }
-        return this.clone(_extends6({}, alts, {
+        return this.clone(_extends19({}, alts, {
           defaultToEN: false
         }));
       };
@@ -27996,7 +27996,7 @@ var require_luxon = __commonJS({
       _proto4.equals = function equals(other) {
         return this.locale === other.locale && this.numberingSystem === other.numberingSystem && this.outputCalendar === other.outputCalendar;
       };
-      _createClass3(Locale2, [{
+      _createClass5(Locale2, [{
         key: "fastNumbers",
         get: function get() {
           if (this.fastNumbersCached == null) {
@@ -28024,7 +28024,7 @@ var require_luxon = __commonJS({
         return extractors.reduce(function(_ref, ex) {
           var mergedVals = _ref[0], mergedZone = _ref[1], cursor = _ref[2];
           var _ex = ex(m2, cursor), val = _ex[0], zone = _ex[1], next = _ex[2];
-          return [_extends6({}, mergedVals, val), mergedZone || zone, next];
+          return [_extends19({}, mergedVals, val), mergedZone || zone, next];
         }, [{}, null, 1]).slice(0, 2);
       };
     }
@@ -28048,11 +28048,11 @@ var require_luxon = __commonJS({
       for (var _len4 = arguments.length, keys = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         keys[_key4] = arguments[_key4];
       }
-      return function(match8, cursor) {
+      return function(match9, cursor) {
         var ret = {};
         var i3;
         for (i3 = 0; i3 < keys.length; i3++) {
-          ret[keys[i3]] = parseInteger(match8[cursor + i3]);
+          ret[keys[i3]] = parseInteger(match9[cursor + i3]);
         }
         return [ret, null, cursor + i3];
       };
@@ -28069,39 +28069,39 @@ var require_luxon = __commonJS({
     var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
     var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
     var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
-    function int(match8, pos, fallback) {
-      var m2 = match8[pos];
+    function int(match9, pos, fallback) {
+      var m2 = match9[pos];
       return isUndefined(m2) ? fallback : parseInteger(m2);
     }
-    function extractISOYmd(match8, cursor) {
+    function extractISOYmd(match9, cursor) {
       var item = {
-        year: int(match8, cursor),
-        month: int(match8, cursor + 1, 1),
-        day: int(match8, cursor + 2, 1)
+        year: int(match9, cursor),
+        month: int(match9, cursor + 1, 1),
+        day: int(match9, cursor + 2, 1)
       };
       return [item, null, cursor + 3];
     }
-    function extractISOTime(match8, cursor) {
+    function extractISOTime(match9, cursor) {
       var item = {
-        hours: int(match8, cursor, 0),
-        minutes: int(match8, cursor + 1, 0),
-        seconds: int(match8, cursor + 2, 0),
-        milliseconds: parseMillis(match8[cursor + 3])
+        hours: int(match9, cursor, 0),
+        minutes: int(match9, cursor + 1, 0),
+        seconds: int(match9, cursor + 2, 0),
+        milliseconds: parseMillis(match9[cursor + 3])
       };
       return [item, null, cursor + 4];
     }
-    function extractISOOffset(match8, cursor) {
-      var local2 = !match8[cursor] && !match8[cursor + 1], fullOffset = signedOffset(match8[cursor + 1], match8[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
+    function extractISOOffset(match9, cursor) {
+      var local2 = !match9[cursor] && !match9[cursor + 1], fullOffset = signedOffset(match9[cursor + 1], match9[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
       return [{}, zone, cursor + 3];
     }
-    function extractIANAZone(match8, cursor) {
-      var zone = match8[cursor] ? IANAZone.create(match8[cursor]) : null;
+    function extractIANAZone(match9, cursor) {
+      var zone = match9[cursor] ? IANAZone.create(match9[cursor]) : null;
       return [{}, zone, cursor + 1];
     }
     var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$");
     var isoDuration = /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
-    function extractISODuration(match8) {
-      var s4 = match8[0], yearStr = match8[1], monthStr = match8[2], weekStr = match8[3], dayStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], millisecondsStr = match8[8];
+    function extractISODuration(match9) {
+      var s4 = match9[0], yearStr = match9[1], monthStr = match9[2], weekStr = match9[3], dayStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], millisecondsStr = match9[8];
       var hasNegativePrefix = s4[0] === "-";
       var negativeSeconds = secondStr && secondStr[0] === "-";
       var maybeNegate = function maybeNegate2(num, force) {
@@ -28148,8 +28148,8 @@ var require_luxon = __commonJS({
       return result;
     }
     var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
-    function extractRFC2822(match8) {
-      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], obsOffset = match8[8], milOffset = match8[9], offHourStr = match8[10], offMinuteStr = match8[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC2822(match9) {
+      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], obsOffset = match9[8], milOffset = match9[9], offHourStr = match9[10], offMinuteStr = match9[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       var offset2;
       if (obsOffset) {
         offset2 = obsOffsets[obsOffset];
@@ -28166,12 +28166,12 @@ var require_luxon = __commonJS({
     var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/;
     var rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/;
     var ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
-    function extractRFC1123Or850(match8) {
-      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC1123Or850(match9) {
+      var weekdayStr = match9[1], dayStr = match9[2], monthStr = match9[3], yearStr = match9[4], hourStr = match9[5], minuteStr = match9[6], secondStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
-    function extractASCII(match8) {
-      var weekdayStr = match8[1], monthStr = match8[2], dayStr = match8[3], hourStr = match8[4], minuteStr = match8[5], secondStr = match8[6], yearStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractASCII(match9) {
+      var weekdayStr = match9[1], monthStr = match9[2], dayStr = match9[3], hourStr = match9[4], minuteStr = match9[5], secondStr = match9[6], yearStr = match9[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
     var isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
@@ -28233,7 +28233,7 @@ var require_luxon = __commonJS({
         milliseconds: 1e3
       }
     };
-    var casualMatrix = _extends6({
+    var casualMatrix = _extends19({
       years: {
         quarters: 4,
         months: 12,
@@ -28264,7 +28264,7 @@ var require_luxon = __commonJS({
     }, lowOrderMatrix);
     var daysInYearAccurate = 146097 / 400;
     var daysInMonthAccurate = 146097 / 4800;
-    var accurateMatrix = _extends6({
+    var accurateMatrix = _extends19({
       years: {
         quarters: 4,
         months: 12,
@@ -28300,7 +28300,7 @@ var require_luxon = __commonJS({
         clear = false;
       }
       var conf = {
-        values: clear ? alts.values : _extends6({}, dur.values, alts.values || {}),
+        values: clear ? alts.values : _extends19({}, dur.values, alts.values || {}),
         loc: dur.loc.clone(alts.loc),
         conversionAccuracy: alts.conversionAccuracy || dur.conversionAccuracy
       };
@@ -28430,7 +28430,7 @@ var require_luxon = __commonJS({
         if (opts === void 0) {
           opts = {};
         }
-        var fmtOpts = _extends6({}, opts, {
+        var fmtOpts = _extends19({}, opts, {
           floor: opts.round !== false && opts.floor !== false
         });
         return this.isValid ? Formatter.create(this.loc, fmtOpts).formatDurationFromString(this, fmt) : INVALID$2;
@@ -28438,7 +28438,7 @@ var require_luxon = __commonJS({
       _proto.toObject = function toObject() {
         if (!this.isValid)
           return {};
-        return _extends6({}, this.values);
+        return _extends19({}, this.values);
       };
       _proto.toISO = function toISO() {
         if (!this.isValid)
@@ -28473,7 +28473,7 @@ var require_luxon = __commonJS({
         var millis = this.toMillis();
         if (millis < 0 || millis >= 864e5)
           return null;
-        opts = _extends6({
+        opts = _extends19({
           suppressMilliseconds: false,
           suppressSeconds: false,
           includePrefix: false,
@@ -28543,7 +28543,7 @@ var require_luxon = __commonJS({
       _proto.set = function set(values) {
         if (!this.isValid)
           return this;
-        var mixed = _extends6({}, this.values, normalizeObject(values, Duration2.normalizeUnit));
+        var mixed = _extends19({}, this.values, normalizeObject(values, Duration2.normalizeUnit));
         return clone$1(this, {
           values: mixed
         });
@@ -28652,7 +28652,7 @@ var require_luxon = __commonJS({
         }
         return true;
       };
-      _createClass3(Duration2, [{
+      _createClass5(Duration2, [{
         key: "locale",
         get: function get() {
           return this.isValid ? this.loc.locale : null;
@@ -29034,7 +29034,7 @@ var require_luxon = __commonJS({
       _proto.mapEndpoints = function mapEndpoints(mapFn) {
         return Interval2.fromDateTimes(mapFn(this.s), mapFn(this.e));
       };
-      _createClass3(Interval2, [{
+      _createClass5(Interval2, [{
         key: "start",
         get: function get() {
           return this.isValid ? this.s : null;
@@ -29510,7 +29510,7 @@ var require_luxon = __commonJS({
       }, "");
       return ["^" + re + "$", units];
     }
-    function match7(input, regex, handlers) {
+    function match8(input, regex, handlers) {
       var matches = input.match(regex);
       if (matches) {
         var all = {};
@@ -29640,7 +29640,7 @@ var require_luxon = __commonJS({
           invalidReason: disqualifyingUnit.invalidReason
         };
       } else {
-        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match7(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
+        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match8(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
         if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
           throw new ConflictingSpecificationError("Can't include meridiem when specifying 24-hour format");
         }
@@ -29692,7 +29692,7 @@ var require_luxon = __commonJS({
       } else {
         weekYear = year;
       }
-      return _extends6({
+      return _extends19({
         weekYear,
         weekNumber,
         weekday
@@ -29711,7 +29711,7 @@ var require_luxon = __commonJS({
         year = weekYear;
       }
       var _uncomputeOrdinal = uncomputeOrdinal(year, ordinal), month = _uncomputeOrdinal.month, day = _uncomputeOrdinal.day;
-      return _extends6({
+      return _extends19({
         year,
         month,
         day
@@ -29720,7 +29720,7 @@ var require_luxon = __commonJS({
     function gregorianToOrdinal(gregData) {
       var year = gregData.year, month = gregData.month, day = gregData.day;
       var ordinal = computeOrdinal(year, month, day);
-      return _extends6({
+      return _extends19({
         year,
         ordinal
       }, timeObject(gregData));
@@ -29728,7 +29728,7 @@ var require_luxon = __commonJS({
     function ordinalToGregorian(ordinalData) {
       var year = ordinalData.year, ordinal = ordinalData.ordinal;
       var _uncomputeOrdinal2 = uncomputeOrdinal(year, ordinal), month = _uncomputeOrdinal2.month, day = _uncomputeOrdinal2.day;
-      return _extends6({
+      return _extends19({
         year,
         month,
         day
@@ -29799,7 +29799,7 @@ var require_luxon = __commonJS({
         loc: inst.loc,
         invalid: inst.invalid
       };
-      return new DateTime2(_extends6({}, current, alts, {
+      return new DateTime2(_extends19({}, current, alts, {
         old: current
       }));
     }
@@ -29833,7 +29833,7 @@ var require_luxon = __commonJS({
       return fixOffset(objToLocalTS(obj), offset2, zone);
     }
     function adjustTime(inst, dur) {
-      var oPre = inst.o, year = inst.c.year + Math.trunc(dur.years), month = inst.c.month + Math.trunc(dur.months) + Math.trunc(dur.quarters) * 3, c3 = _extends6({}, inst.c, {
+      var oPre = inst.o, year = inst.c.year + Math.trunc(dur.years), month = inst.c.month + Math.trunc(dur.months) + Math.trunc(dur.quarters) * 3, c3 = _extends19({}, inst.c, {
         year,
         month,
         day: Math.min(inst.c.day, daysInMonth(year, month)) + Math.trunc(dur.days) + Math.trunc(dur.weeks) * 7
@@ -29861,7 +29861,7 @@ var require_luxon = __commonJS({
     function parseDataToDateTime(parsed, parsedZone, opts, format, text) {
       var setZone = opts.setZone, zone = opts.zone;
       if (parsed && Object.keys(parsed).length !== 0) {
-        var interpretationZone = parsedZone || zone, inst = DateTime2.fromObject(parsed, _extends6({}, opts, {
+        var interpretationZone = parsedZone || zone, inst = DateTime2.fromObject(parsed, _extends19({}, opts, {
           zone: interpretationZone
         }));
         return setZone ? inst : inst.setZone(zone);
@@ -30331,11 +30331,11 @@ var require_luxon = __commonJS({
         }
         var mixed;
         if (settingWeekStuff) {
-          mixed = weekToGregorian(_extends6({}, gregorianToWeek(this.c), normalized));
+          mixed = weekToGregorian(_extends19({}, gregorianToWeek(this.c), normalized));
         } else if (!isUndefined(normalized.ordinal)) {
-          mixed = ordinalToGregorian(_extends6({}, gregorianToOrdinal(this.c), normalized));
+          mixed = ordinalToGregorian(_extends19({}, gregorianToOrdinal(this.c), normalized));
         } else {
-          mixed = _extends6({}, this.toObject(), normalized);
+          mixed = _extends19({}, this.toObject(), normalized);
           if (isUndefined(normalized.day)) {
             mixed.day = Math.min(daysInMonth(mixed.year, mixed.month), mixed.day);
           }
@@ -30493,7 +30493,7 @@ var require_luxon = __commonJS({
         }
         if (!this.isValid)
           return {};
-        var base = _extends6({}, this.c);
+        var base = _extends19({}, this.c);
         if (opts.includeConfig) {
           base.outputCalendar = this.outputCalendar;
           base.numberingSystem = this.loc.numberingSystem;
@@ -30514,7 +30514,7 @@ var require_luxon = __commonJS({
         if (!this.isValid || !otherDateTime.isValid) {
           return Duration.invalid("created by diffing an invalid DateTime");
         }
-        var durOpts = _extends6({
+        var durOpts = _extends19({
           locale: this.locale,
           numberingSystem: this.numberingSystem
         }, opts);
@@ -30560,7 +30560,7 @@ var require_luxon = __commonJS({
           units = options.unit;
           unit = void 0;
         }
-        return diffRelative(base, this.plus(padding), _extends6({}, options, {
+        return diffRelative(base, this.plus(padding), _extends19({}, options, {
           numeric: "always",
           units,
           unit
@@ -30574,7 +30574,7 @@ var require_luxon = __commonJS({
           return null;
         return diffRelative(options.base || DateTime3.fromObject({}, {
           zone: this.zone
-        }), this, _extends6({}, options, {
+        }), this, _extends19({}, options, {
           numeric: "auto",
           units: ["years", "months", "days"],
           calendary: true
@@ -30619,7 +30619,7 @@ var require_luxon = __commonJS({
         }
         return DateTime3.fromFormatExplain(text, fmt, options);
       };
-      _createClass3(DateTime3, [{
+      _createClass5(DateTime3, [{
         key: "isValid",
         get: function get() {
           return this.invalid === null;
@@ -34170,9 +34170,9 @@ var require_dash_all_debug = __commonJS({
                   reject(promise, value);
                 }
               }
-              function initializePromise(promise, resolver) {
+              function initializePromise(promise, resolver2) {
                 try {
-                  resolver(function resolvePromise(value) {
+                  resolver2(function resolvePromise(value) {
                     resolve2(promise, value);
                   }, function rejectPromise(reason) {
                     reject(promise, reason);
@@ -34313,13 +34313,13 @@ var require_dash_all_debug = __commonJS({
                 throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.");
               }
               var Promise$1 = function() {
-                function Promise2(resolver) {
+                function Promise2(resolver2) {
                   this[PROMISE_ID] = nextId();
                   this._result = this._state = void 0;
                   this._subscribers = [];
-                  if (noop2 !== resolver) {
-                    typeof resolver !== "function" && needsResolver();
-                    this instanceof Promise2 ? initializePromise(this, resolver) : needsNew();
+                  if (noop2 !== resolver2) {
+                    typeof resolver2 !== "function" && needsResolver();
+                    this instanceof Promise2 ? initializePromise(this, resolver2) : needsNew();
                   }
                 }
                 Promise2.prototype.catch = function _catch(onRejection) {
@@ -38330,17 +38330,17 @@ var require_dash_all_debug = __commonJS({
           function once(emitter, name) {
             return new Promise(function(resolve2, reject) {
               function errorListener(err) {
-                emitter.removeListener(name, resolver);
+                emitter.removeListener(name, resolver2);
                 reject(err);
               }
-              function resolver() {
+              function resolver2() {
                 if (typeof emitter.removeListener === "function") {
                   emitter.removeListener("error", errorListener);
                 }
                 resolve2([].slice.call(arguments));
               }
               ;
-              eventTargetAgnosticAddListener(emitter, name, resolver, { once: true });
+              eventTargetAgnosticAddListener(emitter, name, resolver2, { once: true });
               if (name !== "error") {
                 addErrorHandlerIfEventEmitter(emitter, errorListener, { once: true });
               }
@@ -40253,7 +40253,7 @@ var require_dash_all_debug = __commonJS({
         },
         "./node_modules/readable-stream/lib/internal/streams/BufferList.js": function(module3, exports3, __webpack_require__) {
           "use strict";
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
@@ -40265,7 +40265,7 @@ var require_dash_all_debug = __commonJS({
           }
           module3.exports = function() {
             function BufferList() {
-              _classCallCheck2(this, BufferList);
+              _classCallCheck4(this, BufferList);
               this.head = null;
               this.tail = null;
               this.length = 0;
@@ -42656,25 +42656,25 @@ var require_dash_all_debug = __commonJS({
                 };
               }
             }
-            function getSingletonInstance(context, className) {
+            function getSingletonInstance(context, className8) {
               for (var i3 in singletonContexts) {
                 var obj = singletonContexts[i3];
-                if (obj.context === context && obj.name === className) {
+                if (obj.context === context && obj.name === className8) {
                   return obj.instance;
                 }
               }
               return null;
             }
-            function setSingletonInstance(context, className, instance2) {
+            function setSingletonInstance(context, className8, instance2) {
               for (var i3 in singletonContexts) {
                 var obj = singletonContexts[i3];
-                if (obj.context === context && obj.name === className) {
+                if (obj.context === context && obj.name === className8) {
                   singletonContexts[i3].instance = instance2;
                   return;
                 }
               }
               singletonContexts.push({
-                name: className,
+                name: className8,
                 context,
                 instance: instance2
               });
@@ -42752,8 +42752,8 @@ var require_dash_all_debug = __commonJS({
             }
             function merge3(classConstructor, context, args) {
               var classInstance;
-              var className = classConstructor.__dashjs_factory_name;
-              var extensionObject = context[className];
+              var className8 = classConstructor.__dashjs_factory_name;
+              var extensionObject = context[className8];
               if (extensionObject) {
                 var extension = extensionObject.instance;
                 if (extensionObject.override) {
@@ -42782,7 +42782,7 @@ var require_dash_all_debug = __commonJS({
                 }, args);
               }
               classInstance.getClassName = function() {
-                return className;
+                return className8;
               };
               return classInstance;
             }
@@ -42810,20 +42810,20 @@ var require_dash_all_debug = __commonJS({
           var _core_Debug__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/core/Debug.js");
           var _streaming_constants_Constants__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__("./src/streaming/constants/Constants.js");
           var _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__("./src/streaming/vo/metrics/HTTPRequest.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _defineProperty(obj, key, value) {
+          function _defineProperty15(obj, key, value) {
             if (key in obj) {
               Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
             } else {
@@ -42941,8 +42941,8 @@ var require_dash_all_debug = __commonJS({
                 },
                 selectionModeForInitialTrack: _streaming_constants_Constants__WEBPACK_IMPORTED_MODULE_3__["default"].TRACK_SELECTION_MODE_HIGHEST_SELECTION_PRIORITY,
                 fragmentRequestTimeout: 0,
-                retryIntervals: (_retryIntervals = {}, _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MPD_TYPE, 500), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].XLINK_EXPANSION_TYPE, 500), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MEDIA_SEGMENT_TYPE, 1e3), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INIT_SEGMENT_TYPE, 1e3), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].BITSTREAM_SWITCHING_SEGMENT_TYPE, 1e3), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INDEX_SEGMENT_TYPE, 1e3), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MSS_FRAGMENT_INFO_SEGMENT_TYPE, 1e3), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].LICENSE, 1e3), _defineProperty(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].OTHER_TYPE, 1e3), _defineProperty(_retryIntervals, "lowLatencyReductionFactor", 10), _retryIntervals),
-                retryAttempts: (_retryAttempts = {}, _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MPD_TYPE, 3), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].XLINK_EXPANSION_TYPE, 1), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MEDIA_SEGMENT_TYPE, 3), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INIT_SEGMENT_TYPE, 3), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].BITSTREAM_SWITCHING_SEGMENT_TYPE, 3), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INDEX_SEGMENT_TYPE, 3), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MSS_FRAGMENT_INFO_SEGMENT_TYPE, 3), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].LICENSE, 3), _defineProperty(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].OTHER_TYPE, 3), _defineProperty(_retryAttempts, "lowLatencyMultiplyFactor", 5), _retryAttempts),
+                retryIntervals: (_retryIntervals = {}, _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MPD_TYPE, 500), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].XLINK_EXPANSION_TYPE, 500), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MEDIA_SEGMENT_TYPE, 1e3), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INIT_SEGMENT_TYPE, 1e3), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].BITSTREAM_SWITCHING_SEGMENT_TYPE, 1e3), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INDEX_SEGMENT_TYPE, 1e3), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MSS_FRAGMENT_INFO_SEGMENT_TYPE, 1e3), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].LICENSE, 1e3), _defineProperty15(_retryIntervals, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].OTHER_TYPE, 1e3), _defineProperty15(_retryIntervals, "lowLatencyReductionFactor", 10), _retryIntervals),
+                retryAttempts: (_retryAttempts = {}, _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MPD_TYPE, 3), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].XLINK_EXPANSION_TYPE, 1), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MEDIA_SEGMENT_TYPE, 3), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INIT_SEGMENT_TYPE, 3), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].BITSTREAM_SWITCHING_SEGMENT_TYPE, 3), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].INDEX_SEGMENT_TYPE, 3), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].MSS_FRAGMENT_INFO_SEGMENT_TYPE, 3), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].LICENSE, 3), _defineProperty15(_retryAttempts, _streaming_vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_4__["HTTPRequest"].OTHER_TYPE, 3), _defineProperty15(_retryAttempts, "lowLatencyMultiplyFactor", 5), _retryAttempts),
                 abr: {
                   movingAverageMethod: _streaming_constants_Constants__WEBPACK_IMPORTED_MODULE_3__["default"].MOVING_AVERAGE_SLIDING_WINDOW,
                   ABRStrategy: _streaming_constants_Constants__WEBPACK_IMPORTED_MODULE_3__["default"].ABR_STRATEGY_DYNAMIC,
@@ -43003,7 +43003,7 @@ var require_dash_all_debug = __commonJS({
               for (var n2 in source) {
                 if (source.hasOwnProperty(n2)) {
                   if (dest.hasOwnProperty(n2)) {
-                    if (_typeof5(source[n2]) === "object" && source[n2] !== null) {
+                    if (_typeof8(source[n2]) === "object" && source[n2] !== null) {
                       mixinSettings(source[n2], dest[n2], path.slice() + n2 + ".");
                     } else {
                       dest[n2] = _Utils_js__WEBPACK_IMPORTED_MODULE_1__["default"].clone(source[n2]);
@@ -43016,7 +43016,7 @@ var require_dash_all_debug = __commonJS({
               return settings;
             }
             function update(settingsObj) {
-              if (_typeof5(settingsObj) === "object") {
+              if (_typeof8(settingsObj) === "object") {
                 mixinSettings(settingsObj, settings, "");
               }
             }
@@ -43039,25 +43039,25 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.r(__webpack_exports__);
           var path_browserify__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./node_modules/path-browserify/index.js");
           var path_browserify__WEBPACK_IMPORTED_MODULE_0___default = /* @__PURE__ */ __webpack_require__.n(path_browserify__WEBPACK_IMPORTED_MODULE_0__);
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -43067,18 +43067,18 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var Utils = /* @__PURE__ */ function() {
             function Utils2() {
-              _classCallCheck2(this, Utils2);
+              _classCallCheck4(this, Utils2);
             }
-            _createClass3(Utils2, null, [{
+            _createClass5(Utils2, null, [{
               key: "mixin",
               value: function mixin(dest, source, copy) {
                 var s3;
@@ -43088,7 +43088,7 @@ var require_dash_all_debug = __commonJS({
                     if (source.hasOwnProperty(name)) {
                       s3 = source[name];
                       if (!(name in dest) || dest[name] !== s3 && (!(name in empty) || empty[name] !== s3)) {
-                        if (_typeof5(dest[name]) === "object" && dest[name] !== null) {
+                        if (_typeof8(dest[name]) === "object" && dest[name] !== null) {
                           dest[name] = Utils2.mixin(dest[name], s3, copy);
                         } else {
                           dest[name] = copy(s3);
@@ -43102,7 +43102,7 @@ var require_dash_all_debug = __commonJS({
             }, {
               key: "clone",
               value: function clone(src) {
-                if (!src || _typeof5(src) !== "object") {
+                if (!src || _typeof8(src) !== "object") {
                   return src;
                 }
                 var r3;
@@ -43219,65 +43219,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _ErrorsBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/errors/ErrorsBase.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -43292,18 +43292,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var Errors = /* @__PURE__ */ function(_ErrorsBase) {
-            _inherits2(Errors2, _ErrorsBase);
-            var _super = _createSuper2(Errors2);
+            _inherits4(Errors2, _ErrorsBase);
+            var _super = _createSuper4(Errors2);
             function Errors2() {
               var _this;
-              _classCallCheck2(this, Errors2);
+              _classCallCheck4(this, Errors2);
               _this = _super.call(this);
               _this.MANIFEST_LOADER_PARSING_FAILURE_ERROR_CODE = 10;
               _this.MANIFEST_LOADER_LOADING_FAILURE_ERROR_CODE = 11;
@@ -43354,12 +43354,12 @@ var require_dash_all_debug = __commonJS({
         "./src/core/errors/ErrorsBase.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -43369,18 +43369,18 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var ErrorsBase = /* @__PURE__ */ function() {
             function ErrorsBase2() {
-              _classCallCheck2(this, ErrorsBase2);
+              _classCallCheck4(this, ErrorsBase2);
             }
-            _createClass3(ErrorsBase2, [{
+            _createClass5(ErrorsBase2, [{
               key: "extend",
               value: function extend(errors, config) {
                 if (!errors)
@@ -43404,65 +43404,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _EventsBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/events/EventsBase.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -43477,18 +43477,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var CoreEvents = /* @__PURE__ */ function(_EventsBase) {
-            _inherits2(CoreEvents2, _EventsBase);
-            var _super = _createSuper2(CoreEvents2);
+            _inherits4(CoreEvents2, _EventsBase);
+            var _super = _createSuper4(CoreEvents2);
             function CoreEvents2() {
               var _this;
-              _classCallCheck2(this, CoreEvents2);
+              _classCallCheck4(this, CoreEvents2);
               _this = _super.call(this);
               _this.ATTEMPT_BACKGROUND_SYNC = "attemptBackgroundSync";
               _this.BUFFERING_COMPLETED = "bufferingCompleted";
@@ -43541,65 +43541,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _CoreEvents__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/events/CoreEvents.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -43614,17 +43614,17 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var Events = /* @__PURE__ */ function(_CoreEvents) {
-            _inherits2(Events2, _CoreEvents);
-            var _super = _createSuper2(Events2);
+            _inherits4(Events2, _CoreEvents);
+            var _super = _createSuper4(Events2);
             function Events2() {
-              _classCallCheck2(this, Events2);
+              _classCallCheck4(this, Events2);
               return _super.apply(this, arguments);
             }
             return Events2;
@@ -43635,12 +43635,12 @@ var require_dash_all_debug = __commonJS({
         "./src/core/events/EventsBase.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -43650,18 +43650,18 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var EventsBase = /* @__PURE__ */ function() {
             function EventsBase2() {
-              _classCallCheck2(this, EventsBase2);
+              _classCallCheck4(this, EventsBase2);
             }
-            _createClass3(EventsBase2, [{
+            _createClass5(EventsBase2, [{
               key: "extend",
               value: function extend(events, config) {
                 if (!events)
@@ -45466,12 +45466,12 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/constants/DashConstants.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -45481,19 +45481,19 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var DashConstants = /* @__PURE__ */ function() {
             function DashConstants2() {
-              _classCallCheck2(this, DashConstants2);
+              _classCallCheck4(this, DashConstants2);
               this.init();
             }
-            _createClass3(DashConstants2, [{
+            _createClass5(DashConstants2, [{
               key: "init",
               value: function init() {
                 this.BASE_URL = "BaseURL";
@@ -46021,7 +46021,7 @@ var require_dash_all_debug = __commonJS({
           function _createForOfIteratorHelper(o2, allowArrayLike) {
             var it;
             if (typeof Symbol === "undefined" || o2[Symbol.iterator] == null) {
-              if (Array.isArray(o2) || (it = _unsupportedIterableToArray(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
+              if (Array.isArray(o2) || (it = _unsupportedIterableToArray4(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
                 if (it)
                   o2 = it;
                 var i3 = 0;
@@ -46057,20 +46057,20 @@ var require_dash_all_debug = __commonJS({
               }
             } };
           }
-          function _unsupportedIterableToArray(o2, minLen) {
+          function _unsupportedIterableToArray4(o2, minLen) {
             if (!o2)
               return;
             if (typeof o2 === "string")
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
             var n2 = Object.prototype.toString.call(o2).slice(8, -1);
             if (n2 === "Object" && o2.constructor)
               n2 = o2.constructor.name;
             if (n2 === "Map" || n2 === "Set")
               return Array.from(o2);
             if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
           }
-          function _arrayLikeToArray(arr, len) {
+          function _arrayLikeToArray4(arr, len) {
             if (len == null || len > arr.length)
               len = arr.length;
             for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++) {
@@ -47153,12 +47153,12 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/parser/maps/CommonProperty.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -47168,23 +47168,23 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var CommonProperty = /* @__PURE__ */ function() {
             function CommonProperty2(name) {
-              _classCallCheck2(this, CommonProperty2);
+              _classCallCheck4(this, CommonProperty2);
               var getDefaultMergeForName = function getDefaultMergeForName2(n2) {
                 return n2 && n2.length && n2.charAt(0) === n2.charAt(0).toUpperCase();
               };
               this._name = name;
               this._merge = getDefaultMergeForName(name);
             }
-            _createClass3(CommonProperty2, [{
+            _createClass5(CommonProperty2, [{
               key: "name",
               get: function get() {
                 return this._name;
@@ -47203,12 +47203,12 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _CommonProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/parser/maps/CommonProperty.js");
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -47218,17 +47218,17 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var MapNode = /* @__PURE__ */ function() {
             function MapNode2(name, properties, children) {
               var _this = this;
-              _classCallCheck2(this, MapNode2);
+              _classCallCheck4(this, MapNode2);
               this._name = name || "";
               this._properties = [];
               this._children = children || [];
@@ -47238,7 +47238,7 @@ var require_dash_all_debug = __commonJS({
                 });
               }
             }
-            _createClass3(MapNode2, [{
+            _createClass5(MapNode2, [{
               key: "name",
               get: function get() {
                 return this._name;
@@ -47263,65 +47263,65 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.r(__webpack_exports__);
           var _MapNode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/parser/maps/MapNode.js");
           var _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/dash/constants/DashConstants.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -47336,17 +47336,17 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var RepresentationBaseValuesMap = /* @__PURE__ */ function(_MapNode) {
-            _inherits2(RepresentationBaseValuesMap2, _MapNode);
-            var _super = _createSuper2(RepresentationBaseValuesMap2);
+            _inherits4(RepresentationBaseValuesMap2, _MapNode);
+            var _super = _createSuper4(RepresentationBaseValuesMap2);
             function RepresentationBaseValuesMap2() {
-              _classCallCheck2(this, RepresentationBaseValuesMap2);
+              _classCallCheck4(this, RepresentationBaseValuesMap2);
               var commonProperties = [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PROFILES, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].WIDTH, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].HEIGHT, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SAR, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].FRAMERATE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].AUDIO_SAMPLING_RATE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MIME_TYPE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_PROFILES, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CODECS, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MAXIMUM_SAP_PERIOD, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].START_WITH_SAP, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MAX_PLAYOUT_RATE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CODING_DEPENDENCY, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SCAN_TYPE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].FRAME_PACKING, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].AUDIO_CHANNEL_CONFIGURATION, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_PROTECTION, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ESSENTIAL_PROPERTY, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SUPPLEMENTAL_PROPERTY, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INBAND_EVENT_STREAM];
               return _super.call(this, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ADAPTATION_SET, commonProperties, [new _MapNode__WEBPACK_IMPORTED_MODULE_0__["default"](_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPRESENTATION, commonProperties, [new _MapNode__WEBPACK_IMPORTED_MODULE_0__["default"](_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SUB_REPRESENTATION, commonProperties)])]);
             }
@@ -47359,65 +47359,65 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.r(__webpack_exports__);
           var _MapNode__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/parser/maps/MapNode.js");
           var _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/dash/constants/DashConstants.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -47432,17 +47432,17 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var SegmentValuesMap = /* @__PURE__ */ function(_MapNode) {
-            _inherits2(SegmentValuesMap2, _MapNode);
-            var _super = _createSuper2(SegmentValuesMap2);
+            _inherits4(SegmentValuesMap2, _MapNode);
+            var _super = _createSuper4(SegmentValuesMap2);
             function SegmentValuesMap2() {
-              _classCallCheck2(this, SegmentValuesMap2);
+              _classCallCheck4(this, SegmentValuesMap2);
               var commonProperties = [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_BASE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_TEMPLATE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_LIST];
               return _super.call(this, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PERIOD, commonProperties, [new _MapNode__WEBPACK_IMPORTED_MODULE_0__["default"](_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ADAPTATION_SET, commonProperties, [new _MapNode__WEBPACK_IMPORTED_MODULE_0__["default"](_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPRESENTATION, commonProperties)])]);
             }
@@ -47453,12 +47453,12 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/parser/matchers/BaseMatcher.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -47468,20 +47468,20 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var BaseMatcher = /* @__PURE__ */ function() {
             function BaseMatcher2(test, converter) {
-              _classCallCheck2(this, BaseMatcher2);
+              _classCallCheck4(this, BaseMatcher2);
               this._test = test;
               this._converter = converter;
             }
-            _createClass3(BaseMatcher2, [{
+            _createClass5(BaseMatcher2, [{
               key: "test",
               get: function get() {
                 return this._test;
@@ -47500,65 +47500,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _BaseMatcher__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/parser/matchers/BaseMatcher.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -47573,30 +47573,30 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var SECONDS_IN_MIN = 60;
           var MINUTES_IN_HOUR = 60;
           var MILLISECONDS_IN_SECONDS = 1e3;
           var datetimeRegex = /^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2})(?::([0-9]*)(\.[0-9]*)?)?(?:([+-])([0-9]{2})(?::?)([0-9]{2}))?/;
           var DateTimeMatcher = /* @__PURE__ */ function(_BaseMatcher) {
-            _inherits2(DateTimeMatcher2, _BaseMatcher);
-            var _super = _createSuper2(DateTimeMatcher2);
+            _inherits4(DateTimeMatcher2, _BaseMatcher);
+            var _super = _createSuper4(DateTimeMatcher2);
             function DateTimeMatcher2() {
-              _classCallCheck2(this, DateTimeMatcher2);
+              _classCallCheck4(this, DateTimeMatcher2);
               return _super.call(this, function(attr) {
                 return datetimeRegex.test(attr.value);
               }, function(str) {
-                var match7 = datetimeRegex.exec(str);
+                var match8 = datetimeRegex.exec(str);
                 var utcDate;
-                utcDate = Date.UTC(parseInt(match7[1], 10), parseInt(match7[2], 10) - 1, parseInt(match7[3], 10), parseInt(match7[4], 10), parseInt(match7[5], 10), match7[6] && parseInt(match7[6], 10) || 0, match7[7] && parseFloat(match7[7]) * MILLISECONDS_IN_SECONDS || 0);
-                if (match7[9] && match7[10]) {
-                  var timezoneOffset = parseInt(match7[9], 10) * MINUTES_IN_HOUR + parseInt(match7[10], 10);
-                  utcDate += (match7[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
+                utcDate = Date.UTC(parseInt(match8[1], 10), parseInt(match8[2], 10) - 1, parseInt(match8[3], 10), parseInt(match8[4], 10), parseInt(match8[5], 10), match8[6] && parseInt(match8[6], 10) || 0, match8[7] && parseFloat(match8[7]) * MILLISECONDS_IN_SECONDS || 0);
+                if (match8[9] && match8[10]) {
+                  var timezoneOffset = parseInt(match8[9], 10) * MINUTES_IN_HOUR + parseInt(match8[10], 10);
+                  utcDate += (match8[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
                 }
                 return new Date(utcDate);
               });
@@ -47611,65 +47611,65 @@ var require_dash_all_debug = __commonJS({
           var _BaseMatcher__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/parser/matchers/BaseMatcher.js");
           var _streaming_constants_Constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/streaming/constants/Constants.js");
           var _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/dash/constants/DashConstants.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -47684,11 +47684,11 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var durationRegex = /^([-])?P(([\d.]*)Y)?(([\d.]*)M)?(([\d.]*)D)?T?(([\d.]*)H)?(([\d.]*)M)?(([\d.]*)S)?/;
           var SECONDS_IN_YEAR = 365 * 24 * 60 * 60;
@@ -47697,10 +47697,10 @@ var require_dash_all_debug = __commonJS({
           var SECONDS_IN_HOUR = 60 * 60;
           var SECONDS_IN_MIN = 60;
           var DurationMatcher = /* @__PURE__ */ function(_BaseMatcher) {
-            _inherits2(DurationMatcher2, _BaseMatcher);
-            var _super = _createSuper2(DurationMatcher2);
+            _inherits4(DurationMatcher2, _BaseMatcher);
+            var _super = _createSuper4(DurationMatcher2);
             function DurationMatcher2() {
-              _classCallCheck2(this, DurationMatcher2);
+              _classCallCheck4(this, DurationMatcher2);
               return _super.call(this, function(attr) {
                 var attributeList = [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].MIN_BUFFER_TIME, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].MEDIA_PRESENTATION_DURATION, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].MINIMUM_UPDATE_PERIOD, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].TIMESHIFT_BUFFER_DEPTH, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].MAX_SEGMENT_DURATION, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].MAX_SUBSEGMENT_DURATION, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].SUGGESTED_PRESENTATION_DELAY, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].START, _streaming_constants_Constants__WEBPACK_IMPORTED_MODULE_1__["default"].START_TIME, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_2__["default"].DURATION];
                 var len = attributeList.length;
@@ -47711,9 +47711,9 @@ var require_dash_all_debug = __commonJS({
                 }
                 return false;
               }, function(str) {
-                var match7 = durationRegex.exec(str);
-                var result = parseFloat(match7[3] || 0) * SECONDS_IN_YEAR + parseFloat(match7[5] || 0) * SECONDS_IN_MONTH + parseFloat(match7[7] || 0) * SECONDS_IN_DAY + parseFloat(match7[9] || 0) * SECONDS_IN_HOUR + parseFloat(match7[11] || 0) * SECONDS_IN_MIN + parseFloat(match7[13] || 0);
-                if (match7[1] !== void 0) {
+                var match8 = durationRegex.exec(str);
+                var result = parseFloat(match8[3] || 0) * SECONDS_IN_YEAR + parseFloat(match8[5] || 0) * SECONDS_IN_MONTH + parseFloat(match8[7] || 0) * SECONDS_IN_DAY + parseFloat(match8[9] || 0) * SECONDS_IN_HOUR + parseFloat(match8[11] || 0) * SECONDS_IN_MIN + parseFloat(match8[13] || 0);
+                if (match8[1] !== void 0) {
                   result = -result;
                 }
                 return result;
@@ -47727,65 +47727,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _BaseMatcher__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/parser/matchers/BaseMatcher.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -47800,18 +47800,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var numericRegex = /^[-+]?[0-9]+[.]?[0-9]*([eE][-+]?[0-9]+)?$/;
           var NumericMatcher = /* @__PURE__ */ function(_BaseMatcher) {
-            _inherits2(NumericMatcher2, _BaseMatcher);
-            var _super = _createSuper2(NumericMatcher2);
+            _inherits4(NumericMatcher2, _BaseMatcher);
+            var _super = _createSuper4(NumericMatcher2);
             function NumericMatcher2() {
-              _classCallCheck2(this, NumericMatcher2);
+              _classCallCheck4(this, NumericMatcher2);
               return _super.call(this, function(attr) {
                 return numericRegex.test(attr.value);
               }, function(str) {
@@ -47827,20 +47827,20 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.r(__webpack_exports__);
           var _BaseMatcher__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/parser/matchers/BaseMatcher.js");
           var _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/dash/constants/DashConstants.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _defineProperty(obj, key, value) {
+          function _defineProperty15(obj, key, value) {
             if (key in obj) {
               Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
             } else {
@@ -47848,52 +47848,52 @@ var require_dash_all_debug = __commonJS({
             }
             return obj;
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -47908,20 +47908,20 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var StringMatcher = /* @__PURE__ */ function(_BaseMatcher) {
-            _inherits2(StringMatcher2, _BaseMatcher);
-            var _super = _createSuper2(StringMatcher2);
+            _inherits4(StringMatcher2, _BaseMatcher);
+            var _super = _createSuper4(StringMatcher2);
             function StringMatcher2() {
-              _classCallCheck2(this, StringMatcher2);
+              _classCallCheck4(this, StringMatcher2);
               return _super.call(this, function(attr, nodeName) {
                 var _stringAttrsInElement;
-                var stringAttrsInElements = (_stringAttrsInElement = {}, _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MPD, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PROFILES]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PERIOD, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BASE_URL, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SERVICE_LOCATION, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BYTE_RANGE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_BASE, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INITIALIZATION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RANGE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPRESENTATION_INDEX, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RANGE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_LIST, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BITSTREAM_SWITCHING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RANGE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_URL, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MEDIA_RANGE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_TEMPLATE, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MEDIA, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INITIALIZATION_MINUS, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BITSTREAM_SWITCHING_MINUS]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ASSET_IDENTIFIER, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].EVENT_STREAM, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ADAPTATION_SET, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PROFILES, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MIME_TYPE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_PROFILES, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CODECS, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_TYPE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].FRAME_PACKING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].AUDIO_CHANNEL_CONFIGURATION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_PROTECTION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ESSENTIAL_PROPERTY, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SUPPLEMENTAL_PROPERTY, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INBAND_EVENT_STREAM, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ACCESSIBILITY, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ROLE, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RATING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VIEWPOINT, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_COMPONENT, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_TYPE]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPRESENTATION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].DEPENDENCY_ID, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MEDIA_STREAM_STRUCTURE_ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SUBSET, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].METRICS, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].METRICS_MINUS]), _defineProperty(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPORTING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _stringAttrsInElement);
+                var stringAttrsInElements = (_stringAttrsInElement = {}, _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MPD, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PROFILES]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PERIOD, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BASE_URL, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SERVICE_LOCATION, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BYTE_RANGE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_BASE, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INITIALIZATION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RANGE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPRESENTATION_INDEX, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RANGE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_LIST, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BITSTREAM_SWITCHING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RANGE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_URL, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MEDIA_RANGE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_TEMPLATE, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX_RANGE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MEDIA, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INDEX, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INITIALIZATION_MINUS, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].BITSTREAM_SWITCHING_MINUS]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ASSET_IDENTIFIER, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].EVENT_STREAM, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ADAPTATION_SET, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].PROFILES, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MIME_TYPE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SEGMENT_PROFILES, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CODECS, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_TYPE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].FRAME_PACKING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].AUDIO_CHANNEL_CONFIGURATION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_PROTECTION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ESSENTIAL_PROPERTY, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SUPPLEMENTAL_PROPERTY, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].INBAND_EVENT_STREAM, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ACCESSIBILITY, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ROLE, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].RATING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VIEWPOINT, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_COMPONENT, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].CONTENT_TYPE]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPRESENTATION, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].DEPENDENCY_ID, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].MEDIA_STREAM_STRUCTURE_ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].SUBSET, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].METRICS, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].METRICS_MINUS]), _defineProperty15(_stringAttrsInElement, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].REPORTING, [_constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].VALUE, _constants_DashConstants__WEBPACK_IMPORTED_MODULE_1__["default"].ID]), _stringAttrsInElement);
                 if (stringAttrsInElements.hasOwnProperty(nodeName)) {
                   var attrNames = stringAttrsInElements[nodeName];
                   if (attrNames !== void 0) {
@@ -47943,18 +47943,18 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _core_FactoryMaker__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/FactoryMaker.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
           function ObjectIron(mappers) {
             function mergeValues(parentItem, childItem) {
@@ -47972,7 +47972,7 @@ var require_dash_all_debug = __commonJS({
                     if (property.merge) {
                       var parentValue = parent[property.name];
                       var childValue = child[property.name];
-                      if (_typeof5(parentValue) === "object" && _typeof5(childValue) === "object") {
+                      if (_typeof8(parentValue) === "object" && _typeof8(childValue) === "object") {
                         mergeValues(parentValue, childValue);
                       } else {
                         child[property.name] = parentValue + childValue;
@@ -47998,7 +47998,7 @@ var require_dash_all_debug = __commonJS({
               }
             }
             function run(source) {
-              if (source === null || _typeof5(source) !== "object") {
+              if (source === null || _typeof8(source) !== "object") {
                 return source;
               }
               if (source.Period_asArray && "period" in mappers) {
@@ -48110,12 +48110,12 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.d(__webpack_exports__, "default", function() {
             return Round10;
           });
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -48125,18 +48125,18 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var Round10 = /* @__PURE__ */ function() {
             function Round102() {
-              _classCallCheck2(this, Round102);
+              _classCallCheck4(this, Round102);
             }
-            _createClass3(Round102, null, [{
+            _createClass5(Round102, null, [{
               key: "round10",
               value: function round10(value, exp) {
                 return _decimalAdjust("round", value, exp);
@@ -48909,13 +48909,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/AdaptationSet.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var AdaptationSet = function AdaptationSet2() {
-            _classCallCheck2(this, AdaptationSet2);
+            _classCallCheck4(this, AdaptationSet2);
             this.period = null;
             this.index = -1;
             this.type = null;
@@ -48925,7 +48925,7 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/BaseURL.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
@@ -48933,7 +48933,7 @@ var require_dash_all_debug = __commonJS({
           var DEFAULT_DVB_PRIORITY = 1;
           var DEFAULT_DVB_WEIGHT = 1;
           var BaseURL = function BaseURL2(url, serviceLocation, priority, weight) {
-            _classCallCheck2(this, BaseURL2);
+            _classCallCheck4(this, BaseURL2);
             this.url = url || "";
             this.serviceLocation = serviceLocation || url || "";
             this.dvb_priority = priority || DEFAULT_DVB_PRIORITY;
@@ -48948,13 +48948,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/Event.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var Event2 = function Event3() {
-            _classCallCheck2(this, Event3);
+            _classCallCheck4(this, Event3);
             this.duration = NaN;
             this.presentationTime = NaN;
             this.id = NaN;
@@ -48967,13 +48967,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/EventStream.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var EventStream = function EventStream2() {
-            _classCallCheck2(this, EventStream2);
+            _classCallCheck4(this, EventStream2);
             this.adaptionSet = null;
             this.representation = null;
             this.period = null;
@@ -48987,13 +48987,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/ManifestInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var ManifestInfo = function ManifestInfo2() {
-            _classCallCheck2(this, ManifestInfo2);
+            _classCallCheck4(this, ManifestInfo2);
             this.dvrWindowSize = NaN;
             this.loadedTime = null;
             this.availableFrom = null;
@@ -49007,13 +49007,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/MediaInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var MediaInfo = function MediaInfo2() {
-            _classCallCheck2(this, MediaInfo2);
+            _classCallCheck4(this, MediaInfo2);
             this.id = null;
             this.index = null;
             this.type = null;
@@ -49039,13 +49039,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/Mpd.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var Mpd = function Mpd2() {
-            _classCallCheck2(this, Mpd2);
+            _classCallCheck4(this, Mpd2);
             this.manifest = null;
             this.suggestedPresentationDelay = 0;
             this.availabilityStartTime = null;
@@ -49061,12 +49061,12 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/PatchOperation.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -49076,22 +49076,22 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var PatchOperation = /* @__PURE__ */ function() {
             function PatchOperation2(action, xpath, value) {
-              _classCallCheck2(this, PatchOperation2);
+              _classCallCheck4(this, PatchOperation2);
               this.action = action;
               this.xpath = xpath;
               this.value = value;
               this.position = null;
             }
-            _createClass3(PatchOperation2, [{
+            _createClass5(PatchOperation2, [{
               key: "getMpdTarget",
               value: function getMpdTarget(root) {
                 var isSiblingOperation = this.action === "remove" || this.action === "replace" || this.position === "before" || this.position === "after";
@@ -49105,13 +49105,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/Period.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var Period = function Period2() {
-            _classCallCheck2(this, Period2);
+            _classCallCheck4(this, Period2);
             this.id = null;
             this.index = -1;
             this.duration = NaN;
@@ -49126,12 +49126,12 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _constants_DashConstants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/constants/DashConstants.js");
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -49141,16 +49141,16 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var Representation = /* @__PURE__ */ function() {
             function Representation2() {
-              _classCallCheck2(this, Representation2);
+              _classCallCheck4(this, Representation2);
               this.id = null;
               this.index = -1;
               this.adaptation = null;
@@ -49178,7 +49178,7 @@ var require_dash_all_debug = __commonJS({
               this.availabilityTimeOffset = 0;
               this.availabilityTimeComplete = true;
             }
-            _createClass3(Representation2, [{
+            _createClass5(Representation2, [{
               key: "hasInitialization",
               value: function hasInitialization() {
                 return this.initialization !== null || this.range !== null;
@@ -49196,13 +49196,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/RepresentationInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var RepresentationInfo = function RepresentationInfo2() {
-            _classCallCheck2(this, RepresentationInfo2);
+            _classCallCheck4(this, RepresentationInfo2);
             this.id = null;
             this.quality = null;
             this.fragmentDuration = null;
@@ -49214,13 +49214,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/Segment.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var Segment = function Segment2() {
-            _classCallCheck2(this, Segment2);
+            _classCallCheck4(this, Segment2);
             this.indexRange = null;
             this.index = null;
             this.mediaRange = null;
@@ -49240,12 +49240,12 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/SimpleXPath.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -49255,17 +49255,17 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var SimpleXPath = /* @__PURE__ */ function() {
             function SimpleXPath2(selector) {
               var _this = this;
-              _classCallCheck2(this, SimpleXPath2);
+              _classCallCheck4(this, SimpleXPath2);
               this.valid = selector[0] == "/";
               this.path = selector.split("/").filter(function(component) {
                 return component.length !== 0;
@@ -49294,7 +49294,7 @@ var require_dash_all_debug = __commonJS({
                 return parsed;
               });
             }
-            _createClass3(SimpleXPath2, [{
+            _createClass5(SimpleXPath2, [{
               key: "isValid",
               value: function isValid() {
                 return this.valid;
@@ -49364,13 +49364,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/StreamInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var StreamInfo = function StreamInfo2() {
-            _classCallCheck2(this, StreamInfo2);
+            _classCallCheck4(this, StreamInfo2);
             this.id = null;
             this.index = null;
             this.start = NaN;
@@ -49383,13 +49383,13 @@ var require_dash_all_debug = __commonJS({
         "./src/dash/vo/UTCTiming.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var UTCTiming = function UTCTiming2() {
-            _classCallCheck2(this, UTCTiming2);
+            _classCallCheck4(this, UTCTiming2);
             this.schemeIdUri = "";
             this.value = "";
           };
@@ -51040,65 +51040,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _core_events_EventsBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/events/EventsBase.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -51113,18 +51113,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var MediaPlayerEvents = /* @__PURE__ */ function(_EventsBase) {
-            _inherits2(MediaPlayerEvents2, _EventsBase);
-            var _super = _createSuper2(MediaPlayerEvents2);
+            _inherits4(MediaPlayerEvents2, _EventsBase);
+            var _super = _createSuper4(MediaPlayerEvents2);
             function MediaPlayerEvents2() {
               var _this;
-              _classCallCheck2(this, MediaPlayerEvents2);
+              _classCallCheck4(this, MediaPlayerEvents2);
               _this = _super.call(this);
               _this.AST_IN_FUTURE = "astInFuture";
               _this.BUFFER_EMPTY = "bufferStalled";
@@ -53311,12 +53311,12 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/constants/Constants.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -53326,19 +53326,19 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var Constants = /* @__PURE__ */ function() {
             function Constants2() {
-              _classCallCheck2(this, Constants2);
+              _classCallCheck4(this, Constants2);
               this.init();
             }
-            _createClass3(Constants2, [{
+            _createClass5(Constants2, [{
               key: "init",
               value: function init() {
                 this.STREAM = "stream";
@@ -53406,12 +53406,12 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/constants/MetricsConstants.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -53421,19 +53421,19 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var MetricsConstants = /* @__PURE__ */ function() {
             function MetricsConstants2() {
-              _classCallCheck2(this, MetricsConstants2);
+              _classCallCheck4(this, MetricsConstants2);
               this.init();
             }
-            _createClass3(MetricsConstants2, [{
+            _createClass5(MetricsConstants2, [{
               key: "init",
               value: function init() {
                 this.TCP_CONNECTION = "TcpList";
@@ -53464,12 +53464,12 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/constants/ProtectionConstants.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -53479,19 +53479,19 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var ProtectionConstants = /* @__PURE__ */ function() {
             function ProtectionConstants2() {
-              _classCallCheck2(this, ProtectionConstants2);
+              _classCallCheck4(this, ProtectionConstants2);
               this.init();
             }
-            _createClass3(ProtectionConstants2, [{
+            _createClass5(ProtectionConstants2, [{
               key: "init",
               value: function init() {
                 this.CLEARKEY_KEYSTEM_STRING = "org.w3.clearkey";
@@ -57291,34 +57291,34 @@ var require_dash_all_debug = __commonJS({
           var _core_errors_Errors__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__("./src/core/errors/Errors.js");
           var _EventController__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__("./src/streaming/controllers/EventController.js");
           var _constants_ConformanceViolationConstants__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__("./src/streaming/constants/ConformanceViolationConstants.js");
-          function _toConsumableArray(arr) {
-            return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+          function _toConsumableArray4(arr) {
+            return _arrayWithoutHoles4(arr) || _iterableToArray4(arr) || _unsupportedIterableToArray4(arr) || _nonIterableSpread4();
           }
-          function _nonIterableSpread() {
+          function _nonIterableSpread4() {
             throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
           }
-          function _unsupportedIterableToArray(o2, minLen) {
+          function _unsupportedIterableToArray4(o2, minLen) {
             if (!o2)
               return;
             if (typeof o2 === "string")
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
             var n2 = Object.prototype.toString.call(o2).slice(8, -1);
             if (n2 === "Object" && o2.constructor)
               n2 = o2.constructor.name;
             if (n2 === "Map" || n2 === "Set")
               return Array.from(o2);
             if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
           }
-          function _iterableToArray(iter) {
+          function _iterableToArray4(iter) {
             if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter))
               return Array.from(iter);
           }
-          function _arrayWithoutHoles(arr) {
+          function _arrayWithoutHoles4(arr) {
             if (Array.isArray(arr))
-              return _arrayLikeToArray(arr);
+              return _arrayLikeToArray4(arr);
           }
-          function _arrayLikeToArray(arr, len) {
+          function _arrayLikeToArray4(arr, len) {
             if (len == null || len > arr.length)
               len = arr.length;
             for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++) {
@@ -57987,7 +57987,7 @@ var require_dash_all_debug = __commonJS({
                     }
                     return acc;
                   }, []);
-                  fragmentDuration = Math.max.apply(Math, _toConsumableArray(fragmentDurations));
+                  fragmentDuration = Math.max.apply(Math, _toConsumableArray4(fragmentDurations));
                 }
                 return isFinite(fragmentDuration) ? fragmentDuration : NaN;
               } catch (e) {
@@ -58471,11 +58471,11 @@ var require_dash_all_debug = __commonJS({
               var MILLISECONDS_IN_SECONDS = 1e3;
               var datetimeRegex = /^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2})(?::([0-9]*)(\.[0-9]*)?)?(?:([+\-])([0-9]{2})([0-9]{2}))?/;
               var utcDate, timezoneOffset;
-              var match7 = datetimeRegex.exec(xsdatetimeStr);
-              utcDate = Date.UTC(parseInt(match7[1], 10), parseInt(match7[2], 10) - 1, parseInt(match7[3], 10), parseInt(match7[4], 10), parseInt(match7[5], 10), match7[6] && (parseInt(match7[6], 10) || 0), match7[7] && parseFloat(match7[7]) * MILLISECONDS_IN_SECONDS || 0);
-              if (match7[9] && match7[10]) {
-                timezoneOffset = parseInt(match7[9], 10) * MINUTES_IN_HOUR + parseInt(match7[10], 10);
-                utcDate += (match7[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
+              var match8 = datetimeRegex.exec(xsdatetimeStr);
+              utcDate = Date.UTC(parseInt(match8[1], 10), parseInt(match8[2], 10) - 1, parseInt(match8[3], 10), parseInt(match8[4], 10), parseInt(match8[5], 10), match8[6] && (parseInt(match8[6], 10) || 0), match8[7] && parseFloat(match8[7]) * MILLISECONDS_IN_SECONDS || 0);
+              if (match8[9] && match8[10]) {
+                timezoneOffset = parseInt(match8[9], 10) * MINUTES_IN_HOUR + parseInt(match8[10], 10);
+                utcDate += (match8[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
               }
               return new Date(utcDate).getTime();
             }
@@ -58913,65 +58913,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _core_events_EventsBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/events/EventsBase.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -58986,18 +58986,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var MetricsReportingEvents = /* @__PURE__ */ function(_EventsBase) {
-            _inherits2(MetricsReportingEvents2, _EventsBase);
-            var _super = _createSuper2(MetricsReportingEvents2);
+            _inherits4(MetricsReportingEvents2, _EventsBase);
+            var _super = _createSuper4(MetricsReportingEvents2);
             function MetricsReportingEvents2() {
               var _this;
-              _classCallCheck2(this, MetricsReportingEvents2);
+              _classCallCheck4(this, MetricsReportingEvents2);
               _this = _super.call(this);
               _this.METRICS_INITIALISATION_COMPLETE = "internal_metricsReportingInitialized";
               _this.BECAME_REPORTING_PLAYER = "internal_becameReportingPlayer";
@@ -59980,13 +59980,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/metrics/vo/DVBErrors.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var DVBErrors = function DVBErrors2() {
-            _classCallCheck2(this, DVBErrors2);
+            _classCallCheck4(this, DVBErrors2);
             this.mpdurl = null;
             this.errorcode = null;
             this.terror = null;
@@ -60008,13 +60008,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/metrics/vo/Metrics.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var Metrics = function Metrics2() {
-            _classCallCheck2(this, Metrics2);
+            _classCallCheck4(this, Metrics2);
             this.metrics = "";
             this.Range = [];
             this.Reporting = [];
@@ -60024,13 +60024,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/metrics/vo/Range.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var Range = function Range2() {
-            _classCallCheck2(this, Range2);
+            _classCallCheck4(this, Range2);
             this.starttime = 0;
             this.duration = Infinity;
             this._useWallClockTime = false;
@@ -60040,14 +60040,14 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/metrics/vo/Reporting.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var DEFAULT_DVB_PROBABILITY = 1e3;
           var Reporting = function Reporting2() {
-            _classCallCheck2(this, Reporting2);
+            _classCallCheck4(this, Reporting2);
             this.schemeIdUri = "";
             this.value = "";
             this.dvb_reportingUrl = "";
@@ -60060,14 +60060,14 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.r(__webpack_exports__);
           var _utils_ObjectUtils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/streaming/utils/ObjectUtils.js");
           var _core_FactoryMaker__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/core/FactoryMaker.js");
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var DEFAULT_INDEX = NaN;
           var Node2 = function Node3(_baseUrls, _selectedIdx) {
-            _classCallCheck2(this, Node3);
+            _classCallCheck4(this, Node3);
             this.data = {
               baseUrls: _baseUrls || null,
               selectedIdx: _selectedIdx || DEFAULT_INDEX
@@ -60192,7 +60192,7 @@ var require_dash_all_debug = __commonJS({
           function _createForOfIteratorHelper(o2, allowArrayLike) {
             var it;
             if (typeof Symbol === "undefined" || o2[Symbol.iterator] == null) {
-              if (Array.isArray(o2) || (it = _unsupportedIterableToArray(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
+              if (Array.isArray(o2) || (it = _unsupportedIterableToArray4(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
                 if (it)
                   o2 = it;
                 var i3 = 0;
@@ -60228,20 +60228,20 @@ var require_dash_all_debug = __commonJS({
               }
             } };
           }
-          function _unsupportedIterableToArray(o2, minLen) {
+          function _unsupportedIterableToArray4(o2, minLen) {
             if (!o2)
               return;
             if (typeof o2 === "string")
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
             var n2 = Object.prototype.toString.call(o2).slice(8, -1);
             if (n2 === "Object" && o2.constructor)
               n2 = o2.constructor.name;
             if (n2 === "Map" || n2 === "Set")
               return Array.from(o2);
             if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
           }
-          function _arrayLikeToArray(arr, len) {
+          function _arrayLikeToArray4(arr, len) {
             if (len == null || len > arr.length)
               len = arr.length;
             for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++) {
@@ -61162,7 +61162,7 @@ var require_dash_all_debug = __commonJS({
             var context = this.context;
             var eventBus = Object(_core_EventBus__WEBPACK_IMPORTED_MODULE_0__["default"])(context).getInstance();
             var instance, manifest;
-            function getValue() {
+            function getValue3() {
               return manifest;
             }
             function setValue(value) {
@@ -61174,7 +61174,7 @@ var require_dash_all_debug = __commonJS({
               }
             }
             instance = {
-              getValue,
+              getValue: getValue3,
               setValue
             };
             return instance;
@@ -62035,7 +62035,7 @@ var require_dash_all_debug = __commonJS({
           var _core_Settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/core/Settings.js");
           var _constants_Constants__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__("./src/streaming/constants/Constants.js");
           function _slicedToArray(arr, i3) {
-            return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i3) || _unsupportedIterableToArray(arr, i3) || _nonIterableRest();
+            return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i3) || _unsupportedIterableToArray4(arr, i3) || _nonIterableRest();
           }
           function _nonIterableRest() {
             throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
@@ -62074,7 +62074,7 @@ var require_dash_all_debug = __commonJS({
           function _createForOfIteratorHelper(o2, allowArrayLike) {
             var it;
             if (typeof Symbol === "undefined" || o2[Symbol.iterator] == null) {
-              if (Array.isArray(o2) || (it = _unsupportedIterableToArray(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
+              if (Array.isArray(o2) || (it = _unsupportedIterableToArray4(o2)) || allowArrayLike && o2 && typeof o2.length === "number") {
                 if (it)
                   o2 = it;
                 var i3 = 0;
@@ -62110,20 +62110,20 @@ var require_dash_all_debug = __commonJS({
               }
             } };
           }
-          function _unsupportedIterableToArray(o2, minLen) {
+          function _unsupportedIterableToArray4(o2, minLen) {
             if (!o2)
               return;
             if (typeof o2 === "string")
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
             var n2 = Object.prototype.toString.call(o2).slice(8, -1);
             if (n2 === "Object" && o2.constructor)
               n2 = o2.constructor.name;
             if (n2 === "Map" || n2 === "Set")
               return Array.from(o2);
             if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
-              return _arrayLikeToArray(o2, minLen);
+              return _arrayLikeToArray4(o2, minLen);
           }
-          function _arrayLikeToArray(arr, len) {
+          function _arrayLikeToArray4(arr, len) {
             if (len == null || len > arr.length)
               len = arr.length;
             for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++) {
@@ -62492,7 +62492,7 @@ var require_dash_all_debug = __commonJS({
           var _core_Settings__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/core/Settings.js");
           var _constants_Constants__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__("./src/streaming/constants/Constants.js");
           var _models_LowLatencyThroughputModel__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__("./src/streaming/models/LowLatencyThroughputModel.js");
-          function _defineProperty(obj, key, value) {
+          function _defineProperty15(obj, key, value) {
             if (key in obj) {
               Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
             } else {
@@ -62521,7 +62521,7 @@ var require_dash_all_debug = __commonJS({
               retryRequests = [];
               cmcdModel = Object(_models_CmcdModel__WEBPACK_IMPORTED_MODULE_5__["default"])(context).getInstance();
               lowLatencyThroughputModel = Object(_models_LowLatencyThroughputModel__WEBPACK_IMPORTED_MODULE_12__["default"])(context).getInstance();
-              downloadErrorToRequestTypeMap = (_downloadErrorToReque = {}, _defineProperty(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].MPD_TYPE, errors.DOWNLOAD_ERROR_ID_MANIFEST_CODE), _defineProperty(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].XLINK_EXPANSION_TYPE, errors.DOWNLOAD_ERROR_ID_XLINK_CODE), _defineProperty(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].INIT_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_INITIALIZATION_CODE), _defineProperty(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].MEDIA_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _defineProperty(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].INDEX_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _defineProperty(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].BITSTREAM_SWITCHING_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _defineProperty(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].OTHER_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _downloadErrorToReque);
+              downloadErrorToRequestTypeMap = (_downloadErrorToReque = {}, _defineProperty15(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].MPD_TYPE, errors.DOWNLOAD_ERROR_ID_MANIFEST_CODE), _defineProperty15(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].XLINK_EXPANSION_TYPE, errors.DOWNLOAD_ERROR_ID_XLINK_CODE), _defineProperty15(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].INIT_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_INITIALIZATION_CODE), _defineProperty15(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].MEDIA_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _defineProperty15(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].INDEX_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _defineProperty15(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].BITSTREAM_SWITCHING_SEGMENT_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _defineProperty15(_downloadErrorToReque, _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_2__["HTTPRequest"].OTHER_TYPE, errors.DOWNLOAD_ERROR_ID_CONTENT_CODE), _downloadErrorToReque);
             }
             function internalLoad(config, remainingAttempts) {
               var request = config.request;
@@ -62925,12 +62925,12 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/CommonEncryption.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -62940,11 +62940,11 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var LICENSE_SERVER_MANIFEST_CONFIGURATIONS = {
@@ -62953,9 +62953,9 @@ var require_dash_all_debug = __commonJS({
           };
           var CommonEncryption = /* @__PURE__ */ function() {
             function CommonEncryption2() {
-              _classCallCheck2(this, CommonEncryption2);
+              _classCallCheck4(this, CommonEncryption2);
             }
-            _createClass3(CommonEncryption2, null, [{
+            _createClass5(CommonEncryption2, null, [{
               key: "findCencContentProtection",
               value: function findCencContentProtection(cpArray) {
                 var retVal = null;
@@ -63253,65 +63253,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _core_events_EventsBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/events/EventsBase.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -63326,18 +63326,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var ProtectionEvents = /* @__PURE__ */ function(_EventsBase) {
-            _inherits2(ProtectionEvents2, _EventsBase);
-            var _super = _createSuper2(ProtectionEvents2);
+            _inherits4(ProtectionEvents2, _EventsBase);
+            var _super = _createSuper4(ProtectionEvents2);
             function ProtectionEvents2() {
               var _this;
-              _classCallCheck2(this, ProtectionEvents2);
+              _classCallCheck4(this, ProtectionEvents2);
               _this = _super.call(this);
               _this.INTERNAL_KEY_MESSAGE = "internalKeyMessage";
               _this.INTERNAL_KEY_STATUS_CHANGED = "internalkeyStatusChanged";
@@ -63380,18 +63380,18 @@ var require_dash_all_debug = __commonJS({
           var _core_Utils__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__("./src/core/Utils.js");
           var _constants_Constants__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__("./src/streaming/constants/Constants.js");
           var _core_FactoryMaker__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__("./src/core/FactoryMaker.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
           var NEEDKEY_BEFORE_INITIALIZE_RETRIES = 5;
           var NEEDKEY_BEFORE_INITIALIZE_TIMEOUT = 500;
@@ -63880,7 +63880,7 @@ var require_dash_all_debug = __commonJS({
                 var serverURL = protData.serverURL;
                 if (typeof serverURL === "string" && serverURL !== "") {
                   url = serverURL;
-                } else if (_typeof5(serverURL) === "object" && serverURL.hasOwnProperty(messageType)) {
+                } else if (_typeof8(serverURL) === "object" && serverURL.hasOwnProperty(messageType)) {
                   url = serverURL[messageType];
                 }
               } else if (protData && protData.laURL && protData.laURL !== "") {
@@ -64566,65 +64566,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _core_errors_ErrorsBase__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/core/errors/ErrorsBase.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -64639,18 +64639,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var ProtectionErrors = /* @__PURE__ */ function(_ErrorsBase) {
-            _inherits2(ProtectionErrors2, _ErrorsBase);
-            var _super = _createSuper2(ProtectionErrors2);
+            _inherits4(ProtectionErrors2, _ErrorsBase);
+            var _super = _createSuper4(ProtectionErrors2);
             function ProtectionErrors2() {
               var _this;
-              _classCallCheck2(this, ProtectionErrors2);
+              _classCallCheck4(this, ProtectionErrors2);
               _this = _super.call(this);
               _this.MEDIA_KEYERR_CODE = 100;
               _this.MEDIA_KEYERR_UNKNOWN_CODE = 101;
@@ -65940,12 +65940,12 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/ClearKeyKeySet.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -65955,22 +65955,22 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var ClearKeyKeySet = /* @__PURE__ */ function() {
             function ClearKeyKeySet2(keyPairs, type) {
-              _classCallCheck2(this, ClearKeyKeySet2);
+              _classCallCheck4(this, ClearKeyKeySet2);
               if (type && type !== "persistent" && type !== "temporary")
                 throw new Error("Invalid ClearKey key set type!  Must be one of 'persistent' or 'temporary'");
               this.keyPairs = keyPairs;
               this.type = type;
             }
-            _createClass3(ClearKeyKeySet2, [{
+            _createClass5(ClearKeyKeySet2, [{
               key: "toJWK",
               value: function toJWK() {
                 var i3;
@@ -66007,13 +66007,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/KeyMessage.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var KeyMessage = function KeyMessage2(sessionToken, message, defaultURL, messageType) {
-            _classCallCheck2(this, KeyMessage2);
+            _classCallCheck4(this, KeyMessage2);
             this.sessionToken = sessionToken;
             this.message = message;
             this.defaultURL = defaultURL;
@@ -66024,13 +66024,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/KeyPair.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var KeyPair = function KeyPair2(keyID, key) {
-            _classCallCheck2(this, KeyPair2);
+            _classCallCheck4(this, KeyPair2);
             this.keyID = keyID;
             this.key = key;
           };
@@ -66039,13 +66039,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/KeySystemAccess.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var KeySystemAccess = function KeySystemAccess2(keySystem, ksConfiguration) {
-            _classCallCheck2(this, KeySystemAccess2);
+            _classCallCheck4(this, KeySystemAccess2);
             this.keySystem = keySystem;
             this.ksConfiguration = ksConfiguration;
           };
@@ -66054,13 +66054,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/KeySystemConfiguration.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var KeySystemConfiguration = function KeySystemConfiguration2(audioCapabilities, videoCapabilities, distinctiveIdentifier, persistentState, sessionTypes) {
-            _classCallCheck2(this, KeySystemConfiguration2);
+            _classCallCheck4(this, KeySystemConfiguration2);
             this.initDataTypes = ["cenc"];
             if (audioCapabilities && audioCapabilities.length) {
               this.audioCapabilities = audioCapabilities;
@@ -66077,13 +66077,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/LicenseRequest.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var LicenseRequest = function LicenseRequest2(url, method, responseType, headers, withCredentials, messageType, sessionId, data) {
-            _classCallCheck2(this, LicenseRequest2);
+            _classCallCheck4(this, LicenseRequest2);
             this.url = url;
             this.method = method;
             this.responseType = responseType;
@@ -66098,13 +66098,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/LicenseResponse.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var LicenseResponse = function LicenseResponse2(url, headers, data) {
-            _classCallCheck2(this, LicenseResponse2);
+            _classCallCheck4(this, LicenseResponse2);
             this.url = url;
             this.headers = headers;
             this.data = data;
@@ -66114,13 +66114,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/MediaCapability.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var MediaCapability = function MediaCapability2(contentType, robustness) {
-            _classCallCheck2(this, MediaCapability2);
+            _classCallCheck4(this, MediaCapability2);
             this.contentType = contentType;
             this.robustness = robustness;
           };
@@ -66129,13 +66129,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/protection/vo/NeedKey.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var NeedKey = function NeedKey2(initData, initDataType) {
-            _classCallCheck2(this, NeedKey2);
+            _classCallCheck4(this, NeedKey2);
             this.initData = initData;
             this.initDataType = initDataType;
           };
@@ -68424,13 +68424,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/rules/abr/lolp/QoeInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var QoeInfo = function QoeInfo2() {
-            _classCallCheck2(this, QoeInfo2);
+            _classCallCheck4(this, QoeInfo2);
             this.type = null;
             this.lastBitrate = null;
             this.weights = {};
@@ -69901,8 +69901,8 @@ var require_dash_all_debug = __commonJS({
                   var imsc1ImgUrnTester = /^(urn:)(mpeg:[a-z0-9][a-z0-9-]{0,31}:)(subs:)([0-9]+)$/;
                   var smpteImgUrnTester = /^#(.*)$/;
                   if (imsc1ImgUrnTester.test(uri)) {
-                    var match7 = imsc1ImgUrnTester.exec(uri);
-                    var imageId = parseInt(match7[4], 10) - 1;
+                    var match8 = imsc1ImgUrnTester.exec(uri);
+                    var imageId = parseInt(match8[4], 10) - 1;
                     var imageData = btoa(cue.images[imageId]);
                     var dataUrl = "data:image/png;base64," + imageData;
                     return dataUrl;
@@ -71851,21 +71851,21 @@ var require_dash_all_debug = __commonJS({
             return checkIsVideoOrAudioType;
           });
           var _constants_Constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/streaming/constants/Constants.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
           function checkParameterType(parameter, type) {
-            if (_typeof5(parameter) !== type) {
+            if (_typeof8(parameter) !== type) {
               throw _constants_Constants__WEBPACK_IMPORTED_MODULE_0__["default"].BAD_ARGUMENT_ERROR;
             }
           }
@@ -72320,13 +72320,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/BitrateInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var BitrateInfo = function BitrateInfo2() {
-            _classCallCheck2(this, BitrateInfo2);
+            _classCallCheck4(this, BitrateInfo2);
             this.mediaType = null;
             this.bitrate = null;
             this.width = null;
@@ -72339,13 +72339,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/DashJSError.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var DashJSError = function DashJSError2(code, message, data) {
-            _classCallCheck2(this, DashJSError2);
+            _classCallCheck4(this, DashJSError2);
             this.code = code || null;
             this.message = message || null;
             this.data = data || null;
@@ -72355,13 +72355,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/DataChunk.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var DataChunk = function DataChunk2() {
-            _classCallCheck2(this, DataChunk2);
+            _classCallCheck4(this, DataChunk2);
             this.streamId = null;
             this.mediaInfo = null;
             this.segmentType = null;
@@ -72380,12 +72380,12 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/streaming/vo/metrics/HTTPRequest.js");
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -72395,16 +72395,16 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var FragmentRequest = /* @__PURE__ */ function() {
             function FragmentRequest2(url) {
-              _classCallCheck2(this, FragmentRequest2);
+              _classCallCheck4(this, FragmentRequest2);
               this.action = FragmentRequest2.ACTION_DOWNLOAD;
               this.startTime = NaN;
               this.mediaStartTime = NaN;
@@ -72430,7 +72430,7 @@ var require_dash_all_debug = __commonJS({
               this.responseType = "arraybuffer";
               this.representationId = null;
             }
-            _createClass3(FragmentRequest2, [{
+            _createClass5(FragmentRequest2, [{
               key: "isInitializationRequest",
               value: function isInitializationRequest() {
                 return this.type && this.type === _vo_metrics_HTTPRequest__WEBPACK_IMPORTED_MODULE_0__["HTTPRequest"].INIT_SEGMENT_TYPE;
@@ -72454,65 +72454,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _FragmentRequest__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/streaming/vo/FragmentRequest.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -72527,18 +72527,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var HeadRequest = /* @__PURE__ */ function(_FragmentRequest) {
-            _inherits2(HeadRequest2, _FragmentRequest);
-            var _super = _createSuper2(HeadRequest2);
+            _inherits4(HeadRequest2, _FragmentRequest);
+            var _super = _createSuper4(HeadRequest2);
             function HeadRequest2(url) {
               var _this;
-              _classCallCheck2(this, HeadRequest2);
+              _classCallCheck4(this, HeadRequest2);
               _this = _super.call(this, url);
               _this.checkForExistenceOnly = true;
               return _this;
@@ -72550,12 +72550,12 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/IsoBox.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _defineProperties3(target, props) {
+          function _defineProperties5(target, props) {
             for (var i3 = 0; i3 < props.length; i3++) {
               var descriptor = props[i3];
               descriptor.enumerable = descriptor.enumerable || false;
@@ -72565,16 +72565,16 @@ var require_dash_all_debug = __commonJS({
               Object.defineProperty(target, descriptor.key, descriptor);
             }
           }
-          function _createClass3(Constructor, protoProps, staticProps) {
+          function _createClass5(Constructor, protoProps, staticProps) {
             if (protoProps)
-              _defineProperties3(Constructor.prototype, protoProps);
+              _defineProperties5(Constructor.prototype, protoProps);
             if (staticProps)
-              _defineProperties3(Constructor, staticProps);
+              _defineProperties5(Constructor, staticProps);
             return Constructor;
           }
           var IsoBox = /* @__PURE__ */ function() {
             function IsoBox2(boxData) {
-              _classCallCheck2(this, IsoBox2);
+              _classCallCheck4(this, IsoBox2);
               this.offset = boxData._offset;
               this.type = boxData.type;
               this.size = boxData.size;
@@ -72656,7 +72656,7 @@ var require_dash_all_debug = __commonJS({
                   break;
               }
             }
-            _createClass3(IsoBox2, [{
+            _createClass5(IsoBox2, [{
               key: "getChildBox",
               value: function getChildBox(type) {
                 for (var i3 = 0; i3 < this.boxes.length; i3++) {
@@ -72684,13 +72684,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/IsoBoxSearchInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var IsoBoxSearchInfo = function IsoBoxSearchInfo2(lastCompletedOffset, found, size) {
-            _classCallCheck2(this, IsoBoxSearchInfo2);
+            _classCallCheck4(this, IsoBoxSearchInfo2);
             this.lastCompletedOffset = lastCompletedOffset;
             this.found = found;
             this.size = size;
@@ -72700,13 +72700,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/MetricsList.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var MetricsList = function MetricsList2() {
-            _classCallCheck2(this, MetricsList2);
+            _classCallCheck4(this, MetricsList2);
             this.TcpList = [];
             this.HttpList = [];
             this.RepSwitchList = [];
@@ -72727,65 +72727,65 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.r(__webpack_exports__);
           var _constants_Constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/streaming/constants/Constants.js");
           var _FragmentRequest__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__("./src/streaming/vo/FragmentRequest.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -72800,18 +72800,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var TextRequest = /* @__PURE__ */ function(_FragmentRequest) {
-            _inherits2(TextRequest2, _FragmentRequest);
-            var _super = _createSuper2(TextRequest2);
+            _inherits4(TextRequest2, _FragmentRequest);
+            var _super = _createSuper4(TextRequest2);
             function TextRequest2(url, type) {
               var _this;
-              _classCallCheck2(this, TextRequest2);
+              _classCallCheck4(this, TextRequest2);
               _this = _super.call(this);
               _this.url = url || null;
               _this.type = type || null;
@@ -72827,65 +72827,65 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _dash_vo_MediaInfo__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/dash/vo/MediaInfo.js");
-          function _typeof5(obj) {
+          function _typeof8(obj) {
             "@babel/helpers - typeof";
             if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return typeof obj2;
               };
             } else {
-              _typeof5 = function _typeof6(obj2) {
+              _typeof8 = function _typeof9(obj2) {
                 return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
               };
             }
-            return _typeof5(obj);
+            return _typeof8(obj);
           }
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
-          function _inherits2(subClass, superClass) {
+          function _inherits4(subClass, superClass) {
             if (typeof superClass !== "function" && superClass !== null) {
               throw new TypeError("Super expression must either be null or a function");
             }
             subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
             if (superClass)
-              _setPrototypeOf2(subClass, superClass);
+              _setPrototypeOf4(subClass, superClass);
           }
-          function _setPrototypeOf2(o2, p2) {
-            _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf3(o3, p3) {
+          function _setPrototypeOf4(o2, p2) {
+            _setPrototypeOf4 = Object.setPrototypeOf || function _setPrototypeOf5(o3, p3) {
               o3.__proto__ = p3;
               return o3;
             };
-            return _setPrototypeOf2(o2, p2);
+            return _setPrototypeOf4(o2, p2);
           }
-          function _createSuper2(Derived) {
-            var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+          function _createSuper4(Derived) {
+            var hasNativeReflectConstruct = _isNativeReflectConstruct4();
             return function _createSuperInternal() {
-              var Super = _getPrototypeOf2(Derived), result;
+              var Super = _getPrototypeOf4(Derived), result;
               if (hasNativeReflectConstruct) {
-                var NewTarget = _getPrototypeOf2(this).constructor;
+                var NewTarget = _getPrototypeOf4(this).constructor;
                 result = Reflect.construct(Super, arguments, NewTarget);
               } else {
                 result = Super.apply(this, arguments);
               }
-              return _possibleConstructorReturn2(this, result);
+              return _possibleConstructorReturn4(this, result);
             };
           }
-          function _possibleConstructorReturn2(self2, call) {
-            if (call && (_typeof5(call) === "object" || typeof call === "function")) {
+          function _possibleConstructorReturn4(self2, call) {
+            if (call && (_typeof8(call) === "object" || typeof call === "function")) {
               return call;
             }
-            return _assertThisInitialized2(self2);
+            return _assertThisInitialized4(self2);
           }
-          function _assertThisInitialized2(self2) {
+          function _assertThisInitialized4(self2) {
             if (self2 === void 0) {
               throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
             }
             return self2;
           }
-          function _isNativeReflectConstruct2() {
+          function _isNativeReflectConstruct4() {
             if (typeof Reflect === "undefined" || !Reflect.construct)
               return false;
             if (Reflect.construct.sham)
@@ -72900,18 +72900,18 @@ var require_dash_all_debug = __commonJS({
               return false;
             }
           }
-          function _getPrototypeOf2(o2) {
-            _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf3(o3) {
+          function _getPrototypeOf4(o2) {
+            _getPrototypeOf4 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf5(o3) {
               return o3.__proto__ || Object.getPrototypeOf(o3);
             };
-            return _getPrototypeOf2(o2);
+            return _getPrototypeOf4(o2);
           }
           var TextTrackInfo = /* @__PURE__ */ function(_MediaInfo) {
-            _inherits2(TextTrackInfo2, _MediaInfo);
-            var _super = _createSuper2(TextTrackInfo2);
+            _inherits4(TextTrackInfo2, _MediaInfo);
+            var _super = _createSuper4(TextTrackInfo2);
             function TextTrackInfo2() {
               var _this;
-              _classCallCheck2(this, TextTrackInfo2);
+              _classCallCheck4(this, TextTrackInfo2);
               _this = _super.call(this);
               _this.captionData = null;
               _this.label = null;
@@ -72929,13 +72929,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/Thumbnail.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var Thumbnail = function Thumbnail2() {
-            _classCallCheck2(this, Thumbnail2);
+            _classCallCheck4(this, Thumbnail2);
             this.url = null;
             this.width = null;
             this.height = null;
@@ -72947,13 +72947,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/ThumbnailTrackInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var ThumbnailTrackInfo = function ThumbnailTrackInfo2() {
-            _classCallCheck2(this, ThumbnailTrackInfo2);
+            _classCallCheck4(this, ThumbnailTrackInfo2);
             this.bitrate = 0;
             this.width = 0;
             this.height = 0;
@@ -72972,13 +72972,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/URIFragmentData.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var URIFragmentData = function URIFragmentData2() {
-            _classCallCheck2(this, URIFragmentData2);
+            _classCallCheck4(this, URIFragmentData2);
             this.t = null;
             this.xywh = null;
             this.track = null;
@@ -72991,13 +72991,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/metrics/BufferLevel.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var BufferLevel = function BufferLevel2() {
-            _classCallCheck2(this, BufferLevel2);
+            _classCallCheck4(this, BufferLevel2);
             this.t = null;
             this.level = null;
           };
@@ -73007,13 +73007,13 @@ var require_dash_all_debug = __commonJS({
           "use strict";
           __webpack_require__.r(__webpack_exports__);
           var _constants_MetricsConstants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("./src/streaming/constants/MetricsConstants.js");
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var BufferState = function BufferState2() {
-            _classCallCheck2(this, BufferState2);
+            _classCallCheck4(this, BufferState2);
             this.target = null;
             this.state = _constants_MetricsConstants__WEBPACK_IMPORTED_MODULE_0__["default"].BUFFER_EMPTY;
           };
@@ -73022,13 +73022,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/metrics/DVRInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var DVRInfo = function DVRInfo2() {
-            _classCallCheck2(this, DVRInfo2);
+            _classCallCheck4(this, DVRInfo2);
             this.time = null;
             this.range = null;
             this.manifestInfo = null;
@@ -73038,13 +73038,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/metrics/DroppedFrames.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var DroppedFrames = function DroppedFrames2() {
-            _classCallCheck2(this, DroppedFrames2);
+            _classCallCheck4(this, DroppedFrames2);
             this.time = null;
             this.droppedFrames = null;
           };
@@ -73059,13 +73059,13 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.d(__webpack_exports__, "HTTPRequestTrace", function() {
             return HTTPRequestTrace;
           });
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var HTTPRequest = function HTTPRequest2() {
-            _classCallCheck2(this, HTTPRequest2);
+            _classCallCheck4(this, HTTPRequest2);
             this.tcpid = null;
             this.type = null;
             this.url = null;
@@ -73084,7 +73084,7 @@ var require_dash_all_debug = __commonJS({
             this._serviceLocation = null;
           };
           var HTTPRequestTrace = function HTTPRequestTrace2() {
-            _classCallCheck2(this, HTTPRequestTrace2);
+            _classCallCheck4(this, HTTPRequestTrace2);
             this.s = null;
             this.d = null;
             this.b = [];
@@ -73114,13 +73114,13 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.d(__webpack_exports__, "ManifestUpdateRepresentationInfo", function() {
             return ManifestUpdateRepresentationInfo;
           });
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var ManifestUpdate = function ManifestUpdate2() {
-            _classCallCheck2(this, ManifestUpdate2);
+            _classCallCheck4(this, ManifestUpdate2);
             this.mediaType = null;
             this.type = null;
             this.requestTime = null;
@@ -73135,14 +73135,14 @@ var require_dash_all_debug = __commonJS({
             this.representationInfo = [];
           };
           var ManifestUpdateStreamInfo = function ManifestUpdateStreamInfo2() {
-            _classCallCheck2(this, ManifestUpdateStreamInfo2);
+            _classCallCheck4(this, ManifestUpdateStreamInfo2);
             this.id = null;
             this.index = null;
             this.start = null;
             this.duration = null;
           };
           var ManifestUpdateRepresentationInfo = function ManifestUpdateRepresentationInfo2() {
-            _classCallCheck2(this, ManifestUpdateRepresentationInfo2);
+            _classCallCheck4(this, ManifestUpdateRepresentationInfo2);
             this.id = null;
             this.index = null;
             this.mediaType = null;
@@ -73161,13 +73161,13 @@ var require_dash_all_debug = __commonJS({
           __webpack_require__.d(__webpack_exports__, "PlayListTrace", function() {
             return PlayListTrace;
           });
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var PlayList = function PlayList2() {
-            _classCallCheck2(this, PlayList2);
+            _classCallCheck4(this, PlayList2);
             this.start = null;
             this.mstart = null;
             this.starttype = null;
@@ -73178,7 +73178,7 @@ var require_dash_all_debug = __commonJS({
           PlayList.RESUME_FROM_PAUSE_START_REASON = "resume";
           PlayList.METRICS_COLLECTION_START_REASON = "metrics_collection_start";
           var PlayListTrace = function PlayListTrace2() {
-            _classCallCheck2(this, PlayListTrace2);
+            _classCallCheck4(this, PlayListTrace2);
             this.representationid = null;
             this.subreplevel = null;
             this.start = null;
@@ -73198,13 +73198,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/metrics/RepresentationSwitch.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var RepresentationSwitch = function RepresentationSwitch2() {
-            _classCallCheck2(this, RepresentationSwitch2);
+            _classCallCheck4(this, RepresentationSwitch2);
             this.t = null;
             this.mt = null;
             this.to = null;
@@ -73215,13 +73215,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/metrics/RequestsQueue.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var RequestsQueue = function RequestsQueue2() {
-            _classCallCheck2(this, RequestsQueue2);
+            _classCallCheck4(this, RequestsQueue2);
             this.loadingRequests = [];
             this.executedRequests = [];
           };
@@ -73230,13 +73230,13 @@ var require_dash_all_debug = __commonJS({
         "./src/streaming/vo/metrics/SchedulingInfo.js": function(module3, __webpack_exports__, __webpack_require__) {
           "use strict";
           __webpack_require__.r(__webpack_exports__);
-          function _classCallCheck2(instance, Constructor) {
+          function _classCallCheck4(instance, Constructor) {
             if (!(instance instanceof Constructor)) {
               throw new TypeError("Cannot call a class as a function");
             }
           }
           var SchedulingInfo = function SchedulingInfo2() {
-            _classCallCheck2(this, SchedulingInfo2);
+            _classCallCheck4(this, SchedulingInfo2);
             this.mediaType = null;
             this.t = null;
             this.type = null;
@@ -73258,8 +73258,901 @@ var require_dash_all_debug = __commonJS({
   }
 });
 
+// node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js
+var require_react_is_development = __commonJS({
+  "node_modules/prop-types/node_modules/react-is/cjs/react-is.development.js"(exports2) {
+    "use strict";
+    if (true) {
+      (function() {
+        "use strict";
+        var hasSymbol = typeof Symbol === "function" && Symbol.for;
+        var REACT_ELEMENT_TYPE = hasSymbol ? Symbol.for("react.element") : 60103;
+        var REACT_PORTAL_TYPE = hasSymbol ? Symbol.for("react.portal") : 60106;
+        var REACT_FRAGMENT_TYPE = hasSymbol ? Symbol.for("react.fragment") : 60107;
+        var REACT_STRICT_MODE_TYPE = hasSymbol ? Symbol.for("react.strict_mode") : 60108;
+        var REACT_PROFILER_TYPE = hasSymbol ? Symbol.for("react.profiler") : 60114;
+        var REACT_PROVIDER_TYPE = hasSymbol ? Symbol.for("react.provider") : 60109;
+        var REACT_CONTEXT_TYPE = hasSymbol ? Symbol.for("react.context") : 60110;
+        var REACT_ASYNC_MODE_TYPE = hasSymbol ? Symbol.for("react.async_mode") : 60111;
+        var REACT_CONCURRENT_MODE_TYPE = hasSymbol ? Symbol.for("react.concurrent_mode") : 60111;
+        var REACT_FORWARD_REF_TYPE = hasSymbol ? Symbol.for("react.forward_ref") : 60112;
+        var REACT_SUSPENSE_TYPE = hasSymbol ? Symbol.for("react.suspense") : 60113;
+        var REACT_SUSPENSE_LIST_TYPE = hasSymbol ? Symbol.for("react.suspense_list") : 60120;
+        var REACT_MEMO_TYPE = hasSymbol ? Symbol.for("react.memo") : 60115;
+        var REACT_LAZY_TYPE = hasSymbol ? Symbol.for("react.lazy") : 60116;
+        var REACT_BLOCK_TYPE = hasSymbol ? Symbol.for("react.block") : 60121;
+        var REACT_FUNDAMENTAL_TYPE = hasSymbol ? Symbol.for("react.fundamental") : 60117;
+        var REACT_RESPONDER_TYPE = hasSymbol ? Symbol.for("react.responder") : 60118;
+        var REACT_SCOPE_TYPE = hasSymbol ? Symbol.for("react.scope") : 60119;
+        function isValidElementType(type) {
+          return typeof type === "string" || typeof type === "function" || type === REACT_FRAGMENT_TYPE || type === REACT_CONCURRENT_MODE_TYPE || type === REACT_PROFILER_TYPE || type === REACT_STRICT_MODE_TYPE || type === REACT_SUSPENSE_TYPE || type === REACT_SUSPENSE_LIST_TYPE || typeof type === "object" && type !== null && (type.$$typeof === REACT_LAZY_TYPE || type.$$typeof === REACT_MEMO_TYPE || type.$$typeof === REACT_PROVIDER_TYPE || type.$$typeof === REACT_CONTEXT_TYPE || type.$$typeof === REACT_FORWARD_REF_TYPE || type.$$typeof === REACT_FUNDAMENTAL_TYPE || type.$$typeof === REACT_RESPONDER_TYPE || type.$$typeof === REACT_SCOPE_TYPE || type.$$typeof === REACT_BLOCK_TYPE);
+        }
+        function typeOf(object) {
+          if (typeof object === "object" && object !== null) {
+            var $$typeof = object.$$typeof;
+            switch ($$typeof) {
+              case REACT_ELEMENT_TYPE:
+                var type = object.type;
+                switch (type) {
+                  case REACT_ASYNC_MODE_TYPE:
+                  case REACT_CONCURRENT_MODE_TYPE:
+                  case REACT_FRAGMENT_TYPE:
+                  case REACT_PROFILER_TYPE:
+                  case REACT_STRICT_MODE_TYPE:
+                  case REACT_SUSPENSE_TYPE:
+                    return type;
+                  default:
+                    var $$typeofType = type && type.$$typeof;
+                    switch ($$typeofType) {
+                      case REACT_CONTEXT_TYPE:
+                      case REACT_FORWARD_REF_TYPE:
+                      case REACT_LAZY_TYPE:
+                      case REACT_MEMO_TYPE:
+                      case REACT_PROVIDER_TYPE:
+                        return $$typeofType;
+                      default:
+                        return $$typeof;
+                    }
+                }
+              case REACT_PORTAL_TYPE:
+                return $$typeof;
+            }
+          }
+          return void 0;
+        }
+        var AsyncMode = REACT_ASYNC_MODE_TYPE;
+        var ConcurrentMode = REACT_CONCURRENT_MODE_TYPE;
+        var ContextConsumer = REACT_CONTEXT_TYPE;
+        var ContextProvider = REACT_PROVIDER_TYPE;
+        var Element = REACT_ELEMENT_TYPE;
+        var ForwardRef = REACT_FORWARD_REF_TYPE;
+        var Fragment2 = REACT_FRAGMENT_TYPE;
+        var Lazy = REACT_LAZY_TYPE;
+        var Memo = REACT_MEMO_TYPE;
+        var Portal = REACT_PORTAL_TYPE;
+        var Profiler = REACT_PROFILER_TYPE;
+        var StrictMode2 = REACT_STRICT_MODE_TYPE;
+        var Suspense = REACT_SUSPENSE_TYPE;
+        var hasWarnedAboutDeprecatedIsAsyncMode = false;
+        function isAsyncMode(object) {
+          {
+            if (!hasWarnedAboutDeprecatedIsAsyncMode) {
+              hasWarnedAboutDeprecatedIsAsyncMode = true;
+              console["warn"]("The ReactIs.isAsyncMode() alias has been deprecated, and will be removed in React 17+. Update your code to use ReactIs.isConcurrentMode() instead. It has the exact same API.");
+            }
+          }
+          return isConcurrentMode(object) || typeOf(object) === REACT_ASYNC_MODE_TYPE;
+        }
+        function isConcurrentMode(object) {
+          return typeOf(object) === REACT_CONCURRENT_MODE_TYPE;
+        }
+        function isContextConsumer(object) {
+          return typeOf(object) === REACT_CONTEXT_TYPE;
+        }
+        function isContextProvider(object) {
+          return typeOf(object) === REACT_PROVIDER_TYPE;
+        }
+        function isElement(object) {
+          return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+        }
+        function isForwardRef(object) {
+          return typeOf(object) === REACT_FORWARD_REF_TYPE;
+        }
+        function isFragment(object) {
+          return typeOf(object) === REACT_FRAGMENT_TYPE;
+        }
+        function isLazy(object) {
+          return typeOf(object) === REACT_LAZY_TYPE;
+        }
+        function isMemo(object) {
+          return typeOf(object) === REACT_MEMO_TYPE;
+        }
+        function isPortal(object) {
+          return typeOf(object) === REACT_PORTAL_TYPE;
+        }
+        function isProfiler(object) {
+          return typeOf(object) === REACT_PROFILER_TYPE;
+        }
+        function isStrictMode(object) {
+          return typeOf(object) === REACT_STRICT_MODE_TYPE;
+        }
+        function isSuspense(object) {
+          return typeOf(object) === REACT_SUSPENSE_TYPE;
+        }
+        exports2.AsyncMode = AsyncMode;
+        exports2.ConcurrentMode = ConcurrentMode;
+        exports2.ContextConsumer = ContextConsumer;
+        exports2.ContextProvider = ContextProvider;
+        exports2.Element = Element;
+        exports2.ForwardRef = ForwardRef;
+        exports2.Fragment = Fragment2;
+        exports2.Lazy = Lazy;
+        exports2.Memo = Memo;
+        exports2.Portal = Portal;
+        exports2.Profiler = Profiler;
+        exports2.StrictMode = StrictMode2;
+        exports2.Suspense = Suspense;
+        exports2.isAsyncMode = isAsyncMode;
+        exports2.isConcurrentMode = isConcurrentMode;
+        exports2.isContextConsumer = isContextConsumer;
+        exports2.isContextProvider = isContextProvider;
+        exports2.isElement = isElement;
+        exports2.isForwardRef = isForwardRef;
+        exports2.isFragment = isFragment;
+        exports2.isLazy = isLazy;
+        exports2.isMemo = isMemo;
+        exports2.isPortal = isPortal;
+        exports2.isProfiler = isProfiler;
+        exports2.isStrictMode = isStrictMode;
+        exports2.isSuspense = isSuspense;
+        exports2.isValidElementType = isValidElementType;
+        exports2.typeOf = typeOf;
+      })();
+    }
+  }
+});
+
+// node_modules/prop-types/node_modules/react-is/index.js
+var require_react_is = __commonJS({
+  "node_modules/prop-types/node_modules/react-is/index.js"(exports2, module2) {
+    "use strict";
+    if (false) {
+      module2.exports = null;
+    } else {
+      module2.exports = require_react_is_development();
+    }
+  }
+});
+
+// node_modules/prop-types/lib/ReactPropTypesSecret.js
+var require_ReactPropTypesSecret = __commonJS({
+  "node_modules/prop-types/lib/ReactPropTypesSecret.js"(exports2, module2) {
+    "use strict";
+    var ReactPropTypesSecret = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
+    module2.exports = ReactPropTypesSecret;
+  }
+});
+
+// node_modules/prop-types/checkPropTypes.js
+var require_checkPropTypes = __commonJS({
+  "node_modules/prop-types/checkPropTypes.js"(exports2, module2) {
+    "use strict";
+    var printWarning = function() {
+    };
+    if (true) {
+      ReactPropTypesSecret = require_ReactPropTypesSecret();
+      loggedTypeFailures = {};
+      has = Function.call.bind(Object.prototype.hasOwnProperty);
+      printWarning = function(text) {
+        var message = "Warning: " + text;
+        if (typeof console !== "undefined") {
+          console.error(message);
+        }
+        try {
+          throw new Error(message);
+        } catch (x3) {
+        }
+      };
+    }
+    var ReactPropTypesSecret;
+    var loggedTypeFailures;
+    var has;
+    function checkPropTypes(typeSpecs, values, location, componentName, getStack) {
+      if (true) {
+        for (var typeSpecName in typeSpecs) {
+          if (has(typeSpecs, typeSpecName)) {
+            var error;
+            try {
+              if (typeof typeSpecs[typeSpecName] !== "function") {
+                var err = Error((componentName || "React class") + ": " + location + " type `" + typeSpecName + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`.");
+                err.name = "Invariant Violation";
+                throw err;
+              }
+              error = typeSpecs[typeSpecName](values, typeSpecName, componentName, location, null, ReactPropTypesSecret);
+            } catch (ex) {
+              error = ex;
+            }
+            if (error && !(error instanceof Error)) {
+              printWarning((componentName || "React class") + ": type specification of " + location + " `" + typeSpecName + "` is invalid; the type checker function must return `null` or an `Error` but returned a " + typeof error + ". You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).");
+            }
+            if (error instanceof Error && !(error.message in loggedTypeFailures)) {
+              loggedTypeFailures[error.message] = true;
+              var stack = getStack ? getStack() : "";
+              printWarning("Failed " + location + " type: " + error.message + (stack != null ? stack : ""));
+            }
+          }
+        }
+      }
+    }
+    checkPropTypes.resetWarningCache = function() {
+      if (true) {
+        loggedTypeFailures = {};
+      }
+    };
+    module2.exports = checkPropTypes;
+  }
+});
+
+// node_modules/prop-types/factoryWithTypeCheckers.js
+var require_factoryWithTypeCheckers = __commonJS({
+  "node_modules/prop-types/factoryWithTypeCheckers.js"(exports2, module2) {
+    "use strict";
+    var ReactIs = require_react_is();
+    var assign = require_object_assign();
+    var ReactPropTypesSecret = require_ReactPropTypesSecret();
+    var checkPropTypes = require_checkPropTypes();
+    var has = Function.call.bind(Object.prototype.hasOwnProperty);
+    var printWarning = function() {
+    };
+    if (true) {
+      printWarning = function(text) {
+        var message = "Warning: " + text;
+        if (typeof console !== "undefined") {
+          console.error(message);
+        }
+        try {
+          throw new Error(message);
+        } catch (x3) {
+        }
+      };
+    }
+    function emptyFunctionThatReturnsNull() {
+      return null;
+    }
+    module2.exports = function(isValidElement, throwOnDirectAccess) {
+      var ITERATOR_SYMBOL = typeof Symbol === "function" && Symbol.iterator;
+      var FAUX_ITERATOR_SYMBOL = "@@iterator";
+      function getIteratorFn(maybeIterable) {
+        var iteratorFn = maybeIterable && (ITERATOR_SYMBOL && maybeIterable[ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL]);
+        if (typeof iteratorFn === "function") {
+          return iteratorFn;
+        }
+      }
+      var ANONYMOUS = "<<anonymous>>";
+      var ReactPropTypes = {
+        array: createPrimitiveTypeChecker("array"),
+        bool: createPrimitiveTypeChecker("boolean"),
+        func: createPrimitiveTypeChecker("function"),
+        number: createPrimitiveTypeChecker("number"),
+        object: createPrimitiveTypeChecker("object"),
+        string: createPrimitiveTypeChecker("string"),
+        symbol: createPrimitiveTypeChecker("symbol"),
+        any: createAnyTypeChecker(),
+        arrayOf: createArrayOfTypeChecker,
+        element: createElementTypeChecker(),
+        elementType: createElementTypeTypeChecker(),
+        instanceOf: createInstanceTypeChecker,
+        node: createNodeChecker(),
+        objectOf: createObjectOfTypeChecker,
+        oneOf: createEnumTypeChecker,
+        oneOfType: createUnionTypeChecker,
+        shape: createShapeTypeChecker,
+        exact: createStrictShapeTypeChecker
+      };
+      function is(x3, y2) {
+        if (x3 === y2) {
+          return x3 !== 0 || 1 / x3 === 1 / y2;
+        } else {
+          return x3 !== x3 && y2 !== y2;
+        }
+      }
+      function PropTypeError(message) {
+        this.message = message;
+        this.stack = "";
+      }
+      PropTypeError.prototype = Error.prototype;
+      function createChainableTypeChecker(validate) {
+        if (true) {
+          var manualPropTypeCallCache = {};
+          var manualPropTypeWarningCount = 0;
+        }
+        function checkType(isRequired, props, propName, componentName, location, propFullName, secret) {
+          componentName = componentName || ANONYMOUS;
+          propFullName = propFullName || propName;
+          if (secret !== ReactPropTypesSecret) {
+            if (throwOnDirectAccess) {
+              var err = new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use `PropTypes.checkPropTypes()` to call them. Read more at http://fb.me/use-check-prop-types");
+              err.name = "Invariant Violation";
+              throw err;
+            } else if (typeof console !== "undefined") {
+              var cacheKey = componentName + ":" + propName;
+              if (!manualPropTypeCallCache[cacheKey] && manualPropTypeWarningCount < 3) {
+                printWarning("You are manually calling a React.PropTypes validation function for the `" + propFullName + "` prop on `" + componentName + "`. This is deprecated and will throw in the standalone `prop-types` package. You may be seeing this warning due to a third-party PropTypes library. See https://fb.me/react-warning-dont-call-proptypes for details.");
+                manualPropTypeCallCache[cacheKey] = true;
+                manualPropTypeWarningCount++;
+              }
+            }
+          }
+          if (props[propName] == null) {
+            if (isRequired) {
+              if (props[propName] === null) {
+                return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required " + ("in `" + componentName + "`, but its value is `null`."));
+              }
+              return new PropTypeError("The " + location + " `" + propFullName + "` is marked as required in " + ("`" + componentName + "`, but its value is `undefined`."));
+            }
+            return null;
+          } else {
+            return validate(props, propName, componentName, location, propFullName);
+          }
+        }
+        var chainedCheckType = checkType.bind(null, false);
+        chainedCheckType.isRequired = checkType.bind(null, true);
+        return chainedCheckType;
+      }
+      function createPrimitiveTypeChecker(expectedType) {
+        function validate(props, propName, componentName, location, propFullName, secret) {
+          var propValue = props[propName];
+          var propType = getPropType(propValue);
+          if (propType !== expectedType) {
+            var preciseType = getPreciseType(propValue);
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + preciseType + "` supplied to `" + componentName + "`, expected ") + ("`" + expectedType + "`."));
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createAnyTypeChecker() {
+        return createChainableTypeChecker(emptyFunctionThatReturnsNull);
+      }
+      function createArrayOfTypeChecker(typeChecker) {
+        function validate(props, propName, componentName, location, propFullName) {
+          if (typeof typeChecker !== "function") {
+            return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside arrayOf.");
+          }
+          var propValue = props[propName];
+          if (!Array.isArray(propValue)) {
+            var propType = getPropType(propValue);
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an array."));
+          }
+          for (var i3 = 0; i3 < propValue.length; i3++) {
+            var error = typeChecker(propValue, i3, componentName, location, propFullName + "[" + i3 + "]", ReactPropTypesSecret);
+            if (error instanceof Error) {
+              return error;
+            }
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createElementTypeChecker() {
+        function validate(props, propName, componentName, location, propFullName) {
+          var propValue = props[propName];
+          if (!isValidElement(propValue)) {
+            var propType = getPropType(propValue);
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement."));
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createElementTypeTypeChecker() {
+        function validate(props, propName, componentName, location, propFullName) {
+          var propValue = props[propName];
+          if (!ReactIs.isValidElementType(propValue)) {
+            var propType = getPropType(propValue);
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected a single ReactElement type."));
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createInstanceTypeChecker(expectedClass) {
+        function validate(props, propName, componentName, location, propFullName) {
+          if (!(props[propName] instanceof expectedClass)) {
+            var expectedClassName = expectedClass.name || ANONYMOUS;
+            var actualClassName = getClassName(props[propName]);
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + actualClassName + "` supplied to `" + componentName + "`, expected ") + ("instance of `" + expectedClassName + "`."));
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createEnumTypeChecker(expectedValues) {
+        if (!Array.isArray(expectedValues)) {
+          if (true) {
+            if (arguments.length > 1) {
+              printWarning("Invalid arguments supplied to oneOf, expected an array, got " + arguments.length + " arguments. A common mistake is to write oneOf(x, y, z) instead of oneOf([x, y, z]).");
+            } else {
+              printWarning("Invalid argument supplied to oneOf, expected an array.");
+            }
+          }
+          return emptyFunctionThatReturnsNull;
+        }
+        function validate(props, propName, componentName, location, propFullName) {
+          var propValue = props[propName];
+          for (var i3 = 0; i3 < expectedValues.length; i3++) {
+            if (is(propValue, expectedValues[i3])) {
+              return null;
+            }
+          }
+          var valuesString = JSON.stringify(expectedValues, function replacer(key, value) {
+            var type = getPreciseType(value);
+            if (type === "symbol") {
+              return String(value);
+            }
+            return value;
+          });
+          return new PropTypeError("Invalid " + location + " `" + propFullName + "` of value `" + String(propValue) + "` " + ("supplied to `" + componentName + "`, expected one of " + valuesString + "."));
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createObjectOfTypeChecker(typeChecker) {
+        function validate(props, propName, componentName, location, propFullName) {
+          if (typeof typeChecker !== "function") {
+            return new PropTypeError("Property `" + propFullName + "` of component `" + componentName + "` has invalid PropType notation inside objectOf.");
+          }
+          var propValue = props[propName];
+          var propType = getPropType(propValue);
+          if (propType !== "object") {
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type " + ("`" + propType + "` supplied to `" + componentName + "`, expected an object."));
+          }
+          for (var key in propValue) {
+            if (has(propValue, key)) {
+              var error = typeChecker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+              if (error instanceof Error) {
+                return error;
+              }
+            }
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createUnionTypeChecker(arrayOfTypeCheckers) {
+        if (!Array.isArray(arrayOfTypeCheckers)) {
+          true ? printWarning("Invalid argument supplied to oneOfType, expected an instance of array.") : void 0;
+          return emptyFunctionThatReturnsNull;
+        }
+        for (var i3 = 0; i3 < arrayOfTypeCheckers.length; i3++) {
+          var checker = arrayOfTypeCheckers[i3];
+          if (typeof checker !== "function") {
+            printWarning("Invalid argument supplied to oneOfType. Expected an array of check functions, but received " + getPostfixForTypeWarning(checker) + " at index " + i3 + ".");
+            return emptyFunctionThatReturnsNull;
+          }
+        }
+        function validate(props, propName, componentName, location, propFullName) {
+          for (var i4 = 0; i4 < arrayOfTypeCheckers.length; i4++) {
+            var checker2 = arrayOfTypeCheckers[i4];
+            if (checker2(props, propName, componentName, location, propFullName, ReactPropTypesSecret) == null) {
+              return null;
+            }
+          }
+          return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`."));
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createNodeChecker() {
+        function validate(props, propName, componentName, location, propFullName) {
+          if (!isNode2(props[propName])) {
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` supplied to " + ("`" + componentName + "`, expected a ReactNode."));
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createShapeTypeChecker(shapeTypes) {
+        function validate(props, propName, componentName, location, propFullName) {
+          var propValue = props[propName];
+          var propType = getPropType(propValue);
+          if (propType !== "object") {
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
+          }
+          for (var key in shapeTypes) {
+            var checker = shapeTypes[key];
+            if (!checker) {
+              continue;
+            }
+            var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+            if (error) {
+              return error;
+            }
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function createStrictShapeTypeChecker(shapeTypes) {
+        function validate(props, propName, componentName, location, propFullName) {
+          var propValue = props[propName];
+          var propType = getPropType(propValue);
+          if (propType !== "object") {
+            return new PropTypeError("Invalid " + location + " `" + propFullName + "` of type `" + propType + "` " + ("supplied to `" + componentName + "`, expected `object`."));
+          }
+          var allKeys = assign({}, props[propName], shapeTypes);
+          for (var key in allKeys) {
+            var checker = shapeTypes[key];
+            if (!checker) {
+              return new PropTypeError("Invalid " + location + " `" + propFullName + "` key `" + key + "` supplied to `" + componentName + "`.\nBad object: " + JSON.stringify(props[propName], null, "  ") + "\nValid keys: " + JSON.stringify(Object.keys(shapeTypes), null, "  "));
+            }
+            var error = checker(propValue, key, componentName, location, propFullName + "." + key, ReactPropTypesSecret);
+            if (error) {
+              return error;
+            }
+          }
+          return null;
+        }
+        return createChainableTypeChecker(validate);
+      }
+      function isNode2(propValue) {
+        switch (typeof propValue) {
+          case "number":
+          case "string":
+          case "undefined":
+            return true;
+          case "boolean":
+            return !propValue;
+          case "object":
+            if (Array.isArray(propValue)) {
+              return propValue.every(isNode2);
+            }
+            if (propValue === null || isValidElement(propValue)) {
+              return true;
+            }
+            var iteratorFn = getIteratorFn(propValue);
+            if (iteratorFn) {
+              var iterator = iteratorFn.call(propValue);
+              var step;
+              if (iteratorFn !== propValue.entries) {
+                while (!(step = iterator.next()).done) {
+                  if (!isNode2(step.value)) {
+                    return false;
+                  }
+                }
+              } else {
+                while (!(step = iterator.next()).done) {
+                  var entry = step.value;
+                  if (entry) {
+                    if (!isNode2(entry[1])) {
+                      return false;
+                    }
+                  }
+                }
+              }
+            } else {
+              return false;
+            }
+            return true;
+          default:
+            return false;
+        }
+      }
+      function isSymbol(propType, propValue) {
+        if (propType === "symbol") {
+          return true;
+        }
+        if (!propValue) {
+          return false;
+        }
+        if (propValue["@@toStringTag"] === "Symbol") {
+          return true;
+        }
+        if (typeof Symbol === "function" && propValue instanceof Symbol) {
+          return true;
+        }
+        return false;
+      }
+      function getPropType(propValue) {
+        var propType = typeof propValue;
+        if (Array.isArray(propValue)) {
+          return "array";
+        }
+        if (propValue instanceof RegExp) {
+          return "object";
+        }
+        if (isSymbol(propType, propValue)) {
+          return "symbol";
+        }
+        return propType;
+      }
+      function getPreciseType(propValue) {
+        if (typeof propValue === "undefined" || propValue === null) {
+          return "" + propValue;
+        }
+        var propType = getPropType(propValue);
+        if (propType === "object") {
+          if (propValue instanceof Date) {
+            return "date";
+          } else if (propValue instanceof RegExp) {
+            return "regexp";
+          }
+        }
+        return propType;
+      }
+      function getPostfixForTypeWarning(value) {
+        var type = getPreciseType(value);
+        switch (type) {
+          case "array":
+          case "object":
+            return "an " + type;
+          case "boolean":
+          case "date":
+          case "regexp":
+            return "a " + type;
+          default:
+            return type;
+        }
+      }
+      function getClassName(propValue) {
+        if (!propValue.constructor || !propValue.constructor.name) {
+          return ANONYMOUS;
+        }
+        return propValue.constructor.name;
+      }
+      ReactPropTypes.checkPropTypes = checkPropTypes;
+      ReactPropTypes.resetWarningCache = checkPropTypes.resetWarningCache;
+      ReactPropTypes.PropTypes = ReactPropTypes;
+      return ReactPropTypes;
+    };
+  }
+});
+
+// node_modules/prop-types/index.js
+var require_prop_types = __commonJS({
+  "node_modules/prop-types/index.js"(exports2, module2) {
+    if (true) {
+      ReactIs = require_react_is();
+      throwOnDirectAccess = true;
+      module2.exports = require_factoryWithTypeCheckers()(ReactIs.isElement, throwOnDirectAccess);
+    } else {
+      module2.exports = null();
+    }
+    var ReactIs;
+    var throwOnDirectAccess;
+  }
+});
+
+// node_modules/lodash.memoize/index.js
+var require_lodash2 = __commonJS({
+  "node_modules/lodash.memoize/index.js"(exports2, module2) {
+    var FUNC_ERROR_TEXT = "Expected a function";
+    var HASH_UNDEFINED = "__lodash_hash_undefined__";
+    var funcTag = "[object Function]";
+    var genTag = "[object GeneratorFunction]";
+    var reRegExpChar = /[\\^$.*+?()[\]{}|]/g;
+    var reIsHostCtor = /^\[object .+?Constructor\]$/;
+    var freeGlobal = typeof global == "object" && global && global.Object === Object && global;
+    var freeSelf = typeof self == "object" && self && self.Object === Object && self;
+    var root = freeGlobal || freeSelf || Function("return this")();
+    function getValue3(object, key) {
+      return object == null ? void 0 : object[key];
+    }
+    function isHostObject(value) {
+      var result = false;
+      if (value != null && typeof value.toString != "function") {
+        try {
+          result = !!(value + "");
+        } catch (e) {
+        }
+      }
+      return result;
+    }
+    var arrayProto = Array.prototype;
+    var funcProto = Function.prototype;
+    var objectProto = Object.prototype;
+    var coreJsData = root["__core-js_shared__"];
+    var maskSrcKey = function() {
+      var uid = /[^.]+$/.exec(coreJsData && coreJsData.keys && coreJsData.keys.IE_PROTO || "");
+      return uid ? "Symbol(src)_1." + uid : "";
+    }();
+    var funcToString = funcProto.toString;
+    var hasOwnProperty = objectProto.hasOwnProperty;
+    var objectToString = objectProto.toString;
+    var reIsNative = RegExp("^" + funcToString.call(hasOwnProperty).replace(reRegExpChar, "\\$&").replace(/hasOwnProperty|(function).*?(?=\\\()| for .+?(?=\\\])/g, "$1.*?") + "$");
+    var splice = arrayProto.splice;
+    var Map2 = getNative(root, "Map");
+    var nativeCreate = getNative(Object, "create");
+    function Hash(entries) {
+      var index = -1, length = entries ? entries.length : 0;
+      this.clear();
+      while (++index < length) {
+        var entry = entries[index];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function hashClear() {
+      this.__data__ = nativeCreate ? nativeCreate(null) : {};
+    }
+    function hashDelete(key) {
+      return this.has(key) && delete this.__data__[key];
+    }
+    function hashGet(key) {
+      var data = this.__data__;
+      if (nativeCreate) {
+        var result = data[key];
+        return result === HASH_UNDEFINED ? void 0 : result;
+      }
+      return hasOwnProperty.call(data, key) ? data[key] : void 0;
+    }
+    function hashHas(key) {
+      var data = this.__data__;
+      return nativeCreate ? data[key] !== void 0 : hasOwnProperty.call(data, key);
+    }
+    function hashSet(key, value) {
+      var data = this.__data__;
+      data[key] = nativeCreate && value === void 0 ? HASH_UNDEFINED : value;
+      return this;
+    }
+    Hash.prototype.clear = hashClear;
+    Hash.prototype["delete"] = hashDelete;
+    Hash.prototype.get = hashGet;
+    Hash.prototype.has = hashHas;
+    Hash.prototype.set = hashSet;
+    function ListCache(entries) {
+      var index = -1, length = entries ? entries.length : 0;
+      this.clear();
+      while (++index < length) {
+        var entry = entries[index];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function listCacheClear() {
+      this.__data__ = [];
+    }
+    function listCacheDelete(key) {
+      var data = this.__data__, index = assocIndexOf(data, key);
+      if (index < 0) {
+        return false;
+      }
+      var lastIndex = data.length - 1;
+      if (index == lastIndex) {
+        data.pop();
+      } else {
+        splice.call(data, index, 1);
+      }
+      return true;
+    }
+    function listCacheGet(key) {
+      var data = this.__data__, index = assocIndexOf(data, key);
+      return index < 0 ? void 0 : data[index][1];
+    }
+    function listCacheHas(key) {
+      return assocIndexOf(this.__data__, key) > -1;
+    }
+    function listCacheSet(key, value) {
+      var data = this.__data__, index = assocIndexOf(data, key);
+      if (index < 0) {
+        data.push([key, value]);
+      } else {
+        data[index][1] = value;
+      }
+      return this;
+    }
+    ListCache.prototype.clear = listCacheClear;
+    ListCache.prototype["delete"] = listCacheDelete;
+    ListCache.prototype.get = listCacheGet;
+    ListCache.prototype.has = listCacheHas;
+    ListCache.prototype.set = listCacheSet;
+    function MapCache(entries) {
+      var index = -1, length = entries ? entries.length : 0;
+      this.clear();
+      while (++index < length) {
+        var entry = entries[index];
+        this.set(entry[0], entry[1]);
+      }
+    }
+    function mapCacheClear() {
+      this.__data__ = {
+        "hash": new Hash(),
+        "map": new (Map2 || ListCache)(),
+        "string": new Hash()
+      };
+    }
+    function mapCacheDelete(key) {
+      return getMapData(this, key)["delete"](key);
+    }
+    function mapCacheGet(key) {
+      return getMapData(this, key).get(key);
+    }
+    function mapCacheHas(key) {
+      return getMapData(this, key).has(key);
+    }
+    function mapCacheSet(key, value) {
+      getMapData(this, key).set(key, value);
+      return this;
+    }
+    MapCache.prototype.clear = mapCacheClear;
+    MapCache.prototype["delete"] = mapCacheDelete;
+    MapCache.prototype.get = mapCacheGet;
+    MapCache.prototype.has = mapCacheHas;
+    MapCache.prototype.set = mapCacheSet;
+    function assocIndexOf(array, key) {
+      var length = array.length;
+      while (length--) {
+        if (eq(array[length][0], key)) {
+          return length;
+        }
+      }
+      return -1;
+    }
+    function baseIsNative(value) {
+      if (!isObject(value) || isMasked(value)) {
+        return false;
+      }
+      var pattern = isFunction(value) || isHostObject(value) ? reIsNative : reIsHostCtor;
+      return pattern.test(toSource(value));
+    }
+    function getMapData(map, key) {
+      var data = map.__data__;
+      return isKeyable(key) ? data[typeof key == "string" ? "string" : "hash"] : data.map;
+    }
+    function getNative(object, key) {
+      var value = getValue3(object, key);
+      return baseIsNative(value) ? value : void 0;
+    }
+    function isKeyable(value) {
+      var type = typeof value;
+      return type == "string" || type == "number" || type == "symbol" || type == "boolean" ? value !== "__proto__" : value === null;
+    }
+    function isMasked(func) {
+      return !!maskSrcKey && maskSrcKey in func;
+    }
+    function toSource(func) {
+      if (func != null) {
+        try {
+          return funcToString.call(func);
+        } catch (e) {
+        }
+        try {
+          return func + "";
+        } catch (e) {
+        }
+      }
+      return "";
+    }
+    function memoize2(func, resolver2) {
+      if (typeof func != "function" || resolver2 && typeof resolver2 != "function") {
+        throw new TypeError(FUNC_ERROR_TEXT);
+      }
+      var memoized = function() {
+        var args = arguments, key = resolver2 ? resolver2.apply(this, args) : args[0], cache = memoized.cache;
+        if (cache.has(key)) {
+          return cache.get(key);
+        }
+        var result = func.apply(this, args);
+        memoized.cache = cache.set(key, result);
+        return result;
+      };
+      memoized.cache = new (memoize2.Cache || MapCache)();
+      return memoized;
+    }
+    memoize2.Cache = MapCache;
+    function eq(value, other) {
+      return value === other || value !== value && other !== other;
+    }
+    function isFunction(value) {
+      var tag = isObject(value) ? objectToString.call(value) : "";
+      return tag == funcTag || tag == genTag;
+    }
+    function isObject(value) {
+      var type = typeof value;
+      return !!value && (type == "object" || type == "function");
+    }
+    module2.exports = memoize2;
+  }
+});
+
 // src/web/modules/RecordingList/index.tsx
-var import_react52 = __toModule(require_react());
+var import_react75 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -73276,11 +74169,11 @@ var nodejsCustomInspectSymbol_default = nodejsCustomInspectSymbol;
 function _typeof(obj) {
   "@babel/helpers - typeof";
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof = function _typeof5(obj2) {
+    _typeof = function _typeof8(obj2) {
       return typeof obj2;
     };
   } else {
-    _typeof = function _typeof5(obj2) {
+    _typeof = function _typeof8(obj2) {
       return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
     };
   }
@@ -73979,11 +74872,11 @@ function hasMultilineItems(maybeArray) {
 function _typeof2(obj) {
   "@babel/helpers - typeof";
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof2 = function _typeof5(obj2) {
+    _typeof2 = function _typeof8(obj2) {
       return typeof obj2;
     };
   } else {
-    _typeof2 = function _typeof5(obj2) {
+    _typeof2 = function _typeof8(obj2) {
       return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
     };
   }
@@ -74003,10 +74896,10 @@ function getLocation(source, position) {
   var lineRegexp = /\r\n|[\n\r]/g;
   var line = 1;
   var column = position + 1;
-  var match7;
-  while ((match7 = lineRegexp.exec(source.body)) && match7.index < position) {
+  var match8;
+  while ((match8 = lineRegexp.exec(source.body)) && match8.index < position) {
     line += 1;
-    column = position + 1 - (match7.index + match7[0].length);
+    column = position + 1 - (match8.index + match8[0].length);
   }
   return {
     line,
@@ -74072,11 +74965,11 @@ function leftPad(len, str) {
 function _typeof3(obj) {
   "@babel/helpers - typeof";
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof3 = function _typeof5(obj2) {
+    _typeof3 = function _typeof8(obj2) {
       return typeof obj2;
     };
   } else {
-    _typeof3 = function _typeof5(obj2) {
+    _typeof3 = function _typeof8(obj2) {
       return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
     };
   }
@@ -74193,14 +75086,14 @@ function _isNativeFunction(fn) {
   return Function.toString.call(fn).indexOf("[native code]") !== -1;
 }
 function _setPrototypeOf(o2, p2) {
-  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf2(o3, p3) {
+  _setPrototypeOf = Object.setPrototypeOf || function _setPrototypeOf4(o3, p3) {
     o3.__proto__ = p3;
     return o3;
   };
   return _setPrototypeOf(o2, p2);
 }
 function _getPrototypeOf(o2) {
-  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf2(o3) {
+  _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf4(o3) {
     return o3.__proto__ || Object.getPrototypeOf(o3);
   };
   return _getPrototypeOf(o2);
@@ -74378,11 +75271,11 @@ function devAssert(condition, message) {
 function _typeof4(obj) {
   "@babel/helpers - typeof";
   if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
-    _typeof4 = function _typeof5(obj2) {
+    _typeof4 = function _typeof8(obj2) {
       return typeof obj2;
     };
   } else {
-    _typeof4 = function _typeof5(obj2) {
+    _typeof4 = function _typeof8(obj2) {
       return obj2 && typeof Symbol === "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
     };
   }
@@ -74396,11 +75289,11 @@ var instanceOf_default = false ? function instanceOf(value, constructor) {
   }
   if (_typeof4(value) === "object" && value !== null) {
     var _value$constructor;
-    var className = constructor.prototype[Symbol.toStringTag];
+    var className8 = constructor.prototype[Symbol.toStringTag];
     var valueClassName = Symbol.toStringTag in value ? value[Symbol.toStringTag] : (_value$constructor = value.constructor) === null || _value$constructor === void 0 ? void 0 : _value$constructor.name;
-    if (className === valueClassName) {
+    if (className8 === valueClassName) {
       var stringifiedValue = inspect(value);
-      throw new Error("Cannot use ".concat(className, ' "').concat(stringifiedValue, '" from another module or realm.\n\nEnsure that there is only one instance of "graphql" in the node_modules\ndirectory. If different versions of "graphql" are the dependencies of other\nrelied on modules, use "resolutions" to ensure only one version is installed.\n\nhttps://yarnpkg.com/en/docs/selective-version-resolutions\n\nDuplicate "graphql" modules cannot be used at the same time since different\nversions may have different capabilities and behavior. The data from one\nversion used in the function from another could produce confusing and\nspurious results.'));
+      throw new Error("Cannot use ".concat(className8, ' "').concat(stringifiedValue, '" from another module or realm.\n\nEnsure that there is only one instance of "graphql" in the node_modules\ndirectory. If different versions of "graphql" are the dependencies of other\nrelied on modules, use "resolutions" to ensure only one version is installed.\n\nhttps://yarnpkg.com/en/docs/selective-version-resolutions\n\nDuplicate "graphql" modules cannot be used at the same time since different\nversions may have different capabilities and behavior. The data from one\nversion used in the function from another could produce confusing and\nspurious results.'));
     }
   }
   return false;
@@ -80052,9 +80945,9 @@ var import_classnames2 = __toModule(require_classnames());
 // src/components/Svg/Close.tsx
 var import_react9 = __toModule(require_react());
 var import_classnames = __toModule(require_classnames());
-function Close({ className, alt = "Close" }) {
+function Close({ className: className8, alt = "Close" }) {
   return /* @__PURE__ */ import_react9.default.createElement("svg", {
-    className: (0, import_classnames.default)(className, "fill-current", "Svg", "Svg__close"),
+    className: (0, import_classnames.default)(className8, "fill-current", "Svg", "Svg__close"),
     width: "100%",
     viewBox: "0 0 16 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -80079,11 +80972,11 @@ function InputUI(props) {
     onFocus,
     value,
     name,
-    className = "",
+    className: className8 = "",
     type
   } = props;
   return /* @__PURE__ */ import_react10.default.createElement("div", {
-    className: `group h-8 items-center w-full relative  dark:text-white ${className} input__${name}`
+    className: `group h-8 items-center w-full relative  dark:text-white ${className8} input__${name}`
   }, import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
     className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
   }, import_react10.default.cloneElement(icon, {
@@ -80115,7 +81008,7 @@ function Input(props) {
     onFocus,
     value,
     name,
-    className,
+    className: className8,
     type = "text"
   } = props;
   return /* @__PURE__ */ import_react10.default.createElement(InputUI, {
@@ -80132,7 +81025,7 @@ function Input(props) {
     inputRef,
     onFocus,
     value,
-    className,
+    className: className8,
     name,
     type
   });
@@ -80143,24 +81036,24 @@ var import_react11 = __toModule(require_react());
 var import_classnames3 = __toModule(require_classnames());
 var import_ts_pattern = __toModule(require_lib());
 function ButtonUI(props) {
-  const { children, disabled = false, onClick, className = "", kind = "default", type, iconButton = false } = props;
+  const { children, disabled = false, onClick, className: className8 = "", kind = "default", type, iconButton = false } = props;
   const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white disabled:bg-blue-600").with("secondary", () => "border-[1px] border-gray-300 dark:border-bluegray-5 dark:text-white hover:border-gray-400 dark:hover:border-bluegray-4 dark:hover:border-opacity-20 disabled:border-gray-300 disabled:dark:border-bluegray-5 disabled:dark:border-opacity-100active:bg-gray-400 dark:active:bg-bluegray-7 active:text-white").with("default", () => "bg-gray-200 dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white hover:bg-gray-300 active:bg-gray-400 active:text-white disabled:bg-gray-200").exhaustive();
   return /* @__PURE__ */ import_react11.default.createElement("button", {
     disabled,
     tabIndex: 0,
-    className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base disabled:opacity-75 ${buttonStyle} ${className}`, { "px-2.5": !iconButton, "justify-center": iconButton }),
+    className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base disabled:opacity-75 ${buttonStyle} ${className8}`, { "px-2.5": !iconButton, "justify-center": iconButton }),
     onClick,
     type
   }, children);
 }
 function Button(props) {
-  const { children, disabled, onClick, className, iconButton, kind, type } = props;
+  const { children, disabled, onClick, className: className8, iconButton, kind, type } = props;
   return /* @__PURE__ */ import_react11.default.createElement(ButtonUI, {
     onClick,
     disabled,
     kind,
     iconButton,
-    className,
+    className: className8,
     type
   }, children);
 }
@@ -80168,9 +81061,9 @@ function Button(props) {
 // src/components/Svg/Logo.tsx
 var import_react12 = __toModule(require_react());
 var import_classnames4 = __toModule(require_classnames());
-function Logo({ className, alt = "Logo" }) {
+function Logo({ className: className8, alt = "Logo" }) {
   return /* @__PURE__ */ import_react12.default.createElement("svg", {
-    className: (0, import_classnames4.default)("text-[#FE590C]", className, "Svg", "Svg__logo", "fill-current"),
+    className: (0, import_classnames4.default)("text-[#FE590C]", className8, "Svg", "Svg__logo", "fill-current"),
     width: "100%",
     viewBox: "0 0 379 104",
     xmlns: "http://www.w3.org/2000/svg"
@@ -80907,19 +81800,19 @@ var Auth = ({
 };
 
 // src/modules/RecordingList/index.tsx
-var import_react51 = __toModule(require_react());
+var import_react74 = __toModule(require_react());
 var import_luxon = __toModule(require_luxon());
-var import_ts_pattern6 = __toModule(require_lib());
+var import_ts_pattern7 = __toModule(require_lib());
 
 // src/components/Svg/MagnifyingGlass.tsx
 var import_react16 = __toModule(require_react());
 var import_classnames5 = __toModule(require_classnames());
 function MagnifyingGlass({
-  className,
+  className: className8,
   alt = "Magnifying Glass"
 }) {
   return /* @__PURE__ */ import_react16.default.createElement("svg", {
-    className: (0, import_classnames5.default)(className, "stroke-current", "Svg", "Svg__magnifyingGlass"),
+    className: (0, import_classnames5.default)(className8, "stroke-current", "Svg", "Svg__magnifyingGlass"),
     width: "100%",
     viewBox: "0 0 12 12",
     fill: "none",
@@ -81239,9 +82132,9 @@ function useWindowSize() {
 // src/components/Svg/Back15.tsx
 var import_react20 = __toModule(require_react());
 var import_classnames6 = __toModule(require_classnames());
-function Back15({ className, alt = "Back15" }) {
+function Back15({ className: className8, alt = "Back15" }) {
   return /* @__PURE__ */ import_react20.default.createElement("svg", {
-    className: (0, import_classnames6.default)(className, "fill-current", "Svg", "Svg__back15"),
+    className: (0, import_classnames6.default)(className8, "fill-current", "Svg", "Svg__back15"),
     width: "100%",
     viewBox: "0 0 16 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -81255,9 +82148,9 @@ function Back15({ className, alt = "Back15" }) {
 // src/components/Svg/Forward15.tsx
 var import_react21 = __toModule(require_react());
 var import_classnames7 = __toModule(require_classnames());
-function Forward15({ className, alt = "Forward15" }) {
+function Forward15({ className: className8, alt = "Forward15" }) {
   return /* @__PURE__ */ import_react21.default.createElement("svg", {
-    className: (0, import_classnames7.default)(className, "fill-current", "Svg", "Svg__forward15"),
+    className: (0, import_classnames7.default)(className8, "fill-current", "Svg", "Svg__forward15"),
     width: "100%",
     viewBox: "0 0 16 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -81271,9 +82164,9 @@ function Forward15({ className, alt = "Forward15" }) {
 // src/components/Svg/XMark.tsx
 var import_react22 = __toModule(require_react());
 var import_classnames8 = __toModule(require_classnames());
-function XMark({ className, alt = "XMark" }) {
+function XMark({ className: className8, alt = "XMark" }) {
   return /* @__PURE__ */ import_react22.default.createElement("svg", {
-    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__xMark"),
+    className: (0, import_classnames8.default)(className8, "fill-current", "Svg", "Svg__xMark"),
     width: "100%",
     viewBox: "0 0 10 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -81285,9 +82178,9 @@ function XMark({ className, alt = "XMark" }) {
 // src/components/Svg/Swap.tsx
 var import_react23 = __toModule(require_react());
 var import_classnames9 = __toModule(require_classnames());
-function Swap({ className, alt = "Swap" }) {
+function Swap({ className: className8, alt = "Swap" }) {
   return /* @__PURE__ */ import_react23.default.createElement("svg", {
-    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__swap"),
+    className: (0, import_classnames9.default)(className8, "fill-current", "Svg", "Svg__swap"),
     width: "100%",
     viewBox: "0 0 14 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -81299,9 +82192,9 @@ function Swap({ className, alt = "Swap" }) {
 // src/components/Svg/End.tsx
 var import_react24 = __toModule(require_react());
 var import_classnames10 = __toModule(require_classnames());
-function End({ className, alt = "End" }) {
+function End({ className: className8, alt = "End" }) {
   return /* @__PURE__ */ import_react24.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__end"),
+    className: (0, import_classnames10.default)(className8, "fill-current", "Svg", "Svg__end"),
     width: "100%",
     viewBox: "0 0 12 12",
     xmlns: "http://www.w3.org/2000/svg"
@@ -81313,9 +82206,9 @@ function End({ className, alt = "End" }) {
 // src/components/Svg/Speaker.tsx
 var import_react25 = __toModule(require_react());
 var import_classnames11 = __toModule(require_classnames());
-function Speaker({ className, alt = "Speaker" }) {
+function Speaker({ className: className8, alt = "Speaker" }) {
   return /* @__PURE__ */ import_react25.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__speaker"),
+    className: (0, import_classnames11.default)(className8, "fill-current", "Svg", "Svg__speaker"),
     width: "100%",
     viewBox: "0 0 14 14",
     fill: "none",
@@ -81328,9 +82221,9 @@ function Speaker({ className, alt = "Speaker" }) {
 // src/components/Svg/SpeakerLoud.tsx
 var import_react26 = __toModule(require_react());
 var import_classnames12 = __toModule(require_classnames());
-function SpeakerLoud({ className, alt = "SpeakerLoud" }) {
+function SpeakerLoud({ className: className8, alt = "SpeakerLoud" }) {
   return /* @__PURE__ */ import_react26.default.createElement("svg", {
-    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__speakerLoud"),
+    className: (0, import_classnames12.default)(className8, "fill-current", "Svg", "Svg__speakerLoud"),
     width: "100%",
     viewBox: "0 0 18 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -81342,9 +82235,9 @@ function SpeakerLoud({ className, alt = "SpeakerLoud" }) {
 // src/components/Svg/SpeakerMute.tsx
 var import_react27 = __toModule(require_react());
 var import_classnames13 = __toModule(require_classnames());
-function SpeakerMute({ className, alt = "SpeakerMute" }) {
+function SpeakerMute({ className: className8, alt = "SpeakerMute" }) {
   return /* @__PURE__ */ import_react27.default.createElement("svg", {
-    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__speakerMute"),
+    className: (0, import_classnames13.default)(className8, "fill-current", "Svg", "Svg__speakerMute"),
     width: "100%",
     viewBox: "0 0 18 14",
     fill: "none",
@@ -81359,9 +82252,9 @@ function SpeakerMute({ className, alt = "SpeakerMute" }) {
 // src/components/Svg/Play.tsx
 var import_react28 = __toModule(require_react());
 var import_classnames14 = __toModule(require_classnames());
-function Play({ className, alt = "Play" }) {
+function Play({ className: className8, alt = "Play" }) {
   return /* @__PURE__ */ import_react28.default.createElement("svg", {
-    className: (0, import_classnames14.default)(className, "fill-current", "Svg", "Svg__play"),
+    className: (0, import_classnames14.default)(className8, "fill-current", "Svg", "Svg__play"),
     width: "100%",
     viewBox: "0 0 13 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -81373,9 +82266,9 @@ function Play({ className, alt = "Play" }) {
 // src/components/Svg/Pause.tsx
 var import_react29 = __toModule(require_react());
 var import_classnames15 = __toModule(require_classnames());
-function Pause({ className, alt = "Pause" }) {
+function Pause({ className: className8, alt = "Pause" }) {
   return /* @__PURE__ */ import_react29.default.createElement("svg", {
-    className: (0, import_classnames15.default)(className, "fill-current", "Svg", "Svg__pause"),
+    className: (0, import_classnames15.default)(className8, "fill-current", "Svg", "Svg__pause"),
     width: "100%",
     fill: "white",
     viewBox: "0 0 12 16",
@@ -81470,7 +82363,7 @@ function useOutsideClickHandler(refs, outsideClickHandler) {
 function TooltipUI(props) {
   const {
     children,
-    className = "",
+    className: className8 = "",
     content,
     hideTooltip,
     modal,
@@ -81492,7 +82385,7 @@ function TooltipUI(props) {
   return /* @__PURE__ */ import_react33.default.createElement(import_react33.default.Fragment, null, modal && visible && /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "fixed z-20 top-0 left-0 right-0 bottom-0 bg-gray-900 opacity-10 dark:opacity-60 tooltip__modal"
   }), /* @__PURE__ */ import_react33.default.createElement("div", {
-    className: `tooltip ${className}`,
+    className: `tooltip ${className8}`,
     onClick: onTargetClick,
     onMouseEnter: onTargetMouseEnter,
     onMouseLeave: onTargetMouseLeave,
@@ -81562,7 +82455,7 @@ function getTooltipPosition({
 function Tooltip(props) {
   const {
     children,
-    className,
+    className: className8,
     closeDelay = 0,
     content,
     grow = "down-right",
@@ -81631,7 +82524,7 @@ function Tooltip(props) {
     }
   });
   return /* @__PURE__ */ import_react33.default.createElement(TooltipUI, {
-    className,
+    className: className8,
     content,
     targetRef,
     hideTooltip,
@@ -81971,9 +82864,9 @@ function Playbar(props) {
 // src/components/Svg/Plus.tsx
 var import_react35 = __toModule(require_react());
 var import_classnames17 = __toModule(require_classnames());
-function Plus({ className, alt = "Plus" }) {
+function Plus({ className: className8, alt = "Plus" }) {
   return /* @__PURE__ */ import_react35.default.createElement("svg", {
-    className: (0, import_classnames17.default)(className, "fill-current", "Svg", "Svg__plus"),
+    className: (0, import_classnames17.default)(className8, "fill-current", "Svg", "Svg__plus"),
     width: "100%",
     viewBox: "0 0 10 8",
     fill: "none",
@@ -81999,9 +82892,9 @@ var import_classnames20 = __toModule(require_classnames());
 // src/components/Svg/Bell.tsx
 var import_react36 = __toModule(require_react());
 var import_classnames18 = __toModule(require_classnames());
-function Bell({ className, alt = "Bell" }) {
+function Bell({ className: className8, alt = "Bell" }) {
   return /* @__PURE__ */ import_react36.default.createElement("svg", {
-    className: (0, import_classnames18.default)(className, "fill-current", "Svg", "Svg__bell"),
+    className: (0, import_classnames18.default)(className8, "fill-current", "Svg", "Svg__bell"),
     width: "100%",
     viewBox: "0 0 16 18",
     xmlns: "http://www.w3.org/2000/svg"
@@ -82015,9 +82908,9 @@ function Bell({ className, alt = "Bell" }) {
 // src/components/Svg/Calendar.tsx
 var import_react37 = __toModule(require_react());
 var import_classnames19 = __toModule(require_classnames());
-function Calendar({ className, alt = "Calendar" }) {
+function Calendar({ className: className8, alt = "Calendar" }) {
   return /* @__PURE__ */ import_react37.default.createElement("svg", {
-    className: (0, import_classnames19.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
+    className: (0, import_classnames19.default)(className8, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
@@ -82135,15 +83028,15 @@ function PlayButton(props) {
 }
 
 // src/modules/RecordingForm/index.tsx
-var import_react50 = __toModule(require_react());
-var import_ts_pattern5 = __toModule(require_lib());
+var import_react73 = __toModule(require_react());
+var import_ts_pattern6 = __toModule(require_lib());
 
 // src/components/Svg/ArrowLeft.tsx
 var import_react39 = __toModule(require_react());
 var import_classnames21 = __toModule(require_classnames());
-function ArrowLeft({ className, alt = "Arrow Left" }) {
+function ArrowLeft({ className: className8, alt = "Arrow Left" }) {
   return /* @__PURE__ */ import_react39.default.createElement("svg", {
-    className: (0, import_classnames21.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+    className: (0, import_classnames21.default)(className8, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -82167,9 +83060,9 @@ var import_react41 = __toModule(require_react());
 // src/components/Svg/Check.tsx
 var import_react40 = __toModule(require_react());
 var import_classnames22 = __toModule(require_classnames());
-function Check({ className, alt = "Check" }) {
+function Check({ className: className8, alt = "Check" }) {
   return /* @__PURE__ */ import_react40.default.createElement("svg", {
-    className: (0, import_classnames22.default)(className, "fill-current", "Svg", "Svg__check"),
+    className: (0, import_classnames22.default)(className8, "fill-current", "Svg", "Svg__check"),
     width: "100%",
     viewBox: "0 0 8 6",
     fill: "none",
@@ -82183,20 +83076,20 @@ function Check({ className, alt = "Check" }) {
 
 // src/components/Checkbox/index.tsx
 function CheckboxUI(props) {
-  const { checked, className = "", onChange } = props;
+  const { checked, className: className8 = "", onChange } = props;
   const checkBoxStyles = checked ? "bg-blue-500 shadow text-white" : "border border-gray-300";
   return /* @__PURE__ */ import_react41.default.createElement("div", {
-    className: `cursor-pointer flex h-4 items-center justify-center rounded-xl w-4 ${checkBoxStyles} ${className}`,
+    className: `cursor-pointer flex h-4 items-center justify-center rounded-xl w-4 ${checkBoxStyles} ${className8}`,
     onClick: onChange
   }, checked && /* @__PURE__ */ import_react41.default.createElement(Check, {
     className: "w-2"
   }));
 }
 function Checkbox(props) {
-  const { checked, className, name, onChange } = props;
+  const { checked, className: className8, name, onChange } = props;
   return /* @__PURE__ */ import_react41.default.createElement(CheckboxUI, {
     checked,
-    className,
+    className: className8,
     onChange: (0, import_react41.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: !checked }), [onChange])
   });
 }
@@ -82204,23 +83097,23 @@ function Checkbox(props) {
 // src/components/FormField/index.tsx
 var import_react42 = __toModule(require_react());
 function FormFieldUI(props) {
-  const { className = "form-field", children } = props;
+  const { className: className8 = "form-field", children } = props;
   return /* @__PURE__ */ import_react42.default.createElement("div", {
-    className: `bg-white border border-gray-200 rounded shadow-xl ${className}`
+    className: `bg-white border border-gray-200 rounded shadow-xl ${className8}`
   }, children);
 }
 function FormField(props) {
-  const { children, className } = props;
+  const { children, className: className8 } = props;
   return /* @__PURE__ */ import_react42.default.createElement(FormFieldUI, {
-    className
+    className: className8
   }, children);
 }
 
 // src/components/FormField/FormFieldSelect/index.tsx
 function FormFieldSelect(props) {
-  const { className, name, onChange, options, value } = props;
+  const { className: className8, name, onChange, options, value } = props;
   return /* @__PURE__ */ import_react43.default.createElement(FormField, {
-    className
+    className: className8
   }, options.map((option) => /* @__PURE__ */ import_react43.default.createElement("div", {
     className: "border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 first:hover:rounded-t last:hover:rounded-b last:border-0",
     key: option.value,
@@ -82269,9 +83162,9 @@ var import_ts_pattern4 = __toModule(require_lib());
 // src/components/FormField/FormFieldInput/index.tsx
 var import_react45 = __toModule(require_react());
 function FormFieldInput(props) {
-  const { autoFocus, className, clearable, description, label, name, onChange, placeholder, value } = props;
+  const { autoFocus, className: className8, clearable, description, label, name, onChange, placeholder, value } = props;
   return /* @__PURE__ */ import_react45.default.createElement(FormField, {
-    className
+    className: className8
   }, !!label && /* @__PURE__ */ import_react45.default.createElement("p", {
     className: "font-semibold text-base text-black form-field__label"
   }, label), !!description && /* @__PURE__ */ import_react45.default.createElement("p", {
@@ -82288,7 +83181,70 @@ function FormFieldInput(props) {
   })));
 }
 
-// src/modules/RecordingForm/ConnectionDetails/index.tsx
+// src/modules/RecordingForm/types.ts
+var ConnectionType2 = /* @__PURE__ */ ((ConnectionType4) => {
+  ConnectionType4["GoogleMeet"] = "google_meet";
+  ConnectionType4["PhoneNumber"] = "phone";
+  ConnectionType4["Webcast"] = "webcast";
+  ConnectionType4["Zoom"] = "zoom";
+  return ConnectionType4;
+})(ConnectionType2 || {});
+var ScheduleMeridiem = /* @__PURE__ */ ((ScheduleMeridiem3) => {
+  ScheduleMeridiem3["AM"] = "AM";
+  ScheduleMeridiem3["PM"] = "PM";
+  return ScheduleMeridiem3;
+})(ScheduleMeridiem || {});
+var ScheduleType = /* @__PURE__ */ ((ScheduleType3) => {
+  ScheduleType3["Now"] = "now";
+  ScheduleType3["Future"] = "future";
+  return ScheduleType3;
+})(ScheduleType || {});
+var CONNECTION_TYPE_OPTION_GOOGLE = {
+  label: "Google Meet",
+  value: "google_meet" /* GoogleMeet */,
+  description: "Connect to a Google Meet dial-in number"
+};
+var CONNECTION_TYPE_OPTION_PHONE = {
+  label: "Phone Number",
+  value: "phone" /* PhoneNumber */,
+  description: "Connect to any phone number, with optional pin"
+};
+var CONNECTION_TYPE_OPTION_WEBCAST = {
+  label: "Webcast URL",
+  value: "webcast" /* Webcast */,
+  description: "Connect to a webcast url"
+};
+var CONNECTION_TYPE_OPTION_ZOOM = {
+  label: "Zoom",
+  value: "zoom" /* Zoom */,
+  description: "Connect to a Zoom dial-in number"
+};
+var CONNECTION_TYPE_OPTIONS = [
+  CONNECTION_TYPE_OPTION_ZOOM,
+  CONNECTION_TYPE_OPTION_GOOGLE,
+  CONNECTION_TYPE_OPTION_WEBCAST,
+  CONNECTION_TYPE_OPTION_PHONE
+];
+var CONNECTION_TYPE_OPTIONS_MAP = {
+  [CONNECTION_TYPE_OPTION_GOOGLE.value]: CONNECTION_TYPE_OPTION_GOOGLE,
+  [CONNECTION_TYPE_OPTION_PHONE.value]: CONNECTION_TYPE_OPTION_PHONE,
+  [CONNECTION_TYPE_OPTION_WEBCAST.value]: CONNECTION_TYPE_OPTION_WEBCAST,
+  [CONNECTION_TYPE_OPTION_ZOOM.value]: CONNECTION_TYPE_OPTION_ZOOM
+};
+var PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING = {
+  label: "Set it & forget it",
+  value: "not_participating" /* NotParticipating */,
+  description: "We'll automatically connect, then transcribe and record the call for you. You can join later if you change your mind."
+};
+var PARTICIPATION_TYPE_OPTION_PARTICIPATING = {
+  label: "Call me",
+  value: "participating" /* Participating */,
+  description: "We'll call you, and then connect you to the call. Please enter any required pins, or speak to an operator, if needed. The call will continue to record & transcribe even after you disconnect. You may end the recording manually from the transcript in Aiera."
+};
+var PARTICIPATION_TYPE_OPTIONS = [
+  PARTICIPATION_TYPE_OPTION_PARTICIPATING,
+  PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING
+];
 var ZOOM_MEETING_TYPE_OPTION_PHONE = {
   label: "Dial-in number",
   value: "phone",
@@ -82300,6 +83256,37 @@ var ZOOM_MEETING_TYPE_OPTION_WEB = {
   description: "Connect to Zoom meeting via web url"
 };
 var ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_WEB, ZOOM_MEETING_TYPE_OPTION_PHONE];
+var CONNECT_OFFSET_SECONDS_OPTIONS = [
+  { label: "When the call starts", value: 0 },
+  { label: "1 minute before", value: -60 },
+  { label: "2 minutes before", value: -120 },
+  { label: "3 minutes before", value: -180 },
+  { label: "4 minutes before", value: -240 },
+  { label: "5 minutes before", value: -300 }
+];
+var SCHEDULE_MERIDIEM_OPTIONS = [
+  {
+    label: "AM",
+    value: "AM" /* AM */
+  },
+  {
+    label: "PM",
+    value: "PM" /* PM */
+  }
+];
+var SCHEDULE_TYPE_OPTION_NOW = {
+  label: "Now",
+  value: "now" /* Now */,
+  description: "Aiera will attempt to connect when you create the recording"
+};
+var SCHEDULE_TYPE_OPTION_FUTURE = {
+  label: "In the future",
+  value: "future" /* Future */,
+  description: "Schedule a time for Aiera to attempt connecting to the event"
+};
+var SCHEDULE_TYPE_OPTIONS = [SCHEDULE_TYPE_OPTION_NOW, SCHEDULE_TYPE_OPTION_FUTURE];
+
+// src/modules/RecordingForm/ConnectionDetails/index.tsx
 function ConnectionDetailsUI(props) {
   const {
     connectAccessId,
@@ -82317,8 +83304,7 @@ function ConnectionDetailsUI(props) {
     onChangeZoomMeetingType,
     participationType,
     participationTypeOptions,
-    zoomMeetingType,
-    zoomMeetingTypeOptions
+    zoomMeetingType
   } = props;
   const dialInField = /* @__PURE__ */ import_react46.default.createElement(FormFieldInput, {
     autoFocus: true,
@@ -82376,7 +83362,7 @@ function ConnectionDetailsUI(props) {
     className: "mt-2.5",
     name: "zoomMeetingType",
     onChange: onChangeZoomMeetingType,
-    options: zoomMeetingTypeOptions,
+    options: ZOOM_MEETING_TYPE_OPTIONS,
     value: zoomMeetingType
   }), !!zoomMeetingType && /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, (0, import_ts_pattern4.match)(zoomMeetingType).with("web", () => /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, renderConnectUrlField("Enter the Zoom meeting url", "Meeting URL*"), renderPasscodeField(), /* @__PURE__ */ import_react46.default.createElement(FormFieldInput, {
     className: "mt-5 px-4 py-3",
@@ -82422,8 +83408,7 @@ function ConnectionDetails(props) {
     onChangeZoomMeetingType: handlers.zoomMeetingType,
     participationType,
     participationTypeOptions,
-    zoomMeetingType: state.zoomMeetingType,
-    zoomMeetingTypeOptions: ZOOM_MEETING_TYPE_OPTIONS
+    zoomMeetingType: state.zoomMeetingType
   });
 }
 
@@ -82439,87 +83424,3388 @@ function RecordingDetails(_props) {
 }
 
 // src/modules/RecordingForm/Scheduling/index.tsx
-var import_react48 = __toModule(require_react());
-function SchedulingUI(_props) {
-  return /* @__PURE__ */ import_react48.default.createElement("div", {
-    className: "font-medium py-3 text-gray-400 text-xs tracking-wide uppercase scheduling"
-  }, /* @__PURE__ */ import_react48.default.createElement("p", null, "Scheduling"));
+var import_react71 = __toModule(require_react());
+
+// src/components/DatePicker/index.tsx
+var import_react68 = __toModule(require_react());
+
+// node_modules/react-calendar/dist/esm/Calendar.js
+var import_react67 = __toModule(require_react());
+var import_prop_types16 = __toModule(require_prop_types());
+
+// node_modules/merge-class-names/dist/esm/index.js
+function mergeClassNames() {
+  return Array.prototype.slice.call(arguments).reduce(function(classList, arg) {
+    return classList.concat(arg);
+  }, []).filter(function(arg) {
+    return typeof arg === "string";
+  }).join(" ");
 }
-function Scheduling(_props) {
-  return /* @__PURE__ */ import_react48.default.createElement(SchedulingUI, null);
+
+// node_modules/react-calendar/dist/esm/Calendar/Navigation.js
+var import_react48 = __toModule(require_react());
+var import_prop_types2 = __toModule(require_prop_types());
+
+// node_modules/get-user-locale/dist/esm/index.js
+var import_lodash3 = __toModule(require_lodash2());
+function resolver(options) {
+  return JSON.stringify(options);
+}
+function uniqDefined(arr) {
+  return arr.filter(function(el, index) {
+    return el && arr.indexOf(el) === index;
+  });
+}
+function normalizeLocales(arr) {
+  return arr.map(function(el) {
+    if (!el || el.indexOf("-") === -1 || el.toLowerCase() !== el) {
+      return el;
+    }
+    var splitEl = el.split("-");
+    return splitEl[0] + "-" + splitEl[1].toUpperCase();
+  });
+}
+function getUserLocalesInternal(_temp) {
+  var _ref = _temp === void 0 ? {} : _temp, _ref$useFallbackLocal = _ref.useFallbackLocale, useFallbackLocale = _ref$useFallbackLocal === void 0 ? true : _ref$useFallbackLocal, _ref$fallbackLocale = _ref.fallbackLocale, fallbackLocale = _ref$fallbackLocale === void 0 ? "en-US" : _ref$fallbackLocale;
+  var languageList = [];
+  if (typeof window !== "undefined") {
+    var _window = window, navigator2 = _window.navigator;
+    languageList = languageList.concat(navigator2.languages, navigator2.language, navigator2.userLanguage, navigator2.browserLanguage, navigator2.systemLanguage);
+  }
+  if (useFallbackLocale) {
+    languageList.push(fallbackLocale);
+  }
+  return normalizeLocales(uniqDefined(languageList));
+}
+var getUserLocales = (0, import_lodash3.default)(getUserLocalesInternal, resolver);
+function getUserLocaleInternal(options) {
+  return getUserLocales(options)[0] || null;
+}
+var getUserLocale = (0, import_lodash3.default)(getUserLocaleInternal, resolver);
+var esm_default = getUserLocale;
+
+// node_modules/@wojtekmaj/date-utils/dist/esm/index.js
+function makeGetEdgeOfNeighbor(getPeriod, getEdgeOfPeriod, defaultOffset) {
+  return function makeGetEdgeOfNeighborInternal(date) {
+    var offset = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : defaultOffset;
+    var previousPeriod = getPeriod(date) + offset;
+    return getEdgeOfPeriod(previousPeriod);
+  };
+}
+function makeGetEnd(getBeginOfNextPeriod) {
+  return function makeGetEndInternal(date) {
+    return new Date(getBeginOfNextPeriod(date).getTime() - 1);
+  };
+}
+function makeGetRange(functions) {
+  return function makeGetRangeInternal(date) {
+    return functions.map(function(fn) {
+      return fn(date);
+    });
+  };
+}
+function getYear(date) {
+  if (date instanceof Date) {
+    return date.getFullYear();
+  }
+  if (typeof date === "number") {
+    return date;
+  }
+  var year = parseInt(date, 10);
+  if (typeof date === "string" && !isNaN(year)) {
+    return year;
+  }
+  throw new Error("Failed to get year from date: ".concat(date, "."));
+}
+function getMonth(date) {
+  if (date instanceof Date) {
+    return date.getMonth();
+  }
+  throw new Error("Failed to get month from date: ".concat(date, "."));
+}
+function getDate(date) {
+  if (date instanceof Date) {
+    return date.getDate();
+  }
+  throw new Error("Failed to get year from date: ".concat(date, "."));
+}
+function getCenturyStart(date) {
+  var year = getYear(date);
+  var centuryStartYear = year + (-year + 1) % 100;
+  var centuryStartDate = new Date();
+  centuryStartDate.setFullYear(centuryStartYear, 0, 1);
+  centuryStartDate.setHours(0, 0, 0, 0);
+  return centuryStartDate;
+}
+var getPreviousCenturyStart = makeGetEdgeOfNeighbor(getYear, getCenturyStart, -100);
+var getNextCenturyStart = makeGetEdgeOfNeighbor(getYear, getCenturyStart, 100);
+var getCenturyEnd = makeGetEnd(getNextCenturyStart);
+var getPreviousCenturyEnd = makeGetEdgeOfNeighbor(getYear, getCenturyEnd, -100);
+var getNextCenturyEnd = makeGetEdgeOfNeighbor(getYear, getCenturyEnd, 100);
+var getCenturyRange = makeGetRange([getCenturyStart, getCenturyEnd]);
+function getDecadeStart(date) {
+  var year = getYear(date);
+  var decadeStartYear = year + (-year + 1) % 10;
+  var decadeStartDate = new Date();
+  decadeStartDate.setFullYear(decadeStartYear, 0, 1);
+  decadeStartDate.setHours(0, 0, 0, 0);
+  return decadeStartDate;
+}
+var getPreviousDecadeStart = makeGetEdgeOfNeighbor(getYear, getDecadeStart, -10);
+var getNextDecadeStart = makeGetEdgeOfNeighbor(getYear, getDecadeStart, 10);
+var getDecadeEnd = makeGetEnd(getNextDecadeStart);
+var getPreviousDecadeEnd = makeGetEdgeOfNeighbor(getYear, getDecadeEnd, -10);
+var getNextDecadeEnd = makeGetEdgeOfNeighbor(getYear, getDecadeEnd, 10);
+var getDecadeRange = makeGetRange([getDecadeStart, getDecadeEnd]);
+function getYearStart(date) {
+  var year = getYear(date);
+  var yearStartDate = new Date();
+  yearStartDate.setFullYear(year, 0, 1);
+  yearStartDate.setHours(0, 0, 0, 0);
+  return yearStartDate;
+}
+var getPreviousYearStart = makeGetEdgeOfNeighbor(getYear, getYearStart, -1);
+var getNextYearStart = makeGetEdgeOfNeighbor(getYear, getYearStart, 1);
+var getYearEnd = makeGetEnd(getNextYearStart);
+var getPreviousYearEnd = makeGetEdgeOfNeighbor(getYear, getYearEnd, -1);
+var getNextYearEnd = makeGetEdgeOfNeighbor(getYear, getYearEnd, 1);
+var getYearRange = makeGetRange([getYearStart, getYearEnd]);
+function makeGetEdgeOfNeighborMonth(getEdgeOfPeriod, defaultOffset) {
+  return function makeGetEdgeOfNeighborMonthInternal(date) {
+    var offset = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : defaultOffset;
+    var year = getYear(date);
+    var month = getMonth(date) + offset;
+    var previousPeriod = new Date();
+    previousPeriod.setFullYear(year, month, 1);
+    previousPeriod.setHours(0, 0, 0, 0);
+    return getEdgeOfPeriod(previousPeriod);
+  };
+}
+function getMonthStart(date) {
+  var year = getYear(date);
+  var month = getMonth(date);
+  var monthStartDate = new Date();
+  monthStartDate.setFullYear(year, month, 1);
+  monthStartDate.setHours(0, 0, 0, 0);
+  return monthStartDate;
+}
+var getPreviousMonthStart = makeGetEdgeOfNeighborMonth(getMonthStart, -1);
+var getNextMonthStart = makeGetEdgeOfNeighborMonth(getMonthStart, 1);
+var getMonthEnd = makeGetEnd(getNextMonthStart);
+var getPreviousMonthEnd = makeGetEdgeOfNeighborMonth(getMonthEnd, -1);
+var getNextMonthEnd = makeGetEdgeOfNeighborMonth(getMonthEnd, 1);
+var getMonthRange = makeGetRange([getMonthStart, getMonthEnd]);
+function makeGetEdgeOfNeighborDay(getEdgeOfPeriod, defaultOffset) {
+  return function makeGetEdgeOfNeighborDayInternal(date) {
+    var offset = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : defaultOffset;
+    var year = getYear(date);
+    var month = getMonth(date);
+    var day = getDate(date) + offset;
+    var previousPeriod = new Date();
+    previousPeriod.setFullYear(year, month, day);
+    previousPeriod.setHours(0, 0, 0, 0);
+    return getEdgeOfPeriod(previousPeriod);
+  };
+}
+function getDayStart(date) {
+  var year = getYear(date);
+  var month = getMonth(date);
+  var day = getDate(date);
+  var dayStartDate = new Date();
+  dayStartDate.setFullYear(year, month, day);
+  dayStartDate.setHours(0, 0, 0, 0);
+  return dayStartDate;
+}
+var getPreviousDayStart = makeGetEdgeOfNeighborDay(getDayStart, -1);
+var getNextDayStart = makeGetEdgeOfNeighborDay(getDayStart, 1);
+var getDayEnd = makeGetEnd(getNextDayStart);
+var getPreviousDayEnd = makeGetEdgeOfNeighborDay(getDayEnd, -1);
+var getNextDayEnd = makeGetEdgeOfNeighborDay(getDayEnd, 1);
+var getDayRange = makeGetRange([getDayStart, getDayEnd]);
+function getDaysInMonth(date) {
+  return getDate(getMonthEnd(date));
+}
+
+// node_modules/react-calendar/dist/esm/shared/const.js
+var _CALENDAR_TYPE_LOCALE;
+function _toConsumableArray(arr) {
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
+}
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray(o2, minLen) {
+  if (!o2)
+    return;
+  if (typeof o2 === "string")
+    return _arrayLikeToArray(o2, minLen);
+  var n2 = Object.prototype.toString.call(o2).slice(8, -1);
+  if (n2 === "Object" && o2.constructor)
+    n2 = o2.constructor.name;
+  if (n2 === "Map" || n2 === "Set")
+    return Array.from(o2);
+  if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
+    return _arrayLikeToArray(o2, minLen);
+}
+function _iterableToArray(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+    return Array.from(iter);
+}
+function _arrayWithoutHoles(arr) {
+  if (Array.isArray(arr))
+    return _arrayLikeToArray(arr);
+}
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length)
+    len = arr.length;
+  for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++) {
+    arr2[i3] = arr[i3];
+  }
+  return arr2;
+}
+function _defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+var CALENDAR_TYPES = {
+  ARABIC: "Arabic",
+  HEBREW: "Hebrew",
+  ISO_8601: "ISO 8601",
+  US: "US"
+};
+var CALENDAR_TYPE_LOCALES = (_CALENDAR_TYPE_LOCALE = {}, _defineProperty(_CALENDAR_TYPE_LOCALE, CALENDAR_TYPES.US, ["en-CA", "en-US", "es-AR", "es-BO", "es-CL", "es-CO", "es-CR", "es-DO", "es-EC", "es-GT", "es-HN", "es-MX", "es-NI", "es-PA", "es-PE", "es-PR", "es-SV", "es-VE", "pt-BR"]), _defineProperty(_CALENDAR_TYPE_LOCALE, CALENDAR_TYPES.ARABIC, [
+  "ar",
+  "ar-AE",
+  "ar-BH",
+  "ar-DZ",
+  "ar-EG",
+  "ar-IQ",
+  "ar-JO",
+  "ar-KW",
+  "ar-LY",
+  "ar-OM",
+  "ar-QA",
+  "ar-SA",
+  "ar-SD",
+  "ar-SY",
+  "ar-YE",
+  "dv",
+  "dv-MV",
+  "ps",
+  "ps-AR"
+]), _defineProperty(_CALENDAR_TYPE_LOCALE, CALENDAR_TYPES.HEBREW, ["he", "he-IL"]), _CALENDAR_TYPE_LOCALE);
+var WEEKDAYS = _toConsumableArray(Array(7)).map(function(el, index) {
+  return index;
+});
+
+// node_modules/react-calendar/dist/esm/shared/dateFormatter.js
+var formatterCache = /* @__PURE__ */ new Map();
+function getFormatter(options) {
+  return function(locale, date) {
+    var localeWithDefault = locale || esm_default();
+    if (!formatterCache.has(localeWithDefault)) {
+      formatterCache.set(localeWithDefault, /* @__PURE__ */ new Map());
+    }
+    var formatterCacheLocale = formatterCache.get(localeWithDefault);
+    if (!formatterCacheLocale.has(options)) {
+      formatterCacheLocale.set(options, new Intl.DateTimeFormat(localeWithDefault, options).format);
+    }
+    return formatterCacheLocale.get(options)(date);
+  };
+}
+function toSafeHour(date) {
+  var safeDate = new Date(date);
+  return new Date(safeDate.setHours(12));
+}
+function getSafeFormatter(options) {
+  return function(locale, date) {
+    return getFormatter(options)(locale, toSafeHour(date));
+  };
+}
+var formatDateOptions = {
+  day: "numeric",
+  month: "numeric",
+  year: "numeric"
+};
+var formatDayOptions = {
+  day: "numeric"
+};
+var formatLongDateOptions = {
+  day: "numeric",
+  month: "long",
+  year: "numeric"
+};
+var formatMonthOptions = {
+  month: "long"
+};
+var formatMonthYearOptions = {
+  month: "long",
+  year: "numeric"
+};
+var formatShortWeekdayOptions = {
+  weekday: "short"
+};
+var formatWeekdayOptions = {
+  weekday: "long"
+};
+var formatYearOptions = {
+  year: "numeric"
+};
+var formatDate = getSafeFormatter(formatDateOptions);
+var formatDay = getSafeFormatter(formatDayOptions);
+var formatLongDate = getSafeFormatter(formatLongDateOptions);
+var formatMonth = getSafeFormatter(formatMonthOptions);
+var formatMonthYear = getSafeFormatter(formatMonthYearOptions);
+var formatShortWeekday = getSafeFormatter(formatShortWeekdayOptions);
+var formatWeekday = getSafeFormatter(formatWeekdayOptions);
+var formatYear = getSafeFormatter(formatYearOptions);
+
+// node_modules/react-calendar/dist/esm/shared/dates.js
+var SUNDAY = WEEKDAYS[0];
+var FRIDAY = WEEKDAYS[5];
+var SATURDAY = WEEKDAYS[6];
+function getDayOfWeek(date) {
+  var calendarType = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : CALENDAR_TYPES.ISO_8601;
+  var weekday = date.getDay();
+  switch (calendarType) {
+    case CALENDAR_TYPES.ISO_8601:
+      return (weekday + 6) % 7;
+    case CALENDAR_TYPES.ARABIC:
+      return (weekday + 1) % 7;
+    case CALENDAR_TYPES.HEBREW:
+    case CALENDAR_TYPES.US:
+      return weekday;
+    default:
+      throw new Error("Unsupported calendar type.");
+  }
+}
+function getBeginOfCenturyYear(date) {
+  var beginOfCentury = getCenturyStart(date);
+  return getYear(beginOfCentury);
+}
+function getBeginOfDecadeYear(date) {
+  var beginOfDecade = getDecadeStart(date);
+  return getYear(beginOfDecade);
+}
+function getBeginOfWeek(date) {
+  var calendarType = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : CALENDAR_TYPES.ISO_8601;
+  var year = getYear(date);
+  var monthIndex = getMonth(date);
+  var day = date.getDate() - getDayOfWeek(date, calendarType);
+  return new Date(year, monthIndex, day);
+}
+function getWeekNumber(date) {
+  var calendarType = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : CALENDAR_TYPES.ISO_8601;
+  var calendarTypeForWeekNumber = calendarType === CALENDAR_TYPES.US ? CALENDAR_TYPES.US : CALENDAR_TYPES.ISO_8601;
+  var beginOfWeek = getBeginOfWeek(date, calendarType);
+  var year = getYear(date) + 1;
+  var dayInWeekOne;
+  var beginOfFirstWeek;
+  do {
+    dayInWeekOne = new Date(year, 0, calendarTypeForWeekNumber === CALENDAR_TYPES.ISO_8601 ? 4 : 1);
+    beginOfFirstWeek = getBeginOfWeek(dayInWeekOne, calendarType);
+    year -= 1;
+  } while (date < beginOfFirstWeek);
+  return Math.round((beginOfWeek - beginOfFirstWeek) / (864e5 * 7)) + 1;
+}
+function getBegin(rangeType, date) {
+  switch (rangeType) {
+    case "century":
+      return getCenturyStart(date);
+    case "decade":
+      return getDecadeStart(date);
+    case "year":
+      return getYearStart(date);
+    case "month":
+      return getMonthStart(date);
+    case "day":
+      return getDayStart(date);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+}
+function getBeginPrevious(rangeType, date) {
+  switch (rangeType) {
+    case "century":
+      return getPreviousCenturyStart(date);
+    case "decade":
+      return getPreviousDecadeStart(date);
+    case "year":
+      return getPreviousYearStart(date);
+    case "month":
+      return getPreviousMonthStart(date);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+}
+function getBeginNext(rangeType, date) {
+  switch (rangeType) {
+    case "century":
+      return getNextCenturyStart(date);
+    case "decade":
+      return getNextDecadeStart(date);
+    case "year":
+      return getNextYearStart(date);
+    case "month":
+      return getNextMonthStart(date);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+}
+var getBeginPrevious2 = function getBeginPrevious22(rangeType, date) {
+  switch (rangeType) {
+    case "decade":
+      return getPreviousDecadeStart(date, -100);
+    case "year":
+      return getPreviousYearStart(date, -10);
+    case "month":
+      return getPreviousMonthStart(date, -12);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+};
+var getBeginNext2 = function getBeginNext22(rangeType, date) {
+  switch (rangeType) {
+    case "decade":
+      return getNextDecadeStart(date, 100);
+    case "year":
+      return getNextYearStart(date, 10);
+    case "month":
+      return getNextMonthStart(date, 12);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+};
+function getEnd(rangeType, date) {
+  switch (rangeType) {
+    case "century":
+      return getCenturyEnd(date);
+    case "decade":
+      return getDecadeEnd(date);
+    case "year":
+      return getYearEnd(date);
+    case "month":
+      return getMonthEnd(date);
+    case "day":
+      return getDayEnd(date);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+}
+function getEndPrevious(rangeType, date) {
+  switch (rangeType) {
+    case "century":
+      return getPreviousCenturyEnd(date);
+    case "decade":
+      return getPreviousDecadeEnd(date);
+    case "year":
+      return getPreviousYearEnd(date);
+    case "month":
+      return getPreviousMonthEnd(date);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+}
+var getEndPrevious2 = function getEndPrevious22(rangeType, date) {
+  switch (rangeType) {
+    case "decade":
+      return getPreviousDecadeEnd(date, -100);
+    case "year":
+      return getPreviousYearEnd(date, -10);
+    case "month":
+      return getPreviousMonthEnd(date, -12);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+};
+function getRange(rangeType, date) {
+  switch (rangeType) {
+    case "century":
+      return getCenturyRange(date);
+    case "decade":
+      return getDecadeRange(date);
+    case "year":
+      return getYearRange(date);
+    case "month":
+      return getMonthRange(date);
+    case "day":
+      return getDayRange(date);
+    default:
+      throw new Error("Invalid rangeType: ".concat(rangeType));
+  }
+}
+function getValueRange(rangeType, date1, date2) {
+  var rawNextValue = [date1, date2].sort(function(a4, b3) {
+    return a4 - b3;
+  });
+  return [getBegin(rangeType, rawNextValue[0]), getEnd(rangeType, rawNextValue[1])];
+}
+function toYearLabel(locale) {
+  var formatYear2 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : formatYear;
+  var dates = arguments.length > 2 ? arguments[2] : void 0;
+  return dates.map(function(date) {
+    return formatYear2(locale, date);
+  }).join(" \u2013 ");
+}
+function getCenturyLabel(locale, formatYear2, date) {
+  return toYearLabel(locale, formatYear2, getCenturyRange(date));
+}
+function getDecadeLabel(locale, formatYear2, date) {
+  return toYearLabel(locale, formatYear2, getDecadeRange(date));
+}
+function isWeekend(date) {
+  var calendarType = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : CALENDAR_TYPES.ISO_8601;
+  var weekday = date.getDay();
+  switch (calendarType) {
+    case CALENDAR_TYPES.ARABIC:
+    case CALENDAR_TYPES.HEBREW:
+      return weekday === FRIDAY || weekday === SATURDAY;
+    case CALENDAR_TYPES.ISO_8601:
+    case CALENDAR_TYPES.US:
+      return weekday === SATURDAY || weekday === SUNDAY;
+    default:
+      throw new Error("Unsupported calendar type.");
+  }
+}
+
+// node_modules/react-calendar/dist/esm/shared/propTypes.js
+var import_prop_types = __toModule(require_prop_types());
+function _typeof5(obj) {
+  "@babel/helpers - typeof";
+  return _typeof5 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(obj2) {
+    return typeof obj2;
+  } : function(obj2) {
+    return obj2 && typeof Symbol == "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+  }, _typeof5(obj);
+}
+var calendarTypes = Object.values(CALENDAR_TYPES);
+var allViews = ["century", "decade", "year", "month"];
+var isCalendarType = import_prop_types.default.oneOf(calendarTypes);
+var isClassName = import_prop_types.default.oneOfType([import_prop_types.default.string, import_prop_types.default.arrayOf(import_prop_types.default.string)]);
+var isMinDate = function isMinDate2(props, propName, componentName) {
+  var minDate = props[propName];
+  if (!minDate) {
+    return null;
+  }
+  if (!(minDate instanceof Date)) {
+    return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof5(minDate), "` supplied to `").concat(componentName, "`, expected instance of `Date`."));
+  }
+  var maxDate = props.maxDate;
+  if (maxDate && minDate > maxDate) {
+    return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof5(minDate), "` supplied to `").concat(componentName, "`, minDate cannot be larger than maxDate."));
+  }
+  return null;
+};
+var isMaxDate = function isMaxDate2(props, propName, componentName) {
+  var maxDate = props[propName];
+  if (!maxDate) {
+    return null;
+  }
+  if (!(maxDate instanceof Date)) {
+    return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof5(maxDate), "` supplied to `").concat(componentName, "`, expected instance of `Date`."));
+  }
+  var minDate = props.minDate;
+  if (minDate && maxDate < minDate) {
+    return new Error("Invalid prop `".concat(propName, "` of type `").concat(_typeof5(maxDate), "` supplied to `").concat(componentName, "`, maxDate cannot be smaller than minDate."));
+  }
+  return null;
+};
+var isRef = import_prop_types.default.oneOfType([import_prop_types.default.func, import_prop_types.default.shape({
+  current: import_prop_types.default.any
+})]);
+var isValue = import_prop_types.default.oneOfType([import_prop_types.default.instanceOf(Date), import_prop_types.default.arrayOf(import_prop_types.default.instanceOf(Date))]);
+var isViews = import_prop_types.default.arrayOf(import_prop_types.default.oneOf(allViews));
+var isView = function isView2(props, propName, componentName) {
+  var view = props[propName];
+  var views = props.views;
+  var allowedViews = views || allViews;
+  if (view !== void 0 && allowedViews.indexOf(view) === -1) {
+    return new Error("Invalid prop `".concat(propName, "` of value `").concat(view, "` supplied to `").concat(componentName, "`, expected one of [").concat(allowedViews.map(function(a4) {
+      return '"'.concat(a4, '"');
+    }).join(", "), "]."));
+  }
+  return null;
+};
+isView.isRequired = function(props, propName, componentName) {
+  var view = props[propName];
+  if (!view) {
+    return new Error("The prop `".concat(propName, "` is marked as required in `").concat(componentName, "`, but its value is `").concat(view, "`."));
+  }
+  return isView(props, propName, componentName);
+};
+var tileGroupProps = {
+  activeStartDate: import_prop_types.default.instanceOf(Date).isRequired,
+  hover: import_prop_types.default.instanceOf(Date),
+  locale: import_prop_types.default.string,
+  maxDate: isMaxDate,
+  minDate: isMinDate,
+  onClick: import_prop_types.default.func,
+  onMouseOver: import_prop_types.default.func,
+  tileClassName: import_prop_types.default.oneOfType([import_prop_types.default.func, isClassName]),
+  tileContent: import_prop_types.default.oneOfType([import_prop_types.default.func, import_prop_types.default.node]),
+  value: isValue,
+  valueType: import_prop_types.default.string
+};
+var tileProps = {
+  activeStartDate: import_prop_types.default.instanceOf(Date).isRequired,
+  classes: import_prop_types.default.arrayOf(import_prop_types.default.string).isRequired,
+  date: import_prop_types.default.instanceOf(Date).isRequired,
+  locale: import_prop_types.default.string,
+  maxDate: isMaxDate,
+  minDate: isMinDate,
+  onClick: import_prop_types.default.func,
+  onMouseOver: import_prop_types.default.func,
+  style: import_prop_types.default.objectOf(import_prop_types.default.oneOfType([import_prop_types.default.string, import_prop_types.default.number])),
+  tileClassName: import_prop_types.default.oneOfType([import_prop_types.default.func, isClassName]),
+  tileContent: import_prop_types.default.oneOfType([import_prop_types.default.func, import_prop_types.default.node]),
+  tileDisabled: import_prop_types.default.func
+};
+
+// node_modules/react-calendar/dist/esm/Calendar/Navigation.js
+var className = "react-calendar__navigation";
+function Navigation(_ref) {
+  var activeStartDate = _ref.activeStartDate, drillUp = _ref.drillUp, _ref$formatMonthYear = _ref.formatMonthYear, formatMonthYear2 = _ref$formatMonthYear === void 0 ? formatMonthYear : _ref$formatMonthYear, _ref$formatYear = _ref.formatYear, formatYear2 = _ref$formatYear === void 0 ? formatYear : _ref$formatYear, locale = _ref.locale, maxDate = _ref.maxDate, minDate = _ref.minDate, _ref$navigationAriaLa = _ref.navigationAriaLabel, navigationAriaLabel = _ref$navigationAriaLa === void 0 ? "" : _ref$navigationAriaLa, navigationAriaLive = _ref.navigationAriaLive, navigationLabel = _ref.navigationLabel, _ref$next2AriaLabel = _ref.next2AriaLabel, next2AriaLabel = _ref$next2AriaLabel === void 0 ? "" : _ref$next2AriaLabel, _ref$next2Label = _ref.next2Label, next2Label = _ref$next2Label === void 0 ? "\xBB" : _ref$next2Label, _ref$nextAriaLabel = _ref.nextAriaLabel, nextAriaLabel = _ref$nextAriaLabel === void 0 ? "" : _ref$nextAriaLabel, _ref$nextLabel = _ref.nextLabel, nextLabel = _ref$nextLabel === void 0 ? "\u203A" : _ref$nextLabel, _ref$prev2AriaLabel = _ref.prev2AriaLabel, prev2AriaLabel = _ref$prev2AriaLabel === void 0 ? "" : _ref$prev2AriaLabel, _ref$prev2Label = _ref.prev2Label, prev2Label = _ref$prev2Label === void 0 ? "\xAB" : _ref$prev2Label, _ref$prevAriaLabel = _ref.prevAriaLabel, prevAriaLabel = _ref$prevAriaLabel === void 0 ? "" : _ref$prevAriaLabel, _ref$prevLabel = _ref.prevLabel, prevLabel = _ref$prevLabel === void 0 ? "\u2039" : _ref$prevLabel, setActiveStartDate = _ref.setActiveStartDate, showDoubleView = _ref.showDoubleView, view = _ref.view, views = _ref.views;
+  var drillUpAvailable = views.indexOf(view) > 0;
+  var shouldShowPrevNext2Buttons = view !== "century";
+  var previousActiveStartDate = getBeginPrevious(view, activeStartDate);
+  var previousActiveStartDate2 = shouldShowPrevNext2Buttons && getBeginPrevious2(view, activeStartDate);
+  var nextActiveStartDate = getBeginNext(view, activeStartDate);
+  var nextActiveStartDate2 = shouldShowPrevNext2Buttons && getBeginNext2(view, activeStartDate);
+  var prevButtonDisabled = function() {
+    if (previousActiveStartDate.getFullYear() < 0) {
+      return true;
+    }
+    var previousActiveEndDate = getEndPrevious(view, activeStartDate);
+    return minDate && minDate >= previousActiveEndDate;
+  }();
+  var prev2ButtonDisabled = shouldShowPrevNext2Buttons && function() {
+    if (previousActiveStartDate2.getFullYear() < 0) {
+      return true;
+    }
+    var previousActiveEndDate = getEndPrevious2(view, activeStartDate);
+    return minDate && minDate >= previousActiveEndDate;
+  }();
+  var nextButtonDisabled = maxDate && maxDate < nextActiveStartDate;
+  var next2ButtonDisabled = shouldShowPrevNext2Buttons && maxDate && maxDate < nextActiveStartDate2;
+  function onClickPrevious() {
+    setActiveStartDate(previousActiveStartDate, "prev");
+  }
+  function onClickPrevious2() {
+    setActiveStartDate(previousActiveStartDate2, "prev2");
+  }
+  function onClickNext() {
+    setActiveStartDate(nextActiveStartDate, "next");
+  }
+  function onClickNext2() {
+    setActiveStartDate(nextActiveStartDate2, "next2");
+  }
+  function renderLabel(date) {
+    var label = function() {
+      switch (view) {
+        case "century":
+          return getCenturyLabel(locale, formatYear2, date);
+        case "decade":
+          return getDecadeLabel(locale, formatYear2, date);
+        case "year":
+          return formatYear2(locale, date);
+        case "month":
+          return formatMonthYear2(locale, date);
+        default:
+          throw new Error("Invalid view: ".concat(view, "."));
+      }
+    }();
+    return navigationLabel ? navigationLabel({
+      date,
+      label,
+      locale: locale || getUserLocale(),
+      view
+    }) : label;
+  }
+  function renderButton() {
+    var labelClassName = "".concat(className, "__label");
+    return /* @__PURE__ */ import_react48.default.createElement("button", {
+      "aria-label": navigationAriaLabel,
+      "aria-live": navigationAriaLive,
+      className: labelClassName,
+      disabled: !drillUpAvailable,
+      onClick: drillUp,
+      style: {
+        flexGrow: 1
+      },
+      type: "button"
+    }, /* @__PURE__ */ import_react48.default.createElement("span", {
+      className: "".concat(labelClassName, "__labelText ").concat(labelClassName, "__labelText--from")
+    }, renderLabel(activeStartDate)), showDoubleView && /* @__PURE__ */ import_react48.default.createElement(import_react48.default.Fragment, null, /* @__PURE__ */ import_react48.default.createElement("span", {
+      className: "".concat(labelClassName, "__divider")
+    }, " \u2013 "), /* @__PURE__ */ import_react48.default.createElement("span", {
+      className: "".concat(labelClassName, "__labelText ").concat(labelClassName, "__labelText--to")
+    }, renderLabel(nextActiveStartDate))));
+  }
+  return /* @__PURE__ */ import_react48.default.createElement("div", {
+    className
+  }, prev2Label !== null && shouldShowPrevNext2Buttons && /* @__PURE__ */ import_react48.default.createElement("button", {
+    "aria-label": prev2AriaLabel,
+    className: "".concat(className, "__arrow ").concat(className, "__prev2-button"),
+    disabled: prev2ButtonDisabled,
+    onClick: onClickPrevious2,
+    type: "button"
+  }, prev2Label), prevLabel !== null && /* @__PURE__ */ import_react48.default.createElement("button", {
+    "aria-label": prevAriaLabel,
+    className: "".concat(className, "__arrow ").concat(className, "__prev-button"),
+    disabled: prevButtonDisabled,
+    onClick: onClickPrevious,
+    type: "button"
+  }, prevLabel), renderButton(), nextLabel !== null && /* @__PURE__ */ import_react48.default.createElement("button", {
+    "aria-label": nextAriaLabel,
+    className: "".concat(className, "__arrow ").concat(className, "__next-button"),
+    disabled: nextButtonDisabled,
+    onClick: onClickNext,
+    type: "button"
+  }, nextLabel), next2Label !== null && shouldShowPrevNext2Buttons && /* @__PURE__ */ import_react48.default.createElement("button", {
+    "aria-label": next2AriaLabel,
+    className: "".concat(className, "__arrow ").concat(className, "__next2-button"),
+    disabled: next2ButtonDisabled,
+    onClick: onClickNext2,
+    type: "button"
+  }, next2Label));
+}
+Navigation.propTypes = {
+  activeStartDate: import_prop_types2.default.instanceOf(Date).isRequired,
+  drillUp: import_prop_types2.default.func.isRequired,
+  formatMonthYear: import_prop_types2.default.func,
+  formatYear: import_prop_types2.default.func,
+  locale: import_prop_types2.default.string,
+  maxDate: import_prop_types2.default.instanceOf(Date),
+  minDate: import_prop_types2.default.instanceOf(Date),
+  navigationAriaLabel: import_prop_types2.default.string,
+  navigationAriaLive: import_prop_types2.default.string,
+  navigationLabel: import_prop_types2.default.func,
+  next2AriaLabel: import_prop_types2.default.string,
+  next2Label: import_prop_types2.default.node,
+  nextAriaLabel: import_prop_types2.default.string,
+  nextLabel: import_prop_types2.default.node,
+  prev2AriaLabel: import_prop_types2.default.string,
+  prev2Label: import_prop_types2.default.node,
+  prevAriaLabel: import_prop_types2.default.string,
+  prevLabel: import_prop_types2.default.node,
+  setActiveStartDate: import_prop_types2.default.func.isRequired,
+  showDoubleView: import_prop_types2.default.bool,
+  view: isView.isRequired,
+  views: isViews.isRequired
+};
+
+// node_modules/react-calendar/dist/esm/CenturyView.js
+var import_react54 = __toModule(require_react());
+
+// node_modules/react-calendar/dist/esm/CenturyView/Decades.js
+var import_react53 = __toModule(require_react());
+
+// node_modules/react-calendar/dist/esm/TileGroup.js
+var import_react50 = __toModule(require_react());
+var import_prop_types4 = __toModule(require_prop_types());
+
+// node_modules/react-calendar/dist/esm/Flex.js
+var import_react49 = __toModule(require_react());
+var import_prop_types3 = __toModule(require_prop_types());
+var _excluded = ["children", "className", "direction", "count", "offset", "style", "wrap"];
+function _extends6() {
+  _extends6 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends6.apply(this, arguments);
+}
+function ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys(Object(source), true).forEach(function(key) {
+      _defineProperty2(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty2(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _objectWithoutProperties(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+function toPercent(num) {
+  return "".concat(num, "%");
+}
+function Flex(_ref) {
+  var children = _ref.children, className8 = _ref.className, direction = _ref.direction, count = _ref.count, offset = _ref.offset, style = _ref.style, wrap2 = _ref.wrap, otherProps = _objectWithoutProperties(_ref, _excluded);
+  return /* @__PURE__ */ import_react49.default.createElement("div", _extends6({
+    className: className8,
+    style: _objectSpread({
+      display: "flex",
+      flexDirection: direction,
+      flexWrap: wrap2 ? "wrap" : "no-wrap"
+    }, style)
+  }, otherProps), import_react49.default.Children.map(children, function(child, index) {
+    return /* @__PURE__ */ import_react49.default.cloneElement(child, _objectSpread(_objectSpread({}, child.props), {}, {
+      style: {
+        flexBasis: toPercent(100 / count),
+        flexShrink: 0,
+        flexGrow: 0,
+        overflow: "hidden",
+        marginLeft: offset && index === 0 ? toPercent(100 * offset / count) : null
+      }
+    }));
+  }));
+}
+Flex.propTypes = {
+  children: import_prop_types3.default.node,
+  className: import_prop_types3.default.string,
+  count: import_prop_types3.default.number.isRequired,
+  direction: import_prop_types3.default.string,
+  offset: import_prop_types3.default.number,
+  style: import_prop_types3.default.objectOf(import_prop_types3.default.oneOfType([import_prop_types3.default.string, import_prop_types3.default.number])),
+  wrap: import_prop_types3.default.bool
+};
+
+// node_modules/react-calendar/dist/esm/shared/utils.js
+function _toConsumableArray2(arr) {
+  return _arrayWithoutHoles2(arr) || _iterableToArray2(arr) || _unsupportedIterableToArray2(arr) || _nonIterableSpread2();
+}
+function _nonIterableSpread2() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray2(o2, minLen) {
+  if (!o2)
+    return;
+  if (typeof o2 === "string")
+    return _arrayLikeToArray2(o2, minLen);
+  var n2 = Object.prototype.toString.call(o2).slice(8, -1);
+  if (n2 === "Object" && o2.constructor)
+    n2 = o2.constructor.name;
+  if (n2 === "Map" || n2 === "Set")
+    return Array.from(o2);
+  if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
+    return _arrayLikeToArray2(o2, minLen);
+}
+function _iterableToArray2(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+    return Array.from(iter);
+}
+function _arrayWithoutHoles2(arr) {
+  if (Array.isArray(arr))
+    return _arrayLikeToArray2(arr);
+}
+function _arrayLikeToArray2(arr, len) {
+  if (len == null || len > arr.length)
+    len = arr.length;
+  for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++) {
+    arr2[i3] = arr[i3];
+  }
+  return arr2;
+}
+function between(value, min, max) {
+  if (min && min > value) {
+    return min;
+  }
+  if (max && max < value) {
+    return max;
+  }
+  return value;
+}
+function isValueWithinRange(value, range) {
+  return range[0] <= value && range[1] >= value;
+}
+function isRangeWithinRange(greaterRange, smallerRange) {
+  return greaterRange[0] <= smallerRange[0] && greaterRange[1] >= smallerRange[1];
+}
+function doRangesOverlap(range1, range2) {
+  return isValueWithinRange(range1[0], range2) || isValueWithinRange(range1[1], range2);
+}
+function getRangeClassNames(valueRange, dateRange, baseClassName2) {
+  var isRange = doRangesOverlap(dateRange, valueRange);
+  var classes = [];
+  if (isRange) {
+    classes.push(baseClassName2);
+    var isRangeStart = isValueWithinRange(valueRange[0], dateRange);
+    var isRangeEnd = isValueWithinRange(valueRange[1], dateRange);
+    if (isRangeStart) {
+      classes.push("".concat(baseClassName2, "Start"));
+    }
+    if (isRangeEnd) {
+      classes.push("".concat(baseClassName2, "End"));
+    }
+    if (isRangeStart && isRangeEnd) {
+      classes.push("".concat(baseClassName2, "BothEnds"));
+    }
+  }
+  return classes;
+}
+function getTileClasses() {
+  var _ref = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : {}, value = _ref.value, valueType = _ref.valueType, date = _ref.date, dateType = _ref.dateType, hover = _ref.hover;
+  var className8 = "react-calendar__tile";
+  var classes = [className8];
+  if (!date) {
+    return classes;
+  }
+  if (!Array.isArray(date) && !dateType) {
+    throw new Error("getTileClasses(): Unable to get tile activity classes because one or more required arguments were not passed.");
+  }
+  var now = new Date();
+  var dateRange = Array.isArray(date) ? date : getRange(dateType, date);
+  if (isValueWithinRange(now, dateRange)) {
+    classes.push("".concat(className8, "--now"));
+  }
+  if (!value) {
+    return classes;
+  }
+  if (!Array.isArray(value) && !valueType) {
+    throw new Error("getTileClasses(): Unable to get tile activity classes because one or more required arguments were not passed.");
+  }
+  var valueRange = Array.isArray(value) ? value : getRange(valueType, value);
+  if (isRangeWithinRange(valueRange, dateRange)) {
+    classes.push("".concat(className8, "--active"));
+  } else if (doRangesOverlap(valueRange, dateRange)) {
+    classes.push("".concat(className8, "--hasActive"));
+  }
+  var valueRangeClassNames = getRangeClassNames(valueRange, dateRange, "".concat(className8, "--range"));
+  classes.push.apply(classes, _toConsumableArray2(valueRangeClassNames));
+  var valueArray = [].concat(value);
+  if (hover && valueArray.length === 1) {
+    var hoverRange = hover > valueRange[0] ? [valueRange[0], hover] : [hover, valueRange[0]];
+    var hoverRangeClassNames = getRangeClassNames(hoverRange, dateRange, "".concat(className8, "--hover"));
+    classes.push.apply(classes, _toConsumableArray2(hoverRangeClassNames));
+  }
+  return classes;
+}
+
+// node_modules/react-calendar/dist/esm/TileGroup.js
+var _excluded2 = ["className", "count", "dateTransform", "dateType", "end", "hover", "offset", "start", "step", "tile", "value", "valueType"];
+function ownKeys2(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread2(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys2(Object(source), true).forEach(function(key) {
+      _defineProperty3(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys2(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty3(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends7() {
+  _extends7 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends7.apply(this, arguments);
+}
+function _objectWithoutProperties2(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose2(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose2(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+function TileGroup(_ref) {
+  var className8 = _ref.className, _ref$count = _ref.count, count = _ref$count === void 0 ? 3 : _ref$count, dateTransform = _ref.dateTransform, dateType = _ref.dateType, end = _ref.end, hover = _ref.hover, offset = _ref.offset, start = _ref.start, _ref$step = _ref.step, step = _ref$step === void 0 ? 1 : _ref$step, Tile2 = _ref.tile, value = _ref.value, valueType = _ref.valueType, tileProps2 = _objectWithoutProperties2(_ref, _excluded2);
+  var tiles = [];
+  for (var point = start; point <= end; point += step) {
+    var date = dateTransform(point);
+    tiles.push(/* @__PURE__ */ import_react50.default.createElement(Tile2, _extends7({
+      key: date.getTime(),
+      classes: getTileClasses({
+        value,
+        valueType,
+        date,
+        dateType,
+        hover
+      }),
+      date,
+      point
+    }, tileProps2)));
+  }
+  return /* @__PURE__ */ import_react50.default.createElement(Flex, {
+    className: className8,
+    count,
+    offset,
+    wrap: true
+  }, tiles);
+}
+TileGroup.propTypes = _objectSpread2(_objectSpread2({}, tileGroupProps), {}, {
+  activeStartDate: import_prop_types4.default.instanceOf(Date),
+  count: import_prop_types4.default.number,
+  dateTransform: import_prop_types4.default.func.isRequired,
+  dateType: import_prop_types4.default.string,
+  offset: import_prop_types4.default.number,
+  step: import_prop_types4.default.number,
+  tile: import_prop_types4.default.func.isRequired
+});
+
+// node_modules/react-calendar/dist/esm/CenturyView/Decade.js
+var import_react52 = __toModule(require_react());
+var import_prop_types6 = __toModule(require_prop_types());
+
+// node_modules/react-calendar/dist/esm/Tile.js
+var import_react51 = __toModule(require_react());
+var import_prop_types5 = __toModule(require_prop_types());
+function _typeof6(obj) {
+  "@babel/helpers - typeof";
+  return _typeof6 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(obj2) {
+    return typeof obj2;
+  } : function(obj2) {
+    return obj2 && typeof Symbol == "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+  }, _typeof6(obj);
+}
+function ownKeys3(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread3(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys3(Object(source), true).forEach(function(key) {
+      _defineProperty4(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys3(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _classCallCheck2(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function _defineProperties3(target, props) {
+  for (var i3 = 0; i3 < props.length; i3++) {
+    var descriptor = props[i3];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor)
+      descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+function _createClass3(Constructor, protoProps, staticProps) {
+  if (protoProps)
+    _defineProperties3(Constructor.prototype, protoProps);
+  if (staticProps)
+    _defineProperties3(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", { writable: false });
+  return Constructor;
+}
+function _inherits2(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+  Object.defineProperty(subClass, "prototype", { writable: false });
+  if (superClass)
+    _setPrototypeOf2(subClass, superClass);
+}
+function _setPrototypeOf2(o2, p2) {
+  _setPrototypeOf2 = Object.setPrototypeOf || function _setPrototypeOf4(o3, p3) {
+    o3.__proto__ = p3;
+    return o3;
+  };
+  return _setPrototypeOf2(o2, p2);
+}
+function _createSuper2(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct2();
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf2(Derived), result;
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf2(this).constructor;
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+    return _possibleConstructorReturn2(this, result);
+  };
+}
+function _possibleConstructorReturn2(self2, call) {
+  if (call && (_typeof6(call) === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+  return _assertThisInitialized2(self2);
+}
+function _assertThisInitialized2(self2) {
+  if (self2 === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return self2;
+}
+function _isNativeReflectConstruct2() {
+  if (typeof Reflect === "undefined" || !Reflect.construct)
+    return false;
+  if (Reflect.construct.sham)
+    return false;
+  if (typeof Proxy === "function")
+    return true;
+  try {
+    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+    }));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function _getPrototypeOf2(o2) {
+  _getPrototypeOf2 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf4(o3) {
+    return o3.__proto__ || Object.getPrototypeOf(o3);
+  };
+  return _getPrototypeOf2(o2);
+}
+function _defineProperty4(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function datesAreDifferent(date1, date2) {
+  return date1 && !date2 || !date1 && date2 || date1 && date2 && date1.getTime() !== date2.getTime();
+}
+function getValue(nextProps, prop) {
+  var activeStartDate = nextProps.activeStartDate, date = nextProps.date, view = nextProps.view;
+  return typeof prop === "function" ? prop({
+    activeStartDate,
+    date,
+    view
+  }) : prop;
+}
+var Tile = /* @__PURE__ */ function(_Component) {
+  _inherits2(Tile2, _Component);
+  var _super = _createSuper2(Tile2);
+  function Tile2() {
+    var _this;
+    _classCallCheck2(this, Tile2);
+    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+    _this = _super.call.apply(_super, [this].concat(args));
+    _defineProperty4(_assertThisInitialized2(_this), "state", {});
+    return _this;
+  }
+  _createClass3(Tile2, [{
+    key: "render",
+    value: function render() {
+      var _this$props = this.props, activeStartDate = _this$props.activeStartDate, children = _this$props.children, classes = _this$props.classes, date = _this$props.date, formatAbbr = _this$props.formatAbbr, locale = _this$props.locale, maxDate = _this$props.maxDate, maxDateTransform = _this$props.maxDateTransform, minDate = _this$props.minDate, minDateTransform = _this$props.minDateTransform, onClick = _this$props.onClick, onMouseOver = _this$props.onMouseOver, style = _this$props.style, tileDisabled = _this$props.tileDisabled, view = _this$props.view;
+      var _this$state = this.state, tileClassName = _this$state.tileClassName, tileContent = _this$state.tileContent;
+      return /* @__PURE__ */ import_react51.default.createElement("button", {
+        className: mergeClassNames(classes, tileClassName),
+        disabled: minDate && minDateTransform(minDate) > date || maxDate && maxDateTransform(maxDate) < date || tileDisabled && tileDisabled({
+          activeStartDate,
+          date,
+          view
+        }),
+        onClick: onClick && function(event) {
+          return onClick(date, event);
+        },
+        onFocus: onMouseOver && function() {
+          return onMouseOver(date);
+        },
+        onMouseOver: onMouseOver && function() {
+          return onMouseOver(date);
+        },
+        style,
+        type: "button"
+      }, formatAbbr ? /* @__PURE__ */ import_react51.default.createElement("abbr", {
+        "aria-label": formatAbbr(locale, date)
+      }, children) : children, tileContent);
+    }
+  }], [{
+    key: "getDerivedStateFromProps",
+    value: function getDerivedStateFromProps(nextProps, prevState) {
+      var activeStartDate = nextProps.activeStartDate, tileClassName = nextProps.tileClassName, tileContent = nextProps.tileContent;
+      var nextState = {};
+      if (tileClassName !== prevState.tileClassNameProps || datesAreDifferent(activeStartDate, prevState.activeStartDateProps)) {
+        nextState.tileClassName = getValue(nextProps, tileClassName);
+        nextState.tileClassNameProps = tileClassName;
+      }
+      if (tileContent !== prevState.tileContentProps || datesAreDifferent(activeStartDate, prevState.activeStartDateProps)) {
+        nextState.tileContent = getValue(nextProps, tileContent);
+        nextState.tileContentProps = tileContent;
+      }
+      nextState.activeStartDateProps = activeStartDate;
+      return nextState;
+    }
+  }]);
+  return Tile2;
+}(import_react51.Component);
+Tile.propTypes = _objectSpread3(_objectSpread3({}, tileProps), {}, {
+  children: import_prop_types5.default.node.isRequired,
+  formatAbbr: import_prop_types5.default.func,
+  maxDateTransform: import_prop_types5.default.func.isRequired,
+  minDateTransform: import_prop_types5.default.func.isRequired
+});
+
+// node_modules/react-calendar/dist/esm/CenturyView/Decade.js
+var _excluded3 = ["classes", "formatYear"];
+function ownKeys4(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread4(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys4(Object(source), true).forEach(function(key) {
+      _defineProperty5(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys4(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty5(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends8() {
+  _extends8 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends8.apply(this, arguments);
+}
+function _objectWithoutProperties3(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose3(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose3(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+var className2 = "react-calendar__century-view__decades__decade";
+function Decade(_ref) {
+  var classes = _ref.classes, _ref$formatYear = _ref.formatYear, formatYear2 = _ref$formatYear === void 0 ? formatYear : _ref$formatYear, otherProps = _objectWithoutProperties3(_ref, _excluded3);
+  var date = otherProps.date, locale = otherProps.locale;
+  return /* @__PURE__ */ import_react52.default.createElement(Tile, _extends8({}, otherProps, {
+    classes: [].concat(classes, className2),
+    maxDateTransform: getDecadeEnd,
+    minDateTransform: getDecadeStart,
+    view: "century"
+  }), getDecadeLabel(locale, formatYear2, date));
+}
+Decade.propTypes = _objectSpread4(_objectSpread4({}, tileProps), {}, {
+  formatYear: import_prop_types6.default.func
+});
+
+// node_modules/react-calendar/dist/esm/CenturyView/Decades.js
+function ownKeys5(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread5(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys5(Object(source), true).forEach(function(key) {
+      _defineProperty6(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys5(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty6(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends9() {
+  _extends9 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends9.apply(this, arguments);
+}
+function Decades(props) {
+  var activeStartDate = props.activeStartDate;
+  var start = getBeginOfCenturyYear(activeStartDate);
+  var end = start + 99;
+  return /* @__PURE__ */ import_react53.default.createElement(TileGroup, _extends9({}, props, {
+    className: "react-calendar__century-view__decades",
+    dateTransform: getDecadeStart,
+    dateType: "decade",
+    end,
+    start,
+    step: 10,
+    tile: Decade
+  }));
+}
+Decades.propTypes = _objectSpread5({}, tileGroupProps);
+
+// node_modules/react-calendar/dist/esm/CenturyView.js
+function CenturyView(props) {
+  function renderDecades() {
+    return /* @__PURE__ */ import_react54.default.createElement(Decades, props);
+  }
+  return /* @__PURE__ */ import_react54.default.createElement("div", {
+    className: "react-calendar__century-view"
+  }, renderDecades());
+}
+
+// node_modules/react-calendar/dist/esm/DecadeView.js
+var import_react57 = __toModule(require_react());
+
+// node_modules/react-calendar/dist/esm/DecadeView/Years.js
+var import_react56 = __toModule(require_react());
+
+// node_modules/react-calendar/dist/esm/DecadeView/Year.js
+var import_react55 = __toModule(require_react());
+var import_prop_types7 = __toModule(require_prop_types());
+var _excluded4 = ["classes", "formatYear"];
+function ownKeys6(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread6(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys6(Object(source), true).forEach(function(key) {
+      _defineProperty7(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys6(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty7(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends10() {
+  _extends10 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends10.apply(this, arguments);
+}
+function _objectWithoutProperties4(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose4(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose4(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+var className3 = "react-calendar__decade-view__years__year";
+function Year(_ref) {
+  var classes = _ref.classes, _ref$formatYear = _ref.formatYear, formatYear2 = _ref$formatYear === void 0 ? formatYear : _ref$formatYear, otherProps = _objectWithoutProperties4(_ref, _excluded4);
+  var date = otherProps.date, locale = otherProps.locale;
+  return /* @__PURE__ */ import_react55.default.createElement(Tile, _extends10({}, otherProps, {
+    classes: [].concat(classes, className3),
+    maxDateTransform: getYearEnd,
+    minDateTransform: getYearStart,
+    view: "decade"
+  }), formatYear2(locale, date));
+}
+Year.propTypes = _objectSpread6(_objectSpread6({}, tileProps), {}, {
+  formatYear: import_prop_types7.default.func
+});
+
+// node_modules/react-calendar/dist/esm/DecadeView/Years.js
+function ownKeys7(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread7(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys7(Object(source), true).forEach(function(key) {
+      _defineProperty8(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys7(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty8(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends11() {
+  _extends11 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends11.apply(this, arguments);
+}
+function Years(props) {
+  var activeStartDate = props.activeStartDate;
+  var start = getBeginOfDecadeYear(activeStartDate);
+  var end = start + 9;
+  return /* @__PURE__ */ import_react56.default.createElement(TileGroup, _extends11({}, props, {
+    className: "react-calendar__decade-view__years",
+    dateTransform: function dateTransform(year) {
+      var date = new Date();
+      date.setFullYear(year, 0, 1);
+      date.setHours(0, 0, 0, 0);
+      return date;
+    },
+    dateType: "year",
+    end,
+    start,
+    tile: Year
+  }));
+}
+Years.propTypes = _objectSpread7({}, tileGroupProps);
+
+// node_modules/react-calendar/dist/esm/DecadeView.js
+function DecadeView(props) {
+  function renderYears() {
+    return /* @__PURE__ */ import_react57.default.createElement(Years, props);
+  }
+  return /* @__PURE__ */ import_react57.default.createElement("div", {
+    className: "react-calendar__decade-view"
+  }, renderYears());
+}
+
+// node_modules/react-calendar/dist/esm/YearView.js
+var import_react60 = __toModule(require_react());
+
+// node_modules/react-calendar/dist/esm/YearView/Months.js
+var import_react59 = __toModule(require_react());
+var import_prop_types9 = __toModule(require_prop_types());
+
+// node_modules/react-calendar/dist/esm/YearView/Month.js
+var import_react58 = __toModule(require_react());
+var import_prop_types8 = __toModule(require_prop_types());
+var _excluded5 = ["classes", "formatMonth", "formatMonthYear"];
+function ownKeys8(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread8(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys8(Object(source), true).forEach(function(key) {
+      _defineProperty9(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys8(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty9(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends12() {
+  _extends12 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends12.apply(this, arguments);
+}
+function _objectWithoutProperties5(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose5(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose5(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+var className4 = "react-calendar__year-view__months__month";
+function Month(_ref) {
+  var classes = _ref.classes, _ref$formatMonth = _ref.formatMonth, formatMonth2 = _ref$formatMonth === void 0 ? formatMonth : _ref$formatMonth, _ref$formatMonthYear = _ref.formatMonthYear, formatMonthYear2 = _ref$formatMonthYear === void 0 ? formatMonthYear : _ref$formatMonthYear, otherProps = _objectWithoutProperties5(_ref, _excluded5);
+  var date = otherProps.date, locale = otherProps.locale;
+  return /* @__PURE__ */ import_react58.default.createElement(Tile, _extends12({}, otherProps, {
+    classes: [].concat(classes, className4),
+    formatAbbr: formatMonthYear2,
+    maxDateTransform: getMonthEnd,
+    minDateTransform: getMonthStart,
+    view: "year"
+  }), formatMonth2(locale, date));
+}
+Month.propTypes = _objectSpread8(_objectSpread8({}, tileProps), {}, {
+  formatMonth: import_prop_types8.default.func,
+  formatMonthYear: import_prop_types8.default.func
+});
+
+// node_modules/react-calendar/dist/esm/YearView/Months.js
+function ownKeys9(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread9(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys9(Object(source), true).forEach(function(key) {
+      _defineProperty10(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys9(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty10(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends13() {
+  _extends13 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends13.apply(this, arguments);
+}
+function Months(props) {
+  var activeStartDate = props.activeStartDate;
+  var start = 0;
+  var end = 11;
+  var year = getYear(activeStartDate);
+  return /* @__PURE__ */ import_react59.default.createElement(TileGroup, _extends13({}, props, {
+    className: "react-calendar__year-view__months",
+    dateTransform: function dateTransform(monthIndex) {
+      var date = new Date();
+      date.setFullYear(year, monthIndex, 1);
+      date.setHours(0, 0, 0, 0);
+      return date;
+    },
+    dateType: "month",
+    end,
+    start,
+    tile: Month
+  }));
+}
+Months.propTypes = _objectSpread9(_objectSpread9({}, tileGroupProps), {}, {
+  locale: import_prop_types9.default.string
+});
+
+// node_modules/react-calendar/dist/esm/YearView.js
+function YearView(props) {
+  function renderMonths() {
+    return /* @__PURE__ */ import_react60.default.createElement(Months, props);
+  }
+  return /* @__PURE__ */ import_react60.default.createElement("div", {
+    className: "react-calendar__year-view"
+  }, renderMonths());
+}
+
+// node_modules/react-calendar/dist/esm/MonthView.js
+var import_react66 = __toModule(require_react());
+var import_prop_types15 = __toModule(require_prop_types());
+
+// node_modules/react-calendar/dist/esm/MonthView/Days.js
+var import_react62 = __toModule(require_react());
+var import_prop_types11 = __toModule(require_prop_types());
+
+// node_modules/react-calendar/dist/esm/MonthView/Day.js
+var import_react61 = __toModule(require_react());
+var import_prop_types10 = __toModule(require_prop_types());
+var _excluded6 = ["formatDay", "formatLongDate", "calendarType", "classes", "currentMonthIndex"];
+function ownKeys10(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread10(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys10(Object(source), true).forEach(function(key) {
+      _defineProperty11(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys10(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty11(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends14() {
+  _extends14 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends14.apply(this, arguments);
+}
+function _objectWithoutProperties6(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose6(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose6(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+var className5 = "react-calendar__month-view__days__day";
+function Day(_ref) {
+  var _ref$formatDay = _ref.formatDay, formatDay2 = _ref$formatDay === void 0 ? formatDay : _ref$formatDay, _ref$formatLongDate = _ref.formatLongDate, formatLongDate2 = _ref$formatLongDate === void 0 ? formatLongDate : _ref$formatLongDate, calendarType = _ref.calendarType, classes = _ref.classes, currentMonthIndex = _ref.currentMonthIndex, otherProps = _objectWithoutProperties6(_ref, _excluded6);
+  var date = otherProps.date, locale = otherProps.locale;
+  return /* @__PURE__ */ import_react61.default.createElement(Tile, _extends14({}, otherProps, {
+    classes: [].concat(classes, className5, isWeekend(date, calendarType) ? "".concat(className5, "--weekend") : null, date.getMonth() !== currentMonthIndex ? "".concat(className5, "--neighboringMonth") : null),
+    formatAbbr: formatLongDate2,
+    maxDateTransform: getDayEnd,
+    minDateTransform: getDayStart,
+    view: "month"
+  }), formatDay2(locale, date));
+}
+Day.propTypes = _objectSpread10(_objectSpread10({}, tileProps), {}, {
+  currentMonthIndex: import_prop_types10.default.number.isRequired,
+  formatDay: import_prop_types10.default.func,
+  formatLongDate: import_prop_types10.default.func
+});
+
+// node_modules/react-calendar/dist/esm/MonthView/Days.js
+var _excluded7 = ["showFixedNumberOfWeeks", "showNeighboringMonth"];
+function ownKeys11(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread11(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys11(Object(source), true).forEach(function(key) {
+      _defineProperty12(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys11(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty12(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _extends15() {
+  _extends15 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends15.apply(this, arguments);
+}
+function _objectWithoutProperties7(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose7(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose7(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+function Days(props) {
+  var activeStartDate = props.activeStartDate, calendarType = props.calendarType;
+  var showFixedNumberOfWeeks = props.showFixedNumberOfWeeks, showNeighboringMonth = props.showNeighboringMonth, otherProps = _objectWithoutProperties7(props, _excluded7);
+  var year = getYear(activeStartDate);
+  var monthIndex = getMonth(activeStartDate);
+  var hasFixedNumberOfWeeks = showFixedNumberOfWeeks || showNeighboringMonth;
+  var dayOfWeek = getDayOfWeek(activeStartDate, calendarType);
+  var offset = hasFixedNumberOfWeeks ? 0 : dayOfWeek;
+  var start = (hasFixedNumberOfWeeks ? -dayOfWeek : 0) + 1;
+  var end = function() {
+    if (showFixedNumberOfWeeks) {
+      return start + 6 * 7 - 1;
+    }
+    var daysInMonth = getDaysInMonth(activeStartDate);
+    if (showNeighboringMonth) {
+      var activeEndDate = new Date();
+      activeEndDate.setFullYear(year, monthIndex, daysInMonth);
+      activeEndDate.setHours(0, 0, 0, 0);
+      var daysUntilEndOfTheWeek = 7 - getDayOfWeek(activeEndDate, calendarType) - 1;
+      return daysInMonth + daysUntilEndOfTheWeek;
+    }
+    return daysInMonth;
+  }();
+  return /* @__PURE__ */ import_react62.default.createElement(TileGroup, _extends15({}, otherProps, {
+    className: "react-calendar__month-view__days",
+    count: 7,
+    currentMonthIndex: monthIndex,
+    dateTransform: function dateTransform(day) {
+      var date = new Date();
+      date.setFullYear(year, monthIndex, day);
+      date.setHours(0, 0, 0, 0);
+      return date;
+    },
+    dateType: "day",
+    end,
+    offset,
+    start,
+    tile: Day
+  }));
+}
+Days.propTypes = _objectSpread11({
+  calendarType: isCalendarType.isRequired,
+  showFixedNumberOfWeeks: import_prop_types11.default.bool,
+  showNeighboringMonth: import_prop_types11.default.bool
+}, tileGroupProps);
+
+// node_modules/react-calendar/dist/esm/MonthView/Weekdays.js
+var import_react63 = __toModule(require_react());
+var import_prop_types12 = __toModule(require_prop_types());
+var className6 = "react-calendar__month-view__weekdays";
+function Weekdays(props) {
+  var calendarType = props.calendarType, _props$formatShortWee = props.formatShortWeekday, formatShortWeekday2 = _props$formatShortWee === void 0 ? formatShortWeekday : _props$formatShortWee, locale = props.locale, onMouseLeave = props.onMouseLeave;
+  var anyDate = new Date();
+  var beginOfMonth = getMonthStart(anyDate);
+  var year = getYear(beginOfMonth);
+  var monthIndex = getMonth(beginOfMonth);
+  var weekdays = [];
+  for (var weekday = 1; weekday <= 7; weekday += 1) {
+    var weekdayDate = new Date(year, monthIndex, weekday - getDayOfWeek(beginOfMonth, calendarType));
+    var abbr = formatWeekday(locale, weekdayDate);
+    weekdays.push(/* @__PURE__ */ import_react63.default.createElement("div", {
+      key: weekday,
+      className: "".concat(className6, "__weekday")
+    }, /* @__PURE__ */ import_react63.default.createElement("abbr", {
+      "aria-label": abbr,
+      title: abbr
+    }, formatShortWeekday2(locale, weekdayDate).replace(".", ""))));
+  }
+  return /* @__PURE__ */ import_react63.default.createElement(Flex, {
+    className: className6,
+    count: 7,
+    onFocus: onMouseLeave,
+    onMouseOver: onMouseLeave
+  }, weekdays);
+}
+Weekdays.propTypes = {
+  calendarType: isCalendarType.isRequired,
+  formatShortWeekday: import_prop_types12.default.func,
+  locale: import_prop_types12.default.string,
+  onMouseLeave: import_prop_types12.default.func
+};
+
+// node_modules/react-calendar/dist/esm/MonthView/WeekNumbers.js
+var import_react65 = __toModule(require_react());
+var import_prop_types14 = __toModule(require_prop_types());
+
+// node_modules/react-calendar/dist/esm/MonthView/WeekNumber.js
+var import_react64 = __toModule(require_react());
+var import_prop_types13 = __toModule(require_prop_types());
+var _excluded8 = ["date", "onClickWeekNumber", "weekNumber"];
+function _extends16() {
+  _extends16 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends16.apply(this, arguments);
+}
+function ownKeys12(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread12(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys12(Object(source), true).forEach(function(key) {
+      _defineProperty13(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys12(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty13(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _objectWithoutProperties8(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose8(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose8(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+var className7 = "react-calendar__tile";
+function WeekNumber(_ref) {
+  var date = _ref.date, onClickWeekNumber = _ref.onClickWeekNumber, weekNumber = _ref.weekNumber, otherProps = _objectWithoutProperties8(_ref, _excluded8);
+  var props = _objectSpread12({
+    className: className7
+  }, otherProps);
+  var children = /* @__PURE__ */ import_react64.default.createElement("span", null, weekNumber);
+  return onClickWeekNumber ? /* @__PURE__ */ import_react64.default.createElement("button", _extends16({}, props, {
+    onClick: function onClick(event) {
+      return onClickWeekNumber(weekNumber, date, event);
+    },
+    type: "button"
+  }), children) : /* @__PURE__ */ import_react64.default.createElement("div", props, children);
+}
+WeekNumber.propTypes = {
+  date: import_prop_types13.default.instanceOf(Date).isRequired,
+  onClickWeekNumber: import_prop_types13.default.func,
+  weekNumber: import_prop_types13.default.node.isRequired
+};
+
+// node_modules/react-calendar/dist/esm/MonthView/WeekNumbers.js
+function WeekNumbers(props) {
+  var activeStartDate = props.activeStartDate, calendarType = props.calendarType, onClickWeekNumber = props.onClickWeekNumber, onMouseLeave = props.onMouseLeave, showFixedNumberOfWeeks = props.showFixedNumberOfWeeks;
+  var numberOfWeeks = function() {
+    if (showFixedNumberOfWeeks) {
+      return 6;
+    }
+    var numberOfDays = getDaysInMonth(activeStartDate);
+    var startWeekday = getDayOfWeek(activeStartDate, calendarType);
+    var days = numberOfDays - (7 - startWeekday);
+    return 1 + Math.ceil(days / 7);
+  }();
+  var dates = function() {
+    var year = getYear(activeStartDate);
+    var monthIndex = getMonth(activeStartDate);
+    var day = getDate(activeStartDate);
+    var result = [];
+    for (var index = 0; index < numberOfWeeks; index += 1) {
+      result.push(getBeginOfWeek(new Date(year, monthIndex, day + index * 7), calendarType));
+    }
+    return result;
+  }();
+  var weekNumbers = dates.map(function(date) {
+    return getWeekNumber(date, calendarType);
+  });
+  return /* @__PURE__ */ import_react65.default.createElement(Flex, {
+    className: "react-calendar__month-view__weekNumbers",
+    count: numberOfWeeks,
+    direction: "column",
+    onFocus: onMouseLeave,
+    onMouseOver: onMouseLeave,
+    style: {
+      flexBasis: "calc(100% * (1 / 8)",
+      flexShrink: 0
+    }
+  }, weekNumbers.map(function(weekNumber, weekIndex) {
+    return /* @__PURE__ */ import_react65.default.createElement(WeekNumber, {
+      key: weekNumber,
+      date: dates[weekIndex],
+      onClickWeekNumber,
+      weekNumber
+    });
+  }));
+}
+WeekNumbers.propTypes = {
+  activeStartDate: import_prop_types14.default.instanceOf(Date).isRequired,
+  calendarType: isCalendarType.isRequired,
+  onClickWeekNumber: import_prop_types14.default.func,
+  onMouseLeave: import_prop_types14.default.func,
+  showFixedNumberOfWeeks: import_prop_types14.default.bool
+};
+
+// node_modules/react-calendar/dist/esm/MonthView.js
+var _excluded9 = ["calendarType", "formatShortWeekday", "onClickWeekNumber", "showWeekNumbers"];
+function _extends17() {
+  _extends17 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends17.apply(this, arguments);
+}
+function _objectWithoutProperties9(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose9(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose9(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+function getCalendarTypeFromLocale(locale) {
+  return Object.keys(CALENDAR_TYPE_LOCALES).find(function(calendarType) {
+    return CALENDAR_TYPE_LOCALES[calendarType].includes(locale);
+  }) || CALENDAR_TYPES.ISO_8601;
+}
+function MonthView(props) {
+  var activeStartDate = props.activeStartDate, locale = props.locale, onMouseLeave = props.onMouseLeave, showFixedNumberOfWeeks = props.showFixedNumberOfWeeks;
+  var _props$calendarType = props.calendarType, calendarType = _props$calendarType === void 0 ? getCalendarTypeFromLocale(locale) : _props$calendarType, formatShortWeekday2 = props.formatShortWeekday, onClickWeekNumber = props.onClickWeekNumber, showWeekNumbers = props.showWeekNumbers, childProps = _objectWithoutProperties9(props, _excluded9);
+  function renderWeekdays() {
+    return /* @__PURE__ */ import_react66.default.createElement(Weekdays, {
+      calendarType,
+      formatShortWeekday: formatShortWeekday2,
+      locale,
+      onMouseLeave
+    });
+  }
+  function renderWeekNumbers() {
+    if (!showWeekNumbers) {
+      return null;
+    }
+    return /* @__PURE__ */ import_react66.default.createElement(WeekNumbers, {
+      activeStartDate,
+      calendarType,
+      onClickWeekNumber,
+      onMouseLeave,
+      showFixedNumberOfWeeks
+    });
+  }
+  function renderDays() {
+    return /* @__PURE__ */ import_react66.default.createElement(Days, _extends17({
+      calendarType
+    }, childProps));
+  }
+  var className8 = "react-calendar__month-view";
+  return /* @__PURE__ */ import_react66.default.createElement("div", {
+    className: mergeClassNames(className8, showWeekNumbers ? "".concat(className8, "--weekNumbers") : "")
+  }, /* @__PURE__ */ import_react66.default.createElement("div", {
+    style: {
+      display: "flex",
+      alignItems: "flex-end"
+    }
+  }, renderWeekNumbers(), /* @__PURE__ */ import_react66.default.createElement("div", {
+    style: {
+      flexGrow: 1,
+      width: "100%"
+    }
+  }, renderWeekdays(), renderDays())));
+}
+MonthView.propTypes = {
+  activeStartDate: import_prop_types15.default.instanceOf(Date).isRequired,
+  calendarType: isCalendarType,
+  formatShortWeekday: import_prop_types15.default.func,
+  locale: import_prop_types15.default.string,
+  onClickWeekNumber: import_prop_types15.default.func,
+  onMouseLeave: import_prop_types15.default.func,
+  showFixedNumberOfWeeks: import_prop_types15.default.bool,
+  showWeekNumbers: import_prop_types15.default.bool
+};
+
+// node_modules/react-calendar/dist/esm/Calendar.js
+var _excluded10 = ["activeStartDate", "defaultActiveStartDate", "defaultValue", "defaultView", "maxDetail", "minDetail", "value", "view"];
+function _extends18() {
+  _extends18 = Object.assign || function(target) {
+    for (var i3 = 1; i3 < arguments.length; i3++) {
+      var source = arguments[i3];
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+    return target;
+  };
+  return _extends18.apply(this, arguments);
+}
+function _typeof7(obj) {
+  "@babel/helpers - typeof";
+  return _typeof7 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(obj2) {
+    return typeof obj2;
+  } : function(obj2) {
+    return obj2 && typeof Symbol == "function" && obj2.constructor === Symbol && obj2 !== Symbol.prototype ? "symbol" : typeof obj2;
+  }, _typeof7(obj);
+}
+function _classCallCheck3(instance, Constructor) {
+  if (!(instance instanceof Constructor)) {
+    throw new TypeError("Cannot call a class as a function");
+  }
+}
+function _defineProperties4(target, props) {
+  for (var i3 = 0; i3 < props.length; i3++) {
+    var descriptor = props[i3];
+    descriptor.enumerable = descriptor.enumerable || false;
+    descriptor.configurable = true;
+    if ("value" in descriptor)
+      descriptor.writable = true;
+    Object.defineProperty(target, descriptor.key, descriptor);
+  }
+}
+function _createClass4(Constructor, protoProps, staticProps) {
+  if (protoProps)
+    _defineProperties4(Constructor.prototype, protoProps);
+  if (staticProps)
+    _defineProperties4(Constructor, staticProps);
+  Object.defineProperty(Constructor, "prototype", { writable: false });
+  return Constructor;
+}
+function _inherits3(subClass, superClass) {
+  if (typeof superClass !== "function" && superClass !== null) {
+    throw new TypeError("Super expression must either be null or a function");
+  }
+  subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, writable: true, configurable: true } });
+  Object.defineProperty(subClass, "prototype", { writable: false });
+  if (superClass)
+    _setPrototypeOf3(subClass, superClass);
+}
+function _setPrototypeOf3(o2, p2) {
+  _setPrototypeOf3 = Object.setPrototypeOf || function _setPrototypeOf4(o3, p3) {
+    o3.__proto__ = p3;
+    return o3;
+  };
+  return _setPrototypeOf3(o2, p2);
+}
+function _createSuper3(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct3();
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf3(Derived), result;
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf3(this).constructor;
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+    return _possibleConstructorReturn3(this, result);
+  };
+}
+function _possibleConstructorReturn3(self2, call) {
+  if (call && (_typeof7(call) === "object" || typeof call === "function")) {
+    return call;
+  } else if (call !== void 0) {
+    throw new TypeError("Derived constructors may only return object or undefined");
+  }
+  return _assertThisInitialized3(self2);
+}
+function _assertThisInitialized3(self2) {
+  if (self2 === void 0) {
+    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+  }
+  return self2;
+}
+function _isNativeReflectConstruct3() {
+  if (typeof Reflect === "undefined" || !Reflect.construct)
+    return false;
+  if (Reflect.construct.sham)
+    return false;
+  if (typeof Proxy === "function")
+    return true;
+  try {
+    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function() {
+    }));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+function _getPrototypeOf3(o2) {
+  _getPrototypeOf3 = Object.setPrototypeOf ? Object.getPrototypeOf : function _getPrototypeOf4(o3) {
+    return o3.__proto__ || Object.getPrototypeOf(o3);
+  };
+  return _getPrototypeOf3(o2);
+}
+function ownKeys13(object, enumerableOnly) {
+  var keys = Object.keys(object);
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    enumerableOnly && (symbols = symbols.filter(function(sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    })), keys.push.apply(keys, symbols);
+  }
+  return keys;
+}
+function _objectSpread13(target) {
+  for (var i3 = 1; i3 < arguments.length; i3++) {
+    var source = arguments[i3] != null ? arguments[i3] : {};
+    i3 % 2 ? ownKeys13(Object(source), true).forEach(function(key) {
+      _defineProperty14(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys13(Object(source)).forEach(function(key) {
+      Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+    });
+  }
+  return target;
+}
+function _defineProperty14(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, { value, enumerable: true, configurable: true, writable: true });
+  } else {
+    obj[key] = value;
+  }
+  return obj;
+}
+function _objectWithoutProperties10(source, excluded) {
+  if (source == null)
+    return {};
+  var target = _objectWithoutPropertiesLoose10(source, excluded);
+  var key, i3;
+  if (Object.getOwnPropertySymbols) {
+    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+    for (i3 = 0; i3 < sourceSymbolKeys.length; i3++) {
+      key = sourceSymbolKeys[i3];
+      if (excluded.indexOf(key) >= 0)
+        continue;
+      if (!Object.prototype.propertyIsEnumerable.call(source, key))
+        continue;
+      target[key] = source[key];
+    }
+  }
+  return target;
+}
+function _objectWithoutPropertiesLoose10(source, excluded) {
+  if (source == null)
+    return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i3;
+  for (i3 = 0; i3 < sourceKeys.length; i3++) {
+    key = sourceKeys[i3];
+    if (excluded.indexOf(key) >= 0)
+      continue;
+    target[key] = source[key];
+  }
+  return target;
+}
+function _toConsumableArray3(arr) {
+  return _arrayWithoutHoles3(arr) || _iterableToArray3(arr) || _unsupportedIterableToArray3(arr) || _nonIterableSpread3();
+}
+function _nonIterableSpread3() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+function _unsupportedIterableToArray3(o2, minLen) {
+  if (!o2)
+    return;
+  if (typeof o2 === "string")
+    return _arrayLikeToArray3(o2, minLen);
+  var n2 = Object.prototype.toString.call(o2).slice(8, -1);
+  if (n2 === "Object" && o2.constructor)
+    n2 = o2.constructor.name;
+  if (n2 === "Map" || n2 === "Set")
+    return Array.from(o2);
+  if (n2 === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n2))
+    return _arrayLikeToArray3(o2, minLen);
+}
+function _iterableToArray3(iter) {
+  if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null)
+    return Array.from(iter);
+}
+function _arrayWithoutHoles3(arr) {
+  if (Array.isArray(arr))
+    return _arrayLikeToArray3(arr);
+}
+function _arrayLikeToArray3(arr, len) {
+  if (len == null || len > arr.length)
+    len = arr.length;
+  for (var i3 = 0, arr2 = new Array(len); i3 < len; i3++) {
+    arr2[i3] = arr[i3];
+  }
+  return arr2;
+}
+var defaultMinDate = new Date();
+defaultMinDate.setFullYear(1, 0, 1);
+defaultMinDate.setHours(0, 0, 0, 0);
+var defaultMaxDate = new Date(864e13);
+var baseClassName = "react-calendar";
+var allViews2 = ["century", "decade", "year", "month"];
+var allValueTypes = [].concat(_toConsumableArray3(allViews2.slice(1)), ["day"]);
+function toDate(value) {
+  if (value instanceof Date) {
+    return value;
+  }
+  return new Date(value);
+}
+function getLimitedViews(minDetail, maxDetail) {
+  return allViews2.slice(allViews2.indexOf(minDetail), allViews2.indexOf(maxDetail) + 1);
+}
+function isViewAllowed(view, minDetail, maxDetail) {
+  var views = getLimitedViews(minDetail, maxDetail);
+  return views.indexOf(view) !== -1;
+}
+function getView(view, minDetail, maxDetail) {
+  if (isViewAllowed(view, minDetail, maxDetail)) {
+    return view;
+  }
+  return maxDetail;
+}
+function getValueType(maxDetail) {
+  return allValueTypes[allViews2.indexOf(maxDetail)];
+}
+function getValue2(value, index) {
+  if (!value) {
+    return null;
+  }
+  var rawValue = Array.isArray(value) && value.length === 2 ? value[index] : value;
+  if (!rawValue) {
+    return null;
+  }
+  var valueDate = toDate(rawValue);
+  if (isNaN(valueDate.getTime())) {
+    throw new Error("Invalid date: ".concat(value));
+  }
+  return valueDate;
+}
+function getDetailValue(_ref, index) {
+  var value = _ref.value, minDate = _ref.minDate, maxDate = _ref.maxDate, maxDetail = _ref.maxDetail;
+  var valuePiece = getValue2(value, index);
+  if (!valuePiece) {
+    return null;
+  }
+  var valueType = getValueType(maxDetail);
+  var detailValueFrom = [getBegin, getEnd][index](valueType, valuePiece);
+  return between(detailValueFrom, minDate, maxDate);
+}
+var getDetailValueFrom = function getDetailValueFrom2(args) {
+  return getDetailValue(args, 0);
+};
+var getDetailValueTo = function getDetailValueTo2(args) {
+  return getDetailValue(args, 1);
+};
+var getDetailValueArray = function getDetailValueArray2(args) {
+  var value = args.value;
+  if (Array.isArray(value)) {
+    return value;
+  }
+  return [getDetailValueFrom, getDetailValueTo].map(function(fn) {
+    return fn(args);
+  });
+};
+function getActiveStartDate(props) {
+  var maxDate = props.maxDate, maxDetail = props.maxDetail, minDate = props.minDate, minDetail = props.minDetail, value = props.value, view = props.view;
+  var rangeType = getView(view, minDetail, maxDetail);
+  var valueFrom = getDetailValueFrom({
+    value,
+    minDate,
+    maxDate,
+    maxDetail
+  }) || new Date();
+  return getBegin(rangeType, valueFrom);
+}
+function getInitialActiveStartDate(props) {
+  var activeStartDate = props.activeStartDate, defaultActiveStartDate = props.defaultActiveStartDate, defaultValue = props.defaultValue, defaultView = props.defaultView, maxDetail = props.maxDetail, minDetail = props.minDetail, value = props.value, view = props.view, otherProps = _objectWithoutProperties10(props, _excluded10);
+  var rangeType = getView(view, minDetail, maxDetail);
+  var valueFrom = activeStartDate || defaultActiveStartDate;
+  if (valueFrom) {
+    return getBegin(rangeType, valueFrom);
+  }
+  return getActiveStartDate(_objectSpread13({
+    maxDetail,
+    minDetail,
+    value: value || defaultValue,
+    view: view || defaultView
+  }, otherProps));
+}
+var getIsSingleValue = function getIsSingleValue2(value) {
+  return value && [].concat(value).length === 1;
+};
+var Calendar2 = /* @__PURE__ */ function(_Component) {
+  _inherits3(Calendar3, _Component);
+  var _super = _createSuper3(Calendar3);
+  function Calendar3() {
+    var _this;
+    _classCallCheck3(this, Calendar3);
+    for (var _len = arguments.length, _args = new Array(_len), _key = 0; _key < _len; _key++) {
+      _args[_key] = arguments[_key];
+    }
+    _this = _super.call.apply(_super, [this].concat(_args));
+    _defineProperty14(_assertThisInitialized3(_this), "state", {
+      activeStartDate: _this.props.defaultActiveStartDate,
+      value: _this.props.defaultValue,
+      view: _this.props.defaultView
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "setStateAndCallCallbacks", function(nextState, event, callback) {
+      var _assertThisInitialize = _assertThisInitialized3(_this), previousActiveStartDate = _assertThisInitialize.activeStartDate, previousView = _assertThisInitialize.view;
+      var _this$props = _this.props, allowPartialRange = _this$props.allowPartialRange, onActiveStartDateChange = _this$props.onActiveStartDateChange, onChange = _this$props.onChange, onViewChange = _this$props.onViewChange, selectRange = _this$props.selectRange;
+      var prevArgs = {
+        activeStartDate: previousActiveStartDate,
+        view: previousView
+      };
+      _this.setState(nextState, function() {
+        var args = {
+          action: nextState.action,
+          activeStartDate: nextState.activeStartDate || _this.activeStartDate,
+          value: nextState.value || _this.value,
+          view: nextState.view || _this.view
+        };
+        function shouldUpdate(key) {
+          return key in nextState && (_typeof7(nextState[key]) !== _typeof7(prevArgs[key]) || (nextState[key] instanceof Date ? nextState[key].getTime() !== prevArgs[key].getTime() : nextState[key] !== prevArgs[key]));
+        }
+        if (shouldUpdate("activeStartDate")) {
+          if (onActiveStartDateChange)
+            onActiveStartDateChange(args);
+        }
+        if (shouldUpdate("view")) {
+          if (onViewChange)
+            onViewChange(args);
+        }
+        if (shouldUpdate("value")) {
+          if (onChange) {
+            if (selectRange) {
+              var isSingleValue = getIsSingleValue(nextState.value);
+              if (!isSingleValue) {
+                onChange(nextState.value, event);
+              } else if (allowPartialRange) {
+                onChange([nextState.value], event);
+              }
+            } else {
+              onChange(nextState.value, event);
+            }
+          }
+        }
+        if (callback)
+          callback(args);
+      });
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "setActiveStartDate", function(nextActiveStartDate, action) {
+      _this.setStateAndCallCallbacks({
+        action,
+        activeStartDate: nextActiveStartDate
+      });
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "drillDown", function(nextActiveStartDate, event) {
+      if (!_this.drillDownAvailable) {
+        return;
+      }
+      _this.onClickTile(nextActiveStartDate, event);
+      var _assertThisInitialize2 = _assertThisInitialized3(_this), view = _assertThisInitialize2.view, views = _assertThisInitialize2.views;
+      var onDrillDown = _this.props.onDrillDown;
+      var nextView = views[views.indexOf(view) + 1];
+      _this.setStateAndCallCallbacks({
+        action: "drillDown",
+        activeStartDate: nextActiveStartDate,
+        view: nextView
+      }, void 0, onDrillDown);
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "drillUp", function() {
+      if (!_this.drillUpAvailable) {
+        return;
+      }
+      var _assertThisInitialize3 = _assertThisInitialized3(_this), activeStartDate = _assertThisInitialize3.activeStartDate, view = _assertThisInitialize3.view, views = _assertThisInitialize3.views;
+      var onDrillUp = _this.props.onDrillUp;
+      var nextView = views[views.indexOf(view) - 1];
+      var nextActiveStartDate = getBegin(nextView, activeStartDate);
+      _this.setStateAndCallCallbacks({
+        action: "drillUp",
+        activeStartDate: nextActiveStartDate,
+        view: nextView
+      }, void 0, onDrillUp);
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "onChange", function(value, event) {
+      var selectRange = _this.props.selectRange;
+      _this.onClickTile(value, event);
+      var nextValue;
+      if (selectRange) {
+        var _assertThisInitialize4 = _assertThisInitialized3(_this), previousValue = _assertThisInitialize4.value, valueType = _assertThisInitialize4.valueType;
+        if (!getIsSingleValue(previousValue)) {
+          nextValue = getBegin(valueType, value);
+        } else {
+          nextValue = getValueRange(valueType, previousValue, value);
+        }
+      } else {
+        nextValue = _this.getProcessedValue(value);
+      }
+      var nextActiveStartDate = getActiveStartDate(_objectSpread13(_objectSpread13({}, _this.props), {}, {
+        value: nextValue
+      }));
+      event.persist();
+      _this.setStateAndCallCallbacks({
+        action: "onChange",
+        activeStartDate: nextActiveStartDate,
+        value: nextValue
+      }, event);
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "onClickTile", function(value, event) {
+      var _assertThisInitialize5 = _assertThisInitialized3(_this), view = _assertThisInitialize5.view;
+      var _this$props2 = _this.props, onClickDay = _this$props2.onClickDay, onClickDecade = _this$props2.onClickDecade, onClickMonth = _this$props2.onClickMonth, onClickYear = _this$props2.onClickYear;
+      var callback = function() {
+        switch (view) {
+          case "century":
+            return onClickDecade;
+          case "decade":
+            return onClickYear;
+          case "year":
+            return onClickMonth;
+          case "month":
+            return onClickDay;
+          default:
+            throw new Error("Invalid view: ".concat(view, "."));
+        }
+      }();
+      if (callback)
+        callback(value, event);
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "onMouseOver", function(value) {
+      _this.setState(function(prevState) {
+        if (prevState.hover && prevState.hover.getTime() === value.getTime()) {
+          return null;
+        }
+        return {
+          hover: value
+        };
+      });
+    });
+    _defineProperty14(_assertThisInitialized3(_this), "onMouseLeave", function() {
+      _this.setState({
+        hover: null
+      });
+    });
+    return _this;
+  }
+  _createClass4(Calendar3, [{
+    key: "activeStartDate",
+    get: function get() {
+      var activeStartDateProps = this.props.activeStartDate;
+      var activeStartDateState = this.state.activeStartDate;
+      return activeStartDateProps || activeStartDateState || getInitialActiveStartDate(this.props);
+    }
+  }, {
+    key: "value",
+    get: function get() {
+      var _this$props3 = this.props, selectRange = _this$props3.selectRange, valueProps = _this$props3.value;
+      var valueState = this.state.value;
+      if (selectRange && getIsSingleValue(valueState)) {
+        return valueState;
+      }
+      return valueProps !== void 0 ? valueProps : valueState;
+    }
+  }, {
+    key: "valueType",
+    get: function get() {
+      var maxDetail = this.props.maxDetail;
+      return getValueType(maxDetail);
+    }
+  }, {
+    key: "view",
+    get: function get() {
+      var _this$props4 = this.props, minDetail = _this$props4.minDetail, maxDetail = _this$props4.maxDetail, viewProps = _this$props4.view;
+      var viewState = this.state.view;
+      return getView(viewProps || viewState, minDetail, maxDetail);
+    }
+  }, {
+    key: "views",
+    get: function get() {
+      var _this$props5 = this.props, minDetail = _this$props5.minDetail, maxDetail = _this$props5.maxDetail;
+      return getLimitedViews(minDetail, maxDetail);
+    }
+  }, {
+    key: "hover",
+    get: function get() {
+      var selectRange = this.props.selectRange;
+      var hover = this.state.hover;
+      return selectRange ? hover : null;
+    }
+  }, {
+    key: "drillDownAvailable",
+    get: function get() {
+      var view = this.view, views = this.views;
+      return views.indexOf(view) < views.length - 1;
+    }
+  }, {
+    key: "drillUpAvailable",
+    get: function get() {
+      var view = this.view, views = this.views;
+      return views.indexOf(view) > 0;
+    }
+  }, {
+    key: "getProcessedValue",
+    value: function getProcessedValue(value) {
+      var _this$props6 = this.props, minDate = _this$props6.minDate, maxDate = _this$props6.maxDate, maxDetail = _this$props6.maxDetail, returnValue = _this$props6.returnValue;
+      var processFunction = function() {
+        switch (returnValue) {
+          case "start":
+            return getDetailValueFrom;
+          case "end":
+            return getDetailValueTo;
+          case "range":
+            return getDetailValueArray;
+          default:
+            throw new Error("Invalid returnValue.");
+        }
+      }();
+      return processFunction({
+        value,
+        minDate,
+        maxDate,
+        maxDetail
+      });
+    }
+  }, {
+    key: "renderContent",
+    value: function renderContent(next) {
+      var currentActiveStartDate = this.activeStartDate, onMouseOver = this.onMouseOver, valueType = this.valueType, value = this.value, view = this.view;
+      var _this$props7 = this.props, calendarType = _this$props7.calendarType, locale = _this$props7.locale, maxDate = _this$props7.maxDate, minDate = _this$props7.minDate, selectRange = _this$props7.selectRange, tileClassName = _this$props7.tileClassName, tileContent = _this$props7.tileContent, tileDisabled = _this$props7.tileDisabled;
+      var hover = this.hover;
+      var activeStartDate = next ? getBeginNext(view, currentActiveStartDate) : getBegin(view, currentActiveStartDate);
+      var onClick = this.drillDownAvailable ? this.drillDown : this.onChange;
+      var commonProps = {
+        activeStartDate,
+        hover,
+        locale,
+        maxDate,
+        minDate,
+        onClick,
+        onMouseOver: selectRange ? onMouseOver : null,
+        tileClassName,
+        tileContent,
+        tileDisabled,
+        value,
+        valueType
+      };
+      switch (view) {
+        case "century": {
+          var formatYear2 = this.props.formatYear;
+          return /* @__PURE__ */ import_react67.default.createElement(CenturyView, _extends18({
+            formatYear: formatYear2
+          }, commonProps));
+        }
+        case "decade": {
+          var _formatYear = this.props.formatYear;
+          return /* @__PURE__ */ import_react67.default.createElement(DecadeView, _extends18({
+            formatYear: _formatYear
+          }, commonProps));
+        }
+        case "year": {
+          var _this$props8 = this.props, formatMonth2 = _this$props8.formatMonth, formatMonthYear2 = _this$props8.formatMonthYear;
+          return /* @__PURE__ */ import_react67.default.createElement(YearView, _extends18({
+            formatMonth: formatMonth2,
+            formatMonthYear: formatMonthYear2
+          }, commonProps));
+        }
+        case "month": {
+          var _this$props9 = this.props, formatDay2 = _this$props9.formatDay, formatLongDate2 = _this$props9.formatLongDate, formatShortWeekday2 = _this$props9.formatShortWeekday, onClickWeekNumber = _this$props9.onClickWeekNumber, showDoubleView = _this$props9.showDoubleView, showFixedNumberOfWeeks = _this$props9.showFixedNumberOfWeeks, showNeighboringMonth = _this$props9.showNeighboringMonth, showWeekNumbers = _this$props9.showWeekNumbers;
+          var onMouseLeave = this.onMouseLeave;
+          return /* @__PURE__ */ import_react67.default.createElement(MonthView, _extends18({
+            calendarType,
+            formatDay: formatDay2,
+            formatLongDate: formatLongDate2,
+            formatShortWeekday: formatShortWeekday2,
+            onClickWeekNumber,
+            onMouseLeave: selectRange ? onMouseLeave : null,
+            showFixedNumberOfWeeks: typeof showFixedNumberOfWeeks !== "undefined" ? showFixedNumberOfWeeks : showDoubleView,
+            showNeighboringMonth,
+            showWeekNumbers
+          }, commonProps));
+        }
+        default:
+          throw new Error("Invalid view: ".concat(view, "."));
+      }
+    }
+  }, {
+    key: "renderNavigation",
+    value: function renderNavigation() {
+      var showNavigation = this.props.showNavigation;
+      if (!showNavigation) {
+        return null;
+      }
+      var activeStartDate = this.activeStartDate, view = this.view, views = this.views;
+      var _this$props10 = this.props, formatMonthYear2 = _this$props10.formatMonthYear, formatYear2 = _this$props10.formatYear, locale = _this$props10.locale, maxDate = _this$props10.maxDate, minDate = _this$props10.minDate, navigationAriaLabel = _this$props10.navigationAriaLabel, navigationAriaLive = _this$props10.navigationAriaLive, navigationLabel = _this$props10.navigationLabel, next2AriaLabel = _this$props10.next2AriaLabel, next2Label = _this$props10.next2Label, nextAriaLabel = _this$props10.nextAriaLabel, nextLabel = _this$props10.nextLabel, prev2AriaLabel = _this$props10.prev2AriaLabel, prev2Label = _this$props10.prev2Label, prevAriaLabel = _this$props10.prevAriaLabel, prevLabel = _this$props10.prevLabel, showDoubleView = _this$props10.showDoubleView;
+      return /* @__PURE__ */ import_react67.default.createElement(Navigation, {
+        activeStartDate,
+        drillUp: this.drillUp,
+        formatMonthYear: formatMonthYear2,
+        formatYear: formatYear2,
+        locale,
+        maxDate,
+        minDate,
+        navigationAriaLabel,
+        navigationAriaLive,
+        navigationLabel,
+        next2AriaLabel,
+        next2Label,
+        nextAriaLabel,
+        nextLabel,
+        prev2AriaLabel,
+        prev2Label,
+        prevAriaLabel,
+        prevLabel,
+        setActiveStartDate: this.setActiveStartDate,
+        showDoubleView,
+        view,
+        views
+      });
+    }
+  }, {
+    key: "render",
+    value: function render() {
+      var _this$props11 = this.props, className8 = _this$props11.className, inputRef = _this$props11.inputRef, selectRange = _this$props11.selectRange, showDoubleView = _this$props11.showDoubleView;
+      var onMouseLeave = this.onMouseLeave, value = this.value;
+      var valueArray = [].concat(value);
+      return /* @__PURE__ */ import_react67.default.createElement("div", {
+        className: mergeClassNames(baseClassName, selectRange && valueArray.length === 1 && "".concat(baseClassName, "--selectRange"), showDoubleView && "".concat(baseClassName, "--doubleView"), className8),
+        ref: inputRef
+      }, this.renderNavigation(), /* @__PURE__ */ import_react67.default.createElement("div", {
+        className: "".concat(baseClassName, "__viewContainer"),
+        onBlur: selectRange ? onMouseLeave : null,
+        onMouseLeave: selectRange ? onMouseLeave : null
+      }, this.renderContent(), showDoubleView && this.renderContent(true)));
+    }
+  }]);
+  return Calendar3;
+}(import_react67.Component);
+Calendar2.defaultProps = {
+  maxDate: defaultMaxDate,
+  maxDetail: "month",
+  minDate: defaultMinDate,
+  minDetail: "century",
+  returnValue: "start",
+  showNavigation: true,
+  showNeighboringMonth: true
+};
+var isActiveStartDate = import_prop_types16.default.instanceOf(Date);
+var isLooseValue = import_prop_types16.default.oneOfType([import_prop_types16.default.string, isValue]);
+Calendar2.propTypes = {
+  activeStartDate: isActiveStartDate,
+  allowPartialRange: import_prop_types16.default.bool,
+  calendarType: isCalendarType,
+  className: isClassName,
+  defaultActiveStartDate: isActiveStartDate,
+  defaultValue: isLooseValue,
+  defaultView: isView,
+  formatDay: import_prop_types16.default.func,
+  formatLongDate: import_prop_types16.default.func,
+  formatMonth: import_prop_types16.default.func,
+  formatMonthYear: import_prop_types16.default.func,
+  formatShortWeekday: import_prop_types16.default.func,
+  formatYear: import_prop_types16.default.func,
+  inputRef: isRef,
+  locale: import_prop_types16.default.string,
+  maxDate: isMaxDate,
+  maxDetail: import_prop_types16.default.oneOf(allViews2),
+  minDate: isMinDate,
+  minDetail: import_prop_types16.default.oneOf(allViews2),
+  navigationAriaLabel: import_prop_types16.default.string,
+  navigationAriaLive: import_prop_types16.default.oneOf(["off", "polite", "assertive"]),
+  navigationLabel: import_prop_types16.default.func,
+  next2AriaLabel: import_prop_types16.default.string,
+  next2Label: import_prop_types16.default.node,
+  nextAriaLabel: import_prop_types16.default.string,
+  nextLabel: import_prop_types16.default.node,
+  onActiveStartDateChange: import_prop_types16.default.func,
+  onChange: import_prop_types16.default.func,
+  onClickDay: import_prop_types16.default.func,
+  onClickDecade: import_prop_types16.default.func,
+  onClickMonth: import_prop_types16.default.func,
+  onClickWeekNumber: import_prop_types16.default.func,
+  onClickYear: import_prop_types16.default.func,
+  onDrillDown: import_prop_types16.default.func,
+  onDrillUp: import_prop_types16.default.func,
+  onViewChange: import_prop_types16.default.func,
+  prev2AriaLabel: import_prop_types16.default.string,
+  prev2Label: import_prop_types16.default.node,
+  prevAriaLabel: import_prop_types16.default.string,
+  prevLabel: import_prop_types16.default.node,
+  returnValue: import_prop_types16.default.oneOf(["start", "end", "range"]),
+  selectRange: import_prop_types16.default.bool,
+  showDoubleView: import_prop_types16.default.bool,
+  showFixedNumberOfWeeks: import_prop_types16.default.bool,
+  showNavigation: import_prop_types16.default.bool,
+  showNeighboringMonth: import_prop_types16.default.bool,
+  showWeekNumbers: import_prop_types16.default.bool,
+  tileClassName: import_prop_types16.default.oneOfType([import_prop_types16.default.func, isClassName]),
+  tileContent: import_prop_types16.default.oneOfType([import_prop_types16.default.func, import_prop_types16.default.node]),
+  tileDisabled: import_prop_types16.default.func,
+  value: isLooseValue,
+  view: isView
+};
+
+// src/components/DatePicker/index.tsx
+function DatePickerUI(props) {
+  const {
+    calendarRef,
+    className: className8 = "",
+    maxDetail,
+    minDate,
+    minDetail,
+    name,
+    onChange,
+    range = false,
+    value,
+    visible
+  } = props;
+  return /* @__PURE__ */ import_react68.default.createElement("div", {
+    className: `relative transition-all duration-200 ${className8}`,
+    "data-tname": name,
+    ref: calendarRef
+  }, visible && /* @__PURE__ */ import_react68.default.createElement(Calendar2, {
+    maxDetail,
+    minDate,
+    minDetail,
+    onChange,
+    selectRange: range,
+    value
+  }));
+}
+function DatePicker(props) {
+  const [visible, setVisibility] = (0, import_react68.useState)(true);
+  const { calendarRef, className: className8, maxDetail, minDate, minDetail, name, onChange, range, value } = props;
+  return /* @__PURE__ */ import_react68.default.createElement(DatePickerUI, {
+    calendarRef,
+    className: className8,
+    maxDetail,
+    minDate,
+    minDetail,
+    name,
+    onChange: (0, import_react68.useCallback)((value2, event) => {
+      onChange == null ? void 0 : onChange(event, { name, value: value2 });
+      setVisibility(false);
+    }, [onChange]),
+    range,
+    value,
+    visible
+  });
+}
+
+// src/components/Dropdown/index.tsx
+var import_react70 = __toModule(require_react());
+var import_classnames25 = __toModule(require_classnames());
+var import_ts_pattern5 = __toModule(require_lib());
+
+// src/components/Svg/Chevron.tsx
+var import_react69 = __toModule(require_react());
+var import_classnames24 = __toModule(require_classnames());
+function Chevron({ className: className8, alt = "Chevron" }) {
+  return /* @__PURE__ */ import_react69.default.createElement("svg", {
+    className: (0, import_classnames24.default)(className8, "fill-current", "Svg", "Svg__chevron"),
+    width: "100%",
+    viewBox: "0 0 8 5",
+    xmlns: "http://www.w3.org/2000/svg"
+  }, /* @__PURE__ */ import_react69.default.createElement("title", null, alt), /* @__PURE__ */ import_react69.default.createElement("path", {
+    fillRule: "evenodd",
+    clipRule: "evenodd",
+    d: "M0.292893 0.292893C0.683417 -0.0976311 1.31658 -0.0976311 1.70711 0.292893L4 2.58579L6.29289 0.292893C6.68342 -0.0976311 7.31658 -0.0976311 7.70711 0.292893C8.09763 0.683417 8.09763 1.31658 7.70711 1.70711L4.70711 4.70711C4.31658 5.09763 3.68342 5.09763 3.29289 4.70711L0.292893 1.70711C-0.0976311 1.31658 -0.0976311 0.683417 0.292893 0.292893Z"
+  }));
+}
+
+// src/components/Dropdown/index.tsx
+function TooltipContent(props) {
+  const { hideTooltip, selectedIndex, selectedOptionRef, selectIndex, onChange, options, scrollRef } = props;
+  useWindowListener("keydown", (event) => {
+    const key = event == null ? void 0 : event.key;
+    (0, import_ts_pattern5.match)(key).with("ArrowUp", () => {
+      if (selectedIndex > 0)
+        selectIndex(selectedIndex - 1);
+    }).with("ArrowDown", () => {
+      if (selectedIndex < options.length - 1)
+        selectIndex(selectedIndex + 1);
+    }).with("Enter", () => {
+      var _a;
+      selectIndex(0);
+      onChange == null ? void 0 : onChange(event, { value: (_a = options[selectedIndex]) == null ? void 0 : _a.value });
+      hideTooltip == null ? void 0 : hideTooltip();
+    }).otherwise(() => true);
+  });
+  return /* @__PURE__ */ import_react70.default.createElement("div", {
+    className: "bg-white overflow-hidden rounded-lg shadow-md w-full dark:bg-bluegray-6 dropdown-menu"
+  }, /* @__PURE__ */ import_react70.default.createElement("div", {
+    className: "flex flex-col max-h-[150px] overflow-y-scroll w-full",
+    ref: scrollRef
+  }, /* @__PURE__ */ import_react70.default.createElement("div", {
+    className: "flex-1"
+  }, options.map((option, index) => /* @__PURE__ */ import_react70.default.createElement("div", {
+    className: (0, import_classnames25.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
+      "odd:bg-gray-100 dark:odd:bg-bluegray-5": selectedIndex !== index,
+      "bg-blue-500": selectedIndex === index,
+      "text-white": selectedIndex === index,
+      "text-gray-900 dark:text-white": selectedIndex !== index
+    }),
+    key: option.label,
+    onClick: (event) => {
+      event.stopPropagation();
+      onChange == null ? void 0 : onChange(event, { value: option.value });
+      hideTooltip == null ? void 0 : hideTooltip();
+    },
+    onFocus: () => selectIndex(index),
+    onMouseEnter: () => selectIndex(index),
+    ref: selectedIndex === index ? selectedOptionRef : void 0,
+    tabIndex: 0
+  }, /* @__PURE__ */ import_react70.default.createElement("div", {
+    className: "px-4 truncate flex-1 text-base"
+  }, option.label))))));
+}
+function DropdownUI(props) {
+  const {
+    className: className8 = "",
+    selectIndex,
+    selectedLabel,
+    tooltipGrow = "down-left",
+    tooltipPosition = "bottom-right"
+  } = props;
+  return /* @__PURE__ */ import_react70.default.createElement(Tooltip, {
+    className: `border border-gray-200 cursor-pointer flex h-8 items-center py-1.5 px-3 rounded-lg space-between text-sm w-full dark:bg-bluegray-6 dark:border-bluegray-5 focus:border-1 focus:border-blue-600 focus:outline-none focus:shadow-input hover:border-blue-400 dropdown ${className8}`,
+    content: ({ hideTooltip }) => /* @__PURE__ */ import_react70.default.createElement(TooltipContent, __spreadValues({
+      hideTooltip
+    }, props)),
+    grow: tooltipGrow,
+    onClose: () => {
+      selectIndex(0);
+    },
+    openOn: "click",
+    position: tooltipPosition,
+    yOffset: 5
+  }, /* @__PURE__ */ import_react70.default.createElement("div", {
+    className: "flex-1"
+  }, selectedLabel), /* @__PURE__ */ import_react70.default.createElement(Chevron, {
+    className: "w-2"
+  }));
+}
+function Dropdown(props) {
+  const [selectedIndex, selectIndex] = (0, import_react70.useState)(0);
+  const selectedOptionRef = (0, import_react70.useRef)(null);
+  const scrollContainerRef = (0, import_react70.useRef)(null);
+  (0, import_react70.useLayoutEffect)(() => {
+    if (selectedOptionRef.current && scrollContainerRef.current) {
+      const containerPos = scrollContainerRef.current.getBoundingClientRect();
+      const optionPos = selectedOptionRef.current.getBoundingClientRect();
+      const optionTopObstructed = optionPos.top < containerPos.top;
+      const optionBottomObstructed = containerPos.top + containerPos.height < optionPos.top + optionPos.height;
+      if (optionTopObstructed || optionBottomObstructed)
+        selectedOptionRef.current.scrollIntoView();
+    }
+  }, [selectedOptionRef == null ? void 0 : selectedOptionRef.current, scrollContainerRef == null ? void 0 : scrollContainerRef.current]);
+  const { className: className8, onChange, options, tooltipGrow, tooltipPosition, value } = props;
+  const selectedLabel = (0, import_react70.useMemo)(() => {
+    var _a;
+    return (_a = options.find((o2) => o2.value === value)) == null ? void 0 : _a.label;
+  }, [options, value]);
+  return /* @__PURE__ */ import_react70.default.createElement(DropdownUI, {
+    className: className8,
+    onChange,
+    options,
+    scrollRef: scrollContainerRef,
+    selectedIndex,
+    selectedLabel,
+    selectedOptionRef,
+    selectIndex,
+    tooltipGrow,
+    tooltipPosition,
+    value
+  });
+}
+
+// src/modules/RecordingForm/Scheduling/index.tsx
+function SchedulingUI(props) {
+  const {
+    calendarRef,
+    connectOffsetSeconds,
+    isCalendarVisible,
+    onChangeConnectOffsetSeconds,
+    onChangeScheduleDate,
+    onChangeScheduleMeridiem,
+    onChangeScheduleTime,
+    onChangeScheduleType,
+    scheduleDate,
+    scheduleMeridiem,
+    scheduleTime,
+    scheduleType,
+    showCalendar
+  } = props;
+  return /* @__PURE__ */ import_react71.default.createElement("div", {
+    className: "py-3 scheduling"
+  }, /* @__PURE__ */ import_react71.default.createElement("p", {
+    className: "font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase"
+  }, "Scheduling"), /* @__PURE__ */ import_react71.default.createElement(FormFieldSelect, {
+    className: "mt-2.5",
+    name: "scheduleType",
+    onChange: onChangeScheduleType,
+    options: SCHEDULE_TYPE_OPTIONS,
+    value: scheduleType
+  }), scheduleType === ScheduleType.Future && /* @__PURE__ */ import_react71.default.createElement(import_react71.default.Fragment, null, /* @__PURE__ */ import_react71.default.createElement(FormField, {
+    className: "mt-5 px-4 py-3"
+  }, /* @__PURE__ */ import_react71.default.createElement("p", {
+    className: "font-semibold text-base text-black form-field__label"
+  }, "Date & Time"), /* @__PURE__ */ import_react71.default.createElement("p", {
+    className: "font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description"
+  }, "Aiera will automatically connect at this time"), /* @__PURE__ */ import_react71.default.createElement("div", {
+    className: "flex items-center mt-3 space-between w-full"
+  }, /* @__PURE__ */ import_react71.default.createElement(Input, {
+    clearable: false,
+    name: "scheduleDate",
+    onFocus: showCalendar,
+    value: scheduleDate ? scheduleDate.toLocaleDateString() : ""
+  }), /* @__PURE__ */ import_react71.default.createElement(Input, {
+    className: "ml-2",
+    name: "scheduleTime",
+    onChange: onChangeScheduleTime,
+    placeholder: "10:00",
+    value: scheduleTime
+  }), /* @__PURE__ */ import_react71.default.createElement(Dropdown, {
+    className: "ml-2",
+    onChange: onChangeScheduleMeridiem,
+    options: SCHEDULE_MERIDIEM_OPTIONS,
+    value: scheduleMeridiem
+  })), isCalendarVisible && /* @__PURE__ */ import_react71.default.createElement(DatePicker, {
+    calendarRef,
+    name: "scheduleDate",
+    onChange: onChangeScheduleDate
+  })), /* @__PURE__ */ import_react71.default.createElement(FormField, {
+    className: "mt-5 px-4 py-3"
+  }, /* @__PURE__ */ import_react71.default.createElement("p", {
+    className: "font-semibold text-base text-black form-field__label"
+  }, "When should we connect?"), /* @__PURE__ */ import_react71.default.createElement("p", {
+    className: "font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description"
+  }, "How soon before the call starts should we connect?"), /* @__PURE__ */ import_react71.default.createElement(Dropdown, {
+    className: "mt-3",
+    onChange: onChangeConnectOffsetSeconds,
+    options: CONNECT_OFFSET_SECONDS_OPTIONS,
+    tooltipGrow: "up-left",
+    value: connectOffsetSeconds
+  }))));
+}
+function Scheduling(props) {
+  const [isCalendarVisible, setCalendarVisibility] = (0, import_react71.useState)(false);
+  const calendarRef = (0, import_react71.useRef)(null);
+  useOutsideClickHandler([calendarRef], (0, import_react71.useCallback)(() => {
+    if (isCalendarVisible) {
+      setCalendarVisibility(false);
+    }
+  }, [isCalendarVisible]));
+  const {
+    connectOffsetSeconds,
+    onChangeConnectOffsetSeconds,
+    onChangeScheduleDate,
+    onChangeScheduleMeridiem,
+    onChangeScheduleTime,
+    onChangeScheduleType,
+    scheduleDate,
+    scheduleMeridiem,
+    scheduleTime,
+    scheduleType
+  } = props;
+  return /* @__PURE__ */ import_react71.default.createElement(SchedulingUI, {
+    calendarRef,
+    connectOffsetSeconds,
+    isCalendarVisible,
+    onChangeConnectOffsetSeconds,
+    onChangeScheduleDate,
+    onChangeScheduleMeridiem,
+    onChangeScheduleTime,
+    onChangeScheduleType,
+    scheduleDate,
+    scheduleMeridiem,
+    scheduleTime,
+    scheduleType,
+    showCalendar: (0, import_react71.useCallback)(() => setCalendarVisibility(true), [setCalendarVisibility])
+  });
 }
 
 // src/modules/RecordingForm/Troubleshooting/index.tsx
-var import_react49 = __toModule(require_react());
+var import_react72 = __toModule(require_react());
 function TroubleshootingUI(_props) {
-  return /* @__PURE__ */ import_react49.default.createElement("div", {
+  return /* @__PURE__ */ import_react72.default.createElement("div", {
     className: "font-medium py-3 text-gray-400 text-xs tracking-wide uppercase troubleshooting"
-  }, /* @__PURE__ */ import_react49.default.createElement("p", null, "Troubleshooting"));
+  }, /* @__PURE__ */ import_react72.default.createElement("p", null, "Troubleshooting"));
 }
 function Troubleshooting(_props) {
-  return /* @__PURE__ */ import_react49.default.createElement(TroubleshootingUI, null);
+  return /* @__PURE__ */ import_react72.default.createElement(TroubleshootingUI, null);
 }
 
 // src/modules/RecordingForm/index.tsx
 var NUM_STEPS = 5;
-var ConnectionType2 = /* @__PURE__ */ ((ConnectionType3) => {
-  ConnectionType3["GoogleMeet"] = "google_meet";
-  ConnectionType3["PhoneNumber"] = "phone";
-  ConnectionType3["Webcast"] = "webcast";
-  ConnectionType3["Zoom"] = "zoom";
-  return ConnectionType3;
-})(ConnectionType2 || {});
-var CONNECTION_TYPE_OPTION_GOOGLE = {
-  label: "Google Meet",
-  value: "google_meet" /* GoogleMeet */,
-  description: "Connect to a Google Meet dial-in number"
-};
-var CONNECTION_TYPE_OPTION_PHONE = {
-  label: "Phone Number",
-  value: "phone" /* PhoneNumber */,
-  description: "Connect to any phone number, with optional pin"
-};
-var CONNECTION_TYPE_OPTION_WEBCAST = {
-  label: "Webcast URL",
-  value: "webcast" /* Webcast */,
-  description: "Connect to a webcast url"
-};
-var CONNECTION_TYPE_OPTION_ZOOM = {
-  label: "Zoom",
-  value: "zoom" /* Zoom */,
-  description: "Connect to a Zoom dial-in number"
-};
-var CONNECTION_TYPE_OPTIONS = [
-  CONNECTION_TYPE_OPTION_ZOOM,
-  CONNECTION_TYPE_OPTION_GOOGLE,
-  CONNECTION_TYPE_OPTION_WEBCAST,
-  CONNECTION_TYPE_OPTION_PHONE
-];
-var CONNECTION_TYPE_OPTIONS_MAP = {
-  [CONNECTION_TYPE_OPTION_GOOGLE.value]: CONNECTION_TYPE_OPTION_GOOGLE,
-  [CONNECTION_TYPE_OPTION_PHONE.value]: CONNECTION_TYPE_OPTION_PHONE,
-  [CONNECTION_TYPE_OPTION_WEBCAST.value]: CONNECTION_TYPE_OPTION_WEBCAST,
-  [CONNECTION_TYPE_OPTION_ZOOM.value]: CONNECTION_TYPE_OPTION_ZOOM
-};
-var PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING = {
-  label: "Set it & forget it",
-  value: "not_participating" /* NotParticipating */,
-  description: "We'll automatically connect, then transcribe and record the call for you. You can join later if you change your mind."
-};
-var PARTICIPATION_TYPE_OPTION_PARTICIPATING = {
-  label: "Call me",
-  value: "participating" /* Participating */,
-  description: "We'll call you, and then connect you to the call. Please enter any required pins, or speak to an operator, if needed. The call will continue to record & transcribe even after you disconnect. You may end the recording manually from the transcript in Aiera."
-};
-var PARTICIPATION_TYPE_OPTIONS = [
-  PARTICIPATION_TYPE_OPTION_PARTICIPATING,
-  PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING
-];
 function RecordingFormUI(props) {
   const {
     connectAccessId,
     connectCallerId,
     connectionType,
+    connectOffsetSeconds,
     connectPhoneNumber,
     connectPin,
     connectUrl,
@@ -82528,36 +86814,45 @@ function RecordingFormUI(props) {
     onChangeConnectAccessId,
     onChangeConnectCallerId,
     onChangeConnectionType,
+    onChangeConnectOffsetSeconds,
     onChangeConnectPhoneNumber,
     onChangeConnectPin,
     onChangeConnectUrl,
     onChangeParticipationType,
+    onChangeScheduleDate,
+    onChangeScheduleMeridiem,
+    onChangeScheduleTime,
+    onChangeScheduleType,
     onNextStep,
     onPrevStep,
     onSubmit,
     participationType,
+    scheduleDate,
+    scheduleMeridiem,
+    scheduleTime,
+    scheduleType,
     step
   } = props;
-  return /* @__PURE__ */ import_react50.default.createElement("div", {
+  return /* @__PURE__ */ import_react73.default.createElement("div", {
     className: "bg-slate-50 h-full flex flex-col justify-between recording-form"
-  }, /* @__PURE__ */ import_react50.default.createElement("div", {
+  }, /* @__PURE__ */ import_react73.default.createElement("div", {
     className: "bg-white flex flex-col pt-3 px-3 shadow-3xl z-10 dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header"
-  }, /* @__PURE__ */ import_react50.default.createElement("div", {
+  }, /* @__PURE__ */ import_react73.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react50.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react73.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react50.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react73.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "Recordings"), /* @__PURE__ */ import_react50.default.createElement("p", {
+  }), "Recordings"), /* @__PURE__ */ import_react73.default.createElement("p", {
     className: "ml-auto text-gray-400 text-sm"
-  }, "Step ", step, " of ", NUM_STEPS))), /* @__PURE__ */ import_react50.default.createElement("div", {
+  }, "Step ", step, " of ", NUM_STEPS))), /* @__PURE__ */ import_react73.default.createElement("div", {
     className: "h-full overflow-y-scroll pb-3 px-3 shadow-3xl"
-  }, (0, import_ts_pattern5.match)(step).with(1, () => /* @__PURE__ */ import_react50.default.createElement(ConnectionType, {
+  }, (0, import_ts_pattern6.match)(step).with(1, () => /* @__PURE__ */ import_react73.default.createElement(ConnectionType, {
     connectionType,
     connectionTypeOptions: CONNECTION_TYPE_OPTIONS,
     onChange: onChangeConnectionType
-  })).with(2, () => /* @__PURE__ */ import_react50.default.createElement(ConnectionDetails, {
+  })).with(2, () => /* @__PURE__ */ import_react73.default.createElement(ConnectionDetails, {
     connectAccessId,
     connectCallerId,
     connectionType,
@@ -82572,27 +86867,38 @@ function RecordingFormUI(props) {
     onChangeParticipationType,
     participationType,
     participationTypeOptions: PARTICIPATION_TYPE_OPTIONS
-  })).with(3, () => /* @__PURE__ */ import_react50.default.createElement(Scheduling, null)).with(4, () => /* @__PURE__ */ import_react50.default.createElement(Troubleshooting, null)).with(5, () => /* @__PURE__ */ import_react50.default.createElement(RecordingDetails, null)).otherwise(() => null)), /* @__PURE__ */ import_react50.default.createElement("div", {
+  })).with(3, () => /* @__PURE__ */ import_react73.default.createElement(Scheduling, {
+    connectOffsetSeconds,
+    onChangeConnectOffsetSeconds,
+    onChangeScheduleDate,
+    onChangeScheduleMeridiem,
+    onChangeScheduleTime,
+    onChangeScheduleType,
+    scheduleDate,
+    scheduleMeridiem,
+    scheduleTime,
+    scheduleType
+  })).with(4, () => /* @__PURE__ */ import_react73.default.createElement(Troubleshooting, null)).with(5, () => /* @__PURE__ */ import_react73.default.createElement(RecordingDetails, null)).otherwise(() => null)), /* @__PURE__ */ import_react73.default.createElement("div", {
     className: "bg-white border-gray-200 border-opacity-80 border-t flex flex-col pt-3 px-3 shadow-inner recording-form__footer"
-  }, /* @__PURE__ */ import_react50.default.createElement("div", {
+  }, /* @__PURE__ */ import_react73.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, step > 1 && /* @__PURE__ */ import_react50.default.createElement("div", {
+  }, step > 1 && /* @__PURE__ */ import_react73.default.createElement("div", {
     className: "cursor-pointer flex group items-center mr-2 prev-step",
     onClick: () => onPrevStep(step - 1)
-  }, /* @__PURE__ */ import_react50.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react73.default.createElement(ArrowLeft, {
     className: "fill-current mr-2 relative text-black w-3.5 z-1 group-active:fill-current group-active:text-white"
-  }), /* @__PURE__ */ import_react50.default.createElement("span", {
+  }), /* @__PURE__ */ import_react73.default.createElement("span", {
     className: "text-sm group-hover:underline"
-  }, (0, import_ts_pattern5.match)(step).with(2, () => "Change Connection").with(3, () => "Change Configuration").with(4, () => "Scheduling").with(5, () => "Troubleshooting").otherwise(() => null))), /* @__PURE__ */ import_react50.default.createElement(Button, {
+  }, (0, import_ts_pattern6.match)(step).with(2, () => "Change Connection").with(3, () => "Change Configuration").with(4, () => "Scheduling").with(5, () => "Troubleshooting").otherwise(() => null))), /* @__PURE__ */ import_react73.default.createElement(Button, {
     className: "bg-blue-500 cursor-pointer flex items-center ml-auto rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step",
     disabled: isNextButtonDisabled,
     onClick: (event) => step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1)
-  }, /* @__PURE__ */ import_react50.default.createElement("span", {
+  }, /* @__PURE__ */ import_react73.default.createElement("span", {
     className: "font-light text-sm text-white"
-  }, (0, import_ts_pattern5.match)(step).with(1, () => {
+  }, (0, import_ts_pattern6.match)(step).with(1, () => {
     const connectionTypeOption = connectionType ? CONNECTION_TYPE_OPTIONS_MAP[connectionType] : null;
     return `Configure ${connectionTypeOption ? connectionTypeOption.label : ""}`;
-  }).with(2, () => "Scheduling").with(3, () => "Troubleshooting").with(4, () => "Recording Details").with(5, () => "Create Recording").otherwise(() => null)), /* @__PURE__ */ import_react50.default.createElement(ArrowLeft, {
+  }).with(2, () => "Scheduling").with(3, () => "Troubleshooting").with(4, () => "Recording Details").with(5, () => "Create Recording").otherwise(() => null)), /* @__PURE__ */ import_react73.default.createElement(ArrowLeft, {
     className: "fill-current ml-2 relative rotate-180 text-white w-3.5 z-1 group-active:fill-current group-active:text-white"
   })))));
 }
@@ -82602,20 +86908,26 @@ function RecordingForm(props) {
     connectAccessId: "",
     connectCallerId: "",
     connectionType: void 0,
+    connectOffsetSeconds: 0,
     connectPhoneNumber: "",
     connectPin: "",
     connectUrl: "",
     meetingType: "",
     onConnectDialNumber: "",
     participationType: void 0,
+    scheduleDate: new Date(),
+    scheduleMeridiem: ScheduleMeridiem.AM,
+    scheduleTime: "",
+    scheduleType: void 0,
     smsAlertBeforeCall: false
   });
-  const [step, setStep] = (0, import_react50.useState)(1);
-  const isNextButtonDisabled = (0, import_react50.useMemo)(() => step >= 1 && !state.connectionType, [state, step]);
-  return /* @__PURE__ */ import_react50.default.createElement(RecordingFormUI, {
+  const [step, setStep] = (0, import_react73.useState)(1);
+  const isNextButtonDisabled = (0, import_react73.useMemo)(() => step >= 1 && !state.connectionType, [state, step]);
+  return /* @__PURE__ */ import_react73.default.createElement(RecordingFormUI, {
     connectAccessId: state.connectAccessId,
     connectCallerId: state.connectCallerId,
     connectionType: state.connectionType,
+    connectOffsetSeconds: state.connectOffsetSeconds,
     connectPhoneNumber: state.connectPhoneNumber,
     connectPin: state.connectPin,
     connectUrl: state.connectUrl,
@@ -82625,15 +86937,24 @@ function RecordingForm(props) {
     onChangeConnectAccessId: handlers.connectAccessId,
     onChangeConnectCallerId: handlers.connectCallerId,
     onChangeConnectionType: handlers.connectionType,
+    onChangeConnectOffsetSeconds: handlers.connectOffsetSeconds,
     onChangeConnectPhoneNumber: handlers.connectPhoneNumber,
     onChangeConnectPin: handlers.connectPin,
     onChangeConnectUrl: handlers.connectUrl,
     onChangeParticipationType: handlers.participationType,
+    onChangeScheduleDate: handlers.scheduleDate,
+    onChangeScheduleMeridiem: handlers.scheduleMeridiem,
+    onChangeScheduleTime: handlers.scheduleTime,
+    onChangeScheduleType: handlers.scheduleType,
     onConnectDialNumber: state.onConnectDialNumber,
     onNextStep: setStep,
     onPrevStep: setStep,
     onSubmit: () => console.log("SUBMITTED"),
     participationType: state.participationType,
+    scheduleDate: state.scheduleDate,
+    scheduleMeridiem: state.scheduleMeridiem,
+    scheduleTime: state.scheduleTime,
+    scheduleType: state.scheduleType,
     smsAlertBeforeCall: state.smsAlertBeforeCall,
     step
   });
@@ -82643,65 +86964,65 @@ function RecordingForm(props) {
 function RecordingListUI(props) {
   const { onSearchChange, recordingsQuery, searchTerm, showForm, toggleForm } = props;
   if (showForm) {
-    return /* @__PURE__ */ import_react51.default.createElement(RecordingForm, {
+    return /* @__PURE__ */ import_react74.default.createElement(RecordingForm, {
       onBack: toggleForm
     });
   }
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react51.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react51.default.createElement("div", {
+  return /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "h-full flex flex-col recordinglist"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recordinglist__header"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react51.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react51.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react74.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react74.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onSearchChange,
     placeholder: "Search Recordings...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react51.default.createElement(Button, {
+  }), /* @__PURE__ */ import_react74.default.createElement(Button, {
     className: "bg-blue-500 cursor-pointer flex flex-shrink-0 items-center ml-2 rounded-0.375 active:bg-blue-700 hover:bg-blue-600",
     onClick: toggleForm
-  }, /* @__PURE__ */ import_react51.default.createElement(Plus, {
+  }, /* @__PURE__ */ import_react74.default.createElement(Plus, {
     className: "h-4 mb-0.5 text-white w-2.5"
-  }), /* @__PURE__ */ import_react51.default.createElement("span", {
+  }), /* @__PURE__ */ import_react74.default.createElement("span", {
     className: "font-light ml-1.5 text-sm text-white"
-  }, "Schedule Recording")))), /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, "Schedule Recording")))), /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern6.match)(recordingsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react51.default.createElement("ul", {
+  }, (0, import_ts_pattern7.match)(recordingsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react74.default.createElement("ul", {
     className: "w-full RecordingList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react51.default.createElement("li", {
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react74.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9"
-  }), /* @__PURE__ */ import_react51.default.createElement("div", {
+  }), /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react51.default.createElement("div", {
+  }), /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react51.default.createElement("div", {
+  })), /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react51.default.createElement("div", {
+  }), /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react51.default.createElement("div", {
+  }), /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no recordings.")).with({ status: "error" }, () => wrapMsg("There was an error loading recordings.")).with({ status: "empty" }, () => wrapMsg("There are no recordings.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react51.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There are no recordings.")).with({ status: "error" }, () => wrapMsg("There was an error loading recordings.")).with({ status: "empty" }, () => wrapMsg("There are no recordings.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react74.default.createElement("ul", {
     className: "w-full"
   }, events.map((event) => {
     var _a;
@@ -82710,22 +87031,22 @@ function RecordingListUI(props) {
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== eventDate.toFormat("MM/dd/yyyy")) {
       prevEventDate = eventDate;
-      divider = /* @__PURE__ */ import_react51.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react74.default.createElement("li", {
         className: "sticky top-[8px] px-3 first-of-type:pb-2"
-      }, /* @__PURE__ */ import_react51.default.createElement("div", {
+      }, /* @__PURE__ */ import_react74.default.createElement("div", {
         className: "px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70"
-      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react51.default.createElement("div", {
+      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react74.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"
       })));
     }
-    return /* @__PURE__ */ import_react51.default.createElement(import_react51.Fragment, {
+    return /* @__PURE__ */ import_react74.default.createElement(import_react74.Fragment, {
       key: event.id
-    }, divider, /* @__PURE__ */ import_react51.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react74.default.createElement("li", {
       tabIndex: 0,
       className: "group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
-    }, /* @__PURE__ */ import_react51.default.createElement(Tooltip, {
+    }, /* @__PURE__ */ import_react74.default.createElement(Tooltip, {
       className: "h-12 flex flex-row",
-      content: /* @__PURE__ */ import_react51.default.createElement("div", {
+      content: /* @__PURE__ */ import_react74.default.createElement("div", {
         className: "max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9"
       }, prettyLineBreak(event.title)),
       grow: "up-right",
@@ -82733,35 +87054,35 @@ function RecordingListUI(props) {
       position: "top-left",
       yOffset: 4,
       hideOnDocumentScroll: true
-    }, /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "flex items-center justify-center"
-    }, /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "flex items-center justify-center w-8 h-8"
-    }, /* @__PURE__ */ import_react51.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react74.default.createElement(PlayButton, {
       metaData: { eventType: event.eventType },
       id: event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl,
       offset: audioOffset || 0
-    }))), /* @__PURE__ */ import_react51.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
-    }, /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "flex items-end"
-    }, /* @__PURE__ */ import_react51.default.createElement("span", {
+    }, /* @__PURE__ */ import_react74.default.createElement("span", {
       className: "leading-none text-sm text-black dark:text-white truncate font-bold"
-    }, event.title)), /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, event.title)), /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white"
-    }, event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event.isLive ? /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, event.isLive ? /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
-    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300"
-    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react51.default.createElement("div", {
+    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react74.default.createElement("div", {
       className: "leading-none mt-1 text-gray-300 group-hover:text-gray-500"
     }, eventDate.toFormat("MMM dd, yyyy"))))));
-  }))).exhaustive(), /* @__PURE__ */ import_react51.default.createElement("div", {
+  }))).exhaustive(), /* @__PURE__ */ import_react74.default.createElement("div", {
     className: "flex-1"
-  })))), /* @__PURE__ */ import_react51.default.createElement(Playbar, null));
+  })))), /* @__PURE__ */ import_react74.default.createElement(Playbar, null));
 }
 function RecordingList(_props) {
   const { handlers, state } = useChangeHandlers({
@@ -82792,24 +87113,24 @@ function RecordingList(_props) {
       }
     }
   });
-  return /* @__PURE__ */ import_react51.default.createElement(RecordingListUI, {
+  return /* @__PURE__ */ import_react74.default.createElement(RecordingListUI, {
     onSearchChange: handlers.searchTerm,
     recordingsQuery,
     searchTerm: state.searchTerm,
     showForm: state.showForm,
-    toggleForm: (0, import_react51.useCallback)((event) => handlers.showForm(event, { value: !state.showForm }), [state.showForm])
+    toggleForm: (0, import_react74.useCallback)((event) => handlers.showForm(event, { value: !state.showForm }), [state.showForm])
   });
 }
 
 // src/web/modules/RecordingList/index.tsx
 var App = () => {
-  return /* @__PURE__ */ import_react52.default.createElement(import_react52.StrictMode, null, /* @__PURE__ */ import_react52.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react75.default.createElement(import_react75.StrictMode, null, /* @__PURE__ */ import_react75.default.createElement(Provider6, {
     config: { moduleName: "RecordingList" }
-  }, /* @__PURE__ */ import_react52.default.createElement(Auth, null, /* @__PURE__ */ import_react52.default.createElement("div", {
+  }, /* @__PURE__ */ import_react75.default.createElement(Auth, null, /* @__PURE__ */ import_react75.default.createElement("div", {
     className: "h-full"
-  }, /* @__PURE__ */ import_react52.default.createElement(RecordingList, null)))));
+  }, /* @__PURE__ */ import_react75.default.createElement(RecordingList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react52.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react75.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus
@@ -82879,6 +87200,14 @@ PERFORMANCE OF THIS SOFTWARE.
  */
 /** @license React v0.20.2
  * scheduler.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+/** @license React v16.13.1
+ * react-is.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *

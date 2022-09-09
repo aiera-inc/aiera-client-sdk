@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">90.47% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>22/24</span>
+                <span class='fraction'>19/21</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.66% </span>
+                <span class="strong">90.47% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>22/24</span>
+                <span class='fraction'>19/21</span>
             </div>
         
             
@@ -289,18 +289,7 @@
 <a name='L224'></a><a href='#L224'>224</a>
 <a name='L225'></a><a href='#L225'>225</a>
 <a name='L226'></a><a href='#L226'>226</a>
-<a name='L227'></a><a href='#L227'>227</a>
-<a name='L228'></a><a href='#L228'>228</a>
-<a name='L229'></a><a href='#L229'>229</a>
-<a name='L230'></a><a href='#L230'>230</a>
-<a name='L231'></a><a href='#L231'>231</a>
-<a name='L232'></a><a href='#L232'>232</a>
-<a name='L233'></a><a href='#L233'>233</a>
-<a name='L234'></a><a href='#L234'>234</a>
-<a name='L235'></a><a href='#L235'>235</a>
-<a name='L236'></a><a href='#L236'>236</a>
-<a name='L237'></a><a href='#L237'>237</a>
-<a name='L238'></a><a href='#L238'>238</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L227'></a><a href='#L227'>227</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,17 +299,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -536,28 +515,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
 import { match } from 'ts-pattern';
 &nbsp;
 import { FormFieldInput } from '@aiera/client-sdk/components/FormField/FormFieldInput';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { ConnectionType, ParticipationType } from '@aiera/client-sdk/modules/RecordingForm';
+import {
+    ZOOM_MEETING_TYPE_OPTIONS,
+    ConnectionType,
+    ParticipationType,
+} from '@aiera/client-sdk/modules/RecordingForm/types';
 import { SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
-&nbsp;
-const ZOOM_MEETING_TYPE_OPTION_PHONE = {
-    label: 'Dial-in number',
-    value: 'phone',
-    description: 'Connect to Zoom meeting via dial-in number',
-};
-const ZOOM_MEETING_TYPE_OPTION_WEB = {
-    label: 'Web URL',
-    value: 'web',
-    description: 'Connect to Zoom meeting via web url',
-};
-const ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_WEB, ZOOM_MEETING_TYPE_OPTION_PHONE];
 &nbsp;
 interface ConnectionDetailsSharedProps {
     connectAccessId: string;
@@ -580,7 +550,6 @@ interface ConnectionDetailsSharedProps {
 interface ConnectionDetailsUIProps extends ConnectionDetailsSharedProps {
     onChangeZoomMeetingType: ChangeHandler&lt;string&gt;;
     zoomMeetingType?: string;
-    zoomMeetingTypeOptions: SelectOption&lt;string&gt;[];
 }
 &nbsp;
 export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactElement {
@@ -601,7 +570,6 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         participationType,
         participationTypeOptions,
         zoomMeetingType,
-        zoomMeetingTypeOptions,
     } = props;
     const dialInField = (
         &lt;FormFieldInput
@@ -671,7 +639,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                             className="mt-2.5"
                             name="zoomMeetingType"
                             onChange={onChangeZoomMeetingType}
-                            options={zoomMeetingTypeOptions}
+                            options={ZOOM_MEETING_TYPE_OPTIONS}
                             value={zoomMeetingType}
                         /&gt;
                         {!!zoomMeetingType &amp;&amp; (
@@ -770,7 +738,6 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             participationType={participationType}
             participationTypeOptions={participationTypeOptions}
             zoomMeetingType={state.zoomMeetingType}
-            zoomMeetingTypeOptions={ZOOM_MEETING_TYPE_OPTIONS}
         /&gt;
     );
 }
@@ -781,7 +748,7 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Sep 09 2022 12:28:06 GMT-0400 (Eastern Daylight Time)
+                at Fri Sep 09 2022 12:44:45 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>
