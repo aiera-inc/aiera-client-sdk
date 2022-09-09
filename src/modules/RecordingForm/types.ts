@@ -3,9 +3,6 @@
  */
 
 // TODO: remove these once the server generates them
-/**
- * TEMPORARY TYPES
- */
 export enum ConnectionType {
     GoogleMeet = 'google_meet',
     PhoneNumber = 'phone',

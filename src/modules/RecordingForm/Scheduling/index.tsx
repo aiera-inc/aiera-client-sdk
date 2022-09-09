@@ -53,7 +53,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
     } = props;
     return (
         <div className="py-3 scheduling">
-            <p className="font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase">Scheduling</p>
+            <p className="font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase">Scheduling</p>
             <FormFieldSelect
                 className="mt-2.5"
                 name="scheduleType"
@@ -65,7 +65,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                 <>
                     <FormField className="mt-5 px-4 py-3">
                         <p className="font-semibold text-base text-black form-field__label">Date & Time</p>
-                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm  form-field__description">
+                        <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
                             Aiera will automatically connect at this time
                         </p>
                         <div className="flex items-center mt-3 space-between w-full">
@@ -95,7 +95,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                     </FormField>
                     <FormField className="mt-5 px-4 py-3">
                         <p className="font-semibold text-base text-black form-field__label">When should we connect?</p>
-                        <p className="font-light leading-4 pt-0.5 text-[#ABB2C7] text-sm  form-field__description">
+                        <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
                             How soon before the call starts should we connect?
                         </p>
                         <Dropdown
