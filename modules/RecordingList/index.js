@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement42 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement44 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement42(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement44(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement42(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement44(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement42(element.type, key, ref, self2, source, owner, props);
+          return ReactElement44(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -657,8 +657,8 @@ var require_react_development = __commonJS({
             "=": "=0",
             ":": "=2"
           };
-          var escapedString = key.replace(escapeRegex, function(match6) {
-            return escaperLookup[match6];
+          var escapedString = key.replace(escapeRegex, function(match7) {
+            return escaperLookup[match7];
           });
           return "$" + escapedString;
         }
@@ -1204,8 +1204,8 @@ var require_react_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match6 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match6 && match6[1] || "";
+                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match7 && match7[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React42 = require_react();
+        var React45 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React42.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React45.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React42) {
+        if (!React45) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3126,8 +3126,8 @@ var require_react_dom_development = __commonJS({
               try {
                 throw Error();
               } catch (x3) {
-                var match6 = x3.stack.trim().match(/\n( *(at )?)/);
-                prefix2 = match6 && match6[1] || "";
+                var match7 = x3.stack.trim().match(/\n( *(at )?)/);
+                prefix2 = match7 && match7[1] || "";
               }
             }
             return "\n" + prefix2 + name;
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React42.Children.forEach(children, function(child) {
+          React45.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React42.Children.forEach(props.children, function(child) {
+              React45.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React42.Component().refs;
+        var emptyRefsObject = new React45.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -25938,8 +25938,8 @@ var require_lib = __commonJS({
     Object.defineProperty(exports2, "__", { enumerable: true, get: function() {
       return wildcards_1.__;
     } });
-    var match6 = (value) => builder(value, []);
-    exports2.match = match6;
+    var match7 = (value) => builder(value, []);
+    exports2.match = match7;
     var builder = (value, cases) => {
       const run = () => {
         const entry = cases.find(({ test }) => test(value));
@@ -28048,11 +28048,11 @@ var require_luxon = __commonJS({
       for (var _len4 = arguments.length, keys = new Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
         keys[_key4] = arguments[_key4];
       }
-      return function(match7, cursor) {
+      return function(match8, cursor) {
         var ret = {};
         var i3;
         for (i3 = 0; i3 < keys.length; i3++) {
-          ret[keys[i3]] = parseInteger(match7[cursor + i3]);
+          ret[keys[i3]] = parseInteger(match8[cursor + i3]);
         }
         return [ret, null, cursor + i3];
       };
@@ -28069,39 +28069,39 @@ var require_luxon = __commonJS({
     var sqlYmdRegex = /(\d{4})-(\d\d)-(\d\d)/;
     var sqlTimeRegex = RegExp(isoTimeBaseRegex.source + " ?(?:" + offsetRegex.source + "|(" + ianaRegex.source + "))?");
     var sqlTimeExtensionRegex = RegExp("(?: " + sqlTimeRegex.source + ")?");
-    function int(match7, pos, fallback) {
-      var m2 = match7[pos];
+    function int(match8, pos, fallback) {
+      var m2 = match8[pos];
       return isUndefined(m2) ? fallback : parseInteger(m2);
     }
-    function extractISOYmd(match7, cursor) {
+    function extractISOYmd(match8, cursor) {
       var item = {
-        year: int(match7, cursor),
-        month: int(match7, cursor + 1, 1),
-        day: int(match7, cursor + 2, 1)
+        year: int(match8, cursor),
+        month: int(match8, cursor + 1, 1),
+        day: int(match8, cursor + 2, 1)
       };
       return [item, null, cursor + 3];
     }
-    function extractISOTime(match7, cursor) {
+    function extractISOTime(match8, cursor) {
       var item = {
-        hours: int(match7, cursor, 0),
-        minutes: int(match7, cursor + 1, 0),
-        seconds: int(match7, cursor + 2, 0),
-        milliseconds: parseMillis(match7[cursor + 3])
+        hours: int(match8, cursor, 0),
+        minutes: int(match8, cursor + 1, 0),
+        seconds: int(match8, cursor + 2, 0),
+        milliseconds: parseMillis(match8[cursor + 3])
       };
       return [item, null, cursor + 4];
     }
-    function extractISOOffset(match7, cursor) {
-      var local2 = !match7[cursor] && !match7[cursor + 1], fullOffset = signedOffset(match7[cursor + 1], match7[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
+    function extractISOOffset(match8, cursor) {
+      var local2 = !match8[cursor] && !match8[cursor + 1], fullOffset = signedOffset(match8[cursor + 1], match8[cursor + 2]), zone = local2 ? null : FixedOffsetZone.instance(fullOffset);
       return [{}, zone, cursor + 3];
     }
-    function extractIANAZone(match7, cursor) {
-      var zone = match7[cursor] ? IANAZone.create(match7[cursor]) : null;
+    function extractIANAZone(match8, cursor) {
+      var zone = match8[cursor] ? IANAZone.create(match8[cursor]) : null;
       return [{}, zone, cursor + 1];
     }
     var isoTimeOnly = RegExp("^T?" + isoTimeBaseRegex.source + "$");
     var isoDuration = /^-?P(?:(?:(-?\d{1,9}(?:\.\d{1,9})?)Y)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,9}(?:\.\d{1,9})?)W)?(?:(-?\d{1,9}(?:\.\d{1,9})?)D)?(?:T(?:(-?\d{1,9}(?:\.\d{1,9})?)H)?(?:(-?\d{1,9}(?:\.\d{1,9})?)M)?(?:(-?\d{1,20})(?:[.,](-?\d{1,9}))?S)?)?)$/;
-    function extractISODuration(match7) {
-      var s4 = match7[0], yearStr = match7[1], monthStr = match7[2], weekStr = match7[3], dayStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], millisecondsStr = match7[8];
+    function extractISODuration(match8) {
+      var s4 = match8[0], yearStr = match8[1], monthStr = match8[2], weekStr = match8[3], dayStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], millisecondsStr = match8[8];
       var hasNegativePrefix = s4[0] === "-";
       var negativeSeconds = secondStr && secondStr[0] === "-";
       var maybeNegate = function maybeNegate2(num, force) {
@@ -28148,8 +28148,8 @@ var require_luxon = __commonJS({
       return result;
     }
     var rfc2822 = /^(?:(Mon|Tue|Wed|Thu|Fri|Sat|Sun),\s)?(\d{1,2})\s(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\s(\d{2,4})\s(\d\d):(\d\d)(?::(\d\d))?\s(?:(UT|GMT|[ECMP][SD]T)|([Zz])|(?:([+-]\d\d)(\d\d)))$/;
-    function extractRFC2822(match7) {
-      var weekdayStr = match7[1], dayStr = match7[2], monthStr = match7[3], yearStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], obsOffset = match7[8], milOffset = match7[9], offHourStr = match7[10], offMinuteStr = match7[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC2822(match8) {
+      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], obsOffset = match8[8], milOffset = match8[9], offHourStr = match8[10], offMinuteStr = match8[11], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       var offset2;
       if (obsOffset) {
         offset2 = obsOffsets[obsOffset];
@@ -28166,12 +28166,12 @@ var require_luxon = __commonJS({
     var rfc1123 = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun), (\d\d) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) (\d{4}) (\d\d):(\d\d):(\d\d) GMT$/;
     var rfc850 = /^(Monday|Tuesday|Wedsday|Thursday|Friday|Saturday|Sunday), (\d\d)-(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)-(\d\d) (\d\d):(\d\d):(\d\d) GMT$/;
     var ascii = /^(Mon|Tue|Wed|Thu|Fri|Sat|Sun) (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) ( \d|\d\d) (\d\d):(\d\d):(\d\d) (\d{4})$/;
-    function extractRFC1123Or850(match7) {
-      var weekdayStr = match7[1], dayStr = match7[2], monthStr = match7[3], yearStr = match7[4], hourStr = match7[5], minuteStr = match7[6], secondStr = match7[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractRFC1123Or850(match8) {
+      var weekdayStr = match8[1], dayStr = match8[2], monthStr = match8[3], yearStr = match8[4], hourStr = match8[5], minuteStr = match8[6], secondStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
-    function extractASCII(match7) {
-      var weekdayStr = match7[1], monthStr = match7[2], dayStr = match7[3], hourStr = match7[4], minuteStr = match7[5], secondStr = match7[6], yearStr = match7[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
+    function extractASCII(match8) {
+      var weekdayStr = match8[1], monthStr = match8[2], dayStr = match8[3], hourStr = match8[4], minuteStr = match8[5], secondStr = match8[6], yearStr = match8[7], result = fromStrings(weekdayStr, yearStr, monthStr, dayStr, hourStr, minuteStr, secondStr);
       return [result, FixedOffsetZone.utcInstance];
     }
     var isoYmdWithTimeExtensionRegex = combineRegexes(isoYmdRegex, isoTimeExtensionRegex);
@@ -29510,7 +29510,7 @@ var require_luxon = __commonJS({
       }, "");
       return ["^" + re + "$", units];
     }
-    function match6(input, regex, handlers) {
+    function match7(input, regex, handlers) {
       var matches = input.match(regex);
       if (matches) {
         var all = {};
@@ -29640,7 +29640,7 @@ var require_luxon = __commonJS({
           invalidReason: disqualifyingUnit.invalidReason
         };
       } else {
-        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match6(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
+        var _buildRegex = buildRegex(units), regexString = _buildRegex[0], handlers = _buildRegex[1], regex = RegExp(regexString, "i"), _match = match7(input, regex, handlers), rawMatches = _match[0], matches = _match[1], _ref62 = matches ? dateTimeFromMatches(matches) : [null, null], result = _ref62[0], zone = _ref62[1];
         if (hasOwnProperty(matches, "a") && hasOwnProperty(matches, "H")) {
           throw new ConflictingSpecificationError("Can't include meridiem when specifying 24-hour format");
         }
@@ -47591,12 +47591,12 @@ var require_dash_all_debug = __commonJS({
               return _super.call(this, function(attr) {
                 return datetimeRegex.test(attr.value);
               }, function(str) {
-                var match6 = datetimeRegex.exec(str);
+                var match7 = datetimeRegex.exec(str);
                 var utcDate;
-                utcDate = Date.UTC(parseInt(match6[1], 10), parseInt(match6[2], 10) - 1, parseInt(match6[3], 10), parseInt(match6[4], 10), parseInt(match6[5], 10), match6[6] && parseInt(match6[6], 10) || 0, match6[7] && parseFloat(match6[7]) * MILLISECONDS_IN_SECONDS || 0);
-                if (match6[9] && match6[10]) {
-                  var timezoneOffset = parseInt(match6[9], 10) * MINUTES_IN_HOUR + parseInt(match6[10], 10);
-                  utcDate += (match6[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
+                utcDate = Date.UTC(parseInt(match7[1], 10), parseInt(match7[2], 10) - 1, parseInt(match7[3], 10), parseInt(match7[4], 10), parseInt(match7[5], 10), match7[6] && parseInt(match7[6], 10) || 0, match7[7] && parseFloat(match7[7]) * MILLISECONDS_IN_SECONDS || 0);
+                if (match7[9] && match7[10]) {
+                  var timezoneOffset = parseInt(match7[9], 10) * MINUTES_IN_HOUR + parseInt(match7[10], 10);
+                  utcDate += (match7[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
                 }
                 return new Date(utcDate);
               });
@@ -47711,9 +47711,9 @@ var require_dash_all_debug = __commonJS({
                 }
                 return false;
               }, function(str) {
-                var match6 = durationRegex.exec(str);
-                var result = parseFloat(match6[3] || 0) * SECONDS_IN_YEAR + parseFloat(match6[5] || 0) * SECONDS_IN_MONTH + parseFloat(match6[7] || 0) * SECONDS_IN_DAY + parseFloat(match6[9] || 0) * SECONDS_IN_HOUR + parseFloat(match6[11] || 0) * SECONDS_IN_MIN + parseFloat(match6[13] || 0);
-                if (match6[1] !== void 0) {
+                var match7 = durationRegex.exec(str);
+                var result = parseFloat(match7[3] || 0) * SECONDS_IN_YEAR + parseFloat(match7[5] || 0) * SECONDS_IN_MONTH + parseFloat(match7[7] || 0) * SECONDS_IN_DAY + parseFloat(match7[9] || 0) * SECONDS_IN_HOUR + parseFloat(match7[11] || 0) * SECONDS_IN_MIN + parseFloat(match7[13] || 0);
+                if (match7[1] !== void 0) {
                   result = -result;
                 }
                 return result;
@@ -58471,11 +58471,11 @@ var require_dash_all_debug = __commonJS({
               var MILLISECONDS_IN_SECONDS = 1e3;
               var datetimeRegex = /^([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2})(?::([0-9]*)(\.[0-9]*)?)?(?:([+\-])([0-9]{2})([0-9]{2}))?/;
               var utcDate, timezoneOffset;
-              var match6 = datetimeRegex.exec(xsdatetimeStr);
-              utcDate = Date.UTC(parseInt(match6[1], 10), parseInt(match6[2], 10) - 1, parseInt(match6[3], 10), parseInt(match6[4], 10), parseInt(match6[5], 10), match6[6] && (parseInt(match6[6], 10) || 0), match6[7] && parseFloat(match6[7]) * MILLISECONDS_IN_SECONDS || 0);
-              if (match6[9] && match6[10]) {
-                timezoneOffset = parseInt(match6[9], 10) * MINUTES_IN_HOUR + parseInt(match6[10], 10);
-                utcDate += (match6[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
+              var match7 = datetimeRegex.exec(xsdatetimeStr);
+              utcDate = Date.UTC(parseInt(match7[1], 10), parseInt(match7[2], 10) - 1, parseInt(match7[3], 10), parseInt(match7[4], 10), parseInt(match7[5], 10), match7[6] && (parseInt(match7[6], 10) || 0), match7[7] && parseFloat(match7[7]) * MILLISECONDS_IN_SECONDS || 0);
+              if (match7[9] && match7[10]) {
+                timezoneOffset = parseInt(match7[9], 10) * MINUTES_IN_HOUR + parseInt(match7[10], 10);
+                utcDate += (match7[8] === "+" ? -1 : 1) * timezoneOffset * SECONDS_IN_MIN * MILLISECONDS_IN_SECONDS;
               }
               return new Date(utcDate).getTime();
             }
@@ -69901,8 +69901,8 @@ var require_dash_all_debug = __commonJS({
                   var imsc1ImgUrnTester = /^(urn:)(mpeg:[a-z0-9][a-z0-9-]{0,31}:)(subs:)([0-9]+)$/;
                   var smpteImgUrnTester = /^#(.*)$/;
                   if (imsc1ImgUrnTester.test(uri)) {
-                    var match6 = imsc1ImgUrnTester.exec(uri);
-                    var imageId = parseInt(match6[4], 10) - 1;
+                    var match7 = imsc1ImgUrnTester.exec(uri);
+                    var imageId = parseInt(match7[4], 10) - 1;
                     var imageData = btoa(cue.images[imageId]);
                     var dataUrl = "data:image/png;base64," + imageData;
                     return dataUrl;
@@ -73259,7 +73259,7 @@ var require_dash_all_debug = __commonJS({
 });
 
 // src/web/modules/RecordingList/index.tsx
-var import_react49 = __toModule(require_react());
+var import_react52 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -74003,10 +74003,10 @@ function getLocation(source, position) {
   var lineRegexp = /\r\n|[\n\r]/g;
   var line = 1;
   var column = position + 1;
-  var match6;
-  while ((match6 = lineRegexp.exec(source.body)) && match6.index < position) {
+  var match7;
+  while ((match7 = lineRegexp.exec(source.body)) && match7.index < position) {
     line += 1;
-    column = position + 1 - (match6.index + match6[0].length);
+    column = position + 1 - (match7.index + match7[0].length);
   }
   return {
     line,
@@ -80907,9 +80907,9 @@ var Auth = ({
 };
 
 // src/modules/RecordingList/index.tsx
-var import_react48 = __toModule(require_react());
+var import_react51 = __toModule(require_react());
 var import_luxon = __toModule(require_luxon());
-var import_ts_pattern5 = __toModule(require_lib());
+var import_ts_pattern6 = __toModule(require_lib());
 
 // src/components/Svg/MagnifyingGlass.tsx
 var import_react16 = __toModule(require_react());
@@ -82135,8 +82135,8 @@ function PlayButton(props) {
 }
 
 // src/modules/RecordingForm/index.tsx
-var import_react47 = __toModule(require_react());
-var import_ts_pattern4 = __toModule(require_lib());
+var import_react50 = __toModule(require_react());
+var import_ts_pattern5 = __toModule(require_lib());
 
 // src/components/Svg/ArrowLeft.tsx
 var import_react39 = __toModule(require_react());
@@ -82155,7 +82155,10 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 }
 
 // src/modules/RecordingForm/ConnectionType/index.tsx
-var import_react42 = __toModule(require_react());
+var import_react44 = __toModule(require_react());
+
+// src/components/FormField/FormFieldSelect/index.tsx
+var import_react43 = __toModule(require_react());
 var import_classnames23 = __toModule(require_classnames());
 
 // src/components/Checkbox/index.tsx
@@ -82198,34 +82201,61 @@ function Checkbox(props) {
   });
 }
 
+// src/components/FormField/index.tsx
+var import_react42 = __toModule(require_react());
+function FormFieldUI(props) {
+  const { className = "form-field", children } = props;
+  return /* @__PURE__ */ import_react42.default.createElement("div", {
+    className: `bg-white border border-gray-200 rounded shadow-xl ${className}`
+  }, children);
+}
+function FormField(props) {
+  const { children, className } = props;
+  return /* @__PURE__ */ import_react42.default.createElement(FormFieldUI, {
+    className
+  }, children);
+}
+
+// src/components/FormField/FormFieldSelect/index.tsx
+function FormFieldSelect(props) {
+  const { className, name, onChange, options, value } = props;
+  return /* @__PURE__ */ import_react43.default.createElement(FormField, {
+    className
+  }, options.map((option) => /* @__PURE__ */ import_react43.default.createElement("div", {
+    className: "border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 first:hover:rounded-t last:hover:rounded-b last:border-0",
+    key: option.value,
+    onClick: (e) => onChange ? onChange(e, { name, value: option.value }) : {}
+  }, /* @__PURE__ */ import_react43.default.createElement("div", null, /* @__PURE__ */ import_react43.default.createElement("p", {
+    className: (0, import_classnames23.default)([
+      "text-black text-base",
+      { "font-semibold": value === option.value }
+    ])
+  }, option.label), !!option.description && /* @__PURE__ */ import_react43.default.createElement("p", {
+    className: "font-light leading-4 pt-0.5 text-slate-400 text-sm"
+  }, option.description)), /* @__PURE__ */ import_react43.default.createElement(Checkbox, {
+    checked: value === option.value,
+    className: "ml-auto flex-shrink-0"
+  }))));
+}
+
 // src/modules/RecordingForm/ConnectionType/index.tsx
 function ConnectionTypeUI(props) {
   const { connectionType, connectionTypeOptions, onChange } = props;
-  return /* @__PURE__ */ import_react42.default.createElement("div", {
+  return /* @__PURE__ */ import_react44.default.createElement("div", {
     className: "py-3 connection-type"
-  }, /* @__PURE__ */ import_react42.default.createElement("p", {
-    className: "font-semibold mt-2 text-[#C1C7D7] text-xs tracking-widest uppercase"
-  }, "Connection Type"), /* @__PURE__ */ import_react42.default.createElement("div", {
-    className: "bg-white border border-gray-100 mt-2 rounded shadow-xl"
-  }, Object.values(connectionTypeOptions).map((option) => /* @__PURE__ */ import_react42.default.createElement("div", {
-    className: "border-b border-gray-100 cursor-pointer flex h[70px] items-center px-4 py-3 hover:bg-gray-50 last:border-0",
-    key: option.value,
-    onClick: (e) => onChange(e, { name: "connectionType", value: option.value })
-  }, /* @__PURE__ */ import_react42.default.createElement("div", null, /* @__PURE__ */ import_react42.default.createElement("p", {
-    className: (0, import_classnames23.default)([
-      "text-black text-base",
-      { "font-semibold": connectionType === option.value }
-    ])
-  }, option.label), /* @__PURE__ */ import_react42.default.createElement("p", {
-    className: "font-light pt-0.25 text-[#ABB2C7] text-sm"
-  }, option.description)), /* @__PURE__ */ import_react42.default.createElement(Checkbox, {
-    checked: connectionType === option.value,
-    className: "ml-auto flex-shrink-0"
-  })))));
+  }, /* @__PURE__ */ import_react44.default.createElement("p", {
+    className: "font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase"
+  }, "Connection Type"), /* @__PURE__ */ import_react44.default.createElement(FormFieldSelect, {
+    className: "mt-2.5",
+    name: "connectionType",
+    onChange,
+    options: connectionTypeOptions,
+    value: connectionType
+  }));
 }
 function ConnectionType(props) {
   const { connectionType, connectionTypeOptions, onChange } = props;
-  return /* @__PURE__ */ import_react42.default.createElement(ConnectionTypeUI, {
+  return /* @__PURE__ */ import_react44.default.createElement(ConnectionTypeUI, {
     connectionType,
     connectionTypeOptions,
     onChange
@@ -82233,121 +82263,336 @@ function ConnectionType(props) {
 }
 
 // src/modules/RecordingForm/ConnectionDetails/index.tsx
-var import_react43 = __toModule(require_react());
-function ConnectionDetailsUI(_props) {
-  return /* @__PURE__ */ import_react43.default.createElement("div", {
-    className: "font-medium py-3 text-gray-400 text-xs tracking-wide uppercase connection-details"
-  }, /* @__PURE__ */ import_react43.default.createElement("p", null, "Configure Connection"));
+var import_react46 = __toModule(require_react());
+var import_ts_pattern4 = __toModule(require_lib());
+
+// src/components/FormField/FormFieldInput/index.tsx
+var import_react45 = __toModule(require_react());
+function FormFieldInput(props) {
+  const { autoFocus, className, clearable, description, label, name, onChange, placeholder, value } = props;
+  return /* @__PURE__ */ import_react45.default.createElement(FormField, {
+    className
+  }, !!label && /* @__PURE__ */ import_react45.default.createElement("p", {
+    className: "font-semibold text-base text-black form-field__label"
+  }, label), !!description && /* @__PURE__ */ import_react45.default.createElement("p", {
+    className: "font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description"
+  }, description), /* @__PURE__ */ import_react45.default.createElement("div", {
+    className: "mt-3 w-full"
+  }, /* @__PURE__ */ import_react45.default.createElement(Input, {
+    autoFocus,
+    clearable,
+    name,
+    onChange,
+    placeholder,
+    value
+  })));
 }
-function ConnectionDetails(_props) {
-  return /* @__PURE__ */ import_react43.default.createElement(ConnectionDetailsUI, null);
+
+// src/modules/RecordingForm/ConnectionDetails/index.tsx
+var ZOOM_MEETING_TYPE_OPTION_PHONE = {
+  label: "Dial-in number",
+  value: "phone",
+  description: "Connect to Zoom meeting via dial-in number"
+};
+var ZOOM_MEETING_TYPE_OPTION_WEB = {
+  label: "Web URL",
+  value: "web",
+  description: "Connect to Zoom meeting via web url"
+};
+var ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_WEB, ZOOM_MEETING_TYPE_OPTION_PHONE];
+function ConnectionDetailsUI(props) {
+  const {
+    connectAccessId,
+    connectCallerId,
+    connectionType,
+    connectPhoneNumber,
+    connectPin,
+    connectUrl,
+    onChangeConnectAccessId,
+    onChangeConnectCallerId,
+    onChangeConnectPhoneNumber,
+    onChangeConnectPin,
+    onChangeConnectUrl,
+    onChangeParticipationType,
+    onChangeZoomMeetingType,
+    participationType,
+    participationTypeOptions,
+    zoomMeetingType,
+    zoomMeetingTypeOptions
+  } = props;
+  const dialInField = /* @__PURE__ */ import_react46.default.createElement(FormFieldInput, {
+    autoFocus: true,
+    className: "mt-5 px-4 py-3",
+    clearable: true,
+    description: "Enter the dial-in number",
+    label: "Dial-in number*",
+    name: "connectPhoneNumber",
+    onChange: onChangeConnectPhoneNumber,
+    placeholder: "(888)-123-4567",
+    value: connectPhoneNumber
+  });
+  const participationTypeField = /* @__PURE__ */ import_react46.default.createElement(FormFieldSelect, {
+    className: "mt-2.5",
+    name: "participationType",
+    onChange: onChangeParticipationType,
+    options: participationTypeOptions,
+    value: participationType
+  });
+  const renderConnectUrlField = (description, label) => /* @__PURE__ */ import_react46.default.createElement(FormFieldInput, {
+    autoFocus: true,
+    className: "mt-5 px-4 py-3",
+    clearable: true,
+    description,
+    label,
+    name: "connectUrl",
+    onChange: onChangeConnectUrl,
+    placeholder: "https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5",
+    value: connectUrl
+  });
+  const renderMeetingIdField = (label, description) => /* @__PURE__ */ import_react46.default.createElement(FormFieldInput, {
+    className: "mt-5 px-4 py-3",
+    clearable: true,
+    description,
+    label,
+    name: "connectAccessId",
+    onChange: onChangeConnectAccessId,
+    placeholder: "1234567890",
+    value: connectAccessId
+  });
+  const renderPasscodeField = (label = "Passcode", description = "Enter the passcode (optional)") => /* @__PURE__ */ import_react46.default.createElement(FormFieldInput, {
+    className: "mt-5 px-4 py-3",
+    clearable: true,
+    description,
+    label,
+    name: "connectPin",
+    onChange: onChangeConnectPin,
+    value: connectPin
+  });
+  return /* @__PURE__ */ import_react46.default.createElement("div", {
+    className: "py-3 connection-details"
+  }, /* @__PURE__ */ import_react46.default.createElement("p", {
+    className: "font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase"
+  }, "Configure Connection"), (0, import_ts_pattern4.match)(connectionType).with(ConnectionType2.Zoom, () => /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, /* @__PURE__ */ import_react46.default.createElement(FormFieldSelect, {
+    className: "mt-2.5",
+    name: "zoomMeetingType",
+    onChange: onChangeZoomMeetingType,
+    options: zoomMeetingTypeOptions,
+    value: zoomMeetingType
+  }), !!zoomMeetingType && /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, (0, import_ts_pattern4.match)(zoomMeetingType).with("web", () => /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, renderConnectUrlField("Enter the Zoom meeting url", "Meeting URL*"), renderPasscodeField(), /* @__PURE__ */ import_react46.default.createElement(FormFieldInput, {
+    className: "mt-5 px-4 py-3",
+    clearable: true,
+    description: "Enter the name of the caller ID Aiera should use when connecting (optional)",
+    label: "Caller ID",
+    name: "connectCallerId",
+    onChange: onChangeConnectCallerId,
+    value: connectCallerId
+  }))).with("phone", () => /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, dialInField, renderMeetingIdField("Meeting ID*", "Enter the meeting ID"), renderPasscodeField(), participationTypeField)).otherwise(() => null)))).with(ConnectionType2.GoogleMeet, () => /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, dialInField, renderPasscodeField("PIN", "Enter a PIN (optional)"), participationTypeField)).with(ConnectionType2.Webcast, () => /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, renderConnectUrlField("Enter the url to access recording", "Host URL*"))).with(ConnectionType2.PhoneNumber, () => /* @__PURE__ */ import_react46.default.createElement(import_react46.default.Fragment, null, dialInField, renderMeetingIdField("Meeting ID / Access Code", "Enter the meeting ID or access code"), renderPasscodeField("PIN", "Enter a PIN (optional)"), participationTypeField)).otherwise(() => null));
+}
+function ConnectionDetails(props) {
+  const { state, handlers } = useChangeHandlers({ zoomMeetingType: "" });
+  const {
+    connectAccessId,
+    connectCallerId,
+    connectionType,
+    connectPhoneNumber,
+    connectPin,
+    connectUrl,
+    onChangeConnectAccessId,
+    onChangeConnectCallerId,
+    onChangeConnectPhoneNumber,
+    onChangeConnectPin,
+    onChangeConnectUrl,
+    onChangeParticipationType,
+    participationType,
+    participationTypeOptions
+  } = props;
+  return /* @__PURE__ */ import_react46.default.createElement(ConnectionDetailsUI, {
+    connectAccessId,
+    connectCallerId,
+    connectionType,
+    connectPhoneNumber,
+    connectPin,
+    connectUrl,
+    onChangeConnectAccessId,
+    onChangeConnectCallerId,
+    onChangeConnectPhoneNumber,
+    onChangeConnectPin,
+    onChangeConnectUrl,
+    onChangeParticipationType,
+    onChangeZoomMeetingType: handlers.zoomMeetingType,
+    participationType,
+    participationTypeOptions,
+    zoomMeetingType: state.zoomMeetingType,
+    zoomMeetingTypeOptions: ZOOM_MEETING_TYPE_OPTIONS
+  });
 }
 
 // src/modules/RecordingForm/RecordingDetails/index.tsx
-var import_react44 = __toModule(require_react());
+var import_react47 = __toModule(require_react());
 function RecordingDetailsUI(_props) {
-  return /* @__PURE__ */ import_react44.default.createElement("div", {
+  return /* @__PURE__ */ import_react47.default.createElement("div", {
     className: "font-medium py-3 text-gray-400 text-xs tracking-wide uppercase recording-details"
-  }, /* @__PURE__ */ import_react44.default.createElement("p", null, "Recording Details"));
+  }, /* @__PURE__ */ import_react47.default.createElement("p", null, "Recording Details"));
 }
 function RecordingDetails(_props) {
-  return /* @__PURE__ */ import_react44.default.createElement(RecordingDetailsUI, null);
+  return /* @__PURE__ */ import_react47.default.createElement(RecordingDetailsUI, null);
 }
 
 // src/modules/RecordingForm/Scheduling/index.tsx
-var import_react45 = __toModule(require_react());
+var import_react48 = __toModule(require_react());
 function SchedulingUI(_props) {
-  return /* @__PURE__ */ import_react45.default.createElement("div", {
+  return /* @__PURE__ */ import_react48.default.createElement("div", {
     className: "font-medium py-3 text-gray-400 text-xs tracking-wide uppercase scheduling"
-  }, /* @__PURE__ */ import_react45.default.createElement("p", null, "Scheduling"));
+  }, /* @__PURE__ */ import_react48.default.createElement("p", null, "Scheduling"));
 }
 function Scheduling(_props) {
-  return /* @__PURE__ */ import_react45.default.createElement(SchedulingUI, null);
+  return /* @__PURE__ */ import_react48.default.createElement(SchedulingUI, null);
 }
 
 // src/modules/RecordingForm/Troubleshooting/index.tsx
-var import_react46 = __toModule(require_react());
+var import_react49 = __toModule(require_react());
 function TroubleshootingUI(_props) {
-  return /* @__PURE__ */ import_react46.default.createElement("div", {
+  return /* @__PURE__ */ import_react49.default.createElement("div", {
     className: "font-medium py-3 text-gray-400 text-xs tracking-wide uppercase troubleshooting"
-  }, /* @__PURE__ */ import_react46.default.createElement("p", null, "Troubleshooting"));
+  }, /* @__PURE__ */ import_react49.default.createElement("p", null, "Troubleshooting"));
 }
 function Troubleshooting(_props) {
-  return /* @__PURE__ */ import_react46.default.createElement(TroubleshootingUI, null);
+  return /* @__PURE__ */ import_react49.default.createElement(TroubleshootingUI, null);
 }
 
 // src/modules/RecordingForm/index.tsx
 var NUM_STEPS = 5;
-var CONNECTION_TYPE_OPTIONS = {
-  ["zoom" /* Zoom */]: {
-    label: "Zoom",
-    value: "zoom" /* Zoom */,
-    description: "Connect to a Zoom dial-in number"
-  },
-  ["google_meet" /* GoogleMeet */]: {
-    label: "Google Meet",
-    value: "google_meet" /* GoogleMeet */,
-    description: "Connect to a Google Meet dial-in number"
-  },
-  ["webcast" /* Webcast */]: {
-    label: "Webcast URL",
-    value: "webcast" /* Webcast */,
-    description: "Connect to a webcast url"
-  },
-  ["phone" /* PhoneNumber */]: {
-    label: "Phone Number",
-    value: "phone" /* PhoneNumber */,
-    description: "Connect to any phone number, with optional pin"
-  }
+var ConnectionType2 = /* @__PURE__ */ ((ConnectionType3) => {
+  ConnectionType3["GoogleMeet"] = "google_meet";
+  ConnectionType3["PhoneNumber"] = "phone";
+  ConnectionType3["Webcast"] = "webcast";
+  ConnectionType3["Zoom"] = "zoom";
+  return ConnectionType3;
+})(ConnectionType2 || {});
+var CONNECTION_TYPE_OPTION_GOOGLE = {
+  label: "Google Meet",
+  value: "google_meet" /* GoogleMeet */,
+  description: "Connect to a Google Meet dial-in number"
 };
+var CONNECTION_TYPE_OPTION_PHONE = {
+  label: "Phone Number",
+  value: "phone" /* PhoneNumber */,
+  description: "Connect to any phone number, with optional pin"
+};
+var CONNECTION_TYPE_OPTION_WEBCAST = {
+  label: "Webcast URL",
+  value: "webcast" /* Webcast */,
+  description: "Connect to a webcast url"
+};
+var CONNECTION_TYPE_OPTION_ZOOM = {
+  label: "Zoom",
+  value: "zoom" /* Zoom */,
+  description: "Connect to a Zoom dial-in number"
+};
+var CONNECTION_TYPE_OPTIONS = [
+  CONNECTION_TYPE_OPTION_ZOOM,
+  CONNECTION_TYPE_OPTION_GOOGLE,
+  CONNECTION_TYPE_OPTION_WEBCAST,
+  CONNECTION_TYPE_OPTION_PHONE
+];
+var CONNECTION_TYPE_OPTIONS_MAP = {
+  [CONNECTION_TYPE_OPTION_GOOGLE.value]: CONNECTION_TYPE_OPTION_GOOGLE,
+  [CONNECTION_TYPE_OPTION_PHONE.value]: CONNECTION_TYPE_OPTION_PHONE,
+  [CONNECTION_TYPE_OPTION_WEBCAST.value]: CONNECTION_TYPE_OPTION_WEBCAST,
+  [CONNECTION_TYPE_OPTION_ZOOM.value]: CONNECTION_TYPE_OPTION_ZOOM
+};
+var PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING = {
+  label: "Set it & forget it",
+  value: "not_participating" /* NotParticipating */,
+  description: "We'll automatically connect, then transcribe and record the call for you. You can join later if you change your mind."
+};
+var PARTICIPATION_TYPE_OPTION_PARTICIPATING = {
+  label: "Call me",
+  value: "participating" /* Participating */,
+  description: "We'll call you, and then connect you to the call. Please enter any required pins, or speak to an operator, if needed. The call will continue to record & transcribe even after you disconnect. You may end the recording manually from the transcript in Aiera."
+};
+var PARTICIPATION_TYPE_OPTIONS = [
+  PARTICIPATION_TYPE_OPTION_PARTICIPATING,
+  PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING
+];
 function RecordingFormUI(props) {
   const {
+    connectAccessId,
+    connectCallerId,
     connectionType,
+    connectPhoneNumber,
+    connectPin,
+    connectUrl,
     isNextButtonDisabled,
     onBack,
+    onChangeConnectAccessId,
+    onChangeConnectCallerId,
     onChangeConnectionType,
+    onChangeConnectPhoneNumber,
+    onChangeConnectPin,
+    onChangeConnectUrl,
+    onChangeParticipationType,
     onNextStep,
     onPrevStep,
     onSubmit,
+    participationType,
     step
   } = props;
-  return /* @__PURE__ */ import_react47.default.createElement("div", {
-    className: "bg-[#F7F8FB] h-full flex flex-col justify-between recording-form"
-  }, /* @__PURE__ */ import_react47.default.createElement("div", {
-    className: "bg-white flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header"
-  }, /* @__PURE__ */ import_react47.default.createElement("div", {
+  return /* @__PURE__ */ import_react50.default.createElement("div", {
+    className: "bg-slate-50 h-full flex flex-col justify-between recording-form"
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
+    className: "bg-white flex flex-col pt-3 px-3 shadow-3xl z-10 dark:shadow-3xl-dark dark:bg-bluegray-6 recording-form__header"
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react47.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react50.default.createElement(Button, {
     className: "mr-2",
     onClick: onBack
-  }, /* @__PURE__ */ import_react47.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react50.default.createElement(ArrowLeft, {
     className: "fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), "Recordings"), /* @__PURE__ */ import_react47.default.createElement("p", {
+  }), "Recordings"), /* @__PURE__ */ import_react50.default.createElement("p", {
     className: "ml-auto text-gray-400 text-sm"
-  }, "Step ", step, " of ", NUM_STEPS))), /* @__PURE__ */ import_react47.default.createElement("div", {
-    className: "h-full pb-3 px-3 shadow-3xl"
-  }, (0, import_ts_pattern4.match)(step).with(1, () => /* @__PURE__ */ import_react47.default.createElement(ConnectionType, {
+  }, "Step ", step, " of ", NUM_STEPS))), /* @__PURE__ */ import_react50.default.createElement("div", {
+    className: "h-full overflow-y-scroll pb-3 px-3 shadow-3xl"
+  }, (0, import_ts_pattern5.match)(step).with(1, () => /* @__PURE__ */ import_react50.default.createElement(ConnectionType, {
     connectionType,
     connectionTypeOptions: CONNECTION_TYPE_OPTIONS,
     onChange: onChangeConnectionType
-  })).with(2, () => /* @__PURE__ */ import_react47.default.createElement(ConnectionDetails, null)).with(3, () => /* @__PURE__ */ import_react47.default.createElement(Scheduling, null)).with(4, () => /* @__PURE__ */ import_react47.default.createElement(Troubleshooting, null)).with(5, () => /* @__PURE__ */ import_react47.default.createElement(RecordingDetails, null)).otherwise(() => null)), /* @__PURE__ */ import_react47.default.createElement("div", {
+  })).with(2, () => /* @__PURE__ */ import_react50.default.createElement(ConnectionDetails, {
+    connectAccessId,
+    connectCallerId,
+    connectionType,
+    connectPhoneNumber,
+    connectPin,
+    connectUrl,
+    onChangeConnectAccessId,
+    onChangeConnectCallerId,
+    onChangeConnectPhoneNumber,
+    onChangeConnectPin,
+    onChangeConnectUrl,
+    onChangeParticipationType,
+    participationType,
+    participationTypeOptions: PARTICIPATION_TYPE_OPTIONS
+  })).with(3, () => /* @__PURE__ */ import_react50.default.createElement(Scheduling, null)).with(4, () => /* @__PURE__ */ import_react50.default.createElement(Troubleshooting, null)).with(5, () => /* @__PURE__ */ import_react50.default.createElement(RecordingDetails, null)).otherwise(() => null)), /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "bg-white border-gray-200 border-opacity-80 border-t flex flex-col pt-3 px-3 shadow-inner recording-form__footer"
-  }, /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, step > 1 && /* @__PURE__ */ import_react47.default.createElement("div", {
+  }, step > 1 && /* @__PURE__ */ import_react50.default.createElement("div", {
     className: "cursor-pointer flex group items-center mr-2 prev-step",
     onClick: () => onPrevStep(step - 1)
-  }, /* @__PURE__ */ import_react47.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react50.default.createElement(ArrowLeft, {
     className: "fill-current mr-2 relative text-black w-3.5 z-1 group-active:fill-current group-active:text-white"
-  }), /* @__PURE__ */ import_react47.default.createElement("span", {
+  }), /* @__PURE__ */ import_react50.default.createElement("span", {
     className: "text-sm group-hover:underline"
-  }, (0, import_ts_pattern4.match)(step).with(2, () => "Change Connection").with(3, () => "Change Configuration").with(4, () => "Scheduling").with(5, () => "Troubleshooting").otherwise(() => null))), /* @__PURE__ */ import_react47.default.createElement(Button, {
+  }, (0, import_ts_pattern5.match)(step).with(2, () => "Change Connection").with(3, () => "Change Configuration").with(4, () => "Scheduling").with(5, () => "Troubleshooting").otherwise(() => null))), /* @__PURE__ */ import_react50.default.createElement(Button, {
     className: "bg-blue-500 cursor-pointer flex items-center ml-auto rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step",
     disabled: isNextButtonDisabled,
     onClick: (event) => step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1)
-  }, /* @__PURE__ */ import_react47.default.createElement("span", {
+  }, /* @__PURE__ */ import_react50.default.createElement("span", {
     className: "font-light text-sm text-white"
-  }, (0, import_ts_pattern4.match)(step).with(1, () => `Configure ${connectionType ? CONNECTION_TYPE_OPTIONS[connectionType].label : ""}`).with(2, () => "Scheduling").with(3, () => "Troubleshooting").with(4, () => "Recording Details").with(5, () => "Create Recording").otherwise(() => null)), /* @__PURE__ */ import_react47.default.createElement(ArrowLeft, {
+  }, (0, import_ts_pattern5.match)(step).with(1, () => {
+    const connectionTypeOption = connectionType ? CONNECTION_TYPE_OPTIONS_MAP[connectionType] : null;
+    return `Configure ${connectionTypeOption ? connectionTypeOption.label : ""}`;
+  }).with(2, () => "Scheduling").with(3, () => "Troubleshooting").with(4, () => "Recording Details").with(5, () => "Create Recording").otherwise(() => null)), /* @__PURE__ */ import_react50.default.createElement(ArrowLeft, {
     className: "fill-current ml-2 relative rotate-180 text-white w-3.5 z-1 group-active:fill-current group-active:text-white"
   })))));
 }
@@ -82362,12 +82607,12 @@ function RecordingForm(props) {
     connectUrl: "",
     meetingType: "",
     onConnectDialNumber: "",
-    participationType: "",
+    participationType: void 0,
     smsAlertBeforeCall: false
   });
-  const [step, setStep] = (0, import_react47.useState)(1);
-  const isNextButtonDisabled = (0, import_react47.useMemo)(() => step >= 1 && !state.connectionType, [state, step]);
-  return /* @__PURE__ */ import_react47.default.createElement(RecordingFormUI, {
+  const [step, setStep] = (0, import_react50.useState)(1);
+  const isNextButtonDisabled = (0, import_react50.useMemo)(() => step >= 1 && !state.connectionType, [state, step]);
+  return /* @__PURE__ */ import_react50.default.createElement(RecordingFormUI, {
     connectAccessId: state.connectAccessId,
     connectCallerId: state.connectCallerId,
     connectionType: state.connectionType,
@@ -82377,7 +82622,13 @@ function RecordingForm(props) {
     isNextButtonDisabled,
     meetingType: state.meetingType,
     onBack,
+    onChangeConnectAccessId: handlers.connectAccessId,
+    onChangeConnectCallerId: handlers.connectCallerId,
     onChangeConnectionType: handlers.connectionType,
+    onChangeConnectPhoneNumber: handlers.connectPhoneNumber,
+    onChangeConnectPin: handlers.connectPin,
+    onChangeConnectUrl: handlers.connectUrl,
+    onChangeParticipationType: handlers.participationType,
     onConnectDialNumber: state.onConnectDialNumber,
     onNextStep: setStep,
     onPrevStep: setStep,
@@ -82392,65 +82643,65 @@ function RecordingForm(props) {
 function RecordingListUI(props) {
   const { onSearchChange, recordingsQuery, searchTerm, showForm, toggleForm } = props;
   if (showForm) {
-    return /* @__PURE__ */ import_react48.default.createElement(RecordingForm, {
+    return /* @__PURE__ */ import_react51.default.createElement(RecordingForm, {
       onBack: toggleForm
     });
   }
-  const wrapMsg = (msg) => /* @__PURE__ */ import_react48.default.createElement("div", {
+  const wrapMsg = (msg) => /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   let prevEventDate = null;
-  return /* @__PURE__ */ import_react48.default.createElement("div", {
+  return /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "h-full flex flex-col recordinglist"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 recordinglist__header"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex items-center mb-3"
-  }, /* @__PURE__ */ import_react48.default.createElement(Input, {
-    icon: /* @__PURE__ */ import_react48.default.createElement(MagnifyingGlass, null),
+  }, /* @__PURE__ */ import_react51.default.createElement(Input, {
+    icon: /* @__PURE__ */ import_react51.default.createElement(MagnifyingGlass, null),
     name: "search",
     onChange: onSearchChange,
     placeholder: "Search Recordings...",
     value: searchTerm
-  }), /* @__PURE__ */ import_react48.default.createElement(Button, {
+  }), /* @__PURE__ */ import_react51.default.createElement(Button, {
     className: "bg-blue-500 cursor-pointer flex flex-shrink-0 items-center ml-2 rounded-0.375 active:bg-blue-700 hover:bg-blue-600",
     onClick: toggleForm
-  }, /* @__PURE__ */ import_react48.default.createElement(Plus, {
+  }, /* @__PURE__ */ import_react51.default.createElement(Plus, {
     className: "h-4 mb-0.5 text-white w-2.5"
-  }), /* @__PURE__ */ import_react48.default.createElement("span", {
+  }), /* @__PURE__ */ import_react51.default.createElement("span", {
     className: "font-light ml-1.5 text-sm text-white"
-  }, "Schedule Recording")))), /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, "Schedule Recording")))), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex flex-col flex-grow"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex flex-col items-center justify-center flex-1"
-  }, (0, import_ts_pattern5.match)(recordingsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react48.default.createElement("ul", {
+  }, (0, import_ts_pattern6.match)(recordingsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react51.default.createElement("ul", {
     className: "w-full RecordingList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react48.default.createElement("li", {
+  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react51.default.createElement("li", {
     key: idx,
     className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex items-center"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9"
-  }), /* @__PURE__ */ import_react48.default.createElement("div", {
+  }), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react48.default.createElement("div", {
+  }), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react48.default.createElement("div", {
+  })), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react48.default.createElement("div", {
+  }, /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react48.default.createElement("div", {
+  }), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react48.default.createElement("div", {
+  }), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no recordings.")).with({ status: "error" }, () => wrapMsg("There was an error loading recordings.")).with({ status: "empty" }, () => wrapMsg("There are no recordings.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react48.default.createElement("ul", {
+  })))))))).with({ status: "paused" }, () => wrapMsg("There are no recordings.")).with({ status: "error" }, () => wrapMsg("There was an error loading recordings.")).with({ status: "empty" }, () => wrapMsg("There are no recordings.")).with({ status: "success" }, ({ data: { events } }) => /* @__PURE__ */ import_react51.default.createElement("ul", {
     className: "w-full"
   }, events.map((event) => {
     var _a;
@@ -82459,22 +82710,22 @@ function RecordingListUI(props) {
     let divider = null;
     if (!prevEventDate || prevEventDate.toFormat("MM/dd/yyyy") !== eventDate.toFormat("MM/dd/yyyy")) {
       prevEventDate = eventDate;
-      divider = /* @__PURE__ */ import_react48.default.createElement("li", {
+      divider = /* @__PURE__ */ import_react51.default.createElement("li", {
         className: "sticky top-[8px] px-3 first-of-type:pb-2"
-      }, /* @__PURE__ */ import_react48.default.createElement("div", {
+      }, /* @__PURE__ */ import_react51.default.createElement("div", {
         className: "px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70"
-      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react48.default.createElement("div", {
+      }, eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react51.default.createElement("div", {
         className: "ml-2 w-full flex h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"
       })));
     }
-    return /* @__PURE__ */ import_react48.default.createElement(import_react48.Fragment, {
+    return /* @__PURE__ */ import_react51.default.createElement(import_react51.Fragment, {
       key: event.id
-    }, divider, /* @__PURE__ */ import_react48.default.createElement("li", {
+    }, divider, /* @__PURE__ */ import_react51.default.createElement("li", {
       tabIndex: 0,
       className: "group h-12 text-xs text-gray-300 mx-1 rounded-lg px-2 cursor-pointer hover:bg-blue-50 active:bg-blue-100 dark:hover:bg-bluegray-6 dark:active:bg-bluegray-5"
-    }, /* @__PURE__ */ import_react48.default.createElement(Tooltip, {
+    }, /* @__PURE__ */ import_react51.default.createElement(Tooltip, {
       className: "h-12 flex flex-row",
-      content: /* @__PURE__ */ import_react48.default.createElement("div", {
+      content: /* @__PURE__ */ import_react51.default.createElement("div", {
         className: "max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9"
       }, prettyLineBreak(event.title)),
       grow: "up-right",
@@ -82482,35 +82733,35 @@ function RecordingListUI(props) {
       position: "top-left",
       yOffset: 4,
       hideOnDocumentScroll: true
-    }, /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "flex items-center justify-center"
-    }, /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "flex items-center justify-center w-8 h-8"
-    }, /* @__PURE__ */ import_react48.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react51.default.createElement(PlayButton, {
       metaData: { eventType: event.eventType },
       id: event.id,
       url: event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioRecordingUrl,
       offset: audioOffset || 0
-    }))), /* @__PURE__ */ import_react48.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4"
-    }, /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "flex items-end"
-    }, /* @__PURE__ */ import_react48.default.createElement("span", {
+    }, /* @__PURE__ */ import_react51.default.createElement("span", {
       className: "leading-none text-sm text-black dark:text-white truncate font-bold"
-    }, event.title)), /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, event.title)), /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white"
-    }, event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event.isLive ? /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, event.isLive ? /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
-    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300"
-    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react48.default.createElement("div", {
+    }, eventDate.toFormat("h:mma")), /* @__PURE__ */ import_react51.default.createElement("div", {
       className: "leading-none mt-1 text-gray-300 group-hover:text-gray-500"
     }, eventDate.toFormat("MMM dd, yyyy"))))));
-  }))).exhaustive(), /* @__PURE__ */ import_react48.default.createElement("div", {
+  }))).exhaustive(), /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex-1"
-  })))), /* @__PURE__ */ import_react48.default.createElement(Playbar, null));
+  })))), /* @__PURE__ */ import_react51.default.createElement(Playbar, null));
 }
 function RecordingList(_props) {
   const { handlers, state } = useChangeHandlers({
@@ -82541,24 +82792,24 @@ function RecordingList(_props) {
       }
     }
   });
-  return /* @__PURE__ */ import_react48.default.createElement(RecordingListUI, {
+  return /* @__PURE__ */ import_react51.default.createElement(RecordingListUI, {
     onSearchChange: handlers.searchTerm,
     recordingsQuery,
     searchTerm: state.searchTerm,
     showForm: state.showForm,
-    toggleForm: (0, import_react48.useCallback)((event) => handlers.showForm(event, { value: !state.showForm }), [state.showForm])
+    toggleForm: (0, import_react51.useCallback)((event) => handlers.showForm(event, { value: !state.showForm }), [state.showForm])
   });
 }
 
 // src/web/modules/RecordingList/index.tsx
 var App = () => {
-  return /* @__PURE__ */ import_react49.default.createElement(import_react49.StrictMode, null, /* @__PURE__ */ import_react49.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react52.default.createElement(import_react52.StrictMode, null, /* @__PURE__ */ import_react52.default.createElement(Provider6, {
     config: { moduleName: "RecordingList" }
-  }, /* @__PURE__ */ import_react49.default.createElement(Auth, null, /* @__PURE__ */ import_react49.default.createElement("div", {
+  }, /* @__PURE__ */ import_react52.default.createElement(Auth, null, /* @__PURE__ */ import_react52.default.createElement("div", {
     className: "h-full"
-  }, /* @__PURE__ */ import_react49.default.createElement(RecordingList, null)))));
+  }, /* @__PURE__ */ import_react52.default.createElement(RecordingList, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react49.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react52.default.createElement(App, null), document.getElementById("root"));
 /*
 object-assign
 (c) Sindre Sorhus
