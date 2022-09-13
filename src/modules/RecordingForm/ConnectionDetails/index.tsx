@@ -1,13 +1,15 @@
-import React, { ReactElement } from 'react';
+import React, { Dispatch, ReactElement, SetStateAction, useMemo } from 'react';
 import { match } from 'ts-pattern';
-
+import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldInput } from '@aiera/client-sdk/components/FormField/FormFieldInput';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
+import { PhoneNumberInput } from '@aiera/client-sdk/components/PhoneNumberInput';
 import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import {
-    ZOOM_MEETING_TYPE_OPTIONS,
     ConnectionType,
     ParticipationType,
+    ZOOM_MEETING_TYPE_OPTION_PHONE,
+    ZOOM_MEETING_TYPE_OPTIONS,
 } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
@@ -21,10 +23,12 @@ interface ConnectionDetailsSharedProps {
     connectUrl: string;
     onChangeConnectAccessId: ChangeHandler<string>;
     onChangeConnectCallerId: ChangeHandler<string>;
+    onChangeConnectDialNumber: Dispatch<SetStateAction<string>>;
     onChangeConnectPhoneNumber: ChangeHandler<string>;
     onChangeConnectPin: ChangeHandler<string>;
     onChangeConnectUrl: ChangeHandler<string>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
+    onConnectDialNumber: string;
     participationType?: ParticipationType;
     participationTypeOptions: SelectOption<ParticipationType>[];
 }
@@ -32,6 +36,7 @@ interface ConnectionDetailsSharedProps {
 /** @notExported */
 interface ConnectionDetailsUIProps extends ConnectionDetailsSharedProps {
     onChangeZoomMeetingType: ChangeHandler<string>;
+    showCallMeFields: boolean;
     zoomMeetingType?: string;
 }
 
@@ -45,13 +50,16 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         connectUrl,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
+        onChangeConnectDialNumber,
         onChangeConnectPhoneNumber,
         onChangeConnectPin,
         onChangeConnectUrl,
         onChangeParticipationType,
         onChangeZoomMeetingType,
+        onConnectDialNumber,
         participationType,
         participationTypeOptions,
+        showCallMeFields,
         zoomMeetingType,
     } = props;
     const dialInField = (
@@ -175,6 +183,22 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                     </>
                 ))
                 .otherwise(() => null)}
+            {showCallMeFields && (
+                <FormField className="mt-5 px-4 py-3">
+                    <p className="font-semibold text-base text-black form-field__label">Your phone number</p>
+                    <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
+                        Must be a direct line. Extensions are not supported for personal numbers
+                    </p>
+                    <PhoneNumberInput
+                        className="mt-3"
+                        defaultCountry="US"
+                        name="onConnectDialNumber"
+                        onChange={onChangeConnectDialNumber}
+                        placeholder="(888)-123-4567"
+                        value={onConnectDialNumber}
+                    />
+                </FormField>
+            )}
         </div>
     );
 }
@@ -196,13 +220,27 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
         connectUrl,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
+        onChangeConnectDialNumber,
         onChangeConnectPhoneNumber,
         onChangeConnectPin,
         onChangeConnectUrl,
         onChangeParticipationType,
+        onConnectDialNumber,
         participationType,
         participationTypeOptions,
     } = props;
+    // Only show the call me fields if the participation type is "Call me"
+    // and the connection type is either Google Meet, Phone Number,
+    // or Zoom with the "phone" meeting type selected
+    const showCallMeFields = useMemo(
+        () =>
+            participationType === ParticipationType.Participating &&
+            !!connectionType &&
+            ([ConnectionType.GoogleMeet, ConnectionType.PhoneNumber].includes(connectionType) ||
+                (connectionType === ConnectionType.Zoom &&
+                    state.zoomMeetingType === ZOOM_MEETING_TYPE_OPTION_PHONE.value)),
+        [connectionType, participationType]
+    );
     return (
         <ConnectionDetailsUI
             connectAccessId={connectAccessId}
@@ -213,13 +251,16 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             connectUrl={connectUrl}
             onChangeConnectAccessId={onChangeConnectAccessId}
             onChangeConnectCallerId={onChangeConnectCallerId}
+            onChangeConnectDialNumber={onChangeConnectDialNumber}
             onChangeConnectPhoneNumber={onChangeConnectPhoneNumber}
             onChangeConnectPin={onChangeConnectPin}
             onChangeConnectUrl={onChangeConnectUrl}
             onChangeParticipationType={onChangeParticipationType}
             onChangeZoomMeetingType={handlers.zoomMeetingType}
+            onConnectDialNumber={onConnectDialNumber}
             participationType={participationType}
             participationTypeOptions={participationTypeOptions}
+            showCallMeFields={showCallMeFields}
             zoomMeetingType={state.zoomMeetingType}
         />
     );

@@ -1,5 +1,5 @@
-import React, { FocusEvent, ReactElement, useEffect, useState } from 'react';
-import { ChangeHandler } from '@aiera/client-sdk/types';
+import React, { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react';
+import 'react-phone-number-input/style.css';
 import './styles.css';
 
 interface PhoneNumberInputSharedProps {
@@ -7,7 +7,7 @@ interface PhoneNumberInputSharedProps {
     className?: string;
     label?: string;
     name?: string;
-    onChange?: ChangeHandler<string>;
+    onChange: Dispatch<SetStateAction<string>>;
     placeholder?: string;
     value?: string;
 }
@@ -270,9 +270,8 @@ type PhoneInputProps = {
     defaultCountry?: CountryCode;
     disabled?: boolean;
     initialValueFormat?: 'national';
-    onFocus?(event: FocusEvent<HTMLElement>): void;
     onChange(value?: string): void;
-    onBlur?(event: FocusEvent<HTMLElement>): void;
+    placeholder?: string;
     value?: string;
 };
 interface PhoneInputState<Props> {
@@ -301,8 +300,21 @@ interface PhoneNumberInputUIProps extends PhoneNumberInputSharedProps {
 }
 
 export function PhoneNumberInputUI(props: PhoneNumberInputUIProps): ReactElement {
-    const { className = '' } = props;
-    return <div className={className}>PhoneNumberInputUI</div>;
+    const { className = '', onChange, placeholder, ReactPhoneInput, value } = props;
+    return (
+        <div className={`h-8 items-center w-full dark:text-white ${className}`}>
+            {ReactPhoneInput && (
+                <ReactPhoneInput
+                    autoComplete="off"
+                    defaultCountry="US"
+                    initialValueFormat="national"
+                    onChange={(value?: string) => onChange(value || '')}
+                    placeholder={placeholder}
+                    value={value}
+                />
+            )}
+        </div>
+    );
 }
 
 /** @notExported */

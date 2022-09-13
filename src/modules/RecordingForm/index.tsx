@@ -40,6 +40,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     meetingType: string;
     onChangeConnectAccessId: ChangeHandler<string>;
     onChangeConnectCallerId: ChangeHandler<string>;
+    onChangeConnectDialNumber: Dispatch<SetStateAction<string>>;
     onChangeConnectionType: ChangeHandler<ConnectionType>;
     onChangeConnectOffsetSeconds: ChangeHandler<number>;
     onChangeConnectPhoneNumber: ChangeHandler<string>;
@@ -76,6 +77,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onBack,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
+        onChangeConnectDialNumber,
         onChangeConnectionType,
         onChangeConnectOffsetSeconds,
         onChangeConnectPhoneNumber,
@@ -86,6 +88,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
+        onConnectDialNumber,
         onNextStep,
         onPrevStep,
         onSubmit,
@@ -128,10 +131,12 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             connectUrl={connectUrl}
                             onChangeConnectAccessId={onChangeConnectAccessId}
                             onChangeConnectCallerId={onChangeConnectCallerId}
+                            onChangeConnectDialNumber={onChangeConnectDialNumber}
                             onChangeConnectPhoneNumber={onChangeConnectPhoneNumber}
                             onChangeConnectPin={onChangeConnectPin}
                             onChangeConnectUrl={onChangeConnectUrl}
                             onChangeParticipationType={onChangeParticipationType}
+                            onConnectDialNumber={onConnectDialNumber}
                             participationType={participationType}
                             participationTypeOptions={PARTICIPATION_TYPE_OPTIONS}
                         />
@@ -211,7 +216,6 @@ interface RecordingFormState {
     connectPin: string;
     connectUrl: string;
     meetingType: string;
-    onConnectDialNumber: string;
     participationType?: ParticipationType;
     scheduleDate: Date;
     scheduleMeridiem: ScheduleMeridiem;
@@ -234,7 +238,6 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         connectPin: '',
         connectUrl: '',
         meetingType: '',
-        onConnectDialNumber: '',
         participationType: undefined,
         scheduleDate: new Date(),
         scheduleMeridiem: ScheduleMeridiem.AM,
@@ -243,9 +246,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         smsAlertBeforeCall: false,
     });
     const [step, setStep] = useState<number>(1);
-
+    // Need to track onConnectDialNumber separately because the react-phone-number-input library
+    // doesn't send the event with the onChange callback, so we can't use useChangeHandlers
+    const [onConnectDialNumber, onChangeConnectDialNumber] = useState<string>('');
     const isNextButtonDisabled = useMemo(() => step >= 1 && !state.connectionType, [state, step]);
-
     return (
         <RecordingFormUI
             connectAccessId={state.connectAccessId}
@@ -260,6 +264,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onBack={onBack}
             onChangeConnectAccessId={handlers.connectAccessId}
             onChangeConnectCallerId={handlers.connectCallerId}
+            onChangeConnectDialNumber={onChangeConnectDialNumber}
             onChangeConnectionType={handlers.connectionType}
             onChangeConnectOffsetSeconds={handlers.connectOffsetSeconds}
             onChangeConnectPhoneNumber={handlers.connectPhoneNumber}
@@ -270,7 +275,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeScheduleMeridiem={handlers.scheduleMeridiem}
             onChangeScheduleTime={handlers.scheduleTime}
             onChangeScheduleType={handlers.scheduleType}
-            onConnectDialNumber={state.onConnectDialNumber}
+            onConnectDialNumber={onConnectDialNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={() => console.log('SUBMITTED')}

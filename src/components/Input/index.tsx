@@ -51,7 +51,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         type,
     } = props;
     return (
-        <div className={`group h-8 items-center w-full relative  dark:text-white ${className} input__${name}`}>
+        <div className={`group h-8 items-center w-full relative dark:text-white ${className} input__${name}`}>
             {React.isValidElement(icon) && (
                 <div className="absolute pointer-events-none h-8 w-8 justify-center items-center flex">
                     {React.cloneElement(icon, {

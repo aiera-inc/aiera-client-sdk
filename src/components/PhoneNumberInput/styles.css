@@ -1,0 +1,12 @@
+/*className={classNames(*/
+/*'w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5',*/
+/*{ 'pl-7': !!icon, 'pl-3': !icon }*/
+/*)}*/
+
+input {
+    border: 1px solid rgb(229 231 235);
+    border-radius: 8px;
+    font-size: 14px;
+    height: 100%;
+    width: 100%;
+}
