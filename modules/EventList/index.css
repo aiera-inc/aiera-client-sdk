@@ -1185,6 +1185,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(254 242 242 / var(--tw-bg-opacity));
 }
+.bg-yellow-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 249 195 / var(--tw-bg-opacity));
+}
 .bg-gray-300 {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
@@ -1443,6 +1447,9 @@ video {
 }
 .text-3xl {
   font-size: 1.5rem;
+}
+.text-4xl {
+  font-size: 1.875rem;
 }
 .text-xl {
   font-size: 1.125rem;

@@ -37630,7 +37630,8 @@ function createGQLClient(config) {
       keys: {
         ApplicationConfiguration: () => null,
         EventQuotePriceInfo: () => null,
-        Search: () => null
+        Search: () => null,
+        UserEmailStatus: () => null
       }
     }),
     auth ? authExchange(auth) : null,
@@ -38139,6 +38140,14 @@ var CompanyResolutionDocument = lib_default`
         }
       }
     }
+  }
+}
+    `;
+var UserStatusDocument = lib_default`
+    query UserStatus($email: String!) {
+  userStatus(email: $email) {
+    active
+    status
   }
 }
     `;

@@ -32,7 +32,13 @@
                         showAudioPlayer: true,
                         showSearch: true,
                     },
+                    user: {
+                        //email: 'customer@example.com',
+                    },
                 });
+            });
+            eventList.on('user-status-inactive', (status) => {
+                console.log(status);
             });
         </script>
     </body>
