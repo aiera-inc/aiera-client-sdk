@@ -25,7 +25,13 @@ import { QueryResult, usePagingQuery } from '@aiera/client-sdk/api/client';
 import { isToday } from '@aiera/client-sdk/lib/datetimes';
 import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
-import { getPrimaryQuote, useCompanyResolver, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
+import {
+    getPrimaryQuote,
+    useCompanyResolver,
+    useAutoTrack,
+    useSettings,
+    useUserStatus,
+} from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { useAlertList } from '@aiera/client-sdk/lib/data';
@@ -75,6 +81,7 @@ export interface EventListUIProps {
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
     useConfigOptions: boolean;
+    userStatusInactive: boolean;
 }
 
 interface EventRowProps {
@@ -273,7 +280,31 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         searchTerm,
         setFocus,
         useConfigOptions,
+        userStatusInactive,
     } = props;
+
+    if (userStatusInactive) {
+        return (
+            <div className="flex flex-col justify-center items-center flex-1 h-full px-4">
+                <h1 className="text-4xl font-bold">Uh-oh...</h1>
+                <p className="text-slate-500 text-center">
+                    You no longer have access
+                    <br />
+                    to transcripts by Aiera.
+                </p>
+                <div className="bg-yellow-100 rounded-xl px-5 py-3 mt-4 text-center">
+                    <p>
+                        Please reach out to{' '}
+                        <a href="mailto:sales@aiera.com" className="text-blue-600">
+                            sales@aiera.com
+                        </a>
+                        <br />
+                        if you would like access to be enabled
+                    </p>
+                </div>
+            </div>
+        );
+    }
 
     if (event) {
         return (
@@ -482,6 +513,8 @@ interface EventListState {
     filterByTypes: FilterByType[];
     listType: EventView;
     searchTerm: string;
+    userStatusLoaded: boolean;
+    userStatusInactive: boolean;
 }
 
 export const EventList = ({ useConfigOptions = false }: EventListProps): ReactElement => {
@@ -494,10 +527,13 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
         filterByTypes: [],
         listType: useConfigOptions ? EventView.Recent : EventView.LiveAndUpcoming,
         searchTerm: '',
+        userStatusLoaded: false,
+        userStatusInactive: false,
     });
 
     const { settings } = useSettings();
     const resolveCompany = useCompanyResolver();
+    const resolveUserStatus = useUserStatus();
 
     const config = useConfig();
 
@@ -538,6 +574,23 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
         },
         'in'
     );
+
+    const loadUserStatus = async (email: string) => {
+        const userState = await resolveUserStatus(email);
+        if (userState?.userStatus) {
+            mergeState({ userStatusLoaded: true });
+            if (!userState.userStatus.active) {
+                mergeState({ userStatusInactive: true });
+                bus?.emit('user-status-inactive', userState.userStatus, 'out');
+            }
+        }
+    };
+
+    useEffect(() => {
+        if (!state.userStatusLoaded && config.user?.email) {
+            void loadUserStatus(config.user.email);
+        }
+    }, [state, state.userStatusLoaded, loadUserStatus, config, config?.user]);
 
     const onSelectEvent = useCallback<ChangeHandler<EventListEvent>>(
         (event, change) => {
@@ -769,6 +822,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             searchTerm={state.searchTerm}
             setFocus={setFocus}
             useConfigOptions={useConfigOptions}
+            userStatusInactive={state.userStatusInactive}
         />
     );
 };

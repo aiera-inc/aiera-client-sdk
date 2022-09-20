@@ -88,6 +88,7 @@ function createGQLClient(config: Config): Client {
                 ApplicationConfiguration: () => null,
                 EventQuotePriceInfo: () => null,
                 Search: () => null,
+                UserEmailStatus: () => null,
             },
         }),
         auth ? authExchange(auth) : null,

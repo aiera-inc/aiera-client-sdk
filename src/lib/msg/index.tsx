@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, ReactNode, ReactElement } from 'react';
 import type { InstrumentID } from '@finos/fdc3';
 import EventEmitter from 'eventemitter3';
-import type { ValueOf } from '@aiera/client-sdk/types';
+import type { UserEmailStatus, ValueOf } from '@aiera/client-sdk/types';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
 import { Config } from '../config';
 
@@ -23,6 +23,7 @@ export interface MessageBusEvents {
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
     'seek-transcript-seconds': number;
+    'user-status-inactive': UserEmailStatus;
 }
 
 export interface Message<E extends keyof MessageBusEvents> {

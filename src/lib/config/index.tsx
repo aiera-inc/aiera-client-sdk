@@ -20,6 +20,10 @@ interface Options {
     showAudioPlayer?: boolean;
 }
 
+interface User {
+    email?: string;
+}
+
 export interface Config {
     assetPath?: string;
     moduleName?: Module;
@@ -34,6 +38,7 @@ export interface Config {
     hideSettings?: boolean;
     openDash?: () => void;
     options?: Options;
+    user?: User;
 }
 
 // Setup default values for env

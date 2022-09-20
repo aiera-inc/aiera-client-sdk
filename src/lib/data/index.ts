@@ -14,6 +14,8 @@ import {
     CompanyResolutionQueryVariables,
     TrackMutation,
     TrackMutationVariables,
+    UserStatusQuery,
+    UserStatusQueryVariables,
 } from '@aiera/client-sdk/types/generated';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useConfig } from '@aiera/client-sdk/lib/config';
@@ -97,6 +99,29 @@ export function useCompanyResolver(): (
                 )
                 .toPromise();
             return result?.data?.companies;
+        },
+        [client]
+    );
+}
+
+export function useUserStatus(): (email: string) => Promise<UserStatusQuery | undefined> {
+    const client = useClient();
+    return useCallback(
+        async (email: string) => {
+            const result = await client
+                .query<UserStatusQuery, UserStatusQueryVariables>(
+                    gql`
+                        query UserStatus($email: String!) {
+                            userStatus(email: $email) {
+                                active
+                                status
+                            }
+                        }
+                    `,
+                    { email }
+                )
+                .toPromise();
+            return result.data;
         },
         [client]
     );
