@@ -31,6 +31,7 @@ import {
     useAutoTrack,
     useSettings,
     useUserStatus,
+    useTrack,
 } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
@@ -534,6 +535,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
     const { settings } = useSettings();
     const resolveCompany = useCompanyResolver();
     const resolveUserStatus = useUserStatus();
+    const track = useTrack();
 
     const config = useConfig();
 
@@ -579,6 +581,11 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
         const userState = await resolveUserStatus(email);
         if (userState?.userStatus) {
             mergeState({ userStatusLoaded: true });
+            void track('Load', 'User Status', {
+                email,
+                userStatusActive: userState.userStatus.active,
+                userStatus: userState.userStatus.status,
+            });
             if (!userState.userStatus.active) {
                 mergeState({ userStatusInactive: true });
                 bus?.emit('user-status-inactive', userState.userStatus, 'out');

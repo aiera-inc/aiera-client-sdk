@@ -140,7 +140,7 @@ export function useAppConfig(): QueryResult<AppConfigQuery, AppConfigQueryVariab
     });
 }
 
-type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit';
+type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit' | 'Load';
 type TrackingObject =
     | 'Event'
     | 'Event Filter By'
@@ -153,6 +153,7 @@ type TrackingObject =
     | 'Audio Start'
     | 'Audio Over'
     | 'Audio Stop'
+    | 'User Status'
     | 'News'
     | 'News Search';
 
