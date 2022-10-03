@@ -1,12 +1,24 @@
-/*className={classNames(*/
-/*'w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5',*/
-/*{ 'pl-7': !!icon, 'pl-3': !icon }*/
-/*)}*/
-
-input {
-    border: 1px solid rgb(229 231 235);
-    border-radius: 8px;
-    font-size: 14px;
-    height: 100%;
+input.PhoneInputInput {
+    border-radius: 0.5rem;
+    border-width: 1px;
+    border-color: #E5E7EB;
+    font-size: 0.75rem;
+    height: 30px;
+    line-height: 1.25rem;
+    padding-left: 0.75rem;
     width: 100%;
+}
+input.PhoneInputInput:focus {
+    border-color: rgb(37 99 235);
+    box-shadow: 0 0 #0000, 0 0 #0000, inset 0 0 0 1px #2463eb;
+    font-size: 0.75rem;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+input.PhoneInputInput:hover:not(:focus) {
+    border-color: #60A5FA;
+}
+input.PhoneInputInput::placeholder {
+    font-size: 0.75rem;
+    padding-bottom: 5px;
 }
