@@ -37941,7 +37941,7 @@ function InputUI(props) {
     type
   } = props;
   return /* @__PURE__ */ import_react10.default.createElement("div", {
-    className: `group h-8 items-center w-full relative  dark:text-white ${className} input__${name}`
+    className: `group h-8 items-center w-full relative dark:text-white ${className} input__${name}`
   }, import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
     className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
   }, import_react10.default.cloneElement(icon, {

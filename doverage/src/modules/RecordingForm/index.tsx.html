@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.66% </span>
+                <span class="strong">87.09% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>26/30</span>
+                <span class='fraction'>27/31</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.2% </span>
+                <span class="strong">86.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/29</span>
+                <span class='fraction'>26/30</span>
             </div>
         
             
@@ -349,7 +349,12 @@
 <a name='L284'></a><a href='#L284'>284</a>
 <a name='L285'></a><a href='#L285'>285</a>
 <a name='L286'></a><a href='#L286'>286</a>
-<a name='L287'></a><a href='#L287'>287</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L287'></a><a href='#L287'>287</a>
+<a name='L288'></a><a href='#L288'>288</a>
+<a name='L289'></a><a href='#L289'>289</a>
+<a name='L290'></a><a href='#L290'>290</a>
+<a name='L291'></a><a href='#L291'>291</a>
+<a name='L292'></a><a href='#L292'>292</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -373,6 +378,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -471,6 +479,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -574,7 +584,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -592,12 +601,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -677,6 +687,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     meetingType: string;
     onChangeConnectAccessId: ChangeHandler&lt;string&gt;;
     onChangeConnectCallerId: ChangeHandler&lt;string&gt;;
+    onChangeConnectDialNumber: Dispatch&lt;SetStateAction&lt;string&gt;&gt;;
     onChangeConnectionType: ChangeHandler&lt;ConnectionType&gt;;
     onChangeConnectOffsetSeconds: ChangeHandler&lt;number&gt;;
     onChangeConnectPhoneNumber: ChangeHandler&lt;string&gt;;
@@ -713,6 +724,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onBack,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
+        onChangeConnectDialNumber,
         onChangeConnectionType,
         onChangeConnectOffsetSeconds,
         onChangeConnectPhoneNumber,
@@ -723,6 +735,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
+        onConnectDialNumber,
         onNextStep,
         onPrevStep,
         onSubmit,
@@ -765,10 +778,12 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             connectUrl={connectUrl}
                             onChangeConnectAccessId={onChangeConnectAccessId}
                             onChangeConnectCallerId={onChangeConnectCallerId}
+                            onChangeConnectDialNumber={onChangeConnectDialNumber}
                             onChangeConnectPhoneNumber={onChangeConnectPhoneNumber}
                             onChangeConnectPin={onChangeConnectPin}
                             onChangeConnectUrl={onChangeConnectUrl}
                             onChangeParticipationType={onChangeParticipationType}
+                            onConnectDialNumber={onConnectDialNumber}
                             participationType={participationType}
                             participationTypeOptions={PARTICIPATION_TYPE_OPTIONS}
                         /&gt;
@@ -848,7 +863,6 @@ interface RecordingFormState {
     connectPin: string;
     connectUrl: string;
     meetingType: string;
-    onConnectDialNumber: string;
     participationType?: ParticipationType;
     scheduleDate: Date;
     scheduleMeridiem: ScheduleMeridiem;
@@ -871,7 +885,6 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         connectPin: '',
         connectUrl: '',
         meetingType: '',
-        onConnectDialNumber: '',
         participationType: undefined,
         scheduleDate: new Date(),
         scheduleMeridiem: ScheduleMeridiem.AM,
@@ -880,9 +893,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         smsAlertBeforeCall: false,
     });
     const [step, setStep] = useState&lt;number&gt;(1);
-&nbsp;
+    // Need to track onConnectDialNumber separately because the react-phone-number-input library
+    // doesn't send the event with the onChange callback, so we can't use useChangeHandlers
+    const [onConnectDialNumber, onChangeConnectDialNumber] = useState&lt;string&gt;('');
     const isNextButtonDisabled = useMemo(() =&gt; step &gt;= 1 &amp;&amp; !state.connectionType, [state, step]);
-&nbsp;
     return (
         &lt;RecordingFormUI
             connectAccessId={state.connectAccessId}
@@ -897,6 +911,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onBack={onBack}
             onChangeConnectAccessId={handlers.connectAccessId}
             onChangeConnectCallerId={handlers.connectCallerId}
+            onChangeConnectDialNumber={onChangeConnectDialNumber}
             onChangeConnectionType={handlers.connectionType}
             onChangeConnectOffsetSeconds={handlers.connectOffsetSeconds}
             onChangeConnectPhoneNumber={handlers.connectPhoneNumber}
@@ -907,7 +922,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeScheduleMeridiem={handlers.scheduleMeridiem}
             onChangeScheduleTime={handlers.scheduleTime}
             onChangeScheduleType={handlers.scheduleType}
-            onConnectDialNumber={state.onConnectDialNumber}
+            onConnectDialNumber={onConnectDialNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >console.log('SUBMITTED')}</span>
@@ -928,7 +943,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Sep 21 2022 11:33:11 GMT-0400 (Eastern Daylight Time)
+                at Tue Oct 04 2022 11:33:40 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
