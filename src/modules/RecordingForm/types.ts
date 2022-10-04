@@ -11,8 +11,20 @@ export enum ConnectionType {
 }
 
 /**
+ * Constants
+ */
+export const AIERA_INTERVENTION_START_TIME = '8:00 AM';
+export const AIERA_INTERVENTION_END_TIME = '5:30 PM';
+
+/**
  * Enums
  */
+export enum OnFailure {
+    AieraIntervention = 'aiera_intervention',
+    ManualInterventionCall = 'manual_intervention_call',
+    ManualInterventionSms = 'manual_intervention_sms',
+    None = 'none',
+}
 export enum ParticipationType {
     NotParticipating = 'not_participating',
     Participating = 'participating',
@@ -81,8 +93,8 @@ export const PARTICIPATION_TYPE_OPTION_PARTICIPATING = {
         'end the recording manually from the transcript in Aiera.',
 };
 export const PARTICIPATION_TYPE_OPTIONS = [
-    PARTICIPATION_TYPE_OPTION_PARTICIPATING,
     PARTICIPATION_TYPE_OPTION_NOT_PARTICIPATING,
+    PARTICIPATION_TYPE_OPTION_PARTICIPATING,
 ];
 export const ZOOM_MEETING_TYPE_OPTION_PHONE = {
     label: 'Dial-in number',
@@ -128,3 +140,38 @@ const SCHEDULE_TYPE_OPTION_FUTURE = {
     description: 'Schedule a time for Aiera to attempt connecting to the event',
 };
 export const SCHEDULE_TYPE_OPTIONS = [SCHEDULE_TYPE_OPTION_NOW, SCHEDULE_TYPE_OPTION_FUTURE];
+
+/**
+ * Troubleshooting sub-module
+ */
+const TROUBLESHOOTING_TYPE_OPTION_INTERVENTION = {
+    label: 'Attempt Aiera intervention',
+    value: OnFailure.AieraIntervention,
+    description:
+        'Give permission to the Aiera team to intervene. Only available Monday - Friday, ' +
+        `${AIERA_INTERVENTION_START_TIME} - ${AIERA_INTERVENTION_END_TIME} EST`,
+};
+const TROUBLESHOOTING_TYPE_OPTION_CALL = {
+    label: 'Call me',
+    value: OnFailure.ManualInterventionCall,
+    description: "We'll call you and then connect you to the number you provided",
+};
+const TROUBLESHOOTING_TYPE_OPTION_NONE = {
+    label: 'Do nothing',
+    value: OnFailure.None,
+    description: 'Let the event transcription fail silently',
+};
+const TROUBLESHOOTING_TYPE_OPTION_SMS = {
+    label: 'Alert me by SMS',
+    value: OnFailure.ManualInterventionSms,
+    description: "We'll alert you by SMS if we can't connect to your event",
+};
+export const TROUBLESHOOTING_TYPE_OPTIONS = [
+    TROUBLESHOOTING_TYPE_OPTION_SMS,
+    TROUBLESHOOTING_TYPE_OPTION_CALL,
+    TROUBLESHOOTING_TYPE_OPTION_NONE,
+];
+export const TROUBLESHOOTING_TYPE_INTERVENTION_OPTIONS = [
+    TROUBLESHOOTING_TYPE_OPTION_INTERVENTION,
+    TROUBLESHOOTING_TYPE_OPTION_NONE,
+];

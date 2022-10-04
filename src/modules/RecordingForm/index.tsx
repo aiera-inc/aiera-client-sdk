@@ -15,6 +15,7 @@ import {
     CONNECTION_TYPE_OPTIONS_MAP,
     PARTICIPATION_TYPE_OPTIONS,
     ConnectionType,
+    OnFailure,
     ParticipationType,
     ScheduleMeridiem,
     ScheduleType,
@@ -46,12 +47,16 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectPhoneNumber: ChangeHandler<string>;
     onChangeConnectPin: ChangeHandler<string>;
     onChangeConnectUrl: ChangeHandler<string>;
+    onChangeOnFailure: ChangeHandler<OnFailure>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
     onChangeScheduleDate: ChangeHandler<Date>;
     onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
     onChangeScheduleTime: ChangeHandler<string>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
     onConnectDialNumber: string;
+    onFailure?: OnFailure;
+    onFailureInstructions?: string;
+    onFailurePhoneNumber?: string;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
     onSubmit: MouseEventHandler;
@@ -84,12 +89,16 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectPhoneNumber,
         onChangeConnectPin,
         onChangeConnectUrl,
+        onChangeOnFailure,
         onChangeParticipationType,
         onChangeScheduleDate,
         onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
         onConnectDialNumber,
+        onFailure,
+        onFailureInstructions,
+        onFailurePhoneNumber,
         onNextStep,
         onPrevStep,
         onSubmit,
@@ -160,7 +169,14 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             scheduleType={scheduleType}
                         />
                     ))
-                    .with(4, () => <Troubleshooting />)
+                    .with(4, () => (
+                        <Troubleshooting
+                            onChangeOnFailure={onChangeOnFailure}
+                            onFailure={onFailure}
+                            onFailureInstructions={onFailureInstructions}
+                            onFailurePhoneNumber={onFailurePhoneNumber}
+                        />
+                    ))
                     .with(5, () => <RecordingDetails />)
                     .otherwise(() => null)}
             </div>
@@ -221,6 +237,9 @@ interface RecordingFormState {
     connectPin: string;
     connectUrl: string;
     meetingType: string;
+    onFailure?: OnFailure;
+    onFailureInstructions?: string;
+    onFailurePhoneNumber?: string;
     participationType?: ParticipationType;
     scheduleDate: Date;
     scheduleMeridiem: ScheduleMeridiem;
@@ -243,6 +262,9 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         connectPin: '',
         connectUrl: '',
         meetingType: '',
+        onFailure: undefined,
+        onFailureInstructions: '',
+        onFailurePhoneNumber: '',
         participationType: undefined,
         scheduleDate: new Date(),
         scheduleMeridiem: ScheduleMeridiem.AM,
@@ -275,12 +297,16 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectPhoneNumber={handlers.connectPhoneNumber}
             onChangeConnectPin={handlers.connectPin}
             onChangeConnectUrl={handlers.connectUrl}
+            onChangeOnFailure={handlers.onFailure}
             onChangeParticipationType={handlers.participationType}
             onChangeScheduleDate={handlers.scheduleDate}
             onChangeScheduleMeridiem={handlers.scheduleMeridiem}
             onChangeScheduleTime={handlers.scheduleTime}
             onChangeScheduleType={handlers.scheduleType}
             onConnectDialNumber={onConnectDialNumber}
+            onFailure={state.onFailure}
+            onFailureInstructions={state.onFailureInstructions}
+            onFailurePhoneNumber={state.onFailurePhoneNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={() => console.log('SUBMITTED')}
