@@ -38,6 +38,8 @@ describe('ConnectionDetails', () => {
         onChangeParticipationType: onChange,
         onConnectDialNumber: '555-123-4567',
         participationTypeOptions: PARTICIPATION_TYPE_OPTIONS,
+        smsAlertBeforeCall: false,
+        toggleSMSAlertBeforeCall: onChange,
     };
 
     describe('when connection type is Zoom', () => {

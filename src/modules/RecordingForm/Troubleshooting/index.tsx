@@ -8,8 +8,8 @@ interface TroubleshootingUIProps extends TroubleshootingSharedProps {}
 
 export function TroubleshootingUI(_props: TroubleshootingUIProps): ReactElement {
     return (
-        <div className="font-medium py-3 text-gray-400 text-xs tracking-wide uppercase troubleshooting">
-            <p>Troubleshooting</p>
+        <div className="py-3 troubleshooting">
+            <p className="font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase">Troubleshooting</p>
         </div>
     );
 }

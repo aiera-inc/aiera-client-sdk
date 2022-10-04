@@ -62,6 +62,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
     step: number;
+    toggleSMSAlertBeforeCall: ChangeHandler<boolean>;
 }
 
 export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
@@ -97,7 +98,9 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         scheduleMeridiem,
         scheduleTime,
         scheduleType,
+        smsAlertBeforeCall,
         step,
+        toggleSMSAlertBeforeCall,
     } = props;
     return (
         <div className="bg-slate-50 h-full flex flex-col justify-between recording-form">
@@ -139,6 +142,8 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             onConnectDialNumber={onConnectDialNumber}
                             participationType={participationType}
                             participationTypeOptions={PARTICIPATION_TYPE_OPTIONS}
+                            smsAlertBeforeCall={smsAlertBeforeCall}
+                            toggleSMSAlertBeforeCall={toggleSMSAlertBeforeCall}
                         />
                     ))
                     .with(3, () => (
@@ -285,6 +290,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             scheduleTime={state.scheduleTime}
             scheduleType={state.scheduleType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
+            toggleSMSAlertBeforeCall={handlers.smsAlertBeforeCall}
             step={step}
         />
     );

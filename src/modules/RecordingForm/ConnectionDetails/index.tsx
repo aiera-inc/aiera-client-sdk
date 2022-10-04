@@ -1,5 +1,6 @@
 import React, { Dispatch, ReactElement, SetStateAction, useMemo } from 'react';
 import { match } from 'ts-pattern';
+import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
 import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldInput } from '@aiera/client-sdk/components/FormField/FormFieldInput';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
@@ -31,6 +32,8 @@ interface ConnectionDetailsSharedProps {
     onConnectDialNumber: string;
     participationType?: ParticipationType;
     participationTypeOptions: SelectOption<ParticipationType>[];
+    smsAlertBeforeCall: boolean;
+    toggleSMSAlertBeforeCall: ChangeHandler<boolean>;
 }
 
 /** @notExported */
@@ -60,6 +63,8 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         participationType,
         participationTypeOptions,
         showCallMeFields,
+        smsAlertBeforeCall,
+        toggleSMSAlertBeforeCall,
         zoomMeetingType,
     } = props;
     const dialInField = (
@@ -184,20 +189,34 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                 ))
                 .otherwise(() => null)}
             {showCallMeFields && (
-                <FormField className="mt-5 px-4 py-3">
-                    <p className="font-semibold text-base text-black form-field__label">Your phone number</p>
-                    <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
-                        Must be a direct line. Extensions are not supported for personal numbers
-                    </p>
-                    <PhoneNumberInput
-                        className="mt-3"
-                        defaultCountry="US"
-                        name="onConnectDialNumber"
-                        onChange={onChangeConnectDialNumber}
-                        placeholder="(888)-123-4567"
-                        value={onConnectDialNumber}
-                    />
-                </FormField>
+                <>
+                    <FormField className="mt-5 px-4 py-3">
+                        <p className="font-semibold text-base text-black form-field__label">Your phone number</p>
+                        <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
+                            Must be a direct line. Extensions are not supported for personal numbers
+                        </p>
+                        <PhoneNumberInput
+                            className="mt-3"
+                            defaultCountry="US"
+                            name="onConnectDialNumber"
+                            onChange={onChangeConnectDialNumber}
+                            placeholder="(888)-123-4567"
+                            value={onConnectDialNumber}
+                        />
+                    </FormField>
+                    <FormField className="mt-5 px-4 py-3">
+                        <p className="font-semibold text-base text-black form-field__label">Alert me before</p>
+                        <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
+                            Get an SMS 5 minutes before the call
+                        </p>
+                        <Checkbox
+                            checked={smsAlertBeforeCall}
+                            className="flex-shrink-0 ml-auto mt-3"
+                            label="Aiera has permission to text me a reminder before the call"
+                            onChange={toggleSMSAlertBeforeCall}
+                        />
+                    </FormField>
+                </>
             )}
         </div>
     );
@@ -228,6 +247,8 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
         onConnectDialNumber,
         participationType,
         participationTypeOptions,
+        smsAlertBeforeCall,
+        toggleSMSAlertBeforeCall,
     } = props;
     // Only show the call me fields if the participation type is "Call me"
     // and the connection type is either Google Meet, Phone Number,
@@ -261,6 +282,8 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             participationType={participationType}
             participationTypeOptions={participationTypeOptions}
             showCallMeFields={showCallMeFields}
+            smsAlertBeforeCall={smsAlertBeforeCall}
+            toggleSMSAlertBeforeCall={toggleSMSAlertBeforeCall}
             zoomMeetingType={state.zoomMeetingType}
         />
     );
