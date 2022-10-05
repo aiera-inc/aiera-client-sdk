@@ -48,6 +48,8 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectPin: ChangeHandler<string>;
     onChangeConnectUrl: ChangeHandler<string>;
     onChangeOnFailure: ChangeHandler<OnFailure>;
+    onChangeOnFailureDialNumber: Dispatch<SetStateAction<string>>;
+    onChangeOnFailureSmsNumber: Dispatch<SetStateAction<string>>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
     onChangeScheduleDate: ChangeHandler<Date>;
     onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
@@ -55,8 +57,9 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeScheduleType: ChangeHandler<ScheduleType>;
     onConnectDialNumber: string;
     onFailure?: OnFailure;
+    onFailureDialNumber?: string;
     onFailureInstructions?: string;
-    onFailurePhoneNumber?: string;
+    onFailureSmsNumber?: string;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
     onSubmit: MouseEventHandler;
@@ -90,6 +93,8 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectPin,
         onChangeConnectUrl,
         onChangeOnFailure,
+        onChangeOnFailureDialNumber,
+        onChangeOnFailureSmsNumber,
         onChangeParticipationType,
         onChangeScheduleDate,
         onChangeScheduleMeridiem,
@@ -97,8 +102,9 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeScheduleType,
         onConnectDialNumber,
         onFailure,
+        onFailureDialNumber,
         onFailureInstructions,
-        onFailurePhoneNumber,
+        onFailureSmsNumber,
         onNextStep,
         onPrevStep,
         onSubmit,
@@ -172,9 +178,12 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     .with(4, () => (
                         <Troubleshooting
                             onChangeOnFailure={onChangeOnFailure}
+                            onChangeOnFailureDialNumber={onChangeOnFailureDialNumber}
+                            onChangeOnFailureSmsNumber={onChangeOnFailureSmsNumber}
                             onFailure={onFailure}
+                            onFailureDialNumber={onFailureDialNumber}
                             onFailureInstructions={onFailureInstructions}
-                            onFailurePhoneNumber={onFailurePhoneNumber}
+                            onFailureSmsNumber={onFailureSmsNumber}
                         />
                     ))
                     .with(5, () => <RecordingDetails />)
@@ -239,7 +248,6 @@ interface RecordingFormState {
     meetingType: string;
     onFailure?: OnFailure;
     onFailureInstructions?: string;
-    onFailurePhoneNumber?: string;
     participationType?: ParticipationType;
     scheduleDate: Date;
     scheduleMeridiem: ScheduleMeridiem;
@@ -264,7 +272,6 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         meetingType: '',
         onFailure: undefined,
         onFailureInstructions: '',
-        onFailurePhoneNumber: '',
         participationType: undefined,
         scheduleDate: new Date(),
         scheduleMeridiem: ScheduleMeridiem.AM,
@@ -273,10 +280,16 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         smsAlertBeforeCall: false,
     });
     const [step, setStep] = useState<number>(1);
-    // Need to track onConnectDialNumber separately because the react-phone-number-input library
-    // doesn't send the event with the onChange callback, so we can't use useChangeHandlers
+
+    // Need to track onConnectDialNumber, onFailureDialNumber, and onFailureSmsNumber separately
+    // because the react-phone-number-input library doesn't send the event with the onChange callback,
+    // so we can't use useChangeHandlers
     const [onConnectDialNumber, onChangeConnectDialNumber] = useState<string>('');
+    const [onFailureDialNumber, onChangeOnFailureDialNumber] = useState<string>('');
+    const [onFailureSmsNumber, onChangeOnFailureSmsNumber] = useState<string>('');
+
     const isNextButtonDisabled = useMemo(() => step >= 1 && !state.connectionType, [state, step]);
+
     return (
         <RecordingFormUI
             connectAccessId={state.connectAccessId}
@@ -298,6 +311,8 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectPin={handlers.connectPin}
             onChangeConnectUrl={handlers.connectUrl}
             onChangeOnFailure={handlers.onFailure}
+            onChangeOnFailureDialNumber={onChangeOnFailureDialNumber}
+            onChangeOnFailureSmsNumber={onChangeOnFailureSmsNumber}
             onChangeParticipationType={handlers.participationType}
             onChangeScheduleDate={handlers.scheduleDate}
             onChangeScheduleMeridiem={handlers.scheduleMeridiem}
@@ -305,8 +320,9 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeScheduleType={handlers.scheduleType}
             onConnectDialNumber={onConnectDialNumber}
             onFailure={state.onFailure}
+            onFailureDialNumber={onFailureDialNumber}
             onFailureInstructions={state.onFailureInstructions}
-            onFailurePhoneNumber={state.onFailurePhoneNumber}
+            onFailureSmsNumber={onFailureSmsNumber}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={() => console.log('SUBMITTED')}

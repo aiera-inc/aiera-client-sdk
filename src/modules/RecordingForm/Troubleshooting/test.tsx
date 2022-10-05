@@ -8,7 +8,13 @@ describe('Troubleshooting', () => {
     const onChange = jest.fn();
 
     test('renders', () => {
-        renderWithProvider(<Troubleshooting onChangeOnFailure={onChange} />);
+        renderWithProvider(
+            <Troubleshooting
+                onChangeOnFailure={onChange}
+                onChangeOnFailureDialNumber={onChange}
+                onChangeOnFailureSmsNumber={onChange}
+            />
+        );
         screen.getByText('Troubleshooting');
     });
 });
