@@ -3,11 +3,16 @@ import { match } from 'ts-pattern';
 import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
 import { PhoneNumberInput } from '@aiera/client-sdk/components/PhoneNumberInput';
-import { OnFailure, TROUBLESHOOTING_TYPE_OPTIONS } from '@aiera/client-sdk/modules/RecordingForm/types';
+import {
+    OnFailure,
+    TROUBLESHOOTING_TYPE_INTERVENTION_OPTIONS,
+    TROUBLESHOOTING_TYPE_OPTIONS,
+} from '@aiera/client-sdk/modules/RecordingForm/types';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface TroubleshootingSharedProps {
+    isWebcast: boolean;
     onChangeOnFailure: ChangeHandler<OnFailure>;
     onChangeOnFailureDialNumber: Dispatch<SetStateAction<string>>;
     onChangeOnFailureSmsNumber: Dispatch<SetStateAction<string>>;
@@ -22,6 +27,7 @@ interface TroubleshootingUIProps extends TroubleshootingSharedProps {}
 
 export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
     const {
+        isWebcast,
         onChangeOnFailure,
         onChangeOnFailureDialNumber,
         onChangeOnFailureSmsNumber,
@@ -50,9 +56,9 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
             <p className="font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase">Troubleshooting</p>
             <FormFieldSelect
                 className="mt-2.5"
-                name="scheduleType"
+                name="onFailure"
                 onChange={onChangeOnFailure}
-                options={TROUBLESHOOTING_TYPE_OPTIONS}
+                options={isWebcast ? TROUBLESHOOTING_TYPE_INTERVENTION_OPTIONS : TROUBLESHOOTING_TYPE_OPTIONS}
                 value={onFailure}
             />
             {match(onFailure)
@@ -75,6 +81,7 @@ export interface TroubleshootingProps extends TroubleshootingSharedProps {}
  */
 export function Troubleshooting(props: TroubleshootingProps): ReactElement {
     const {
+        isWebcast,
         onChangeOnFailure,
         onChangeOnFailureDialNumber,
         onChangeOnFailureSmsNumber,
@@ -85,6 +92,7 @@ export function Troubleshooting(props: TroubleshootingProps): ReactElement {
     } = props;
     return (
         <TroubleshootingUI
+            isWebcast={isWebcast}
             onChangeOnFailure={onChangeOnFailure}
             onChangeOnFailureDialNumber={onChangeOnFailureDialNumber}
             onChangeOnFailureSmsNumber={onChangeOnFailureSmsNumber}

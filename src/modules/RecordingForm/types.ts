@@ -37,6 +37,10 @@ export enum ScheduleType {
     Now = 'now',
     Future = 'future',
 }
+export enum ZoomMeetingType {
+    Phone = 'phone',
+    Web = 'web',
+}
 
 /**
  * ConnectionType sub-module
@@ -98,12 +102,12 @@ export const PARTICIPATION_TYPE_OPTIONS = [
 ];
 export const ZOOM_MEETING_TYPE_OPTION_PHONE = {
     label: 'Dial-in number',
-    value: 'phone',
+    value: ZoomMeetingType.Phone,
     description: 'Connect to Zoom meeting via dial-in number',
 };
 export const ZOOM_MEETING_TYPE_OPTION_WEB = {
     label: 'Web URL',
-    value: 'web',
+    value: ZoomMeetingType.Web,
     description: 'Connect to Zoom meeting via web url',
 };
 export const ZOOM_MEETING_TYPE_OPTIONS = [ZOOM_MEETING_TYPE_OPTION_WEB, ZOOM_MEETING_TYPE_OPTION_PHONE];

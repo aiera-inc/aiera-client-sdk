@@ -11,14 +11,18 @@ import { RecordingDetails } from './RecordingDetails';
 import { Scheduling } from './Scheduling';
 import { Troubleshooting } from './Troubleshooting';
 import {
+    CONNECTION_TYPE_OPTION_WEBCAST,
+    CONNECTION_TYPE_OPTION_ZOOM,
     CONNECTION_TYPE_OPTIONS,
     CONNECTION_TYPE_OPTIONS_MAP,
     PARTICIPATION_TYPE_OPTIONS,
+    ZOOM_MEETING_TYPE_OPTION_WEB,
     ConnectionType,
     OnFailure,
     ParticipationType,
     ScheduleMeridiem,
     ScheduleType,
+    ZoomMeetingType,
 } from './types';
 import './styles.css';
 
@@ -38,6 +42,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectPin: string;
     connectUrl: string;
     isNextButtonDisabled: boolean;
+    isWebcast: boolean;
     meetingType: string;
     onChangeConnectAccessId: ChangeHandler<string>;
     onChangeConnectCallerId: ChangeHandler<string>;
@@ -55,6 +60,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
     onChangeScheduleTime: ChangeHandler<string>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
+    onChangeZoomMeetingType: ChangeHandler<ZoomMeetingType>;
     onConnectDialNumber: string;
     onFailure?: OnFailure;
     onFailureDialNumber?: string;
@@ -71,6 +77,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     smsAlertBeforeCall: boolean;
     step: number;
     toggleSMSAlertBeforeCall: ChangeHandler<boolean>;
+    zoomMeetingType?: ZoomMeetingType;
 }
 
 export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
@@ -83,6 +90,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         connectPin,
         connectUrl,
         isNextButtonDisabled,
+        isWebcast,
         onBack,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
@@ -100,6 +108,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
+        onChangeZoomMeetingType,
         onConnectDialNumber,
         onFailure,
         onFailureDialNumber,
@@ -116,6 +125,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         smsAlertBeforeCall,
         step,
         toggleSMSAlertBeforeCall,
+        zoomMeetingType,
     } = props;
     return (
         <div className="bg-slate-50 h-full flex flex-col justify-between recording-form">
@@ -154,11 +164,13 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             onChangeConnectPin={onChangeConnectPin}
                             onChangeConnectUrl={onChangeConnectUrl}
                             onChangeParticipationType={onChangeParticipationType}
+                            onChangeZoomMeetingType={onChangeZoomMeetingType}
                             onConnectDialNumber={onConnectDialNumber}
                             participationType={participationType}
                             participationTypeOptions={PARTICIPATION_TYPE_OPTIONS}
                             smsAlertBeforeCall={smsAlertBeforeCall}
                             toggleSMSAlertBeforeCall={toggleSMSAlertBeforeCall}
+                            zoomMeetingType={zoomMeetingType}
                         />
                     ))
                     .with(3, () => (
@@ -177,6 +189,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     ))
                     .with(4, () => (
                         <Troubleshooting
+                            isWebcast={isWebcast}
                             onChangeOnFailure={onChangeOnFailure}
                             onChangeOnFailureDialNumber={onChangeOnFailureDialNumber}
                             onChangeOnFailureSmsNumber={onChangeOnFailureSmsNumber}
@@ -254,6 +267,7 @@ interface RecordingFormState {
     scheduleTime?: string;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
+    zoomMeetingType?: ZoomMeetingType;
 }
 
 /**
@@ -278,6 +292,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         scheduleTime: '',
         scheduleType: undefined,
         smsAlertBeforeCall: false,
+        zoomMeetingType: undefined,
     });
     const [step, setStep] = useState<number>(1);
 
@@ -289,6 +304,13 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     const [onFailureSmsNumber, onChangeOnFailureSmsNumber] = useState<string>('');
 
     const isNextButtonDisabled = useMemo(() => step >= 1 && !state.connectionType, [state, step]);
+    const isWebcast = useMemo(
+        () =>
+            state.connectionType === CONNECTION_TYPE_OPTION_WEBCAST.value ||
+            (state.connectionType === CONNECTION_TYPE_OPTION_ZOOM.value &&
+                state.zoomMeetingType === ZOOM_MEETING_TYPE_OPTION_WEB.value),
+        [state.connectionType, state.zoomMeetingType]
+    );
 
     return (
         <RecordingFormUI
@@ -300,6 +322,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
             isNextButtonDisabled={isNextButtonDisabled}
+            isWebcast={isWebcast}
             meetingType={state.meetingType}
             onBack={onBack}
             onChangeConnectAccessId={handlers.connectAccessId}
@@ -318,6 +341,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeScheduleMeridiem={handlers.scheduleMeridiem}
             onChangeScheduleTime={handlers.scheduleTime}
             onChangeScheduleType={handlers.scheduleType}
+            onChangeZoomMeetingType={handlers.zoomMeetingType}
             onConnectDialNumber={onConnectDialNumber}
             onFailure={state.onFailure}
             onFailureDialNumber={onFailureDialNumber}
@@ -334,6 +358,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             smsAlertBeforeCall={state.smsAlertBeforeCall}
             toggleSMSAlertBeforeCall={handlers.smsAlertBeforeCall}
             step={step}
+            zoomMeetingType={state.zoomMeetingType}
         />
     );
 }
