@@ -1,7 +1,9 @@
 import React, { Dispatch, ReactElement, SetStateAction } from 'react';
 import { match } from 'ts-pattern';
+import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
 import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
+import { Input } from '@aiera/client-sdk/components/Input';
 import { PhoneNumberInput } from '@aiera/client-sdk/components/PhoneNumberInput';
 import {
     OnFailure,
@@ -12,14 +14,17 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface TroubleshootingSharedProps {
+    hasAieraInterventionPermission: boolean;
     isWebcast: boolean;
     onChangeOnFailure: ChangeHandler<OnFailure>;
     onChangeOnFailureDialNumber: Dispatch<SetStateAction<string>>;
+    onChangeOnFailureInstructions: ChangeHandler<string>;
     onChangeOnFailureSmsNumber: Dispatch<SetStateAction<string>>;
     onFailure?: OnFailure;
     onFailureDialNumber?: string;
     onFailureInstructions?: string;
     onFailureSmsNumber?: string;
+    toggleAieraInterventionPermission: ChangeHandler<boolean>;
 }
 
 /** @notExported */
@@ -27,13 +32,17 @@ interface TroubleshootingUIProps extends TroubleshootingSharedProps {}
 
 export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
     const {
+        hasAieraInterventionPermission,
         isWebcast,
         onChangeOnFailure,
         onChangeOnFailureDialNumber,
+        onChangeOnFailureInstructions,
         onChangeOnFailureSmsNumber,
         onFailure,
         onFailureDialNumber,
+        onFailureInstructions,
         onFailureSmsNumber,
+        toggleAieraInterventionPermission,
     } = props;
     const phoneNumberInput = (name: string, onChange: Dispatch<SetStateAction<string>>, value?: string) => (
         <FormField className="mt-5 px-4 py-3">
@@ -68,6 +77,23 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
                 .with(OnFailure.ManualInterventionSms, () =>
                     phoneNumberInput('onFailureSmsNumber', onChangeOnFailureSmsNumber, onFailureSmsNumber)
                 )
+                .with(OnFailure.AieraIntervention, () => (
+                    <>
+                        <Input
+                            name="onFailureInstructions"
+                            onChange={onChangeOnFailureInstructions}
+                            placeholder="Passwords or other useful information"
+                            type="textarea"
+                            value={onFailureInstructions}
+                        />
+                        <Checkbox
+                            checked={hasAieraInterventionPermission}
+                            className="flex-shrink-0 ml-auto mt-3"
+                            label="Aiera has permission to text me a reminder before the call"
+                            onChange={toggleAieraInterventionPermission}
+                        />
+                    </>
+                ))
                 .otherwise(() => null)}
         </div>
     );
@@ -81,25 +107,31 @@ export interface TroubleshootingProps extends TroubleshootingSharedProps {}
  */
 export function Troubleshooting(props: TroubleshootingProps): ReactElement {
     const {
+        hasAieraInterventionPermission,
         isWebcast,
         onChangeOnFailure,
         onChangeOnFailureDialNumber,
+        onChangeOnFailureInstructions,
         onChangeOnFailureSmsNumber,
         onFailure,
         onFailureDialNumber,
         onFailureInstructions,
         onFailureSmsNumber,
+        toggleAieraInterventionPermission,
     } = props;
     return (
         <TroubleshootingUI
+            hasAieraInterventionPermission={hasAieraInterventionPermission}
             isWebcast={isWebcast}
             onChangeOnFailure={onChangeOnFailure}
             onChangeOnFailureDialNumber={onChangeOnFailureDialNumber}
+            onChangeOnFailureInstructions={onChangeOnFailureInstructions}
             onChangeOnFailureSmsNumber={onChangeOnFailureSmsNumber}
             onFailure={onFailure}
             onFailureDialNumber={onFailureDialNumber}
             onFailureInstructions={onFailureInstructions}
             onFailureSmsNumber={onFailureSmsNumber}
+            toggleAieraInterventionPermission={toggleAieraInterventionPermission}
         />
     );
 }

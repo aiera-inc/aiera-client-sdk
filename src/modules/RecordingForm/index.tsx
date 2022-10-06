@@ -41,6 +41,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
+    hasAieraInterventionPermission: boolean;
     isNextButtonDisabled: boolean;
     isWebcast: boolean;
     meetingType: string;
@@ -54,6 +55,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeConnectUrl: ChangeHandler<string>;
     onChangeOnFailure: ChangeHandler<OnFailure>;
     onChangeOnFailureDialNumber: Dispatch<SetStateAction<string>>;
+    onChangeOnFailureInstructions: ChangeHandler<string>;
     onChangeOnFailureSmsNumber: Dispatch<SetStateAction<string>>;
     onChangeParticipationType: ChangeHandler<ParticipationType>;
     onChangeScheduleDate: ChangeHandler<Date>;
@@ -76,6 +78,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
     step: number;
+    toggleAieraInterventionPermission: ChangeHandler<boolean>;
     toggleSMSAlertBeforeCall: ChangeHandler<boolean>;
     zoomMeetingType?: ZoomMeetingType;
 }
@@ -89,6 +92,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         connectPhoneNumber,
         connectPin,
         connectUrl,
+        hasAieraInterventionPermission,
         isNextButtonDisabled,
         isWebcast,
         onBack,
@@ -102,6 +106,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeConnectUrl,
         onChangeOnFailure,
         onChangeOnFailureDialNumber,
+        onChangeOnFailureInstructions,
         onChangeOnFailureSmsNumber,
         onChangeParticipationType,
         onChangeScheduleDate,
@@ -124,6 +129,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         scheduleType,
         smsAlertBeforeCall,
         step,
+        toggleAieraInterventionPermission,
         toggleSMSAlertBeforeCall,
         zoomMeetingType,
     } = props;
@@ -189,14 +195,17 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     ))
                     .with(4, () => (
                         <Troubleshooting
+                            hasAieraInterventionPermission={hasAieraInterventionPermission}
                             isWebcast={isWebcast}
                             onChangeOnFailure={onChangeOnFailure}
                             onChangeOnFailureDialNumber={onChangeOnFailureDialNumber}
+                            onChangeOnFailureInstructions={onChangeOnFailureInstructions}
                             onChangeOnFailureSmsNumber={onChangeOnFailureSmsNumber}
                             onFailure={onFailure}
                             onFailureDialNumber={onFailureDialNumber}
                             onFailureInstructions={onFailureInstructions}
                             onFailureSmsNumber={onFailureSmsNumber}
+                            toggleAieraInterventionPermission={toggleAieraInterventionPermission}
                         />
                     ))
                     .with(5, () => <RecordingDetails />)
@@ -258,6 +267,7 @@ interface RecordingFormState {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
+    hasAieraInterventionPermission: boolean;
     meetingType: string;
     onFailure?: OnFailure;
     onFailureInstructions?: string;
@@ -283,6 +293,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         connectPhoneNumber: '',
         connectPin: '',
         connectUrl: '',
+        hasAieraInterventionPermission: false,
         meetingType: '',
         onFailure: undefined,
         onFailureInstructions: '',
@@ -321,6 +332,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPhoneNumber={state.connectPhoneNumber}
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
+            hasAieraInterventionPermission={state.hasAieraInterventionPermission}
             isNextButtonDisabled={isNextButtonDisabled}
             isWebcast={isWebcast}
             meetingType={state.meetingType}
@@ -335,6 +347,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeConnectUrl={handlers.connectUrl}
             onChangeOnFailure={handlers.onFailure}
             onChangeOnFailureDialNumber={onChangeOnFailureDialNumber}
+            onChangeOnFailureInstructions={handlers.onFailureInstructions}
             onChangeOnFailureSmsNumber={onChangeOnFailureSmsNumber}
             onChangeParticipationType={handlers.participationType}
             onChangeScheduleDate={handlers.scheduleDate}
@@ -356,6 +369,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             scheduleTime={state.scheduleTime}
             scheduleType={state.scheduleType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
+            toggleAieraInterventionPermission={handlers.hasAieraInterventionPermission}
             toggleSMSAlertBeforeCall={handlers.smsAlertBeforeCall}
             step={step}
             zoomMeetingType={state.zoomMeetingType}

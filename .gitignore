@@ -1,8 +1,9 @@
 /dist/
-node_modules/
 /.vim/
 /src/types/generated.ts
-.nvmrc
-.jest/coverage
+node_modules/
+.DS_Store
 .idea
+.jest/coverage
+.nvmrc
 .vimspector.json
