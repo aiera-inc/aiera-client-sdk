@@ -47,4 +47,11 @@ describe('Troubleshooting', () => {
         screen.getByText('Your phone number');
         expect(mockFn).toHaveBeenCalled();
     });
+
+    test('when onFailure is Aiera intervention, render instructions input and permission checkbox', () => {
+        renderWithProvider(<Troubleshooting {...props} isWebcast={true} onFailure={OnFailure.AieraIntervention} />);
+        screen.getByText('Instructions');
+        screen.getByText('Confirm that Aiera agents have permission', { exact: false });
+        screen.getByPlaceholderText('Passwords or other useful information');
+    });
 });

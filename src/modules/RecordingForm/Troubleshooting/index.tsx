@@ -3,8 +3,8 @@ import { match } from 'ts-pattern';
 import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
 import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
-import { Input } from '@aiera/client-sdk/components/Input';
 import { PhoneNumberInput } from '@aiera/client-sdk/components/PhoneNumberInput';
+import { Textarea } from '@aiera/client-sdk/components/Textarea';
 import {
     OnFailure,
     TROUBLESHOOTING_TYPE_INTERVENTION_OPTIONS,
@@ -44,6 +44,8 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
         onFailureSmsNumber,
         toggleAieraInterventionPermission,
     } = props;
+    const interventionCheckboxMsg =
+        'Confirm that Aiera agents have permission to attempt to resolve any connection issues for this event';
     const phoneNumberInput = (name: string, onChange: Dispatch<SetStateAction<string>>, value?: string) => (
         <FormField className="mt-5 px-4 py-3">
             <p className="font-semibold text-base text-black form-field__label">Your phone number</p>
@@ -78,21 +80,25 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
                     phoneNumberInput('onFailureSmsNumber', onChangeOnFailureSmsNumber, onFailureSmsNumber)
                 )
                 .with(OnFailure.AieraIntervention, () => (
-                    <>
-                        <Input
+                    <FormField className="mt-5 px-4 py-3">
+                        <p className="font-semibold text-base text-black form-field__label">Instructions</p>
+                        <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
+                            Any information our agents might need to help connect your webcast
+                        </p>
+                        <Textarea
+                            className="mt-3"
                             name="onFailureInstructions"
                             onChange={onChangeOnFailureInstructions}
                             placeholder="Passwords or other useful information"
-                            type="textarea"
                             value={onFailureInstructions}
                         />
                         <Checkbox
                             checked={hasAieraInterventionPermission}
                             className="flex-shrink-0 ml-auto mt-3"
-                            label="Aiera has permission to text me a reminder before the call"
+                            label={interventionCheckboxMsg}
                             onChange={toggleAieraInterventionPermission}
                         />
-                    </>
+                    </FormField>
                 ))
                 .otherwise(() => null)}
         </div>
