@@ -31,11 +31,11 @@ interface TextareaUIProps extends TextareaSharedProps {
 export function TextareaUI(props: TextareaUIProps): ReactElement {
     const { autoFocus, className = '', clearable, clear, id, name, onChange, onFocus, placeholder, value } = props;
     return (
-        <div className={`group h-8 items-center w-full relative dark:text-white ${className} textarea__${name}`}>
+        <div className={`group items-center relative w-full dark:text-white ${className} textarea__${name}`}>
             <textarea
                 id={id}
                 autoFocus={autoFocus}
-                className="h-full border border-gray-200 min-h-[58px] pl-3 rounded-lg text-sm w-full focus:border-1 focus:border-blue-600 focus:outline-none focus:shadow-input hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5"
+                className="h-full border border-gray-200 min-h-[58px] px-3 py-2 rounded-lg text-sm w-full focus:border-1 focus:border-blue-600 focus:outline-none focus:shadow-input hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5"
                 onChange={onChange}
                 onFocus={onFocus}
                 placeholder={placeholder}
