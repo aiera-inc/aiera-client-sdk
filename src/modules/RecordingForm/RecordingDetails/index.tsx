@@ -18,7 +18,7 @@ export function RecordingDetailsUI(props: RecordingDetailsUIProps): ReactElement
             <p className="font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase">Recording Details</p>
             <FormFieldInput
                 autoFocus
-                className="mt-2.5"
+                className="mt-5 px-4 py-3"
                 clearable
                 description="Enter the name of the recording"
                 label="Title*"
