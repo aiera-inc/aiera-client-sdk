@@ -2,8 +2,14 @@ import React from 'react';
 import { screen } from '@testing-library/react';
 
 import { OnFailure } from '@aiera/client-sdk/modules/RecordingForm/types';
-import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
+import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { Troubleshooting } from './index';
+
+const mockFn = jest.fn();
+jest.mock('react-phone-number-input', () => ({
+    __esModule: true,
+    default: mockFn,
+}));
 
 describe('Troubleshooting', () => {
     const onChange = jest.fn();
@@ -36,9 +42,9 @@ describe('Troubleshooting', () => {
         screen.getByText('Do nothing');
     });
 
-    test('when onFailure is call or sms, render phone number input', async () => {
-        await actAndFlush(() => renderWithProvider(<Troubleshooting {...props} isWebcast={false} />));
+    test('when onFailure is call or sms, render phone number input', () => {
+        renderWithProvider(<Troubleshooting {...props} isWebcast={false} />);
         screen.getByText('Your phone number');
-        screen.getByPlaceholderText('(888)-123-4567');
+        expect(mockFn).toHaveBeenCalled();
     });
 });
