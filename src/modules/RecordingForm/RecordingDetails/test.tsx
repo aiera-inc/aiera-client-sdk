@@ -6,7 +6,8 @@ import { RecordingDetails } from './index';
 
 describe('RecordingDetails', () => {
     test('renders', () => {
-        renderWithProvider(<RecordingDetails />);
+        renderWithProvider(<RecordingDetails onChangeTitle={jest.fn()} title="Recording Details Test" />);
         screen.getByText('Recording Details');
+        expect(screen.getByDisplayValue('Recording Details Test')).toBeInTheDocument();
     });
 });

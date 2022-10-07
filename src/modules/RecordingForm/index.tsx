@@ -62,6 +62,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
     onChangeScheduleTime: ChangeHandler<string>;
     onChangeScheduleType: ChangeHandler<ScheduleType>;
+    onChangeTitle: ChangeHandler<string>;
     onChangeZoomMeetingType: ChangeHandler<ZoomMeetingType>;
     onConnectDialNumber: string;
     onFailure?: OnFailure;
@@ -78,6 +79,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
     step: number;
+    title?: string;
     toggleAieraInterventionPermission: ChangeHandler<boolean>;
     toggleSMSAlertBeforeCall: ChangeHandler<boolean>;
     zoomMeetingType?: ZoomMeetingType;
@@ -113,6 +115,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onChangeScheduleMeridiem,
         onChangeScheduleTime,
         onChangeScheduleType,
+        onChangeTitle,
         onChangeZoomMeetingType,
         onConnectDialNumber,
         onFailure,
@@ -129,6 +132,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         scheduleType,
         smsAlertBeforeCall,
         step,
+        title,
         toggleAieraInterventionPermission,
         toggleSMSAlertBeforeCall,
         zoomMeetingType,
@@ -208,7 +212,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             toggleAieraInterventionPermission={toggleAieraInterventionPermission}
                         />
                     ))
-                    .with(5, () => <RecordingDetails />)
+                    .with(5, () => <RecordingDetails onChangeTitle={onChangeTitle} title={title} />)
                     .otherwise(() => null)}
             </div>
             <div className="bg-white border-gray-200 border-opacity-80 border-t flex flex-col pt-3 px-3 shadow-inner recording-form__footer">
@@ -277,6 +281,7 @@ interface RecordingFormState {
     scheduleTime?: string;
     scheduleType?: ScheduleType;
     smsAlertBeforeCall: boolean;
+    title?: string;
     zoomMeetingType?: ZoomMeetingType;
 }
 
@@ -303,6 +308,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         scheduleTime: '',
         scheduleType: undefined,
         smsAlertBeforeCall: false,
+        title: '',
         zoomMeetingType: undefined,
     });
     const [step, setStep] = useState<number>(1);
@@ -354,6 +360,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onChangeScheduleMeridiem={handlers.scheduleMeridiem}
             onChangeScheduleTime={handlers.scheduleTime}
             onChangeScheduleType={handlers.scheduleType}
+            onChangeTitle={handlers.title}
             onChangeZoomMeetingType={handlers.zoomMeetingType}
             onConnectDialNumber={onConnectDialNumber}
             onFailure={state.onFailure}
@@ -369,9 +376,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             scheduleTime={state.scheduleTime}
             scheduleType={state.scheduleType}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
+            step={step}
+            title={state.title}
             toggleAieraInterventionPermission={handlers.hasAieraInterventionPermission}
             toggleSMSAlertBeforeCall={handlers.smsAlertBeforeCall}
-            step={step}
             zoomMeetingType={state.zoomMeetingType}
         />
     );
