@@ -1,13 +1,4 @@
-import React, {
-    Dispatch,
-    MouseEvent,
-    ReactElement,
-    Ref,
-    SetStateAction,
-    useLayoutEffect,
-    useRef,
-    useState,
-} from 'react';
+import React, { MouseEvent, ReactElement, Ref, useLayoutEffect, useRef, useState } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
@@ -15,20 +6,19 @@ import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
-import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
 import { CompanyFilterQuery, CompanyFilterQueryVariables } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
 export type CompanyFilterResult = CompanyFilterQuery['companies'][0];
 
-interface SearchTerm {
-    searchTerm: string;
-}
-
 interface CompanySelectSharedProps {
     className?: string;
     onChange?: ChangeHandler<CompanyFilterResult>;
+    onChangeSearchTerm: ChangeHandler<string>;
+    onSelectCompany?: (event?: MouseEvent) => void;
+    searchTerm?: string;
     value?: CompanyFilterResult;
 }
 
@@ -36,23 +26,20 @@ interface CompanySelectSharedProps {
 interface CompanySelectUIProps extends CompanySelectSharedProps {
     companiesLoading?: boolean;
     companiesQuery: QueryResult<CompanyFilterQuery, CompanyFilterQueryVariables>;
-    hideTooltip?: (event?: MouseEvent) => void;
-    onSearchChange: ChangeHandler<string>;
     scrollRef: Ref<HTMLDivElement>;
     searchTerm: string;
     selectedIndex: number;
     selectedOptionRef: Ref<HTMLDivElement>;
     selectIndex: (index: number) => void;
-    setState: Dispatch<SetStateAction<SearchTerm>>;
 }
 
 export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
     const {
         className = '',
         companiesQuery,
-        hideTooltip,
         onChange,
-        onSearchChange,
+        onChangeSearchTerm,
+        onSelectCompany,
         scrollRef,
         searchTerm,
         selectedIndex,
@@ -75,7 +62,7 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
                     icon={<MagnifyingGlass />}
                     name="company-select__search"
                     placeholder="Search..."
-                    onChange={onSearchChange}
+                    onChange={onChangeSearchTerm}
                     value={searchTerm}
                 />
             </div>
@@ -104,7 +91,7 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
                                         onClick={(event) => {
                                             event.stopPropagation();
                                             onChange?.(event, { value: company });
-                                            hideTooltip?.();
+                                            onSelectCompany?.();
                                         }}
                                         onMouseEnter={() => selectIndex(index)}
                                         tabIndex={0}
@@ -136,9 +123,8 @@ export interface CompanySelectProps extends CompanySelectSharedProps {}
  * Renders CompanySelect
  */
 export function CompanySelect(props: CompanySelectProps): ReactElement {
-    const { className, onChange, value } = props;
+    const { className, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = '', value } = props;
     const [selectedIndex, selectIndex] = useState(0);
-    const { state, handlers, setState } = useChangeHandlers({ searchTerm: '' });
     const companiesQuery = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
         isEmpty: ({ companies }) => companies.length === 0,
         query: gql`
@@ -166,16 +152,13 @@ export function CompanySelect(props: CompanySelectProps): ReactElement {
                 }
             }
         `,
-        variables: {
-            searchTerm: state.searchTerm,
-        },
-        pause: !state.searchTerm,
+        variables: { searchTerm },
+        pause: !searchTerm,
     });
 
     // Keyboard controls
     useWindowListener('keydown', (event) => {
         const key = event?.key;
-
         match(companiesQuery)
             .with({ status: 'success' }, ({ data: { companies } }) => {
                 if (companies.length > 0) {
@@ -199,7 +182,8 @@ export function CompanySelect(props: CompanySelectProps): ReactElement {
                             if (companies.length && companies[selectedIndex]) {
                                 selectIndex(0);
                                 onChange?.(event, { value: companies[selectedIndex] });
-                                setState({ searchTerm: '' });
+                                onChangeSearchTerm(event, { value: '' });
+                                onSelectCompany?.();
                             }
                         })
                         .otherwise(() => true);
@@ -229,14 +213,14 @@ export function CompanySelect(props: CompanySelectProps): ReactElement {
             className={className}
             companiesQuery={companiesQuery}
             onChange={onChange}
-            onSearchChange={handlers.searchTerm}
+            onChangeSearchTerm={onChangeSearchTerm}
+            onSelectCompany={onSelectCompany}
             value={value}
             scrollRef={scrollContainerRef}
-            searchTerm={state.searchTerm}
+            searchTerm={searchTerm}
             selectIndex={selectIndex}
             selectedIndex={selectedIndex}
             selectedOptionRef={selectedOptionRef}
-            setState={setState}
         />
     );
 }

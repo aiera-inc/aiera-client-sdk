@@ -6,7 +6,7 @@ import { CompanySelect } from '.';
 
 describe('CompanySelect', () => {
     test('renders', () => {
-        renderWithProvider(<CompanySelect />);
+        renderWithProvider(<CompanySelect onChangeSearchTerm={jest.fn()} />);
         screen.getByPlaceholderText('Search...');
         screen.getByText('Type to search...');
     });
