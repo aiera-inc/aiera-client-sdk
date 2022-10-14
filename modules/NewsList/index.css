@@ -493,6 +493,9 @@ video {
   margin-top: 0.75rem;
   margin-bottom: 0.75rem;
 }
+.ml-2 {
+  margin-left: 0.5rem;
+}
 .mb-5 {
   margin-bottom: 1.25rem;
 }
@@ -513,9 +516,6 @@ video {
 }
 .ml-2\.5 {
   margin-left: 0.625rem;
-}
-.ml-2 {
-  margin-left: 0.5rem;
 }
 .mr-1 {
   margin-right: 0.25rem;
@@ -717,6 +717,9 @@ video {
 }
 .min-h-\[80px\] {
   min-height: 80px;
+}
+.min-h-\[58px\] {
+  min-height: 58px;
 }
 .w-4 {
   width: 1rem;
