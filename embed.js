@@ -228,11 +228,22 @@
     }
     emit(event, data) {
       var _a, _b;
-      (_b = (_a = this.frame) == null ? void 0 : _a.contentWindow) == null ? void 0 : _b.postMessage({
-        ns: "aiera",
-        event,
-        data
-      }, this.module.origin);
+      if (navigator.userAgent.includes("Safari")) {
+        setTimeout(() => {
+          var _a2, _b2;
+          (_b2 = (_a2 = this.frame) == null ? void 0 : _a2.contentWindow) == null ? void 0 : _b2.postMessage({
+            ns: "aiera",
+            event,
+            data
+          }, this.module.origin);
+        }, 100);
+      } else {
+        (_b = (_a = this.frame) == null ? void 0 : _a.contentWindow) == null ? void 0 : _b.postMessage({
+          ns: "aiera",
+          event,
+          data
+        }, this.module.origin);
+      }
     }
     on(event, listener) {
       this.emitter.on(event, listener);
