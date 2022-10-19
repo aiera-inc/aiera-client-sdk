@@ -332,14 +332,31 @@ export class Module {
      * @param event - Must be one of [[MessageBusEvents]]
      */
     emit<E extends keyof MessageBusEvents>(event: E, data: Message<E>['data']) {
-        this.frame?.contentWindow?.postMessage(
-            {
-                ns: 'aiera',
-                event,
-                data,
-            },
-            this.module.origin
-        );
+        if (navigator.userAgent.includes('Safari')) {
+            // This setTimeout seems to be needed for safari
+            // it does not make sense.. as we know the frame has already
+            // loaded before this postMessage is called. This fix is a
+            // hack for now, until we can discover the root cause of the issue
+            setTimeout(() => {
+                this.frame?.contentWindow?.postMessage(
+                    {
+                        ns: 'aiera',
+                        event,
+                        data,
+                    },
+                    this.module.origin
+                );
+            }, 100);
+        } else {
+            this.frame?.contentWindow?.postMessage(
+                {
+                    ns: 'aiera',
+                    event,
+                    data,
+                },
+                this.module.origin
+            );
+        }
     }
 
     /**
