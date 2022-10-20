@@ -318,7 +318,20 @@ export class Module {
         frame.src = this.module.toString();
         window.addEventListener('message', this.onWindowMessage);
         return new Promise<void>((resolve, reject) => {
-            frame.onload = () => resolve();
+            frame.onload = () => {
+                if (navigator.userAgent.includes('Safari')) {
+                    // This setTimeout seems to be needed for safari, for the iframe
+                    // to receive the postMessage. It does not make sense.. as we know
+                    // the frame has already loaded before this postMessage is called.
+                    // But maybe it needs to happen on the next render tick. This fix is a
+                    // hack for now, until we can discover the root cause of the issue
+                    setTimeout(() => {
+                        resolve();
+                    }, 100);
+                } else {
+                    resolve();
+                }
+            };
             frame.onerror = reject;
         });
     }
@@ -332,31 +345,14 @@ export class Module {
      * @param event - Must be one of [[MessageBusEvents]]
      */
     emit<E extends keyof MessageBusEvents>(event: E, data: Message<E>['data']) {
-        if (navigator.userAgent.includes('Safari')) {
-            // This setTimeout seems to be needed for safari
-            // it does not make sense.. as we know the frame has already
-            // loaded before this postMessage is called. This fix is a
-            // hack for now, until we can discover the root cause of the issue
-            setTimeout(() => {
-                this.frame?.contentWindow?.postMessage(
-                    {
-                        ns: 'aiera',
-                        event,
-                        data,
-                    },
-                    this.module.origin
-                );
-            }, 100);
-        } else {
-            this.frame?.contentWindow?.postMessage(
-                {
-                    ns: 'aiera',
-                    event,
-                    data,
-                },
-                this.module.origin
-            );
-        }
+        this.frame?.contentWindow?.postMessage(
+            {
+                ns: 'aiera',
+                event,
+                data,
+            },
+            this.module.origin
+        );
     }
 
     /**
