@@ -222,28 +222,25 @@
       frame.src = this.module.toString();
       window.addEventListener("message", this.onWindowMessage);
       return new Promise((resolve, reject) => {
-        frame.onload = () => resolve();
+        frame.onload = () => {
+          if (navigator.userAgent.includes("Safari")) {
+            setTimeout(() => {
+              resolve();
+            }, 100);
+          } else {
+            resolve();
+          }
+        };
         frame.onerror = reject;
       });
     }
     emit(event, data) {
       var _a, _b;
-      if (navigator.userAgent.includes("Safari")) {
-        setTimeout(() => {
-          var _a2, _b2;
-          (_b2 = (_a2 = this.frame) == null ? void 0 : _a2.contentWindow) == null ? void 0 : _b2.postMessage({
-            ns: "aiera",
-            event,
-            data
-          }, this.module.origin);
-        }, 100);
-      } else {
-        (_b = (_a = this.frame) == null ? void 0 : _a.contentWindow) == null ? void 0 : _b.postMessage({
-          ns: "aiera",
-          event,
-          data
-        }, this.module.origin);
-      }
+      (_b = (_a = this.frame) == null ? void 0 : _a.contentWindow) == null ? void 0 : _b.postMessage({
+        ns: "aiera",
+        event,
+        data
+      }, this.module.origin);
     }
     on(event, listener) {
       this.emitter.on(event, listener);
