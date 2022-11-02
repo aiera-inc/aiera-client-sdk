@@ -54,22 +54,17 @@ const companyTwo = {
 
 describe('CompanySelect', () => {
     const onChangeSearchTerm = jest.fn();
+    const searchTerm = 'test';
+
     test('renders', () => {
         renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />);
         screen.getByPlaceholderText('Search...');
         screen.getByText('Type to search...');
     });
 
-    test('handles default state', () => {
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />);
-        screen.getByText('By Company');
-    });
-
-    test('handles loading state', async () => {
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />);
-        const button = screen.getByText('By Company');
-        userEvent.click(button);
-        const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
+    test('handles loading state', () => {
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm={searchTerm} />);
+        const input = screen.getByPlaceholderText('Search...');
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'Goo');
         screen.getByText('Loading...');
@@ -84,8 +79,6 @@ describe('CompanySelect', () => {
                     },
                 }),
         });
-        const button = screen.getByText('By Company');
-        userEvent.click(button);
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'Goo');
@@ -94,7 +87,7 @@ describe('CompanySelect', () => {
 
     test('renders companies', async () => {
         const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />, {
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -102,8 +95,6 @@ describe('CompanySelect', () => {
                     },
                 }),
         });
-        const button = screen.getByText('By Company');
-        userEvent.click(button);
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'tic');
@@ -115,7 +106,7 @@ describe('CompanySelect', () => {
 
     test('selects company on "enter"', async () => {
         const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />, {
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -123,8 +114,6 @@ describe('CompanySelect', () => {
                     },
                 }),
         });
-        const button = screen.getByText('By Company');
-        userEvent.click(button);
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'tic');
@@ -136,7 +125,7 @@ describe('CompanySelect', () => {
 
     test('navigates company by keyboard arrow', async () => {
         const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />, {
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -144,8 +133,6 @@ describe('CompanySelect', () => {
                     },
                 }),
         });
-        const button = screen.getByText('By Company');
-        userEvent.click(button);
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'tic');
@@ -158,7 +145,7 @@ describe('CompanySelect', () => {
 
     test('navigates company by keyboard tab', async () => {
         const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />, {
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -166,8 +153,6 @@ describe('CompanySelect', () => {
                     },
                 }),
         });
-        const button = screen.getByText('By Company');
-        userEvent.click(button);
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'tic');
@@ -180,7 +165,7 @@ describe('CompanySelect', () => {
 
     test('renders selected company', () => {
         const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />);
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="tick" value={company} />);
         const button = screen.getByText('TICK');
         screen.getByText('Name');
         screen.getByTitle('Close');

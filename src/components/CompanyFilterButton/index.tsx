@@ -39,6 +39,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
             <Tooltip
                 content={({ hideTooltip }) => (
                     <CompanySelect
+                        autoFocus
                         onChange={onChange}
                         onChangeSearchTerm={onChangeSearchTerm}
                         onSelectCompany={hideTooltip}

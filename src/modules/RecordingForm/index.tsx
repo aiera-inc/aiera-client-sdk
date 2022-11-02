@@ -2,6 +2,7 @@ import React, { Dispatch, MouseEventHandler, ReactElement, SetStateAction, useMe
 import { match } from 'ts-pattern';
 
 import { Button } from '@aiera/client-sdk/components/Button';
+import { CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -45,6 +46,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     isNextButtonDisabled: boolean;
     isWebcast: boolean;
     meetingType: string;
+    onChangeCompany: ChangeHandler<CompanyFilterResult>;
     onChangeConnectAccessId: ChangeHandler<string>;
     onChangeConnectCallerId: ChangeHandler<string>;
     onChangeConnectDialNumber: Dispatch<SetStateAction<string>>;
@@ -77,6 +79,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     scheduleMeridiem: ScheduleMeridiem;
     scheduleTime?: string;
     scheduleType?: ScheduleType;
+    selectedCompany?: CompanyFilterResult;
     smsAlertBeforeCall: boolean;
     step: number;
     title?: string;
@@ -98,6 +101,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         isNextButtonDisabled,
         isWebcast,
         onBack,
+        onChangeCompany,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
         onChangeConnectDialNumber,
@@ -130,6 +134,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         scheduleMeridiem,
         scheduleTime,
         scheduleType,
+        selectedCompany,
         smsAlertBeforeCall,
         step,
         title,
@@ -212,7 +217,14 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             toggleAieraInterventionPermission={toggleAieraInterventionPermission}
                         />
                     ))
-                    .with(5, () => <RecordingDetails onChangeTitle={onChangeTitle} title={title} />)
+                    .with(5, () => (
+                        <RecordingDetails
+                            onChangeCompany={onChangeCompany}
+                            onChangeTitle={onChangeTitle}
+                            selectedCompany={selectedCompany}
+                            title={title}
+                        />
+                    ))
                     .otherwise(() => null)}
             </div>
             <div className="bg-white border-gray-200 border-opacity-80 border-t flex flex-col pt-3 px-3 shadow-inner recording-form__footer">
@@ -280,6 +292,7 @@ interface RecordingFormState {
     scheduleMeridiem: ScheduleMeridiem;
     scheduleTime?: string;
     scheduleType?: ScheduleType;
+    selectedCompany?: CompanyFilterResult;
     smsAlertBeforeCall: boolean;
     title?: string;
     zoomMeetingType?: ZoomMeetingType;
@@ -307,6 +320,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         scheduleMeridiem: ScheduleMeridiem.AM,
         scheduleTime: '',
         scheduleType: undefined,
+        selectedCompany: undefined,
         smsAlertBeforeCall: false,
         title: '',
         zoomMeetingType: undefined,
@@ -343,6 +357,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             isWebcast={isWebcast}
             meetingType={state.meetingType}
             onBack={onBack}
+            onChangeCompany={handlers.selectedCompany}
             onChangeConnectAccessId={handlers.connectAccessId}
             onChangeConnectCallerId={handlers.connectCallerId}
             onChangeConnectDialNumber={onChangeConnectDialNumber}
@@ -375,6 +390,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             scheduleMeridiem={state.scheduleMeridiem}
             scheduleTime={state.scheduleTime}
             scheduleType={state.scheduleType}
+            selectedCompany={state.selectedCompany}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
             step={step}
             title={state.title}

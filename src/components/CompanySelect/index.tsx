@@ -14,6 +14,7 @@ import './styles.css';
 export type CompanyFilterResult = CompanyFilterQuery['companies'][0];
 
 interface CompanySelectSharedProps {
+    autoFocus?: boolean;
     className?: string;
     onChange?: ChangeHandler<CompanyFilterResult>;
     onChangeSearchTerm: ChangeHandler<string>;
@@ -35,6 +36,7 @@ interface CompanySelectUIProps extends CompanySelectSharedProps {
 
 export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
     const {
+        autoFocus = false,
         className = '',
         companiesQuery,
         onChange,
@@ -55,63 +57,65 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
         <div
             className={`shadow-md bg-white rounded-lg w-72 overflow-hidden dark:bg-bluegray-6 company-select ${className}`}
         >
-            <div className="p-3 w-full">
+            <div className="p-3 w-full company-select-input-container">
                 <Input
+                    autoFocus={autoFocus}
                     clearable
-                    autoFocus
                     icon={<MagnifyingGlass />}
                     name="company-select__search"
-                    placeholder="Search..."
                     onChange={onChangeSearchTerm}
+                    placeholder="Search..."
                     value={searchTerm}
                 />
             </div>
-            <div className="flex flex-col max-h-[270px] min-h-[80px] overflow-y-scroll" ref={scrollRef}>
-                {match(companiesQuery)
-                    .with({ status: 'loading' }, () => wrapMsg('Loading...'))
-                    .with({ status: 'paused' }, () => wrapMsg('Type to search...'))
-                    .with({ status: 'error' }, () => wrapMsg('There was an error searching.'))
-                    .with({ status: 'empty' }, () => wrapMsg('No results.'))
-                    .with({ status: 'success' }, ({ data: { companies } }) => (
-                        <div className="flex-1">
-                            {companies.map((company, index) => {
-                                const primaryQuote = getPrimaryQuote(company);
-                                return (
-                                    <div
-                                        className={classNames(
-                                            'flex items-center h-9 tracking-wide cursor-pointer focus:outline-none',
-                                            {
-                                                'odd:bg-gray-100 dark:odd:bg-bluegray-5': selectedIndex !== index,
-                                                'bg-blue-500': selectedIndex === index,
-                                                'text-white': selectedIndex === index,
-                                                'text-gray-900 dark:text-white': selectedIndex !== index,
-                                            }
-                                        )}
-                                        key={company.id}
-                                        onClick={(event) => {
-                                            event.stopPropagation();
-                                            onChange?.(event, { value: company });
-                                            onSelectCompany?.();
-                                        }}
-                                        onMouseEnter={() => selectIndex(index)}
-                                        tabIndex={0}
-                                        onFocus={() => selectIndex(index)}
-                                        ref={selectedIndex === index ? selectedOptionRef : undefined}
-                                    >
-                                        <div className="pl-4 truncate flex-1 text-base">{company.commonName}</div>
-                                        <div className="w-20 pl-3 truncate font-semibold text-right text-sm">
-                                            {primaryQuote?.localTicker}
+            {!!searchTerm && (
+                <div className="flex flex-col max-h-[270px] min-h-[80px] overflow-y-scroll" ref={scrollRef}>
+                    {match(companiesQuery)
+                        .with({ status: 'loading' }, () => wrapMsg('Loading...'))
+                        .with({ status: 'paused' }, () => wrapMsg('Type to search...'))
+                        .with({ status: 'error' }, () => wrapMsg('There was an error searching.'))
+                        .with({ status: 'empty' }, () => wrapMsg('No results.'))
+                        .with({ status: 'success' }, ({ data: { companies } }) => (
+                            <div className="flex-1">
+                                {companies.map((company, index) => {
+                                    const primaryQuote = getPrimaryQuote(company);
+                                    return (
+                                        <div
+                                            className={classNames(
+                                                'flex items-center h-9 tracking-wide cursor-pointer focus:outline-none',
+                                                {
+                                                    'odd:bg-gray-100 dark:odd:bg-bluegray-5': selectedIndex !== index,
+                                                    'bg-blue-500': selectedIndex === index,
+                                                    'text-white': selectedIndex === index,
+                                                    'text-gray-900 dark:text-white': selectedIndex !== index,
+                                                }
+                                            )}
+                                            key={company.id}
+                                            onClick={(event) => {
+                                                event.stopPropagation();
+                                                onChange?.(event, { value: company });
+                                                onSelectCompany?.();
+                                            }}
+                                            onMouseEnter={() => selectIndex(index)}
+                                            tabIndex={0}
+                                            onFocus={() => selectIndex(index)}
+                                            ref={selectedIndex === index ? selectedOptionRef : undefined}
+                                        >
+                                            <div className="pl-4 truncate flex-1 text-base">{company.commonName}</div>
+                                            <div className="w-20 pl-3 truncate font-semibold text-right text-sm">
+                                                {primaryQuote?.localTicker}
+                                            </div>
+                                            <div className="w-20 pl-3 pr-4 truncate text-gray-300 text-sm">
+                                                {primaryQuote?.exchange?.shortName}
+                                            </div>
                                         </div>
-                                        <div className="w-20 pl-3 pr-4 truncate text-gray-300 text-sm">
-                                            {primaryQuote?.exchange?.shortName}
-                                        </div>
-                                    </div>
-                                );
-                            })}
-                        </div>
-                    ))
-                    .exhaustive()}
-            </div>
+                                    );
+                                })}
+                            </div>
+                        ))
+                        .exhaustive()}
+                </div>
+            )}
         </div>
     );
 }
@@ -123,7 +127,7 @@ export interface CompanySelectProps extends CompanySelectSharedProps {}
  * Renders CompanySelect
  */
 export function CompanySelect(props: CompanySelectProps): ReactElement {
-    const { className, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = '', value } = props;
+    const { autoFocus, className, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = '', value } = props;
     const [selectedIndex, selectIndex] = useState(0);
     const companiesQuery = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
         isEmpty: ({ companies }) => companies.length === 0,
@@ -210,17 +214,18 @@ export function CompanySelect(props: CompanySelectProps): ReactElement {
 
     return (
         <CompanySelectUI
+            autoFocus={autoFocus}
             className={className}
             companiesQuery={companiesQuery}
             onChange={onChange}
             onChangeSearchTerm={onChangeSearchTerm}
             onSelectCompany={onSelectCompany}
-            value={value}
             scrollRef={scrollContainerRef}
             searchTerm={searchTerm}
-            selectIndex={selectIndex}
             selectedIndex={selectedIndex}
             selectedOptionRef={selectedOptionRef}
+            selectIndex={selectIndex}
+            value={value}
         />
     );
 }
