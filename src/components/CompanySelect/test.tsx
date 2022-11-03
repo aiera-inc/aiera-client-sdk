@@ -3,7 +3,7 @@ import { fromValue } from 'wonka';
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
-import { renderWithProvider } from 'testUtils';
+import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { CompanySelect } from '.';
 
 const company = {
@@ -54,24 +54,36 @@ const companyTwo = {
 
 describe('CompanySelect', () => {
     const onChangeSearchTerm = jest.fn();
-    const searchTerm = 'test';
 
     test('renders', () => {
         renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />);
         screen.getByPlaceholderText('Search...');
-        screen.getByText('Type to search...');
     });
 
     test('handles loading state', () => {
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm={searchTerm} />);
+        const onChangeSearchTerm = jest.fn();
+        const { rerender } = renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />);
         const input = screen.getByPlaceholderText('Search...');
         expect(screen.queryByText('Loading...')).toBeNull();
         userEvent.type(input, 'Goo');
+        expect(onChangeSearchTerm).toHaveBeenNthCalledWith(1, expect.anything(), {
+            name: 'company-select__search',
+            value: 'G',
+        });
+        expect(onChangeSearchTerm).toHaveBeenNthCalledWith(2, expect.anything(), {
+            name: 'company-select__search',
+            value: 'o',
+        });
+        expect(onChangeSearchTerm).toHaveBeenNthCalledWith(3, expect.anything(), {
+            name: 'company-select__search',
+            value: 'o',
+        });
+        rerender(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="Goo" />);
         screen.getByText('Loading...');
     });
 
-    test('handles no results state', async () => {
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} />, {
+    test('handles empty state', () => {
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="Goo" />, {
             executeQuery: () =>
                 fromValue({
                     data: {
@@ -79,97 +91,86 @@ describe('CompanySelect', () => {
                     },
                 }),
         });
-        const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
-        expect(screen.queryByText('Loading...')).toBeNull();
-        userEvent.type(input, 'Goo');
         screen.getByText('No results.');
     });
 
-    test('renders companies', async () => {
-        const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        companies: [company],
-                    },
-                }),
+    test('handles error state', () => {
+        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="Goo" />, {
+            executeQuery: () => fromValue({ error: 'error' }),
         });
-        const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
-        expect(screen.queryByText('Loading...')).toBeNull();
-        userEvent.type(input, 'tic');
+        screen.getByText('There was an error searching.');
+    });
+
+    test('renders companies', () => {
+        const onChange = jest.fn();
+        renderWithProvider(
+            <CompanySelect onChange={onChange} onChangeSearchTerm={onChangeSearchTerm} searchTerm="tic" />,
+            {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            companies: [company, companyTwo],
+                        },
+                    }),
+            }
+        );
         userEvent.click(screen.getByText('TICK'));
-        expect(onChangeSearchTerm).toHaveBeenCalledWith(expect.anything(), { value: company });
-        // Make sure the tooltip is hidden after the onchange
-        await waitFor(() => expect(screen.queryByPlaceholderText('Search...')).toBeNull());
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: company });
     });
 
     test('selects company on "enter"', async () => {
-        const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        companies: [company],
-                    },
-                }),
-        });
+        const onChange = jest.fn();
+        renderWithProvider(
+            <CompanySelect onChange={onChange} onChangeSearchTerm={onChangeSearchTerm} searchTerm="tic" />,
+            {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            companies: [company],
+                        },
+                    }),
+            }
+        );
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
-        expect(screen.queryByText('Loading...')).toBeNull();
-        userEvent.type(input, 'tic');
         fireEvent.keyDown(input, { key: 'Enter' });
-        expect(onChangeSearchTerm).toHaveBeenCalledWith(expect.anything(), { value: company });
-        // Make sure the tooltip is hidden after the onchange
-        await waitFor(() => expect(screen.queryByPlaceholderText('Search...')).toBeNull());
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: company });
     });
 
     test('navigates company by keyboard arrow', async () => {
-        const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        companies: [company, companyTwo],
-                    },
-                }),
-        });
+        const onChange = jest.fn();
+        renderWithProvider(
+            <CompanySelect onChange={onChange} onChangeSearchTerm={onChangeSearchTerm} searchTerm="tic" />,
+            {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            companies: [company, companyTwo],
+                        },
+                    }),
+            }
+        );
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
-        expect(screen.queryByText('Loading...')).toBeNull();
-        userEvent.type(input, 'tic');
         fireEvent.keyDown(input, { key: 'ArrowDown' });
         fireEvent.keyDown(input, { key: 'Enter' });
-        expect(onChangeSearchTerm).toHaveBeenCalledWith(expect.anything(), { value: companyTwo });
-        // Make sure the tooltip is hidden after the onchange
-        await waitFor(() => expect(screen.queryByPlaceholderText('Search...')).toBeNull());
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: companyTwo });
     });
 
     test('navigates company by keyboard tab', async () => {
-        const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="test" />, {
-            executeQuery: () =>
-                fromValue({
-                    data: {
-                        companies: [company, companyTwo],
-                    },
-                }),
-        });
+        const onChange = jest.fn();
+        renderWithProvider(
+            <CompanySelect onChange={onChange} onChangeSearchTerm={onChangeSearchTerm} searchTerm="tic" />,
+            {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            companies: [company, companyTwo],
+                        },
+                    }),
+            }
+        );
         const input = await waitFor(() => screen.getByPlaceholderText('Search...'));
-        expect(screen.queryByText('Loading...')).toBeNull();
-        userEvent.type(input, 'tic');
         userEvent.tab();
         fireEvent.keyDown(input, { key: 'Enter' });
-        expect(onChangeSearchTerm).toHaveBeenCalledWith(expect.anything(), { value: companyTwo });
-        // Make sure the tooltip is hidden after the onchange
-        await waitFor(() => expect(screen.queryByPlaceholderText('Search...')).toBeNull());
-    });
-
-    test('renders selected company', () => {
-        const onChangeSearchTerm = jest.fn();
-        renderWithProvider(<CompanySelect onChangeSearchTerm={onChangeSearchTerm} searchTerm="tick" value={company} />);
-        const button = screen.getByText('TICK');
-        screen.getByText('Name');
-        screen.getByTitle('Close');
-        userEvent.click(button);
-        expect(onChangeSearchTerm).toHaveBeenCalledWith(expect.anything(), { value: null });
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: companyTwo });
     });
 });
