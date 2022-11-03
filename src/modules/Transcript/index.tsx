@@ -318,7 +318,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     .exhaustive()}
             </div>
             {match(eventQuery)
-                .with({ status: 'success' }, ({ data: { events } }) => {
+                .with({ status: 'success' }, { status: 'empty' }, ({ data: { events } }) => {
                     const event = events[0];
                     const primaryQuote = getPrimaryQuote(event?.primaryCompany);
                     return (
