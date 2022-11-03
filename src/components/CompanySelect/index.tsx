@@ -20,7 +20,6 @@ interface CompanySelectSharedProps {
     onChangeSearchTerm: ChangeHandler<string>;
     onSelectCompany?: (event?: MouseEvent) => void;
     searchTerm?: string;
-    value?: CompanyFilterResult;
 }
 
 /** @notExported */
@@ -57,7 +56,7 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
         <div
             className={`shadow-md bg-white rounded-lg w-72 overflow-hidden dark:bg-bluegray-6 company-select ${className}`}
         >
-            <div className="p-3 w-full company-select-input-container">
+            <div className="p-3 w-full company-select__search-container">
                 <Input
                     autoFocus={autoFocus}
                     clearable
@@ -69,7 +68,10 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
                 />
             </div>
             {!!searchTerm && (
-                <div className="flex flex-col max-h-[270px] min-h-[80px] overflow-y-scroll" ref={scrollRef}>
+                <div
+                    className="flex flex-col max-h-[270px] min-h-[80px] overflow-y-scroll company-select__results-container"
+                    ref={scrollRef}
+                >
                     {match(companiesQuery)
                         .with({ status: 'loading' }, () => wrapMsg('Loading...'))
                         .with({ status: 'paused' }, () => wrapMsg('Type to search...'))
@@ -127,7 +129,7 @@ export interface CompanySelectProps extends CompanySelectSharedProps {}
  * Renders CompanySelect
  */
 export function CompanySelect(props: CompanySelectProps): ReactElement {
-    const { autoFocus, className, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = '', value } = props;
+    const { autoFocus, className, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = '' } = props;
     const [selectedIndex, selectIndex] = useState(0);
     const companiesQuery = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
         isEmpty: ({ companies }) => companies.length === 0,
@@ -225,7 +227,6 @@ export function CompanySelect(props: CompanySelectProps): ReactElement {
             selectedIndex={selectedIndex}
             selectedOptionRef={selectedOptionRef}
             selectIndex={selectIndex}
-            value={value}
         />
     );
 }

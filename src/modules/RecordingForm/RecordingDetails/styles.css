@@ -1,3 +1,6 @@
-.company-select-input-container {
+.company-select__results-container {
+    margin-top: 8px;
+}
+.company-select__search-container {
     padding: 0 !important; /* remove padding around input */
 }

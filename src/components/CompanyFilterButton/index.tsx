@@ -44,7 +44,6 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                         onChangeSearchTerm={onChangeSearchTerm}
                         onSelectCompany={hideTooltip}
                         searchTerm={searchTerm}
-                        value={value}
                     />
                 )}
                 grow="down-left"
