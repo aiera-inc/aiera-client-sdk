@@ -66,4 +66,10 @@ describe('Input', () => {
         userEvent.hover(inputEle);
         expect(screen.queryByTitle('Close')).toBeNull();
     });
+
+    test('renders error when set', () => {
+        const onChange = jest.fn();
+        render(<Input error="Required" name="input" onChange={onChange} value="test" />);
+        screen.getByText('Required');
+    });
 });

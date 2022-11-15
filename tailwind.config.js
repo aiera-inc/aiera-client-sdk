@@ -22,6 +22,7 @@ module.exports = {
                 DEFAULT: '0px 1px 2px rgba(184, 184, 208, 0.28), 0px 4px 8px rgba(131, 131, 165, 0.07)',
                 '3xl': '0px 1px 2px rgba(184, 184, 208, 0.28), 0px 20px 28px rgba(131, 131, 165, 0.12)',
                 input: 'inset 0 0px 0px 1px #2463eb',
+                inputError: 'inset 0 0px 0px 1px #dc2626',
                 '3xl-dark': '0px 1px 2px rgba(0, 0, 0, 0.18), 0px 12px 24px rgba(0, 0, 0, 0.13)',
             },
             colors: {

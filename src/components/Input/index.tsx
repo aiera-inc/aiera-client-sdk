@@ -15,17 +15,18 @@ import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import './styles.css';
 
 interface InputSharedProps {
-    inputRef?: Ref<HTMLInputElement>;
     autoFocus?: boolean;
-    icon?: ReactNode;
-    id?: string;
-    placeholder?: string;
-    onFocus?: FocusEventHandler;
-    value?: string;
     className?: string;
     clearable?: boolean;
+    error?: string;
+    icon?: ReactNode;
+    id?: string;
+    inputRef?: Ref<HTMLInputElement>;
     name: string;
+    onFocus?: FocusEventHandler;
+    placeholder?: string;
     type?: string;
+    value?: string;
 }
 
 /** @notExported */
@@ -36,52 +37,67 @@ interface InputUIProps extends InputSharedProps {
 
 export function InputUI(props: InputUIProps): ReactElement {
     const {
-        inputRef,
         autoFocus,
+        className = '',
+        clear,
+        clearable,
+        error,
         icon,
         id,
-        clearable,
-        clear,
-        placeholder,
+        inputRef,
+        name,
         onChange,
         onFocus,
-        value,
-        name,
-        className = '',
+        placeholder,
         type,
+        value,
     } = props;
     return (
-        <div className={`group h-8 items-center w-full relative dark:text-white ${className} input__${name}`}>
-            {React.isValidElement(icon) && (
-                <div className="absolute pointer-events-none h-8 w-8 justify-center items-center flex">
-                    {React.cloneElement(icon, {
-                        className:
-                            'group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4',
-                    })}
-                </div>
-            )}
-            <input
-                id={id}
-                ref={inputRef}
-                autoFocus={autoFocus}
-                className={classNames(
-                    'w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5',
-                    { 'pl-7': !!icon, 'pl-3': !icon }
+        <div className={`flex flex-col ${className} input__${name}`}>
+            {error && <div className="mb-0.5 ml-auto text-red-600 text-sm">{error}</div>}
+            <div className="group h-8 items-center w-full relative dark:text-white">
+                {React.isValidElement(icon) && (
+                    <div className="absolute pointer-events-none h-8 w-8 justify-center items-center flex">
+                        {React.cloneElement(icon, {
+                            className: `group-focus-within:stroke-current group-focus-within:text-${
+                                error ? 'red' : 'blue'
+                            }-600 z-1 relative w-4`,
+                        })}
+                    </div>
                 )}
-                onChange={onChange}
-                onFocus={onFocus}
-                placeholder={placeholder}
-                value={value}
-                type={type}
-            />
-            {clearable && value && (
-                <div
-                    className="h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700"
-                    onClick={clear}
-                >
-                    <Close />
-                </div>
-            )}
+                <input
+                    id={id}
+                    ref={inputRef}
+                    autoFocus={autoFocus}
+                    className={classNames(
+                        'w-full h-full text-sm border border-gray-200 rounded-lg focus:border-1 focus:outline-none dark:bg-bluegray-6 dark:border-bluegray-5',
+                        {
+                            'pl-7': !!icon,
+                            'pl-3': !icon,
+                            'border-red-600': !!error,
+                            'focus:border-blue-600': !error,
+                            'focus:border-red-600': !!error,
+                            'focus:shadow-input': !error,
+                            'focus:shadow-inputError': !!error,
+                            'hover:border-blue-400': !error,
+                            'hover:border-red-600': !!error,
+                        }
+                    )}
+                    onChange={onChange}
+                    onFocus={onFocus}
+                    placeholder={placeholder}
+                    value={value}
+                    type={type}
+                />
+                {clearable && value && (
+                    <div
+                        className="h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700"
+                        onClick={clear}
+                    >
+                        <Close />
+                    </div>
+                )}
+            </div>
         </div>
     );
 }
@@ -96,41 +112,43 @@ export interface InputProps extends InputSharedProps {
  */
 export function Input(props: InputProps): ReactElement {
     const {
-        inputRef,
         autoFocus = false,
+        className,
+        clearable = true,
+        error,
         icon,
         id,
-        clearable = true,
-        placeholder,
+        inputRef,
+        name,
         onChange,
         onFocus,
-        value,
-        name,
-        className,
+        placeholder,
         type = 'text',
+        value,
     } = props;
     return (
         <InputUI
             autoFocus={autoFocus}
-            clearable={clearable}
+            className={className}
             clear={useCallback(
                 (event: MouseEvent<HTMLDivElement>) => onChange?.(event, { name, value: '' }),
                 [onChange]
             )}
+            clearable={clearable}
+            error={error}
             icon={icon}
             id={id}
-            placeholder={placeholder}
+            inputRef={inputRef}
+            name={name}
             onChange={useCallback(
                 (event: ChangeEvent<HTMLInputElement>) =>
                     onChange?.(event, { name, value: event?.currentTarget?.value }),
                 [onChange]
             )}
-            inputRef={inputRef}
             onFocus={onFocus}
-            value={value}
-            className={className}
-            name={name}
+            placeholder={placeholder}
             type={type}
+            value={value}
         />
     );
 }
