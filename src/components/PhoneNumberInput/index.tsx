@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, FocusEventHandler, ReactElement, SetStateAction, useEffect, useState } from 'react';
 import 'react-phone-number-input/style.css';
 import './styles.css';
 
@@ -7,7 +7,9 @@ interface PhoneNumberInputSharedProps {
     className?: string;
     label?: string;
     name?: string;
+    onBlur?: FocusEventHandler;
     onChange: Dispatch<SetStateAction<string>>;
+    onFocus?: FocusEventHandler;
     placeholder?: string;
     value?: string;
 }
@@ -270,7 +272,9 @@ type PhoneInputProps = {
     defaultCountry?: CountryCode;
     disabled?: boolean;
     initialValueFormat?: 'national';
+    onBlur?: FocusEventHandler;
     onChange(value?: string): void;
+    onFocus?: FocusEventHandler;
     placeholder?: string;
     value?: string;
 };
@@ -300,7 +304,7 @@ interface PhoneNumberInputUIProps extends PhoneNumberInputSharedProps {
 }
 
 export function PhoneNumberInputUI(props: PhoneNumberInputUIProps): ReactElement {
-    const { className = '', onChange, placeholder, ReactPhoneInput, value } = props;
+    const { className = '', onBlur, onChange, onFocus, placeholder, ReactPhoneInput, value } = props;
     return (
         <div className={`h-8 items-center w-full dark:text-white ${className}`}>
             {ReactPhoneInput && (
@@ -308,7 +312,9 @@ export function PhoneNumberInputUI(props: PhoneNumberInputUIProps): ReactElement
                     autoComplete="off"
                     defaultCountry="US"
                     initialValueFormat="national"
+                    onBlur={onBlur}
                     onChange={(value?: string) => onChange(value || '')}
+                    onFocus={onFocus}
                     placeholder={placeholder}
                     value={value}
                 />
@@ -335,7 +341,7 @@ export function PhoneNumberInput(props: PhoneNumberInputProps): ReactElement {
         });
     }, []);
 
-    const { defaultCountry, className, label, name, onChange, placeholder, value } = props;
+    const { defaultCountry, className, label, name, onBlur, onChange, onFocus, placeholder, value } = props;
     return (
         <PhoneNumberInputUI
             defaultCountry={defaultCountry}
@@ -343,7 +349,9 @@ export function PhoneNumberInput(props: PhoneNumberInputProps): ReactElement {
             formatNumber={formatNumber}
             label={label}
             name={name}
+            onBlur={onBlur}
             onChange={onChange}
+            onFocus={onFocus}
             placeholder={placeholder}
             ReactPhoneInput={ReactPhoneInput}
             value={value}

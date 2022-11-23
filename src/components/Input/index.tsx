@@ -23,6 +23,7 @@ interface InputSharedProps {
     id?: string;
     inputRef?: Ref<HTMLInputElement>;
     name: string;
+    onBlur?: FocusEventHandler;
     onFocus?: FocusEventHandler;
     placeholder?: string;
     type?: string;
@@ -46,6 +47,7 @@ export function InputUI(props: InputUIProps): ReactElement {
         id,
         inputRef,
         name,
+        onBlur,
         onChange,
         onFocus,
         placeholder,
@@ -83,6 +85,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                             'hover:border-red-600': !!error,
                         }
                     )}
+                    onBlur={onBlur}
                     onChange={onChange}
                     onFocus={onFocus}
                     placeholder={placeholder}
@@ -120,6 +123,7 @@ export function Input(props: InputProps): ReactElement {
         id,
         inputRef,
         name,
+        onBlur,
         onChange,
         onFocus,
         placeholder,
@@ -140,6 +144,7 @@ export function Input(props: InputProps): ReactElement {
             id={id}
             inputRef={inputRef}
             name={name}
+            onBlur={onBlur}
             onChange={useCallback(
                 (event: ChangeEvent<HTMLInputElement>) =>
                     onChange?.(event, { name, value: event?.currentTarget?.value }),

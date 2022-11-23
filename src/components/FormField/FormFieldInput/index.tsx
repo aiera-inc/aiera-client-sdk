@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FocusEventHandler } from 'react';
 
 import { FormField } from '@aiera/client-sdk/components/FormField';
 import { Input } from '@aiera/client-sdk/components/Input';
@@ -15,13 +15,16 @@ export interface FormFieldInputProps extends SharedProps {
     clearable?: boolean;
     description?: string;
     label?: string;
+    onBlur?: FocusEventHandler;
     onChange?: ChangeHandler<string>;
+    onFocus?: FocusEventHandler;
     placeholder?: string;
     value: string;
 }
 
 export function FormFieldInput(props: FormFieldInputProps) {
-    const { autoFocus, className, clearable, description, label, name, onChange, placeholder, value } = props;
+    const { autoFocus, className, clearable, description, label, name, onBlur, onChange, onFocus, placeholder, value } =
+        props;
     return (
         <FormField className={className}>
             {!!label && <p className="font-semibold text-base text-black form-field__label">{label}</p>}
@@ -35,7 +38,9 @@ export function FormFieldInput(props: FormFieldInputProps) {
                     autoFocus={autoFocus}
                     clearable={clearable}
                     name={name}
+                    onBlur={onBlur}
                     onChange={onChange}
+                    onFocus={onFocus}
                     placeholder={placeholder}
                     value={value}
                 />

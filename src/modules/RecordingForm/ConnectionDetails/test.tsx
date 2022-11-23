@@ -20,6 +20,8 @@ describe('ConnectionDetails', () => {
         connectPhoneNumber: '555-555-5555',
         connectPin: '1234',
         connectUrl: 'https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5',
+        errors: {},
+        onBlur: onChange,
         onChangeConnectAccessId: onChange,
         onChangeConnectCallerId: onChange,
         onChangeConnectDialNumber: onChange,
@@ -29,9 +31,11 @@ describe('ConnectionDetails', () => {
         onChangeParticipationType: onChange,
         onChangeZoomMeetingType: onChange,
         onConnectDialNumber: '555-123-4567',
+        onFocus: onChange,
         participationTypeOptions: PARTICIPATION_TYPE_OPTIONS,
         smsAlertBeforeCall: false,
         toggleSMSAlertBeforeCall: onChange,
+        touched: {},
     };
 
     describe('when connection type is Zoom', () => {

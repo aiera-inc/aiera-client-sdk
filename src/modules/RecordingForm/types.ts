@@ -2,12 +2,22 @@
  * Consts, types, and interfaces for RecordingForm and its sub-modules
  */
 
-// TODO: remove these once the server generates them
+// TODO: remove once the server generates these
 export enum ConnectionType {
     GoogleMeet = 'google_meet',
     PhoneNumber = 'phone',
     Webcast = 'webcast',
     Zoom = 'zoom',
+}
+
+/**
+ * Interfaces
+ */
+export interface InputErrorState {
+    [key: string]: string | undefined;
+}
+export interface InputTouchedState {
+    [key: string]: boolean;
 }
 
 /**

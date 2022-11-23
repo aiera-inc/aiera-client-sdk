@@ -1,4 +1,4 @@
-import React, { Dispatch, ReactElement, SetStateAction, useMemo } from 'react';
+import React, { Dispatch, FocusEventHandler, ReactElement, SetStateAction, useMemo } from 'react';
 import { match } from 'ts-pattern';
 import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
 import { FormField } from '@aiera/client-sdk/components/FormField';
@@ -8,6 +8,8 @@ import { PhoneNumberInput } from '@aiera/client-sdk/components/PhoneNumberInput'
 import { ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import {
     ConnectionType,
+    InputErrorState,
+    InputTouchedState,
     ParticipationType,
     ZOOM_MEETING_TYPE_OPTION_PHONE,
     ZOOM_MEETING_TYPE_OPTIONS,
@@ -23,6 +25,8 @@ interface ConnectionDetailsSharedProps {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
+    errors: InputErrorState;
+    onBlur: FocusEventHandler;
     onChangeConnectAccessId: ChangeHandler<string>;
     onChangeConnectCallerId: ChangeHandler<string>;
     onChangeConnectDialNumber: Dispatch<SetStateAction<string>>;
@@ -32,10 +36,12 @@ interface ConnectionDetailsSharedProps {
     onChangeParticipationType: ChangeHandler<ParticipationType>;
     onChangeZoomMeetingType: ChangeHandler<ZoomMeetingType>;
     onConnectDialNumber: string;
+    onFocus: FocusEventHandler;
     participationType?: ParticipationType;
     participationTypeOptions: SelectOption<ParticipationType>[];
     smsAlertBeforeCall: boolean;
     toggleSMSAlertBeforeCall: ChangeHandler<boolean>;
+    touched: InputTouchedState;
     zoomMeetingType?: ZoomMeetingType;
 }
 
@@ -52,6 +58,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         connectPhoneNumber,
         connectPin,
         connectUrl,
+        onBlur,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
         onChangeConnectDialNumber,
@@ -61,6 +68,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         onChangeParticipationType,
         onChangeZoomMeetingType,
         onConnectDialNumber,
+        onFocus,
         participationType,
         participationTypeOptions,
         showCallMeFields,
@@ -76,7 +84,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             description="Enter the dial-in number"
             label="Dial-in number*"
             name="connectPhoneNumber"
+            onBlur={onBlur}
             onChange={onChangeConnectPhoneNumber}
+            onFocus={onFocus}
             placeholder="(888)-123-4567"
             value={connectPhoneNumber}
         />
@@ -98,7 +108,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             description={description}
             label={label}
             name="connectUrl"
+            onBlur={onBlur}
             onChange={onChangeConnectUrl}
+            onFocus={onFocus}
             placeholder="https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5"
             value={connectUrl}
         />
@@ -110,7 +122,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             description={description}
             label={label}
             name="connectAccessId"
+            onBlur={onBlur}
             onChange={onChangeConnectAccessId}
+            onFocus={onFocus}
             placeholder="1234567890"
             value={connectAccessId}
         />
@@ -122,7 +136,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             description={description}
             label={label}
             name="connectPin"
+            onBlur={onBlur}
             onChange={onChangeConnectPin}
+            onFocus={onFocus}
             value={connectPin}
         />
     );
@@ -152,7 +168,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                                 description="Enter the name of the caller ID Aiera should use when connecting (optional)"
                                                 label="Caller ID"
                                                 name="connectCallerId"
+                                                onBlur={onBlur}
                                                 onChange={onChangeConnectCallerId}
+                                                onFocus={onFocus}
                                                 value={connectCallerId}
                                             />
                                         </>
@@ -200,7 +218,9 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                             className="mt-3"
                             defaultCountry="US"
                             name="onConnectDialNumber"
+                            onBlur={onBlur}
                             onChange={onChangeConnectDialNumber}
+                            onFocus={onFocus}
                             placeholder="(888)-123-4567"
                             value={onConnectDialNumber}
                         />
@@ -237,6 +257,8 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
         connectPhoneNumber,
         connectPin,
         connectUrl,
+        errors,
+        onBlur,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
         onChangeConnectDialNumber,
@@ -246,10 +268,12 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
         onChangeParticipationType,
         onChangeZoomMeetingType,
         onConnectDialNumber,
+        onFocus,
         participationType,
         participationTypeOptions,
         smsAlertBeforeCall,
         toggleSMSAlertBeforeCall,
+        touched,
         zoomMeetingType,
     } = props;
     // Only show the call me fields if the participation type is "Call me"
@@ -271,6 +295,8 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             connectPhoneNumber={connectPhoneNumber}
             connectPin={connectPin}
             connectUrl={connectUrl}
+            errors={errors}
+            onBlur={onBlur}
             onChangeConnectAccessId={onChangeConnectAccessId}
             onChangeConnectCallerId={onChangeConnectCallerId}
             onChangeConnectDialNumber={onChangeConnectDialNumber}
@@ -280,11 +306,13 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             onChangeParticipationType={onChangeParticipationType}
             onChangeZoomMeetingType={onChangeZoomMeetingType}
             onConnectDialNumber={onConnectDialNumber}
+            onFocus={onFocus}
             participationType={participationType}
             participationTypeOptions={participationTypeOptions}
             showCallMeFields={showCallMeFields}
             smsAlertBeforeCall={smsAlertBeforeCall}
             toggleSMSAlertBeforeCall={toggleSMSAlertBeforeCall}
+            touched={touched}
             zoomMeetingType={zoomMeetingType}
         />
     );

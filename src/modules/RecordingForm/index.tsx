@@ -1,4 +1,14 @@
-import React, { Dispatch, MouseEventHandler, ReactElement, SetStateAction, useMemo, useState } from 'react';
+import React, {
+    Dispatch,
+    FocusEvent,
+    FocusEventHandler,
+    MouseEventHandler,
+    ReactElement,
+    SetStateAction,
+    useCallback,
+    useMemo,
+    useState,
+} from 'react';
 import { match } from 'ts-pattern';
 
 import { Button } from '@aiera/client-sdk/components/Button';
@@ -19,6 +29,8 @@ import {
     PARTICIPATION_TYPE_OPTIONS,
     ZOOM_MEETING_TYPE_OPTION_WEB,
     ConnectionType,
+    InputErrorState,
+    InputTouchedState,
     OnFailure,
     ParticipationType,
     ScheduleMeridiem,
@@ -42,10 +54,12 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
+    errors: InputErrorState;
     hasAieraInterventionPermission: boolean;
     isNextButtonDisabled: boolean;
     isWebcast: boolean;
     meetingType: string;
+    onBlur: FocusEventHandler;
     onChangeCompany: ChangeHandler<CompanyFilterResult>;
     onChangeConnectAccessId: ChangeHandler<string>;
     onChangeConnectCallerId: ChangeHandler<string>;
@@ -71,6 +85,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     onFailureDialNumber?: string;
     onFailureInstructions?: string;
     onFailureSmsNumber?: string;
+    onFocus: FocusEventHandler;
     onNextStep: Dispatch<SetStateAction<number>>;
     onPrevStep: Dispatch<SetStateAction<number>>;
     onSubmit: MouseEventHandler;
@@ -85,6 +100,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     title?: string;
     toggleAieraInterventionPermission: ChangeHandler<boolean>;
     toggleSMSAlertBeforeCall: ChangeHandler<boolean>;
+    touched: InputTouchedState;
     zoomMeetingType?: ZoomMeetingType;
 }
 
@@ -97,10 +113,12 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         connectPhoneNumber,
         connectPin,
         connectUrl,
+        errors,
         hasAieraInterventionPermission,
         isNextButtonDisabled,
         isWebcast,
         onBack,
+        onBlur,
         onChangeCompany,
         onChangeConnectAccessId,
         onChangeConnectCallerId,
@@ -126,6 +144,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onFailureDialNumber,
         onFailureInstructions,
         onFailureSmsNumber,
+        onFocus,
         onNextStep,
         onPrevStep,
         onSubmit,
@@ -140,6 +159,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         title,
         toggleAieraInterventionPermission,
         toggleSMSAlertBeforeCall,
+        touched,
         zoomMeetingType,
     } = props;
     return (
@@ -172,6 +192,8 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             connectPhoneNumber={connectPhoneNumber}
                             connectPin={connectPin}
                             connectUrl={connectUrl}
+                            errors={errors}
+                            onBlur={onBlur}
                             onChangeConnectAccessId={onChangeConnectAccessId}
                             onChangeConnectCallerId={onChangeConnectCallerId}
                             onChangeConnectDialNumber={onChangeConnectDialNumber}
@@ -181,10 +203,12 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             onChangeParticipationType={onChangeParticipationType}
                             onChangeZoomMeetingType={onChangeZoomMeetingType}
                             onConnectDialNumber={onConnectDialNumber}
+                            onFocus={onFocus}
                             participationType={participationType}
                             participationTypeOptions={PARTICIPATION_TYPE_OPTIONS}
                             smsAlertBeforeCall={smsAlertBeforeCall}
                             toggleSMSAlertBeforeCall={toggleSMSAlertBeforeCall}
+                            touched={touched}
                             zoomMeetingType={zoomMeetingType}
                         />
                     ))
@@ -327,6 +351,11 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     });
     const [step, setStep] = useState<number>(1);
 
+    const [errors, setErrors] = useState<InputErrorState>({});
+    // Keep track of which inputs have been in focus to
+    // conditionally show errors, if any
+    const [touched, setTouched] = useState<InputTouchedState>({});
+
     // Need to track onConnectDialNumber, onFailureDialNumber, and onFailureSmsNumber separately
     // because the react-phone-number-input library doesn't send the event with the onChange callback,
     // so we can't use useChangeHandlers
@@ -343,6 +372,21 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         [state.connectionType, state.zoomMeetingType]
     );
 
+    const validateInput = ({ name, value }: { name: string; value: string | number }) => {
+        const isString = typeof value === 'string';
+        const hasValue = isString ? value.trim().length > 0 : !!value;
+        const trimmedValue = isString ? value.replace(/\s/g, '') : value;
+        if (name === 'connectAccessId') {
+            if (!hasValue && state.connectionType === ConnectionType.Zoom) {
+                setErrors({ connectAccessId: 'Required' });
+            } else if (hasValue && !/^[\d#]+$/.test(trimmedValue as string)) {
+                setErrors({ connectAccessId: 'Must only contain numbers or #' });
+            } else if (errors.connectAccessId) {
+                setErrors({ connectAccessId: undefined });
+            }
+        }
+    };
+
     return (
         <RecordingFormUI
             connectAccessId={state.connectAccessId}
@@ -352,11 +396,17 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPhoneNumber={state.connectPhoneNumber}
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
+            errors={errors}
             hasAieraInterventionPermission={state.hasAieraInterventionPermission}
             isNextButtonDisabled={isNextButtonDisabled}
             isWebcast={isWebcast}
             meetingType={state.meetingType}
             onBack={onBack}
+            onBlur={useCallback(
+                (event: FocusEvent<HTMLInputElement>) =>
+                    validateInput?.({ name: event?.target?.name, value: event?.target?.value }),
+                [validateInput]
+            )}
             onChangeCompany={handlers.selectedCompany}
             onChangeConnectAccessId={handlers.connectAccessId}
             onChangeConnectCallerId={handlers.connectCallerId}
@@ -382,6 +432,15 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onFailureDialNumber={onFailureDialNumber}
             onFailureInstructions={state.onFailureInstructions}
             onFailureSmsNumber={onFailureSmsNumber}
+            onFocus={useCallback(
+                (event: FocusEvent<HTMLInputElement>) => {
+                    const name = event?.target?.name;
+                    if (name) {
+                        setTouched({ [name]: true });
+                    }
+                },
+                [setTouched]
+            )}
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={() => console.log('SUBMITTED')}
@@ -396,6 +455,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             title={state.title}
             toggleAieraInterventionPermission={handlers.hasAieraInterventionPermission}
             toggleSMSAlertBeforeCall={handlers.smsAlertBeforeCall}
+            touched={touched}
             zoomMeetingType={state.zoomMeetingType}
         />
     );
