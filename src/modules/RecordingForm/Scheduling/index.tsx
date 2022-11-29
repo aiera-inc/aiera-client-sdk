@@ -7,21 +7,17 @@ import { Input } from '@aiera/client-sdk/components/Input';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import {
     CONNECT_OFFSET_SECONDS_OPTIONS,
+    RecordingFormStateChangeHandler,
     SCHEDULE_MERIDIEM_OPTIONS,
     SCHEDULE_TYPE_OPTIONS,
     ScheduleMeridiem,
     ScheduleType,
 } from '@aiera/client-sdk/modules/RecordingForm/types';
-import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface SchedulingSharedProps {
     connectOffsetSeconds: number;
-    onChangeConnectOffsetSeconds: ChangeHandler<number>;
-    onChangeScheduleDate: ChangeHandler<Date>;
-    onChangeScheduleMeridiem: ChangeHandler<ScheduleMeridiem>;
-    onChangeScheduleTime: ChangeHandler<string>;
-    onChangeScheduleType: ChangeHandler<ScheduleType>;
+    onChange: RecordingFormStateChangeHandler;
     scheduleDate: Date;
     scheduleMeridiem: ScheduleMeridiem;
     scheduleTime?: string;
@@ -40,11 +36,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
         calendarRef,
         connectOffsetSeconds,
         isCalendarVisible,
-        onChangeConnectOffsetSeconds,
-        onChangeScheduleDate,
-        onChangeScheduleMeridiem,
-        onChangeScheduleTime,
-        onChangeScheduleType,
+        onChange,
         scheduleDate,
         scheduleMeridiem,
         scheduleTime,
@@ -57,7 +49,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
             <FormFieldSelect
                 className="mt-2.5"
                 name="scheduleType"
-                onChange={onChangeScheduleType}
+                onChange={onChange}
                 options={SCHEDULE_TYPE_OPTIONS}
                 value={scheduleType}
             />
@@ -78,19 +70,20 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                             <Input
                                 className="ml-2"
                                 name="scheduleTime"
-                                onChange={onChangeScheduleTime}
+                                onChange={onChange}
                                 placeholder="10:00"
                                 value={scheduleTime}
                             />
                             <Dropdown
                                 className="ml-2"
-                                onChange={onChangeScheduleMeridiem}
+                                name="scheduleMeridiem"
+                                onChange={onChange}
                                 options={SCHEDULE_MERIDIEM_OPTIONS}
                                 value={scheduleMeridiem}
                             />
                         </div>
                         {isCalendarVisible && (
-                            <DatePicker calendarRef={calendarRef} name="scheduleDate" onChange={onChangeScheduleDate} />
+                            <DatePicker calendarRef={calendarRef} name="scheduleDate" onChange={onChange} />
                         )}
                     </FormField>
                     <FormField className="mt-5 px-4 py-3">
@@ -100,7 +93,8 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                         </p>
                         <Dropdown
                             className="mt-3"
-                            onChange={onChangeConnectOffsetSeconds}
+                            name="connectOffsetSeconds"
+                            onChange={onChange}
                             options={CONNECT_OFFSET_SECONDS_OPTIONS}
                             tooltipGrow="up-left"
                             value={connectOffsetSeconds}
@@ -132,28 +126,13 @@ export function Scheduling(props: SchedulingProps): ReactElement {
         }, [isCalendarVisible])
     );
 
-    const {
-        connectOffsetSeconds,
-        onChangeConnectOffsetSeconds,
-        onChangeScheduleDate,
-        onChangeScheduleMeridiem,
-        onChangeScheduleTime,
-        onChangeScheduleType,
-        scheduleDate,
-        scheduleMeridiem,
-        scheduleTime,
-        scheduleType,
-    } = props;
+    const { connectOffsetSeconds, onChange, scheduleDate, scheduleMeridiem, scheduleTime, scheduleType } = props;
     return (
         <SchedulingUI
             calendarRef={calendarRef}
             connectOffsetSeconds={connectOffsetSeconds}
             isCalendarVisible={isCalendarVisible}
-            onChangeConnectOffsetSeconds={onChangeConnectOffsetSeconds}
-            onChangeScheduleDate={onChangeScheduleDate}
-            onChangeScheduleMeridiem={onChangeScheduleMeridiem}
-            onChangeScheduleTime={onChangeScheduleTime}
-            onChangeScheduleType={onChangeScheduleType}
+            onChange={onChange}
             scheduleDate={scheduleDate}
             scheduleMeridiem={scheduleMeridiem}
             scheduleTime={scheduleTime}

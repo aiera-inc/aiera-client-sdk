@@ -32,12 +32,7 @@ describe('RecordingDetails', () => {
 
     test('renders', () => {
         renderWithProvider(
-            <RecordingDetails
-                onChangeCompany={onChange}
-                onChangeTitle={onChange}
-                selectedCompany={company}
-                title="Recording Details Test"
-            />
+            <RecordingDetails onChange={onChange} selectedCompany={company} title="Recording Details Test" />
         );
         screen.getByText('Recording Details');
         screen.getByText('Enter the name of the recording');

@@ -9,6 +9,7 @@ import './styles.css';
 
 interface DropdownSharedProps<T> {
     className?: string;
+    name?: string;
     onChange?: ChangeHandler<T>;
     options: SelectOption<T>[];
     tooltipGrow?: TooltipProps['grow'];
@@ -27,7 +28,7 @@ interface DropdownUIProps<T> extends DropdownSharedProps<T> {
 }
 
 function TooltipContent<T>(props: DropdownUIProps<T>): ReactElement {
-    const { hideTooltip, selectedIndex, selectedOptionRef, selectIndex, onChange, options, scrollRef } = props;
+    const { hideTooltip, name, onChange, options, scrollRef, selectedIndex, selectedOptionRef, selectIndex } = props;
 
     // Allow scrolling, selecting, and closing the tooltip with keyboard
     useWindowListener('keydown', (event) => {
@@ -41,7 +42,7 @@ function TooltipContent<T>(props: DropdownUIProps<T>): ReactElement {
             })
             .with('Enter', () => {
                 selectIndex(0);
-                onChange?.(event, { value: options[selectedIndex]?.value });
+                onChange?.(event, { name, value: options[selectedIndex]?.value });
                 hideTooltip?.();
             })
             .otherwise(() => true);
@@ -65,7 +66,7 @@ function TooltipContent<T>(props: DropdownUIProps<T>): ReactElement {
                             key={option.label}
                             onClick={(event) => {
                                 event.stopPropagation();
-                                onChange?.(event, { value: option.value });
+                                onChange?.(event, { name, value: option.value });
                                 hideTooltip?.();
                             }}
                             onFocus={() => selectIndex(index)}

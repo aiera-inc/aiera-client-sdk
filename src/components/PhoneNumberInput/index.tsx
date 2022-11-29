@@ -1,4 +1,4 @@
-import React, { Dispatch, FocusEventHandler, ReactElement, SetStateAction, useEffect, useState } from 'react';
+import React, { FocusEventHandler, ReactElement, useEffect, useState } from 'react';
 import 'react-phone-number-input/style.css';
 import './styles.css';
 
@@ -8,7 +8,7 @@ interface PhoneNumberInputSharedProps {
     label?: string;
     name?: string;
     onBlur?: FocusEventHandler;
-    onChange: Dispatch<SetStateAction<string>>;
+    onChange(value?: string): void;
     onFocus?: FocusEventHandler;
     placeholder?: string;
     value?: string;
@@ -304,6 +304,7 @@ interface PhoneNumberInputUIProps extends PhoneNumberInputSharedProps {
 }
 
 export function PhoneNumberInputUI(props: PhoneNumberInputUIProps): ReactElement {
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { className = '', onBlur, onChange, onFocus, placeholder, ReactPhoneInput, value } = props;
     return (
         <div className={`h-8 items-center w-full dark:text-white ${className}`}>
@@ -340,7 +341,7 @@ export function PhoneNumberInput(props: PhoneNumberInputProps): ReactElement {
             setReactPhoneInput(ReactPhoneInput);
         });
     }, []);
-
+    // eslint-disable-next-line @typescript-eslint/unbound-method
     const { defaultCountry, className, label, name, onBlur, onChange, onFocus, placeholder, value } = props;
     return (
         <PhoneNumberInputUI

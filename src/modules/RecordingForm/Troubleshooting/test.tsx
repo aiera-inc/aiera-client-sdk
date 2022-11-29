@@ -16,12 +16,8 @@ describe('Troubleshooting', () => {
     const props = {
         hasAieraInterventionPermission: false,
         isWebcast: true,
-        onChangeOnFailure: onChange,
-        onChangeOnFailureDialNumber: onChange,
-        onChangeOnFailureInstructions: onChange,
-        onChangeOnFailureSmsNumber: onChange,
+        onChange,
         onFailure: OnFailure.ManualInterventionCall,
-        toggleAieraInterventionPermission: onChange,
     };
 
     test('renders', () => {

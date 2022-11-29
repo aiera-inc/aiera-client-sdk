@@ -14,11 +14,7 @@ describe('Scheduling', () => {
         renderWithProvider(
             <Scheduling
                 connectOffsetSeconds={connectOffsetSeconds}
-                onChangeConnectOffsetSeconds={onChange}
-                onChangeScheduleDate={onChange}
-                onChangeScheduleMeridiem={onChange}
-                onChangeScheduleTime={onChange}
-                onChangeScheduleType={onChange}
+                onChange={onChange}
                 scheduleDate={scheduleDate}
                 scheduleMeridiem={scheduleMeridiem}
             />
@@ -32,11 +28,7 @@ describe('Scheduling', () => {
         renderWithProvider(
             <Scheduling
                 connectOffsetSeconds={connectOffsetSeconds}
-                onChangeConnectOffsetSeconds={onChange}
-                onChangeScheduleDate={onChange}
-                onChangeScheduleMeridiem={onChange}
-                onChangeScheduleTime={onChange}
-                onChangeScheduleType={onChange}
+                onChange={onChange}
                 scheduleDate={scheduleDate}
                 scheduleMeridiem={scheduleMeridiem}
                 scheduleType={ScheduleType.Now}
@@ -49,11 +41,7 @@ describe('Scheduling', () => {
         renderWithProvider(
             <Scheduling
                 connectOffsetSeconds={connectOffsetSeconds}
-                onChangeConnectOffsetSeconds={onChange}
-                onChangeScheduleDate={onChange}
-                onChangeScheduleMeridiem={onChange}
-                onChangeScheduleTime={onChange}
-                onChangeScheduleType={onChange}
+                onChange={onChange}
                 scheduleDate={scheduleDate}
                 scheduleMeridiem={scheduleMeridiem}
                 scheduleType={ScheduleType.Future}

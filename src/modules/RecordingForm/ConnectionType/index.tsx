@@ -1,14 +1,17 @@
 import React, { ReactElement } from 'react';
 
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
-import { ConnectionType as ConnectionTypeEnum } from '@aiera/client-sdk/modules/RecordingForm/types';
-import { ChangeHandler, SelectOption } from '@aiera/client-sdk/types';
+import {
+    ConnectionType as ConnectionTypeEnum,
+    RecordingFormStateChangeHandler,
+} from '@aiera/client-sdk/modules/RecordingForm/types';
+import { SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';
 
 interface ConnectionTypeSharedProps {
     connectionType?: ConnectionTypeEnum;
     connectionTypeOptions: SelectOption<ConnectionTypeEnum>[];
-    onChange: ChangeHandler<ConnectionTypeEnum>;
+    onChange: RecordingFormStateChangeHandler;
 }
 
 /** @notExported */

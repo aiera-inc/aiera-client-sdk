@@ -2,13 +2,9 @@
  * Consts, types, and interfaces for RecordingForm and its sub-modules
  */
 
-// TODO: remove once the server generates these
-export enum ConnectionType {
-    GoogleMeet = 'google_meet',
-    PhoneNumber = 'phone',
-    Webcast = 'webcast',
-    Zoom = 'zoom',
-}
+import { SyntheticEvent } from 'react';
+import { CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
+import { ValueOf } from '@aiera/client-sdk/types';
 
 /**
  * Interfaces
@@ -19,6 +15,45 @@ export interface InputErrorState {
 export interface InputTouchedState {
     [key: string]: boolean;
 }
+export interface RecordingFormState {
+    confirmPermission: boolean;
+    connectAccessId: string;
+    connectCallerId: string;
+    connectionType?: ConnectionType;
+    connectOffsetSeconds: number;
+    connectPhoneNumber: string;
+    connectPin: string;
+    connectUrl: string;
+    hasAieraInterventionPermission: boolean;
+    meetingType: string;
+    onConnectDialNumber: string;
+    onFailure?: OnFailure;
+    onFailureDialNumber: string;
+    onFailureInstructions: string;
+    onFailureSmsNumber: string;
+    participationType?: ParticipationType;
+    scheduleDate: Date;
+    scheduleMeridiem: ScheduleMeridiem;
+    scheduleTime?: string;
+    scheduleType?: ScheduleType;
+    selectedCompany?: CompanyFilterResult;
+    smsAlertBeforeCall: boolean;
+    title: string;
+    useOnConnectDialNumber: boolean;
+    zoomMeetingType?: ZoomMeetingType;
+}
+export interface RecordingFormStateChangeEvent {
+    name?: string;
+    value?: ValueOf<RecordingFormState> | null;
+}
+
+/**
+ * Types
+ */
+export type RecordingFormStateChangeHandler<E extends SyntheticEvent = SyntheticEvent> = (
+    event: E | Event | null,
+    change: RecordingFormStateChangeEvent
+) => void;
 
 /**
  * Constants
@@ -29,6 +64,12 @@ export const AIERA_INTERVENTION_END_TIME = '5:30 PM';
 /**
  * Enums
  */
+export enum ConnectionType {
+    GoogleMeet = 'google_meet',
+    PhoneNumber = 'phone',
+    Webcast = 'webcast',
+    Zoom = 'zoom',
+}
 export enum OnFailure {
     AieraIntervention = 'aiera_intervention',
     ManualInterventionCall = 'manual_intervention_call',

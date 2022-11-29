@@ -16,6 +16,7 @@ export type CompanyFilterResult = CompanyFilterQuery['companies'][0];
 interface CompanySelectSharedProps {
     autoFocus?: boolean;
     className?: string;
+    name?: string;
     onChange?: ChangeHandler<CompanyFilterResult>;
     onChangeSearchTerm: ChangeHandler<string>;
     onSelectCompany?: (event?: MouseEvent) => void;
@@ -38,6 +39,7 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
         autoFocus = false,
         className = '',
         companiesQuery,
+        name = 'company-select__search',
         onChange,
         onChangeSearchTerm,
         onSelectCompany,
@@ -61,7 +63,7 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
                     autoFocus={autoFocus}
                     clearable
                     icon={<MagnifyingGlass />}
-                    name="company-select__search"
+                    name={name}
                     onChange={onChangeSearchTerm}
                     placeholder="Search..."
                     value={searchTerm}
@@ -129,7 +131,7 @@ export interface CompanySelectProps extends CompanySelectSharedProps {}
  * Renders CompanySelect
  */
 export function CompanySelect(props: CompanySelectProps): ReactElement {
-    const { autoFocus, className, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = '' } = props;
+    const { autoFocus, className, name, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = '' } = props;
     const [selectedIndex, selectIndex] = useState(0);
     const companiesQuery = useQuery<CompanyFilterQuery, CompanyFilterQueryVariables>({
         isEmpty: ({ companies }) => companies.length === 0,
@@ -219,6 +221,7 @@ export function CompanySelect(props: CompanySelectProps): ReactElement {
             autoFocus={autoFocus}
             className={className}
             companiesQuery={companiesQuery}
+            name={name}
             onChange={onChange}
             onChangeSearchTerm={onChangeSearchTerm}
             onSelectCompany={onSelectCompany}

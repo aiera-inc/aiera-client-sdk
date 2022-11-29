@@ -6,13 +6,13 @@ import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldInput } from '@aiera/client-sdk/components/FormField/FormFieldInput';
 import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { RecordingFormStateChangeHandler } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
 
 interface RecordingDetailsSharedProps {
-    onChangeCompany: ChangeHandler<CompanyFilterResult>;
-    onChangeTitle: ChangeHandler<string>;
+    onChange: RecordingFormStateChangeHandler;
     selectedCompany?: CompanyFilterResult;
     title?: string;
 }
@@ -24,14 +24,7 @@ interface RecordingDetailsUIProps extends RecordingDetailsSharedProps {
 }
 
 export function RecordingDetailsUI(props: RecordingDetailsUIProps): ReactElement {
-    const {
-        companySearchTerm,
-        onChangeCompany,
-        onChangeCompanySearchTerm,
-        onChangeTitle,
-        selectedCompany,
-        title = '',
-    } = props;
+    const { companySearchTerm, onChange, onChangeCompanySearchTerm, selectedCompany, title = '' } = props;
     return (
         <div className="py-3 recording-details">
             <p className="font-semibold mt-2 text-slate-400 text-sm tracking-widest uppercase">Recording Details</p>
@@ -42,7 +35,7 @@ export function RecordingDetailsUI(props: RecordingDetailsUIProps): ReactElement
                 description="Enter the name of the recording"
                 label="Title*"
                 name="title"
-                onChange={onChangeTitle}
+                onChange={onChange}
                 value={title}
             />
             <FormField className="mt-5 px-4 py-3">
@@ -55,7 +48,7 @@ export function RecordingDetailsUI(props: RecordingDetailsUIProps): ReactElement
                         className="mt-3"
                         kind="default"
                         onClick={(event) => {
-                            onChangeCompany(event, { value: null });
+                            onChange(event, { name: 'selectedCompany', value: null });
                             onChangeCompanySearchTerm(event, { value: '' });
                         }}
                     >
@@ -68,7 +61,8 @@ export function RecordingDetailsUI(props: RecordingDetailsUIProps): ReactElement
                 ) : (
                     <CompanySelect
                         className="mt-3 shadow-none w-full"
-                        onChange={onChangeCompany}
+                        name="selectedCompany"
+                        onChange={onChange}
                         onChangeSearchTerm={onChangeCompanySearchTerm}
                         searchTerm={companySearchTerm}
                     />
@@ -90,13 +84,12 @@ interface RecordingDetailsState {
  */
 export function RecordingDetails(props: RecordingDetailsProps): ReactElement {
     const { handlers, state } = useChangeHandlers<RecordingDetailsState>({ companySearchTerm: '' });
-    const { onChangeCompany, onChangeTitle, selectedCompany, title } = props;
+    const { onChange, selectedCompany, title } = props;
     return (
         <RecordingDetailsUI
             companySearchTerm={state.companySearchTerm}
-            onChangeCompany={onChangeCompany}
+            onChange={onChange}
             onChangeCompanySearchTerm={handlers.companySearchTerm}
-            onChangeTitle={onChangeTitle}
             selectedCompany={selectedCompany}
             title={title}
         />
