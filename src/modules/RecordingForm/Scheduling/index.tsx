@@ -1,4 +1,4 @@
-import React, { ReactElement, Ref, useCallback, useRef, useState } from 'react';
+import React, { FocusEventHandler, ReactElement, Ref, useCallback, useRef, useState } from 'react';
 import { DatePicker } from '@aiera/client-sdk/components/DatePicker';
 import { Dropdown } from '@aiera/client-sdk/components/Dropdown';
 import { FormField } from '@aiera/client-sdk/components/FormField';
@@ -17,6 +17,7 @@ import './styles.css';
 
 interface SchedulingSharedProps {
     connectOffsetSeconds: number;
+    onBlur: FocusEventHandler;
     onChange: RecordingFormStateChangeHandler;
     scheduleDate: Date;
     scheduleMeridiem: ScheduleMeridiem;
@@ -36,6 +37,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
         calendarRef,
         connectOffsetSeconds,
         isCalendarVisible,
+        onBlur,
         onChange,
         scheduleDate,
         scheduleMeridiem,
@@ -70,6 +72,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                             <Input
                                 className="ml-2"
                                 name="scheduleTime"
+                                onBlur={onBlur}
                                 onChange={onChange}
                                 placeholder="10:00"
                                 value={scheduleTime}
@@ -126,12 +129,14 @@ export function Scheduling(props: SchedulingProps): ReactElement {
         }, [isCalendarVisible])
     );
 
-    const { connectOffsetSeconds, onChange, scheduleDate, scheduleMeridiem, scheduleTime, scheduleType } = props;
+    const { connectOffsetSeconds, onBlur, onChange, scheduleDate, scheduleMeridiem, scheduleTime, scheduleType } =
+        props;
     return (
         <SchedulingUI
             calendarRef={calendarRef}
             connectOffsetSeconds={connectOffsetSeconds}
             isCalendarVisible={isCalendarVisible}
+            onBlur={onBlur}
             onChange={onChange}
             scheduleDate={scheduleDate}
             scheduleMeridiem={scheduleMeridiem}

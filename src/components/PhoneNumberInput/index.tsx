@@ -5,6 +5,7 @@ import './styles.css';
 interface PhoneNumberInputSharedProps {
     defaultCountry?: string;
     className?: string;
+    error?: string;
     label?: string;
     name?: string;
     onBlur?: FocusEventHandler;
@@ -305,20 +306,23 @@ interface PhoneNumberInputUIProps extends PhoneNumberInputSharedProps {
 
 export function PhoneNumberInputUI(props: PhoneNumberInputUIProps): ReactElement {
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    const { className = '', onBlur, onChange, onFocus, placeholder, ReactPhoneInput, value } = props;
+    const { className = '', error, onBlur, onChange, onFocus, placeholder, ReactPhoneInput, value } = props;
     return (
         <div className={`h-8 items-center w-full dark:text-white ${className}`}>
             {ReactPhoneInput && (
-                <ReactPhoneInput
-                    autoComplete="off"
-                    defaultCountry="US"
-                    initialValueFormat="national"
-                    onBlur={onBlur}
-                    onChange={(value?: string) => onChange(value || '')}
-                    onFocus={onFocus}
-                    placeholder={placeholder}
-                    value={value}
-                />
+                <>
+                    {error && <div className="mb-0.5 ml-auto text-red-600 text-sm">{error}</div>}
+                    <ReactPhoneInput
+                        autoComplete="off"
+                        defaultCountry="US"
+                        initialValueFormat="national"
+                        onBlur={onBlur}
+                        onChange={(value?: string) => onChange(value || '')}
+                        onFocus={onFocus}
+                        placeholder={placeholder}
+                        value={value}
+                    />
+                </>
             )}
         </div>
     );
@@ -342,11 +346,12 @@ export function PhoneNumberInput(props: PhoneNumberInputProps): ReactElement {
         });
     }, []);
     // eslint-disable-next-line @typescript-eslint/unbound-method
-    const { defaultCountry, className, label, name, onBlur, onChange, onFocus, placeholder, value } = props;
+    const { className, defaultCountry, error, label, name, onBlur, onChange, onFocus, placeholder, value } = props;
     return (
         <PhoneNumberInputUI
-            defaultCountry={defaultCountry}
             className={className}
+            defaultCountry={defaultCountry}
+            error={error}
             formatNumber={formatNumber}
             label={label}
             name={name}

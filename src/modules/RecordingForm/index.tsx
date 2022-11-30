@@ -169,6 +169,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     .with(3, () => (
                         <Scheduling
                             connectOffsetSeconds={connectOffsetSeconds}
+                            onBlur={onBlur}
                             onChange={onChange}
                             scheduleDate={scheduleDate}
                             scheduleMeridiem={scheduleMeridiem}
@@ -180,6 +181,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                         <Troubleshooting
                             hasAieraInterventionPermission={hasAieraInterventionPermission}
                             isWebcast={isWebcast}
+                            onBlur={onBlur}
                             onChange={onChange}
                             onFailure={onFailure}
                             onFailureDialNumber={onFailureDialNumber}
@@ -314,7 +316,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                             value: event?.target?.value,
                         })
                     ),
-                [errors, validateInput]
+                [errors, privateRecordingId, state, validateInput]
             )}
             onChange={useCallback(
                 (_, { name = '', value }: RecordingFormStateChangeEvent) => {

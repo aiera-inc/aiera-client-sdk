@@ -55,8 +55,8 @@ export function InputUI(props: InputUIProps): ReactElement {
         value,
     } = props;
     return (
-        <div className={`flex flex-col ${className} input__${name}`}>
-            {error && <div className="mb-0.5 ml-auto text-red-600 text-sm">{error}</div>}
+        <div className={`flex flex-col relative ${className} input__${name}`}>
+            {error && <div className="absolute bottom-8 right-0 text-red-600 text-sm z-10">{error}</div>}
             <div className="group h-8 items-center w-full relative dark:text-white">
                 {React.isValidElement(icon) && (
                     <div className="absolute pointer-events-none h-8 w-8 justify-center items-center flex">
@@ -68,8 +68,6 @@ export function InputUI(props: InputUIProps): ReactElement {
                     </div>
                 )}
                 <input
-                    id={id}
-                    ref={inputRef}
                     autoFocus={autoFocus}
                     className={classNames(
                         'w-full h-full text-sm border border-gray-200 rounded-lg focus:border-1 focus:outline-none dark:bg-bluegray-6 dark:border-bluegray-5',
@@ -85,10 +83,13 @@ export function InputUI(props: InputUIProps): ReactElement {
                             'hover:border-red-600': !!error,
                         }
                     )}
+                    id={id}
+                    name={name}
                     onBlur={onBlur}
                     onChange={onChange}
                     onFocus={onFocus}
                     placeholder={placeholder}
+                    ref={inputRef}
                     value={value}
                     type={type}
                 />

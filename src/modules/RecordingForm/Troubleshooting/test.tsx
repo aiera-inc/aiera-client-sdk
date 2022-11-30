@@ -16,6 +16,7 @@ describe('Troubleshooting', () => {
     const props = {
         hasAieraInterventionPermission: false,
         isWebcast: true,
+        onBlur: onChange,
         onChange,
         onFailure: OnFailure.ManualInterventionCall,
     };

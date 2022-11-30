@@ -14,6 +14,7 @@ describe('Scheduling', () => {
         renderWithProvider(
             <Scheduling
                 connectOffsetSeconds={connectOffsetSeconds}
+                onBlur={onChange}
                 onChange={onChange}
                 scheduleDate={scheduleDate}
                 scheduleMeridiem={scheduleMeridiem}
@@ -28,6 +29,7 @@ describe('Scheduling', () => {
         renderWithProvider(
             <Scheduling
                 connectOffsetSeconds={connectOffsetSeconds}
+                onBlur={onChange}
                 onChange={onChange}
                 scheduleDate={scheduleDate}
                 scheduleMeridiem={scheduleMeridiem}
@@ -41,6 +43,7 @@ describe('Scheduling', () => {
         renderWithProvider(
             <Scheduling
                 connectOffsetSeconds={connectOffsetSeconds}
+                onBlur={onChange}
                 onChange={onChange}
                 scheduleDate={scheduleDate}
                 scheduleMeridiem={scheduleMeridiem}

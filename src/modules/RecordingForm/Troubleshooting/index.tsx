@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react';
+import React, { FocusEventHandler, ReactElement } from 'react';
 import { match } from 'ts-pattern';
 import { Checkbox } from '@aiera/client-sdk/components/Checkbox';
 import { FormField } from '@aiera/client-sdk/components/FormField';
@@ -16,6 +16,7 @@ import './styles.css';
 interface TroubleshootingSharedProps {
     hasAieraInterventionPermission: boolean;
     isWebcast: boolean;
+    onBlur: FocusEventHandler;
     onChange: RecordingFormStateChangeHandler;
     onFailure?: OnFailure;
     onFailureDialNumber?: string;
@@ -30,6 +31,7 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
     const {
         hasAieraInterventionPermission,
         isWebcast,
+        onBlur,
         onChange,
         onFailure,
         onFailureDialNumber,
@@ -48,6 +50,7 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
                 className="mt-3"
                 defaultCountry="US"
                 name={name}
+                onBlur={onBlur}
                 onChange={(value?: string) => onChange(null, { name, value })}
                 placeholder="(888)-123-4567"
                 value={value}
@@ -106,6 +109,7 @@ export function Troubleshooting(props: TroubleshootingProps): ReactElement {
     const {
         hasAieraInterventionPermission,
         isWebcast,
+        onBlur,
         onChange,
         onFailure,
         onFailureDialNumber,
@@ -116,6 +120,7 @@ export function Troubleshooting(props: TroubleshootingProps): ReactElement {
         <TroubleshootingUI
             hasAieraInterventionPermission={hasAieraInterventionPermission}
             isWebcast={isWebcast}
+            onBlur={onBlur}
             onChange={onChange}
             onFailure={onFailure}
             onFailureDialNumber={onFailureDialNumber}

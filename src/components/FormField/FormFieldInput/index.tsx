@@ -14,6 +14,7 @@ export interface FormFieldInputProps extends SharedProps {
     autoFocus?: boolean;
     clearable?: boolean;
     description?: string;
+    error?: string;
     label?: string;
     onBlur?: FocusEventHandler;
     onChange?: ChangeHandler<string>;
@@ -23,8 +24,20 @@ export interface FormFieldInputProps extends SharedProps {
 }
 
 export function FormFieldInput(props: FormFieldInputProps) {
-    const { autoFocus, className, clearable, description, label, name, onBlur, onChange, onFocus, placeholder, value } =
-        props;
+    const {
+        autoFocus,
+        className,
+        clearable,
+        description,
+        error,
+        label,
+        name,
+        onBlur,
+        onChange,
+        onFocus,
+        placeholder,
+        value,
+    } = props;
     return (
         <FormField className={className}>
             {!!label && <p className="font-semibold text-base text-black form-field__label">{label}</p>}
@@ -37,6 +50,7 @@ export function FormFieldInput(props: FormFieldInputProps) {
                 <Input
                     autoFocus={autoFocus}
                     clearable={clearable}
+                    error={error}
                     name={name}
                     onBlur={onBlur}
                     onChange={onChange}

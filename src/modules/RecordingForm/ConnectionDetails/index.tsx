@@ -50,6 +50,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         connectPhoneNumber,
         connectPin,
         connectUrl,
+        errors,
         onBlur,
         onChange,
         onConnectDialNumber,
@@ -66,6 +67,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             className="mt-5 px-4 py-3"
             clearable
             description="Enter the dial-in number"
+            error={errors.connectPhoneNumber}
             label="Dial-in number*"
             name="connectPhoneNumber"
             onBlur={onBlur}
@@ -90,6 +92,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             className="mt-5 px-4 py-3"
             clearable
             description={description}
+            error={errors.connectUrl}
             label={label}
             name="connectUrl"
             onBlur={onBlur}
@@ -104,6 +107,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             className="mt-5 px-4 py-3"
             clearable
             description={description}
+            error={errors.connectAccessId}
             label={label}
             name="connectAccessId"
             onBlur={onBlur}
@@ -118,6 +122,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             className="mt-5 px-4 py-3"
             clearable
             description={description}
+            error={errors.connectPin}
             label={label}
             name="connectPin"
             onBlur={onBlur}
@@ -201,6 +206,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                         <PhoneNumberInput
                             className="mt-3"
                             defaultCountry="US"
+                            error={errors.onConnectDialNumber}
                             name="onConnectDialNumber"
                             onBlur={onBlur}
                             onChange={(value?: string) => onChange(null, { name: 'onConnectDialNumber', value })}
