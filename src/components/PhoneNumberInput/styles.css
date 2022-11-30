@@ -22,3 +22,16 @@ input.PhoneInputInput::placeholder {
     font-size: 0.75rem;
     padding-bottom: 5px;
 }
+.PhoneInput__error input.PhoneInputInput {
+    border-color: #dc2626;
+}
+.PhoneInput__error input.PhoneInputInput:focus {
+    border-color: #dc2626;
+    box-shadow: 0 0 #0000, 0 0 #0000, inset 0 0 0 1px #dc2626;
+    font-size: 0.75rem;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+.PhoneInput__error input.PhoneInputInput:hover:not(:focus) {
+    border-color: #f87171;
+}

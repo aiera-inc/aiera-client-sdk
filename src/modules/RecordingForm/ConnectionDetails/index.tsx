@@ -201,10 +201,10 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                     <FormField className="mt-5 px-4 py-3">
                         <p className="font-semibold text-base text-black form-field__label">Your phone number</p>
                         <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
-                            Must be a direct line. Extensions are not supported for personal numbers
+                            Must be a direct line. Extensions are not supported
                         </p>
                         <PhoneNumberInput
-                            className="mt-3"
+                            className="mt-5"
                             defaultCountry="US"
                             error={errors.onConnectDialNumber}
                             name="onConnectDialNumber"

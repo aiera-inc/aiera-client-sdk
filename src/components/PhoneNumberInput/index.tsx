@@ -304,26 +304,24 @@ interface PhoneNumberInputUIProps extends PhoneNumberInputSharedProps {
     ReactPhoneInput?: PhoneInputWithCountrySelectType;
 }
 
-export function PhoneNumberInputUI(props: PhoneNumberInputUIProps): ReactElement {
+export function PhoneNumberInputUI(props: PhoneNumberInputUIProps): ReactElement | null {
     // eslint-disable-next-line @typescript-eslint/unbound-method
     const { className = '', error, onBlur, onChange, onFocus, placeholder, ReactPhoneInput, value } = props;
+    if (!ReactPhoneInput) return null;
     return (
-        <div className={`h-8 items-center w-full dark:text-white ${className}`}>
-            {ReactPhoneInput && (
-                <>
-                    {error && <div className="mb-0.5 ml-auto text-red-600 text-sm">{error}</div>}
-                    <ReactPhoneInput
-                        autoComplete="off"
-                        defaultCountry="US"
-                        initialValueFormat="national"
-                        onBlur={onBlur}
-                        onChange={(value?: string) => onChange(value || '')}
-                        onFocus={onFocus}
-                        placeholder={placeholder}
-                        value={value}
-                    />
-                </>
-            )}
+        <div className={`h-8 items-center relative w-full dark:text-white ${className}`}>
+            {error && <div className="absolute bottom-8 right-0 text-red-600 text-sm z-10">{error}</div>}
+            <ReactPhoneInput
+                autoComplete="off"
+                className={error ? 'PhoneInput__error' : undefined}
+                defaultCountry="US"
+                initialValueFormat="national"
+                onBlur={onBlur}
+                onChange={(value?: string) => onChange(value || '')}
+                onFocus={onFocus}
+                placeholder={placeholder}
+                value={value}
+            />
         </div>
     );
 }

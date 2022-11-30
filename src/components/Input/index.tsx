@@ -80,7 +80,7 @@ export function InputUI(props: InputUIProps): ReactElement {
                             'focus:shadow-input': !error,
                             'focus:shadow-inputError': !!error,
                             'hover:border-blue-400': !error,
-                            'hover:border-red-600': !!error,
+                            'hover:border-red-400': !!error,
                         }
                     )}
                     id={id}
