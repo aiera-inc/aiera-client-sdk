@@ -169,6 +169,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     .with(3, () => (
                         <Scheduling
                             connectOffsetSeconds={connectOffsetSeconds}
+                            errors={errors}
                             onBlur={onBlur}
                             onChange={onChange}
                             scheduleDate={scheduleDate}

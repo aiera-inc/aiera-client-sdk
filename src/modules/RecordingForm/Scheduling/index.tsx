@@ -7,9 +7,10 @@ import { Input } from '@aiera/client-sdk/components/Input';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import {
     CONNECT_OFFSET_SECONDS_OPTIONS,
-    RecordingFormStateChangeHandler,
     SCHEDULE_MERIDIEM_OPTIONS,
     SCHEDULE_TYPE_OPTIONS,
+    InputErrorState,
+    RecordingFormStateChangeHandler,
     ScheduleMeridiem,
     ScheduleType,
 } from '@aiera/client-sdk/modules/RecordingForm/types';
@@ -17,6 +18,7 @@ import './styles.css';
 
 interface SchedulingSharedProps {
     connectOffsetSeconds: number;
+    errors: InputErrorState;
     onBlur: FocusEventHandler;
     onChange: RecordingFormStateChangeHandler;
     scheduleDate: Date;
@@ -37,6 +39,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
         calendarRef,
         connectOffsetSeconds,
         isCalendarVisible,
+        errors,
         onBlur,
         onChange,
         scheduleDate,
@@ -62,7 +65,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                         <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
                             Aiera will automatically connect at this time
                         </p>
-                        <div className="flex items-center mt-3 space-between w-full">
+                        <div className="flex items-center mt-5 space-between w-full">
                             <Input
                                 className="shrink-[1]"
                                 clearable={false}
@@ -72,6 +75,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                             />
                             <Input
                                 className="ml-2 shrink-[1]"
+                                error={errors.scheduleTime}
                                 name="scheduleTime"
                                 onBlur={onBlur}
                                 onChange={onChange}
@@ -130,12 +134,21 @@ export function Scheduling(props: SchedulingProps): ReactElement {
         }, [isCalendarVisible])
     );
 
-    const { connectOffsetSeconds, onBlur, onChange, scheduleDate, scheduleMeridiem, scheduleTime, scheduleType } =
-        props;
+    const {
+        connectOffsetSeconds,
+        errors,
+        onBlur,
+        onChange,
+        scheduleDate,
+        scheduleMeridiem,
+        scheduleTime,
+        scheduleType,
+    } = props;
     return (
         <SchedulingUI
             calendarRef={calendarRef}
             connectOffsetSeconds={connectOffsetSeconds}
+            errors={errors}
             isCalendarVisible={isCalendarVisible}
             onBlur={onBlur}
             onChange={onChange}
