@@ -6,6 +6,7 @@ import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFiel
 import { PhoneNumberInput } from '@aiera/client-sdk/components/PhoneNumberInput';
 import { Textarea } from '@aiera/client-sdk/components/Textarea';
 import {
+    InputErrorState,
     OnFailure,
     RecordingFormStateChangeHandler,
     TROUBLESHOOTING_TYPE_INTERVENTION_OPTIONS,
@@ -14,6 +15,7 @@ import {
 import './styles.css';
 
 interface TroubleshootingSharedProps {
+    errors: InputErrorState;
     hasAieraInterventionPermission: boolean;
     isWebcast: boolean;
     onBlur: FocusEventHandler;
@@ -29,6 +31,7 @@ interface TroubleshootingUIProps extends TroubleshootingSharedProps {}
 
 export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
     const {
+        errors,
         hasAieraInterventionPermission,
         isWebcast,
         onBlur,
@@ -49,6 +52,7 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
             <PhoneNumberInput
                 className="mt-3"
                 defaultCountry="US"
+                error={errors[name]}
                 name={name}
                 onBlur={onBlur}
                 onChange={(value?: string) => onChange(null, { name, value })}
@@ -107,6 +111,7 @@ export interface TroubleshootingProps extends TroubleshootingSharedProps {}
  */
 export function Troubleshooting(props: TroubleshootingProps): ReactElement {
     const {
+        errors,
         hasAieraInterventionPermission,
         isWebcast,
         onBlur,
@@ -118,6 +123,7 @@ export function Troubleshooting(props: TroubleshootingProps): ReactElement {
     } = props;
     return (
         <TroubleshootingUI
+            errors={errors}
             hasAieraInterventionPermission={hasAieraInterventionPermission}
             isWebcast={isWebcast}
             onBlur={onBlur}

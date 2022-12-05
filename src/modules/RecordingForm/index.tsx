@@ -180,6 +180,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     ))
                     .with(4, () => (
                         <Troubleshooting
+                            errors={errors}
                             hasAieraInterventionPermission={hasAieraInterventionPermission}
                             isWebcast={isWebcast}
                             onBlur={onBlur}

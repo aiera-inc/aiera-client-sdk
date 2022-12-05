@@ -80,6 +80,11 @@ export default function validateInput({
         } else if (errors.onFailureDialNumber === 'Cannot be the same as the "Dial-in number"') {
             delete errors.onFailureDialNumber;
         }
+        if (hasValue && value === state.onFailureSmsNumber) {
+            errors.onFailureSmsNumber = 'Cannot be the same as the "Dial-in number"';
+        } else if (errors.onFailureSmsNumber === 'Cannot be the same as the "Dial-in number"') {
+            delete errors.onFailureSmsNumber;
+        }
     }
     // Allow digit-only PINs for phone-based connection types
     // Exclude Zoom web urls
@@ -124,6 +129,9 @@ export default function validateInput({
             if (errors.onFailureDialNumber) {
                 delete errors.onFailureDialNumber;
             }
+            if (errors.onFailureSmsNumber) {
+                delete errors.onFailureSmsNumber;
+            }
         }
         // TODO Add support for externalAudioStreamUrl
         // if (value === ConnectionType.AudioStream) {
@@ -145,6 +153,9 @@ export default function validateInput({
         //     // No phone intervention for audio streams
         //     if (errors.onFailureDialNumber) {
         //         delete errors.onFailureDialNumber;
+        //     }
+        //     if (errors.onFailureSmsNumber) {
+        //         delete errors.onFailureSmsNumber;
         //     }
         // } else if (errors.externalAudioStreamUrl) {
         //     delete errors.externalAudioStreamUrl;
@@ -330,11 +341,18 @@ export default function validateInput({
         }
     }
     if (name === 'onFailure') {
-        if ([OnFailure.ManualInterventionCall, OnFailure.ManualInterventionSms].includes(value as OnFailure)) {
+        if (OnFailure.ManualInterventionCall === value) {
             if (!state.onFailureDialNumber && !state.useOnConnectDialNumber) {
                 errors.onFailureDialNumber = 'Required';
             } else if (errors.onFailureDialNumber) {
                 delete errors.onFailureDialNumber;
+            }
+        }
+        if (OnFailure.ManualInterventionSms === value) {
+            if (!state.onFailureSmsNumber) {
+                errors.onFailureSmsNumber = 'Required';
+            } else if (errors.onFailureSmsNumber) {
+                delete errors.onFailureSmsNumber;
             }
         }
         // For new private recordings, add error to confirm permission checkbox when selecting
@@ -351,20 +369,16 @@ export default function validateInput({
             if (errors.onFailureDialNumber) {
                 delete errors.onFailureDialNumber;
             }
+            if (errors.onFailureSmsNumber) {
+                delete errors.onFailureSmsNumber;
+            }
             if (errors.confirmPermission) {
                 delete errors.confirmPermission;
             }
         }
     }
-    // onFailureDialNumber isn't a Private Recording field, but is used in the Troubleshooting component
-    // as the input name and value.
-    // When the form is submitted, its value is mapped to either onFailureSmsNumber or onFailureDialNumber
-    // depending on the current onFailure value.
     if (name === 'onFailureDialNumber') {
-        if (
-            state.onFailure &&
-            [OnFailure.ManualInterventionCall, OnFailure.ManualInterventionSms].includes(state.onFailure)
-        ) {
+        if (state.onFailure && state.onFailure === OnFailure.ManualInterventionCall) {
             if (!hasValue) {
                 errors.onFailureDialNumber = 'Required';
             } else if (errors.onFailureDialNumber) {
@@ -376,6 +390,21 @@ export default function validateInput({
         // Add error if the same value as connectPhoneNumber
         if (hasValue && value === state.connectPhoneNumber) {
             errors.onFailureDialNumber = 'Cannot be the same as the "Dial-in number"';
+        }
+    }
+    if (name === 'onFailureSmsNumber') {
+        if (state.onFailure && state.onFailure === OnFailure.ManualInterventionSms) {
+            if (!hasValue) {
+                errors.onFailureSmsNumber = 'Required';
+            } else if (errors.onFailureSmsNumber) {
+                delete errors.onFailureSmsNumber;
+            }
+        } else if (errors.onFailureSmsNumber) {
+            delete errors.onFailureSmsNumber;
+        }
+        // Add error if the same value as connectPhoneNumber
+        if (hasValue && value === state.connectPhoneNumber) {
+            errors.onFailureSmsNumber = 'Cannot be the same as the "Dial-in number"';
         }
     }
     if (name === 'participationType') {
