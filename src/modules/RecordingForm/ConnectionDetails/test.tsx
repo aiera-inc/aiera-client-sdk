@@ -52,6 +52,7 @@ describe('ConnectionDetails', () => {
             const webOption = screen.getByText('Web URL');
             fireEvent.click(webOption);
             expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue(props.connectUrl)).toBeInTheDocument();
             expect(screen.queryByDisplayValue(props.connectCallerId)).toBeInTheDocument();
             expect(screen.queryByDisplayValue(props.connectPin)).toBeInTheDocument();
             // Do not render phone fields
@@ -105,6 +106,104 @@ describe('ConnectionDetails', () => {
             expect(screen.queryByText('Call me')).toBeNull();
             expect(screen.queryByText('Your phone number')).toBeNull();
         });
+
+        test('when meeting type is web and connectUrl is not set, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...props}
+                    connectUrl={''}
+                    errors={{ connectUrl: 'Required' }}
+                    zoomMeetingType={ZoomMeetingType.Web}
+                />
+            );
+            const webOption = screen.getByText('Web URL');
+            fireEvent.click(webOption);
+            expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeInTheDocument();
+            screen.getByText('Required');
+        });
+
+        test('when meeting type is web and connectUrl is invalid, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...props}
+                    connectUrl={'www.test'}
+                    errors={{ connectUrl: 'Must be a valid url starting with http or https' }}
+                    zoomMeetingType={ZoomMeetingType.Web}
+                />
+            );
+            const webOption = screen.getByText('Web URL');
+            fireEvent.click(webOption);
+            expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeInTheDocument();
+            screen.getByText('Must be a valid url starting with http or https');
+        });
+
+        test('when meeting type is phone and connectPhoneNumber is not set, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...props}
+                    connectPhoneNumber={''}
+                    errors={{ connectPhoneNumber: 'Required' }}
+                    zoomMeetingType={ZoomMeetingType.Phone}
+                />
+            );
+            const phoneOption = screen.getByText('Dial-in number*');
+            fireEvent.click(phoneOption);
+            expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
+            screen.getByText('Required');
+        });
+
+        test('when meeting type is phone and connectAccessId is not set, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...props}
+                    connectAccessId={''}
+                    errors={{ connectAccessId: 'Required' }}
+                    zoomMeetingType={ZoomMeetingType.Phone}
+                />
+            );
+            const phoneOption = screen.getByText('Dial-in number*');
+            fireEvent.click(phoneOption);
+            expect(screen.queryByPlaceholderText('1234567890')).toBeInTheDocument();
+            screen.getByText('Required');
+        });
+
+        test('when meeting type is phone and connectPin is invalid, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...props}
+                    connectPin="test"
+                    errors={{ connectPin: 'Must only contain numbers or #' }}
+                    zoomMeetingType={ZoomMeetingType.Phone}
+                />
+            );
+            const phoneOption = screen.getByText('Dial-in number*');
+            fireEvent.click(phoneOption);
+            expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue('test')).toBeInTheDocument();
+            screen.getByText('Must only contain numbers or #');
+        });
+
+        test('when meeting type is phone, participation type is "Call me", and onConnectDialNumber is not set, render an error', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(
+                    <ConnectionDetails
+                        {...props}
+                        onConnectDialNumber=""
+                        errors={{ onConnectDialNumber: 'Required when selecting "Call me" option' }}
+                        participationType={ParticipationType.Participating}
+                        zoomMeetingType={ZoomMeetingType.Phone}
+                    />
+                );
+            });
+            const phoneOption = screen.getByText('Dial-in number*');
+            fireEvent.click(phoneOption);
+            const callMeOption = await waitFor(() => screen.getByText('Call me'));
+            await actAndFlush(() => {
+                fireEvent.click(callMeOption);
+            });
+            screen.getByText('Your phone number');
+            screen.getByText('Required when selecting "Call me" option');
+        });
     });
 
     describe('when connection type is Google Meet', () => {
@@ -112,6 +211,7 @@ describe('ConnectionDetails', () => {
             ...props,
             connectionType: ConnectionType.GoogleMeet,
         };
+
         test('renders fields for Google Meet', () => {
             renderWithProvider(<ConnectionDetails {...googleProps} />);
             screen.getByText('Dial-in number*');
@@ -120,6 +220,42 @@ describe('ConnectionDetails', () => {
             screen.getByText('Call me');
             screen.getByText('Set it & forget it');
         });
+
+        test('when connectPin is invalid, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...googleProps}
+                    connectPin="test"
+                    errors={{ connectPin: 'Must only contain numbers or #' }}
+                />
+            );
+            const phoneOption = screen.getByText('Dial-in number*');
+            fireEvent.click(phoneOption);
+            expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue('test')).toBeInTheDocument();
+            screen.getByText('Must only contain numbers or #');
+        });
+
+        test('when participation type is "Call me" and onConnectDialNumber is not set, render an error', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(
+                    <ConnectionDetails
+                        {...googleProps}
+                        onConnectDialNumber=""
+                        errors={{ onConnectDialNumber: 'Required when selecting "Call me" option' }}
+                        participationType={ParticipationType.Participating}
+                    />
+                );
+            });
+            const phoneOption = screen.getByText('Dial-in number*');
+            fireEvent.click(phoneOption);
+            const callMeOption = await waitFor(() => screen.getByText('Call me'));
+            await actAndFlush(() => {
+                fireEvent.click(callMeOption);
+            });
+            screen.getByText('Your phone number');
+            screen.getByText('Required when selecting "Call me" option');
+        });
     });
 
     describe('when connection type is Webcast URL', () => {
@@ -127,26 +263,63 @@ describe('ConnectionDetails', () => {
             ...props,
             connectionType: ConnectionType.Webcast,
         };
+
         test('renders fields for Webcast URL', () => {
             renderWithProvider(<ConnectionDetails {...webcastProps} />);
             screen.getByText('Host URL*');
             expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeInTheDocument();
         });
+
+        test('when connectUrl is not set, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails {...webcastProps} connectUrl={''} errors={{ connectUrl: 'Required' }} />
+            );
+            expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeInTheDocument();
+            screen.getByText('Required');
+        });
+
+        test('when connectUrl is invalid, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...webcastProps}
+                    connectUrl={'www.test'}
+                    errors={{ connectUrl: 'Must be a valid url starting with http or https' }}
+                />
+            );
+            expect(screen.queryByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5')).toBeInTheDocument();
+            screen.getByText('Must be a valid url starting with http or https');
+        });
     });
 
     describe('when connection type is Phone Number', () => {
-        const webcastProps = {
+        const phoneNumberProps = {
             ...props,
             connectionType: ConnectionType.PhoneNumber,
         };
+
         test('renders fields for Phone Number', () => {
-            renderWithProvider(<ConnectionDetails {...webcastProps} />);
+            renderWithProvider(<ConnectionDetails {...phoneNumberProps} />);
             screen.getByText('Dial-in number*');
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
             expect(screen.queryByPlaceholderText('1234567890')).toBeInTheDocument();
             expect(screen.queryByDisplayValue(props.connectPin)).toBeInTheDocument();
             screen.getByText('Call me');
             screen.getByText('Set it & forget it');
+        });
+
+        test('when connectPin is invalid, render an error', () => {
+            renderWithProvider(
+                <ConnectionDetails
+                    {...phoneNumberProps}
+                    connectPin="test"
+                    errors={{ connectPin: 'Must only contain numbers or #' }}
+                />
+            );
+            const phoneOption = screen.getByText('Dial-in number*');
+            fireEvent.click(phoneOption);
+            expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue('test')).toBeInTheDocument();
+            screen.getByText('Must only contain numbers or #');
         });
     });
 });

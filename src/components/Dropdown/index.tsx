@@ -137,11 +137,12 @@ export function Dropdown<T>(props: DropdownProps<T>): ReactElement {
         }
     }, [selectedOptionRef?.current, scrollContainerRef?.current]);
 
-    const { className, onChange, options, tooltipGrow, tooltipPosition, value } = props;
+    const { className, name, onChange, options, tooltipGrow, tooltipPosition, value } = props;
     const selectedLabel = useMemo(() => options.find((o) => o.value === value)?.label, [options, value]);
     return (
         <DropdownUI
             className={className}
+            name={name}
             onChange={onChange}
             options={options}
             scrollRef={scrollContainerRef}

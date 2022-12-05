@@ -11,9 +11,9 @@ import {
     InputTouchedState,
     ParticipationType,
     RecordingFormStateChangeHandler,
+    ZoomMeetingType,
     ZOOM_MEETING_TYPE_OPTION_PHONE,
     ZOOM_MEETING_TYPE_OPTIONS,
-    ZoomMeetingType,
 } from '@aiera/client-sdk/modules/RecordingForm/types';
 import { SelectOption } from '@aiera/client-sdk/types';
 import './styles.css';

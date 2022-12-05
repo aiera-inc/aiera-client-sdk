@@ -64,13 +64,14 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                         </p>
                         <div className="flex items-center mt-3 space-between w-full">
                             <Input
+                                className="shrink-[1]"
                                 clearable={false}
                                 name="scheduleDate"
                                 onFocus={showCalendar}
                                 value={scheduleDate ? scheduleDate.toLocaleDateString() : ''}
                             />
                             <Input
-                                className="ml-2"
+                                className="ml-2 shrink-[1]"
                                 name="scheduleTime"
                                 onBlur={onBlur}
                                 onChange={onChange}
@@ -78,7 +79,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                                 value={scheduleTime}
                             />
                             <Dropdown
-                                className="ml-2"
+                                className="ml-2 shrink-[2]"
                                 name="scheduleMeridiem"
                                 onChange={onChange}
                                 options={SCHEDULE_MERIDIEM_OPTIONS}

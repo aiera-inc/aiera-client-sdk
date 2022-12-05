@@ -20,4 +20,12 @@ describe('PhoneNumberInput', () => {
         await actAndFlush(() => renderWithProvider(<PhoneNumberInput onChange={onChange} placeholder={placeholder} />));
         screen.getByPlaceholderText(placeholder);
     });
+
+    test('renders error when set', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<PhoneNumberInput error="Required" onChange={onChange} placeholder={placeholder} />)
+        );
+        screen.getByPlaceholderText(placeholder);
+        screen.getByText('Required');
+    });
 });
