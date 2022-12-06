@@ -9,12 +9,18 @@ import React, {
     useMemo,
     useState,
 } from 'react';
+import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
+import { useMutation } from 'urql';
 
 import { Button } from '@aiera/client-sdk/components/Button';
 import { CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import {
+    CreatePrivateRecordingMutation,
+    CreatePrivateRecordingMutationVariables,
+} from '@aiera/client-sdk/types/generated';
 import { ConnectionType as ConnectionTypeComponent } from './ConnectionType';
 import { ConnectionDetails } from './ConnectionDetails';
 import { RecordingDetails } from './RecordingDetails';
@@ -49,6 +55,8 @@ interface RecordingFormSharedProps {
     privateRecordingId?: number | string;
 }
 
+type SubmitState = 'none' | 'loading' | 'error' | 'submitted';
+
 /** @notExported */
 interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectAccessId: string;
@@ -82,6 +90,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     selectedCompany?: CompanyFilterResult;
     smsAlertBeforeCall: boolean;
     step: number;
+    submitState: SubmitState;
     title: string;
     touched: InputTouchedState;
     zoomMeetingType?: ZoomMeetingType;
@@ -292,6 +301,41 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         [state.connectionType, state.zoomMeetingType]
     );
 
+    /**
+     * Mutations
+     */
+    const [submitState, setSubmitState] = useState<SubmitState>('none');
+    const [_, createPrivateRecordingMutation] = useMutation<
+        CreatePrivateRecordingMutation,
+        CreatePrivateRecordingMutationVariables
+    >(gql`
+        mutation CreatePrivateRecording($input: CreatePrivateRecordingInput!) {
+            createPrivateRecording(input: $input) {
+                success
+            }
+        }
+    `);
+    const createPrivateRecording = useCallback(async () => {
+        setSubmitState('loading');
+        return createPrivateRecordingMutation({
+            input: {
+                connectionType: ConnectionType.Zoom,
+                scheduledFor: new Date().toISOString(),
+                title: 'Vich test delete me',
+            },
+        })
+            .then((resp) => {
+                if (resp.data?.createPrivateRecording) {
+                    setSubmitState('submitted');
+                } else {
+                    throw new Error('Error creating recording');
+                }
+            })
+            .catch((_e) => {
+                setSubmitState('error');
+            });
+    }, [createPrivateRecordingMutation, setSubmitState]);
+
     return (
         <RecordingFormUI
             connectAccessId={state.connectAccessId}
@@ -351,7 +395,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             )}
             onNextStep={setStep}
             onPrevStep={setStep}
-            onSubmit={() => console.log('SUBMITTED')}
+            onSubmit={useCallback(async () => {
+                await createPrivateRecording();
+                setSubmitState('submitted');
+            }, [createPrivateRecording])}
             participationType={state.participationType}
             scheduleDate={state.scheduleDate}
             scheduleMeridiem={state.scheduleMeridiem}
@@ -360,6 +407,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             selectedCompany={state.selectedCompany}
             smsAlertBeforeCall={state.smsAlertBeforeCall}
             step={step}
+            submitState={submitState}
             title={state.title}
             touched={touched}
             zoomMeetingType={state.zoomMeetingType}

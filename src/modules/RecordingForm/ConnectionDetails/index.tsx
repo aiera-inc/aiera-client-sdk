@@ -187,7 +187,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                 .with(ConnectionType.Webcast, () => (
                     <>{renderConnectUrlField('Enter the url to access recording', 'Host URL*')}</>
                 ))
-                .with(ConnectionType.PhoneNumber, () => (
+                .with(ConnectionType.Phone, () => (
                     <>
                         {dialInField}
                         {renderMeetingIdField('Meeting ID / Access Code', 'Enter the meeting ID or access code')}
@@ -266,7 +266,7 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
         () =>
             participationType === ParticipationType.Participating &&
             !!connectionType &&
-            ([ConnectionType.GoogleMeet, ConnectionType.PhoneNumber].includes(connectionType) ||
+            ([ConnectionType.GoogleMeet, ConnectionType.Phone].includes(connectionType) ||
                 (connectionType === ConnectionType.Zoom && zoomMeetingType === ZOOM_MEETING_TYPE_OPTION_PHONE.value)),
         [connectionType, participationType, zoomMeetingType]
     );

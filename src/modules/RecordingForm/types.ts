@@ -5,6 +5,34 @@
 import { SyntheticEvent } from 'react';
 import { CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { ValueOf } from '@aiera/client-sdk/types';
+import { PrConnectionType as ConnectionType } from '@aiera/client-sdk/types/generated';
+
+/**
+ * Enums
+ */
+export { ConnectionType };
+export enum OnFailure {
+    AieraIntervention = 'aiera_intervention',
+    ManualInterventionCall = 'manual_intervention_call',
+    ManualInterventionSms = 'manual_intervention_sms',
+    None = 'none',
+}
+export enum ParticipationType {
+    NotParticipating = 'not_participating',
+    Participating = 'participating',
+}
+export enum ScheduleMeridiem {
+    AM = 'AM',
+    PM = 'PM',
+}
+export enum ScheduleType {
+    Now = 'now',
+    Future = 'future',
+}
+export enum ZoomMeetingType {
+    Phone = 'phone',
+    Web = 'web',
+}
 
 /**
  * Interfaces
@@ -62,38 +90,6 @@ export const AIERA_INTERVENTION_START_TIME = '8:00 AM';
 export const AIERA_INTERVENTION_END_TIME = '5:30 PM';
 
 /**
- * Enums
- */
-export enum ConnectionType {
-    GoogleMeet = 'google_meet',
-    PhoneNumber = 'phone',
-    Webcast = 'webcast',
-    Zoom = 'zoom',
-}
-export enum OnFailure {
-    AieraIntervention = 'aiera_intervention',
-    ManualInterventionCall = 'manual_intervention_call',
-    ManualInterventionSms = 'manual_intervention_sms',
-    None = 'none',
-}
-export enum ParticipationType {
-    NotParticipating = 'not_participating',
-    Participating = 'participating',
-}
-export enum ScheduleMeridiem {
-    AM = 'AM',
-    PM = 'PM',
-}
-export enum ScheduleType {
-    Now = 'now',
-    Future = 'future',
-}
-export enum ZoomMeetingType {
-    Phone = 'phone',
-    Web = 'web',
-}
-
-/**
  * ConnectionType sub-module
  */
 export const CONNECTION_TYPE_OPTION_GOOGLE = {
@@ -103,7 +99,7 @@ export const CONNECTION_TYPE_OPTION_GOOGLE = {
 };
 export const CONNECTION_TYPE_OPTION_PHONE = {
     label: 'Phone Number',
-    value: ConnectionType.PhoneNumber,
+    value: ConnectionType.Phone,
     description: 'Connect to any phone number, with optional pin',
 };
 export const CONNECTION_TYPE_OPTION_WEBCAST = {

@@ -103,7 +103,7 @@ export default function validateInput({
     if (name === 'connectionType') {
         // connectPhoneNumber is only required for Google Meet and phone number types
         if (
-            [ConnectionType.GoogleMeet, ConnectionType.PhoneNumber].includes(value as ConnectionType) &&
+            [ConnectionType.GoogleMeet, ConnectionType.Phone].includes(value as ConnectionType) &&
             !state.connectPhoneNumber &&
             !errors.connectPhoneNumber
         ) {
@@ -205,7 +205,7 @@ export default function validateInput({
         // and onConnectDialNumber isn't set.
         // Otherwise, delete the onConnectDialNumber error if it's set and the above conditions aren't met
         if (
-            [ConnectionType.GoogleMeet, ConnectionType.PhoneNumber].includes(value as ConnectionType) ||
+            [ConnectionType.GoogleMeet, ConnectionType.Phone].includes(value as ConnectionType) ||
             (value === ConnectionType.Zoom && state.zoomMeetingType === ZoomMeetingType.Phone)
         ) {
             if (state.participationType === ParticipationType.Participating && !state.onConnectDialNumber) {
