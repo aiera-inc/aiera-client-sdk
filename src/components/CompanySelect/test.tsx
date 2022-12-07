@@ -115,7 +115,7 @@ describe('CompanySelect', () => {
             }
         );
         userEvent.click(screen.getByText('TICK'));
-        expect(onChange).toHaveBeenCalledWith(expect.anything(), { value: company });
+        expect(onChange).toHaveBeenCalledWith(expect.anything(), { name: 'company-select__search', value: company });
     });
 
     test('selects company on "enter"', async () => {

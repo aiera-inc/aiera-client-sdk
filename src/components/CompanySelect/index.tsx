@@ -97,7 +97,7 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
                                             key={company.id}
                                             onClick={(event) => {
                                                 event.stopPropagation();
-                                                onChange?.(event, { value: company });
+                                                onChange?.(event, { name, value: company });
                                                 onSelectCompany?.();
                                             }}
                                             onMouseEnter={() => selectIndex(index)}
