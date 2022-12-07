@@ -405,6 +405,10 @@ export class Module {
         this.emit('seek-transcript-seconds', seconds);
     }
 
+    seekTranscriptTimestamp(timestamp: string) {
+        this.emit('seek-transcript-timestamp', timestamp);
+    }
+
     /**
      * Unloads the module and remove message listeners.
      */
