@@ -21,6 +21,9 @@ import {
     CreatePrivateRecordingMutation,
     CreatePrivateRecordingMutationVariables,
     PrOnFailure,
+    UpdatePrivateRecordingInput,
+    UpdatePrivateRecordingMutation,
+    UpdatePrivateRecordingMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 import { ConnectionType as ConnectionTypeComponent } from './ConnectionType';
 import { ConnectionDetails } from './ConnectionDetails';
@@ -53,7 +56,7 @@ const NUM_STEPS = 5;
 
 interface RecordingFormSharedProps {
     onBack: MouseEventHandler;
-    privateRecordingId?: number | string;
+    privateRecordingId?: number;
 }
 
 type SubmitState = 'none' | 'loading' | 'error' | 'submitted';
@@ -316,15 +319,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         }
         return converted;
     }, [state.scheduleTime, state.scheduleMeridiem]);
-    const mapStateToScheduledFor = useMemo(() => {
-        let dateTime = (state.scheduleType === ScheduleType.Now ? new Date() : state.scheduleDate).toISOString();
-        if (state.scheduleType === ScheduleType.Future && convertedTime) {
-            // Combine the date and time from state
-            dateTime = dateTime.replace(/[^T]*$/, convertedTime);
-        }
-        return dateTime;
-    }, [state.scheduleDate, state.scheduleType]);
-    const onFailure = useMemo(
+    const mapStateToOnFailure = useMemo(
         () =>
             match(state.onFailure)
                 .with(OnFailure.AieraIntervention, () => PrOnFailure.AieraIntervention)
@@ -335,6 +330,36 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 )
                 .otherwise(() => PrOnFailure.None),
         [state.onFailure]
+    );
+    const mapStateToScheduledFor = useMemo(() => {
+        let dateTime = (state.scheduleType === ScheduleType.Now ? new Date() : state.scheduleDate).toISOString();
+        if (state.scheduleType === ScheduleType.Future && convertedTime) {
+            // Combine the date and time from state
+            dateTime = dateTime.replace(/[^T]*$/, convertedTime);
+        }
+        return dateTime;
+    }, [state.scheduleDate, state.scheduleType]);
+    const privateRecordingInput = useMemo(
+        () => ({
+            companyIds: state.selectedCompany ? [parseInt(state.selectedCompany.id)] : undefined,
+            connectAccessId: state.connectAccessId,
+            connectCallerId: state.connectCallerId,
+            connectionType: state.connectionType as ConnectionType,
+            connectOffsetSeconds: state.connectOffsetSeconds,
+            connectPhoneNumber: state.connectPhoneNumber,
+            connectPin: state.connectPin,
+            connectUrl: state.connectUrl,
+            onConnectDialNumber: state.onConnectDialNumber,
+            onFailure: mapStateToOnFailure,
+            onFailureDialNumber: state.onFailureDialNumber,
+            onFailureInstructions: state.onFailureInstructions,
+            onFailureSmsNumber: state.onFailureSmsNumber,
+            privateRecordingId,
+            scheduledFor: mapStateToScheduledFor,
+            smsAlertBeforeCall: state.smsAlertBeforeCall,
+            title: state.title,
+        }),
+        [mapStateToOnFailure, mapStateToScheduledFor, privateRecordingId, state]
     );
 
     /**
@@ -353,26 +378,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     `);
     const createPrivateRecording = useCallback(async () => {
         setSubmitState('loading');
-        return createPrivateRecordingMutation({
-            input: {
-                companyIds: state.selectedCompany ? [parseInt(state.selectedCompany.id)] : undefined,
-                connectAccessId: state.connectAccessId,
-                connectCallerId: state.connectCallerId,
-                connectionType: state.connectionType as ConnectionType,
-                connectOffsetSeconds: state.connectOffsetSeconds,
-                connectPhoneNumber: state.connectPhoneNumber,
-                connectPin: state.connectPin,
-                connectUrl: state.connectUrl,
-                onConnectDialNumber: state.onConnectDialNumber,
-                onFailure,
-                onFailureDialNumber: state.onFailureDialNumber,
-                onFailureInstructions: state.onFailureInstructions,
-                onFailureSmsNumber: state.onFailureSmsNumber,
-                scheduledFor: mapStateToScheduledFor,
-                smsAlertBeforeCall: state.smsAlertBeforeCall,
-                title: state.title,
-            },
-        })
+        return createPrivateRecordingMutation({ input: privateRecordingInput })
             .then((resp) => {
                 if (resp.data?.createPrivateRecording?.success) {
                     setSubmitState('submitted');
@@ -383,7 +389,34 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             .catch((_e) => {
                 setSubmitState('error');
             });
-    }, [createPrivateRecordingMutation, state, setSubmitState]);
+    }, [createPrivateRecordingMutation, privateRecordingInput, setSubmitState]);
+
+    const [__, updatePrivateRecordingMutation] = useMutation<
+        UpdatePrivateRecordingMutation,
+        UpdatePrivateRecordingMutationVariables
+    >(gql`
+        mutation UpdatePrivateRecording($input: UpdatePrivateRecordingInput!) {
+            updatePrivateRecording(input: $input) {
+                success
+            }
+        }
+    `);
+    const updatePrivateRecording = useCallback(async () => {
+        setSubmitState('loading');
+        return updatePrivateRecordingMutation({
+            input: privateRecordingInput as unknown as UpdatePrivateRecordingInput,
+        })
+            .then((resp) => {
+                if (resp.data?.updatePrivateRecording?.success) {
+                    setSubmitState('submitted');
+                } else {
+                    throw new Error('Error updating recording');
+                }
+            })
+            .catch((_e) => {
+                setSubmitState('error');
+            });
+    }, [updatePrivateRecordingMutation, privateRecordingInput, setSubmitState]);
 
     return (
         <RecordingFormUI
@@ -446,10 +479,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onPrevStep={setStep}
             onSubmit={useCallback(async () => {
                 if (Object.keys(errors).length === 0) {
-                    await createPrivateRecording();
+                    await (privateRecordingId ? updatePrivateRecording() : createPrivateRecording());
                     setSubmitState('submitted');
                 }
-            }, [createPrivateRecording])}
+            }, [createPrivateRecording, privateRecordingId, updatePrivateRecording])}
             participationType={state.participationType}
             scheduleDate={state.scheduleDate}
             scheduleMeridiem={state.scheduleMeridiem}
