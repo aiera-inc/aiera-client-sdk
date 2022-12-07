@@ -80,6 +80,7 @@ export declare class Module {
     configure(config: Config): void;
     setWatchlist(instruments: InstrumentID[]): void;
     seekTranscriptSeconds(seconds: number): void;
+    seekTranscriptTimestamp(timestamp: string): void;
     /**
      * Unloads the module and remove message listeners.
      */

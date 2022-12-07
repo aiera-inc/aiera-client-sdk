@@ -261,6 +261,9 @@
     seekTranscriptSeconds(seconds) {
       this.emit("seek-transcript-seconds", seconds);
     }
+    seekTranscriptTimestamp(timestamp) {
+      this.emit("seek-transcript-timestamp", timestamp);
+    }
     unload() {
       if (this.frame)
         this.frame.src = "";
