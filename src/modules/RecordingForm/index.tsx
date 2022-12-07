@@ -20,6 +20,7 @@ import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers
 import {
     CreatePrivateRecordingMutation,
     CreatePrivateRecordingMutationVariables,
+    PrOnFailure,
 } from '@aiera/client-sdk/types/generated';
 import { ConnectionType as ConnectionTypeComponent } from './ConnectionType';
 import { ConnectionDetails } from './ConnectionDetails';
@@ -31,18 +32,18 @@ import {
     CONNECTION_TYPE_OPTION_ZOOM,
     CONNECTION_TYPE_OPTIONS,
     CONNECTION_TYPE_OPTIONS_MAP,
-    PARTICIPATION_TYPE_OPTIONS,
-    ZOOM_MEETING_TYPE_OPTION_WEB,
     ConnectionType,
     InputErrorState,
     InputTouchedState,
     OnFailure,
+    PARTICIPATION_TYPE_OPTIONS,
     ParticipationType,
     RecordingFormState,
     RecordingFormStateChangeEvent,
     RecordingFormStateChangeHandler,
     ScheduleMeridiem,
     ScheduleType,
+    ZOOM_MEETING_TYPE_OPTION_WEB,
     ZoomMeetingType,
 } from './types';
 import validateInput from './validateInput';
@@ -300,6 +301,41 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 state.zoomMeetingType === ZOOM_MEETING_TYPE_OPTION_WEB.value),
         [state.connectionType, state.zoomMeetingType]
     );
+    // Converts time to 24 hours
+    const convertedTime = useMemo(() => {
+        let converted = null;
+        if (state.scheduleTime && state.scheduleMeridiem) {
+            const minutes = state.scheduleTime.slice(-2);
+            let hour = parseInt(state.scheduleTime.slice(0, state.scheduleTime.length > 3 ? 2 : 1), 0);
+            if (hour < 12 && state.scheduleMeridiem === ScheduleMeridiem.PM) {
+                hour += 12;
+            } else if (hour === 12 && state.scheduleMeridiem === ScheduleMeridiem.AM) {
+                hour = 0;
+            }
+            converted = `${hour < 10 ? `0${hour}` : hour}:${minutes}:00.000Z`;
+        }
+        return converted;
+    }, [state.scheduleTime, state.scheduleMeridiem]);
+    const mapStateToScheduledFor = useMemo(() => {
+        let dateTime = (state.scheduleType === ScheduleType.Now ? new Date() : state.scheduleDate).toISOString();
+        if (state.scheduleType === ScheduleType.Future && convertedTime) {
+            // Combine the date and time from state
+            dateTime = dateTime.replace(/[^T]*$/, convertedTime);
+        }
+        return dateTime;
+    }, [state.scheduleDate, state.scheduleType]);
+    const onFailure = useMemo(
+        () =>
+            match(state.onFailure)
+                .with(OnFailure.AieraIntervention, () => PrOnFailure.AieraIntervention)
+                .with(
+                    OnFailure.ManualInterventionCall,
+                    OnFailure.ManualInterventionSms,
+                    () => PrOnFailure.ManualIntervention
+                )
+                .otherwise(() => PrOnFailure.None),
+        [state.onFailure]
+    );
 
     /**
      * Mutations
@@ -319,13 +355,26 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         setSubmitState('loading');
         return createPrivateRecordingMutation({
             input: {
-                connectionType: ConnectionType.Zoom,
-                scheduledFor: new Date().toISOString(),
-                title: 'Vich test delete me',
+                companyIds: state.selectedCompany ? [parseInt(state.selectedCompany.id)] : undefined,
+                connectAccessId: state.connectAccessId,
+                connectCallerId: state.connectCallerId,
+                connectionType: state.connectionType as ConnectionType,
+                connectOffsetSeconds: state.connectOffsetSeconds,
+                connectPhoneNumber: state.connectPhoneNumber,
+                connectPin: state.connectPin,
+                connectUrl: state.connectUrl,
+                onConnectDialNumber: state.onConnectDialNumber,
+                onFailure,
+                onFailureDialNumber: state.onFailureDialNumber,
+                onFailureInstructions: state.onFailureInstructions,
+                onFailureSmsNumber: state.onFailureSmsNumber,
+                scheduledFor: mapStateToScheduledFor,
+                smsAlertBeforeCall: state.smsAlertBeforeCall,
+                title: state.title,
             },
         })
             .then((resp) => {
-                if (resp.data?.createPrivateRecording) {
+                if (resp.data?.createPrivateRecording?.success) {
                     setSubmitState('submitted');
                 } else {
                     throw new Error('Error creating recording');
@@ -334,7 +383,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             .catch((_e) => {
                 setSubmitState('error');
             });
-    }, [createPrivateRecordingMutation, setSubmitState]);
+    }, [createPrivateRecordingMutation, state, setSubmitState]);
 
     return (
         <RecordingFormUI
@@ -396,8 +445,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             onNextStep={setStep}
             onPrevStep={setStep}
             onSubmit={useCallback(async () => {
-                await createPrivateRecording();
-                setSubmitState('submitted');
+                if (Object.keys(errors).length === 0) {
+                    await createPrivateRecording();
+                    setSubmitState('submitted');
+                }
             }, [createPrivateRecording])}
             participationType={state.participationType}
             scheduleDate={state.scheduleDate}
