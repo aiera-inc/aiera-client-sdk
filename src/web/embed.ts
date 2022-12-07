@@ -405,6 +405,7 @@ export class Module {
         this.emit('seek-transcript-seconds', seconds);
     }
 
+    // It expects milliseconds from the epoch
     seekTranscriptTimestamp(timestamp: string) {
         this.emit('seek-transcript-timestamp', timestamp);
     }
