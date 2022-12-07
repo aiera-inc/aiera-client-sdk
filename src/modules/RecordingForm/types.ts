@@ -44,7 +44,6 @@ export interface InputTouchedState {
     [key: string]: boolean;
 }
 export interface RecordingFormState {
-    confirmPermission: boolean;
     connectAccessId: string;
     connectCallerId: string;
     connectionType?: ConnectionType;

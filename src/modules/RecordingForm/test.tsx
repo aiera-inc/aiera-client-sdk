@@ -1,9 +1,12 @@
 import React from 'react';
-import { screen } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import { renderWithProvider } from 'testUtils';
-import { CONNECTION_TYPE_OPTION_ZOOM } from '@aiera/client-sdk/modules/RecordingForm/types';
+import {
+    CONNECTION_TYPE_OPTION_ZOOM,
+    ZOOM_MEETING_TYPE_OPTION_WEB,
+} from '@aiera/client-sdk/modules/RecordingForm/types';
 import { RecordingForm } from '.';
 
 describe('RecordingForm', () => {
@@ -21,7 +24,7 @@ describe('RecordingForm', () => {
         screen.getByText('Step 1 of 5');
     });
 
-    test('handles next step button', () => {
+    test('handles next step button', async () => {
         const { rendered } = renderWithProvider(<RecordingForm onBack={onBack} />);
         const nextButton = rendered.container.querySelector('.next-step');
         expect(nextButton).not.toBeNull();
@@ -33,33 +36,79 @@ describe('RecordingForm', () => {
             userEvent.click(nextButton);
             screen.getByText('Step 2 of 5');
             screen.getByText('Scheduling');
+            expect(nextButton).toBeDisabled();
+            // Fill out required fields
+            await waitFor(() => userEvent.click(screen.getByText(ZOOM_MEETING_TYPE_OPTION_WEB.label)));
+            const meetingUrlInput = screen.getByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5');
+            await waitFor(() =>
+                fireEvent.change(meetingUrlInput, { target: { value: 'https://zoom.us/j/8881234567' } })
+            );
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
             screen.getByText('Step 3 of 5');
             screen.getByText('Troubleshooting');
+            expect(nextButton).toBeDisabled();
+            await waitFor(() => userEvent.click(screen.getByText('Now')));
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
             screen.getByText('Step 4 of 5');
             screen.getByText('Recording Details');
+            expect(nextButton).toBeDisabled();
+            await waitFor(() => userEvent.click(screen.getByText('Do nothing')));
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
             screen.getByText('Step 5 of 5');
             screen.getByText('Create Recording');
+            expect(nextButton).toBeDisabled();
+            const titleInput = rendered.container.querySelector('input[name="title"]');
+            if (titleInput) {
+                await waitFor(() => fireEvent.change(titleInput, { target: { value: 'test' } }));
+            }
+            expect(nextButton).not.toBeDisabled();
         }
     });
 
-    test('handles previous step button', () => {
+    test('handles previous step button', async () => {
         const { rendered } = renderWithProvider(<RecordingForm onBack={onBack} />);
         const nextButton = rendered.container.querySelector('.next-step');
         expect(nextButton).not.toBeNull();
         expect(rendered.container.querySelector('.prev-step')).toBeNull();
-        // Click the next step button 4 times to get to last step
+        expect(nextButton).toBeDisabled();
+        // Click through and fill out required fields to get to last step
+        userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label));
         if (nextButton) {
-            // Select an option to enable the next button
-            userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label));
             userEvent.click(nextButton);
+            screen.getByText('Step 2 of 5');
+            screen.getByText('Scheduling');
+            expect(nextButton).toBeDisabled();
+            // Fill out required fields
+            await waitFor(() => userEvent.click(screen.getByText(ZOOM_MEETING_TYPE_OPTION_WEB.label)));
+            const meetingUrlInput = screen.getByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5');
+            await waitFor(() =>
+                fireEvent.change(meetingUrlInput, { target: { value: 'https://zoom.us/j/8881234567' } })
+            );
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
+            screen.getByText('Step 3 of 5');
+            screen.getByText('Troubleshooting');
+            expect(nextButton).toBeDisabled();
+            await waitFor(() => userEvent.click(screen.getByText('Now')));
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
+            screen.getByText('Step 4 of 5');
+            screen.getByText('Recording Details');
+            expect(nextButton).toBeDisabled();
+            await waitFor(() => userEvent.click(screen.getByText('Do nothing')));
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
             screen.getByText('Step 5 of 5');
-            screen.getByText('Troubleshooting');
+            screen.getByText('Create Recording');
+            expect(nextButton).toBeDisabled();
+            const titleInput = rendered.container.querySelector('input[name="title"]');
+            if (titleInput) {
+                await waitFor(() => fireEvent.change(titleInput, { target: { value: 'test' } }));
+            }
+            expect(nextButton).not.toBeDisabled();
         }
         // Click the previous step button until first step
         const prevButton = rendered.container.querySelector('.prev-step');
@@ -80,7 +129,7 @@ describe('RecordingForm', () => {
         }
     });
 
-    test('renders sub-module for step', () => {
+    test('renders sub-module for step', async () => {
         const { rendered } = renderWithProvider(<RecordingForm onBack={onBack} />);
         const nextButton = rendered.container.querySelector('.next-step');
         expect(rendered.container.querySelector('.connection-type')).not.toBeNull();
@@ -89,12 +138,40 @@ describe('RecordingForm', () => {
             userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label));
             userEvent.click(nextButton);
             expect(rendered.container.querySelector('.connection-details')).not.toBeNull();
+            screen.getByText('Step 2 of 5');
+            screen.getByText('Scheduling');
+            expect(nextButton).toBeDisabled();
+            // Fill out required fields
+            await waitFor(() => userEvent.click(screen.getByText(ZOOM_MEETING_TYPE_OPTION_WEB.label)));
+            const meetingUrlInput = screen.getByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5');
+            await waitFor(() =>
+                fireEvent.change(meetingUrlInput, { target: { value: 'https://zoom.us/j/8881234567' } })
+            );
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
             expect(rendered.container.querySelector('.scheduling')).not.toBeNull();
+            screen.getByText('Step 3 of 5');
+            screen.getByText('Troubleshooting');
+            expect(nextButton).toBeDisabled();
+            await waitFor(() => userEvent.click(screen.getByText('Now')));
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
             expect(rendered.container.querySelector('.troubleshooting')).not.toBeNull();
+            screen.getByText('Step 4 of 5');
+            screen.getByText('Recording Details');
+            expect(nextButton).toBeDisabled();
+            await waitFor(() => userEvent.click(screen.getByText('Do nothing')));
+            expect(nextButton).not.toBeDisabled();
             userEvent.click(nextButton);
             expect(rendered.container.querySelector('.recording-details')).not.toBeNull();
+            screen.getByText('Step 5 of 5');
+            screen.getByText('Create Recording');
+            expect(nextButton).toBeDisabled();
+            const titleInput = rendered.container.querySelector('input[name="title"]');
+            if (titleInput) {
+                await waitFor(() => fireEvent.change(titleInput, { target: { value: 'test' } }));
+            }
+            expect(nextButton).not.toBeDisabled();
         }
     });
 });

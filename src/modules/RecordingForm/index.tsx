@@ -205,7 +205,13 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                         />
                     ))
                     .with(5, () => (
-                        <RecordingDetails onChange={onChange} selectedCompany={selectedCompany} title={title} />
+                        <RecordingDetails
+                            errors={errors}
+                            onBlur={onBlur}
+                            onChange={onChange}
+                            selectedCompany={selectedCompany}
+                            title={title}
+                        />
                     ))
                     .otherwise(() => null)}
             </div>
@@ -263,7 +269,6 @@ export interface RecordingFormProps extends RecordingFormSharedProps {}
 export function RecordingForm(props: RecordingFormProps): ReactElement {
     const { onBack, privateRecordingId } = props;
     const { mergeState, state } = useChangeHandlers<RecordingFormState>({
-        confirmPermission: true,
         connectAccessId: '',
         connectCallerId: '',
         connectionType: undefined,
@@ -296,7 +301,28 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     // conditionally show errors, if any
     const [touched, setTouched] = useState<InputTouchedState>({});
 
-    const isNextButtonDisabled = useMemo(() => step >= 1 && !state.connectionType, [state, step]);
+    const isNextButtonDisabled = useMemo(() => {
+        let disabled = false;
+        if (step >= 1 && !state.connectionType) {
+            disabled = true;
+        }
+        if (
+            step >= 2 &&
+            ((state.connectionType === ConnectionType.Zoom && !state.zoomMeetingType) || Object.keys(errors).length > 0)
+        ) {
+            disabled = true;
+        }
+        if (step >= 3 && !state.scheduleType) {
+            disabled = true;
+        }
+        if (step >= 4 && !state.onFailure) {
+            disabled = true;
+        }
+        if (step >= NUM_STEPS && !state.title) {
+            disabled = true;
+        }
+        return disabled;
+    }, [errors, state.connectionType, state.zoomMeetingType, step]);
     const isWebcast = useMemo(
         () =>
             state.connectionType === CONNECTION_TYPE_OPTION_WEBCAST.value ||

@@ -51,11 +51,11 @@ export default function validateInput({
             errors.audioUpload = 'Required';
         }
     }
-    if (name === 'confirmPermission') {
-        if (value && errors.confirmPermission) {
-            delete errors.confirmPermission;
+    if (name === 'hasAieraInterventionPermission') {
+        if (value && errors.hasAieraInterventionPermission) {
+            delete errors.hasAieraInterventionPermission;
         } else {
-            errors.confirmPermission = 'Required';
+            errors.hasAieraInterventionPermission = 'Required';
         }
     }
     if (name === 'connectAccessId') {
@@ -217,8 +217,8 @@ export default function validateInput({
             delete errors.onConnectDialNumber;
         }
         // Remove "Aiera Intervention" permission checkbox error if switching connection types
-        if (value !== state.connectionType && errors.confirmPermission) {
-            delete errors.confirmPermission;
+        if (value !== state.connectionType && errors.hasAieraInterventionPermission) {
+            delete errors.hasAieraInterventionPermission;
         }
         // TODO Add support for uploading audio files
         // For uploading audio files, add required error if no file is in state
@@ -267,8 +267,8 @@ export default function validateInput({
         }
     }
     // Update required fields based on Zoom meeting type (web or phone)
-    if (name === 'meetingType') {
-        if (value === 'web') {
+    if (name === 'zoomMeetingType') {
+        if (value === ZoomMeetingType.Web) {
             if (!state.connectUrl) {
                 errors.connectUrl = 'Required';
             } else {
@@ -292,7 +292,7 @@ export default function validateInput({
                 delete errors.connectPin;
             }
         }
-        if (value === 'phone') {
+        if (value === ZoomMeetingType.Phone) {
             if (!state.connectAccessId) {
                 errors.connectAccessId = 'Required';
             }
@@ -310,8 +310,8 @@ export default function validateInput({
                 delete errors.connectPin;
             }
             // Remove "Aiera Intervention" permission checkbox error if switching to phone meetingType
-            if (errors.confirmPermission) {
-                delete errors.confirmPermission;
+            if (errors.hasAieraInterventionPermission) {
+                delete errors.hasAieraInterventionPermission;
             }
         }
     }
@@ -360,10 +360,10 @@ export default function validateInput({
         if (
             value === OnFailure.AieraIntervention &&
             isNewRecording &&
-            !state.confirmPermission &&
-            !errors.confirmPermission
+            !state.hasAieraInterventionPermission &&
+            !errors.hasAieraInterventionPermission
         ) {
-            errors.confirmPermission = 'Required';
+            errors.hasAieraInterventionPermission = 'Required';
         }
         if (value === OnFailure.None) {
             if (errors.onFailureDialNumber) {
@@ -372,8 +372,8 @@ export default function validateInput({
             if (errors.onFailureSmsNumber) {
                 delete errors.onFailureSmsNumber;
             }
-            if (errors.confirmPermission) {
-                delete errors.confirmPermission;
+            if (errors.hasAieraInterventionPermission) {
+                delete errors.hasAieraInterventionPermission;
             }
         }
     }
