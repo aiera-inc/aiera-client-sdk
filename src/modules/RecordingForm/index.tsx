@@ -9,6 +9,7 @@ import React, {
     useMemo,
     useState,
 } from 'react';
+import classNames from 'classnames';
 import gql from 'graphql-tag';
 import { match } from 'ts-pattern';
 import { useMutation } from 'urql';
@@ -16,8 +17,10 @@ import { useMutation } from 'urql';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
+import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import {
+    CreatePrivateRecordingInput,
     CreatePrivateRecordingMutation,
     CreatePrivateRecordingMutationVariables,
     PrOnFailure,
@@ -25,6 +28,7 @@ import {
     UpdatePrivateRecordingMutation,
     UpdatePrivateRecordingMutationVariables,
 } from '@aiera/client-sdk/types/generated';
+
 import { ConnectionType as ConnectionTypeComponent } from './ConnectionType';
 import { ConnectionDetails } from './ConnectionDetails';
 import { RecordingDetails } from './RecordingDetails';
@@ -52,6 +56,22 @@ import {
 import validateInput from './validateInput';
 import './styles.css';
 
+// Map validated input names to error hints displayed above the submit button
+const INPUT_FIELD_LABELS = {
+    audioUpload: 'File',
+    confirmPermission: 'Agent intervention permission checkbox',
+    connectAccessId: 'Meeting ID',
+    connectionType: 'Type of connection',
+    connectPhoneNumber: 'Dial-in number',
+    connectPin: 'PIN',
+    connectUrl: 'URL',
+    localeCode: 'Language',
+    onConnectDialNumber: 'Your phone number',
+    onFailurePhoneNumber: 'Best number to reach you',
+    participationType: 'How we should connect',
+    scheduleTime: 'Schedule time',
+    title: 'Title',
+} as { [key: keyof InputErrorState]: string };
 const NUM_STEPS = 5;
 
 interface RecordingFormSharedProps {
@@ -70,6 +90,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
+    errorHints?: { [key: string]: string[] };
     errors: InputErrorState;
     hasAieraInterventionPermission: boolean;
     isNextButtonDisabled: boolean;
@@ -109,6 +130,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         connectPhoneNumber,
         connectPin,
         connectUrl,
+        errorHints,
         errors,
         hasAieraInterventionPermission,
         isNextButtonDisabled,
@@ -216,7 +238,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                     .otherwise(() => null)}
             </div>
             <div className="bg-white border-gray-200 border-opacity-80 border-t flex flex-col pt-3 px-3 shadow-inner recording-form__footer">
-                <div className="flex items-center mb-3">
+                <div className="flex items-center mb-3 relative">
                     {step > 1 && (
                         <div
                             className="cursor-pointer flex group items-center mr-2 prev-step"
@@ -233,27 +255,52 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             </span>
                         </div>
                     )}
-                    <Button
-                        className="bg-blue-500 cursor-pointer flex items-center ml-auto rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step"
-                        disabled={isNextButtonDisabled}
-                        onClick={(event) => (step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1))}
+                    <Tooltip
+                        className="ml-auto"
+                        closeOn="hover"
+                        content={
+                            errorHints && Object.keys(errorHints).length > 0 ? (
+                                <div className="backdrop-blur-[6px] bg-black flex-col items-start justify-center py-1 px-1.5 rounded-md text-sm text-white">
+                                    {Object.keys(errorHints).map((key) => (
+                                        <span className="leading-5 text-sm" key={key}>
+                                            {`${key}: ${(errorHints[key] as string[]).join(', ')}`}
+                                            <br />
+                                        </span>
+                                    ))}
+                                </div>
+                            ) : null
+                        }
+                        grow="up-left"
+                        hideOnDocumentScroll
+                        openOn="hover"
+                        position="top-right"
+                        yOffset={12}
                     >
-                        <span className="font-light text-sm text-white">
-                            {match(step)
-                                .with(1, () => {
-                                    const connectionTypeOption = connectionType
-                                        ? CONNECTION_TYPE_OPTIONS_MAP[connectionType]
-                                        : null;
-                                    return `Configure ${connectionTypeOption ? connectionTypeOption.label : ''}`;
-                                })
-                                .with(2, () => 'Scheduling')
-                                .with(3, () => 'Troubleshooting')
-                                .with(4, () => 'Recording Details')
-                                .with(5, () => 'Create Recording')
-                                .otherwise(() => null)}
-                        </span>
-                        <ArrowLeft className="fill-current ml-2 relative rotate-180 text-white w-3.5 z-1 group-active:fill-current group-active:text-white" />
-                    </Button>
+                        <Button
+                            className={classNames(
+                                'bg-blue-500 cursor-pointer flex items-center rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step',
+                                { 'cursor-not-allowed': isNextButtonDisabled }
+                            )}
+                            disabled={isNextButtonDisabled}
+                            onClick={(event) => (step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1))}
+                        >
+                            <span className="font-light text-sm text-white">
+                                {match(step)
+                                    .with(1, () => {
+                                        const connectionTypeOption = connectionType
+                                            ? CONNECTION_TYPE_OPTIONS_MAP[connectionType]
+                                            : null;
+                                        return `Configure ${connectionTypeOption ? connectionTypeOption.label : ''}`;
+                                    })
+                                    .with(2, () => 'Scheduling')
+                                    .with(3, () => 'Troubleshooting')
+                                    .with(4, () => 'Recording Details')
+                                    .with(5, () => 'Create Recording')
+                                    .otherwise(() => null)}
+                            </span>
+                            <ArrowLeft className="fill-current ml-2 relative rotate-180 text-white w-3.5 z-1 group-active:fill-current group-active:text-white" />
+                        </Button>
+                    </Tooltip>
                 </div>
             </div>
         </div>
@@ -301,7 +348,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     // conditionally show errors, if any
     const [touched, setTouched] = useState<InputTouchedState>({});
 
-    const isNextButtonDisabled = useMemo(() => {
+    const isNextButtonDisabled: boolean = useMemo(() => {
         let disabled = false;
         if (step >= 1 && !state.connectionType) {
             disabled = true;
@@ -323,7 +370,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         }
         return disabled;
     }, [errors, state.connectionType, state.zoomMeetingType, step]);
-    const isWebcast = useMemo(
+    const isWebcast: boolean = useMemo(
         () =>
             state.connectionType === CONNECTION_TYPE_OPTION_WEBCAST.value ||
             (state.connectionType === CONNECTION_TYPE_OPTION_ZOOM.value &&
@@ -331,7 +378,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         [state.connectionType, state.zoomMeetingType]
     );
     // Converts time to 24 hours
-    const convertedTime = useMemo(() => {
+    const convertedTime: string | null = useMemo(() => {
         let converted = null;
         if (state.scheduleTime && state.scheduleMeridiem) {
             const minutes = state.scheduleTime.slice(-2);
@@ -345,7 +392,22 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         }
         return converted;
     }, [state.scheduleTime, state.scheduleMeridiem]);
-    const mapStateToOnFailure = useMemo(
+    const errorHints: { [key: string]: string[] } = useMemo(() => {
+        const hints = {} as { [key: string]: string[] };
+        if (Object.keys(errors).length) {
+            Object.keys(errors).forEach((key: keyof InputErrorState) => {
+                const value = errors[key] as string;
+                const label = INPUT_FIELD_LABELS[key] as string;
+                if (hints[value]) {
+                    (hints[value] as string[]).push(label);
+                } else {
+                    hints[value] = [label];
+                }
+            });
+        }
+        return hints;
+    }, [errors]);
+    const mapStateToOnFailure: PrOnFailure = useMemo(
         () =>
             match(state.onFailure)
                 .with(OnFailure.AieraIntervention, () => PrOnFailure.AieraIntervention)
@@ -357,7 +419,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 .otherwise(() => PrOnFailure.None),
         [state.onFailure]
     );
-    const mapStateToScheduledFor = useMemo(() => {
+    const mapStateToScheduledFor: string = useMemo(() => {
         let dateTime = (state.scheduleType === ScheduleType.Now ? new Date() : state.scheduleDate).toISOString();
         if (state.scheduleType === ScheduleType.Future && convertedTime) {
             // Combine the date and time from state
@@ -365,7 +427,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         }
         return dateTime;
     }, [state.scheduleDate, state.scheduleType]);
-    const privateRecordingInput = useMemo(
+    const privateRecordingInput: CreatePrivateRecordingInput | UpdatePrivateRecordingInput = useMemo(
         () => ({
             companyIds: state.selectedCompany ? [parseInt(state.selectedCompany.id)] : undefined,
             connectAccessId: state.connectAccessId,
@@ -429,9 +491,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     `);
     const updatePrivateRecording = useCallback(async () => {
         setSubmitState('loading');
-        return updatePrivateRecordingMutation({
-            input: privateRecordingInput as unknown as UpdatePrivateRecordingInput,
-        })
+        return updatePrivateRecordingMutation({ input: privateRecordingInput as UpdatePrivateRecordingInput })
             .then((resp) => {
                 if (resp.data?.updatePrivateRecording?.success) {
                     setSubmitState('submitted');
@@ -453,6 +513,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPhoneNumber={state.connectPhoneNumber}
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
+            errorHints={errorHints}
             errors={errors}
             hasAieraInterventionPermission={state.hasAieraInterventionPermission}
             isNextButtonDisabled={isNextButtonDisabled}
