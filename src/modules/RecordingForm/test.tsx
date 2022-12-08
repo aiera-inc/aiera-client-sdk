@@ -174,4 +174,26 @@ describe('RecordingForm', () => {
             expect(nextButton).not.toBeDisabled();
         }
     });
+
+    test('when there are errors, hovering over the button should show a tooltip', async () => {
+        const { rendered } = renderWithProvider(<RecordingForm onBack={onBack} />);
+        const nextButton = rendered.container.querySelector('.next-step');
+        expect(rendered.container.querySelector('.connection-type')).not.toBeNull();
+        if (nextButton) {
+            // Select an option to enable the next button
+            userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label));
+            userEvent.click(nextButton);
+            expect(rendered.container.querySelector('.connection-details')).not.toBeNull();
+            screen.getByText('Step 2 of 5');
+            screen.getByText('Scheduling');
+            expect(nextButton).toBeDisabled();
+            // Fill out required fields
+            await waitFor(() => userEvent.click(screen.getByText(ZOOM_MEETING_TYPE_OPTION_WEB.label)));
+            screen.getByPlaceholderText('https://zoom.us/j/8881234567?pwd=Ya1b2c3d4e5');
+            await waitFor(() => {
+                fireEvent.mouseEnter(nextButton);
+                screen.getByText('Required: URL');
+            });
+        }
+    });
 });
