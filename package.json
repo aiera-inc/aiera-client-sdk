@@ -1,10 +1,10 @@
 {
-    "name": "@aiera/client-sdk",
+    "name": "aiera-client-sdk",
     "version": "0.0.25",
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
-    "main": "index.js",
+    "main": "src/index.js",
     "types": "index.d.ts",
     "scripts": {
         "build": "npm run clean && npm run codegen && concurrently npm:build:lib:* && cd dist && npm pack && mv aiera-client-sdk-$npm_package_version.tgz aiera-client-sdk.tgz",
@@ -126,5 +126,13 @@
         "*.{ts,tsx}": [
             "eslint --no-error-on-unmatched-pattern --fix"
         ]
-    }
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/aiera-inc/aiera-client-sdk.git"
+    },
+    "bugs": {
+        "url": "https://github.com/aiera-inc/aiera-client-sdk/issues"
+    },
+    "homepage": "https://github.com/aiera-inc/aiera-client-sdk#readme"
 }

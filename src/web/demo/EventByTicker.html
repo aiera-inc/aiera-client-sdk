@@ -24,13 +24,14 @@
             event.on('authenticated', () => {
                 event.configure({
                     options: {
-                        ticker: 'meta',
+                        ticker: 'aapl',
                         darkMode: false,
                         showTitleInfo: true,
                         showRecordingDetails: false,
                         showPriceReaction: false,
                         showSearch: false,
                         showAudioPlayer: false,
+                        topics: ['term1', 'term2'],
                     },
                     user: {
                         //email: 'customer@example.com',
