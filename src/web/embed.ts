@@ -422,3 +422,8 @@ export class Module {
 // eslint-disable-next-line
 // @ts-ignore
 window.Aiera = { Module };
+
+// NPM PACKAGE
+module.exports = {
+    Aiera: Module,
+};
