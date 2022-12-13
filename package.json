@@ -1,6 +1,6 @@
 {
     "name": "aiera-client-sdk1",
-    "version": "0.0.29",
+    "version": "0.0.30",
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
@@ -8,7 +8,7 @@
         "dist",
         "src"
     ],
-    "main": "./dist/web/embed.js",
+    "main": "./dist/web/index.js",
     "types": "./dist/types/index.d.ts",
     "scripts": {
         "build": "npm run clean && npm run codegen && concurrently npm:build:lib:* && cd dist && npm pack && mv aiera-client-sdk-$npm_package_version.tgz aiera-client-sdk.tgz",
