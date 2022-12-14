@@ -162,6 +162,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         selectedCompany,
         smsAlertBeforeCall,
         step,
+        submitState,
         title,
         touched,
         zoomMeetingType,
@@ -284,30 +285,45 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                         position="top-right"
                         yOffset={12}
                     >
-                        <Button
-                            className={classNames(
-                                'bg-blue-500 cursor-pointer flex items-center rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step',
-                                { 'cursor-not-allowed': isNextButtonDisabled }
-                            )}
-                            disabled={isNextButtonDisabled}
-                            onClick={(event) => (step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1))}
-                        >
-                            <span className="font-light text-sm text-white">
-                                {match(step)
-                                    .with(1, () => {
-                                        const connectionTypeOption = connectionType
-                                            ? CONNECTION_TYPE_OPTIONS_MAP[connectionType]
-                                            : null;
-                                        return `Configure ${connectionTypeOption ? connectionTypeOption.label : ''}`;
-                                    })
-                                    .with(2, () => 'Scheduling')
-                                    .with(3, () => 'Troubleshooting')
-                                    .with(4, () => 'Recording Details')
-                                    .with(5, () => 'Create Recording')
-                                    .otherwise(() => null)}
-                            </span>
-                            <ArrowLeft className="fill-current ml-2 relative rotate-180 text-white w-3.5 z-1 group-active:fill-current group-active:text-white" />
-                        </Button>
+                        {match(submitState)
+                            .with('none', 'error', 'submitted', () => (
+                                <Button
+                                    className={classNames(
+                                        'bg-blue-500 cursor-pointer flex items-center rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step',
+                                        { 'cursor-not-allowed': isNextButtonDisabled }
+                                    )}
+                                    disabled={isNextButtonDisabled}
+                                    onClick={(event) => (step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1))}
+                                >
+                                    <span className="font-light text-sm text-white">
+                                        {match(step)
+                                            .with(1, () => {
+                                                const connectionTypeOption = connectionType
+                                                    ? CONNECTION_TYPE_OPTIONS_MAP[connectionType]
+                                                    : null;
+                                                return `Configure ${
+                                                    connectionTypeOption ? connectionTypeOption.label : ''
+                                                }`;
+                                            })
+                                            .with(2, () => 'Scheduling')
+                                            .with(3, () => 'Troubleshooting')
+                                            .with(4, () => 'Recording Details')
+                                            .with(5, () => 'Create Recording')
+                                            .otherwise(() => null)}
+                                    </span>
+                                    <ArrowLeft className="fill-current ml-2 relative rotate-180 text-white w-3.5 z-1 group-active:fill-current group-active:text-white" />
+                                </Button>
+                            ))
+                            .with('loading', () => {
+                                return (
+                                    <Button className="justify-center w-32" disabled kind="primary">
+                                        <div className="w-2 h-2 bg-white rounded-full animate-bounce animation" />
+                                        <div className="w-2 h-2 ml-1 bg-white rounded-full animate-bounce animation-delay-100" />
+                                        <div className="w-2 h-2 ml-1 bg-white rounded-full animate-bounce animation-delay-200" />
+                                    </Button>
+                                );
+                            })
+                            .exhaustive()}
                     </Tooltip>
                 </div>
             </div>
@@ -435,7 +451,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             dateTime = dateTime.replace(/[^T]*$/, convertedTime);
         }
         return dateTime;
-    }, [state.scheduleDate, state.scheduleType]);
+    }, [state.scheduleDate, state.scheduleMeridiem, state.scheduleTime, state.scheduleType]);
     const privateRecordingInput: CreatePrivateRecordingInput | UpdatePrivateRecordingInput = useMemo(
         () => ({
             companyIds: state.selectedCompany ? [parseInt(state.selectedCompany.id)] : undefined,
@@ -495,7 +511,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         },
     });
 
-    // Update state when the recording is loaded
+    // Update state when the recording is loaded for editing
     useEffect(() => {
         if (recordingsQuery.status === 'success') {
             const privateRecording: PrivateRecording | undefined = recordingsQuery.data.privateRecordings[0];
@@ -634,7 +650,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             errorHints={errorHints}
             errors={errors}
             hasAieraInterventionPermission={state.hasAieraInterventionPermission}
-            isNextButtonDisabled={isNextButtonDisabled}
+            isNextButtonDisabled={isNextButtonDisabled || ['error', 'loading', 'submitted'].includes(submitState)}
             isWebcast={isWebcast}
             meetingType={state.meetingType}
             onBack={onBack}
