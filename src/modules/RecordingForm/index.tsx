@@ -6,6 +6,7 @@ import React, {
     ReactElement,
     SetStateAction,
     useCallback,
+    useEffect,
     useMemo,
     useState,
 } from 'react';
@@ -24,6 +25,8 @@ import {
     CreatePrivateRecordingMutation,
     CreatePrivateRecordingMutationVariables,
     PrOnFailure,
+    RecordingsQuery,
+    RecordingsQueryVariables,
     UpdatePrivateRecordingInput,
     UpdatePrivateRecordingMutation,
     UpdatePrivateRecordingMutationVariables,
@@ -55,6 +58,7 @@ import {
 } from './types';
 import validateInput from './validateInput';
 import './styles.css';
+import { useQuery } from '@aiera/client-sdk/api/client';
 
 // Map validated input names to error hints displayed above the submit button
 const INPUT_FIELD_LABELS = {
@@ -79,6 +83,7 @@ interface RecordingFormSharedProps {
     privateRecordingId?: number;
 }
 
+type PrivateRecording = RecordingsQuery['privateRecordings'][0];
 type SubmitState = 'none' | 'loading' | 'error' | 'submitted';
 
 /** @notExported */
@@ -98,6 +103,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     meetingType: string;
     onBlur: FocusEventHandler;
     onChange: RecordingFormStateChangeHandler;
+    onCompleteEmailCreator: boolean;
     onConnectDialNumber: string;
     onFailure?: OnFailure;
     onFailureDialNumber: string;
@@ -138,6 +144,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         onBack,
         onBlur,
         onChange,
+        onCompleteEmailCreator,
         onConnectDialNumber,
         onFailure,
         onFailureDialNumber,
@@ -231,6 +238,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                             errors={errors}
                             onBlur={onBlur}
                             onChange={onChange}
+                            onCompleteEmailCreator={onCompleteEmailCreator}
                             selectedCompany={selectedCompany}
                             title={title}
                         />
@@ -325,6 +333,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         connectUrl: '',
         hasAieraInterventionPermission: false,
         meetingType: '',
+        onCompleteEmailCreator: false,
         onConnectDialNumber: '',
         onFailure: undefined,
         onFailureDialNumber: '',
@@ -437,6 +446,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPhoneNumber: state.connectPhoneNumber,
             connectPin: state.connectPin,
             connectUrl: state.connectUrl,
+            onCompleteEmailCreator: state.onCompleteEmailCreator,
             onConnectDialNumber: state.onConnectDialNumber,
             onFailure: mapStateToOnFailure,
             onFailureDialNumber: state.onFailureDialNumber,
@@ -449,6 +459,114 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         }),
         [mapStateToOnFailure, mapStateToScheduledFor, privateRecordingId, state]
     );
+
+    /**
+     * Recordings query for editing
+     */
+    const recordingsQuery = useQuery<RecordingsQuery, RecordingsQueryVariables>({
+        isEmpty: ({ privateRecordings }) => privateRecordings.length === 0,
+        query: gql`
+            query Recordings($filter: PrivateRecordingFilter) {
+                privateRecordings(filter: $filter) {
+                    id
+                    connectAccessId
+                    connectCallerId
+                    connectionType
+                    connectOffsetSeconds
+                    connectPhoneNumber
+                    connectPin
+                    connectUrl
+                    onCompleteEmailCreator
+                    onConnectDialNumber
+                    onFailure
+                    onFailureDialNumber
+                    onFailureInstructions
+                    onFailureSmsNumber
+                    scheduledFor
+                    smsAlertBeforeCall
+                    title
+                }
+            }
+        `,
+        pause: !privateRecordingId,
+        requestPolicy: 'cache-and-network',
+        variables: {
+            filter: privateRecordingId ? { privateRecordingId: String(privateRecordingId) } : undefined,
+        },
+    });
+
+    // Update state when the recording is loaded
+    useEffect(() => {
+        if (recordingsQuery.status === 'success') {
+            const privateRecording: PrivateRecording | undefined = recordingsQuery.data.privateRecordings[0];
+            const connectUrl = privateRecording?.connectUrl || '';
+            const onConnectDialNumber = privateRecording?.onConnectDialNumber || '';
+            const onFailureProp = privateRecording?.onFailure;
+            const onFailureDialNumber = privateRecording?.onFailureDialNumber || '';
+            const onFailureSmsNumber = privateRecording?.onFailureSmsNumber || '';
+            const scheduledFor = privateRecording?.scheduledFor;
+            // Map onFailure to state
+            let onFailure;
+            if (onFailureProp === PrOnFailure.ManualIntervention) {
+                if (onFailureDialNumber) {
+                    onFailure = OnFailure.ManualInterventionCall;
+                }
+                if (onFailureSmsNumber) {
+                    onFailure = OnFailure.ManualInterventionSms;
+                }
+            }
+            if (onFailureProp === PrOnFailure.AieraIntervention) {
+                onFailure = OnFailure.AieraIntervention;
+            }
+            // Map scheduledFor to state
+            const scheduleDate = scheduledFor ? new Date(scheduledFor) : new Date();
+            let scheduleMeridiem = ScheduleMeridiem.AM;
+            let scheduleTime = '';
+            let scheduleType;
+            if (scheduledFor) {
+                const timeParts = scheduleDate.toLocaleTimeString().split(' ');
+                if (timeParts[1] === 'PM') {
+                    scheduleMeridiem = ScheduleMeridiem.PM;
+                }
+                const time = timeParts[0]?.split(':');
+                if (time) {
+                    const hour = time[0] || '';
+                    const minute = time[1] || '';
+                    scheduleTime = `${hour}:${minute}`;
+                }
+                scheduleType = ScheduleType.Future;
+            }
+            mergeState({
+                connectAccessId: privateRecording?.connectAccessId || '',
+                connectCallerId: privateRecording?.connectCallerId || '',
+                connectionType: privateRecording?.connectionType,
+                connectOffsetSeconds: privateRecording?.connectOffsetSeconds || 0,
+                connectPhoneNumber: privateRecording?.connectPhoneNumber || '',
+                connectPin: privateRecording?.connectPin || '',
+                connectUrl,
+                // equityIds: get(privateRecording, 'equityIds', []).map((id) => `${id}`),
+                hasAieraInterventionPermission: !!privateRecording,
+                onCompleteEmailCreator: privateRecording?.onCompleteEmailCreator || true,
+                onConnectDialNumber,
+                onFailure,
+                onFailureDialNumber,
+                onFailureInstructions: privateRecording?.onFailureInstructions || '',
+                onFailureSmsNumber,
+                participationType: onConnectDialNumber
+                    ? ParticipationType.Participating
+                    : ParticipationType.NotParticipating,
+                scheduleDate,
+                scheduleMeridiem,
+                scheduleTime,
+                scheduleType,
+                // selectedCompany: TODO
+                smsAlertBeforeCall: privateRecording?.smsAlertBeforeCall || false,
+                title: privateRecording?.title || '',
+                useOnConnectDialNumber: [onFailureDialNumber, onFailureSmsNumber].includes(onConnectDialNumber),
+                zoomMeetingType: connectUrl.length ? ZoomMeetingType.Web : ZoomMeetingType.Phone,
+            });
+        }
+    }, [mergeState, recordingsQuery]);
 
     /**
      * Mutations
@@ -548,6 +666,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 },
                 [errors, validateInput]
             )}
+            onCompleteEmailCreator={state.onCompleteEmailCreator}
             onConnectDialNumber={state.onConnectDialNumber}
             onFailure={state.onFailure}
             onFailureDialNumber={state.onFailureDialNumber}

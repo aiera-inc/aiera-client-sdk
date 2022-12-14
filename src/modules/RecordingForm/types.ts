@@ -53,6 +53,7 @@ export interface RecordingFormState {
     connectUrl: string;
     hasAieraInterventionPermission: boolean;
     meetingType: string;
+    onCompleteEmailCreator: boolean;
     onConnectDialNumber: string;
     onFailure?: OnFailure;
     onFailureDialNumber: string;
