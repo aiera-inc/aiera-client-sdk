@@ -2,6 +2,7 @@ import React, {
     Dispatch,
     FocusEvent,
     FocusEventHandler,
+    MouseEvent,
     MouseEventHandler,
     ReactElement,
     SetStateAction,
@@ -73,7 +74,7 @@ const INPUT_FIELD_LABELS = {
     onConnectDialNumber: 'Your phone number',
     onFailurePhoneNumber: 'Best number to reach you',
     participationType: 'How we should connect',
-    scheduleTime: 'Schedule time',
+    scheduleTime: 'Time',
     title: 'Title',
 } as { [key: keyof InputErrorState]: string };
 const NUM_STEPS = 5;
@@ -268,7 +269,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                         className="ml-auto"
                         closeOn="hover"
                         content={
-                            errorHints && Object.keys(errorHints).length > 0 ? (
+                            isNextButtonDisabled && errorHints && Object.keys(errorHints).length > 0 ? (
                                 <div className="backdrop-blur-[6px] bg-black flex-col items-start justify-center py-1 px-1.5 rounded-md text-sm text-white">
                                     {Object.keys(errorHints).map((key) => (
                                         <span className="leading-5 text-sm" key={key}>
@@ -369,6 +370,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     const [step, setStep] = useState<number>(1);
 
     const [errors, setErrors] = useState<InputErrorState>({});
+    const [hasChanges, setHasChanges] = useState<boolean>(false);
     // Keep track of which inputs have been in focus to
     // conditionally show errors, if any
     const [touched, setTouched] = useState<InputTouchedState>({});
@@ -653,7 +655,17 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             isNextButtonDisabled={isNextButtonDisabled || ['error', 'loading', 'submitted'].includes(submitState)}
             isWebcast={isWebcast}
             meetingType={state.meetingType}
-            onBack={onBack}
+            onBack={useCallback(
+                (event: MouseEvent<HTMLDivElement>) => {
+                    if (
+                        !hasChanges ||
+                        (hasChanges && window.confirm('You have unsaved changes. Are you sure you want to cancel?'))
+                    ) {
+                        onBack(event);
+                    }
+                },
+                [hasChanges, onBack]
+            )}
             onBlur={useCallback(
                 (event: FocusEvent<HTMLInputElement>) =>
                     setErrors(
@@ -669,6 +681,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             )}
             onChange={useCallback(
                 (_, { name = '', value }: RecordingFormStateChangeEvent) => {
+                    setHasChanges(true);
                     mergeState({ [name]: value });
                     setErrors(
                         validateInput({
@@ -699,12 +712,17 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             )}
             onNextStep={setStep}
             onPrevStep={setStep}
-            onSubmit={useCallback(async () => {
-                if (Object.keys(errors).length === 0) {
-                    await (privateRecordingId ? updatePrivateRecording() : createPrivateRecording());
-                    setSubmitState('submitted');
-                }
-            }, [createPrivateRecording, privateRecordingId, updatePrivateRecording])}
+            onSubmit={useCallback(
+                async (event: MouseEvent<HTMLDivElement>) => {
+                    if (Object.keys(errors).length === 0) {
+                        await (privateRecordingId ? updatePrivateRecording() : createPrivateRecording());
+                        setHasChanges(false);
+                        setSubmitState('submitted');
+                        onBack(event);
+                    }
+                },
+                [createPrivateRecording, privateRecordingId, updatePrivateRecording]
+            )}
             participationType={state.participationType}
             scheduleDate={state.scheduleDate}
             scheduleMeridiem={state.scheduleMeridiem}

@@ -196,4 +196,28 @@ describe('RecordingForm', () => {
             });
         }
     });
+
+    test('clicking ok in the has changes confirm dialog should call onBack', async () => {
+        const confirmSpy = jest.spyOn(window, 'confirm');
+        const onBack = jest.fn();
+        confirmSpy.mockImplementation(jest.fn(() => true));
+        renderWithProvider(<RecordingForm onBack={onBack} />);
+        await waitFor(() => userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label)));
+        const backButton = screen.getByText('Recordings');
+        userEvent.click(backButton);
+        expect(onBack).toHaveBeenCalled();
+        confirmSpy.mockReset();
+    });
+
+    test('clicking cancel in the has changes confirm dialog should not call onBack', async () => {
+        const confirmSpy = jest.spyOn(window, 'confirm');
+        const onBack = jest.fn();
+        confirmSpy.mockImplementation(jest.fn(() => false));
+        renderWithProvider(<RecordingForm onBack={onBack} />);
+        await waitFor(() => userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label)));
+        const backButton = screen.getByText('Recordings');
+        userEvent.click(backButton);
+        expect(onBack).not.toHaveBeenCalled();
+        confirmSpy.mockReset();
+    });
 });

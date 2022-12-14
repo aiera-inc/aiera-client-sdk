@@ -161,7 +161,7 @@ export default function validateInput({
         //     delete errors.externalAudioStreamUrl;
         // }
         if (value === ConnectionType.Zoom) {
-            if (!state.connectAccessId && !errors.connectAccessId) {
+            if (!state.connectAccessId && !errors.connectAccessId && state.zoomMeetingType) {
                 errors.connectAccessId = 'Required';
             }
             // We require connectUrl for "web" Zoom meeting type
