@@ -381,8 +381,12 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             disabled = true;
         }
         if (
+            state.connectionType &&
             step >= 2 &&
-            ((state.connectionType === ConnectionType.Zoom && !state.zoomMeetingType) || Object.keys(errors).length > 0)
+            ((state.connectionType === ConnectionType.Zoom && !state.zoomMeetingType) ||
+                ([ConnectionType.GoogleMeet, ConnectionType.Phone].includes(state.connectionType) &&
+                    !state.participationType) ||
+                Object.keys(errors).length > 0)
         ) {
             disabled = true;
         }

@@ -14,10 +14,12 @@ import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/us
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { PlayButton } from '@aiera/client-sdk/modules/EventList/PlayButton'; // TODO this should probably be a component
 import { RecordingForm } from '@aiera/client-sdk/modules/RecordingForm';
-import { RecordingListQuery, RecordingListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types';
+import { RecordingListQuery, RecordingListQueryVariables, User } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
 interface RecordingListSharedProps {}
+
+type CustomEvent = RecordingListQuery['customEvents'][0];
 
 /** @notExported */
 interface RecordingListUIProps extends RecordingListSharedProps {
@@ -84,11 +86,24 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                             .with({ status: 'paused' }, () => wrapMsg('There are no recordings.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading recordings.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no recordings.'))
-                            .with({ status: 'success' }, ({ data: { events } }) => (
+                            .with({ status: 'success' }, ({ data: { customEvents } }) => (
                                 <ul className="w-full">
-                                    {events.map((event) => {
+                                    {customEvents.map((event: CustomEvent) => {
                                         const eventDate = DateTime.fromISO(event.eventDate);
                                         const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
+                                        let createdBy = '';
+                                        if (event.creator) {
+                                            const creator = event.creator as User;
+                                            if (creator.firstName) {
+                                                createdBy = creator.firstName;
+                                            }
+                                            if (creator.lastName) {
+                                                createdBy = `${createdBy} ${creator.lastName.slice(0, 1)}.`;
+                                            }
+                                            if (!createdBy) {
+                                                createdBy = creator.primaryEmail || creator.username;
+                                            }
+                                        }
                                         let divider = null;
                                         if (
                                             !prevEventDate ||
@@ -145,7 +160,7 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                                                                 </span>
                                                             </div>
                                                             <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
-                                                                {event.eventType.replace(/_/g, ' ')}
+                                                                {createdBy}
                                                             </div>
                                                         </div>
                                                         <div className="flex flex-col justify-center items-end">
@@ -197,26 +212,51 @@ export function RecordingList(_props: RecordingListProps): ReactElement {
     });
 
     const recordingsQuery = useQuery<RecordingListQuery, RecordingListQueryVariables>({
-        isEmpty: ({ events }) => events.length === 0,
+        isEmpty: ({ customEvents }) => customEvents.length === 0,
         requestPolicy: 'cache-and-network',
-        // TODO replace with recordings query (once written)
         query: gql`
-            query RecordingList($filter: EventFilter, $view: EventView) {
-                events(filter: $filter, view: $view) {
+            query RecordingList($filter: CustomEventsFilter) {
+                customEvents(filter: $filter) {
                     id
-                    title
+                    audioRecordingOffsetMs
+                    audioRecordingUrl
+                    creator {
+                        id
+                        firstName
+                        lastName
+                        primaryEmail
+                        username
+                    }
                     eventDate
                     eventType
                     isLive
-                    audioRecordingUrl
-                    audioRecordingOffsetMs
+                    primaryCompany {
+                        id
+                        commonName
+                        instruments {
+                            id
+                            isPrimary
+                            quotes {
+                                id
+                                isPrimary
+                                localTicker
+                                exchange {
+                                    id
+                                    shortName
+                                    country {
+                                        id
+                                        countryCode
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    title
                 }
             }
         `,
         variables: {
-            view: EventView.Recent,
             filter: {
-                eventTypes: [EventType.Custom],
                 title: state.searchTerm || undefined,
             },
         },

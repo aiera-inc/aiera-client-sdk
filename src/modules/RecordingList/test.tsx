@@ -17,7 +17,7 @@ describe('RecordingList', () => {
             executeQuery: () =>
                 fromValue({
                     data: {
-                        events: [],
+                        customEvents: [],
                     },
                 }),
         });
