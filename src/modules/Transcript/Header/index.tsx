@@ -22,30 +22,31 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
-    useConfigOptions: boolean;
     containerHeight: number;
     currentParagraphTimestamp?: string | null;
     endTime?: string | null;
     eventId: string;
     eventQuery: EventQuery;
     onBack?: MouseEventHandler;
+    onBackHeader: string;
     searchTerm?: string;
     onChangeSearchTerm?: ChangeHandler<string>;
     onSeekAudioByDate?: (date: string) => void;
     startTime?: string | null;
+    useConfigOptions: boolean;
 }
 
 /** @notExported */
 interface HeaderUIProps extends HeaderSharedProps {
+    eventDetailsExpanded: boolean;
     headerExpanded: boolean;
     headerRef: Ref<HTMLDivElement>;
-    toggleHeader: () => void;
-    eventDetailsExpanded: boolean;
-    toggleEventDetails: () => void;
-    priceChartExpanded: boolean;
-    togglePriceChart: () => void;
     keyMentionsExpanded: boolean;
+    priceChartExpanded: boolean;
+    toggleEventDetails: () => void;
+    toggleHeader: () => void;
     toggleKeyMentions: () => void;
+    togglePriceChart: () => void;
 }
 
 export function HeaderUI(props: HeaderUIProps): ReactElement {
@@ -60,6 +61,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         headerRef,
         keyMentionsExpanded,
         onBack,
+        onBackHeader,
         onChangeSearchTerm,
         onSeekAudioByDate,
         priceChartExpanded,
@@ -99,7 +101,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                     {onBack && (
                         <Button className="mr-2" onClick={onBack}>
                             <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-                            Events
+                            {onBackHeader}
                         </Button>
                     )}
                     <Input
@@ -254,6 +256,7 @@ export function Header(props: HeaderProps): ReactElement {
         eventId,
         eventQuery,
         onBack,
+        onBackHeader,
         searchTerm,
         onChangeSearchTerm,
         onSeekAudioByDate,
@@ -310,6 +313,7 @@ export function Header(props: HeaderProps): ReactElement {
             headerRef={headerRef}
             keyMentionsExpanded={keyMentionsExpanded}
             onBack={onBack}
+            onBackHeader={onBackHeader}
             onChangeSearchTerm={onChangeSearchTerm}
             onSeekAudioByDate={onSeekAudioByDate}
             priceChartExpanded={priceChartExpanded}

@@ -62,8 +62,13 @@ type SpeakerTurnsWithMatches = SpeakerTurn & { paragraphsWithMatches: ParagraphW
 type Partial = { text: string; timestamp: number };
 
 /** @notExported */
-interface TranscriptUIProps {
-    useConfigOptions: boolean;
+interface TranscriptSharedProps {
+    eventId?: string;
+    onBack?: MouseEventHandler;
+}
+
+/** @notExported */
+interface TranscriptUIProps extends TranscriptSharedProps {
     containerHeight: number;
     containerRef: Ref<HTMLDivElement>;
     currentMatch?: string | null;
@@ -79,6 +84,7 @@ interface TranscriptUIProps {
     matches: Chunk[];
     nextMatch: () => void;
     onBack?: MouseEventHandler;
+    onBackHeader: string;
     onChangeSearchTerm: ChangeHandler<string>;
     onClickTranscript?: (paragraph: Paragraph) => void;
     onSeekAudioByDate?: (date: string) => void;
@@ -89,6 +95,7 @@ interface TranscriptUIProps {
     showSpeakers: boolean;
     speakerTurns: SpeakerTurnsWithMatches[];
     startTime?: string | null;
+    useConfigOptions: boolean;
 }
 
 function NoEventFound() {
@@ -116,6 +123,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         matches,
         nextMatch,
         onBack,
+        onBackHeader,
         onChangeSearchTerm,
         onClickTranscript,
         onSeekAudioByDate,
@@ -150,6 +158,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 eventId={eventId}
                                 eventQuery={eventQuery}
                                 onBack={onBack}
+                                onBackHeader={onBackHeader}
                                 searchTerm={searchTerm}
                                 onChangeSearchTerm={onChangeSearchTerm}
                                 onSeekAudioByDate={onSeekAudioByDate}
@@ -895,18 +904,23 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
 }
 
 /** @notExported */
-export interface TranscriptProps {
-    useConfigOptions?: boolean;
-    eventId?: string;
-    onBack?: MouseEventHandler;
+export interface TranscriptProps extends TranscriptSharedProps {
     initialSearchTerm?: string;
+    onBackHeader?: string;
+    useConfigOptions?: boolean;
 }
 
 /**
  * Renders Transcript
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
-    const { eventId: eventListEventId, onBack, initialSearchTerm, useConfigOptions = false } = props;
+    const {
+        eventId: eventListEventId,
+        onBack,
+        onBackHeader = 'Events',
+        initialSearchTerm,
+        useConfigOptions = false,
+    } = props;
     const [eventId, setEventId] = useState(eventListEventId);
     const config = useConfig();
     const eventIdFromTicker = useLatestEventForTicker(config?.options?.ticker);
@@ -989,7 +1003,6 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     return (
         <TranscriptUI
-            useConfigOptions={useConfigOptions}
             containerHeight={containerHeight}
             containerRef={containerRef}
             currentMatch={searchState.currentMatch}
@@ -1005,6 +1018,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             matches={searchState.matches}
             nextMatch={searchState.nextMatch}
             onBack={onBack ? onClickBack : undefined}
+            onBackHeader={onBackHeader}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
             onSeekAudioByDate={onSeekAudioByDate}
@@ -1015,6 +1029,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             showSpeakers={!!eventQuery.state.data?.events[0]?.hasPublishedTranscript}
             speakerTurns={searchState.speakerTurnsWithMatches}
             startTime={startTime}
+            useConfigOptions={useConfigOptions}
         />
     );
 };

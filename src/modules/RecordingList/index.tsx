@@ -1,4 +1,4 @@
-import React, { Fragment, MouseEventHandler, ReactElement, SyntheticEvent, useCallback } from 'react';
+import React, { MouseEvent, MouseEventHandler, ReactElement, SyntheticEvent, useCallback } from 'react';
 import gql from 'graphql-tag';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
@@ -9,32 +9,51 @@ import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Plus } from '@aiera/client-sdk/components/Svg/Plus';
+import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { isToday } from '@aiera/client-sdk/lib/datetimes';
 import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { PlayButton } from '@aiera/client-sdk/modules/EventList/PlayButton'; // TODO this should probably be a component
 import { RecordingForm } from '@aiera/client-sdk/modules/RecordingForm';
-import { RecordingListQuery, RecordingListQueryVariables, User } from '@aiera/client-sdk/types/generated';
+import { Transcript } from '@aiera/client-sdk/modules/Transcript';
+import { RecordingListQuery, RecordingListQueryVariables } from '@aiera/client-sdk/types/generated';
 import './styles.css';
 
 interface RecordingListSharedProps {}
 
-type CustomEvent = RecordingListQuery['customEvents'][0];
+type RecordingListEvent = RecordingListQuery['customEvents'][0];
 
 /** @notExported */
 interface RecordingListUIProps extends RecordingListSharedProps {
     onSearchChange: ChangeHandler<string>;
+    onSelectRecording: ChangeHandler<RecordingListEvent>;
     recordingsQuery: QueryResult<RecordingListQuery, RecordingListQueryVariables>;
     searchTerm: string;
+    selectedRecording?: RecordingListEvent;
     showForm: boolean;
     toggleForm: MouseEventHandler;
 }
 
 export function RecordingListUI(props: RecordingListUIProps): ReactElement {
-    const { onSearchChange, recordingsQuery, searchTerm, showForm, toggleForm } = props;
+    const { onSearchChange, onSelectRecording, recordingsQuery, searchTerm, selectedRecording, showForm, toggleForm } =
+        props;
+
     if (showForm) {
         return <RecordingForm onBack={toggleForm} />;
     }
+
+    if (selectedRecording) {
+        return (
+            <Transcript
+                eventId={selectedRecording.id}
+                initialSearchTerm={searchTerm}
+                onBack={(event) => onSelectRecording(event, { value: null })}
+                onBackHeader="Recordings"
+            />
+        );
+    }
+
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     let prevEventDate: DateTime | null = null;
     return (
@@ -88,12 +107,12 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                             .with({ status: 'empty' }, () => wrapMsg('There are no recordings.'))
                             .with({ status: 'success' }, ({ data: { customEvents } }) => (
                                 <ul className="w-full">
-                                    {customEvents.map((event: CustomEvent) => {
+                                    {customEvents.map((event: RecordingListEvent) => {
                                         const eventDate = DateTime.fromISO(event.eventDate);
                                         const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
                                         let createdBy = '';
                                         if (event.creator) {
-                                            const creator = event.creator as User;
+                                            const creator = event.creator;
                                             if (creator.firstName) {
                                                 createdBy = creator.firstName;
                                             }
@@ -120,7 +139,12 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                                             );
                                         }
                                         return (
-                                            <Fragment key={event.id}>
+                                            <div
+                                                key={event.id}
+                                                onClick={(_event: MouseEvent<HTMLDivElement>) =>
+                                                    onSelectRecording(_event, { value: event })
+                                                }
+                                            >
                                                 {divider}
                                                 <li
                                                     tabIndex={0}
@@ -170,7 +194,11 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                                                                 </div>
                                                             ) : (
                                                                 <div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300">
-                                                                    {eventDate.toFormat('h:mma')}
+                                                                    {isToday(event.eventDate) ? (
+                                                                        <TimeAgo date={event.eventDate} realtime />
+                                                                    ) : (
+                                                                        eventDate.toFormat('h:mma')
+                                                                    )}
                                                                 </div>
                                                             )}
                                                             <div className="leading-none mt-1 text-gray-300 group-hover:text-gray-500">
@@ -179,7 +207,7 @@ export function RecordingListUI(props: RecordingListUIProps): ReactElement {
                                                         </div>
                                                     </Tooltip>
                                                 </li>
-                                            </Fragment>
+                                            </div>
                                         );
                                     })}
                                 </ul>
@@ -199,6 +227,7 @@ export interface RecordingListProps extends RecordingListSharedProps {}
 
 interface RecordingListState {
     searchTerm: string;
+    selectedRecording?: RecordingListEvent;
     showForm: boolean;
 }
 
@@ -208,6 +237,7 @@ interface RecordingListState {
 export function RecordingList(_props: RecordingListProps): ReactElement {
     const { handlers, state } = useChangeHandlers<RecordingListState>({
         searchTerm: '',
+        selectedRecording: undefined,
         showForm: false,
     });
 
@@ -262,15 +292,33 @@ export function RecordingList(_props: RecordingListProps): ReactElement {
         },
     });
 
+    const onSelectRecording = useCallback<ChangeHandler<RecordingListEvent>>(
+        (event, change) => {
+            // const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
+            // bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
+            handlers.selectedRecording(event, change);
+            // If we are going back to the recording list, refetch immediately
+            if (!change.value) {
+                recordingsQuery.refetch();
+            }
+        },
+        [state]
+    );
+
     return (
         <RecordingListUI
             onSearchChange={handlers.searchTerm}
+            onSelectRecording={onSelectRecording}
             recordingsQuery={recordingsQuery}
             searchTerm={state.searchTerm}
+            selectedRecording={state.selectedRecording}
             showForm={state.showForm}
             toggleForm={useCallback(
-                (event: SyntheticEvent<Element, Event>) => handlers.showForm(event, { value: !state.showForm }),
-                [state.showForm]
+                (event: SyntheticEvent<Element, Event>) => {
+                    onSelectRecording(event, { value: null });
+                    handlers.showForm(event, { value: !state.showForm });
+                },
+                [onSelectRecording, state.showForm]
             )}
         />
     );
