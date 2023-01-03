@@ -350,7 +350,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         connectUrl: '',
         hasAieraInterventionPermission: false,
         meetingType: '',
-        onCompleteEmailCreator: false,
+        onCompleteEmailCreator: true,
         onConnectDialNumber: '',
         onFailure: undefined,
         onFailureDialNumber: '',
@@ -457,7 +457,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             dateTime = dateTime.replace(/[^T]*$/, convertedTime);
         }
         return dateTime;
-    }, [state.scheduleDate, state.scheduleMeridiem, state.scheduleTime, state.scheduleType]);
+    }, [convertedTime, state.scheduleDate, state.scheduleMeridiem, state.scheduleTime, state.scheduleType]);
     const privateRecordingInput: CreatePrivateRecordingInput | UpdatePrivateRecordingInput = useMemo(
         () => ({
             companyIds: state.selectedCompany ? [parseInt(state.selectedCompany.id)] : undefined,
