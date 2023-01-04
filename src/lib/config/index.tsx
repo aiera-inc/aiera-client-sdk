@@ -6,18 +6,26 @@ import { Options as RealtimeOptions } from 'pusher-js';
 import { defaultEnv } from '@aiera/client-sdk/lib/config/env';
 import { useMessageListener } from '../msg';
 
-type Module = 'ASR' | 'EventList' | 'NewsList' | 'RecordingList' | 'EventByTicker' | 'EventListByTicker';
+type Module = 'ASR' | 'EventList' | 'NewsList' | 'EventByTicker' | 'EventListByTicker';
 type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
+export type EventListFilter = 'earningsOnly' | 'transcripts';
+export type EventListView = 'combined' | 'tabs';
+
 interface Options {
-    ticker?: string;
-    eventId?: string;
+    customOnly?: boolean;
     darkMode?: boolean;
-    showTitleInfo?: boolean;
-    showRecordingDetails?: boolean;
-    showPriceReaction?: boolean;
-    showSearch?: boolean;
+    eventId?: string;
+    eventListFilters?: EventListFilter[];
+    eventListView?: EventListView;
     showAudioPlayer?: boolean;
+    showCompanyFilter?: boolean;
+    showPriceReaction?: boolean;
+    showRecordingDetails?: boolean;
+    showScheduleRecording?: boolean;
+    showSearch?: boolean;
+    showTitleInfo?: boolean;
+    ticker?: string;
 }
 
 interface User {
