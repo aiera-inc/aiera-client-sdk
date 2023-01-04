@@ -192,6 +192,14 @@ export class AudioPlayer {
 
     rawSeek(position: number): void {
         this.audio.currentTime = position;
+
+        // We want to re-render the audio player
+        // on-seek if the audio isn't currently
+        // playing. Important if the playhead
+        // hasn't initialized yet.
+        if (!this.playing(null)) {
+            this.triggerUpdate();
+        }
     }
 
     ff(distance: number): void {
