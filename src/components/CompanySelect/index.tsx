@@ -56,7 +56,7 @@ export function CompanySelectUI(props: CompanySelectUIProps): ReactElement {
 
     return (
         <div
-            className={`shadow-md bg-white rounded-lg w-72 overflow-hidden dark:bg-bluegray-6 company-select ${className}`}
+            className={`shadow-md bg-white rounded-lg w-[271px] overflow-hidden dark:bg-bluegray-6 company-select ${className}`}
         >
             <div className="p-3 w-full company-select__search-container">
                 <Input

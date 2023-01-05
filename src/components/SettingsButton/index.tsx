@@ -36,7 +36,7 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
     return (
         <div className="shadow-md bg-white dark:bg-bluegray-6 rounded-lg w-44 overflow-hidden p-1">
             <div className="pt-2 pb-2 px-3 font-semibold text-base flex justify-between items-center dark:text-white">
-                <span>Widget Settings</span>
+                <span>Component Settings</span>
                 <div className="cursor-pointer hover:text-blue-500" onClick={() => hideTooltip?.()}>
                     <XMark className="w-2" />
                 </div>

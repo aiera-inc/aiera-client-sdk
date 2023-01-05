@@ -70,6 +70,7 @@ export type { CompanyFilterResult };
 
 export interface EventListUIProps {
     company?: CompanyFilterResult;
+    customOnly: boolean;
     darkMode?: boolean;
     event?: EventListEvent;
     eventListView?: EventListView;
@@ -274,6 +275,7 @@ const EventRow = ({
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
         company,
+        customOnly,
         darkMode = false,
         event,
         eventListView,
@@ -328,8 +330,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         return (
             <Transcript
                 eventId={event.id}
-                onBack={onBackFromTranscript}
                 initialSearchTerm={searchTerm}
+                onBackHeader={customOnly ? 'Back' : undefined}
+                onBack={onBackFromTranscript}
                 useConfigOptions={useConfigOptions}
             />
         );
@@ -363,12 +366,26 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                 <CompanyFilterButton onChange={onCompanyChange} value={company} />
                             </div>
                             <SettingsButton showSyncWatchlist showTonalSentiment={false} />
-                            <Button
-                                className="bg-blue-500 cursor-pointer flex flex-shrink-0 items-center ml-2 rounded-0.375 active:bg-blue-700 hover:bg-blue-600"
-                                onClick={toggleForm}
+                            <Tooltip
+                                className="flex-shrink-0 ml-2"
+                                content={
+                                    <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                        Schedule a new recording
+                                    </div>
+                                }
+                                grow="down-left"
+                                hideOnDocumentScroll
+                                openOn="hover"
+                                position="bottom-right"
+                                yOffset={6}
                             >
-                                <Plus className="h-4 mb-0.5 text-white w-2.5" />
-                            </Button>
+                                <Button
+                                    className="bg-blue-500 cursor-pointer flex items-center rounded-0.375 active:bg-blue-700 hover:bg-blue-600"
+                                    onClick={toggleForm}
+                                >
+                                    <Plus className="h-4 mb-0.5 text-white w-2.5" />
+                                </Button>
+                            </Tooltip>
                         </>
                     )}
                 </div>
@@ -859,6 +876,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
     return (
         <EventListUI
             company={state.company}
+            customOnly={!!config.options?.customOnly}
             darkMode={settings.darkMode}
             event={state.event}
             eventListView={config.options?.eventListView}
