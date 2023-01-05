@@ -219,7 +219,10 @@
 <a name='L154'></a><a href='#L154'>154</a>
 <a name='L155'></a><a href='#L155'>155</a>
 <a name='L156'></a><a href='#L156'>156</a>
-<a name='L157'></a><a href='#L157'>157</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L157'></a><a href='#L157'>157</a>
+<a name='L158'></a><a href='#L158'>158</a>
+<a name='L159'></a><a href='#L159'>159</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -310,8 +313,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -340,12 +343,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,9 +360,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -386,6 +390,7 @@ import './styles.css';
 &nbsp;
 interface DropdownSharedProps&lt;T&gt; {
     className?: string;
+    name?: string;
     onChange?: ChangeHandler&lt;T&gt;;
     options: SelectOption&lt;T&gt;[];
     tooltipGrow?: TooltipProps['grow'];
@@ -404,7 +409,7 @@ interface DropdownUIProps&lt;T&gt; extends DropdownSharedProps&lt;T&gt; {
 }
 &nbsp;
 function TooltipContent&lt;T&gt;(props: DropdownUIProps&lt;T&gt;): ReactElement {
-    const { hideTooltip, selectedIndex, selectedOptionRef, selectIndex, onChange, options, scrollRef } = props;
+    const { hideTooltip, name, onChange, options, scrollRef, selectedIndex, selectedOptionRef, selectIndex } = props;
 &nbsp;
     // Allow scrolling, selecting, and closing the tooltip with keyboard
     useWindowListener('keydown', (event) =&gt; {
@@ -418,7 +423,7 @@ function TooltipContent&lt;T&gt;(props: DropdownUIProps&lt;T&gt;): ReactElement 
             })
             .with('Enter', () =&gt; {
                 selectIndex(0);
-                onChange?.(event, { value: options[selectedIndex]?.value });
+                onChange?.(event, { name, value: options[selectedIndex]?.value });
                 hideTooltip?.();
             })
             .otherwise(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >true)</span>;
@@ -442,7 +447,7 @@ function TooltipContent&lt;T&gt;(props: DropdownUIProps&lt;T&gt;): ReactElement 
                             key={option.label}
                             onClick={<span class="fstat-no" title="function not covered" >(e</span>vent) =&gt; {
 <span class="cstat-no" title="statement not covered" >                                event.stopPropagation();</span>
-<span class="cstat-no" title="statement not covered" >                                onChange?.(event, { value: option.value });</span>
+<span class="cstat-no" title="statement not covered" >                                onChange?.(event, { name, value: option.value });</span>
 <span class="cstat-no" title="statement not covered" >                                hideTooltip?.();</span>
                             }}
                             onFocus={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >selectIndex(index)}</span>
@@ -513,11 +518,12 @@ export function Dropdown&lt;T&gt;(props: DropdownProps&lt;T&gt;): ReactElement {
         }
     }, [selectedOptionRef?.current, scrollContainerRef?.current]);
 &nbsp;
-    const { className, onChange, options, tooltipGrow, tooltipPosition, value } = props;
+    const { className, name, onChange, options, tooltipGrow, tooltipPosition, value } = props;
     const selectedLabel = useMemo(() =&gt; options.find((o) =&gt; o.value === value)?.label, [options, value]);
     return (
         &lt;DropdownUI
             className={className}
+            name={name}
             onChange={onChange}
             options={options}
             scrollRef={scrollContainerRef}
@@ -538,7 +544,7 @@ export function Dropdown&lt;T&gt;(props: DropdownProps&lt;T&gt;): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Jan 04 2023 16:12:03 GMT-0500 (Eastern Standard Time)
+                at Thu Jan 05 2023 11:36:12 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

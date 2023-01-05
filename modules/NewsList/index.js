@@ -37926,34 +37926,50 @@ function Close({ className, alt = "Close" }) {
 // src/components/Input/index.tsx
 function InputUI(props) {
   const {
-    inputRef,
     autoFocus,
+    className = "",
+    clear,
+    clearable,
+    error,
     icon,
     id,
-    clearable,
-    clear,
-    placeholder,
+    inputRef,
+    name,
+    onBlur,
     onChange,
     onFocus,
-    value,
-    name,
-    className = "",
-    type
+    placeholder,
+    type,
+    value
   } = props;
   return /* @__PURE__ */ import_react10.default.createElement("div", {
     className: `group h-8 items-center w-full relative dark:text-white ${className} input__${name}`
-  }, import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
+  }, error && /* @__PURE__ */ import_react10.default.createElement("div", {
+    className: "absolute bottom-8 right-0 text-red-600 text-sm z-10"
+  }, error), import_react10.default.isValidElement(icon) && /* @__PURE__ */ import_react10.default.createElement("div", {
     className: "absolute pointer-events-none h-8 w-8 justify-center items-center flex"
   }, import_react10.default.cloneElement(icon, {
-    className: "group-focus-within:stroke-current group-focus-within:text-blue-600 z-1 relative w-4"
+    className: `group-focus-within:stroke-current group-focus-within:text-${error ? "red" : "blue"}-600 z-1 relative w-4`
   })), /* @__PURE__ */ import_react10.default.createElement("input", {
-    id,
-    ref: inputRef,
     autoFocus,
-    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:shadow-input focus:border-1 focus:outline-none focus:border-blue-600 hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5", { "pl-7": !!icon, "pl-3": !icon }),
+    className: (0, import_classnames2.default)("w-full h-full text-sm border border-gray-200 rounded-lg focus:border-1 focus:outline-none dark:bg-bluegray-6 dark:border-bluegray-5", {
+      "pl-7": !!icon,
+      "pl-3": !icon,
+      "border-red-600": !!error,
+      "focus:border-blue-600": !error,
+      "focus:border-red-600": !!error,
+      "focus:shadow-input": !error,
+      "focus:shadow-inputError": !!error,
+      "hover:border-blue-400": !error,
+      "hover:border-red-400": !!error
+    }),
+    id,
+    name,
+    onBlur,
     onChange,
     onFocus,
     placeholder,
+    ref: inputRef,
     value,
     type
   }), clearable && value && /* @__PURE__ */ import_react10.default.createElement("div", {
@@ -37963,36 +37979,40 @@ function InputUI(props) {
 }
 function Input(props) {
   const {
-    inputRef,
     autoFocus = false,
+    className,
+    clearable = true,
+    error,
     icon,
     id,
-    clearable = true,
-    placeholder,
+    inputRef,
+    name,
+    onBlur,
     onChange,
     onFocus,
-    value,
-    name,
-    className,
-    type = "text"
+    placeholder,
+    type = "text",
+    value
   } = props;
   return /* @__PURE__ */ import_react10.default.createElement(InputUI, {
     autoFocus,
-    clearable,
+    className,
     clear: (0, import_react10.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
+    clearable,
+    error,
     icon,
     id,
-    placeholder,
+    inputRef,
+    name,
+    onBlur,
     onChange: (0, import_react10.useCallback)((event) => {
       var _a;
       return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
     }, [onChange]),
-    inputRef,
     onFocus,
-    value,
-    className,
-    name,
-    type
+    placeholder,
+    type,
+    value
   });
 }
 
@@ -39330,6 +39350,7 @@ function CompanySelectUI(props) {
     autoFocus = false,
     className = "",
     companiesQuery,
+    name = "company-select__search",
     onChange,
     onChangeSearchTerm,
     onSelectCompany,
@@ -39350,7 +39371,7 @@ function CompanySelectUI(props) {
     autoFocus,
     clearable: true,
     icon: /* @__PURE__ */ import_react22.default.createElement(MagnifyingGlass, null),
-    name: "company-select__search",
+    name,
     onChange: onChangeSearchTerm,
     placeholder: "Search...",
     value: searchTerm
@@ -39389,7 +39410,7 @@ function CompanySelectUI(props) {
   }))).exhaustive()));
 }
 function CompanySelect(props) {
-  const { autoFocus, className, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = "" } = props;
+  const { autoFocus, className, name, onChange, onChangeSearchTerm, onSelectCompany, searchTerm = "" } = props;
   const [selectedIndex, selectIndex] = (0, import_react22.useState)(0);
   const companiesQuery = useQuery2({
     isEmpty: ({ companies }) => companies.length === 0,
@@ -39468,6 +39489,7 @@ function CompanySelect(props) {
     autoFocus,
     className,
     companiesQuery,
+    name,
     onChange,
     onChangeSearchTerm,
     onSelectCompany,
