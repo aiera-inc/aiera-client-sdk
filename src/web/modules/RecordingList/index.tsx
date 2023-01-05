@@ -9,7 +9,18 @@ import '@aiera/client-sdk/css/styles.css';
 const App: FC = (): ReactElement => {
     return (
         <StrictMode>
-            <Provider config={{ moduleName: 'EventList' }}>
+            <Provider
+                config={{
+                    moduleName: 'EventList',
+                    options: {
+                        customOnly: true,
+                        eventListFilters: ['transcripts'],
+                        eventListView: 'combined',
+                        showCompanyFilter: true,
+                        showScheduleRecording: true,
+                    },
+                }}
+            >
                 <Auth>
                     <div className="h-full">
                         <EventList />

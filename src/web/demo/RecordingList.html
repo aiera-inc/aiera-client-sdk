@@ -19,14 +19,14 @@
         <script>
             const recordingList = new Aiera.Module('../modules/EventList/index.html', 'aiera');
             recordingList.load().then(() => {
-                recordingList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+                recordingList.authenticateApiKey('2f9fdce669928c0317613d734f5a85f7');
             });
             recordingList.on('authenticated', () => {
                 recordingList.configure({
                     options: {
                         customOnly: true,
                         eventListFilters: ['transcripts'],
-                        eventListView: 'tabs',
+                        eventListView: 'combined',
                         showCompanyFilter: true,
                         showScheduleRecording: true,
                     },

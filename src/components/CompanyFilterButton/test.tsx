@@ -31,12 +31,12 @@ const company = {
 describe('CompanyFilterButton', () => {
     test('handles default state', () => {
         renderWithProvider(<CompanyFilterButton />);
-        screen.getByText('By Company');
+        screen.getByText('Company');
     });
 
     test('renders company select', async () => {
         renderWithProvider(<CompanyFilterButton />);
-        const button = screen.getByText('By Company');
+        const button = screen.getByText('Company');
         userEvent.click(button);
         await waitFor(() => screen.getByPlaceholderText('Search...'));
     });
