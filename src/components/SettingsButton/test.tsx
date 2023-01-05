@@ -10,14 +10,14 @@ describe('SettingsButton', () => {
         const { rendered } = renderWithProvider(<SettingsButton />);
         const button = rendered.container.querySelector('.settings_button');
         if (button) fireEvent.click(button);
-        await waitFor(() => screen.getByText('Component Settings'));
+        await waitFor(() => screen.getByText('Widget Settings'));
     });
 
     test('has a toggle which will change on click', async () => {
         const { rendered } = renderWithProvider(<SettingsButton />);
         const button = rendered.container.querySelector('.settings_button');
         if (button) fireEvent.click(button);
-        await waitFor(() => screen.getByText('Component Settings'));
+        await waitFor(() => screen.getByText('Widget Settings'));
         const toggle = rendered.container.querySelectorAll('.toggle')[0] as HTMLInputElement;
         expect(toggle.checked).toEqual(false);
         await actAndFlush(() => {
@@ -30,7 +30,7 @@ describe('SettingsButton', () => {
         const { rendered, rerender } = renderWithProvider(<SettingsButton />);
         const button = rendered.container.querySelector('.settings_button');
         if (button) fireEvent.click(button);
-        await waitFor(() => screen.getByText('Component Settings'));
+        await waitFor(() => screen.getByText('Widget Settings'));
         screen.getByText('Text Sentiment'); // visible by default
         screen.getByText('Tonal Sentiment'); // visible by default
         rerender(<SettingsButton showTextSentiment={false} showTonalSentiment={false} />);

@@ -367,7 +367,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             </div>
                             <SettingsButton showSyncWatchlist showTonalSentiment={false} />
                             <Tooltip
-                                className="flex-shrink-0 ml-2"
                                 content={
                                     <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
                                         Schedule a new recording
@@ -380,7 +379,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                 yOffset={6}
                             >
                                 <Button
-                                    className="bg-blue-500 cursor-pointer flex items-center rounded-0.375 active:bg-blue-700 hover:bg-blue-600"
+                                    className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
+                                    kind="primary"
                                     onClick={toggleForm}
                                 >
                                     <Plus className="h-4 mb-0.5 text-white w-2.5" />
