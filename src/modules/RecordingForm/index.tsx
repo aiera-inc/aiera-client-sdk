@@ -398,7 +398,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
         if (step >= 4 && !state.onFailure) {
             disabled = true;
         }
-        if (step >= NUM_STEPS && !state.title) {
+        if (step >= NUM_STEPS && (!state.title || !hasChanges)) {
             disabled = true;
         }
         return disabled;
