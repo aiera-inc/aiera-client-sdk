@@ -1,26 +1,30 @@
 import React, { MouseEventHandler, ReactElement, useState, useCallback, useRef, Ref } from 'react';
-import { match } from 'ts-pattern';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
+import { match } from 'ts-pattern';
 
-import { ChangeHandler } from '@aiera/client-sdk/types';
-import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
-import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
-import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
+import { QueryResult } from '@aiera/client-sdk/api/client';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import { Plus } from '@aiera/client-sdk/components/Svg/Plus';
 import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
+import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
-import { QueryResult } from '@aiera/client-sdk/api/client';
+
 import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
 import { KeyMentions } from '../KeyMentions';
 import './styles.css';
-import { useConfig } from '@aiera/client-sdk/lib/config';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
+
 interface HeaderSharedProps {
     containerHeight: number;
     currentParagraphTimestamp?: string | null;
@@ -29,9 +33,10 @@ interface HeaderSharedProps {
     eventQuery: EventQuery;
     onBack?: MouseEventHandler;
     onBackHeader: string;
-    searchTerm?: string;
     onChangeSearchTerm?: ChangeHandler<string>;
+    onEdit?: MouseEventHandler;
     onSeekAudioByDate?: (date: string) => void;
+    searchTerm?: string;
     startTime?: string | null;
     useConfigOptions: boolean;
 }
@@ -62,6 +67,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         keyMentionsExpanded,
         onBack,
         onBackHeader,
+        onEdit,
         onChangeSearchTerm,
         onSeekAudioByDate,
         priceChartExpanded,
@@ -113,6 +119,28 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                         onChange={onChangeSearchTerm}
                     />
                     {!useConfigOptions && <SettingsButton showTonalSentiment={false} />}
+                    {!!onEdit && (
+                        <Tooltip
+                            content={
+                                <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                    Edit recording
+                                </div>
+                            }
+                            grow="down-left"
+                            hideOnDocumentScroll
+                            openOn="hover"
+                            position="bottom-right"
+                            yOffset={6}
+                        >
+                            <Button
+                                className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
+                                kind="primary"
+                                onClick={onEdit}
+                            >
+                                <Plus className="h-4 mb-0.5 text-white w-2.5" />
+                            </Button>
+                        </Tooltip>
+                    )}
                 </div>
             )}
             {showTitleInfo &&
@@ -251,18 +279,19 @@ export interface HeaderProps extends HeaderSharedProps {}
  */
 export function Header(props: HeaderProps): ReactElement {
     const {
-        useConfigOptions,
+        containerHeight,
+        currentParagraphTimestamp,
         endTime,
         eventId,
         eventQuery,
         onBack,
         onBackHeader,
-        searchTerm,
         onChangeSearchTerm,
+        onEdit,
         onSeekAudioByDate,
-        containerHeight,
-        currentParagraphTimestamp,
+        searchTerm,
         startTime,
+        useConfigOptions,
     } = props;
     const [headerExpanded, setHeaderState] = useState(false);
     const [priceChartExpanded, setPriceChartState] = useState(false);
@@ -302,11 +331,10 @@ export function Header(props: HeaderProps): ReactElement {
 
     return (
         <HeaderUI
-            useConfigOptions={useConfigOptions}
             containerHeight={containerHeight}
             currentParagraphTimestamp={currentParagraphTimestamp}
-            eventDetailsExpanded={eventDetailsExpanded}
             endTime={endTime}
+            eventDetailsExpanded={eventDetailsExpanded}
             eventId={eventId}
             eventQuery={eventQuery}
             headerExpanded={headerExpanded}
@@ -315,6 +343,7 @@ export function Header(props: HeaderProps): ReactElement {
             onBack={onBack}
             onBackHeader={onBackHeader}
             onChangeSearchTerm={onChangeSearchTerm}
+            onEdit={onEdit}
             onSeekAudioByDate={onSeekAudioByDate}
             priceChartExpanded={priceChartExpanded}
             searchTerm={searchTerm}
@@ -323,6 +352,7 @@ export function Header(props: HeaderProps): ReactElement {
             toggleHeader={toggleHeader}
             toggleKeyMentions={toggleKeyMentions}
             togglePriceChart={togglePriceChart}
+            useConfigOptions={useConfigOptions}
         />
     );
 }

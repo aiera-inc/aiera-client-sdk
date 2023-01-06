@@ -65,6 +65,7 @@ type Partial = { text: string; timestamp: number };
 interface TranscriptSharedProps {
     eventId?: string;
     onBack?: MouseEventHandler;
+    onEdit?: MouseEventHandler;
 }
 
 /** @notExported */
@@ -74,14 +75,14 @@ interface TranscriptUIProps extends TranscriptSharedProps {
     currentMatch?: string | null;
     currentMatchRef: Ref<HTMLDivElement>;
     currentParagraph?: string | null;
-    currentParagraphTimestamp?: string | null;
     currentParagraphRef: Ref<HTMLDivElement>;
+    currentParagraphTimestamp?: string | null;
     darkMode?: boolean;
     endTime?: string | null;
     eventId?: string;
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>;
-    matchIndex: number;
     matches: Chunk[];
+    matchIndex: number;
     nextMatch: () => void;
     onBack?: MouseEventHandler;
     onBackHeader: string;
@@ -126,6 +127,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         onBackHeader,
         onChangeSearchTerm,
         onClickTranscript,
+        onEdit,
         onSeekAudioByDate,
         partial,
         prevMatch,
@@ -159,6 +161,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 eventQuery={eventQuery}
                                 onBack={onBack}
                                 onBackHeader={onBackHeader}
+                                onEdit={onEdit}
                                 searchTerm={searchTerm}
                                 onChangeSearchTerm={onChangeSearchTerm}
                                 onSeekAudioByDate={onSeekAudioByDate}
@@ -918,6 +921,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         eventId: eventListEventId,
         onBack,
         onBackHeader = 'Events',
+        onEdit,
         initialSearchTerm,
         useConfigOptions = false,
     } = props;
@@ -1021,6 +1025,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             onBackHeader={onBackHeader}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
+            onEdit={onEdit}
             onSeekAudioByDate={onSeekAudioByDate}
             partial={partial}
             prevMatch={searchState.prevMatch}

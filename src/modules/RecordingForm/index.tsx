@@ -81,7 +81,7 @@ const NUM_STEPS = 5;
 
 interface RecordingFormSharedProps {
     onBack: MouseEventHandler;
-    privateRecordingId?: number;
+    privateRecordingId?: number | string;
 }
 
 type PrivateRecording = RecordingsQuery['privateRecordings'][0];

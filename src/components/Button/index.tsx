@@ -24,9 +24,9 @@ export function ButtonUI(props: ButtonUIProps): ReactElement {
             'primary',
             () =>
                 'bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white disabled:bg-blue-600 ' +
-                'dark:border-[1px] dark:bg-bluegray-6 dark:border-bluegray-5 dark:text-white ' +
-                'dark:hover:border-bluegray-4 dark:hover:border-opacity-20 disabled:dark:border-bluegray-5 ' +
-                'disabled:dark:border-opacity-100 dark:active:bg-bluegray-7'
+                'dark:text-white dark:active:bg-bluegray-7 dark:active:border-bluegray-4 dark:active:border-[1px] ' +
+                'dark:hover:border-bluegray-4 dark:hover:border-opacity-20 dark:active:border-opacity-20 ' +
+                'disabled:dark:border-bluegray-5 disabled:dark:border-opacity-100'
         )
         .with(
             'secondary',

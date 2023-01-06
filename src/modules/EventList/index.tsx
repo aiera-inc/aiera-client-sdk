@@ -18,7 +18,7 @@ import gql from 'graphql-tag';
 import { DateTime } from 'luxon';
 import { match } from 'ts-pattern';
 
-import { QueryResult, usePagingQuery } from '@aiera/client-sdk/api/client';
+import { QueryResult, usePagingQuery, useQuery } from '@aiera/client-sdk/api/client';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { Input } from '@aiera/client-sdk/components/Input';
@@ -48,7 +48,13 @@ import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { RecordingForm } from '@aiera/client-sdk/modules/RecordingForm';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
+import {
+    EventListCurrentUserQuery,
+    EventListQuery,
+    EventListQueryVariables,
+    EventType,
+    EventView,
+} from '@aiera/client-sdk/types/generated';
 import { InstrumentID } from '@aiera/client-sdk/web/embed';
 
 import { FilterBy } from './FilterBy';
@@ -66,6 +72,7 @@ interface FilterByTypeOption {
 }
 
 export type EventListEvent = EventListQuery['search']['events']['hits'][0]['event'];
+export type EventListEventCreator = EventListQuery['search']['events']['hits'][0]['event']['creator'];
 export type { CompanyFilterResult };
 
 export interface EventListUIProps {
@@ -93,13 +100,17 @@ export interface EventListUIProps {
     scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
+    showCompanyFilter: boolean;
     showForm: boolean;
+    showFormButton: boolean;
     toggleForm: MouseEventHandler;
     useConfigOptions: boolean;
+    userQuery: QueryResult<EventListCurrentUserQuery>;
     userStatusInactive: boolean;
 }
 
 interface EventRowProps {
+    customOnly: boolean;
     event: EventListEvent;
     index: number;
     isRefetching: boolean;
@@ -114,6 +125,7 @@ interface EventRowProps {
 }
 
 const EventRow = ({
+    customOnly,
     event,
     numMentions,
     maxHits = 0,
@@ -134,13 +146,32 @@ const EventRow = ({
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = DateTime.fromISO(event.eventDate);
     const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
+    let createdBy = '';
+    if (customOnly && event.creator) {
+        const creator: EventListEventCreator = event.creator;
+        if (creator.firstName) {
+            createdBy = creator.firstName;
+        }
+        if (creator.lastName) {
+            createdBy = `${createdBy} ${creator.lastName.slice(0, 1)}.`;
+        }
+        if (!createdBy) {
+            createdBy = creator.primaryEmail || creator.username;
+        }
+    }
     let divider = null;
     if (showDivider) {
         divider = (
             <li className={classNames('sticky px-3 top-[56px]')}>
                 <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
+                    {isToday(event.eventDate) && (
+                        <>
+                            <span className="text-black dark:text-white">Today</span>
+                            <span>,&nbsp;</span>
+                        </>
+                    )}
                     {eventDate.toFormat('DDDD')}
-                    <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
+                    <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5" />
                     {!renderedRefetch && (
                         <div
                             onClick={!isRefetching ? refetch : undefined}
@@ -234,7 +265,7 @@ const EventRow = ({
                             )}
                         </div>
                         <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
-                            {event.eventType.replace(/_/g, ' ')}
+                            {customOnly ? createdBy : event.eventType.replace(/_/g, ' ')}
                         </div>
                         {searchTerm && (
                             <div className="flex items-center mt-[2px]">
@@ -297,9 +328,12 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         scrollRef,
         searchTerm,
         setFocus,
+        showCompanyFilter,
         showForm,
+        showFormButton,
         toggleForm,
         useConfigOptions,
+        userQuery,
         userStatusInactive,
     } = props;
 
@@ -326,20 +360,27 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         );
     }
 
-    if (event) {
+    if (event && !showForm) {
         return (
             <Transcript
                 eventId={event.id}
                 initialSearchTerm={searchTerm}
                 onBackHeader={customOnly ? 'Back' : undefined}
                 onBack={onBackFromTranscript}
+                onEdit={
+                    event.creator &&
+                    userQuery.status === 'success' &&
+                    userQuery.data.currentUser.id === event.creator.id
+                        ? toggleForm
+                        : undefined
+                }
                 useConfigOptions={useConfigOptions}
             />
         );
     }
 
     if (showForm) {
-        return <RecordingForm onBack={toggleForm} />;
+        return <RecordingForm onBack={toggleForm} privateRecordingId={event?.id} />;
     }
 
     const config = useConfig();
@@ -362,30 +403,34 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     />
                     {!useConfigOptions && (
                         <>
-                            <div className="ml-2">
-                                <CompanyFilterButton onChange={onCompanyChange} value={company} />
-                            </div>
+                            {showCompanyFilter && (
+                                <div className="ml-2">
+                                    <CompanyFilterButton onChange={onCompanyChange} value={company} />
+                                </div>
+                            )}
                             <SettingsButton showSyncWatchlist showTonalSentiment={false} />
-                            <Tooltip
-                                content={
-                                    <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
-                                        Schedule a new recording
-                                    </div>
-                                }
-                                grow="down-left"
-                                hideOnDocumentScroll
-                                openOn="hover"
-                                position="bottom-right"
-                                yOffset={6}
-                            >
-                                <Button
-                                    className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
-                                    kind="primary"
-                                    onClick={toggleForm}
+                            {showFormButton && (
+                                <Tooltip
+                                    content={
+                                        <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                            Schedule a new recording
+                                        </div>
+                                    }
+                                    grow="down-left"
+                                    hideOnDocumentScroll
+                                    openOn="hover"
+                                    position="bottom-right"
+                                    yOffset={6}
                                 >
-                                    <Plus className="h-4 mb-0.5 text-white w-2.5" />
-                                </Button>
-                            </Tooltip>
+                                    <Button
+                                        className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
+                                        kind="primary"
+                                        onClick={toggleForm}
+                                    >
+                                        <Plus className="h-4 mb-0.5 text-white w-2.5" />
+                                    </Button>
+                                </Tooltip>
+                            )}
                         </>
                     )}
                 </div>
@@ -463,18 +508,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         }
                                                         return (
                                                             <EventRow
-                                                                key={`${hit.event.id}-${index}`}
+                                                                customOnly={customOnly}
                                                                 event={hit.event}
-                                                                numMentions={hit.numMentions}
                                                                 index={index}
                                                                 isRefetching={isUpcomingRefetching}
+                                                                key={`${hit.event.id}-${index}`}
                                                                 maxHits={maxHits}
-                                                                showDivider={showDivider}
+                                                                numMentions={hit.numMentions}
+                                                                onSelectEvent={onSelectEvent}
                                                                 refetch={refetch}
                                                                 renderedRefetch={index !== 0}
                                                                 searchTerm={searchTerm}
                                                                 setFocus={setFocus}
-                                                                onSelectEvent={onSelectEvent}
+                                                                showDivider={showDivider}
                                                             />
                                                         );
                                                     })
@@ -495,18 +541,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         }
                                         return (
                                             <EventRow
-                                                key={`${hit.event.id}-${index}`}
+                                                customOnly={customOnly}
                                                 event={hit.event}
-                                                numMentions={hit.numMentions}
                                                 index={index}
                                                 isRefetching={isRefetching}
+                                                key={`${hit.event.id}-${index}`}
                                                 maxHits={maxHits}
-                                                showDivider={showDivider}
+                                                numMentions={hit.numMentions}
+                                                onSelectEvent={onSelectEvent}
                                                 refetch={refetch}
                                                 renderedRefetch={renderedRefetch}
                                                 searchTerm={searchTerm}
                                                 setFocus={setFocus}
-                                                onSelectEvent={onSelectEvent}
+                                                showDivider={showDivider}
                                             />
                                         );
                                     })}
@@ -690,12 +737,19 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
                         numMentions
                         event {
                             id
-                            title
+                            audioRecordingUrl
+                            audioRecordingOffsetMs
                             eventDate
                             eventType
                             isLive
-                            audioRecordingUrl
-                            audioRecordingOffsetMs
+                            title
+                            creator {
+                                id
+                                firstName
+                                lastName
+                                primaryEmail
+                                username
+                            }
                             primaryCompany {
                                 id
                                 commonName
@@ -776,6 +830,17 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
                     : undefined,
             },
         },
+    });
+
+    const userQuery = useQuery<EventListCurrentUserQuery>({
+        requestPolicy: 'cache-only',
+        query: gql`
+            query EventListCurrentUser {
+                currentUser {
+                    id
+                }
+            }
+        `,
     });
 
     const filterByTypeOptions: FilterByTypeOption[] = useMemo(() => {
@@ -901,7 +966,11 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             scrollRef={scrollRef}
             searchTerm={state.searchTerm}
             setFocus={setFocus}
+            showCompanyFilter={
+                config.options?.showCompanyFilter === undefined ? true : config.options?.showCompanyFilter
+            }
             showForm={state.showForm}
+            showFormButton={!!config.options?.showScheduleRecording}
             toggleForm={useCallback(
                 (event: SyntheticEvent<Element, Event>) => {
                     onSelectEvent(event, { value: null });
@@ -910,6 +979,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
                 [onSelectEvent, state.showForm]
             )}
             useConfigOptions={useConfigOptions}
+            userQuery={userQuery}
             userStatusInactive={state.userStatusInactive}
         />
     );
