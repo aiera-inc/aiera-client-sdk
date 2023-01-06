@@ -9,7 +9,7 @@ import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import { Plus } from '@aiera/client-sdk/components/Svg/Plus';
+import { Pencil } from '@aiera/client-sdk/components/Svg/Pencil';
 import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { useConfig } from '@aiera/client-sdk/lib/config';
@@ -137,7 +137,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                 kind="primary"
                                 onClick={onEdit}
                             >
-                                <Plus className="h-4 mb-0.5 text-white w-2.5" />
+                                <Pencil className="w-6 h-6 text-white w-2.5" />
                             </Button>
                         </Tooltip>
                     )}
