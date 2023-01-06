@@ -14,7 +14,7 @@ describe('RecordingForm', () => {
 
     test('handles back button', () => {
         renderWithProvider(<RecordingForm onBack={onBack} />);
-        const backButton = screen.getByText('Back to list');
+        const backButton = screen.getByText('Back');
         userEvent.click(backButton);
         expect(onBack).toHaveBeenCalled();
     });
@@ -203,7 +203,7 @@ describe('RecordingForm', () => {
         confirmSpy.mockImplementation(jest.fn(() => true));
         renderWithProvider(<RecordingForm onBack={onBack} />);
         await waitFor(() => userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label)));
-        const backButton = screen.getByText('Back to list');
+        const backButton = screen.getByText('Back');
         userEvent.click(backButton);
         expect(onBack).toHaveBeenCalled();
         confirmSpy.mockReset();
@@ -215,7 +215,7 @@ describe('RecordingForm', () => {
         confirmSpy.mockImplementation(jest.fn(() => false));
         renderWithProvider(<RecordingForm onBack={onBack} />);
         await waitFor(() => userEvent.click(screen.getByText(CONNECTION_TYPE_OPTION_ZOOM.label)));
-        const backButton = screen.getByText('Back to list');
+        const backButton = screen.getByText('Back');
         userEvent.click(backButton);
         expect(onBack).not.toHaveBeenCalled();
         confirmSpy.mockReset();

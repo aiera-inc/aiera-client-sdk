@@ -973,10 +973,9 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             showFormButton={!!config.options?.showScheduleRecording}
             toggleForm={useCallback(
                 (event: SyntheticEvent<Element, Event>) => {
-                    onSelectEvent(event, { value: null });
                     handlers.showForm(event, { value: !state.showForm });
                 },
-                [onSelectEvent, state.showForm]
+                [state.showForm]
             )}
             useConfigOptions={useConfigOptions}
             userQuery={userQuery}

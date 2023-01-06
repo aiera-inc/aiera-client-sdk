@@ -96,6 +96,7 @@ interface RecordingFormUIProps extends RecordingFormSharedProps {
     connectPhoneNumber: string;
     connectPin: string;
     connectUrl: string;
+    editing: boolean;
     errorHints?: { [key: string]: string[] };
     errors: InputErrorState;
     hasAieraInterventionPermission: boolean;
@@ -137,6 +138,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
         connectPhoneNumber,
         connectPin,
         connectUrl,
+        editing,
         errorHints,
         errors,
         hasAieraInterventionPermission,
@@ -174,7 +176,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                 <div className="flex items-center mb-3">
                     <Button className="mr-2" onClick={onBack}>
                         <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-                        Back to list
+                        Back
                     </Button>
                     <p className="ml-auto text-gray-400 text-sm">
                         Step {step} of {NUM_STEPS}
@@ -309,7 +311,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                                             .with(2, () => 'Scheduling')
                                             .with(3, () => 'Troubleshooting')
                                             .with(4, () => 'Recording Details')
-                                            .with(5, () => 'Create Recording')
+                                            .with(5, () => `${editing ? 'Update' : 'Create'} Recording`)
                                             .otherwise(() => null)}
                                     </span>
                                     <ArrowLeft className="fill-current ml-2 relative rotate-180 text-white w-3.5 z-1 group-active:fill-current group-active:text-white" />
@@ -504,6 +506,27 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                     onFailureDialNumber
                     onFailureInstructions
                     onFailureSmsNumber
+                    primaryCompany {
+                        id
+                        commonName
+                        instruments {
+                            id
+                            isPrimary
+                            quotes {
+                                id
+                                exchange {
+                                    id
+                                    country {
+                                        id
+                                        countryCode
+                                    }
+                                    shortName
+                                }
+                                isPrimary
+                                localTicker
+                            }
+                        }
+                    }
                     scheduledFor
                     smsAlertBeforeCall
                     title
@@ -536,9 +559,10 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 if (onFailureSmsNumber) {
                     onFailure = OnFailure.ManualInterventionSms;
                 }
-            }
-            if (onFailureProp === PrOnFailure.AieraIntervention) {
+            } else if (onFailureProp === PrOnFailure.AieraIntervention) {
                 onFailure = OnFailure.AieraIntervention;
+            } else {
+                onFailure = OnFailure.None;
             }
             // Map scheduledFor to state
             const scheduleDate = scheduledFor ? new Date(scheduledFor) : new Date();
@@ -581,14 +605,16 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 scheduleMeridiem,
                 scheduleTime,
                 scheduleType,
-                // selectedCompany: TODO
+                selectedCompany: privateRecording?.primaryCompany
+                    ? (privateRecording.primaryCompany as CompanyFilterResult)
+                    : undefined,
                 smsAlertBeforeCall: privateRecording?.smsAlertBeforeCall || false,
                 title: privateRecording?.title || '',
                 useOnConnectDialNumber: [onFailureDialNumber, onFailureSmsNumber].includes(onConnectDialNumber),
                 zoomMeetingType: connectUrl.length ? ZoomMeetingType.Web : ZoomMeetingType.Phone,
             });
         }
-    }, [mergeState, recordingsQuery]);
+    }, [mergeState, privateRecordingId, recordingsQuery]);
 
     /**
      * Mutations
@@ -653,6 +679,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             connectPhoneNumber={state.connectPhoneNumber}
             connectPin={state.connectPin}
             connectUrl={state.connectUrl}
+            editing={!!privateRecordingId}
             errorHints={errorHints}
             errors={errors}
             hasAieraInterventionPermission={state.hasAieraInterventionPermission}
