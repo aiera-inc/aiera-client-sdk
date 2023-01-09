@@ -164,13 +164,7 @@ const EventRow = ({
         divider = (
             <li className={classNames('sticky px-3 top-[56px]')}>
                 <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
-                    {isToday(event.eventDate) && (
-                        <>
-                            <span className="text-black dark:text-white">Today</span>
-                            <span>,&nbsp;</span>
-                        </>
-                    )}
-                    {eventDate.toFormat('DDDD')}
+                    {isToday(event.eventDate) ? `Today, ${eventDate.toFormat('DDD')}` : eventDate.toFormat('DDDD')}
                     <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5" />
                     {!renderedRefetch && (
                         <div
@@ -232,10 +226,12 @@ const EventRow = ({
                         <div className="flex items-center justify-center w-8 h-8">
                             <PlayButton
                                 metaData={{
-                                    quote: primaryQuote,
-                                    eventType: event.eventType,
+                                    createdBy,
                                     eventDate: eventDate ? eventDate.toISO() : undefined,
+                                    eventType: event.eventType,
                                     localTicker: primaryQuote?.localTicker,
+                                    quote: primaryQuote,
+                                    title: event.title,
                                 }}
                                 id={event.id}
                                 url={

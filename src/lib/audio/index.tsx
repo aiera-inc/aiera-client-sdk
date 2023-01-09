@@ -4,10 +4,12 @@ import { EventType, Quote } from '@aiera/client-sdk/types/generated';
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
 
 export interface EventMetaData {
-    quote?: Maybe<DeepPartial<Quote>>;
-    eventType?: EventType;
+    createdBy?: string;
     eventDate?: string;
+    eventType?: EventType;
     localTicker?: string;
+    quote?: Maybe<DeepPartial<Quote>>;
+    title?: string;
 }
 
 export class AudioPlayer {
@@ -54,12 +56,12 @@ export class AudioPlayer {
         this.audio.addEventListener('timeupdate', this.adjustPlayback);
     }
 
-    // The dash player automatically overwrits the playback rate on each tick
+    // The dash player automatically overwrites the playback rate on each tick
     // when liveCatchup is on so we need toi adjust those settings as the current time
     // changes.
     //
     // If we are > threshold seconds back from the live edge, turn catchup mode
-    // off so we can set a cusotm playback rate.
+    // off so we can set a custom playback rate.
     // If we are within threshold seconds of the live edge, turn liveCatchup back on
     // and let dashjs control the playback speed.
     adjustPlayback = (): void => {
