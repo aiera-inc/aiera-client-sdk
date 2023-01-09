@@ -31,6 +31,7 @@ import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { EventListFilter, EventListView, useConfig } from '@aiera/client-sdk/lib/config';
 import {
+    getEventCreatorName,
     getPrimaryQuote,
     useAlertList,
     useAutoTrack,
@@ -54,6 +55,7 @@ import {
     EventListQueryVariables,
     EventType,
     EventView,
+    User,
 } from '@aiera/client-sdk/types/generated';
 import { InstrumentID } from '@aiera/client-sdk/web/embed';
 
@@ -72,7 +74,6 @@ interface FilterByTypeOption {
 }
 
 export type EventListEvent = EventListQuery['search']['events']['hits'][0]['event'];
-export type EventListEventCreator = EventListQuery['search']['events']['hits'][0]['event']['creator'];
 export type { CompanyFilterResult };
 
 export interface EventListUIProps {
@@ -146,19 +147,7 @@ const EventRow = ({
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = DateTime.fromISO(event.eventDate);
     const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
-    let createdBy = '';
-    if (customOnly && event.creator) {
-        const creator: EventListEventCreator = event.creator;
-        if (creator.firstName) {
-            createdBy = creator.firstName;
-        }
-        if (creator.lastName) {
-            createdBy = `${createdBy} ${creator.lastName.slice(0, 1)}.`;
-        }
-        if (!createdBy) {
-            createdBy = creator.primaryEmail || creator.username;
-        }
-    }
+    const createdBy = getEventCreatorName(event.creator as User);
     let divider = null;
     if (showDivider) {
         divider = (

@@ -14,10 +14,23 @@ import React, {
 } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
-import { match } from 'ts-pattern';
-import { DateTime } from 'luxon';
 import { findAll } from 'highlight-words-core';
+import { DateTime } from 'luxon';
+import { match } from 'ts-pattern';
 
+import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { Playbar } from '@aiera/client-sdk/components/Playbar';
+import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
+import { Close } from '@aiera/client-sdk/components/Svg/Close';
+import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { getEventCreatorName, getPrimaryQuote, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
+import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
+import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
+import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
+import { hash } from '@aiera/client-sdk/lib/strings';
 import {
     BasicTextualSentiment,
     EventUpdatesQuery,
@@ -28,24 +41,12 @@ import {
     LatestParagraphsQueryVariables,
     TranscriptQuery,
     TranscriptQueryVariables,
+    User,
 } from '@aiera/client-sdk/types/generated';
-import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
-import { hash } from '@aiera/client-sdk/lib/strings';
-import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
-import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
-import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
-import { useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
-import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
-import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
-import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
-import { Close } from '@aiera/client-sdk/components/Svg/Close';
-import { Playbar } from '@aiera/client-sdk/components/Playbar';
+
 import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
 import './styles.css';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 
 type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
 type Paragraph = SpeakerTurn['paragraphs'][0];
@@ -332,23 +333,24 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             {match(eventQuery)
                 .with({ status: 'success' }, { status: 'empty' }, ({ data: { events } }) => {
                     const event = events[0];
-                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
                     return (
                         (event?.audioRecordingUrl || event?.isLive) && (
                             <Playbar
-                                hidePlayer={!showPlayer}
                                 hideEventDetails={useConfigOptions}
+                                hidePlayer={!showPlayer}
                                 id={event?.id}
+                                metaData={{
+                                    createdBy: getEventCreatorName(event?.creator as User),
+                                    eventType: event?.eventType,
+                                    quote: getPrimaryQuote(event?.primaryCompany),
+                                    title: event?.title,
+                                }}
+                                offset={(event?.audioRecordingOffsetMs || 0) / 1000}
                                 url={
                                     event.isLive
                                         ? `https://storage.media.aiera.com/${event.id}`
                                         : event.audioRecordingUrl || ''
                                 }
-                                offset={(event?.audioRecordingOffsetMs || 0) / 1000}
-                                metaData={{
-                                    quote: primaryQuote,
-                                    eventType: event?.eventType,
-                                }}
                             />
                         )
                     );
@@ -364,15 +366,22 @@ function useEventUpdates(eventId = '') {
             query EventUpdates($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
                     id
+                    audioRecordingOffsetMs
+                    audioRecordingUrl
+                    connectionStatus
+                    creator {
+                        id
+                        firstName
+                        lastName
+                        primaryEmail
+                        username
+                    }
                     eventDate
                     hasConnectionDetails
-                    isLive
-                    audioRecordingUrl
-                    audioRecordingOffsetMs
-                    publishedTranscriptExpected
-                    hasTranscript
                     hasPublishedTranscript
-                    connectionStatus
+                    hasTranscript
+                    isLive
+                    publishedTranscriptExpected
                 }
             }
         `,
@@ -422,20 +431,24 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
             query Transcript($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
                     id
-                    title
+                    audioRecordingUrl
+                    audioRecordingOffsetMs
+                    connectionStatus
+                    creator {
+                        id
+                        firstName
+                        lastName
+                        primaryEmail
+                        username
+                    }
+                    dialInPhoneNumbers
+                    dialInPin
                     eventDate
                     eventType
                     hasConnectionDetails
-                    isLive
-                    audioRecordingUrl
-                    audioRecordingOffsetMs
-                    publishedTranscriptExpected
-                    hasTranscript
                     hasPublishedTranscript
-                    webcastUrls
-                    dialInPhoneNumbers
-                    dialInPin
-                    connectionStatus
+                    hasTranscript
+                    isLive
                     primaryCompany {
                         id
                         commonName
@@ -444,19 +457,20 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                             isPrimary
                             quotes {
                                 id
-                                isPrimary
-                                localTicker
                                 exchange {
                                     id
-                                    shortName
                                     country {
                                         id
                                         countryCode
                                     }
+                                    shortName
                                 }
+                                isPrimary
+                                localTicker
                             }
                         }
                     }
+                    publishedTranscriptExpected
                     quotePrices {
                         currentDayClosePrice
                         currentDayOpenPrice
@@ -464,60 +478,62 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                         previousDayClosePrice
                         quote {
                             id
-                            localTicker
                             exchange {
                                 id
                                 shortName
                             }
+                            localTicker
                         }
                         realtimePrices {
                             id
                             date
                             price
-                            volume
-                            priceChangeFromStartValue
                             priceChangeFromStartPercent
-                            volumeChangeFromStartValue
-                            volumeChangeFromStartPercent
-                            volumeChangeFromLastValue
+                            priceChangeFromStartValue
+                            volume
                             volumeChangeFromLastPercent
+                            volumeChangeFromLastValue
+                            volumeChangeFromStartPercent
+                            volumeChangeFromStartValue
                         }
                         startPrice
                     }
+                    title
                     transcripts {
                         id
                         sections {
                             id
                             speakerTurns {
                                 id
-                                speaker {
-                                    id
-                                    name
-                                    title
-                                    identified
-                                }
                                 paragraphs {
                                     id
-                                    timestamp
                                     displayTimestamp
-                                    syncTimestamp
-                                    syncMs
                                     sentences {
                                         id
-                                        text
                                         sentiment {
                                             id
                                             textual {
                                                 id
-                                                overThreshold
                                                 basicSentiment
+                                                overThreshold
                                             }
                                         }
+                                        text
                                     }
+                                    syncMs
+                                    syncTimestamp
+                                    timestamp
+                                }
+                                speaker {
+                                    id
+                                    identified
+                                    name
+                                    title
                                 }
                             }
                         }
                     }
+                    webcastUrls
                 }
             }
         `,
