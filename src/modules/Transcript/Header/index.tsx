@@ -19,6 +19,7 @@ import { PriceChart } from '../PriceChart';
 import { KeyMentions } from '../KeyMentions';
 import './styles.css';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { Summary } from '../Summary';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 interface HeaderSharedProps {
@@ -46,6 +47,8 @@ interface HeaderUIProps extends HeaderSharedProps {
     togglePriceChart: () => void;
     keyMentionsExpanded: boolean;
     toggleKeyMentions: () => void;
+    toggleSummary: () => void;
+    summaryExpanded: boolean;
 }
 
 export function HeaderUI(props: HeaderUIProps): ReactElement {
@@ -68,8 +71,10 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         toggleHeader,
         toggleKeyMentions,
         togglePriceChart,
+        toggleSummary,
         useConfigOptions,
         startTime,
+        summaryExpanded,
     } = props;
 
     const config = useConfig();
@@ -221,6 +226,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         keyMentionsExpanded={keyMentionsExpanded}
                                     />
                                 )}
+                                {headerExpanded && (
+                                    <Summary toggleSummary={toggleSummary} summaryExpanded={summaryExpanded} />
+                                )}
                                 {showPriceReaction && (
                                     <PriceChart
                                         currentParagraphTimestamp={currentParagraphTimestamp}
@@ -265,23 +273,34 @@ export function Header(props: HeaderProps): ReactElement {
     const [priceChartExpanded, setPriceChartState] = useState(false);
     const [eventDetailsExpanded, setEventDetailsState] = useState(false);
     const [keyMentionsExpanded, setKeyMentionsState] = useState(false);
+    const [summaryExpanded, setSummaryState] = useState(false);
 
     const toggleHeader = useCallback(() => setHeaderState(!headerExpanded), [headerExpanded]);
 
     const toggleKeyMentions = useCallback(() => {
         setKeyMentionsState(!keyMentionsExpanded);
+        setSummaryState(false);
         setPriceChartState(false);
         setEventDetailsState(false);
     }, [keyMentionsExpanded]);
 
+    const toggleSummary = useCallback(() => {
+        setSummaryState(!summaryExpanded);
+        setKeyMentionsState(false);
+        setPriceChartState(false);
+        setEventDetailsState(false);
+    }, [summaryExpanded]);
+
     const toggleEventDetails = useCallback(() => {
         setEventDetailsState(!eventDetailsExpanded);
+        setSummaryState(false);
         setPriceChartState(false);
         setKeyMentionsState(false);
     }, [eventDetailsExpanded]);
 
     const togglePriceChart = useCallback(() => {
         setPriceChartState(!priceChartExpanded);
+        setSummaryState(false);
         setEventDetailsState(false);
         setKeyMentionsState(false);
     }, [priceChartExpanded]);
@@ -319,6 +338,8 @@ export function Header(props: HeaderProps): ReactElement {
             toggleHeader={toggleHeader}
             toggleKeyMentions={toggleKeyMentions}
             togglePriceChart={togglePriceChart}
+            toggleSummary={toggleSummary}
+            summaryExpanded={summaryExpanded}
         />
     );
 }
