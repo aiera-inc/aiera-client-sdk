@@ -46,7 +46,7 @@ export function FormFieldSelect<T>(props: FormFieldSelectProps<T>): ReactElement
                             <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm">{option.description}</p>
                         )}
                     </div>
-                    <Checkbox checked={value === option.value} className="ml-auto flex-shrink-0" />
+                    <Checkbox checked={value === option.value} className="ml-auto flex-shrink-0" kind="radio" />
                 </div>
             ))}
         </FormField>

@@ -28,4 +28,14 @@ describe('Checkbox', () => {
         renderWithProvider(<Checkbox checked label="Test 123" onChange={onChange} />);
         screen.getByText('Test 123');
     });
+
+    test('when kind is checkbox, renders checkbox border style', () => {
+        const { rendered } = renderWithProvider(<Checkbox checked label="Test 123" onChange={onChange} />);
+        expect(rendered.container.getElementsByClassName('rounded-sm').length).toBe(1);
+    });
+
+    test('when kind is radio, renders radio border style', () => {
+        const { rendered } = renderWithProvider(<Checkbox checked kind="radio" label="Test 123" onChange={onChange} />);
+        expect(rendered.container.getElementsByClassName('rounded-xl').length).toBe(1);
+    });
 });

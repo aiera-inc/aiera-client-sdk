@@ -350,7 +350,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
             <Transcript
                 eventId={event.id}
                 initialSearchTerm={searchTerm}
-                onBackHeader={customOnly ? 'Back' : undefined}
+                onBackHeader={customOnly ? 'Back to list' : undefined}
                 onBack={onBackFromTranscript}
                 onEdit={
                     event.creator &&

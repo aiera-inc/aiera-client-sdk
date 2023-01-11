@@ -1,6 +1,6 @@
-.company-select__results-container {
+.recording-details .company-select__results-container {
     margin-top: 8px;
 }
-.company-select__search-container {
+.recording-details .company-select__search-container {
     padding: 0 !important; /* remove padding around input */
 }
