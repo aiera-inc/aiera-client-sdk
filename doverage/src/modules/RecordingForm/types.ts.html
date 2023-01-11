@@ -291,11 +291,35 @@
 <a name='L226'></a><a href='#L226'>226</a>
 <a name='L227'></a><a href='#L227'>227</a>
 <a name='L228'></a><a href='#L228'>228</a>
-<a name='L229'></a><a href='#L229'>229</a>
-<a name='L230'></a><a href='#L230'>230</a>
-<a name='L231'></a><a href='#L231'>231</a>
-<a name='L232'></a><a href='#L232'>232</a>
-<a name='L233'></a><a href='#L233'>233</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L229'></a><a href='#L229'>229</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -357,38 +381,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -534,6 +526,34 @@
 import { SyntheticEvent } from 'react';
 import { CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
 import { ValueOf } from '@aiera/client-sdk/types';
+import { PrConnectionType as ConnectionType } from '@aiera/client-sdk/types/generated';
+&nbsp;
+/**
+ * Enums
+ */
+export { ConnectionType };
+export enum OnFailure {
+    AieraIntervention = 'aiera_intervention',
+    ManualInterventionCall = 'manual_intervention_call',
+    ManualInterventionSms = 'manual_intervention_sms',
+    None = 'none',
+}
+export enum ParticipationType {
+    NotParticipating = 'not_participating',
+    Participating = 'participating',
+}
+export enum ScheduleMeridiem {
+    AM = 'AM',
+    PM = 'PM',
+}
+export enum ScheduleType {
+    Now = 'now',
+    Future = 'future',
+}
+export enum ZoomMeetingType {
+    Phone = 'phone',
+    Web = 'web',
+}
 &nbsp;
 /**
  * Interfaces
@@ -545,7 +565,6 @@ export interface InputTouchedState {
     [key: string]: boolean;
 }
 export interface RecordingFormState {
-    confirmPermission: boolean;
     connectAccessId: string;
     connectCallerId: string;
     connectionType?: ConnectionType;
@@ -555,6 +574,7 @@ export interface RecordingFormState {
     connectUrl: string;
     hasAieraInterventionPermission: boolean;
     meetingType: string;
+    onCompleteEmailCreator: boolean;
     onConnectDialNumber: string;
     onFailure?: OnFailure;
     onFailureDialNumber: string;
@@ -591,38 +611,6 @@ export const AIERA_INTERVENTION_START_TIME = '8:00 AM';
 export const AIERA_INTERVENTION_END_TIME = '5:30 PM';
 &nbsp;
 /**
- * Enums
- */
-export enum ConnectionType {
-    GoogleMeet = 'google_meet',
-    PhoneNumber = 'phone',
-    Webcast = 'webcast',
-    Zoom = 'zoom',
-}
-export enum OnFailure {
-    AieraIntervention = 'aiera_intervention',
-    ManualInterventionCall = 'manual_intervention_call',
-    ManualInterventionSms = 'manual_intervention_sms',
-    None = 'none',
-}
-export enum ParticipationType {
-    NotParticipating = 'not_participating',
-    Participating = 'participating',
-}
-export enum ScheduleMeridiem {
-    AM = 'AM',
-    PM = 'PM',
-}
-export enum ScheduleType {
-    Now = 'now',
-    Future = 'future',
-}
-export enum ZoomMeetingType {
-    Phone = 'phone',
-    Web = 'web',
-}
-&nbsp;
-/**
  * ConnectionType sub-module
  */
 export const CONNECTION_TYPE_OPTION_GOOGLE = {
@@ -632,7 +620,7 @@ export const CONNECTION_TYPE_OPTION_GOOGLE = {
 };
 export const CONNECTION_TYPE_OPTION_PHONE = {
     label: 'Phone Number',
-    value: ConnectionType.PhoneNumber,
+    value: ConnectionType.Phone,
     description: 'Connect to any phone number, with optional pin',
 };
 export const CONNECTION_TYPE_OPTION_WEBCAST = {
@@ -766,7 +754,7 @@ export const TROUBLESHOOTING_TYPE_INTERVENTION_OPTIONS = [
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Jan 05 2023 11:36:12 GMT-0500 (Eastern Standard Time)
+                at Wed Jan 11 2023 13:32:37 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

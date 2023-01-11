@@ -17,8 +17,21 @@
         <script src="../embed.js"></script>
         <iframe id="aiera"></iframe>
         <script>
-            const recordingList = new Aiera.Module('../modules/RecordingList/index.html', 'aiera');
-            recordingList.load();
+            const recordingList = new Aiera.Module('../modules/EventList/index.html', 'aiera');
+            recordingList.load().then(() => {
+                recordingList.authenticateApiKey('2f9fdce669928c0317613d734f5a85f7');
+            });
+            recordingList.on('authenticated', () => {
+                recordingList.configure({
+                    options: {
+                        customOnly: true,
+                        eventListFilters: ['transcripts'],
+                        eventListView: 'combined',
+                        showCompanyFilter: true,
+                        showScheduleRecording: true,
+                    },
+                });
+            });
         </script>
     </body>
 </html>

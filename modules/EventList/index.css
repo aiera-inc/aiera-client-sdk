@@ -19,10 +19,6 @@
   padding-right: 0px;
 }
 
-/* src/modules/Transcript/EmptyMessage/styles.css */
-
-/* src/components/ExpandButton/styles.css */
-
 /* src/components/Toggle/styles.css */
 :root {
   --toggle-border: 3px;
@@ -103,6 +99,423 @@
 
 /* src/components/SettingsButton/styles.css */
 
+/* src/components/Tabs/styles.css */
+
+/* src/components/TimeAgo/styles.css */
+
+/* src/components/Checkbox/styles.css */
+
+/* src/components/FormField/styles.css */
+
+/* src/modules/RecordingForm/ConnectionType/styles.css */
+
+/* node_modules/react-phone-number-input/style.css */
+:root {
+  --PhoneInput-color--focus: #03b2cb;
+  --PhoneInputInternationalIconPhone-opacity: 0.8;
+  --PhoneInputInternationalIconGlobe-opacity: 0.65;
+  --PhoneInputCountrySelect-marginRight: 0.35em;
+  --PhoneInputCountrySelectArrow-width: 0.3em;
+  --PhoneInputCountrySelectArrow-marginLeft: var(--PhoneInputCountrySelect-marginRight);
+  --PhoneInputCountrySelectArrow-borderWidth: 1px;
+  --PhoneInputCountrySelectArrow-opacity: 0.45;
+  --PhoneInputCountrySelectArrow-color: currentColor;
+  --PhoneInputCountrySelectArrow-color--focus: var(--PhoneInput-color--focus);
+  --PhoneInputCountrySelectArrow-transform: rotate(45deg);
+  --PhoneInputCountryFlag-aspectRatio: 1.5;
+  --PhoneInputCountryFlag-height: 1em;
+  --PhoneInputCountryFlag-borderWidth: 1px;
+  --PhoneInputCountryFlag-borderColor: rgba(0,0,0,0.5);
+  --PhoneInputCountryFlag-borderColor--focus: var(--PhoneInput-color--focus);
+  --PhoneInputCountryFlag-backgroundColor--loading: rgba(0,0,0,0.1);
+}
+.PhoneInput {
+  display: flex;
+  align-items: center;
+}
+.PhoneInputInput {
+  flex: 1;
+  min-width: 0;
+}
+.PhoneInputCountryIcon {
+  width: calc(var(--PhoneInputCountryFlag-height) * var(--PhoneInputCountryFlag-aspectRatio));
+  height: var(--PhoneInputCountryFlag-height);
+}
+.PhoneInputCountryIcon--square {
+  width: var(--PhoneInputCountryFlag-height);
+}
+.PhoneInputCountryIcon--border {
+  background-color: var(--PhoneInputCountryFlag-backgroundColor--loading);
+  box-shadow: 0 0 0 var(--PhoneInputCountryFlag-borderWidth) var(--PhoneInputCountryFlag-borderColor), inset 0 0 0 var(--PhoneInputCountryFlag-borderWidth) var(--PhoneInputCountryFlag-borderColor);
+}
+.PhoneInputCountryIconImg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.PhoneInputInternationalIconPhone {
+  opacity: var(--PhoneInputInternationalIconPhone-opacity);
+}
+.PhoneInputInternationalIconGlobe {
+  opacity: var(--PhoneInputInternationalIconGlobe-opacity);
+}
+.PhoneInputCountry {
+  position: relative;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  margin-right: var(--PhoneInputCountrySelect-marginRight);
+}
+.PhoneInputCountrySelect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: 1;
+  border: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+.PhoneInputCountrySelect[disabled],
+.PhoneInputCountrySelect[readonly] {
+  cursor: default;
+}
+.PhoneInputCountrySelectArrow {
+  display: block;
+  content: "";
+  width: var(--PhoneInputCountrySelectArrow-width);
+  height: var(--PhoneInputCountrySelectArrow-width);
+  margin-left: var(--PhoneInputCountrySelectArrow-marginLeft);
+  border-style: solid;
+  border-color: var(--PhoneInputCountrySelectArrow-color);
+  border-top-width: 0;
+  border-bottom-width: var(--PhoneInputCountrySelectArrow-borderWidth);
+  border-left-width: 0;
+  border-right-width: var(--PhoneInputCountrySelectArrow-borderWidth);
+  transform: var(--PhoneInputCountrySelectArrow-transform);
+  opacity: var(--PhoneInputCountrySelectArrow-opacity);
+}
+.PhoneInputCountrySelect:focus + .PhoneInputCountryIcon + .PhoneInputCountrySelectArrow {
+  opacity: 1;
+  color: var(--PhoneInputCountrySelectArrow-color--focus);
+}
+.PhoneInputCountrySelect:focus + .PhoneInputCountryIcon--border {
+  box-shadow: 0 0 0 var(--PhoneInputCountryFlag-borderWidth) var(--PhoneInputCountryFlag-borderColor--focus), inset 0 0 0 var(--PhoneInputCountryFlag-borderWidth) var(--PhoneInputCountryFlag-borderColor--focus);
+}
+.PhoneInputCountrySelect:focus + .PhoneInputCountryIcon .PhoneInputInternationalIconGlobe {
+  opacity: 1;
+  color: var(--PhoneInputCountrySelectArrow-color--focus);
+}
+
+/* src/components/PhoneNumberInput/styles.css */
+input.PhoneInputInput {
+  border-radius: 0.5rem;
+  border-width: 1px;
+  border-color: #E5E7EB;
+  font-size: 0.75rem;
+  height: 30px;
+  line-height: 1.25rem;
+  padding-left: 0.75rem;
+  width: 100%;
+}
+input.PhoneInputInput:focus {
+  border-color: rgb(37 99 235);
+  box-shadow:
+    0 0 #0000,
+    0 0 #0000,
+    inset 0 0 0 1px #2463eb;
+  font-size: 0.75rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+input.PhoneInputInput:hover:not(:focus) {
+  border-color: #60A5FA;
+}
+input.PhoneInputInput::-moz-placeholder {
+  font-size: 0.75rem;
+  padding-bottom: 5px;
+}
+input.PhoneInputInput:-ms-input-placeholder {
+  font-size: 0.75rem;
+  padding-bottom: 5px;
+}
+input.PhoneInputInput::placeholder {
+  font-size: 0.75rem;
+  padding-bottom: 5px;
+}
+.PhoneInput__error input.PhoneInputInput {
+  border-color: #dc2626;
+}
+.PhoneInput__error input.PhoneInputInput:focus {
+  border-color: #dc2626;
+  box-shadow:
+    0 0 #0000,
+    0 0 #0000,
+    inset 0 0 0 1px #dc2626;
+  font-size: 0.75rem;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+.PhoneInput__error input.PhoneInputInput:hover:not(:focus) {
+  border-color: #f87171;
+}
+
+/* src/modules/RecordingForm/ConnectionDetails/styles.css */
+
+/* src/modules/RecordingForm/RecordingDetails/styles.css */
+.company-select__results-container {
+  margin-top: 8px;
+}
+.company-select__search-container {
+  padding: 0 !important;
+}
+
+/* node_modules/react-calendar/dist/Calendar.css */
+.react-calendar {
+  width: 350px;
+  max-width: 100%;
+  background: white;
+  border: 1px solid #a0a096;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  line-height: 1.125em;
+}
+.react-calendar--doubleView {
+  width: 700px;
+}
+.react-calendar--doubleView .react-calendar__viewContainer {
+  display: flex;
+  margin: -0.5em;
+}
+.react-calendar--doubleView .react-calendar__viewContainer > * {
+  width: 50%;
+  margin: 0.5em;
+}
+.react-calendar,
+.react-calendar *,
+.react-calendar *:before,
+.react-calendar *:after {
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.react-calendar button {
+  margin: 0;
+  border: 0;
+  outline: none;
+}
+.react-calendar button:enabled:hover {
+  cursor: pointer;
+}
+.react-calendar__navigation {
+  display: flex;
+  height: 44px;
+  margin-bottom: 1em;
+}
+.react-calendar__navigation button {
+  min-width: 44px;
+  background: none;
+}
+.react-calendar__navigation button:disabled {
+  background-color: #f0f0f0;
+}
+.react-calendar__navigation button:enabled:hover,
+.react-calendar__navigation button:enabled:focus {
+  background-color: #e6e6e6;
+}
+.react-calendar__month-view__weekdays {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size: 0.75em;
+}
+.react-calendar__month-view__weekdays__weekday {
+  padding: 0.5em;
+}
+.react-calendar__month-view__weekNumbers .react-calendar__tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75em;
+  font-weight: bold;
+}
+.react-calendar__month-view__days__day--weekend {
+  color: #d10000;
+}
+.react-calendar__month-view__days__day--neighboringMonth {
+  color: #757575;
+}
+.react-calendar__year-view .react-calendar__tile,
+.react-calendar__decade-view .react-calendar__tile,
+.react-calendar__century-view .react-calendar__tile {
+  padding: 2em 0.5em;
+}
+.react-calendar__tile {
+  max-width: 100%;
+  padding: 10px 6.6667px;
+  background: none;
+  text-align: center;
+  line-height: 16px;
+}
+.react-calendar__tile:disabled {
+  background-color: #f0f0f0;
+}
+.react-calendar__tile:enabled:hover,
+.react-calendar__tile:enabled:focus {
+  background-color: #e6e6e6;
+}
+.react-calendar__tile--now {
+  background: #ffff76;
+}
+.react-calendar__tile--now:enabled:hover,
+.react-calendar__tile--now:enabled:focus {
+  background: #ffffa9;
+}
+.react-calendar__tile--hasActive {
+  background: #76baff;
+}
+.react-calendar__tile--hasActive:enabled:hover,
+.react-calendar__tile--hasActive:enabled:focus {
+  background: #a9d4ff;
+}
+.react-calendar__tile--active {
+  background: #006edc;
+  color: white;
+}
+.react-calendar__tile--active:enabled:hover,
+.react-calendar__tile--active:enabled:focus {
+  background: #1087ff;
+}
+.react-calendar--selectRange .react-calendar__tile--hover {
+  background-color: #e6e6e6;
+}
+
+/* src/components/DatePicker/styles.css */
+.react-calendar {
+  border: unset;
+  border-radius: 6px;
+  box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+.react-calendar__year-view.react-calendar__tile {
+  padding: 21px 0;
+  border-radius: 6px;
+}
+.react-calendar__year-view.react-calendar__tile:focus {
+  background-color: #F0F0F7;
+}
+.react-calendar__year-view.react-calendar__tile:hover {
+  background-color: #F0F0F7;
+}
+.react-calendar__navigation {
+  margin-bottom: 5px;
+  padding-top: 5px;
+}
+.react-calendar__navigation.react-calendar__navigation__label {
+  background-color: #FFFFFF;
+  font-size: 14px;
+  font-family:
+    "Rubik",
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+  color: #717181;
+  border-radius: 6px;
+}
+.react-calendar__navigation.react-calendar__tile:focus {
+  background-color: #F0F0F7;
+}
+.react-calendar__navigation.react-calendar__tile:hover {
+  background-color: #F0F0F7;
+}
+.react-calendar__navigation__prev-button {
+  margin-left: 6px;
+  border-radius: 6px;
+}
+.react-calendar__navigation__prev-button:focus {
+  background-color: #F0F0F7;
+}
+.react-calendar__navigation__prev-button:hover {
+  background-color: #F0F0F7;
+}
+.react-calendar__navigation__next-button {
+  margin-right: 6px;
+  border-radius: 6px;
+}
+.react-calendar__navigation__next-button:focus {
+  background-color: #F0F0F7;
+}
+.react-calendar__navigation__next-button:hover {
+  background-color: #F0F0F7;
+}
+.react-calendar__navigation__prev2-button {
+  display: none;
+}
+.react-calendar__navigation__next2-button {
+  display: none;
+}
+.react-calendar__month-view {
+  background-color: #FFFFFF;
+  border: 1px solid #E5E7EF;
+  border-bottom: none;
+  margin: 0 -1px 0 -1px;
+  padding: 10px;
+}
+.react-calendar__month-view.react-calendar__tile:focus {
+  background-color: #F0F0F7;
+}
+.react-calendar__month-view.react-calendar__tile:hover {
+  background-color: #F0F0F7;
+}
+.react-calendar__tile--hover {
+  background-color: #F0F0F7;
+}
+.react-calendar--selectRange {
+  background-color: #F0F0F7;
+}
+.react-calendar__tile--active {
+  border-radius: 20px 0 0 20px;
+  background-color: #007AFF;
+}
+.react-calendar__tile--active:hover {
+  background-color: #007AFF;
+}
+.react-calendar__tile--active:focus {
+  background-color: #007AFF;
+}
+
+/* src/components/Dropdown/styles.css */
+
+/* src/modules/RecordingForm/Scheduling/styles.css */
+.calendar {
+  left: 0;
+  top: 2px;
+}
+.react-calendar__tile--active {
+  background-color: #007AFF;
+  border-radius: 20px !important;
+}
+.react-calendar__tile--active:focus {
+  background-color: #007AFF;
+}
+.react-calendar__tile--active:hover {
+  background-color: #007AFF;
+}
+
+/* src/components/Textarea/styles.css */
+
+/* src/modules/RecordingForm/Troubleshooting/styles.css */
+
+/* src/modules/RecordingForm/styles.css */
+
+/* src/modules/Transcript/EmptyMessage/styles.css */
+
+/* src/components/ExpandButton/styles.css */
+
 /* src/modules/Transcript/EventDetails/styles.css */
 
 /* src/modules/Transcript/PriceChart/styles.css */
@@ -112,10 +525,6 @@
 /* src/modules/Transcript/Header/styles.css */
 
 /* src/modules/Transcript/styles.css */
-
-/* src/components/Tabs/styles.css */
-
-/* src/components/TimeAgo/styles.css */
 
 /* src/modules/EventList/FilterBy/styles.css */
 
@@ -490,9 +899,6 @@ video {
 .top-\[12px\] {
   top: 12px;
 }
-.top-\[8px\] {
-  top: 8px;
-}
 .z-10 {
   z-index: 10;
 }
@@ -638,11 +1044,11 @@ video {
 .ml-auto {
   margin-left: auto;
 }
-.ml-1\.5 {
-  margin-left: 0.375rem;
-}
 .-mb-3 {
   margin-bottom: -0.75rem;
+}
+.ml-1\.5 {
+  margin-left: 0.375rem;
 }
 .mt-5 {
   margin-top: 1.25rem;
@@ -770,8 +1176,8 @@ video {
 .w-2 {
   width: 0.5rem;
 }
-.w-72 {
-  width: 18rem;
+.w-\[271px\] {
+  width: 271px;
 }
 .w-full {
   width: 100%;
@@ -977,6 +1383,9 @@ video {
   cursor: -webkit-grab;
   cursor: grab;
 }
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
 .select-none {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -1029,6 +1438,9 @@ video {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+.text-ellipsis {
+  text-overflow: ellipsis;
 }
 .whitespace-normal {
   white-space: normal;
@@ -1166,13 +1578,13 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(250 204 21 / var(--tw-bg-opacity));
 }
-.bg-red-200 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
-}
 .bg-black {
   --tw-bg-opacity: 1;
   background-color: rgb(0 0 0 / var(--tw-bg-opacity));
+}
+.bg-red-200 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(254 202 202 / var(--tw-bg-opacity));
 }
 .bg-gray-900 {
   --tw-bg-opacity: 1;
@@ -1311,6 +1723,22 @@ video {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem;
 }
+.px-1\.5 {
+  padding-left: 0.375rem;
+  padding-right: 0.375rem;
+}
+.py-0\.5 {
+  padding-top: 0.125rem;
+  padding-bottom: 0.125rem;
+}
+.px-1 {
+  padding-left: 0.25rem;
+  padding-right: 0.25rem;
+}
+.py-0 {
+  padding-top: 0px;
+  padding-bottom: 0px;
+}
 .py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
@@ -1322,22 +1750,6 @@ video {
 .py-2\.5 {
   padding-top: 0.625rem;
   padding-bottom: 0.625rem;
-}
-.px-1\.5 {
-  padding-left: 0.375rem;
-  padding-right: 0.375rem;
-}
-.px-1 {
-  padding-left: 0.25rem;
-  padding-right: 0.25rem;
-}
-.py-0\.5 {
-  padding-top: 0.125rem;
-  padding-bottom: 0.125rem;
-}
-.py-0 {
-  padding-top: 0px;
-  padding-bottom: 0px;
 }
 .px-5 {
   padding-left: 1.25rem;
@@ -1711,6 +2123,11 @@ video {
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
+.backdrop-blur-\[6px\] {
+  --tw-backdrop-blur: blur(6px);
+  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
 .backdrop-filter {
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
   backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
@@ -1818,9 +2235,6 @@ video {
 .odd\:bg-gray-50:nth-child(odd) {
   --tw-bg-opacity: 1;
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
-}
-.first-of-type\:pb-2:first-of-type {
-  padding-bottom: 0.5rem;
 }
 .hover\:animate-none:hover {
   -webkit-animation: none;
@@ -2435,6 +2849,13 @@ video {
 .dark .dark\:hover\:opacity-80:hover {
   opacity: 0.8;
 }
+.dark .dark\:active\:border-\[1px\]:active {
+  border-width: 1px;
+}
+.dark .dark\:active\:border-bluegray-4:active {
+  --tw-border-opacity: 1;
+  border-color: rgb(208 205 228 / var(--tw-border-opacity));
+}
 .dark .dark\:active\:border-blue-700:active {
   --tw-border-opacity: 1;
   border-color: rgb(29 78 216 / var(--tw-border-opacity));
@@ -2442,6 +2863,9 @@ video {
 .dark .dark\:active\:border-yellow-400:active {
   --tw-border-opacity: 1;
   border-color: rgb(250 204 21 / var(--tw-border-opacity));
+}
+.dark .dark\:active\:border-opacity-20:active {
+  --tw-border-opacity: 0.2;
 }
 .dark .dark\:active\:bg-bluegray-7:active {
   --tw-bg-opacity: 1;

@@ -38022,7 +38022,7 @@ var import_classnames3 = __toModule(require_classnames());
 var import_ts_pattern = __toModule(require_lib());
 function ButtonUI(props) {
   const { children, disabled = false, onClick, className = "", kind = "default", type, iconButton = false } = props;
-  const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white disabled:bg-blue-600").with("secondary", () => "border-[1px] border-gray-300 dark:border-bluegray-5 dark:text-white hover:border-gray-400 dark:hover:border-bluegray-4 dark:hover:border-opacity-20 disabled:border-gray-300 disabled:dark:border-bluegray-5 disabled:dark:border-opacity-100active:bg-gray-400 dark:active:bg-bluegray-7 active:text-white").with("default", () => "bg-gray-200 dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white hover:bg-gray-300 active:bg-gray-400 active:text-white disabled:bg-gray-200").exhaustive();
+  const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white disabled:bg-blue-600 dark:text-white dark:active:bg-bluegray-7 dark:active:border-bluegray-4 dark:active:border-[1px] dark:hover:border-bluegray-4 dark:hover:border-opacity-20 dark:active:border-opacity-20 disabled:dark:border-bluegray-5 disabled:dark:border-opacity-100").with("secondary", () => "border-[1px] border-gray-300 dark:border-bluegray-5 dark:text-white hover:border-gray-400 dark:hover:border-bluegray-4 dark:hover:border-opacity-20 disabled:border-gray-300 disabled:dark:border-bluegray-5 disabled:dark:border-opacity-100active:bg-gray-400 dark:active:bg-bluegray-7 active:text-white").with("default", () => "bg-gray-200 dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white hover:bg-gray-300 active:bg-gray-400 active:text-white disabled:bg-gray-200").exhaustive();
   return /* @__PURE__ */ import_react11.default.createElement("button", {
     disabled,
     tabIndex: 0,
@@ -38222,12 +38222,19 @@ var EventListDocument = lib_default`
         numMentions
         event {
           id
-          title
+          audioRecordingUrl
+          audioRecordingOffsetMs
           eventDate
           eventType
           isLive
-          audioRecordingUrl
-          audioRecordingOffsetMs
+          title
+          creator {
+            id
+            firstName
+            lastName
+            primaryEmail
+            username
+          }
           primaryCompany {
             id
             commonName
@@ -38252,6 +38259,13 @@ var EventListDocument = lib_default`
         }
       }
     }
+  }
+}
+    `;
+var EventListCurrentUserDocument = lib_default`
+    query EventListCurrentUser {
+  currentUser {
+    id
   }
 }
     `;
@@ -38339,16 +38353,61 @@ var NewsListDocument = lib_default`
   }
 }
     `;
-var RecordingListDocument = lib_default`
-    query RecordingList($filter: EventFilter, $view: EventView) {
-  events(filter: $filter, view: $view) {
+var RecordingsDocument = lib_default`
+    query Recordings($filter: PrivateRecordingFilter) {
+  privateRecordings(filter: $filter) {
     id
+    connectAccessId
+    connectCallerId
+    connectionType
+    connectOffsetSeconds
+    connectPhoneNumber
+    connectPin
+    connectUrl
+    onCompleteEmailCreator
+    onConnectDialNumber
+    onFailure
+    onFailureDialNumber
+    onFailureInstructions
+    onFailureSmsNumber
+    primaryCompany {
+      id
+      commonName
+      instruments {
+        id
+        isPrimary
+        quotes {
+          id
+          exchange {
+            id
+            country {
+              id
+              countryCode
+            }
+            shortName
+          }
+          isPrimary
+          localTicker
+        }
+      }
+    }
+    scheduledFor
+    smsAlertBeforeCall
     title
-    eventDate
-    eventType
-    isLive
-    audioRecordingUrl
-    audioRecordingOffsetMs
+  }
+}
+    `;
+var CreatePrivateRecordingDocument = lib_default`
+    mutation CreatePrivateRecording($input: CreatePrivateRecordingInput!) {
+  createPrivateRecording(input: $input) {
+    success
+  }
+}
+    `;
+var UpdatePrivateRecordingDocument = lib_default`
+    mutation UpdatePrivateRecording($input: UpdatePrivateRecordingInput!) {
+  updatePrivateRecording(input: $input) {
+    success
   }
 }
     `;
@@ -38391,15 +38450,22 @@ var EventUpdatesDocument = lib_default`
     query EventUpdates($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
     id
+    audioRecordingOffsetMs
+    audioRecordingUrl
+    connectionStatus
+    creator {
+      id
+      firstName
+      lastName
+      primaryEmail
+      username
+    }
     eventDate
     hasConnectionDetails
-    isLive
-    audioRecordingUrl
-    audioRecordingOffsetMs
-    publishedTranscriptExpected
-    hasTranscript
     hasPublishedTranscript
-    connectionStatus
+    hasTranscript
+    isLive
+    publishedTranscriptExpected
   }
 }
     `;
@@ -38414,20 +38480,24 @@ var TranscriptDocument = lib_default`
     query Transcript($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
     id
-    title
+    audioRecordingUrl
+    audioRecordingOffsetMs
+    connectionStatus
+    creator {
+      id
+      firstName
+      lastName
+      primaryEmail
+      username
+    }
+    dialInPhoneNumbers
+    dialInPin
     eventDate
     eventType
     hasConnectionDetails
-    isLive
-    audioRecordingUrl
-    audioRecordingOffsetMs
-    publishedTranscriptExpected
-    hasTranscript
     hasPublishedTranscript
-    webcastUrls
-    dialInPhoneNumbers
-    dialInPin
-    connectionStatus
+    hasTranscript
+    isLive
     primaryCompany {
       id
       commonName
@@ -38436,19 +38506,20 @@ var TranscriptDocument = lib_default`
         isPrimary
         quotes {
           id
-          isPrimary
-          localTicker
           exchange {
             id
-            shortName
             country {
               id
               countryCode
             }
+            shortName
           }
+          isPrimary
+          localTicker
         }
       }
     }
+    publishedTranscriptExpected
     quotePrices {
       currentDayClosePrice
       currentDayOpenPrice
@@ -38456,60 +38527,62 @@ var TranscriptDocument = lib_default`
       previousDayClosePrice
       quote {
         id
-        localTicker
         exchange {
           id
           shortName
         }
+        localTicker
       }
       realtimePrices {
         id
         date
         price
-        volume
-        priceChangeFromStartValue
         priceChangeFromStartPercent
-        volumeChangeFromStartValue
-        volumeChangeFromStartPercent
-        volumeChangeFromLastValue
+        priceChangeFromStartValue
+        volume
         volumeChangeFromLastPercent
+        volumeChangeFromLastValue
+        volumeChangeFromStartPercent
+        volumeChangeFromStartValue
       }
       startPrice
     }
+    title
     transcripts {
       id
       sections {
         id
         speakerTurns {
           id
-          speaker {
-            id
-            name
-            title
-            identified
-          }
           paragraphs {
             id
-            timestamp
             displayTimestamp
-            syncTimestamp
-            syncMs
             sentences {
               id
-              text
               sentiment {
                 id
                 textual {
                   id
-                  overThreshold
                   basicSentiment
+                  overThreshold
                 }
               }
+              text
             }
+            syncMs
+            syncTimestamp
+            timestamp
+          }
+          speaker {
+            id
+            identified
+            name
+            title
           }
         }
       }
     }
+    webcastUrls
   }
 }
     `;
@@ -39364,7 +39437,7 @@ function CompanySelectUI(props) {
     className: "flex flex-1 items-center justify-center text-gray-600 mb-5"
   }, msg);
   return /* @__PURE__ */ import_react22.default.createElement("div", {
-    className: `shadow-md bg-white rounded-lg w-72 overflow-hidden dark:bg-bluegray-6 company-select ${className}`
+    className: `shadow-md bg-white rounded-lg w-[271px] overflow-hidden dark:bg-bluegray-6 company-select ${className}`
   }, /* @__PURE__ */ import_react22.default.createElement("div", {
     className: "p-3 w-full company-select__search-container"
   }, /* @__PURE__ */ import_react22.default.createElement(Input, {
@@ -39393,7 +39466,7 @@ function CompanySelectUI(props) {
       key: company.id,
       onClick: (event) => {
         event.stopPropagation();
-        onChange == null ? void 0 : onChange(event, { value: company });
+        onChange == null ? void 0 : onChange(event, { name, value: company });
         onSelectCompany == null ? void 0 : onSelectCompany();
       },
       onMouseEnter: () => selectIndex(index),
@@ -39788,7 +39861,7 @@ function CompanyFilterButtonUI(props) {
   }, /* @__PURE__ */ import_react27.default.createElement(Building, {
     alt: "building",
     className: "mr-2"
-  }), "By Company"), value && /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Fragment, null, /* @__PURE__ */ import_react27.default.createElement("div", {
+  }), "Company"), value && /* @__PURE__ */ import_react27.default.createElement(import_react27.default.Fragment, null, /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "font-bold"
   }, (_a = getPrimaryQuote(value)) == null ? void 0 : _a.localTicker), /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "font-light truncate mx-2"
