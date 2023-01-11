@@ -162,21 +162,12 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                             </Tooltip>
                         ) : (
                             <div className="flex items-end h-[12px] mt-[1px]">
-                                <span
-                                    className={classNames(
-                                        'select-none leading-none text-sm text-blue-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap group-hover:text-blue-800 group-active:text-blue-900',
-                                        {
-                                            uppercase: !isCustom,
-                                        }
-                                    )}
-                                >
+                                <span className="select-none leading-none text-sm text-blue-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap uppercase group-hover:text-blue-800 group-active:text-blue-900">
                                     {eventMetaData?.quote?.localTicker || eventMetaData?.title || 'Instrument'}
                                 </span>
-                                {!isCustom && (
-                                    <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
-                                        {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
-                                    </span>
-                                )}
+                                <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
+                                    {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                                </span>
                             </div>
                         )}
                         <span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900">
