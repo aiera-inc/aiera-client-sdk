@@ -410,21 +410,6 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 state.zoomMeetingType === ZOOM_MEETING_TYPE_OPTION_WEB.value),
         [state.connectionType, state.zoomMeetingType]
     );
-    // Converts time to 24 hours
-    const convertedTime: string | null = useMemo(() => {
-        let converted = null;
-        if (state.scheduleTime && state.scheduleMeridiem) {
-            const minutes = state.scheduleTime.slice(-2);
-            let hour = parseInt(state.scheduleTime.slice(0, state.scheduleTime.length > 3 ? 2 : 1), 0);
-            if (hour < 12 && state.scheduleMeridiem === ScheduleMeridiem.PM) {
-                hour += 12;
-            } else if (hour === 12 && state.scheduleMeridiem === ScheduleMeridiem.AM) {
-                hour = 0;
-            }
-            converted = `${hour < 10 ? `0${hour}` : hour}:${minutes}:00.000Z`;
-        }
-        return converted;
-    }, [state.scheduleTime, state.scheduleMeridiem]);
     const errorHints: { [key: string]: string[] } = useMemo(() => {
         const hints = {} as { [key: string]: string[] };
         if (Object.keys(errors).length) {
@@ -454,12 +439,25 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     );
     const mapStateToScheduledFor: string = useMemo(() => {
         let dateTime = (state.scheduleType === ScheduleType.Now ? new Date() : state.scheduleDate).toISOString();
-        if (state.scheduleType === ScheduleType.Future && convertedTime) {
+        if (state.scheduleType === ScheduleType.Future) {
+            let convertedTime = null;
+            if (state.scheduleTime && state.scheduleMeridiem) {
+                const minutes = state.scheduleTime.slice(-2);
+                let hour = parseInt(state.scheduleTime.slice(0, state.scheduleTime.length > 3 ? 2 : 1), 0);
+                if (hour < 12 && state.scheduleMeridiem === ScheduleMeridiem.PM) {
+                    hour += 12;
+                } else if (hour === 12 && state.scheduleMeridiem === ScheduleMeridiem.AM) {
+                    hour = 0;
+                }
+                convertedTime = `${hour < 10 ? `0${hour}` : hour}:${minutes}:00.000Z`;
+            }
             // Combine the date and time from state
-            dateTime = dateTime.replace(/[^T]*$/, convertedTime);
+            if (convertedTime) {
+                dateTime = dateTime.replace(/[^T]*$/, convertedTime);
+            }
         }
         return dateTime;
-    }, [convertedTime, state.scheduleDate, state.scheduleMeridiem, state.scheduleTime, state.scheduleType]);
+    }, [state.scheduleDate, state.scheduleMeridiem, state.scheduleTime, state.scheduleType]);
     const privateRecordingInput: CreatePrivateRecordingInput | UpdatePrivateRecordingInput = useMemo(
         () => ({
             companyIds: state.selectedCompany ? [parseInt(state.selectedCompany.id)] : undefined,
