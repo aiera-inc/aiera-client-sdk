@@ -779,6 +779,9 @@ video {
 .shrink-\[2\] {
   flex-shrink: 2;
 }
+.shrink-0 {
+  flex-shrink: 0;
+}
 .flex-grow {
   flex-grow: 1;
 }
@@ -912,6 +915,9 @@ video {
 }
 .rounded-lg {
   border-radius: 0.5rem;
+}
+.rounded-sm {
+  border-radius: 0.125rem;
 }
 .rounded-xl {
   border-radius: 0.75rem;
@@ -2671,10 +2677,10 @@ input.PhoneInputInput::placeholder {
 /* src/modules/RecordingForm/ConnectionDetails/styles.css */
 
 /* src/modules/RecordingForm/RecordingDetails/styles.css */
-.company-select__results-container {
+.recording-details .company-select__results-container {
   margin-top: 8px;
 }
-.company-select__search-container {
+.recording-details .company-select__search-container {
   padding: 0 !important;
 }
 

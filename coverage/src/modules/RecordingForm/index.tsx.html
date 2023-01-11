@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.53% </span>
+                <span class="strong">55.17% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>84/146</span>
+                <span class='fraction'>80/145</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.78% </span>
+                <span class="strong">39.72% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>61/146</span>
+                <span class='fraction'>58/146</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.83% </span>
+                <span class="strong">70.21% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>34/48</span>
+                <span class='fraction'>33/47</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">57.53% </span>
+                <span class="strong">55.17% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>84/146</span>
+                <span class='fraction'>80/145</span>
             </div>
         
             
@@ -832,9 +832,7 @@
 <a name='L767'></a><a href='#L767'>767</a>
 <a name='L768'></a><a href='#L768'>768</a>
 <a name='L769'></a><a href='#L769'>769</a>
-<a name='L770'></a><a href='#L770'>770</a>
-<a name='L771'></a><a href='#L771'>771</a>
-<a name='L772'></a><a href='#L772'>772</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L770'></a><a href='#L770'>770</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1246,21 +1244,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">57x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">8x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">57x</span>
 <span class="cline-any cline-yes">35x</span>
 <span class="cline-any cline-yes">35x</span>
@@ -1291,8 +1274,21 @@
 <span class="cline-any cline-yes">57x</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1783,7 +1779,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                 &lt;div className="flex items-center mb-3"&gt;
                     &lt;Button className="mr-2" onClick={onBack}&gt;
                         &lt;ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" /&gt;
-                        Back
+                        Back to list
                     &lt;/Button&gt;
                     &lt;p className="ml-auto text-gray-400 text-sm"&gt;
                         Step {step} of {NUM_STEPS}
@@ -2017,21 +2013,6 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                 state.zoomMeetingType === ZOOM_MEETING_TYPE_OPTION_WEB.value),
         [state.connectionType, state.zoomMeetingType]
     );
-    // Converts time to 24 hours
-    const convertedTime: string | null = useMemo(() =&gt; {
-        let converted = null;
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (state.scheduleTime &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >state.scheduleMeridiem)</span> {
-            const minutes = <span class="cstat-no" title="statement not covered" >state.scheduleTime.slice(-2);</span>
-            let hour = <span class="cstat-no" title="statement not covered" >parseInt(state.scheduleTime.slice(0, state.scheduleTime.length &gt; 3 ? 2 : 1), 0);</span>
-<span class="cstat-no" title="statement not covered" >            if (hour &lt; 12 &amp;&amp; state.scheduleMeridiem === ScheduleMeridiem.PM) {</span>
-<span class="cstat-no" title="statement not covered" >                hour += 12;</span>
-            } else <span class="cstat-no" title="statement not covered" >if (hour === 12 &amp;&amp; state.scheduleMeridiem === ScheduleMeridiem.AM) {</span>
-<span class="cstat-no" title="statement not covered" >                hour = 0;</span>
-            }
-<span class="cstat-no" title="statement not covered" >            converted = `${hour &lt; 10 ? `0${hour}` : hour}:${minutes}:00.000Z`;</span>
-        }
-        return converted;
-    }, [state.scheduleTime, state.scheduleMeridiem]);
     const errorHints: { [key: string]: string[] } = useMemo(() =&gt; {
         const hints = {} as { [key: string]: string[] };
         if (Object.keys(errors).length) {
@@ -2061,12 +2042,25 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
     );
     const mapStateToScheduledFor: string = useMemo(() =&gt; {
         let dateTime = (state.scheduleType === ScheduleType.Now ? new Date() : state.scheduleDate).toISOString();
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (state.scheduleType === ScheduleType.Future &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >convertedTime)</span> {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (state.scheduleType === ScheduleType.Future) {
+            let convertedTime = <span class="cstat-no" title="statement not covered" >null;</span>
+<span class="cstat-no" title="statement not covered" >            if (state.scheduleTime &amp;&amp; state.scheduleMeridiem) {</span>
+                const minutes = <span class="cstat-no" title="statement not covered" >state.scheduleTime.slice(-2);</span>
+                let hour = <span class="cstat-no" title="statement not covered" >parseInt(state.scheduleTime.slice(0, state.scheduleTime.length &gt; 3 ? 2 : 1), 0);</span>
+<span class="cstat-no" title="statement not covered" >                if (hour &lt; 12 &amp;&amp; state.scheduleMeridiem === ScheduleMeridiem.PM) {</span>
+<span class="cstat-no" title="statement not covered" >                    hour += 12;</span>
+                } else <span class="cstat-no" title="statement not covered" >if (hour === 12 &amp;&amp; state.scheduleMeridiem === ScheduleMeridiem.AM) {</span>
+<span class="cstat-no" title="statement not covered" >                    hour = 0;</span>
+                }
+<span class="cstat-no" title="statement not covered" >                convertedTime = `${hour &lt; 10 ? `0${hour}` : hour}:${minutes}:00.000Z`;</span>
+            }
             // Combine the date and time from state
-<span class="cstat-no" title="statement not covered" >            dateTime = dateTime.replace(/[^T]*$/, convertedTime);</span>
+<span class="cstat-no" title="statement not covered" >            if (convertedTime) {</span>
+<span class="cstat-no" title="statement not covered" >                dateTime = dateTime.replace(/[^T]*$/, convertedTime);</span>
+            }
         }
         return dateTime;
-    }, [convertedTime, state.scheduleDate, state.scheduleMeridiem, state.scheduleTime, state.scheduleType]);
+    }, [state.scheduleDate, state.scheduleMeridiem, state.scheduleTime, state.scheduleType]);
     const privateRecordingInput: CreatePrivateRecordingInput | UpdatePrivateRecordingInput = useMemo(
         () =&gt; ({
             companyIds: state.selectedCompany ? <span class="branch-0 cbranch-no" title="branch not covered" >[parseInt(state.selectedCompany.id)] </span>: undefined,
@@ -2383,7 +2377,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Jan 11 2023 13:42:22 GMT-0500 (Eastern Standard Time)
+                at Wed Jan 11 2023 17:22:52 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

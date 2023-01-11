@@ -779,6 +779,9 @@ video {
 .shrink-\[2\] {
   flex-shrink: 2;
 }
+.shrink-0 {
+  flex-shrink: 0;
+}
 .flex-grow {
   flex-grow: 1;
 }
@@ -912,6 +915,9 @@ video {
 }
 .rounded-lg {
   border-radius: 0.5rem;
+}
+.rounded-sm {
+  border-radius: 0.125rem;
 }
 .rounded-xl {
   border-radius: 0.75rem;

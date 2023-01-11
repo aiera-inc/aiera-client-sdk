@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/6</span>
+                <span class='fraction'>9/9</span>
             </div>
         
             
@@ -117,7 +117,15 @@
 <a name='L52'></a><a href='#L52'>52</a>
 <a name='L53'></a><a href='#L53'>53</a>
 <a name='L54'></a><a href='#L54'>54</a>
-<a name='L55'></a><a href='#L55'>55</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L55'></a><a href='#L55'>55</a>
+<a name='L56'></a><a href='#L56'>56</a>
+<a name='L57'></a><a href='#L57'>57</a>
+<a name='L58'></a><a href='#L58'>58</a>
+<a name='L59'></a><a href='#L59'>59</a>
+<a name='L60'></a><a href='#L60'>60</a>
+<a name='L61'></a><a href='#L61'>61</a>
+<a name='L62'></a><a href='#L62'>62</a>
+<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -136,9 +144,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">242x</span>
-<span class="cline-any cline-yes">242x</span>
-<span class="cline-any cline-yes">242x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-yes">227x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">244x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -157,8 +172,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">242x</span>
-<span class="cline-any cline-yes">242x</span>
+<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -177,9 +193,12 @@ import { Check } from '@aiera/client-sdk/components/Svg/Check';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import './styles.css';
 &nbsp;
+type CheckboxKind = 'checkbox' | 'radio';
+&nbsp;
 interface CheckboxSharedProps {
     checked: boolean;
     className?: string;
+    kind?: CheckboxKind;
     label?: string;
     name?: string;
 }
@@ -190,11 +209,15 @@ interface CheckboxUIProps extends CheckboxSharedProps {
 }
 &nbsp;
 export function CheckboxUI(props: CheckboxUIProps): ReactElement {
-    const { checked, className = '', label, name, onChange } = props;
+    const { checked, className = '', kind = 'checkbox', label, name, onChange } = props;
     const checkBoxStyles = checked ? 'bg-blue-500 shadow text-white' : 'border border-gray-300';
+    let radius = 'rounded-sm';
+    if (kind === 'radio') {
+        radius = 'rounded-xl';
+    }
     return (
         &lt;div className={`cursor-pointer flex items-center ${className} checkbox`} data-tname={name} onClick={onChange}&gt;
-            &lt;div className={`flex flex-shrink-0 h-4 items-center justify-center rounded-xl w-4 ${checkBoxStyles}`}&gt;
+            &lt;div className={`flex flex-shrink-0 h-4 items-center justify-center ${radius} w-4 ${checkBoxStyles}`}&gt;
                 {checked &amp;&amp; &lt;Check className="w-2" /&gt;}
             &lt;/div&gt;
             {label &amp;&amp; &lt;div className="ml-2 text-sm"&gt;{label}&lt;/div&gt;}
@@ -211,11 +234,12 @@ export interface CheckboxProps extends CheckboxSharedProps {
  * Renders Checkbox
  */
 export function Checkbox(props: CheckboxProps): ReactElement {
-    const { checked, className, label, name, onChange } = props;
+    const { checked, className, kind, label, name, onChange } = props;
     return (
         &lt;CheckboxUI
             checked={checked}
             className={className}
+            kind={kind}
             label={label}
             name={name}
             onChange={useCallback(
@@ -232,7 +256,7 @@ export function Checkbox(props: CheckboxProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Jan 11 2023 13:42:22 GMT-0500 (Eastern Standard Time)
+                at Wed Jan 11 2023 17:22:52 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
