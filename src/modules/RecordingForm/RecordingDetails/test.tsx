@@ -32,10 +32,35 @@ describe('RecordingDetails', () => {
 
     test('renders', () => {
         renderWithProvider(
-            <RecordingDetails onChange={onChange} selectedCompany={company} title="Recording Details Test" />
+            <RecordingDetails
+                errors={{}}
+                onBlur={onChange}
+                onChange={onChange}
+                onCompleteEmailCreator
+                selectedCompany={company}
+                title="Recording Details Test"
+            />
         );
         screen.getByText('Recording Details');
         screen.getByText('Enter the name of the recording');
         screen.getByText('Associate with a specific company');
+        screen.getByText('Email me a copy of the transcript');
+        expect(screen.queryByDisplayValue('Recording Details Test')).toBeInTheDocument();
+    });
+
+    test('when title is not set, renders an error', () => {
+        renderWithProvider(
+            <RecordingDetails
+                errors={{ title: 'Required' }}
+                onBlur={onChange}
+                onChange={onChange}
+                onCompleteEmailCreator
+                selectedCompany={company}
+            />
+        );
+        screen.getByText('Recording Details');
+        screen.getByText('Enter the name of the recording');
+        screen.getByText('Associate with a specific company');
+        screen.getByText('Required');
     });
 });

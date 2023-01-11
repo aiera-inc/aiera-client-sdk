@@ -71,7 +71,7 @@ export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactE
                     {!value && (
                         <div className="flex items-center whitespace-nowrap text-sm font-normal">
                             <Building alt="building" className="mr-2" />
-                            By Company
+                            Company
                         </div>
                     )}
                     {value && (

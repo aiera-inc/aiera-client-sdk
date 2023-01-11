@@ -1,22 +1,24 @@
 import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject } from 'react';
 import classNames from 'classnames';
-import { ChangeHandler } from '@aiera/client-sdk/types';
-import { AudioPlayer, EventMetaData, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
-import { OnDragStart, OnDragEnd, useDrag } from '@aiera/client-sdk/lib/hooks/useDrag';
-import { useWindowSize } from '@aiera/client-sdk/lib/hooks/useWindowSize';
-import { useTrack } from '@aiera/client-sdk/lib/data';
-import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
+
 import { Button } from '@aiera/client-sdk/components/Button';
-import { Forward15 } from '@aiera/client-sdk/components/Svg/Forward15';
-import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
-import { Swap } from '@aiera/client-sdk/components/Svg/Swap';
+import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
 import { End } from '@aiera/client-sdk/components/Svg/End';
+import { Forward15 } from '@aiera/client-sdk/components/Svg/Forward15';
+import { Pause } from '@aiera/client-sdk/components/Svg/Pause';
+import { Play } from '@aiera/client-sdk/components/Svg/Play';
 import { Speaker } from '@aiera/client-sdk/components/Svg/Speaker';
 import { SpeakerLoud } from '@aiera/client-sdk/components/Svg/SpeakerLoud';
 import { SpeakerMute } from '@aiera/client-sdk/components/Svg/SpeakerMute';
-import { Play } from '@aiera/client-sdk/components/Svg/Play';
-import { Pause } from '@aiera/client-sdk/components/Svg/Pause';
+import { Swap } from '@aiera/client-sdk/components/Svg/Swap';
+import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { AudioPlayer, EventMetaData, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { useTrack } from '@aiera/client-sdk/lib/data';
+import { OnDragStart, OnDragEnd, useDrag } from '@aiera/client-sdk/lib/hooks/useDrag';
+import { useWindowSize } from '@aiera/client-sdk/lib/hooks/useWindowSize';
+import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
+import { ChangeHandler } from '@aiera/client-sdk/types';
 
 import './styles.css';
 
@@ -39,7 +41,6 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     clear: () => void;
     currentTime: number;
     duration: number;
-    seekToEnd: () => void;
     error: boolean;
     eventMetaData: EventMetaData;
     fastForward: () => void;
@@ -52,8 +53,9 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     percentPlayed?: number;
     playbackRate: number;
     rewind: () => void;
-    setVolume: (vol: number) => void;
+    seekToEnd: () => void;
     seekToStart: () => void;
+    setVolume: (vol: number) => void;
     showSwap: boolean;
     swap: () => void;
     togglePlayback: () => void;
@@ -66,7 +68,6 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         clear,
         currentTime,
         duration,
-        seekToEnd,
         error,
         eventMetaData,
         fastForward,
@@ -80,15 +81,16 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         percentPlayed = 0,
         playbackRate,
         rewind,
-        setVolume,
+        seekToEnd,
         seekToStart,
+        setVolume,
         showSwap,
         swap,
         togglePlayback,
         toggleRate,
         volume,
     } = props;
-
+    const isCustom = eventMetaData?.eventType === 'custom';
     return (
         <div className="relative h-13 w-full flex flex-col justify-center mt-[-6px] z-20">
             <div className="bg-white absolute top-[9px] left-0 right-0 bottom-0 dark:bg-bluegray-7 dark:top-[6px]" />
@@ -140,16 +142,38 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
                         onClick={onClickCalendar}
                     >
-                        <div className="flex items-end h-[12px] mt-[1px]">
-                            <span className="select-none leading-none text-sm text-blue-600 font-bold uppercase group-hover:text-blue-800 group-active:text-blue-900">
-                                {eventMetaData?.quote?.localTicker || 'Instrument'}
-                            </span>
-                            <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
-                                {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
-                            </span>
-                        </div>
+                        {isCustom && eventMetaData?.title ? (
+                            <Tooltip
+                                className="flex items-end h-[12px] mt-[1px]"
+                                content={
+                                    <div className="bg-black bg-opacity-80 max-w-[300px] px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                        {prettyLineBreak(eventMetaData.title)}
+                                    </div>
+                                }
+                                grow="up-right"
+                                hideOnDocumentScroll
+                                openOn="hover"
+                                position="top-left"
+                                yOffset={30}
+                            >
+                                <span className="font-bold leading-none overflow-hidden select-none text-blue-600 text-ellipsis text-sm whitespace-nowrap group-active:text-blue-900 group-hover:text-blue-800">
+                                    {eventMetaData?.quote?.localTicker || eventMetaData.title}
+                                </span>
+                            </Tooltip>
+                        ) : (
+                            <div className="flex items-end h-[12px] mt-[1px]">
+                                <span className="select-none leading-none text-sm text-blue-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap uppercase group-hover:text-blue-800 group-active:text-blue-900">
+                                    {eventMetaData?.quote?.localTicker || eventMetaData?.title || 'Instrument'}
+                                </span>
+                                <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
+                                    {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                                </span>
+                            </div>
+                        )}
                         <span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900">
-                            {eventMetaData?.eventType?.replace(/_/g, ' ') || 'No Type Found'}
+                            {(isCustom
+                                ? eventMetaData?.createdBy || eventMetaData?.eventType?.replace(/_/g, ' ')
+                                : eventMetaData?.eventType?.replace(/_/g, ' ')) || 'No Type Found'}
                         </span>
                     </div>
                 )}
@@ -359,10 +383,10 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
 export interface PlaybarProps extends PlaybarSharedProps {
     hidePlayer?: boolean;
     id?: string;
+    metaData?: EventMetaData;
     offset?: number;
     onClickCalendar?: ChangeHandler<string>;
     url?: string;
-    metaData?: EventMetaData;
 }
 
 /**
@@ -400,15 +424,14 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
 
     return (
         <PlaybarUI
-            hideEventDetails={hideEventDetails}
             clear={clear}
             currentTime={audioPlayer.displayCurrentTime}
             duration={audioPlayer.displayDuration}
-            seekToEnd={seekToEnd}
             error={audioPlayer.error}
             eventMetaData={audioPlayer.eventMetaData}
             fastForward={fastForward}
             fixed={!!(id && url)}
+            hideEventDetails={hideEventDetails}
             isPlaying={isPlaying}
             knobLeft={knobLeft}
             knobRef={knobRef}
@@ -417,8 +440,9 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             percentPlayed={percentPlayed}
             playbackRate={audioPlayer.playbackRate}
             rewind={rewind}
-            setVolume={audioPlayer.setVolume}
+            seekToEnd={seekToEnd}
             seekToStart={seekToStart}
+            setVolume={audioPlayer.setVolume}
             showSwap={!!isPlayingAnotherEvent}
             swap={swap}
             togglePlayback={togglePlayback}

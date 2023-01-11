@@ -1,98 +1,124 @@
 import React, {
+    Dispatch,
     Fragment,
-    ReactElement,
-    SyntheticEvent,
     MouseEvent,
     MouseEventHandler,
-    useEffect,
-    useCallback,
-    useMemo,
-    useState,
-    useRef,
+    ReactElement,
     RefObject,
-    Dispatch,
     SetStateAction,
+    SyntheticEvent,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState,
 } from 'react';
-import gql from 'graphql-tag';
-import { match } from 'ts-pattern';
-import { DateTime } from 'luxon';
 import classNames from 'classnames';
+import gql from 'graphql-tag';
+import { DateTime } from 'luxon';
+import { match } from 'ts-pattern';
 
-import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
-import { ChangeHandler } from '@aiera/client-sdk/types';
-import { EventListQuery, EventListQueryVariables, EventType, EventView } from '@aiera/client-sdk/types/generated';
-import { QueryResult, usePagingQuery } from '@aiera/client-sdk/api/client';
-import { isToday } from '@aiera/client-sdk/lib/datetimes';
-import { useMessageListener, Message } from '@aiera/client-sdk/lib/msg';
-import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
-import {
-    getPrimaryQuote,
-    useCompanyResolver,
-    useAutoTrack,
-    useSettings,
-    useUserStatus,
-    useTrack,
-} from '@aiera/client-sdk/lib/data';
-import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
-import { useAlertList } from '@aiera/client-sdk/lib/data';
+import { QueryResult, usePagingQuery, useQuery } from '@aiera/client-sdk/api/client';
+import { Button } from '@aiera/client-sdk/components/Button';
 import { CompanyFilterButton, CompanyFilterResult } from '@aiera/client-sdk/components/CompanyFilterButton';
-import { Transcript } from '@aiera/client-sdk/modules/Transcript';
+import { Input } from '@aiera/client-sdk/components/Input';
+import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
+import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import { Plus } from '@aiera/client-sdk/components/Svg/Plus';
 import { Tabs } from '@aiera/client-sdk/components/Tabs';
 import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
-import { Playbar } from '@aiera/client-sdk/components/Playbar';
-import { Input } from '@aiera/client-sdk/components/Input';
-import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { EventListFilter, EventListView, useConfig } from '@aiera/client-sdk/lib/config';
+import {
+    getEventCreatorName,
+    getPrimaryQuote,
+    useAlertList,
+    useAutoTrack,
+    useCompanyResolver,
+    useSettings,
+    useTrack,
+    useUserStatus,
+} from '@aiera/client-sdk/lib/data';
+import { isToday } from '@aiera/client-sdk/lib/datetimes';
+import { useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { useWindowListener } from '@aiera/client-sdk/lib/hooks/useEventListener';
+import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
+import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
+import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
+import { RecordingForm } from '@aiera/client-sdk/modules/RecordingForm';
+import { Transcript } from '@aiera/client-sdk/modules/Transcript';
+import { ChangeHandler } from '@aiera/client-sdk/types';
+import {
+    EventListCurrentUserQuery,
+    EventListQuery,
+    EventListQueryVariables,
+    EventType,
+    EventView,
+    User,
+} from '@aiera/client-sdk/types/generated';
+import { InstrumentID } from '@aiera/client-sdk/web/embed';
+
 import { FilterBy } from './FilterBy';
 import { PlayButton } from './PlayButton';
 import './styles.css';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { InstrumentID } from '@aiera/client-sdk/web/embed';
 
 enum FilterByType {
     transcript,
     earningsOnly,
 }
 
+interface FilterByTypeOption {
+    label: string;
+    value: FilterByType;
+}
+
 export type EventListEvent = EventListQuery['search']['events']['hits'][0]['event'];
 export type { CompanyFilterResult };
 
 export interface EventListUIProps {
-    refetch?: () => void;
     company?: CompanyFilterResult;
+    customOnly: boolean;
     darkMode?: boolean;
     event?: EventListEvent;
+    eventListView?: EventListView;
     eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
     eventsQueryUpcoming: QueryResult<EventListQuery, EventListQueryVariables>;
+    filterByTypeOptions: FilterByTypeOption[];
     filterByTypes?: FilterByType[];
-    loadMore?: (event: MouseEvent) => void;
     listType?: EventView;
     loading?: boolean;
+    loadMore?: (event: MouseEvent) => void;
     maxHits?: number;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler<CompanyFilterResult>;
     onSearchChange?: ChangeHandler<string>;
-    onSelectFilterBy?: ChangeHandler<FilterByType[]>;
-    onSelectListType?: ChangeHandler<EventView>;
     onSelectEvent?: ChangeHandler<EventListEvent>;
     onSelectEventById?: ChangeHandler<string>;
+    onSelectFilterBy?: ChangeHandler<FilterByType[]>;
+    onSelectListType?: ChangeHandler<EventView>;
+    refetch?: () => void;
     scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
+    showCompanyFilter: boolean;
+    showForm: boolean;
+    showFormButton: boolean;
+    toggleForm: MouseEventHandler;
     useConfigOptions: boolean;
+    userQuery: QueryResult<EventListCurrentUserQuery>;
     userStatusInactive: boolean;
 }
 
 interface EventRowProps {
-    refetch?: () => void;
+    customOnly: boolean;
     event: EventListEvent;
-    maxHits?: number;
-    numMentions: number | null | undefined;
     index: number;
     isRefetching: boolean;
+    maxHits?: number;
+    numMentions: number | null | undefined;
     onSelectEvent?: ChangeHandler<EventListEvent>;
+    refetch?: () => void;
     renderedRefetch: boolean;
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
@@ -100,6 +126,7 @@ interface EventRowProps {
 }
 
 const EventRow = ({
+    customOnly,
     event,
     numMentions,
     maxHits = 0,
@@ -120,13 +147,14 @@ const EventRow = ({
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = DateTime.fromISO(event.eventDate);
     const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
+    const createdBy = getEventCreatorName(event.creator as User);
     let divider = null;
     if (showDivider) {
         divider = (
             <li className={classNames('sticky px-3 top-[56px]')}>
                 <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
-                    {eventDate.toFormat('DDDD')}
-                    <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
+                    {isToday(event.eventDate) ? `Today, ${eventDate.toFormat('DDD')}` : eventDate.toFormat('DDDD')}
+                    <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5" />
                     {!renderedRefetch && (
                         <div
                             onClick={!isRefetching ? refetch : undefined}
@@ -187,10 +215,12 @@ const EventRow = ({
                         <div className="flex items-center justify-center w-8 h-8">
                             <PlayButton
                                 metaData={{
-                                    quote: primaryQuote,
-                                    eventType: event.eventType,
+                                    createdBy,
                                     eventDate: eventDate ? eventDate.toISO() : undefined,
+                                    eventType: event.eventType,
                                     localTicker: primaryQuote?.localTicker,
+                                    quote: primaryQuote,
+                                    title: event.title,
                                 }}
                                 id={event.id}
                                 url={
@@ -220,7 +250,7 @@ const EventRow = ({
                             )}
                         </div>
                         <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
-                            {event.eventType.replace(/_/g, ' ')}
+                            {customOnly ? createdBy : event.eventType.replace(/_/g, ' ')}
                         </div>
                         {searchTerm && (
                             <div className="flex items-center mt-[2px]">
@@ -260,12 +290,14 @@ const EventRow = ({
 
 export const EventListUI = (props: EventListUIProps): ReactElement => {
     const {
-        refetch,
         company,
+        customOnly,
         darkMode = false,
         event,
+        eventListView,
         eventsQuery,
         eventsQueryUpcoming,
+        filterByTypeOptions,
         filterByTypes,
         loadMore,
         listType,
@@ -277,10 +309,16 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         onSelectListType,
         onSelectEvent,
         onSelectEventById,
+        refetch,
         scrollRef,
         searchTerm,
         setFocus,
+        showCompanyFilter,
+        showForm,
+        showFormButton,
+        toggleForm,
         useConfigOptions,
+        userQuery,
         userStatusInactive,
     } = props;
 
@@ -307,20 +345,33 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         );
     }
 
-    if (event) {
+    if (event && !showForm) {
         return (
             <Transcript
                 eventId={event.id}
-                onBack={onBackFromTranscript}
                 initialSearchTerm={searchTerm}
+                onBackHeader={customOnly ? 'Back' : undefined}
+                onBack={onBackFromTranscript}
+                onEdit={
+                    event.creator &&
+                    userQuery.status === 'success' &&
+                    userQuery.data.currentUser.id === event.creator.id
+                        ? toggleForm
+                        : undefined
+                }
                 useConfigOptions={useConfigOptions}
             />
         );
     }
 
+    if (showForm) {
+        return <RecordingForm onBack={toggleForm} privateRecordingId={event?.id} />;
+    }
+
     const config = useConfig();
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
     const theme = !useConfigOptions ? darkMode : (useConfigOptions && config.options?.darkMode) || false;
+    const showAllEvents = !!company || eventListView === 'combined';
     let prevEventDate: DateTime | null = null;
     let renderedRefetch = false;
 
@@ -337,10 +388,34 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     />
                     {!useConfigOptions && (
                         <>
-                            <div className="ml-2">
-                                <CompanyFilterButton onChange={onCompanyChange} value={company} />
-                            </div>
+                            {showCompanyFilter && (
+                                <div className="ml-2">
+                                    <CompanyFilterButton onChange={onCompanyChange} value={company} />
+                                </div>
+                            )}
                             <SettingsButton showSyncWatchlist showTonalSentiment={false} />
+                            {showFormButton && (
+                                <Tooltip
+                                    content={
+                                        <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                            Schedule a new recording
+                                        </div>
+                                    }
+                                    grow="down-left"
+                                    hideOnDocumentScroll
+                                    openOn="hover"
+                                    position="bottom-right"
+                                    yOffset={6}
+                                >
+                                    <Button
+                                        className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
+                                        kind="primary"
+                                        onClick={toggleForm}
+                                    >
+                                        <Plus className="h-4 mb-0.5 text-white w-2.5" />
+                                    </Button>
+                                </Tooltip>
+                            )}
                         </>
                     )}
                 </div>
@@ -348,15 +423,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}>
                 <div className="flex flex-col flex-grow">
                     <div className="sticky top-0 px-3 pt-3 pb-2 z-10">
-                        <FilterBy
-                            onChange={onSelectFilterBy}
-                            options={[
-                                { value: FilterByType.transcript, label: 'Transcripts' },
-                                { value: FilterByType.earningsOnly, label: 'Earnings' },
-                            ]}
-                            value={filterByTypes}
-                        >
-                            {company ? (
+                        <FilterBy onChange={onSelectFilterBy} options={filterByTypeOptions} value={filterByTypes}>
+                            {showAllEvents ? (
                                 <p className="text-sm font-semibold dark:text-white">All Events</p>
                             ) : (
                                 <Tabs<EventView>
@@ -404,7 +472,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'success' }, ({ data, isPaging, isRefetching }) => (
                                 <ul className="w-full">
-                                    {company &&
+                                    {showAllEvents &&
                                         match(eventsQueryUpcoming)
                                             .with(
                                                 { status: 'success' },
@@ -425,18 +493,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                         }
                                                         return (
                                                             <EventRow
-                                                                key={`${hit.event.id}-${index}`}
+                                                                customOnly={customOnly}
                                                                 event={hit.event}
-                                                                numMentions={hit.numMentions}
                                                                 index={index}
                                                                 isRefetching={isUpcomingRefetching}
+                                                                key={`${hit.event.id}-${index}`}
                                                                 maxHits={maxHits}
-                                                                showDivider={showDivider}
+                                                                numMentions={hit.numMentions}
+                                                                onSelectEvent={onSelectEvent}
                                                                 refetch={refetch}
                                                                 renderedRefetch={index !== 0}
                                                                 searchTerm={searchTerm}
                                                                 setFocus={setFocus}
-                                                                onSelectEvent={onSelectEvent}
+                                                                showDivider={showDivider}
                                                             />
                                                         );
                                                     })
@@ -457,18 +526,19 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         }
                                         return (
                                             <EventRow
-                                                key={`${hit.event.id}-${index}`}
+                                                customOnly={customOnly}
                                                 event={hit.event}
-                                                numMentions={hit.numMentions}
                                                 index={index}
                                                 isRefetching={isRefetching}
+                                                key={`${hit.event.id}-${index}`}
                                                 maxHits={maxHits}
-                                                showDivider={showDivider}
+                                                numMentions={hit.numMentions}
+                                                onSelectEvent={onSelectEvent}
                                                 refetch={refetch}
                                                 renderedRefetch={renderedRefetch}
                                                 searchTerm={searchTerm}
                                                 setFocus={setFocus}
-                                                onSelectEvent={onSelectEvent}
+                                                showDivider={showDivider}
                                             />
                                         );
                                     })}
@@ -507,29 +577,31 @@ export interface EventListProps {
 
 interface EventListState {
     company?: CompanyFilterResult;
-    fromIndex: number;
-    pageSize: number;
-    watchlist: string[];
     event?: EventListEvent;
     filterByTypes: FilterByType[];
+    fromIndex: number;
     listType: EventView;
+    pageSize: number;
     searchTerm: string;
-    userStatusLoaded: boolean;
+    showForm: boolean;
     userStatusInactive: boolean;
+    userStatusLoaded: boolean;
+    watchlist: string[];
 }
 
 export const EventList = ({ useConfigOptions = false }: EventListProps): ReactElement => {
     const { state, handlers, mergeState } = useChangeHandlers<EventListState>({
         company: undefined,
-        fromIndex: 0,
-        pageSize: 30,
-        watchlist: [],
         event: undefined,
         filterByTypes: [],
+        fromIndex: 0,
         listType: useConfigOptions ? EventView.Recent : EventView.LiveAndUpcoming,
+        pageSize: 30,
         searchTerm: '',
-        userStatusLoaded: false,
+        showForm: false,
         userStatusInactive: false,
+        userStatusLoaded: false,
+        watchlist: [],
     });
 
     const { settings } = useSettings();
@@ -650,12 +722,19 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
                         numMentions
                         event {
                             id
-                            title
+                            audioRecordingUrl
+                            audioRecordingOffsetMs
                             eventDate
                             eventType
                             isLive
-                            audioRecordingUrl
-                            audioRecordingOffsetMs
+                            title
+                            creator {
+                                id
+                                firstName
+                                lastName
+                                primaryEmail
+                                username
+                            }
                             primaryCompany {
                                 id
                                 commonName
@@ -684,18 +763,28 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
         }
     `;
 
+    const eventTypes = useMemo(() => {
+        let types;
+        if (config.options?.customOnly) {
+            types = [EventType.Custom];
+        } else if (state.filterByTypes.includes(FilterByType.earningsOnly)) {
+            types = [EventType.Earnings];
+        }
+        return types;
+    }, [config, state.filterByTypes]);
+
     const eventsQuery = usePagingQuery<EventListQuery, EventListQueryVariables>({
         isEmpty: (data) => data.search.events.numTotalHits === 0,
         requestPolicy: 'cache-and-network',
         query: eventsGQL,
         mergeResults,
         variables: {
-            view: state.company ? EventView.Recent : state.listType,
+            view: state.company || config.options?.eventListView === 'combined' ? EventView.Recent : state.listType,
             fromIndex: state.fromIndex,
             size: state.pageSize,
             filter: {
                 hasTranscripts: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
-                eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
+                eventTypes,
                 searchTerm: state.searchTerm || undefined,
                 companyIds: state.company?.id
                     ? [state.company.id]
@@ -717,7 +806,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             size: state.pageSize,
             filter: {
                 hasTranscripts: state.filterByTypes.includes(FilterByType.transcript) ? true : undefined,
-                eventTypes: state.filterByTypes.includes(FilterByType.earningsOnly) ? [EventType.Earnings] : undefined,
+                eventTypes,
                 searchTerm: state.searchTerm || undefined,
                 companyIds: state.company?.id
                     ? [state.company.id]
@@ -727,6 +816,37 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             },
         },
     });
+
+    const userQuery = useQuery<EventListCurrentUserQuery>({
+        requestPolicy: 'cache-only',
+        query: gql`
+            query EventListCurrentUser {
+                currentUser {
+                    id
+                }
+            }
+        `,
+    });
+
+    const filterByTypeOptions: FilterByTypeOption[] = useMemo(() => {
+        let options: FilterByTypeOption[] = [];
+        if (config.options?.eventListFilters) {
+            config.options.eventListFilters.forEach((filter: EventListFilter) => {
+                if (filter === 'transcripts') {
+                    options.push({ value: FilterByType.transcript, label: 'Transcripts' });
+                }
+                if (filter === 'earningsOnly') {
+                    options.push({ value: FilterByType.earningsOnly, label: 'Earnings' });
+                }
+            });
+        } else {
+            options = [
+                { value: FilterByType.transcript, label: 'Transcripts' },
+                { value: FilterByType.earningsOnly, label: 'Earnings' },
+            ];
+        }
+        return options;
+    }, [config]);
 
     const hasMoreResults = useMemo(() => {
         if (eventsQuery.status === 'success') {
@@ -806,14 +926,16 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
     return (
         <EventListUI
             company={state.company}
+            customOnly={!!config.options?.customOnly}
             darkMode={settings.darkMode}
             event={state.event}
+            eventListView={config.options?.eventListView}
             eventsQuery={eventsQuery}
             eventsQueryUpcoming={eventsQueryUpcoming}
+            filterByTypeOptions={filterByTypeOptions}
             filterByTypes={state.filterByTypes}
-            loadMore={hasMoreResults ? loadMore : undefined}
-            refetch={refetch}
             listType={state.listType}
+            loadMore={hasMoreResults ? loadMore : undefined}
             maxHits={maxHits}
             onBackFromTranscript={useCallback(
                 (event: SyntheticEvent<Element, Event>) => onSelectEvent(event, { value: null }),
@@ -821,14 +943,27 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             )}
             onCompanyChange={onSelectCompany}
             onSearchChange={handlers.searchTerm}
-            onSelectFilterBy={handlers.filterByTypes}
-            onSelectListType={handlers.listType}
             onSelectEvent={onSelectEvent}
             onSelectEventById={onSelectEventById}
+            onSelectFilterBy={handlers.filterByTypes}
+            onSelectListType={handlers.listType}
+            refetch={refetch}
             scrollRef={scrollRef}
             searchTerm={state.searchTerm}
             setFocus={setFocus}
+            showCompanyFilter={
+                config.options?.showCompanyFilter === undefined ? true : config.options?.showCompanyFilter
+            }
+            showForm={state.showForm}
+            showFormButton={!!config.options?.showScheduleRecording}
+            toggleForm={useCallback(
+                (event: SyntheticEvent<Element, Event>) => {
+                    handlers.showForm(event, { value: !state.showForm });
+                },
+                [state.showForm]
+            )}
             useConfigOptions={useConfigOptions}
+            userQuery={userQuery}
             userStatusInactive={state.userStatusInactive}
         />
     );

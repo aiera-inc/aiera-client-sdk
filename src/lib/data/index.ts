@@ -14,6 +14,7 @@ import {
     CompanyResolutionQueryVariables,
     TrackMutation,
     TrackMutationVariables,
+    User,
     UserStatusQuery,
     UserStatusQueryVariables,
 } from '@aiera/client-sdk/types/generated';
@@ -21,6 +22,22 @@ import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useStorage } from '@aiera/client-sdk/lib/storage';
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+
+export function getEventCreatorName(creator?: User | null): string {
+    let createdBy = '';
+    if (creator) {
+        if (creator.firstName) {
+            createdBy = creator.firstName;
+        }
+        if (creator.lastName) {
+            createdBy = `${createdBy} ${creator.lastName.slice(0, 1)}.`;
+        }
+        if (!createdBy) {
+            createdBy = creator.primaryEmail || creator.username;
+        }
+    }
+    return createdBy;
+}
 
 /**
  * Utilities for working with quotes/instruments

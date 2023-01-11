@@ -66,29 +66,32 @@ const eventQuery = {
 };
 
 describe('Header', () => {
+    const onBack = jest.fn();
+
     test('renders', () => {
-        const onBack = jest.fn();
         renderWithProvider(
             <Header
-                useConfigOptions={false}
                 containerHeight={500}
+                eventId="1928914"
                 eventQuery={eventQuery as EventQuery}
                 onBack={onBack}
-                eventId="1928914"
+                onBackHeader="Events"
+                useConfigOptions={false}
             />
         );
         screen.getByText('VERB');
     });
 
-    test('Back function is called', () => {
+    test('back function is called', () => {
         const onBack = jest.fn();
         renderWithProvider(
             <Header
-                useConfigOptions={false}
                 containerHeight={500}
+                eventId="1928914"
                 eventQuery={eventQuery as EventQuery}
                 onBack={onBack}
-                eventId="1928914"
+                onBackHeader="Events"
+                useConfigOptions={false}
             />
         );
         const eventsBtn = screen.getByText('Events');
@@ -96,16 +99,31 @@ describe('Header', () => {
         expect(onBack).toHaveBeenCalledTimes(1);
     });
 
-    test('Renders search term and fires search change events', () => {
+    test('renders specified text for onBack button', () => {
+        renderWithProvider(
+            <Header
+                containerHeight={500}
+                eventId="1928914"
+                eventQuery={eventQuery as EventQuery}
+                onBack={onBack}
+                onBackHeader="Recordings"
+                useConfigOptions={false}
+            />
+        );
+        screen.getByText('Recordings');
+    });
+
+    test('renders search term and fires search change events', () => {
         const onChangeSearchTerm = jest.fn();
         renderWithProvider(
             <Header
-                useConfigOptions={false}
-                eventId="1928914"
                 containerHeight={500}
+                eventId="1928914"
                 eventQuery={eventQuery as EventQuery}
+                onBackHeader="Events"
                 onChangeSearchTerm={onChangeSearchTerm}
                 searchTerm={'test search'}
+                useConfigOptions={false}
             />
         );
         const searchInput = screen.getByPlaceholderText('Search Transcript...');

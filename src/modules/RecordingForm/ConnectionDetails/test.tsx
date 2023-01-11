@@ -294,7 +294,7 @@ describe('ConnectionDetails', () => {
     describe('when connection type is Phone Number', () => {
         const phoneNumberProps = {
             ...props,
-            connectionType: ConnectionType.PhoneNumber,
+            connectionType: ConnectionType.Phone,
         };
 
         test('renders fields for Phone Number', () => {
