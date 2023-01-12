@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.74% </span>
+                <span class="strong">92.71% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>134/151</span>
+                <span class='fraction'>140/151</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.53% </span>
+                <span class="strong">76.11% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>40/65</span>
+                <span class='fraction'>51/67</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">88.48% </span>
+                <span class="strong">92.8% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>123/139</span>
+                <span class='fraction'>129/139</span>
             </div>
         
             
@@ -602,19 +602,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">75x</span>
-<span class="cline-any cline-yes">75x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">80x</span>
+<span class="cline-any cline-yes">80x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">75x</span>
+<span class="cline-any cline-yes">80x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -723,7 +723,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">180x</span>
+<span class="cline-any cline-yes">182x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -766,9 +766,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">372x</span>
-<span class="cline-any cline-yes">372x</span>
-<span class="cline-any cline-yes">372x</span>
+<span class="cline-any cline-yes">374x</span>
+<span class="cline-any cline-yes">374x</span>
+<span class="cline-any cline-yes">374x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -793,7 +793,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">372x</span>
+<span class="cline-any cline-yes">374x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1116,15 +1116,15 @@ import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
 &nbsp;
 export function getEventCreatorName(creator?: User | null): string {
     let createdBy = '';
-    <span class="missing-if-branch" title="if path not taken" >I</span>if (creator) {
-<span class="cstat-no" title="statement not covered" >        if (creator.firstName) {</span>
-<span class="cstat-no" title="statement not covered" >            createdBy = creator.firstName;</span>
+    if (creator) {
+        if (creator.firstName) {
+            createdBy = creator.firstName;
         }
-<span class="cstat-no" title="statement not covered" >        if (creator.lastName) {</span>
-<span class="cstat-no" title="statement not covered" >            createdBy = `${createdBy} ${creator.lastName.slice(0, 1)}.`;</span>
+        if (creator.lastName) {
+            createdBy = createdBy ? `${createdBy} ${creator.lastName.slice(0, 1)}.` : creator.lastName;
         }
-<span class="cstat-no" title="statement not covered" >        if (!createdBy) {</span>
-<span class="cstat-no" title="statement not covered" >            createdBy = creator.primaryEmail || creator.username;</span>
+        if (!createdBy) {
+            createdBy = creator.primaryEmail || creator.username;
         }
     }
     return createdBy;
@@ -1609,7 +1609,7 @@ export function <span class="fstat-no" title="function not covered" >usePlaySoun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Jan 11 2023 17:22:52 GMT-0500 (Eastern Standard Time)
+                at Wed Jan 11 2023 23:07:03 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
