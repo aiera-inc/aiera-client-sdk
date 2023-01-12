@@ -1,10 +1,59 @@
 import React, { ReactNode, useEffect } from 'react';
-import { renderHook } from '@testing-library/react-hooks';
-import { fromValue } from 'wonka';
-
 import { actAndFlush, getMockedClient, MockProvider, renderWithProvider } from 'testUtils';
+import { fromValue } from 'wonka';
+import { renderHook } from '@testing-library/react-hooks';
 
-import { useAppConfig, useAutoTrack, useTrack, useSettings, useAlertList, defaultSettings, defaultAlertList } from '.';
+import { User } from '@aiera/client-sdk/types/generated';
+import {
+    getEventCreatorName,
+    useAppConfig,
+    useAutoTrack,
+    useTrack,
+    useSettings,
+    useAlertList,
+    defaultSettings,
+    defaultAlertList,
+} from '.';
+
+describe('getEventCreatorName', () => {
+    test('renders first name when only first name is defined', () => {
+        const user = {
+            firstName: 'Tester',
+        };
+        expect(getEventCreatorName(user as User)).toBe(user.firstName);
+    });
+
+    test('renders last name when only last name is defined', () => {
+        const user = {
+            lastName: 'McTesting',
+        };
+        expect(getEventCreatorName(user as User)).toBe(user.lastName);
+    });
+
+    test('renders first name and last initial when both are defined', () => {
+        const user = {
+            firstName: 'Tester',
+            lastName: 'McTesting',
+            username: 'test@aiera.com',
+        };
+        expect(getEventCreatorName(user as User)).toBe('Tester M.');
+    });
+
+    test('renders primary email when set and name is not defined', () => {
+        const user = {
+            primaryEmail: 'test@aiera.com',
+            username: 'tester@example.com',
+        };
+        expect(getEventCreatorName(user as User)).toBe(user.primaryEmail);
+    });
+
+    test('renders username when set and primary email and name are not defined', () => {
+        const user = {
+            username: 'tester@example.com',
+        };
+        expect(getEventCreatorName(user as User)).toBe(user.username);
+    });
+});
 
 describe('useTrack', () => {
     const TestComponent = () => {

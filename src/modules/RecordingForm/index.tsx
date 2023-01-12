@@ -176,7 +176,7 @@ export function RecordingFormUI(props: RecordingFormUIProps): ReactElement {
                 <div className="flex items-center mb-3">
                     <Button className="mr-2" onClick={onBack}>
                         <ArrowLeft className="fill-current text-black w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
-                        Back to list
+                        {editing ? 'Event' : 'Events'}
                     </Button>
                     <p className="ml-auto text-gray-400 text-sm">
                         Step {step} of {NUM_STEPS}

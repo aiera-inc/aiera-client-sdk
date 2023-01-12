@@ -346,19 +346,14 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     }
 
     if (event && !showForm) {
+        const editable =
+            event.creator && userQuery.status === 'success' && userQuery.data.currentUser.id === event.creator.id;
         return (
             <Transcript
                 eventId={event.id}
                 initialSearchTerm={searchTerm}
-                onBackHeader={customOnly ? 'Back to list' : undefined}
                 onBack={onBackFromTranscript}
-                onEdit={
-                    event.creator &&
-                    userQuery.status === 'success' &&
-                    userQuery.data.currentUser.id === event.creator.id
-                        ? toggleForm
-                        : undefined
-                }
+                onEdit={editable ? toggleForm : undefined}
                 useConfigOptions={useConfigOptions}
             />
         );

@@ -30,7 +30,7 @@ export function getEventCreatorName(creator?: User | null): string {
             createdBy = creator.firstName;
         }
         if (creator.lastName) {
-            createdBy = `${createdBy} ${creator.lastName.slice(0, 1)}.`;
+            createdBy = createdBy ? `${createdBy} ${creator.lastName.slice(0, 1)}.` : creator.lastName;
         }
         if (!createdBy) {
             createdBy = creator.primaryEmail || creator.username;
