@@ -472,6 +472,14 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                         }
                         startPrice
                     }
+                    summaries {
+                        audioClip
+                        modelType
+                        summary
+                        summaryType
+                        title
+                        videoClip
+                    }
                     transcripts {
                         id
                         sections {
