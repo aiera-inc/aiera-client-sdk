@@ -669,7 +669,26 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
     const onSelectEvent = useCallback<ChangeHandler<EventListEvent>>(
         (event, change) => {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
+            const ticker = primaryQuote?.localTicker;
+            const title = change.value?.title;
+            const eventDate = change.value?.eventDate;
+            const eventType = change.value?.eventType;
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
+
+            // We don't need to emit events
+            // when going back to the event list
+            if (ticker && title) {
+                bus?.emit(
+                    'event-selected',
+                    {
+                        ticker,
+                        title,
+                        eventType,
+                        eventDate,
+                    },
+                    'out'
+                );
+            }
             handlers.event(event, change);
             // If we are going back to the event list, refetch immediately
             if (!change.value) {

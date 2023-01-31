@@ -13,6 +13,13 @@ interface EventAlert {
     eventIds: string[];
 }
 
+interface EventSelected {
+    ticker?: string;
+    eventDate?: string;
+    eventType?: string;
+    title?: string;
+}
+
 export interface MessageBusEvents {
     'seek-audio-seconds': number;
     authenticate: AuthTokens;
@@ -20,6 +27,7 @@ export interface MessageBusEvents {
     authenticated: null;
     configure: Config;
     'event-alert': EventAlert;
+    'event-selected': EventSelected;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
     'seek-transcript-seconds': number;
