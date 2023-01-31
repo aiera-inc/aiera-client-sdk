@@ -677,7 +677,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
 
             // We don't need to emit events
             // when going back to the event list
-            if (ticker && title) {
+            if (eventDate && title) {
                 bus?.emit(
                     'event-selected',
                     {
