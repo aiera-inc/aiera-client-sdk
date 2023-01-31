@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.51% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>114/174</span>
+                <span class='fraction'>120/180</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.49% </span>
+                <span class="strong">54.94% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>97/178</span>
+                <span class='fraction'>100/182</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.68% </span>
+                <span class="strong">66.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>111/169</span>
+                <span class='fraction'>117/175</span>
             </div>
         
             
@@ -1028,7 +1028,26 @@
 <a name='L963'></a><a href='#L963'>963</a>
 <a name='L964'></a><a href='#L964'>964</a>
 <a name='L965'></a><a href='#L965'>965</a>
-<a name='L966'></a><a href='#L966'>966</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L966'></a><a href='#L966'>966</a>
+<a name='L967'></a><a href='#L967'>967</a>
+<a name='L968'></a><a href='#L968'>968</a>
+<a name='L969'></a><a href='#L969'>969</a>
+<a name='L970'></a><a href='#L970'>970</a>
+<a name='L971'></a><a href='#L971'>971</a>
+<a name='L972'></a><a href='#L972'>972</a>
+<a name='L973'></a><a href='#L973'>973</a>
+<a name='L974'></a><a href='#L974'>974</a>
+<a name='L975'></a><a href='#L975'>975</a>
+<a name='L976'></a><a href='#L976'>976</a>
+<a name='L977'></a><a href='#L977'>977</a>
+<a name='L978'></a><a href='#L978'>978</a>
+<a name='L979'></a><a href='#L979'>979</a>
+<a name='L980'></a><a href='#L980'>980</a>
+<a name='L981'></a><a href='#L981'>981</a>
+<a name='L982'></a><a href='#L982'>982</a>
+<a name='L983'></a><a href='#L983'>983</a>
+<a name='L984'></a><a href='#L984'>984</a>
+<a name='L985'></a><a href='#L985'>985</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1700,6 +1719,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -2664,7 +2702,26 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
     const onSelectEvent = useCallback&lt;ChangeHandler&lt;EventListEvent&gt;&gt;(
         (event, change) =&gt; {
             const primaryQuote = getPrimaryQuote(change.value?.primaryCompany);
+            const ticker = primaryQuote?.localTicker;
+            const title = change.value?.title;
+            const eventDate = change.value?.eventDate;
+            const eventType = change.value?.eventType;
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
+&nbsp;
+            // We don't need to emit events
+            // when going back to the event list
+            if (eventDate &amp;&amp; title) {
+                bus?.emit(
+                    'event-selected',
+                    {
+                        ticker,
+                        title,
+                        eventType,
+                        eventDate,
+                    },
+                    'out'
+                );
+            }
             handlers.event(event, change);
             // If we are going back to the event list, refetch immediately
             <span class="missing-if-branch" title="if path not taken" >I</span>if (!change.value) {
@@ -2965,7 +3022,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Jan 11 2023 23:07:03 GMT-0500 (Eastern Standard Time)
+                at Tue Jan 31 2023 11:40:15 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

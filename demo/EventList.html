@@ -39,6 +39,12 @@
                 //     { ticker: 'PTON' },
                 // ]);
             });
+            eventList.on('instrument-selected', (ticker) => {
+                console.log('selected ticker: ', ticker);
+            });
+            eventList.on('event-selected', (event) => {
+                console.log('selected event: ', event);
+            });
         </script>
     </body>
 </html>
