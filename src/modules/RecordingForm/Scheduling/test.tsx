@@ -55,7 +55,7 @@ describe('Scheduling', () => {
             />
         );
         screen.getByText('Date & Time');
-        expect(screen.queryByPlaceholderText('10:00')).toBeInTheDocument();
+        expect(screen.queryByPlaceholderText('09:30')).toBeInTheDocument();
         screen.getByText('AM');
     });
 
@@ -72,7 +72,7 @@ describe('Scheduling', () => {
             />
         );
         screen.getByText('Date & Time');
-        expect(screen.queryByPlaceholderText('10:00')).toBeInTheDocument();
+        expect(screen.queryByPlaceholderText('09:30')).toBeInTheDocument();
         screen.getByText('AM');
         screen.getByText('Required');
     });
@@ -91,7 +91,7 @@ describe('Scheduling', () => {
             />
         );
         screen.getByText('Date & Time');
-        expect(screen.queryByPlaceholderText('10:00')).toBeInTheDocument();
+        expect(screen.queryByPlaceholderText('09:30')).toBeInTheDocument();
         screen.getByText('AM');
         screen.getByText('Invalid');
     });

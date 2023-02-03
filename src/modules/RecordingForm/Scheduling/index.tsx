@@ -1,9 +1,19 @@
-import React, { FocusEventHandler, ReactElement, Ref, useCallback, useRef, useState } from 'react';
+import React, {
+    ChangeEvent,
+    FocusEventHandler,
+    ReactElement,
+    Ref,
+    useCallback,
+    useMemo,
+    useRef,
+    useState,
+} from 'react';
+import MaskedInput from 'react-text-mask';
 import { DatePicker } from '@aiera/client-sdk/components/DatePicker';
 import { Dropdown } from '@aiera/client-sdk/components/Dropdown';
 import { FormField } from '@aiera/client-sdk/components/FormField';
 import { FormFieldSelect } from '@aiera/client-sdk/components/FormField/FormFieldSelect';
-import { Input } from '@aiera/client-sdk/components/Input';
+import { Input, InputProps } from '@aiera/client-sdk/components/Input';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import {
     CONNECT_OFFSET_SECONDS_OPTIONS,
@@ -32,6 +42,7 @@ interface SchedulingUIProps extends SchedulingSharedProps {
     calendarRef: Ref<HTMLDivElement>;
     isCalendarVisible: boolean;
     showCalendar: () => void;
+    timeInputMask: Array<RegExp | string>;
 }
 
 export function SchedulingUI(props: SchedulingUIProps): ReactElement {
@@ -47,6 +58,7 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
         scheduleTime,
         scheduleType,
         showCalendar,
+        timeInputMask,
     } = props;
     return (
         <div className="py-3 scheduling">
@@ -73,13 +85,23 @@ export function SchedulingUI(props: SchedulingUIProps): ReactElement {
                                 onFocus={showCalendar}
                                 value={scheduleDate ? scheduleDate.toLocaleDateString() : ''}
                             />
-                            <Input
+                            <MaskedInput
                                 className="ml-2 shrink-[1]"
-                                error={errors.scheduleTime}
-                                name="scheduleTime"
+                                guide={false}
+                                mask={timeInputMask}
+                                name="scheduledTime"
                                 onBlur={onBlur}
-                                onChange={onChange}
-                                placeholder="10:00"
+                                onChange={(event: ChangeEvent<HTMLInputElement>) =>
+                                    onChange?.(event, { name: 'scheduleTime', value: event?.currentTarget?.value })
+                                }
+                                placeholder="09:30"
+                                render={(ref: (inputElement: HTMLElement) => void, props) => (
+                                    <Input
+                                        {...(props as unknown as InputProps)}
+                                        error={errors.scheduleTime}
+                                        inputRef={ref as unknown as Ref<HTMLInputElement>}
+                                    />
+                                )}
                                 value={scheduleTime}
                             />
                             <Dropdown
@@ -144,6 +166,12 @@ export function Scheduling(props: SchedulingProps): ReactElement {
         scheduleTime,
         scheduleType,
     } = props;
+
+    const timeInputMask = useMemo(() => {
+        const startsWithTwo = scheduleTime ? scheduleTime[0] === '2' : false;
+        return [/[0-2]/, startsWithTwo ? /[0-3]/ : /[0-9]/, ':', /[0-5]/, /[0-9]/];
+    }, [scheduleTime]);
+
     return (
         <SchedulingUI
             calendarRef={calendarRef}
@@ -157,6 +185,7 @@ export function Scheduling(props: SchedulingProps): ReactElement {
             scheduleTime={scheduleTime}
             scheduleType={scheduleType}
             showCalendar={useCallback(() => setCalendarVisibility(true), [setCalendarVisibility])}
+            timeInputMask={timeInputMask}
         />
     );
 }

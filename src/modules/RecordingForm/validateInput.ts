@@ -424,11 +424,9 @@ export default function validateInput({
             if (!hasValue) {
                 errors.scheduleTime = 'Required';
             } else {
-                const validTime = [3, 4].includes((value as string).length);
-                if (!validTime) {
+                if (String(value).length !== 5) {
                     errors.scheduleTime = 'Invalid';
-                }
-                if (validTime && errors.scheduleTime) {
+                } else if (errors.scheduleTime) {
                     delete errors.scheduleTime;
                 }
             }
@@ -445,7 +443,7 @@ export default function validateInput({
         }
     }
     // Add or remove the onFailureDialNumber error depending on if useOnConnectDialNumber is checked off
-    // and whether or not onConnectDialNumber or onFailureDialNumber is set
+    // and whether onConnectDialNumber or onFailureDialNumber is set
     if (name === 'useOnConnectDialNumber') {
         if (
             errors.onFailureDialNumber &&

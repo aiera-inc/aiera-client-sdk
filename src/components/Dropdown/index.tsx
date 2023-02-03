@@ -107,7 +107,7 @@ export function DropdownUI<T>(props: DropdownUIProps<T>): ReactElement {
             position={tooltipPosition}
             yOffset={5}
         >
-            <div className="flex-1">{selectedLabel}</div>
+            <div className="flex-1 pr-2">{selectedLabel}</div>
             <Chevron className="w-2" />
         </Tooltip>
     );
