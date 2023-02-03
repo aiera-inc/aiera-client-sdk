@@ -62,8 +62,10 @@ describe('ConnectionDetails', () => {
             expect(screen.queryByText('Set it & forget it')).toBeNull();
         });
 
-        test('when meeting type is phone, render fields for phone only', () => {
-            renderWithProvider(<ConnectionDetails {...props} zoomMeetingType={ZoomMeetingType.Phone} />);
+        test('when meeting type is phone, render fields for phone only', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(<ConnectionDetails {...props} zoomMeetingType={ZoomMeetingType.Phone} />);
+            });
             const phoneOption = screen.getByText('Dial-in number');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
@@ -137,45 +139,51 @@ describe('ConnectionDetails', () => {
             screen.getByText('Must be a valid url starting with http or https');
         });
 
-        test('when meeting type is phone and connectPhoneNumber is not set, render an error', () => {
-            renderWithProvider(
-                <ConnectionDetails
-                    {...props}
-                    connectPhoneNumber={''}
-                    errors={{ connectPhoneNumber: 'Required' }}
-                    zoomMeetingType={ZoomMeetingType.Phone}
-                />
-            );
+        test('when meeting type is phone and connectPhoneNumber is not set, render an error', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(
+                    <ConnectionDetails
+                        {...props}
+                        connectPhoneNumber={''}
+                        errors={{ connectPhoneNumber: 'Required' }}
+                        zoomMeetingType={ZoomMeetingType.Phone}
+                    />
+                );
+            });
             const phoneOption = screen.getByText('Dial-in number*');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
             screen.getByText('Required');
         });
 
-        test('when meeting type is phone and connectAccessId is not set, render an error', () => {
-            renderWithProvider(
-                <ConnectionDetails
-                    {...props}
-                    connectAccessId={''}
-                    errors={{ connectAccessId: 'Required' }}
-                    zoomMeetingType={ZoomMeetingType.Phone}
-                />
-            );
+        test('when meeting type is phone and connectAccessId is not set, render an error', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(
+                    <ConnectionDetails
+                        {...props}
+                        connectAccessId={''}
+                        errors={{ connectAccessId: 'Required' }}
+                        zoomMeetingType={ZoomMeetingType.Phone}
+                    />
+                );
+            });
             const phoneOption = screen.getByText('Dial-in number*');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('1234567890')).toBeInTheDocument();
             screen.getByText('Required');
         });
 
-        test('when meeting type is phone and connectPin is invalid, render an error', () => {
-            renderWithProvider(
-                <ConnectionDetails
-                    {...props}
-                    connectPin="test"
-                    errors={{ connectPin: 'Must only contain numbers or #' }}
-                    zoomMeetingType={ZoomMeetingType.Phone}
-                />
-            );
+        test('when meeting type is phone and connectPin is invalid, render an error', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(
+                    <ConnectionDetails
+                        {...props}
+                        connectPin="test"
+                        errors={{ connectPin: 'Must only contain numbers or #' }}
+                        zoomMeetingType={ZoomMeetingType.Phone}
+                    />
+                );
+            });
             const phoneOption = screen.getByText('Dial-in number*');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
@@ -212,8 +220,8 @@ describe('ConnectionDetails', () => {
             connectionType: ConnectionType.GoogleMeet,
         };
 
-        test('renders fields for Google Meet', () => {
-            renderWithProvider(<ConnectionDetails {...googleProps} />);
+        test('renders fields for Google Meet', async () => {
+            await actAndFlush(() => renderWithProvider(<ConnectionDetails {...googleProps} />));
             screen.getByText('Dial-in number*');
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
             expect(screen.queryByDisplayValue(props.connectPin)).toBeInTheDocument();
@@ -221,14 +229,16 @@ describe('ConnectionDetails', () => {
             screen.getByText('Set it & forget it');
         });
 
-        test('when connectPin is invalid, render an error', () => {
-            renderWithProvider(
-                <ConnectionDetails
-                    {...googleProps}
-                    connectPin="test"
-                    errors={{ connectPin: 'Must only contain numbers or #' }}
-                />
-            );
+        test('when connectPin is invalid, render an error', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(
+                    <ConnectionDetails
+                        {...googleProps}
+                        connectPin="test"
+                        errors={{ connectPin: 'Must only contain numbers or #' }}
+                    />
+                );
+            });
             const phoneOption = screen.getByText('Dial-in number*');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
@@ -297,8 +307,8 @@ describe('ConnectionDetails', () => {
             connectionType: ConnectionType.Phone,
         };
 
-        test('renders fields for Phone Number', () => {
-            renderWithProvider(<ConnectionDetails {...phoneNumberProps} />);
+        test('renders fields for Phone Number', async () => {
+            await actAndFlush(() => renderWithProvider(<ConnectionDetails {...phoneNumberProps} />));
             screen.getByText('Dial-in number*');
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
             expect(screen.queryByPlaceholderText('1234567890')).toBeInTheDocument();
@@ -307,14 +317,16 @@ describe('ConnectionDetails', () => {
             screen.getByText('Set it & forget it');
         });
 
-        test('when connectPin is invalid, render an error', () => {
-            renderWithProvider(
-                <ConnectionDetails
-                    {...phoneNumberProps}
-                    connectPin="test"
-                    errors={{ connectPin: 'Must only contain numbers or #' }}
-                />
-            );
+        test('when connectPin is invalid, render an error', async () => {
+            await actAndFlush(() => {
+                renderWithProvider(
+                    <ConnectionDetails
+                        {...phoneNumberProps}
+                        connectPin="test"
+                        errors={{ connectPin: 'Must only contain numbers or #' }}
+                    />
+                );
+            });
             const phoneOption = screen.getByText('Dial-in number*');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();

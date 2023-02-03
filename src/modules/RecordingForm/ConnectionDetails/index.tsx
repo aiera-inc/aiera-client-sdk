@@ -62,20 +62,23 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         zoomMeetingType,
     } = props;
     const dialInField = (
-        <FormFieldInput
-            autoFocus
-            className="mt-5 px-4 py-3"
-            clearable
-            description="Enter the dial-in number"
-            error={errors.connectPhoneNumber}
-            label="Dial-in number*"
-            name="connectPhoneNumber"
-            onBlur={onBlur}
-            onChange={onChange}
-            onFocus={onFocus}
-            placeholder="(888)-123-4567"
-            value={connectPhoneNumber}
-        />
+        <FormField className="mt-5 px-4 py-3">
+            <p className="font-semibold text-base text-black form-field__label">Dial-in number*</p>
+            <p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description">
+                Enter the dial-in number
+            </p>
+            <PhoneNumberInput
+                className="mt-5"
+                defaultCountry="US"
+                error={errors.connectPhoneNumber}
+                name="connectPhoneNumber"
+                onBlur={onBlur}
+                onChange={(value?: string) => onChange(null, { name: 'connectPhoneNumber', value })}
+                onFocus={onFocus}
+                placeholder="(888)-123-4567"
+                value={connectPhoneNumber}
+            />
+        </FormField>
     );
     const participationTypeField = (
         <FormFieldSelect
@@ -108,6 +111,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             clearable
             description={description}
             error={errors.connectAccessId}
+            inputType="number"
             label={label}
             name="connectAccessId"
             onBlur={onBlur}

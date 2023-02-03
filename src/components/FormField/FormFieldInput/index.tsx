@@ -16,6 +16,7 @@ export interface FormFieldInputProps extends SharedProps {
     description?: string;
     error?: string;
     label?: string;
+    inputType?: string;
     onBlur?: FocusEventHandler;
     onChange?: ChangeHandler<string>;
     onFocus?: FocusEventHandler;
@@ -30,6 +31,7 @@ export function FormFieldInput(props: FormFieldInputProps) {
         clearable,
         description,
         error,
+        inputType,
         label,
         name,
         onBlur,
@@ -56,6 +58,7 @@ export function FormFieldInput(props: FormFieldInputProps) {
                     onChange={onChange}
                     onFocus={onFocus}
                     placeholder={placeholder}
+                    type={inputType}
                     value={value}
                 />
             </div>
