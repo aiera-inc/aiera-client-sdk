@@ -20,6 +20,8 @@ function validateUrl(url: string): RegExpMatchArray | null {
     return valid;
 }
 
+const SCHEDULE_TIME_REQUIRED_ERROR = 'Req. format HH:MM';
+
 export default function validateInput({
     errorState,
     isNewRecording,
@@ -422,10 +424,10 @@ export default function validateInput({
     if (name === 'scheduleTime') {
         if (state.scheduleType === ScheduleType.Future) {
             if (!hasValue) {
-                errors.scheduleTime = 'Required';
+                errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;
             } else {
                 if (String(value).length !== 5) {
-                    errors.scheduleTime = 'Invalid';
+                    errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;
                 } else if (errors.scheduleTime) {
                     delete errors.scheduleTime;
                 }
@@ -436,7 +438,7 @@ export default function validateInput({
     }
     if (name === 'scheduleType') {
         if (value === ScheduleType.Future && !state.scheduleTime) {
-            errors.scheduleTime = 'Required';
+            errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;
         }
         if (value === ScheduleType.Now && errors.scheduleTime) {
             delete errors.scheduleTime;
