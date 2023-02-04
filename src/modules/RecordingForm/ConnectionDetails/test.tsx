@@ -178,7 +178,7 @@ describe('ConnectionDetails', () => {
                 renderWithProvider(
                     <ConnectionDetails
                         {...props}
-                        connectPin="test"
+                        connectPin="12345"
                         errors={{ connectPin: 'Must only contain numbers or #' }}
                         zoomMeetingType={ZoomMeetingType.Phone}
                     />
@@ -187,7 +187,7 @@ describe('ConnectionDetails', () => {
             const phoneOption = screen.getByText('Dial-in number*');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
-            expect(screen.queryByDisplayValue('test')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue('12345')).toBeInTheDocument();
             screen.getByText('Must only contain numbers or #');
         });
 
@@ -322,7 +322,7 @@ describe('ConnectionDetails', () => {
                 renderWithProvider(
                     <ConnectionDetails
                         {...phoneNumberProps}
-                        connectPin="test"
+                        connectPin="12345"
                         errors={{ connectPin: 'Must only contain numbers or #' }}
                     />
                 );
@@ -330,7 +330,7 @@ describe('ConnectionDetails', () => {
             const phoneOption = screen.getByText('Dial-in number*');
             fireEvent.click(phoneOption);
             expect(screen.queryByPlaceholderText('(888)-123-4567')).toBeInTheDocument();
-            expect(screen.queryByDisplayValue('test')).toBeInTheDocument();
+            expect(screen.queryByDisplayValue('12345')).toBeInTheDocument();
             screen.getByText('Must only contain numbers or #');
         });
     });

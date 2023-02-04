@@ -38,4 +38,18 @@ describe('Checkbox', () => {
         const { rendered } = renderWithProvider(<Checkbox checked kind="radio" label="Test 123" onChange={onChange} />);
         expect(rendered.container.getElementsByClassName('rounded-xl').length).toBe(1);
     });
+
+    test('when not checked and required, render error styles', () => {
+        const { rendered } = renderWithProvider(
+            <Checkbox checked={false} label="Test 123" onChange={onChange} required />
+        );
+        expect(rendered.container.getElementsByClassName('border-red-600').length).toBe(1);
+        expect(rendered.container.getElementsByClassName('text-red-600').length).toBe(1);
+    });
+
+    test('when checked and required, do not render error styles', () => {
+        const { rendered } = renderWithProvider(<Checkbox checked label="Test 123" onChange={onChange} required />);
+        expect(rendered.container.getElementsByClassName('border-red-600').length).toBe(0);
+        expect(rendered.container.getElementsByClassName('text-red-600').length).toBe(0);
+    });
 });

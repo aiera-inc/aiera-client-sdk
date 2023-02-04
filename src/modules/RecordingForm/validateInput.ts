@@ -56,7 +56,7 @@ export default function validateInput({
     if (name === 'hasAieraInterventionPermission') {
         if (value && errors.hasAieraInterventionPermission) {
             delete errors.hasAieraInterventionPermission;
-        } else {
+        } else if (!value && state.onFailure === OnFailure.AieraIntervention) {
             errors.hasAieraInterventionPermission = 'Required';
         }
     }

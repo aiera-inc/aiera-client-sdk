@@ -95,6 +95,7 @@ export function TroubleshootingUI(props: TroubleshootingUIProps): ReactElement {
                             label={interventionCheckboxMsg}
                             name="hasAieraInterventionPermission"
                             onChange={onChange}
+                            required
                         />
                     </FormField>
                 ))

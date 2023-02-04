@@ -64,12 +64,12 @@ import { useQuery } from '@aiera/client-sdk/api/client';
 // Map validated input names to error hints displayed above the submit button
 const INPUT_FIELD_LABELS = {
     audioUpload: 'File',
-    confirmPermission: 'Agent intervention permission checkbox',
     connectAccessId: 'Meeting ID',
     connectionType: 'Type of connection',
     connectPhoneNumber: 'Dial-in number',
     connectPin: 'PIN',
     connectUrl: 'URL',
+    hasAieraInterventionPermission: 'Agent intervention permission checkbox',
     localeCode: 'Language',
     onConnectDialNumber: 'Your phone number',
     onFailurePhoneNumber: 'Best number to reach you',
@@ -700,7 +700,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                     setErrors(
                         validateInput({
                             errorState: errors,
-                            isNewRecording: !!privateRecordingId,
+                            isNewRecording: !privateRecordingId,
                             name: event?.target?.name,
                             state,
                             value: event?.target?.value,
@@ -715,7 +715,7 @@ export function RecordingForm(props: RecordingFormProps): ReactElement {
                     setErrors(
                         validateInput({
                             errorState: errors,
-                            isNewRecording: !!privateRecordingId,
+                            isNewRecording: !privateRecordingId,
                             name,
                             state,
                             value,

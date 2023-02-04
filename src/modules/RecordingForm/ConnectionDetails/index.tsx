@@ -121,12 +121,13 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             value={connectAccessId}
         />
     );
-    const renderPasscodeField = (label = 'Passcode', description = 'Enter the passcode (optional)') => (
+    const renderPasscodeField = (label = 'Passcode', description = 'Enter the passcode (optional)', type = 'text') => (
         <FormFieldInput
             className="mt-5 px-4 py-3"
             clearable
             description={description}
             error={errors.connectPin}
+            inputType={type}
             label={label}
             name="connectPin"
             onBlur={onBlur}
@@ -172,7 +173,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                         <>
                                             {dialInField}
                                             {renderMeetingIdField('Meeting ID*', 'Enter the meeting ID')}
-                                            {renderPasscodeField()}
+                                            {renderPasscodeField('Passcode', 'Enter the passcode (optional)', 'number')}
                                             {participationTypeField}
                                         </>
                                     ))
@@ -195,7 +196,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                     <>
                         {dialInField}
                         {renderMeetingIdField('Meeting ID / Access Code', 'Enter the meeting ID or access code')}
-                        {renderPasscodeField('PIN', 'Enter a PIN (optional)')}
+                        {renderPasscodeField('PIN', 'Enter a PIN (optional)', 'number')}
                         {participationTypeField}
                     </>
                 ))
