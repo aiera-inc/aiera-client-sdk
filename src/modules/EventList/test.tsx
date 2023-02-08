@@ -288,8 +288,8 @@ describe('EventList', () => {
         await actAndFlush(() =>
             renderWithProvider(<EventList />, {
                 executeQuery: ({ query }: { query: DocumentNode }) => {
-                    const queryName = getQueryNames(query)[0];
-                    return queryName === 'EventList'
+                    const queryName = getQueryNames(query)[0] || '';
+                    return ['EventList', 'EventListUpcoming'].includes(queryName)
                         ? fromValue({
                               data: {
                                   search: { events: { numTotalHits: eventList.length, hits: eventList } },
@@ -313,8 +313,8 @@ describe('EventList', () => {
         await actAndFlush(() =>
             renderWithProvider(<EventList />, {
                 executeQuery: ({ query }: { query: DocumentNode }) => {
-                    const queryName = getQueryNames(query)[0];
-                    return queryName === 'EventList'
+                    const queryName = getQueryNames(query)[0] || '';
+                    return ['EventList', 'EventListUpcoming'].includes(queryName)
                         ? fromValue({
                               data: {
                                   search: { events: { numTotalHits: eventList.length, hits: eventList } },
