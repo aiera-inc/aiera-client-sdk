@@ -739,7 +739,13 @@ function useAudioSync(
 ] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
     const offset = { top: eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? 55 : 5, bottom: 15 };
-    const { scrollContainerRef, targetRef: currentParagraphRef } = useAutoScroll<HTMLDivElement>({ offset });
+    const {
+        scrollContainerRef,
+        scrollContainer,
+        targetRef: currentParagraphRef,
+    } = useAutoScroll<HTMLDivElement>({
+        offset,
+    });
 
     const paragraphs = useMemo(() => speakerTurns.flatMap((s) => s.paragraphs), [speakerTurns]);
     // It's not the most efficient thing to load the partial here, since each partial change will trigger a re-render.
@@ -761,6 +767,8 @@ function useAudioSync(
                 : null;
 
         const lastSyncMs = paragraphs.slice(-1)[0]?.syncMs || 0;
+        const isListening = eventId ? audioPlayer.playing(eventId) : false;
+
         const listeningAtLiveEdge = audioParagraph && audioPlayer.rawCurrentTime * 1000 > lastSyncMs;
         const liveAndNotListening = !audioParagraph && eventQuery.state.data?.events[0]?.isLive;
 
@@ -770,8 +778,13 @@ function useAudioSync(
         // If we aren't listening at all and the call is live, we also want to
         // default to the partials
         if (listeningAtLiveEdge || liveAndNotListening) {
-            if (partial.text) setCurrentParagraph('partial');
-            else {
+            if (partial.text) {
+                setCurrentParagraph('partial');
+                // Not playing audio
+                if (!isListening) {
+                    audioPlayer.seekToEnd();
+                }
+            } else {
                 const lastParagraph = paragraphs.slice(-1)[0];
                 if (lastParagraph) {
                     setCurrentParagraph(lastParagraph.id);
@@ -780,7 +793,22 @@ function useAudioSync(
         }
         // If we found a paragraph for the current audio, use it
         else if (audioParagraph) {
-            setCurrentParagraph(audioParagraph.id);
+            const scrollHeight = scrollContainer?.scrollHeight;
+            const offsetHeight = scrollContainer?.offsetHeight;
+            const scrollTop = scrollContainer?.scrollTop;
+            let isAtBottom = false;
+            if (scrollHeight && offsetHeight && scrollTop) {
+                // 180 gives us some buffer to decide they're close enough to the bottom
+                isAtBottom = scrollHeight <= 180 + offsetHeight + scrollTop;
+            }
+            if (isAtBottom && partial.text && !isListening) {
+                setCurrentParagraph('partial');
+                if (!isListening) {
+                    audioPlayer.seekToEnd();
+                }
+            } else {
+                setCurrentParagraph(audioParagraph.id);
+            }
         }
         // If we don't have any audio to sync to and aren't live, go to the first paragraph
         else if (paragraphs[0]) {

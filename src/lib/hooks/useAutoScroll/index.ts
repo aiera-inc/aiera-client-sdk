@@ -72,6 +72,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     offset?: { top: number; bottom: number };
     log?: boolean;
 }): {
+    scrollContainer: HTMLElement | null;
     scrollContainerRef: RefCallback<E>;
     targetRef: RefCallback<T>;
     scroll: (opts?: { top?: number; onlyIfNeeded?: boolean }) => void;
@@ -134,7 +135,17 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
             scrollContainer.addEventListener('scroll', onScroll);
         }
         return () => scrollContainer?.removeEventListener('scroll', onScroll);
-    }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, offset.top, offset.bottom]);
+    }, [
+        scrollContainer,
+        scrollContainer?.scrollHeight,
+        target,
+        skip,
+        pauseOnUserScroll,
+        initialBehavior,
+        behavior,
+        offset.top,
+        offset.bottom,
+    ]);
 
     const scroll = useCallback(
         (opts?: { top?: number; onlyIfNeeded?: boolean }) => {
@@ -156,5 +167,5 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         [scrollContainer, target, initialBehavior, behavior, offset.top, offset.bottom]
     );
 
-    return { scrollContainerRef, targetRef, scroll, isAutoScrolling };
+    return { scrollContainer, scrollContainerRef, targetRef, scroll, isAutoScrolling };
 }
