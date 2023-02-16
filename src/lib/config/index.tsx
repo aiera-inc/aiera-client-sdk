@@ -18,6 +18,7 @@ interface Options {
     eventId?: string;
     eventListFilters?: EventListFilter[];
     eventListView?: EventListView;
+    relativeTimestamps?: boolean;
     showAudioPlayer?: boolean;
     showCompanyFilter?: boolean;
     showPriceReaction?: boolean;

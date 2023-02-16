@@ -15,7 +15,7 @@ import React, {
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import { findAll } from 'highlight-words-core';
-import { DateTime } from 'luxon';
+import { DateTime, Duration } from 'luxon';
 import { match } from 'ts-pattern';
 
 import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
@@ -60,7 +60,7 @@ interface ParagraphWithMatches {
     paragraph: Paragraph;
 }
 type SpeakerTurnsWithMatches = SpeakerTurn & { paragraphsWithMatches: ParagraphWithMatches[] };
-type Partial = { text: string; timestamp: number };
+type Partial = { text: string; timestamp: number; relativeTimestamp: number };
 
 /** @notExported */
 interface TranscriptSharedProps {
@@ -146,6 +146,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     const showTitleInfo = !useConfigOptions || (useConfigOptions && config.options?.showTitleInfo);
     const showSearch = !useConfigOptions || (useConfigOptions && config.options?.showSearch);
     const theme = !useConfigOptions ? darkMode : (useConfigOptions && config.options?.darkMode) || false;
+    const relativeTimestamps = useConfigOptions && config.options?.relativeTimestamps;
 
     return (
         <div className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: theme })} ref={containerRef}>
@@ -227,6 +228,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     .with({ status: 'success' }, ({ data }) => {
                         return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
                             const speakerTime = paragraphs[0]?.paragraph?.timestamp;
+                            const speakerTimeRelative = paragraphs[0]?.paragraph?.syncMs;
                             return (
                                 <div key={`speaker-turn-${id}`}>
                                     {showSpeakers && speaker.identified && (
@@ -237,15 +239,17 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                     <span className="text-gray-400">, {speaker.title}</span>
                                                 )}
                                             </div>
-                                            {speakerTime && (
+                                            {speakerTime && speakerTimeRelative && (
                                                 <div className="text-xs dark:text-bluegray-4 dark:text-opacity-50">
-                                                    {DateTime.fromISO(speakerTime).toFormat('h:mm:ss a')}
+                                                    {relativeTimestamps
+                                                        ? Duration.fromMillis(speakerTimeRelative).toFormat('h:mm:ss')
+                                                        : DateTime.fromISO(speakerTime).toFormat('h:mm:ss a')}
                                                 </div>
                                             )}
                                         </div>
                                     )}
                                     {paragraphs.map(({ sentences, paragraph }) => {
-                                        const { id, timestamp } = paragraph;
+                                        const { id, timestamp, syncMs } = paragraph;
                                         return (
                                             <div
                                                 key={id}
@@ -254,9 +258,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                 onClick={() => onClickTranscript?.(paragraph)}
                                                 ref={id === currentParagraph ? currentParagraphRef : undefined}
                                             >
-                                                {(!showSpeakers || !speaker.identified) && timestamp && (
+                                                {(!showSpeakers || !speaker.identified) && timestamp && syncMs && (
                                                     <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
-                                                        {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
+                                                        {relativeTimestamps
+                                                            ? Duration.fromMillis(syncMs).toFormat('h:mm:ss')
+                                                            : DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
                                                     </div>
                                                 )}
                                                 <div className="text-sm dark:text-bluegray-4">
@@ -305,9 +311,13 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     })}
                                     {data.events[0]?.isLive && partial?.text && (
                                         <div className="relative p-3 pb-4 mb-4">
-                                            {partial.timestamp && (
+                                            {partial.timestamp && partial.relativeTimestamp && (
                                                 <div className="pb-2 font-semibold text-sm dark:text-bluegray-5">
-                                                    {DateTime.fromMillis(partial.timestamp).toFormat('h:mm:ss a')}
+                                                    {relativeTimestamps
+                                                        ? Duration.fromMillis(partial.relativeTimestamp).toFormat(
+                                                              'h:mm:ss'
+                                                          )
+                                                        : DateTime.fromMillis(partial.timestamp).toFormat('h:mm:ss a')}
                                                 </div>
                                             )}
                                             <div
@@ -655,7 +665,13 @@ function useLatestTranscripts(
 }
 
 function usePartials(eventId: string, lastParagraphId?: string) {
-    const [partial, setPartial] = useState<{ timestamp: number; text: string; index: number }>({
+    const [partial, setPartial] = useState<{
+        relativeTimestamp: number;
+        timestamp: number;
+        text: string;
+        index: number;
+    }>({
+        relativeTimestamp: 0,
         timestamp: 0,
         text: '',
         index: -1,
@@ -663,18 +679,24 @@ function usePartials(eventId: string, lastParagraphId?: string) {
     const [lastCleared, setLastCleared] = useState<number>(-1);
 
     // Listen for incoming partials via realtime websocket
-    useRealtimeEvent<{ start_timestamp_ms: number; pretty_transcript: string; index: number }>(
+    useRealtimeEvent<{ start_ms: number; start_timestamp_ms: number; pretty_transcript: string; index: number }>(
         `scheduled_audio_call_${eventId}_events_changes`,
         'partial_transcript',
         useCallback(
             (data) => {
-                const { start_timestamp_ms: timestamp = 0, pretty_transcript: text = '', index = -1 } = data || {};
+                const {
+                    start_ms: relativeTimestamp = 0,
+                    start_timestamp_ms: timestamp = 0,
+                    pretty_transcript: text = '',
+                    index = -1,
+                } = data || {};
                 setPartial((prevState) => {
                     // Partials come in via webhooks which means they can be out of order, make sure the one we are
                     // processing has a higher index than the last one we processed. Otherwise we should ignroe it.
                     if (index >= prevState.index) {
                         return {
                             index,
+                            relativeTimestamp,
                             text,
                             timestamp,
                         };
@@ -713,6 +735,7 @@ function usePartials(eventId: string, lastParagraphId?: string) {
         if (lastCleared >= partial.index) {
             setPartial({
                 index: lastCleared,
+                relativeTimestamp: 0,
                 timestamp: 0,
                 text: '',
             });
