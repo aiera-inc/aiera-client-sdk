@@ -40230,7 +40230,17 @@ function useAutoScroll(opts) {
       scrollContainer.addEventListener("scroll", onScroll);
     }
     return () => scrollContainer == null ? void 0 : scrollContainer.removeEventListener("scroll", onScroll);
-  }, [scrollContainer, target, skip, pauseOnUserScroll, initialBehavior, behavior, offset.top, offset.bottom]);
+  }, [
+    scrollContainer,
+    scrollContainer == null ? void 0 : scrollContainer.scrollHeight,
+    target,
+    skip,
+    pauseOnUserScroll,
+    initialBehavior,
+    behavior,
+    offset.top,
+    offset.bottom
+  ]);
   const scroll = (0, import_react36.useCallback)((opts2) => {
     const { top, onlyIfNeeded = false } = opts2 || {};
     if (top === void 0) {
@@ -40241,7 +40251,7 @@ function useAutoScroll(opts) {
       scrollContainer == null ? void 0 : scrollContainer.scrollTo({ top });
     }
   }, [scrollContainer, target, initialBehavior, behavior, offset.top, offset.bottom]);
-  return { scrollContainerRef, targetRef, scroll, isAutoScrolling };
+  return { scrollContainer, scrollContainerRef, targetRef, scroll, isAutoScrolling };
 }
 
 // src/modules/News/index.tsx
