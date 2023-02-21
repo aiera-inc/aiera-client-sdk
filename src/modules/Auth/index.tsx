@@ -20,6 +20,7 @@ import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/us
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 export type LoginState = 'none' | 'loading' | 'error';
 
@@ -39,9 +40,12 @@ interface AuthProps {
 
 export const AuthUI = (props: AuthProps) => {
     const { children, userQuery, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
+    const config = useConfig();
+    const styleOverrides = config.overrides?.style;
 
     return (
         <>
+            <style>{styleOverrides}</style>
             {match(userQuery.status)
                 .with('loading', 'paused', () => (
                     <div className="relative flex flex-col items-center justify-center w-full h-full">
@@ -173,9 +177,12 @@ export const AuthUI = (props: AuthProps) => {
 
 export const ApiAuthUI = (props: AuthProps) => {
     const { children, userQuery, loginState } = props;
+    const config = useConfig();
+    const styleOverrides = config.overrides?.style;
 
     return (
         <>
+            <style>{styleOverrides}</style>
             {match(userQuery.status)
                 .with('loading', 'paused', () => (
                     <div className="relative flex flex-col items-center justify-center w-full h-full">

@@ -29,6 +29,10 @@ interface Options {
     ticker?: string;
 }
 
+interface Overrides {
+    style?: string;
+}
+
 interface User {
     email?: string;
 }
@@ -47,6 +51,7 @@ export interface Config {
     hideSettings?: boolean;
     openDash?: () => void;
     options?: Options;
+    overrides?: Overrides;
     user?: User;
 }
 

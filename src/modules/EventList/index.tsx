@@ -151,14 +151,14 @@ const EventRow = ({
     let divider = null;
     if (showDivider) {
         divider = (
-            <li className={classNames('sticky px-3 top-[56px]')}>
+            <li className={classNames('sticky px-3 top-[56px] event-row-divider')}>
                 <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
                     {isToday(event.eventDate) ? `Today, ${eventDate.toFormat('DDD')}` : eventDate.toFormat('DDDD')}
                     <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5" />
                     {!renderedRefetch && (
                         <div
                             onClick={!isRefetching ? refetch : undefined}
-                            className="text-gray-400 cursor-pointer hover:text-gray-500 w-[50px]"
+                            className="text-gray-400 cursor-pointer hover:text-gray-500 w-[50px] event-row-divider__refresh"
                         >
                             {isRefetching ? (
                                 <div className="flex justify-center group">
@@ -181,13 +181,15 @@ const EventRow = ({
             <li
                 tabIndex={0}
                 className={classNames(
-                    'group text-xs text-gray-300 mx-1 rounded-lg px-2 hover:bg-blue-50 dark:hover:bg-bluegray-6',
+                    'group text-xs text-gray-300 mx-1 rounded-lg px-2',
+                    'hover:bg-blue-50 dark:hover:bg-bluegray-6',
                     {
                         'cursor-pointer active:bg-blue-100 dark:active:bg-bluegray-5':
                             event.eventType !== 'earnings_release',
                         'h-12': !searchTerm,
                         'h-14': !!searchTerm,
-                    }
+                    },
+                    'event-row'
                 )}
                 onClick={
                     event.eventType !== 'earnings_release' ? (e) => onSelectEvent?.(e, { value: event }) : undefined

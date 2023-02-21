@@ -17,7 +17,12 @@ interface EventDetailsUIProps extends EventDetailsSharedProps {}
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
     const { event, eventDetailsExpanded, toggleEventDetails } = props;
     return (
-        <div className="flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5">
+        <div
+            className={classNames(
+                'flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5',
+                'transcript__header__details'
+            )}
+        >
             <div className="flex items-center justify-start h-10 cursor-pointer group" onClick={toggleEventDetails}>
                 <span className="text-sm block font-semibold w-28 mr-1 dark:text-white">Event Details</span>
                 <span className="text-gray-400 text-sm text-right flex-1 truncate group-hover:text-gray-600">

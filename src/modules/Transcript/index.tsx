@@ -171,7 +171,13 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             />
                         )}
                         {searchTerm && (
-                            <div className="flex items-center h-10 bg-gray-100 dark:bg-bluegray-6 dark:bg-opacity-40 text-gray-500 dark:text-bluegray-4 text-sm p-3 shadow">
+                            <div
+                                className={classNames(
+                                    'flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow',
+                                    'dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4',
+                                    'transcript__search-navigator'
+                                )}
+                            >
                                 <div className="text-sm">
                                     Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
                                     <span className="font-semibold">{searchTerm}</span>
@@ -232,7 +238,13 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             return (
                                 <div key={`speaker-turn-${id}`}>
                                     {showSpeakers && speaker.identified && (
-                                        <div className="p-3 pb-2 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50 dark:bg-bluegray-7 dark:text-gray-400">
+                                        <div
+                                            className={classNames(
+                                                'p-3 pb-2 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50',
+                                                'dark:bg-bluegray-7 dark:text-gray-400',
+                                                'transcript__speaker'
+                                            )}
+                                        >
                                             <div>
                                                 <span className="font-semibold dark:text-white">{speaker.name}</span>
                                                 {speaker.title && (
@@ -254,7 +266,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             <div
                                                 key={id}
                                                 id={`paragraph-${id}`}
-                                                className="relative p-3 pb-4"
+                                                className="relative p-3 pb-4 transcript__paragraph"
                                                 onClick={() => onClickTranscript?.(paragraph)}
                                                 ref={id === currentParagraph ? currentParagraphRef : undefined}
                                             >

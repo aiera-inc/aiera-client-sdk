@@ -125,6 +125,7 @@ export function SettingsButtonUI({
                 />
             )}
             grow="down-left"
+            className="button__settings"
             modal
             openOn="click"
             position="bottom-right"

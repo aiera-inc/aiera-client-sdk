@@ -35,7 +35,7 @@ interface CompanyFilterButtonUIProps extends CompanyFilterButtonSharedProps {
 export function CompanyFilterButtonUI(props: CompanyFilterButtonUIProps): ReactElement {
     const { onChange, onChangeSearchTerm, searchTerm, selectIndex, setState, value } = props;
     return (
-        <div>
+        <div className="button__company-filter">
             <Tooltip
                 content={({ hideTooltip }) => (
                     <CompanySelect

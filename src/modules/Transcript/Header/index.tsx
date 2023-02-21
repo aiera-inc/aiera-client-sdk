@@ -105,7 +105,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
             {showSearch && (
                 <div className="flex items-center px-3">
                     {onBack && (
-                        <Button className="mr-2 shrink-0" onClick={onBack}>
+                        <Button className="mr-2 shrink-0 button__back" onClick={onBack}>
                             <ArrowLeft className="fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white" />
                             {onBackHeader}
                         </Button>
@@ -182,10 +182,15 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                         return (
                             <>
                                 <div
-                                    className={classNames('flex flex-row p-3 items-center', {
-                                        'cursor-pointer': hasEventExtras && (showPriceReaction || showRecordingDetails),
-                                        group: hasEventExtras,
-                                    })}
+                                    className={classNames(
+                                        'flex flex-row p-3 items-center',
+                                        {
+                                            'cursor-pointer':
+                                                hasEventExtras && (showPriceReaction || showRecordingDetails),
+                                            group: hasEventExtras,
+                                        },
+                                        'transcript__header__title'
+                                    )}
                                     onClick={hasEventExtras ? toggleHeader : undefined}
                                 >
                                     <div className="flex flex-col justify-center flex-1 min-w-0">

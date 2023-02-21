@@ -45,7 +45,7 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
                     'active:bg-blue-600': !isPlaying,
                     'active:text-white': !isPlaying,
                 },
-                'playButton'
+                'button__play'
             )}
             onClick={togglePlayback}
         >
