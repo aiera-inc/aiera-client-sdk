@@ -137,7 +137,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         <Swap className="w-3" />
                     </Button>
                 )}
-                {!hideEventDetails && (
+                {(!hideEventDetails || showSwap) && (
                     <div
                         className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
                         onClick={onClickCalendar}

@@ -71,6 +71,8 @@ enum FilterByType {
 interface FilterByTypeOption {
     label: string;
     value: FilterByType;
+    defaultValue?: boolean;
+    visible?: boolean;
 }
 
 export type EventListEvent = EventListQuery['search']['events']['hits'][0]['event'];
@@ -104,6 +106,7 @@ export interface EventListUIProps {
     showCompanyFilter: boolean;
     showForm: boolean;
     showFormButton: boolean;
+    showHeaderControls: boolean;
     toggleForm: MouseEventHandler;
     useConfigOptions: boolean;
     userQuery: QueryResult<EventListCurrentUserQuery>;
@@ -318,6 +321,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         showCompanyFilter,
         showForm,
         showFormButton,
+        showHeaderControls,
         toggleForm,
         useConfigOptions,
         userQuery,
@@ -356,6 +360,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                 initialSearchTerm={searchTerm}
                 onBack={onBackFromTranscript}
                 onEdit={editable ? toggleForm : undefined}
+                showHeaderControls={showHeaderControls}
                 useConfigOptions={useConfigOptions}
             />
         );
@@ -383,7 +388,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         placeholder="Events & Transcripts..."
                         value={searchTerm}
                     />
-                    {!useConfigOptions && (
+                    {showHeaderControls && (
                         <>
                             {showCompanyFilter && (
                                 <div className="ml-2">
@@ -569,7 +574,9 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 };
 
 export interface EventListProps {
+    defaultLive?: boolean;
     useConfigOptions?: boolean;
+    showHeaderControls?: boolean;
 }
 
 interface EventListState {
@@ -586,13 +593,17 @@ interface EventListState {
     watchlist: string[];
 }
 
-export const EventList = ({ useConfigOptions = false }: EventListProps): ReactElement => {
+export const EventList = ({
+    useConfigOptions = false,
+    defaultLive = true,
+    showHeaderControls = true,
+}: EventListProps): ReactElement => {
     const { state, handlers, mergeState } = useChangeHandlers<EventListState>({
         company: undefined,
         event: undefined,
         filterByTypes: [],
         fromIndex: 0,
-        listType: useConfigOptions ? EventView.Recent : EventView.LiveAndUpcoming,
+        listType: defaultLive ? EventView.LiveAndUpcoming : EventView.Recent,
         pageSize: 30,
         searchTerm: '',
         showForm: false,
@@ -847,14 +858,32 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
     const filterByTypeOptions: FilterByTypeOption[] = useMemo(() => {
         let options: FilterByTypeOption[] = [];
         if (config.options?.eventListFilters) {
+            const defaultValues: FilterByType[] = [];
             config.options.eventListFilters.forEach((filter: EventListFilter) => {
-                if (filter === 'transcripts') {
-                    options.push({ value: FilterByType.transcript, label: 'Transcripts' });
+                if (filter.name === 'transcripts') {
+                    if (filter.visible) {
+                        options.push({
+                            value: FilterByType.transcript,
+                            label: 'Transcripts',
+                        });
+                    }
+                    if (filter.defaultValue) {
+                        defaultValues.push(FilterByType.transcript);
+                    }
                 }
-                if (filter === 'earningsOnly') {
-                    options.push({ value: FilterByType.earningsOnly, label: 'Earnings' });
+                if (filter.name === 'earningsOnly') {
+                    if (filter.visible) {
+                        options.push({
+                            value: FilterByType.earningsOnly,
+                            label: 'Earnings',
+                        });
+                    }
+                    if (filter.defaultValue) {
+                        defaultValues.push(FilterByType.earningsOnly);
+                    }
                 }
             });
+            handlers.filterByTypes(new Event('mouse'), { value: defaultValues });
         } else {
             options = [
                 { value: FilterByType.transcript, label: 'Transcripts' },
@@ -972,6 +1001,7 @@ export const EventList = ({ useConfigOptions = false }: EventListProps): ReactEl
             }
             showForm={state.showForm}
             showFormButton={!!config.options?.showScheduleRecording}
+            showHeaderControls={showHeaderControls}
             toggleForm={useCallback(
                 (event: SyntheticEvent<Element, Event>) => {
                     handlers.showForm(event, { value: !state.showForm });

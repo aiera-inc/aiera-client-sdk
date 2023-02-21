@@ -91,7 +91,7 @@ const App: FC = (): ReactElement => {
             <Provider bus={bus} config={{ moduleName: 'EventList' }}>
                 <Auth>
                     <div className="h-full">
-                        <EventList />
+                        <EventList useConfigOptions />
                     </div>
                 </Auth>
             </Provider>

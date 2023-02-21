@@ -14,7 +14,7 @@ const App: FC = (): ReactElement => {
                     moduleName: 'EventList',
                     options: {
                         customOnly: true,
-                        eventListFilters: ['transcripts'],
+                        eventListFilters: [{ name: 'transcripts', visible: true, defaultValue: false }],
                         eventListView: 'combined',
                         showCompanyFilter: true,
                         showScheduleRecording: true,

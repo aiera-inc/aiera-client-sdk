@@ -67,6 +67,7 @@ interface TranscriptSharedProps {
     eventId?: string;
     onBack?: MouseEventHandler;
     onEdit?: MouseEventHandler;
+    showHeaderControls?: boolean;
 }
 
 /** @notExported */
@@ -134,6 +135,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         prevMatch,
         scrollContainerRef,
         searchTerm,
+        showHeaderControls,
         showSpeakers,
         speakerTurns,
         startTime,
@@ -142,11 +144,25 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
 
     // Show the player when its not useConfigOptions, or if it is enabled with useConfigOptions
     const config = useConfig();
-    const showPlayer = !useConfigOptions || (useConfigOptions && config.options?.showAudioPlayer);
-    const showTitleInfo = !useConfigOptions || (useConfigOptions && config.options?.showTitleInfo);
-    const showSearch = !useConfigOptions || (useConfigOptions && config.options?.showSearch);
     const theme = !useConfigOptions ? darkMode : (useConfigOptions && config.options?.darkMode) || false;
-    const relativeTimestamps = useConfigOptions && config.options?.relativeTimestamps;
+    let showPlayer = true;
+    let showTitleInfo = true;
+    let showSearch = true;
+    let relativeTimestamps = false;
+    if (useConfigOptions && config.options) {
+        if (typeof config.options?.showAudioPlayer === 'boolean') {
+            showPlayer = config.options.showAudioPlayer;
+        }
+        if (typeof config.options?.showTitleInfo === 'boolean') {
+            showTitleInfo = config.options.showTitleInfo;
+        }
+        if (typeof config.options?.showSearch === 'boolean') {
+            showSearch = config.options.showSearch;
+        }
+        if (typeof config.options?.relativeTimestamps === 'boolean') {
+            relativeTimestamps = config.options.relativeTimestamps;
+        }
+    }
 
     return (
         <div className={classNames('h-full flex flex-col transcript bg-gray-50', { dark: theme })} ref={containerRef}>
@@ -165,6 +181,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 onBackHeader={onBackHeader}
                                 onEdit={onEdit}
                                 searchTerm={searchTerm}
+                                showHeaderControls={showHeaderControls}
                                 onChangeSearchTerm={onChangeSearchTerm}
                                 onSeekAudioByDate={onSeekAudioByDate}
                                 startTime={startTime}
@@ -358,7 +375,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     return (
                         (event?.audioRecordingUrl || event?.isLive) && (
                             <Playbar
-                                hideEventDetails={useConfigOptions}
+                                hideEventDetails
                                 hidePlayer={!showPlayer}
                                 id={event?.id}
                                 metaData={{
@@ -1003,6 +1020,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         onEdit,
         initialSearchTerm,
         useConfigOptions = false,
+        showHeaderControls = true,
     } = props;
     const [eventId, setEventId] = useState(eventListEventId);
     const config = useConfig();
@@ -1110,6 +1128,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             prevMatch={searchState.prevMatch}
             scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
+            showHeaderControls={showHeaderControls}
             showSpeakers={!!eventQuery.state.data?.events[0]?.hasPublishedTranscript}
             speakerTurns={searchState.speakerTurnsWithMatches}
             startTime={startTime}

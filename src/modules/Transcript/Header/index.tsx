@@ -37,6 +37,7 @@ interface HeaderSharedProps {
     onEdit?: MouseEventHandler;
     onSeekAudioByDate?: (date: string) => void;
     searchTerm?: string;
+    showHeaderControls?: boolean;
     startTime?: string | null;
     useConfigOptions: boolean;
 }
@@ -72,6 +73,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         onSeekAudioByDate,
         priceChartExpanded,
         searchTerm,
+        showHeaderControls,
         toggleEventDetails,
         toggleHeader,
         toggleKeyMentions,
@@ -81,10 +83,24 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
     } = props;
 
     const config = useConfig();
-    const showPriceReaction = !useConfigOptions || (useConfigOptions && config.options?.showPriceReaction);
-    const showTitleInfo = !useConfigOptions || (useConfigOptions && config.options?.showTitleInfo);
-    const showRecordingDetails = !useConfigOptions || (useConfigOptions && config.options?.showRecordingDetails);
-    const showSearch = !useConfigOptions || (useConfigOptions && config.options?.showSearch);
+    let showPriceReaction = true;
+    let showTitleInfo = true;
+    let showRecordingDetails = true;
+    let showSearch = true;
+    if (useConfigOptions && config.options) {
+        if (typeof config.options?.showPriceReaction === 'boolean') {
+            showPriceReaction = config.options.showPriceReaction;
+        }
+        if (typeof config.options?.showTitleInfo === 'boolean') {
+            showTitleInfo = config.options.showTitleInfo;
+        }
+        if (typeof config.options?.showRecordingDetails === 'boolean') {
+            showRecordingDetails = config.options.showRecordingDetails;
+        }
+        if (typeof config.options?.showSearch === 'boolean') {
+            showSearch = config.options.showSearch;
+        }
+    }
 
     return (
         <div
@@ -118,7 +134,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                         value={searchTerm}
                         onChange={onChangeSearchTerm}
                     />
-                    {!useConfigOptions && <SettingsButton showTonalSentiment={false} />}
+                    {showHeaderControls && <SettingsButton showTonalSentiment={false} />}
                     {!!onEdit && (
                         <Tooltip
                             content={
@@ -137,7 +153,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                 kind="primary"
                                 onClick={onEdit}
                             >
-                                <Pencil className="w-6 h-6 text-white w-2.5" />
+                                <Pencil className="h-6 text-white w-2.5" />
                             </Button>
                         </Tooltip>
                     )}
@@ -295,6 +311,7 @@ export function Header(props: HeaderProps): ReactElement {
         onEdit,
         onSeekAudioByDate,
         searchTerm,
+        showHeaderControls,
         startTime,
         useConfigOptions,
     } = props;
@@ -352,6 +369,7 @@ export function Header(props: HeaderProps): ReactElement {
             onSeekAudioByDate={onSeekAudioByDate}
             priceChartExpanded={priceChartExpanded}
             searchTerm={searchTerm}
+            showHeaderControls={showHeaderControls}
             startTime={startTime}
             toggleEventDetails={toggleEventDetails}
             toggleHeader={toggleHeader}

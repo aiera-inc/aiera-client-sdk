@@ -9,8 +9,14 @@ import { useMessageListener } from '../msg';
 type Module = 'ASR' | 'EventList' | 'NewsList' | 'EventByTicker' | 'EventListByTicker';
 type Platform = 'aiera-sdk-dev' | 'embedded' | 'eze-eclipse' | 'glue42' | 'finsemble' | 'openfin';
 
-export type EventListFilter = 'earningsOnly' | 'transcripts';
+export type EventListFilterType = 'earningsOnly' | 'transcripts';
 export type EventListView = 'combined' | 'tabs';
+
+export interface EventListFilter {
+    name: EventListFilterType;
+    defaultValue?: boolean;
+    visible?: boolean;
+}
 
 interface Options {
     customOnly?: boolean;

@@ -92,12 +92,18 @@ export const FilterByUI = <T extends string | number>(props: FilterByProps<T>): 
 export const FilterBy = <T extends string | number>(props: FilterByProps<T>): ReactElement => {
     const { children, onChange, options = [], value = [] } = props;
     const [focusIndex, setFocus] = useState(-1);
-    if (onChange && options.length) {
+    if (onChange) {
         useWindowListener('keydown', (event: KeyboardEvent) => {
             const selectedOption = options[focusIndex];
             // Focus is -1 on mount and on blur, so when >= 0, we actually want
             // to handle the keyboard event
-            if (event.key === 'Enter' && focusIndex >= 0 && selectedOption && selectedOption?.value >= 0) {
+            if (
+                options.length &&
+                event.key === 'Enter' &&
+                focusIndex >= 0 &&
+                selectedOption &&
+                selectedOption?.value >= 0
+            ) {
                 if (value.includes(selectedOption.value)) {
                     onChange(event, { value: value.filter((o) => o !== selectedOption.value) });
                 } else {

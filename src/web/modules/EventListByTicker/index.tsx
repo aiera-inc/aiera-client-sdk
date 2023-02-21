@@ -46,7 +46,7 @@ const App: FC = (): ReactElement => {
             <Provider bus={bus} config={{ moduleName: 'EventListByTicker' }}>
                 <Auth apiMode>
                     <div className="h-full">
-                        <EventList useConfigOptions />
+                        <EventList useConfigOptions showHeaderControls={false} defaultLive={false} />
                     </div>
                 </Auth>
             </Provider>
