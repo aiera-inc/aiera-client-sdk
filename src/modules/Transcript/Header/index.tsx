@@ -88,16 +88,16 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
     let showRecordingDetails = true;
     let showSearch = true;
     if (useConfigOptions && config.options) {
-        if (typeof config.options?.showPriceReaction === 'boolean') {
+        if (config.options.showPriceReaction !== undefined) {
             showPriceReaction = config.options.showPriceReaction;
         }
-        if (typeof config.options?.showTitleInfo === 'boolean') {
+        if (config.options.showTitleInfo !== undefined) {
             showTitleInfo = config.options.showTitleInfo;
         }
-        if (typeof config.options?.showRecordingDetails === 'boolean') {
+        if (config.options.showRecordingDetails !== undefined) {
             showRecordingDetails = config.options.showRecordingDetails;
         }
-        if (typeof config.options?.showSearch === 'boolean') {
+        if (config.options.showSearch !== undefined) {
             showSearch = config.options.showSearch;
         }
     }

@@ -150,16 +150,16 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     let showSearch = true;
     let relativeTimestamps = false;
     if (useConfigOptions && config.options) {
-        if (typeof config.options?.showAudioPlayer === 'boolean') {
+        if (config.options.showAudioPlayer !== undefined) {
             showPlayer = config.options.showAudioPlayer;
         }
-        if (typeof config.options?.showTitleInfo === 'boolean') {
+        if (config.options.showTitleInfo !== undefined) {
             showTitleInfo = config.options.showTitleInfo;
         }
-        if (typeof config.options?.showSearch === 'boolean') {
+        if (config.options.showSearch !== undefined) {
             showSearch = config.options.showSearch;
         }
-        if (typeof config.options?.relativeTimestamps === 'boolean') {
+        if (config.options.relativeTimestamps !== undefined) {
             relativeTimestamps = config.options.relativeTimestamps;
         }
     }
