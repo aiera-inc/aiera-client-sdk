@@ -372,10 +372,15 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 
     const config = useConfig();
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
-    const theme = !useConfigOptions ? darkMode : (useConfigOptions && config.options?.darkMode) || false;
     const showAllEvents = !!company || eventListView === 'combined';
     let prevEventDate: DateTime | null = null;
     let renderedRefetch = false;
+    let theme = darkMode;
+    if (useConfigOptions && config.options) {
+        if (config.options.darkMode !== undefined) {
+            theme = config.options.darkMode;
+        }
+    }
 
     return (
         <div className={classNames('h-full flex flex-col eventlist', { dark: theme })}>

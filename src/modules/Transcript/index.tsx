@@ -144,12 +144,15 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
 
     // Show the player when its not useConfigOptions, or if it is enabled with useConfigOptions
     const config = useConfig();
-    const theme = !useConfigOptions ? darkMode : (useConfigOptions && config.options?.darkMode) || false;
+    let theme = darkMode;
     let showPlayer = true;
     let showTitleInfo = true;
     let showSearch = true;
     let relativeTimestamps = false;
     if (useConfigOptions && config.options) {
+        if (config.options.darkMode !== undefined) {
+            theme = config.options.darkMode;
+        }
         if (config.options.showAudioPlayer !== undefined) {
             showPlayer = config.options.showAudioPlayer;
         }
@@ -287,12 +290,22 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                 onClick={() => onClickTranscript?.(paragraph)}
                                                 ref={id === currentParagraph ? currentParagraphRef : undefined}
                                             >
-                                                {(!showSpeakers || !speaker.identified) && timestamp && syncMs && (
-                                                    <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
+                                                {(!showSpeakers || !speaker.identified) && (
+                                                    <>
                                                         {relativeTimestamps
-                                                            ? Duration.fromMillis(syncMs).toFormat('h:mm:ss')
-                                                            : DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
-                                                    </div>
+                                                            ? syncMs && (
+                                                                  <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
+                                                                      {Duration.fromMillis(syncMs).toFormat('h:mm:ss')}
+                                                                  </div>
+                                                              )
+                                                            : timestamp && (
+                                                                  <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
+                                                                      {DateTime.fromISO(timestamp).toFormat(
+                                                                          'h:mm:ss a'
+                                                                      )}
+                                                                  </div>
+                                                              )}
+                                                    </>
                                                 )}
                                                 <div className="text-sm dark:text-bluegray-4">
                                                     {sentences.map(({ chunks, id: sId }) => (
