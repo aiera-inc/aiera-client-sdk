@@ -38631,8 +38631,11 @@ function useChangeHandlers(initialState) {
 
 // src/modules/Auth/index.tsx
 var AuthUI = (props) => {
+  var _a;
   const { children, userQuery, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
-  return /* @__PURE__ */ import_react15.default.createElement(import_react15.default.Fragment, null, (0, import_ts_pattern2.match)(userQuery.status).with("loading", "paused", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+  const config = useConfig();
+  const styleOverrides = (_a = config.overrides) == null ? void 0 : _a.style;
+  return /* @__PURE__ */ import_react15.default.createElement(import_react15.default.Fragment, null, /* @__PURE__ */ import_react15.default.createElement("style", null, styleOverrides), (0, import_ts_pattern2.match)(userQuery.status).with("loading", "paused", () => /* @__PURE__ */ import_react15.default.createElement("div", {
     className: "relative flex flex-col items-center justify-center w-full h-full"
   }, /* @__PURE__ */ import_react15.default.createElement("div", {
     className: "absolute w-32 top-10 right-10"
@@ -38732,8 +38735,11 @@ var AuthUI = (props) => {
   }).exhaustive()))))).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
 };
 var ApiAuthUI = (props) => {
+  var _a;
   const { children, userQuery, loginState } = props;
-  return /* @__PURE__ */ import_react15.default.createElement(import_react15.default.Fragment, null, (0, import_ts_pattern2.match)(userQuery.status).with("loading", "paused", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+  const config = useConfig();
+  const styleOverrides = (_a = config.overrides) == null ? void 0 : _a.style;
+  return /* @__PURE__ */ import_react15.default.createElement(import_react15.default.Fragment, null, /* @__PURE__ */ import_react15.default.createElement("style", null, styleOverrides), (0, import_ts_pattern2.match)(userQuery.status).with("loading", "paused", () => /* @__PURE__ */ import_react15.default.createElement("div", {
     className: "relative flex flex-col items-center justify-center w-full h-full"
   }, /* @__PURE__ */ import_react15.default.createElement("div", {
     className: "flex"
@@ -39832,7 +39838,9 @@ function Tooltip(props) {
 function CompanyFilterButtonUI(props) {
   var _a;
   const { onChange, onChangeSearchTerm, searchTerm, selectIndex, setState, value } = props;
-  return /* @__PURE__ */ import_react27.default.createElement("div", null, /* @__PURE__ */ import_react27.default.createElement(Tooltip, {
+  return /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "button__company-filter"
+  }, /* @__PURE__ */ import_react27.default.createElement(Tooltip, {
     content: ({ hideTooltip }) => /* @__PURE__ */ import_react27.default.createElement(CompanySelect, {
       autoFocus: true,
       onChange,
@@ -40058,6 +40066,7 @@ function SettingsButtonUI({
       showTonalSentiment
     }),
     grow: "down-left",
+    className: "button__settings",
     modal: true,
     openOn: "click",
     position: "bottom-right",

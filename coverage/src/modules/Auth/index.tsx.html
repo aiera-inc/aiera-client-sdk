@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.57% </span>
+                <span class="strong">64.61% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/61</span>
+                <span class='fraction'>42/65</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.79% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/59</span>
+                <span class='fraction'>42/63</span>
             </div>
         
             
@@ -406,7 +406,15 @@
 <a name='L341'></a><a href='#L341'>341</a>
 <a name='L342'></a><a href='#L342'>342</a>
 <a name='L343'></a><a href='#L343'>343</a>
-<a name='L344'></a><a href='#L344'>344</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L344'></a><a href='#L344'>344</a>
+<a name='L345'></a><a href='#L345'>345</a>
+<a name='L346'></a><a href='#L346'>346</a>
+<a name='L347'></a><a href='#L347'>347</a>
+<a name='L348'></a><a href='#L348'>348</a>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -447,8 +455,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-yes">12x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">12x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -581,8 +592,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -771,6 +785,7 @@ import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/us
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 &nbsp;
 export type LoginState = 'none' | 'loading' | 'error';
 &nbsp;
@@ -790,9 +805,12 @@ interface AuthProps {
 &nbsp;
 export const AuthUI = (props: AuthProps) =&gt; {
     const { children, userQuery, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
+    const config = useConfig();
+    const styleOverrides = config.overrides?.style;
 &nbsp;
     return (
         &lt;&gt;
+            &lt;style&gt;{styleOverrides}&lt;/style&gt;
             {match(userQuery.status)
                 .with('loading', 'paused', () =&gt; (
                     &lt;div className="relative flex flex-col items-center justify-center w-full h-full"&gt;
@@ -924,9 +942,12 @@ export const AuthUI = (props: AuthProps) =&gt; {
 &nbsp;
 export const ApiAuthUI = <span class="fstat-no" title="function not covered" >(p</span>rops: AuthProps) =&gt; {
     const { children, userQuery, loginState } = <span class="cstat-no" title="statement not covered" >props;</span>
+    const config = <span class="cstat-no" title="statement not covered" >useConfig();</span>
+    const styleOverrides = <span class="cstat-no" title="statement not covered" >config.overrides?.style;</span>
 &nbsp;
 <span class="cstat-no" title="statement not covered" >    return (</span>
         &lt;&gt;
+            &lt;style&gt;{styleOverrides}&lt;/style&gt;
             {match(userQuery.status)
                 .with('loading', 'paused', <span class="fstat-no" title="function not covered" >()</span> =&gt; (
 <span class="cstat-no" title="statement not covered" >                    &lt;div className="relative flex flex-col items-center justify-center w-full h-full"&gt;</span>
@@ -1099,7 +1120,7 @@ export const Auth = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Feb 16 2023 10:31:49 GMT-0500 (Eastern Standard Time)
+                at Wed Feb 22 2023 10:55:57 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

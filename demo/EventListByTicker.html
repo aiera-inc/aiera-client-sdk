@@ -23,6 +23,7 @@
             });
             eventList.on('authenticated', () => {
                 eventList.configure({
+                    hideSettings: true,
                     options: {
                         ticker: 'meta',
                         darkMode: false,
@@ -31,6 +32,17 @@
                         showPriceReaction: true,
                         showAudioPlayer: true,
                         showSearch: true,
+                        eventListFilters: [
+                            { name: 'transcripts', visible: false, defaultValue: true },
+                            { name: 'earningsOnly', visible: false, defaultValue: true },
+                        ],
+                    },
+                    overrides: {
+                        // style: `
+                        //         .eventlist__filterby {
+                        //                background-color: red
+                        //             }
+                        //     `,
                     },
                     user: {
                         //email: 'customer@example.com',

@@ -27,7 +27,19 @@
 
                 // To update the configuration
                 eventList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
-                eventList.configure({ hideSettings: false });
+                eventList.configure({
+                    hideSettings: false,
+                    // overrides: {
+                    //     style: `
+                    //             .eventlist__filterby {
+                    //                    background-color: blue
+                    //                 }
+                    //                 .eventlist__filterby__option {
+                    //                     display: none
+                    //                 }
+                    //         `,
+                    // },
+                });
             });
 
             eventList.on('authenticated', () => {
