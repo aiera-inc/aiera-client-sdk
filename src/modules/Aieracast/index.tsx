@@ -48,7 +48,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         let divider = null;
         if (showDivider) {
             divider = (
-                <li className={classNames('sticky px-3 top-[56px] event-row-divider')}>
+                <li className={classNames('sticky px-3 top-[52px] event-row-divider')}>
                     <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
                         {isToday(event.eventDate) ? `Today, ${eventDate.toFormat('DDD')}` : eventDate.toFormat('DDDD')}
                         <div className="ml-2 flex flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5" />
@@ -170,11 +170,11 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     };
 
     return (
-        <div className="flex flex-col relative h-full border-2 rounded-lg border-slate-200/60 overflow-hidden">
+        <div className="flex flex-col relative h-full border-2 rounded-lg border-slate-200 overflow-hidden">
             <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
                     <div className="h-full w-[19rem] flex-shrink-0 border-r-2 border-r-slate-200/60">
-                        <EventList hidePlaybar EventRow={EventRow} />
+                        <EventList hidePlaybar hideHeader EventRow={EventRow} />
                     </div>
                     {openEventIds.length > 0 ? (
                         <div className="flex overflow-x-auto" ref={scrollRef}>

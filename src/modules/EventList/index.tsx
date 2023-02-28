@@ -90,6 +90,7 @@ export interface EventListUIProps {
     eventsQueryUpcoming: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypeOptions: FilterByTypeOption[];
     filterByTypes?: FilterByType[];
+    hideHeader?: boolean;
     hidePlaybar?: boolean;
     listType?: EventView;
     loading?: boolean;
@@ -308,6 +309,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         eventsQueryUpcoming,
         filterByTypeOptions,
         filterByTypes,
+        hideHeader,
         hidePlaybar,
         loadMore,
         listType,
@@ -391,52 +393,59 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 
     return (
         <div className={classNames('h-full flex flex-col eventlist', { dark: theme })}>
-            <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header">
-                <div className="flex items-center mb-3">
-                    <Input
-                        icon={<MagnifyingGlass />}
-                        name="search"
-                        onChange={onSearchChange}
-                        placeholder="Events & Transcripts..."
-                        value={searchTerm}
-                    />
-                    {showHeaderControls && (
-                        <>
-                            {showCompanyFilter && (
-                                <div className="ml-2">
-                                    <CompanyFilterButton onChange={onCompanyChange} value={company} />
-                                </div>
-                            )}
-                            <SettingsButton showSyncWatchlist showTonalSentiment={false} />
-                            {showFormButton && (
-                                <Tooltip
-                                    content={
-                                        <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
-                                            Schedule a new recording
-                                        </div>
-                                    }
-                                    grow="down-left"
-                                    hideOnDocumentScroll
-                                    openOn="hover"
-                                    position="bottom-right"
-                                    yOffset={6}
-                                >
-                                    <Button
-                                        className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
-                                        kind="primary"
-                                        onClick={toggleForm}
+            {!hideHeader && (
+                <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header">
+                    <div className="flex items-center mb-3">
+                        <Input
+                            icon={<MagnifyingGlass />}
+                            name="search"
+                            onChange={onSearchChange}
+                            placeholder="Events & Transcripts..."
+                            value={searchTerm}
+                        />
+                        {showHeaderControls && (
+                            <>
+                                {showCompanyFilter && (
+                                    <div className="ml-2">
+                                        <CompanyFilterButton onChange={onCompanyChange} value={company} />
+                                    </div>
+                                )}
+                                <SettingsButton showSyncWatchlist showTonalSentiment={false} />
+                                {showFormButton && (
+                                    <Tooltip
+                                        content={
+                                            <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                                Schedule a new recording
+                                            </div>
+                                        }
+                                        grow="down-left"
+                                        hideOnDocumentScroll
+                                        openOn="hover"
+                                        position="bottom-right"
+                                        yOffset={6}
                                     >
-                                        <Plus className="h-4 mb-0.5 text-white w-2.5" />
-                                    </Button>
-                                </Tooltip>
-                            )}
-                        </>
-                    )}
+                                        <Button
+                                            className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
+                                            kind="primary"
+                                            onClick={toggleForm}
+                                        >
+                                            <Plus className="h-4 mb-0.5 text-white w-2.5" />
+                                        </Button>
+                                    </Tooltip>
+                                )}
+                            </>
+                        )}
+                    </div>
                 </div>
-            </div>
+            )}
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}>
                 <div className="flex flex-col flex-grow">
-                    <div className="sticky top-0 px-3 pt-3 pb-2 z-10">
+                    <div
+                        className={classNames('sticky top-0 pb-2 z-10', {
+                            'pt-3 px-3': !hideHeader,
+                            'pt-2 px-2': hideHeader,
+                        })}
+                    >
                         <FilterBy onChange={onSelectFilterBy} options={filterByTypeOptions} value={filterByTypes}>
                             {showAllEvents ? (
                                 <p className="text-sm font-semibold dark:text-white">All Events</p>
@@ -588,6 +597,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 export interface EventListProps {
     defaultLive?: boolean;
     hidePlaybar?: boolean;
+    hideHeader?: boolean;
     useConfigOptions?: boolean;
     showHeaderControls?: boolean;
     EventRow?: JSXElementConstructor<any>;
@@ -610,6 +620,7 @@ interface EventListState {
 export const EventList = ({
     useConfigOptions = false,
     defaultLive = true,
+    hideHeader,
     hidePlaybar,
     showHeaderControls = true,
     EventRow,
@@ -996,6 +1007,7 @@ export const EventList = ({
             EventRow={EventRow}
             filterByTypeOptions={filterByTypeOptions}
             filterByTypes={state.filterByTypes}
+            hideHeader={hideHeader}
             hidePlaybar={hidePlaybar}
             listType={state.listType}
             loadMore={hasMoreResults ? loadMore : undefined}

@@ -7,6 +7,6 @@ import { Aieracast } from '.';
 describe('Aieracast', () => {
     test('renders', () => {
         renderWithProvider(<Aieracast />);
-        screen.getByText('Company');
+        screen.getByText('Earnings');
     });
 });
