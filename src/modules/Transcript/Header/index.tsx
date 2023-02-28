@@ -22,6 +22,7 @@ import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
 import { KeyMentions } from '../KeyMentions';
 import './styles.css';
+import { Close } from '@aiera/client-sdk/components/Svg/Close';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 
@@ -33,6 +34,7 @@ interface HeaderSharedProps {
     eventQuery: EventQuery;
     onBack?: MouseEventHandler;
     onBackHeader: string;
+    onClose?: MouseEventHandler;
     onChangeSearchTerm?: ChangeHandler<string>;
     onEdit?: MouseEventHandler;
     onSeekAudioByDate?: (date: string) => void;
@@ -70,6 +72,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         onBackHeader,
         onEdit,
         onChangeSearchTerm,
+        onClose,
         onSeekAudioByDate,
         priceChartExpanded,
         searchTerm,
@@ -156,6 +159,21 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                 <Pencil className="h-6 text-white w-2.5" />
                             </Button>
                         </Tooltip>
+                    )}
+                    {onClose && (
+                        <Button
+                            className={classNames(
+                                'group flex h-8 items-center font-semibold rounded-lg',
+                                'ml-2 shrink-0 px-2 text-gray-400 border border-gray-200 bg-white',
+                                'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
+                                'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white',
+                                'button__close'
+                            )}
+                            kind="primary"
+                            onClick={onClose}
+                        >
+                            <Close className="h-4 w-4" />
+                        </Button>
                     )}
                 </div>
             )}
@@ -308,6 +326,7 @@ export function Header(props: HeaderProps): ReactElement {
         onBack,
         onBackHeader,
         onChangeSearchTerm,
+        onClose,
         onEdit,
         onSeekAudioByDate,
         searchTerm,
@@ -365,6 +384,7 @@ export function Header(props: HeaderProps): ReactElement {
             onBack={onBack}
             onBackHeader={onBackHeader}
             onChangeSearchTerm={onChangeSearchTerm}
+            onClose={onClose}
             onEdit={onEdit}
             onSeekAudioByDate={onSeekAudioByDate}
             priceChartExpanded={priceChartExpanded}

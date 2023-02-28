@@ -67,6 +67,7 @@ interface TranscriptSharedProps {
     eventId?: string;
     onBack?: MouseEventHandler;
     onEdit?: MouseEventHandler;
+    onClose?: MouseEventHandler;
     showHeaderControls?: boolean;
     hidePlaybar?: boolean;
 }
@@ -130,6 +131,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         onBack,
         onBackHeader,
         onChangeSearchTerm,
+        onClose,
         onClickTranscript,
         onEdit,
         onSeekAudioByDate,
@@ -184,6 +186,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 eventQuery={eventQuery}
                                 onBack={onBack}
                                 onBackHeader={onBackHeader}
+                                onClose={onClose}
                                 onEdit={onEdit}
                                 searchTerm={searchTerm}
                                 showHeaderControls={showHeaderControls}
@@ -1036,6 +1039,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         hidePlaybar,
         onBack,
         onBackHeader = 'Events',
+        onClose,
         onEdit,
         initialSearchTerm,
         useConfigOptions = false,
@@ -1140,6 +1144,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             nextMatch={searchState.nextMatch}
             onBack={onBack ? onClickBack : undefined}
             onBackHeader={onBackHeader}
+            onClose={onClose}
             onChangeSearchTerm={searchState.onChangeSearchTerm}
             onClickTranscript={onClickTranscript}
             onEdit={onEdit}

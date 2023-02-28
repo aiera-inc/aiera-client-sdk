@@ -11,6 +11,7 @@ import { isToday } from '@aiera/client-sdk/lib/datetimes';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
+import { Playbar } from '@aiera/client-sdk/components/Playbar';
 
 interface AieracastSharedProps {}
 
@@ -98,7 +99,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             'h-14': !!searchTerm,
                         })}
                         content={
-                            <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7 ml-9">
+                            <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7">
                                 {prettyLineBreak(event.title)}
                             </div>
                         }
@@ -158,7 +159,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                 {eventDate.toFormat('MMM dd, yyyy')}
                             </div>
                         </div>
-                        <div className="flex items-center justify-center ml-3 mr-1">
+                        <div className="flex items-center justify-center ml-4 mr-2">
                             <div className="flex items-center justify-center w-8 h-8">
                                 <Toggle on={openEventIds.includes(event.id)} onChange={() => toggleEvent(event.id)} />
                             </div>
@@ -183,7 +184,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                     key={id}
                                     className="h-full w-[23rem] flex-shrink-0 border-r-2 border-r-slate-200/60"
                                 >
-                                    <Transcript eventId={id} hidePlaybar />
+                                    <Transcript onClose={() => toggleEvent(id)} eventId={id} hidePlaybar />
                                 </div>
                             ))}
                         </div>
@@ -194,6 +195,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                     )}
                 </div>
             </div>
+            <Playbar />
         </div>
     );
 }
