@@ -1,6 +1,7 @@
 import React, {
     Dispatch,
     Fragment,
+    JSXElementConstructor,
     MouseEvent,
     MouseEventHandler,
     ReactElement,
@@ -84,6 +85,7 @@ export interface EventListUIProps {
     darkMode?: boolean;
     event?: EventListEvent;
     eventListView?: EventListView;
+    EventRow?: JSXElementConstructor<any>;
     eventsQuery: QueryResult<EventListQuery, EventListQueryVariables>;
     eventsQueryUpcoming: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypeOptions: FilterByTypeOption[];
@@ -113,7 +115,7 @@ export interface EventListUIProps {
     userStatusInactive: boolean;
 }
 
-interface EventRowProps {
+export interface EventRowProps {
     customOnly: boolean;
     event: EventListEvent;
     index: number;
@@ -128,7 +130,7 @@ interface EventRowProps {
     showDivider: boolean;
 }
 
-const EventRow = ({
+const DefaultEventRow = ({
     customOnly,
     event,
     numMentions,
@@ -301,6 +303,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         event,
         eventListView,
         eventsQuery,
+        EventRow: EventRowOverride,
         eventsQueryUpcoming,
         filterByTypeOptions,
         filterByTypes,
@@ -327,6 +330,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         userQuery,
         userStatusInactive,
     } = props;
+
+    const EventRow = EventRowOverride || DefaultEventRow;
 
     if (userStatusInactive) {
         return (
@@ -582,6 +587,7 @@ export interface EventListProps {
     defaultLive?: boolean;
     useConfigOptions?: boolean;
     showHeaderControls?: boolean;
+    EventRow?: JSXElementConstructor<any>;
 }
 
 interface EventListState {
@@ -602,6 +608,7 @@ export const EventList = ({
     useConfigOptions = false,
     defaultLive = true,
     showHeaderControls = true,
+    EventRow,
 }: EventListProps): ReactElement => {
     const { state, handlers, mergeState } = useChangeHandlers<EventListState>({
         company: undefined,
@@ -982,6 +989,7 @@ export const EventList = ({
             eventListView={config.options?.eventListView}
             eventsQuery={eventsQuery}
             eventsQueryUpcoming={eventsQueryUpcoming}
+            EventRow={EventRow}
             filterByTypeOptions={filterByTypeOptions}
             filterByTypes={state.filterByTypes}
             listType={state.listType}
