@@ -12,6 +12,7 @@ import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
+import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 
 interface AieracastSharedProps {}
 
@@ -170,12 +171,34 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
+    const [showSidebar, setSidebarState] = useState(true);
+    const toggleSidebar = useCallback(() => setSidebarState(!showSidebar), [showSidebar]);
+
     return (
         <div className="flex flex-col relative h-full border-2 rounded-lg border-slate-200 overflow-hidden">
             <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
-                    <div className="h-full w-[19rem] flex-shrink-0 border-r-2 border-r-slate-200/60">
+                    <div
+                        className={classNames('h-full w-[19rem] flex-shrink-0 transition-all', {
+                            '-ml-[19rem]': !showSidebar,
+                        })}
+                    >
                         <EventList hidePlaybar hideHeader EventRow={EventRow} />
+                    </div>
+                    <div
+                        onClick={toggleSidebar}
+                        className={classNames(
+                            'flex flex-col justify-center items-center w-6 pl-0.5 border-r-2 border-slate-200',
+                            'text-slate-500 rounded-r-lg cursor-pointer bg-slate-200/0',
+                            'hover:bg-slate-200/40 active:bg-slate-200/60 group flex-shrink-0'
+                        )}
+                    >
+                        <Chevron
+                            className={classNames('w-2.5 transition-all', {
+                                'rotate-90 group-active:-rotate-90': showSidebar,
+                                '-rotate-90 group-active:rotate-90': !showSidebar,
+                            })}
+                        />
                     </div>
                     {openEventIds.length > 0 ? (
                         <div className="flex overflow-x-auto" ref={scrollRef}>
