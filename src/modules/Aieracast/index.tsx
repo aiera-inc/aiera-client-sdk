@@ -184,7 +184,12 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                     key={id}
                                     className="h-full w-[23rem] flex-shrink-0 border-r-2 border-r-slate-200/60"
                                 >
-                                    <Transcript onClose={() => toggleEvent(id)} eventId={id} hidePlaybar />
+                                    <Transcript
+                                        onClose={() => toggleEvent(id)}
+                                        eventId={id}
+                                        hidePlaybar
+                                        showHeaderPlayButton
+                                    />
                                 </div>
                             ))}
                         </div>

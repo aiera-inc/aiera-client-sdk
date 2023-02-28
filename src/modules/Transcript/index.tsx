@@ -69,6 +69,7 @@ interface TranscriptSharedProps {
     onEdit?: MouseEventHandler;
     onClose?: MouseEventHandler;
     showHeaderControls?: boolean;
+    showHeaderPlayButton?: boolean;
     hidePlaybar?: boolean;
 }
 
@@ -140,6 +141,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         scrollContainerRef,
         searchTerm,
         showHeaderControls,
+        showHeaderPlayButton,
         showSpeakers,
         speakerTurns,
         startTime,
@@ -190,6 +192,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 onEdit={onEdit}
                                 searchTerm={searchTerm}
                                 showHeaderControls={showHeaderControls}
+                                showHeaderPlayButton={showHeaderPlayButton}
                                 onChangeSearchTerm={onChangeSearchTerm}
                                 onSeekAudioByDate={onSeekAudioByDate}
                                 startTime={startTime}
@@ -1044,6 +1047,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         initialSearchTerm,
         useConfigOptions = false,
         showHeaderControls = true,
+        showHeaderPlayButton,
     } = props;
     const [eventId, setEventId] = useState(eventListEventId);
     const config = useConfig();
@@ -1154,6 +1158,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
             showHeaderControls={showHeaderControls}
+            showHeaderPlayButton={showHeaderPlayButton}
             showSpeakers={!!eventQuery.state.data?.events[0]?.hasPublishedTranscript}
             speakerTurns={searchState.speakerTurnsWithMatches}
             startTime={startTime}

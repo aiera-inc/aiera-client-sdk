@@ -13,16 +13,17 @@ import { Pencil } from '@aiera/client-sdk/components/Svg/Pencil';
 import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { useConfig } from '@aiera/client-sdk/lib/config';
-import { getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { getEventCreatorName, getPrimaryQuote } from '@aiera/client-sdk/lib/data';
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import { ChangeHandler } from '@aiera/client-sdk/types';
-import { TranscriptQuery, TranscriptQueryVariables } from '@aiera/client-sdk/types/generated';
+import { TranscriptQuery, TranscriptQueryVariables, User } from '@aiera/client-sdk/types/generated';
 
 import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
 import { KeyMentions } from '../KeyMentions';
 import './styles.css';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
+import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 
@@ -40,6 +41,7 @@ interface HeaderSharedProps {
     onSeekAudioByDate?: (date: string) => void;
     searchTerm?: string;
     showHeaderControls?: boolean;
+    showHeaderPlayButton?: boolean;
     startTime?: string | null;
     useConfigOptions: boolean;
 }
@@ -77,6 +79,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         priceChartExpanded,
         searchTerm,
         showHeaderControls,
+        showHeaderPlayButton,
         toggleEventDetails,
         toggleHeader,
         toggleKeyMentions,
@@ -212,6 +215,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                             event?.dialInPin ||
                             event?.webcastUrls?.length ||
                             event?.audioRecordingUrl;
+                        const createdBy = getEventCreatorName(event?.creator as User);
+                        const audioOffset = (event?.audioRecordingOffsetMs ?? 0) / 1000;
 
                         return (
                             <>
@@ -227,6 +232,27 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     )}
                                     onClick={hasEventExtras ? toggleHeader : undefined}
                                 >
+                                    {showHeaderPlayButton && event && (
+                                        <div className="w-8 h-8 mr-2">
+                                            <PlayButton
+                                                id={event.id}
+                                                metaData={{
+                                                    createdBy,
+                                                    eventDate: eventDate ? eventDate.toISO() : undefined,
+                                                    eventType: event.eventType,
+                                                    localTicker: primaryQuote?.localTicker,
+                                                    quote: primaryQuote,
+                                                    title: event.title,
+                                                }}
+                                                url={
+                                                    event.isLive
+                                                        ? `https://storage.media.aiera.com/${event.id}`
+                                                        : event.audioRecordingUrl
+                                                }
+                                                offset={audioOffset || 0}
+                                            />
+                                        </div>
+                                    )}
                                     <div className="flex flex-col justify-center flex-1 min-w-0">
                                         <div className="text-xs">
                                             {primaryQuote?.localTicker && (
@@ -331,6 +357,7 @@ export function Header(props: HeaderProps): ReactElement {
         onSeekAudioByDate,
         searchTerm,
         showHeaderControls,
+        showHeaderPlayButton,
         startTime,
         useConfigOptions,
     } = props;
@@ -390,6 +417,7 @@ export function Header(props: HeaderProps): ReactElement {
             priceChartExpanded={priceChartExpanded}
             searchTerm={searchTerm}
             showHeaderControls={showHeaderControls}
+            showHeaderPlayButton={showHeaderPlayButton}
             startTime={startTime}
             toggleEventDetails={toggleEventDetails}
             toggleHeader={toggleHeader}
