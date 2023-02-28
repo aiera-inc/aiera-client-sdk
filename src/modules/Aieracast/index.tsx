@@ -1,4 +1,4 @@
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import './styles.css';
 import { EventList, EventRowProps } from '../EventList';
 import { Transcript } from '../Transcript';
@@ -10,10 +10,11 @@ interface AieracastSharedProps {}
 interface AieracastUIProps extends AieracastSharedProps {
     openEventIds: string[];
     toggleEvent: (id: string) => void;
+    scrollRef: RefObject<HTMLDivElement>;
 }
 
 export function AieracastUI(props: AieracastUIProps): ReactElement {
-    const { openEventIds, toggleEvent } = props;
+    const { openEventIds, toggleEvent, scrollRef } = props;
 
     function EventRow({ event }: EventRowProps) {
         const eventId = event.id;
@@ -32,7 +33,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                 <div className="h-full w-[23rem] flex-shrink-0 ">
                     <EventList EventRow={EventRow} />
                 </div>
-                <div className="flex overflow-x-auto">
+                <div className="flex overflow-x-auto" ref={scrollRef}>
                     {openEventIds.map((id) => (
                         <div key={id} className="h-full w-[23rem] flex-shrink-0">
                             <Transcript eventId={id} hidePlaybar />
@@ -52,6 +53,8 @@ export interface AieracastProps extends AieracastSharedProps {}
  */
 export function Aieracast(): ReactElement {
     const [openEventIds, openEventIdsState] = useState<string[]>([]);
+    const [storedScrollWidth, setScrollWidthState] = useState(0);
+    const scrollRef = useRef<HTMLDivElement>(null);
     const toggleEvent = useCallback(
         (eventId) => {
             const uniqueIds = new Set(openEventIds);
@@ -66,5 +69,19 @@ export function Aieracast(): ReactElement {
         },
         [openEventIds]
     );
-    return <AieracastUI openEventIds={openEventIds} toggleEvent={toggleEvent} />;
+
+    // Scroll to added event
+    useEffect(() => {
+        const scrollWidth = scrollRef.current?.scrollWidth;
+        if (scrollWidth && scrollWidth > storedScrollWidth) {
+            if (scrollRef.current) {
+                const width = scrollRef.current.scrollWidth;
+                scrollRef.current.scrollTo({ left: width, behavior: 'smooth' });
+            }
+        }
+        if (typeof scrollWidth === 'number') {
+            setScrollWidthState(scrollWidth);
+        }
+    }, [scrollRef.current?.scrollWidth, openEventIds]);
+    return <AieracastUI openEventIds={openEventIds} scrollRef={scrollRef} toggleEvent={toggleEvent} />;
 }
