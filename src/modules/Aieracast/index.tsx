@@ -29,13 +29,13 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     return (
         <div className="flex relative h-full">
             <div className="absolute inset-0 flex">
-                <div className="h-full w-80 flex-shrink-0 ">
+                <div className="h-full w-[23rem] flex-shrink-0 ">
                     <EventList EventRow={EventRow} />
                 </div>
                 <div className="flex overflow-x-auto">
                     {openEventIds.map((id) => (
-                        <div key={id} className="h-full w-80 flex-shrink-0">
-                            <Transcript eventId={id} />
+                        <div key={id} className="h-full w-[23rem] flex-shrink-0">
+                            <Transcript eventId={id} hidePlaybar />
                         </div>
                     ))}
                 </div>

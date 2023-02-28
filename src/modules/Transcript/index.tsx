@@ -68,6 +68,7 @@ interface TranscriptSharedProps {
     onBack?: MouseEventHandler;
     onEdit?: MouseEventHandler;
     showHeaderControls?: boolean;
+    hidePlaybar?: boolean;
 }
 
 /** @notExported */
@@ -122,6 +123,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         endTime,
         eventId = '',
         eventQuery,
+        hidePlaybar,
         matchIndex,
         matches,
         nextMatch,
@@ -385,6 +387,9 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
             {match(eventQuery)
                 .with({ status: 'success' }, { status: 'empty' }, ({ data: { events } }) => {
                     const event = events[0];
+                    if (hidePlaybar) {
+                        return null;
+                    }
                     return (
                         (event?.audioRecordingUrl || event?.isLive) && (
                             <Playbar
@@ -1028,6 +1033,7 @@ export interface TranscriptProps extends TranscriptSharedProps {
 export const Transcript = (props: TranscriptProps): ReactElement => {
     const {
         eventId: eventListEventId,
+        hidePlaybar,
         onBack,
         onBackHeader = 'Events',
         onEdit,
@@ -1128,6 +1134,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             endTime={endTime}
             eventId={eventId}
             eventQuery={eventQuery}
+            hidePlaybar={hidePlaybar}
             matchIndex={searchState.matchIndex}
             matches={searchState.matches}
             nextMatch={searchState.nextMatch}
