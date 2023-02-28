@@ -170,15 +170,18 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     };
 
     return (
-        <div className="flex flex-col relative h-full">
+        <div className="flex flex-col relative h-full border-2 rounded-lg border-slate-200/60 overflow-hidden">
             <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
-                    <div className="h-full w-[19rem] flex-shrink-0 ">
+                    <div className="h-full w-[19rem] flex-shrink-0 border-r-2 border-r-slate-200/60">
                         <EventList hidePlaybar EventRow={EventRow} />
                     </div>
                     <div className="flex overflow-x-auto" ref={scrollRef}>
                         {openEventIds.map((id) => (
-                            <div key={id} className="h-full w-[23rem] flex-shrink-0">
+                            <div
+                                key={id}
+                                className="h-full w-[23rem] flex-shrink-0 border-r-2 border-r-slate-200/60 last-of-type:border-r-0"
+                            >
                                 <Transcript eventId={id} hidePlaybar />
                             </div>
                         ))}
