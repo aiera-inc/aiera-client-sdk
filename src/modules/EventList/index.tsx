@@ -90,6 +90,7 @@ export interface EventListUIProps {
     eventsQueryUpcoming: QueryResult<EventListQuery, EventListQueryVariables>;
     filterByTypeOptions: FilterByTypeOption[];
     filterByTypes?: FilterByType[];
+    hidePlaybar?: boolean;
     listType?: EventView;
     loading?: boolean;
     loadMore?: (event: MouseEvent) => void;
@@ -307,6 +308,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         eventsQueryUpcoming,
         filterByTypeOptions,
         filterByTypes,
+        hidePlaybar,
         loadMore,
         listType,
         maxHits = 0,
@@ -578,13 +580,14 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     </div>
                 </div>
             </div>
-            <Playbar onClickCalendar={onSelectEventById} />
+            {!hidePlaybar && <Playbar onClickCalendar={onSelectEventById} />}
         </div>
     );
 };
 
 export interface EventListProps {
     defaultLive?: boolean;
+    hidePlaybar?: boolean;
     useConfigOptions?: boolean;
     showHeaderControls?: boolean;
     EventRow?: JSXElementConstructor<any>;
@@ -607,6 +610,7 @@ interface EventListState {
 export const EventList = ({
     useConfigOptions = false,
     defaultLive = true,
+    hidePlaybar,
     showHeaderControls = true,
     EventRow,
 }: EventListProps): ReactElement => {
@@ -992,6 +996,7 @@ export const EventList = ({
             EventRow={EventRow}
             filterByTypeOptions={filterByTypeOptions}
             filterByTypes={state.filterByTypes}
+            hidePlaybar={hidePlaybar}
             listType={state.listType}
             loadMore={hasMoreResults ? loadMore : undefined}
             maxHits={maxHits}
