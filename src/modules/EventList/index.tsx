@@ -61,7 +61,7 @@ import {
 import { InstrumentID } from '@aiera/client-sdk/web/embed';
 
 import { FilterBy } from './FilterBy';
-import { PlayButton } from './PlayButton';
+import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import './styles.css';
 
 enum FilterByType {
