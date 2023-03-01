@@ -242,16 +242,14 @@ export function Aieracast(): ReactElement {
     const [storedScrollWidth, setScrollWidthState] = useState(0);
     const scrollRef = useRef<HTMLDivElement>(null);
     const toggleEvent = useCallback(
-        (eventId) => {
+        (eventId: string) => {
             const uniqueIds = new Set(openEventIds);
-            if (typeof eventId === 'string') {
-                if (uniqueIds.has(eventId)) {
-                    uniqueIds.delete(eventId);
-                } else {
-                    uniqueIds.add(eventId);
-                }
-                openEventIdsState([...uniqueIds]);
+            if (uniqueIds.has(eventId)) {
+                uniqueIds.delete(eventId);
+            } else {
+                uniqueIds.add(eventId);
             }
+            openEventIdsState([...uniqueIds]);
         },
         [openEventIds]
     );
