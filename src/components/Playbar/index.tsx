@@ -142,47 +142,50 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 {(!hideEventDetails || showSwap) && (
                     <div
                         className={classNames(
-                            'flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer ml-1 group',
+                            'flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer ml-1 group relative',
                             {
                                 'w-[72px]': !showFullDetails,
+                                'flex-1': showFullDetails,
                             }
                         )}
                         onClick={onClickCalendar}
                     >
-                        {isCustom && eventMetaData?.title ? (
-                            <Tooltip
-                                className="flex items-end h-[12px] mt-[1px]"
-                                content={
-                                    <div className="bg-black bg-opacity-80 max-w-[300px] px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
-                                        {prettyLineBreak(eventMetaData.title)}
-                                    </div>
-                                }
-                                grow="up-right"
-                                hideOnDocumentScroll
-                                openOn="hover"
-                                position="top-left"
-                                yOffset={30}
-                            >
-                                <span className="font-bold leading-none overflow-hidden select-none text-blue-600 text-ellipsis text-sm whitespace-nowrap group-active:text-blue-900 group-hover:text-blue-800">
-                                    {eventMetaData?.quote?.localTicker || eventMetaData.title}
-                                </span>
-                            </Tooltip>
-                        ) : (
-                            <div className="flex items-end h-[12px] mt-[1px]">
-                                <span className="select-none leading-none text-sm text-blue-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap uppercase group-hover:text-blue-800 group-active:text-blue-900">
-                                    {eventMetaData?.quote?.localTicker || eventMetaData?.title || 'Instrument'}
-                                </span>
-                                <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
-                                    {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
-                                </span>
-                            </div>
-                        )}
-                        <span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900">
-                            {(isCustom
-                                ? eventMetaData?.createdBy || eventMetaData?.eventType?.replace(/_/g, ' ')
-                                : eventMetaData?.eventType?.replace(/_/g, ' ')) || 'No Type Found'}
-                            {showFullDetails && eventMetaData.title ? ` — ${eventMetaData.title}` : ''}
-                        </span>
+                        <div className="flex flex-col absolute inset-0">
+                            {isCustom && eventMetaData?.title ? (
+                                <Tooltip
+                                    className="flex items-end h-[12px] mt-[1px]"
+                                    content={
+                                        <div className="bg-black bg-opacity-80 max-w-[300px] px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                            {prettyLineBreak(eventMetaData.title)}
+                                        </div>
+                                    }
+                                    grow="up-right"
+                                    hideOnDocumentScroll
+                                    openOn="hover"
+                                    position="top-left"
+                                    yOffset={30}
+                                >
+                                    <span className="font-bold leading-none overflow-hidden select-none text-blue-600 text-ellipsis text-sm whitespace-nowrap group-active:text-blue-900 group-hover:text-blue-800">
+                                        {eventMetaData?.quote?.localTicker || eventMetaData.title}
+                                    </span>
+                                </Tooltip>
+                            ) : (
+                                <div className="flex items-end h-[12px] mt-[1px]">
+                                    <span className="select-none leading-none text-sm text-blue-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap uppercase group-hover:text-blue-800 group-active:text-blue-900">
+                                        {eventMetaData?.quote?.localTicker || eventMetaData?.title || 'Instrument'}
+                                    </span>
+                                    <span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800">
+                                        {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                                    </span>
+                                </div>
+                            )}
+                            <span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900">
+                                {(isCustom
+                                    ? eventMetaData?.createdBy || eventMetaData?.eventType?.replace(/_/g, ' ')
+                                    : eventMetaData?.eventType?.replace(/_/g, ' ')) || 'No Type Found'}
+                                {showFullDetails && eventMetaData.title ? ` — ${eventMetaData.title}` : ''}
+                            </span>
+                        </div>
                     </div>
                 )}
                 <div
@@ -270,6 +273,9 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         </button>
                     </Tooltip>
                 </div>
+                {/* This is for center spacing the player controls when 
+                we are showing the full details in the playbar */}
+                {showFullDetails && <div className="flex-1" />}
                 {error && !isPlaying && (
                     <div className="absolute py-2 px-2.5 backdrop-filter backdrop-blur-md rounded-lg bg-red-200 bg-opacity-30">
                         <div className="text-center text-red-700 text-xs">There was an error playing audio.</div>
