@@ -35,8 +35,6 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         refetch,
         renderedRefetch,
         searchTerm,
-        index,
-        setFocus,
         showDivider,
     }: EventRowProps) => {
         const hitRatio = (numMentions || 0) / maxHits;
@@ -91,8 +89,6 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         'event-row'
                     )}
                     onClick={event.eventType !== 'earnings_release' ? () => toggleEvent(event.id) : undefined}
-                    onFocus={() => setFocus?.(index)}
-                    onBlur={() => setFocus?.(-1)}
                 >
                     <Tooltip
                         className={classNames('flex flex-row', {
@@ -175,11 +171,11 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     const toggleSidebar = useCallback(() => setSidebarState(!showSidebar), [showSidebar]);
 
     return (
-        <div className="flex flex-col relative h-full border-2 rounded-lg border-slate-200 overflow-hidden">
+        <div className="flex flex-col relative h-full border-2 rounded-lg border-slate-200 overflow-hidden aieracast">
             <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
                     <div
-                        className={classNames('h-full w-[19rem] flex-shrink-0 transition-all', {
+                        className={classNames('h-full w-[19rem] flex-shrink-0 transition-all aieracast__events', {
                             '-ml-[18.75rem]': !showSidebar,
                         })}
                     >
@@ -190,7 +186,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         className={classNames(
                             'flex flex-col w-6 py-1 pr-1 border-r-2 border-slate-200',
                             'text-slate-500 cursor-pointer bg-slate-200/0',
-                            'group flex-shrink-0'
+                            'group flex-shrink-0 aieracast__sidebar-tab'
                         )}
                     >
                         <div
@@ -224,7 +220,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             ))}
                         </div>
                     ) : (
-                        <div className="flex items-center justify-center flex-1 text-slate-400">
+                        <div className="flex items-center justify-center flex-1 text-slate-400 aieracast__empty">
                             Select events from the left sidebar
                         </div>
                     )}
