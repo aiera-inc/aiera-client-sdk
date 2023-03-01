@@ -19,30 +19,33 @@
         <script>
             const eventList = new Aiera.Module('../modules/EventList/index.html', 'aiera');
             eventList.load().then(() => {
-                // To try out authentication
-                // eventList.authenticate({
-                //     accessToken: '[accesstoken]',
-                //     refreshToken: '[refreshToken]',
-                // });
-
-                // To update the configuration
                 eventList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
-                eventList.configure({
-                    hideSettings: false,
-                    // overrides: {
-                    //     style: `
-                    //             .eventlist__filterby {
-                    //                    background-color: blue
-                    //                 }
-                    //                 .eventlist__filterby__option {
-                    //                     display: none
-                    //                 }
-                    //         `,
-                    // },
-                });
             });
 
             eventList.on('authenticated', () => {
+                eventList.configure({
+                    hideSettings: true,
+                    options: {
+                        //ticker: 'meta',
+                        showCompanyFilter: false,
+                        //eventListView: 'combined',
+                        darkMode: false,
+                        eventListFilters: [
+                            { name: 'transcripts', visible: false, defaultValue: true },
+                            { name: 'earningsOnly', visible: false, defaultValue: false },
+                        ],
+                    },
+                    overrides: {
+                        // style: `
+                        //         .eventlist__filterby {
+                        //                background-color: blue
+                        //             }
+                        //             .eventlist__filterby__option {
+                        //                 display: none
+                        //             }
+                        //     `,
+                    },
+                });
                 // Set up a watchlist after authentication
                 // eventList.setWatchlist([
                 //     { ticker: 'AAPL' },
