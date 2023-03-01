@@ -267,16 +267,26 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                 </span>
                                             )}
                                             {event?.eventType && primaryQuote?.localTicker && (
-                                                <span className="text-gray-300 group-hover:text-gray-400 capitalize">
+                                                <span className="text-gray-400 group-hover:text-gray-500 capitalize">
                                                     {' '}
                                                     • {event?.eventType.replace(/_/g, ' ')}
                                                 </span>
                                             )}
                                             {eventDate && (
-                                                <span className="text-gray-300 group-hover:text-gray-400">
+                                                <span className="text-gray-400 group-hover:text-gray-500">
                                                     {primaryQuote?.localTicker && ' • '}
-                                                    {eventDate.toFormat('h:mma M/dd/yyyy')}
                                                 </span>
+                                            )}
+                                            {eventDate && event?.isLive ? (
+                                                <span className="text-xs leading-none text-red-600 dark:text-red-400 font-semibold">
+                                                    {`Live ${eventDate.toFormat('h:mma')}`}
+                                                </span>
+                                            ) : (
+                                                eventDate && (
+                                                    <span className="text-gray-400 group-hover:text-gray-500">
+                                                        {eventDate.toFormat('h:mma M/dd/yyyy')}
+                                                    </span>
+                                                )
                                             )}
                                         </div>
                                         <div
