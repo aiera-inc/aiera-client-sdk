@@ -232,7 +232,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     )}
                                     onClick={hasEventExtras ? toggleHeader : undefined}
                                 >
-                                    {showHeaderPlayButton && event && (
+                                    {showHeaderPlayButton && event && (event.isLive || event.audioRecordingUrl) && (
                                         <div className="w-8 h-8 mr-2">
                                             <PlayButton
                                                 id={event.id}
