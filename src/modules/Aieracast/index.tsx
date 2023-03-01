@@ -180,7 +180,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                 <div className="absolute inset-0 flex">
                     <div
                         className={classNames('h-full w-[19rem] flex-shrink-0 transition-all', {
-                            '-ml-[19rem]': !showSidebar,
+                            '-ml-[18.75rem]': !showSidebar,
                         })}
                     >
                         <EventList hidePlaybar hideHeader EventRow={EventRow} />
@@ -188,17 +188,24 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                     <div
                         onClick={toggleSidebar}
                         className={classNames(
-                            'flex flex-col justify-center items-center w-6 pl-0.5 border-r-2 border-slate-200',
-                            'text-slate-500 rounded-r-lg cursor-pointer bg-slate-200/0',
-                            'hover:bg-slate-200/40 active:bg-slate-200/60 group flex-shrink-0'
+                            'flex flex-col w-6 py-1 pr-1 border-r-2 border-slate-200',
+                            'text-slate-500 cursor-pointer bg-slate-200/0',
+                            'group flex-shrink-0'
                         )}
                     >
-                        <Chevron
-                            className={classNames('w-2.5 transition-all', {
-                                'rotate-90 group-active:-rotate-90': showSidebar,
-                                '-rotate-90 group-active:rotate-90': !showSidebar,
-                            })}
-                        />
+                        <div
+                            className={classNames(
+                                'pl-[1px] bg-slate-200/20 rounded flex flex-1 items-center justify-center',
+                                'hover:bg-slate-200/40 active:bg-slate-200/60'
+                            )}
+                        >
+                            <Chevron
+                                className={classNames('w-2.5 transition-all', {
+                                    'rotate-90 group-active:-rotate-90': showSidebar,
+                                    '-rotate-90 group-active:rotate-90': !showSidebar,
+                                })}
+                            />
+                        </div>
                     </div>
                     {openEventIds.length > 0 ? (
                         <div className="flex overflow-x-auto" ref={scrollRef}>
