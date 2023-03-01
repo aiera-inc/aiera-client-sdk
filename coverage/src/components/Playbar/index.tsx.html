@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">68.75% </span>
+                <span class="strong">67.44% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>55/80</span>
+                <span class='fraction'>58/86</span>
             </div>
         
             
@@ -516,7 +516,22 @@
 <a name='L451'></a><a href='#L451'>451</a>
 <a name='L452'></a><a href='#L452'>452</a>
 <a name='L453'></a><a href='#L453'>453</a>
-<a name='L454'></a><a href='#L454'>454</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a>
+<a name='L463'></a><a href='#L463'>463</a>
+<a name='L464'></a><a href='#L464'>464</a>
+<a name='L465'></a><a href='#L465'>465</a>
+<a name='L466'></a><a href='#L466'>466</a>
+<a name='L467'></a><a href='#L467'>467</a>
+<a name='L468'></a><a href='#L468'>468</a>
+<a name='L469'></a><a href='#L469'>469</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -546,6 +561,8 @@
 <span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -610,6 +627,15 @@
 <span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-yes">29x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -756,6 +782,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -969,6 +998,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject } from 'react';
 import classNames from 'classnames';
 &nbsp;
@@ -1005,6 +1035,7 @@ function toDurationString(totalSeconds: number) {
 &nbsp;
 interface PlaybarSharedProps {
     hideEventDetails?: boolean;
+    showFullDetails?: boolean;
 }
 &nbsp;
 /** @notExported */
@@ -1055,6 +1086,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         seekToEnd,
         seekToStart,
         setVolume,
+        showFullDetails,
         showSwap,
         swap,
         togglePlayback,
@@ -1110,42 +1142,51 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 )}
                 {(!hideEventDetails || showSwap) &amp;&amp; (
                     &lt;div
-                        className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
+                        className={classNames(
+                            'flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer ml-1 group relative',
+                            {
+                                'w-[72px]': !showFullDetails,
+                                'flex-1': showFullDetails,
+                            }
+                        )}
                         onClick={onClickCalendar}
                     &gt;
-                        {isCustom &amp;&amp; eventMetaData?.title ? (
-                            &lt;Tooltip
-                                className="flex items-end h-[12px] mt-[1px]"
-                                content={
-                                    &lt;div className="bg-black bg-opacity-80 max-w-[300px] px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7"&gt;
-                                        {prettyLineBreak(eventMetaData.title)}
-                                    &lt;/div&gt;
-                                }
-                                grow="up-right"
-                                hideOnDocumentScroll
-                                openOn="hover"
-                                position="top-left"
-                                yOffset={30}
-                            &gt;
-                                &lt;span className="font-bold leading-none overflow-hidden select-none text-blue-600 text-ellipsis text-sm whitespace-nowrap group-active:text-blue-900 group-hover:text-blue-800"&gt;
-                                    {eventMetaData?.quote?.localTicker || eventMetaData.title}
-                                &lt;/span&gt;
-                            &lt;/Tooltip&gt;
-                        ) : (
-                            &lt;div className="flex items-end h-[12px] mt-[1px]"&gt;
-                                &lt;span className="select-none leading-none text-sm text-blue-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap uppercase group-hover:text-blue-800 group-active:text-blue-900"&gt;
-                                    {eventMetaData?.quote?.localTicker || eventMetaData?.title || 'Instrument'}
-                                &lt;/span&gt;
-                                &lt;span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800"&gt;
-                                    {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
-                                &lt;/span&gt;
-                            &lt;/div&gt;
-                        )}
-                        &lt;span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900"&gt;
-                            {(isCustom
-                                ? eventMetaData?.createdBy || <span class="branch-1 cbranch-no" title="branch not covered" >eventMetaData?.eventType?.replace(/_/g, ' ')</span>
-                                : eventMetaData?.eventType?.replace(/_/g, ' ')) || 'No Type Found'}
-                        &lt;/span&gt;
+                        &lt;div className="flex flex-col absolute inset-0"&gt;
+                            {isCustom &amp;&amp; eventMetaData?.title ? (
+                                &lt;Tooltip
+                                    className="flex items-end h-[12px] mt-[1px]"
+                                    content={
+                                        &lt;div className="bg-black bg-opacity-80 max-w-[300px] px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7"&gt;
+                                            {prettyLineBreak(eventMetaData.title)}
+                                        &lt;/div&gt;
+                                    }
+                                    grow="up-right"
+                                    hideOnDocumentScroll
+                                    openOn="hover"
+                                    position="top-left"
+                                    yOffset={30}
+                                &gt;
+                                    &lt;span className="font-bold leading-none overflow-hidden select-none text-blue-600 text-ellipsis text-sm whitespace-nowrap group-active:text-blue-900 group-hover:text-blue-800"&gt;
+                                        {eventMetaData?.quote?.localTicker || eventMetaData.title}
+                                    &lt;/span&gt;
+                                &lt;/Tooltip&gt;
+                            ) : (
+                                &lt;div className="flex items-end h-[12px] mt-[1px]"&gt;
+                                    &lt;span className="select-none leading-none text-sm text-blue-600 font-bold overflow-hidden text-ellipsis whitespace-nowrap uppercase group-hover:text-blue-800 group-active:text-blue-900"&gt;
+                                        {eventMetaData?.quote?.localTicker || eventMetaData?.title || 'Instrument'}
+                                    &lt;/span&gt;
+                                    &lt;span className="select-none truncate leading-none ml-1 mb-[1px] text-xxs uppercase tracking-widest text-gray-400 group-hover:text-gray-600 group-active:text-gray-800"&gt;
+                                        {eventMetaData?.quote?.exchange?.shortName || 'Exchange'}
+                                    &lt;/span&gt;
+                                &lt;/div&gt;
+                            )}
+                            &lt;span className="select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900"&gt;
+                                {(isCustom
+                                    ? eventMetaData?.createdBy || <span class="branch-1 cbranch-no" title="branch not covered" >eventMetaData?.eventType?.replace(/_/g, ' ')</span>
+                                    : eventMetaData?.eventType?.replace(/_/g, ' ')) || 'No Type Found'}
+                                {showFullDetails &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >eventMetaData.title </span>? <span class="branch-0 cbranch-no" title="branch not covered" >` — ${eventMetaData.title}` </span>: ''}
+                            &lt;/span&gt;
+                        &lt;/div&gt;
                     &lt;/div&gt;
                 )}
                 &lt;div
@@ -1233,6 +1274,9 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                         &lt;/button&gt;
                     &lt;/Tooltip&gt;
                 &lt;/div&gt;
+                {/* This is for center spacing the player controls when 
+                we are showing the full details in the playbar */}
+                {showFullDetails &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >&lt;div className="flex-1" /&gt;}</span>
                 {error &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!isPlaying </span>&amp;&amp; (
 <span class="branch-2 cbranch-no" title="branch not covered" >                    &lt;div className="absolute py-2 px-2.5 backdrop-filter backdrop-blur-md rounded-lg bg-red-200 bg-opacity-30"&gt;</span>
                         &lt;div className="text-center text-red-700 text-xs"&gt;There was an error playing audio.&lt;/div&gt;
@@ -1364,7 +1408,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
  * Renders Playbar
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData } = props;
+    const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData, showFullDetails } = props;
 &nbsp;
     const {
         audioPlayer,
@@ -1414,6 +1458,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             seekToEnd={seekToEnd}
             seekToStart={seekToStart}
             setVolume={audioPlayer.setVolume}
+            showFullDetails={showFullDetails}
             showSwap={!!isPlayingAnotherEvent}
             swap={swap}
             togglePlayback={togglePlayback}
@@ -1429,7 +1474,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Feb 28 2023 21:40:58 GMT-0500 (Eastern Standard Time)
+                at Wed Mar 01 2023 12:31:26 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

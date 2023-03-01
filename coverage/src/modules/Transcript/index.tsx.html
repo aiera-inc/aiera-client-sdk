@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.54% </span>
+                <span class="strong">73.21% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>164/223</span>
+                <span class='fraction'>164/224</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.44% </span>
+                <span class="strong">50.46% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>107/208</span>
+                <span class='fraction'>109/216</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.76% </span>
+                <span class="strong">73.39% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>149/202</span>
+                <span class='fraction'>149/203</span>
             </div>
         
             
@@ -1231,7 +1231,13 @@
 <a name='L1166'></a><a href='#L1166'>1166</a>
 <a name='L1167'></a><a href='#L1167'>1167</a>
 <a name='L1168'></a><a href='#L1168'>1168</a>
-<a name='L1169'></a><a href='#L1169'>1169</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1169'></a><a href='#L1169'>1169</a>
+<a name='L1170'></a><a href='#L1170'>1170</a>
+<a name='L1171'></a><a href='#L1171'>1171</a>
+<a name='L1172'></a><a href='#L1172'>1172</a>
+<a name='L1173'></a><a href='#L1173'>1173</a>
+<a name='L1174'></a><a href='#L1174'>1174</a>
+<a name='L1175'></a><a href='#L1175'>1175</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2355,7 +2361,13 @@
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3246,7 +3258,7 @@ function useAudioSync(
         const lastSyncMs = paragraphs.slice(-1)[0]?.syncMs || 0;
         const isListening = eventId ? audioPlayer.playing(eventId) : <span class="branch-1 cbranch-no" title="branch not covered" >false;</span>
 &nbsp;
-        const listeningAtLiveEdge = audioParagraph &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >audioPlayer.rawCurrentTime * 1000 &gt; lastSyncMs;</span>
+        const listeningAtLiveEdge = audioParagraph &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >isListening </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >audioPlayer.rawCurrentTime * 1000 &gt; lastSyncMs;</span>
         const liveAndNotListening = !audioParagraph &amp;&amp; eventQuery.state.data?.events[0]?.isLive;
 &nbsp;
         // If we are audio is past the recorded transcripts, we are at the "live edge"
@@ -3258,7 +3270,7 @@ function useAudioSync(
             if (partial.text) {
                 setCurrentParagraph('partial');
                 // Not playing audio
-                if (!isListening) {
+                if (!isListening &amp;&amp; !audioPlayer.playing(null)) {
                     audioPlayer.seekToEnd();
                 }
             } else {
@@ -3523,7 +3535,13 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
     bus.on('seek-transcript-timestamp', <span class="fstat-no" title="function not covered" >({</span> data }) =&gt; <span class="cstat-no" title="statement not covered" >void onSeekAudioByDate(data),</span> 'in');
     const onClickTranscript = useCallback(
 <span class="fstat-no" title="function not covered" >        (p</span>aragraph: Paragraph) =&gt; {
-<span class="cstat-no" title="statement not covered" >            audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);</span>
+            // Either audio player is playing no audio, so we can seek
+            // or we are playing the audio for this event, so we can seek
+            // We wont seek the audio player if its playing for another event
+            // in aieracast for example...
+<span class="cstat-no" title="statement not covered" >            if (!audioPlayer.playing(null) || (eventId &amp;&amp; audioPlayer.playing(eventId))) {</span>
+<span class="cstat-no" title="statement not covered" >                audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);</span>
+            }
 <span class="cstat-no" title="statement not covered" >            bus.emit('seek-audio-seconds', (paragraph.syncMs || 0) / 1000, 'out');</span>
         },
         [audioPlayer]
@@ -3574,7 +3592,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Feb 28 2023 21:40:58 GMT-0500 (Eastern Standard Time)
+                at Wed Mar 01 2023 12:31:26 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
