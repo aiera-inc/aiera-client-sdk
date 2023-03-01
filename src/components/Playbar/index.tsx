@@ -34,6 +34,7 @@ function toDurationString(totalSeconds: number) {
 
 interface PlaybarSharedProps {
     hideEventDetails?: boolean;
+    showFullDetails?: boolean;
 }
 
 /** @notExported */
@@ -84,6 +85,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         seekToEnd,
         seekToStart,
         setVolume,
+        showFullDetails,
         showSwap,
         swap,
         togglePlayback,
@@ -139,7 +141,12 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                 )}
                 {(!hideEventDetails || showSwap) && (
                     <div
-                        className="flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer w-[72px] ml-1 group"
+                        className={classNames(
+                            'flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer ml-1 group',
+                            {
+                                'w-[72px]': !showFullDetails,
+                            }
+                        )}
                         onClick={onClickCalendar}
                     >
                         {isCustom && eventMetaData?.title ? (
@@ -174,6 +181,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                             {(isCustom
                                 ? eventMetaData?.createdBy || eventMetaData?.eventType?.replace(/_/g, ' ')
                                 : eventMetaData?.eventType?.replace(/_/g, ' ')) || 'No Type Found'}
+                            {showFullDetails && eventMetaData.title ? ` — ${eventMetaData.title}` : ''}
                         </span>
                     </div>
                 )}
@@ -393,7 +401,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
  * Renders Playbar
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData } = props;
+    const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData, showFullDetails } = props;
 
     const {
         audioPlayer,
@@ -443,6 +451,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             seekToEnd={seekToEnd}
             seekToStart={seekToStart}
             setVolume={audioPlayer.setVolume}
+            showFullDetails={showFullDetails}
             showSwap={!!isPlayingAnotherEvent}
             swap={swap}
             togglePlayback={togglePlayback}

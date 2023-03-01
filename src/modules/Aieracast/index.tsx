@@ -226,7 +226,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                     )}
                 </div>
             </div>
-            <Playbar />
+            <Playbar showFullDetails />
         </div>
     );
 }
