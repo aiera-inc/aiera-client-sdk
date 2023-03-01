@@ -13,6 +13,7 @@ import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 interface AieracastSharedProps {}
 
@@ -25,6 +26,15 @@ interface AieracastUIProps extends AieracastSharedProps {
 
 export function AieracastUI(props: AieracastUIProps): ReactElement {
     const { openEventIds, toggleEvent, scrollRef } = props;
+    const [showSidebar, setSidebarState] = useState(true);
+    const toggleSidebar = useCallback(() => setSidebarState(!showSidebar), [showSidebar]);
+    const config = useConfig();
+    let darkMode = false;
+    if (config.options) {
+        if (config.options.darkMode !== undefined) {
+            darkMode = config.options.darkMode;
+        }
+    }
 
     const EventRow = ({
         customOnly,
@@ -158,7 +168,11 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         </div>
                         <div className="flex items-center justify-center ml-4 mr-2">
                             <div className="flex items-center justify-center w-8 h-8">
-                                <Toggle on={openEventIds.includes(event.id)} onChange={() => toggleEvent(event.id)} />
+                                <Toggle
+                                    darkMode={darkMode}
+                                    on={openEventIds.includes(event.id)}
+                                    onChange={() => toggleEvent(event.id)}
+                                />
                             </div>
                         </div>
                     </Tooltip>
@@ -167,11 +181,18 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
-    const [showSidebar, setSidebarState] = useState(true);
-    const toggleSidebar = useCallback(() => setSidebarState(!showSidebar), [showSidebar]);
-
     return (
-        <div className="flex flex-col relative h-full border-2 rounded-lg border-slate-200 overflow-hidden aieracast">
+        <div
+            className={classNames(
+                'flex flex-col relative h-full border-2 rounded-lg overflow-hidden',
+                {
+                    dark: darkMode,
+                    'border-slate-200': !darkMode,
+                    'border-bluegray-7 bg-bluegray-6': darkMode,
+                },
+                'aieracast'
+            )}
+        >
             <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
                     <div
@@ -179,20 +200,20 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             '-ml-[18.75rem]': !showSidebar,
                         })}
                     >
-                        <EventList hidePlaybar hideHeader EventRow={EventRow} />
+                        <EventList useConfigOptions hidePlaybar hideHeader EventRow={EventRow} />
                     </div>
                     <div
                         onClick={toggleSidebar}
                         className={classNames(
-                            'flex flex-col w-6 py-1 pr-1 border-r-2 border-slate-200',
-                            'text-slate-500 cursor-pointer bg-slate-200/0',
+                            'flex flex-col w-6 py-1 pr-1 border-r-2 border-slate-200 dark:border-bluegray-7',
+                            'text-slate-500 cursor-pointer dark:bg-bluegray-7',
                             'group flex-shrink-0 aieracast__sidebar-tab'
                         )}
                     >
                         <div
                             className={classNames(
-                                'pl-[1px] bg-slate-200/20 rounded flex flex-1 items-center justify-center',
-                                'hover:bg-slate-200/40 active:bg-slate-200/60'
+                                'pl-[1px] bg-slate-200/20 dark:bg-bluegray-6 rounded flex flex-1 items-center justify-center',
+                                'hover:bg-slate-200/40 dark:hover:bg-bluegray-5 active:bg-slate-200/60 dark:active:bg-bluegray-6'
                             )}
                         >
                             <Chevron
@@ -208,9 +229,10 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             {openEventIds.map((id) => (
                                 <div
                                     key={id}
-                                    className="h-full w-[23rem] flex-shrink-0 border-r-2 border-r-slate-200/60"
+                                    className="h-full w-[23rem] flex-shrink-0 border-r-2 border-r-slate-200/60 dark:border-r-bluegray-8"
                                 >
                                     <Transcript
+                                        useConfigOptions
                                         onClose={() => toggleEvent(id)}
                                         eventId={id}
                                         hidePlaybar

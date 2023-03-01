@@ -168,8 +168,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                             className={classNames(
                                 'group flex h-8 items-center font-semibold rounded-lg',
                                 'ml-2 shrink-0 px-2 text-gray-400 border border-gray-200 bg-white',
+                                'dark:border-bluegray-5 dark:text-bluegray-4/60',
                                 'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
-                                'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white',
+                                'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
                                 'button__close'
                             )}
                             kind="primary"
