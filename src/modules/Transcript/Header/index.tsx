@@ -22,8 +22,8 @@ import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
 import { KeyMentions } from '../KeyMentions';
 import './styles.css';
-import { Close } from '@aiera/client-sdk/components/Svg/Close';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
+import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 
@@ -166,8 +166,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                     {onClose && (
                         <Button
                             className={classNames(
-                                'group flex h-8 items-center font-semibold rounded-lg',
-                                'ml-2 shrink-0 px-2 text-gray-400 border border-gray-200 bg-white',
+                                'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
+                                'ml-2 shrink-0 text-gray-400 border border-gray-200 bg-white',
                                 'dark:border-bluegray-5 dark:text-bluegray-4/60',
                                 'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
                                 'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
@@ -176,7 +176,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                             kind="primary"
                             onClick={onClose}
                         >
-                            <Close className="h-4 w-4" />
+                            <XMark className="w-2.5" />
                         </Button>
                     )}
                 </div>
