@@ -845,7 +845,7 @@ function useAudioSync(
         const lastSyncMs = paragraphs.slice(-1)[0]?.syncMs || 0;
         const isListening = eventId ? audioPlayer.playing(eventId) : false;
 
-        const listeningAtLiveEdge = audioParagraph && audioPlayer.rawCurrentTime * 1000 > lastSyncMs;
+        const listeningAtLiveEdge = audioParagraph && isListening && audioPlayer.rawCurrentTime * 1000 > lastSyncMs;
         const liveAndNotListening = !audioParagraph && eventQuery.state.data?.events[0]?.isLive;
 
         // If we are audio is past the recorded transcripts, we are at the "live edge"
@@ -857,7 +857,7 @@ function useAudioSync(
             if (partial.text) {
                 setCurrentParagraph('partial');
                 // Not playing audio
-                if (!isListening) {
+                if (!isListening && !audioPlayer.playing(null)) {
                     audioPlayer.seekToEnd();
                 }
             } else {
@@ -1122,7 +1122,13 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     bus.on('seek-transcript-timestamp', ({ data }) => void onSeekAudioByDate(data), 'in');
     const onClickTranscript = useCallback(
         (paragraph: Paragraph) => {
-            audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
+            // Either audio player is playing no audio, so we can seek
+            // or we are playing the audio for this event, so we can seek
+            // We wont seek the audio player if its playing for another event
+            // in aieracast for example...
+            if (!audioPlayer.playing(null) || (eventId && audioPlayer.playing(eventId))) {
+                audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
+            }
             bus.emit('seek-audio-seconds', (paragraph.syncMs || 0) / 1000, 'out');
         },
         [audioPlayer]
