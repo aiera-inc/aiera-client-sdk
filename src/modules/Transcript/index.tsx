@@ -1122,11 +1122,9 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     bus.on('seek-transcript-timestamp', ({ data }) => void onSeekAudioByDate(data), 'in');
     const onClickTranscript = useCallback(
         (paragraph: Paragraph) => {
-            // Either audio player is playing no audio, so we can seek
-            // or we are playing the audio for this event, so we can seek
-            // We wont seek the audio player if its playing for another event
-            // in aieracast for example...
-            if (!audioPlayer.playing(null) || (eventId && audioPlayer.playing(eventId))) {
+            // We only seek if there is no id associated with the audio (unlikely)
+            // or if the audioPlayer id is the same as our current eventId
+            if (!audioPlayer.id || audioPlayer.id === eventId || (eventId && audioPlayer.playing(eventId))) {
                 audioPlayer.rawSeek((paragraph.syncMs || 0) / 1000);
             }
             bus.emit('seek-audio-seconds', (paragraph.syncMs || 0) / 1000, 'out');
