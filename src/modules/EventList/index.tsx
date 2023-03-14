@@ -265,7 +265,7 @@ const DefaultEventRow = ({
                                 <div className="rounded-full h-[6px] w-20 bg-gray-200">
                                     <div className={`rounded-full h-[6px] bg-blue-500 w-${hitRatioClass}`} />
                                 </div>
-                                <div className="uppercase font-semibold ml-2 text-black tracking-wide text-xs">
+                                <div className="uppercase font-semibold ml-2 text-black tracking-wide text-xs dark:text-white">
                                     {numMentions || 0} hit
                                     {numMentions !== 1 && 's'}
                                 </div>
