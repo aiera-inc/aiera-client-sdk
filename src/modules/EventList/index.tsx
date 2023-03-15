@@ -226,7 +226,9 @@ const DefaultEventRow = ({
                                 metaData={{
                                     createdBy,
                                     eventDate: eventDate ? eventDate.toISO() : undefined,
+                                    eventStream: event.audioStreamUri,
                                     eventType: event.eventType,
+                                    isLive: event?.isLive ? true : false,
                                     localTicker: primaryQuote?.localTicker,
                                     quote: primaryQuote,
                                     title: event.title,
@@ -784,6 +786,7 @@ export const EventList = ({
                             id
                             audioRecordingUrl
                             audioRecordingOffsetMs
+                            audioStreamUri
                             eventDate
                             eventType
                             isLive

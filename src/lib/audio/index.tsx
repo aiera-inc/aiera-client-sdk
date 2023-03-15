@@ -1,12 +1,17 @@
 import React, { createContext, useContext, useEffect, useState, ReactElement, ReactNode } from 'react';
-import { MediaPlayer, MediaPlayerClass } from 'dashjs';
 import { EventType, Quote } from '@aiera/client-sdk/types/generated';
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
+import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
+
+/* eslint-disable @typescript-eslint/no-var-requires */
+const shakaInstance: ShakaPlayer = require('shaka-player/dist/shaka-player.ui.js') as ShakaPlayer;
 
 export interface EventMetaData {
     createdBy?: string;
+    eventStream?: string | null;
     eventDate?: string;
     eventType?: EventType;
+    isLive?: boolean;
     localTicker?: string;
     quote?: Maybe<DeepPartial<Quote>>;
     title?: string;
@@ -23,96 +28,111 @@ export class AudioPlayer {
     metaData?: EventMetaData;
     offset = 0;
     audio: HTMLAudioElement;
-    dash: MediaPlayerClass;
-    usingDash = false;
-    liveCatchupThreshold = 30;
+    liveCatchupThreshold = 5;
+    player?: playerType;
 
     constructor() {
         this.errorInfo = {
             lastPosition: 0,
             error: false,
         };
-        this.audio = new Audio();
-        this.dash = MediaPlayer().create();
-        this.dash.updateSettings({
+        this.audio = document.createElement('audio');
+        this.audio.setAttribute('preload', 'metadata');
+        this.audio.controls = false;
+        this.audio.addEventListener('timeupdate', this.adjustPlayback);
+        this.initShaka(this.audio);
+    }
+
+    initShaka(audioElem: HTMLAudioElement) {
+        shakaInstance?.polyfill?.installAll();
+        if (!shakaInstance?.Player?.isBrowserSupported()) {
+            console.log('Browser not supported.');
+            return;
+        }
+        const localPlayer = new shakaInstance.Player(audioElem);
+        const audioContainer = document.createElement('div');
+        /* eslint-disable @typescript-eslint/unbound-method */
+        /* eslint-disable @typescript-eslint/no-unsafe-call */
+        const ui: shakaUI = new (shakaInstance.ui.Overlay as any)(localPlayer, audioContainer, audioElem) as shakaUI;
+        const controls: shakaUIControls = ui.getControls();
+        const player: playerType = controls.getPlayer();
+        const media: HTMLAudioElement = player.getMediaElement();
+
+        player.configure({
             streaming: {
-                lowLatencyEnabled: true,
-                delay: {
-                    liveDelay: 1.5,
+                rebufferingGoal: 1,
+                bufferingGoal: 2,
+                lowLatencyMode: true,
+                useNativeHlsOnSafari: true,
+                stallEnabled: true,
+                retryParameters: {
+                    maxAttempts: 2, // the maximum number of requests before we fail
+                    baseDelay: 1000, // the base delay in ms between retries
+                    backoffFactor: 2, // the multiplicative backoff factor between retries
+                    fuzzFactor: 0.5, // the fuzz factor to apply to each retry delay
                 },
-                liveCatchup: {
-                    enabled: true,
-                    playbackBufferMin: 0.5,
-                    mode: 'liveCatchupModeLoLP',
-                    minDrift: 0.05,
-                    playbackRate: 0.2,
-                    latencyThreshold: this.liveCatchupThreshold,
+            },
+            manifest: {
+                availabilityWindowOverride: 600000,
+                defaultPresentationDelay: 10,
+                retryParameters: {
+                    timeout: 30000, // timeout in ms, after which we abort
+                    stallTimeout: 5000, // stall timeout in ms, after which we abort
+                    connectionTimeout: 10000, // connection timeout in ms, after which we abort
+                    maxAttempts: 3, // the maximum number of requests before we fail
+                    baseDelay: 1000, // the base delay in ms between retries
+                    backoffFactor: 2, // the multiplicative backoff factor between retries
+                    fuzzFactor: 0.5, // the fuzz factor to apply to each retry delay
                 },
             },
         });
-        this.dash.on(MediaPlayer.events.FRAGMENT_LOADING_PROGRESS, this.triggerUpdate);
-        this.dash.on(window.dashjs.MediaPlayer.events.BUFFER_EMPTY, this.updateTargetLatency);
-        this.dash.on(window.dashjs.MediaPlayer.events.PLAYBACK_WAITING, this.updateTargetLatency);
-        this.audio.addEventListener('timeupdate', this.adjustPlayback);
+        this.player = player;
+        this.audio = media;
     }
 
-    // The dash player automatically overwrites the playback rate on each tick
-    // when liveCatchup is on so we need toi adjust those settings as the current time
-    // changes.
-    //
-    // If we are > threshold seconds back from the live edge, turn catchup mode
-    // off so we can set a custom playback rate.
-    // If we are within threshold seconds of the live edge, turn liveCatchup back on
-    // and let dashjs control the playback speed.
     adjustPlayback = (): void => {
-        if (this.usingDash) {
-            const settings = this.dash.getSettings();
-            const lowLatencyEnabled = settings.streaming?.lowLatencyEnabled;
-            const playbackRate = settings.streaming?.liveCatchup?.playbackRate || 0;
-            const fromLiveEdge = this.dash.duration() - this.dash.time();
-            if (fromLiveEdge + 1 < this.liveCatchupThreshold) {
-                if (!lowLatencyEnabled) {
-                    this.dash.updateSettings({
-                        streaming: { lowLatencyEnabled: true, liveCatchup: { enabled: true } },
-                    });
-                }
-                if (fromLiveEdge < 6 && playbackRate > 0.2) {
-                    this.dash.updateSettings({ streaming: { liveCatchup: { playbackRate: 0.2 } } });
-                }
-            } else if (lowLatencyEnabled) {
-                this.dash.updateSettings({ streaming: { lowLatencyEnabled: false, liveCatchup: { enabled: false } } });
-            }
+        const fromLiveEdge = this.rawDuration - this.rawCurrentTime;
+        if (fromLiveEdge < 6 && this.playbackRate > 1) {
+            this.player?.trickPlay(1);
         }
     };
 
-    updateTargetLatency = (): void => {
-        const settings = this.dash.getSettings();
-        const currentDelay = settings.streaming?.delay?.liveDelay || 1.5;
-        if (this.playing(null)) {
-            // Aggressively back off the target latency for now, but max out at 6 seconds
-            // behind.
-            const newTarget = Math.min(currentDelay * 1.5, 6);
-            this.dash.updateSettings({
-                streaming: {
-                    delay: { liveDelay: newTarget },
-                },
-            });
-        }
-    };
-
-    init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): void {
+    async init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
         if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
-            const { id, url } = opts;
+            let url = opts?.url;
+            const { id } = opts;
+            const startTime = 0;
             this.id = id;
-            if (url !== this.url) {
-                if (this.usingDash) {
-                    this.dash.reset();
-                    this.usingDash = false;
-                }
-                this.url = url;
-                this.audio.src = url;
-            }
             this.offset = opts.offset;
+            if (url !== this.url) {
+                // different event - load new asset/manifest
+                let mimeType: string | null = null;
+                const userAgent = window.navigator.userAgent.toLowerCase();
+                const ios = /iphone|ipod|ipad/.test(userAgent);
+                const isLive = opts?.metaData?.isLive || null;
+
+                if (isLive && ios) {
+                    mimeType = 'application/vnd.apple.mpegurl';
+                    if (opts && opts?.metaData?.eventStream) {
+                        const eventStream: string = opts.metaData.eventStream;
+                        url = `https://storage.media.aiera.com${eventStream}/index.m3u8`;
+                    }
+                } else if (isLive && !ios) {
+                    mimeType = 'application/dash+xml';
+                } else {
+                    mimeType = 'audio/mpeg';
+                }
+                // load asset
+                try {
+                    if (this.player) {
+                        await this.player.load(url, startTime, mimeType);
+                        this.player.trickPlay(1);
+                        this.url = url;
+                    }
+                } catch (e) {
+                    console.log(e);
+                }
+            }
             this.triggerUpdate();
         }
 
@@ -133,10 +153,6 @@ export class AudioPlayer {
         this.metaData = {};
         this.errorInfo.error = false;
         this.errorInfo.lastPosition = 0;
-        if (this.usingDash) {
-            this.dash.reset();
-            this.usingDash = false;
-        }
         this.audio.src = '';
         this.triggerUpdate();
     }
@@ -146,7 +162,7 @@ export class AudioPlayer {
     };
 
     async play(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
-        this.init(opts);
+        await this.init(opts);
         if (this.rawCurrentTime === 0) this.rawSeek(this.offset);
 
         // If after 2 seconds we still haven't started actually playing, set an error state.
@@ -161,17 +177,12 @@ export class AudioPlayer {
             }
         }, 2000);
 
-        try {
+        const isLive = opts?.metaData?.isLive;
+        if (isLive && this.player) {
+            this.player.goToLive();
+            return;
+        } else {
             return await this.audio.play();
-        } catch {
-            this.dash.initialize(this.audio, this.url);
-            this.dash.updateSettings({
-                streaming: {
-                    delay: { liveDelay: 1.5 },
-                },
-            });
-            this.usingDash = true;
-            this.dash.play();
         }
     }
 
@@ -214,10 +225,6 @@ export class AudioPlayer {
 
     setRate(rate: number): void {
         this.audio.playbackRate = rate;
-        if (this.usingDash) {
-            this.dash.setPlaybackRate(rate);
-            this.dash.updateSettings({ streaming: { liveCatchup: { playbackRate: Math.max(rate - 1, 0.2) } } });
-        }
         this.triggerUpdate();
     }
 
@@ -251,7 +258,8 @@ export class AudioPlayer {
     }
 
     get rawDuration(): number {
-        return (this.usingDash ? this.dash.duration() : this.audio.duration) || 0;
+        const dur = this.player ? this.player.seekRange().end : this.audio.duration || 0;
+        return dur;
     }
 
     get rawCurrentTime(): number {

@@ -433,7 +433,9 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 id={event?.id}
                                 metaData={{
                                     createdBy: getEventCreatorName(event?.creator as User),
+                                    eventStream: event?.audioStreamUri,
                                     eventType: event?.eventType,
+                                    isLive: event?.isLive ? true : false,
                                     quote: getPrimaryQuote(event?.primaryCompany),
                                     title: event?.title,
                                 }}
@@ -460,6 +462,7 @@ function useEventUpdates(eventId = '') {
                     id
                     audioRecordingOffsetMs
                     audioRecordingUrl
+                    audioStreamUri
                     connectionStatus
                     creator {
                         id
@@ -525,6 +528,7 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                     id
                     audioRecordingUrl
                     audioRecordingOffsetMs
+                    audioStreamUri
                     connectionStatus
                     creator {
                         id
