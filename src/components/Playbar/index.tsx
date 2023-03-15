@@ -21,6 +21,7 @@ import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 
 import './styles.css';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 
 function toDurationString(totalSeconds: number) {
     if (!totalSeconds || isNaN(totalSeconds)) totalSeconds = 0;
@@ -337,13 +338,42 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
     const isActive = audioPlayer.id;
     const isPlaying = audioPlayer.playing(null);
     const isPlayingAnotherEvent = isPlaying && id && !audioPlayer.playing(id);
+    const bus = useMessageBus();
     const togglePlayback = useCallback(() => {
         if (isPlaying) {
             void track('Click', 'Audio Pause', { eventId: id, url });
             audioPlayer.pause();
+            bus?.emit(
+                'event-audio',
+                {
+                    action: 'pause',
+                    origin: 'playBar',
+                    event: {
+                        eventDate: metaData?.eventDate,
+                        ticker: metaData?.localTicker,
+                        title: metaData?.title,
+                        eventType: metaData?.eventType,
+                    },
+                },
+                'out'
+            );
         } else {
             void track('Click', 'Audio Play', { eventId: id, url });
             void audioPlayer.play();
+            bus?.emit(
+                'event-audio',
+                {
+                    action: 'play',
+                    origin: 'playBar',
+                    event: {
+                        eventDate: metaData?.eventDate,
+                        ticker: metaData?.localTicker,
+                        title: metaData?.title,
+                        eventType: metaData?.eventType,
+                    },
+                },
+                'out'
+            );
         }
     }, [isPlaying]);
     const fastForward = useCallback(() => {

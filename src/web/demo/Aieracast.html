@@ -26,8 +26,8 @@
                 eventList.configure({
                     hideSettings: true,
                     options: {
-                        //eventListView: 'combined',
-                        darkMode: false,
+                        // eventListView: 'combined',
+                        // darkMode: true,
                         eventListFilters: [
                             { name: 'transcripts', visible: false, defaultValue: true },
                             { name: 'earningsOnly', visible: true, defaultValue: false },
@@ -51,6 +51,9 @@
                 //     { ticker: 'TLSA' },
                 //     { ticker: 'PTON' },
                 // ]);
+                eventList.on('event-audio', (event) => {
+                    console.log('play audio: ', event);
+                });
             });
         </script>
     </body>

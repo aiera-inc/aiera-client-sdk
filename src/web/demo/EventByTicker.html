@@ -23,13 +23,14 @@
             });
             event.on('authenticated', () => {
                 event.configure({
+                    hideSettings: true,
                     options: {
-                        ticker: 'meta',
+                        ticker: 'aapl',
                         darkMode: false,
-                        showTitleInfo: true,
-                        showRecordingDetails: false,
-                        showPriceReaction: false,
-                        showSearch: false,
+                        showTitleInfo: false,
+                        showRecordingDetails: true,
+                        showPriceReaction: true,
+                        showSearch: true,
                         showAudioPlayer: false,
                     },
                     user: {

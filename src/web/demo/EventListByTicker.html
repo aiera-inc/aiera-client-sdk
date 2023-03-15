@@ -23,19 +23,13 @@
             });
             eventList.on('authenticated', () => {
                 eventList.configure({
-                    hideSettings: true,
                     options: {
                         ticker: 'meta',
                         darkMode: false,
-                        showTitleInfo: true,
-                        showRecordingDetails: true,
-                        showPriceReaction: true,
-                        showAudioPlayer: true,
-                        showSearch: true,
-                        eventListFilters: [
-                            { name: 'transcripts', visible: true, defaultValue: true },
-                            { name: 'earningsOnly', visible: true, defaultValue: true },
-                        ],
+                        // eventListFilters: [
+                        //     { name: 'transcripts', visible: false, defaultValue: true },
+                        //     { name: 'earningsOnly', visible: true, defaultValue: true },
+                        // ],
                     },
                     overrides: {
                         // style: `

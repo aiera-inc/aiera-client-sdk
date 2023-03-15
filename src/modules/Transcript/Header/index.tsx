@@ -237,6 +237,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         <div className="w-8 h-8 mr-2">
                                             <PlayButton
                                                 id={event.id}
+                                                origin="transcriptHeader"
                                                 metaData={{
                                                     createdBy,
                                                     eventDate: eventDate ? eventDate.toISO() : undefined,

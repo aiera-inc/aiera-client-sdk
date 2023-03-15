@@ -20,12 +20,22 @@ interface EventSelected {
     title?: string;
 }
 
+export type AudioOriginUI = 'eventList' | 'playBar' | 'transcriptHeader';
+type EventAudioAction = 'play' | 'pause';
+
+interface EventAudio {
+    action: EventAudioAction;
+    origin: AudioOriginUI;
+    event: EventSelected;
+}
+
 export interface MessageBusEvents {
     'seek-audio-seconds': number;
     authenticate: AuthTokens;
     authenticateWithApiKey: string;
     authenticated: null;
     configure: Config;
+    'event-audio': EventAudio;
     'event-alert': EventAlert;
     'event-selected': EventSelected;
     'instrument-selected': InstrumentID;

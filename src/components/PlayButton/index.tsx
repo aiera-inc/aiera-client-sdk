@@ -1,12 +1,13 @@
-import React, { useCallback, MouseEvent, ReactElement, ReactNode } from 'react';
-import classNames from 'classnames';
-import { useAudioPlayer, EventMetaData } from '@aiera/client-sdk/lib/audio';
-import { useTrack, useAlertList } from '@aiera/client-sdk/lib/data';
 import { Bell } from '@aiera/client-sdk/components/Svg/Bell';
 import { Calendar } from '@aiera/client-sdk/components/Svg/Calendar';
-import { Play } from '@aiera/client-sdk/components/Svg/Play';
 import { Pause } from '@aiera/client-sdk/components/Svg/Pause';
+import { Play } from '@aiera/client-sdk/components/Svg/Play';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { EventMetaData, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { useAlertList, useTrack } from '@aiera/client-sdk/lib/data';
+import { AudioOriginUI, useMessageBus } from '@aiera/client-sdk/lib/msg';
+import classNames from 'classnames';
+import React, { MouseEvent, ReactElement, ReactNode, useCallback } from 'react';
 import './styles.css';
 
 interface PlayButtonSharedProps {
@@ -101,26 +102,56 @@ export interface PlayButtonProps extends PlayButtonSharedProps {
     url?: string | null;
     offset?: number;
     metaData: EventMetaData;
+    origin?: AudioOriginUI;
 }
 
 /**
  * Renders PlayButton
  */
 export function PlayButton(props: PlayButtonProps): ReactElement {
-    const { id, url, offset = 0, metaData } = props;
+    const { id, url, offset = 0, metaData, origin = 'eventList' } = props;
     const { addAlert, removeAlert, alertList } = useAlertList();
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
     const isPlaying = audioPlayer.playing(id);
+    const bus = useMessageBus();
     const togglePlayback = useCallback(
         (event: MouseEvent) => {
             event.stopPropagation();
             if (audioPlayer.playing(id)) {
                 void track('Click', 'Audio Pause', { eventId: id, url });
                 audioPlayer.pause();
+                bus?.emit(
+                    'event-audio',
+                    {
+                        action: 'pause',
+                        origin,
+                        event: {
+                            eventDate: metaData.eventDate,
+                            ticker: metaData.localTicker,
+                            title: metaData.title,
+                            eventType: metaData.eventType,
+                        },
+                    },
+                    'out'
+                );
             } else if (url) {
                 void track('Click', 'Audio Play', { eventId: id, url });
                 void audioPlayer.play({ id, url, offset, metaData });
+                bus?.emit(
+                    'event-audio',
+                    {
+                        action: 'play',
+                        origin,
+                        event: {
+                            eventDate: metaData.eventDate,
+                            ticker: metaData.localTicker,
+                            title: metaData.title,
+                            eventType: metaData.eventType,
+                        },
+                    },
+                    'out'
+                );
             }
         },
         [isPlaying, id, url, offset]
