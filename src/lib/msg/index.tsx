@@ -5,15 +5,15 @@ import type { UserEmailStatus, ValueOf } from '@aiera/client-sdk/types';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
 import { Config } from '../config';
 
-type Direction = 'in' | 'out';
+export type Direction = 'in' | 'out';
 
-interface EventAlert {
+export interface EventAlert {
     description: string;
     tickerList: string[];
     eventIds: string[];
 }
 
-interface EventSelected {
+export interface EventSelected {
     ticker?: string;
     eventDate?: string;
     eventType?: string;
@@ -21,9 +21,9 @@ interface EventSelected {
 }
 
 export type AudioOriginUI = 'eventList' | 'playBar' | 'transcriptHeader';
-type EventAudioAction = 'play' | 'pause';
+export type EventAudioAction = 'play' | 'pause';
 
-interface EventAudio {
+export interface EventAudio {
     action: EventAudioAction;
     origin: AudioOriginUI;
     event: EventSelected;

@@ -362,7 +362,7 @@ export class Module {
      *
      * See {@link MessageBusEvents}
      */
-    on<E extends keyof MessageBusEvents>(event: E, listener: (msg: Message<E>) => void): Module {
+    on<E extends keyof MessageBusEvents>(event: E, listener: (msg: MessageBusEvents[E]) => void): Module {
         this.emitter.on(event, listener);
         return this;
     }
