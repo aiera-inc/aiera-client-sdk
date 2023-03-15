@@ -26,24 +26,21 @@
                 eventList.configure({
                     hideSettings: true,
                     options: {
-                        //ticker: 'meta',
+                        //ticker: 'aapl',
                         showCompanyFilter: false,
                         //eventListView: 'combined',
-                        darkMode: false,
+                        //darkMode: true,
                         eventListFilters: [
                             { name: 'transcripts', visible: false, defaultValue: true },
-                            { name: 'earningsOnly', visible: false, defaultValue: false },
+                            { name: 'earningsOnly', visible: false, defaultValue: true },
                         ],
                     },
                     overrides: {
-                        // style: `
-                        //         .eventlist__filterby {
-                        //                background-color: blue
-                        //             }
-                        //             .eventlist__filterby__option {
-                        //                 display: none
-                        //             }
-                        //     `,
+                        style: `
+                            .text-blue-600 {
+                                color: #008094 !important;
+                            }
+                            `,
                     },
                 });
                 // Set up a watchlist after authentication
@@ -56,6 +53,9 @@
             });
             eventList.on('instrument-selected', (ticker) => {
                 console.log('selected ticker: ', ticker);
+            });
+            eventList.on('event-audio', (event) => {
+                console.log(`${event.action} audio:`, event);
             });
             eventList.on('event-selected', (event) => {
                 console.log('selected event: ', event);
