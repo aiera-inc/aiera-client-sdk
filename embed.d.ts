@@ -56,7 +56,7 @@ export declare class Module {
      *
      * See {@link MessageBusEvents}
      */
-    on<E extends keyof MessageBusEvents>(event: E, listener: (msg: Message<E>) => void): Module;
+    on<E extends keyof MessageBusEvents>(event: E, listener: (msg: MessageBusEvents[E]) => void): Module;
     /**
      * This method can be used to pass auth tokens directly to the module
      * to bypass the login screen for a user.
