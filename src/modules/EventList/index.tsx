@@ -989,8 +989,17 @@ export const EventList = ({
         [eventsQuery.status]
     );
 
-    useAutoTrack('Click', 'Event Filter By', { filterBy: state.filterByTypes }, [state.filterByTypes]);
-    useAutoTrack('Submit', 'Event Search', { searchTerm: state.searchTerm }, [state.searchTerm], !state.searchTerm);
+    useAutoTrack('Click', 'Event Filter By', { filterBy: state.filterByTypes, widgetUserId: config.tracking?.userId }, [
+        state.filterByTypes,
+        config.tracking?.userId,
+    ]);
+    useAutoTrack(
+        'Submit',
+        'Event Search',
+        { searchTerm: state.searchTerm, widgetUserId: config.tracking?.userId },
+        [state.searchTerm, config.tracking?.userId],
+        !state.searchTerm
+    );
     useAutoTrack('View', 'Events', { widgetUserId: config.tracking?.userId }, [config.tracking?.userId]);
 
     // Will poll alerts when passing true
