@@ -2,7 +2,7 @@ import React, { Fragment, ReactElement, RefObject, useCallback, useEffect, useRe
 import './styles.css';
 import { EventList, EventRowProps } from '../EventList';
 import { Transcript } from '../Transcript';
-import { getEventCreatorName, getPrimaryQuote } from '@aiera/client-sdk/lib/data';
+import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
 import { User } from '@aiera/client-sdk/types';
 import { DateTime } from 'luxon';
@@ -262,6 +262,7 @@ export interface AieracastProps extends AieracastSharedProps {}
 export function Aieracast(): ReactElement {
     const [openEventIds, openEventIdsState] = useState<string[]>([]);
     const [storedScrollWidth, setScrollWidthState] = useState(0);
+    const config = useConfig();
     const scrollRef = useRef<HTMLDivElement>(null);
     const toggleEvent = useCallback(
         (eventId: string) => {
@@ -289,5 +290,6 @@ export function Aieracast(): ReactElement {
             setScrollWidthState(scrollWidth);
         }
     }, [scrollRef.current?.scrollWidth, openEventIds]);
+    useAutoTrack('View', 'Events', { widgetUserId: config.tracking?.userId }, [config.tracking?.userId]);
     return <AieracastUI openEventIds={openEventIds} scrollRef={scrollRef} toggleEvent={toggleEvent} />;
 }

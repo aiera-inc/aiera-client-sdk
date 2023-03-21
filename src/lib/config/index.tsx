@@ -18,7 +18,7 @@ export interface EventListFilter {
     visible?: boolean;
 }
 
-interface Options {
+export interface Options {
     customOnly?: boolean;
     darkMode?: boolean;
     eventId?: string;
@@ -35,11 +35,15 @@ interface Options {
     ticker?: string;
 }
 
-interface Overrides {
+export interface Overrides {
     style?: string;
 }
 
-interface User {
+export interface Tracking {
+    userId?: string;
+}
+
+export interface User {
     email?: string;
 }
 
@@ -59,6 +63,7 @@ export interface Config {
     options?: Options;
     overrides?: Overrides;
     user?: User;
+    tracking?: Tracking;
 }
 
 // Setup default values for env

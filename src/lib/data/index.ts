@@ -160,6 +160,7 @@ export function useAppConfig(): QueryResult<AppConfigQuery, AppConfigQueryVariab
 type TrackingEvent = 'Click' | 'View' | 'Scroll' | 'Submit' | 'Load';
 type TrackingObject =
     | 'Event'
+    | 'Events'
     | 'Event Filter By'
     | 'Event Search'
     | 'Audio Pause'

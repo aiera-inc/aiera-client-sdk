@@ -1131,7 +1131,10 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         },
         [audioPlayer]
     );
-    useAutoTrack('View', 'Event', { eventId }, [eventId]);
+    useAutoTrack('View', 'Event', { eventId, widgetUserId: config.tracking?.userId }, [
+        eventId,
+        config.tracking?.userId,
+    ]);
 
     return (
         <TranscriptUI
