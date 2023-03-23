@@ -228,17 +228,13 @@ const DefaultEventRow = ({
                                     eventDate: eventDate ? eventDate.toISO() : undefined,
                                     eventStream: event.audioStreamUri,
                                     eventType: event.eventType,
-                                    isLive: event?.isLive ? true : false,
+                                    isLive: !!event?.isLive,
                                     localTicker: primaryQuote?.localTicker,
                                     quote: primaryQuote,
                                     title: event.title,
                                 }}
                                 id={event.id}
-                                url={
-                                    event.isLive
-                                        ? `https://storage.media.aiera.com/${event.id}`
-                                        : event.audioRecordingUrl
-                                }
+                                url={event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioProxy}
                                 offset={audioOffset || 0}
                             />
                         </div>
@@ -784,6 +780,7 @@ export const EventList = ({
                         numMentions
                         event {
                             id
+                            audioProxy
                             audioRecordingUrl
                             audioRecordingOffsetMs
                             audioStreamUri

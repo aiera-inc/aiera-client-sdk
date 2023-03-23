@@ -435,7 +435,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     createdBy: getEventCreatorName(event?.creator as User),
                                     eventStream: event?.audioStreamUri,
                                     eventType: event?.eventType,
-                                    isLive: event?.isLive ? true : false,
+                                    isLive: !!event?.isLive,
                                     quote: getPrimaryQuote(event?.primaryCompany),
                                     title: event?.title,
                                 }}

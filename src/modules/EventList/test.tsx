@@ -232,7 +232,7 @@ describe('EventList', () => {
         if (row) within(row).getByTitle('Calendar');
     });
 
-    test('renders play when there is an audio url', async () => {
+    test('renders play when there is an live audio url', async () => {
         await actAndFlush(() =>
             renderWithProvider(<EventList />, {
                 executeQuery: () =>
@@ -244,7 +244,33 @@ describe('EventList', () => {
                                     hits: [
                                         {
                                             ...eventList[0],
-                                            event: { ...eventList[0]?.event, audioRecordingUrl: 'mp3!' },
+                                            event: { ...eventList[0]?.event, isLive: true },
+                                        },
+                                    ],
+                                },
+                            },
+                        },
+                    }),
+            })
+        );
+        const row = screen.getByText('TICK').closest('li');
+        expect(row).toBeTruthy();
+        if (row) within(row).getByTitle('Play');
+    });
+
+    test('renders play when there is an audio proxy url ', async () => {
+        await actAndFlush(() =>
+            renderWithProvider(<EventList />, {
+                executeQuery: () =>
+                    fromValue({
+                        data: {
+                            search: {
+                                events: {
+                                    numTotalHits: eventList.length,
+                                    hits: [
+                                        {
+                                            ...eventList[0],
+                                            event: { ...eventList[0]?.event, audioProxy: 'www.audioproxy.com' },
                                         },
                                     ],
                                 },

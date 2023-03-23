@@ -24,11 +24,7 @@ import './styles.css';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 
 function toDurationString(totalSeconds: number) {
-    if (totalSeconds == Infinity) {
-        // exception for ios before the stream is loaded
-        return '00:00:00';
-    }
-    if (!totalSeconds || isNaN(totalSeconds)) totalSeconds = 0;
+    if (!totalSeconds || isNaN(totalSeconds) || Math.abs(totalSeconds) === Infinity) totalSeconds = 0;
     const seconds = Math.floor(totalSeconds % 60);
     const minutes = Math.floor((totalSeconds / 60) % 60);
     const hours = Math.floor(totalSeconds / 3600);

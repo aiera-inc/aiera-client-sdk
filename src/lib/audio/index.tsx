@@ -182,7 +182,7 @@ export class AudioPlayer {
             this.player.goToLive();
             return;
         } else {
-            return await this.audio.play();
+            return this.audio.play();
         }
     }
 
