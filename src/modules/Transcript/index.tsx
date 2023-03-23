@@ -96,6 +96,7 @@ interface TranscriptUIProps extends TranscriptSharedProps {
     onSeekAudioByDate?: (date: string) => void;
     partial?: Partial;
     prevMatch: () => void;
+    relativeTimestampsOffset: number;
     scrollContainerRef: Ref<HTMLDivElement>;
     searchTerm: string;
     showSpeakers: boolean;
@@ -138,6 +139,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         onSeekAudioByDate,
         partial,
         prevMatch,
+        relativeTimestampsOffset,
         scrollContainerRef,
         searchTerm,
         showHeaderControls,
@@ -148,7 +150,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         useConfigOptions,
     } = props;
 
-    // Show the player when its not useConfigOptions, or if it is enabled with useConfigOptions
+    // Show the player when it's not useConfigOptions, or if it is enabled with useConfigOptions
     const config = useConfig();
     let theme = darkMode;
     let showPlayer = true;
@@ -262,7 +264,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     .with({ status: 'success' }, ({ data }) => {
                         return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
                             const speakerTime = paragraphs[0]?.paragraph?.timestamp;
-                            const speakerTimeRelative = paragraphs[0]?.paragraph?.syncMs;
+                            const speakerTimeRelative =
+                                (paragraphs[0]?.paragraph?.syncMs || 0) - relativeTimestampsOffset;
                             return (
                                 <div key={`speaker-turn-${id}`}>
                                     {showSpeakers && speaker.identified && (
@@ -290,6 +293,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     )}
                                     {paragraphs.map(({ sentences, paragraph }) => {
                                         const { id, timestamp, syncMs } = paragraph;
+                                        const syncMsRelative = (syncMs || 0) - relativeTimestampsOffset;
                                         return (
                                             <div
                                                 key={id}
@@ -300,19 +304,19 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             >
                                                 {(!showSpeakers || !speaker.identified) && (
                                                     <>
-                                                        {relativeTimestamps
-                                                            ? syncMs && (
-                                                                  <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
-                                                                      {Duration.fromMillis(syncMs).toFormat('h:mm:ss')}
-                                                                  </div>
-                                                              )
-                                                            : timestamp && (
-                                                                  <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
-                                                                      {DateTime.fromISO(timestamp).toFormat(
-                                                                          'h:mm:ss a'
-                                                                      )}
-                                                                  </div>
-                                                              )}
+                                                        {relativeTimestamps ? (
+                                                            <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
+                                                                {Duration.fromMillis(syncMsRelative).toFormat(
+                                                                    'h:mm:ss'
+                                                                )}
+                                                            </div>
+                                                        ) : (
+                                                            timestamp && (
+                                                                <div className="pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50">
+                                                                    {DateTime.fromISO(timestamp).toFormat('h:mm:ss a')}
+                                                                </div>
+                                                            )
+                                                        )}
                                                     </>
                                                 )}
                                                 <div className="text-sm dark:text-bluegray-4">
@@ -364,9 +368,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             {partial.timestamp && partial.relativeTimestamp && (
                                                 <div className="pb-2 font-semibold text-sm dark:text-bluegray-5">
                                                     {relativeTimestamps
-                                                        ? Duration.fromMillis(partial.relativeTimestamp).toFormat(
-                                                              'h:mm:ss'
-                                                          )
+                                                        ? Duration.fromMillis(
+                                                              (partial.relativeTimestamp || 0) -
+                                                                  relativeTimestampsOffset
+                                                          ).toFormat('h:mm:ss')
                                                         : DateTime.fromMillis(partial.timestamp).toFormat('h:mm:ss a')}
                                                 </div>
                                             )}
@@ -1162,6 +1167,9 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             onSeekAudioByDate={onSeekAudioByDate}
             partial={partial}
             prevMatch={searchState.prevMatch}
+            relativeTimestampsOffset={
+                searchState.speakerTurnsWithMatches[0]?.paragraphsWithMatches[0]?.paragraph?.syncMs || 0
+            }
             scrollContainerRef={scrollContainerRef}
             searchTerm={searchState.searchTerm}
             showHeaderControls={showHeaderControls}
