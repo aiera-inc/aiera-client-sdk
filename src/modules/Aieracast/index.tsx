@@ -34,10 +34,9 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     const [globalSearch, setGlobalSearchState] = useState<string>('');
     const toggleSidebar = useCallback(() => setSidebarState(!showSidebar), [showSidebar]);
     const onSearch = useCallback((_, { value }: ChangeEvent<string | null>) => {
-        if (value) {
-            setSearchState(value);
-            updateGlobalSearch(value);
-        }
+        const newValue = value || '';
+        setSearchState(newValue);
+        updateGlobalSearch(newValue);
     }, []);
     const config = useConfig();
     let darkMode = false;
