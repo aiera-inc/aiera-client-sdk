@@ -71,6 +71,7 @@ interface TranscriptSharedProps {
     showHeaderControls?: boolean;
     showHeaderPlayButton?: boolean;
     hidePlaybar?: boolean;
+    hideSearch?: boolean;
 }
 
 /** @notExported */
@@ -127,6 +128,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         eventId = '',
         eventQuery,
         hidePlaybar,
+        hideSearch = false,
         matchIndex,
         matches,
         nextMatch,
@@ -155,7 +157,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     let theme = darkMode;
     let showPlayer = true;
     let showTitleInfo = true;
-    let showSearch = true;
+    let showSearch = !hideSearch;
     let relativeTimestamps = false;
     if (useConfigOptions && config.options) {
         if (config.options.darkMode !== undefined) {
@@ -188,6 +190,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 endTime={endTime}
                                 eventId={eventId}
                                 eventQuery={eventQuery}
+                                hideSearch={hideSearch}
                                 onBack={onBack}
                                 onBackHeader={onBackHeader}
                                 onClose={onClose}
@@ -208,7 +211,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     'transcript__search-navigator'
                                 )}
                             >
-                                <div className="text-sm">
+                                <div className="text-sm truncate">
                                     Showing {matches.length} result{matches.length === 1 ? '' : 's'} for &quot;
                                     <span className="font-semibold">{searchTerm}</span>
                                     &quot;
@@ -276,18 +279,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                 'transcript__speaker'
                                             )}
                                         >
-                                            <div>
-                                                <span className="font-semibold dark:text-white">{speaker.name}</span>
-                                                {speaker.title && (
-                                                    <span className="text-gray-400">, {speaker.title}</span>
-                                                )}
-                                            </div>
+                                            <span className="font-semibold dark:text-white">{speaker.name}</span>
+                                            {speaker.title && <span className="text-gray-400">, {speaker.title}</span>}
                                             {speakerTime && speakerTimeRelative && (
-                                                <div className="text-xs dark:text-bluegray-4 dark:text-opacity-50">
+                                                <span className="text-xs dark:text-bluegray-4 dark:text-opacity-50">
                                                     {relativeTimestamps
                                                         ? Duration.fromMillis(speakerTimeRelative).toFormat('h:mm:ss')
                                                         : DateTime.fromISO(speakerTime).toFormat('h:mm:ss a')}
-                                                </div>
+                                                </span>
                                             )}
                                         </div>
                                     )}
@@ -926,9 +925,9 @@ function useAudioSync(
     ];
 }
 
-function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
+function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', controlledSearchTerm = '') {
     const { state, handlers } = useChangeHandlers({
-        searchTerm: initialSearchTerm,
+        searchTerm: initialSearchTerm || controlledSearchTerm,
     });
 
     // Track the current match id and use it to set the proper currentMatchRef for autoscrolling
@@ -1017,6 +1016,10 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
         if (match) setCurrentMatch(match.id);
     }, [matches, matchIndex]);
 
+    useEffect(() => {
+        handlers.searchTerm(new KeyboardEvent('keydown'), { value: controlledSearchTerm });
+    }, [controlledSearchTerm]);
+
     return {
         searchTerm: state.searchTerm,
         onChangeSearchTerm: handlers.searchTerm,
@@ -1033,6 +1036,7 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '') {
 
 /** @notExported */
 export interface TranscriptProps extends TranscriptSharedProps {
+    controlledSearchTerm?: string;
     initialSearchTerm?: string;
     onBackHeader?: string;
     useConfigOptions?: boolean;
@@ -1043,8 +1047,10 @@ export interface TranscriptProps extends TranscriptSharedProps {
  */
 export const Transcript = (props: TranscriptProps): ReactElement => {
     const {
+        controlledSearchTerm,
         eventId: eventListEventId,
         hidePlaybar,
+        hideSearch,
         onBack,
         onBackHeader = 'Events',
         onClose,
@@ -1083,7 +1089,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         startTime,
         endTime,
     ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
-    const searchState = useSearchState(speakerTurns, initialSearchTerm);
+    const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
     const scrollContainerRef = useCallback(
@@ -1155,6 +1161,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             eventId={eventId}
             eventQuery={eventQuery}
             hidePlaybar={hidePlaybar}
+            hideSearch={hideSearch}
             matchIndex={searchState.matchIndex}
             matches={searchState.matches}
             nextMatch={searchState.nextMatch}
