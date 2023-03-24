@@ -4,7 +4,7 @@ import { EventList, EventRowProps } from '../EventList';
 import { Transcript } from '../Transcript';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
-import { User } from '@aiera/client-sdk/types';
+import { ChangeEvent, User } from '@aiera/client-sdk/types';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';
 import { isToday } from '@aiera/client-sdk/lib/datetimes';
@@ -14,6 +14,9 @@ import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { Input } from '@aiera/client-sdk/components/Input';
+import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
+import debounce from 'lodash.debounce';
 
 interface AieracastSharedProps {}
 
@@ -27,7 +30,15 @@ interface AieracastUIProps extends AieracastSharedProps {
 export function AieracastUI(props: AieracastUIProps): ReactElement {
     const { openEventIds, toggleEvent, scrollRef } = props;
     const [showSidebar, setSidebarState] = useState(true);
+    const [searchTerm, setSearchState] = useState<string>('');
+    const [globalSearch, setGlobalSearchState] = useState<string>('');
     const toggleSidebar = useCallback(() => setSidebarState(!showSidebar), [showSidebar]);
+    const onSearch = useCallback((_, { value }: ChangeEvent<string | null>) => {
+        if (value) {
+            setSearchState(value);
+            updateGlobalSearch(value);
+        }
+    }, []);
     const config = useConfig();
     let darkMode = false;
     if (config.options) {
@@ -35,6 +46,8 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
             darkMode = config.options.darkMode;
         }
     }
+
+    const updateGlobalSearch = debounce((v: string) => setGlobalSearchState(v), 250);
 
     const EventRow = ({
         customOnly,
@@ -196,10 +209,33 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
             <div className="flex-1 relative">
                 <div className="absolute inset-0 flex">
                     <div
-                        className={classNames('h-full w-[19rem] flex-shrink-0 transition-all aieracast__events', {
-                            '-ml-[18.75rem]': !showSidebar,
-                        })}
+                        className={classNames(
+                            'h-full w-[19rem] flex-shrink-0 relative',
+                            'transition-all aieracast__events',
+                            {
+                                '-ml-[18.75rem]': !showSidebar,
+                            }
+                        )}
                     >
+                        {showSidebar && (
+                            <div className="absolute top-0 left-0 -right-6 h-28 bg-gradient-to-b from-gray-200/40 dark:from-bluegray-7 dark:to-bluegray-7 to-transparent" />
+                        )}
+                        <div
+                            className={classNames(
+                                'h-12 flex flex-col py-2 px-2 -mb-2 mt-0 transition-all relative aieracast__search',
+                                {
+                                    '-mt-10': !openEventIds || openEventIds.length === 0,
+                                }
+                            )}
+                        >
+                            <Input
+                                onChange={onSearch}
+                                value={searchTerm}
+                                icon={<MagnifyingGlass />}
+                                name={'aieracastSearch'}
+                                placeholder="Search Across Open Transcripts"
+                            />
+                        </div>
                         <EventList useConfigOptions hidePlaybar hideHeader EventRow={EventRow} />
                     </div>
                     <div
@@ -207,13 +243,13 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         className={classNames(
                             'flex flex-col w-6 py-1 pr-1 border-r-2 border-slate-200 dark:border-bluegray-7',
                             'text-slate-500 cursor-pointer dark:bg-bluegray-7',
-                            'group flex-shrink-0 aieracast__sidebar-tab'
+                            'group flex-shrink-0 aieracast__sidebar-tab relative z-20'
                         )}
                     >
                         <div
                             className={classNames(
-                                'pl-[1px] bg-slate-200/20 dark:bg-bluegray-6 rounded flex flex-1 items-center justify-center',
-                                'hover:bg-slate-200/40 dark:hover:bg-bluegray-5 active:bg-slate-200/60 dark:active:bg-bluegray-6'
+                                'pl-[1px] bg-slate-200/40 dark:bg-bluegray-6 rounded flex flex-1 items-center justify-center',
+                                'hover:bg-slate-200/60 dark:hover:bg-bluegray-5 active:bg-slate-200/80 dark:active:bg-bluegray-6'
                             )}
                         >
                             <Chevron
@@ -232,10 +268,12 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                     className="h-full w-[23rem] flex-shrink-0 border-r-2 border-r-slate-200/60 dark:border-r-bluegray-8"
                                 >
                                     <Transcript
+                                        controlledSearchTerm={globalSearch}
                                         useConfigOptions
                                         onClose={() => toggleEvent(id)}
                                         eventId={id}
                                         hidePlaybar
+                                        hideSearch
                                         showHeaderPlayButton
                                     />
                                 </div>

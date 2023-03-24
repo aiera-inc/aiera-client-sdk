@@ -392,7 +392,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     }
 
     return (
-        <div className={classNames('h-full flex flex-col eventlist', { dark: theme })}>
+        <div className={classNames('h-full flex flex-col eventlist relative z-30', { dark: theme })}>
             {!hideHeader && (
                 <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header">
                     <div className="flex items-center mb-3">

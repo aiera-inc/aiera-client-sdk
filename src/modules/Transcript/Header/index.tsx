@@ -33,6 +33,7 @@ interface HeaderSharedProps {
     endTime?: string | null;
     eventId: string;
     eventQuery: EventQuery;
+    hideSearch?: boolean;
     onBack?: MouseEventHandler;
     onBackHeader: string;
     onClose?: MouseEventHandler;
@@ -69,6 +70,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         eventQuery,
         headerExpanded,
         headerRef,
+        hideSearch = false,
         keyMentionsExpanded,
         onBack,
         onBackHeader,
@@ -92,7 +94,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
     let showPriceReaction = true;
     let showTitleInfo = true;
     let showRecordingDetails = true;
-    let showSearch = true;
+    let showSearch = !hideSearch;
     if (useConfigOptions && config.options) {
         if (config.options.showPriceReaction !== undefined) {
             showPriceReaction = config.options.showPriceReaction;
@@ -256,7 +258,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         </div>
                                     )}
                                     <div className="flex flex-col justify-center flex-1 min-w-0">
-                                        <div className="text-xs">
+                                        <div className="text-xs truncate">
                                             {primaryQuote?.localTicker && (
                                                 <span className="pr-1 font-semibold dark:text-white">
                                                     {primaryQuote?.localTicker}
@@ -314,6 +316,22 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                             expanded={headerExpanded}
                                         />
                                     )}
+                                    {onClose && !showSearch && !headerExpanded && (
+                                        <Button
+                                            className={classNames(
+                                                'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
+                                                'ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white',
+                                                'dark:border-bluegray-5 dark:text-bluegray-4/60',
+                                                'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
+                                                'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
+                                                'button__close'
+                                            )}
+                                            kind="primary"
+                                            onClick={onClose}
+                                        >
+                                            <XMark className="w-2.5" />
+                                        </Button>
+                                    )}
                                 </div>
                                 {showRecordingDetails && headerExpanded && event && (
                                     <EventDetails
@@ -361,6 +379,7 @@ export function Header(props: HeaderProps): ReactElement {
         endTime,
         eventId,
         eventQuery,
+        hideSearch,
         onBack,
         onBackHeader,
         onChangeSearchTerm,
@@ -419,6 +438,7 @@ export function Header(props: HeaderProps): ReactElement {
             eventQuery={eventQuery}
             headerExpanded={headerExpanded}
             headerRef={headerRef}
+            hideSearch={hideSearch}
             keyMentionsExpanded={keyMentionsExpanded}
             onBack={onBack}
             onBackHeader={onBackHeader}
