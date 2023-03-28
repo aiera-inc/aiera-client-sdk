@@ -179,6 +179,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                     <div
                         className={classNames(
                             'h-full w-[19rem] flex-shrink-0 relative',
+                            'flex flex-col',
                             'transition-all aieracast__events',
                             {
                                 '-ml-[18.75rem]': !showSidebar,
@@ -189,28 +190,25 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             <div className="absolute top-0 left-0 -right-6 h-28 bg-gradient-to-b from-gray-200/40 dark:from-bluegray-7 dark:to-bluegray-7 to-transparent" />
                         )}
                         <div
-                            className={classNames(
-                                'h-12 flex flex-col py-2 px-2 -mb-2 mt-0 transition-all relative aieracast__search',
-                                {
-                                    //'-mt-10': !openEventIds || openEventIds.length === 0,
-                                }
-                            )}
+                            className={classNames('h-12 flex flex-col py-2 px-2 -mb-2 mt-0 relative aieracast__search')}
                         >
                             <Input
                                 onChange={onSearch}
                                 value={searchTerm}
                                 icon={<MagnifyingGlass />}
                                 name={'aieracastSearch'}
-                                placeholder="Search Across Open Transcripts"
+                                placeholder="Search Across Transcripts"
                             />
                         </div>
-                        <EventList
-                            controlledSearchTerm={globalSearch.length > 0 ? `"${globalSearch}"` : ''}
-                            useConfigOptions
-                            hidePlaybar
-                            hideHeader
-                            EventRow={EventRow}
-                        />
+                        <div className="relative flex-1 flex flex-col overflow-hidden">
+                            <EventList
+                                controlledSearchTerm={globalSearch.length > 0 ? `"${globalSearch}"` : undefined}
+                                useConfigOptions
+                                hidePlaybar
+                                hideHeader
+                                EventRow={EventRow}
+                            />
+                        </div>
                     </div>
                     <div
                         onClick={toggleSidebar}
