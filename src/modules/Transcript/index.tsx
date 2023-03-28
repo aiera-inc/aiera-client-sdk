@@ -282,7 +282,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             <span className="font-semibold dark:text-white">{speaker.name}</span>
                                             {speaker.title && <span className="text-gray-400">, {speaker.title}</span>}
                                             {speakerTime && speakerTimeRelative && (
-                                                <span className="text-xs dark:text-bluegray-4 dark:text-opacity-50">
+                                                <span
+                                                    className={classNames(
+                                                        'text-xs dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0',
+                                                        {
+                                                            'ml-1': !!speaker.name || !!speaker.title,
+                                                        }
+                                                    )}
+                                                >
                                                     {relativeTimestamps
                                                         ? Duration.fromMillis(speakerTimeRelative).toFormat('h:mm:ss')
                                                         : DateTime.fromISO(speakerTime).toFormat('h:mm:ss a')}
