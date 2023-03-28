@@ -48,22 +48,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
 
     const updateGlobalSearch = debounce((v: string) => setGlobalSearchState(v), 250);
 
-    const EventRow = ({
-        customOnly,
-        event,
-        numMentions,
-        maxHits = 0,
-        isRefetching,
-        refetch,
-        renderedRefetch,
-        searchTerm,
-        showDivider,
-    }: EventRowProps) => {
-        const hitRatio = (numMentions || 0) / maxHits;
-        // Need to include these hardcoded to
-        // make sure tailwind doesn't purge
-        // w-1/12 w-2/12 w-3/12 w-4/12 w-5/12 w-6/12 w-7/12 w-8/12 w-9/12 w-10/12 w-11/12
-        const hitRatioClass = hitRatio === 1 ? 'full' : hitRatio === 0 ? '0' : `${Math.ceil(hitRatio * 12)}/12`;
+    const EventRow = ({ customOnly, event, isRefetching, refetch, renderedRefetch, showDivider }: EventRowProps) => {
         const primaryQuote = getPrimaryQuote(event.primaryCompany);
         const eventDate = DateTime.fromISO(event.eventDate);
         const createdBy = getEventCreatorName(event.creator as User);
@@ -101,22 +86,17 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                     tabIndex={0}
                     className={classNames(
                         'group text-xs text-gray-300 mx-1 rounded-lg px-2',
-                        'hover:bg-blue-50 dark:hover:bg-bluegray-6',
+                        'hover:bg-blue-50 dark:hover:bg-bluegray-6 h-12',
                         {
                             'cursor-pointer active:bg-blue-100 dark:active:bg-bluegray-5':
                                 event.eventType !== 'earnings_release',
-                            'h-12': !searchTerm,
-                            'h-14': !!searchTerm,
                         },
                         'event-row'
                     )}
                     onClick={event.eventType !== 'earnings_release' ? () => toggleEvent(event.id) : undefined}
                 >
                     <Tooltip
-                        className={classNames('flex flex-row', {
-                            'h-12': !searchTerm,
-                            'h-14': !!searchTerm,
-                        })}
+                        className={classNames('flex flex-row h-12')}
                         content={
                             <div className="max-w-[300px] bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7">
                                 {prettyLineBreak(event.title)}
@@ -148,17 +128,6 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
                                 {customOnly ? createdBy : event.eventType.replace(/_/g, ' ')}
                             </div>
-                            {searchTerm && (
-                                <div className="flex items-center mt-[2px]">
-                                    <div className="rounded-full h-[6px] w-20 bg-gray-200">
-                                        <div className={`rounded-full h-[6px] bg-blue-500 w-${hitRatioClass}`} />
-                                    </div>
-                                    <div className="uppercase font-semibold ml-2 text-black tracking-wide text-xs">
-                                        {numMentions || 0} hit
-                                        {numMentions !== 1 && 's'}
-                                    </div>
-                                </div>
-                            )}
                         </div>
                         <div className="flex flex-col justify-center items-end">
                             {event.isLive ? (
