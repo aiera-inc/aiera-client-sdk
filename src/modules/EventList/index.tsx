@@ -595,6 +595,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 };
 
 export interface EventListProps {
+    controlledSearchTerm?: string;
     defaultLive?: boolean;
     hidePlaybar?: boolean;
     hideHeader?: boolean;
@@ -618,6 +619,7 @@ interface EventListState {
 }
 
 export const EventList = ({
+    controlledSearchTerm = '',
     useConfigOptions = false,
     defaultLive = true,
     hideHeader,
@@ -632,7 +634,7 @@ export const EventList = ({
         fromIndex: 0,
         listType: defaultLive ? EventView.LiveAndUpcoming : EventView.Recent,
         pageSize: 30,
-        searchTerm: '',
+        searchTerm: controlledSearchTerm,
         showForm: false,
         userStatusInactive: false,
         userStatusLoaded: false,
@@ -1004,6 +1006,10 @@ export const EventList = ({
 
     // Will poll alerts when passing true
     useAlertList(true);
+
+    useEffect(() => {
+        handlers.searchTerm(new KeyboardEvent('keydown'), { value: controlledSearchTerm });
+    }, [controlledSearchTerm]);
 
     return (
         <EventListUI
