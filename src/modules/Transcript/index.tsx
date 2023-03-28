@@ -932,9 +932,9 @@ function useAudioSync(
     ];
 }
 
-function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', controlledSearchTerm = '') {
+function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', controlledSearchTerm?: string) {
     const { state, handlers } = useChangeHandlers({
-        searchTerm: initialSearchTerm || controlledSearchTerm,
+        searchTerm: initialSearchTerm || controlledSearchTerm || '',
     });
 
     // Track the current match id and use it to set the proper currentMatchRef for autoscrolling
@@ -1024,7 +1024,9 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
     }, [matches, matchIndex]);
 
     useEffect(() => {
-        handlers.searchTerm(new KeyboardEvent('keydown'), { value: controlledSearchTerm });
+        if (typeof controlledSearchTerm === 'string') {
+            handlers.searchTerm(new KeyboardEvent('keydown'), { value: controlledSearchTerm });
+        }
     }, [controlledSearchTerm]);
 
     return {
