@@ -381,7 +381,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
 
     const config = useConfig();
     const wrapMsg = (msg: string) => <div className="flex flex-1 items-center justify-center text-gray-600">{msg}</div>;
-    const showAllEvents = !!company || eventListView === 'combined';
+    const showAllEvents = !!company || eventListView === 'combined' || (searchTerm && searchTerm.length > 0);
     let prevEventDate: DateTime | null = null;
     let renderedRefetch = false;
     let theme = darkMode;
@@ -448,7 +448,11 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                     >
                         <FilterBy onChange={onSelectFilterBy} options={filterByTypeOptions} value={filterByTypes}>
                             {showAllEvents ? (
-                                <p className="text-sm font-semibold dark:text-white">All Events</p>
+                                searchTerm && searchTerm.length > 0 ? (
+                                    <p className="text-sm font-semibold dark:text-white">Matching Events</p>
+                                ) : (
+                                    <p className="text-sm font-semibold dark:text-white">All Events</p>
+                                )
                             ) : (
                                 <Tabs<EventView>
                                     className="ml-1 eventlist__tabs"
@@ -835,7 +839,10 @@ export const EventList = ({
         query: eventsGQL,
         mergeResults,
         variables: {
-            view: state.company || config.options?.eventListView === 'combined' ? EventView.Recent : state.listType,
+            view:
+                state.company || config.options?.eventListView === 'combined' || state.searchTerm.length > 0
+                    ? EventView.Recent
+                    : state.listType,
             fromIndex: state.fromIndex,
             size: state.pageSize,
             filter: {
