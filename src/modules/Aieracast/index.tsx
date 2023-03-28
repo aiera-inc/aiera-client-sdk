@@ -223,7 +223,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             className={classNames(
                                 'h-12 flex flex-col py-2 px-2 -mb-2 mt-0 transition-all relative aieracast__search',
                                 {
-                                    '-mt-10': !openEventIds || openEventIds.length === 0,
+                                    //'-mt-10': !openEventIds || openEventIds.length === 0,
                                 }
                             )}
                         >
@@ -235,7 +235,13 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                 placeholder="Search Across Open Transcripts"
                             />
                         </div>
-                        <EventList useConfigOptions hidePlaybar hideHeader EventRow={EventRow} />
+                        <EventList
+                            controlledSearchTerm={globalSearch.length > 0 ? `"${globalSearch}"` : ''}
+                            useConfigOptions
+                            hidePlaybar
+                            hideHeader
+                            EventRow={EventRow}
+                        />
                     </div>
                     <div
                         onClick={toggleSidebar}
