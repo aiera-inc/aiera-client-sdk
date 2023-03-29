@@ -274,26 +274,34 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     {showSpeakers && speaker.identified && (
                                         <div
                                             className={classNames(
-                                                'p-3 pb-2 truncate text-sm -mb-3 sticky top-0 z-10 bg-gray-50',
+                                                'p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800',
                                                 'dark:bg-bluegray-7 dark:text-gray-400',
                                                 'transcript__speaker'
                                             )}
                                         >
-                                            <span className="font-semibold dark:text-white">{speaker.name}</span>
-                                            {speaker.title && <span className="text-gray-400">, {speaker.title}</span>}
+                                            {speaker.name && (
+                                                <p className="truncate">
+                                                    <span className="font-semibold dark:text-white">
+                                                        {speaker.name}
+                                                    </span>
+                                                    {speaker.title && (
+                                                        <span className="text-gray-500">, {speaker.title}</span>
+                                                    )}
+                                                </p>
+                                            )}
                                             {speakerTime && speakerTimeRelative && (
-                                                <span
+                                                <p
                                                     className={classNames(
-                                                        'text-xs dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0',
+                                                        'text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0',
                                                         {
-                                                            'ml-1': !!speaker.name || !!speaker.title,
+                                                            '-mt-[1px]': speaker.name,
                                                         }
                                                     )}
                                                 >
                                                     {relativeTimestamps
                                                         ? Duration.fromMillis(speakerTimeRelative).toFormat('h:mm:ss')
                                                         : DateTime.fromISO(speakerTime).toFormat('h:mm:ss a')}
-                                                </span>
+                                                </p>
                                             )}
                                         </div>
                                     )}
