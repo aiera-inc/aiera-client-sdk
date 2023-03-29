@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.17% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>52/85</span>
+                <span class='fraction'>54/90</span>
             </div>
         
             
@@ -504,7 +504,29 @@
 <a name='L439'></a><a href='#L439'>439</a>
 <a name='L440'></a><a href='#L440'>440</a>
 <a name='L441'></a><a href='#L441'>441</a>
-<a name='L442'></a><a href='#L442'>442</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a>
+<a name='L456'></a><a href='#L456'>456</a>
+<a name='L457'></a><a href='#L457'>457</a>
+<a name='L458'></a><a href='#L458'>458</a>
+<a name='L459'></a><a href='#L459'>459</a>
+<a name='L460'></a><a href='#L460'>460</a>
+<a name='L461'></a><a href='#L461'>461</a>
+<a name='L462'></a><a href='#L462'>462</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -849,7 +871,24 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -916,6 +955,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -980,6 +1020,7 @@ interface HeaderSharedProps {
     endTime?: string | null;
     eventId: string;
     eventQuery: EventQuery;
+    hideSearch?: boolean;
     onBack?: MouseEventHandler;
     onBackHeader: string;
     onClose?: MouseEventHandler;
@@ -1016,6 +1057,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         eventQuery,
         headerExpanded,
         headerRef,
+        hideSearch = false,
         keyMentionsExpanded,
         onBack,
         onBackHeader,
@@ -1039,7 +1081,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
     let showPriceReaction = true;
     let showTitleInfo = true;
     let showRecordingDetails = true;
-    let showSearch = true;
+    let showSearch = !hideSearch;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (useConfigOptions &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >config.options)</span> {
 <span class="cstat-no" title="statement not covered" >        if (config.options.showPriceReaction !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >            showPriceReaction = config.options.showPriceReaction;</span>
@@ -1203,7 +1245,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         &lt;/div&gt;
                                     )}
                                     &lt;div className="flex flex-col justify-center flex-1 min-w-0"&gt;
-                                        &lt;div className="text-xs"&gt;
+                                        &lt;div className="text-xs truncate"&gt;
                                             {primaryQuote?.localTicker &amp;&amp; (
                                                 &lt;span className="pr-1 font-semibold dark:text-white"&gt;
                                                     {primaryQuote?.localTicker}
@@ -1261,6 +1303,22 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                             expanded={headerExpanded}
                                         /&gt;
                                     )}
+                                    {onClose &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!showSearch </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >!headerExpanded </span>&amp;&amp; (
+<span class="branch-3 cbranch-no" title="branch not covered" >                                        &lt;Button</span>
+                                            className={classNames(
+                                                'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
+                                                'ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white',
+                                                'dark:border-bluegray-5 dark:text-bluegray-4/60',
+                                                'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
+                                                'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
+                                                'button__close'
+                                            )}
+                                            kind="primary"
+                                            onClick={onClose}
+                                        &gt;
+                                            &lt;XMark className="w-2.5" /&gt;
+                                        &lt;/Button&gt;
+                                    )}
                                 &lt;/div&gt;
                                 {showRecordingDetails &amp;&amp; headerExpanded &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >event </span>&amp;&amp; (
 <span class="branch-3 cbranch-no" title="branch not covered" >                                    &lt;EventDetails</span>
@@ -1308,6 +1366,7 @@ export function Header(props: HeaderProps): ReactElement {
         endTime,
         eventId,
         eventQuery,
+        hideSearch,
         onBack,
         onBackHeader,
         onChangeSearchTerm,
@@ -1366,6 +1425,7 @@ export function Header(props: HeaderProps): ReactElement {
             eventQuery={eventQuery}
             headerExpanded={headerExpanded}
             headerRef={headerRef}
+            hideSearch={hideSearch}
             keyMentionsExpanded={keyMentionsExpanded}
             onBack={onBack}
             onBackHeader={onBackHeader}
@@ -1393,7 +1453,7 @@ export function Header(props: HeaderProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Mar 23 2023 14:24:01 GMT-0400 (Eastern Daylight Time)
+                at Tue Mar 28 2023 23:30:11 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>
