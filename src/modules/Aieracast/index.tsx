@@ -1,6 +1,6 @@
 import React, { Fragment, ReactElement, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import './styles.css';
-import { EventList, EventRowProps } from '../EventList';
+import { EventList, EventListEvent, EventRowProps } from '../EventList';
 import { Transcript } from '../Transcript';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
@@ -17,13 +17,14 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import debounce from 'lodash.debounce';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 
 interface AieracastSharedProps {}
 
 /** @notExported */
 interface AieracastUIProps extends AieracastSharedProps {
     openEventIds: string[];
-    toggleEvent: (id: string) => void;
+    toggleEvent: (id: string, event?: EventListEvent) => void;
     scrollRef: RefObject<HTMLDivElement>;
 }
 
@@ -93,7 +94,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         },
                         'event-row'
                     )}
-                    onClick={event.eventType !== 'earnings_release' ? () => toggleEvent(event.id) : undefined}
+                    onClick={event.eventType !== 'earnings_release' ? () => toggleEvent(event.id, event) : undefined}
                 >
                     <Tooltip
                         className={classNames('flex flex-row h-12')}
@@ -152,7 +153,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                 <Toggle
                                     darkMode={darkMode}
                                     on={openEventIds.includes(event.id)}
-                                    onChange={() => toggleEvent(event.id)}
+                                    onChange={() => toggleEvent(event.id, event)}
                                 />
                             </div>
                         </div>
@@ -274,12 +275,26 @@ export function Aieracast(): ReactElement {
     const [storedScrollWidth, setScrollWidthState] = useState(0);
     const config = useConfig();
     const scrollRef = useRef<HTMLDivElement>(null);
+    const bus = useMessageBus();
     const toggleEvent = useCallback(
-        (eventId: string) => {
+        (eventId: string, event?: EventListEvent) => {
             const uniqueIds = new Set(openEventIds);
+            const primaryQuote = getPrimaryQuote(event?.primaryCompany);
             if (uniqueIds.has(eventId)) {
                 uniqueIds.delete(eventId);
             } else {
+                if (event?.eventDate && event?.title) {
+                    bus?.emit(
+                        'event-selected',
+                        {
+                            ticker: primaryQuote?.localTicker,
+                            title: event.title,
+                            eventType: event.eventType,
+                            eventDate: event.eventDate,
+                        },
+                        'out'
+                    );
+                }
                 uniqueIds.add(eventId);
             }
             openEventIdsState([...uniqueIds]);
