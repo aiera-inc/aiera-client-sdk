@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">57.4% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>30/50</span>
+                <span class='fraction'>31/54</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">50% </span>
+                <span class="strong">45.65% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>21/42</span>
+                <span class='fraction'>21/46</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.5% </span>
+                <span class="strong">59.61% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>30/48</span>
+                <span class='fraction'>31/52</span>
             </div>
         
             
@@ -368,7 +368,23 @@
 <a name='L303'></a><a href='#L303'>303</a>
 <a name='L304'></a><a href='#L304'>304</a>
 <a name='L305'></a><a href='#L305'>305</a>
-<a name='L306'></a><a href='#L306'>306</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L306'></a><a href='#L306'>306</a>
+<a name='L307'></a><a href='#L307'>307</a>
+<a name='L308'></a><a href='#L308'>308</a>
+<a name='L309'></a><a href='#L309'>309</a>
+<a name='L310'></a><a href='#L310'>310</a>
+<a name='L311'></a><a href='#L311'>311</a>
+<a name='L312'></a><a href='#L312'>312</a>
+<a name='L313'></a><a href='#L313'>313</a>
+<a name='L314'></a><a href='#L314'>314</a>
+<a name='L315'></a><a href='#L315'>315</a>
+<a name='L316'></a><a href='#L316'>316</a>
+<a name='L317'></a><a href='#L317'>317</a>
+<a name='L318'></a><a href='#L318'>318</a>
+<a name='L319'></a><a href='#L319'>319</a>
+<a name='L320'></a><a href='#L320'>320</a>
+<a name='L321'></a><a href='#L321'>321</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -645,10 +661,24 @@
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -675,7 +705,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { Fragment, ReactElement, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import './styles.css';
-import { EventList, EventRowProps } from '../EventList';
+import { EventList, EventListEvent, EventRowProps } from '../EventList';
 import { Transcript } from '../Transcript';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
@@ -692,13 +722,14 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import debounce from 'lodash.debounce';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 &nbsp;
 interface AieracastSharedProps {}
 &nbsp;
 /** @notExported */
 interface AieracastUIProps extends AieracastSharedProps {
     openEventIds: string[];
-    toggleEvent: (id: string) =&gt; void;
+    toggleEvent: (id: string, event?: EventListEvent) =&gt; void;
     scrollRef: RefObject&lt;HTMLDivElement&gt;;
 }
 &nbsp;
@@ -768,7 +799,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         },
                         'event-row'
                     )}
-                    onClick={event.eventType !== 'earnings_release' ? <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >toggleEvent(event.id) </span>: <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
+                    onClick={event.eventType !== 'earnings_release' ? <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >toggleEvent(event.id, event) </span>: <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
                 &gt;
                     &lt;Tooltip
                         className={classNames('flex flex-row h-12')}
@@ -827,7 +858,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                 &lt;Toggle
                                     darkMode={darkMode}
                                     on={openEventIds.includes(event.id)}
-                                    onChange={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >toggleEvent(event.id)}</span>
+                                    onChange={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >toggleEvent(event.id, event)}</span>
                                 /&gt;
                             &lt;/div&gt;
                         &lt;/div&gt;
@@ -949,12 +980,26 @@ export function Aieracast(): ReactElement {
     const [storedScrollWidth, setScrollWidthState] = useState(0);
     const config = useConfig();
     const scrollRef = useRef&lt;HTMLDivElement&gt;(null);
+    const bus = useMessageBus();
     const toggleEvent = useCallback(
-<span class="fstat-no" title="function not covered" >        (e</span>ventId: string) =&gt; {
+<span class="fstat-no" title="function not covered" >        (e</span>ventId: string, event?: EventListEvent) =&gt; {
             const uniqueIds = <span class="cstat-no" title="statement not covered" >new Set(openEventIds);</span>
+            const primaryQuote = <span class="cstat-no" title="statement not covered" >getPrimaryQuote(event?.primaryCompany);</span>
 <span class="cstat-no" title="statement not covered" >            if (uniqueIds.has(eventId)) {</span>
 <span class="cstat-no" title="statement not covered" >                uniqueIds.delete(eventId);</span>
             } else {
+<span class="cstat-no" title="statement not covered" >                if (event?.eventDate &amp;&amp; event?.title) {</span>
+<span class="cstat-no" title="statement not covered" >                    bus?.emit(</span>
+                        'event-selected',
+                        {
+                            ticker: primaryQuote?.localTicker,
+                            title: event.title,
+                            eventType: event.eventType,
+                            eventDate: event.eventDate,
+                        },
+                        'out'
+                    );
+                }
 <span class="cstat-no" title="statement not covered" >                uniqueIds.add(eventId);</span>
             }
 <span class="cstat-no" title="statement not covered" >            openEventIdsState([...uniqueIds]);</span>
@@ -985,7 +1030,7 @@ export function Aieracast(): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Mar 28 2023 23:30:11 GMT-0400 (Eastern Daylight Time)
+                at Wed Mar 29 2023 13:52:31 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

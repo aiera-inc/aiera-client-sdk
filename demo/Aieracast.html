@@ -55,6 +55,9 @@
                 eventList.on('event-audio', (event) => {
                     console.log('play audio: ', event);
                 });
+                eventList.on('event-selected', (event) => {
+                    console.log('selected event: ', event);
+                });
             });
         </script>
     </body>
