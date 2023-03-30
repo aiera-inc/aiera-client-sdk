@@ -33,6 +33,8 @@ export interface Options {
     showSearch?: boolean;
     showTitleInfo?: boolean;
     ticker?: string;
+    hidePartials?: boolean;
+    hideSentiment?: boolean;
 }
 
 export interface Overrides {

@@ -158,6 +158,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     let showPlayer = true;
     let showTitleInfo = true;
     let showSearch = !hideSearch;
+    let showSentiment = true;
+    let showPartials = true;
     let relativeTimestamps = false;
     if (useConfigOptions && config.options) {
         if (config.options.darkMode !== undefined) {
@@ -174,6 +176,12 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         }
         if (config.options.relativeTimestamps !== undefined) {
             relativeTimestamps = config.options.relativeTimestamps;
+        }
+        if (config.options.hidePartials !== undefined) {
+            showPartials = !config.options.hidePartials;
+        }
+        if (config.options.hideSentiment !== undefined) {
+            showSentiment = !config.options.hideSentiment;
         }
     }
 
@@ -358,9 +366,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                                             key={sentenceId}
                                                                             className={classNames({
                                                                                 'text-green-600':
-                                                                                    textSentiment === 'positive',
+                                                                                    textSentiment === 'positive' &&
+                                                                                    showSentiment,
                                                                                 'text-red-600':
-                                                                                    textSentiment === 'negative',
+                                                                                    textSentiment === 'negative' &&
+                                                                                    showSentiment,
                                                                             })}
                                                                         >
                                                                             {text}
@@ -377,7 +387,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             </div>
                                         );
                                     })}
-                                    {data.events[0]?.isLive && partial?.text && (
+                                    {data.events[0]?.isLive && partial?.text && showPartials && (
                                         <div className="relative p-3 pb-4 mb-4">
                                             {partial.timestamp && partial.relativeTimestamp && (
                                                 <div className="pb-2 font-semibold text-sm dark:text-bluegray-5">
