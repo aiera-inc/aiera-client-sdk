@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.24% </span>
+                <span class="strong">72.22% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>167/228</span>
+                <span class='fraction'>169/234</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">51.94% </span>
+                <span class="strong">52.08% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>120/231</span>
+                <span class='fraction'>125/240</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">73.42% </span>
+                <span class="strong">72.3% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>152/207</span>
+                <span class='fraction'>154/213</span>
             </div>
         
             
@@ -1270,7 +1270,17 @@
 <a name='L1205'></a><a href='#L1205'>1205</a>
 <a name='L1206'></a><a href='#L1206'>1206</a>
 <a name='L1207'></a><a href='#L1207'>1207</a>
-<a name='L1208'></a><a href='#L1208'>1208</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1208'></a><a href='#L1208'>1208</a>
+<a name='L1209'></a><a href='#L1209'>1209</a>
+<a name='L1210'></a><a href='#L1210'>1210</a>
+<a name='L1211'></a><a href='#L1211'>1211</a>
+<a name='L1212'></a><a href='#L1212'>1212</a>
+<a name='L1213'></a><a href='#L1213'>1213</a>
+<a name='L1214'></a><a href='#L1214'>1214</a>
+<a name='L1215'></a><a href='#L1215'>1215</a>
+<a name='L1216'></a><a href='#L1216'>1216</a>
+<a name='L1217'></a><a href='#L1217'>1217</a>
+<a name='L1218'></a><a href='#L1218'>1218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1432,6 +1442,14 @@
 <span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-yes">58x</span>
 <span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-yes">58x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1611,6 +1629,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">68x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2637,6 +2657,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
     let showPlayer = true;
     let showTitleInfo = true;
     let showSearch = !hideSearch;
+    let showSentiment = true;
+    let showPartials = true;
     let relativeTimestamps = false;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (useConfigOptions &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >config.options)</span> {
 <span class="cstat-no" title="statement not covered" >        if (config.options.darkMode !== undefined) {</span>
@@ -2653,6 +2675,12 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
         }
 <span class="cstat-no" title="statement not covered" >        if (config.options.relativeTimestamps !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >            relativeTimestamps = config.options.relativeTimestamps;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (config.options.hidePartials !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            showPartials = !config.options.hidePartials;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (config.options.hideSentiment !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            showSentiment = !config.options.hideSentiment;</span>
         }
     }
 &nbsp;
@@ -2837,9 +2865,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
                                                                             key={sentenceId}
                                                                             className={classNames({
                                                                                 'text-green-600':
-                                                                                    textSentiment === 'positive',
+                                                                                    textSentiment === 'positive' &amp;&amp;
+                                                                                    showSentiment,
                                                                                 'text-red-600':
-                                                                                    textSentiment === 'negative',
+                                                                                    textSentiment === 'negative' &amp;&amp;
+                                                                                    showSentiment,
                                                                             })}
                                                                         &gt;
                                                                             {text}
@@ -2856,7 +2886,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
                                             &lt;/div&gt;
                                         );
                                     })}
-                                    {data.events[0]?.isLive &amp;&amp; partial?.text &amp;&amp; (
+                                    {data.events[0]?.isLive &amp;&amp; partial?.text &amp;&amp; showPartials &amp;&amp; (
                                         &lt;div className="relative p-3 pb-4 mb-4"&gt;
                                             {partial.timestamp &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >partial.relativeTimestamp </span>&amp;&amp; (
 <span class="branch-2 cbranch-no" title="branch not covered" >                                                &lt;div className="pb-2 font-semibold text-sm dark:text-bluegray-5"&gt;</span>
@@ -3691,7 +3721,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Mar 29 2023 13:52:31 GMT-0400 (Eastern Daylight Time)
+                at Thu Mar 30 2023 13:14:58 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
