@@ -177,11 +177,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         if (config.options.relativeTimestamps !== undefined) {
             relativeTimestamps = config.options.relativeTimestamps;
         }
-        if (config.options.hidePartials !== undefined) {
-            showPartials = !config.options.hidePartials;
+        if (config.options.showPartials !== undefined) {
+            showPartials = config.options.showPartials;
         }
-        if (config.options.hideSentiment !== undefined) {
-            showSentiment = !config.options.hideSentiment;
+        if (config.options.showSentiment !== undefined) {
+            showSentiment = config.options.showSentiment;
         }
     }
 

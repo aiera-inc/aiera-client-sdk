@@ -31,10 +31,10 @@ export interface Options {
     showRecordingDetails?: boolean;
     showScheduleRecording?: boolean;
     showSearch?: boolean;
+    showPartials?: boolean;
+    showSentiment?: boolean;
     showTitleInfo?: boolean;
     ticker?: string;
-    hidePartials?: boolean;
-    hideSentiment?: boolean;
 }
 
 export interface Overrides {
