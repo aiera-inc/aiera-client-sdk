@@ -426,7 +426,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         return null;
                     }
                     return (
-                        (event?.audioRecordingUrl || event?.isLive) && (
+                        (event?.audioProxy || event?.isLive) && (
                             <Playbar
                                 hideEventDetails
                                 hidePlayer={!showPlayer}
@@ -443,7 +443,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 url={
                                     event.isLive
                                         ? `https://storage.media.aiera.com/${event.id}`
-                                        : event.audioRecordingUrl || ''
+                                        : event.audioProxy || ''
                                 }
                             />
                         )
@@ -460,6 +460,7 @@ function useEventUpdates(eventId = '') {
             query EventUpdates($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
                     id
+                    audioProxy
                     audioRecordingOffsetMs
                     audioRecordingUrl
                     audioStreamUri
@@ -526,6 +527,7 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
             query Transcript($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
                     id
+                    audioProxy
                     audioRecordingUrl
                     audioRecordingOffsetMs
                     audioStreamUri

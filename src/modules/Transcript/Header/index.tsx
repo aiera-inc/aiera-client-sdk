@@ -235,7 +235,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     )}
                                     onClick={hasEventExtras ? toggleHeader : undefined}
                                 >
-                                    {showHeaderPlayButton && event && (event.isLive || event.audioRecordingUrl) && (
+                                    {showHeaderPlayButton && event && (event.isLive || event.audioProxy) && (
                                         <div className="w-8 h-8 mr-2">
                                             <PlayButton
                                                 id={event.id}
@@ -251,7 +251,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                 url={
                                                     event.isLive
                                                         ? `https://storage.media.aiera.com/${event.id}`
-                                                        : event.audioRecordingUrl
+                                                        : event.audioProxy
                                                 }
                                                 offset={audioOffset || 0}
                                             />

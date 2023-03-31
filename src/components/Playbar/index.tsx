@@ -331,9 +331,10 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
     const track = useTrack();
     useEffect(() => {
         if (id && !audioPlayer.playing(null)) {
-            async () => {
+            /* eslint-disable @typescript-eslint/no-floating-promises */
+            (async (): Promise<void> => {
                 await audioPlayer.init({ id, url: url || '', offset, metaData });
-            };
+            })();
         }
     }, [id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
 
@@ -440,7 +441,6 @@ export interface PlaybarProps extends PlaybarSharedProps {
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
     const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData, showFullDetails } = props;
-
     const {
         audioPlayer,
         isActive,

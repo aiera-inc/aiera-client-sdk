@@ -188,7 +188,7 @@ describe('audio library', () => {
 
             // Go forward more than 2s without adjusting currentTime
             // and make sure it has an error
-            jest.advanceTimersByTime(2500);
+            jest.advanceTimersByTime(5500);
             expect(player.errorInfo.error).toBeTruthy();
 
             // Make sure it goes back to clean slate on playing

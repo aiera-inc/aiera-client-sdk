@@ -15,6 +15,7 @@ export interface EventMetaData {
     localTicker?: string;
     quote?: Maybe<DeepPartial<Quote>>;
     title?: string;
+    loading?: boolean;
 }
 
 export class AudioPlayer {
@@ -121,6 +122,9 @@ export class AudioPlayer {
                     mimeType = 'application/dash+xml';
                 } else {
                     mimeType = 'audio/mpeg';
+                    if (url.includes('audio-dev.aiera') || url.includes('audio.aiera')) {
+                        url = url + '&no_trim=true'; // add no_trim as the event is completed.
+                    }
                 }
                 // load asset
                 try {
@@ -175,14 +179,14 @@ export class AudioPlayer {
                 this.errorInfo.error = true;
                 this.triggerUpdate();
             }
-        }, 2000);
+        }, 5000);
 
         const isLive = opts?.metaData?.isLive;
         if (isLive && this.player) {
             this.player.goToLive();
             return;
         } else {
-            return this.audio.play();
+            return await this.audio.play();
         }
     }
 
