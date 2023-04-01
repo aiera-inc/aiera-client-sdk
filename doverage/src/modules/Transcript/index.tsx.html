@@ -1280,7 +1280,13 @@
 <a name='L1215'></a><a href='#L1215'>1215</a>
 <a name='L1216'></a><a href='#L1216'>1216</a>
 <a name='L1217'></a><a href='#L1217'>1217</a>
-<a name='L1218'></a><a href='#L1218'>1218</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1218'></a><a href='#L1218'>1218</a>
+<a name='L1219'></a><a href='#L1219'>1219</a>
+<a name='L1220'></a><a href='#L1220'>1220</a>
+<a name='L1221'></a><a href='#L1221'>1221</a>
+<a name='L1222'></a><a href='#L1222'>1222</a>
+<a name='L1223'></a><a href='#L1223'>1223</a>
+<a name='L1224'></a><a href='#L1224'>1224</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1729,6 +1735,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1736,6 +1744,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1801,6 +1811,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2925,14 +2937,16 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
 <span class="cstat-no" title="statement not covered" >                        return null;</span>
                     }
                     return (
-                        (event?.audioRecordingUrl || event?.isLive) &amp;&amp; (
+                        (event?.audioProxy || event?.isLive) &amp;&amp; (
                             &lt;Playbar
                                 hideEventDetails
                                 hidePlayer={!showPlayer}
                                 id={event?.id}
                                 metaData={{
                                     createdBy: getEventCreatorName(event?.creator as User),
+                                    eventStream: event?.audioStreamUri,
                                     eventType: event?.eventType,
+                                    isLive: !!event?.isLive,
                                     quote: getPrimaryQuote(event?.primaryCompany),
                                     title: event?.title,
                                 }}
@@ -2940,7 +2954,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement =&gt; {
                                 url={
                                     event.isLive
                                         ? `https://storage.media.aiera.com/${event.id}`
-                                        : <span class="branch-1 cbranch-no" title="branch not covered" >event.audioRecordingUrl || ''</span>
+                                        : <span class="branch-1 cbranch-no" title="branch not covered" >event.audioProxy || ''</span>
                                 }
                             /&gt;
                         )
@@ -2957,8 +2971,10 @@ function useEventUpdates(eventId = <span class="branch-0 cbranch-no" title="bran
             query EventUpdates($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
                     id
+                    audioProxy
                     audioRecordingOffsetMs
                     audioRecordingUrl
+                    audioStreamUri
                     connectionStatus
                     creator {
                         id
@@ -3022,8 +3038,10 @@ function useEventData(eventId = <span class="branch-0 cbranch-no" title="branch 
             query Transcript($eventId: ID!) {
                 events(filter: { eventIds: [$eventId] }) {
                     id
+                    audioProxy
                     audioRecordingUrl
                     audioRecordingOffsetMs
+                    audioStreamUri
                     connectionStatus
                     creator {
                         id
@@ -3721,7 +3739,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Mar 30 2023 15:37:35 GMT-0400 (Eastern Daylight Time)
+                at Fri Mar 31 2023 20:20:25 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

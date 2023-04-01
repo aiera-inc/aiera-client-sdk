@@ -38222,8 +38222,10 @@ var EventListDocument = lib_default`
         numMentions
         event {
           id
+          audioProxy
           audioRecordingUrl
           audioRecordingOffsetMs
+          audioStreamUri
           eventDate
           eventType
           isLive
@@ -38450,8 +38452,10 @@ var EventUpdatesDocument = lib_default`
     query EventUpdates($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
     id
+    audioProxy
     audioRecordingOffsetMs
     audioRecordingUrl
+    audioStreamUri
     connectionStatus
     creator {
       id
@@ -38480,8 +38484,10 @@ var TranscriptDocument = lib_default`
     query Transcript($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
     id
+    audioProxy
     audioRecordingUrl
     audioRecordingOffsetMs
+    audioStreamUri
     connectionStatus
     creator {
       id
