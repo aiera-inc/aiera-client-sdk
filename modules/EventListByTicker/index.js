@@ -90276,7 +90276,9 @@ function HeaderUI(props) {
       metaData: {
         createdBy,
         eventDate: eventDate ? eventDate.toISO() : void 0,
+        eventStream: event.audioStreamUri,
         eventType: event.eventType,
+        isLive: !!(event == null ? void 0 : event.isLive),
         localTicker: primaryQuote == null ? void 0 : primaryQuote.localTicker,
         quote: primaryQuote,
         title: event.title
