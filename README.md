@@ -8,7 +8,7 @@ components which are exported alongside a number of custom hooks and utilities t
 An Aiera account is needed to access any of the functionality.
 
 This repo is currently used internally for building out Aiera widgets for external systems and is documented/maintained
-as such. However we've open sourced it to allow for others to embed this functionality as well. If these external use
+as such. However, we've open sourced it to allow for others to embed this functionality as well. If these external use
 cases become more common we will provide additional documentation, tutorials and other materials to help developers
 embed Aiera widgets into their applications.
 
@@ -39,3 +39,9 @@ https://aiera-inc.github.io/aiera-client-sdk/docs/index.html
 > npm start
 > # open browser to localhost:8000/demo/EventList.html
 ```
+
+#### Testing
+
+`console.log` and `console.debug` messages are stubbed by default to prevent flooding the command line. If you need to
+add `console.log` (or the like) to debug your tests, you could edit `.jest/jest-setup.js` to allow certain log levels to
+propagate to your stack trace.
