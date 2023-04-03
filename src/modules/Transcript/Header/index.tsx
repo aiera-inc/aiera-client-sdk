@@ -243,7 +243,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                 metaData={{
                                                     createdBy,
                                                     eventDate: eventDate ? eventDate.toISO() : undefined,
+                                                    eventStream: event.audioStreamUri,
                                                     eventType: event.eventType,
+                                                    isLive: !!event?.isLive,
                                                     localTicker: primaryQuote?.localTicker,
                                                     quote: primaryQuote,
                                                     title: event.title,
