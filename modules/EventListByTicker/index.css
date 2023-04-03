@@ -319,7 +319,6 @@ video {
   position: relative;
 }
 .sticky {
-  position: -webkit-sticky;
   position: sticky;
 }
 .inset-0 {
@@ -833,38 +832,18 @@ video {
 .transform {
   transform: translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y));
 }
-@-webkit-keyframes bounce {
-  0%, 100% {
-    transform: translateY(-25%);
-    -webkit-animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
-  }
-  50% {
-    transform: none;
-    -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
-  }
-}
 @keyframes bounce {
   0%, 100% {
     transform: translateY(-25%);
-    -webkit-animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
     animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
   }
   50% {
     transform: none;
-    -webkit-animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
     animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
   }
 }
 .animate-bounce {
-  -webkit-animation: bounce 1s infinite;
   animation: bounce 1s infinite;
-}
-@-webkit-keyframes pulse {
-  50% {
-    opacity: .5;
-  }
 }
 @keyframes pulse {
   50% {
@@ -872,14 +851,12 @@ video {
   }
 }
 .animate-pulse {
-  -webkit-animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 .cursor-pointer {
   cursor: pointer;
 }
 .cursor-grab {
-  cursor: -webkit-grab;
   cursor: grab;
 }
 .cursor-not-allowed {
@@ -1744,27 +1721,21 @@ video {
   -webkit-line-clamp: 2;
 }
 .animation-delay-100 {
-  -webkit-animation-delay: 100ms;
   animation-delay: 100ms;
 }
 .animation-delay-200 {
-  -webkit-animation-delay: 200ms;
   animation-delay: 200ms;
 }
 .animation-delay-250 {
-  -webkit-animation-delay: 250ms;
   animation-delay: 250ms;
 }
 .animation-delay-500 {
-  -webkit-animation-delay: 500ms;
   animation-delay: 500ms;
 }
 .animation-delay-750 {
-  -webkit-animation-delay: 750ms;
   animation-delay: 750ms;
 }
 .animation-delay-1000 {
-  -webkit-animation-delay: 1s;
   animation-delay: 1s;
 }
 .last\:mx-0:last-child {
@@ -1783,7 +1754,6 @@ video {
   background-color: rgb(249 250 251 / var(--tw-bg-opacity));
 }
 .hover\:animate-none:hover {
-  -webkit-animation: none;
   animation: none;
 }
 .hover\:border-gray-400:hover {
@@ -1946,7 +1916,6 @@ video {
   outline-offset: 2px;
 }
 .active\:cursor-grabbing:active {
-  cursor: -webkit-grabbing;
   cursor: grabbing;
 }
 .active\:border-blue-600:active {
