@@ -89,12 +89,13 @@ export class AudioPlayer {
         });
         this.player = player;
         this.audio = media;
+        this.audio.autoplay = false;
     }
 
     adjustPlayback = (): void => {
         const fromLiveEdge = this.rawDuration - this.rawCurrentTime;
         if (fromLiveEdge < 6 && this.playbackRate > 1) {
-            this.player?.trickPlay(1);
+            this.audio.playbackRate = 1;
         }
     };
 
@@ -130,7 +131,7 @@ export class AudioPlayer {
                 try {
                     if (this.player) {
                         await this.player.load(url, startTime, mimeType);
-                        this.player.trickPlay(1);
+                        this.audio.playbackRate = 1;
                         this.url = url;
                     }
                 } catch (e) {
@@ -184,6 +185,7 @@ export class AudioPlayer {
         const isLive = opts?.metaData?.isLive;
         if (isLive && this.player) {
             this.player.goToLive();
+            this.player.trickPlay(1);
             return;
         } else {
             return await this.audio.play();
