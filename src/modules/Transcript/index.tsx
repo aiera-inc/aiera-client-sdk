@@ -389,7 +389,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     })}
                                     {data.events[0]?.isLive && partial?.text && showPartials && (
                                         <div className="relative p-3 pb-4 mb-4">
-                                            {partial.timestamp && partial.relativeTimestamp && (
+                                            {partial.timestamp && partial.relativeTimestamp !== undefined && (
                                                 <div className="pb-2 font-semibold text-sm dark:text-bluegray-5">
                                                     {relativeTimestamps
                                                         ? Duration.fromMillis(
