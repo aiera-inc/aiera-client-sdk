@@ -9,7 +9,6 @@ export type playerType = {
     goToLive(): void;
     isBrowserSupported(): void;
     load(url: string, opt_startTime?: number, mimetype?: string): Promise<void>;
-    setPlaybackRate(rate: number): void;
     seekRange(): {
         end: number;
     };
