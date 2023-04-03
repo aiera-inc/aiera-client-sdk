@@ -297,7 +297,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                                     )}
                                                 </p>
                                             )}
-                                            {speakerTime && speakerTimeRelative && (
+                                            {speakerTime && speakerTimeRelative !== undefined && (
                                                 <p
                                                     className={classNames(
                                                         'text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0',
