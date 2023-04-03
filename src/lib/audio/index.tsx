@@ -185,6 +185,7 @@ export class AudioPlayer {
         const isLive = opts?.metaData?.isLive;
         if (isLive && this.player) {
             this.player.goToLive();
+            this.player.trickPlay(1);
             return;
         } else {
             return await this.audio.play();

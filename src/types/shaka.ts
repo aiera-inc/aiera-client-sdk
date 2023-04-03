@@ -12,6 +12,7 @@ export type playerType = {
     seekRange(): {
         end: number;
     };
+    trickPlay(speed: number): void;
 };
 
 export type shakaUIControls = {

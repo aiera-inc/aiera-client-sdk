@@ -362,7 +362,12 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
             );
         } else {
             void track('Click', 'Audio Play', { eventId: id, url });
-            void audioPlayer.play();
+            if (id) {
+                void audioPlayer.play({ id, url: url || '', offset, metaData });
+            } else {
+                void audioPlayer.play();
+            }
+
             bus?.emit(
                 'event-audio',
                 {
