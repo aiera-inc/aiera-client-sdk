@@ -83143,10 +83143,9 @@ var AudioPlayer = class {
     this.offset = 0;
     this.liveCatchupThreshold = 5;
     this.adjustPlayback = () => {
-      var _a;
       const fromLiveEdge = this.rawDuration - this.rawCurrentTime;
       if (fromLiveEdge < 6 && this.playbackRate > 1) {
-        (_a = this.player) == null ? void 0 : _a.trickPlay(1);
+        this.audio.playbackRate = 1;
       }
     };
     this.triggerUpdate = () => {
@@ -83210,6 +83209,7 @@ var AudioPlayer = class {
     });
     this.player = player;
     this.audio = media;
+    this.audio.autoplay = false;
   }
   init(opts) {
     return __async(this, null, function* () {
@@ -83242,7 +83242,7 @@ var AudioPlayer = class {
           try {
             if (this.player) {
               yield this.player.load(url, startTime, mimeType);
-              this.player.trickPlay(1);
+              this.audio.playbackRate = 1;
               this.url = url;
             }
           } catch (e) {
@@ -83286,6 +83286,7 @@ var AudioPlayer = class {
       const isLive = (_a = opts == null ? void 0 : opts.metaData) == null ? void 0 : _a.isLive;
       if (isLive && this.player) {
         this.player.goToLive();
+        this.player.trickPlay(1);
         return;
       } else {
         return yield this.audio.play();
@@ -83722,7 +83723,11 @@ function usePlayer(id, url, offset = 0, metaData) {
       }, "out");
     } else {
       void track("Click", "Audio Play", { eventId: id, url });
-      void audioPlayer.play();
+      if (id) {
+        void audioPlayer.play({ id, url: url || "", offset, metaData });
+      } else {
+        void audioPlayer.play();
+      }
       bus == null ? void 0 : bus.emit("event-audio", {
         action: "play",
         origin: "playBar",
@@ -90579,7 +90584,7 @@ var TranscriptUI = (props) => {
         className: "font-semibold dark:text-white"
       }, speaker.name), speaker.title && /* @__PURE__ */ import_react109.default.createElement("span", {
         className: "text-gray-500"
-      }, ", ", speaker.title)), speakerTime && speakerTimeRelative && /* @__PURE__ */ import_react109.default.createElement("p", {
+      }, ", ", speaker.title)), speakerTime && speakerTimeRelative !== void 0 && /* @__PURE__ */ import_react109.default.createElement("p", {
         className: (0, import_classnames47.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
           "-mt-[1px]": speaker.name
         })
@@ -90617,7 +90622,7 @@ var TranscriptUI = (props) => {
         }));
       }), ((_e = data.events[0]) == null ? void 0 : _e.isLive) && (partial == null ? void 0 : partial.text) && showPartials && /* @__PURE__ */ import_react109.default.createElement("div", {
         className: "relative p-3 pb-4 mb-4"
-      }, partial.timestamp && partial.relativeTimestamp && /* @__PURE__ */ import_react109.default.createElement("div", {
+      }, partial.timestamp && partial.relativeTimestamp !== void 0 && /* @__PURE__ */ import_react109.default.createElement("div", {
         className: "pb-2 font-semibold text-sm dark:text-bluegray-5"
       }, relativeTimestamps ? import_luxon2.Duration.fromMillis((partial.relativeTimestamp || 0) - relativeTimestampsOffset).toFormat("h:mm:ss") : import_luxon2.DateTime.fromMillis(partial.timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react109.default.createElement("div", {
         ref: currentParagraph === "partial" ? currentParagraphRef : void 0,
