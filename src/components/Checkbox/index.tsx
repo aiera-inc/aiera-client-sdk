@@ -35,11 +35,13 @@ export function CheckboxUI(props: CheckboxUIProps): ReactElement {
     }
     return (
         <div
-            className={`group cursor-pointer flex items-center ${className} checkbox`}
+            className={classNames('group cursor-pointer flex items-center checkbox', className)}
             data-tname={name}
             onClick={onChange}
         >
-            <div className={`flex flex-shrink-0 h-4 items-center justify-center ${radius} w-4 ${checkBoxStyles}`}>
+            <div
+                className={classNames('flex flex-shrink-0 h-4 items-center justify-center w-4', radius, checkBoxStyles)}
+            >
                 {checked && <Check className="w-2" />}
             </div>
             {label && (
