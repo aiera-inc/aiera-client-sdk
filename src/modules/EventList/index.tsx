@@ -95,7 +95,6 @@ export interface EventListUIProps {
     listType?: EventView;
     loading?: boolean;
     loadMore?: (event: MouseEvent) => void;
-    maxHits?: number;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler<CompanyFilterResult>;
     onSearchChange?: ChangeHandler<string>;
@@ -123,8 +122,6 @@ export interface EventRowProps {
     event: EventListEvent;
     index: number;
     isRefetching: boolean;
-    maxHits?: number;
-    numMentions: number | null | undefined;
     onSelectEvent?: ChangeHandler<EventListEvent>;
     refetch?: () => void;
     renderedRefetch: boolean;
@@ -136,8 +133,6 @@ export interface EventRowProps {
 const DefaultEventRow = ({
     customOnly,
     event,
-    numMentions,
-    maxHits = 0,
     isRefetching,
     onSelectEvent,
     refetch,
@@ -147,11 +142,6 @@ const DefaultEventRow = ({
     setFocus,
     showDivider,
 }: EventRowProps) => {
-    const hitRatio = (numMentions || 0) / maxHits;
-    // Need to include these hardcoded to
-    // make sure tailwind doesn't purge
-    // w-1/12 w-2/12 w-3/12 w-4/12 w-5/12 w-6/12 w-7/12 w-8/12 w-9/12 w-10/12 w-11/12
-    const hitRatioClass = hitRatio === 1 ? 'full' : hitRatio === 0 ? '0' : `${Math.ceil(hitRatio * 12)}/12`;
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = DateTime.fromISO(event.eventDate);
     const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
@@ -260,17 +250,6 @@ const DefaultEventRow = ({
                         <div className="leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white">
                             {customOnly ? createdBy : event.eventType.replace(/_/g, ' ')}
                         </div>
-                        {searchTerm && (
-                            <div className="flex items-center mt-[2px]">
-                                <div className="rounded-full h-[6px] w-20 bg-gray-200">
-                                    <div className={`rounded-full h-[6px] bg-blue-500 w-${hitRatioClass}`} />
-                                </div>
-                                <div className="uppercase font-semibold ml-2 text-black tracking-wide text-xs dark:text-white">
-                                    {numMentions || 0} hit
-                                    {numMentions !== 1 && 's'}
-                                </div>
-                            </div>
-                        )}
                     </div>
                     <div className="flex flex-col justify-center items-end">
                         {event.isLive ? (
@@ -312,7 +291,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         hidePlaybar,
         loadMore,
         listType,
-        maxHits = 0,
         onBackFromTranscript,
         onCompanyChange,
         onSearchChange,
@@ -525,8 +503,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                                 index={index}
                                                                 isRefetching={isUpcomingRefetching}
                                                                 key={`${hit.event.id}-${index}`}
-                                                                maxHits={maxHits}
-                                                                numMentions={hit.numMentions}
                                                                 onSelectEvent={onSelectEvent}
                                                                 refetch={refetch}
                                                                 renderedRefetch={index !== 0}
@@ -562,8 +538,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                             index={index}
                                                             isRefetching={isRefetching}
                                                             key={`${hit.event.id}-${index}`}
-                                                            maxHits={maxHits}
-                                                            numMentions={hit.numMentions}
                                                             onSelectEvent={onSelectEvent}
                                                             refetch={refetch}
                                                             renderedRefetch={renderedRefetch}
@@ -789,7 +763,6 @@ export const EventList = ({
                     numTotalHits
                     hits {
                         id
-                        numMentions
                         event {
                             id
                             audioProxy
@@ -973,16 +946,6 @@ export const EventList = ({
         [handlers.fromIndex, state.fromIndex]
     );
 
-    const maxHits = useMemo(
-        () =>
-            match(eventsQuery)
-                .with({ status: 'success' }, ({ data: { search } }) =>
-                    Math.max(...search.events.hits.map((h) => h.numMentions || 0))
-                )
-                .otherwise(() => 0),
-        [eventsQuery.state]
-    );
-
     const scrollRef = useRef<HTMLDivElement>(null);
     const refetch = useCallback(() => {
         const hasPaged = state.fromIndex > 0;
@@ -1066,7 +1029,6 @@ export const EventList = ({
             hidePlaybar={hidePlaybar}
             listType={state.listType}
             loadMore={hasMoreResults ? loadMore : undefined}
-            maxHits={maxHits}
             onBackFromTranscript={useCallback(
                 (event: SyntheticEvent<Element, Event>) => onSelectEvent(event, { value: null }),
                 [onSelectEvent]
