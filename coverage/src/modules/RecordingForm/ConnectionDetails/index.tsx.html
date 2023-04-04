@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.95% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/23</span>
+                <span class='fraction'>20/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>11/11</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">75% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>12/15</span>
+                <span class='fraction'>12/16</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.95% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/23</span>
+                <span class='fraction'>20/24</span>
             </div>
         
             
@@ -357,7 +357,12 @@
 <a name='L292'></a><a href='#L292'>292</a>
 <a name='L293'></a><a href='#L293'>293</a>
 <a name='L294'></a><a href='#L294'>294</a>
-<a name='L295'></a><a href='#L295'>295</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L295'></a><a href='#L295'>295</a>
+<a name='L296'></a><a href='#L296'>296</a>
+<a name='L297'></a><a href='#L297'>297</a>
+<a name='L298'></a><a href='#L298'>298</a>
+<a name='L299'></a><a href='#L299'>299</a>
+<a name='L300'></a><a href='#L300'>300</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -430,6 +435,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -476,8 +484,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">42x</span>
 <span class="cline-any cline-yes">32x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -715,20 +725,23 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
         zoomMeetingType,
     } = props;
     const dialInField = (
-        &lt;FormFieldInput
-            autoFocus
-            className="mt-5 px-4 py-3"
-            clearable
-            description="Enter the dial-in number"
-            error={errors.connectPhoneNumber}
-            label="Dial-in number*"
-            name="connectPhoneNumber"
-            onBlur={onBlur}
-            onChange={onChange}
-            onFocus={onFocus}
-            placeholder="(888)-123-4567"
-            value={connectPhoneNumber}
-        /&gt;
+        &lt;FormField className="mt-5 px-4 py-3"&gt;
+            &lt;p className="font-semibold text-base text-black form-field__label"&gt;Dial-in number*&lt;/p&gt;
+            &lt;p className="font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description"&gt;
+                Enter the dial-in number
+            &lt;/p&gt;
+            &lt;PhoneNumberInput
+                className="mt-5"
+                defaultCountry="US"
+                error={errors.connectPhoneNumber}
+                name="connectPhoneNumber"
+                onBlur={onBlur}
+                onChange={<span class="fstat-no" title="function not covered" >(v</span>alue?: string) =&gt; <span class="cstat-no" title="statement not covered" >onChange(null, { name: 'connectPhoneNumber', value })}</span>
+                onFocus={onFocus}
+                placeholder="(888)-123-4567"
+                value={connectPhoneNumber}
+            /&gt;
+        &lt;/FormField&gt;
     );
     const participationTypeField = (
         &lt;FormFieldSelect
@@ -761,6 +774,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             clearable
             description={description}
             error={errors.connectAccessId}
+            inputType="number"
             label={label}
             name="connectAccessId"
             onBlur={onBlur}
@@ -770,12 +784,13 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
             value={connectAccessId}
         /&gt;
     );
-    const renderPasscodeField = (label = 'Passcode', description = 'Enter the passcode (optional)') =&gt; (
+    const renderPasscodeField = (label = 'Passcode', description = 'Enter the passcode (optional)', type = 'text') =&gt; (
         &lt;FormFieldInput
             className="mt-5 px-4 py-3"
             clearable
             description={description}
             error={errors.connectPin}
+            inputType={type}
             label={label}
             name="connectPin"
             onBlur={onBlur}
@@ -821,7 +836,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                                         &lt;&gt;
                                             {dialInField}
                                             {renderMeetingIdField('Meeting ID*', 'Enter the meeting ID')}
-                                            {renderPasscodeField()}
+                                            {renderPasscodeField('Passcode', 'Enter the passcode (optional)', 'number')}
                                             {participationTypeField}
                                         &lt;/&gt;
                                     ))
@@ -844,7 +859,7 @@ export function ConnectionDetailsUI(props: ConnectionDetailsUIProps): ReactEleme
                     &lt;&gt;
                         {dialInField}
                         {renderMeetingIdField('Meeting ID / Access Code', 'Enter the meeting ID or access code')}
-                        {renderPasscodeField('PIN', 'Enter a PIN (optional)')}
+                        {renderPasscodeField('PIN', 'Enter a PIN (optional)', 'number')}
                         {participationTypeField}
                     &lt;/&gt;
                 ))
@@ -952,7 +967,7 @@ export function ConnectionDetails(props: ConnectionDetailsProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Apr 04 2023 14:18:54 GMT-0400 (Eastern Daylight Time)
+                at Tue Apr 04 2023 14:21:52 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

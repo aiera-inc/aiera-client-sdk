@@ -1112,7 +1112,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
-        function useMemo12(create, deps) {
+        function useMemo13(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useMemo(create, deps);
         }
@@ -1673,7 +1673,7 @@ var require_react_development = __commonJS({
         exports2.useEffect = useEffect22;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect5;
-        exports2.useMemo = useMemo12;
+        exports2.useMemo = useMemo13;
         exports2.useReducer = useReducer;
         exports2.useRef = useRef14;
         exports2.useState = useState28;
@@ -1760,9 +1760,9 @@ var require_scheduler_development = __commonJS({
           var _setTimeout = window.setTimeout;
           var _clearTimeout = window.clearTimeout;
           if (typeof console !== "undefined") {
-            var requestAnimationFrame = window.requestAnimationFrame;
+            var requestAnimationFrame2 = window.requestAnimationFrame;
             var cancelAnimationFrame = window.cancelAnimationFrame;
-            if (typeof requestAnimationFrame !== "function") {
+            if (typeof requestAnimationFrame2 !== "function") {
               console["error"]("This browser doesn't support requestAnimationFrame. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills");
             }
             if (typeof cancelAnimationFrame !== "function") {
@@ -26097,7 +26097,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames50() {
+      function classNames51() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26108,7 +26108,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames50.apply(null, arg);
+              var inner = classNames51.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26128,14 +26128,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames50.default = classNames50;
-        module2.exports = classNames50;
+        classNames51.default = classNames51;
+        module2.exports = classNames51;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames50;
+          return classNames51;
         });
       } else {
-        window.classNames = classNames50;
+        window.classNames = classNames51;
       }
     })();
   }
@@ -60562,7 +60562,7 @@ function CountrySelectWithIcon(_ref3) {
   }, /* @__PURE__ */ import_react58.default.createElement(CountrySelect, _extends9({}, rest, {
     value,
     options,
-    className: (0, import_classnames28.default)("PhoneInputCountrySelect", className8)
+    className: (0, import_classnames29.default)("PhoneInputCountrySelect", className8)
   })), unicodeFlags && value && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "PhoneInputCountryIconUnicode"
   }, getCountryFlag(value)), !(unicodeFlags && value) && /* @__PURE__ */ import_react58.default.createElement(Icon, {
@@ -60580,12 +60580,12 @@ function getSelectedOption(options, value) {
     }
   }
 }
-var import_react58, import_prop_types4, import_classnames28, _excluded4, _excluded22, DIVIDER_STYLE;
+var import_react58, import_prop_types4, import_classnames29, _excluded4, _excluded22, DIVIDER_STYLE;
 var init_CountrySelect = __esm({
   "node_modules/react-phone-number-input/modules/CountrySelect.js"() {
     import_react58 = __toModule(require_react());
     import_prop_types4 = __toModule(require_prop_types());
-    import_classnames28 = __toModule(require_classnames());
+    import_classnames29 = __toModule(require_classnames());
     init_unicode2();
     _excluded4 = ["value", "onChange", "options"];
     _excluded22 = ["value", "options", "className", "iconComponent", "getIconAspectRatio", "arrowComponent", "unicodeFlags"];
@@ -60678,12 +60678,12 @@ function FlagComponent(_ref) {
     src: flagUrl.replace("{XX}", country).replace("{xx}", country.toLowerCase())
   }));
 }
-var import_react59, import_prop_types5, import_classnames29, _excluded5;
+var import_react59, import_prop_types5, import_classnames30, _excluded5;
 var init_Flag = __esm({
   "node_modules/react-phone-number-input/modules/Flag.js"() {
     import_react59 = __toModule(require_react());
     import_prop_types5 = __toModule(require_prop_types());
-    import_classnames29 = __toModule(require_classnames());
+    import_classnames30 = __toModule(require_classnames());
     _excluded5 = ["country", "countryName", "flags", "flagUrl"];
     FlagComponent.propTypes = {
       country: import_prop_types5.default.string.isRequired,
@@ -61014,7 +61014,7 @@ function createCountryIconComponent(_ref) {
     var country = _ref22.country, label = _ref22.label, aspectRatio = _ref22.aspectRatio, rest = _objectWithoutProperties7(_ref22, _excluded7);
     var _aspectRatio = InternationalIcon2 === InternationalIcon ? aspectRatio : void 0;
     return /* @__PURE__ */ import_react61.default.createElement("div", _extends12({}, rest, {
-      className: (0, import_classnames30.default)("PhoneInputCountryIcon", {
+      className: (0, import_classnames31.default)("PhoneInputCountryIcon", {
         "PhoneInputCountryIcon--square": _aspectRatio === 1,
         "PhoneInputCountryIcon--border": country
       })
@@ -61037,12 +61037,12 @@ function createCountryIconComponent(_ref) {
   };
   return CountryIcon;
 }
-var import_react61, import_prop_types7, import_classnames30, _excluded7, CountryIcon_default;
+var import_react61, import_prop_types7, import_classnames31, _excluded7, CountryIcon_default;
 var init_CountryIcon = __esm({
   "node_modules/react-phone-number-input/modules/CountryIcon.js"() {
     import_react61 = __toModule(require_react());
     import_prop_types7 = __toModule(require_prop_types());
-    import_classnames30 = __toModule(require_classnames());
+    import_classnames31 = __toModule(require_classnames());
     init_InternationalIcon();
     init_Flag();
     _excluded7 = ["country", "label", "aspectRatio"];
@@ -61667,12 +61667,12 @@ function areEqualArrays(a3, b3) {
   }
   return true;
 }
-var import_react62, import_prop_types9, import_classnames31, _excluded8, PhoneNumberInput_, PhoneNumberInput, PhoneInputWithCountry_default;
+var import_react62, import_prop_types9, import_classnames32, _excluded8, PhoneNumberInput_, PhoneNumberInput, PhoneInputWithCountry_default;
 var init_PhoneInputWithCountry = __esm({
   "node_modules/react-phone-number-input/modules/PhoneInputWithCountry.js"() {
     import_react62 = __toModule(require_react());
     import_prop_types9 = __toModule(require_prop_types());
-    import_classnames31 = __toModule(require_classnames());
+    import_classnames32 = __toModule(require_classnames());
     init_InputSmart();
     init_InputBasic();
     init_CountrySelect();
@@ -61914,7 +61914,7 @@ var init_PhoneInputWithCountry = __esm({
           });
           return /* @__PURE__ */ import_react62.default.createElement(ContainerComponent, {
             style,
-            className: (0, import_classnames31.default)(className8, "PhoneInput", {
+            className: (0, import_classnames32.default)(className8, "PhoneInput", {
               "PhoneInput--focus": isFocused,
               "PhoneInput--disabled": disabled,
               "PhoneInput--readOnly": readOnly
@@ -61946,7 +61946,7 @@ var init_PhoneInputWithCountry = __esm({
             disabled,
             readOnly,
             inputComponent,
-            className: (0, import_classnames31.default)("PhoneInputInput", numberInputProps && numberInputProps.className, rest.className)
+            className: (0, import_classnames32.default)("PhoneInputInput", numberInputProps && numberInputProps.className, rest.className)
           })));
         }
       }], [{
@@ -62426,6 +62426,384 @@ var init_min = __esm({
     init_core2();
     init_PhoneInputWithCountryDefault();
     min_default = createPhoneInput(metadata_min_json_default);
+  }
+});
+
+// node_modules/react-text-mask/dist/reactTextMask.js
+var require_reactTextMask = __commonJS({
+  "node_modules/react-text-mask/dist/reactTextMask.js"(exports2, module2) {
+    !function(e, t2) {
+      typeof exports2 == "object" && typeof module2 == "object" ? module2.exports = t2(require_react()) : typeof define == "function" && define.amd ? define(["react"], t2) : typeof exports2 == "object" ? exports2.reactTextMask = t2(require_react()) : e.reactTextMask = t2(e.React);
+    }(exports2, function(e) {
+      return function(e2) {
+        function t2(n2) {
+          if (r3[n2])
+            return r3[n2].exports;
+          var o2 = r3[n2] = { exports: {}, id: n2, loaded: false };
+          return e2[n2].call(o2.exports, o2, o2.exports, t2), o2.loaded = true, o2.exports;
+        }
+        var r3 = {};
+        return t2.m = e2, t2.c = r3, t2.p = "", t2(0);
+      }([function(e2, t2, r3) {
+        "use strict";
+        function n2(e3) {
+          return e3 && e3.__esModule ? e3 : { default: e3 };
+        }
+        function o2(e3, t3) {
+          var r4 = {};
+          for (var n3 in e3)
+            t3.indexOf(n3) >= 0 || Object.prototype.hasOwnProperty.call(e3, n3) && (r4[n3] = e3[n3]);
+          return r4;
+        }
+        function i3(e3, t3) {
+          if (!(e3 instanceof t3))
+            throw new TypeError("Cannot call a class as a function");
+        }
+        function a3(e3, t3) {
+          if (!e3)
+            throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+          return !t3 || typeof t3 != "object" && typeof t3 != "function" ? e3 : t3;
+        }
+        function u4(e3, t3) {
+          if (typeof t3 != "function" && t3 !== null)
+            throw new TypeError("Super expression must either be null or a function, not " + typeof t3);
+          e3.prototype = Object.create(t3 && t3.prototype, { constructor: { value: e3, enumerable: false, writable: true, configurable: true } }), t3 && (Object.setPrototypeOf ? Object.setPrototypeOf(e3, t3) : e3.__proto__ = t3);
+        }
+        Object.defineProperty(t2, "__esModule", { value: true }), t2.conformToMask = void 0;
+        var s2 = Object.assign || function(e3) {
+          for (var t3 = 1; t3 < arguments.length; t3++) {
+            var r4 = arguments[t3];
+            for (var n3 in r4)
+              Object.prototype.hasOwnProperty.call(r4, n3) && (e3[n3] = r4[n3]);
+          }
+          return e3;
+        }, l3 = function() {
+          function e3(e4, t3) {
+            for (var r4 = 0; r4 < t3.length; r4++) {
+              var n3 = t3[r4];
+              n3.enumerable = n3.enumerable || false, n3.configurable = true, "value" in n3 && (n3.writable = true), Object.defineProperty(e4, n3.key, n3);
+            }
+          }
+          return function(t3, r4, n3) {
+            return r4 && e3(t3.prototype, r4), n3 && e3(t3, n3), t3;
+          };
+        }(), f2 = r3(3);
+        Object.defineProperty(t2, "conformToMask", { enumerable: true, get: function() {
+          return n2(f2).default;
+        } });
+        var c3 = r3(11), p2 = n2(c3), d2 = r3(9), h3 = n2(d2), v = r3(5), y2 = n2(v), m2 = r3(2), b3 = function(e3) {
+          function t3() {
+            var e4;
+            i3(this, t3);
+            for (var r4 = arguments.length, n3 = Array(r4), o3 = 0; o3 < r4; o3++)
+              n3[o3] = arguments[o3];
+            var u5 = a3(this, (e4 = t3.__proto__ || Object.getPrototypeOf(t3)).call.apply(e4, [this].concat(n3)));
+            return u5.setRef = u5.setRef.bind(u5), u5.onBlur = u5.onBlur.bind(u5), u5.onChange = u5.onChange.bind(u5), u5;
+          }
+          return u4(t3, e3), l3(t3, [{ key: "setRef", value: function(e4) {
+            this.inputElement = e4;
+          } }, { key: "initTextMask", value: function() {
+            var e4 = this.props, t4 = this.props.value;
+            this.textMaskInputElement = (0, y2.default)(s2({ inputElement: this.inputElement }, e4)), this.textMaskInputElement.update(t4);
+          } }, { key: "componentDidMount", value: function() {
+            this.initTextMask();
+          } }, { key: "componentDidUpdate", value: function(e4) {
+            var t4 = this.props, r4 = t4.value, n3 = t4.pipe, o3 = t4.mask, i4 = t4.guide, a4 = t4.placeholderChar, u5 = t4.showMask, s3 = { guide: i4, placeholderChar: a4, showMask: u5 }, l4 = typeof n3 == "function" && typeof e4.pipe == "function" ? n3.toString() !== e4.pipe.toString() : (0, m2.isNil)(n3) && !(0, m2.isNil)(e4.pipe) || !(0, m2.isNil)(n3) && (0, m2.isNil)(e4.pipe), f3 = o3.toString() !== e4.mask.toString(), c4 = Object.keys(s3).some(function(t5) {
+              return s3[t5] !== e4[t5];
+            }) || f3 || l4, p3 = r4 !== this.inputElement.value;
+            (p3 || c4) && this.initTextMask();
+          } }, { key: "render", value: function e4() {
+            var t4 = this.props, e5 = t4.render, r4 = o2(t4, ["render"]);
+            return delete r4.mask, delete r4.guide, delete r4.pipe, delete r4.placeholderChar, delete r4.keepCharPositions, delete r4.value, delete r4.onBlur, delete r4.onChange, delete r4.showMask, e5(this.setRef, s2({ onBlur: this.onBlur, onChange: this.onChange, defaultValue: this.props.value }, r4));
+          } }, { key: "onChange", value: function(e4) {
+            this.textMaskInputElement.update(), typeof this.props.onChange == "function" && this.props.onChange(e4);
+          } }, { key: "onBlur", value: function(e4) {
+            typeof this.props.onBlur == "function" && this.props.onBlur(e4);
+          } }]), t3;
+        }(p2.default.PureComponent);
+        t2.default = b3, b3.propTypes = { mask: h3.default.oneOfType([h3.default.array, h3.default.func, h3.default.bool, h3.default.shape({ mask: h3.default.oneOfType([h3.default.array, h3.default.func]), pipe: h3.default.func })]).isRequired, guide: h3.default.bool, value: h3.default.oneOfType([h3.default.string, h3.default.number]), pipe: h3.default.func, placeholderChar: h3.default.string, keepCharPositions: h3.default.bool, showMask: h3.default.bool }, b3.defaultProps = { render: function(e3, t3) {
+          return p2.default.createElement("input", s2({ ref: e3 }, t3));
+        } };
+      }, function(e2, t2) {
+        "use strict";
+        Object.defineProperty(t2, "__esModule", { value: true }), t2.placeholderChar = "_", t2.strFunction = "function";
+      }, function(e2, t2, r3) {
+        "use strict";
+        function n2() {
+          var e3 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : f2, t3 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : l3.placeholderChar;
+          if (!o2(e3))
+            throw new Error("Text-mask:convertMaskToPlaceholder; The mask property must be an array.");
+          if (e3.indexOf(t3) !== -1)
+            throw new Error("Placeholder character must not be used as part of the mask. Please specify a character that is not present in your mask as your placeholder character.\n\n" + ("The placeholder character that was received is: " + JSON.stringify(t3) + "\n\n") + ("The mask that was received is: " + JSON.stringify(e3)));
+          return e3.map(function(e4) {
+            return e4 instanceof RegExp ? t3 : e4;
+          }).join("");
+        }
+        function o2(e3) {
+          return Array.isArray && Array.isArray(e3) || e3 instanceof Array;
+        }
+        function i3(e3) {
+          return typeof e3 == "string" || e3 instanceof String;
+        }
+        function a3(e3) {
+          return typeof e3 == "number" && e3.length === void 0 && !isNaN(e3);
+        }
+        function u4(e3) {
+          return typeof e3 == "undefined" || e3 === null;
+        }
+        function s2(e3) {
+          for (var t3 = [], r4 = void 0; r4 = e3.indexOf(c3), r4 !== -1; )
+            t3.push(r4), e3.splice(r4, 1);
+          return { maskWithoutCaretTraps: e3, indexes: t3 };
+        }
+        Object.defineProperty(t2, "__esModule", { value: true }), t2.convertMaskToPlaceholder = n2, t2.isArray = o2, t2.isString = i3, t2.isNumber = a3, t2.isNil = u4, t2.processCaretTraps = s2;
+        var l3 = r3(1), f2 = [], c3 = "[]";
+      }, function(e2, t2, r3) {
+        "use strict";
+        function n2() {
+          var e3 = arguments.length > 0 && arguments[0] !== void 0 ? arguments[0] : s2, t3 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : u4, r4 = arguments.length > 2 && arguments[2] !== void 0 ? arguments[2] : {};
+          if (!(0, i3.isArray)(t3)) {
+            if ((typeof t3 == "undefined" ? "undefined" : o2(t3)) !== a3.strFunction)
+              throw new Error("Text-mask:conformToMask; The mask property must be an array.");
+            t3 = t3(e3, r4), t3 = (0, i3.processCaretTraps)(t3).maskWithoutCaretTraps;
+          }
+          var n3 = r4.guide, l3 = n3 === void 0 || n3, f2 = r4.previousConformedValue, c3 = f2 === void 0 ? s2 : f2, p2 = r4.placeholderChar, d2 = p2 === void 0 ? a3.placeholderChar : p2, h3 = r4.placeholder, v = h3 === void 0 ? (0, i3.convertMaskToPlaceholder)(t3, d2) : h3, y2 = r4.currentCaretPosition, m2 = r4.keepCharPositions, b3 = l3 === false && c3 !== void 0, g2 = e3.length, k2 = c3.length, C2 = v.length, O3 = t3.length, T = g2 - k2, P2 = T > 0, x3 = y2 + (P2 ? -T : 0), w2 = x3 + Math.abs(T);
+          if (m2 === true && !P2) {
+            for (var S2 = s2, _2 = x3; _2 < w2; _2++)
+              v[_2] === d2 && (S2 += d2);
+            e3 = e3.slice(0, x3) + S2 + e3.slice(x3, g2);
+          }
+          for (var M2 = e3.split(s2).map(function(e4, t4) {
+            return { char: e4, isNew: t4 >= x3 && t4 < w2 };
+          }), j = g2 - 1; j >= 0; j--) {
+            var E3 = M2[j].char;
+            if (E3 !== d2) {
+              var R = j >= x3 && k2 === O3;
+              E3 === v[R ? j - T : j] && M2.splice(j, 1);
+            }
+          }
+          var V = s2, N3 = false;
+          e:
+            for (var A = 0; A < C2; A++) {
+              var B = v[A];
+              if (B === d2) {
+                if (M2.length > 0)
+                  for (; M2.length > 0; ) {
+                    var I = M2.shift(), F2 = I.char, q3 = I.isNew;
+                    if (F2 === d2 && b3 !== true) {
+                      V += d2;
+                      continue e;
+                    }
+                    if (t3[A].test(F2)) {
+                      if (m2 === true && q3 !== false && c3 !== s2 && l3 !== false && P2) {
+                        for (var D3 = M2.length, L3 = null, W2 = 0; W2 < D3; W2++) {
+                          var J3 = M2[W2];
+                          if (J3.char !== d2 && J3.isNew === false)
+                            break;
+                          if (J3.char === d2) {
+                            L3 = W2;
+                            break;
+                          }
+                        }
+                        L3 !== null ? (V += F2, M2.splice(L3, 1)) : A--;
+                      } else
+                        V += F2;
+                      continue e;
+                    }
+                    N3 = true;
+                  }
+                b3 === false && (V += v.substr(A, C2));
+                break;
+              }
+              V += B;
+            }
+          if (b3 && P2 === false) {
+            for (var U = null, H2 = 0; H2 < V.length; H2++)
+              v[H2] === d2 && (U = H2);
+            V = U !== null ? V.substr(0, U + 1) : s2;
+          }
+          return { conformedValue: V, meta: { someCharsRejected: N3 } };
+        }
+        Object.defineProperty(t2, "__esModule", { value: true });
+        var o2 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(e3) {
+          return typeof e3;
+        } : function(e3) {
+          return e3 && typeof Symbol == "function" && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
+        };
+        t2.default = n2;
+        var i3 = r3(2), a3 = r3(1), u4 = [], s2 = "";
+      }, function(e2, t2) {
+        "use strict";
+        function r3(e3) {
+          var t3 = e3.previousConformedValue, r4 = t3 === void 0 ? o2 : t3, i3 = e3.previousPlaceholder, a3 = i3 === void 0 ? o2 : i3, u4 = e3.currentCaretPosition, s2 = u4 === void 0 ? 0 : u4, l3 = e3.conformedValue, f2 = e3.rawValue, c3 = e3.placeholderChar, p2 = e3.placeholder, d2 = e3.indexesOfPipedChars, h3 = d2 === void 0 ? n2 : d2, v = e3.caretTrapIndexes, y2 = v === void 0 ? n2 : v;
+          if (s2 === 0 || !f2.length)
+            return 0;
+          var m2 = f2.length, b3 = r4.length, g2 = p2.length, k2 = l3.length, C2 = m2 - b3, O3 = C2 > 0, T = b3 === 0, P2 = C2 > 1 && !O3 && !T;
+          if (P2)
+            return s2;
+          var x3 = O3 && (r4 === l3 || l3 === p2), w2 = 0, S2 = void 0, _2 = void 0;
+          if (x3)
+            w2 = s2 - C2;
+          else {
+            var M2 = l3.toLowerCase(), j = f2.toLowerCase(), E3 = j.substr(0, s2).split(o2), R = E3.filter(function(e4) {
+              return M2.indexOf(e4) !== -1;
+            });
+            _2 = R[R.length - 1];
+            var V = a3.substr(0, R.length).split(o2).filter(function(e4) {
+              return e4 !== c3;
+            }).length, N3 = p2.substr(0, R.length).split(o2).filter(function(e4) {
+              return e4 !== c3;
+            }).length, A = N3 !== V, B = a3[R.length - 1] !== void 0 && p2[R.length - 2] !== void 0 && a3[R.length - 1] !== c3 && a3[R.length - 1] !== p2[R.length - 1] && a3[R.length - 1] === p2[R.length - 2];
+            !O3 && (A || B) && V > 0 && p2.indexOf(_2) > -1 && f2[s2] !== void 0 && (S2 = true, _2 = f2[s2]);
+            for (var I = h3.map(function(e4) {
+              return M2[e4];
+            }), F2 = I.filter(function(e4) {
+              return e4 === _2;
+            }).length, q3 = R.filter(function(e4) {
+              return e4 === _2;
+            }).length, D3 = p2.substr(0, p2.indexOf(c3)).split(o2).filter(function(e4, t4) {
+              return e4 === _2 && f2[t4] !== e4;
+            }).length, L3 = D3 + q3 + F2 + (S2 ? 1 : 0), W2 = 0, J3 = 0; J3 < k2; J3++) {
+              var U = M2[J3];
+              if (w2 = J3 + 1, U === _2 && W2++, W2 >= L3)
+                break;
+            }
+          }
+          if (O3) {
+            for (var H2 = w2, Y = w2; Y <= g2; Y++)
+              if (p2[Y] === c3 && (H2 = Y), p2[Y] === c3 || y2.indexOf(Y) !== -1 || Y === g2)
+                return H2;
+          } else if (S2) {
+            for (var z2 = w2 - 1; z2 >= 0; z2--)
+              if (l3[z2] === _2 || y2.indexOf(z2) !== -1 || z2 === 0)
+                return z2;
+          } else
+            for (var G = w2; G >= 0; G--)
+              if (p2[G - 1] === c3 || y2.indexOf(G) !== -1 || G === 0)
+                return G;
+        }
+        Object.defineProperty(t2, "__esModule", { value: true }), t2.default = r3;
+        var n2 = [], o2 = "";
+      }, function(e2, t2, r3) {
+        "use strict";
+        function n2(e3) {
+          return e3 && e3.__esModule ? e3 : { default: e3 };
+        }
+        function o2(e3) {
+          var t3 = { previousConformedValue: void 0, previousPlaceholder: void 0 };
+          return { state: t3, update: function(r4) {
+            var n3 = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : e3, o3 = n3.inputElement, l4 = n3.mask, c4 = n3.guide, y3 = n3.pipe, b4 = n3.placeholderChar, g3 = b4 === void 0 ? h3.placeholderChar : b4, k2 = n3.keepCharPositions, C2 = k2 !== void 0 && k2, O3 = n3.showMask, T = O3 !== void 0 && O3;
+            if (typeof r4 == "undefined" && (r4 = o3.value), r4 !== t3.previousConformedValue) {
+              (typeof l4 == "undefined" ? "undefined" : s2(l4)) === m2 && l4.pipe !== void 0 && l4.mask !== void 0 && (y3 = l4.pipe, l4 = l4.mask);
+              var P2 = void 0, x3 = void 0;
+              if (l4 instanceof Array && (P2 = (0, d2.convertMaskToPlaceholder)(l4, g3)), l4 !== false) {
+                var w2 = a3(r4), S2 = o3.selectionEnd, _2 = t3.previousConformedValue, M2 = t3.previousPlaceholder, j = void 0;
+                if ((typeof l4 == "undefined" ? "undefined" : s2(l4)) === h3.strFunction) {
+                  if (x3 = l4(w2, { currentCaretPosition: S2, previousConformedValue: _2, placeholderChar: g3 }), x3 === false)
+                    return;
+                  var E3 = (0, d2.processCaretTraps)(x3), R = E3.maskWithoutCaretTraps, V = E3.indexes;
+                  x3 = R, j = V, P2 = (0, d2.convertMaskToPlaceholder)(x3, g3);
+                } else
+                  x3 = l4;
+                var N3 = { previousConformedValue: _2, guide: c4, placeholderChar: g3, pipe: y3, placeholder: P2, currentCaretPosition: S2, keepCharPositions: C2 }, A = (0, p2.default)(w2, x3, N3), B = A.conformedValue, I = (typeof y3 == "undefined" ? "undefined" : s2(y3)) === h3.strFunction, F2 = {};
+                I && (F2 = y3(B, u4({ rawValue: w2 }, N3)), F2 === false ? F2 = { value: _2, rejected: true } : (0, d2.isString)(F2) && (F2 = { value: F2 }));
+                var q3 = I ? F2.value : B, D3 = (0, f2.default)({ previousConformedValue: _2, previousPlaceholder: M2, conformedValue: q3, placeholder: P2, rawValue: w2, currentCaretPosition: S2, placeholderChar: g3, indexesOfPipedChars: F2.indexesOfPipedChars, caretTrapIndexes: j }), L3 = q3 === P2 && D3 === 0, W2 = T ? P2 : v, J3 = L3 ? W2 : q3;
+                t3.previousConformedValue = J3, t3.previousPlaceholder = P2, o3.value !== J3 && (o3.value = J3, i3(o3, D3));
+              }
+            }
+          } };
+        }
+        function i3(e3, t3) {
+          document.activeElement === e3 && (b3 ? g2(function() {
+            return e3.setSelectionRange(t3, t3, y2);
+          }, 0) : e3.setSelectionRange(t3, t3, y2));
+        }
+        function a3(e3) {
+          if ((0, d2.isString)(e3))
+            return e3;
+          if ((0, d2.isNumber)(e3))
+            return String(e3);
+          if (e3 === void 0 || e3 === null)
+            return v;
+          throw new Error("The 'value' provided to Text Mask needs to be a string or a number. The value received was:\n\n " + JSON.stringify(e3));
+        }
+        Object.defineProperty(t2, "__esModule", { value: true });
+        var u4 = Object.assign || function(e3) {
+          for (var t3 = 1; t3 < arguments.length; t3++) {
+            var r4 = arguments[t3];
+            for (var n3 in r4)
+              Object.prototype.hasOwnProperty.call(r4, n3) && (e3[n3] = r4[n3]);
+          }
+          return e3;
+        }, s2 = typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(e3) {
+          return typeof e3;
+        } : function(e3) {
+          return e3 && typeof Symbol == "function" && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
+        };
+        t2.default = o2;
+        var l3 = r3(4), f2 = n2(l3), c3 = r3(3), p2 = n2(c3), d2 = r3(2), h3 = r3(1), v = "", y2 = "none", m2 = "object", b3 = typeof navigator != "undefined" && /Android/i.test(navigator.userAgent), g2 = typeof requestAnimationFrame != "undefined" ? requestAnimationFrame : setTimeout;
+      }, function(e2, t2) {
+        "use strict";
+        function r3(e3) {
+          return function() {
+            return e3;
+          };
+        }
+        var n2 = function() {
+        };
+        n2.thatReturns = r3, n2.thatReturnsFalse = r3(false), n2.thatReturnsTrue = r3(true), n2.thatReturnsNull = r3(null), n2.thatReturnsThis = function() {
+          return this;
+        }, n2.thatReturnsArgument = function(e3) {
+          return e3;
+        }, e2.exports = n2;
+      }, function(e2, t2, r3) {
+        "use strict";
+        function n2(e3, t3, r4, n3, i3, a3, u4, s2) {
+          if (o2(t3), !e3) {
+            var l3;
+            if (t3 === void 0)
+              l3 = new Error("Minified exception occurred; use the non-minified dev environment for the full error message and additional helpful warnings.");
+            else {
+              var f2 = [r4, n3, i3, a3, u4, s2], c3 = 0;
+              l3 = new Error(t3.replace(/%s/g, function() {
+                return f2[c3++];
+              })), l3.name = "Invariant Violation";
+            }
+            throw l3.framesToPop = 1, l3;
+          }
+        }
+        var o2 = function(e3) {
+        };
+        e2.exports = n2;
+      }, function(e2, t2, r3) {
+        "use strict";
+        var n2 = r3(6), o2 = r3(7), i3 = r3(10);
+        e2.exports = function() {
+          function e3(e4, t4, r5, n3, a3, u4) {
+            u4 !== i3 && o2(false, "Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");
+          }
+          function t3() {
+            return e3;
+          }
+          e3.isRequired = e3;
+          var r4 = { array: e3, bool: e3, func: e3, number: e3, object: e3, string: e3, symbol: e3, any: e3, arrayOf: t3, element: e3, instanceOf: t3, node: e3, objectOf: t3, oneOf: t3, oneOfType: t3, shape: t3, exact: t3 };
+          return r4.checkPropTypes = n2, r4.PropTypes = r4, r4;
+        };
+      }, function(e2, t2, r3) {
+        "use strict";
+        typeof Symbol == "function" && typeof Symbol.iterator == "symbol" ? function(e3) {
+          return typeof e3;
+        } : function(e3) {
+          return e3 && typeof Symbol == "function" && e3.constructor === Symbol && e3 !== Symbol.prototype ? "symbol" : typeof e3;
+        }, e2.exports = r3(8)();
+      }, function(e2, t2) {
+        "use strict";
+        var r3 = "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED";
+        e2.exports = r3;
+      }, function(t2, r3) {
+        t2.exports = e;
+      }]);
+    });
   }
 });
 
@@ -81790,7 +82168,6 @@ var EventListDocument = lib_default`
       numTotalHits
       hits {
         id
-        numMentions
         event {
           id
           audioProxy
@@ -82445,7 +82822,7 @@ var Auth = ({
 
 // src/modules/EventList/index.tsx
 var import_react111 = __toModule(require_react());
-var import_classnames49 = __toModule(require_classnames());
+var import_classnames50 = __toModule(require_classnames());
 var import_luxon3 = __toModule(require_luxon());
 var import_ts_pattern13 = __toModule(require_lib());
 
@@ -84243,7 +84620,7 @@ function useInterval(callback, interval) {
 
 // src/modules/RecordingForm/index.tsx
 var import_react93 = __toModule(require_react());
-var import_classnames34 = __toModule(require_classnames());
+var import_classnames35 = __toModule(require_classnames());
 var import_ts_pattern9 = __toModule(require_lib());
 
 // src/components/Svg/ArrowLeft.tsx
@@ -84267,10 +84644,11 @@ var import_react52 = __toModule(require_react());
 
 // src/components/FormField/FormFieldSelect/index.tsx
 var import_react51 = __toModule(require_react());
-var import_classnames27 = __toModule(require_classnames());
+var import_classnames28 = __toModule(require_classnames());
 
 // src/components/Checkbox/index.tsx
 var import_react49 = __toModule(require_react());
+var import_classnames27 = __toModule(require_classnames());
 
 // src/components/Svg/Check.tsx
 var import_react48 = __toModule(require_react());
@@ -84291,33 +84669,35 @@ function Check({ className: className8, alt = "Check" }) {
 
 // src/components/Checkbox/index.tsx
 function CheckboxUI(props) {
-  const { checked, className: className8 = "", kind = "checkbox", label, name, onChange: onChange2 } = props;
-  const checkBoxStyles = checked ? "bg-blue-500 shadow text-white" : "border border-gray-300";
+  const { checked, className: className8 = "", kind = "checkbox", label, name, onChange: onChange2, required = false } = props;
+  const error = !checked && required;
+  const checkBoxStyles = checked ? "bg-blue-500 shadow text-white group-hover:bg-blue-600" : `border ${error ? "border-red-600 group-hover:border-red-700" : "border-gray-300 group-hover:border-gray-400"}`;
   let radius = "rounded-sm";
   if (kind === "radio") {
     radius = "rounded-xl";
   }
   return /* @__PURE__ */ import_react49.default.createElement("div", {
-    className: `cursor-pointer flex items-center ${className8} checkbox`,
+    className: (0, import_classnames27.default)("group cursor-pointer flex items-center checkbox", className8),
     "data-tname": name,
     onClick: onChange2
   }, /* @__PURE__ */ import_react49.default.createElement("div", {
-    className: `flex flex-shrink-0 h-4 items-center justify-center ${radius} w-4 ${checkBoxStyles}`
+    className: (0, import_classnames27.default)("flex flex-shrink-0 h-4 items-center justify-center w-4", radius, checkBoxStyles)
   }, checked && /* @__PURE__ */ import_react49.default.createElement(Check, {
     className: "w-2"
   })), label && /* @__PURE__ */ import_react49.default.createElement("div", {
-    className: "ml-2 text-sm"
+    className: (0, import_classnames27.default)("ml-2 text-sm", { "text-red-600 group-hover:text-red-700": error })
   }, label));
 }
 function Checkbox(props) {
-  const { checked, className: className8, kind, label, name, onChange: onChange2 } = props;
+  const { checked, className: className8, kind, label, name, onChange: onChange2, required } = props;
   return /* @__PURE__ */ import_react49.default.createElement(CheckboxUI, {
     checked,
     className: className8,
     kind,
     label,
     name,
-    onChange: (0, import_react49.useCallback)((event) => onChange2 == null ? void 0 : onChange2(event, { name, value: !checked }), [onChange2])
+    onChange: (0, import_react49.useCallback)((event) => onChange2 == null ? void 0 : onChange2(event, { name, value: !checked }), [onChange2]),
+    required
   });
 }
 
@@ -84346,7 +84726,7 @@ function FormFieldSelect(props) {
     key: option.value,
     onClick: (e) => onChange2 ? onChange2(e, { name, value: option.value }) : {}
   }, /* @__PURE__ */ import_react51.default.createElement("div", null, /* @__PURE__ */ import_react51.default.createElement("p", {
-    className: (0, import_classnames27.default)([
+    className: (0, import_classnames28.default)([
       "text-black text-base",
       { "font-semibold": value === option.value }
     ])
@@ -84396,6 +84776,7 @@ function FormFieldInput(props) {
     clearable,
     description,
     error,
+    inputType,
     label,
     name,
     onBlur,
@@ -84421,6 +84802,7 @@ function FormFieldInput(props) {
     onChange: onChange2,
     onFocus,
     placeholder,
+    type: inputType,
     value
   })));
 }
@@ -84639,20 +85021,23 @@ function ConnectionDetailsUI(props) {
     smsAlertBeforeCall,
     zoomMeetingType
   } = props;
-  const dialInField = /* @__PURE__ */ import_react65.default.createElement(FormFieldInput, {
-    autoFocus: true,
-    className: "mt-5 px-4 py-3",
-    clearable: true,
-    description: "Enter the dial-in number",
+  const dialInField = /* @__PURE__ */ import_react65.default.createElement(FormField, {
+    className: "mt-5 px-4 py-3"
+  }, /* @__PURE__ */ import_react65.default.createElement("p", {
+    className: "font-semibold text-base text-black form-field__label"
+  }, "Dial-in number*"), /* @__PURE__ */ import_react65.default.createElement("p", {
+    className: "font-light leading-4 pt-0.5 text-slate-400 text-sm  form-field__description"
+  }, "Enter the dial-in number"), /* @__PURE__ */ import_react65.default.createElement(PhoneNumberInput2, {
+    className: "mt-5",
+    defaultCountry: "US",
     error: errors.connectPhoneNumber,
-    label: "Dial-in number*",
     name: "connectPhoneNumber",
     onBlur,
-    onChange: onChange2,
+    onChange: (value) => onChange2(null, { name: "connectPhoneNumber", value }),
     onFocus,
     placeholder: "(888)-123-4567",
     value: connectPhoneNumber
-  });
+  }));
   const participationTypeField = /* @__PURE__ */ import_react65.default.createElement(FormFieldSelect, {
     className: "mt-2.5",
     name: "participationType",
@@ -84679,6 +85064,7 @@ function ConnectionDetailsUI(props) {
     clearable: true,
     description,
     error: errors.connectAccessId,
+    inputType: "number",
     label,
     name: "connectAccessId",
     onBlur,
@@ -84687,11 +85073,12 @@ function ConnectionDetailsUI(props) {
     placeholder: "1234567890",
     value: connectAccessId
   });
-  const renderPasscodeField = (label = "Passcode", description = "Enter the passcode (optional)") => /* @__PURE__ */ import_react65.default.createElement(FormFieldInput, {
+  const renderPasscodeField = (label = "Passcode", description = "Enter the passcode (optional)", type = "text") => /* @__PURE__ */ import_react65.default.createElement(FormFieldInput, {
     className: "mt-5 px-4 py-3",
     clearable: true,
     description,
     error: errors.connectPin,
+    inputType: type,
     label,
     name: "connectPin",
     onBlur,
@@ -84719,7 +85106,7 @@ function ConnectionDetailsUI(props) {
     onChange: onChange2,
     onFocus,
     value: connectCallerId
-  }))).with(ZoomMeetingType.Phone, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, dialInField, renderMeetingIdField("Meeting ID*", "Enter the meeting ID"), renderPasscodeField(), participationTypeField)).otherwise(() => null)))).with(PrConnectionType.GoogleMeet, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, dialInField, renderPasscodeField("PIN", "Enter a PIN (optional)"), participationTypeField)).with(PrConnectionType.Webcast, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, renderConnectUrlField("Enter the url to access recording", "Host URL*"))).with(PrConnectionType.Phone, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, dialInField, renderMeetingIdField("Meeting ID / Access Code", "Enter the meeting ID or access code"), renderPasscodeField("PIN", "Enter a PIN (optional)"), participationTypeField)).otherwise(() => null), showCallMeFields && /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, /* @__PURE__ */ import_react65.default.createElement(FormField, {
+  }))).with(ZoomMeetingType.Phone, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, dialInField, renderMeetingIdField("Meeting ID*", "Enter the meeting ID"), renderPasscodeField("Passcode", "Enter the passcode (optional)", "number"), participationTypeField)).otherwise(() => null)))).with(PrConnectionType.GoogleMeet, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, dialInField, renderPasscodeField("PIN", "Enter a PIN (optional)"), participationTypeField)).with(PrConnectionType.Webcast, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, renderConnectUrlField("Enter the url to access recording", "Host URL*"))).with(PrConnectionType.Phone, () => /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, dialInField, renderMeetingIdField("Meeting ID / Access Code", "Enter the meeting ID or access code"), renderPasscodeField("PIN", "Enter a PIN (optional)", "number"), participationTypeField)).otherwise(() => null), showCallMeFields && /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, /* @__PURE__ */ import_react65.default.createElement(FormField, {
     className: "mt-5 px-4 py-3"
   }, /* @__PURE__ */ import_react65.default.createElement("p", {
     className: "font-semibold text-base text-black form-field__label"
@@ -84875,6 +85262,7 @@ function RecordingDetails(props) {
 
 // src/modules/RecordingForm/Scheduling/index.tsx
 var import_react90 = __toModule(require_react());
+var import_react_text_mask = __toModule(require_reactTextMask());
 
 // src/components/DatePicker/index.tsx
 var import_react87 = __toModule(require_react());
@@ -88006,15 +88394,15 @@ function DatePicker(props) {
 
 // src/components/Dropdown/index.tsx
 var import_react89 = __toModule(require_react());
-var import_classnames33 = __toModule(require_classnames());
+var import_classnames34 = __toModule(require_classnames());
 var import_ts_pattern7 = __toModule(require_lib());
 
 // src/components/Svg/Chevron.tsx
 var import_react88 = __toModule(require_react());
-var import_classnames32 = __toModule(require_classnames());
+var import_classnames33 = __toModule(require_classnames());
 function Chevron({ className: className8, alt = "Chevron" }) {
   return /* @__PURE__ */ import_react88.default.createElement("svg", {
-    className: (0, import_classnames32.default)(className8, "fill-current", "Svg", "Svg__chevron"),
+    className: (0, import_classnames33.default)(className8, "fill-current", "Svg", "Svg__chevron"),
     width: "100%",
     viewBox: "0 0 8 5",
     xmlns: "http://www.w3.org/2000/svg"
@@ -88051,7 +88439,7 @@ function TooltipContent2(props) {
   }, /* @__PURE__ */ import_react89.default.createElement("div", {
     className: "flex-1"
   }, options.map((option, index) => /* @__PURE__ */ import_react89.default.createElement("div", {
-    className: (0, import_classnames33.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
+    className: (0, import_classnames34.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
       "odd:bg-gray-100 dark:odd:bg-bluegray-5": selectedIndex !== index,
       "bg-blue-500": selectedIndex === index,
       "text-white": selectedIndex === index,
@@ -88092,7 +88480,7 @@ function DropdownUI(props) {
     position: tooltipPosition,
     yOffset: 5
   }, /* @__PURE__ */ import_react89.default.createElement("div", {
-    className: "flex-1"
+    className: "flex-1 pr-2"
   }, selectedLabel), /* @__PURE__ */ import_react89.default.createElement(Chevron, {
     className: "w-2"
   }));
@@ -88145,7 +88533,8 @@ function SchedulingUI(props) {
     scheduleMeridiem,
     scheduleTime,
     scheduleType,
-    showCalendar
+    showCalendar,
+    timeInputMask
   } = props;
   return /* @__PURE__ */ import_react90.default.createElement("div", {
     className: "py-3 scheduling"
@@ -88171,13 +88560,21 @@ function SchedulingUI(props) {
     name: "scheduleDate",
     onFocus: showCalendar,
     value: scheduleDate ? scheduleDate.toLocaleDateString() : ""
-  }), /* @__PURE__ */ import_react90.default.createElement(Input, {
+  }), /* @__PURE__ */ import_react90.default.createElement(import_react_text_mask.default, {
     className: "ml-2 shrink-[1]",
-    error: errors.scheduleTime,
-    name: "scheduleTime",
+    guide: false,
+    mask: timeInputMask,
+    name: "scheduledTime",
     onBlur,
-    onChange: onChange2,
-    placeholder: "10:00",
+    onChange: (event) => {
+      var _a;
+      return onChange2 == null ? void 0 : onChange2(event, { name: "scheduleTime", value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
+    },
+    placeholder: "09:30",
+    render: (ref, props2) => /* @__PURE__ */ import_react90.default.createElement(Input, __spreadProps(__spreadValues({}, props2), {
+      error: errors.scheduleTime,
+      inputRef: ref
+    })),
     value: scheduleTime
   }), /* @__PURE__ */ import_react90.default.createElement(Dropdown, {
     className: "ml-2 shrink-[2]",
@@ -88222,6 +88619,10 @@ function Scheduling(props) {
     scheduleTime,
     scheduleType
   } = props;
+  const timeInputMask = (0, import_react90.useMemo)(() => {
+    const startsWithTwo = scheduleTime ? scheduleTime[0] === "2" : false;
+    return [/[0-2]/, startsWithTwo ? /[0-3]/ : /[0-9]/, ":", /[0-5]/, /[0-9]/];
+  }, [scheduleTime]);
   return /* @__PURE__ */ import_react90.default.createElement(SchedulingUI, {
     calendarRef,
     connectOffsetSeconds,
@@ -88233,7 +88634,8 @@ function Scheduling(props) {
     scheduleMeridiem,
     scheduleTime,
     scheduleType,
-    showCalendar: (0, import_react90.useCallback)(() => setCalendarVisibility(true), [setCalendarVisibility])
+    showCalendar: (0, import_react90.useCallback)(() => setCalendarVisibility(true), [setCalendarVisibility]),
+    timeInputMask
   });
 }
 
@@ -88336,7 +88738,8 @@ function TroubleshootingUI(props) {
     className: "flex-shrink-0 ml-auto mt-3",
     label: interventionCheckboxMsg,
     name: "hasAieraInterventionPermission",
-    onChange: onChange2
+    onChange: onChange2,
+    required: true
   }))).otherwise(() => null));
 }
 function Troubleshooting(props) {
@@ -88372,6 +88775,7 @@ function validateUrl(url) {
   }
   return valid;
 }
+var SCHEDULE_TIME_REQUIRED_ERROR = "Req. format HH:MM";
 function validateInput({
   errorState,
   isNewRecording,
@@ -88400,7 +88804,7 @@ function validateInput({
   if (name === "hasAieraInterventionPermission") {
     if (value && errors.hasAieraInterventionPermission) {
       delete errors.hasAieraInterventionPermission;
-    } else {
+    } else if (!value && state.onFailure === OnFailure.AieraIntervention) {
       errors.hasAieraInterventionPermission = "Required";
     }
   }
@@ -88673,13 +89077,11 @@ function validateInput({
   if (name === "scheduleTime") {
     if (state.scheduleType === ScheduleType.Future) {
       if (!hasValue) {
-        errors.scheduleTime = "Required";
+        errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;
       } else {
-        const validTime = [3, 4].includes(value.length);
-        if (!validTime) {
-          errors.scheduleTime = "Invalid";
-        }
-        if (validTime && errors.scheduleTime) {
+        if (String(value).length !== 5) {
+          errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;
+        } else if (errors.scheduleTime) {
           delete errors.scheduleTime;
         }
       }
@@ -88689,7 +89091,7 @@ function validateInput({
   }
   if (name === "scheduleType") {
     if (value === ScheduleType.Future && !state.scheduleTime) {
-      errors.scheduleTime = "Required";
+      errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;
     }
     if (value === ScheduleType.Now && errors.scheduleTime) {
       delete errors.scheduleTime;
@@ -88709,12 +89111,12 @@ function validateInput({
 // src/modules/RecordingForm/index.tsx
 var INPUT_FIELD_LABELS = {
   audioUpload: "File",
-  confirmPermission: "Agent intervention permission checkbox",
   connectAccessId: "Meeting ID",
   connectionType: "Type of connection",
   connectPhoneNumber: "Dial-in number",
   connectPin: "PIN",
   connectUrl: "URL",
+  hasAieraInterventionPermission: "Agent intervention permission checkbox",
   localeCode: "Language",
   onConnectDialNumber: "Your phone number",
   onFailurePhoneNumber: "Best number to reach you",
@@ -88852,7 +89254,7 @@ function RecordingFormUI(props) {
     position: "top-right",
     yOffset: 12
   }, (0, import_ts_pattern9.match)(submitState).with("none", "error", "submitted", () => /* @__PURE__ */ import_react93.default.createElement(Button, {
-    className: (0, import_classnames34.default)("bg-blue-500 cursor-pointer flex items-center rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step", { "cursor-not-allowed": isNextButtonDisabled }),
+    className: (0, import_classnames35.default)("bg-blue-500 cursor-pointer flex items-center rounded-0.375 active:bg-blue-700 hover:bg-blue-600 next-step", { "cursor-not-allowed": isNextButtonDisabled }),
     disabled: isNextButtonDisabled,
     onClick: (event) => step === NUM_STEPS ? onSubmit(event) : onNextStep(step + 1)
   }, /* @__PURE__ */ import_react93.default.createElement("span", {
@@ -89170,7 +89572,7 @@ function RecordingForm(props) {
       var _a, _b;
       return setErrors(validateInput({
         errorState: errors,
-        isNewRecording: !!privateRecordingId,
+        isNewRecording: !privateRecordingId,
         name: (_a = event == null ? void 0 : event.target) == null ? void 0 : _a.name,
         state,
         value: (_b = event == null ? void 0 : event.target) == null ? void 0 : _b.value
@@ -89181,7 +89583,7 @@ function RecordingForm(props) {
       mergeState({ [name]: value });
       setErrors(validateInput({
         errorState: errors,
-        isNewRecording: !!privateRecordingId,
+        isNewRecording: !privateRecordingId,
         name,
         state,
         value
@@ -89227,7 +89629,7 @@ function RecordingForm(props) {
 
 // src/modules/Transcript/index.tsx
 var import_react109 = __toModule(require_react());
-var import_classnames47 = __toModule(require_classnames());
+var import_classnames48 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon2 = __toModule(require_luxon());
 var import_ts_pattern12 = __toModule(require_lib());
@@ -89440,19 +89842,19 @@ function EmptyMessage(props) {
 
 // src/modules/Transcript/Header/index.tsx
 var import_react108 = __toModule(require_react());
-var import_classnames46 = __toModule(require_classnames());
+var import_classnames47 = __toModule(require_classnames());
 var import_luxon = __toModule(require_luxon());
 var import_ts_pattern11 = __toModule(require_lib());
 
 // src/components/ExpandButton/index.tsx
 var import_react97 = __toModule(require_react());
-var import_classnames35 = __toModule(require_classnames());
+var import_classnames36 = __toModule(require_classnames());
 function ExpandButtonUI(props) {
   const { className: className8 = "", onClick, expanded } = props;
   return /* @__PURE__ */ import_react97.default.createElement("button", {
     title: "expand",
     onClick,
-    className: (0, import_classnames35.default)(`transition-all flex-shrink-0 h-5 w-5 rounded-xl flex items-start justify-center ${className8}`, {
+    className: (0, import_classnames36.default)(`transition-all flex-shrink-0 h-5 w-5 rounded-xl flex items-start justify-center ${className8}`, {
       "bg-blue-600": expanded,
       "bg-gray-100 dark:bg-bluegray-4 dark:bg-opacity-20": !expanded,
       "hover:bg-blue-700": expanded,
@@ -89461,7 +89863,7 @@ function ExpandButtonUI(props) {
       "active:bg-gray-300 dark:active:bg-bluegray-7": !expanded
     })
   }, /* @__PURE__ */ import_react97.default.createElement(Chevron, {
-    className: (0, import_classnames35.default)("flex-shrink-0 w-2 transition-all", {
+    className: (0, import_classnames36.default)("flex-shrink-0 w-2 transition-all", {
       "mt-[7px] rotate-180 fill-current text-white": expanded,
       "mt-[8px] opacity-30 dark:opacity-100 dark:fill-current dark:text-white": !expanded
     })
@@ -89478,10 +89880,10 @@ function ExpandButton(props) {
 
 // src/components/Svg/Pencil.tsx
 var import_react98 = __toModule(require_react());
-var import_classnames36 = __toModule(require_classnames());
+var import_classnames37 = __toModule(require_classnames());
 function Pencil({ className: className8, alt = "Pencil" }) {
   return /* @__PURE__ */ import_react98.default.createElement("svg", {
-    className: (0, import_classnames36.default)(className8, "fill-current", "Svg", "Svg__pencil"),
+    className: (0, import_classnames37.default)(className8, "fill-current", "Svg", "Svg__pencil"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89492,12 +89894,12 @@ function Pencil({ className: className8, alt = "Pencil" }) {
 
 // src/modules/Transcript/EventDetails/index.tsx
 var import_react99 = __toModule(require_react());
-var import_classnames37 = __toModule(require_classnames());
+var import_classnames38 = __toModule(require_classnames());
 function EventDetailsUI(props) {
   var _a;
   const { event, eventDetailsExpanded, toggleEventDetails } = props;
   return /* @__PURE__ */ import_react99.default.createElement("div", {
-    className: (0, import_classnames37.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
+    className: (0, import_classnames38.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
   }, /* @__PURE__ */ import_react99.default.createElement("div", {
     className: "flex items-center justify-start h-10 cursor-pointer group",
     onClick: toggleEventDetails
@@ -89506,7 +89908,7 @@ function EventDetailsUI(props) {
   }, "Event Details"), /* @__PURE__ */ import_react99.default.createElement("span", {
     className: "text-gray-400 text-sm text-right flex-1 truncate group-hover:text-gray-600"
   }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react99.default.createElement(ExpandButton, {
-    className: (0, import_classnames37.default)("ml-3", {
+    className: (0, import_classnames38.default)("ml-3", {
       "group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50": !eventDetailsExpanded,
       "group-hover:bg-blue-700": eventDetailsExpanded,
       "group-active:bg-gray-400 dark:group-active:bg-bluegray-7": !eventDetailsExpanded,
@@ -89564,16 +89966,16 @@ function EventDetails(props) {
 
 // src/modules/Transcript/PriceChart/index.tsx
 var import_react103 = __toModule(require_react());
-var import_classnames41 = __toModule(require_classnames());
+var import_classnames42 = __toModule(require_classnames());
 var import_highstock = __toModule(require_highstock());
 var import_highcharts_react_official = __toModule(require_highcharts_react_min());
 
 // src/components/Svg/Pin.tsx
 var import_react100 = __toModule(require_react());
-var import_classnames38 = __toModule(require_classnames());
+var import_classnames39 = __toModule(require_classnames());
 function Pin({ className: className8, alt = "Pin" }) {
   return /* @__PURE__ */ import_react100.default.createElement("svg", {
-    className: (0, import_classnames38.default)(className8, "fill-current", "Svg", "Svg__pin"),
+    className: (0, import_classnames39.default)(className8, "fill-current", "Svg", "Svg__pin"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89586,10 +89988,10 @@ function Pin({ className: className8, alt = "Pin" }) {
 
 // src/components/Svg/PinSolid.tsx
 var import_react101 = __toModule(require_react());
-var import_classnames39 = __toModule(require_classnames());
+var import_classnames40 = __toModule(require_classnames());
 function PinSolid({ className: className8, alt = "Pin" }) {
   return /* @__PURE__ */ import_react101.default.createElement("svg", {
-    className: (0, import_classnames39.default)(className8, "fill-current", "Svg", "Svg__pinSolid"),
+    className: (0, import_classnames40.default)(className8, "fill-current", "Svg", "Svg__pinSolid"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89602,13 +90004,13 @@ function PinSolid({ className: className8, alt = "Pin" }) {
 
 // src/components/Svg/MovementArrow.tsx
 var import_react102 = __toModule(require_react());
-var import_classnames40 = __toModule(require_classnames());
+var import_classnames41 = __toModule(require_classnames());
 function MovementArrow({
   className: className8,
   alt = "Movement Arrow"
 }) {
   return /* @__PURE__ */ import_react102.default.createElement("svg", {
-    className: (0, import_classnames40.default)(className8, "fill-current", "Svg", "Svg__movementArrow"),
+    className: (0, import_classnames41.default)(className8, "fill-current", "Svg", "Svg__movementArrow"),
     width: "100%",
     viewBox: "0 0 8 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89806,7 +90208,7 @@ function PriceChartUI(props) {
   }, "Price Reaction"), /* @__PURE__ */ import_react103.default.createElement("span", {
     className: "flex-1"
   }), /* @__PURE__ */ import_react103.default.createElement("span", {
-    className: (0, import_classnames41.default)("text-sm flex cursor-pointer mr-4", {
+    className: (0, import_classnames42.default)("text-sm flex cursor-pointer mr-4", {
       "text-green-500": absolutePriceChange > 0,
       "hover:text-green-600": absolutePriceChange > 0,
       "active:text-green-800": absolutePriceChange > 0,
@@ -89817,10 +90219,10 @@ function PriceChartUI(props) {
     }),
     onClick: togglePriceChart
   }, `$${price.toFixed(2)} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, absolutePriceChange !== 0 && /* @__PURE__ */ import_react103.default.createElement(MovementArrow, {
-    className: (0, import_classnames41.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
+    className: (0, import_classnames42.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
   })), /* @__PURE__ */ import_react103.default.createElement("div", {
     tabIndex: 0,
-    className: (0, import_classnames41.default)("flex mr-1 cursor-pointer", {
+    className: (0, import_classnames42.default)("flex mr-1 cursor-pointer", {
       "text-blue-600": pinned,
       "text-gray-400": !pinned,
       "hover:text-blue-700": pinned,
@@ -89840,7 +90242,7 @@ function PriceChartUI(props) {
   }) : /* @__PURE__ */ import_react103.default.createElement(Pin, {
     className: "w-[12px]"
   })), /* @__PURE__ */ import_react103.default.createElement(ExpandButton, {
-    className: (0, import_classnames41.default)("ml-2", {
+    className: (0, import_classnames42.default)("ml-2", {
       "hover:bg-gray-200": !priceChartExpanded,
       "hover:bg-blue-700": priceChartExpanded,
       "active:bg-gray-400": !priceChartExpanded,
@@ -89978,14 +90380,14 @@ function PriceChart(props) {
 
 // src/modules/Transcript/KeyMentions/index.tsx
 var import_react104 = __toModule(require_react());
-var import_classnames42 = __toModule(require_classnames());
+var import_classnames43 = __toModule(require_classnames());
 
 // src/components/Svg/Bell.tsx
 var import_react105 = __toModule(require_react());
-var import_classnames43 = __toModule(require_classnames());
+var import_classnames44 = __toModule(require_classnames());
 function Bell({ className: className8, alt = "Bell" }) {
   return /* @__PURE__ */ import_react105.default.createElement("svg", {
-    className: (0, import_classnames43.default)(className8, "fill-current", "Svg", "Svg__bell"),
+    className: (0, import_classnames44.default)(className8, "fill-current", "Svg", "Svg__bell"),
     width: "100%",
     viewBox: "0 0 16 18",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89998,10 +90400,10 @@ function Bell({ className: className8, alt = "Bell" }) {
 
 // src/components/Svg/Calendar.tsx
 var import_react106 = __toModule(require_react());
-var import_classnames44 = __toModule(require_classnames());
+var import_classnames45 = __toModule(require_classnames());
 function Calendar2({ className: className8, alt = "Calendar" }) {
   return /* @__PURE__ */ import_react106.default.createElement("svg", {
-    className: (0, import_classnames44.default)(className8, "stroke-current", "Svg", "Svg__Calendar"),
+    className: (0, import_classnames45.default)(className8, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
@@ -90015,12 +90417,12 @@ function Calendar2({ className: className8, alt = "Calendar" }) {
 }
 
 // src/components/PlayButton/index.tsx
-var import_classnames45 = __toModule(require_classnames());
+var import_classnames46 = __toModule(require_classnames());
 var import_react107 = __toModule(require_react());
 function PlayButtonUI(props) {
   const { alertOnLive, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
   return hasAudio ? /* @__PURE__ */ import_react107.default.createElement("div", {
-    className: (0, import_classnames45.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+    className: (0, import_classnames46.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -90055,7 +90457,7 @@ function PlayButtonUI(props) {
     yOffset: 6,
     xOffset: 4,
     hideOnDocumentScroll: true,
-    className: (0, import_classnames45.default)("border flex items-center justify-center w-full h-full rounded-full", {
+    className: (0, import_classnames46.default)("border flex items-center justify-center w-full h-full rounded-full", {
       "dark:bg-yellow-400 dark:text-yellow-800": alertOnLive,
       "dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20": alertOnLive || !alertOnLive,
       "dark:active:bg-bluegray-5 dark:active:text-bluegray-4": alertOnLive,
@@ -90192,7 +90594,7 @@ function HeaderUI(props) {
   }
   return /* @__PURE__ */ import_react108.default.createElement("div", {
     ref: headerRef,
-    className: (0, import_classnames46.default)("bg-white relative rounded-b-lg -mb-1 z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6", {
+    className: (0, import_classnames47.default)("bg-white relative rounded-b-lg -mb-1 z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6", {
       "shadow-3xl dark:shadow-3xl-dark": !headerExpanded,
       "shadow-xl": headerExpanded,
       "pb-3": !showTitleInfo,
@@ -90231,7 +90633,7 @@ function HeaderUI(props) {
   }, /* @__PURE__ */ import_react108.default.createElement(Pencil, {
     className: "h-6 text-white w-2.5"
   }))), onClose && /* @__PURE__ */ import_react108.default.createElement(Button, {
-    className: (0, import_classnames46.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
+    className: (0, import_classnames47.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
     kind: "primary",
     onClick: onClose
   }, /* @__PURE__ */ import_react108.default.createElement(XMark, {
@@ -90269,7 +90671,7 @@ function HeaderUI(props) {
     const createdBy = getEventCreatorName(event == null ? void 0 : event.creator);
     const audioOffset = ((_d = event == null ? void 0 : event.audioRecordingOffsetMs) != null ? _d : 0) / 1e3;
     return /* @__PURE__ */ import_react108.default.createElement(import_react108.default.Fragment, null, /* @__PURE__ */ import_react108.default.createElement("div", {
-      className: (0, import_classnames46.default)("flex flex-row p-3 items-center", {
+      className: (0, import_classnames47.default)("flex flex-row p-3 items-center", {
         "cursor-pointer": hasEventExtras && (showPriceReaction || showRecordingDetails),
         group: hasEventExtras
       }, "transcript__header__title"),
@@ -90308,13 +90710,13 @@ function HeaderUI(props) {
     }, `Live ${eventDate.toFormat("h:mma")}`) : eventDate && /* @__PURE__ */ import_react108.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
     }, eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react108.default.createElement("div", {
-      className: (0, import_classnames46.default)("dark:text-white", {
+      className: (0, import_classnames47.default)("dark:text-white", {
         "text-sm": headerExpanded,
         "text-sm truncate whitespace-normal line-clamp-1": !headerExpanded,
         "font-semibold": !(primaryQuote == null ? void 0 : primaryQuote.localTicker)
       })
     }, event == null ? void 0 : event.title)), hasEventExtras && (showPriceReaction || showRecordingDetails) && /* @__PURE__ */ import_react108.default.createElement(ExpandButton, {
-      className: (0, import_classnames46.default)("ml-2 mt-2 self-start", {
+      className: (0, import_classnames47.default)("ml-2 mt-2 self-start", {
         "group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50": !headerExpanded,
         "group-hover:bg-blue-700": headerExpanded,
         "group-active:bg-gray-400 dark:group-active:bg-bluegray-7": !headerExpanded,
@@ -90323,7 +90725,7 @@ function HeaderUI(props) {
       onClick: toggleHeader,
       expanded: headerExpanded
     }), onClose && !showSearch && !headerExpanded && /* @__PURE__ */ import_react108.default.createElement(Button, {
-      className: (0, import_classnames46.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
+      className: (0, import_classnames47.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
       kind: "primary",
       onClick: onClose
     }, /* @__PURE__ */ import_react108.default.createElement(XMark, {
@@ -90423,7 +90825,7 @@ function Header(props) {
 // src/modules/Transcript/index.tsx
 function NoEventFound() {
   return /* @__PURE__ */ import_react109.default.createElement("div", {
-    className: (0, import_classnames47.default)("h-full flex flex-col flex-1 justify-center items-center")
+    className: (0, import_classnames48.default)("h-full flex flex-col flex-1 justify-center items-center")
   }, /* @__PURE__ */ import_react109.default.createElement("p", {
     className: "text-sm text-slate-500 dark:text-slate-300"
   }, "Transcript Failed to Load"));
@@ -90497,7 +90899,7 @@ var TranscriptUI = (props) => {
     }
   }
   return /* @__PURE__ */ import_react109.default.createElement("div", {
-    className: (0, import_classnames47.default)("h-full flex flex-col transcript bg-gray-50", { dark: theme }),
+    className: (0, import_classnames48.default)("h-full flex flex-col transcript bg-gray-50", { dark: theme }),
     ref: containerRef
   }, (0, import_ts_pattern12.match)(eventQuery).with({ status: "loading" }, { status: "success" }, { status: "empty" }, () => /* @__PURE__ */ import_react109.default.createElement("div", {
     className: "dark:bg-bluegray-7"
@@ -90520,7 +90922,7 @@ var TranscriptUI = (props) => {
     onSeekAudioByDate,
     startTime
   }), searchTerm && /* @__PURE__ */ import_react109.default.createElement("div", {
-    className: (0, import_classnames47.default)("flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow", "dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4", "transcript__search-navigator")
+    className: (0, import_classnames48.default)("flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow", "dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4", "transcript__search-navigator")
   }, /* @__PURE__ */ import_react109.default.createElement("div", {
     className: "text-sm truncate"
   }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react109.default.createElement("span", {
@@ -90569,7 +90971,7 @@ var TranscriptUI = (props) => {
       return /* @__PURE__ */ import_react109.default.createElement("div", {
         key: `speaker-turn-${id}`
       }, showSpeakers && speaker.identified && /* @__PURE__ */ import_react109.default.createElement("div", {
-        className: (0, import_classnames47.default)("p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800", "dark:bg-bluegray-7 dark:text-gray-400", "transcript__speaker")
+        className: (0, import_classnames48.default)("p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800", "dark:bg-bluegray-7 dark:text-gray-400", "transcript__speaker")
       }, speaker.name && /* @__PURE__ */ import_react109.default.createElement("p", {
         className: "truncate"
       }, /* @__PURE__ */ import_react109.default.createElement("span", {
@@ -90577,7 +90979,7 @@ var TranscriptUI = (props) => {
       }, speaker.name), speaker.title && /* @__PURE__ */ import_react109.default.createElement("span", {
         className: "text-gray-500"
       }, ", ", speaker.title)), speakerTime && speakerTimeRelative !== void 0 && /* @__PURE__ */ import_react109.default.createElement("p", {
-        className: (0, import_classnames47.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
+        className: (0, import_classnames48.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
           "-mt-[1px]": speaker.name
         })
       }, relativeTimestamps ? import_luxon2.Duration.fromMillis(speakerTimeRelative).toFormat("h:mm:ss") : import_luxon2.DateTime.fromISO(speakerTime).toFormat("h:mm:ss a"))), paragraphs.map(({ sentences, paragraph }) => {
@@ -90599,13 +91001,13 @@ var TranscriptUI = (props) => {
           key: sId
         }, chunks.map(({ highlight, id: sentenceId, text, textSentiment }) => highlight ? /* @__PURE__ */ import_react109.default.createElement("mark", {
           ref: sentenceId === currentMatch ? currentMatchRef : void 0,
-          className: (0, import_classnames47.default)({
+          className: (0, import_classnames48.default)({
             "bg-yellow-300": sentenceId === currentMatch
           }),
           key: sentenceId
         }, text) : /* @__PURE__ */ import_react109.default.createElement("span", {
           key: sentenceId,
-          className: (0, import_classnames47.default)({
+          className: (0, import_classnames48.default)({
             "text-green-600": textSentiment === "positive" && showSentiment,
             "text-red-600": textSentiment === "negative" && showSentiment
           })
@@ -91219,7 +91621,7 @@ var Transcript = (props) => {
 
 // src/modules/EventList/FilterBy/index.tsx
 var import_react110 = __toModule(require_react());
-var import_classnames48 = __toModule(require_classnames());
+var import_classnames49 = __toModule(require_classnames());
 var FilterByUI = (props) => {
   const { children, onChange: onChange2, options = [], value = [], setFocus } = props;
   return /* @__PURE__ */ import_react110.default.createElement("div", {
@@ -91231,7 +91633,7 @@ var FilterByUI = (props) => {
   }, options.map((option, index) => /* @__PURE__ */ import_react110.default.createElement("div", {
     tabIndex: 0,
     key: `filterby-option-${option.value}`,
-    className: (0, import_classnames48.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "border", {
+    className: (0, import_classnames49.default)("flex", "mx-1", "last:mx-0", "py-0.5", "px-2", "rounded-full", "text-sm", "cursor-pointer", "border", {
       "bg-blue-100 dark:bg-blue-600": value == null ? void 0 : value.includes(option.value),
       "border-blue-300 dark:border-blue-600": value == null ? void 0 : value.includes(option.value),
       "border-gray-100 dark:border-bluegray-5": !(value == null ? void 0 : value.includes(option.value)),
@@ -91287,8 +91689,6 @@ var FilterBy = (props) => {
 var DefaultEventRow = ({
   customOnly,
   event,
-  numMentions,
-  maxHits = 0,
   isRefetching,
   onSelectEvent,
   refetch,
@@ -91299,8 +91699,6 @@ var DefaultEventRow = ({
   showDivider
 }) => {
   var _a, _b;
-  const hitRatio = (numMentions || 0) / maxHits;
-  const hitRatioClass = hitRatio === 1 ? "full" : hitRatio === 0 ? "0" : `${Math.ceil(hitRatio * 12)}/12`;
   const primaryQuote = getPrimaryQuote(event.primaryCompany);
   const eventDate = import_luxon3.DateTime.fromISO(event.eventDate);
   const audioOffset = ((_a = event.audioRecordingOffsetMs) != null ? _a : 0) / 1e3;
@@ -91308,7 +91706,7 @@ var DefaultEventRow = ({
   let divider = null;
   if (showDivider) {
     divider = /* @__PURE__ */ import_react111.default.createElement("li", {
-      className: (0, import_classnames49.default)("sticky px-3 top-[56px] event-row-divider")
+      className: (0, import_classnames50.default)("sticky px-3 top-[56px] event-row-divider")
     }, /* @__PURE__ */ import_react111.default.createElement("div", {
       className: "px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70"
     }, isToday(event.eventDate) ? `Today, ${eventDate.toFormat("DDD")}` : eventDate.toFormat("DDDD"), /* @__PURE__ */ import_react111.default.createElement("div", {
@@ -91330,7 +91728,7 @@ var DefaultEventRow = ({
     key: event.id
   }, divider, /* @__PURE__ */ import_react111.default.createElement("li", {
     tabIndex: 0,
-    className: (0, import_classnames49.default)("group text-xs text-gray-300 mx-1 rounded-lg px-2", "hover:bg-blue-50 dark:hover:bg-bluegray-6", {
+    className: (0, import_classnames50.default)("group text-xs text-gray-300 mx-1 rounded-lg px-2", "hover:bg-blue-50 dark:hover:bg-bluegray-6", {
       "cursor-pointer active:bg-blue-100 dark:active:bg-bluegray-5": event.eventType !== "earnings_release",
       "h-12": !searchTerm,
       "h-14": !!searchTerm
@@ -91339,7 +91737,7 @@ var DefaultEventRow = ({
     onFocus: () => setFocus == null ? void 0 : setFocus(index),
     onBlur: () => setFocus == null ? void 0 : setFocus(-1)
   }, /* @__PURE__ */ import_react111.default.createElement(Tooltip, {
-    className: (0, import_classnames49.default)("flex flex-row", {
+    className: (0, import_classnames50.default)("flex flex-row", {
       "h-12": !searchTerm,
       "h-14": !!searchTerm
     }),
@@ -91381,15 +91779,7 @@ var DefaultEventRow = ({
     className: "leading-none text-sm text-black dark:text-white truncate font-bold"
   }, event.title)), /* @__PURE__ */ import_react111.default.createElement("div", {
     className: "leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white"
-  }, customOnly ? createdBy : event.eventType.replace(/_/g, " ")), searchTerm && /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "flex items-center mt-[2px]"
-  }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "rounded-full h-[6px] w-20 bg-gray-200"
-  }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: `rounded-full h-[6px] bg-blue-500 w-${hitRatioClass}`
-  })), /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "uppercase font-semibold ml-2 text-black tracking-wide text-xs"
-  }, numMentions || 0, " hit", numMentions !== 1 && "s"))), /* @__PURE__ */ import_react111.default.createElement("div", {
+  }, customOnly ? createdBy : event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react111.default.createElement("div", {
     className: "flex flex-col justify-center items-end"
   }, event.isLive ? /* @__PURE__ */ import_react111.default.createElement("div", {
     className: "text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
@@ -91418,7 +91808,6 @@ var EventListUI = (props) => {
     hidePlaybar,
     loadMore,
     listType,
-    maxHits = 0,
     onBackFromTranscript,
     onCompanyChange,
     onSearchChange,
@@ -91485,7 +91874,7 @@ var EventListUI = (props) => {
     }
   }
   return /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: (0, import_classnames49.default)("h-full flex flex-col eventlist relative z-30", { dark: theme })
+    className: (0, import_classnames50.default)("h-full flex flex-col eventlist relative z-30", { dark: theme })
   }, !hideHeader && /* @__PURE__ */ import_react111.default.createElement("div", {
     className: "flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header"
   }, /* @__PURE__ */ import_react111.default.createElement("div", {
@@ -91525,7 +91914,7 @@ var EventListUI = (props) => {
   }, /* @__PURE__ */ import_react111.default.createElement("div", {
     className: "flex flex-col flex-grow"
   }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: (0, import_classnames49.default)("sticky top-0 pb-2 z-10", {
+    className: (0, import_classnames50.default)("sticky top-0 pb-2 z-10", {
       "pt-3 px-3": !hideHeader,
       "pt-2 px-2": hideHeader
     })
@@ -91550,7 +91939,7 @@ var EventListUI = (props) => {
     ],
     value: listType
   }))), /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: (0, import_classnames49.default)("flex flex-col items-center justify-center flex-1")
+    className: (0, import_classnames50.default)("flex flex-col items-center justify-center flex-1")
   }, (0, import_ts_pattern13.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react111.default.createElement("ul", {
     className: "w-full EventList__loading"
   }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react111.default.createElement("li", {
@@ -91594,8 +91983,6 @@ var EventListUI = (props) => {
       index,
       isRefetching: isUpcomingRefetching,
       key: `${hit.event.id}-${index}`,
-      maxHits,
-      numMentions: hit.numMentions,
       onSelectEvent,
       refetch,
       renderedRefetch: index !== 0,
@@ -91619,8 +92006,6 @@ var EventListUI = (props) => {
       index,
       isRefetching,
       key: `${hit.event.id}-${index}`,
-      maxHits,
-      numMentions: hit.numMentions,
       onSelectEvent,
       refetch,
       renderedRefetch,
@@ -91767,15 +92152,14 @@ var EventList = ({
     if (state.fromIndex)
       mergeState({ fromIndex: 0 });
   }, [state.listType, state.listType, state.company, state.filterByTypes, state.searchTerm, state.event]);
-  const eventsGQL = lib_default`
-        query EventList($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
+  const eventsGQL = (type = "") => lib_default`
+        query EventList${type}($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
             search {
                 events(filter: $filter, view: $view, fromIndex: $fromIndex, size: $size) {
                     id
                     numTotalHits
                     hits {
                         id
-                        numMentions
                         event {
                             id
                             audioProxy
@@ -91833,7 +92217,7 @@ var EventList = ({
   const eventsQuery = usePagingQuery({
     isEmpty: (data) => data.search.events.numTotalHits === 0,
     requestPolicy: "cache-and-network",
-    query: eventsGQL,
+    query: eventsGQL(),
     mergeResults,
     variables: {
       view: state.company || ((_a = config.options) == null ? void 0 : _a.eventListView) === "combined" || state.searchTerm.length > 0 ? EventView.Recent : state.listType,
@@ -91850,7 +92234,7 @@ var EventList = ({
   const eventsQueryUpcoming = usePagingQuery({
     isEmpty: (data) => data.search.events.numTotalHits === 0,
     requestPolicy: "cache-and-network",
-    query: eventsGQL,
+    query: eventsGQL("Upcoming"),
     mergeResults,
     variables: {
       view: EventView.LiveAndUpcoming,
@@ -91919,7 +92303,6 @@ var EventList = ({
     return false;
   }, [eventsQuery.status]);
   const loadMore = (0, import_react111.useCallback)((event) => handlers.fromIndex(event, { value: state.fromIndex + state.pageSize }), [handlers.fromIndex, state.fromIndex]);
-  const maxHits = (0, import_react111.useMemo)(() => (0, import_ts_pattern13.match)(eventsQuery).with({ status: "success" }, ({ data: { search } }) => Math.max(...search.events.hits.map((h3) => h3.numMentions || 0))).otherwise(() => 0), [eventsQuery.state]);
   const scrollRef = (0, import_react111.useRef)(null);
   const refetch = (0, import_react111.useCallback)(() => {
     const hasPaged = state.fromIndex > 0;
@@ -91980,7 +92363,6 @@ var EventList = ({
     hidePlaybar,
     listType: state.listType,
     loadMore: hasMoreResults ? loadMore : void 0,
-    maxHits,
     onBackFromTranscript: (0, import_react111.useCallback)((event) => onSelectEvent(event, { value: null }), [onSelectEvent]),
     onCompanyChange: onSelectCompany,
     onSearchChange: handlers.searchTerm,

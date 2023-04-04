@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.6% </span>
+                <span class="strong">27.92% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>61/221</span>
+                <span class='fraction'>62/222</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">22.22% </span>
+                <span class="strong">22.09% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>76/342</span>
+                <span class='fraction'>76/344</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.6% </span>
+                <span class="strong">27.92% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>61/221</span>
+                <span class='fraction'>62/222</span>
             </div>
         
             
@@ -549,6 +549,8 @@
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -583,7 +585,7 @@
 <span class="cline-any cline-yes">27x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -955,8 +957,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1013,6 +1013,8 @@ function validateUrl(url: string): RegExpMatchArray | null {
     return valid;
 }
 &nbsp;
+const SCHEDULE_TIME_REQUIRED_ERROR = 'Req. format HH:MM';
+&nbsp;
 export default function validateInput({
     errorState,
     isNewRecording,
@@ -1047,7 +1049,7 @@ export default function validateInput({
     <span class="missing-if-branch" title="if path not taken" >I</span>if (name === 'hasAieraInterventionPermission') {
 <span class="cstat-no" title="statement not covered" >        if (value &amp;&amp; errors.hasAieraInterventionPermission) {</span>
 <span class="cstat-no" title="statement not covered" >            delete errors.hasAieraInterventionPermission;</span>
-        } else {
+        } else <span class="cstat-no" title="statement not covered" >if (!value &amp;&amp; state.onFailure === OnFailure.AieraIntervention) {</span>
 <span class="cstat-no" title="statement not covered" >            errors.hasAieraInterventionPermission = 'Required';</span>
         }
     }
@@ -1415,13 +1417,11 @@ export default function validateInput({
     <span class="missing-if-branch" title="if path not taken" >I</span>if (name === 'scheduleTime') {
 <span class="cstat-no" title="statement not covered" >        if (state.scheduleType === ScheduleType.Future) {</span>
 <span class="cstat-no" title="statement not covered" >            if (!hasValue) {</span>
-<span class="cstat-no" title="statement not covered" >                errors.scheduleTime = 'Required';</span>
+<span class="cstat-no" title="statement not covered" >                errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;</span>
             } else {
-                const validTime = <span class="cstat-no" title="statement not covered" >[3, 4].includes((value as string).length);</span>
-<span class="cstat-no" title="statement not covered" >                if (!validTime) {</span>
-<span class="cstat-no" title="statement not covered" >                    errors.scheduleTime = 'Invalid';</span>
-                }
-<span class="cstat-no" title="statement not covered" >                if (validTime &amp;&amp; errors.scheduleTime) {</span>
+<span class="cstat-no" title="statement not covered" >                if (String(value).length !== 5) {</span>
+<span class="cstat-no" title="statement not covered" >                    errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;</span>
+                } else <span class="cstat-no" title="statement not covered" >if (errors.scheduleTime) {</span>
 <span class="cstat-no" title="statement not covered" >                    delete errors.scheduleTime;</span>
                 }
             }
@@ -1431,14 +1431,14 @@ export default function validateInput({
     }
     if (name === 'scheduleType') {
         <span class="missing-if-branch" title="if path not taken" >I</span>if (value === ScheduleType.Future &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!state.scheduleTime)</span> {
-<span class="cstat-no" title="statement not covered" >            errors.scheduleTime = 'Required';</span>
+<span class="cstat-no" title="statement not covered" >            errors.scheduleTime = SCHEDULE_TIME_REQUIRED_ERROR;</span>
         }
         <span class="missing-if-branch" title="if path not taken" >I</span>if (value === ScheduleType.Now &amp;&amp; errors.scheduleTime) {
 <span class="cstat-no" title="statement not covered" >            delete errors.scheduleTime;</span>
         }
     }
     // Add or remove the onFailureDialNumber error depending on if useOnConnectDialNumber is checked off
-    // and whether or not onConnectDialNumber or onFailureDialNumber is set
+    // and whether onConnectDialNumber or onFailureDialNumber is set
     <span class="missing-if-branch" title="if path not taken" >I</span>if (name === 'useOnConnectDialNumber') {
 <span class="cstat-no" title="statement not covered" >        if (</span>
             errors.onFailureDialNumber &amp;&amp;
@@ -1462,7 +1462,7 @@ export default function validateInput({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Apr 04 2023 14:18:54 GMT-0400 (Eastern Daylight Time)
+                at Tue Apr 04 2023 14:21:52 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

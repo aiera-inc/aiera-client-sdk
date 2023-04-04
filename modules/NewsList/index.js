@@ -38220,7 +38220,6 @@ var EventListDocument = lib_default`
       numTotalHits
       hits {
         id
-        numMentions
         event {
           id
           audioProxy

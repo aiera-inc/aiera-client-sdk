@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>15/15</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
@@ -125,7 +125,25 @@
 <a name='L60'></a><a href='#L60'>60</a>
 <a name='L61'></a><a href='#L61'>61</a>
 <a name='L62'></a><a href='#L62'>62</a>
-<a name='L63'></a><a href='#L63'>63</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L63'></a><a href='#L63'>63</a>
+<a name='L64'></a><a href='#L64'>64</a>
+<a name='L65'></a><a href='#L65'>65</a>
+<a name='L66'></a><a href='#L66'>66</a>
+<a name='L67'></a><a href='#L67'>67</a>
+<a name='L68'></a><a href='#L68'>68</a>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -147,13 +165,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">244x</span>
-<span class="cline-any cline-yes">244x</span>
-<span class="cline-any cline-yes">244x</span>
-<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-yes">246x</span>
 <span class="cline-any cline-yes">227x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-yes">246x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -172,8 +197,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">244x</span>
-<span class="cline-any cline-yes">244x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-yes">246x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -187,7 +222,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { MouseEvent, MouseEventHandler, ReactElement, useCallback } from 'react';
+import classNames from 'classnames';
 &nbsp;
 import { Check } from '@aiera/client-sdk/components/Svg/Check';
 import { ChangeHandler } from '@aiera/client-sdk/types';
@@ -201,6 +238,7 @@ interface CheckboxSharedProps {
     kind?: CheckboxKind;
     label?: string;
     name?: string;
+    required?: boolean;
 }
 &nbsp;
 /** @notExported */
@@ -209,18 +247,33 @@ interface CheckboxUIProps extends CheckboxSharedProps {
 }
 &nbsp;
 export function CheckboxUI(props: CheckboxUIProps): ReactElement {
-    const { checked, className = '', kind = 'checkbox', label, name, onChange } = props;
-    const checkBoxStyles = checked ? 'bg-blue-500 shadow text-white' : 'border border-gray-300';
+    const { checked, className = '', kind = 'checkbox', label, name, onChange, required = false } = props;
+    const error = !checked &amp;&amp; required;
+    const checkBoxStyles = checked
+        ? 'bg-blue-500 shadow text-white group-hover:bg-blue-600'
+        : `border ${
+              error ? 'border-red-600 group-hover:border-red-700' : 'border-gray-300 group-hover:border-gray-400'
+          }`;
     let radius = 'rounded-sm';
     if (kind === 'radio') {
         radius = 'rounded-xl';
     }
     return (
-        &lt;div className={`cursor-pointer flex items-center ${className} checkbox`} data-tname={name} onClick={onChange}&gt;
-            &lt;div className={`flex flex-shrink-0 h-4 items-center justify-center ${radius} w-4 ${checkBoxStyles}`}&gt;
+        &lt;div
+            className={classNames('group cursor-pointer flex items-center checkbox', className)}
+            data-tname={name}
+            onClick={onChange}
+        &gt;
+            &lt;div
+                className={classNames('flex flex-shrink-0 h-4 items-center justify-center w-4', radius, checkBoxStyles)}
+            &gt;
                 {checked &amp;&amp; &lt;Check className="w-2" /&gt;}
             &lt;/div&gt;
-            {label &amp;&amp; &lt;div className="ml-2 text-sm"&gt;{label}&lt;/div&gt;}
+            {label &amp;&amp; (
+                &lt;div className={classNames('ml-2 text-sm', { 'text-red-600 group-hover:text-red-700': error })}&gt;
+                    {label}
+                &lt;/div&gt;
+            )}
         &lt;/div&gt;
     );
 }
@@ -234,7 +287,7 @@ export interface CheckboxProps extends CheckboxSharedProps {
  * Renders Checkbox
  */
 export function Checkbox(props: CheckboxProps): ReactElement {
-    const { checked, className, kind, label, name, onChange } = props;
+    const { checked, className, kind, label, name, onChange, required } = props;
     return (
         &lt;CheckboxUI
             checked={checked}
@@ -246,6 +299,7 @@ export function Checkbox(props: CheckboxProps): ReactElement {
                 (event: MouseEvent&lt;HTMLDivElement&gt;) =&gt; onChange?.(event, { name, value: !checked }),
                 [onChange]
             )}
+            required={required}
         /&gt;
     );
 }
@@ -256,7 +310,7 @@ export function Checkbox(props: CheckboxProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Apr 04 2023 14:18:54 GMT-0400 (Eastern Daylight Time)
+                at Tue Apr 04 2023 14:21:52 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
