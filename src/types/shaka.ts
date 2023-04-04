@@ -13,6 +13,7 @@ export type playerType = {
         end: number;
     };
     trickPlay(speed: number): void;
+    unload(): void;
 };
 
 export type shakaUIControls = {
