@@ -84218,6 +84218,12 @@ function usePlayer(id, url, offset = 0, metaData) {
         yield audioPlayer.init({ id, url: url || "", offset, metaData });
       }))();
     }
+    return () => {
+      var _a;
+      if (!audioPlayer.playing(null)) {
+        (_a = audioPlayer.player) == null ? void 0 : _a.unload();
+      }
+    };
   }, [id, url, offset, ...Object.values(metaData || {})]);
   const isActive = audioPlayer.id;
   const isPlaying = audioPlayer.playing(null);
