@@ -560,7 +560,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                     )}
                                 </ul>
                             ))
-                            .otherwise(() => null)}
+                            .exhaustive()}
                         <div className="flex-1" />
                     </div>
                 </div>
