@@ -302,7 +302,11 @@ export class Module {
      */
     onWindowMessage = (windowEvent: AieraMessageEvent) => {
         // Check to make sure it's actually an Aiera message before moving on
-        if (windowEvent.origin === this.module.origin && windowEvent.data?.ns === 'aiera') {
+        if (
+            windowEvent.origin === this.module.origin &&
+            windowEvent.data?.ns === 'aiera' &&
+            windowEvent.data?.iframeId === this.frameId
+        ) {
             this.emitter.emit(windowEvent.data.event, windowEvent.data.data);
         }
     };

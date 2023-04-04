@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            iframe {
+                border: none;
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <iframe id="aiera2"></iframe>
+        <script>
+            const eventList = new Aiera.Module('../modules/EventList/index.html', 'aiera');
+            eventList.load().then(() => {
+                eventList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+            });
+            const eventList2 = new Aiera.Module('../modules/EventList/index.html', 'aiera2');
+            eventList2.load().then(() => {
+                eventList2.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+            });
+
+            eventList.on('authenticated', () => {
+                eventList.configure({
+                    hideSettings: true,
+                    options: {
+                        //showPartials: true,
+                        //showSentiment: true,
+                        //ticker: 'aapl',
+                        //showCompanyFilter: false,
+                        //eventListView: 'combined',
+                        //darkMode: true,
+                        // eventListFilters: [
+                        //     { name: 'transcripts', visible: false, defaultValue: true },
+                        //     { name: 'earningsOnly', visible: false, defaultValue: true },
+                        // ],
+                    },
+                    overrides: {
+                        // style: `
+                        //     .text-blue-600 {
+                        //         color: #008094 !important;
+                        //     }
+                        //     `,
+                    },
+                    tracking: {
+                        userId: 'nash-widget-user',
+                    },
+                });
+                // Set up a watchlist after authentication
+                // eventList.setWatchlist([
+                //     { ticker: 'AAPL' },
+                //     { ticker: 'GOOGL' },
+                //     { ticker: 'TLSA' },
+                //     { ticker: 'PTON' },
+                // ]);
+            });
+            eventList.on('instrument-selected', (ticker) => {
+                console.log('selected ticker: ', ticker);
+            });
+            eventList.on('event-audio', (event) => {
+                console.log(`${event.action} audio:`, event);
+            });
+            eventList.on('event-selected', (event) => {
+                console.log('selected event: ', event);
+            });
+            eventList2.on('authenticated', () => {
+                eventList2.configure({
+                    hideSettings: true,
+                    options: {
+                        //showPartials: true,
+                        //showSentiment: true,
+                        //ticker: 'aapl',
+                        //showCompanyFilter: false,
+                        //eventListView: 'combined',
+                        //darkMode: true,
+                        // eventListFilters: [
+                        //     { name: 'transcripts', visible: false, defaultValue: true },
+                        //     { name: 'earningsOnly', visible: false, defaultValue: true },
+                        // ],
+                    },
+                    overrides: {
+                        style: `
+                            .text-blue-600 {
+                                color: #008094 !important;
+                            }
+                            `,
+                    },
+                    tracking: {
+                        userId: 'nash-widget-user',
+                    },
+                });
+                // Set up a watchlist after authentication
+                eventList2.setWatchlist([
+                    { ticker: 'AAPL' },
+                    { ticker: 'GOOGL' },
+                    { ticker: 'TLSA' },
+                    { ticker: 'PTON' },
+                ]);
+            });
+            eventList2.on('instrument-selected', (ticker) => {
+                console.log('2 selected ticker: ', ticker);
+            });
+            eventList2.on('event-audio', (event) => {
+                console.log(`2 ${event.action} audio:`, event);
+            });
+            eventList2.on('event-selected', (event) => {
+                console.log('2 selected event: ', event);
+            });
+        </script>
+    </body>
+</html>

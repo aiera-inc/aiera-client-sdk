@@ -52,7 +52,7 @@ export interface Message<E extends keyof MessageBusEvents> {
 }
 
 export interface AieraMessageEvent extends MessageEvent {
-    data: { ns: 'aiera'; event: keyof MessageBusEvents; data: ValueOf<MessageBusEvents> };
+    data: { ns: 'aiera'; event: keyof MessageBusEvents; data: ValueOf<MessageBusEvents>; iframeId?: string };
 }
 
 /**
@@ -159,6 +159,7 @@ export class MessageBus {
                     ns: 'aiera',
                     event,
                     data,
+                    iframeId: window.frameElement?.id,
                 },
                 '*'
             );
