@@ -336,6 +336,13 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                 await audioPlayer.init({ id, url: url || '', offset, metaData });
             })();
         }
+
+        // returned function will be called on component unmount
+        return () => {
+            if (!audioPlayer.playing(null)) {
+                audioPlayer.player?.unload();
+            }
+        };
     }, [id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
 
     const isActive = audioPlayer.id;
