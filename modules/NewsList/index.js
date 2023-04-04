@@ -37253,12 +37253,13 @@ var MessageBus = class {
     delete this.parent;
   }
   sendWindowMessage(event, data, direction) {
-    var _a;
+    var _a, _b;
     if (direction === "out") {
-      (_a = this.parent) == null ? void 0 : _a.postMessage({
+      (_b = this.parent) == null ? void 0 : _b.postMessage({
         ns: "aiera",
         event,
-        data
+        data,
+        iframeId: (_a = window.frameElement) == null ? void 0 : _a.id
       }, "*");
     }
   }

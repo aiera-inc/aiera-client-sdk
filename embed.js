@@ -208,8 +208,8 @@
   var Module = class {
     constructor(modulePath, frameId) {
       this.onWindowMessage = (windowEvent) => {
-        var _a;
-        if (windowEvent.origin === this.module.origin && ((_a = windowEvent.data) == null ? void 0 : _a.ns) === "aiera") {
+        var _a, _b;
+        if (windowEvent.origin === this.module.origin && ((_a = windowEvent.data) == null ? void 0 : _a.ns) === "aiera" && ((_b = windowEvent.data) == null ? void 0 : _b.iframeId) === this.frameId) {
           this.emitter.emit(windowEvent.data.event, windowEvent.data.data);
         }
       };
