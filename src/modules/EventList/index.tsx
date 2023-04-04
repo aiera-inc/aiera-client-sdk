@@ -102,7 +102,6 @@ export interface EventListUIProps {
     onSelectEventById?: ChangeHandler<string>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
-    queryStatus: string;
     refetch?: () => void;
     scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
@@ -298,7 +297,6 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         onSelectListType,
         onSelectEvent,
         onSelectEventById,
-        queryStatus,
         refetch,
         scrollRef,
         searchTerm,
@@ -449,8 +447,8 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                         </FilterBy>
                     </div>
                     <div className={classNames('flex flex-col items-center justify-center flex-1')}>
-                        {match(queryStatus)
-                            .with('loading', () => (
+                        {match(eventsQuery)
+                            .with({ status: 'loading' }, () => (
                                 <ul className="w-full EventList__loading">
                                     {new Array(15).fill(0).map((_, idx) => (
                                         <li key={idx} className="p-2 animate-pulse mx-2">
@@ -472,10 +470,10 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                     ))}
                                 </ul>
                             ))
-                            .with('paused', () => wrapMsg('There are no events.'))
-                            .with('error', () => wrapMsg('There was an error loading events.'))
-                            .with('empty', () => wrapMsg('There are no events.'))
-                            .with('success', () => (
+                            .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
+                            .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
+                            .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
+                            .with({ status: 'success' }, () => (
                                 <ul className="w-full">
                                     {showAllEvents &&
                                         match(eventsQueryUpcoming)
@@ -865,26 +863,6 @@ export const EventList = ({
         },
     });
 
-    const queryStatus = useMemo(() => {
-        let status = '';
-        if (eventsQuery.status === 'empty' && eventsQueryUpcoming.status === 'empty') {
-            status = 'empty';
-        }
-        if (eventsQuery.status === 'error' || eventsQueryUpcoming.status === 'error') {
-            status = 'error';
-        }
-        if (eventsQuery.status === 'loading' || eventsQueryUpcoming.status === 'loading') {
-            status = 'loading';
-        }
-        if (eventsQuery.status === 'paused' && eventsQueryUpcoming.status === 'paused') {
-            status = 'paused';
-        }
-        if (eventsQuery.status === 'success' || eventsQueryUpcoming.status === 'success') {
-            status = 'success';
-        }
-        return status;
-    }, [eventsQuery, eventsQueryUpcoming]);
-
     const userQuery = useQuery<EventListCurrentUserQuery>({
         requestPolicy: 'cache-only',
         query: gql`
@@ -1039,7 +1017,6 @@ export const EventList = ({
             onSelectEventById={onSelectEventById}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
-            queryStatus={queryStatus}
             refetch={refetch}
             scrollRef={scrollRef}
             searchTerm={state.searchTerm}
