@@ -219,7 +219,9 @@
     }
     load() {
       const frame = this.frame = document.getElementById(this.frameId);
-      frame.src = this.module.toString();
+      const baseUrl = this.module.toString();
+      const params = new URLSearchParams({ frameId: this.frameId }).toString();
+      frame.src = `${baseUrl}?${params}`;
       window.addEventListener("message", this.onWindowMessage);
       return new Promise((resolve, reject) => {
         frame.onload = () => {

@@ -80988,13 +80988,15 @@ var MessageBus = class {
     delete this.parent;
   }
   sendWindowMessage(event, data, direction) {
-    var _a, _b;
+    var _a;
+    const params = new URLSearchParams(window.location.search);
+    const iframeId = params.get("frameId");
     if (direction === "out") {
-      (_b = this.parent) == null ? void 0 : _b.postMessage({
+      (_a = this.parent) == null ? void 0 : _a.postMessage({
         ns: "aiera",
         event,
         data,
-        iframeId: (_a = window.frameElement) == null ? void 0 : _a.id
+        iframeId
       }, "*");
     }
   }
