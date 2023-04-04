@@ -319,7 +319,9 @@ export class Module {
      */
     load() {
         const frame = (this.frame = document.getElementById(this.frameId) as HTMLIFrameElement);
-        frame.src = this.module.toString();
+        const baseUrl = this.module.toString();
+        const params = new URLSearchParams({ frameId: this.frameId }).toString();
+        frame.src = `${baseUrl}?${params}`;
         window.addEventListener('message', this.onWindowMessage);
         return new Promise<void>((resolve, reject) => {
             frame.onload = () => {

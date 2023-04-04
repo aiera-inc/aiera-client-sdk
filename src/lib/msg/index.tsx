@@ -153,13 +153,15 @@ export class MessageBus {
      * Sends a message out to the parent window.
      */
     sendWindowMessage<E extends keyof MessageBusEvents>(event: E, data: Message<E>['data'], direction: Direction) {
+        const params = new URLSearchParams(window.location.search);
+        const iframeId = params.get('frameId');
         if (direction === 'out') {
             this.parent?.postMessage(
                 {
                     ns: 'aiera',
                     event,
                     data,
-                    iframeId: window.frameElement?.id,
+                    iframeId,
                 },
                 '*'
             );
