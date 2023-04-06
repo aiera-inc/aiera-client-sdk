@@ -89,7 +89,7 @@ const App: FC = (): ReactElement => {
     return (
         <StrictMode>
             <Provider bus={bus} config={{ moduleName: 'Aieracast' }}>
-                <Auth>
+                <Auth apiMode>
                     <div className="h-full">
                         <Aieracast />
                     </div>

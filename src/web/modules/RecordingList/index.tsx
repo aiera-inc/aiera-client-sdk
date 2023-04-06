@@ -21,7 +21,7 @@ const App: FC = (): ReactElement => {
                     },
                 }}
             >
-                <Auth>
+                <Auth apiMode>
                     <div className="h-full">
                         <EventList />
                     </div>

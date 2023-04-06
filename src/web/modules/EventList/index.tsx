@@ -89,7 +89,7 @@ const App: FC = (): ReactElement => {
     return (
         <StrictMode>
             <Provider bus={bus} config={{ moduleName: 'EventList' }}>
-                <Auth>
+                <Auth apiMode>
                     <div className="h-full">
                         <EventList useConfigOptions />
                     </div>
