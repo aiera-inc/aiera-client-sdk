@@ -92408,7 +92408,9 @@ var App = () => {
         showScheduleRecording: true
       }
     }
-  }, /* @__PURE__ */ import_react112.default.createElement(Auth, null, /* @__PURE__ */ import_react112.default.createElement("div", {
+  }, /* @__PURE__ */ import_react112.default.createElement(Auth, {
+    apiMode: true
+  }, /* @__PURE__ */ import_react112.default.createElement("div", {
     className: "h-full"
   }, /* @__PURE__ */ import_react112.default.createElement(EventList, null)))));
 };

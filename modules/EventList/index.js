@@ -92451,7 +92451,9 @@ var App = () => {
   return /* @__PURE__ */ import_react112.default.createElement(import_react112.StrictMode, null, /* @__PURE__ */ import_react112.default.createElement(Provider6, {
     bus,
     config: { moduleName: "EventList" }
-  }, /* @__PURE__ */ import_react112.default.createElement(Auth, null, /* @__PURE__ */ import_react112.default.createElement("div", {
+  }, /* @__PURE__ */ import_react112.default.createElement(Auth, {
+    apiMode: true
+  }, /* @__PURE__ */ import_react112.default.createElement("div", {
     className: "h-full"
   }, /* @__PURE__ */ import_react112.default.createElement(EventList, {
     useConfigOptions: true

@@ -92795,7 +92795,9 @@ var App = () => {
   return /* @__PURE__ */ import_react113.default.createElement(import_react113.StrictMode, null, /* @__PURE__ */ import_react113.default.createElement(Provider6, {
     bus,
     config: { moduleName: "Aieracast" }
-  }, /* @__PURE__ */ import_react113.default.createElement(Auth, null, /* @__PURE__ */ import_react113.default.createElement("div", {
+  }, /* @__PURE__ */ import_react113.default.createElement(Auth, {
+    apiMode: true
+  }, /* @__PURE__ */ import_react113.default.createElement("div", {
     className: "h-full"
   }, /* @__PURE__ */ import_react113.default.createElement(Aieracast, null)))));
 };
