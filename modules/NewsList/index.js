@@ -37745,14 +37745,15 @@ function getPrimaryQuote(company) {
 }
 function useCompanyResolver() {
   const client = useClient();
-  return (0, import_react6.useCallback)((identifier) => __async(this, null, function* () {
+  return (0, import_react6.useCallback)((identifiers) => __async(this, null, function* () {
     var _a;
-    const id = Object.values(identifier)[0];
-    if (!id)
+    const ids = identifiers.map((i3) => Object.values(i3)[0]);
+    if (!ids.length) {
       return Promise.reject("No identifier to resolve");
+    }
     const result = yield client.query(lib_default`
-                        query CompanyResolution($identifier: String!) {
-                            companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
+                        query CompanyResolution($identifiers: [String!]) {
+                            companies(filter: { resolution: { identifiers: $identifiers, identifierType: unknown } }) {
                                 id
                                 commonName
                                 instruments {
@@ -37774,7 +37775,7 @@ function useCompanyResolver() {
                                 }
                             }
                         }
-                    `, { identifier: id }).toPromise();
+                    `, { identifiers: ids }).toPromise();
     return (_a = result == null ? void 0 : result.data) == null ? void 0 : _a.companies;
   }), [client]);
 }
@@ -38140,9 +38141,9 @@ var CompanyFilterDocument = lib_default`
 }
     `;
 var CompanyResolutionDocument = lib_default`
-    query CompanyResolution($identifier: String!) {
+    query CompanyResolution($identifiers: [String!]) {
   companies(
-    filter: {resolution: {identifier: $identifier, identifierType: unknown}}
+    filter: {resolution: {identifiers: $identifiers, identifierType: unknown}}
   ) {
     id
     commonName
@@ -40681,7 +40682,7 @@ function NewsList(props) {
   const listSize = props.listSize || DEFAULT_LIST_SIZE;
   const resolveCompany = useCompanyResolver();
   const bus = useMessageListener("instrument-selected", (msg) => __async(this, null, function* () {
-    const companies = yield resolveCompany(msg.data);
+    const companies = yield resolveCompany([msg.data]);
     if (companies == null ? void 0 : companies[0]) {
       const company = companies[0];
       setState((s2) => __spreadProps(__spreadValues({}, s2), {
@@ -40692,7 +40693,11 @@ function NewsList(props) {
     }
   }), "in");
   useMessageListener("instruments-selected", (msg) => __async(this, null, function* () {
-    const companyIds = (yield Promise.all(msg.data.map(resolveCompany))).flat().map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
+    let companyIds = [];
+    const companies = yield resolveCompany(msg.data);
+    if (companies && companies.length) {
+      companyIds = companies.map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
+    }
     setState((s2) => __spreadProps(__spreadValues({}, s2), {
       selectedNews: void 0,
       watchlist: companyIds

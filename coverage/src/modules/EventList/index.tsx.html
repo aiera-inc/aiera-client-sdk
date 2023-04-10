@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.96% </span>
+                <span class="strong">61.97% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>119/189</span>
+                <span class='fraction'>119/192</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.77% </span>
+                <span class="strong">55.61% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>109/192</span>
+                <span class='fraction'>109/196</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63.04% </span>
+                <span class="strong">62.7% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>116/184</span>
+                <span class='fraction'>116/185</span>
             </div>
         
             
@@ -1094,7 +1094,8 @@
 <a name='L1029'></a><a href='#L1029'>1029</a>
 <a name='L1030'></a><a href='#L1030'>1030</a>
 <a name='L1031'></a><a href='#L1031'>1031</a>
-<a name='L1032'></a><a href='#L1032'>1032</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1032'></a><a href='#L1032'>1032</a>
+<a name='L1033'></a><a href='#L1033'>1033</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1750,9 +1751,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2752,7 +2754,7 @@ export const EventList = ({
     const config = useConfig();
 &nbsp;
     const loadTicker = <span class="fstat-no" title="function not covered" >as</span>ync (ticker: InstrumentID) =&gt; {
-        const companies = <span class="cstat-no" title="statement not covered" >await resolveCompany(ticker);</span>
+        const companies = <span class="cstat-no" title="statement not covered" >await resolveCompany([ticker]);</span>
 <span class="cstat-no" title="statement not covered" >        if (companies?.[0]) {</span>
             const company = <span class="cstat-no" title="statement not covered" >companies[0];</span>
 <span class="cstat-no" title="statement not covered" >            mergeState({ company, event: undefined });</span>
@@ -2768,7 +2770,7 @@ export const EventList = ({
     const bus = useMessageListener(
         'instrument-selected',
         async (msg: Message&lt;'instrument-selected'&gt;) =&gt; {
-            const companies = await resolveCompany(msg.data);
+            const companies = await resolveCompany([msg.data]);
             <span class="missing-if-branch" title="if path not taken" >I</span>if (companies?.[0]) {
                 const company = <span class="cstat-no" title="statement not covered" >companies[0];</span>
 <span class="cstat-no" title="statement not covered" >                mergeState({ company, event: undefined });</span>
@@ -2780,10 +2782,11 @@ export const EventList = ({
     useMessageListener(
         'instruments-selected',
 <span class="fstat-no" title="function not covered" >        as</span>ync (msg: Message&lt;'instruments-selected'&gt;) =&gt; {
-            const companyIds = <span class="cstat-no" title="statement not covered" >(await Promise.all(msg.data.map(resolveCompany)))</span>
-                .flat()
-                .map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c?.id)</span>
-                .filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n)</span> as string[];
+            let companyIds: string[] = <span class="cstat-no" title="statement not covered" >[];</span>
+            const companies = <span class="cstat-no" title="statement not covered" >await resolveCompany(msg.data);</span>
+<span class="cstat-no" title="statement not covered" >            if (companies &amp;&amp; companies.length) {</span>
+<span class="cstat-no" title="statement not covered" >                companyIds = companies.map(<span class="fstat-no" title="function not covered" >(c</span>) =&gt; <span class="cstat-no" title="statement not covered" >c?.id)</span>.filter(<span class="fstat-no" title="function not covered" >(n</span>) =&gt; <span class="cstat-no" title="statement not covered" >n)</span>;</span>
+            }
 <span class="cstat-no" title="statement not covered" >            mergeState({ watchlist: companyIds });</span>
         },
         'in'
@@ -3163,7 +3166,7 @@ export const EventList = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Apr 06 2023 12:00:55 GMT-0400 (Eastern Daylight Time)
+                at Mon Apr 10 2023 15:44:54 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

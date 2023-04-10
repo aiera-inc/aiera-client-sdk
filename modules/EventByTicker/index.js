@@ -73560,9 +73560,9 @@ var CompanyFilterDocument = lib_default`
 }
     `;
 var CompanyResolutionDocument = lib_default`
-    query CompanyResolution($identifier: String!) {
+    query CompanyResolution($identifiers: [String!]) {
   companies(
-    filter: {resolution: {identifier: $identifier, identifierType: unknown}}
+    filter: {resolution: {identifiers: $identifiers, identifierType: unknown}}
   ) {
     id
     commonName

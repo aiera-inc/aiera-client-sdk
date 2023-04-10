@@ -81628,14 +81628,15 @@ function getPrimaryQuote(company) {
 }
 function useCompanyResolver() {
   const client = useClient();
-  return (0, import_react6.useCallback)((identifier) => __async(this, null, function* () {
+  return (0, import_react6.useCallback)((identifiers) => __async(this, null, function* () {
     var _a;
-    const id = Object.values(identifier)[0];
-    if (!id)
+    const ids = identifiers.map((i3) => Object.values(i3)[0]);
+    if (!ids.length) {
       return Promise.reject("No identifier to resolve");
+    }
     const result2 = yield client.query(lib_default`
-                        query CompanyResolution($identifier: String!) {
-                            companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
+                        query CompanyResolution($identifiers: [String!]) {
+                            companies(filter: { resolution: { identifiers: $identifiers, identifierType: unknown } }) {
                                 id
                                 commonName
                                 instruments {
@@ -81657,7 +81658,7 @@ function useCompanyResolver() {
                                 }
                             }
                         }
-                    `, { identifier: id }).toPromise();
+                    `, { identifiers: ids }).toPromise();
     return (_a = result2 == null ? void 0 : result2.data) == null ? void 0 : _a.companies;
   }), [client]);
 }
@@ -82230,9 +82231,9 @@ var CompanyFilterDocument = lib_default`
 }
     `;
 var CompanyResolutionDocument = lib_default`
-    query CompanyResolution($identifier: String!) {
+    query CompanyResolution($identifiers: [String!]) {
   companies(
-    filter: {resolution: {identifier: $identifier, identifierType: unknown}}
+    filter: {resolution: {identifiers: $identifiers, identifierType: unknown}}
   ) {
     id
     commonName
@@ -92218,7 +92219,7 @@ var EventList = ({
   const track = useTrack();
   const config = useConfig();
   const loadTicker = (ticker) => __async(void 0, null, function* () {
-    const companies = yield resolveCompany(ticker);
+    const companies = yield resolveCompany([ticker]);
     if (companies == null ? void 0 : companies[0]) {
       const company = companies[0];
       mergeState({ company, event: void 0 });
@@ -92231,14 +92232,18 @@ var EventList = ({
     }
   }, [loadTicker, state, state.company, config, config == null ? void 0 : config.options]);
   const bus = useMessageListener("instrument-selected", (msg) => __async(void 0, null, function* () {
-    const companies = yield resolveCompany(msg.data);
+    const companies = yield resolveCompany([msg.data]);
     if (companies == null ? void 0 : companies[0]) {
       const company = companies[0];
       mergeState({ company, event: void 0 });
     }
   }), "in");
   useMessageListener("instruments-selected", (msg) => __async(void 0, null, function* () {
-    const companyIds = (yield Promise.all(msg.data.map(resolveCompany))).flat().map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
+    let companyIds = [];
+    const companies = yield resolveCompany(msg.data);
+    if (companies && companies.length) {
+      companyIds = companies.map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
+    }
     mergeState({ watchlist: companyIds });
   }), "in");
   const loadUserStatus = (email) => __async(void 0, null, function* () {

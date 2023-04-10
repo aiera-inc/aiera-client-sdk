@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.71% </span>
+                <span class="strong">92.76% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>140/151</span>
+                <span class='fraction'>141/152</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">91.11% </span>
+                <span class="strong">91.3% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>41/45</span>
+                <span class='fraction'>42/46</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.8% </span>
+                <span class="strong">92.14% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>129/139</span>
+                <span class='fraction'>129/140</span>
             </div>
         
             
@@ -577,7 +577,9 @@
 <a name='L512'></a><a href='#L512'>512</a>
 <a name='L513'></a><a href='#L513'>513</a>
 <a name='L514'></a><a href='#L514'>514</a>
-<a name='L515'></a><a href='#L515'>515</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L515'></a><a href='#L515'>515</a>
+<a name='L516'></a><a href='#L516'>516</a>
+<a name='L517'></a><a href='#L517'>517</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -662,13 +664,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -694,7 +694,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1168,21 +1172,23 @@ export function getPrimaryQuote(
 }
 &nbsp;
 export function useCompanyResolver(): (
-    identifier: InstrumentID
+    identifiers: InstrumentID[]
 ) =&gt; Promise&lt;CompanyResolutionQuery['companies'] | undefined&gt; {
     const client = useClient();
     return useCallback(
-        async (identifier: InstrumentID) =&gt; {
+        async (identifiers: InstrumentID[]) =&gt; {
             // InstrumentID can support a bunch of different identifiers, but just grab
             // the first one we find and use it.
-            const id = Object.values(identifier)[0] as ValueOf&lt;InstrumentID&gt;;
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (!id) <span class="cstat-no" title="statement not covered" >return Promise.reject('No identifier to resolve');</span>
+            const ids = identifiers.map((i: InstrumentID) =&gt; Object.values(i)[0] as ValueOf&lt;InstrumentID&gt;) as string[];
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (!ids.length) {
+<span class="cstat-no" title="statement not covered" >                return Promise.reject('No identifier to resolve');</span>
+            }
 &nbsp;
             const result = await client
                 .query&lt;CompanyResolutionQuery, CompanyResolutionQueryVariables&gt;(
                     gql`
-                        query CompanyResolution($identifier: String!) {
-                            companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
+                        query CompanyResolution($identifiers: [String!]) {
+                            companies(filter: { resolution: { identifiers: $identifiers, identifierType: unknown } }) {
                                 id
                                 commonName
                                 instruments {
@@ -1205,7 +1211,7 @@ export function useCompanyResolver(): (
                             }
                         }
                     `,
-                    { identifier: id }
+                    { identifiers: ids }
                 )
                 .toPromise();
             return result?.data?.companies;
@@ -1612,7 +1618,7 @@ export function <span class="fstat-no" title="function not covered" >usePlaySoun
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Apr 06 2023 12:00:55 GMT-0400 (Eastern Daylight Time)
+                at Mon Apr 10 2023 15:44:54 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
