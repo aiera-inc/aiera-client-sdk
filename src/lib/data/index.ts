@@ -75,21 +75,23 @@ export function getPrimaryQuote(
 }
 
 export function useCompanyResolver(): (
-    identifier: InstrumentID
+    identifiers: InstrumentID[]
 ) => Promise<CompanyResolutionQuery['companies'] | undefined> {
     const client = useClient();
     return useCallback(
-        async (identifier: InstrumentID) => {
+        async (identifiers: InstrumentID[]) => {
             // InstrumentID can support a bunch of different identifiers, but just grab
             // the first one we find and use it.
-            const id = Object.values(identifier)[0] as ValueOf<InstrumentID>;
-            if (!id) return Promise.reject('No identifier to resolve');
+            const ids = identifiers.map((i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>) as string[];
+            if (!ids.length) {
+                return Promise.reject('No identifier to resolve');
+            }
 
             const result = await client
                 .query<CompanyResolutionQuery, CompanyResolutionQueryVariables>(
                     gql`
-                        query CompanyResolution($identifier: String!) {
-                            companies(filter: { resolution: { identifier: $identifier, identifierType: unknown } }) {
+                        query CompanyResolution($identifiers: [String!]) {
+                            companies(filter: { resolution: { identifiers: $identifiers, identifierType: unknown } }) {
                                 id
                                 commonName
                                 instruments {
@@ -112,7 +114,7 @@ export function useCompanyResolver(): (
                             }
                         }
                     `,
-                    { identifier: id }
+                    { identifiers: ids }
                 )
                 .toPromise();
             return result?.data?.companies;

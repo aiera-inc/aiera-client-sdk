@@ -625,7 +625,7 @@ export const EventList = ({
     const config = useConfig();
 
     const loadTicker = async (ticker: InstrumentID) => {
-        const companies = await resolveCompany(ticker);
+        const companies = await resolveCompany([ticker]);
         if (companies?.[0]) {
             const company = companies[0];
             mergeState({ company, event: undefined });
@@ -641,7 +641,7 @@ export const EventList = ({
     const bus = useMessageListener(
         'instrument-selected',
         async (msg: Message<'instrument-selected'>) => {
-            const companies = await resolveCompany(msg.data);
+            const companies = await resolveCompany([msg.data]);
             if (companies?.[0]) {
                 const company = companies[0];
                 mergeState({ company, event: undefined });
@@ -653,10 +653,11 @@ export const EventList = ({
     useMessageListener(
         'instruments-selected',
         async (msg: Message<'instruments-selected'>) => {
-            const companyIds = (await Promise.all(msg.data.map(resolveCompany)))
-                .flat()
-                .map((c) => c?.id)
-                .filter((n) => n) as string[];
+            let companyIds: string[] = [];
+            const companies = await resolveCompany(msg.data);
+            if (companies && companies.length) {
+                companyIds = companies.map((c) => c?.id).filter((n) => n);
+            }
             mergeState({ watchlist: companyIds });
         },
         'in'

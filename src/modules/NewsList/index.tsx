@@ -241,7 +241,7 @@ export function NewsList(props: NewsListProps): ReactElement {
     const bus = useMessageListener(
         'instrument-selected',
         async (msg: Message<'instrument-selected'>) => {
-            const companies = await resolveCompany(msg.data);
+            const companies = await resolveCompany([msg.data]);
             if (companies?.[0]) {
                 const company = companies[0];
                 // Set the selected company and reset fromIndex in state
@@ -259,10 +259,11 @@ export function NewsList(props: NewsListProps): ReactElement {
     useMessageListener(
         'instruments-selected',
         async (msg: Message<'instruments-selected'>) => {
-            const companyIds = (await Promise.all(msg.data.map(resolveCompany)))
-                .flat()
-                .map((c) => c?.id)
-                .filter((n) => n) as string[];
+            let companyIds: string[] = [];
+            const companies = await resolveCompany(msg.data);
+            if (companies && companies.length) {
+                companyIds = companies.map((c) => c?.id).filter((n) => n);
+            }
             setState((s) => ({
                 ...s,
                 selectedNews: undefined,
