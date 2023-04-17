@@ -35,6 +35,7 @@ export interface MessageBusEvents {
     authenticateWithApiKey: string;
     authenticated: null;
     configure: Config;
+    configured: null;
     'event-audio': EventAudio;
     'event-alert': EventAlert;
     'event-selected': EventSelected;

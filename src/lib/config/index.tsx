@@ -1,4 +1,13 @@
-import React, { createContext, useContext, useMemo, ReactNode, ReactElement, useState, useCallback } from 'react';
+import React, {
+    createContext,
+    useCallback,
+    useContext,
+    useEffect,
+    useMemo,
+    useState,
+    ReactElement,
+    ReactNode,
+} from 'react';
 import merge from 'lodash.merge';
 import { ClientOptions } from 'urql';
 import { AuthConfig } from '@urql/exchange-auth';
@@ -96,7 +105,13 @@ export function Provider({ config, children }: { config: Config; children: React
         },
         [baseConfig, setStateConfig]
     );
-    useMessageListener('configure', ({ data }) => setConfig(data), 'in');
+    const bus = useMessageListener('configure', ({ data }) => setConfig(data), 'in');
+
+    // Notify when the config is updated
+    useEffect(() => {
+        bus.emit('configured', null, 'out');
+    }, [stateConfig]);
+
     return <Context.Provider value={stateConfig}>{children}</Context.Provider>;
 }
 
