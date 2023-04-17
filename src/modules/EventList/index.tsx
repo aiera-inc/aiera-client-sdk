@@ -37,6 +37,7 @@ import {
     useAlertList,
     useAutoTrack,
     useCompanyResolver,
+    usePrimaryWatchlistResolver,
     useSettings,
     useTrack,
     useUserStatus,
@@ -49,7 +50,7 @@ import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { RecordingForm } from '@aiera/client-sdk/modules/RecordingForm';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
-import { ChangeHandler } from '@aiera/client-sdk/types';
+import { ChangeHandler, ValueOf } from '@aiera/client-sdk/types';
 import {
     EventListCurrentUserQuery,
     EventListQuery,
@@ -592,6 +593,7 @@ interface EventListState {
     userStatusInactive: boolean;
     userStatusLoaded: boolean;
     watchlist: string[];
+    watchlistId?: string;
 }
 
 export const EventList = ({
@@ -615,12 +617,14 @@ export const EventList = ({
         userStatusInactive: false,
         userStatusLoaded: false,
         watchlist: [],
+        watchlistId: undefined,
     });
 
     const { settings } = useSettings();
     const resolveCompany = useCompanyResolver();
     const resolveUserStatus = useUserStatus();
     const track = useTrack();
+    const upsertPrimaryWatchlist = usePrimaryWatchlistResolver();
 
     const config = useConfig();
 
@@ -653,12 +657,29 @@ export const EventList = ({
     useMessageListener(
         'instruments-selected',
         async (msg: Message<'instruments-selected'>) => {
-            let companyIds: string[] = [];
-            const companies = await resolveCompany(msg.data);
-            if (companies && companies.length) {
-                companyIds = companies.map((c) => c?.id).filter((n) => n);
+            const watchlistUsername = config?.tracking?.userId;
+            /**
+             * If there's a userId defined in the tracking config,
+             * upsert a primary watchlist instead of resolving the company ids.
+             * This watchlist approach avoids 414s from EventList queries
+             * when there are thousands of company ids.
+             */
+            if (watchlistUsername) {
+                const companyIds = msg.data.map(
+                    (i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>
+                ) as string[];
+                if (companyIds.length) {
+                    const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
+                    mergeState({ watchlistId });
+                }
+            } else {
+                let companyIds: string[] = [];
+                const companies = await resolveCompany(msg.data);
+                if (companies && companies.length) {
+                    companyIds = companies.map((c) => c?.id).filter((n) => n);
+                }
+                mergeState({ watchlist: companyIds });
             }
-            mergeState({ watchlist: companyIds });
         },
         'in'
     );
@@ -828,6 +849,7 @@ export const EventList = ({
                     : state.watchlist?.length && settings.syncWatchlist
                     ? state.watchlist
                     : undefined,
+                watchlistId: state.watchlistId,
             },
         },
     });
@@ -850,6 +872,7 @@ export const EventList = ({
                     : state.watchlist?.length && settings.syncWatchlist
                     ? state.watchlist
                     : undefined,
+                watchlistId: state.watchlistId,
             },
         },
     });

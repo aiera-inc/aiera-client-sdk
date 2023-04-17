@@ -14,6 +14,8 @@ import {
     CompanyResolutionQueryVariables,
     TrackMutation,
     TrackMutationVariables,
+    UpsertPrimaryWatchlistMutation,
+    UpsertPrimaryWatchlistMutationVariables,
     User,
     UserStatusQuery,
     UserStatusQueryVariables,
@@ -21,7 +23,7 @@ import {
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useStorage } from '@aiera/client-sdk/lib/storage';
-import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 
 export function getEventCreatorName(creator?: User | null): string {
     let createdBy = '';
@@ -50,14 +52,14 @@ function sortByPrimary(a: Primary, b: Primary) {
 }
 
 /**
- * For the primary quote, US based takes precendence, then isPrimary field on both
- * intrument and quote, and finally the first intrument/quote we find if nothing else.
+ * For the primary quote, US-based takes precedence, then isPrimary field on both
+ * instrument and quote, and finally the first instrument/quote we find if nothing else.
  *
  * To do this, sort all the primary instruments to the front, then sort the primary quotes
  * for each. This gives us a primary sorted array of quotes.
- * 1. Use the first US based quote if we have one
- * 2. Otherwise use the first primary quote if we have one
- * 2. Otherwise just use the first quote we have
+ * 1. Use the first US-based quote if we have one
+ * 2. Otherwise, use the first primary quote if we have one
+ * 2. Lastly, just use the first quote we have
  */
 export function getPrimaryQuote(
     company: Maybe<{
@@ -123,6 +125,44 @@ export function useCompanyResolver(): (
     );
 }
 
+/**
+ * Returns a function that can be used to upsert a primary watchlist using the provided username and identifiers
+ *
+ * @param identifiers - list of Instrument IDs
+ * @param username    - username to use for upserting a user
+ */
+export function usePrimaryWatchlistResolver(): (
+    identifiers: string[],
+    username: string
+) => Promise<string | undefined> {
+    const client = useClient();
+    return useCallback(
+        async (identifiers: string[], username: string) => {
+            const result = await client
+                .mutation<UpsertPrimaryWatchlistMutation, UpsertPrimaryWatchlistMutationVariables>(
+                    gql`
+                        mutation UpsertPrimaryWatchlist($input: UpsertPrimaryWatchlistInput!) {
+                            upsertPrimaryWatchlist(input: $input) {
+                                watchlist {
+                                    id
+                                }
+                            }
+                        }
+                    `,
+                    {
+                        input: {
+                            identifiers,
+                            creatorUsername: username,
+                        },
+                    }
+                )
+                .toPromise();
+            return result?.data?.upsertPrimaryWatchlist?.watchlist?.id;
+        },
+        [client]
+    );
+}
+
 export function useUserStatus(): (email: string) => Promise<UserStatusQuery | undefined> {
     const client = useClient();
     return useCallback(
@@ -178,7 +218,7 @@ type TrackingObject =
     | 'News Search';
 
 /**
- * Returns a function that can be used tp track specific events with the app.
+ * Returns a function that can be used to track specific events with the app.
  *
  * The returned track function takes teh following params:
  * @param event      - The event type, we have normalized these to `Click`, `View`, `Scroll` and `Submit`
