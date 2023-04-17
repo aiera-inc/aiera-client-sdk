@@ -184,6 +184,20 @@ describe('EventList', () => {
         expect(client.query).toHaveBeenCalled();
     });
 
+    test('handles multiple instruments via message bus', async () => {
+        const bus = new MessageBus();
+        const TestComponent = () => {
+            return (
+                <Provider bus={bus}>
+                    <EventList />
+                </Provider>
+            );
+        };
+        const { client } = await actAndFlush(() => renderWithProvider(<TestComponent />));
+        await actAndFlush(() => bus.emit('instruments-selected', [{ ticker: 'GME' }, { ticker: 'AAPL' }], 'in'));
+        expect(client.query).toHaveBeenCalled();
+    });
+
     test('handles event alert via message bus', async () => {
         const bus = new MessageBus();
         const onAlert = jest.fn();

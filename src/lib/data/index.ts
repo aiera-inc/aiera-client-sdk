@@ -128,7 +128,7 @@ export function useCompanyResolver(): (
 /**
  * Returns a function that can be used to upsert a primary watchlist using the provided username and identifiers
  *
- * @param identifiers - list of Instrument IDs
+ * @param identifiers - list of strings (Instrument IDs)
  * @param username    - username to use for upserting a user
  */
 export function usePrimaryWatchlistResolver(): (
