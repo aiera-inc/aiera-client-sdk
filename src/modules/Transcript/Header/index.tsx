@@ -24,6 +24,7 @@ import { KeyMentions } from '../KeyMentions';
 import './styles.css';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 
@@ -54,6 +55,7 @@ interface HeaderUIProps extends HeaderSharedProps {
     headerRef: Ref<HTMLDivElement>;
     keyMentionsExpanded: boolean;
     priceChartExpanded: boolean;
+    onPrint: () => void;
     toggleEventDetails: () => void;
     toggleHeader: () => void;
     toggleKeyMentions: () => void;
@@ -77,6 +79,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         onEdit,
         onChangeSearchTerm,
         onClose,
+        onPrint,
         onSeekAudioByDate,
         priceChartExpanded,
         searchTerm,
@@ -376,7 +379,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                 Export Transcript
                                             </span>
                                             <div
-                                                onClick={() => window.print()}
+                                                onClick={onPrint}
                                                 className={classNames(
                                                     'text-gray-400 text-sm hover:text-gray-600',
                                                     'bg-gray-100 hover:bg-gray-200 rounded-md px-2 py-1'
@@ -421,6 +424,7 @@ export function Header(props: HeaderProps): ReactElement {
         startTime,
         useConfigOptions,
     } = props;
+    const bus = useMessageBus();
     const [headerExpanded, setHeaderState] = useState(false);
     const [priceChartExpanded, setPriceChartState] = useState(false);
     const [eventDetailsExpanded, setEventDetailsState] = useState(false);
@@ -445,6 +449,8 @@ export function Header(props: HeaderProps): ReactElement {
         setEventDetailsState(false);
         setKeyMentionsState(false);
     }, [priceChartExpanded]);
+
+    const onPrint = () => bus.sendWindowMessage('print', null, 'out');
 
     // Collapse Expanded Header on Outside Click
     const headerRef = useRef<HTMLDivElement>(null);
@@ -474,6 +480,7 @@ export function Header(props: HeaderProps): ReactElement {
             onChangeSearchTerm={onChangeSearchTerm}
             onClose={onClose}
             onEdit={onEdit}
+            onPrint={onPrint}
             onSeekAudioByDate={onSeekAudioByDate}
             priceChartExpanded={priceChartExpanded}
             searchTerm={searchTerm}

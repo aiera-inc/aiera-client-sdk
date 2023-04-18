@@ -307,9 +307,23 @@ export class Module {
             windowEvent.data?.ns === 'aiera' &&
             windowEvent.data?.iframeId === this.frameId
         ) {
+            if (windowEvent.data.event === 'print') {
+                this.onPrintMessage();
+            }
             this.emitter.emit(windowEvent.data.event, windowEvent.data.data);
         }
     };
+
+    /**
+     * @ignore
+     * Prints iframe when receiving print message
+     */
+    onPrintMessage() {
+        const iframe = document.getElementById(this.frameId) as HTMLIFrameElement;
+        if (iframe.contentWindow) {
+            iframe.contentWindow.print();
+        }
+    }
 
     /**
      * Loads the module into the given iframe and sets up messaging between the frame
