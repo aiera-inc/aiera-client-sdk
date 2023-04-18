@@ -1100,7 +1100,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect23(create, deps) {
+        function useEffect24(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1670,7 +1670,7 @@ var require_react_development = __commonJS({
         exports2.useCallback = useCallback25;
         exports2.useContext = useContext8;
         exports2.useDebugValue = useDebugValue;
-        exports2.useEffect = useEffect23;
+        exports2.useEffect = useEffect24;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect5;
         exports2.useMemo = useMemo13;
@@ -81172,7 +81172,10 @@ function Provider2({ config, children }) {
   const setConfig = (0, import_react3.useCallback)((newConfig) => {
     setStateConfig(__spreadValues(__spreadValues({}, baseConfig), newConfig));
   }, [baseConfig, setStateConfig]);
-  useMessageListener("configure", ({ data }) => setConfig(data), "in");
+  const bus = useMessageListener("configure", ({ data }) => setConfig(data), "in");
+  (0, import_react3.useEffect)(() => {
+    bus.emit("configured", null, "out");
+  }, [stateConfig]);
   return /* @__PURE__ */ import_react3.default.createElement(Context2.Provider, {
     value: stateConfig
   }, children);
@@ -81660,6 +81663,27 @@ function useCompanyResolver() {
                         }
                     `, { identifiers: ids }).toPromise();
     return (_a = result2 == null ? void 0 : result2.data) == null ? void 0 : _a.companies;
+  }), [client]);
+}
+function usePrimaryWatchlistResolver() {
+  const client = useClient();
+  return (0, import_react6.useCallback)((identifiers, username) => __async(this, null, function* () {
+    var _a, _b, _c;
+    const result2 = yield client.mutation(lib_default`
+                        mutation UpsertPrimaryWatchlist($input: UpsertPrimaryWatchlistInput!) {
+                            upsertPrimaryWatchlist(input: $input) {
+                                watchlist {
+                                    id
+                                }
+                            }
+                        }
+                    `, {
+      input: {
+        identifiers,
+        creatorUsername: username
+      }
+    }).toPromise();
+    return (_c = (_b = (_a = result2 == null ? void 0 : result2.data) == null ? void 0 : _a.upsertPrimaryWatchlist) == null ? void 0 : _b.watchlist) == null ? void 0 : _c.id;
   }), [client]);
 }
 function useUserStatus() {
@@ -82253,6 +82277,15 @@ var CompanyResolutionDocument = lib_default`
           }
         }
       }
+    }
+  }
+}
+    `;
+var UpsertPrimaryWatchlistDocument = lib_default`
+    mutation UpsertPrimaryWatchlist($input: UpsertPrimaryWatchlistInput!) {
+  upsertPrimaryWatchlist(input: $input) {
+    watchlist {
+      id
     }
   }
 }
@@ -92211,12 +92244,14 @@ var EventList = ({
     showForm: false,
     userStatusInactive: false,
     userStatusLoaded: false,
-    watchlist: []
+    watchlist: [],
+    watchlistId: void 0
   });
   const { settings } = useSettings();
   const resolveCompany = useCompanyResolver();
   const resolveUserStatus = useUserStatus();
   const track = useTrack();
+  const upsertPrimaryWatchlist = usePrimaryWatchlistResolver();
   const config = useConfig();
   const loadTicker = (ticker) => __async(void 0, null, function* () {
     const companies = yield resolveCompany([ticker]);
@@ -92239,12 +92274,22 @@ var EventList = ({
     }
   }), "in");
   useMessageListener("instruments-selected", (msg) => __async(void 0, null, function* () {
-    let companyIds = [];
-    const companies = yield resolveCompany(msg.data);
-    if (companies && companies.length) {
-      companyIds = companies.map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
+    var _a2;
+    const watchlistUsername = (_a2 = config == null ? void 0 : config.tracking) == null ? void 0 : _a2.userId;
+    if (watchlistUsername) {
+      const companyIds = msg.data.map((i3) => Object.values(i3)[0]);
+      if (companyIds.length) {
+        const watchlistId = yield upsertPrimaryWatchlist(companyIds, watchlistUsername);
+        mergeState({ watchlistId });
+      }
+    } else {
+      let companyIds = [];
+      const companies = yield resolveCompany(msg.data);
+      if (companies && companies.length) {
+        companyIds = companies.map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
+      }
+      mergeState({ watchlist: companyIds });
     }
-    mergeState({ watchlist: companyIds });
   }), "in");
   const loadUserStatus = (email) => __async(void 0, null, function* () {
     const userState = yield resolveUserStatus(email);
@@ -92385,7 +92430,8 @@ var EventList = ({
         hasTranscripts: state.filterByTypes.includes(0 /* transcript */) ? true : void 0,
         eventTypes,
         searchTerm: state.searchTerm || void 0,
-        companyIds: ((_b = state.company) == null ? void 0 : _b.id) ? [state.company.id] : ((_c = state.watchlist) == null ? void 0 : _c.length) && settings.syncWatchlist ? state.watchlist : void 0
+        companyIds: ((_b = state.company) == null ? void 0 : _b.id) ? [state.company.id] : ((_c = state.watchlist) == null ? void 0 : _c.length) && settings.syncWatchlist ? state.watchlist : void 0,
+        watchlistId: state.watchlistId
       }
     }
   });
@@ -92402,7 +92448,8 @@ var EventList = ({
         hasTranscripts: state.filterByTypes.includes(0 /* transcript */) ? true : void 0,
         eventTypes,
         searchTerm: state.searchTerm || void 0,
-        companyIds: ((_d = state.company) == null ? void 0 : _d.id) ? [state.company.id] : ((_e = state.watchlist) == null ? void 0 : _e.length) && settings.syncWatchlist ? state.watchlist : void 0
+        companyIds: ((_d = state.company) == null ? void 0 : _d.id) ? [state.company.id] : ((_e = state.watchlist) == null ? void 0 : _e.length) && settings.syncWatchlist ? state.watchlist : void 0,
+        watchlistId: state.watchlistId
       }
     }
   });

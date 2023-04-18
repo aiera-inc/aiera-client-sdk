@@ -1092,7 +1092,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect15(create, deps) {
+        function useEffect16(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1662,7 +1662,7 @@ var require_react_development = __commonJS({
         exports2.useCallback = useCallback11;
         exports2.useContext = useContext7;
         exports2.useDebugValue = useDebugValue;
-        exports2.useEffect = useEffect15;
+        exports2.useEffect = useEffect16;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect2;
         exports2.useMemo = useMemo7;
@@ -37304,7 +37304,10 @@ function Provider2({ config, children }) {
   const setConfig = (0, import_react3.useCallback)((newConfig) => {
     setStateConfig(__spreadValues(__spreadValues({}, baseConfig), newConfig));
   }, [baseConfig, setStateConfig]);
-  useMessageListener("configure", ({ data }) => setConfig(data), "in");
+  const bus = useMessageListener("configure", ({ data }) => setConfig(data), "in");
+  (0, import_react3.useEffect)(() => {
+    bus.emit("configured", null, "out");
+  }, [stateConfig]);
   return /* @__PURE__ */ import_react3.default.createElement(Context2.Provider, {
     value: stateConfig
   }, children);
@@ -38163,6 +38166,15 @@ var CompanyResolutionDocument = lib_default`
           }
         }
       }
+    }
+  }
+}
+    `;
+var UpsertPrimaryWatchlistDocument = lib_default`
+    mutation UpsertPrimaryWatchlist($input: UpsertPrimaryWatchlistInput!) {
+  upsertPrimaryWatchlist(input: $input) {
+    watchlist {
+      id
     }
   }
 }
