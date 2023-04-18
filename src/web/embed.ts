@@ -320,10 +320,19 @@ export class Module {
      */
     onPrintMessage() {
         const iframe = document.getElementById(this.frameId) as HTMLIFrameElement;
-        if (iframe.contentWindow && iframe.contentWindow.print) {
-            iframe.contentWindow.print();
-        } else {
-            this.emit('print', null);
+        if (iframe.contentWindow && iframe.contentWindow?.document) {
+            const a = window.open('', '', 'height=500, width=500');
+            const data = iframe.contentWindow?.document?.getElementsByTagName('body')[0]?.innerHTML;
+            const link = iframe.contentWindow.document?.querySelector('link');
+            const styles = link?.href;
+            if (data && styles && a) {
+                const divContents = `<html><head><link href="${styles}" rel="stylesheet" type="text/css"></head><body>${data}</body></html>`;
+                a.document.write(divContents);
+                setTimeout(() => {
+                    a?.print();
+                    a?.close();
+                }, 500);
+            }
         }
     }
 

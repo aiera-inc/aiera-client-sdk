@@ -451,13 +451,6 @@ export function Header(props: HeaderProps): ReactElement {
     }, [priceChartExpanded]);
 
     const onPrint = () => bus.sendWindowMessage('print', null, 'out');
-    bus.on(
-        'print',
-        () => {
-            window.print();
-        },
-        'in'
-    );
 
     // Collapse Expanded Header on Outside Click
     const headerRef = useRef<HTMLDivElement>(null);
