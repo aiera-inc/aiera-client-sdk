@@ -76881,9 +76881,6 @@ function Header(props) {
     setKeyMentionsState(false);
   }, [priceChartExpanded]);
   const onPrint = () => bus.sendWindowMessage("print", null, "out");
-  bus.on("print", () => {
-    window.print();
-  }, "in");
   const headerRef = (0, import_react57.useRef)(null);
   useOutsideClickHandler([headerRef], (0, import_react57.useCallback)(() => {
     if (headerExpanded) {

@@ -221,11 +221,21 @@
       this.module = new URL(modulePath, window.location.toString());
     }
     onPrintMessage() {
+      var _a, _b, _c, _d, _e;
       const iframe = document.getElementById(this.frameId);
-      if (iframe.contentWindow && iframe.contentWindow.print) {
-        iframe.contentWindow.print();
-      } else {
-        this.emit("print", null);
+      if (iframe.contentWindow && ((_a = iframe.contentWindow) == null ? void 0 : _a.document)) {
+        const a = window.open("", "", "height=500, width=500");
+        const data = (_d = (_c = (_b = iframe.contentWindow) == null ? void 0 : _b.document) == null ? void 0 : _c.getElementsByTagName("body")[0]) == null ? void 0 : _d.innerHTML;
+        const link = (_e = iframe.contentWindow.document) == null ? void 0 : _e.querySelector("link");
+        const styles = link == null ? void 0 : link.href;
+        if (data && styles && a) {
+          const divContents = `<html><head><link href="${styles}" rel="stylesheet" type="text/css"></head><body>${data}</body></html>`;
+          a.document.write(divContents);
+          setTimeout(() => {
+            a == null ? void 0 : a.print();
+            a == null ? void 0 : a.close();
+          }, 500);
+        }
       }
     }
     load() {
