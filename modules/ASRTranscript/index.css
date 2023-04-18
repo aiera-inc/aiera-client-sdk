@@ -2609,6 +2609,7 @@ input[type=number] {
   }
   .dark * {
     color: #000 !important;
+    background-color: #fff !important;
   }
   .transcript__header__title *:not(button) {
     font-size: 1rem;

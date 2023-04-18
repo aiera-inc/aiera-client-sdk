@@ -222,8 +222,10 @@
     }
     onPrintMessage() {
       const iframe = document.getElementById(this.frameId);
-      if (iframe.contentWindow) {
+      if (iframe.contentWindow && iframe.contentWindow.print) {
         iframe.contentWindow.print();
+      } else {
+        this.emit("print", null);
       }
     }
     load() {
