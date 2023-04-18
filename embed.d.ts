@@ -34,6 +34,11 @@ export declare class Module {
      */
     onWindowMessage: (windowEvent: AieraMessageEvent) => void;
     /**
+     * @ignore
+     * Prints iframe when receiving print message
+     */
+    onPrintMessage(): void;
+    /**
      * Loads the module into the given iframe and sets up messaging between the frame
      * and the parent window.
      *

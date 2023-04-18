@@ -3026,6 +3026,9 @@ input.PhoneInputInput::placeholder {
   body * {
     visibility: hidden;
   }
+  .dark * {
+    color: #000 !important;
+  }
   .transcript__header__title *:not(button) {
     font-size: 1rem;
   }

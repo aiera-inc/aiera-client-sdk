@@ -76640,6 +76640,7 @@ function HeaderUI(props) {
     onEdit,
     onChangeSearchTerm,
     onClose,
+    onPrint,
     onSeekAudioByDate,
     priceChartExpanded,
     searchTerm,
@@ -76833,7 +76834,7 @@ function HeaderUI(props) {
     }, /* @__PURE__ */ import_react57.default.createElement("span", {
       className: "text-sm block font-semibold w-28 mr-1 dark:text-white"
     }, "Export Transcript"), /* @__PURE__ */ import_react57.default.createElement("div", {
-      onClick: () => window.print(),
+      onClick: onPrint,
       className: (0, import_classnames34.default)("text-gray-400 text-sm hover:text-gray-600", "bg-gray-100 hover:bg-gray-200 rounded-md px-2 py-1")
     }, "Print"))));
   }).otherwise(() => null));
@@ -76858,6 +76859,7 @@ function Header(props) {
     startTime,
     useConfigOptions
   } = props;
+  const bus = useMessageBus();
   const [headerExpanded, setHeaderState] = (0, import_react57.useState)(false);
   const [priceChartExpanded, setPriceChartState] = (0, import_react57.useState)(false);
   const [eventDetailsExpanded, setEventDetailsState] = (0, import_react57.useState)(false);
@@ -76878,6 +76880,7 @@ function Header(props) {
     setEventDetailsState(false);
     setKeyMentionsState(false);
   }, [priceChartExpanded]);
+  const onPrint = () => bus.sendWindowMessage("print", null, "out");
   const headerRef = (0, import_react57.useRef)(null);
   useOutsideClickHandler([headerRef], (0, import_react57.useCallback)(() => {
     if (headerExpanded) {
@@ -76900,6 +76903,7 @@ function Header(props) {
     onChangeSearchTerm,
     onClose,
     onEdit,
+    onPrint,
     onSeekAudioByDate,
     priceChartExpanded,
     searchTerm,

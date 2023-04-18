@@ -210,12 +210,21 @@
       this.onWindowMessage = (windowEvent) => {
         var _a, _b;
         if (windowEvent.origin === this.module.origin && ((_a = windowEvent.data) == null ? void 0 : _a.ns) === "aiera" && ((_b = windowEvent.data) == null ? void 0 : _b.iframeId) === this.frameId) {
+          if (windowEvent.data.event === "print") {
+            this.onPrintMessage();
+          }
           this.emitter.emit(windowEvent.data.event, windowEvent.data.data);
         }
       };
       this.emitter = new import_eventemitter3.default();
       this.frameId = frameId;
       this.module = new URL(modulePath, window.location.toString());
+    }
+    onPrintMessage() {
+      const iframe = document.getElementById(this.frameId);
+      if (iframe.contentWindow) {
+        iframe.contentWindow.print();
+      }
     }
     load() {
       const frame = this.frame = document.getElementById(this.frameId);
