@@ -90762,6 +90762,7 @@ function HeaderUI(props) {
   } = props;
   const config = useConfig();
   let showPriceReaction = true;
+  let showExport = true;
   let showTitleInfo = true;
   let showRecordingDetails = true;
   let showSearch = !hideSearch;
@@ -90777,6 +90778,9 @@ function HeaderUI(props) {
     }
     if (config.options.showSearch !== void 0) {
       showSearch = config.options.showSearch;
+    }
+    if (config.options.showExport !== void 0) {
+      showExport = config.options.showExport;
     }
   }
   return /* @__PURE__ */ import_react108.default.createElement("div", {
@@ -90930,7 +90934,16 @@ function HeaderUI(props) {
       togglePriceChart,
       onSeekAudioByDate,
       startTime
-    }));
+    }), showExport && headerExpanded && event && /* @__PURE__ */ import_react108.default.createElement("div", {
+      className: (0, import_classnames47.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
+    }, /* @__PURE__ */ import_react108.default.createElement("div", {
+      className: "flex items-center justify-between h-10 cursor-pointer"
+    }, /* @__PURE__ */ import_react108.default.createElement("span", {
+      className: "text-sm block font-semibold w-28 mr-1 dark:text-white"
+    }, "Export Transcript"), /* @__PURE__ */ import_react108.default.createElement("div", {
+      onClick: () => window.print(),
+      className: (0, import_classnames47.default)("text-gray-400 text-sm hover:text-gray-600", "bg-gray-100 hover:bg-gray-200 rounded-md px-2 py-1")
+    }, "Print"))));
   }).otherwise(() => null));
 }
 function Header(props) {
@@ -91131,6 +91144,7 @@ var TranscriptUI = (props) => {
     className: "w-4 cursor-pointer text-gray-400 hover:text-gray-600",
     onClick: (e) => onChangeSearchTerm(e, { value: "" })
   }, /* @__PURE__ */ import_react109.default.createElement(Close, null))))).otherwise(() => null), /* @__PURE__ */ import_react109.default.createElement("div", {
+    id: "transcriptContainer",
     className: "overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7",
     ref: scrollContainerRef
   }, (0, import_ts_pattern12.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react109.default.createElement("div", {
