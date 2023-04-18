@@ -11,6 +11,7 @@ import {
     useTrack,
     useSettings,
     useAlertList,
+    usePrimaryWatchlistResolver,
     defaultSettings,
     defaultAlertList,
 } from '.';
@@ -388,6 +389,26 @@ describe('useAlertList', () => {
                 '2003019': {
                     ticker: 'FB',
                 },
+            },
+        });
+    });
+});
+
+describe('usePrimaryWatchlistResolver', () => {
+    const TestComponent = () => {
+        const upsertPrimaryWatchlist = usePrimaryWatchlistResolver();
+        useEffect(() => {
+            void upsertPrimaryWatchlist(['AAPL', 'NFLX'], 'component-test-user');
+        }, []);
+        return null;
+    };
+
+    test('calls the upsertPrimaryWatchlist mutation', () => {
+        const { client } = renderWithProvider(<TestComponent />);
+        expect(client.mutation).toHaveBeenCalledWith(expect.anything(), {
+            input: {
+                identifiers: ['AAPL', 'NFLX'],
+                creatorUsername: 'component-test-user',
             },
         });
     });
