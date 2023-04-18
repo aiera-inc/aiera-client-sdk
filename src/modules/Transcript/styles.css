@@ -1,0 +1,24 @@
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .transcript__header__title *:not(button) {
+        @apply text-lg;
+        visibility: visible;
+    }
+    .transcript__header__title {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+    }
+    #transcriptContainer * {
+        visibility: visible;
+    }
+    #transcriptContainer {
+        position: absolute;
+        top: 80px;
+        left: 0px;
+        right: 0px;
+    }
+}

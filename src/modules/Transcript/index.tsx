@@ -254,7 +254,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     </div>
                 ))
                 .otherwise(() => null)}
-            <div className="overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7" ref={scrollContainerRef}>
+            <div
+                id="transcriptContainer"
+                className="overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7"
+                ref={scrollContainerRef}
+            >
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
                         new Array(5).fill(0).map((_, idx) => (

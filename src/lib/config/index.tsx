@@ -36,6 +36,7 @@ export interface Options {
     relativeTimestamps?: boolean;
     showAudioPlayer?: boolean;
     showCompanyFilter?: boolean;
+    showExport?: boolean;
     showPriceReaction?: boolean;
     showRecordingDetails?: boolean;
     showScheduleRecording?: boolean;

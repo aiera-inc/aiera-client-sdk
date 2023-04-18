@@ -92,6 +92,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
 
     const config = useConfig();
     let showPriceReaction = true;
+    let showExport = true;
     let showTitleInfo = true;
     let showRecordingDetails = true;
     let showSearch = !hideSearch;
@@ -107,6 +108,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         }
         if (config.options.showSearch !== undefined) {
             showSearch = config.options.showSearch;
+        }
+        if (config.options.showExport !== undefined) {
+            showExport = config.options.showExport;
         }
     }
 
@@ -359,6 +363,29 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         onSeekAudioByDate={onSeekAudioByDate}
                                         startTime={startTime}
                                     />
+                                )}
+                                {showExport && headerExpanded && event && (
+                                    <div
+                                        className={classNames(
+                                            'flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5',
+                                            'transcript__header__details'
+                                        )}
+                                    >
+                                        <div className="flex items-center justify-between h-10 cursor-pointer">
+                                            <span className="text-sm block font-semibold w-28 mr-1 dark:text-white">
+                                                Export Transcript
+                                            </span>
+                                            <div
+                                                onClick={() => window.print()}
+                                                className={classNames(
+                                                    'text-gray-400 text-sm hover:text-gray-600',
+                                                    'bg-gray-100 hover:bg-gray-200 rounded-md px-2 py-1'
+                                                )}
+                                            >
+                                                Print
+                                            </div>
+                                        </div>
+                                    </div>
                                 )}
                             </>
                         );
