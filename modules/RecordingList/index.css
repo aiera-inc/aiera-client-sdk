@@ -541,36 +541,6 @@ input.PhoneInputInput::placeholder {
 /* src/components/PlayButton/styles.css */
 
 /* src/modules/Transcript/styles.css */
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  .dark * {
-    color: #000 !important;
-    background-color: #fff !important;
-  }
-  .transcript__header__title *:not(button) {
-    font-size: 1rem;
-  }
-  .transcript__header__title *:not(button) {
-    visibility: visible;
-  }
-  .transcript__header__title {
-    position: absolute;
-    top: 0px;
-    left: 0px;
-    right: 0px;
-  }
-  #transcriptContainer * {
-    visibility: visible;
-  }
-  #transcriptContainer {
-    position: absolute;
-    top: 80px;
-    left: 0px;
-    right: 0px;
-  }
-}
 
 /* src/modules/EventList/FilterBy/styles.css */
 
