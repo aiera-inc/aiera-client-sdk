@@ -53,13 +53,24 @@
                         userId: 'nash-widget-user',
                     },
                 });
-                // Set up a watchlist after authentication
-                // eventList.setWatchlist([
-                //     { ticker: 'AAPL' },
-                //     { ticker: 'GOOGL' },
-                //     { ticker: 'TLSA' },
-                //     { ticker: 'PTON' },
-                // ]);
+                /**
+                 * Once authenticated and the config is set, create a watchlist.
+                 *
+                 * Warning: calling setWatchlist before the configure call is finished
+                 * will NOT create the watchlist because we expect a userId to be defined
+                 * in the tracking configuration.
+                 *
+                 * To prevent a race condition, use the on('configured') event listener
+                 * and call setWatchlist once the config options are set in state.
+                 */
+                // eventList.on('configured', () => {
+                //     eventList.setWatchlist([
+                //         { ticker: 'AAPL' },
+                //         { ticker: 'GOOGL' },
+                //         { ticker: 'TLSA' }, // invalid tickers are ignored
+                //         { ticker: 'PTON' },
+                //     ]);
+                // });
             });
             eventList.on('instrument-selected', (ticker) => {
                 console.log('selected ticker: ', ticker);
