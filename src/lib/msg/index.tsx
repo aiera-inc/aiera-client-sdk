@@ -41,7 +41,6 @@ export interface MessageBusEvents {
     'event-selected': EventSelected;
     'instrument-selected': InstrumentID;
     'instruments-selected': InstrumentID[];
-    print: null;
     'seek-transcript-seconds': number;
     'seek-transcript-timestamp': string;
     'user-status-inactive': UserEmailStatus;

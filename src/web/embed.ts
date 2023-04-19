@@ -307,34 +307,9 @@ export class Module {
             windowEvent.data?.ns === 'aiera' &&
             windowEvent.data?.iframeId === this.frameId
         ) {
-            if (windowEvent.data.event === 'print') {
-                this.onPrintMessage();
-            }
             this.emitter.emit(windowEvent.data.event, windowEvent.data.data);
         }
     };
-
-    /**
-     * @ignore
-     * Prints iframe when receiving print message
-     */
-    onPrintMessage() {
-        const iframe = document.getElementById(this.frameId) as HTMLIFrameElement;
-        if (iframe.contentWindow && iframe.contentWindow?.document) {
-            const a = window.open('', '', 'height=500, width=500');
-            const data = iframe.contentWindow?.document?.getElementsByTagName('body')[0]?.innerHTML;
-            const link = iframe.contentWindow.document?.querySelector('link');
-            const styles = link?.href;
-            if (data && styles && a) {
-                const divContents = `<html><head><link href="${styles}" rel="stylesheet" type="text/css"></head><body>${data}</body></html>`;
-                a.document.write(divContents);
-                setTimeout(() => {
-                    a?.print();
-                    a?.close();
-                }, 500);
-            }
-        }
-    }
 
     /**
      * Loads the module into the given iframe and sets up messaging between the frame
