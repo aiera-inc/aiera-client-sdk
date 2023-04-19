@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">54.54% </span>
+                <span class="strong">53.84% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>30/55</span>
+                <span class='fraction'>28/52</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.33% </span>
+                <span class="strong">56.7% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>56/96</span>
+                <span class='fraction'>55/97</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">27.27% </span>
+                <span class="strong">30% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>3/11</span>
+                <span class='fraction'>3/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.6% </span>
+                <span class="strong">54.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>30/53</span>
+                <span class='fraction'>28/51</span>
             </div>
         
             
@@ -552,18 +552,7 @@
 <a name='L487'></a><a href='#L487'>487</a>
 <a name='L488'></a><a href='#L488'>488</a>
 <a name='L489'></a><a href='#L489'>489</a>
-<a name='L490'></a><a href='#L490'>490</a>
-<a name='L491'></a><a href='#L491'>491</a>
-<a name='L492'></a><a href='#L492'>492</a>
-<a name='L493'></a><a href='#L493'>493</a>
-<a name='L494'></a><a href='#L494'>494</a>
-<a name='L495'></a><a href='#L495'>495</a>
-<a name='L496'></a><a href='#L496'>496</a>
-<a name='L497'></a><a href='#L497'>497</a>
-<a name='L498'></a><a href='#L498'>498</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L490'></a><a href='#L490'>490</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -954,7 +943,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -990,7 +978,6 @@
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1012,8 +999,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
 <span class="cline-any cline-yes">62x</span>
@@ -1026,7 +1011,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1083,7 +1067,6 @@ import { KeyMentions } from '../KeyMentions';
 import './styles.css';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
-import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 &nbsp;
 export type EventQuery = QueryResult&lt;TranscriptQuery, TranscriptQueryVariables&gt;;
 &nbsp;
@@ -1114,7 +1097,6 @@ interface HeaderUIProps extends HeaderSharedProps {
     headerRef: Ref&lt;HTMLDivElement&gt;;
     keyMentionsExpanded: boolean;
     priceChartExpanded: boolean;
-    onPrint: () =&gt; void;
     toggleEventDetails: () =&gt; void;
     toggleHeader: () =&gt; void;
     toggleKeyMentions: () =&gt; void;
@@ -1138,7 +1120,6 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         onEdit,
         onChangeSearchTerm,
         onClose,
-        onPrint,
         onSeekAudioByDate,
         priceChartExpanded,
         searchTerm,
@@ -1426,8 +1407,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         startTime={startTime}
                                     /&gt;
                                 )}
-                                {showExport &amp;&amp; headerExpanded &amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >event </span>&amp;&amp; (
-<span class="branch-3 cbranch-no" title="branch not covered" >                                    &lt;div</span>
+                                {false &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >showExport </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >headerExpanded </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >event </span>&amp;&amp; (
+<span class="branch-4 cbranch-no" title="branch not covered" >                                    &lt;div</span>
                                         className={classNames(
                                             'flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5',
                                             'transcript__header__details'
@@ -1438,13 +1419,12 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                 Export Transcript
                                             &lt;/span&gt;
                                             &lt;div
-                                                onClick={onPrint}
                                                 className={classNames(
                                                     'text-gray-400 text-sm hover:text-gray-600',
                                                     'bg-gray-100 hover:bg-gray-200 rounded-md px-2 py-1'
                                                 )}
                                             &gt;
-                                                Print
+                                                Download PDF
                                             &lt;/div&gt;
                                         &lt;/div&gt;
                                     &lt;/div&gt;
@@ -1483,7 +1463,6 @@ export function Header(props: HeaderProps): ReactElement {
         startTime,
         useConfigOptions,
     } = props;
-    const bus = useMessageBus();
     const [headerExpanded, setHeaderState] = useState(false);
     const [priceChartExpanded, setPriceChartState] = useState(false);
     const [eventDetailsExpanded, setEventDetailsState] = useState(false);
@@ -1508,8 +1487,6 @@ export function Header(props: HeaderProps): ReactElement {
 <span class="cstat-no" title="statement not covered" >        setEventDetailsState(false);</span>
 <span class="cstat-no" title="statement not covered" >        setKeyMentionsState(false);</span>
     }, [priceChartExpanded]);
-&nbsp;
-    const onPrint = <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >bus.sendWindowMessage('print', null, 'out');</span>
 &nbsp;
     // Collapse Expanded Header on Outside Click
     const headerRef = useRef&lt;HTMLDivElement&gt;(null);
@@ -1539,7 +1516,6 @@ export function Header(props: HeaderProps): ReactElement {
             onChangeSearchTerm={onChangeSearchTerm}
             onClose={onClose}
             onEdit={onEdit}
-            onPrint={onPrint}
             onSeekAudioByDate={onSeekAudioByDate}
             priceChartExpanded={priceChartExpanded}
             searchTerm={searchTerm}
@@ -1561,7 +1537,7 @@ export function Header(props: HeaderProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Apr 18 2023 18:27:03 GMT-0400 (Eastern Daylight Time)
+                at Wed Apr 19 2023 11:16:45 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

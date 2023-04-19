@@ -210,33 +210,12 @@
       this.onWindowMessage = (windowEvent) => {
         var _a, _b;
         if (windowEvent.origin === this.module.origin && ((_a = windowEvent.data) == null ? void 0 : _a.ns) === "aiera" && ((_b = windowEvent.data) == null ? void 0 : _b.iframeId) === this.frameId) {
-          if (windowEvent.data.event === "print") {
-            this.onPrintMessage();
-          }
           this.emitter.emit(windowEvent.data.event, windowEvent.data.data);
         }
       };
       this.emitter = new import_eventemitter3.default();
       this.frameId = frameId;
       this.module = new URL(modulePath, window.location.toString());
-    }
-    onPrintMessage() {
-      var _a, _b, _c, _d, _e;
-      const iframe = document.getElementById(this.frameId);
-      if (iframe.contentWindow && ((_a = iframe.contentWindow) == null ? void 0 : _a.document)) {
-        const a = window.open("", "", "height=500, width=500");
-        const data = (_d = (_c = (_b = iframe.contentWindow) == null ? void 0 : _b.document) == null ? void 0 : _c.getElementsByTagName("body")[0]) == null ? void 0 : _d.innerHTML;
-        const link = (_e = iframe.contentWindow.document) == null ? void 0 : _e.querySelector("link");
-        const styles = link == null ? void 0 : link.href;
-        if (data && styles && a) {
-          const divContents = `<html><head><link href="${styles}" rel="stylesheet" type="text/css"></head><body>${data}</body></html>`;
-          a.document.write(divContents);
-          setTimeout(() => {
-            a == null ? void 0 : a.print();
-            a == null ? void 0 : a.close();
-          }, 500);
-        }
-      }
     }
     load() {
       const frame = this.frame = document.getElementById(this.frameId);

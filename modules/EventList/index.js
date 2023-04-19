@@ -90612,7 +90612,6 @@ function HeaderUI(props) {
     onEdit,
     onChangeSearchTerm,
     onClose,
-    onPrint,
     onSeekAudioByDate,
     priceChartExpanded,
     searchTerm,
@@ -90799,16 +90798,7 @@ function HeaderUI(props) {
       togglePriceChart,
       onSeekAudioByDate,
       startTime
-    }), showExport && headerExpanded && event && /* @__PURE__ */ import_react108.default.createElement("div", {
-      className: (0, import_classnames47.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
-    }, /* @__PURE__ */ import_react108.default.createElement("div", {
-      className: "flex items-center justify-between h-10 cursor-pointer"
-    }, /* @__PURE__ */ import_react108.default.createElement("span", {
-      className: "text-sm block font-semibold w-28 mr-1 dark:text-white"
-    }, "Export Transcript"), /* @__PURE__ */ import_react108.default.createElement("div", {
-      onClick: onPrint,
-      className: (0, import_classnames47.default)("text-gray-400 text-sm hover:text-gray-600", "bg-gray-100 hover:bg-gray-200 rounded-md px-2 py-1")
-    }, "Print"))));
+    }), false);
   }).otherwise(() => null));
 }
 function Header(props) {
@@ -90831,7 +90821,6 @@ function Header(props) {
     startTime,
     useConfigOptions
   } = props;
-  const bus = useMessageBus();
   const [headerExpanded, setHeaderState] = (0, import_react108.useState)(false);
   const [priceChartExpanded, setPriceChartState] = (0, import_react108.useState)(false);
   const [eventDetailsExpanded, setEventDetailsState] = (0, import_react108.useState)(false);
@@ -90852,7 +90841,6 @@ function Header(props) {
     setEventDetailsState(false);
     setKeyMentionsState(false);
   }, [priceChartExpanded]);
-  const onPrint = () => bus.sendWindowMessage("print", null, "out");
   const headerRef = (0, import_react108.useRef)(null);
   useOutsideClickHandler([headerRef], (0, import_react108.useCallback)(() => {
     if (headerExpanded) {
@@ -90875,7 +90863,6 @@ function Header(props) {
     onChangeSearchTerm,
     onClose,
     onEdit,
-    onPrint,
     onSeekAudioByDate,
     priceChartExpanded,
     searchTerm,
