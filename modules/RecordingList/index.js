@@ -92137,11 +92137,10 @@ var EventList = ({
     var _a2;
     const watchlistUsername = (_a2 = config == null ? void 0 : config.tracking) == null ? void 0 : _a2.userId;
     if (watchlistUsername) {
-      const companyIds = msg.data.map((i3) => Object.values(i3)[0]);
-      if (companyIds.length) {
-        const watchlistId = yield upsertPrimaryWatchlist(companyIds, watchlistUsername);
-        mergeState({ watchlistId });
-      }
+      const companyIds = (msg.data || []).map((i3) => Object.values(i3)[0]);
+      const watchlistId = yield upsertPrimaryWatchlist(companyIds, watchlistUsername);
+      mergeState({ watchlistId });
+      refetch();
     } else {
       let companyIds = [];
       const companies = yield resolveCompany(msg.data);
@@ -92149,6 +92148,7 @@ var EventList = ({
         companyIds = companies.map((c3) => c3 == null ? void 0 : c3.id).filter((n2) => n2);
       }
       mergeState({ watchlist: companyIds });
+      refetch();
     }
   }), "in");
   const loadUserStatus = (email) => __async(void 0, null, function* () {
@@ -92214,7 +92214,15 @@ var EventList = ({
   (0, import_react111.useEffect)(() => {
     if (state.fromIndex)
       mergeState({ fromIndex: 0 });
-  }, [state.listType, state.listType, state.company, state.filterByTypes, state.searchTerm, state.event]);
+  }, [
+    state.company,
+    state.event,
+    state.filterByTypes,
+    state.listType,
+    state.searchTerm,
+    state.watchlist,
+    state.watchlistId
+  ]);
   const eventsGQL = (type = "") => lib_default`
         query EventList${type}($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
             search {
@@ -92372,9 +92380,11 @@ var EventList = ({
   const refetch = (0, import_react111.useCallback)(() => {
     const hasPaged = state.fromIndex > 0;
     mergeState({ fromIndex: 0 });
-    if (!hasPaged)
+    if (!hasPaged) {
       eventsQuery.refetch();
-  }, [eventsQuery.refetch, state.fromIndex]);
+      eventsQueryUpcoming.refetch();
+    }
+  }, [eventsQuery.refetch, eventsQueryUpcoming.refetch, state.fromIndex]);
   useInterval(() => {
     var _a2;
     if ((((_a2 = scrollRef.current) == null ? void 0 : _a2.scrollTop) || 0) <= 10) {
