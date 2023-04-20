@@ -665,13 +665,12 @@ export const EventList = ({
              * when there are thousands of company ids.
              */
             if (watchlistUsername) {
-                const companyIds = msg.data.map(
+                const companyIds = (msg.data || []).map(
                     (i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>
                 ) as string[];
-                if (companyIds.length) {
-                    const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
-                    mergeState({ watchlistId });
-                }
+                const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
+                mergeState({ watchlistId });
+                refetch();
             } else {
                 let companyIds: string[] = [];
                 const companies = await resolveCompany(msg.data);
@@ -679,6 +678,7 @@ export const EventList = ({
                     companyIds = companies.map((c) => c?.id).filter((n) => n);
                 }
                 mergeState({ watchlist: companyIds });
+                refetch();
             }
         },
         'in'
@@ -763,7 +763,15 @@ export const EventList = ({
 
     useEffect(() => {
         if (state.fromIndex) mergeState({ fromIndex: 0 });
-    }, [state.listType, state.listType, state.company, state.filterByTypes, state.searchTerm, state.event]);
+    }, [
+        state.company,
+        state.event,
+        state.filterByTypes,
+        state.listType,
+        state.searchTerm,
+        state.watchlist,
+        state.watchlistId,
+    ]);
 
     const eventsGQL = (type = '') => gql`
         query EventList${type}($filter: EventSearchFilter!, $view: EventView, $size: Int, $fromIndex: Int) {
@@ -942,8 +950,11 @@ export const EventList = ({
     const refetch = useCallback(() => {
         const hasPaged = state.fromIndex > 0;
         mergeState({ fromIndex: 0 });
-        if (!hasPaged) eventsQuery.refetch();
-    }, [eventsQuery.refetch, state.fromIndex]);
+        if (!hasPaged) {
+            eventsQuery.refetch();
+            eventsQueryUpcoming.refetch();
+        }
+    }, [eventsQuery.refetch, eventsQueryUpcoming.refetch, state.fromIndex]);
 
     // Refresh every 15 seconds, but only if the user is at the top of the list
     // If they are on another page we don't want to wipe out their results
