@@ -1154,8 +1154,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         [searchState.speakerTurnsWithMatches]
     );
     const onSeekAudioSeconds = useCallback(
-        (seconds: number) => {
-            audioPlayer.rawSeek(seconds * 10);
+        (seconds: number, useOffset?: boolean) => {
+            audioPlayer.rawSeek(seconds, useOffset);
         },
         [audioPlayer]
     );
@@ -1171,7 +1171,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     const { height: containerHeight, ref: containerRef } = useElementSize();
 
-    const bus = useMessageListener('seek-transcript-seconds', ({ data }) => void onSeekAudioSeconds(data), 'in');
+    const bus = useMessageListener('seek-transcript-seconds', ({ data }) => void onSeekAudioSeconds(data, true), 'in');
     bus.on('seek-transcript-timestamp', ({ data }) => void onSeekAudioByDate(data), 'in');
     const onClickTranscript = useCallback(
         (paragraph: Paragraph) => {

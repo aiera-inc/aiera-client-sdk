@@ -209,8 +209,13 @@ export class AudioPlayer {
         this.audio.currentTime = this.offset;
     }
 
-    rawSeek(position: number): void {
-        this.audio.currentTime = position;
+    // The offset is generally not used, as its included in the
+    // data for paragraphMs etc. however, when getting an external
+    // value for a seek position (such as seekTranscriptSeconds),
+    // that value has no knowledge of an offset, so we should apply it
+    rawSeek(position: number, useOffset = false): void {
+        const newTime = useOffset ? position + this.offset : position;
+        this.audio.currentTime = newTime;
 
         // We want to re-render the audio player
         // on-seek if the audio isn't currently
