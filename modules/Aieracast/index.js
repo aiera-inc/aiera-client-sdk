@@ -83856,8 +83856,9 @@ var AudioPlayer = class {
   seekToStart() {
     this.audio.currentTime = this.offset;
   }
-  rawSeek(position) {
-    this.audio.currentTime = position;
+  rawSeek(position, useOffset = false) {
+    const newTime = useOffset ? position + this.offset : position;
+    this.audio.currentTime = newTime;
     if (!this.playing(null)) {
       this.triggerUpdate();
     }
@@ -91753,7 +91754,9 @@ var Transcript = (props) => {
       }
     }
   }, [searchState.speakerTurnsWithMatches]);
-  const onSeekAudioSeconds = (0, import_react109.useCallback)((seconds) => audioPlayer.rawSeek(seconds), [audioPlayer]);
+  const onSeekAudioSeconds = (0, import_react109.useCallback)((seconds, useOffset) => {
+    audioPlayer.rawSeek(seconds, useOffset);
+  }, [audioPlayer]);
   const onClickBack = (0, import_react109.useCallback)((event) => {
     if (!audioPlayer.playing(null)) {
       audioPlayer.clear();
@@ -91761,14 +91764,14 @@ var Transcript = (props) => {
     onBack == null ? void 0 : onBack(event);
   }, [onBack]);
   const { height: containerHeight, ref: containerRef } = useElementSize();
-  const bus = useMessageListener("seek-transcript-seconds", ({ data }) => void onSeekAudioSeconds(data), "in");
+  const bus = useMessageListener("seek-transcript-seconds", ({ data }) => void onSeekAudioSeconds(data, true), "in");
   bus.on("seek-transcript-timestamp", ({ data }) => void onSeekAudioByDate(data), "in");
   const onClickTranscript = (0, import_react109.useCallback)((paragraph) => {
     if (!audioPlayer.id || audioPlayer.id === eventId || eventId && audioPlayer.playing(eventId)) {
       audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
     }
     bus.emit("seek-audio-seconds", (paragraph.syncMs || 0) / 1e3, "out");
-  }, [audioPlayer]);
+  }, [audioPlayer, eventId]);
   useAutoTrack("View", "Event", { eventId, widgetUserId: (_b = config.tracking) == null ? void 0 : _b.userId }, [
     eventId,
     (_c = config.tracking) == null ? void 0 : _c.userId
