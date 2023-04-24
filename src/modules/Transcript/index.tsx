@@ -1153,7 +1153,12 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         },
         [searchState.speakerTurnsWithMatches]
     );
-    const onSeekAudioSeconds = useCallback((seconds: number) => audioPlayer.rawSeek(seconds), [audioPlayer]);
+    const onSeekAudioSeconds = useCallback(
+        (seconds: number) => {
+            audioPlayer.rawSeek(seconds * 10);
+        },
+        [audioPlayer]
+    );
     const onClickBack = useCallback(
         (event: MouseEvent) => {
             if (!audioPlayer.playing(null)) {
@@ -1177,7 +1182,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             }
             bus.emit('seek-audio-seconds', (paragraph.syncMs || 0) / 1000, 'out');
         },
-        [audioPlayer]
+        [audioPlayer, eventId]
     );
     useAutoTrack('View', 'Event', { eventId, widgetUserId: config.tracking?.userId }, [
         eventId,

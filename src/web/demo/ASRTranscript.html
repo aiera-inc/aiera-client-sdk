@@ -19,12 +19,13 @@
         <script>
             const asrTranscript = new Aiera.Module('../modules/ASRTranscript/index.html', 'aiera');
             asrTranscript.load().then(() => {
-                asrTranscript.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+                asrTranscript.authenticateApiKey('56dadc01d107f61d1aa3079b8d0844c0');
             });
             asrTranscript.on('authenticated', () => {
                 asrTranscript.configure({
                     options: {
-                        eventId: '2191898',
+                        relativeTimestamps: true,
+                        eventId: '2458436',
                         darkMode: true,
                         showTitleInfo: true,
                         showRecordingDetails: true,
