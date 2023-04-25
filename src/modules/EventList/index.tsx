@@ -686,8 +686,7 @@ export const EventList = ({
                     (i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>
                 ) as string[];
                 const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
-                mergeState({ watchlistId });
-                mergeState({ loadingWatchlist: 'started' });
+                mergeState({ watchlistId, loadingWatchlist: 'started' });
                 refetch();
             } else {
                 let companyIds: string[] = [];
@@ -979,7 +978,15 @@ export const EventList = ({
                 eventsQueryUpcoming.refetch();
             }
         }
-    }, [state.listType, eventsQuery.refetch, eventsQueryUpcoming.refetch, state.fromIndex]);
+    }, [
+        state.listType,
+        eventsQuery.refetch,
+        eventsQueryUpcoming.refetch,
+        state.fromIndex,
+        state.company,
+        state.searchTerm,
+        config.options?.eventListView,
+    ]);
 
     // Refresh every 15 seconds, but only if the user is at the top of the list
     // If they are on another page we don't want to wipe out their results
