@@ -593,7 +593,7 @@ export interface EventListProps {
     EventRow?: JSXElementConstructor<any>;
 }
 
-type LoadingWatchlist = 'started' | 'loading' | 'complete';
+type LoadingWatchlist = 'started' | 'loading-query' | 'loading-refetch' | 'complete';
 
 interface EventListState {
     company?: CompanyFilterResult;
@@ -1035,29 +1035,38 @@ export const EventList = ({
 
     useEffect(() => {
         // We've started loading the watchlist
+        const watchlistQuery = state.listType === 'recent' ? eventsQuery : eventsQueryUpcoming;
         if (state.loadingWatchlist === 'started') {
-            // the query has started to load, or refetch
-            if (
-                eventsQuery.state.stale ||
-                eventsQueryUpcoming.state.stale ||
-                eventsQuery.status === 'loading' ||
-                eventsQueryUpcoming.status === 'loading'
-            ) {
-                mergeState({ loadingWatchlist: 'loading' });
+            if (watchlistQuery.state.stale) {
+                // If its a refetch query
+                mergeState({ loadingWatchlist: 'loading-refetch' });
+            } else if (watchlistQuery.status === 'loading') {
+                // If its a query load
+                mergeState({ loadingWatchlist: 'loading-query' });
             }
-        } else if (state.loadingWatchlist === 'loading') {
-            // the query has completed loading, and
-            // the state is no longer stale
-            if (
-                !eventsQuery.state.stale &&
-                !eventsQueryUpcoming.state.stale &&
-                eventsQuery.status === 'success' &&
-                eventsQueryUpcoming.status === 'success'
-            ) {
-                mergeState({ loadingWatchlist: 'complete' });
+        } else if (state.loadingWatchlist === 'loading-refetch') {
+            if (!watchlistQuery.state.stale) {
+                // Refetch completed
+                setTimeout(() => {
+                    mergeState({ loadingWatchlist: 'complete' });
+                }, 250);
+            }
+        } else if (state.loadingWatchlist === 'loading-query') {
+            if (watchlistQuery.status === 'success') {
+                // Query completed
+                setTimeout(() => {
+                    mergeState({ loadingWatchlist: 'complete' });
+                }, 250);
             }
         }
-    }, [state.loadingWatchlist, eventsQuery, eventsQueryUpcoming]);
+    }, [
+        state.listType,
+        state.loadingWatchlist,
+        eventsQuery.status,
+        eventsQuery.state.stale,
+        eventsQueryUpcoming.state.stale,
+        eventsQueryUpcoming.status,
+    ]);
 
     return (
         <EventListUI
