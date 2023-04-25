@@ -687,12 +687,6 @@ export const EventList = ({
                 mergeState({ loadingWatchlist: 'started' });
                 const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
                 mergeState({ watchlistId });
-
-                setTimeout(() => {
-                    // we want this to happen on the next tick
-                    // so the results are already stale
-                    mergeState({ loadingWatchlist: 'loading' });
-                });
                 refetch();
             } else {
                 let companyIds: string[] = [];
@@ -1040,10 +1034,30 @@ export const EventList = ({
     }, [controlledSearchTerm]);
 
     useEffect(() => {
-        if (!eventsQuery.state.stale && !eventsQueryUpcoming.state.stale && state.loadingWatchlist === 'loading') {
-            mergeState({ loadingWatchlist: 'complete' });
+        // We've started loading the watchlist
+        if (state.loadingWatchlist === 'started') {
+            // the query has started to load, or refetch
+            if (
+                eventsQuery.state.stale ||
+                eventsQueryUpcoming.state.stale ||
+                eventsQuery.status === 'loading' ||
+                eventsQueryUpcoming.status === 'loading'
+            ) {
+                mergeState({ loadingWatchlist: 'loading' });
+            }
+        } else if (state.loadingWatchlist === 'loading') {
+            // the query has completed loading, and
+            // the state is no longer stale
+            if (
+                !eventsQuery.state.stale &&
+                !eventsQueryUpcoming.state.stale &&
+                eventsQuery.status === 'success' &&
+                eventsQueryUpcoming.status === 'success'
+            ) {
+                mergeState({ loadingWatchlist: 'complete' });
+            }
         }
-    }, [eventsQuery.state, eventsQueryUpcoming.state, state.loadingWatchlist]);
+    }, [state.loadingWatchlist, eventsQuery, eventsQueryUpcoming]);
 
     return (
         <EventListUI
