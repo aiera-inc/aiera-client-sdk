@@ -681,10 +681,10 @@ export const EventList = ({
              * when there are thousands of company ids.
              */
             if (watchlistUsername) {
+                mergeState({ loadingWatchlist: 'started' });
                 const companyIds = (msg.data || []).map(
                     (i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>
                 ) as string[];
-                mergeState({ loadingWatchlist: 'started' });
                 const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
                 mergeState({ watchlistId });
                 refetch();
@@ -1033,6 +1033,7 @@ export const EventList = ({
         handlers.searchTerm(new KeyboardEvent('keydown'), { value: controlledSearchTerm });
     }, [controlledSearchTerm]);
 
+    // Handle watchlist loading UI
     useEffect(() => {
         // We've started loading the watchlist
         const watchlistQuery = state.listType === 'recent' ? eventsQuery : eventsQueryUpcoming;
