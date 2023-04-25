@@ -96,7 +96,7 @@ export interface EventListUIProps {
     listType?: EventView;
     loading?: boolean;
     loadMore?: (event: MouseEvent) => void;
-    loadingWatchlist: boolean;
+    loadingWatchlist: LoadingWatchlist;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler<CompanyFilterResult>;
     onSearchChange?: ChangeHandler<string>;
@@ -479,7 +479,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'success' }, ({ data, isPaging, isRefetching }) =>
-                                loadingWatchlist ? (
+                                loadingWatchlist !== 'complete' ? (
                                     <LoadingEventList />
                                 ) : (
                                     <ul className="w-full">
@@ -593,13 +593,15 @@ export interface EventListProps {
     EventRow?: JSXElementConstructor<any>;
 }
 
+type LoadingWatchlist = 'started' | 'loading' | 'complete';
+
 interface EventListState {
     company?: CompanyFilterResult;
     event?: EventListEvent;
     filterByTypes: FilterByType[];
     fromIndex: number;
     listType: EventView;
-    loadingWatchlist: boolean;
+    loadingWatchlist: LoadingWatchlist;
     pageSize: number;
     searchTerm: string;
     showForm: boolean;
@@ -624,7 +626,7 @@ export const EventList = ({
         filterByTypes: [],
         fromIndex: 0,
         listType: defaultLive ? EventView.LiveAndUpcoming : EventView.Recent,
-        loadingWatchlist: false,
+        loadingWatchlist: 'complete',
         pageSize: 30,
         searchTerm: controlledSearchTerm,
         showForm: false,
@@ -682,12 +684,14 @@ export const EventList = ({
                 const companyIds = (msg.data || []).map(
                     (i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>
                 ) as string[];
+                mergeState({ loadingWatchlist: 'started' });
                 const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
                 mergeState({ watchlistId });
+
                 setTimeout(() => {
                     // we want this to happen on the next tick
                     // so the results are already stale
-                    mergeState({ loadingWatchlist: true });
+                    mergeState({ loadingWatchlist: 'loading' });
                 });
                 refetch();
             } else {
@@ -1036,8 +1040,8 @@ export const EventList = ({
     }, [controlledSearchTerm]);
 
     useEffect(() => {
-        if (!eventsQuery.state.stale && !eventsQueryUpcoming.state.stale && state.loadingWatchlist) {
-            mergeState({ loadingWatchlist: false });
+        if (!eventsQuery.state.stale && !eventsQueryUpcoming.state.stale && state.loadingWatchlist === 'loading') {
+            mergeState({ loadingWatchlist: 'complete' });
         }
     }, [eventsQuery.state, eventsQueryUpcoming.state, state.loadingWatchlist]);
 
