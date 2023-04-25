@@ -593,7 +593,7 @@ export interface EventListProps {
     EventRow?: JSXElementConstructor<any>;
 }
 
-type LoadingWatchlist = 'started' | 'loading-query' | 'loading-refetch' | 'complete';
+type LoadingWatchlist = 'initialized' | 'started' | 'loading-query' | 'loading-refetch' | 'complete';
 
 interface EventListState {
     company?: CompanyFilterResult;
@@ -681,12 +681,13 @@ export const EventList = ({
              * when there are thousands of company ids.
              */
             if (watchlistUsername) {
-                mergeState({ loadingWatchlist: 'started' });
+                mergeState({ loadingWatchlist: 'initialized' });
                 const companyIds = (msg.data || []).map(
                     (i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>
                 ) as string[];
                 const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
                 mergeState({ watchlistId });
+                mergeState({ loadingWatchlist: 'started' });
                 refetch();
             } else {
                 let companyIds: string[] = [];
@@ -968,10 +969,17 @@ export const EventList = ({
         const hasPaged = state.fromIndex > 0;
         mergeState({ fromIndex: 0 });
         if (!hasPaged) {
-            eventsQuery.refetch();
-            eventsQueryUpcoming.refetch();
+            if (state.company || config.options?.eventListView === 'combined' || state.searchTerm.length > 0) {
+                // Reasons to refetch both
+                eventsQuery.refetch();
+                eventsQueryUpcoming.refetch();
+            } else if (state.listType === 'recent') {
+                eventsQuery.refetch();
+            } else if (state.listType === 'live_and_upcoming') {
+                eventsQueryUpcoming.refetch();
+            }
         }
-    }, [eventsQuery.refetch, eventsQueryUpcoming.refetch, state.fromIndex]);
+    }, [state.listType, eventsQuery.refetch, eventsQueryUpcoming.refetch, state.fromIndex]);
 
     // Refresh every 15 seconds, but only if the user is at the top of the list
     // If they are on another page we don't want to wipe out their results
@@ -1048,26 +1056,15 @@ export const EventList = ({
         } else if (state.loadingWatchlist === 'loading-refetch') {
             if (!watchlistQuery.state.stale) {
                 // Refetch completed
-                setTimeout(() => {
-                    mergeState({ loadingWatchlist: 'complete' });
-                }, 250);
+                mergeState({ loadingWatchlist: 'complete' });
             }
         } else if (state.loadingWatchlist === 'loading-query') {
             if (watchlistQuery.status === 'success') {
                 // Query completed
-                setTimeout(() => {
-                    mergeState({ loadingWatchlist: 'complete' });
-                }, 250);
+                mergeState({ loadingWatchlist: 'complete' });
             }
         }
-    }, [
-        state.listType,
-        state.loadingWatchlist,
-        eventsQuery.status,
-        eventsQuery.state.stale,
-        eventsQueryUpcoming.state.stale,
-        eventsQueryUpcoming.status,
-    ]);
+    }, [state.listType, state.loadingWatchlist, eventsQuery, eventsQueryUpcoming]);
 
     return (
         <EventListUI
