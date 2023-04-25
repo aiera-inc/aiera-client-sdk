@@ -96,6 +96,7 @@ export interface EventListUIProps {
     listType?: EventView;
     loading?: boolean;
     loadMore?: (event: MouseEvent) => void;
+    loadingWatchlist: boolean;
     onBackFromTranscript?: MouseEventHandler;
     onCompanyChange?: ChangeHandler<CompanyFilterResult>;
     onSearchChange?: ChangeHandler<string>;
@@ -290,6 +291,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         hideHeader,
         hidePlaybar,
         loadMore,
+        loadingWatchlist,
         listType,
         onBackFromTranscript,
         onCompanyChange,
@@ -474,93 +476,120 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
                             .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
                             .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
-                            .with({ status: 'success' }, ({ data, isPaging, isRefetching }) => (
-                                <ul className="w-full">
-                                    {showAllEvents &&
-                                        match(eventsQueryUpcoming)
-                                            .with(
-                                                { status: 'success' },
-                                                ({ data: dataUpcoming, isRefetching: isUpcomingRefetching }) =>
-                                                    dataUpcoming.search.events.hits.map((hit, index) => {
-                                                        const eventDate = DateTime.fromISO(hit.event.eventDate);
-                                                        let showDivider = false;
-                                                        if (
-                                                            !prevEventDate ||
-                                                            prevEventDate.toFormat('MM/dd/yyyy') !==
-                                                                eventDate.toFormat('MM/dd/yyyy')
-                                                        ) {
-                                                            prevEventDate = eventDate;
-                                                            showDivider = true;
-                                                        }
-                                                        if (!renderedRefetch) {
-                                                            renderedRefetch = true;
-                                                        }
-                                                        return (
-                                                            <EventRow
-                                                                customOnly={customOnly}
-                                                                event={hit.event}
-                                                                index={index}
-                                                                isRefetching={isUpcomingRefetching}
-                                                                key={`${hit.event.id}-${index}`}
-                                                                onSelectEvent={onSelectEvent}
-                                                                refetch={refetch}
-                                                                renderedRefetch={index !== 0}
-                                                                searchTerm={searchTerm}
-                                                                setFocus={setFocus}
-                                                                showDivider={showDivider}
-                                                            />
-                                                        );
-                                                    })
-                                            )
-                                            .otherwise(() => null)}
-                                    {data.search.events.hits.map((hit, index) => {
-                                        const eventDate = DateTime.fromISO(hit.event.eventDate);
-                                        let showDivider = false;
-                                        if (
-                                            !prevEventDate ||
-                                            prevEventDate.toFormat('MM/dd/yyyy') !== eventDate.toFormat('MM/dd/yyyy')
-                                        ) {
-                                            prevEventDate = eventDate;
-                                            showDivider = true;
-                                        }
-                                        if (index > 0 && !renderedRefetch) {
-                                            renderedRefetch = true;
-                                        }
-                                        return (
-                                            <EventRow
-                                                customOnly={customOnly}
-                                                event={hit.event}
-                                                index={index}
-                                                isRefetching={isRefetching}
-                                                key={`${hit.event.id}-${index}`}
-                                                onSelectEvent={onSelectEvent}
-                                                refetch={refetch}
-                                                renderedRefetch={renderedRefetch}
-                                                searchTerm={searchTerm}
-                                                setFocus={setFocus}
-                                                showDivider={showDivider}
-                                            />
-                                        );
-                                    })}
-                                    {loadMore && (
-                                        <li className="px-3 cursor-pointer" onClick={!isPaging ? loadMore : undefined}>
-                                            <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
-                                                <div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"></div>
-                                                {isPaging ? (
-                                                    <div className="flex justify-center items-center group h-[15px]">
-                                                        <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
-                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
-                                                        <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                            .with({ status: 'success' }, ({ data, isPaging, isRefetching }) =>
+                                loadingWatchlist ? (
+                                    <ul className="w-full EventList__loading">
+                                        {new Array(15).fill(0).map((_, idx) => (
+                                            <li key={idx} className="p-2 animate-pulse mx-2">
+                                                <div className="flex items-center">
+                                                    <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9" />
+                                                    <div className="flex flex-col flex-1 min-w-0 p-2 pr-4">
+                                                        <div className="flex">
+                                                            <div className="rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7" />
+                                                            <div className="rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12" />
+                                                        </div>
+                                                        <div className="flex">
+                                                            <div className="rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2" />
+                                                            <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2" />
+                                                            <div className="rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2" />
+                                                        </div>
                                                     </div>
-                                                ) : (
-                                                    'Load more'
-                                                )}
-                                                <div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
-                                            </div>
-                                        </li>
-                                    )}
-                                </ul>
-                            ))
+                                                </div>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                ) : (
+                                    <ul className="w-full">
+                                        {showAllEvents &&
+                                            match(eventsQueryUpcoming)
+                                                .with(
+                                                    { status: 'success' },
+                                                    ({ data: dataUpcoming, isRefetching: isUpcomingRefetching }) =>
+                                                        dataUpcoming.search.events.hits.map((hit, index) => {
+                                                            const eventDate = DateTime.fromISO(hit.event.eventDate);
+                                                            let showDivider = false;
+                                                            if (
+                                                                !prevEventDate ||
+                                                                prevEventDate.toFormat('MM/dd/yyyy') !==
+                                                                    eventDate.toFormat('MM/dd/yyyy')
+                                                            ) {
+                                                                prevEventDate = eventDate;
+                                                                showDivider = true;
+                                                            }
+                                                            if (!renderedRefetch) {
+                                                                renderedRefetch = true;
+                                                            }
+                                                            return (
+                                                                <EventRow
+                                                                    customOnly={customOnly}
+                                                                    event={hit.event}
+                                                                    index={index}
+                                                                    isRefetching={isUpcomingRefetching}
+                                                                    key={`${hit.event.id}-${index}`}
+                                                                    onSelectEvent={onSelectEvent}
+                                                                    refetch={refetch}
+                                                                    renderedRefetch={index !== 0}
+                                                                    searchTerm={searchTerm}
+                                                                    setFocus={setFocus}
+                                                                    showDivider={showDivider}
+                                                                />
+                                                            );
+                                                        })
+                                                )
+                                                .otherwise(() => null)}
+                                        {data.search.events.hits.map((hit, index) => {
+                                            const eventDate = DateTime.fromISO(hit.event.eventDate);
+                                            let showDivider = false;
+                                            if (
+                                                !prevEventDate ||
+                                                prevEventDate.toFormat('MM/dd/yyyy') !==
+                                                    eventDate.toFormat('MM/dd/yyyy')
+                                            ) {
+                                                prevEventDate = eventDate;
+                                                showDivider = true;
+                                            }
+                                            if (index > 0 && !renderedRefetch) {
+                                                renderedRefetch = true;
+                                            }
+                                            return (
+                                                <EventRow
+                                                    customOnly={customOnly}
+                                                    event={hit.event}
+                                                    index={index}
+                                                    isRefetching={isRefetching}
+                                                    key={`${hit.event.id}-${index}`}
+                                                    onSelectEvent={onSelectEvent}
+                                                    refetch={refetch}
+                                                    renderedRefetch={renderedRefetch}
+                                                    searchTerm={searchTerm}
+                                                    setFocus={setFocus}
+                                                    showDivider={showDivider}
+                                                />
+                                            );
+                                        })}
+                                        {loadMore && (
+                                            <li
+                                                className="px-3 cursor-pointer"
+                                                onClick={!isPaging ? loadMore : undefined}
+                                            >
+                                                <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
+                                                    <div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"></div>
+                                                    {isPaging ? (
+                                                        <div className="flex justify-center items-center group h-[15px]">
+                                                            <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
+                                                            <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
+                                                            <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                                                        </div>
+                                                    ) : (
+                                                        'Load more'
+                                                    )}
+                                                    <div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
+                                                </div>
+                                            </li>
+                                        )}
+                                    </ul>
+                                )
+                            )
                             .exhaustive()}
                         <div className="flex-1" />
                     </div>
@@ -587,6 +616,7 @@ interface EventListState {
     filterByTypes: FilterByType[];
     fromIndex: number;
     listType: EventView;
+    loadingWatchlist: boolean;
     pageSize: number;
     searchTerm: string;
     showForm: boolean;
@@ -611,6 +641,7 @@ export const EventList = ({
         filterByTypes: [],
         fromIndex: 0,
         listType: defaultLive ? EventView.LiveAndUpcoming : EventView.Recent,
+        loadingWatchlist: false,
         pageSize: 30,
         searchTerm: controlledSearchTerm,
         showForm: false,
@@ -670,6 +701,11 @@ export const EventList = ({
                 ) as string[];
                 const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
                 mergeState({ watchlistId });
+                setTimeout(() => {
+                    // we want this to happen on the next tick
+                    // so the results are already stale
+                    mergeState({ loadingWatchlist: true });
+                });
                 refetch();
             } else {
                 let companyIds: string[] = [];
@@ -1016,6 +1052,12 @@ export const EventList = ({
         handlers.searchTerm(new KeyboardEvent('keydown'), { value: controlledSearchTerm });
     }, [controlledSearchTerm]);
 
+    useEffect(() => {
+        if (!eventsQuery.state.stale && !eventsQueryUpcoming.state.stale && state.loadingWatchlist) {
+            mergeState({ loadingWatchlist: false });
+        }
+    }, [eventsQuery.state, eventsQueryUpcoming.state, state.loadingWatchlist]);
+
     return (
         <EventListUI
             company={state.company}
@@ -1032,6 +1074,7 @@ export const EventList = ({
             hidePlaybar={hidePlaybar}
             listType={state.listType}
             loadMore={hasMoreResults ? loadMore : undefined}
+            loadingWatchlist={state.loadingWatchlist}
             onBackFromTranscript={useCallback(
                 (event: SyntheticEvent<Element, Event>) => onSelectEvent(event, { value: null }),
                 [onSelectEvent]
