@@ -77737,7 +77737,8 @@ var App = () => {
   }, /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "h-full"
   }, /* @__PURE__ */ import_react59.default.createElement(Transcript, {
-    useConfigOptions: true
+    useConfigOptions: true,
+    showHeaderControls: false
   })))));
 };
 import_react_dom.default.render(/* @__PURE__ */ import_react59.default.createElement(App, null), document.getElementById("root"));
