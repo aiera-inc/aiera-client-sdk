@@ -91736,6 +91736,32 @@ var FilterBy = (props) => {
 };
 
 // src/modules/EventList/index.tsx
+var LoadingEventList = () => /* @__PURE__ */ import_react111.default.createElement("ul", {
+  className: "w-full EventList__loading"
+}, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react111.default.createElement("li", {
+  key: idx,
+  className: "p-2 animate-pulse mx-2"
+}, /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "flex items-center"
+}, /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9"
+}), /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
+}, /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "flex"
+}, /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7"
+}), /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12"
+})), /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "flex"
+}, /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2"
+}), /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2"
+}), /* @__PURE__ */ import_react111.default.createElement("div", {
+  className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2"
+})))))));
 var DefaultEventRow = ({
   customOnly,
   event,
@@ -91857,6 +91883,7 @@ var EventListUI = (props) => {
     hideHeader,
     hidePlaybar,
     loadMore,
+    loadingWatchlist,
     listType,
     onBackFromTranscript,
     onCompanyChange,
@@ -91990,32 +92017,7 @@ var EventListUI = (props) => {
     value: listType
   }))), /* @__PURE__ */ import_react111.default.createElement("div", {
     className: (0, import_classnames50.default)("flex flex-col items-center justify-center flex-1")
-  }, (0, import_ts_pattern13.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react111.default.createElement("ul", {
-    className: "w-full EventList__loading"
-  }, new Array(15).fill(0).map((_2, idx) => /* @__PURE__ */ import_react111.default.createElement("li", {
-    key: idx,
-    className: "p-2 animate-pulse mx-2"
-  }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "flex items-center"
-  }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "rounded-full bg-gray-300 dark:bg-bluegray-5 w-9 h-9"
-  }), /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "flex flex-col flex-1 min-w-0 p-2 pr-4"
-  }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "flex"
-  }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "rounded-full bg-gray-500 dark:bg-bluegray-5 h-[10px] mr-2 w-7"
-  }), /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "rounded-full bg-gray-400 dark:bg-bluegray-6 h-[10px] mr-2 w-12"
-  })), /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "flex"
-  }, /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "rounded-full bg-gray-300 dark:bg-bluegray-5 h-[10px] mr-2 w-28 mt-2"
-  }), /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-16 mt-2"
-  }), /* @__PURE__ */ import_react111.default.createElement("div", {
-    className: "rounded-full bg-gray-200 dark:bg-bluegray-6 h-[10px] mr-2 w-10 mt-2"
-  })))))))).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data, isPaging, isRefetching }) => /* @__PURE__ */ import_react111.default.createElement("ul", {
+  }, (0, import_ts_pattern13.match)(eventsQuery).with({ status: "loading" }, () => /* @__PURE__ */ import_react111.default.createElement(LoadingEventList, null)).with({ status: "paused" }, () => wrapMsg("There are no events.")).with({ status: "error" }, () => wrapMsg("There was an error loading events.")).with({ status: "empty" }, () => wrapMsg("There are no events.")).with({ status: "success" }, ({ data, isPaging, isRefetching }) => loadingWatchlist !== "complete" ? /* @__PURE__ */ import_react111.default.createElement(LoadingEventList, null) : /* @__PURE__ */ import_react111.default.createElement("ul", {
     className: "w-full"
   }, showAllEvents && (0, import_ts_pattern13.match)(eventsQueryUpcoming).with({ status: "success" }, ({ data: dataUpcoming, isRefetching: isUpcomingRefetching }) => dataUpcoming.search.events.hits.map((hit, index) => {
     const eventDate = import_luxon3.DateTime.fromISO(hit.event.eventDate);
@@ -92095,13 +92097,14 @@ var EventList = ({
   showHeaderControls = true,
   EventRow
 }) => {
-  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p;
+  var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k, _l, _m, _n, _o, _p, _q;
   const { state, handlers, mergeState } = useChangeHandlers({
     company: void 0,
     event: void 0,
     filterByTypes: [],
     fromIndex: 0,
     listType: defaultLive ? EventView.LiveAndUpcoming : EventView.Recent,
+    loadingWatchlist: "complete",
     pageSize: 30,
     searchTerm: controlledSearchTerm,
     showForm: false,
@@ -92140,9 +92143,10 @@ var EventList = ({
     var _a2;
     const watchlistUsername = (_a2 = config == null ? void 0 : config.tracking) == null ? void 0 : _a2.userId;
     if (watchlistUsername) {
+      mergeState({ loadingWatchlist: "initialized" });
       const companyIds = (msg.data || []).map((i3) => Object.values(i3)[0]);
       const watchlistId = yield upsertPrimaryWatchlist(companyIds, watchlistUsername);
-      mergeState({ watchlistId });
+      mergeState({ watchlistId, loadingWatchlist: "started" });
       refetch();
     } else {
       let companyIds = [];
@@ -92381,13 +92385,28 @@ var EventList = ({
   const loadMore = (0, import_react111.useCallback)((event) => handlers.fromIndex(event, { value: state.fromIndex + state.pageSize }), [handlers.fromIndex, state.fromIndex]);
   const scrollRef = (0, import_react111.useRef)(null);
   const refetch = (0, import_react111.useCallback)(() => {
+    var _a2;
     const hasPaged = state.fromIndex > 0;
     mergeState({ fromIndex: 0 });
     if (!hasPaged) {
-      eventsQuery.refetch();
-      eventsQueryUpcoming.refetch();
+      if (state.company || ((_a2 = config.options) == null ? void 0 : _a2.eventListView) === "combined" || state.searchTerm.length > 0) {
+        eventsQuery.refetch();
+        eventsQueryUpcoming.refetch();
+      } else if (state.listType === "recent") {
+        eventsQuery.refetch();
+      } else if (state.listType === "live_and_upcoming") {
+        eventsQueryUpcoming.refetch();
+      }
     }
-  }, [eventsQuery.refetch, eventsQueryUpcoming.refetch, state.fromIndex]);
+  }, [
+    state.listType,
+    eventsQuery.refetch,
+    eventsQueryUpcoming.refetch,
+    state.fromIndex,
+    state.company,
+    state.searchTerm,
+    (_f = config.options) == null ? void 0 : _f.eventListView
+  ]);
   useInterval(() => {
     var _a2;
     if ((((_a2 = scrollRef.current) == null ? void 0 : _a2.scrollTop) || 0) <= 10) {
@@ -92416,22 +92435,40 @@ var EventList = ({
       }
     }
   }, [eventsQuery.status]);
-  useAutoTrack("Click", "Event Filter By", { filterBy: state.filterByTypes, widgetUserId: (_f = config.tracking) == null ? void 0 : _f.userId }, [
+  useAutoTrack("Click", "Event Filter By", { filterBy: state.filterByTypes, widgetUserId: (_g = config.tracking) == null ? void 0 : _g.userId }, [
     state.filterByTypes,
-    (_g = config.tracking) == null ? void 0 : _g.userId
+    (_h = config.tracking) == null ? void 0 : _h.userId
   ]);
-  useAutoTrack("Submit", "Event Search", { searchTerm: state.searchTerm, widgetUserId: (_h = config.tracking) == null ? void 0 : _h.userId }, [state.searchTerm, (_i = config.tracking) == null ? void 0 : _i.userId], !state.searchTerm);
-  useAutoTrack("View", "Events", { widgetUserId: (_j = config.tracking) == null ? void 0 : _j.userId }, [(_k = config.tracking) == null ? void 0 : _k.userId]);
+  useAutoTrack("Submit", "Event Search", { searchTerm: state.searchTerm, widgetUserId: (_i = config.tracking) == null ? void 0 : _i.userId }, [state.searchTerm, (_j = config.tracking) == null ? void 0 : _j.userId], !state.searchTerm);
+  useAutoTrack("View", "Events", { widgetUserId: (_k = config.tracking) == null ? void 0 : _k.userId }, [(_l = config.tracking) == null ? void 0 : _l.userId]);
   useAlertList(true);
   (0, import_react111.useEffect)(() => {
     handlers.searchTerm(new KeyboardEvent("keydown"), { value: controlledSearchTerm });
   }, [controlledSearchTerm]);
+  (0, import_react111.useEffect)(() => {
+    const watchlistQuery = state.listType === "recent" ? eventsQuery : eventsQueryUpcoming;
+    if (state.loadingWatchlist === "started") {
+      if (watchlistQuery.state.stale) {
+        mergeState({ loadingWatchlist: "loading-refetch" });
+      } else if (watchlistQuery.status === "loading") {
+        mergeState({ loadingWatchlist: "loading-query" });
+      }
+    } else if (state.loadingWatchlist === "loading-refetch") {
+      if (!watchlistQuery.state.stale) {
+        mergeState({ loadingWatchlist: "complete" });
+      }
+    } else if (state.loadingWatchlist === "loading-query") {
+      if (watchlistQuery.status === "success") {
+        mergeState({ loadingWatchlist: "complete" });
+      }
+    }
+  }, [state.listType, state.loadingWatchlist, eventsQuery, eventsQueryUpcoming]);
   return /* @__PURE__ */ import_react111.default.createElement(EventListUI, {
     company: state.company,
-    customOnly: !!((_l = config.options) == null ? void 0 : _l.customOnly),
+    customOnly: !!((_m = config.options) == null ? void 0 : _m.customOnly),
     darkMode: settings.darkMode,
     event: state.event,
-    eventListView: (_m = config.options) == null ? void 0 : _m.eventListView,
+    eventListView: (_n = config.options) == null ? void 0 : _n.eventListView,
     eventsQuery,
     eventsQueryUpcoming,
     EventRow,
@@ -92441,6 +92478,7 @@ var EventList = ({
     hidePlaybar,
     listType: state.listType,
     loadMore: hasMoreResults ? loadMore : void 0,
+    loadingWatchlist: state.loadingWatchlist,
     onBackFromTranscript: (0, import_react111.useCallback)((event) => onSelectEvent(event, { value: null }), [onSelectEvent]),
     onCompanyChange: onSelectCompany,
     onSearchChange: handlers.searchTerm,
@@ -92452,9 +92490,9 @@ var EventList = ({
     scrollRef,
     searchTerm: state.searchTerm,
     setFocus,
-    showCompanyFilter: ((_n = config.options) == null ? void 0 : _n.showCompanyFilter) === void 0 ? true : (_o = config.options) == null ? void 0 : _o.showCompanyFilter,
+    showCompanyFilter: ((_o = config.options) == null ? void 0 : _o.showCompanyFilter) === void 0 ? true : (_p = config.options) == null ? void 0 : _p.showCompanyFilter,
     showForm: state.showForm,
-    showFormButton: !!((_p = config.options) == null ? void 0 : _p.showScheduleRecording),
+    showFormButton: !!((_q = config.options) == null ? void 0 : _q.showScheduleRecording),
     showHeaderControls,
     toggleForm: (0, import_react111.useCallback)((event) => {
       handlers.showForm(event, { value: !state.showForm });
