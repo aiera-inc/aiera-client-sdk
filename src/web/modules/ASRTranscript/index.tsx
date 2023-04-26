@@ -46,7 +46,7 @@ const App: FC = (): ReactElement => {
             <Provider bus={bus} config={{ moduleName: 'ASR' }}>
                 <Auth apiMode>
                     <div className="h-full">
-                        <Transcript useConfigOptions />
+                        <Transcript useConfigOptions showHeaderControls={false} />
                     </div>
                 </Auth>
             </Provider>

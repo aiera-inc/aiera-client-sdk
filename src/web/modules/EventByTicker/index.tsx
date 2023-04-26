@@ -46,7 +46,7 @@ const App: FC = (): ReactElement => {
             <Provider bus={bus} config={{ moduleName: 'EventByTicker' }}>
                 <Auth apiMode>
                     <div className="h-full">
-                        <Transcript useConfigOptions />
+                        <Transcript useConfigOptions showHeaderControls={false} />
                     </div>
                 </Auth>
             </Provider>
