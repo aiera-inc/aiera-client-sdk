@@ -395,10 +395,11 @@ describe('useAlertList', () => {
 });
 
 describe('usePrimaryWatchlistResolver', () => {
+    const identifiers = [{ BBG: 'AAPL:US' }, { ticker: 'NFLX' }];
     const TestComponent = () => {
         const upsertPrimaryWatchlist = usePrimaryWatchlistResolver();
         useEffect(() => {
-            void upsertPrimaryWatchlist(['AAPL', 'NFLX'], 'component-test-user');
+            void upsertPrimaryWatchlist(identifiers, 'component-test-user');
         }, []);
         return null;
     };
@@ -407,7 +408,7 @@ describe('usePrimaryWatchlistResolver', () => {
         const { client } = renderWithProvider(<TestComponent />);
         expect(client.mutation).toHaveBeenCalledWith(expect.anything(), {
             input: {
-                identifiers: ['AAPL', 'NFLX'],
+                identifiers,
                 creatorUsername: 'component-test-user',
             },
         });

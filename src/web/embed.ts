@@ -258,12 +258,12 @@ import { Config } from '../lib/config';
 // so that the full definition gets generated into the public docs,
 // and limited to the types we actually support.
 export interface InstrumentID {
-    // BBG?: string;
-    CUSIP?: string;
+    BBG?: string;
+    // CUSIP?: string;
     // FDS_ID?: string;
     // FIGI?: string;
     ISIN?: string;
-    // PERMID?: string;
+    PERMID?: string;
     RIC?: string;
     // SEDOL?: string;
     ticker?: string;

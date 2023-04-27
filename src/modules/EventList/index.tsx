@@ -50,7 +50,7 @@ import { Message, useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { RecordingForm } from '@aiera/client-sdk/modules/RecordingForm';
 import { Transcript } from '@aiera/client-sdk/modules/Transcript';
-import { ChangeHandler, ValueOf } from '@aiera/client-sdk/types';
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import {
     EventListCurrentUserQuery,
     EventListQuery,
@@ -682,10 +682,7 @@ export const EventList = ({
              */
             if (watchlistUsername) {
                 mergeState({ loadingWatchlist: 'initialized' });
-                const companyIds = (msg.data || []).map(
-                    (i: InstrumentID) => Object.values(i)[0] as ValueOf<InstrumentID>
-                ) as string[];
-                const watchlistId = await upsertPrimaryWatchlist(companyIds, watchlistUsername);
+                const watchlistId = await upsertPrimaryWatchlist(msg.data, watchlistUsername);
                 mergeState({ watchlistId, loadingWatchlist: 'started' });
                 refetch();
             } else {
