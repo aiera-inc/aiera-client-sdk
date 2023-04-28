@@ -18,6 +18,10 @@ import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import debounce from 'lodash.debounce';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable, SortableContext, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { restrictToHorizontalAxis, restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 
 interface AieracastSharedProps {}
 
@@ -25,6 +29,7 @@ interface AieracastSharedProps {}
 interface AieracastUIProps extends AieracastSharedProps {
     openEventIds: string[];
     toggleEvent: (id: string, event?: EventListEvent) => void;
+    onChangeOpenEventIds: (ids: string[]) => void;
     scrollRef: RefObject<HTMLDivElement>;
 }
 
@@ -37,7 +42,7 @@ interface EventWidths {
 }
 
 export function AieracastUI(props: AieracastUIProps): ReactElement {
-    const { openEventIds, toggleEvent, scrollRef } = props;
+    const { openEventIds, onChangeOpenEventIds, toggleEvent, scrollRef } = props;
     const [resizingEventId, setResizingState] = useState('');
     const [eventWidths, setEventWidths] = useState<EventWidths>({});
     const [showSidebar, setSidebarState] = useState(true);
@@ -236,6 +241,57 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
+    const SortableItem = ({ id }: { id: string }) => {
+        const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+        let width = '368px';
+        const eventWidth = eventWidths[id];
+        if (eventWidth && typeof eventWidth?.width === 'number') {
+            width = `${eventWidth.width}px`;
+        }
+
+        return (
+            <div
+                key={id}
+                className={classNames(
+                    'relative h-full flex-shrink-0 border-r-2 active:z-20',
+                    'border-r-slate-200/60 dark:border-r-bluegray-8'
+                )}
+                style={{
+                    width,
+                    transform: CSS.Translate.toString(transform),
+                    transition,
+                }}
+                ref={setNodeRef}
+            >
+                <div {...attributes} {...listeners}>
+                    Handle
+                </div>
+                <div className="relative">
+                    <Transcript
+                        controlledSearchTerm={globalSearch}
+                        useConfigOptions
+                        onClose={() => toggleEvent(id)}
+                        eventId={id}
+                        hidePlaybar
+                        hideSearch
+                        showHeaderPlayButton
+                    />
+                    <div
+                        onMouseDown={(e) => startResizingEvent(e, id)}
+                        className={classNames(
+                            'absolute top-0 bottom-0 w-1 -right-0.5',
+                            'active:bg-blue-500 active:cursor-none',
+                            'cursor-col-resize z-50',
+                            {
+                                'bg-blue-500': resizingEventId === id,
+                            }
+                        )}
+                    />
+                </div>
+            </div>
+        );
+    };
+
     return (
         <div
             className={classNames(
@@ -307,46 +363,32 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         </div>
                     </div>
                     {openEventIds.length > 0 ? (
-                        <div
-                            className={classNames('flex overflow-x-auto', {
-                                'pointer-events-none select-none': resizingEventId.length > 0,
-                            })}
-                            ref={scrollRef}
-                        >
-                            {openEventIds.map((id) => {
-                                let width = '386px';
-                                const eventWidth = eventWidths[id];
-                                if (eventWidth && typeof eventWidth?.width === 'number') {
-                                    width = `${eventWidth.width}px`;
+                        <DndContext
+                            onDragEnd={(dragEvent: DragEndEvent) => {
+                                const { active, over } = dragEvent;
+                                if (active.id !== over?.id && over) {
+                                    const newIds = [...openEventIds];
+                                    const oldIndex = newIds.indexOf(`${active.id}`);
+                                    const newIndex = newIds.indexOf(`${over.id}`);
+                                    const movedIds = arrayMove(newIds, oldIndex, newIndex);
+                                    onChangeOpenEventIds(movedIds);
                                 }
-                                return (
-                                    <div
-                                        key={id}
-                                        className={classNames(
-                                            'relative h-full flex-shrink-0 border-r-2',
-                                            'border-r-slate-200/60 dark:border-r-bluegray-8'
-                                        )}
-                                        style={{
-                                            width,
-                                        }}
-                                    >
-                                        <Transcript
-                                            controlledSearchTerm={globalSearch}
-                                            useConfigOptions
-                                            onClose={() => toggleEvent(id)}
-                                            eventId={id}
-                                            hidePlaybar
-                                            hideSearch
-                                            showHeaderPlayButton
-                                        />
-                                        <div
-                                            onMouseDown={(e) => startResizingEvent(e, id)}
-                                            className="absolute top-0 bottom-0 w-1 -right-0.5 active:bg-blue-500 active:cursor-none cursor-col-resize z-20"
-                                        />
-                                    </div>
-                                );
-                            })}
-                        </div>
+                            }}
+                            modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]}
+                        >
+                            <div
+                                className={classNames('flex flex-1 overflow-x-auto', {
+                                    'pointer-events-none select-none': resizingEventId.length > 0,
+                                })}
+                                ref={scrollRef}
+                            >
+                                <SortableContext items={openEventIds} strategy={horizontalListSortingStrategy}>
+                                    {openEventIds.map((id) => (
+                                        <SortableItem key={id} id={id} />
+                                    ))}
+                                </SortableContext>
+                            </div>
+                        </DndContext>
                     ) : (
                         <div className="flex items-center justify-center flex-1 text-slate-400 aieracast__empty">
                             Select events from the left sidebar
@@ -366,7 +408,7 @@ export interface AieracastProps extends AieracastSharedProps {}
  * Renders Aieracast
  */
 export function Aieracast(): ReactElement {
-    const [openEventIds, openEventIdsState] = useState<string[]>([]);
+    const [openEventIds, setOpenEventIdsState] = useState<string[]>([]);
     const [storedScrollWidth, setScrollWidthState] = useState(0);
     const config = useConfig();
     const scrollRef = useRef<HTMLDivElement>(null);
@@ -392,7 +434,7 @@ export function Aieracast(): ReactElement {
                 }
                 uniqueIds.add(eventId);
             }
-            openEventIdsState([...uniqueIds]);
+            setOpenEventIdsState([...uniqueIds]);
         },
         [openEventIds]
     );
@@ -411,5 +453,12 @@ export function Aieracast(): ReactElement {
         }
     }, [scrollRef.current?.scrollWidth, openEventIds]);
     useAutoTrack('View', 'Events', { widgetUserId: config.tracking?.userId }, [config.tracking?.userId]);
-    return <AieracastUI openEventIds={openEventIds} scrollRef={scrollRef} toggleEvent={toggleEvent} />;
+    return (
+        <AieracastUI
+            openEventIds={openEventIds}
+            scrollRef={scrollRef}
+            onChangeOpenEventIds={setOpenEventIdsState}
+            toggleEvent={toggleEvent}
+        />
+    );
 }
