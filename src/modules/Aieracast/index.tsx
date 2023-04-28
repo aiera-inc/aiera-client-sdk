@@ -85,10 +85,12 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     // handle the mousemove event, and update the width
     // for that event
     useEffect(() => {
+        let rafId: number;
         const onResize = (e: MouseEvent) => {
             const currentWidth = eventWidths[resizingEventId];
             if (currentWidth) {
-                requestAnimationFrame(() => {
+                cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => {
                     setEventWidths({
                         ...eventWidths,
                         [resizingEventId]: {
@@ -115,13 +117,19 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         return () => {
             window.removeEventListener('mouseup', onReset);
             window.removeEventListener('mousemove', onResize);
+            cancelAnimationFrame(rafId);
         };
     }, [resizingEventId, eventWidths]);
+
     const config = useConfig();
     let darkMode = false;
+    let showSearch = false;
     if (config.options) {
         if (config.options.darkMode !== undefined) {
             darkMode = config.options.darkMode;
+        }
+        if (config.options.showSearch !== undefined) {
+            showSearch = config.options.showSearch;
         }
     }
 
@@ -241,7 +249,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
-    const SortableItem = ({ id }: { id: string }) => {
+    const SortableItem = React.memo(({ id }: { id: string }) => {
         const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
         let width = '368px';
         const eventWidth = eventWidths[id];
@@ -254,7 +262,11 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                 key={id}
                 className={classNames(
                     'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
-                    'border-r-slate-200/60 dark:border-r-bluegray-8'
+                    'border-r-slate-200/60 dark:border-r-bluegray-8',
+                    {
+                        aieracast__transcriptHeader: !showSearch,
+                        'aieracast__transcriptHeader-showSearch': showSearch,
+                    }
                 )}
                 style={{
                     width,
@@ -263,33 +275,33 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                 }}
                 ref={setNodeRef}
             >
-                <div className="relative flex-1">
-                    <Transcript
-                        headerHandleAttributes={attributes}
-                        headerHandleListeners={listeners}
-                        controlledSearchTerm={globalSearch}
-                        useConfigOptions
-                        onClose={() => toggleEvent(id)}
-                        eventId={id}
-                        hidePlaybar
-                        hideSearch
-                        showHeaderPlayButton
-                    />
-                    <div
-                        onMouseDown={(e) => startResizingEvent(e, id)}
-                        className={classNames(
-                            'absolute top-0 bottom-0 w-1 -right-0.5',
-                            'active:bg-blue-500 active:cursor-none',
-                            'cursor-col-resize z-50',
-                            {
-                                'bg-blue-500': resizingEventId === id,
-                            }
-                        )}
-                    />
-                </div>
+                <Transcript
+                    headerHandleAttributes={attributes}
+                    headerHandleListeners={listeners}
+                    controlledSearchTerm={globalSearch}
+                    useConfigOptions
+                    onClose={() => toggleEvent(id)}
+                    eventId={id}
+                    hidePlaybar
+                    hideSearch
+                    showHeaderPlayButton
+                />
+                <div
+                    onMouseDown={(e) => startResizingEvent(e, id)}
+                    className={classNames(
+                        'absolute top-0 bottom-0 w-1 -right-0.5',
+                        'active:bg-blue-500 active:cursor-none',
+                        'cursor-col-resize z-50',
+                        {
+                            'bg-blue-500': resizingEventId === id,
+                        }
+                    )}
+                />
             </div>
         );
-    };
+    });
+
+    SortableItem.displayName = 'AieracastEventColumn';
 
     return (
         <div

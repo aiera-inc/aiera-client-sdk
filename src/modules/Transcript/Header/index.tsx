@@ -124,7 +124,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         <div
             ref={headerRef}
             className={classNames(
-                'bg-white relative rounded-b-lg -mb-1 z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6',
+                'bg-white relative rounded-b-lg z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6',
                 {
                     'shadow-3xl dark:shadow-3xl-dark': !headerExpanded,
                     'shadow-xl': headerExpanded,

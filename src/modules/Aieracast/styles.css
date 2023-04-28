@@ -1,0 +1,6 @@
+.aieracast__transcriptHeader .transcript__header {
+    min-height: 57px;
+}
+.aieracast__transcriptHeader-showSearch .transcript__header {
+    min-height: 101px;
+}
