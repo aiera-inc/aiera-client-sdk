@@ -92153,8 +92153,7 @@ var EventList = ({
     const watchlistUsername = (_a2 = config == null ? void 0 : config.tracking) == null ? void 0 : _a2.userId;
     if (watchlistUsername) {
       mergeState({ loadingWatchlist: "initialized" });
-      const companyIds = (msg.data || []).map((i3) => Object.values(i3)[0]);
-      const watchlistId = yield upsertPrimaryWatchlist(companyIds, watchlistUsername);
+      const watchlistId = yield upsertPrimaryWatchlist(msg.data, watchlistUsername);
       mergeState({ watchlistId, loadingWatchlist: "started" });
       refetch();
     } else {

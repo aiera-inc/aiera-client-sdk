@@ -2,8 +2,9 @@ import type { AieraMessageEvent, Message, MessageBusEvents } from '@aiera/client
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
 import { Config } from '../lib/config';
 export interface InstrumentID {
-    CUSIP?: string;
+    BBG?: string;
     ISIN?: string;
+    PERMID?: string;
     RIC?: string;
     ticker?: string;
 }
