@@ -28,8 +28,18 @@ interface AieracastUIProps extends AieracastSharedProps {
     scrollRef: RefObject<HTMLDivElement>;
 }
 
+/** @notExported */
+interface EventWidths {
+    [id: string]: {
+        left: number;
+        width: number;
+    };
+}
+
 export function AieracastUI(props: AieracastUIProps): ReactElement {
     const { openEventIds, toggleEvent, scrollRef } = props;
+    const [resizingEventId, setResizingState] = useState('');
+    const [eventWidths, setEventWidths] = useState<EventWidths>({});
     const [showSidebar, setSidebarState] = useState(true);
     const [searchTerm, setSearchState] = useState<string>('');
     const [globalSearch, setGlobalSearchState] = useState<string>('');
@@ -39,6 +49,69 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         setSearchState(newValue);
         updateGlobalSearch(newValue);
     }, []);
+
+    // Store the current eventId we're resizing
+    // update that event's current width or set
+    // its default value, and grab its left position
+    const startResizingEvent = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>, id: string) => {
+            const target = e.target as HTMLElement;
+            const parent = target.parentElement;
+            if (parent && parent?.getBoundingClientRect) {
+                const parentRect = parent.getBoundingClientRect();
+                const left = parentRect.left;
+                const eventWidth = eventWidths[id];
+                const newEventWidth = {
+                    left: left,
+                    width: eventWidth?.width || 368,
+                };
+                document.body.style.cursor = 'none';
+                setEventWidths({
+                    ...eventWidths,
+                    [id]: newEventWidth,
+                });
+                setResizingState(id);
+            }
+        },
+        [eventWidths, setResizingState, setEventWidths]
+    );
+
+    // Setup listeners when we have resizingEventId
+    // handle the mousemove event, and update the width
+    // for that event
+    useEffect(() => {
+        const onResize = (e: MouseEvent) => {
+            const currentWidth = eventWidths[resizingEventId];
+            if (currentWidth) {
+                requestAnimationFrame(() => {
+                    setEventWidths({
+                        ...eventWidths,
+                        [resizingEventId]: {
+                            left: currentWidth.left,
+                            width: e.pageX - currentWidth.left > 368 ? e.pageX - currentWidth.left : 368,
+                        },
+                    });
+                });
+            }
+        };
+
+        const onReset = () => {
+            setResizingState('');
+            document.body.style.cursor = 'auto';
+            window.removeEventListener('mouseup', onReset);
+            window.removeEventListener('mousemove', onResize);
+        };
+
+        if (resizingEventId) {
+            window.addEventListener('mousemove', onResize);
+            window.addEventListener('mouseup', onReset);
+        }
+
+        return () => {
+            window.removeEventListener('mouseup', onReset);
+            window.removeEventListener('mousemove', onResize);
+        };
+    }, [resizingEventId, eventWidths]);
     const config = useConfig();
     let darkMode = false;
     if (config.options) {
@@ -234,23 +307,45 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         </div>
                     </div>
                     {openEventIds.length > 0 ? (
-                        <div className="flex overflow-x-auto" ref={scrollRef}>
-                            {openEventIds.map((id) => (
-                                <div
-                                    key={id}
-                                    className="h-full w-[23rem] flex-shrink-0 border-r-2 border-r-slate-200/60 dark:border-r-bluegray-8"
-                                >
-                                    <Transcript
-                                        controlledSearchTerm={globalSearch}
-                                        useConfigOptions
-                                        onClose={() => toggleEvent(id)}
-                                        eventId={id}
-                                        hidePlaybar
-                                        hideSearch
-                                        showHeaderPlayButton
-                                    />
-                                </div>
-                            ))}
+                        <div
+                            className={classNames('flex overflow-x-auto', {
+                                'pointer-events-none select-none': resizingEventId.length > 0,
+                            })}
+                            ref={scrollRef}
+                        >
+                            {openEventIds.map((id) => {
+                                let width = '386px';
+                                const eventWidth = eventWidths[id];
+                                if (eventWidth && typeof eventWidth?.width === 'number') {
+                                    width = `${eventWidth.width}px`;
+                                }
+                                return (
+                                    <div
+                                        key={id}
+                                        className={classNames(
+                                            'relative h-full flex-shrink-0 border-r-2',
+                                            'border-r-slate-200/60 dark:border-r-bluegray-8'
+                                        )}
+                                        style={{
+                                            width,
+                                        }}
+                                    >
+                                        <Transcript
+                                            controlledSearchTerm={globalSearch}
+                                            useConfigOptions
+                                            onClose={() => toggleEvent(id)}
+                                            eventId={id}
+                                            hidePlaybar
+                                            hideSearch
+                                            showHeaderPlayButton
+                                        />
+                                        <div
+                                            onMouseDown={(e) => startResizingEvent(e, id)}
+                                            className="absolute top-0 bottom-0 w-1 -right-0.5 active:bg-blue-500 active:cursor-none cursor-col-resize z-20"
+                                        />
+                                    </div>
+                                );
+                            })}
                         </div>
                     ) : (
                         <div className="flex items-center justify-center flex-1 text-slate-400 aieracast__empty">
