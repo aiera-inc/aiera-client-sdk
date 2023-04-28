@@ -263,14 +263,16 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                 }}
                 ref={setNodeRef}
             >
-                <div {...attributes} {...listeners}>
-                    Handle
-                </div>
                 <div className="relative">
                     <Transcript
+                        headerHandleAttributes={attributes}
+                        headerHandleListeners={listeners}
                         controlledSearchTerm={globalSearch}
                         useConfigOptions
-                        onClose={() => toggleEvent(id)}
+                        onClose={(e) => {
+                            console.log(e, 'poop');
+                            toggleEvent(id);
+                        }}
                         eventId={id}
                         hidePlaybar
                         hideSearch

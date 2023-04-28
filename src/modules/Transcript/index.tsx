@@ -43,6 +43,7 @@ import {
     TranscriptQueryVariables,
     User,
 } from '@aiera/client-sdk/types/generated';
+import { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
 
 import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
@@ -72,6 +73,8 @@ interface TranscriptSharedProps {
     showHeaderPlayButton?: boolean;
     hidePlaybar?: boolean;
     hideSearch?: boolean;
+    headerHandleAttributes?: DraggableAttributes;
+    headerHandleListeners?: DraggableSyntheticListeners;
 }
 
 /** @notExported */
@@ -127,6 +130,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         endTime,
         eventId = '',
         eventQuery,
+        headerHandleAttributes,
+        headerHandleListeners,
         hidePlaybar,
         hideSearch = false,
         matchIndex,
@@ -192,6 +197,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     <div className="dark:bg-bluegray-7">
                         {(showTitleInfo || showSearch) && (
                             <Header
+                                headerHandleAttributes={headerHandleAttributes}
+                                headerHandleListeners={headerHandleListeners}
                                 useConfigOptions={useConfigOptions}
                                 containerHeight={containerHeight}
                                 currentParagraphTimestamp={currentParagraphTimestamp}
@@ -1086,6 +1093,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const {
         controlledSearchTerm,
         eventId: eventListEventId,
+        headerHandleAttributes,
+        headerHandleListeners,
         hidePlaybar,
         hideSearch,
         onBack,
@@ -1202,6 +1211,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             endTime={endTime}
             eventId={eventId}
             eventQuery={eventQuery}
+            headerHandleAttributes={headerHandleAttributes}
+            headerHandleListeners={headerHandleListeners}
             hidePlaybar={hidePlaybar}
             hideSearch={hideSearch}
             matchIndex={searchState.matchIndex}

@@ -17,6 +17,7 @@ import { getEventCreatorName, getPrimaryQuote } from '@aiera/client-sdk/lib/data
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { TranscriptQuery, TranscriptQueryVariables, User } from '@aiera/client-sdk/types/generated';
+import { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
 
 import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
@@ -24,6 +25,7 @@ import { KeyMentions } from '../KeyMentions';
 import './styles.css';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
+import { Handle } from '@aiera/client-sdk/components/Svg/Handle';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 
@@ -33,6 +35,8 @@ interface HeaderSharedProps {
     endTime?: string | null;
     eventId: string;
     eventQuery: EventQuery;
+    headerHandleAttributes?: DraggableAttributes;
+    headerHandleListeners?: DraggableSyntheticListeners;
     hideSearch?: boolean;
     onBack?: MouseEventHandler;
     onBackHeader: string;
@@ -69,6 +73,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         eventId,
         eventQuery,
         headerExpanded,
+        headerHandleAttributes,
+        headerHandleListeners,
         headerRef,
         hideSearch = false,
         keyMentionsExpanded,
@@ -239,6 +245,15 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     )}
                                     onClick={hasEventExtras ? toggleHeader : undefined}
                                 >
+                                    {headerHandleAttributes && headerHandleListeners && (
+                                        <div
+                                            {...headerHandleAttributes}
+                                            {...headerHandleListeners}
+                                            className="-ml-1 pr-0.5 hover:text-gray-700 text-gray-400"
+                                        >
+                                            <Handle className="w-6" />
+                                        </div>
+                                    )}
                                     {showHeaderPlayButton && event && (event.isLive || event.audioProxy) && (
                                         <div className="w-8 h-8 mr-2">
                                             <PlayButton
@@ -407,6 +422,8 @@ export function Header(props: HeaderProps): ReactElement {
         endTime,
         eventId,
         eventQuery,
+        headerHandleAttributes,
+        headerHandleListeners,
         hideSearch,
         onBack,
         onBackHeader,
@@ -465,6 +482,8 @@ export function Header(props: HeaderProps): ReactElement {
             eventId={eventId}
             eventQuery={eventQuery}
             headerExpanded={headerExpanded}
+            headerHandleAttributes={headerHandleAttributes}
+            headerHandleListeners={headerHandleListeners}
             headerRef={headerRef}
             hideSearch={hideSearch}
             keyMentionsExpanded={keyMentionsExpanded}
