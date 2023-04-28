@@ -48,7 +48,11 @@ export interface ToggleProps extends ToggleSharedProps {}
  * Renders Toggle
  */
 export function Toggle(props: ToggleProps): ReactElement {
-    const { on = false, onChange } = props;
+    const { on = false, onChange, darkMode } = props;
     const { settings } = useSettings();
-    return <ToggleUI on={on} onChange={onChange} darkMode={settings.darkMode} />;
+    let dmode = settings.darkMode;
+    if (darkMode !== undefined) {
+        dmode = darkMode;
+    }
+    return <ToggleUI on={on} onChange={onChange} darkMode={dmode} />;
 }

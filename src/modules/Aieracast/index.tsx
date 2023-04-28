@@ -253,7 +253,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
             <div
                 key={id}
                 className={classNames(
-                    'relative h-full flex-shrink-0 border-r-2 active:z-20',
+                    'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
                     'border-r-slate-200/60 dark:border-r-bluegray-8'
                 )}
                 style={{
@@ -263,16 +263,13 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                 }}
                 ref={setNodeRef}
             >
-                <div className="relative">
+                <div className="relative flex-1">
                     <Transcript
                         headerHandleAttributes={attributes}
                         headerHandleListeners={listeners}
                         controlledSearchTerm={globalSearch}
                         useConfigOptions
-                        onClose={(e) => {
-                            console.log(e, 'poop');
-                            toggleEvent(id);
-                        }}
+                        onClose={() => toggleEvent(id)}
                         eventId={id}
                         hidePlaybar
                         hideSearch
