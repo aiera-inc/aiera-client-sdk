@@ -80,10 +80,12 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     // handle the mousemove event, and update the width
     // for that event
     useEffect(() => {
+        let rafId: number;
         const onResize = (e: MouseEvent) => {
             const currentWidth = eventWidths[resizingEventId];
             if (currentWidth) {
-                requestAnimationFrame(() => {
+                cancelAnimationFrame(rafId);
+                rafId = requestAnimationFrame(() => {
                     setEventWidths({
                         ...eventWidths,
                         [resizingEventId]: {
@@ -110,6 +112,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         return () => {
             window.removeEventListener('mouseup', onReset);
             window.removeEventListener('mousemove', onResize);
+            cancelAnimationFrame(rafId);
         };
     }, [resizingEventId, eventWidths]);
     const config = useConfig();
