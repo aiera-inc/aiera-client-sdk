@@ -249,13 +249,8 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
-    const SortableItem = React.memo(({ id }: { id: string }) => {
+    const SortableItem = React.memo(({ id, width, isResizing }: { id: string; width: string; isResizing: boolean }) => {
         const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
-        let width = '368px';
-        const eventWidth = eventWidths[id];
-        if (eventWidth && typeof eventWidth?.width === 'number') {
-            width = `${eventWidth.width}px`;
-        }
 
         return (
             <div
@@ -293,7 +288,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         'active:bg-blue-500 active:cursor-none',
                         'cursor-col-resize z-50',
                         {
-                            'bg-blue-500': resizingEventId === id,
+                            'bg-blue-500': isResizing,
                         }
                     )}
                 />
@@ -394,9 +389,21 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                 ref={scrollRef}
                             >
                                 <SortableContext items={openEventIds} strategy={horizontalListSortingStrategy}>
-                                    {openEventIds.map((id) => (
-                                        <SortableItem key={id} id={id} />
-                                    ))}
+                                    {openEventIds.map((id) => {
+                                        let width = '368px';
+                                        const eventWidth = eventWidths[id];
+                                        if (eventWidth && typeof eventWidth?.width === 'number') {
+                                            width = `${eventWidth.width}px`;
+                                        }
+                                        return (
+                                            <SortableItem
+                                                key={id}
+                                                id={id}
+                                                width={width}
+                                                isResizing={resizingEventId === id}
+                                            />
+                                        );
+                                    })}
                                 </SortableContext>
                             </div>
                         </DndContext>
