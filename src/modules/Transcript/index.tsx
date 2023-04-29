@@ -44,6 +44,8 @@ import {
     User,
 } from '@aiera/client-sdk/types/generated';
 import { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+import { useSortable } from '@dnd-kit/sortable';
 
 import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
@@ -73,6 +75,7 @@ interface TranscriptSharedProps {
     showHeaderPlayButton?: boolean;
     hidePlaybar?: boolean;
     hideSearch?: boolean;
+    handlesEnabled?: boolean;
     headerHandleAttributes?: DraggableAttributes;
     headerHandleListeners?: DraggableSyntheticListeners;
 }
@@ -130,6 +133,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         endTime,
         eventId = '',
         eventQuery,
+        handlesEnabled,
         headerHandleAttributes,
         headerHandleListeners,
         hidePlaybar,
@@ -197,8 +201,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     <div className="dark:bg-bluegray-7">
                         {(showTitleInfo || showSearch) && (
                             <Header
-                                headerHandleAttributes={headerHandleAttributes}
-                                headerHandleListeners={headerHandleListeners}
+                                headerHandleAttributes={handlesEnabled ? headerHandleAttributes : undefined}
+                                headerHandleListeners={handlesEnabled ? headerHandleListeners : undefined}
                                 useConfigOptions={useConfigOptions}
                                 containerHeight={containerHeight}
                                 currentParagraphTimestamp={currentParagraphTimestamp}
@@ -1080,6 +1084,9 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
 
 /** @notExported */
 export interface TranscriptProps extends TranscriptSharedProps {
+    width?: string;
+    isResizing?: boolean;
+    startResize?: (e: React.MouseEvent<HTMLDivElement>, id: string) => void;
     controlledSearchTerm?: string;
     initialSearchTerm?: string;
     onBackHeader?: string;
@@ -1093,8 +1100,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const {
         controlledSearchTerm,
         eventId: eventListEventId,
-        headerHandleAttributes,
-        headerHandleListeners,
+        handlesEnabled = false,
         hidePlaybar,
         hideSearch,
         onBack,
@@ -1102,9 +1108,12 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         onClose,
         onEdit,
         initialSearchTerm,
+        isResizing = false,
         useConfigOptions = false,
         showHeaderControls = true,
         showHeaderPlayButton,
+        startResize,
+        width,
     } = props;
     const [eventId, setEventId] = useState(eventListEventId);
     const config = useConfig();
@@ -1198,7 +1207,15 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         config.tracking?.userId,
     ]);
 
-    return (
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: eventId || '' });
+    const startResizingEvent = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            if (eventId && startResize) startResize(e, eventId);
+        },
+        [eventId]
+    );
+
+    const transcriptComponent = (
         <TranscriptUI
             containerHeight={containerHeight}
             containerRef={containerRef}
@@ -1211,8 +1228,9 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             endTime={endTime}
             eventId={eventId}
             eventQuery={eventQuery}
-            headerHandleAttributes={headerHandleAttributes}
-            headerHandleListeners={headerHandleListeners}
+            handlesEnabled={handlesEnabled}
+            headerHandleAttributes={attributes}
+            headerHandleListeners={listeners}
             hidePlaybar={hidePlaybar}
             hideSearch={hideSearch}
             matchIndex={searchState.matchIndex}
@@ -1240,4 +1258,47 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             useConfigOptions={useConfigOptions}
         />
     );
+
+    // This means we can resize and drag and drop
+    if (handlesEnabled) {
+        let showSearch = !hideSearch;
+        if (useConfigOptions && config.options) {
+            if (config.options.showSearch !== undefined) {
+                showSearch = config.options.showSearch;
+            }
+        }
+        return (
+            <div
+                className={classNames(
+                    'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
+                    'border-r-slate-200/60 dark:border-r-bluegray-8',
+                    {
+                        handles__transcriptHeader: !showSearch,
+                        'handles__transcriptHeader-showSearch': showSearch,
+                    }
+                )}
+                style={{
+                    width,
+                    transform: CSS.Translate.toString(transform),
+                    transition,
+                }}
+                ref={setNodeRef}
+            >
+                {transcriptComponent}
+                <div
+                    onMouseDown={startResizingEvent}
+                    className={classNames(
+                        'absolute top-0 bottom-0 w-1 -right-0.5',
+                        'active:bg-blue-500 active:cursor-none',
+                        'cursor-col-resize z-50',
+                        {
+                            'bg-blue-500': isResizing,
+                        }
+                    )}
+                />
+            </div>
+        );
+    }
+
+    return transcriptComponent;
 };

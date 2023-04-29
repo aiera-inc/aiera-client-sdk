@@ -26,3 +26,10 @@
         right: 0px;
     }
 }
+
+.handles__transcriptHeader .transcript__header {
+    min-height: 57px;
+}
+.handles__transcriptHeader-showSearch .transcript__header {
+    min-height: 101px;
+}

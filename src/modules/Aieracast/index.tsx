@@ -18,8 +18,7 @@ import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import debounce from 'lodash.debounce';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
-import { CSS } from '@dnd-kit/utilities';
-import { useSortable, SortableContext, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { SortableContext, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { restrictToHorizontalAxis, restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
 
@@ -65,15 +64,17 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
             if (parent && parent?.getBoundingClientRect) {
                 const parentRect = parent.getBoundingClientRect();
                 const left = parentRect.left;
-                const eventWidth = eventWidths[id];
-                const newEventWidth = {
-                    left: left,
-                    width: eventWidth?.width || 368,
-                };
                 document.body.style.cursor = 'none';
-                setEventWidths({
-                    ...eventWidths,
-                    [id]: newEventWidth,
+                setEventWidths((prevWidths) => {
+                    const eventWidth = prevWidths[id];
+                    const newEventWidth = {
+                        left: left,
+                        width: eventWidth?.width || 368,
+                    };
+                    return {
+                        ...prevWidths,
+                        [id]: newEventWidth,
+                    };
                 });
                 setResizingState(id);
             }
@@ -91,12 +92,14 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
             if (currentWidth) {
                 cancelAnimationFrame(rafId);
                 rafId = requestAnimationFrame(() => {
-                    setEventWidths({
-                        ...eventWidths,
-                        [resizingEventId]: {
-                            left: currentWidth.left,
-                            width: e.pageX - currentWidth.left > 368 ? e.pageX - currentWidth.left : 368,
-                        },
+                    setEventWidths((prevWidths) => {
+                        return {
+                            ...prevWidths,
+                            [resizingEventId]: {
+                                left: currentWidth.left,
+                                width: e.pageX - currentWidth.left > 368 ? e.pageX - currentWidth.left : 368,
+                            },
+                        };
                     });
                 });
             }
@@ -123,13 +126,9 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
 
     const config = useConfig();
     let darkMode = false;
-    let showSearch = false;
     if (config.options) {
         if (config.options.darkMode !== undefined) {
             darkMode = config.options.darkMode;
-        }
-        if (config.options.showSearch !== undefined) {
-            showSearch = config.options.showSearch;
         }
     }
 
@@ -249,55 +248,6 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
-    const SortableItem = React.memo(({ id, width, isResizing }: { id: string; width: string; isResizing: boolean }) => {
-        const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
-
-        return (
-            <div
-                key={id}
-                className={classNames(
-                    'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
-                    'border-r-slate-200/60 dark:border-r-bluegray-8',
-                    {
-                        aieracast__transcriptHeader: !showSearch,
-                        'aieracast__transcriptHeader-showSearch': showSearch,
-                    }
-                )}
-                style={{
-                    width,
-                    transform: CSS.Translate.toString(transform),
-                    transition,
-                }}
-                ref={setNodeRef}
-            >
-                <Transcript
-                    headerHandleAttributes={attributes}
-                    headerHandleListeners={listeners}
-                    controlledSearchTerm={globalSearch}
-                    useConfigOptions
-                    onClose={() => toggleEvent(id)}
-                    eventId={id}
-                    hidePlaybar
-                    hideSearch
-                    showHeaderPlayButton
-                />
-                <div
-                    onMouseDown={(e) => startResizingEvent(e, id)}
-                    className={classNames(
-                        'absolute top-0 bottom-0 w-1 -right-0.5',
-                        'active:bg-blue-500 active:cursor-none',
-                        'cursor-col-resize z-50',
-                        {
-                            'bg-blue-500': isResizing,
-                        }
-                    )}
-                />
-            </div>
-        );
-    });
-
-    SortableItem.displayName = 'AieracastEventColumn';
-
     return (
         <div
             className={classNames(
@@ -396,11 +346,19 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                             width = `${eventWidth.width}px`;
                                         }
                                         return (
-                                            <SortableItem
-                                                key={id}
-                                                id={id}
+                                            <Transcript
                                                 width={width}
-                                                isResizing={resizingEventId === id}
+                                                startResize={startResizingEvent}
+                                                isResizing={id === resizingEventId}
+                                                handlesEnabled
+                                                key={id}
+                                                controlledSearchTerm={globalSearch}
+                                                useConfigOptions
+                                                onClose={() => toggleEvent(id)}
+                                                eventId={id}
+                                                hidePlaybar
+                                                hideSearch
+                                                showHeaderPlayButton
                                             />
                                         );
                                     })}
