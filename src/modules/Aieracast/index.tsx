@@ -239,6 +239,38 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
+    const EventColumn = React.memo(({ width, id }: { width: string; id: string }) => {
+        const closeEvent = useCallback(() => toggleEvent(id), [id]);
+        const mouseDownResize = useCallback((e: React.MouseEvent<HTMLDivElement>) => startResizingEvent(e, id), [id]);
+        return (
+            <div
+                key={id}
+                className={classNames(
+                    'relative h-full flex-shrink-0 border-r-2',
+                    'border-r-slate-200/60 dark:border-r-bluegray-8'
+                )}
+                style={{
+                    width,
+                }}
+            >
+                <Transcript
+                    controlledSearchTerm={globalSearch}
+                    useConfigOptions
+                    onClose={closeEvent}
+                    eventId={id}
+                    hidePlaybar
+                    hideSearch
+                    showHeaderPlayButton
+                />
+                <div
+                    onMouseDown={mouseDownResize}
+                    className="absolute top-0 bottom-0 w-1 -right-0.5 active:bg-blue-500 active:cursor-none cursor-col-resize z-20"
+                />
+            </div>
+        );
+    });
+    EventColumn.displayName = 'EventColumn';
+
     return (
         <div
             className={classNames(
@@ -322,32 +354,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                 if (eventWidth && typeof eventWidth?.width === 'number') {
                                     width = `${eventWidth.width}px`;
                                 }
-                                return (
-                                    <div
-                                        key={id}
-                                        className={classNames(
-                                            'relative h-full flex-shrink-0 border-r-2',
-                                            'border-r-slate-200/60 dark:border-r-bluegray-8'
-                                        )}
-                                        style={{
-                                            width,
-                                        }}
-                                    >
-                                        <Transcript
-                                            controlledSearchTerm={globalSearch}
-                                            useConfigOptions
-                                            onClose={() => toggleEvent(id)}
-                                            eventId={id}
-                                            hidePlaybar
-                                            hideSearch
-                                            showHeaderPlayButton
-                                        />
-                                        <div
-                                            onMouseDown={(e) => startResizingEvent(e, id)}
-                                            className="absolute top-0 bottom-0 w-1 -right-0.5 active:bg-blue-500 active:cursor-none cursor-col-resize z-20"
-                                        />
-                                    </div>
-                                );
+                                return <EventColumn id={id} key={id} width={width} />;
                             })}
                         </div>
                     ) : (
