@@ -134,6 +134,20 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
 
     const updateGlobalSearch = debounce((v: string) => setGlobalSearchState(v), 250);
 
+    const onDragEnd = useCallback(
+        (dragEvent: DragEndEvent) => {
+            const { active, over } = dragEvent;
+            if (active.id !== over?.id && over) {
+                const newIds = [...openEventIds];
+                const oldIndex = newIds.indexOf(`${active.id}`);
+                const newIndex = newIds.indexOf(`${over.id}`);
+                const movedIds = arrayMove(newIds, oldIndex, newIndex);
+                onChangeOpenEventIds(movedIds);
+            }
+        },
+        [openEventIds]
+    );
+
     const EventRow = ({ customOnly, event, isRefetching, refetch, renderedRefetch, showDivider }: EventRowProps) => {
         const primaryQuote = getPrimaryQuote(event.primaryCompany);
         const eventDate = DateTime.fromISO(event.eventDate);
@@ -320,16 +334,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                     </div>
                     {openEventIds.length > 0 ? (
                         <DndContext
-                            onDragEnd={(dragEvent: DragEndEvent) => {
-                                const { active, over } = dragEvent;
-                                if (active.id !== over?.id && over) {
-                                    const newIds = [...openEventIds];
-                                    const oldIndex = newIds.indexOf(`${active.id}`);
-                                    const newIndex = newIds.indexOf(`${over.id}`);
-                                    const movedIds = arrayMove(newIds, oldIndex, newIndex);
-                                    onChangeOpenEventIds(movedIds);
-                                }
-                            }}
+                            onDragEnd={onDragEnd}
                             modifiers={[restrictToHorizontalAxis, restrictToFirstScrollableAncestor]}
                         >
                             <div

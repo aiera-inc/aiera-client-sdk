@@ -45,7 +45,7 @@ import {
     User,
 } from '@aiera/client-sdk/types/generated';
 import { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
-import { CSS } from '@dnd-kit/utilities';
+import { CSS, Transform } from '@dnd-kit/utilities';
 import { useSortable } from '@dnd-kit/sortable';
 
 import { EmptyMessage } from './EmptyMessage';
@@ -73,6 +73,9 @@ interface HandlesWrapperUIProps {
     startResize: (e: React.MouseEvent<HTMLDivElement>, id: string) => void;
     children: ReactNode;
     eventId?: string;
+    transition?: string;
+    transform: Transform | null;
+    setNodeRef: (node: HTMLElement | null) => void;
 }
 function HandlesWrapperUI({
     showSearch,
@@ -81,8 +84,10 @@ function HandlesWrapperUI({
     startResize,
     isResizing,
     eventId = '',
+    transition,
+    transform,
+    setNodeRef,
 }: HandlesWrapperUIProps) {
-    const { setNodeRef, transform, transition } = useSortable({ id: eventId });
     const startResizingEvent = useCallback(
         (e: React.MouseEvent<HTMLDivElement>) => {
             if (eventId && startResize) startResize(e, eventId);
@@ -1264,7 +1269,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         eventId,
         config.tracking?.userId,
     ]);
-    const { attributes, listeners } = useSortable({ id: eventId || '' });
+    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: eventId || '' });
 
     const transcriptComponent = (
         <TranscriptUI
@@ -1320,6 +1325,9 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         }
         return (
             <HandlesWrapperUI
+                transform={transform}
+                transition={transition}
+                setNodeRef={setNodeRef}
                 showSearch={showSearch}
                 width={width}
                 startResize={startResize}

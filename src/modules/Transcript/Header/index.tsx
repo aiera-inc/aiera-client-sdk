@@ -249,7 +249,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         <div
                                             {...headerHandleAttributes}
                                             {...headerHandleListeners}
-                                            className="-ml-1 pr-0.5 hover:text-gray-700 text-gray-400"
+                                            className="-ml-1 pr-0.5 hover:text-gray-700 text-gray-400 active:cursor-grabbing"
                                         >
                                             <Handle className="w-6" />
                                         </div>
