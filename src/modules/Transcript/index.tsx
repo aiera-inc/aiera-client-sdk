@@ -11,6 +11,7 @@ import React, {
     useEffect,
     useState,
     Fragment,
+    ReactNode,
 } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
@@ -64,6 +65,63 @@ interface ParagraphWithMatches {
 }
 type SpeakerTurnsWithMatches = SpeakerTurn & { paragraphsWithMatches: ParagraphWithMatches[] };
 type Partial = { text: string; timestamp: number; relativeTimestamp: number };
+
+interface HandlesWrapperUIProps {
+    showSearch: boolean;
+    width: string;
+    isResizing: boolean;
+    startResize: (e: React.MouseEvent<HTMLDivElement>, id: string) => void;
+    children: ReactNode;
+    eventId?: string;
+}
+function HandlesWrapperUI({
+    showSearch,
+    width,
+    children,
+    startResize,
+    isResizing,
+    eventId = '',
+}: HandlesWrapperUIProps) {
+    const { setNodeRef, transform, transition } = useSortable({ id: eventId });
+    const startResizingEvent = useCallback(
+        (e: React.MouseEvent<HTMLDivElement>) => {
+            if (eventId && startResize) startResize(e, eventId);
+        },
+        [eventId]
+    );
+
+    return (
+        <div
+            className={classNames(
+                'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
+                'border-r-slate-200/60 dark:border-r-bluegray-8',
+                {
+                    handles__transcriptHeader: !showSearch,
+                    'handles__transcriptHeader-showSearch': showSearch,
+                }
+            )}
+            style={{
+                width,
+                transform: CSS.Translate.toString(transform),
+                transition,
+            }}
+            ref={setNodeRef}
+        >
+            {children}
+            <div
+                onMouseDown={startResizingEvent}
+                className={classNames(
+                    'absolute top-0 bottom-0 w-1 -right-0.5',
+                    'active:bg-blue-500 active:cursor-none',
+                    'cursor-col-resize z-50',
+                    {
+                        'bg-blue-500': isResizing,
+                    }
+                )}
+            />
+        </div>
+    );
+}
 
 /** @notExported */
 interface TranscriptSharedProps {
@@ -1206,14 +1264,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         eventId,
         config.tracking?.userId,
     ]);
-
-    const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: eventId || '' });
-    const startResizingEvent = useCallback(
-        (e: React.MouseEvent<HTMLDivElement>) => {
-            if (eventId && startResize) startResize(e, eventId);
-        },
-        [eventId]
-    );
+    const { attributes, listeners } = useSortable({ id: eventId || '' });
 
     const transcriptComponent = (
         <TranscriptUI
@@ -1260,7 +1311,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     );
 
     // This means we can resize and drag and drop
-    if (handlesEnabled) {
+    if (handlesEnabled && width && startResize) {
         let showSearch = !hideSearch;
         if (useConfigOptions && config.options) {
             if (config.options.showSearch !== undefined) {
@@ -1268,35 +1319,15 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             }
         }
         return (
-            <div
-                className={classNames(
-                    'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
-                    'border-r-slate-200/60 dark:border-r-bluegray-8',
-                    {
-                        handles__transcriptHeader: !showSearch,
-                        'handles__transcriptHeader-showSearch': showSearch,
-                    }
-                )}
-                style={{
-                    width,
-                    transform: CSS.Translate.toString(transform),
-                    transition,
-                }}
-                ref={setNodeRef}
+            <HandlesWrapperUI
+                showSearch={showSearch}
+                width={width}
+                startResize={startResize}
+                isResizing={isResizing}
+                eventId={eventId}
             >
                 {transcriptComponent}
-                <div
-                    onMouseDown={startResizingEvent}
-                    className={classNames(
-                        'absolute top-0 bottom-0 w-1 -right-0.5',
-                        'active:bg-blue-500 active:cursor-none',
-                        'cursor-col-resize z-50',
-                        {
-                            'bg-blue-500': isResizing,
-                        }
-                    )}
-                />
-            </div>
+            </HandlesWrapperUI>
         );
     }
 
