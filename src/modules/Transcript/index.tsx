@@ -77,56 +77,60 @@ interface HandlesWrapperUIProps {
     transform: Transform | null;
     setNodeRef: (node: HTMLElement | null) => void;
 }
-function HandlesWrapperUI({
-    showSearch,
-    width,
-    children,
-    startResize,
-    isResizing,
-    eventId = '',
-    transition,
-    transform,
-    setNodeRef,
-}: HandlesWrapperUIProps) {
-    const startResizingEvent = useCallback(
-        (e: React.MouseEvent<HTMLDivElement>) => {
-            if (eventId && startResize) startResize(e, eventId);
-        },
-        [eventId]
-    );
+const HandlesWrapperUI = React.memo(
+    ({
+        showSearch,
+        width,
+        children,
+        startResize,
+        isResizing,
+        eventId = '',
+        transition,
+        transform,
+        setNodeRef,
+    }: HandlesWrapperUIProps) => {
+        const startResizingEvent = useCallback(
+            (e: React.MouseEvent<HTMLDivElement>) => {
+                if (eventId && startResize) startResize(e, eventId);
+            },
+            [eventId]
+        );
 
-    return (
-        <div
-            className={classNames(
-                'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
-                'border-r-slate-200/60 dark:border-r-bluegray-8',
-                {
-                    handles__transcriptHeader: !showSearch,
-                    'handles__transcriptHeader-showSearch': showSearch,
-                }
-            )}
-            style={{
-                width,
-                transform: CSS.Translate.toString(transform),
-                transition,
-            }}
-            ref={setNodeRef}
-        >
-            {children}
+        return (
             <div
-                onMouseDown={startResizingEvent}
                 className={classNames(
-                    'absolute top-0 bottom-0 w-1 -right-0.5',
-                    'active:bg-blue-500 active:cursor-none',
-                    'cursor-col-resize z-50',
+                    'relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20',
+                    'border-r-slate-200/60 dark:border-r-bluegray-8',
                     {
-                        'bg-blue-500': isResizing,
+                        handles__transcriptHeader: !showSearch,
+                        'handles__transcriptHeader-showSearch': showSearch,
                     }
                 )}
-            />
-        </div>
-    );
-}
+                style={{
+                    width,
+                    transform: CSS.Translate.toString(transform),
+                    transition,
+                }}
+                ref={setNodeRef}
+            >
+                {children}
+                <div
+                    onMouseDown={startResizingEvent}
+                    className={classNames(
+                        'absolute top-0 bottom-0 w-1 -right-0.5',
+                        'active:bg-blue-500 active:cursor-none',
+                        'cursor-col-resize z-50',
+                        {
+                            'bg-blue-500': isResizing,
+                        }
+                    )}
+                />
+            </div>
+        );
+    }
+);
+
+HandlesWrapperUI.displayName = 'HandlesWrapperUI';
 
 /** @notExported */
 interface TranscriptSharedProps {

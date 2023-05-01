@@ -137,7 +137,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     const onDragEnd = useCallback(
         (dragEvent: DragEndEvent) => {
             const { active, over } = dragEvent;
-            if (active.id !== over?.id && over) {
+            if (over && active.id !== over?.id) {
                 const newIds = [...openEventIds];
                 const oldIndex = newIds.indexOf(`${active.id}`);
                 const newIndex = newIds.indexOf(`${over.id}`);
@@ -347,7 +347,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                     {openEventIds.map((id) => {
                                         let width = '368px';
                                         const eventWidth = eventWidths[id];
-                                        if (eventWidth && typeof eventWidth?.width === 'number') {
+                                        if (eventWidth) {
                                             width = `${eventWidth.width}px`;
                                         }
                                         return (
