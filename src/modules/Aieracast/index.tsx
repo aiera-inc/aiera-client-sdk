@@ -1,7 +1,6 @@
 import React, { Fragment, ReactElement, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import './styles.css';
 import { EventList, EventListEvent, EventRowProps } from '../EventList';
-import { Transcript } from '../Transcript';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
 import { ChangeEvent, User } from '@aiera/client-sdk/types';
@@ -20,7 +19,12 @@ import debounce from 'lodash.debounce';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { SortableContext, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { useSortable } from '@dnd-kit/sortable';
+import { CSS } from '@dnd-kit/utilities';
 import { restrictToHorizontalAxis, restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
+
+const LIPSUM =
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc egestas accumsan dolor vel hendrerit. Suspendisse potenti. Vivamus semper neque neque, a laoreet ex elementum ac. Nam arcu mi, luctus sit amet nisi vel, maximus luctus erat. Praesent venenatis arcu mattis, hendrerit augue condimentum, egestas erat. In iaculis scelerisque urna. Aliquam erat volutpat. Maecenas gravida lorem non arcu cursus vehicula. Integer ac vulputate erat, ut vestibulum diam. Integer sit amet elementum tellus. Vivamus eget pharetra urna. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Proin quis fermentum metus. Vestibulum vehicula bibendum hendrerit. Nam viverra consectetur cursus. In vitae leo velit. Phasellus facilisis pharetra massa, ut feugiat odio. Integer auctor nec felis in pulvinar. Cras ullamcorper mattis metus iaculis ornare. Vestibulum non felis a sapien suscipit gravida et vitae justo. Vivamus vel mattis turpis. Fusce ullamcorper vulputate ex, eu eleifend massa finibus quis. Nulla suscipit tincidunt luctus. Phasellus sed massa enim. Vivamus at vulputate ipsum. Donec venenatis sit amet tortor sed varius. Duis sodales neque aliquam mauris semper, nec porttitor turpis tempor. Sed sem urna, condimentum eget lacus in, pretium lacinia lectus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Sed ac dolor aliquet, pulvinar justo id, viverra mi. Nunc varius rutrum risus in pellentesque. Pellentesque sit amet ex hendrerit, tempor erat sed, condimentum felis. Integer eget lectus mattis, fringilla dui at, sollicitudin leo. Ut vitae efficitur massa. Morbi sit amet justo eu dui cursus gravida. Duis eget consectetur tellus, ac ultrices risus. Sed dictum mi lectus, ut tincidunt odio auctor quis. Curabitur posuere magna vitae augue dignissim, at facilisis erat lobortis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Quisque pretium tincidunt justo. In ac purus nisl. Donec lacinia est et lectus condimentum, quis laoreet urna tincidunt. Pellentesque rhoncus, mi quis scelerisque placerat, dui justo auctor dui, id ultrices ipsum nunc ac diam. Vivamus vitae elementum arcu. Nullam ac turpis eget magna finibus posuere quis vitae ante. Proin vel porttitor nulla. Vestibulum vehicula ligula porta ligula volutpat, sit amet gravida sapien gravida. Suspendisse consequat iaculis massa. Morbi sed eros in eros ullamcorper imperdiet vitae ut nibh. Suspendisse libero mauris, ornare non luctus ut, dignissim nec libero. Nunc convallis consectetur ornare. Duis faucibus laoreet ante eget tincidunt. Pellentesque auctor nisi sed neque volutpat, id egestas dui ultrices. Phasellus venenatis ultricies nisi, gravida tincidunt justo ullamcorper eu. Sed quis sapien metus. Aenean gravida dui sit amet ultrices dapibus. Pellentesque bibendum, metus non egestas vestibulum, odio tellus vestibulum ipsum, id pharetra odio erat mollis nibh. Proin maximus tellus quis lectus eleifend, ut efficitur massa rutrum. Praesent sollicitudin, elit sed ullamcorper fermentum, arcu mi sodales lorem, quis aliquam ligula velit in enim. Phasellus vel sollicitudin nisi, sed tristique enim. Donec quis consequat est. Nulla suscipit, turpis et varius tempor, mauris nunc ultricies ex, quis rhoncus nunc dui et metus.';
 
 interface AieracastSharedProps {}
 
@@ -53,34 +57,6 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         setSearchState(newValue);
         updateGlobalSearch(newValue);
     }, []);
-
-    // Store the current eventId we're resizing
-    // update that event's current width or set
-    // its default value, and grab its left position
-    const startResizingEvent = useCallback(
-        (e: React.MouseEvent<HTMLDivElement>, id: string) => {
-            const target = e.target as HTMLElement;
-            const parent = target.parentElement;
-            if (parent && parent?.getBoundingClientRect) {
-                const parentRect = parent.getBoundingClientRect();
-                const left = parentRect.left;
-                document.body.style.cursor = 'none';
-                setEventWidths((prevWidths) => {
-                    const eventWidth = prevWidths[id];
-                    const newEventWidth = {
-                        left: left,
-                        width: eventWidth?.width || 368,
-                    };
-                    return {
-                        ...prevWidths,
-                        [id]: newEventWidth,
-                    };
-                });
-                setResizingState(id);
-            }
-        },
-        [eventWidths, setResizingState, setEventWidths]
-    );
 
     // Setup listeners when we have resizingEventId
     // handle the mousemove event, and update the width
@@ -262,6 +238,28 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         );
     };
 
+    const SortableTest = React.memo(({ id, width }: { id: string; width: string }) => {
+        const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id });
+
+        return (
+            <div
+                {...attributes}
+                {...listeners}
+                ref={setNodeRef}
+                className="overflow-auto height-full"
+                style={{
+                    width,
+                    transform: CSS.Translate.toString(transform),
+                    transition,
+                }}
+            >
+                {LIPSUM}
+            </div>
+        );
+    });
+
+    SortableTest.displayName = 'SortableTest';
+
     return (
         <div
             className={classNames(
@@ -350,22 +348,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                                         if (eventWidth) {
                                             width = `${eventWidth.width}px`;
                                         }
-                                        return (
-                                            <Transcript
-                                                width={width}
-                                                startResize={startResizingEvent}
-                                                isResizing={id === resizingEventId}
-                                                handlesEnabled
-                                                key={id}
-                                                controlledSearchTerm={globalSearch}
-                                                useConfigOptions
-                                                onClose={() => toggleEvent(id)}
-                                                eventId={id}
-                                                hidePlaybar
-                                                hideSearch
-                                                showHeaderPlayButton
-                                            />
-                                        );
+                                        return <SortableTest key={id} id={id} width={width} />;
                                     })}
                                 </SortableContext>
                             </div>
