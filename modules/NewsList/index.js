@@ -39939,12 +39939,16 @@ function ToggleUI(props) {
   }));
 }
 function Toggle(props) {
-  const { on = false, onChange } = props;
+  const { on = false, onChange, darkMode } = props;
   const { settings } = useSettings();
+  let dmode = settings.darkMode;
+  if (darkMode !== void 0) {
+    dmode = darkMode;
+  }
   return /* @__PURE__ */ import_react28.default.createElement(ToggleUI, {
     on,
     onChange,
-    darkMode: settings.darkMode
+    darkMode: dmode
   });
 }
 

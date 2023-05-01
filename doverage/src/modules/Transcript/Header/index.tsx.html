@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">56.7% </span>
+                <span class="strong">56% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>55/97</span>
+                <span class='fraction'>56/100</span>
             </div>
         
             
@@ -552,7 +552,32 @@
 <a name='L487'></a><a href='#L487'>487</a>
 <a name='L488'></a><a href='#L488'>488</a>
 <a name='L489'></a><a href='#L489'>489</a>
-<a name='L490'></a><a href='#L490'>490</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L490'></a><a href='#L490'>490</a>
+<a name='L491'></a><a href='#L491'>491</a>
+<a name='L492'></a><a href='#L492'>492</a>
+<a name='L493'></a><a href='#L493'>493</a>
+<a name='L494'></a><a href='#L494'>494</a>
+<a name='L495'></a><a href='#L495'>495</a>
+<a name='L496'></a><a href='#L496'>496</a>
+<a name='L497'></a><a href='#L497'>497</a>
+<a name='L498'></a><a href='#L498'>498</a>
+<a name='L499'></a><a href='#L499'>499</a>
+<a name='L500'></a><a href='#L500'>500</a>
+<a name='L501'></a><a href='#L501'>501</a>
+<a name='L502'></a><a href='#L502'>502</a>
+<a name='L503'></a><a href='#L503'>503</a>
+<a name='L504'></a><a href='#L504'>504</a>
+<a name='L505'></a><a href='#L505'>505</a>
+<a name='L506'></a><a href='#L506'>506</a>
+<a name='L507'></a><a href='#L507'>507</a>
+<a name='L508'></a><a href='#L508'>508</a>
+<a name='L509'></a><a href='#L509'>509</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -943,7 +968,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1011,6 +1047,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">62x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1060,6 +1098,7 @@ import { getEventCreatorName, getPrimaryQuote } from '@aiera/client-sdk/lib/data
 import { useOutsideClickHandler } from '@aiera/client-sdk/lib/hooks/useOutsideClickHandler';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { TranscriptQuery, TranscriptQueryVariables, User } from '@aiera/client-sdk/types/generated';
+import { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
 &nbsp;
 import { EventDetails } from '../EventDetails';
 import { PriceChart } from '../PriceChart';
@@ -1067,6 +1106,7 @@ import { KeyMentions } from '../KeyMentions';
 import './styles.css';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
+import { Handle } from '@aiera/client-sdk/components/Svg/Handle';
 &nbsp;
 export type EventQuery = QueryResult&lt;TranscriptQuery, TranscriptQueryVariables&gt;;
 &nbsp;
@@ -1076,6 +1116,8 @@ interface HeaderSharedProps {
     endTime?: string | null;
     eventId: string;
     eventQuery: EventQuery;
+    headerHandleAttributes?: DraggableAttributes;
+    headerHandleListeners?: DraggableSyntheticListeners;
     hideSearch?: boolean;
     onBack?: MouseEventHandler;
     onBackHeader: string;
@@ -1112,6 +1154,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         eventId,
         eventQuery,
         headerExpanded,
+        headerHandleAttributes,
+        headerHandleListeners,
         headerRef,
         hideSearch = false,
         keyMentionsExpanded,
@@ -1161,7 +1205,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         &lt;div
             ref={headerRef}
             className={classNames(
-                'bg-white relative rounded-b-lg -mb-1 z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6',
+                'bg-white relative rounded-b-lg z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6',
                 {
                     'shadow-3xl dark:shadow-3xl-dark': !headerExpanded,
                     'shadow-xl': headerExpanded,
@@ -1282,6 +1326,15 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     )}
                                     onClick={hasEventExtras ? toggleHeader : undefined}
                                 &gt;
+                                    {headerHandleAttributes &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >headerHandleListeners </span>&amp;&amp; (
+<span class="branch-2 cbranch-no" title="branch not covered" >                                        &lt;div</span>
+                                            {...headerHandleAttributes}
+                                            {...headerHandleListeners}
+                                            className="-ml-1 pr-0.5 hover:text-gray-700 text-gray-400 active:cursor-grabbing"
+                                        &gt;
+                                            &lt;Handle className="w-6" /&gt;
+                                        &lt;/div&gt;
+                                    )}
                                     {showHeaderPlayButton &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >event </span>&amp;&amp; (<span class="branch-2 cbranch-no" title="branch not covered" >event.isLive </span>|| <span class="branch-3 cbranch-no" title="branch not covered" >event.audioProxy)</span> &amp;&amp; (
 <span class="branch-4 cbranch-no" title="branch not covered" >                                        &lt;div className="w-8 h-8 mr-2"&gt;</span>
                                             &lt;PlayButton
@@ -1450,6 +1503,8 @@ export function Header(props: HeaderProps): ReactElement {
         endTime,
         eventId,
         eventQuery,
+        headerHandleAttributes,
+        headerHandleListeners,
         hideSearch,
         onBack,
         onBackHeader,
@@ -1508,6 +1563,8 @@ export function Header(props: HeaderProps): ReactElement {
             eventId={eventId}
             eventQuery={eventQuery}
             headerExpanded={headerExpanded}
+            headerHandleAttributes={headerHandleAttributes}
+            headerHandleListeners={headerHandleListeners}
             headerRef={headerRef}
             hideSearch={hideSearch}
             keyMentionsExpanded={keyMentionsExpanded}
@@ -1537,7 +1594,7 @@ export function Header(props: HeaderProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Apr 27 2023 20:16:25 GMT-0400 (Eastern Daylight Time)
+                at Mon May 01 2023 15:40:35 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>
