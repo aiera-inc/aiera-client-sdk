@@ -1,17 +1,17 @@
 import React, {
     Dispatch,
-    SetStateAction,
+    Fragment,
     MouseEvent,
     MouseEventHandler,
     ReactElement,
+    ReactNode,
     Ref,
     RefCallback,
+    SetStateAction,
     useCallback,
-    useMemo,
     useEffect,
+    useMemo,
     useState,
-    Fragment,
-    ReactNode,
 } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
@@ -19,15 +19,15 @@ import { findAll } from 'highlight-words-core';
 import { DateTime, Duration } from 'luxon';
 import { match } from 'ts-pattern';
 
-import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
-import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { AudioPlayer, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
-import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
@@ -581,7 +581,7 @@ function useEventUpdates(eventId = '') {
 }
 
 function useLatestEventForTicker(ticker = '') {
-    const latestEventForTickerQuery = useQuery<LatestEventForTickerQuery, LatestEventForTickerQueryVariables>({
+    return useQuery<LatestEventForTickerQuery, LatestEventForTickerQueryVariables>({
         query: gql`
             query LatestEventForTicker($filter: LatestEventFilter!) {
                 latestEventForTicker(filter: $filter) {
@@ -598,8 +598,6 @@ function useLatestEventForTicker(ticker = '') {
             },
         },
     });
-
-    return latestEventForTickerQuery;
 }
 
 function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQuery, EventUpdatesQueryVariables>) {
@@ -789,7 +787,7 @@ function useLatestTranscripts(
         }
     }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
 
-    // Loop throught he speaker turns and paragraphs and update any of the original paragraphs
+    // Loop through the speaker turns and paragraphs and update any of the original paragraphs
     // that have changed since the first download, then add any completely new paragraphs to the
     // end of the last speaker turn.
     //

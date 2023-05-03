@@ -855,6 +855,7 @@ export const EventList = ({
         requestPolicy: 'cache-and-network',
         query: eventsGQL(),
         mergeResults,
+        pause: !!state.event,
         variables: {
             view:
                 state.company || config.options?.eventListView === 'combined' || state.searchTerm.length > 0
@@ -881,6 +882,7 @@ export const EventList = ({
         requestPolicy: 'cache-and-network',
         query: eventsGQL('Upcoming'),
         mergeResults,
+        pause: !!state.event,
         variables: {
             view: EventView.LiveAndUpcoming,
             fromIndex: state.fromIndex,
