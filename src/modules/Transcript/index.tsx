@@ -787,7 +787,7 @@ function useLatestTranscripts(
                 return next;
             });
         }
-    }, [latestParagraphsQuery.state.data]);
+    }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
 
     // Loop throught he speaker turns and paragraphs and update any of the original paragraphs
     // that have changed since the first download, then add any completely new paragraphs to the
