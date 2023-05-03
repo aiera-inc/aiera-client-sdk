@@ -29,7 +29,7 @@
         "new": "plop --plopfile templates/plopfile.ts",
         "release": "NODE_ENV=production npm run build && hub release create -m v$npm_package_version -a dist/aiera-client-sdk.tgz v$npm_package_version",
         "pre-release": "export VERSION=pre-$(date '+%Y-%m-%dT%H-%M-%S')-$(git rev-parse HEAD | cut -c -7) && NODE_ENV=production npm run build && hub release create -m $VERSION -a dist/aiera-client-sdk.tgz $VERSION",
-        "publish-web-dev": "NODE_ENV=production npm run build && npm run build:docs && npm run test && aws s3 sync --acl=public-read ./dist/web s3://aiera-public-assets/aiera-sdk/dev/$npm_package_version",
+        "publish-web-dev": "NODE_ENV=development npm run build && npm run build:docs && npm run test && aws s3 sync --acl=public-read ./dist/web s3://aiera-public-assets/aiera-sdk/dev/$npm_package_version",
         "publish-web-prod": "NODE_ENV=production npm run build && npm run build:docs && npm run test && aws s3 sync --acl=public-read ./dist/web s3://aiera-public-assets/aiera-sdk/$npm_package_version",
         "start": "npm run build:watch",
         "test": "jest --config .jest/jest.config.js --coverage",
