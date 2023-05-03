@@ -95,7 +95,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
     } = props;
     const isCustom = eventMetaData?.eventType === 'custom';
     return (
-        <div className="relative h-13 w-full flex flex-col justify-center mt-[-6px] z-20 playbar">
+        <div className="relative h-13 w-full flex flex-col justify-center mt-[-6px] z-30 playbar">
             <div className="bg-white absolute top-[9px] left-0 right-0 bottom-0 dark:bg-bluegray-7 dark:top-[6px]" />
             <div
                 className="bg-yellow-50 absolute top-[9px] left-0 bottom-0 bg-opacity-80 dark:bg-opacity-50 dark:bg-bluegray-5"
