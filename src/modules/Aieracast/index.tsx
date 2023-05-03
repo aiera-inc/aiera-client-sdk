@@ -302,6 +302,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         </div>
                         <div className="relative flex-1 flex flex-col overflow-hidden">
                             <EventList
+                                noEarningsRelease
                                 controlledSearchTerm={globalSearch.length > 0 ? `"${globalSearch}"` : undefined}
                                 useConfigOptions
                                 hidePlaybar
