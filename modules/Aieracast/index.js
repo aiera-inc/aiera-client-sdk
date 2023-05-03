@@ -83783,7 +83783,7 @@ var AudioPlayer = class {
         const startTime = 0;
         this.id = id;
         this.offset = opts.offset;
-        if (url !== this.url) {
+        if (url !== this.url || !this.playing(this.id)) {
           let mimeType = null;
           const userAgent = window.navigator.userAgent.toLowerCase();
           const ios = /iphone|ipod|ipad/.test(userAgent);
@@ -94925,7 +94925,7 @@ function useEventUpdates(eventId = "") {
   return eventUpdateQuery;
 }
 function useLatestEventForTicker(ticker = "") {
-  const latestEventForTickerQuery = useQuery2({
+  return useQuery2({
     query: lib_default`
             query LatestEventForTicker($filter: LatestEventFilter!) {
                 latestEventForTicker(filter: $filter) {
@@ -94942,7 +94942,6 @@ function useLatestEventForTicker(ticker = "") {
       }
     }
   });
-  return latestEventForTickerQuery;
 }
 function useEventData(eventId = "", eventUpdateQuery) {
   var _a, _b;
@@ -95122,7 +95121,7 @@ function useLatestTranscripts(eventId = "", eventQuery) {
         return next;
       });
     }
-  }, [latestParagraphsQuery.state.data]);
+  }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
   return (0, import_react114.useMemo)(() => {
     var _a2, _b2, _c;
     const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
@@ -96115,6 +96114,7 @@ var EventList = ({
     requestPolicy: "cache-and-network",
     query: eventsGQL(),
     mergeResults,
+    pause: !!state.event,
     variables: {
       view: state.company || ((_a = config.options) == null ? void 0 : _a.eventListView) === "combined" || state.searchTerm.length > 0 ? EventView.Recent : state.listType,
       fromIndex: state.fromIndex,
@@ -96133,6 +96133,7 @@ var EventList = ({
     requestPolicy: "cache-and-network",
     query: eventsGQL("Upcoming"),
     mergeResults,
+    pause: !!state.event,
     variables: {
       view: EventView.LiveAndUpcoming,
       fromIndex: state.fromIndex,

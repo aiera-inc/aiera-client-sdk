@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.16% </span>
+                <span class="strong">70.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>174/248</span>
+                <span class='fraction'>173/247</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">70.04% </span>
+                <span class="strong">69.91% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>159/227</span>
+                <span class='fraction'>158/226</span>
             </div>
         
             
@@ -1408,9 +1408,7 @@
 <a name='L1343'></a><a href='#L1343'>1343</a>
 <a name='L1344'></a><a href='#L1344'>1344</a>
 <a name='L1345'></a><a href='#L1345'>1345</a>
-<a name='L1346'></a><a href='#L1346'>1346</a>
-<a name='L1347'></a><a href='#L1347'>1347</a>
-<a name='L1348'></a><a href='#L1348'>1348</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1346'></a><a href='#L1346'>1346</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2010,8 +2008,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2759,18 +2755,18 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, {
     Dispatch,
-    SetStateAction,
+    Fragment,
     MouseEvent,
     MouseEventHandler,
     ReactElement,
+    ReactNode,
     Ref,
     RefCallback,
+    SetStateAction,
     useCallback,
-    useMemo,
     useEffect,
+    useMemo,
     useState,
-    Fragment,
-    ReactNode,
 } from 'react';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
@@ -2778,15 +2774,15 @@ import { findAll } from 'highlight-words-core';
 import { DateTime, Duration } from 'luxon';
 import { match } from 'ts-pattern';
 &nbsp;
-import { useQuery, QueryResult } from '@aiera/client-sdk/api/client';
+import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { Close } from '@aiera/client-sdk/components/Svg/Close';
-import { useAudioPlayer, AudioPlayer } from '@aiera/client-sdk/lib/audio';
+import { AudioPlayer, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack, useSettings } from '@aiera/client-sdk/lib/data';
 import { useAutoScroll } from '@aiera/client-sdk/lib/hooks/useAutoScroll';
-import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
+import { ChangeHandler, useChangeHandlers } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { useElementSize } from '@aiera/client-sdk/lib/hooks/useElementSize';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
@@ -3340,7 +3336,7 @@ function useEventUpdates(eventId = <span class="branch-0 cbranch-no" title="bran
 }
 &nbsp;
 function useLatestEventForTicker(ticker = '') {
-    const latestEventForTickerQuery = useQuery&lt;LatestEventForTickerQuery, LatestEventForTickerQueryVariables&gt;({
+    return useQuery&lt;LatestEventForTickerQuery, LatestEventForTickerQueryVariables&gt;({
         query: gql`
             query LatestEventForTicker($filter: LatestEventFilter!) {
                 latestEventForTicker(filter: $filter) {
@@ -3357,8 +3353,6 @@ function useLatestEventForTicker(ticker = '') {
             },
         },
     });
-&nbsp;
-    return latestEventForTickerQuery;
 }
 &nbsp;
 function useEventData(eventId = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span> eventUpdateQuery: QueryResult&lt;EventUpdatesQuery, EventUpdatesQueryVariables&gt;) {
@@ -3546,9 +3540,9 @@ function useLatestTranscripts(
                 return next;
             });
         }
-    }, [latestParagraphsQuery.state.data]);
+    }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
 &nbsp;
-    // Loop throught he speaker turns and paragraphs and update any of the original paragraphs
+    // Loop through the speaker turns and paragraphs and update any of the original paragraphs
     // that have changed since the first download, then add any completely new paragraphs to the
     // end of the last speaker turn.
     //
@@ -4111,7 +4105,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed May 03 2023 16:24:20 GMT-0400 (Eastern Daylight Time)
+                at Wed May 03 2023 16:26:23 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
