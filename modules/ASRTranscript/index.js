@@ -75100,7 +75100,7 @@ function PlaybarUI(props) {
   } = props;
   const isCustom = (eventMetaData == null ? void 0 : eventMetaData.eventType) === "custom";
   return /* @__PURE__ */ import_react33.default.createElement("div", {
-    className: "relative h-13 w-full flex flex-col justify-center mt-[-6px] z-20 playbar"
+    className: "relative h-13 w-full flex flex-col justify-center mt-[-6px] z-30 playbar"
   }, /* @__PURE__ */ import_react33.default.createElement("div", {
     className: "bg-white absolute top-[9px] left-0 right-0 bottom-0 dark:bg-bluegray-7 dark:top-[6px]"
   }), /* @__PURE__ */ import_react33.default.createElement("div", {
