@@ -95907,6 +95907,7 @@ var EventListUI = (props) => {
   }));
 };
 var EventList = ({
+  noEarningsRelease = false,
   controlledSearchTerm = "",
   useConfigOptions = false,
   defaultLive = true,
@@ -96106,6 +96107,8 @@ var EventList = ({
       types = [EventType.Custom];
     } else if (state.filterByTypes.includes(1 /* earningsOnly */)) {
       types = [EventType.Earnings];
+    } else if (noEarningsRelease) {
+      types = Object.values(EventType).filter((type) => ![EventType.EarningsRelease, EventType.Test].includes(type));
     }
     return types;
   }, [config, state.filterByTypes]);
@@ -96553,6 +96556,7 @@ function AieracastUI(props) {
   })), /* @__PURE__ */ import_react117.default.createElement("div", {
     className: "relative flex-1 flex flex-col overflow-hidden"
   }, /* @__PURE__ */ import_react117.default.createElement(EventList, {
+    noEarningsRelease: true,
     controlledSearchTerm: globalSearch.length > 0 ? `"${globalSearch}"` : void 0,
     useConfigOptions: true,
     hidePlaybar: true,
