@@ -106,7 +106,7 @@ export class AudioPlayer {
             const startTime = 0;
             this.id = id;
             this.offset = opts.offset;
-            if (url !== this.url) {
+            if (url !== this.url || !this.playing(this.id)) {
                 // different event - load new asset/manifest
                 let mimeType: string | null = null;
                 const userAgent = window.navigator.userAgent.toLowerCase();
