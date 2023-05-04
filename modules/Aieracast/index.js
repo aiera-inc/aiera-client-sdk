@@ -93785,8 +93785,13 @@ function PriceChartUI(props) {
     setPrice,
     startTime
   } = props;
+  const originalPriceIndex = startTime ? chartData.findIndex(({ x: x3 }) => {
+    const seconds = new Date(startTime).getTime();
+    return x3 > seconds;
+  }) || 0 : 0;
+  const priceIndex = originalPriceIndex > 0 ? originalPriceIndex - 1 : 0;
+  const originalPrice = ((_a = chartData[priceIndex]) == null ? void 0 : _a.y) || 0;
   const price = parseFloat(currentPrice == null ? void 0 : currentPrice.toFixed(2));
-  const originalPrice = ((_a = chartData[0]) == null ? void 0 : _a.y) || 0;
   const absolutePriceChange = parseFloat((price - originalPrice).toFixed(2));
   const percentPriceChange = parseFloat((absolutePriceChange * 100 / originalPrice).toFixed(2));
   const options = {
