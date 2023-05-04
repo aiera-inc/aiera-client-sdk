@@ -45,7 +45,7 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                 className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                 onClick={(e) => handlers.darkMode(e, { value: !settings.darkMode })}
             >
-                <Toggle on={settings.darkMode} onChange={handlers.darkMode} />
+                <Toggle on={settings.darkMode} onChange={handlers.darkMode} darkMode={settings.darkMode} />
                 <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
                     Dark Mode
                 </span>
@@ -55,7 +55,11 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={(e) => handlers.textSentiment(e, { value: !settings.textSentiment })}
                 >
-                    <Toggle on={settings.textSentiment} onChange={handlers.textSentiment} />
+                    <Toggle
+                        on={settings.textSentiment}
+                        onChange={handlers.textSentiment}
+                        darkMode={settings.darkMode}
+                    />
                     <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
                         Text Sentiment
                     </span>
@@ -66,7 +70,11 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={(e) => handlers.tonalSentiment(e, { value: !settings.tonalSentiment })}
                 >
-                    <Toggle on={settings.tonalSentiment} onChange={handlers.tonalSentiment} />
+                    <Toggle
+                        on={settings.tonalSentiment}
+                        onChange={handlers.tonalSentiment}
+                        darkMode={settings.darkMode}
+                    />
                     <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
                         Tonal Sentiment
                     </span>
@@ -77,7 +85,11 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={(e) => handlers.syncWatchlist(e, { value: !settings.syncWatchlist })}
                 >
-                    <Toggle on={settings.syncWatchlist} onChange={handlers.syncWatchlist} />
+                    <Toggle
+                        on={settings.syncWatchlist}
+                        onChange={handlers.syncWatchlist}
+                        darkMode={settings.darkMode}
+                    />
                     <span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white">
                         Sync Watchlist
                     </span>

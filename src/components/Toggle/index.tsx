@@ -1,6 +1,5 @@
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import classNames from 'classnames';
-import { useSettings } from '@aiera/client-sdk/lib/data';
 import { ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import './styles.css';
@@ -48,11 +47,12 @@ export interface ToggleProps extends ToggleSharedProps {}
  * Renders Toggle
  */
 export function Toggle(props: ToggleProps): ReactElement {
-    const { on = false, onChange, darkMode } = props;
-    const { settings } = useSettings();
-    let dmode = settings.darkMode;
-    if (darkMode !== undefined) {
-        dmode = darkMode;
-    }
-    return <ToggleUI on={on} onChange={onChange} darkMode={dmode} />;
+    const { on = false, onChange, darkMode = false } = props;
+    const [darkModeState, setDarkModeState] = useState(darkMode);
+    useEffect(() => {
+        if (darkMode !== undefined) {
+            setDarkModeState(darkMode);
+        }
+    }, [darkMode]);
+    return <ToggleUI on={on} onChange={onChange} darkMode={darkModeState} />;
 }
