@@ -57,8 +57,16 @@ export function PriceChartUI(props: PriceChartUIProps): ReactElement {
         setPrice,
         startTime,
     } = props;
+    const originalPriceIndex = startTime
+        ? chartData.findIndex(({ x }) => {
+              const seconds = new Date(startTime).getTime();
+              return x > seconds;
+          }) || 0
+        : 0;
+    // We subtract 1, because we want the price before the event starts
+    const priceIndex = originalPriceIndex > 0 ? originalPriceIndex - 1 : 0;
+    const originalPrice = chartData[priceIndex]?.y || 0;
     const price: number = parseFloat(currentPrice?.toFixed(2));
-    const originalPrice = chartData[0]?.y || 0;
     const absolutePriceChange: number = parseFloat((price - originalPrice).toFixed(2));
     const percentPriceChange: number = parseFloat(((absolutePriceChange * 100) / originalPrice).toFixed(2));
 
