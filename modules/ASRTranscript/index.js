@@ -1081,7 +1081,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context8, unstable_observedBits);
         }
-        function useState20(initialState) {
+        function useState21(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1093,7 +1093,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect22(create, deps) {
+        function useEffect23(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1663,13 +1663,13 @@ var require_react_development = __commonJS({
         exports2.useCallback = useCallback17;
         exports2.useContext = useContext10;
         exports2.useDebugValue = useDebugValue;
-        exports2.useEffect = useEffect22;
+        exports2.useEffect = useEffect23;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useLayoutEffect = useLayoutEffect4;
         exports2.useMemo = useMemo10;
         exports2.useReducer = useReducer2;
         exports2.useRef = useRef12;
-        exports2.useState = useState20;
+        exports2.useState = useState21;
         exports2.version = ReactVersion;
       })();
     }
@@ -77453,16 +77453,17 @@ function ToggleUI(props) {
   }));
 }
 function Toggle(props) {
-  const { on = false, onChange, darkMode } = props;
-  const { settings } = useSettings();
-  let dmode = settings.darkMode;
-  if (darkMode !== void 0) {
-    dmode = darkMode;
-  }
+  const { on = false, onChange, darkMode = false } = props;
+  const [darkModeState, setDarkModeState] = (0, import_react47.useState)(darkMode);
+  (0, import_react47.useEffect)(() => {
+    if (darkMode !== void 0) {
+      setDarkModeState(darkMode);
+    }
+  }, [darkMode]);
   return /* @__PURE__ */ import_react47.default.createElement(ToggleUI, {
     on,
     onChange,
-    darkMode: dmode
+    darkMode: darkModeState
   });
 }
 
@@ -77532,7 +77533,8 @@ function TooltipContent(props) {
     onClick: (e) => handlers.darkMode(e, { value: !settings.darkMode })
   }, /* @__PURE__ */ import_react50.default.createElement(Toggle, {
     on: settings.darkMode,
-    onChange: handlers.darkMode
+    onChange: handlers.darkMode,
+    darkMode: settings.darkMode
   }), /* @__PURE__ */ import_react50.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
   }, "Dark Mode")), showTextSentiment && /* @__PURE__ */ import_react50.default.createElement("div", {
@@ -77540,7 +77542,8 @@ function TooltipContent(props) {
     onClick: (e) => handlers.textSentiment(e, { value: !settings.textSentiment })
   }, /* @__PURE__ */ import_react50.default.createElement(Toggle, {
     on: settings.textSentiment,
-    onChange: handlers.textSentiment
+    onChange: handlers.textSentiment,
+    darkMode: settings.darkMode
   }), /* @__PURE__ */ import_react50.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
   }, "Text Sentiment")), showTonalSentiment && /* @__PURE__ */ import_react50.default.createElement("div", {
@@ -77548,7 +77551,8 @@ function TooltipContent(props) {
     onClick: (e) => handlers.tonalSentiment(e, { value: !settings.tonalSentiment })
   }, /* @__PURE__ */ import_react50.default.createElement(Toggle, {
     on: settings.tonalSentiment,
-    onChange: handlers.tonalSentiment
+    onChange: handlers.tonalSentiment,
+    darkMode: settings.darkMode
   }), /* @__PURE__ */ import_react50.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
   }, "Tonal Sentiment")), showSyncWatchlist && /* @__PURE__ */ import_react50.default.createElement("div", {
@@ -77556,7 +77560,8 @@ function TooltipContent(props) {
     onClick: (e) => handlers.syncWatchlist(e, { value: !settings.syncWatchlist })
   }, /* @__PURE__ */ import_react50.default.createElement(Toggle, {
     on: settings.syncWatchlist,
-    onChange: handlers.syncWatchlist
+    onChange: handlers.syncWatchlist,
+    darkMode: settings.darkMode
   }), /* @__PURE__ */ import_react50.default.createElement("span", {
     className: "text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"
   }, "Sync Watchlist")), !!openDash && /* @__PURE__ */ import_react50.default.createElement("div", {

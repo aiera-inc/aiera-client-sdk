@@ -227,7 +227,19 @@
 <a name='L162'></a><a href='#L162'>162</a>
 <a name='L163'></a><a href='#L163'>163</a>
 <a name='L164'></a><a href='#L164'>164</a>
-<a name='L165'></a><a href='#L165'>165</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L165'></a><a href='#L165'>165</a>
+<a name='L166'></a><a href='#L166'>166</a>
+<a name='L167'></a><a href='#L167'>167</a>
+<a name='L168'></a><a href='#L168'>168</a>
+<a name='L169'></a><a href='#L169'>169</a>
+<a name='L170'></a><a href='#L170'>170</a>
+<a name='L171'></a><a href='#L171'>171</a>
+<a name='L172'></a><a href='#L172'>172</a>
+<a name='L173'></a><a href='#L173'>173</a>
+<a name='L174'></a><a href='#L174'>174</a>
+<a name='L175'></a><a href='#L175'>175</a>
+<a name='L176'></a><a href='#L176'>176</a>
+<a name='L177'></a><a href='#L177'>177</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -293,18 +305,30 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -438,7 +462,7 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                 className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                 onClick={(e) =&gt; handlers.darkMode(e, { value: !settings.darkMode })}
             &gt;
-                &lt;Toggle on={settings.darkMode} onChange={handlers.darkMode} /&gt;
+                &lt;Toggle on={settings.darkMode} onChange={handlers.darkMode} darkMode={settings.darkMode} /&gt;
                 &lt;span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"&gt;
                     Dark Mode
                 &lt;/span&gt;
@@ -448,7 +472,11 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >handlers.textSentiment(e, { value: !settings.textSentiment })}</span>
                 &gt;
-                    &lt;Toggle on={settings.textSentiment} onChange={handlers.textSentiment} /&gt;
+                    &lt;Toggle
+                        on={settings.textSentiment}
+                        onChange={handlers.textSentiment}
+                        darkMode={settings.darkMode}
+                    /&gt;
                     &lt;span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"&gt;
                         Text Sentiment
                     &lt;/span&gt;
@@ -459,7 +487,11 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >handlers.tonalSentiment(e, { value: !settings.tonalSentiment })}</span>
                 &gt;
-                    &lt;Toggle on={settings.tonalSentiment} onChange={handlers.tonalSentiment} /&gt;
+                    &lt;Toggle
+                        on={settings.tonalSentiment}
+                        onChange={handlers.tonalSentiment}
+                        darkMode={settings.darkMode}
+                    /&gt;
                     &lt;span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"&gt;
                         Tonal Sentiment
                     &lt;/span&gt;
@@ -470,7 +502,11 @@ function TooltipContent(props: SettingsButtonUIProps): ReactElement {
                     className="rounded-lg cursor-pointer group py-2.5 px-3 flex items-center hover:bg-gray-50 dark:hover:bg-bluegray-5"
                     onClick={<span class="fstat-no" title="function not covered" >(e</span>) =&gt; <span class="cstat-no" title="statement not covered" >handlers.syncWatchlist(e, { value: !settings.syncWatchlist })}</span>
                 &gt;
-                    &lt;Toggle on={settings.syncWatchlist} onChange={handlers.syncWatchlist} /&gt;
+                    &lt;Toggle
+                        on={settings.syncWatchlist}
+                        onChange={handlers.syncWatchlist}
+                        darkMode={settings.darkMode}
+                    /&gt;
                     &lt;span className="text-sm ml-2.5 text-gray-600 dark:text-bluegray-4 group-hover:text-gray-900 dark:group-hover:text-white"&gt;
                         Sync Watchlist
                     &lt;/span&gt;
@@ -562,7 +598,7 @@ export function SettingsButton(props: SettingsButtonProps): ReactElement | null 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed May 03 2023 17:44:59 GMT-0400 (Eastern Daylight Time)
+                at Thu May 04 2023 16:58:12 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
