@@ -1049,6 +1049,16 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
         offset: { top: 5, bottom: 5 },
     });
     const { settings } = useSettings();
+    const config = useConfig();
+    const relativeTimestampOffset = (speakerTurns[0]?.paragraphs[0]?.syncMs || 0) / 1000;
+    const beginSec =
+        config.options?.transcriptRelativeBeginSeconds !== undefined
+            ? config.options.transcriptRelativeBeginSeconds + relativeTimestampOffset
+            : undefined;
+    const endSec =
+        config.options?.transcriptRelativeEndSeconds !== undefined
+            ? config.options.transcriptRelativeEndSeconds + relativeTimestampOffset
+            : undefined;
 
     // when paragraphs or search term are updated, loop over the paragraphs
     // adding the search highlights to each as a separate `chunks` field. Then
@@ -1058,40 +1068,55 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
         () =>
             speakerTurns.map((s) => ({
                 ...s,
-                paragraphsWithMatches: s.paragraphs.map((paragraph) => {
-                    return {
-                        sentences: paragraph.sentences.map((sentence, idx) => ({
-                            id: `primary-sentence-${sentence.id}-${idx}`,
-                            chunks: state.searchTerm
-                                ? findAll({
-                                      autoEscape: true,
-                                      caseSensitive: false,
-                                      searchWords: [state.searchTerm],
-                                      textToHighlight: sentence.text,
-                                  }).map(({ highlight, start, end }, index) => ({
-                                      highlight,
-                                      id: `${paragraph.id}-${sentence.id}-search-term-chunk-${index}`,
-                                      text: sentence.text.substr(start, end - start),
-                                      textSentiment:
-                                          settings.textSentiment &&
-                                          sentence.sentiment?.textual?.overThreshold &&
-                                          sentence.sentiment?.textual?.basicSentiment,
-                                  }))
-                                : [
-                                      {
-                                          highlight: false,
-                                          id: `${paragraph.id}-${sentence.id}-sentence-chunk-${idx}`,
-                                          text: sentence.text,
+                paragraphsWithMatches: s.paragraphs
+                    .filter((p) => {
+                        if (typeof beginSec === 'number' && p.syncMs) {
+                            const normalizedTime = p.syncMs / 1000;
+                            if (typeof endSec === 'number') {
+                                return normalizedTime >= beginSec && normalizedTime <= endSec;
+                            } else {
+                                return normalizedTime >= beginSec;
+                            }
+                        } else if (typeof endSec === 'number' && p.syncMs) {
+                            const normalizedTime = p.syncMs / 1000;
+                            return normalizedTime <= endSec;
+                        }
+                        return true;
+                    })
+                    .map((paragraph) => {
+                        return {
+                            sentences: paragraph.sentences.map((sentence, idx) => ({
+                                id: `primary-sentence-${sentence.id}-${idx}`,
+                                chunks: state.searchTerm
+                                    ? findAll({
+                                          autoEscape: true,
+                                          caseSensitive: false,
+                                          searchWords: [state.searchTerm],
+                                          textToHighlight: sentence.text,
+                                      }).map(({ highlight, start, end }, index) => ({
+                                          highlight,
+                                          id: `${paragraph.id}-${sentence.id}-search-term-chunk-${index}`,
+                                          text: sentence.text.substr(start, end - start),
                                           textSentiment:
                                               settings.textSentiment &&
                                               sentence.sentiment?.textual?.overThreshold &&
                                               sentence.sentiment?.textual?.basicSentiment,
-                                      },
-                                  ],
-                        })),
-                        paragraph,
-                    };
-                }),
+                                      }))
+                                    : [
+                                          {
+                                              highlight: false,
+                                              id: `${paragraph.id}-${sentence.id}-sentence-chunk-${idx}`,
+                                              text: sentence.text,
+                                              textSentiment:
+                                                  settings.textSentiment &&
+                                                  sentence.sentiment?.textual?.overThreshold &&
+                                                  sentence.sentiment?.textual?.basicSentiment,
+                                          },
+                                      ],
+                            })),
+                            paragraph,
+                        };
+                    }),
             })),
 
         [settings, speakerTurns, state.searchTerm]
