@@ -17,7 +17,7 @@ import { Logo } from '@aiera/client-sdk/components/Svg/Logo';
 import { useClient } from '@aiera/client-sdk/api/client';
 import { AuthProvider } from '@aiera/client-sdk/lib/auth';
 import { useChangeHandlers, ChangeHandler } from '@aiera/client-sdk/lib/hooks/useChangeHandlers';
-import { useMessageListener } from '@aiera/client-sdk/lib/msg';
+import { Message, MessageBusEvents, useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import './styles.css';
 import { useConfig } from '@aiera/client-sdk/lib/config';
@@ -242,7 +242,7 @@ export const Auth = ({
         `,
     });
 
-    const bus = useMessageListener('authenticate', () => userQuery.refetch(), 'in');
+    const bus = useMessageBus();
     useEffect(() => {
         if (userQuery.status === 'success') {
             bus.emit('authenticated', null, 'out');
@@ -316,7 +316,23 @@ export const Auth = ({
         },
         [loginWithPublicApiMutation, config, userQuery.refetch, state, setLoginState]
     );
-    bus.on('authenticateWithApiKey', (msg) => void loginWithApiKey(msg?.data), 'in');
+
+    useEffect(() => {
+        const refetchOnAuth = () => userQuery.refetch();
+        const loginApiKey = <E extends keyof MessageBusEvents>(msg: Message<E>) =>
+            void loginWithApiKey(msg?.data as string);
+        if (bus) {
+            bus.on('authenticate', refetchOnAuth, 'in');
+            bus.on('authenticateWithApiKey', loginApiKey, 'in');
+        }
+
+        return () => {
+            if (bus) {
+                bus.off('authenticate', refetchOnAuth, 'in');
+                bus.off('authenticateWithApiKey', loginApiKey, 'in');
+            }
+        };
+    }, [bus]);
 
     return (
         <AuthProvider logout={logout}>
