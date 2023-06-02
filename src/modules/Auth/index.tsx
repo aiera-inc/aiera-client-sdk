@@ -228,6 +228,8 @@ export const Auth = ({
     const initialAuthform = { email: '', password: '' };
     const { state, mergeState, handlers } = useChangeHandlers(initialAuthform);
     const [loginState, setLoginState] = useState<'none' | 'loading' | 'error'>('none');
+    const [parentOrigin, setParentOrigin] = useState<string>(document.location.href);
+    const [publicApiKey, setPublicApiKey] = useState<string>('');
     const { reset } = useClient();
 
     const userQuery = useQuery<CurrentUserQuery>({
@@ -299,7 +301,24 @@ export const Auth = ({
 
     // We need the parent origin, as the window origin will default to the iframe
     // which will always be an aiera URL
-    const parentOrigin = window.location != window.parent.location ? document.referrer : document.location.href;
+    useEffect(() => {
+        if (window.location != window.parent.location) {
+            const newParentOrigin = document.referrer;
+            setParentOrigin(newParentOrigin);
+            // Re-auth with public api key when previous auth failed and the parent origin changes
+            if (parentOrigin !== newParentOrigin && loginState === 'error' && publicApiKey) {
+                void loginWithApiKey(publicApiKey);
+            }
+        }
+    }, [
+        document.referrer,
+        window.location,
+        window.parent.location,
+        loginState,
+        parentOrigin,
+        publicApiKey,
+        setParentOrigin,
+    ]);
 
     const loginWithApiKey = useCallback(
         async (apiKey: string) => {
@@ -314,13 +333,16 @@ export const Auth = ({
                 await logout();
             }
         },
-        [loginWithPublicApiMutation, config, userQuery.refetch, state, setLoginState]
+        [loginWithPublicApiMutation, config, parentOrigin, state, setLoginState, userQuery.refetch]
     );
 
     useEffect(() => {
         const refetchOnAuth = () => userQuery.refetch();
-        const loginApiKey = <E extends keyof MessageBusEvents>(msg: Message<E>) =>
-            void loginWithApiKey(msg?.data as string);
+        const loginApiKey = <E extends keyof MessageBusEvents>(msg: Message<E>) => {
+            const apiKey = (msg?.data as string) || '';
+            setPublicApiKey(apiKey);
+            void loginWithApiKey(apiKey);
+        };
         if (bus) {
             bus.on('authenticate', refetchOnAuth, 'in');
             bus.on('authenticateWithApiKey', loginApiKey, 'in');
