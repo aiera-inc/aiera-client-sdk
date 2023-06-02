@@ -82920,6 +82920,8 @@ var Auth = ({
   const initialAuthform = { email: "", password: "" };
   const { state, mergeState, handlers } = useChangeHandlers(initialAuthform);
   const [loginState, setLoginState] = (0, import_react15.useState)("none");
+  const [parentOrigin, setParentOrigin] = (0, import_react15.useState)(document.location.href);
+  const [publicApiKey, setPublicApiKey] = (0, import_react15.useState)("");
   const { reset } = useClient2();
   const userQuery = useQuery2({
     query: lib_default`
@@ -82932,7 +82934,7 @@ var Auth = ({
             }
         `
   });
-  const bus = useMessageListener("authenticate", () => userQuery.refetch(), "in");
+  const bus = useMessageBus();
   (0, import_react15.useEffect)(() => {
     if (userQuery.status === "success") {
       bus.emit("authenticated", null, "out");
@@ -82975,7 +82977,23 @@ var Auth = ({
             }
         }
     `);
-  const parentOrigin = window.location != window.parent.location ? document.referrer : document.location.href;
+  (0, import_react15.useEffect)(() => {
+    if (window.location != window.parent.location) {
+      const newParentOrigin = document.referrer;
+      setParentOrigin(newParentOrigin);
+      if (parentOrigin !== newParentOrigin && loginState === "error" && publicApiKey) {
+        void loginWithApiKey(publicApiKey);
+      }
+    }
+  }, [
+    document.referrer,
+    window.location,
+    window.parent.location,
+    loginState,
+    parentOrigin,
+    publicApiKey,
+    setParentOrigin
+  ]);
   const loginWithApiKey = (0, import_react15.useCallback)((apiKey) => __async(void 0, null, function* () {
     var _a;
     setLoginState("loading");
@@ -82988,8 +83006,25 @@ var Auth = ({
       setLoginState("error");
       yield logout();
     }
-  }), [loginWithPublicApiMutation, config, userQuery.refetch, state, setLoginState]);
-  bus.on("authenticateWithApiKey", (msg) => void loginWithApiKey(msg == null ? void 0 : msg.data), "in");
+  }), [loginWithPublicApiMutation, config, parentOrigin, state, setLoginState, userQuery.refetch]);
+  (0, import_react15.useEffect)(() => {
+    const refetchOnAuth = () => userQuery.refetch();
+    const loginApiKey = (msg) => {
+      const apiKey = (msg == null ? void 0 : msg.data) || "";
+      setPublicApiKey(apiKey);
+      void loginWithApiKey(apiKey);
+    };
+    if (bus) {
+      bus.on("authenticate", refetchOnAuth, "in");
+      bus.on("authenticateWithApiKey", loginApiKey, "in");
+    }
+    return () => {
+      if (bus) {
+        bus.off("authenticate", refetchOnAuth, "in");
+        bus.off("authenticateWithApiKey", loginApiKey, "in");
+      }
+    };
+  }, [bus]);
   return /* @__PURE__ */ import_react15.default.createElement(AuthProvider, {
     logout
   }, apiMode ? /* @__PURE__ */ import_react15.default.createElement(ApiAuthUI, {
