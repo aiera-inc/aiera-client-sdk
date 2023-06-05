@@ -95310,6 +95310,7 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   ];
 }
 function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTerm) {
+  var _a, _b, _c, _d;
   const { state, handlers } = useChangeHandlers({
     searchTerm: initialSearchTerm || controlledSearchTerm || ""
   });
@@ -95320,11 +95321,28 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
     offset: { top: 5, bottom: 5 }
   });
   const { settings } = useSettings();
+  const config = useConfig();
+  const relativeTimestampOffset = (((_b = (_a = speakerTurns[0]) == null ? void 0 : _a.paragraphs[0]) == null ? void 0 : _b.syncMs) || 0) / 1e3;
+  const beginSec = ((_c = config.options) == null ? void 0 : _c.transcriptRelativeBeginSeconds) !== void 0 ? config.options.transcriptRelativeBeginSeconds + relativeTimestampOffset : void 0;
+  const endSec = ((_d = config.options) == null ? void 0 : _d.transcriptRelativeEndSeconds) !== void 0 ? config.options.transcriptRelativeEndSeconds + relativeTimestampOffset : void 0;
   const speakerTurnsWithMatches = (0, import_react114.useMemo)(() => speakerTurns.map((s2) => __spreadProps(__spreadValues({}, s2), {
-    paragraphsWithMatches: s2.paragraphs.map((paragraph) => {
+    paragraphsWithMatches: s2.paragraphs.filter((p2) => {
+      if (typeof beginSec === "number" && p2.syncMs) {
+        const normalizedTime = p2.syncMs / 1e3;
+        if (typeof endSec === "number") {
+          return normalizedTime >= beginSec && normalizedTime <= endSec;
+        } else {
+          return normalizedTime >= beginSec;
+        }
+      } else if (typeof endSec === "number" && p2.syncMs) {
+        const normalizedTime = p2.syncMs / 1e3;
+        return normalizedTime <= endSec;
+      }
+      return true;
+    }).map((paragraph) => {
       return {
         sentences: paragraph.sentences.map((sentence, idx) => {
-          var _a, _b, _c, _d;
+          var _a2, _b2, _c2, _d2;
           return {
             id: `primary-sentence-${sentence.id}-${idx}`,
             chunks: state.searchTerm ? (0, import_highlight_words_core.findAll)({
@@ -95333,19 +95351,19 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
               searchWords: [state.searchTerm],
               textToHighlight: sentence.text
             }).map(({ highlight, start, end }, index) => {
-              var _a2, _b2, _c2, _d2;
+              var _a3, _b3, _c3, _d3;
               return {
                 highlight,
                 id: `${paragraph.id}-${sentence.id}-search-term-chunk-${index}`,
                 text: sentence.text.substr(start, end - start),
-                textSentiment: settings.textSentiment && ((_b2 = (_a2 = sentence.sentiment) == null ? void 0 : _a2.textual) == null ? void 0 : _b2.overThreshold) && ((_d2 = (_c2 = sentence.sentiment) == null ? void 0 : _c2.textual) == null ? void 0 : _d2.basicSentiment)
+                textSentiment: settings.textSentiment && ((_b3 = (_a3 = sentence.sentiment) == null ? void 0 : _a3.textual) == null ? void 0 : _b3.overThreshold) && ((_d3 = (_c3 = sentence.sentiment) == null ? void 0 : _c3.textual) == null ? void 0 : _d3.basicSentiment)
               };
             }) : [
               {
                 highlight: false,
                 id: `${paragraph.id}-${sentence.id}-sentence-chunk-${idx}`,
                 text: sentence.text,
-                textSentiment: settings.textSentiment && ((_b = (_a = sentence.sentiment) == null ? void 0 : _a.textual) == null ? void 0 : _b.overThreshold) && ((_d = (_c = sentence.sentiment) == null ? void 0 : _c.textual) == null ? void 0 : _d.basicSentiment)
+                textSentiment: settings.textSentiment && ((_b2 = (_a2 = sentence.sentiment) == null ? void 0 : _a2.textual) == null ? void 0 : _b2.overThreshold) && ((_d2 = (_c2 = sentence.sentiment) == null ? void 0 : _c2.textual) == null ? void 0 : _d2.basicSentiment)
               }
             ]
           };
@@ -95356,8 +95374,8 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
   })), [settings, speakerTurns, state.searchTerm]);
   const matches = (0, import_react114.useMemo)(() => speakerTurnsWithMatches.flatMap((s2) => s2.paragraphsWithMatches).flatMap((p2) => p2.sentences).flatMap((s2) => s2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
   (0, import_react114.useEffect)(() => {
-    var _a;
-    setCurrentMatch(((_a = matches[0]) == null ? void 0 : _a.id) || null);
+    var _a2;
+    setCurrentMatch(((_a2 = matches[0]) == null ? void 0 : _a2.id) || null);
   }, [state.searchTerm]);
   const matchIndex = (0, import_react114.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
   const nextMatch = (0, import_react114.useCallback)(() => {
