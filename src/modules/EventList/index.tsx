@@ -803,6 +803,9 @@ export const EventList = ({
                             audioRecordingUrl
                             audioRecordingOffsetMs
                             audioStreamUri
+                            connectionStatus
+                            hasPublishedTranscript
+                            hasTranscript
                             eventDate
                             eventType
                             isLive

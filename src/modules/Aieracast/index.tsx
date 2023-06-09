@@ -4,7 +4,7 @@ import { EventList, EventListEvent, EventRowProps } from '../EventList';
 import { Transcript } from '../Transcript';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
-import { ChangeEvent, User } from '@aiera/client-sdk/types';
+import { ChangeEvent, EventConnectionStatus, User } from '@aiera/client-sdk/types';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';
 import { isToday } from '@aiera/client-sdk/lib/datetimes';
@@ -152,6 +152,10 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         const primaryQuote = getPrimaryQuote(event.primaryCompany);
         const eventDate = DateTime.fromISO(event.eventDate);
         const createdBy = getEventCreatorName(event.creator as User);
+        const hasNoTranscript =
+            !event.hasPublishedTranscript &&
+            !event.hasTranscript &&
+            event.connectionStatus === EventConnectionStatus.Missed;
         let divider = null;
         if (showDivider) {
             divider = (
@@ -230,7 +234,11 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             </div>
                         </div>
                         <div className="flex flex-col justify-center items-end">
-                            {event.isLive ? (
+                            {hasNoTranscript ? (
+                                <div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300">
+                                    No Transcript
+                                </div>
+                            ) : event.isLive ? (
                                 <div className="text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white">
                                     {`Live • ${eventDate.toFormat('h:mma')}`}
                                 </div>
