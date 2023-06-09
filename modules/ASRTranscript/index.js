@@ -73661,6 +73661,9 @@ var EventListDocument = lib_default`
           audioRecordingUrl
           audioRecordingOffsetMs
           audioStreamUri
+          connectionStatus
+          hasPublishedTranscript
+          hasTranscript
           eventDate
           eventType
           isLive

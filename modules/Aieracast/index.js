@@ -82365,6 +82365,9 @@ var EventListDocument = lib_default`
           audioRecordingUrl
           audioRecordingOffsetMs
           audioStreamUri
+          connectionStatus
+          hasPublishedTranscript
+          hasTranscript
           eventDate
           eventType
           isLive
@@ -96125,6 +96128,9 @@ var EventList = ({
                             audioRecordingUrl
                             audioRecordingOffsetMs
                             audioStreamUri
+                            connectionStatus
+                            hasPublishedTranscript
+                            hasTranscript
                             eventDate
                             eventType
                             isLive
@@ -96520,6 +96526,7 @@ function AieracastUI(props) {
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = import_luxon4.DateTime.fromISO(event.eventDate);
     const createdBy = getEventCreatorName(event.creator);
+    const hasNoTranscript = !event.hasPublishedTranscript && !event.hasTranscript && event.connectionStatus === EventConnectionStatus.Missed;
     let divider = null;
     if (showDivider) {
       divider = /* @__PURE__ */ import_react117.default.createElement("li", {
@@ -96573,7 +96580,9 @@ function AieracastUI(props) {
       className: "leading-none flex text-sm capitalize items-center mt-1 text-black dark:text-white"
     }, customOnly ? createdBy : event.eventType.replace(/_/g, " "))), /* @__PURE__ */ import_react117.default.createElement("div", {
       className: "flex flex-col justify-center items-end"
-    }, event.isLive ? /* @__PURE__ */ import_react117.default.createElement("div", {
+    }, hasNoTranscript ? /* @__PURE__ */ import_react117.default.createElement("div", {
+      className: "leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300"
+    }, "No Transcript") : event.isLive ? /* @__PURE__ */ import_react117.default.createElement("div", {
       className: "text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"
     }, `Live \u2022 ${eventDate.toFormat("h:mma")}`) : /* @__PURE__ */ import_react117.default.createElement("div", {
       className: "leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300"

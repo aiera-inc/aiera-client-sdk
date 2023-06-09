@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43% </span>
+                <span class="strong">43.56% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>43/100</span>
+                <span class='fraction'>44/101</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">34.37% </span>
+                <span class="strong">37.68% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>22/64</span>
+                <span class='fraction'>26/69</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">43.87% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>43/98</span>
+                <span class='fraction'>44/99</span>
             </div>
         
             
@@ -509,7 +509,15 @@
 <a name='L444'></a><a href='#L444'>444</a>
 <a name='L445'></a><a href='#L445'>445</a>
 <a name='L446'></a><a href='#L446'>446</a>
-<a name='L447'></a><a href='#L447'>447</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L447'></a><a href='#L447'>447</a>
+<a name='L448'></a><a href='#L448'>448</a>
+<a name='L449'></a><a href='#L449'>449</a>
+<a name='L450'></a><a href='#L450'>450</a>
+<a name='L451'></a><a href='#L451'>451</a>
+<a name='L452'></a><a href='#L452'>452</a>
+<a name='L453'></a><a href='#L453'>453</a>
+<a name='L454'></a><a href='#L454'>454</a>
+<a name='L455'></a><a href='#L455'>455</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -663,6 +671,10 @@
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
 <span class="cline-any cline-yes">6x</span>
@@ -705,6 +717,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -961,7 +977,7 @@ import { EventList, EventListEvent, EventRowProps } from '../EventList';
 import { Transcript } from '../Transcript';
 import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
 import { Toggle } from '@aiera/client-sdk/components/Toggle';
-import { ChangeEvent, User } from '@aiera/client-sdk/types';
+import { ChangeEvent, EventConnectionStatus, User } from '@aiera/client-sdk/types';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';
 import { isToday } from '@aiera/client-sdk/lib/datetimes';
@@ -1109,6 +1125,10 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
         const primaryQuote = getPrimaryQuote(event.primaryCompany);
         const eventDate = DateTime.fromISO(event.eventDate);
         const createdBy = getEventCreatorName(event.creator as User);
+        const hasNoTranscript =
+            !event.hasPublishedTranscript &amp;&amp;
+            !event.hasTranscript &amp;&amp;
+            event.connectionStatus === EventConnectionStatus.Missed;
         let divider = null;
         if (showDivider) {
             divider = (
@@ -1187,7 +1207,11 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                             &lt;/div&gt;
                         &lt;/div&gt;
                         &lt;div className="flex flex-col justify-center items-end"&gt;
-                            {event.isLive ? (
+                            {hasNoTranscript ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                                &lt;div className="leading-none text-gray-500 group-hover:text-black dark:group-hover:text-gray-300"&gt;</span>
+                                    No Transcript
+                                &lt;/div&gt;
+                            ) : event.isLive ? (
 <span class="branch-0 cbranch-no" title="branch not covered" >                                &lt;div className="text-xs leading-none flex justify-center items-center text-red-600 dark:text-red-400 font-semibold bg-red-50 dark:bg-bluegray-6 rounded px-1 pt-0.5 pb-[3px] mb-0.5 group-hover:bg-red-500 group-hover:text-white"&gt;</span>
                                     {`Live • ${eventDate.toFormat('h:mma')}`}
                                 &lt;/div&gt;
@@ -1408,7 +1432,7 @@ export function Aieracast(): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Jun 05 2023 18:09:13 GMT-0400 (Eastern Daylight Time)
+                at Fri Jun 09 2023 16:32:51 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
