@@ -322,6 +322,7 @@ export const Auth = ({
 
     const loginWithApiKey = useCallback(
         async (apiKey: string) => {
+            await logout();
             setLoginState('loading');
             const result = await loginWithPublicApiMutation({ apiKey, origin: parentOrigin });
             if (result?.data?.loginWithPublicApiKey) {
