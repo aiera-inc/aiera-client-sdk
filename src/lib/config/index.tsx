@@ -34,6 +34,8 @@ export interface Options {
     eventListFilters?: EventListFilter[];
     eventListView?: EventListView;
     relativeTimestamps?: boolean;
+    transcriptRawBeginSeconds?: number;
+    transcriptRawEndSeconds?: number;
     transcriptRelativeBeginSeconds?: number;
     transcriptRelativeEndSeconds?: number;
     showAudioPlayer?: boolean;

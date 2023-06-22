@@ -1051,14 +1051,22 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
     const { settings } = useSettings();
     const config = useConfig();
     const relativeTimestampOffset = (speakerTurns[0]?.paragraphs[0]?.syncMs || 0) / 1000;
-    const beginSec =
+    let beginSec =
         config.options?.transcriptRelativeBeginSeconds !== undefined
             ? config.options.transcriptRelativeBeginSeconds + relativeTimestampOffset
             : undefined;
-    const endSec =
+    let endSec =
         config.options?.transcriptRelativeEndSeconds !== undefined
             ? config.options.transcriptRelativeEndSeconds + relativeTimestampOffset
             : undefined;
+
+    if (config.options?.transcriptRawBeginSeconds !== undefined) {
+        beginSec = config.options.transcriptRawBeginSeconds;
+    }
+
+    if (config.options?.transcriptRawEndSeconds !== undefined) {
+        endSec = config.options.transcriptRawEndSeconds;
+    }
 
     // when paragraphs or search term are updated, loop over the paragraphs
     // adding the search highlights to each as a separate `chunks` field. Then
