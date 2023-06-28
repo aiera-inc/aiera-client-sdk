@@ -11,6 +11,7 @@ export interface EventMetaData {
     eventStream?: string | null;
     eventDate?: string;
     eventType?: EventType;
+    externalAudioStreamUrl?: string | null;
     isLive?: boolean;
     localTicker?: string;
     quote?: Maybe<DeepPartial<Quote>>;
@@ -115,9 +116,12 @@ export class AudioPlayer {
 
                 if (isLive && ios) {
                     mimeType = 'application/vnd.apple.mpegurl';
-                    if (opts && opts?.metaData?.eventStream) {
-                        const eventStream: string = opts.metaData.eventStream;
-                        url = `https://storage.media.aiera.com${eventStream}/index.m3u8`;
+                    if (opts && (opts?.metaData?.eventStream || opts?.metaData?.externalAudioStreamUrl)) {
+                        if (opts?.metaData?.externalAudioStreamUrl) {
+                            url = opts.metaData.externalAudioStreamUrl;
+                        } else if (opts?.metaData?.eventStream) {
+                            url = `https://storage.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
+                        }
                     }
                 } else if (isLive && !ios) {
                     mimeType = 'application/dash+xml';

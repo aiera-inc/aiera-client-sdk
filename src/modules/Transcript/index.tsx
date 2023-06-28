@@ -517,16 +517,13 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     createdBy: getEventCreatorName(event?.creator as User),
                                     eventStream: event?.audioStreamUri,
                                     eventType: event?.eventType,
+                                    externalAudioStreamUrl: event.externalAudioStreamUrl,
                                     isLive: !!event?.isLive,
                                     quote: getPrimaryQuote(event?.primaryCompany),
                                     title: event?.title,
                                 }}
                                 offset={(event?.audioRecordingOffsetMs || 0) / 1000}
-                                url={
-                                    event.isLive
-                                        ? `https://storage.media.aiera.com/${event.id}`
-                                        : event.audioProxy || ''
-                                }
+                                url={(event.isLive ? event.liveStreamUrl : event.audioProxy) || ''}
                             />
                         )
                     );
@@ -555,10 +552,12 @@ function useEventUpdates(eventId = '') {
                         username
                     }
                     eventDate
+                    externalAudioStreamUrl
                     hasConnectionDetails
                     hasPublishedTranscript
                     hasTranscript
                     isLive
+                    liveStreamUrl
                     publishedTranscriptExpected
                 }
             }
@@ -623,10 +622,12 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                     dialInPin
                     eventDate
                     eventType
+                    externalAudioStreamUrl
                     hasConnectionDetails
                     hasPublishedTranscript
                     hasTranscript
                     isLive
+                    liveStreamUrl
                     primaryCompany {
                         id
                         commonName

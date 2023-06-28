@@ -17,8 +17,10 @@ const eventList = [
     {
         id: '1',
         title: 'Event Title',
-        eventType: 'earnings',
         eventDate: EVENT_DATE_TIME,
+        eventType: 'earnings',
+        externalAudioStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
+        liveStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
         primaryCompany: {
             instruments: [
                 {
@@ -40,8 +42,10 @@ const eventList = [
     {
         id: '2',
         title: 'Event Title 2',
-        eventType: 'presentation',
         eventDate: new Date(new Date().getTime() + 3000).toISOString(),
+        eventType: 'presentation',
+        externalAudioStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
+        liveStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
         primaryCompany: {
             instruments: [
                 {
