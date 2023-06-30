@@ -38875,6 +38875,7 @@ var Auth = ({
   ]);
   const loginWithApiKey = (0, import_react15.useCallback)((apiKey) => __async(void 0, null, function* () {
     var _a;
+    yield logout();
     setLoginState("loading");
     const result = yield loginWithPublicApiMutation({ apiKey, origin: parentOrigin });
     if ((_a = result == null ? void 0 : result.data) == null ? void 0 : _a.loginWithPublicApiKey) {
