@@ -93286,7 +93286,7 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   ];
 }
 function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTerm) {
-  var _a, _b, _c, _d;
+  var _a, _b, _c, _d, _e, _f;
   const { state, handlers } = useChangeHandlers({
     searchTerm: initialSearchTerm || controlledSearchTerm || ""
   });
@@ -93299,8 +93299,14 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
   const { settings } = useSettings();
   const config = useConfig();
   const relativeTimestampOffset = (((_b = (_a = speakerTurns[0]) == null ? void 0 : _a.paragraphs[0]) == null ? void 0 : _b.syncMs) || 0) / 1e3;
-  const beginSec = ((_c = config.options) == null ? void 0 : _c.transcriptRelativeBeginSeconds) !== void 0 ? config.options.transcriptRelativeBeginSeconds + relativeTimestampOffset : void 0;
-  const endSec = ((_d = config.options) == null ? void 0 : _d.transcriptRelativeEndSeconds) !== void 0 ? config.options.transcriptRelativeEndSeconds + relativeTimestampOffset : void 0;
+  let beginSec = ((_c = config.options) == null ? void 0 : _c.transcriptRelativeBeginSeconds) !== void 0 ? config.options.transcriptRelativeBeginSeconds + relativeTimestampOffset : void 0;
+  let endSec = ((_d = config.options) == null ? void 0 : _d.transcriptRelativeEndSeconds) !== void 0 ? config.options.transcriptRelativeEndSeconds + relativeTimestampOffset : void 0;
+  if (((_e = config.options) == null ? void 0 : _e.transcriptRawBeginSeconds) !== void 0) {
+    beginSec = config.options.transcriptRawBeginSeconds;
+  }
+  if (((_f = config.options) == null ? void 0 : _f.transcriptRawEndSeconds) !== void 0) {
+    endSec = config.options.transcriptRawEndSeconds;
+  }
   const speakerTurnsWithMatches = (0, import_react114.useMemo)(() => speakerTurns.map((s2) => __spreadProps(__spreadValues({}, s2), {
     paragraphsWithMatches: s2.paragraphs.filter((p2) => {
       if (typeof beginSec === "number" && p2.syncMs) {
