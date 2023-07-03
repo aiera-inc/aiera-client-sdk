@@ -59,14 +59,14 @@
              * To prevent a race condition, use the on('configured') event listener
              * and call setWatchlist once the config options are set in state.
              */
-            eventList.on('configured', () => {
-                eventList.setWatchlist([
-                    { ticker: 'AAPL' },
-                    { ticker: 'GOOGL' },
-                    { ticker: 'TLSA' }, // invalid tickers are ignored
-                    { ticker: 'PTON' },
-                ]);
-            });
+            // eventList.on('configured', () => {
+            //     eventList.setWatchlist([
+            //         { ticker: 'AAPL' },
+            //         { ticker: 'GOOGL' },
+            //         { ticker: 'TLSA' }, // invalid tickers are ignored
+            //         { ticker: 'PTON' },
+            //     ]);
+            // });
 
             eventList.on('instrument-selected', (ticker) => {
                 console.log('selected ticker: ', ticker);
