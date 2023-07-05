@@ -38,7 +38,7 @@ export class AudioPlayer {
             lastPosition: 0,
             error: false,
         };
-        this.audio = document.createElement('audio');
+        this.audio = document.createElement('video');
         this.audio.setAttribute('preload', 'metadata');
         this.audio.controls = false;
         this.audio.addEventListener('timeupdate', this.adjustPlayback);
@@ -124,7 +124,8 @@ export class AudioPlayer {
                         }
                     }
                 } else if (isLive && !ios) {
-                    mimeType = 'application/dash+xml';
+                    // mimeType = 'application/dash+xml';
+                    mimeType = 'application/vnd.apple.mpegurl';
                 } else {
                     mimeType = 'audio/mpeg';
                     if (url.includes('audio-dev.aiera') || url.includes('audio.aiera')) {
