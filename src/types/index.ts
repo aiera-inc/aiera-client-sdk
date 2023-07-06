@@ -70,3 +70,9 @@ export type SelectOption<T> = {
 };
 
 export type ValueOf<T> = T[keyof T];
+
+declare global {
+    interface Window {
+        muxjs: object;
+    }
+}

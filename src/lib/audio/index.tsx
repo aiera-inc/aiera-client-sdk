@@ -1,7 +1,12 @@
 import React, { createContext, useContext, useEffect, useState, ReactElement, ReactNode } from 'react';
 import { EventType, Quote } from '@aiera/client-sdk/types/generated';
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
+import muxjs from 'mux.js';
 import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
+
+// shaka player package looks for window.muxjs
+// i extended window.muxjs in the types index.ts
+window.muxjs = muxjs;
 
 /* eslint-disable @typescript-eslint/no-var-requires */
 const shakaInstance: ShakaPlayer = require('shaka-player/dist/shaka-player.ui.js') as ShakaPlayer;
@@ -100,6 +105,26 @@ export class AudioPlayer {
         }
     };
 
+    getMimeType(stream: string) {
+        const found = stream.search('storage.media');
+        if (found > 0) {
+            return 'application/dash+xml';
+        }
+        // get the extension of the stream url to determine the mimetype
+        const streamExt = this.getStreamExtension(stream);
+        if (streamExt === 'm3u8') {
+            return 'application/vnd.apple.mpegurl';
+        } else if (streamExt === 'mpd') {
+            return 'application/dash+xml';
+        }
+
+        return '';
+    }
+
+    getStreamExtension(stream: string) {
+        return stream.split(/[#?]/)[0]?.split('.').pop()?.trim();
+    }
+
     async init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
         if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
             let url = opts?.url;
@@ -124,8 +149,7 @@ export class AudioPlayer {
                         }
                     }
                 } else if (isLive && !ios) {
-                    // mimeType = 'application/dash+xml';
-                    mimeType = 'application/vnd.apple.mpegurl';
+                    mimeType = this.getMimeType(url);
                 } else {
                     mimeType = 'audio/mpeg';
                     if (url.includes('audio-dev.aiera') || url.includes('audio.aiera')) {
