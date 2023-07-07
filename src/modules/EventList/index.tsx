@@ -1065,10 +1065,10 @@ export const EventList = ({
         const watchlistQuery = state.listType === 'recent' ? eventsQuery : eventsQueryUpcoming;
         if (state.loadingWatchlist === 'started') {
             if (watchlistQuery.state.stale) {
-                // If its a refetch query
+                // If it's a refetch query
                 mergeState({ loadingWatchlist: 'loading-refetch' });
             } else if (watchlistQuery.status === 'loading') {
-                // If its a query load
+                // If it's a query load
                 mergeState({ loadingWatchlist: 'loading-query' });
             }
         } else if (state.loadingWatchlist === 'loading-refetch') {
@@ -1077,7 +1077,7 @@ export const EventList = ({
                 mergeState({ loadingWatchlist: 'complete' });
             }
         } else if (state.loadingWatchlist === 'loading-query') {
-            if (watchlistQuery.status === 'success') {
+            if (watchlistQuery.status === 'success' || !watchlistQuery.state.stale) {
                 // Query completed
                 mergeState({ loadingWatchlist: 'complete' });
             }

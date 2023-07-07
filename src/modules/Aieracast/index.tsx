@@ -438,7 +438,7 @@ export function Aieracast(): ReactElement {
                 scrollRef.current.scrollTo({ left: width, behavior: 'smooth' });
             }
         }
-        if (typeof scrollWidth === 'number') {
+        if (scrollWidth !== undefined) {
             setScrollWidthState(scrollWidth);
         }
     }, [scrollRef.current?.scrollWidth, openEventIds]);
