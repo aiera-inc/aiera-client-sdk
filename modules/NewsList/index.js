@@ -38242,11 +38242,13 @@ var EventListDocument = lib_default`
           audioRecordingOffsetMs
           audioStreamUri
           connectionStatus
+          externalAudioStreamUrl
           hasPublishedTranscript
           hasTranscript
           eventDate
           eventType
           isLive
+          liveStreamUrl
           title
           creator {
             id
@@ -38483,10 +38485,12 @@ var EventUpdatesDocument = lib_default`
       username
     }
     eventDate
+    externalAudioStreamUrl
     hasConnectionDetails
     hasPublishedTranscript
     hasTranscript
     isLive
+    liveStreamUrl
     publishedTranscriptExpected
   }
 }
@@ -38518,10 +38522,12 @@ var TranscriptDocument = lib_default`
     dialInPin
     eventDate
     eventType
+    externalAudioStreamUrl
     hasConnectionDetails
     hasPublishedTranscript
     hasTranscript
     isLive
+    liveStreamUrl
     primaryCompany {
       id
       commonName

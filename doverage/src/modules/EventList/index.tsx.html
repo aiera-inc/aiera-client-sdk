@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.7% </span>
+                <span class="strong">55.21% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>127/228</span>
+                <span class='fraction'>127/230</span>
             </div>
         
             
@@ -1195,7 +1195,10 @@
 <a name='L1130'></a><a href='#L1130'>1130</a>
 <a name='L1131'></a><a href='#L1131'>1131</a>
 <a name='L1132'></a><a href='#L1132'>1132</a>
-<a name='L1133'></a><a href='#L1133'>1133</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1133'></a><a href='#L1133'>1133</a>
+<a name='L1134'></a><a href='#L1134'>1134</a>
+<a name='L1135'></a><a href='#L1135'>1135</a>
+<a name='L1136'></a><a href='#L1136'>1136</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1415,6 +1418,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2042,6 +2046,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">77x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
@@ -2572,13 +2578,14 @@ const DefaultEventRow = ({
                                     eventDate: eventDate ? eventDate.toISO() : <span class="branch-1 cbranch-no" title="branch not covered" >undefined,</span>
                                     eventStream: event.audioStreamUri,
                                     eventType: event.eventType,
+                                    externalAudioStreamUrl: event.externalAudioStreamUrl,
                                     isLive: !!event?.isLive,
                                     localTicker: primaryQuote?.localTicker,
                                     quote: primaryQuote,
                                     title: event.title,
                                 }}
                                 id={event.id}
-                                url={event.isLive ? `https://storage.media.aiera.com/${event.id}` : event.audioProxy}
+                                url={event.isLive ? event.liveStreamUrl : event.audioProxy}
                                 offset={audioOffset || 0}
                             /&gt;
                         &lt;/div&gt;
@@ -3133,11 +3140,13 @@ export const EventList = ({
                             audioRecordingOffsetMs
                             audioStreamUri
                             connectionStatus
+                            externalAudioStreamUrl
                             hasPublishedTranscript
                             hasTranscript
                             eventDate
                             eventType
                             isLive
+                            liveStreamUrl
                             title
                             creator {
                                 id
@@ -3391,10 +3400,10 @@ export const EventList = ({
         const watchlistQuery = state.listType === 'recent' ? <span class="branch-0 cbranch-no" title="branch not covered" >eventsQuery </span>: eventsQueryUpcoming;
         <span class="missing-if-branch" title="if path not taken" >I</span>if (state.loadingWatchlist === 'started') {
 <span class="cstat-no" title="statement not covered" >            if (watchlistQuery.state.stale) {</span>
-                // If its a refetch query
+                // If it's a refetch query
 <span class="cstat-no" title="statement not covered" >                mergeState({ loadingWatchlist: 'loading-refetch' });</span>
             } else <span class="cstat-no" title="statement not covered" >if (watchlistQuery.status === 'loading') {</span>
-                // If its a query load
+                // If it's a query load
 <span class="cstat-no" title="statement not covered" >                mergeState({ loadingWatchlist: 'loading-query' });</span>
             }
         } else <span class="missing-if-branch" title="if path not taken" >I</span>if (state.loadingWatchlist === 'loading-refetch') {
@@ -3403,7 +3412,7 @@ export const EventList = ({
 <span class="cstat-no" title="statement not covered" >                mergeState({ loadingWatchlist: 'complete' });</span>
             }
         } else <span class="missing-if-branch" title="if path not taken" >I</span>if (state.loadingWatchlist === 'loading-query') {
-<span class="cstat-no" title="statement not covered" >            if (watchlistQuery.status === 'success') {</span>
+<span class="cstat-no" title="statement not covered" >            if (watchlistQuery.status === 'success' || !watchlistQuery.state.stale) {</span>
                 // Query completed
 <span class="cstat-no" title="statement not covered" >                mergeState({ loadingWatchlist: 'complete' });</span>
             }
@@ -3466,7 +3475,7 @@ export const EventList = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Jun 30 2023 11:34:28 GMT-0400 (Eastern Daylight Time)
+                at Fri Jul 07 2023 15:12:48 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
