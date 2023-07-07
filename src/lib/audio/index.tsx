@@ -126,7 +126,10 @@ export class AudioPlayer {
     }
 
     async init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
-        if (opts && (this.id !== opts.id || this.audio.src !== opts.url)) {
+        // Ignore query parameters when checking if the audio url changed
+        const currentUrl = (this.audio.src || '').split('?')[0];
+        const optsUrl = (opts?.url || '').split('?')[0];
+        if (opts && (this.id !== opts.id || currentUrl !== optsUrl)) {
             let url = opts?.url;
             const { id } = opts;
             const startTime = 0;
