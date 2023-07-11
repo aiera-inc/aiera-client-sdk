@@ -255,8 +255,7 @@ export class AudioPlayer {
     rawSeek(position: number, useOffset = false): void {
         const newTime = useOffset ? position + this.offset : position;
         this.audio.currentTime = newTime;
-        console.log("debug seek ", newTime)
-
+        
         // We want to re-render the audio player
         // on-seek if the audio isn't currently
         // playing. Important if the playhead
