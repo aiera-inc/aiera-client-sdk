@@ -21,7 +21,6 @@ export interface EventMetaData {
     localTicker?: string;
     quote?: Maybe<DeepPartial<Quote>>;
     title?: string;
-    loading?: boolean;
 }
 
 export class AudioPlayer {
@@ -37,6 +36,7 @@ export class AudioPlayer {
     audio: HTMLAudioElement;
     liveCatchupThreshold = 5;
     player?: playerType;
+    loadNewAsset?: boolean;
 
     constructor() {
         this.errorInfo = {
@@ -127,8 +127,9 @@ export class AudioPlayer {
 
     async init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
         // Ignore query parameters when checking if the audio url changed
-        const currentUrl = (this.audio.src || '').split('?')[0];
+        const currentUrl = this.player?.getAssetUri()?.split('?')[0];
         const optsUrl = (opts?.url || '').split('?')[0];
+        this.loadNewAsset = false;
         if (opts && (this.id !== opts.id || currentUrl !== optsUrl)) {
             let url = opts?.url;
             const { id } = opts;
@@ -165,6 +166,7 @@ export class AudioPlayer {
                         await this.player.load(url, startTime, mimeType);
                         this.audio.playbackRate = 1;
                         this.url = url;
+                        this.loadNewAsset = true;
                     }
                 } catch (e) {
                     console.log(e);
@@ -216,8 +218,13 @@ export class AudioPlayer {
 
         const isLive = opts?.metaData?.isLive;
         if (isLive && this.player) {
-            this.player.goToLive();
-            this.player.trickPlay(1);
+            const currentTime = this.rawCurrentTime - this.offset;
+            if(this.loadNewAsset || currentTime === 0){
+                this.player.goToLive();
+                this.player.trickPlay(1);
+            } else {
+                this.audio.play();
+            }
             return;
         } else {
             return await this.audio.play();
@@ -248,7 +255,7 @@ export class AudioPlayer {
     rawSeek(position: number, useOffset = false): void {
         const newTime = useOffset ? position + this.offset : position;
         this.audio.currentTime = newTime;
-
+        
         // We want to re-render the audio player
         // on-seek if the audio isn't currently
         // playing. Important if the playhead
