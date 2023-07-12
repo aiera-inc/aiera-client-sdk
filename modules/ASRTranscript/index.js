@@ -82461,9 +82461,10 @@ var AudioPlayer = class {
   }
   init(opts) {
     return __async(this, null, function* () {
-      var _a, _b, _c, _d, _e;
-      const currentUrl = (this.audio.src || "").split("?")[0];
+      var _a, _b, _c, _d, _e, _f, _g;
+      const currentUrl = (_b = (_a = this.player) == null ? void 0 : _a.getAssetUri()) == null ? void 0 : _b.split("?")[0];
       const optsUrl = ((opts == null ? void 0 : opts.url) || "").split("?")[0];
+      this.loadNewAsset = false;
       if (opts && (this.id !== opts.id || currentUrl !== optsUrl)) {
         let url = opts == null ? void 0 : opts.url;
         const { id } = opts;
@@ -82474,13 +82475,13 @@ var AudioPlayer = class {
           let mimeType = null;
           const userAgent = window.navigator.userAgent.toLowerCase();
           const ios = /iphone|ipod|ipad/.test(userAgent);
-          const isLive = ((_a = opts == null ? void 0 : opts.metaData) == null ? void 0 : _a.isLive) || null;
+          const isLive = ((_c = opts == null ? void 0 : opts.metaData) == null ? void 0 : _c.isLive) || null;
           if (isLive && ios) {
             mimeType = "application/vnd.apple.mpegurl";
-            if (opts && (((_b = opts == null ? void 0 : opts.metaData) == null ? void 0 : _b.eventStream) || ((_c = opts == null ? void 0 : opts.metaData) == null ? void 0 : _c.externalAudioStreamUrl))) {
-              if ((_d = opts == null ? void 0 : opts.metaData) == null ? void 0 : _d.externalAudioStreamUrl) {
+            if (opts && (((_d = opts == null ? void 0 : opts.metaData) == null ? void 0 : _d.eventStream) || ((_e = opts == null ? void 0 : opts.metaData) == null ? void 0 : _e.externalAudioStreamUrl))) {
+              if ((_f = opts == null ? void 0 : opts.metaData) == null ? void 0 : _f.externalAudioStreamUrl) {
                 url = opts.metaData.externalAudioStreamUrl;
-              } else if ((_e = opts == null ? void 0 : opts.metaData) == null ? void 0 : _e.eventStream) {
+              } else if ((_g = opts == null ? void 0 : opts.metaData) == null ? void 0 : _g.eventStream) {
                 url = `https://storage.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
               }
             }
@@ -82497,6 +82498,7 @@ var AudioPlayer = class {
               yield this.player.load(url, startTime, mimeType);
               this.audio.playbackRate = 1;
               this.url = url;
+              this.loadNewAsset = true;
             }
           } catch (e) {
             console.log(e);
@@ -82538,8 +82540,13 @@ var AudioPlayer = class {
       }, 5e3);
       const isLive = (_a = opts == null ? void 0 : opts.metaData) == null ? void 0 : _a.isLive;
       if (isLive && this.player) {
-        this.player.goToLive();
-        this.player.trickPlay(1);
+        const currentTime = this.rawCurrentTime - this.offset;
+        if (this.loadNewAsset || currentTime === 0) {
+          this.player.goToLive();
+          this.player.trickPlay(1);
+        } else {
+          this.audio.play();
+        }
         return;
       } else {
         return yield this.audio.play();
