@@ -80865,18 +80865,49 @@ function useAlertList(poll = false, interval = 3e3) {
 // src/lib/realtime/index.tsx
 var Context5 = (0, import_react7.createContext)(void 0);
 function Provider5({ children, client: passedClient }) {
-  var _a, _b, _c, _d;
+  var _a, _b;
   const [client, setClient] = (0, import_react7.useState)(passedClient);
+  const [appConfig, setAppConfig] = (0, import_react7.useState)(void 0);
+  const [currentUser, setCurrentUser] = (0, import_react7.useState)(void 0);
+  const userQuery = useQuery2({
+    requestPolicy: "cache-only",
+    query: lib_default`
+            query RealtimeCurrentUser {
+                currentUser {
+                    id
+                }
+            }
+        `
+  });
+  (0, import_react7.useEffect)(() => {
+    var _a2, _b2, _c, _d;
+    if (!currentUser) {
+      if (userQuery.status === "success" && ((_b2 = (_a2 = userQuery.state.data) == null ? void 0 : _a2.currentUser) == null ? void 0 : _b2.id)) {
+        setCurrentUser(userQuery.state.data.currentUser);
+      } else if (userQuery.status === "error" || userQuery.status === "success" && !((_d = (_c = userQuery.state.data) == null ? void 0 : _c.currentUser) == null ? void 0 : _d.id)) {
+        userQuery.refetch({ requestPolicy: "cache-and-network" });
+      }
+    }
+  }, [currentUser, (_a = userQuery.state.data) == null ? void 0 : _a.currentUser, userQuery.status]);
   const configQuery = useAppConfig();
+  (0, import_react7.useEffect)(() => {
+    var _a2, _b2;
+    if (!appConfig && currentUser) {
+      if (configQuery.status === "success" && ((_a2 = configQuery.state.data) == null ? void 0 : _a2.configuration)) {
+        setAppConfig(configQuery.state.data.configuration);
+      } else if (configQuery.status === "error" || configQuery.status === "success" && !((_b2 = configQuery.data) == null ? void 0 : _b2.configuration)) {
+        configQuery.refetch();
+      }
+    }
+  }, [appConfig, (_b = configQuery.state.data) == null ? void 0 : _b.configuration, configQuery.status, currentUser]);
   const { realtimeOptions } = useConfig();
   (0, import_react7.useEffect)(() => {
-    var _a2, _b2, _c2, _d2;
-    const appKey = (_b2 = (_a2 = configQuery.state.data) == null ? void 0 : _a2.configuration) == null ? void 0 : _b2.pusherAppKey;
-    const cluster = (_d2 = (_c2 = configQuery.state.data) == null ? void 0 : _c2.configuration) == null ? void 0 : _d2.pusherAppCluster;
-    if (!passedClient && appKey && cluster) {
+    const appKey = appConfig == null ? void 0 : appConfig.pusherAppKey;
+    const cluster = appConfig == null ? void 0 : appConfig.pusherAppCluster;
+    if (!client && !passedClient && appKey && cluster) {
       setClient(new import_pusher_js.default(appKey, (0, import_lodash2.default)({ cluster }, realtimeOptions)));
     }
-  }, [(_b = (_a = configQuery.state.data) == null ? void 0 : _a.configuration) == null ? void 0 : _b.pusherAppKey, (_d = (_c = configQuery.state.data) == null ? void 0 : _c.configuration) == null ? void 0 : _d.pusherAppKey]);
+  }, [appConfig, client, passedClient]);
   return /* @__PURE__ */ import_react7.default.createElement(Context5.Provider, {
     value: client
   }, children);
@@ -81210,6 +81241,13 @@ var TrackDocument = lib_default`
     mutation Track($event: String!, $properties: GenericObjectScalar!) {
   track(event: $event, properties: $properties) {
     success
+  }
+}
+    `;
+var RealtimeCurrentUserDocument = lib_default`
+    query RealtimeCurrentUser {
+  currentUser {
+    id
   }
 }
     `;
