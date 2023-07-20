@@ -63,7 +63,6 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
     }, [appConfig, configQuery.state.data?.configuration, configQuery.status, currentUser]);
 
     const { realtimeOptions } = useConfig();
-    console.log({ appConfig, currentUser, client });
     useEffect(() => {
         const appKey = appConfig?.pusherAppKey;
         const cluster = appConfig?.pusherAppCluster;
