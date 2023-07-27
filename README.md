@@ -40,6 +40,19 @@ https://aiera-inc.github.io/aiera-client-sdk/docs/index.html
 > # open browser to localhost:8000/demo/EventList.html
 ```
 
+#### Deploying
+
+To release the latest code for the embedded modules in S3 (e.g. s3://aiera-public-assets/aiera-sdk/), first source the
+`.env` file matching the environment to which you want to deploy. If deploying to dev (e.g. /aiera-sdk/dev/0.0.55),
+run `source development.env` in the command line. Alternatively, for prod, run `source production.env`.
+
+***IMPORTANT***: *if you don't source the correct `.env` file before running the publish command, you could end up
+pointing **production** code to a **local**/**dev** `aiera-pubic-api`.*
+
+Before publishing to S3, confirm you have the correct `aiera-public-api` url. In the command line,
+run `echo $AIERA_SDK_API_URL`. Then, run `npm run publish-web-dev` or `npm run publish-web-prod` depending on the environment to which you'd like
+to deploy.
+
 #### Testing
 
 `console.log` and `console.debug` messages are stubbed by default to prevent flooding the command line. If you need to
