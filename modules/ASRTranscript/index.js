@@ -87159,7 +87159,7 @@ var Transcript = (props) => {
     onBack == null ? void 0 : onBack(event);
   }, [onBack]);
   const { height: containerHeight, ref: containerRef } = useElementSize();
-  const bus = useMessageListener("seek-transcript-seconds", ({ data }) => void onSeekAudioSeconds(data, true), "in");
+  const bus = useMessageListener("seek-transcript-seconds", ({ data }) => void onSeekAudioSeconds(data, false), "in");
   bus.on("seek-transcript-timestamp", ({ data }) => void onSeekAudioByDate(data), "in");
   const onClickTranscript = (0, import_react63.useCallback)((paragraph) => {
     if (!audioPlayer.id || audioPlayer.id === eventId || eventId && audioPlayer.playing(eventId)) {
