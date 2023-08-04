@@ -256,7 +256,7 @@ const DefaultEventRow = ({
                         </div>
                     </div>
                     <div className="flex flex-col justify-center flex-1 min-w-0 pl-2 pr-4">
-                        <div className="flex items-end">
+                        <div className="flex items-baseline">
                             {primaryQuote?.localTicker ? (
                                 <>
                                     <span className="leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
