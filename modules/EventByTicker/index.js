@@ -86827,27 +86827,37 @@ function useLatestTranscripts(eventId = "", eventQuery) {
       eventId
     }
   });
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react63.useState)(/* @__PURE__ */ new Map());
+  const [refetchingTranscript, setRefetchingTranscript] = (0, import_react63.useState)(false);
   useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "modified", (0, import_react63.useCallback)(() => {
     latestParagraphsQuery.refetch();
   }, [latestParagraphsQuery.refetch]));
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react63.useState)(/* @__PURE__ */ new Map());
   (0, import_react63.useEffect)(() => {
-    var _a2, _b2, _c;
     if (latestParagraphsQuery.state.data) {
-      const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
-      if (!speakerTurns || speakerTurns.length === 0) {
-        eventQuery.refetch();
-      }
       setLatestParagraphs((prev) => {
-        var _a3, _b3, _c2;
+        var _a2, _b2, _c;
         const next = new Map(prev);
-        (((_c2 = (_b3 = (_a3 = latestParagraphsQuery.state.data) == null ? void 0 : _a3.events[0]) == null ? void 0 : _b3.transcripts[0]) == null ? void 0 : _c2.latestParagraphs) || []).forEach((p2) => {
+        (((_c = (_b2 = (_a2 = latestParagraphsQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.latestParagraphs) || []).forEach((p2) => {
           next.set(p2.id, p2);
         });
         return next;
       });
     }
   }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
+  (0, import_react63.useEffect)(() => {
+    var _a2, _b2, _c;
+    if (!refetchingTranscript && latestParagraphs && latestParagraphs.size > 0) {
+      const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
+      if (!speakerTurns || speakerTurns.length === 0) {
+        setRefetchingTranscript(true);
+      }
+    }
+  }, [eventQuery, latestParagraphs, refetchingTranscript]);
+  (0, import_react63.useEffect)(() => {
+    if (refetchingTranscript) {
+      eventQuery.refetch();
+    }
+  }, [refetchingTranscript]);
   return (0, import_react63.useMemo)(() => {
     var _a2, _b2, _c;
     const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
