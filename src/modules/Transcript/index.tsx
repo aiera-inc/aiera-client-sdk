@@ -766,6 +766,12 @@ function useLatestTranscripts(
         },
     });
 
+    // Each time the latestParagraphs get updated, set them in state
+    const [latestParagraphs, setLatestParagraphs] = useState<Map<string, Paragraph>>(new Map());
+
+    // When this is true, we do a refetch of the eventQuery
+    const [refetchingTranscript, setRefetchingTranscript] = useState(false);
+
     useRealtimeEvent<void>(
         `scheduled_audio_call_${eventId}_events_changes`,
         'modified',
@@ -774,19 +780,8 @@ function useLatestTranscripts(
         }, [latestParagraphsQuery.refetch])
     );
 
-    // Each time the latestParagraphs get updated, set them in state
-    const [latestParagraphs, setLatestParagraphs] = useState<Map<string, Paragraph>>(new Map());
     useEffect(() => {
         if (latestParagraphsQuery.state.data) {
-            const speakerTurns =
-                eventQuery.state.data?.events[0]?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns) ||
-                [];
-
-            // Refetch eventQuery if we have no speakerTurns
-            if (!speakerTurns || speakerTurns.length === 0) {
-                eventQuery.refetch();
-            }
-
             setLatestParagraphs((prev) => {
                 const next = new Map(prev);
                 (latestParagraphsQuery.state.data?.events[0]?.transcripts[0]?.latestParagraphs || []).forEach((p) => {
@@ -796,6 +791,31 @@ function useLatestTranscripts(
             });
         }
     }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
+
+    // Watch the eventQuery and the lastestParagraphs
+    // if we have no speakerTurns from the eventQuery
+    // and we do have latestParagraphs
+    // let's toggle on refetching mode
+    useEffect(() => {
+        if (!refetchingTranscript && latestParagraphs && latestParagraphs.size > 0) {
+            const speakerTurns =
+                eventQuery.state.data?.events[0]?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns) ||
+                [];
+            if (!speakerTurns || speakerTurns.length === 0) {
+                setRefetchingTranscript(true);
+            }
+        }
+    }, [eventQuery, latestParagraphs, refetchingTranscript]);
+
+    // Refetching mode is on
+    // Time to refetch the transcript
+    // Nothing turns this off, so it
+    // should only run once
+    useEffect(() => {
+        if (refetchingTranscript) {
+            eventQuery.refetch();
+        }
+    }, [refetchingTranscript]);
 
     // Loop through the speaker turns and paragraphs and update any of the original paragraphs
     // that have changed since the first download, then add any completely new paragraphs to the
