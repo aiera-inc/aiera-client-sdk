@@ -86832,11 +86832,16 @@ function useLatestTranscripts(eventId = "", eventQuery) {
   }, [latestParagraphsQuery.refetch]));
   const [latestParagraphs, setLatestParagraphs] = (0, import_react63.useState)(/* @__PURE__ */ new Map());
   (0, import_react63.useEffect)(() => {
+    var _a2, _b2, _c;
     if (latestParagraphsQuery.state.data) {
+      const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
+      if (!speakerTurns || speakerTurns.length === 0) {
+        eventQuery.refetch();
+      }
       setLatestParagraphs((prev) => {
-        var _a2, _b2, _c;
+        var _a3, _b3, _c2;
         const next = new Map(prev);
-        (((_c = (_b2 = (_a2 = latestParagraphsQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.latestParagraphs) || []).forEach((p2) => {
+        (((_c2 = (_b3 = (_a3 = latestParagraphsQuery.state.data) == null ? void 0 : _a3.events[0]) == null ? void 0 : _b3.transcripts[0]) == null ? void 0 : _c2.latestParagraphs) || []).forEach((p2) => {
           next.set(p2.id, p2);
         });
         return next;
