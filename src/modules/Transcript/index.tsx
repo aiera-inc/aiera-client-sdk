@@ -778,6 +778,15 @@ function useLatestTranscripts(
     const [latestParagraphs, setLatestParagraphs] = useState<Map<string, Paragraph>>(new Map());
     useEffect(() => {
         if (latestParagraphsQuery.state.data) {
+            const speakerTurns =
+                eventQuery.state.data?.events[0]?.transcripts[0]?.sections.flatMap((section) => section.speakerTurns) ||
+                [];
+
+            // Refetch eventQuery if we have no speakerTurns
+            if (!speakerTurns || speakerTurns.length === 0) {
+                eventQuery.refetch();
+            }
+
             setLatestParagraphs((prev) => {
                 const next = new Map(prev);
                 (latestParagraphsQuery.state.data?.events[0]?.transcripts[0]?.latestParagraphs || []).forEach((p) => {
