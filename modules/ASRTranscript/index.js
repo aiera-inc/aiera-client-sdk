@@ -82431,6 +82431,7 @@ var AudioPlayer = class {
     };
     this.audio = document.createElement("video");
     this.audio.setAttribute("preload", "metadata");
+    this.audio.setAttribute("playsinline", "true");
     this.audio.controls = false;
     this.audio.addEventListener("timeupdate", this.adjustPlayback);
     this.initShaka(this.audio);
