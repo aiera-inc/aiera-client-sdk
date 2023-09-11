@@ -45,6 +45,7 @@ export class AudioPlayer {
         };
         this.audio = document.createElement('video');
         this.audio.setAttribute('preload', 'metadata');
+        this.audio.setAttribute('playsinline', 'true');
         this.audio.controls = false;
         this.audio.addEventListener('timeupdate', this.adjustPlayback);
         this.initShaka(this.audio);
@@ -219,7 +220,7 @@ export class AudioPlayer {
         const isLive = opts?.metaData?.isLive;
         if (isLive && this.player) {
             const currentTime = this.rawCurrentTime - this.offset;
-            if(this.loadNewAsset || currentTime === 0){
+            if (this.loadNewAsset || currentTime === 0) {
                 this.player.goToLive();
                 this.player.trickPlay(1);
             } else {
@@ -255,7 +256,7 @@ export class AudioPlayer {
     rawSeek(position: number, useOffset = false): void {
         const newTime = useOffset ? position + this.offset : position;
         this.audio.currentTime = newTime;
-        
+
         // We want to re-render the audio player
         // on-seek if the audio isn't currently
         // playing. Important if the playhead
