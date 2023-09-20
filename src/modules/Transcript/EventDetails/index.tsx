@@ -1,10 +1,13 @@
 import React, { ReactElement } from 'react';
-import { TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import gql from 'graphql-tag';
+import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import { useQuery } from '@aiera/client-sdk/api/client';
 import classNames from 'classnames';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
 import './styles.css';
 
 export type Event = TranscriptQuery['events'][0];
+
 interface EventDetailsSharedProps {
     eventDetailsExpanded: boolean;
     toggleEventDetails: () => void;
@@ -16,6 +19,18 @@ interface EventDetailsUIProps extends EventDetailsSharedProps {}
 
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
     const { event, eventDetailsExpanded, toggleEventDetails } = props;
+    const userQuery = useQuery<CurrentUserQuery>({
+        requestPolicy: 'cache-only',
+        query: gql`
+            query CurrentUserQuery {
+                currentUser {
+                    id
+                    apiKey
+                }
+            }
+        `,
+    });
+
     return (
         <div
             className={classNames(
@@ -88,6 +103,24 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                                     target="_blank"
                                 >
                                     {event.audioRecordingUrl}
+                                </a>
+                            </span>
+                        </div>
+                    )}
+                    {userQuery.state.data?.currentUser?.apiKey && (
+                        <div className="flex my-3 px-3.5">
+                            <span className="font-semibold flex-shrink-0 block w-28 mr-1">Transcript </span>
+                            <span className="block truncate">
+                                <a
+                                    className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
+                                    href={
+                                        `https://audio` +
+                                        (process.env.NODE_ENV !== 'production' ? `-dev` : '') +
+                                        `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`
+                                    }
+                                    rel="noreferrer"
+                                >
+                                    Download PDF
                                 </a>
                             </span>
                         </div>

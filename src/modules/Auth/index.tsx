@@ -239,6 +239,7 @@ export const Auth = ({
                     id
                     firstName
                     lastName
+                    apiKey
                 }
             }
         `,
