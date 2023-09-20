@@ -38246,6 +38246,7 @@ var CurrentUserDocument = lib_default`
     id
     firstName
     lastName
+    apiKey
   }
 }
     `;
@@ -38468,6 +38469,14 @@ var UpdatePrivateRecordingDocument = lib_default`
     mutation UpdatePrivateRecording($input: UpdatePrivateRecordingInput!) {
   updatePrivateRecording(input: $input) {
     success
+  }
+}
+    `;
+var CurrentUserQueryDocument = lib_default`
+    query CurrentUserQuery {
+  currentUser {
+    id
+    apiKey
   }
 }
     `;
@@ -38853,6 +38862,7 @@ var Auth = ({
                     id
                     firstName
                     lastName
+                    apiKey
                 }
             }
         `

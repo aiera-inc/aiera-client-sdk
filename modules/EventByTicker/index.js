@@ -81257,6 +81257,7 @@ var CurrentUserDocument = lib_default`
     id
     firstName
     lastName
+    apiKey
   }
 }
     `;
@@ -81479,6 +81480,14 @@ var UpdatePrivateRecordingDocument = lib_default`
     mutation UpdatePrivateRecording($input: UpdatePrivateRecordingInput!) {
   updatePrivateRecording(input: $input) {
     success
+  }
+}
+    `;
+var CurrentUserQueryDocument = lib_default`
+    query CurrentUserQuery {
+  currentUser {
+    id
+    apiKey
   }
 }
     `;
@@ -81864,6 +81873,7 @@ var Auth = ({
                     id
                     firstName
                     lastName
+                    apiKey
                 }
             }
         `
@@ -85335,8 +85345,19 @@ function SettingsButton(props) {
 var import_react51 = __toModule(require_react());
 var import_classnames25 = __toModule(require_classnames());
 function EventDetailsUI(props) {
-  var _a;
+  var _a, _b, _c;
   const { event, eventDetailsExpanded, toggleEventDetails } = props;
+  const userQuery = useQuery2({
+    requestPolicy: "cache-only",
+    query: lib_default`
+            query CurrentUserQuery {
+                currentUser {
+                    id
+                    apiKey
+                }
+            }
+        `
+  });
   return /* @__PURE__ */ import_react51.default.createElement("div", {
     className: (0, import_classnames25.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
   }, /* @__PURE__ */ import_react51.default.createElement("div", {
@@ -85392,7 +85413,17 @@ function EventDetailsUI(props) {
     href: event.audioRecordingUrl,
     rel: "noreferrer",
     target: "_blank"
-  }, event.audioRecordingUrl)))));
+  }, event.audioRecordingUrl))), ((_c = (_b = userQuery.state.data) == null ? void 0 : _b.currentUser) == null ? void 0 : _c.apiKey) && /* @__PURE__ */ import_react51.default.createElement("div", {
+    className: "flex my-3 px-3.5"
+  }, /* @__PURE__ */ import_react51.default.createElement("span", {
+    className: "font-semibold flex-shrink-0 block w-28 mr-1"
+  }, "Transcript "), /* @__PURE__ */ import_react51.default.createElement("span", {
+    className: "block truncate"
+  }, /* @__PURE__ */ import_react51.default.createElement("a", {
+    className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
+    href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
+    rel: "noreferrer"
+  }, "Download PDF")))));
 }
 function EventDetails(props) {
   const { event, eventDetailsExpanded, toggleEventDetails } = props;
