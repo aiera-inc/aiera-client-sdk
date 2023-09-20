@@ -418,6 +418,7 @@ export function Aieracast(): ReactElement {
                             title: event.title,
                             eventType: event.eventType,
                             eventDate: event.eventDate,
+                            eventId: event.id,
                         },
                         'out'
                     );

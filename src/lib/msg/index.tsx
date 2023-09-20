@@ -17,6 +17,7 @@ export interface EventSelected {
     ticker?: string;
     eventDate?: string;
     eventType?: string;
+    eventId?: string;
     title?: string;
 }
 

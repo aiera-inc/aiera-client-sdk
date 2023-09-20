@@ -730,6 +730,7 @@ export const EventList = ({
             const title = change.value?.title;
             const eventDate = change.value?.eventDate;
             const eventType = change.value?.eventType;
+            const eventId = change.value?.id;
             bus?.emit('instrument-selected', { ticker: primaryQuote?.localTicker }, 'out');
 
             // We don't need to emit events
@@ -740,6 +741,7 @@ export const EventList = ({
                     {
                         ticker,
                         title,
+                        eventId,
                         eventType,
                         eventDate,
                     },
