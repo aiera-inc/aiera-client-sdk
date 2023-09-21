@@ -85413,7 +85413,7 @@ function EventDetailsUI(props) {
     href: event.audioRecordingUrl,
     rel: "noreferrer",
     target: "_blank"
-  }, event.audioRecordingUrl))), ((_c = (_b = userQuery.state.data) == null ? void 0 : _b.currentUser) == null ? void 0 : _c.apiKey) && /* @__PURE__ */ import_react51.default.createElement("div", {
+  }, event.audioRecordingUrl))), ((_c = (_b = userQuery.state.data) == null ? void 0 : _b.currentUser) == null ? void 0 : _c.apiKey) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react51.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react51.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-28 mr-1"
