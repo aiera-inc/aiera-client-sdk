@@ -107,7 +107,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                             </span>
                         </div>
                     )}
-                    {userQuery.state.data?.currentUser?.apiKey && !event.isLive && (
+                    {userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed' && (
                         <div className="flex my-3 px-3.5">
                             <span className="font-semibold flex-shrink-0 block w-28 mr-1">Transcript </span>
                             <span className="block truncate">
