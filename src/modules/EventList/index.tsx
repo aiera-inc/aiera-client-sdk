@@ -64,6 +64,8 @@ import { InstrumentID } from '@aiera/client-sdk/web/embed';
 import { FilterBy } from './FilterBy';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import './styles.css';
+import { Calendar as CalendarIcon } from '@aiera/client-sdk/components/Svg/Calendar';
+import { Calendar } from '../Calendar';
 
 enum FilterByType {
     transcript,
@@ -108,10 +110,13 @@ export interface EventListUIProps {
     scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
     setFocus?: Dispatch<SetStateAction<number>>;
+    showCalendar: boolean;
+    showCalendarToggle?: boolean;
     showCompanyFilter: boolean;
     showForm: boolean;
     showFormButton: boolean;
     showHeaderControls: boolean;
+    toggleCalendar: MouseEventHandler;
     toggleForm: MouseEventHandler;
     useConfigOptions: boolean;
     userQuery: QueryResult<EventListCurrentUserQuery>;
@@ -328,10 +333,13 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         scrollRef,
         searchTerm,
         setFocus,
+        showCalendar,
+        showCalendarToggle,
         showCompanyFilter,
         showForm,
         showFormButton,
         showHeaderControls,
+        toggleCalendar,
         toggleForm,
         useConfigOptions,
         userQuery,
@@ -436,9 +444,32 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                         </Button>
                                     </Tooltip>
                                 )}
+                                {showCalendarToggle && (
+                                    <Tooltip
+                                        content={
+                                            <div className="bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7">
+                                                Show Calendar
+                                            </div>
+                                        }
+                                        grow="down-left"
+                                        hideOnDocumentScroll
+                                        openOn="hover"
+                                        position="bottom-right"
+                                        yOffset={6}
+                                    >
+                                        <Button
+                                            className="cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]"
+                                            kind="primary"
+                                            onClick={toggleCalendar}
+                                        >
+                                            <CalendarIcon className="h-6 mb-0.5 text-white w-6" />
+                                        </Button>
+                                    </Tooltip>
+                                )}
                             </>
                         )}
                     </div>
+                    {showCalendar && <Calendar />}
                 </div>
             )}
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}>
@@ -606,6 +637,7 @@ interface EventListState {
     loadingWatchlist: LoadingWatchlist;
     pageSize: number;
     searchTerm: string;
+    showCalendar: boolean;
     showForm: boolean;
     userStatusInactive: boolean;
     userStatusLoaded: boolean;
@@ -632,6 +664,7 @@ export const EventList = ({
         loadingWatchlist: 'complete',
         pageSize: 30,
         searchTerm: controlledSearchTerm,
+        showCalendar: false,
         showForm: false,
         userStatusInactive: false,
         userStatusLoaded: false,
@@ -1117,12 +1150,20 @@ export const EventList = ({
             scrollRef={scrollRef}
             searchTerm={state.searchTerm}
             setFocus={setFocus}
+            showCalendar={state.showCalendar}
             showCompanyFilter={
                 config.options?.showCompanyFilter === undefined ? true : config.options?.showCompanyFilter
             }
             showForm={state.showForm}
             showFormButton={!!config.options?.showScheduleRecording}
+            showCalendarToggle={!!config.options?.showCalendarToggle}
             showHeaderControls={showHeaderControls}
+            toggleCalendar={useCallback(
+                (event: SyntheticEvent<Element, Event>) => {
+                    handlers.showCalendar(event, { value: !state.showCalendar });
+                },
+                [state.showCalendar]
+            )}
             toggleForm={useCallback(
                 (event: SyntheticEvent<Element, Event>) => {
                     handlers.showForm(event, { value: !state.showForm });
