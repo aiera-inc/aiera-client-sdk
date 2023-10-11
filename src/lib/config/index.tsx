@@ -44,6 +44,7 @@ export interface Options {
     showPriceReaction?: boolean;
     showRecordingDetails?: boolean;
     showScheduleRecording?: boolean;
+    showCalendar?: boolean;
     showCalendarToggle?: boolean;
     showSearch?: boolean;
     showPartials?: boolean;

@@ -1150,7 +1150,7 @@ export const EventList = ({
             scrollRef={scrollRef}
             searchTerm={state.searchTerm}
             setFocus={setFocus}
-            showCalendar={state.showCalendar}
+            showCalendar={config.options?.showCalendar === undefined ? state.showCalendar : config.options.showCalendar}
             showCompanyFilter={
                 config.options?.showCompanyFilter === undefined ? true : config.options?.showCompanyFilter
             }
