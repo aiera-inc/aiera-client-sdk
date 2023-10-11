@@ -18,9 +18,9 @@ export function CalendarUI(props: CalendarUIProps): ReactElement {
     const { selectedDate, darkMode, onSelectDate } = props;
     const { weeks, month, year, seekMonths, seekToday, todayIsVisible } = useDaytaPicker({ selectedDate });
     return (
-        <div className={classNames('h-full flex flex-col calendar', { dark: darkMode })}>
+        <div className={classNames('h-full flex flex-col pb-2 calendar', { dark: darkMode })}>
             <div className="flex">
-                <p className="text-base flex-1">{`${month} ${year}`}</p>
+                {month && year && <p className="text-base flex-1">{`${month} ${year}`}</p>}
                 {!todayIsVisible && (
                     <p className="text-base" onClick={seekToday}>
                         Today
@@ -33,17 +33,17 @@ export function CalendarUI(props: CalendarUIProps): ReactElement {
                     Prev
                 </p>
             </div>
-            <div className="flex justify-around">
-                <p className="text-sm">S</p>
-                <p className="text-sm">M</p>
-                <p className="text-sm">T</p>
-                <p className="text-sm">W</p>
-                <p className="text-sm">T</p>
-                <p className="text-sm">F</p>
-                <p className="text-sm">S</p>
+            <div className="flex justify-around font-semibold text-slate-400">
+                <p className="text-sm w-8 text-center">S</p>
+                <p className="text-sm w-8 text-center">M</p>
+                <p className="text-sm w-8 text-center">T</p>
+                <p className="text-sm w-8 text-center">W</p>
+                <p className="text-sm w-8 text-center">T</p>
+                <p className="text-sm w-8 text-center">F</p>
+                <p className="text-sm w-8 text-center">S</p>
             </div>
             {weeks.map((days, index) => (
-                <div key={`week-${month}-${index}`} className="flex justify-around">
+                <div key={`week-${index}`} className="flex justify-around">
                     {days.map(({ day, currentMonth, isToday, isSelected, date }) => (
                         <div
                             key={day}
