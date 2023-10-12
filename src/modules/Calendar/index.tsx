@@ -5,6 +5,7 @@ import { useSettings } from '@aiera/client-sdk/lib/data';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 import { useDaytaPicker } from './data';
 import './styles.css';
+import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 
 interface CalendarSharedProps {
     onSelectDate: ChangeHandler<Date>;
@@ -21,21 +22,36 @@ export function CalendarUI(props: CalendarUIProps): ReactElement {
     const { weeks, month, year, seekMonths, seekToday, todayIsVisible } = useDaytaPicker({ selectedDate });
     return (
         <div className={classNames('h-full flex flex-col pb-2 calendar', { dark: darkMode })}>
-            <div className="flex">
-                {month && year && <p className="text-base flex-1">{`${month} ${year}`}</p>}
-                {!todayIsVisible && (
-                    <p className="text-base" onClick={seekToday}>
-                        Today
-                    </p>
-                )}
-                <p className="text-base" onClick={() => seekMonths(1)}>
-                    Next
-                </p>
-                <p className="text-base" onClick={() => seekMonths(-1)}>
-                    Prev
-                </p>
+            <div className="flex mb-2">
+                <div className="flex flex-1 items-center">
+                    {month && year && (
+                        <p className="text-base font-bold tracking-tight antialiased">{`${month} ${year}`}</p>
+                    )}
+                    {!todayIsVisible && (
+                        <div
+                            className="ml-2 cursor-pointer flex bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-md text-slate-500 items-center px-1.5"
+                            onClick={seekToday}
+                        >
+                            <p className="text-sm text-slate-500">Go to Today</p>
+                        </div>
+                    )}
+                </div>
+                <div
+                    className="cursor-pointer flex bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-md text-slate-500 items-center pl-1.5 pr-2"
+                    onClick={() => seekMonths(-1)}
+                >
+                    <Chevron className="w-2.5 rotate-90" />
+                    <p className="text-sm ml-1">Prev</p>
+                </div>
+                <div
+                    className="cursor-pointer ml-2 flex bg-slate-100 hover:bg-slate-200 active:bg-slate-300 rounded-md text-slate-500 items-center pr-1.5 pl-2"
+                    onClick={() => seekMonths(1)}
+                >
+                    <p className="text-sm mr-1">Next</p>
+                    <Chevron className="w-2.5 -rotate-90" />
+                </div>
             </div>
-            <div className="flex justify-around font-semibold text-slate-400">
+            <div className="flex justify-between font-semibold text-slate-400">
                 <p className="text-sm w-8 text-center">S</p>
                 <p className="text-sm w-8 text-center">M</p>
                 <p className="text-sm w-8 text-center">T</p>
@@ -45,7 +61,7 @@ export function CalendarUI(props: CalendarUIProps): ReactElement {
                 <p className="text-sm w-8 text-center">S</p>
             </div>
             {weeks.map((days, index) => (
-                <div key={`week-${index}`} className="flex justify-around">
+                <div key={`week-${index}`} className="flex justify-between">
                     {days.map(({ day, currentMonth, isToday, isSelected, date }) => (
                         <div
                             key={day}
