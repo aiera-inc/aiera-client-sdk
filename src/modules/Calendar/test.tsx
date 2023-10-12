@@ -14,7 +14,16 @@ describe('Calendar', () => {
     });
 
     test('renders Calendar Controls', async () => {
-        await actAndFlush(() => render(<Calendar />));
+        await actAndFlush(() =>
+            render(
+                <Calendar
+                    onSelectDate={(_, { name, value }) => {
+                        console.log({ name, value });
+                    }}
+                    selectedDate={new Date()}
+                />
+            )
+        );
         screen.getByText('Next');
         screen.getByText('Prev');
     });

@@ -106,9 +106,11 @@ export interface EventListUIProps {
     onSelectEventById?: ChangeHandler<string>;
     onSelectFilterBy?: ChangeHandler<FilterByType[]>;
     onSelectListType?: ChangeHandler<EventView>;
+    onSelectDate: ChangeHandler<Date>;
     refetch?: () => void;
     scrollRef: RefObject<HTMLDivElement>;
     searchTerm?: string;
+    selectedDate: Date;
     setFocus?: Dispatch<SetStateAction<number>>;
     showCalendar: boolean;
     showCalendarToggle?: boolean;
@@ -327,11 +329,13 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
         onSearchChange,
         onSelectFilterBy,
         onSelectListType,
+        onSelectDate,
         onSelectEvent,
         onSelectEventById,
         refetch,
         scrollRef,
         searchTerm,
+        selectedDate,
         setFocus,
         showCalendar,
         showCalendarToggle,
@@ -469,7 +473,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                             </>
                         )}
                     </div>
-                    {showCalendar && <Calendar />}
+                    {showCalendar && <Calendar selectedDate={selectedDate} onSelectDate={onSelectDate} />}
                 </div>
             )}
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}>
@@ -637,6 +641,7 @@ interface EventListState {
     loadingWatchlist: LoadingWatchlist;
     pageSize: number;
     searchTerm: string;
+    selectedDate: Date;
     showCalendar: boolean;
     showForm: boolean;
     userStatusInactive: boolean;
@@ -664,6 +669,7 @@ export const EventList = ({
         loadingWatchlist: 'complete',
         pageSize: 30,
         searchTerm: controlledSearchTerm,
+        selectedDate: new Date(),
         showCalendar: false,
         showForm: false,
         userStatusInactive: false,
@@ -1146,8 +1152,10 @@ export const EventList = ({
             onSelectEventById={onSelectEventById}
             onSelectFilterBy={handlers.filterByTypes}
             onSelectListType={handlers.listType}
+            onSelectDate={handlers.selectedDate}
             refetch={refetch}
             scrollRef={scrollRef}
+            selectedDate={state.selectedDate}
             searchTerm={state.searchTerm}
             setFocus={setFocus}
             showCalendar={config.options?.showCalendar === undefined ? state.showCalendar : config.options.showCalendar}

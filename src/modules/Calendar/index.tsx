@@ -1,21 +1,23 @@
 import classNames from 'classnames';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 
-import './styles.css';
 import { useSettings } from '@aiera/client-sdk/lib/data';
+import { ChangeHandler } from '@aiera/client-sdk/types';
 import { useDaytaPicker } from './data';
+import './styles.css';
 
-interface CalendarSharedProps {}
+interface CalendarSharedProps {
+    onSelectDate: ChangeHandler<Date>;
+    selectedDate: Date;
+}
 
 /** @notExported */
 interface CalendarUIProps extends CalendarSharedProps {
-    onSelectDate: (d: Date) => void;
-    selectedDate: Date;
     darkMode?: boolean;
 }
 
 export function CalendarUI(props: CalendarUIProps): ReactElement {
-    const { selectedDate, darkMode, onSelectDate } = props;
+    const { selectedDate = new Date(), darkMode, onSelectDate } = props;
     const { weeks, month, year, seekMonths, seekToday, todayIsVisible } = useDaytaPicker({ selectedDate });
     return (
         <div className={classNames('h-full flex flex-col pb-2 calendar', { dark: darkMode })}>
@@ -47,7 +49,7 @@ export function CalendarUI(props: CalendarUIProps): ReactElement {
                     {days.map(({ day, currentMonth, isToday, isSelected, date }) => (
                         <div
                             key={day}
-                            onClick={() => onSelectDate(date)}
+                            onClick={(e) => onSelectDate(e, { name: 'date', value: date })}
                             className={classNames(
                                 'rounded-full text-base h-8 w-8',
                                 'flex items-center justify-center',
@@ -77,8 +79,7 @@ export interface CalendarProps extends CalendarSharedProps {}
 /**
  * Renders News
  */
-export function Calendar(): ReactElement {
-    const [selectedDate, setSelectedDate] = useState(new Date());
+export function Calendar({ selectedDate, onSelectDate }: CalendarProps): ReactElement {
     const { settings } = useSettings();
-    return <CalendarUI darkMode={settings.darkMode} selectedDate={selectedDate} onSelectDate={setSelectedDate} />;
+    return <CalendarUI darkMode={settings.darkMode} selectedDate={selectedDate} onSelectDate={onSelectDate} />;
 }
