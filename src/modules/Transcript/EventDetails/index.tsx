@@ -119,6 +119,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                                         `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`
                                     }
                                     rel="noreferrer"
+                                    download={true}
                                 >
                                     Download PDF
                                 </a>
