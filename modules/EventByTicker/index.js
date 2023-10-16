@@ -85422,7 +85422,8 @@ function EventDetailsUI(props) {
   }, /* @__PURE__ */ import_react51.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
-    rel: "noreferrer"
+    rel: "noreferrer",
+    download: true
   }, "Download PDF")))));
 }
 function EventDetails(props) {
