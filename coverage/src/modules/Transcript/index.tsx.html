@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.34% </span>
+                <span class="strong">69.09% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>190/274</span>
+                <span class='fraction'>190/275</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.04% </span>
+                <span class="strong">68.77% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>174/252</span>
+                <span class='fraction'>174/253</span>
             </div>
         
             
@@ -1471,7 +1471,12 @@
 <a name='L1406'></a><a href='#L1406'>1406</a>
 <a name='L1407'></a><a href='#L1407'>1407</a>
 <a name='L1408'></a><a href='#L1408'>1408</a>
-<a name='L1409'></a><a href='#L1409'>1409</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1409'></a><a href='#L1409'>1409</a>
+<a name='L1410'></a><a href='#L1410'>1410</a>
+<a name='L1411'></a><a href='#L1411'>1411</a>
+<a name='L1412'></a><a href='#L1412'>1412</a>
+<a name='L1413'></a><a href='#L1413'>1413</a>
+<a name='L1414'></a><a href='#L1414'>1414</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2431,8 +2436,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2528,6 +2535,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2744,6 +2752,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2763,6 +2772,7 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -3837,13 +3847,15 @@ function useAudioSync(
     Partial,
     string | null,
     string | null,
-    string | null
+    string | null,
+    () =&gt; void
 ] {
     const [currentParagraph, setCurrentParagraph] = useState&lt;string | null&gt;(null);
     const offset = { top: eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? <span class="branch-0 cbranch-no" title="branch not covered" >55 </span>: 5, bottom: 15 };
     const {
         scrollContainerRef,
         scrollContainer,
+        forceNextScroll,
         targetRef: currentParagraphRef,
     } = useAutoScroll&lt;HTMLDivElement&gt;({
         offset,
@@ -3944,6 +3956,7 @@ function useAudioSync(
         currentParagraphTimestamp,
         startTime,
         endTime,
+        forceNextScroll,
     ];
 }
 &nbsp;
@@ -4152,6 +4165,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
         currentParagraphTimestamp,
         startTime,
         endTime,
+        forceNextScroll,
     ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
     const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
@@ -4174,11 +4188,12 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
 <span class="cstat-no" title="statement not covered" >            if (pastIndex &gt; 0) {</span>
                 const currentP = <span class="cstat-no" title="statement not covered" >p[pastIndex - 1] || p[pastIndex];</span>
 <span class="cstat-no" title="statement not covered" >                if (currentP) {</span>
+<span class="cstat-no" title="statement not covered" >                    forceNextScroll();</span>
 <span class="cstat-no" title="statement not covered" >                    onClickTranscript(currentP);</span>
                 }
             }
         },
-        [searchState.speakerTurnsWithMatches]
+        [searchState.speakerTurnsWithMatches, forceNextScroll]
     );
     const onSeekAudioSeconds = useCallback(
 <span class="fstat-no" title="function not covered" >        (s</span>econds: number, useOffset?: boolean) =&gt; {
@@ -4294,7 +4309,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Oct 16 2023 15:17:06 GMT-0400 (Eastern Daylight Time)
+                at Mon Oct 23 2023 17:40:31 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

@@ -83223,7 +83223,28 @@ function useAutoScroll(opts) {
   const [target, targetRef] = (0, import_react35.useState)(null);
   const isAutoScrolling = (0, import_react35.useRef)(null);
   const pauseAutoScroll = (0, import_react35.useRef)(false);
+  const forceScroll = (0, import_react35.useRef)(false);
   const initialScroll = (0, import_react35.useRef)(true);
+  const scrollToCurrentRef = (0, import_react35.useCallback)(() => {
+    if (!skip && scrollContainer && target) {
+      void function() {
+        return __async(this, null, function* () {
+          isAutoScrolling.current = scrollIntoView(scrollContainer, target, { behavior: initialScroll.current ? initialBehavior : behavior }, 200, offset);
+          yield isAutoScrolling.current;
+          isAutoScrolling.current = null;
+        });
+      }();
+    }
+  }, [
+    scrollContainer,
+    scrollContainer == null ? void 0 : scrollContainer.scrollHeight,
+    target,
+    skip,
+    initialBehavior,
+    behavior,
+    offset.top,
+    offset.bottom
+  ]);
   (0, import_react35.useEffect)(() => {
     function onScroll() {
       maybePauseAutoScroll();
@@ -83233,14 +83254,8 @@ function useAutoScroll(opts) {
         pauseAutoScroll.current = !isVisible(scrollContainer, target);
       }
     }
-    if (!skip && !pauseAutoScroll.current && scrollContainer && target) {
-      void function() {
-        return __async(this, null, function* () {
-          isAutoScrolling.current = scrollIntoView(scrollContainer, target, { behavior: initialScroll.current ? initialBehavior : behavior }, 200, offset);
-          yield isAutoScrolling.current;
-          isAutoScrolling.current = null;
-        });
-      }();
+    if (!forceScroll.current && !pauseAutoScroll.current) {
+      scrollToCurrentRef();
       initialScroll.current = false;
     }
     if (!target) {
@@ -83252,16 +83267,27 @@ function useAutoScroll(opts) {
     }
     return () => scrollContainer == null ? void 0 : scrollContainer.removeEventListener("scroll", onScroll);
   }, [
+    scrollToCurrentRef,
     scrollContainer,
     scrollContainer == null ? void 0 : scrollContainer.scrollHeight,
     target,
     skip,
-    pauseOnUserScroll,
-    initialBehavior,
-    behavior,
-    offset.top,
-    offset.bottom
+    forceScroll,
+    pauseOnUserScroll
   ]);
+  (0, import_react35.useEffect)(() => {
+    if (forceScroll.current && target) {
+      scrollToCurrentRef();
+      if (forceScroll.current) {
+        forceScroll.current = false;
+      }
+    }
+  }, [target, scrollToCurrentRef]);
+  const forceNextScroll = (0, import_react35.useCallback)(() => {
+    if (!forceScroll.current) {
+      forceScroll.current = true;
+    }
+  }, [forceScroll]);
   const scroll = (0, import_react35.useCallback)((opts2) => {
     const { top, onlyIfNeeded = false } = opts2 || {};
     if (top === void 0) {
@@ -83272,7 +83298,7 @@ function useAutoScroll(opts) {
       scrollContainer == null ? void 0 : scrollContainer.scrollTo({ top });
     }
   }, [scrollContainer, target, initialBehavior, behavior, offset.top, offset.bottom]);
-  return { scrollContainer, scrollContainerRef, targetRef, scroll, isAutoScrolling };
+  return { forceNextScroll, scrollContainer, scrollContainerRef, targetRef, scroll, isAutoScrolling };
 }
 
 // src/lib/hooks/useElementSize/index.ts
@@ -86963,6 +86989,7 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   const {
     scrollContainerRef,
     scrollContainer,
+    forceNextScroll,
     targetRef: currentParagraphRef
   } = useAutoScroll({
     offset
@@ -87030,7 +87057,8 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
     partial,
     currentParagraphTimestamp,
     startTime,
-    endTime
+    endTime,
+    forceNextScroll
   ];
 }
 function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTerm) {
@@ -87180,7 +87208,8 @@ var Transcript = (props) => {
     partial,
     currentParagraphTimestamp,
     startTime,
-    endTime
+    endTime,
+    forceNextScroll
   ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
   const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
   const scrollContainerRef = (0, import_react63.useCallback)((ref) => {
@@ -87193,10 +87222,11 @@ var Transcript = (props) => {
     if (pastIndex > 0) {
       const currentP = p2[pastIndex - 1] || p2[pastIndex];
       if (currentP) {
+        forceNextScroll();
         onClickTranscript(currentP);
       }
     }
-  }, [searchState.speakerTurnsWithMatches]);
+  }, [searchState.speakerTurnsWithMatches, forceNextScroll]);
   const onSeekAudioSeconds = (0, import_react63.useCallback)((seconds, useOffset) => {
     audioPlayer.rawSeek(seconds, useOffset);
   }, [audioPlayer]);
