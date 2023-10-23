@@ -956,13 +956,15 @@ function useAudioSync(
     Partial,
     string | null,
     string | null,
-    string | null
+    string | null,
+    () => void
 ] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
     const offset = { top: eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? 55 : 5, bottom: 15 };
     const {
         scrollContainerRef,
         scrollContainer,
+        forceNextScroll,
         targetRef: currentParagraphRef,
     } = useAutoScroll<HTMLDivElement>({
         offset,
@@ -1063,6 +1065,7 @@ function useAudioSync(
         currentParagraphTimestamp,
         startTime,
         endTime,
+        forceNextScroll,
     ];
 }
 
@@ -1271,6 +1274,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         currentParagraphTimestamp,
         startTime,
         endTime,
+        forceNextScroll,
     ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
     const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
@@ -1293,11 +1297,12 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             if (pastIndex > 0) {
                 const currentP = p[pastIndex - 1] || p[pastIndex];
                 if (currentP) {
+                    forceNextScroll();
                     onClickTranscript(currentP);
                 }
             }
         },
-        [searchState.speakerTurnsWithMatches]
+        [searchState.speakerTurnsWithMatches, forceNextScroll]
     );
     const onSeekAudioSeconds = useCallback(
         (seconds: number, useOffset?: boolean) => {

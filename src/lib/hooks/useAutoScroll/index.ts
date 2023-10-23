@@ -72,6 +72,7 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     offset?: { top: number; bottom: number };
     log?: boolean;
 }): {
+    forceNextScroll: () => void;
     scrollContainer: HTMLElement | null;
     scrollContainerRef: RefCallback<E>;
     targetRef: RefCallback<T>;
@@ -89,7 +90,33 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
     const [target, targetRef] = useState<T | null>(null);
     const isAutoScrolling = useRef<Promise<void> | null>(null);
     const pauseAutoScroll = useRef<boolean>(false);
+    const forceScroll = useRef<boolean>(false);
     const initialScroll = useRef<boolean>(true);
+
+    const scrollToCurrentRef = useCallback(() => {
+        if (!skip && scrollContainer && target) {
+            void (async function () {
+                isAutoScrolling.current = scrollIntoView(
+                    scrollContainer,
+                    target,
+                    { behavior: initialScroll.current ? initialBehavior : behavior },
+                    200,
+                    offset
+                );
+                await isAutoScrolling.current;
+                isAutoScrolling.current = null;
+            })();
+        }
+    }, [
+        scrollContainer,
+        scrollContainer?.scrollHeight,
+        target,
+        skip,
+        initialBehavior,
+        behavior,
+        offset.top,
+        offset.bottom,
+    ]);
 
     useEffect(() => {
         function onScroll() {
@@ -106,19 +133,8 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         }
 
         // Whenever one of the refs changes, check if we should scroll to the current target
-
-        if (!skip && !pauseAutoScroll.current && scrollContainer && target) {
-            void (async function () {
-                isAutoScrolling.current = scrollIntoView(
-                    scrollContainer,
-                    target,
-                    { behavior: initialScroll.current ? initialBehavior : behavior },
-                    200,
-                    offset
-                );
-                await isAutoScrolling.current;
-                isAutoScrolling.current = null;
-            })();
+        if (!forceScroll.current && !pauseAutoScroll.current) {
+            scrollToCurrentRef();
 
             // If we scrolled, reset initial back so we start smooth scrolling from now on
             initialScroll.current = false;
@@ -136,16 +152,38 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         }
         return () => scrollContainer?.removeEventListener('scroll', onScroll);
     }, [
+        scrollToCurrentRef,
         scrollContainer,
         scrollContainer?.scrollHeight,
         target,
         skip,
+        forceScroll,
         pauseOnUserScroll,
-        initialBehavior,
-        behavior,
-        offset.top,
-        offset.bottom,
     ]);
+
+    // Handle Forced scroll When forceScroll is true,
+    // the next time the target ref changes, it will scroll to it
+    //
+    // we don't use forceScroll as a dependency, because if there
+    // is already a target, we don't want to force the scroll..
+    // we want to wait until target changes && forceScroll is already true
+    // and then we force the scroll
+    useEffect(() => {
+        if (forceScroll.current && target) {
+            scrollToCurrentRef();
+
+            // If we forced this scroll, turn it off
+            if (forceScroll.current) {
+                forceScroll.current = false;
+            }
+        }
+    }, [target, scrollToCurrentRef]);
+
+    const forceNextScroll = useCallback(() => {
+        if (!forceScroll.current) {
+            forceScroll.current = true;
+        }
+    }, [forceScroll]);
 
     const scroll = useCallback(
         (opts?: { top?: number; onlyIfNeeded?: boolean }) => {
@@ -167,5 +205,5 @@ export function useAutoScroll<E extends HTMLElement = HTMLDivElement, T extends 
         [scrollContainer, target, initialBehavior, behavior, offset.top, offset.bottom]
     );
 
-    return { scrollContainer, scrollContainerRef, targetRef, scroll, isAutoScrolling };
+    return { forceNextScroll, scrollContainer, scrollContainerRef, targetRef, scroll, isAutoScrolling };
 }
