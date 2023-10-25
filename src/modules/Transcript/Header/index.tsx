@@ -26,6 +26,7 @@ import './styles.css';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Handle } from '@aiera/client-sdk/components/Svg/Handle';
+import { Download } from '@aiera/client-sdk/components/Svg/Download';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 
@@ -334,11 +335,44 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                             expanded={headerExpanded}
                                         />
                                     )}
+                                    {!headerExpanded && (
+                                        <Tooltip
+                                            yOffset={6}
+                                            position="bottom-right"
+                                            grow="down-left"
+                                            openOn="click"
+                                            modal
+                                            content={
+                                                <div className="shadow-md bg-white rounded-lg flex flex-col overflow-hidden">
+                                                    <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
+                                                        <p className="text-sm">Download MP3</p>
+                                                    </div>
+                                                    <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
+                                                        <p className="text-sm">Download PDF</p>
+                                                    </div>
+                                                </div>
+                                            }
+                                        >
+                                            <Button
+                                                className={classNames(
+                                                    'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
+                                                    'ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white',
+                                                    'dark:border-bluegray-5 dark:text-bluegray-4/60',
+                                                    'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
+                                                    'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
+                                                    'button__download'
+                                                )}
+                                                kind="primary"
+                                            >
+                                                <Download className="h-5 w-5 flex-shrink-0" />
+                                            </Button>
+                                        </Tooltip>
+                                    )}
                                     {onClose && !showSearch && !headerExpanded && (
                                         <Button
                                             className={classNames(
                                                 'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
-                                                'ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white',
+                                                'shrink-0 text-gray-400 border border-gray-200 bg-white',
                                                 'dark:border-bluegray-5 dark:text-bluegray-4/60',
                                                 'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
                                                 'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
