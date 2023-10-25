@@ -425,6 +425,8 @@ export function Tooltip(props: TooltipProps): ReactElement {
                 (event.type === 'mouseenter' && openOn === 'hover') ||
                 (event.type === 'click' && openOn === 'click')
             ) {
+                event?.stopPropagation();
+                event?.preventDefault();
                 cancelHide();
                 delayedShowTooltip(
                     getTooltipPosition({
