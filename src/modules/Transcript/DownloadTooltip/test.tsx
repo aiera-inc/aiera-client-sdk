@@ -42,6 +42,6 @@ const event = {
 describe('DownloadTooltip', () => {
     test('renders', () => {
         renderWithProvider(<DownloadTooltip event={event as Event} />);
-        screen.getByText('Download');
+        screen.getByTestId('downloadButton');
     });
 });
