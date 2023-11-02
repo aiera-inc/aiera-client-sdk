@@ -11,6 +11,7 @@ interface ButtonSharedProps {
     iconButton?: boolean;
     kind?: ButtonKind;
     onClick?: (event: MouseEvent<Element>) => void;
+    testId?: string;
     type?: ButtonHTMLAttributes<HTMLButtonElement>['type'];
 }
 
@@ -18,7 +19,16 @@ interface ButtonSharedProps {
 interface ButtonUIProps extends ButtonSharedProps {}
 
 export function ButtonUI(props: ButtonUIProps): ReactElement {
-    const { children, disabled = false, onClick, className = '', kind = 'default', type, iconButton = false } = props;
+    const {
+        children,
+        disabled = false,
+        onClick,
+        className = '',
+        kind = 'default',
+        type,
+        iconButton = false,
+        testId,
+    } = props;
     const buttonStyle = match(kind)
         .with(
             'primary',
@@ -46,6 +56,7 @@ export function ButtonUI(props: ButtonUIProps): ReactElement {
 
     return (
         <button
+            data-testid={testId}
             disabled={disabled}
             tabIndex={0}
             className={classNames(
@@ -67,7 +78,7 @@ export interface ButtonProps extends ButtonSharedProps {}
  * Renders Button
  */
 export function Button(props: ButtonProps): ReactElement {
-    const { children, disabled, onClick, className, iconButton, kind, type } = props;
+    const { children, disabled, onClick, className, iconButton, kind, type, testId } = props;
     return (
         <ButtonUI
             onClick={onClick}
@@ -75,6 +86,7 @@ export function Button(props: ButtonProps): ReactElement {
             kind={kind}
             iconButton={iconButton}
             className={className}
+            testId={testId}
             type={type}
         >
             {children}
