@@ -194,6 +194,7 @@ function generateEventTranscripts(sentences: string[], startingIndex = 1, isLive
                     },
                 ],
             },
+            attachments: [{ mimeType: 'application/pdf', title: 'Slides', archivedUrl: '' }],
             transcripts: [
                 {
                     id: '1',

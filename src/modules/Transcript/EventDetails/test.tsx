@@ -20,6 +20,7 @@ const event = {
     dialInPhoneNumbers: ['23131232', '213123123'],
     webcastUrls: ['http://www.example.com'],
     audioRecordingUrl: 'http://www.example.com/audio',
+    attachments: [{ mimeType: 'application/pdf', title: 'Slides', archivedUrl: '' }],
     primaryCompany: {
         instruments: [
             {

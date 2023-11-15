@@ -610,6 +610,12 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                     audioRecordingUrl
                     audioRecordingOffsetMs
                     audioStreamUri
+                    attachments {
+                        archivedUrl
+                        mimeType
+                        title
+                        url
+                    }
                     connectionStatus
                     creator {
                         id

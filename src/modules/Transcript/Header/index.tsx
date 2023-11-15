@@ -231,6 +231,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                             event?.audioRecordingUrl;
                         const createdBy = getEventCreatorName(event?.creator as User);
                         const audioOffset = (event?.audioRecordingOffsetMs ?? 0) / 1000;
+                        const attachments = event?.attachments.filter((att) => att?.mimeType === 'application/pdf');
+                        const slides = attachments?.find((att) => att?.title === 'Slides')?.archivedUrl;
+                        const press = attachments?.find((att) => att?.title === 'Press')?.archivedUrl;
 
                         return (
                             <>
@@ -363,12 +366,34 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         modal
                                         content={
                                             <div className="shadow-md bg-white rounded-lg flex flex-col overflow-hidden">
-                                                <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
-                                                    <p className="text-sm">Download MP3</p>
-                                                </div>
+                                                {event?.audioRecordingUrl && (
+                                                    <a
+                                                        className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
+                                                        href={event.audioRecordingUrl}
+                                                        rel="noreferrer"
+                                                        download
+                                                    >
+                                                        <p className="text-sm">Download MP3</p>
+                                                    </a>
+                                                )}
                                                 <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
                                                     <p className="text-sm">Transcript PDF</p>
                                                 </div>
+                                                {slides && (
+                                                    <a
+                                                        href={slides}
+                                                        rel="noreferrer"
+                                                        className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
+                                                        download
+                                                    >
+                                                        <p className="text-sm">Slides PDF</p>
+                                                    </a>
+                                                )}
+                                                {press && (
+                                                    <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
+                                                        <p className="text-sm">Press PDF</p>
+                                                    </div>
+                                                )}
                                             </div>
                                         }
                                     >

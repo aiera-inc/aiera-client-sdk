@@ -21,6 +21,7 @@ const eventList = [
         eventType: 'earnings',
         externalAudioStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
         liveStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
+        attachments: [{ mimeType: 'application/pdf', title: 'Slides', archivedUrl: '' }],
         primaryCompany: {
             instruments: [
                 {
@@ -46,6 +47,7 @@ const eventList = [
         eventType: 'presentation',
         externalAudioStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
         liveStreamUrl: 'https://content.knowledgevision.com/index.m3u8',
+        attachments: [{ mimeType: 'application/pdf', title: 'Slides', archivedUrl: '' }],
         primaryCompany: {
             instruments: [
                 {
@@ -72,6 +74,7 @@ const eventTranscript = [
         eventDate: EVENT_DATE_TIME,
         title: 'Event Title',
         eventType: 'earnings',
+        attachments: [{ mimeType: 'application/pdf', title: 'Slides', archivedUrl: '' }],
         primaryCompany: {
             instruments: [
                 {

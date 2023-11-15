@@ -11,6 +11,7 @@ const eventQuery = {
                 audioRecordingOffsetMs: 0,
                 audioRecordingUrl:
                     'https://s3.amazonaws.com/content.aiera.co/assets/1928914_7ffa48726bfc4e2e9dd639312955bc8d_transcribed_audio.mp3',
+                attachments: [{ mimeType: 'application/pdf', title: 'Slides', archivedUrl: '' }],
                 connectionStatus: 'transcribed',
                 dialInPhoneNumbers: [],
                 dialInPin: null,
