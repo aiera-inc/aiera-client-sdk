@@ -366,10 +366,10 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         modal
                                         content={
                                             <div className="shadow-md bg-white rounded-lg flex flex-col overflow-hidden">
-                                                {event?.audioRecordingUrl && (
+                                                {event?.audioRecordingUrl && event?.audioProxy && (
                                                     <a
                                                         className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
-                                                        href={event.audioRecordingUrl}
+                                                        href={event.audioProxy}
                                                         rel="noreferrer"
                                                         download
                                                     >
