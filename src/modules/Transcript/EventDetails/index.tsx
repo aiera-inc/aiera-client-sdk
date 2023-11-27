@@ -31,6 +31,10 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
         `,
     });
 
+    const attachments = event?.attachments?.filter((att) => att?.mimeType === 'application/pdf');
+    const slides = attachments?.find((att) => att?.title === 'Slides')?.archivedUrl;
+    const press = attachments?.find((att) => att?.title === 'Press Release')?.archivedUrl;
+
     return (
         <div
             className={classNames(
@@ -75,7 +79,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                     )}
                     {event.webcastUrls.length > 0 && (
                         <div className="flex my-3 px-3.5">
-                            <span className="font-semibold flex-shrink-0 block w-28 mr-1">Webcast</span>
+                            <span className="font-semibold flex-shrink-0 block w-40 mr-1">Webcast</span>
                             <div className="overflow-hidden truncate">
                                 {event.webcastUrls?.map((url: string) => (
                                     <div key={url} className="block truncate">
@@ -85,7 +89,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                                             rel="noreferrer"
                                             target="_blank"
                                         >
-                                            {url}
+                                            Open in new window
                                         </a>
                                     </div>
                                 ))}
@@ -94,7 +98,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                     )}
                     {event.audioRecordingUrl && (
                         <div className="flex my-3 px-3.5">
-                            <span className="font-semibold flex-shrink-0 block w-28 mr-1">Download MP3</span>
+                            <span className="font-semibold flex-shrink-0 block w-40 mr-1">Event Audio</span>
                             <span className="block truncate">
                                 <a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
@@ -102,14 +106,44 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                                     rel="noreferrer"
                                     target="_blank"
                                 >
-                                    {event.audioRecordingUrl}
+                                    Download MP3
+                                </a>
+                            </span>
+                        </div>
+                    )}
+                    {slides && (
+                        <div className="flex my-3 px-3.5">
+                            <span className="font-semibold flex-shrink-0 block w-40 mr-1">Presentation Slides</span>
+                            <span className="block truncate">
+                                <a
+                                    className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
+                                    href={slides}
+                                    rel="noreferrer"
+                                    download
+                                >
+                                    Download PDF
+                                </a>
+                            </span>
+                        </div>
+                    )}
+                    {press && (
+                        <div className="flex my-3 px-3.5">
+                            <span className="font-semibold flex-shrink-0 block w-40 mr-1">Press Release</span>
+                            <span className="block truncate">
+                                <a
+                                    className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
+                                    href={press}
+                                    rel="noreferrer"
+                                    target="_blank"
+                                >
+                                    Download PDF
                                 </a>
                             </span>
                         </div>
                     )}
                     {userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed' && (
                         <div className="flex my-3 px-3.5">
-                            <span className="font-semibold flex-shrink-0 block w-28 mr-1">Transcript </span>
+                            <span className="font-semibold flex-shrink-0 block w-40 mr-1">Transcript </span>
                             <span className="block truncate">
                                 <a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"

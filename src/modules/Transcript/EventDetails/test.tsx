@@ -46,7 +46,7 @@ describe('EventDetails', () => {
         renderWithProvider(<EventDetails event={event as Event} eventDetailsExpanded toggleEventDetails={toggle} />);
         const eventDetails = screen.getByText('Event Details');
         fireEvent.click(eventDetails);
-        screen.getByText('http://www.example.com/audio');
+        screen.getByText('Open in new window');
         expect(toggle).toHaveBeenCalledTimes(1);
     });
 });
