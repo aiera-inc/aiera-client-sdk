@@ -31,39 +31,71 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
         `,
     });
 
+    const attachments = event?.attachments?.filter((att) => att?.mimeType === 'application/pdf');
+    const slides = attachments?.find((att) => att?.title === 'Slides')?.archivedUrl;
+    const press = attachments?.find((att) => att?.title === 'Press Release')?.archivedUrl;
+    const hasMP3 = !!event?.audioRecordingUrl && !!event?.audioProxy;
+    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
+    const canDownloadTranscript = userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed';
+
+    if (!hasMP3 && !canDownloadTranscript && !press && !slides) {
+        return <></>;
+    }
+
     return (
         <Tooltip
             yOffset={6}
+            xOffset={12}
             position="bottom-right"
             grow="down-left"
             openOn="click"
             modal
             content={
                 <div className="shadow-md bg-white rounded-lg flex flex-col overflow-hidden">
-                    <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
-                        <p className="text-sm">Download MP3</p>
-                    </div>
-                    <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
-                        <p className="text-sm">Transcript PDF</p>
-                    </div>
-                    {userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed' && (
-                        <div className="flex my-3 px-3.5">
-                            <span className="font-semibold flex-shrink-0 block w-28 mr-1">Transcript </span>
-                            <span className="block truncate">
-                                <a
-                                    className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
-                                    href={
-                                        `https://audio` +
-                                        (process.env.NODE_ENV !== 'production' ? `-dev` : '') +
-                                        `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`
-                                    }
-                                    rel="noreferrer"
-                                    download={true}
-                                >
-                                    Download PDF
-                                </a>
-                            </span>
-                        </div>
+                    {hasMP3 && event.audioProxy && (
+                        <a
+                            className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
+                            href={event.audioProxy}
+                            target="_blank"
+                            rel="noreferrer"
+                            download
+                        >
+                            <p className="text-sm">Download MP3</p>
+                        </a>
+                    )}
+                    {canDownloadTranscript && userApiKey && (
+                        <a
+                            className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
+                            href={
+                                `https://audio` +
+                                (process.env.NODE_ENV !== 'production' ? `-dev` : '') +
+                                `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userApiKey}`
+                            }
+                            rel="noreferrer"
+                            download
+                        >
+                            <p className="text-sm">Transcript PDF</p>
+                        </a>
+                    )}
+                    {slides && (
+                        <a
+                            href={slides}
+                            rel="noreferrer"
+                            className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
+                            download
+                        >
+                            <p className="text-sm">Slides PDF</p>
+                        </a>
+                    )}
+                    {press && (
+                        <a
+                            href={press}
+                            rel="noreferrer"
+                            className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
+                            download
+                        >
+                            <p className="text-sm">Press PDF</p>
+                        </a>
                     )}
                 </div>
             }
@@ -71,8 +103,9 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
             <Button
                 testId="downloadButton"
                 className={classNames(
+                    'mr-3 mt-3',
                     'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
-                    'ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white',
+                    'shrink-0 text-gray-400 border border-gray-200 bg-white',
                     'dark:border-bluegray-5 dark:text-bluegray-4/60',
                     'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
                     'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
