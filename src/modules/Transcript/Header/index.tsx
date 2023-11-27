@@ -1,16 +1,16 @@
-import React, { MouseEventHandler, ReactElement, useState, useCallback, useRef, Ref } from 'react';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
+import React, { MouseEventHandler, ReactElement, Ref, useCallback, useRef, useState } from 'react';
 import { match } from 'ts-pattern';
 
 import { QueryResult } from '@aiera/client-sdk/api/client';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
 import { Input } from '@aiera/client-sdk/components/Input';
+import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { ArrowLeft } from '@aiera/client-sdk/components/Svg/ArrowLeft';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
 import { Pencil } from '@aiera/client-sdk/components/Svg/Pencil';
-import { SettingsButton } from '@aiera/client-sdk/components/SettingsButton';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { getEventCreatorName, getPrimaryQuote } from '@aiera/client-sdk/lib/data';
@@ -19,14 +19,14 @@ import { ChangeHandler } from '@aiera/client-sdk/types';
 import { TranscriptQuery, TranscriptQueryVariables, User } from '@aiera/client-sdk/types/generated';
 import { DraggableAttributes, DraggableSyntheticListeners } from '@dnd-kit/core';
 
-import { EventDetails } from '../EventDetails';
-import { PriceChart } from '../PriceChart';
-import { KeyMentions } from '../KeyMentions';
-import './styles.css';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
-import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Handle } from '@aiera/client-sdk/components/Svg/Handle';
-import { Download } from '@aiera/client-sdk/components/Svg/Download';
+import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
+import { DownloadTooltip } from '../DownloadTooltip';
+import { EventDetails } from '../EventDetails';
+import { KeyMentions } from '../KeyMentions';
+import { PriceChart } from '../PriceChart';
+import './styles.css';
 
 export type EventQuery = QueryResult<TranscriptQuery, TranscriptQueryVariables>;
 
@@ -231,9 +231,6 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                             event?.audioRecordingUrl;
                         const createdBy = getEventCreatorName(event?.creator as User);
                         const audioOffset = (event?.audioRecordingOffsetMs ?? 0) / 1000;
-                        const attachments = event?.attachments.filter((att) => att?.mimeType === 'application/pdf');
-                        const slides = attachments?.find((att) => att?.title === 'Slides')?.archivedUrl;
-                        const press = attachments?.find((att) => att?.title === 'Press')?.archivedUrl;
 
                         return (
                             <>
@@ -357,61 +354,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                             </Button>
                                         )}
                                     </div>
-                                    <Tooltip
-                                        yOffset={6}
-                                        xOffset={12}
-                                        position="bottom-right"
-                                        grow="down-left"
-                                        openOn="click"
-                                        modal
-                                        content={
-                                            <div className="shadow-md bg-white rounded-lg flex flex-col overflow-hidden">
-                                                {event?.audioRecordingUrl && event?.audioProxy && (
-                                                    <a
-                                                        className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
-                                                        href={event.audioProxy}
-                                                        rel="noreferrer"
-                                                        download
-                                                    >
-                                                        <p className="text-sm">Download MP3</p>
-                                                    </a>
-                                                )}
-                                                <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
-                                                    <p className="text-sm">Transcript PDF</p>
-                                                </div>
-                                                {slides && (
-                                                    <a
-                                                        href={slides}
-                                                        rel="noreferrer"
-                                                        className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
-                                                        download
-                                                    >
-                                                        <p className="text-sm">Slides PDF</p>
-                                                    </a>
-                                                )}
-                                                {press && (
-                                                    <div className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center">
-                                                        <p className="text-sm">Press PDF</p>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        }
-                                    >
-                                        <Button
-                                            className={classNames(
-                                                'mr-3 mt-3',
-                                                'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
-                                                'shrink-0 text-gray-400 border border-gray-200 bg-white',
-                                                'dark:border-bluegray-5 dark:text-bluegray-4/60',
-                                                'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
-                                                'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
-                                                'button__download'
-                                            )}
-                                            kind="primary"
-                                        >
-                                            <Download className="h-5 w-5 flex-shrink-0" />
-                                        </Button>
-                                    </Tooltip>
+                                    {event && <DownloadTooltip event={event} />}
                                 </div>
                                 {showRecordingDetails && headerExpanded && event && (
                                     <EventDetails
