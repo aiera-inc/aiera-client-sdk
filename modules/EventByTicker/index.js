@@ -85649,28 +85649,40 @@ function DownloadTooltipUI(props) {
       href: event.audioProxy,
       target: "_blank",
       rel: "noreferrer",
-      download: true
+      download: true,
+      onClick: (e) => {
+        e.stopPropagation();
+      }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
     }, "Download MP3")), canDownloadTranscript && userApiKey && /* @__PURE__ */ import_react56.default.createElement("a", {
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
       href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userApiKey}`,
       rel: "noreferrer",
-      download: true
+      download: true,
+      onClick: (e) => {
+        e.stopPropagation();
+      }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
     }, "Transcript PDF")), slides && /* @__PURE__ */ import_react56.default.createElement("a", {
       href: slides,
       rel: "noreferrer",
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
-      download: true
+      download: true,
+      onClick: (e) => {
+        e.stopPropagation();
+      }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
     }, "Slides PDF")), press && /* @__PURE__ */ import_react56.default.createElement("a", {
       href: press,
       rel: "noreferrer",
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
-      download: true
+      download: true,
+      onClick: (e) => {
+        e.stopPropagation();
+      }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
     }, "Press PDF")))
