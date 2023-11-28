@@ -236,7 +236,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                             <>
                                 <div
                                     className={classNames(
-                                        'flex flex-1 flex-row p-3 items-center',
+                                        'flex flex-row p-3 items-center',
                                         {
                                             'cursor-pointer':
                                                 hasEventExtras && (showPriceReaction || showRecordingDetails),
@@ -339,8 +339,8 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                     {onClose && !showSearch && !headerExpanded && (
                                         <Button
                                             className={classNames(
-                                                'ml-2 group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
-                                                'shrink-0 text-gray-400 border border-gray-200 bg-white',
+                                                'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
+                                                'ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white',
                                                 'dark:border-bluegray-5 dark:text-bluegray-4/60',
                                                 'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
                                                 'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',

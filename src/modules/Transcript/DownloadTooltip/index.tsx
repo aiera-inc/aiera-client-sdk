@@ -45,7 +45,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
     return (
         <Tooltip
             yOffset={6}
-            xOffset={12}
+            xOffset={0}
             position="bottom-right"
             grow="down-left"
             openOn="click"
@@ -103,7 +103,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
             <Button
                 testId="downloadButton"
                 className={classNames(
-                    'mr-3 mt-3',
+                    'ml-3',
                     'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
                     'shrink-0 text-gray-400 border border-gray-200 bg-white',
                     'dark:border-bluegray-5 dark:text-bluegray-4/60',
