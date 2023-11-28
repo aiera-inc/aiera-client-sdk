@@ -50,7 +50,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
             grow="down-left"
             openOn="click"
             modal
-            content={
+            content={({ hideTooltip }) => (
                 <div className="shadow-md bg-white rounded-lg flex flex-col overflow-hidden">
                     {hasMP3 && event.audioProxy && (
                         <a
@@ -61,6 +61,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             download
                             onClick={(e) => {
                                 e.stopPropagation();
+                                hideTooltip();
                             }}
                         >
                             <p className="text-sm">Download MP3</p>
@@ -78,6 +79,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             download
                             onClick={(e) => {
                                 e.stopPropagation();
+                                hideTooltip();
                             }}
                         >
                             <p className="text-sm">Transcript PDF</p>
@@ -91,6 +93,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             download
                             onClick={(e) => {
                                 e.stopPropagation();
+                                hideTooltip();
                             }}
                         >
                             <p className="text-sm">Slides PDF</p>
@@ -104,13 +107,14 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             download
                             onClick={(e) => {
                                 e.stopPropagation();
+                                hideTooltip();
                             }}
                         >
                             <p className="text-sm">Press PDF</p>
                         </a>
                     )}
                 </div>
-            }
+            )}
         >
             <Button
                 testId="downloadButton"
