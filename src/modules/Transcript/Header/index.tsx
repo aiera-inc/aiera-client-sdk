@@ -234,127 +234,124 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
 
                         return (
                             <>
-                                <div className="flex items-start">
-                                    <div
-                                        className={classNames(
-                                            'flex flex-1 flex-row p-3 items-center',
-                                            {
-                                                'cursor-pointer':
-                                                    hasEventExtras && (showPriceReaction || showRecordingDetails),
-                                                group: hasEventExtras,
-                                            },
-                                            'transcript__header__title'
-                                        )}
-                                        onClick={hasEventExtras ? toggleHeader : undefined}
-                                    >
-                                        {headerHandleAttributes && headerHandleListeners && (
-                                            <div
-                                                {...headerHandleAttributes}
-                                                {...headerHandleListeners}
-                                                className="-ml-1 pr-0.5 hover:text-gray-700 text-gray-400 active:cursor-grabbing"
-                                            >
-                                                <Handle className="w-6" />
-                                            </div>
-                                        )}
-                                        {showHeaderPlayButton && event && (event.isLive || event.audioProxy) && (
-                                            <div className="w-8 h-8 mr-2">
-                                                <PlayButton
-                                                    id={event.id}
-                                                    origin="transcriptHeader"
-                                                    metaData={{
-                                                        createdBy,
-                                                        eventDate: eventDate ? eventDate.toISO() : undefined,
-                                                        eventStream: event.audioStreamUri,
-                                                        eventType: event.eventType,
-                                                        externalAudioStreamUrl: event.externalAudioStreamUrl,
-                                                        isLive: !!event?.isLive,
-                                                        localTicker: primaryQuote?.localTicker,
-                                                        quote: primaryQuote,
-                                                        title: event.title,
-                                                    }}
-                                                    url={event.isLive ? event.liveStreamUrl : event.audioProxy}
-                                                    offset={audioOffset || 0}
-                                                />
-                                            </div>
-                                        )}
-                                        <div className="flex flex-col justify-center flex-1 min-w-0">
-                                            <div className="text-xs truncate">
-                                                {primaryQuote?.localTicker && (
-                                                    <span className="pr-1 font-semibold dark:text-white">
-                                                        {primaryQuote?.localTicker}
-                                                    </span>
-                                                )}
-                                                {primaryQuote?.exchange?.shortName && (
-                                                    <span className="text-gray-400 group-hover:text-gray-500">
-                                                        {primaryQuote?.exchange?.shortName}
-                                                    </span>
-                                                )}
-                                                {event?.eventType && primaryQuote?.localTicker && (
-                                                    <span className="text-gray-400 group-hover:text-gray-500 capitalize">
-                                                        {' '}
-                                                        • {event?.eventType.replace(/_/g, ' ')}
-                                                    </span>
-                                                )}
-                                                {eventDate && (
-                                                    <span className="text-gray-400 group-hover:text-gray-500">
-                                                        {primaryQuote?.localTicker && ' • '}
-                                                    </span>
-                                                )}
-                                                {eventDate && event?.isLive ? (
-                                                    <span className="text-xs leading-none text-red-600 dark:text-red-400 font-semibold">
-                                                        {`Live ${eventDate.toFormat('h:mma')}`}
-                                                    </span>
-                                                ) : (
-                                                    eventDate && (
-                                                        <span className="text-gray-400 group-hover:text-gray-500">
-                                                            {eventDate.toFormat('h:mma M/dd/yyyy')}
-                                                        </span>
-                                                    )
-                                                )}
-                                            </div>
-                                            <div
-                                                className={classNames('dark:text-white', {
-                                                    'text-sm': headerExpanded,
-                                                    'text-sm truncate whitespace-normal line-clamp-1': !headerExpanded,
-                                                    'font-semibold': !primaryQuote?.localTicker,
-                                                })}
-                                            >
-                                                {event?.title}
-                                            </div>
+                                <div
+                                    className={classNames(
+                                        'flex flex-1 flex-row p-3 items-center',
+                                        {
+                                            'cursor-pointer':
+                                                hasEventExtras && (showPriceReaction || showRecordingDetails),
+                                        },
+                                        'transcript__header__title'
+                                    )}
+                                    onClick={hasEventExtras ? toggleHeader : undefined}
+                                >
+                                    {headerHandleAttributes && headerHandleListeners && (
+                                        <div
+                                            {...headerHandleAttributes}
+                                            {...headerHandleListeners}
+                                            className="-ml-1 pr-0.5 hover:text-gray-700 text-gray-400 active:cursor-grabbing"
+                                        >
+                                            <Handle className="w-6" />
                                         </div>
-                                        {hasEventExtras && (showPriceReaction || showRecordingDetails) && (
-                                            <ExpandButton
-                                                className={classNames('ml-2 mt-2 self-start', {
-                                                    'group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50':
-                                                        !headerExpanded,
-                                                    'group-hover:bg-blue-700': headerExpanded,
-                                                    'group-active:bg-gray-400 dark:group-active:bg-bluegray-7':
-                                                        !headerExpanded,
-                                                    'group-active:bg-blue-900': headerExpanded,
-                                                })}
-                                                onClick={toggleHeader}
-                                                expanded={headerExpanded}
+                                    )}
+                                    {showHeaderPlayButton && event && (event.isLive || event.audioProxy) && (
+                                        <div className="w-8 h-8 mr-2">
+                                            <PlayButton
+                                                id={event.id}
+                                                origin="transcriptHeader"
+                                                metaData={{
+                                                    createdBy,
+                                                    eventDate: eventDate ? eventDate.toISO() : undefined,
+                                                    eventStream: event.audioStreamUri,
+                                                    eventType: event.eventType,
+                                                    externalAudioStreamUrl: event.externalAudioStreamUrl,
+                                                    isLive: !!event?.isLive,
+                                                    localTicker: primaryQuote?.localTicker,
+                                                    quote: primaryQuote,
+                                                    title: event.title,
+                                                }}
+                                                url={event.isLive ? event.liveStreamUrl : event.audioProxy}
+                                                offset={audioOffset || 0}
                                             />
-                                        )}
-
-                                        {onClose && !showSearch && !headerExpanded && (
-                                            <Button
-                                                className={classNames(
-                                                    'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
-                                                    'shrink-0 text-gray-400 border border-gray-200 bg-white',
-                                                    'dark:border-bluegray-5 dark:text-bluegray-4/60',
-                                                    'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
-                                                    'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
-                                                    'button__close'
-                                                )}
-                                                kind="primary"
-                                                onClick={onClose}
-                                            >
-                                                <XMark className="w-2.5" />
-                                            </Button>
-                                        )}
+                                        </div>
+                                    )}
+                                    <div className="flex flex-col justify-center flex-1 min-w-0 group">
+                                        <div className="text-xs truncate">
+                                            {primaryQuote?.localTicker && (
+                                                <span className="pr-1 font-semibold dark:text-white">
+                                                    {primaryQuote?.localTicker}
+                                                </span>
+                                            )}
+                                            {primaryQuote?.exchange?.shortName && (
+                                                <span className="text-gray-400 group-hover:text-gray-500">
+                                                    {primaryQuote?.exchange?.shortName}
+                                                </span>
+                                            )}
+                                            {event?.eventType && primaryQuote?.localTicker && (
+                                                <span className="text-gray-400 group-hover:text-gray-500 capitalize">
+                                                    {' '}
+                                                    • {event?.eventType.replace(/_/g, ' ')}
+                                                </span>
+                                            )}
+                                            {eventDate && (
+                                                <span className="text-gray-400 group-hover:text-gray-500">
+                                                    {primaryQuote?.localTicker && ' • '}
+                                                </span>
+                                            )}
+                                            {eventDate && event?.isLive ? (
+                                                <span className="text-xs leading-none text-red-600 dark:text-red-400 font-semibold">
+                                                    {`Live ${eventDate.toFormat('h:mma')}`}
+                                                </span>
+                                            ) : (
+                                                eventDate && (
+                                                    <span className="text-gray-400 group-hover:text-gray-500">
+                                                        {eventDate.toFormat('h:mma M/dd/yyyy')}
+                                                    </span>
+                                                )
+                                            )}
+                                        </div>
+                                        <div
+                                            className={classNames('dark:text-white', {
+                                                'text-sm': headerExpanded,
+                                                'text-sm truncate whitespace-normal line-clamp-1': !headerExpanded,
+                                                'font-semibold': !primaryQuote?.localTicker,
+                                            })}
+                                        >
+                                            {event?.title}
+                                        </div>
                                     </div>
-                                    {event && <DownloadTooltip event={event} />}
+                                    {hasEventExtras && (showPriceReaction || showRecordingDetails) && (
+                                        <ExpandButton
+                                            className={classNames('ml-2 mt-2 self-start', {
+                                                'group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50':
+                                                    !headerExpanded,
+                                                'group-hover:bg-blue-700': headerExpanded,
+                                                'group-active:bg-gray-400 dark:group-active:bg-bluegray-7':
+                                                    !headerExpanded,
+                                                'group-active:bg-blue-900': headerExpanded,
+                                            })}
+                                            onClick={toggleHeader}
+                                            expanded={headerExpanded}
+                                        />
+                                    )}
+
+                                    {!headerExpanded && event && <DownloadTooltip event={event} />}
+                                    {onClose && !showSearch && !headerExpanded && (
+                                        <Button
+                                            className={classNames(
+                                                'ml-2 group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
+                                                'shrink-0 text-gray-400 border border-gray-200 bg-white',
+                                                'dark:border-bluegray-5 dark:text-bluegray-4/60',
+                                                'hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white',
+                                                'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
+                                                'button__close'
+                                            )}
+                                            kind="primary"
+                                            onClick={onClose}
+                                        >
+                                            <XMark className="w-2.5" />
+                                        </Button>
+                                    )}
                                 </div>
                                 {showRecordingDetails && headerExpanded && event && (
                                     <EventDetails
