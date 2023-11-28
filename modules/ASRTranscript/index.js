@@ -85642,7 +85642,7 @@ function DownloadTooltipUI(props) {
     grow: "down-left",
     openOn: "click",
     modal: true,
-    content: /* @__PURE__ */ import_react56.default.createElement("div", {
+    content: ({ hideTooltip }) => /* @__PURE__ */ import_react56.default.createElement("div", {
       className: "shadow-md bg-white rounded-lg flex flex-col overflow-hidden"
     }, hasMP3 && event.audioProxy && /* @__PURE__ */ import_react56.default.createElement("a", {
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
@@ -85652,6 +85652,7 @@ function DownloadTooltipUI(props) {
       download: true,
       onClick: (e) => {
         e.stopPropagation();
+        hideTooltip();
       }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
@@ -85662,6 +85663,7 @@ function DownloadTooltipUI(props) {
       download: true,
       onClick: (e) => {
         e.stopPropagation();
+        hideTooltip();
       }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
@@ -85672,6 +85674,7 @@ function DownloadTooltipUI(props) {
       download: true,
       onClick: (e) => {
         e.stopPropagation();
+        hideTooltip();
       }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
@@ -85682,6 +85685,7 @@ function DownloadTooltipUI(props) {
       download: true,
       onClick: (e) => {
         e.stopPropagation();
+        hideTooltip();
       }
     }, /* @__PURE__ */ import_react56.default.createElement("p", {
       className: "text-sm"
