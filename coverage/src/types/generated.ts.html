@@ -1828,7 +1828,43 @@
 <a name='L1763'></a><a href='#L1763'>1763</a>
 <a name='L1764'></a><a href='#L1764'>1764</a>
 <a name='L1765'></a><a href='#L1765'>1765</a>
-<a name='L1766'></a><a href='#L1766'>1766</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1766'></a><a href='#L1766'>1766</a>
+<a name='L1767'></a><a href='#L1767'>1767</a>
+<a name='L1768'></a><a href='#L1768'>1768</a>
+<a name='L1769'></a><a href='#L1769'>1769</a>
+<a name='L1770'></a><a href='#L1770'>1770</a>
+<a name='L1771'></a><a href='#L1771'>1771</a>
+<a name='L1772'></a><a href='#L1772'>1772</a>
+<a name='L1773'></a><a href='#L1773'>1773</a>
+<a name='L1774'></a><a href='#L1774'>1774</a>
+<a name='L1775'></a><a href='#L1775'>1775</a>
+<a name='L1776'></a><a href='#L1776'>1776</a>
+<a name='L1777'></a><a href='#L1777'>1777</a>
+<a name='L1778'></a><a href='#L1778'>1778</a>
+<a name='L1779'></a><a href='#L1779'>1779</a>
+<a name='L1780'></a><a href='#L1780'>1780</a>
+<a name='L1781'></a><a href='#L1781'>1781</a>
+<a name='L1782'></a><a href='#L1782'>1782</a>
+<a name='L1783'></a><a href='#L1783'>1783</a>
+<a name='L1784'></a><a href='#L1784'>1784</a>
+<a name='L1785'></a><a href='#L1785'>1785</a>
+<a name='L1786'></a><a href='#L1786'>1786</a>
+<a name='L1787'></a><a href='#L1787'>1787</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3460,6 +3496,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3633,6 +3675,14 @@ export type AssetClass = {
   parent?: Maybe&lt;AssetClass&gt;;
 };
 &nbsp;
+export type Attachment = {
+  __typename?: 'Attachment';
+  archivedUrl: Scalars['String'];
+  mimeType: Scalars['String'];
+  title: Scalars['String'];
+  url: Scalars['String'];
+};
+&nbsp;
 export enum BasicTextualSentiment {
   Negative = 'negative',
   Neutral = 'neutral',
@@ -3778,9 +3828,11 @@ export enum ContentSource {
 }
 &nbsp;
 export enum ContentType {
+  Attachment = 'attachment',
   Document = 'document',
   Filing = 'filing',
   News = 'news',
+  Research = 'research',
   Spotlight = 'spotlight',
   Streetaccount = 'streetaccount'
 }
@@ -3842,6 +3894,8 @@ export type Error = {
 &nbsp;
 export type Event = {
   __typename?: 'Event';
+  archivedSlidesUrl?: Maybe&lt;Scalars['String']&gt;;
+  attachments: Array&lt;Maybe&lt;Attachment&gt;&gt;;
   audioProxy?: Maybe&lt;Scalars['String']&gt;;
   audioRecordingOffsetMs: Scalars['Int'];
   audioRecordingUrl?: Maybe&lt;Scalars['String']&gt;;
@@ -3867,9 +3921,12 @@ export type Event = {
   id: Scalars['ID'];
   isLive: Scalars['Boolean'];
   liveStreamUrl?: Maybe&lt;Scalars['String']&gt;;
+  localTranscriptFileUrl?: Maybe&lt;Scalars['String']&gt;;
+  pressUrl?: Maybe&lt;Scalars['String']&gt;;
   primaryCompany?: Maybe&lt;Company&gt;;
   publishedTranscriptExpected: Scalars['Boolean'];
   quotePrices: Array&lt;EventQuotePriceInfo&gt;;
+  slidesUrl?: Maybe&lt;Scalars['String']&gt;;
   title: Scalars['String'];
   transcripts: Array&lt;EventTranscript&gt;;
   webcastUrls: Array&lt;Scalars['String']&gt;;
@@ -4804,7 +4861,7 @@ export type TranscriptQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, audioProxy?: string | null | undefined, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, audioStreamUri?: string | null | undefined, connectionStatus: EventConnectionStatus, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, eventDate: string, eventType: EventType, externalAudioStreamUrl?: string | null | undefined, hasConnectionDetails: boolean, hasPublishedTranscript: boolean, hasTranscript: boolean, isLive: boolean, liveStreamUrl?: string | null | undefined, publishedTranscriptExpected: boolean, title: string, webcastUrls: Array&lt;string&gt;, creator?: { __typename?: 'User', id: string, firstName?: string | null | undefined, lastName?: string | null | undefined, primaryEmail?: string | null | undefined, username: string } | null | undefined, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, quotePrices: Array&lt;{ __typename?: 'EventQuotePriceInfo', currentDayClosePrice?: number | null | undefined, currentDayOpenPrice?: number | null | undefined, endPrice?: number | null | undefined, previousDayClosePrice?: number | null | undefined, startPrice?: number | null | undefined, quote: { __typename?: 'Quote', id: string, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string } }, realtimePrices: Array&lt;{ __typename?: 'EventQuoteRealtimePrice', id: string, date: string, price: number, priceChangeFromStartPercent?: number | null | undefined, priceChangeFromStartValue?: number | null | undefined, volume: number, volumeChangeFromLastPercent?: number | null | undefined, volumeChangeFromLastValue?: number | null | undefined, volumeChangeFromStartPercent?: number | null | undefined, volumeChangeFromStartValue?: number | null | undefined }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, displayTimestamp?: string | null | undefined, syncMs?: number | null | undefined, syncTimestamp?: string | null | undefined, timestamp?: string | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, basicSentiment: BasicTextualSentiment, overThreshold: boolean } | null | undefined } | null | undefined }&gt; }&gt;, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, identified: boolean, name: string, title?: string | null | undefined } }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, audioProxy?: string | null | undefined, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, audioStreamUri?: string | null | undefined, connectionStatus: EventConnectionStatus, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, eventDate: string, eventType: EventType, externalAudioStreamUrl?: string | null | undefined, hasConnectionDetails: boolean, hasPublishedTranscript: boolean, hasTranscript: boolean, isLive: boolean, liveStreamUrl?: string | null | undefined, publishedTranscriptExpected: boolean, title: string, webcastUrls: Array&lt;string&gt;, attachments: Array&lt;{ __typename?: 'Attachment', archivedUrl: string, mimeType: string, title: string, url: string } | null | undefined&gt;, creator?: { __typename?: 'User', id: string, firstName?: string | null | undefined, lastName?: string | null | undefined, primaryEmail?: string | null | undefined, username: string } | null | undefined, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, quotePrices: Array&lt;{ __typename?: 'EventQuotePriceInfo', currentDayClosePrice?: number | null | undefined, currentDayOpenPrice?: number | null | undefined, endPrice?: number | null | undefined, previousDayClosePrice?: number | null | undefined, startPrice?: number | null | undefined, quote: { __typename?: 'Quote', id: string, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string } }, realtimePrices: Array&lt;{ __typename?: 'EventQuoteRealtimePrice', id: string, date: string, price: number, priceChangeFromStartPercent?: number | null | undefined, priceChangeFromStartValue?: number | null | undefined, volume: number, volumeChangeFromLastPercent?: number | null | undefined, volumeChangeFromLastValue?: number | null | undefined, volumeChangeFromStartPercent?: number | null | undefined, volumeChangeFromStartValue?: number | null | undefined }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, displayTimestamp?: string | null | undefined, syncMs?: number | null | undefined, syncTimestamp?: string | null | undefined, timestamp?: string | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, basicSentiment: BasicTextualSentiment, overThreshold: boolean } | null | undefined } | null | undefined }&gt; }&gt;, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, identified: boolean, name: string, title?: string | null | undefined } }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 export type LatestParagraphsQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
@@ -5232,6 +5289,12 @@ export const TranscriptDocument = gql`
     audioRecordingUrl
     audioRecordingOffsetMs
     audioStreamUri
+    attachments {
+      archivedUrl
+      mimeType
+      title
+      url
+    }
     connectionStatus
     creator {
       id
@@ -5365,7 +5428,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Oct 23 2023 17:40:31 GMT-0400 (Eastern Daylight Time)
+                at Tue Nov 28 2023 13:04:17 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

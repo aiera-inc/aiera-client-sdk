@@ -38059,9 +38059,19 @@ var import_react11 = __toModule(require_react());
 var import_classnames3 = __toModule(require_classnames());
 var import_ts_pattern = __toModule(require_lib());
 function ButtonUI(props) {
-  const { children, disabled = false, onClick, className = "", kind = "default", type, iconButton = false } = props;
+  const {
+    children,
+    disabled = false,
+    onClick,
+    className = "",
+    kind = "default",
+    type,
+    iconButton = false,
+    testId
+  } = props;
   const buttonStyle = (0, import_ts_pattern.match)(kind).with("primary", () => "bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white active:text-white disabled:bg-blue-600 dark:text-white dark:active:bg-bluegray-7 dark:active:border-bluegray-4 dark:active:border-[1px] dark:hover:border-bluegray-4 dark:hover:border-opacity-20 dark:active:border-opacity-20 disabled:dark:border-bluegray-5 disabled:dark:border-opacity-100").with("secondary", () => "border-[1px] border-gray-300 dark:border-bluegray-5 dark:text-white hover:border-gray-400 dark:hover:border-bluegray-4 dark:hover:border-opacity-20 disabled:border-gray-300 disabled:dark:border-bluegray-5 disabled:dark:border-opacity-100active:bg-gray-400 dark:active:bg-bluegray-7 active:text-white").with("default", () => "bg-gray-200 dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:active:bg-bluegray-7 dark:text-white hover:bg-gray-300 active:bg-gray-400 active:text-white disabled:bg-gray-200").exhaustive();
   return /* @__PURE__ */ import_react11.default.createElement("button", {
+    "data-testid": testId,
     disabled,
     tabIndex: 0,
     className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base disabled:opacity-75 ${buttonStyle} ${className}`, { "px-2.5": !iconButton, "justify-center": iconButton }),
@@ -38070,13 +38080,14 @@ function ButtonUI(props) {
   }, children);
 }
 function Button(props) {
-  const { children, disabled, onClick, className, iconButton, kind, type } = props;
+  const { children, disabled, onClick, className, iconButton, kind, type, testId } = props;
   return /* @__PURE__ */ import_react11.default.createElement(ButtonUI, {
     onClick,
     disabled,
     kind,
     iconButton,
     className,
+    testId,
     type
   }, children);
 }
@@ -38132,9 +38143,11 @@ var import_react14 = __toModule(require_react());
 
 // src/types/generated.ts
 var ContentType = /* @__PURE__ */ ((ContentType2) => {
+  ContentType2["Attachment"] = "attachment";
   ContentType2["Document"] = "document";
   ContentType2["Filing"] = "filing";
   ContentType2["News"] = "news";
+  ContentType2["Research"] = "research";
   ContentType2["Spotlight"] = "spotlight";
   ContentType2["Streetaccount"] = "streetaccount";
   return ContentType2;
@@ -38557,6 +38570,12 @@ var TranscriptDocument = lib_default`
     audioRecordingUrl
     audioRecordingOffsetMs
     audioStreamUri
+    attachments {
+      archivedUrl
+      mimeType
+      title
+      url
+    }
     connectionStatus
     creator {
       id
@@ -39898,6 +39917,8 @@ function Tooltip(props) {
   }, closeDelay, [onClose]);
   const showTooltip = (0, import_react26.useCallback)((event) => {
     if (!event || event.type === "mouseenter" && openOn === "hover" || event.type === "click" && openOn === "click") {
+      event == null ? void 0 : event.stopPropagation();
+      event == null ? void 0 : event.preventDefault();
       cancelHide();
       delayedShowTooltip(getTooltipPosition({
         anchor: targetRef == null ? void 0 : targetRef.current,

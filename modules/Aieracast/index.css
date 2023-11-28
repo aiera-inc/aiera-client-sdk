@@ -561,11 +561,11 @@ video {
 .mt-2\.5 {
   margin-top: 0.625rem;
 }
-.mb-8 {
-  margin-bottom: 2rem;
-}
 .ml-3 {
   margin-left: 0.75rem;
+}
+.mb-8 {
+  margin-bottom: 2rem;
 }
 .mb-3\.5 {
   margin-bottom: 0.875rem;
@@ -764,6 +764,9 @@ video {
 }
 .w-\[3px\] {
   width: 3px;
+}
+.w-40 {
+  width: 10rem;
 }
 .min-w-0 {
   min-width: 0px;
@@ -1855,6 +1858,10 @@ video {
 .hover\:text-gray-700:hover {
   --tw-text-opacity: 1;
   color: rgb(55 65 81 / var(--tw-text-opacity));
+}
+.hover\:text-white:hover {
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 .hover\:text-blue-700:hover {
   --tw-text-opacity: 1;
@@ -3039,15 +3046,17 @@ input.PhoneInputInput::placeholder {
 
 /* src/components/ExpandButton/styles.css */
 
-/* src/modules/Transcript/EventDetails/styles.css */
+/* src/components/PlayButton/styles.css */
 
-/* src/modules/Transcript/PriceChart/styles.css */
+/* src/modules/Transcript/DownloadTooltip/styles.css */
+
+/* src/modules/Transcript/EventDetails/styles.css */
 
 /* src/modules/Transcript/KeyMentions/styles.css */
 
-/* src/modules/Transcript/Header/styles.css */
+/* src/modules/Transcript/PriceChart/styles.css */
 
-/* src/components/PlayButton/styles.css */
+/* src/modules/Transcript/Header/styles.css */
 
 /* src/modules/Transcript/styles.css */
 @media print {
