@@ -103,6 +103,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
     let showTitleInfo = true;
     let showRecordingDetails = true;
     let showSearch = !hideSearch;
+    let showDownloadButton = true;
     if (useConfigOptions && config.options) {
         if (config.options.showPriceReaction !== undefined) {
             showPriceReaction = config.options.showPriceReaction;
@@ -118,6 +119,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         }
         if (config.options.showExport !== undefined) {
             showExport = config.options.showExport;
+        }
+        if (config.options.showDownloadButton !== undefined) {
+            showDownloadButton = config.options.showDownloadButton;
         }
     }
 
@@ -335,7 +339,9 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                         />
                                     )}
 
-                                    {!headerExpanded && event && <DownloadTooltip event={event} />}
+                                    {!headerExpanded && event && showDownloadButton && (
+                                        <DownloadTooltip event={event} />
+                                    )}
                                     {onClose && !showSearch && !headerExpanded && (
                                         <Button
                                             className={classNames(

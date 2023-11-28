@@ -40,6 +40,7 @@ export interface Options {
     transcriptRelativeEndSeconds?: number;
     showAudioPlayer?: boolean;
     showCompanyFilter?: boolean;
+    showDownloadButton?: boolean;
     showExport?: boolean;
     showPriceReaction?: boolean;
     showRecordingDetails?: boolean;
