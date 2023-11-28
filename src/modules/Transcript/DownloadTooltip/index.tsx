@@ -59,6 +59,9 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             target="_blank"
                             rel="noreferrer"
                             download
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
                         >
                             <p className="text-sm">Download MP3</p>
                         </a>
@@ -73,6 +76,9 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             }
                             rel="noreferrer"
                             download
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
                         >
                             <p className="text-sm">Transcript PDF</p>
                         </a>
@@ -83,6 +89,9 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             rel="noreferrer"
                             className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
                             download
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
                         >
                             <p className="text-sm">Slides PDF</p>
                         </a>
@@ -93,6 +102,9 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                             rel="noreferrer"
                             className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
                             download
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
                         >
                             <p className="text-sm">Press PDF</p>
                         </a>
