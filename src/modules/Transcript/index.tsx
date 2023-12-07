@@ -372,7 +372,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                         .with({ status: 'success' }, ({ data }) => {
                             const event = data?.events[0];
                             if (event && event.summaries && event.summaries.length > 0) {
-                                const summary = findSummary(event.summaries);
+                                const summaryObj = findSummary(event.summaries);
+                                let summaryTexts =
+                                    summaryObj?.summary && summaryObj.summary.length > 0 ? summaryObj.summary : [];
+                                if (!showSummary) {
+                                    // We're only showing the first line to truncate
+                                    // when the UI is collapsed
+                                    summaryTexts = summaryTexts.slice(0, 1);
+                                }
                                 return (
                                     <div
                                         onClick={toggleSummary}
@@ -382,18 +389,21 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                             AI SUMMARY
                                         </p>
                                         <h2 className="font-bold leading-[1.1875rem] tracking-tight text-base">
-                                            {summary?.title}
+                                            {summaryObj?.title}
                                         </h2>
-                                        <p
-                                            className={classNames(
-                                                'text-sm mt-2 text-slate-700 group-hover:text-slate-900',
-                                                {
-                                                    truncate: !showSummary,
-                                                }
-                                            )}
-                                        >
-                                            {summary?.summary}
-                                        </p>
+                                        {summaryTexts.map((summaryText) => (
+                                            <p
+                                                key={summaryText.slice(0, 10)}
+                                                className={classNames(
+                                                    'text-sm mt-2 text-slate-700 group-hover:text-slate-900',
+                                                    {
+                                                        truncate: !showSummary,
+                                                    }
+                                                )}
+                                            >
+                                                {summaryText}
+                                            </p>
+                                        ))}
                                     </div>
                                 );
                             }
