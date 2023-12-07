@@ -385,17 +385,17 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                         onClick={toggleSummary}
                                         className="mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 rounded-b-lg px-3 py-2.5 summaryContainer"
                                     >
-                                        <p className="text-xs tracking-wide text-slate-400 font-bold mb-1">
+                                        <p className="text-xs tracking-wide text-slate-400 font-bold mb-1 summaryLabel">
                                             AI SUMMARY
                                         </p>
-                                        <h2 className="font-bold leading-[1.1875rem] tracking-tight text-base">
+                                        <h2 className="font-bold leading-[1.1875rem] tracking-tight text-base summaryTitle">
                                             {summaryObj?.title}
                                         </h2>
                                         {summaryTexts.map((summaryText) => (
                                             <p
                                                 key={summaryText.slice(0, 10)}
                                                 className={classNames(
-                                                    'text-sm mt-2 text-slate-700 group-hover:text-slate-900',
+                                                    'text-sm mt-2 text-slate-700 group-hover:text-slate-900 summaryText',
                                                     {
                                                         truncate: !showSummary,
                                                     }
