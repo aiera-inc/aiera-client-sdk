@@ -177,10 +177,8 @@ interface TranscriptUIProps extends TranscriptSharedProps {
     scrollContainerRef: Ref<HTMLDivElement>;
     searchTerm: string;
     showSpeakers: boolean;
-    showSummary: boolean;
     speakerTurns: SpeakerTurnsWithMatches[];
     startTime?: string | null;
-    toggleSummary: () => void;
     useConfigOptions: boolean;
 }
 
@@ -247,13 +245,15 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         showHeaderControls,
         showHeaderPlayButton,
         showSpeakers,
-        showSummary,
         speakerTurns,
         startTime,
-        toggleSummary,
         useConfigOptions,
     } = props;
 
+    const [showSummary, setShowSummary] = useState(false);
+    const toggleSummary = useCallback(() => {
+        setShowSummary((pv) => !pv);
+    }, []);
     // Show the player when it's not useConfigOptions, or if it is enabled with useConfigOptions
     const config = useConfig();
     let theme = darkMode;
@@ -376,7 +376,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 return (
                                     <div
                                         onClick={toggleSummary}
-                                        className="mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 rounded-b-lg px-3 py-2 summaryContainer"
+                                        className="mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 rounded-b-lg px-3 py-2.5 summaryContainer"
                                     >
                                         <p className="text-xs tracking-wide text-slate-400 font-bold mb-1">
                                             AI SUMMARY
@@ -1331,7 +1331,6 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         width,
     } = props;
     const [eventId, setEventId] = useState(eventListEventId);
-    const [showSummary, setShowSummary] = useState(false);
     const config = useConfig();
     const eventIdFromTicker = useLatestEventForTicker(config?.options?.ticker);
 
@@ -1405,10 +1404,6 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         [onBack]
     );
 
-    const toggleSummary = useCallback(() => {
-        setShowSummary((pv) => !pv);
-    }, []);
-
     const { height: containerHeight, ref: containerRef } = useElementSize();
 
     const bus = useMessageListener('seek-transcript-seconds', ({ data }) => void onSeekAudioSeconds(data, false), 'in');
@@ -1468,10 +1463,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             showHeaderControls={showHeaderControls}
             showHeaderPlayButton={showHeaderPlayButton}
             showSpeakers={!!eventQuery.state.data?.events[0]?.hasPublishedTranscript}
-            showSummary={showSummary}
             speakerTurns={searchState.speakerTurnsWithMatches}
             startTime={startTime}
-            toggleSummary={toggleSummary}
             useConfigOptions={useConfigOptions}
         />
     );
