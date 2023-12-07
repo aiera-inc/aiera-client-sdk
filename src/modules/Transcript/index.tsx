@@ -34,6 +34,9 @@ import { useRealtimeEvent } from '@aiera/client-sdk/lib/realtime';
 import { hash } from '@aiera/client-sdk/lib/strings';
 import {
     BasicTextualSentiment,
+    EventSummarization,
+    EventSummarizationModelType,
+    EventSummarizationSummaryType,
     EventUpdatesQuery,
     EventUpdatesQueryVariables,
     LatestEventForTickerQuery,
@@ -177,6 +180,25 @@ interface TranscriptUIProps extends TranscriptSharedProps {
     speakerTurns: SpeakerTurnsWithMatches[];
     startTime?: string | null;
     useConfigOptions: boolean;
+}
+
+function findSummary(summarizations: EventSummarization[]) {
+    const noNulls = summarizations.filter((s) => s);
+    const constrained = noNulls.filter(
+        (s: EventSummarization) => s?.modelType === EventSummarizationModelType.Constrained
+    );
+    const summaries =
+        constrained.length > 0
+            ? constrained
+            : noNulls.filter((s: EventSummarization) => s?.modelType === EventSummarizationModelType.Zeroshot);
+    const everything = summaries.find(
+        (s: EventSummarization) => s?.summaryType === EventSummarizationSummaryType.Everything
+    );
+    const pres = summaries.find(
+        (s: EventSummarization) => s?.summaryType === EventSummarizationSummaryType.Presentation
+    );
+    const qa = summaries.find((s: EventSummarization) => s?.summaryType === EventSummarizationSummaryType.QAndA);
+    return everything || pres || qa;
 }
 
 function NoEventFound() {
@@ -337,6 +359,22 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 className="overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7"
                 ref={scrollContainerRef}
             >
+                {match(eventQuery)
+                    .with({ status: 'success' }, ({ data }) => {
+                        const event = data.events[0];
+                        if (event && event.summaries && event.summaries.length > 0) {
+                            const summary = findSummary(event.summaries);
+                            return (
+                                <div className="text-sm bg-slate-200/80 rounded-b-lg px-3 py-2 summaryContainer">
+                                    <p className="text-xs tracking-wide text-slate-400 font-bold mb-1">AI SUMMARY</p>
+                                    <h2 className="font-bold leading-4 tracking-tight text-base">{summary?.title}</h2>
+                                    <p className="text-sm mt-2 truncate">{summary?.summary}</p>
+                                </div>
+                            );
+                        }
+                        return null;
+                    })
+                    .otherwise(() => null)}
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
                         new Array(5).fill(0).map((_, idx) => (
@@ -682,6 +720,21 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                             volumeChangeFromStartValue
                         }
                         startPrice
+                    }
+                    summaries {
+                        id
+                        audioClip
+                        created
+                        eventId
+                        modelType
+                        modified
+                        priority
+                        reviewed
+                        summary
+                        summaryType
+                        title
+                        transcriptVersion
+                        videoClip
                     }
                     title
                     transcripts {
