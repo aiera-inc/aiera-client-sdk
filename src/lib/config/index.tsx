@@ -48,6 +48,7 @@ export interface Options {
     showSearch?: boolean;
     showPartials?: boolean;
     showSentiment?: boolean;
+    showSummary?: boolean;
     showTitleInfo?: boolean;
     ticker?: string;
 }
