@@ -177,8 +177,10 @@ interface TranscriptUIProps extends TranscriptSharedProps {
     scrollContainerRef: Ref<HTMLDivElement>;
     searchTerm: string;
     showSpeakers: boolean;
+    showSummary: boolean;
     speakerTurns: SpeakerTurnsWithMatches[];
     startTime?: string | null;
+    toggleSummary: () => void;
     useConfigOptions: boolean;
 }
 
@@ -245,8 +247,10 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         showHeaderControls,
         showHeaderPlayButton,
         showSpeakers,
+        showSummary,
         speakerTurns,
         startTime,
+        toggleSummary,
         useConfigOptions,
     } = props;
 
@@ -258,6 +262,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
     let showSearch = !hideSearch;
     let showSentiment = true;
     let showPartials = true;
+    let showSummaryByConfig = true;
     let relativeTimestamps = false;
     if (useConfigOptions && config.options) {
         if (config.options.darkMode !== undefined) {
@@ -280,6 +285,9 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         }
         if (config.options.showSentiment !== undefined) {
             showSentiment = config.options.showSentiment;
+        }
+        if (config.options.showSummary !== undefined) {
+            showSummaryByConfig = config.options.showSummary;
         }
     }
 
@@ -359,22 +367,39 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                 className="overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7"
                 ref={scrollContainerRef}
             >
-                {match(eventQuery)
-                    .with({ status: 'success' }, ({ data }) => {
-                        const event = data.events[0];
-                        if (event && event.summaries && event.summaries.length > 0) {
-                            const summary = findSummary(event.summaries);
-                            return (
-                                <div className="text-sm bg-slate-200/80 rounded-b-lg px-3 py-2 summaryContainer">
-                                    <p className="text-xs tracking-wide text-slate-400 font-bold mb-1">AI SUMMARY</p>
-                                    <h2 className="font-bold leading-4 tracking-tight text-base">{summary?.title}</h2>
-                                    <p className="text-sm mt-2 truncate">{summary?.summary}</p>
-                                </div>
-                            );
-                        }
-                        return null;
-                    })
-                    .otherwise(() => null)}
+                {showSummaryByConfig &&
+                    match(eventQuery)
+                        .with({ status: 'success' }, ({ data }) => {
+                            const event = data?.events[0];
+                            if (event && event.summaries && event.summaries.length > 0) {
+                                const summary = findSummary(event.summaries);
+                                return (
+                                    <div
+                                        onClick={toggleSummary}
+                                        className="mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 rounded-b-lg px-3 py-2 summaryContainer"
+                                    >
+                                        <p className="text-xs tracking-wide text-slate-400 font-bold mb-1">
+                                            AI SUMMARY
+                                        </p>
+                                        <h2 className="font-bold leading-[1.1875rem] tracking-tight text-base">
+                                            {summary?.title}
+                                        </h2>
+                                        <p
+                                            className={classNames(
+                                                'text-sm mt-2 text-slate-700 group-hover:text-slate-900',
+                                                {
+                                                    truncate: !showSummary,
+                                                }
+                                            )}
+                                        >
+                                            {summary?.summary}
+                                        </p>
+                                    </div>
+                                );
+                            }
+                            return null;
+                        })
+                        .otherwise(() => null)}
                 {match(eventQuery)
                     .with({ status: 'loading' }, () =>
                         new Array(5).fill(0).map((_, idx) => (
@@ -1306,6 +1331,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         width,
     } = props;
     const [eventId, setEventId] = useState(eventListEventId);
+    const [showSummary, setShowSummary] = useState(false);
     const config = useConfig();
     const eventIdFromTicker = useLatestEventForTicker(config?.options?.ticker);
 
@@ -1379,6 +1405,10 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         [onBack]
     );
 
+    const toggleSummary = useCallback(() => {
+        setShowSummary((pv) => !pv);
+    }, []);
+
     const { height: containerHeight, ref: containerRef } = useElementSize();
 
     const bus = useMessageListener('seek-transcript-seconds', ({ data }) => void onSeekAudioSeconds(data, false), 'in');
@@ -1438,8 +1468,10 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             showHeaderControls={showHeaderControls}
             showHeaderPlayButton={showHeaderPlayButton}
             showSpeakers={!!eventQuery.state.data?.events[0]?.hasPublishedTranscript}
+            showSummary={showSummary}
             speakerTurns={searchState.speakerTurnsWithMatches}
             startTime={startTime}
+            toggleSummary={toggleSummary}
             useConfigOptions={useConfigOptions}
         />
     );
