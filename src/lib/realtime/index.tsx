@@ -8,8 +8,10 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useAppConfig } from '@aiera/client-sdk/lib/data';
 import { AppConfigQuery, RealtimeCurrentUserQuery } from '@aiera/client-sdk/types/generated';
 
-const REFETCH_TIMEOUT_LIMIT = 100;
-const REFETCH_TIMEOUT_THRESHOLD = 20;
+const REFETCH_LIMIT = 100; // after 100 failed attempts, stop querying
+const REFETCH_TIMEOUT_DEFAULT = 500; // in ms
+const REFETCH_TIMEOUT_LIMIT = 2000; // 2 seconds (in ms)
+const REFETCH_TIMEOUT_THRESHOLD = 30;
 
 type AppConfiguration = AppConfigQuery['configuration'];
 type RealtimeCurrentUser = RealtimeCurrentUserQuery['currentUser'];
@@ -21,14 +23,15 @@ export const Context = createContext<Realtime | undefined>(undefined);
 export function Provider({ children, client: passedClient }: { children: ReactNode; client?: Pusher }): ReactElement {
     const [client, setClient] = useState<Realtime | undefined>(passedClient);
 
-    // Keep current user and Pusher config in state
-    // If the config isn't set, wait until user is authed to refetch
-    // And only then set the Pusher client
+    /**
+     * Keep current user and Pusher config in state.
+     * If the config isn't set, wait until the user is authed to refetch.
+     * And only then set the Pusher client.
+     */
     const [appConfig, setAppConfig] = useState<AppConfiguration | undefined>(undefined);
     const [currentUser, setCurrentUser] = useState<RealtimeCurrentUser | undefined>(undefined);
 
-    // Track number of RealtimeCurrentUser refetches
-    // Once the limit is reached, start refetching on an interval
+    // Track number of RealtimeCurrentUser query refetches
     const [refetchCount, setRefetchCount] = useState<number>(0);
 
     // Auth needed to retrieve Pusher config from server
@@ -52,21 +55,23 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
                 userQuery.status === 'error' ||
                 (userQuery.status === 'success' && !userQuery.state.data?.currentUser?.id)
             ) {
-                // If there's an issue, don't hammer the server
-                // Once the limit is reached, only refetch every 2 seconds
-                refetchTimer = window.setTimeout(
-                    () => {
-                        if (refetchCount < REFETCH_TIMEOUT_LIMIT) {
-                            console.log('REFETCH!');
+                /**
+                 * If there's an issue, don't hammer the server.
+                 * Once the threshold is hit, refetch every 2 seconds.
+                 * And once the limit is reached, stop refetching entirely.
+                 */
+                if (refetchCount < REFETCH_LIMIT) {
+                    refetchTimer = window.setTimeout(
+                        () => {
                             setRefetchCount(refetchCount + 1);
                             userQuery.refetch({ requestPolicy: 'cache-and-network' });
-                        }
-                    },
-                    refetchCount < REFETCH_TIMEOUT_THRESHOLD ? 500 : 2000
-                );
+                        },
+                        refetchCount < REFETCH_TIMEOUT_THRESHOLD ? REFETCH_TIMEOUT_DEFAULT : REFETCH_TIMEOUT_LIMIT
+                    );
+                }
             }
         }
-        // Remove refetch on cleanup
+        // Remove refetch timeout on cleanup
         return () => {
             if (refetchTimer) {
                 window.clearTimeout(refetchTimer);
