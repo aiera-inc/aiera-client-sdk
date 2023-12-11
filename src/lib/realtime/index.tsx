@@ -8,6 +8,9 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useAppConfig } from '@aiera/client-sdk/lib/data';
 import { AppConfigQuery, RealtimeCurrentUserQuery } from '@aiera/client-sdk/types/generated';
 
+const REFETCH_TIMEOUT_LIMIT = 100;
+const REFETCH_TIMEOUT_THRESHOLD = 20;
+
 type AppConfiguration = AppConfigQuery['configuration'];
 type RealtimeCurrentUser = RealtimeCurrentUserQuery['currentUser'];
 
@@ -24,6 +27,10 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
     const [appConfig, setAppConfig] = useState<AppConfiguration | undefined>(undefined);
     const [currentUser, setCurrentUser] = useState<RealtimeCurrentUser | undefined>(undefined);
 
+    // Track number of RealtimeCurrentUser refetches
+    // Once the limit is reached, start refetching on an interval
+    const [refetchCount, setRefetchCount] = useState<number>(0);
+
     // Auth needed to retrieve Pusher config from server
     const userQuery = useQuery<RealtimeCurrentUserQuery>({
         requestPolicy: 'cache-only',
@@ -36,6 +43,8 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
         `,
     });
     useEffect(() => {
+        let refetchTimer: number | undefined;
+
         if (!currentUser) {
             if (userQuery.status === 'success' && userQuery.state.data?.currentUser?.id) {
                 setCurrentUser(userQuery.state.data.currentUser);
@@ -43,10 +52,27 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
                 userQuery.status === 'error' ||
                 (userQuery.status === 'success' && !userQuery.state.data?.currentUser?.id)
             ) {
-                userQuery.refetch({ requestPolicy: 'cache-and-network' });
+                // If there's an issue, don't hammer the server
+                // Once the limit is reached, only refetch every 2 seconds
+                refetchTimer = window.setTimeout(
+                    () => {
+                        if (refetchCount < REFETCH_TIMEOUT_LIMIT) {
+                            console.log('REFETCH!');
+                            setRefetchCount(refetchCount + 1);
+                            userQuery.refetch({ requestPolicy: 'cache-and-network' });
+                        }
+                    },
+                    refetchCount < REFETCH_TIMEOUT_THRESHOLD ? 500 : 2000
+                );
             }
         }
-    }, [currentUser, userQuery.state.data?.currentUser, userQuery.status]);
+        // Remove refetch on cleanup
+        return () => {
+            if (refetchTimer) {
+                window.clearTimeout(refetchTimer);
+            }
+        };
+    }, [currentUser, refetchCount, userQuery.state.data?.currentUser, userQuery.status]);
 
     const configQuery = useAppConfig();
     useEffect(() => {

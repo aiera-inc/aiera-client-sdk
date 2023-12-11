@@ -719,6 +719,20 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                         }
                     }
                     webcastUrls
+                    summaries {
+                        id
+                        audioClip
+                        created
+                        eventId
+                        modelType
+                        modified
+                        reviewed
+                        summary
+                        summaryType
+                        title
+                        transcriptVersion
+                        videoClip
+                    }
                 }
             }
         `,
@@ -736,6 +750,7 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
         }
     }, [eventUpdateQuery.state.data?.events[0]?.hasTranscript]);
 
+    console.log({ summaries: eventQuery.state.data?.events[0]?.summaries });
     return eventQuery;
 }
 
