@@ -1,8 +1,8 @@
-import React, { createContext, useContext, useEffect, useState, ReactElement, ReactNode } from 'react';
-import { EventType, Quote } from '@aiera/client-sdk/types/generated';
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
-import muxjs from 'mux.js';
+import { EventType, Quote } from '@aiera/client-sdk/types/generated';
 import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
+import muxjs from 'mux.js';
+import React, { ReactElement, ReactNode, createContext, useContext, useEffect, useState } from 'react';
 
 // shaka player package looks for window.muxjs
 // i extended window.muxjs in the types index.ts
@@ -33,6 +33,7 @@ export class AudioPlayer {
     };
     metaData?: EventMetaData;
     offset = 0;
+    playingStartTime = 0;
     audio: HTMLAudioElement;
     liveCatchupThreshold = 5;
     player?: playerType;
@@ -224,7 +225,7 @@ export class AudioPlayer {
                 this.player.goToLive();
                 this.player.trickPlay(1);
             } else {
-                this.audio.play();
+                await this.audio.play();
             }
             return;
         } else {
@@ -284,6 +285,10 @@ export class AudioPlayer {
             this.audio.volume = volume;
         }
     };
+
+    setPlayingStartTime(time: number): void {
+        this.playingStartTime = time;
+    }
 
     togglePlaybackRate(): void {
         if (this.audio.playbackRate < 1) {

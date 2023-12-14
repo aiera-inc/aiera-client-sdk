@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject, useState } from 'react';
 import classNames from 'classnames';
+import React, { MouseEvent, ReactElement, RefObject, useCallback, useEffect, useRef } from 'react';
 
 import { Button } from '@aiera/client-sdk/components/Button';
 import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
@@ -15,13 +15,13 @@ import { XMark } from '@aiera/client-sdk/components/Svg/XMark';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { AudioPlayer, EventMetaData, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useTrack } from '@aiera/client-sdk/lib/data';
-import { OnDragStart, OnDragEnd, useDrag } from '@aiera/client-sdk/lib/hooks/useDrag';
+import { OnDragEnd, OnDragStart, useDrag } from '@aiera/client-sdk/lib/hooks/useDrag';
 import { useWindowSize } from '@aiera/client-sdk/lib/hooks/useWindowSize';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { ChangeHandler } from '@aiera/client-sdk/types';
 
-import './styles.css';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
+import './styles.css';
 
 function toDurationString(totalSeconds: number) {
     if (!totalSeconds || isNaN(totalSeconds) || Math.abs(totalSeconds) === Infinity) totalSeconds = 0;
@@ -328,7 +328,6 @@ function usePlaybarDrag(
 
 function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaData) {
     const audioPlayer = useAudioPlayer();
-    const [playingStartTime, setPlayingStartTime] = useState(0);
     const track = useTrack();
     useEffect(() => {
         if (id && !audioPlayer.playing(null)) {
@@ -354,12 +353,12 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
         if (isPlaying) {
             void track('Click', 'Audio Pause', { eventId: id, url });
             audioPlayer.pause();
-            if (playingStartTime) {
+            if (audioPlayer.playingStartTime) {
                 void track('Click', 'Audio Duration', {
                     eventId: id,
-                    duration: new Date().getTime() - playingStartTime,
+                    duration: new Date().getTime() - audioPlayer.playingStartTime,
                 });
-                setPlayingStartTime(0);
+                audioPlayer.setPlayingStartTime(0);
             }
             bus?.emit(
                 'event-audio',
@@ -383,7 +382,7 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                 void audioPlayer.play();
             }
 
-            setPlayingStartTime(new Date().getTime());
+            audioPlayer.setPlayingStartTime(new Date().getTime());
 
             bus?.emit(
                 'event-audio',
@@ -424,27 +423,27 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
     const clear = useCallback(() => {
         void track('Click', 'Audio Stop', { eventId: id, url });
         audioPlayer.clear();
-        if (playingStartTime) {
+        if (audioPlayer.playingStartTime) {
             void track('Click', 'Audio Duration', {
                 eventId: id,
-                duration: new Date().getTime() - playingStartTime,
+                duration: new Date().getTime() - audioPlayer.playingStartTime,
             });
-            setPlayingStartTime(0);
+            audioPlayer.setPlayingStartTime(0);
         }
-    }, [playingStartTime]);
+    }, [audioPlayer.playingStartTime]);
     const swap = useCallback(() => {
         if (id) {
             audioPlayer.clear();
-            if (playingStartTime) {
+            if (audioPlayer.playingStartTime) {
                 void track('Click', 'Audio Duration', {
                     eventId: id,
-                    duration: new Date().getTime() - playingStartTime,
+                    duration: new Date().getTime() - audioPlayer.playingStartTime,
                 });
-                setPlayingStartTime(0);
+                audioPlayer.setPlayingStartTime(0);
             }
             void audioPlayer.play({ id, url: url || '', offset, metaData });
         }
-    }, [playingStartTime, id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
+    }, [audioPlayer.playingStartTime, id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
 
     return {
         audioPlayer,
