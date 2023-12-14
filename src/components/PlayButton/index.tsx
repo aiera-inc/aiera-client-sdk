@@ -7,7 +7,7 @@ import { EventMetaData, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useAlertList, useTrack } from '@aiera/client-sdk/lib/data';
 import { AudioOriginUI, useMessageBus } from '@aiera/client-sdk/lib/msg';
 import classNames from 'classnames';
-import React, { MouseEvent, ReactElement, ReactNode, useCallback } from 'react';
+import React, { MouseEvent, ReactElement, ReactNode, useCallback, useState } from 'react';
 import './styles.css';
 
 interface PlayButtonSharedProps {
@@ -111,6 +111,7 @@ export interface PlayButtonProps extends PlayButtonSharedProps {
 export function PlayButton(props: PlayButtonProps): ReactElement {
     const { id, url, offset = 0, metaData, origin = 'eventList' } = props;
     const { addAlert, removeAlert, alertList } = useAlertList();
+    const [playingStartTime, setPlayingStartTime] = useState(0);
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
     const isPlaying = audioPlayer.playing(id);
@@ -121,6 +122,13 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
             if (audioPlayer.playing(id)) {
                 void track('Click', 'Audio Pause', { eventId: id, url });
                 audioPlayer.pause();
+                if (playingStartTime) {
+                    void track('Click', 'Audio Duration', {
+                        eventId: id,
+                        duration: new Date().getTime() - playingStartTime,
+                    });
+                    setPlayingStartTime(0);
+                }
                 bus?.emit(
                     'event-audio',
                     {
@@ -138,6 +146,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
             } else if (url) {
                 void track('Click', 'Audio Play', { eventId: id, url });
                 void audioPlayer.play({ id, url, offset, metaData });
+                setPlayingStartTime(new Date().getTime());
                 bus?.emit(
                     'event-audio',
                     {

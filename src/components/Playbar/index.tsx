@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject } from 'react';
+import React, { useCallback, useEffect, useRef, MouseEvent, ReactElement, RefObject, useState } from 'react';
 import classNames from 'classnames';
 
 import { Button } from '@aiera/client-sdk/components/Button';
@@ -328,6 +328,7 @@ function usePlaybarDrag(
 
 function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaData) {
     const audioPlayer = useAudioPlayer();
+    const [playingStartTime, setPlayingStartTime] = useState(0);
     const track = useTrack();
     useEffect(() => {
         if (id && !audioPlayer.playing(null)) {
@@ -353,6 +354,13 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
         if (isPlaying) {
             void track('Click', 'Audio Pause', { eventId: id, url });
             audioPlayer.pause();
+            if (playingStartTime) {
+                void track('Click', 'Audio Duration', {
+                    eventId: id,
+                    duration: new Date().getTime() - playingStartTime,
+                });
+                setPlayingStartTime(0);
+            }
             bus?.emit(
                 'event-audio',
                 {
@@ -374,6 +382,8 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
             } else {
                 void audioPlayer.play();
             }
+
+            setPlayingStartTime(new Date().getTime());
 
             bus?.emit(
                 'event-audio',
@@ -414,13 +424,27 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
     const clear = useCallback(() => {
         void track('Click', 'Audio Stop', { eventId: id, url });
         audioPlayer.clear();
-    }, []);
+        if (playingStartTime) {
+            void track('Click', 'Audio Duration', {
+                eventId: id,
+                duration: new Date().getTime() - playingStartTime,
+            });
+            setPlayingStartTime(0);
+        }
+    }, [playingStartTime]);
     const swap = useCallback(() => {
         if (id) {
             audioPlayer.clear();
+            if (playingStartTime) {
+                void track('Click', 'Audio Duration', {
+                    eventId: id,
+                    duration: new Date().getTime() - playingStartTime,
+                });
+                setPlayingStartTime(0);
+            }
             void audioPlayer.play({ id, url: url || '', offset, metaData });
         }
-    }, [id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
+    }, [playingStartTime, id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
 
     return {
         audioPlayer,

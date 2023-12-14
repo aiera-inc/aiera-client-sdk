@@ -205,6 +205,7 @@ type TrackingObject =
     | 'Events'
     | 'Event Filter By'
     | 'Event Search'
+    | 'Audio Duration'
     | 'Audio Pause'
     | 'Audio Play'
     | 'Audio Fast Forward'
