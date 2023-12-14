@@ -82016,8 +82016,8 @@ var import_luxon2 = __toModule(require_luxon());
 var import_ts_pattern6 = __toModule(require_lib());
 
 // src/components/Playbar/index.tsx
-var import_react33 = __toModule(require_react());
 var import_classnames15 = __toModule(require_classnames());
+var import_react33 = __toModule(require_react());
 
 // src/components/Svg/Back15.tsx
 var import_react16 = __toModule(require_react());
@@ -82432,13 +82432,14 @@ function Tooltip(props) {
 }
 
 // src/lib/audio/index.tsx
-var import_react30 = __toModule(require_react());
 var import_mux = __toModule(require_mux());
+var import_react30 = __toModule(require_react());
 window.muxjs = import_mux.default;
 var shakaInstance = require_shaka_player_ui();
 var AudioPlayer = class {
   constructor() {
     this.offset = 0;
+    this.playingStartTime = 0;
     this.liveCatchupThreshold = 5;
     this.adjustPlayback = () => {
       const fromLiveEdge = this.rawDuration - this.rawCurrentTime;
@@ -82613,7 +82614,7 @@ var AudioPlayer = class {
           this.player.goToLive();
           this.player.trickPlay(1);
         } else {
-          this.audio.play();
+          yield this.audio.play();
         }
         return;
       } else {
@@ -82650,6 +82651,9 @@ var AudioPlayer = class {
   setRate(rate) {
     this.audio.playbackRate = rate;
     this.triggerUpdate();
+  }
+  setPlayingStartTime(time) {
+    this.playingStartTime = time;
   }
   togglePlaybackRate() {
     if (this.audio.playbackRate < 1) {
@@ -83046,6 +83050,13 @@ function usePlayer(id, url, offset = 0, metaData) {
     if (isPlaying) {
       void track("Click", "Audio Pause", { eventId: id, url });
       audioPlayer.pause();
+      if (audioPlayer.playingStartTime) {
+        void track("Click", "Audio Duration", {
+          eventId: id,
+          duration: new Date().getTime() - audioPlayer.playingStartTime
+        });
+        audioPlayer.setPlayingStartTime(0);
+      }
       bus == null ? void 0 : bus.emit("event-audio", {
         action: "pause",
         origin: "playBar",
@@ -83063,6 +83074,7 @@ function usePlayer(id, url, offset = 0, metaData) {
       } else {
         void audioPlayer.play();
       }
+      audioPlayer.setPlayingStartTime(new Date().getTime());
       bus == null ? void 0 : bus.emit("event-audio", {
         action: "play",
         origin: "playBar",
@@ -83098,13 +83110,27 @@ function usePlayer(id, url, offset = 0, metaData) {
   const clear = (0, import_react33.useCallback)(() => {
     void track("Click", "Audio Stop", { eventId: id, url });
     audioPlayer.clear();
-  }, []);
+    if (audioPlayer.playingStartTime) {
+      void track("Click", "Audio Duration", {
+        eventId: id,
+        duration: new Date().getTime() - audioPlayer.playingStartTime
+      });
+      audioPlayer.setPlayingStartTime(0);
+    }
+  }, [audioPlayer.playingStartTime]);
   const swap = (0, import_react33.useCallback)(() => {
     if (id) {
       audioPlayer.clear();
+      if (audioPlayer.playingStartTime) {
+        void track("Click", "Audio Duration", {
+          eventId: id,
+          duration: new Date().getTime() - audioPlayer.playingStartTime
+        });
+        audioPlayer.setPlayingStartTime(0);
+      }
       void audioPlayer.play({ id, url: url || "", offset, metaData });
     }
-  }, [id, url, offset, ...Object.values(metaData || {})]);
+  }, [audioPlayer.playingStartTime, id, url, offset, ...Object.values(metaData || {})]);
   return {
     audioPlayer,
     seekToEnd,
@@ -85492,6 +85518,13 @@ function PlayButton(props) {
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
       audioPlayer.pause();
+      if (audioPlayer.playingStartTime) {
+        void track("Click", "Audio Duration", {
+          eventId: id,
+          duration: new Date().getTime() - audioPlayer.playingStartTime
+        });
+        audioPlayer.setPlayingStartTime(0);
+      }
       bus == null ? void 0 : bus.emit("event-audio", {
         action: "pause",
         origin,
@@ -85505,6 +85538,7 @@ function PlayButton(props) {
     } else if (url) {
       void track("Click", "Audio Play", { eventId: id, url });
       void audioPlayer.play({ id, url, offset, metaData });
+      audioPlayer.setPlayingStartTime(new Date().getTime());
       bus == null ? void 0 : bus.emit("event-audio", {
         action: "play",
         origin,

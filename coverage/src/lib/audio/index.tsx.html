@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.95% </span>
+                <span class="strong">73.29% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>116/159</span>
+                <span class='fraction'>118/161</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.05% </span>
+                <span class="strong">97.14% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>33/34</span>
+                <span class='fraction'>34/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">72.61% </span>
+                <span class="strong">72.95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>114/157</span>
+                <span class='fraction'>116/159</span>
             </div>
         
             
@@ -441,7 +441,12 @@
 <a name='L376'></a><a href='#L376'>376</a>
 <a name='L377'></a><a href='#L377'>377</a>
 <a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L379'></a><a href='#L379'>379</a>
+<a name='L380'></a><a href='#L380'>380</a>
+<a name='L381'></a><a href='#L381'>381</a>
+<a name='L382'></a><a href='#L382'>382</a>
+<a name='L383'></a><a href='#L383'>383</a>
+<a name='L384'></a><a href='#L384'>384</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -475,6 +480,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-yes">29x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">29x</span>
@@ -729,6 +735,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -819,11 +829,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">200x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { createContext, useContext, useEffect, useState, ReactElement, ReactNode } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
 import { EventType, Quote } from '@aiera/client-sdk/types/generated';
-import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
-import muxjs from 'mux.js';
 import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
+import muxjs from 'mux.js';
+import React, { ReactElement, ReactNode, createContext, useContext, useEffect, useState } from 'react';
 &nbsp;
 // shaka player package looks for window.muxjs
 // i extended window.muxjs in the types index.ts
@@ -854,6 +864,7 @@ export class AudioPlayer {
     };
     metaData?: EventMetaData;
     offset = 0;
+    playingStartTime = 0;
     audio: HTMLAudioElement;
     liveCatchupThreshold = 5;
     player?: playerType;
@@ -1045,7 +1056,7 @@ export class AudioPlayer {
 <span class="cstat-no" title="statement not covered" >                this.player.goToLive();</span>
 <span class="cstat-no" title="statement not covered" >                this.player.trickPlay(1);</span>
             } else {
-<span class="cstat-no" title="statement not covered" >                this.audio.play();</span>
+<span class="cstat-no" title="statement not covered" >                await this.audio.play();</span>
             }
 <span class="cstat-no" title="statement not covered" >            return;</span>
         } else {
@@ -1105,6 +1116,10 @@ export class AudioPlayer {
             this.audio.volume = volume;
         }
     };
+&nbsp;
+    setPlayingStartTime(time: number): void {
+        this.playingStartTime = time;
+    }
 &nbsp;
     togglePlaybackRate(): void {
         <span class="missing-if-branch" title="if path not taken" >I</span>if (this.audio.playbackRate &lt; 1) {
@@ -1204,7 +1219,7 @@ export function useAudioPlayer(withUpdates = true): AudioPlayer {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Nov 28 2023 14:47:24 GMT-0500 (Eastern Standard Time)
+                at Thu Dec 14 2023 17:19:40 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
