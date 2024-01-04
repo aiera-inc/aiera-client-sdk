@@ -86,6 +86,7 @@ function createGQLClient(config: Config): Client {
             // See: https://formidable.com/open-source/urql/docs/graphcache/normalized-caching/#custom-keys-and-non-keyable-entities
             keys: {
                 ApplicationConfiguration: () => null,
+                Attachment: () => null,
                 EventQuotePriceInfo: () => null,
                 Search: () => null,
                 UserEmailStatus: () => null,
