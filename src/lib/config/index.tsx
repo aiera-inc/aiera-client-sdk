@@ -42,6 +42,7 @@ export interface Options {
     showCompanyFilter?: boolean;
     showDownloadButton?: boolean;
     showExport?: boolean;
+    showGlobalSearch?: boolean;
     showPriceReaction?: boolean;
     showRecordingDetails?: boolean;
     showScheduleRecording?: boolean;

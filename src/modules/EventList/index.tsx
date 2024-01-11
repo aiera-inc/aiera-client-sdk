@@ -388,24 +388,30 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     let prevEventDate: DateTime | null = null;
     let renderedRefetch = false;
     let theme = darkMode;
+    let showGlobalSearch = true;
     if (useConfigOptions && config.options) {
         if (config.options.darkMode !== undefined) {
             theme = config.options.darkMode;
+        }
+        if (config.options.showGlobalSearch !== undefined) {
+            showGlobalSearch = config.options.showGlobalSearch;
         }
     }
 
     return (
         <div className={classNames('h-full flex flex-col eventlist relative z-30', { dark: theme })}>
-            {!hideHeader && (
+            {!hideHeader && (showGlobalSearch || showCompanyFilter) && (
                 <div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header">
                     <div className="flex items-center mb-3">
-                        <Input
-                            icon={<MagnifyingGlass />}
-                            name="search"
-                            onChange={onSearchChange}
-                            placeholder="Events & Transcripts..."
-                            value={searchTerm}
-                        />
+                        {showGlobalSearch && (
+                            <Input
+                                icon={<MagnifyingGlass />}
+                                name="search"
+                                onChange={onSearchChange}
+                                placeholder="Events & Transcripts..."
+                                value={searchTerm}
+                            />
+                        )}
                         {showHeaderControls && (
                             <>
                                 {showCompanyFilter && (

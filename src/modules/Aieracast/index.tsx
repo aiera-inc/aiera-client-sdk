@@ -126,9 +126,13 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
 
     const config = useConfig();
     let darkMode = false;
+    let showGlobalSearch = true;
     if (config.options) {
         if (config.options.darkMode !== undefined) {
             darkMode = config.options.darkMode;
+        }
+        if (config.options.showGlobalSearch !== undefined) {
+            showGlobalSearch = config.options.showGlobalSearch;
         }
     }
 
@@ -297,17 +301,21 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                         {showSidebar && (
                             <div className="absolute top-0 left-0 -right-6 h-28 bg-gradient-to-b from-gray-200/40 dark:from-bluegray-7 dark:to-bluegray-7 to-transparent" />
                         )}
-                        <div
-                            className={classNames('h-12 flex flex-col py-2 px-2 -mb-2 mt-0 relative aieracast__search')}
-                        >
-                            <Input
-                                onChange={onSearch}
-                                value={searchTerm}
-                                icon={<MagnifyingGlass />}
-                                name={'aieracastSearch'}
-                                placeholder="Search Across Transcripts"
-                            />
-                        </div>
+                        {showGlobalSearch && (
+                            <div
+                                className={classNames(
+                                    'h-12 flex flex-col py-2 px-2 -mb-2 mt-0 relative aieracast__search'
+                                )}
+                            >
+                                <Input
+                                    onChange={onSearch}
+                                    value={searchTerm}
+                                    icon={<MagnifyingGlass />}
+                                    name={'aieracastSearch'}
+                                    placeholder="Search Across Transcripts"
+                                />
+                            </div>
+                        )}
                         <div className="relative flex-1 flex flex-col overflow-hidden">
                             <EventList
                                 noEarningsRelease
