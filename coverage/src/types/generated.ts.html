@@ -1880,7 +1880,22 @@
 <a name='L1815'></a><a href='#L1815'>1815</a>
 <a name='L1816'></a><a href='#L1816'>1816</a>
 <a name='L1817'></a><a href='#L1817'>1817</a>
-<a name='L1818'></a><a href='#L1818'>1818</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1818'></a><a href='#L1818'>1818</a>
+<a name='L1819'></a><a href='#L1819'>1819</a>
+<a name='L1820'></a><a href='#L1820'>1820</a>
+<a name='L1821'></a><a href='#L1821'>1821</a>
+<a name='L1822'></a><a href='#L1822'>1822</a>
+<a name='L1823'></a><a href='#L1823'>1823</a>
+<a name='L1824'></a><a href='#L1824'>1824</a>
+<a name='L1825'></a><a href='#L1825'>1825</a>
+<a name='L1826'></a><a href='#L1826'>1826</a>
+<a name='L1827'></a><a href='#L1827'>1827</a>
+<a name='L1828'></a><a href='#L1828'>1828</a>
+<a name='L1829'></a><a href='#L1829'>1829</a>
+<a name='L1830'></a><a href='#L1830'>1830</a>
+<a name='L1831'></a><a href='#L1831'>1831</a>
+<a name='L1832'></a><a href='#L1832'>1832</a>
+<a name='L1833'></a><a href='#L1833'>1833</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3558,6 +3573,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4954,7 +4984,7 @@ export type TranscriptQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, audioProxy?: string | null | undefined, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, audioStreamUri?: string | null | undefined, connectionStatus: EventConnectionStatus, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, eventDate: string, eventType: EventType, externalAudioStreamUrl?: string | null | undefined, hasConnectionDetails: boolean, hasPublishedTranscript: boolean, hasTranscript: boolean, isLive: boolean, liveStreamUrl?: string | null | undefined, publishedTranscriptExpected: boolean, title: string, webcastUrls: Array&lt;string&gt;, attachments: Array&lt;{ __typename?: 'Attachment', archivedUrl: string, mimeType: string, title: string, url: string } | null | undefined&gt;, creator?: { __typename?: 'User', id: string, firstName?: string | null | undefined, lastName?: string | null | undefined, primaryEmail?: string | null | undefined, username: string } | null | undefined, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, quotePrices: Array&lt;{ __typename?: 'EventQuotePriceInfo', currentDayClosePrice?: number | null | undefined, currentDayOpenPrice?: number | null | undefined, endPrice?: number | null | undefined, previousDayClosePrice?: number | null | undefined, startPrice?: number | null | undefined, quote: { __typename?: 'Quote', id: string, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string } }, realtimePrices: Array&lt;{ __typename?: 'EventQuoteRealtimePrice', id: string, date: string, price: number, priceChangeFromStartPercent?: number | null | undefined, priceChangeFromStartValue?: number | null | undefined, volume: number, volumeChangeFromLastPercent?: number | null | undefined, volumeChangeFromLastValue?: number | null | undefined, volumeChangeFromStartPercent?: number | null | undefined, volumeChangeFromStartValue?: number | null | undefined }&gt; }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, displayTimestamp?: string | null | undefined, syncMs?: number | null | undefined, syncTimestamp?: string | null | undefined, timestamp?: string | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, basicSentiment: BasicTextualSentiment, overThreshold: boolean } | null | undefined } | null | undefined }&gt; }&gt;, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, identified: boolean, name: string, title?: string | null | undefined } }&gt; }&gt; }&gt; }&gt; };
+export type TranscriptQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, audioProxy?: string | null | undefined, audioRecordingUrl?: string | null | undefined, audioRecordingOffsetMs: number, audioStreamUri?: string | null | undefined, connectionStatus: EventConnectionStatus, dialInPhoneNumbers: Array&lt;string&gt;, dialInPin?: string | null | undefined, eventDate: string, eventType: EventType, externalAudioStreamUrl?: string | null | undefined, hasConnectionDetails: boolean, hasPublishedTranscript: boolean, hasTranscript: boolean, isLive: boolean, liveStreamUrl?: string | null | undefined, publishedTranscriptExpected: boolean, title: string, webcastUrls: Array&lt;string&gt;, attachments: Array&lt;{ __typename?: 'Attachment', archivedUrl: string, mimeType: string, title: string, url: string } | null | undefined&gt;, creator?: { __typename?: 'User', id: string, firstName?: string | null | undefined, lastName?: string | null | undefined, primaryEmail?: string | null | undefined, username: string } | null | undefined, primaryCompany?: { __typename?: 'Company', id: string, commonName: string, instruments: Array&lt;{ __typename?: 'Instrument', id: string, isPrimary: boolean, quotes: Array&lt;{ __typename?: 'Quote', id: string, isPrimary: boolean, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string, country: { __typename?: 'Country', id: string, countryCode: string } } }&gt; }&gt; } | null | undefined, quotePrices: Array&lt;{ __typename?: 'EventQuotePriceInfo', currentDayClosePrice?: number | null | undefined, currentDayOpenPrice?: number | null | undefined, endPrice?: number | null | undefined, previousDayClosePrice?: number | null | undefined, startPrice?: number | null | undefined, quote: { __typename?: 'Quote', id: string, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string } }, realtimePrices: Array&lt;{ __typename?: 'EventQuoteRealtimePrice', id: string, date: string, price: number, priceChangeFromStartPercent?: number | null | undefined, priceChangeFromStartValue?: number | null | undefined, volume: number, volumeChangeFromLastPercent?: number | null | undefined, volumeChangeFromLastValue?: number | null | undefined, volumeChangeFromStartPercent?: number | null | undefined, volumeChangeFromStartValue?: number | null | undefined }&gt; }&gt;, summaries: Array&lt;{ __typename?: 'EventSummarization', id: string, audioClip?: string | null | undefined, created: string, eventId: string, modelType: EventSummarizationModelType, modified?: string | null | undefined, priority: number, reviewed?: string | null | undefined, summary: Array&lt;string&gt;, summaryType: EventSummarizationSummaryType, title: string, transcriptVersion: number, videoClip?: string | null | undefined }&gt;, transcripts: Array&lt;{ __typename?: 'EventTranscript', id: string, sections: Array&lt;{ __typename?: 'EventTranscriptSection', id: string, speakerTurns: Array&lt;{ __typename?: 'EventTranscriptSpeakerTurn', id: string, paragraphs: Array&lt;{ __typename?: 'EventTranscriptParagraph', id: string, displayTimestamp?: string | null | undefined, syncMs?: number | null | undefined, syncTimestamp?: string | null | undefined, timestamp?: string | null | undefined, sentences: Array&lt;{ __typename?: 'EventTranscriptSentence', id: string, text: string, sentiment?: { __typename?: 'EventTranscriptSentenceSentimentContainer', id: string, textual?: { __typename?: 'EventTranscriptSentenceTextualSentiment', id: string, basicSentiment: BasicTextualSentiment, overThreshold: boolean } | null | undefined } | null | undefined }&gt; }&gt;, speaker: { __typename?: 'EventTranscriptSpeaker', id: string, identified: boolean, name: string, title?: string | null | undefined } }&gt; }&gt; }&gt; }&gt; };
 &nbsp;
 export type LatestParagraphsQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
@@ -5455,6 +5485,21 @@ export const TranscriptDocument = gql`
       }
       startPrice
     }
+    summaries {
+      id
+      audioClip
+      created
+      eventId
+      modelType
+      modified
+      priority
+      reviewed
+      summary
+      summaryType
+      title
+      transcriptVersion
+      videoClip
+    }
     title
     transcripts {
       id
@@ -5521,7 +5566,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Jan 05 2024 10:52:40 GMT-0500 (Eastern Standard Time)
+                at Thu Jan 11 2024 12:03:47 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

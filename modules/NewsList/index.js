@@ -38667,6 +38667,21 @@ var TranscriptDocument = lib_default`
       }
       startPrice
     }
+    summaries {
+      id
+      audioClip
+      created
+      eventId
+      modelType
+      modified
+      priority
+      reviewed
+      summary
+      summaryType
+      title
+      transcriptVersion
+      videoClip
+    }
     title
     transcripts {
       id

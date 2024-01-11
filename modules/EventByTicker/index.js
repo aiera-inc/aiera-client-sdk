@@ -81185,6 +81185,19 @@ var EventConnectionStatus = /* @__PURE__ */ ((EventConnectionStatus2) => {
   EventConnectionStatus2["WaitingToConnect"] = "waiting_to_connect";
   return EventConnectionStatus2;
 })(EventConnectionStatus || {});
+var EventSummarizationModelType = /* @__PURE__ */ ((EventSummarizationModelType2) => {
+  EventSummarizationModelType2["Bullets"] = "bullets";
+  EventSummarizationModelType2["Constrained"] = "constrained";
+  EventSummarizationModelType2["Criticals"] = "criticals";
+  EventSummarizationModelType2["Zeroshot"] = "zeroshot";
+  return EventSummarizationModelType2;
+})(EventSummarizationModelType || {});
+var EventSummarizationSummaryType = /* @__PURE__ */ ((EventSummarizationSummaryType2) => {
+  EventSummarizationSummaryType2["Everything"] = "everything";
+  EventSummarizationSummaryType2["Presentation"] = "presentation";
+  EventSummarizationSummaryType2["QAndA"] = "q_and_a";
+  return EventSummarizationSummaryType2;
+})(EventSummarizationSummaryType || {});
 var RefreshDocument = lib_default`
     mutation Refresh {
   __typename
@@ -81675,6 +81688,21 @@ var TranscriptDocument = lib_default`
         volumeChangeFromStartValue
       }
       startPrice
+    }
+    summaries {
+      id
+      audioClip
+      created
+      eventId
+      modelType
+      modified
+      priority
+      reviewed
+      summary
+      summaryType
+      title
+      transcriptVersion
+      videoClip
     }
     title
     transcripts {
@@ -86639,6 +86667,15 @@ var HandlesWrapperUI = import_react65.default.memo(({
   }));
 });
 HandlesWrapperUI.displayName = "HandlesWrapperUI";
+function findSummary(summarizations) {
+  const noNulls = summarizations.filter((s2) => s2);
+  const constrained = noNulls.filter((s2) => (s2 == null ? void 0 : s2.modelType) === EventSummarizationModelType.Constrained);
+  const summaries = constrained.length > 0 ? constrained : noNulls.filter((s2) => (s2 == null ? void 0 : s2.modelType) === EventSummarizationModelType.Zeroshot);
+  const everything = summaries.find((s2) => (s2 == null ? void 0 : s2.summaryType) === EventSummarizationSummaryType.Everything);
+  const pres = summaries.find((s2) => (s2 == null ? void 0 : s2.summaryType) === EventSummarizationSummaryType.Presentation);
+  const qa = summaries.find((s2) => (s2 == null ? void 0 : s2.summaryType) === EventSummarizationSummaryType.QAndA);
+  return everything || pres || qa;
+}
 function NoEventFound() {
   return /* @__PURE__ */ import_react65.default.createElement("div", {
     className: (0, import_classnames38.default)("h-full flex flex-col flex-1 justify-center items-center")
@@ -86686,6 +86723,10 @@ var TranscriptUI = (props) => {
     startTime,
     useConfigOptions
   } = props;
+  const [showSummary, setShowSummary] = (0, import_react65.useState)(false);
+  const toggleSummary = (0, import_react65.useCallback)(() => {
+    setShowSummary((pv) => !pv);
+  }, []);
   const config = useConfig();
   let theme = darkMode;
   let showPlayer = true;
@@ -86693,6 +86734,7 @@ var TranscriptUI = (props) => {
   let showSearch = !hideSearch;
   let showSentiment = true;
   let showPartials = true;
+  let showSummaryByConfig = true;
   let relativeTimestamps = false;
   if (useConfigOptions && config.options) {
     if (config.options.darkMode !== void 0) {
@@ -86715,6 +86757,9 @@ var TranscriptUI = (props) => {
     }
     if (config.options.showSentiment !== void 0) {
       showSentiment = config.options.showSentiment;
+    }
+    if (config.options.showSummary !== void 0) {
+      showSummaryByConfig = config.options.showSummary;
     }
   }
   return /* @__PURE__ */ import_react65.default.createElement("div", {
@@ -86768,7 +86813,30 @@ var TranscriptUI = (props) => {
     id: "transcriptContainer",
     className: "overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7",
     ref: scrollContainerRef
-  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, showSummaryByConfig && (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, ({ data }) => {
+    const event = data == null ? void 0 : data.events[0];
+    if (event && event.summaries && event.summaries.length > 0) {
+      const summaryObj = findSummary(event.summaries);
+      let summaryTexts = (summaryObj == null ? void 0 : summaryObj.summary) && summaryObj.summary.length > 0 ? summaryObj.summary : [];
+      if (!showSummary) {
+        summaryTexts = summaryTexts.slice(0, 1);
+      }
+      return /* @__PURE__ */ import_react65.default.createElement("div", {
+        onClick: toggleSummary,
+        className: "mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 rounded-b-lg px-3 py-2.5 summaryContainer"
+      }, /* @__PURE__ */ import_react65.default.createElement("p", {
+        className: "text-xs tracking-wide text-slate-400 font-bold mb-1 summaryLabel"
+      }, "AI SUMMARY"), /* @__PURE__ */ import_react65.default.createElement("h2", {
+        className: "font-bold leading-[1.1875rem] tracking-tight text-base summaryTitle"
+      }, summaryObj == null ? void 0 : summaryObj.title), summaryTexts.map((summaryText) => /* @__PURE__ */ import_react65.default.createElement("p", {
+        key: summaryText.slice(0, 10),
+        className: (0, import_classnames38.default)("text-sm mt-2 text-slate-700 group-hover:text-slate-900 summaryText", {
+          truncate: !showSummary
+        })
+      }, summaryText)));
+    }
+    return null;
+  }).otherwise(() => null), (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react65.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
   }, /* @__PURE__ */ import_react65.default.createElement("div", {
@@ -87015,6 +87083,21 @@ function useEventData(eventId = "", eventUpdateQuery) {
                             volumeChangeFromStartValue
                         }
                         startPrice
+                    }
+                    summaries {
+                        id
+                        audioClip
+                        created
+                        eventId
+                        modelType
+                        modified
+                        priority
+                        reviewed
+                        summary
+                        summaryType
+                        title
+                        transcriptVersion
+                        videoClip
                     }
                     title
                     transcripts {

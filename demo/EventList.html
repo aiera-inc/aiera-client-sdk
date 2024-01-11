@@ -24,7 +24,7 @@
 
             eventList.on('authenticated', () => {
                 eventList.configure({
-                    //hideSettings: true,
+                    hideSettings: true,
                     options: {
                         // darkMode: true,
                         // eventListFilters: [
@@ -32,17 +32,22 @@
                         //     { name: 'earningsOnly', visible: false, defaultValue: true },
                         // ],
                         // eventListView: 'combined',
-                        // showCompanyFilter: false,
+                        showCompanyFilter: false,
+                        // showGlobalSearch: false,
+                        // showSearch: false,
+                        // showSummary: false,
                         // showPartials: true,
                         // showSentiment: true,
+                        // showDownloadButton: false,
+                        // showScheduleRecording: true,
                         // ticker: 'aapl',
                     },
                     overrides: {
-                        // style: `
-                        //     .text-blue-600 {
-                        //         color: #008094 !important;
-                        //     }
-                        //     `,
+                        style: `
+                            .text-blue-600 {
+                                color: #008094 !important;
+                            }
+                            `,
                     },
                     tracking: {
                         userId: 'nash-widget-user',

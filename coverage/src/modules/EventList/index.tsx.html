@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.44% </span>
+                <span class="strong">64.03% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>145/225</span>
+                <span class='fraction'>146/228</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.21% </span>
+                <span class="strong">55.08% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>127/230</span>
+                <span class='fraction'>130/236</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.84% </span>
+                <span class="strong">64.41% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>142/219</span>
+                <span class='fraction'>143/222</span>
             </div>
         
             
@@ -1200,7 +1200,13 @@
 <a name='L1135'></a><a href='#L1135'>1135</a>
 <a name='L1136'></a><a href='#L1136'>1136</a>
 <a name='L1137'></a><a href='#L1137'>1137</a>
-<a name='L1138'></a><a href='#L1138'>1138</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1138'></a><a href='#L1138'>1138</a>
+<a name='L1139'></a><a href='#L1139'>1139</a>
+<a name='L1140'></a><a href='#L1140'>1140</a>
+<a name='L1141'></a><a href='#L1141'>1141</a>
+<a name='L1142'></a><a href='#L1142'>1142</a>
+<a name='L1143'></a><a href='#L1143'>1143</a>
+<a name='L1144'></a><a href='#L1144'>1144</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1591,12 +1597,18 @@
 <span class="cline-any cline-yes">55x</span>
 <span class="cline-any cline-yes">55x</span>
 <span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">55x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2727,24 +2739,30 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
     let prevEventDate: DateTime | null = null;
     let renderedRefetch = false;
     let theme = darkMode;
+    let showGlobalSearch = true;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (useConfigOptions &amp;&amp; config.options) {
 <span class="cstat-no" title="statement not covered" >        if (config.options.darkMode !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >            theme = config.options.darkMode;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (config.options.showGlobalSearch !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            showGlobalSearch = config.options.showGlobalSearch;</span>
         }
     }
 &nbsp;
     return (
         &lt;div className={classNames('h-full flex flex-col eventlist relative z-30', { dark: theme })}&gt;
-            {!hideHeader &amp;&amp; (
+            {!hideHeader &amp;&amp; (showGlobalSearch || <span class="branch-2 cbranch-no" title="branch not covered" >showCompanyFilter)</span> &amp;&amp; (
                 &lt;div className="flex flex-col pt-3 pl-3 pr-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 eventlist__header"&gt;
                     &lt;div className="flex items-center mb-3"&gt;
-                        &lt;Input
-                            icon={&lt;MagnifyingGlass /&gt;}
-                            name="search"
-                            onChange={onSearchChange}
-                            placeholder="Events &amp; Transcripts..."
-                            value={searchTerm}
-                        /&gt;
+                        {showGlobalSearch &amp;&amp; (
+                            &lt;Input
+                                icon={&lt;MagnifyingGlass /&gt;}
+                                name="search"
+                                onChange={onSearchChange}
+                                placeholder="Events &amp; Transcripts..."
+                                value={searchTerm}
+                            /&gt;
+                        )}
                         {showHeaderControls &amp;&amp; (
                             &lt;&gt;
                                 {showCompanyFilter &amp;&amp; (
@@ -3481,7 +3499,7 @@ export const EventList = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Jan 05 2024 10:52:40 GMT-0500 (Eastern Standard Time)
+                at Thu Jan 11 2024 12:03:47 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
