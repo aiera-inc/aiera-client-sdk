@@ -8,14 +8,31 @@
             html,
             body,
             #root {
-                height: 100%;
-                background-color: #fff;
+                background-color: transparent;
+                overflow: hidden;
             }
         </style>
     </head>
     <body>
         <noscript>You need to enable JavaScript to run this app.</noscript>
         <div id="root"></div>
+        <script type="text/javascript">
+            function sendHeight() {
+                if (parent.postMessage) {
+                    var height = document.getElementById('aiera-event-snippet')?.offsetHeight;
+                    if (height) {
+                        parent.postMessage(height, '*');
+                    }
+                }
+            }
+            const container = document.getElementById('root');
+            const resizeObserver = new ResizeObserver((entries) => {
+                for (const entry of entries) {
+                    sendHeight();
+                }
+            });
+            resizeObserver.observe(container);
+        </script>
         <script src="index.js"></script>
     </body>
 </html>

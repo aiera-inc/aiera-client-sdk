@@ -7,6 +7,6 @@ import { EventSnippet } from '.';
 describe('EventSnippet', () => {
     test('renders', () => {
         renderWithProvider(<EventSnippet />);
-        screen.getByText('AIERA');
+        screen.getByText('NFLX');
     });
 });

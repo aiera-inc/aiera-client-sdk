@@ -16,15 +16,15 @@ export function EventSnippetUI(props: EventSnippetUIProps): ReactElement {
     const togglePlayback = useCallback(() => setIsPlaying((pv) => !pv), []);
     const { children } = props;
     return (
-        <div>
+        <div id="aiera-event-snippet">
             {children || (
-                <div className="flex flex-col rounded-lg border px-5 py-[18px] relative antialiased">
+                <div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white px-5 py-[18px] relative antialiased">
                     <div className="flex items-center">
                         <div className="flex flex-col justify-center flex-1">
-                            <p className="text-base font-bold">Aiera Inc, Earnings</p>
+                            <p className="text-base font-bold">Netflix, Inc | Earnings</p>
                             <p className="text-sm text-slate-500 leading-3">7:30 PM, Jan 13, 2024</p>
                         </div>
-                        <p className="text-xs tracking-wide text-orange-600 font-semibold mr-2">AIERA</p>
+                        <p className="text-xs tracking-wide text-orange-600 font-semibold mr-2">NFLX</p>
                     </div>
                     <div>
                         <p className="text-[200px] leading-[200px] font-serif absolute top-14 left-2 text-slate-100">
@@ -34,21 +34,21 @@ export function EventSnippetUI(props: EventSnippetUIProps): ReactElement {
                             ”
                         </p>
                         <p className="text-base py-10 px-6 relative z-10">
-                            In scelerisque suscipit mauris eu fermentum. Ut sed suscipit lacus, vel bibendum mi. Cras
-                            feugiat nunc arcu, vitae commodo turpis porttitor id. Integer accumsan, libero in consequat
-                            consectetur, odio magna laoreet lacus, eu ultricies leo metus a mauris. Curabitur placerat
-                            lectus quis metus pulvinar, elementum tempus ipsum dictum. Etiam imperdiet interdum
-                            ullamcorper. Nulla dolor odio, cursus a felis nec, lacinia ultricies velit. Fusce volutpat
-                            risus ex, a blandit sem tempor et.
+                            But at the very end of our last session together, the Gil presented this new demand that
+                            kind of on top of everything for a per subscriber levy unrelated to viewing or success, and
+                            this really broke our momentum, unfortunately. But you should know, we are incredibly and
+                            totally committed to ending this strike. The industry, our communities and the economy are
+                            all hurting. So we need to get a deal done that respects all sides as soon as we possibly
+                            can.
                         </p>
                     </div>
                     <div className="flex items-center relative z-10">
                         <div className="h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
-                            <p className="font-bold text-base">KS</p>
+                            <p className="font-bold text-base">RH</p>
                         </div>
                         <div className="flex flex-col justify-center ml-2 flex-1">
-                            <p className="text-base leading-[14px] font-bold">Ken Sena</p>
-                            <p className="text-sm text-slate-500 leading-3 mt-1">CEO, Aiera Inc.</p>
+                            <p className="text-base leading-[14px] font-bold">Reed Hastings</p>
+                            <p className="text-sm text-slate-500 leading-3 mt-1">CEO, Netflix, Inc.</p>
                         </div>
                         <div
                             className={classNames(
