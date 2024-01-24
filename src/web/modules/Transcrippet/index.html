@@ -19,7 +19,7 @@
         <script type="text/javascript">
             function sendHeight() {
                 if (parent.postMessage) {
-                    var height = document.getElementById('aiera-event-snippet')?.offsetHeight;
+                    var height = document.getElementById('aiera-transcrippet')?.offsetHeight;
                     if (height) {
                         parent.postMessage(height, '*');
                     }

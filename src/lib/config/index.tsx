@@ -38,6 +38,7 @@ export interface Options {
     transcriptRawEndSeconds?: number;
     transcriptRelativeBeginSeconds?: number;
     transcriptRelativeEndSeconds?: number;
+    transcrippetGuid?: string;
     showAudioPlayer?: boolean;
     showCompanyFilter?: boolean;
     showDownloadButton?: boolean;

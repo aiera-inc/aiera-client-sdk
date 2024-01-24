@@ -6,7 +6,7 @@ import { Provider } from '@aiera/client-sdk/components/Provider';
 import '@aiera/client-sdk/css/styles.css';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
-import { EventSnippet } from '@aiera/client-sdk/modules/EventSnippet';
+import { Transcrippet } from '@aiera/client-sdk/modules/Transcrippet';
 
 const useMessageBus = () => {
     const bus = useMessageListener(
@@ -46,7 +46,7 @@ const App: FC = (): ReactElement => {
             <Provider bus={bus} config={{ moduleName: 'ASR' }}>
                 <Auth apiMode>
                     <div className="h-full">
-                        <EventSnippet />
+                        <Transcrippet />
                     </div>
                 </Auth>
             </Provider>

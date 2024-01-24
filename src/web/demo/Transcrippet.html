@@ -7,7 +7,7 @@
             iframe {
                 border: none;
                 resize: none;
-                width: 500px;
+                width: 550px;
                 overflow: hidden;
             }
         </style>
@@ -16,7 +16,7 @@
         <script src="../embed.js"></script>
         <iframe id="aiera"></iframe>
         <script>
-            const eventSnippet = new Aiera.Module('../modules/EventSnippet/index.html', 'aiera');
+            const eventSnippet = new Aiera.Module('../modules/Transcrippet/index.html', 'aiera');
             eventSnippet.load().then(() => {
                 eventSnippet.authenticateApiKey('5425a8a29e64be45ed728d9bf3df9d3a');
             });
@@ -25,7 +25,7 @@
                 eventSnippet.configure({
                     hideSettings: true,
                     options: {
-                        eventId: '2191898',
+                        transcrippetGuid: '5d5886326b5ba0a4b6dd4f89ea84b574',
                         // darkMode: true,
                     },
                     // overrides: {
