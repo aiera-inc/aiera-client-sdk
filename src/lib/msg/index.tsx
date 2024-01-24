@@ -21,7 +21,7 @@ export interface EventSelected {
     title?: string;
 }
 
-export type AudioOriginUI = 'eventList' | 'playBar' | 'transcriptHeader';
+export type AudioOriginUI = 'eventList' | 'playBar' | 'transcriptHeader' | 'transcrippet';
 export type EventAudioAction = 'play' | 'pause';
 
 export interface EventAudio {

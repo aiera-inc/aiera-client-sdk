@@ -43,7 +43,7 @@ const App: FC = (): ReactElement => {
     const bus = useMessageBus();
     return (
         <StrictMode>
-            <Provider bus={bus} config={{ moduleName: 'ASR' }}>
+            <Provider bus={bus} config={{ moduleName: 'Transcrippet' }}>
                 <Auth apiMode>
                     <div className="h-full">
                         <Transcrippet />
