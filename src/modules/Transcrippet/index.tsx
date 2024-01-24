@@ -1,12 +1,11 @@
 import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
+import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import { Logo } from '@aiera/client-sdk/components/Svg/Logo';
-import { Pause } from '@aiera/client-sdk/components/Svg/Pause';
-import { Play } from '@aiera/client-sdk/components/Svg/Play';
+import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { TranscrippetQuery, TranscrippetQueryVariables } from '@aiera/client-sdk/types/generated';
-import classNames from 'classnames';
 import gql from 'graphql-tag';
-import React, { ReactElement, useCallback, useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { match } from 'ts-pattern';
 import './styles.css';
 
@@ -17,15 +16,39 @@ interface TranscrippetUIProps extends TranscrippetSharedProps {
     transcrippetQuery: QueryResult<TranscrippetQuery, TranscrippetQueryVariables>;
 }
 
+function getSpeakerInitials(fullName?: string | null) {
+    if (!fullName) return 'N/A';
+    const parts = fullName.split(' ');
+    if (parts.length > 0) {
+        const firstName = parts[0];
+        const lastName = parts[parts.length - 1];
+        if (firstName?.charAt(0) && lastName?.charAt(0)) {
+            return `${firstName?.charAt(0)}${lastName?.charAt(0)}`;
+        }
+    }
+
+    return `${fullName.charAt(0)}`;
+}
+
 export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
-    const [isPlaying, setIsPlaying] = useState(false);
-    const togglePlayback = useCallback(() => setIsPlaying((pv) => !pv), []);
     const { transcrippetQuery } = props;
 
     return match(transcrippetQuery)
         .with({ status: 'success' }, ({ data }) => {
             const transcrippet = data?.transcrippet;
-            const { transcript, speakerName, speakerTitle, companyName, companyTicker, eventType } = transcrippet;
+            const {
+                transcript,
+                speakerName,
+                speakerTitle,
+                companyName,
+                companyTicker,
+                eventType,
+                eventDate,
+                eventId,
+                audioUrl,
+                startMs,
+            } = transcrippet;
+            const startTime = startMs ? startMs / 1000 : 0;
             return (
                 <div id="aiera-transcrippet">
                     <div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white px-5 py-[18px] relative antialiased">
@@ -51,40 +74,23 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                         </div>
                         <div className="flex items-center relative z-10">
                             <div className="h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
-                                <p className="font-bold text-base">TS</p>
+                                <p className="font-bold text-base">{getSpeakerInitials(speakerName)}</p>
                             </div>
                             <div className="flex flex-col justify-center ml-2 flex-1">
                                 <p className="text-base leading-[14px] font-bold">{speakerName}</p>
                                 <p className="text-sm text-slate-500 leading-3 mt-1">{speakerTitle}</p>
                             </div>
-                            <div
-                                className={classNames(
-                                    'group flex items-center justify-center w-9 h-9 rounded-full border cursor-pointer shadow-sm dark:border-blue-600',
-                                    {
-                                        'hover:border-blue-500 dark:hover:border-blue-500': !isPlaying,
-                                        'active:border-blue-600 dark:hover:border-blue-700': !isPlaying,
-                                        'border-blue-600': isPlaying,
-                                        'text-blue-600 dark:text-white': !isPlaying,
-                                        'text-white': isPlaying,
-                                        'bg-blue-600': isPlaying,
-                                        'bg-white dark:bg-blue-600': !isPlaying,
-                                        'dark:hover:bg-blue-700': !isPlaying,
-                                        'hover:bg-blue-700 dark:hover:bg-blue-700': isPlaying,
-                                        'hover:border-blue-700': isPlaying,
-                                        'active:bg-blue-800': isPlaying,
-                                        'active:border-blue-800': isPlaying,
-                                        'active:bg-blue-600': !isPlaying,
-                                        'active:text-white': !isPlaying,
-                                    },
-                                    'button__play'
-                                )}
-                                onClick={togglePlayback}
-                            >
-                                {isPlaying ? (
-                                    <Pause className="w-3" />
-                                ) : (
-                                    <Play className="ml-1 w-4 h-4 group-active:text-current" />
-                                )}
+                            <div className="h-8 w-8">
+                                <PlayButton
+                                    metaData={{
+                                        eventDate: eventDate,
+                                        eventType: eventType,
+                                        externalAudioStreamUrl: audioUrl,
+                                    }}
+                                    id={`${eventId}`}
+                                    url={audioUrl}
+                                    offset={startTime}
+                                />
                             </div>
                         </div>
                     </div>
@@ -152,6 +158,9 @@ export interface TranscrippetProps extends TranscrippetSharedProps {
 export function Transcrippet(props: TranscrippetProps): ReactElement {
     const { transcrippetGuid: transcrippetGuidProp = '' } = props;
     const [transcrippetId, setTranscrippetId] = useState(transcrippetGuidProp);
+    const [endMs, setEndMs] = useState<number | null>(null);
+    const [startMs, setStartMs] = useState<number>(0);
+    const audioPlayer = useAudioPlayer();
     const config = useConfig();
 
     useEffect(() => {
@@ -160,7 +169,27 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
         }
     }, [transcrippetId, config, config?.options]);
 
+    // Pause when reaching endMs or end of audio
+    // Seek back to startMs
+    useEffect(() => {
+        if (
+            (endMs && endMs !== startMs && audioPlayer.rawCurrentTime > endMs / 1000) ||
+            audioPlayer.rawCurrentTime >= audioPlayer.rawDuration
+        ) {
+            audioPlayer.rawSeek(startMs / 1000);
+            audioPlayer.pause();
+        }
+    }, [audioPlayer.rawCurrentTime, endMs, startMs]);
+
     const transcrippetQuery = useTranscrippetData(transcrippetId);
+
+    useEffect(() => {
+        if (transcrippetQuery.status === 'success') {
+            const transcrippetData = transcrippetQuery.data.transcrippet;
+            setStartMs(transcrippetData.startMs || 0);
+            setEndMs(transcrippetData.endMs || null);
+        }
+    }, [transcrippetQuery]);
 
     return <TranscrippetUI transcrippetQuery={transcrippetQuery} />;
 }
