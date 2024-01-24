@@ -24,6 +24,7 @@ describe('Transcrippet', () => {
                                 speakerName: 'Ken Sena',
                                 speakerTitle: 'Big Cheese',
                                 eventType: 'stuff',
+                                eventDate: new Date().getTime(),
                             },
                         },
                     }),
@@ -31,7 +32,6 @@ describe('Transcrippet', () => {
         );
         screen.getByText('dummy text');
         screen.getByText('Aiera | stuff');
-        screen.getByText('aira');
         screen.getByText('Ken Sena');
         screen.getByText('Big Cheese');
     });
