@@ -46,7 +46,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
                 userQuery.status === 'error' ||
                 (userQuery.status === 'success' && !userQuery.state.data?.currentUser?.id)
             ) {
-                // setShouldRefetchCurrentUser(true);
+                setShouldRefetchCurrentUser(true);
             }
         }
     }, [currentUser, userQuery.state.data?.currentUser, userQuery.status]);
@@ -54,7 +54,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
     // Check every 5 seconds if we should refetch the RealtimeCurrentUser query
     useInterval(() => {
         if (shouldRefetchCurrentUser) {
-            // userQuery.refetch({ requestPolicy: 'cache-and-network' });
+            userQuery.refetch({ requestPolicy: 'cache-and-network' });
         }
     }, 5000);
 
