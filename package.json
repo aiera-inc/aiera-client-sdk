@@ -117,6 +117,7 @@
         "highcharts": "9.3.2",
         "highcharts-react-official": "3.1.0",
         "highlight-words-core": "1.2.2",
+        "html2canvas": "^1.4.1",
         "lodash.debounce": "^4.0.8",
         "lodash.merge": "4.6.2",
         "luxon": "2.1.1",

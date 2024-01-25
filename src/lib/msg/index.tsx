@@ -37,6 +37,7 @@ export interface MessageBusEvents {
     authenticated: null;
     configure: Config;
     configured: null;
+    'download-screenshot': null;
     'event-audio': EventAudio;
     'event-alert': EventAlert;
     'event-selected': EventSelected;

@@ -403,6 +403,10 @@ export class Module {
         this.emit('configure', config);
     }
 
+    downloadScreenshot() {
+        this.emit('download-screenshot', null);
+    }
+
     setWatchlist(instruments: InstrumentID[]) {
         this.emit('instruments-selected', instruments);
     }

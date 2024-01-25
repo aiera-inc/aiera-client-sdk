@@ -8,6 +8,8 @@ import React, { Fragment, ReactElement, useEffect, useState } from 'react';
 import { match } from 'ts-pattern';
 import './styles.css';
 import classNames from 'classnames';
+import html2canvas from 'html2canvas';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 
 interface TranscrippetSharedProps {}
 
@@ -37,6 +39,25 @@ function sumUpToIndex(array: number[], index: number) {
         }
         return accumulator;
     }, 0);
+}
+
+async function downloadImage() {
+    const download = (blob: string) => {
+        const fakeLink = window.document.createElement('a');
+        fakeLink.classList.add('hidden');
+        fakeLink.download = 'filename';
+        fakeLink.href = blob;
+        document.body.appendChild(fakeLink);
+        fakeLink.click();
+        document.body.removeChild(fakeLink);
+        fakeLink.remove();
+    };
+    const element = document.getElementById('aiera-transcrippet');
+    if (element) {
+        const canvas = await html2canvas(element);
+        const image = canvas.toDataURL('image/png', 1.0);
+        download(image);
+    }
 }
 
 export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
@@ -168,7 +189,10 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     </p>
                                 )}
                             </div>
-                            <p className="text-xs tracking-wide text-orange-600 font-semibold mr-2 uppercase">
+                            <p
+                                onClick={downloadImage}
+                                className="text-xs tracking-wide text-orange-600 font-semibold mr-2 uppercase"
+                            >
                                 {companyTicker}
                             </p>
                         </div>
@@ -266,6 +290,9 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             setEndMs(transcrippetData.endMs || null);
         }
     }, [transcrippetQuery]);
+
+    // Listen for download-screenshot
+    useMessageListener('download-screenshot', downloadImage, 'in');
 
     return <TranscrippetUI transcrippetQuery={transcrippetQuery} />;
 }
