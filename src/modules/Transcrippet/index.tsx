@@ -17,7 +17,7 @@ interface TranscrippetUIProps extends TranscrippetSharedProps {
 }
 
 function getSpeakerInitials(fullName?: string | null) {
-    if (!fullName) return 'N/A';
+    if (!fullName) return '??';
     const parts = fullName.split(' ');
     if (parts.length > 0) {
         const firstName = parts[0];
@@ -75,20 +75,37 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                 <div id="aiera-transcrippet">
                     <div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white px-5 py-[18px] relative antialiased">
                         <div className="flex items-center relative z-10">
-                            <div className="h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
-                                <p className="font-bold text-base">{getSpeakerInitials(speakerName)}</p>
-                            </div>
-                            <div className="flex flex-col justify-center ml-2 flex-1">
-                                <p className="text-base leading-[14px] font-bold">{speakerName}</p>
-                                <p className="text-sm text-slate-500 leading-3 mt-1">
+                            {speakerName ? (
+                                <Fragment>
+                                    <div className="h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+                                        <p className="font-bold text-base">{getSpeakerInitials(speakerName)}</p>
+                                    </div>
+                                    <div className="flex flex-col justify-center ml-2 flex-1">
+                                        <p className="text-base leading-[14px] font-bold">
+                                            {speakerName || 'No Speaker Assigned'}
+                                        </p>
+                                        <p className="text-sm text-slate-500 leading-3 mt-1">
+                                            {companyTicker && (
+                                                <span className="text-slate-600 mr-1 uppercase font-semibold">
+                                                    {companyTicker}
+                                                </span>
+                                            )}
+                                            {speakerTitle || 'Unidentified'}
+                                        </p>
+                                    </div>
+                                </Fragment>
+                            ) : (
+                                <Fragment>
                                     {companyTicker && (
-                                        <span className="text-slate-600 mr-1 uppercase font-semibold">
-                                            {companyTicker}
-                                        </span>
+                                        <div className="h-9 mr-2 px-2 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
+                                            <p className="font-bold text-xs">{companyTicker}</p>
+                                        </div>
                                     )}
-                                    {speakerTitle}
-                                </p>
-                            </div>
+                                    <div className="flex flex-col justify-center flex-1">
+                                        <p className="text-base leading-[14px] font-bold">Event Participant</p>
+                                    </div>
+                                </Fragment>
+                            )}
                             <div className="h-8 w-8">
                                 <PlayButton
                                     metaData={{
@@ -136,7 +153,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                         <div className="flex items-center">
                             <div className="flex flex-col justify-center flex-1">
                                 <p className="text-base font-bold capitalize">
-                                    {companyName} | {eventType}
+                                    {companyName} | {eventType.replace(/_/g, ' ')}
                                 </p>
                                 {eventDate && (
                                     <p className="text-sm text-slate-500 leading-3">
