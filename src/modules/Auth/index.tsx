@@ -185,7 +185,7 @@ export const ApiAuthUI = (props: AuthProps) => {
             <style>{styleOverrides}</style>
             {match(userQuery.status)
                 .with('loading', 'paused', () => (
-                    <div className="relative flex flex-col items-center justify-center w-full h-full">
+                    <div className="relative flex flex-col items-center justify-center w-full h-full min-h-[4rem]">
                         <div className="flex">
                             <div className="w-2 h-2 bg-slate-600 rounded-full animate-bounce animation" />
                             <div className="w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100" />

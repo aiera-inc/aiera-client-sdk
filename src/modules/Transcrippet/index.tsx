@@ -1,6 +1,5 @@
 import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
-import { Logo } from '@aiera/client-sdk/components/Svg/Logo';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { TranscrippetQuery, TranscrippetQueryVariables } from '@aiera/client-sdk/types/generated';
@@ -118,14 +117,11 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
             );
         })
         .otherwise(() => (
-            <div className="relative flex flex-col items-center justify-center w-full h-full min-h-[5rem]">
-                <div className="w-24 mt-6">
-                    <Logo />
-                </div>
-                <div className="flex mt-6">
-                    <div className="w-2 h-2 bg-[#FE590C] rounded-full animate-bounce animation" />
-                    <div className="w-2 h-2 ml-1 bg-[#FE590C] rounded-full animate-bounce animation-delay-100" />
-                    <div className="w-2 h-2 ml-1 bg-[#FE590C] rounded-full animate-bounce animation-delay-200" />
+            <div className="relative flex flex-col items-center justify-center w-full h-full min-h-[4rem]">
+                <div className="flex">
+                    <div className="w-2 h-2 bg-slate-600 rounded-full animate-bounce animation" />
+                    <div className="w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100" />
+                    <div className="w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200" />
                 </div>
             </div>
         ));
