@@ -4,9 +4,10 @@ import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { TranscrippetQuery, TranscrippetQueryVariables } from '@aiera/client-sdk/types/generated';
 import gql from 'graphql-tag';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { Fragment, ReactElement, useEffect, useState } from 'react';
 import { match } from 'ts-pattern';
 import './styles.css';
+import classNames from 'classnames';
 
 interface TranscrippetSharedProps {}
 
@@ -29,8 +30,18 @@ function getSpeakerInitials(fullName?: string | null) {
     return `${fullName.charAt(0)}`;
 }
 
+function sumUpToIndex(array: number[], index: number) {
+    return array.reduce((accumulator, currentValue, currentIndex) => {
+        if (currentIndex <= index) {
+            return accumulator + currentValue;
+        }
+        return accumulator;
+    }, 0);
+}
+
 export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
     const { transcrippetQuery } = props;
+    const audioPlayer = useAudioPlayer();
 
     return match(transcrippetQuery)
         .with({ status: 'success' }, ({ data }) => {
@@ -46,8 +57,20 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                 eventId,
                 audioUrl,
                 startMs,
+                wordDurationsMs,
             } = transcrippet;
             const startTime = startMs ? startMs / 1000 : 0;
+
+            let content: string | string[] = transcript;
+            let durations: number[] = [];
+
+            if (wordDurationsMs && Array.isArray(wordDurationsMs) && wordDurationsMs.length > 0) {
+                content = transcript.split(' ');
+                durations = wordDurationsMs as number[];
+            }
+
+            const wordHighlightEnabled = Array.isArray(content) && startMs && durations.length > 0;
+
             return (
                 <div id="aiera-transcrippet">
                     <div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white px-5 py-[18px] relative antialiased">
@@ -88,7 +111,27 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                             <p className="text-[200px] leading-[100px] font-serif absolute bottom-0 right-2 text-slate-100">
                                 ”
                             </p>
-                            <p className="text-base py-10 px-6 relative z-10">{transcript}</p>
+                            <p
+                                className={classNames('text-base py-10 px-6 relative z-10 transition-all', {
+                                    'text-slate-400': wordHighlightEnabled && !!audioPlayer.playing(eventId),
+                                })}
+                            >
+                                {Array.isArray(content) && startMs && durations.length > 0
+                                    ? content.map((text, index) => (
+                                          <Fragment key={`${text}-${index}`}>
+                                              <span
+                                                  className={classNames('transition-all', {
+                                                      'text-slate-900':
+                                                          audioPlayer.rawCurrentTime >=
+                                                          (startMs + sumUpToIndex(durations, index)) / 1000,
+                                                  })}
+                                              >
+                                                  {text}
+                                              </span>{' '}
+                                          </Fragment>
+                                      ))
+                                    : content}
+                            </p>
                         </div>
                         <div className="flex items-center">
                             <div className="flex flex-col justify-center flex-1">

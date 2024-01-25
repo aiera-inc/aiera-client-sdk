@@ -20,31 +20,16 @@
             eventSnippet.load().then(() => {
                 eventSnippet.authenticateApiKey('5425a8a29e64be45ed728d9bf3df9d3a');
             });
-
             eventSnippet.on('authenticated', () => {
                 eventSnippet.configure({
-                    hideSettings: true,
                     options: {
-                        transcrippetGuid: '3f04723e4d1528f8a62f8e19941066ef',
-                        // darkMode: true,
+                        transcrippetGuid: '57016c27109f5337cd1bedcd9381b433',
                     },
-                    // overrides: {
-                    //     style: `
-                    //         .text-blue-600 {
-                    //             color: #008094 !important;
-                    //         }
-                    //         `,
-                    // },
                     tracking: {
                         userId: 'nash-widget-user',
                     },
                 });
             });
-
-            eventSnippet.on('event-audio', (event) => {
-                console.log(`${event.action} audio:`, event);
-            });
-
             // Create browser compatible event handler.
             var eventMethod = window.addEventListener ? 'addEventListener' : 'attachEvent';
             var eventer = window[eventMethod];
