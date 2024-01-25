@@ -4,7 +4,7 @@ import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { TranscrippetQuery, TranscrippetQueryVariables } from '@aiera/client-sdk/types/generated';
 import gql from 'graphql-tag';
-import React, { Fragment, ReactElement, useEffect, useState } from 'react';
+import React, { Fragment, ReactElement, Ref, useEffect, useRef, useState } from 'react';
 import { match } from 'ts-pattern';
 import './styles.css';
 import classNames from 'classnames';
@@ -16,6 +16,7 @@ interface TranscrippetSharedProps {}
 /** @notExported */
 interface TranscrippetUIProps extends TranscrippetSharedProps {
     transcrippetQuery: QueryResult<TranscrippetQuery, TranscrippetQueryVariables>;
+    transcrippetRef: Ref<HTMLDivElement>;
 }
 
 function getSpeakerInitials(fullName?: string | null) {
@@ -61,7 +62,7 @@ async function downloadImage() {
 }
 
 export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
-    const { transcrippetQuery } = props;
+    const { transcrippetQuery, transcrippetRef } = props;
     const audioPlayer = useAudioPlayer();
 
     return match(transcrippetQuery)
@@ -93,7 +94,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
             const wordHighlightEnabled = Array.isArray(content) && startMs && durations.length > 0;
 
             return (
-                <div id="aiera-transcrippet">
+                <div ref={transcrippetRef} id="aiera-transcrippet">
                     <div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white px-5 py-[18px] relative antialiased">
                         <div className="flex items-center relative z-10">
                             {speakerName ? (
@@ -262,6 +263,26 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
     const [startMs, setStartMs] = useState<number>(0);
     const audioPlayer = useAudioPlayer();
     const config = useConfig();
+    const transcrippetRef = useRef<HTMLDivElement>(null);
+
+    // Listen for download-screenshot
+    const bus = useMessageListener('download-screenshot', downloadImage, 'in');
+
+    // Send up height
+    useEffect(() => {
+        const container = document.getElementById('root');
+        const resizeObserver = new ResizeObserver((entries) => {
+            entries.forEach(() => {
+                const height = transcrippetRef.current?.offsetHeight;
+                if (height) {
+                    bus.emit('transcrippet-height', height, 'out');
+                }
+            });
+        });
+        if (container) {
+            resizeObserver.observe(container);
+        }
+    }, []);
 
     useEffect(() => {
         if (!transcrippetId && config?.options?.transcrippetGuid) {
@@ -291,8 +312,5 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
         }
     }, [transcrippetQuery]);
 
-    // Listen for download-screenshot
-    useMessageListener('download-screenshot', downloadImage, 'in');
-
-    return <TranscrippetUI transcrippetQuery={transcrippetQuery} />;
+    return <TranscrippetUI transcrippetRef={transcrippetRef} transcrippetQuery={transcrippetQuery} />;
 }

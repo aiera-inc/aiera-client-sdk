@@ -5,6 +5,20 @@ import { actAndFlush, renderWithProvider } from 'testUtils';
 import { fromValue } from 'wonka';
 import { Transcrippet } from '.';
 
+class ResizeObserverMock {
+    observe() {
+        // Mock the observe method
+    }
+    unobserve() {
+        // Mock the unobserve method
+    }
+    disconnect() {
+        // Mock the disconnect method
+    }
+}
+
+global.ResizeObserver = ResizeObserverMock;
+
 describe('Transcrippet', () => {
     afterEach(() => {
         jest.clearAllTimers();
