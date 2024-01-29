@@ -23,26 +23,16 @@
             eventSnippet.on('authenticated', () => {
                 eventSnippet.configure({
                     options: {
-                        transcrippetGuid: '57016c27109f5337cd1bedcd9381b433',
+                        transcrippetGuid: '7a4b067b4a05b70b1367589efd84ea00',
                     },
                     tracking: {
                         userId: 'nash-widget-user',
                     },
                 });
             });
-            // Create browser compatible event handler.
-            var eventMethod = window.addEventListener ? 'addEventListener' : 'attachEvent';
-            var eventer = window[eventMethod];
-            var messageEvent = eventMethod == 'attachEvent' ? 'onmessage' : 'message';
-            // Listen for a message from the iframe.
-            eventer(
-                messageEvent,
-                function (e) {
-                    if (isNaN(e.data)) return;
-                    document.getElementById('aiera').style.height = e.data + 'px';
-                },
-                false
-            );
+            eventSnippet.on('transcrippet-height', (height) => {
+                document.getElementById('aiera').style.height = height + 'px';
+            });
         </script>
     </body>
 </html>

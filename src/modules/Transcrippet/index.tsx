@@ -42,11 +42,11 @@ function sumUpToIndex(array: number[], index: number) {
     }, 0);
 }
 
-async function downloadImage() {
+async function downloadImage(id?: string) {
     const download = (blob: string) => {
         const fakeLink = window.document.createElement('a');
         fakeLink.classList.add('hidden');
-        fakeLink.download = 'filename';
+        fakeLink.download = `aiera-transcrippet-${id || new Date().getTime()}`;
         fakeLink.href = blob;
         document.body.appendChild(fakeLink);
         fakeLink.click();
@@ -128,7 +128,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     </div>
                                 </Fragment>
                             )}
-                            <div className="h-8 w-8">
+                            <div data-html2canvas-ignore="true" className="h-8 w-8">
                                 <PlayButton
                                     metaData={{
                                         localTicker: typeof companyTicker === 'string' ? companyTicker : undefined,
@@ -144,10 +144,16 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                             </div>
                         </div>
                         <div>
-                            <p className="text-[200px] leading-[200px] font-serif absolute top-14 left-2 text-slate-100">
+                            <p
+                                data-html2canvas-ignore="true"
+                                className="text-[200px] leading-[200px] font-serif absolute top-14 left-2 text-slate-100"
+                            >
                                 “
                             </p>
-                            <p className="text-[200px] leading-[100px] font-serif absolute bottom-0 right-2 text-slate-100">
+                            <p
+                                data-html2canvas-ignore="true"
+                                className="text-[200px] leading-[100px] font-serif absolute bottom-0 right-2 text-slate-100"
+                            >
                                 ”
                             </p>
                             <p
@@ -190,10 +196,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     </p>
                                 )}
                             </div>
-                            <p
-                                onClick={downloadImage}
-                                className="text-xs tracking-wide text-orange-600 font-semibold mr-2 uppercase"
-                            >
+                            <p className="text-xs tracking-wide text-orange-600 font-semibold mr-2 uppercase">
                                 {companyTicker}
                             </p>
                         </div>
@@ -266,7 +269,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
     const transcrippetRef = useRef<HTMLDivElement>(null);
 
     // Listen for download-screenshot
-    const bus = useMessageListener('download-screenshot', downloadImage, 'in');
+    const bus = useMessageListener('download-screenshot', () => downloadImage(transcrippetId), 'in');
 
     // Send up height
     useEffect(() => {
