@@ -257,6 +257,9 @@
     configure(config) {
       this.emit("configure", config);
     }
+    downloadScreenshot() {
+      this.emit("download-screenshot", null);
+    }
     setWatchlist(instruments) {
       this.emit("instruments-selected", instruments);
     }

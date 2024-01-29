@@ -81531,6 +81531,30 @@ var UpdatePrivateRecordingDocument = lib_default`
   }
 }
     `;
+var TranscrippetDocument = lib_default`
+    query Transcrippet($transcrippetGuid: String!) {
+  transcrippet(transcrippetGuid: $transcrippetGuid) {
+    audioUrl
+    companyId
+    companyLogoUrl
+    companyName
+    companyTicker
+    endMs
+    eventDate
+    eventId
+    eventType
+    id
+    speakerId
+    speakerName
+    speakerTitle
+    startMs
+    status
+    transcript
+    transcriptionAudioOffsetSeconds
+    wordDurationsMs
+  }
+}
+    `;
 var CurrentUserQueryDocument = lib_default`
     query CurrentUserQuery {
   currentUser {
@@ -81897,7 +81921,7 @@ var ApiAuthUI = (props) => {
   const config = useConfig();
   const styleOverrides = (_a = config.overrides) == null ? void 0 : _a.style;
   return /* @__PURE__ */ import_react16.default.createElement(import_react16.default.Fragment, null, /* @__PURE__ */ import_react16.default.createElement("style", null, styleOverrides), (0, import_ts_pattern2.match)(userQuery.status).with("loading", "paused", () => /* @__PURE__ */ import_react16.default.createElement("div", {
-    className: "relative flex flex-col items-center justify-center w-full h-full"
+    className: "relative flex flex-col items-center justify-center w-full h-full min-h-[4rem]"
   }, /* @__PURE__ */ import_react16.default.createElement("div", {
     className: "flex"
   }, /* @__PURE__ */ import_react16.default.createElement("div", {

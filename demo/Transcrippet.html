@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            iframe {
+                border: none;
+                resize: none;
+                width: 550px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            const eventSnippet = new Aiera.Module('../modules/Transcrippet/index.html', 'aiera');
+            eventSnippet.load().then(() => {
+                eventSnippet.authenticateApiKey('5425a8a29e64be45ed728d9bf3df9d3a');
+            });
+            eventSnippet.on('authenticated', () => {
+                eventSnippet.configure({
+                    options: {
+                        transcrippetGuid: '7a4b067b4a05b70b1367589efd84ea00',
+                    },
+                    tracking: {
+                        userId: 'nash-widget-user',
+                    },
+                });
+            });
+            eventSnippet.on('transcrippet-height', (height) => {
+                document.getElementById('aiera').style.height = height + 'px';
+            });
+        </script>
+    </body>
+</html>

@@ -79,6 +79,7 @@ export declare class Module {
      * so the settings are used from initialization
      */
     configure(config: Config): void;
+    downloadScreenshot(): void;
     setWatchlist(instruments: InstrumentID[]): void;
     seekTranscriptSeconds(seconds: number): void;
     seekTranscriptTimestamp(timestamp: string): void;
