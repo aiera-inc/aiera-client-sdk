@@ -86847,14 +86847,14 @@ var TranscriptUI = (props) => {
       }
       return /* @__PURE__ */ import_react65.default.createElement("div", {
         onClick: toggleSummary,
-        className: "mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 rounded-b-lg px-3 py-2.5 summaryContainer"
+        className: "mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 dark:bg-bluegray-6/50 rounded-b-lg px-3 py-2.5 summaryContainer"
       }, /* @__PURE__ */ import_react65.default.createElement("p", {
-        className: "text-xs tracking-wide text-slate-400 font-bold mb-1 summaryLabel"
+        className: "text-xs tracking-wide text-slate-400 dark:text-slate-100/20 font-bold mb-1 summaryLabel"
       }, "AI SUMMARY"), /* @__PURE__ */ import_react65.default.createElement("h2", {
-        className: "font-bold leading-[1.1875rem] tracking-tight text-base summaryTitle"
+        className: "font-bold dark:text-slate-100 dark:antialiased leading-[1.1875rem] tracking-tight text-base summaryTitle"
       }, summaryObj == null ? void 0 : summaryObj.title), summaryTexts.map((summaryText) => /* @__PURE__ */ import_react65.default.createElement("p", {
         key: summaryText.slice(0, 10),
-        className: (0, import_classnames38.default)("text-sm mt-2 text-slate-700 group-hover:text-slate-900 summaryText", {
+        className: (0, import_classnames38.default)("text-sm mt-2 text-slate-700 dark:text-slate-200/30 group-hover:text-slate-900 dark:group-hover:text-slate-200/60 summaryText", {
           truncate: !showSummary
         })
       }, summaryText)));
