@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import html2canvas from 'html2canvas';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 
-const PUBLIC_TRANSCRIPPET_URL = 'https://public.aiera.com/snippet/snippet-component.html?id=';
+const PUBLIC_TRANSCRIPPET_URL = 'https://public.aiera.com/shared/transcrippet.html?id=';
 
 interface TranscrippetSharedProps {}
 
