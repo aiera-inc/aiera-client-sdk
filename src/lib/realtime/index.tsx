@@ -9,6 +9,8 @@ import { useAppConfig } from '@aiera/client-sdk/lib/data';
 import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { AppConfigQuery, RealtimeCurrentUserQuery } from '@aiera/client-sdk/types/generated';
 
+const CURRENT_USER_REFETCH_LIMIT = 50;
+
 type AppConfiguration = AppConfigQuery['configuration'];
 type RealtimeCurrentUser = RealtimeCurrentUserQuery['currentUser'];
 
@@ -24,6 +26,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
     // And only then set the Pusher client
     const [appConfig, setAppConfig] = useState<AppConfiguration | undefined>(undefined);
     const [currentUser, setCurrentUser] = useState<RealtimeCurrentUser | undefined>(undefined);
+    const [currentUserRefetchCount, setCurrentUserRefetchCount] = useState<number>(0);
     const [shouldRefetchCurrentUser, setShouldRefetchCurrentUser] = useState<boolean>(false);
 
     // Auth needed to retrieve Pusher config from server
@@ -51,10 +54,18 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
         }
     }, [currentUser, userQuery.state.data?.currentUser, userQuery.status]);
 
+    // Stop polling RealtimeCurrentUser after 100 failed attempts
+    useEffect(() => {
+        if (currentUserRefetchCount >= CURRENT_USER_REFETCH_LIMIT) {
+            setShouldRefetchCurrentUser(false);
+        }
+    }, [currentUserRefetchCount]);
+
     // Check every 5 seconds if we should refetch the RealtimeCurrentUser query
     useInterval(() => {
         if (shouldRefetchCurrentUser) {
             userQuery.refetch({ requestPolicy: 'cache-and-network' });
+            setCurrentUserRefetchCount(currentUserRefetchCount + 1);
         }
     }, 5000);
 

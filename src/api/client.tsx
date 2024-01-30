@@ -99,9 +99,15 @@ function createGQLClient(config: Config): Client {
         // Cast needed because of the filter
     ) as Exchange[];
 
+    const fetchOptions: RequestInit = {};
+    if (config.moduleName) {
+        fetchOptions.headers = { Component: config.moduleName };
+    }
+
     return createClient({
         ...(config.gqlOptions?.clientOptions || { url: '' }),
         exchanges,
+        fetchOptions,
         requestPolicy: 'cache-and-network',
     });
 }
