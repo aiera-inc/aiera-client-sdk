@@ -20,6 +20,10 @@ class ResizeObserverMock {
 global.ResizeObserver = ResizeObserverMock;
 
 describe('Transcrippet', () => {
+    beforeEach(() => {
+        jest.useFakeTimers();
+    });
+
     afterEach(() => {
         jest.clearAllTimers();
         jest.useRealTimers();

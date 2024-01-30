@@ -13,6 +13,8 @@ import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 
 const PUBLIC_TRANSCRIPPET_URL = 'https://public.aiera.com/shared/transcrippet.html?id=';
 
+type Transcrippet = TranscrippetQuery['transcrippet'];
+
 interface TranscrippetSharedProps {}
 
 /** @notExported */
@@ -243,7 +245,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
 }
 
 function useTranscrippetData(id = '') {
-    const transcrippetQuery = useQuery<TranscrippetQuery, TranscrippetQueryVariables>({
+    return useQuery<TranscrippetQuery, TranscrippetQueryVariables>({
         query: gql`
             query Transcrippet($transcrippetGuid: String!) {
                 transcrippet(transcrippetGuid: $transcrippetGuid) {
@@ -274,8 +276,6 @@ function useTranscrippetData(id = '') {
             transcrippetGuid: id,
         },
     });
-
-    return transcrippetQuery;
 }
 
 /** @notExported */
@@ -289,6 +289,7 @@ export interface TranscrippetProps extends TranscrippetSharedProps {
 export function Transcrippet(props: TranscrippetProps): ReactElement {
     const { transcrippetGuid: transcrippetGuidProp = '' } = props;
     const [transcrippetId, setTranscrippetId] = useState(transcrippetGuidProp);
+    const [eventId, setEventId] = useState<string | undefined>(undefined);
     const [endMs, setEndMs] = useState<number | null>(null);
     const [startMs, setStartMs] = useState<number>(0);
     const audioPlayer = useAudioPlayer();
@@ -320,6 +321,8 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
         }
     }, [transcrippetId, config, config?.options]);
 
+    const transcrippetQuery = useTranscrippetData(transcrippetId);
+
     // Pause when reaching endMs or end of audio
     // Seek back to startMs
     useEffect(() => {
@@ -328,17 +331,20 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             audioPlayer.rawCurrentTime >= audioPlayer.rawDuration
         ) {
             audioPlayer.rawSeek(startMs / 1000);
-            audioPlayer.pause();
+            if (eventId && audioPlayer.playing(eventId)) {
+                audioPlayer.pause();
+            }
         }
-    }, [audioPlayer.rawCurrentTime, endMs, startMs]);
-
-    const transcrippetQuery = useTranscrippetData(transcrippetId);
+    }, [audioPlayer.rawCurrentTime, eventId, endMs, startMs]);
 
     useEffect(() => {
         if (transcrippetQuery.status === 'success') {
-            const transcrippetData = transcrippetQuery.data.transcrippet;
-            setStartMs(transcrippetData.startMs || 0);
-            setEndMs(transcrippetData.endMs || null);
+            const transcrippetData = transcrippetQuery.state.data?.transcrippet;
+            if (transcrippetData) {
+                setEventId(transcrippetData.eventId);
+                setStartMs(transcrippetData.startMs || 0);
+                setEndMs(transcrippetData.endMs || null);
+            }
         }
     }, [transcrippetQuery]);
 
