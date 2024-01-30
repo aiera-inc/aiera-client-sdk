@@ -11,10 +11,13 @@ import classNames from 'classnames';
 import html2canvas from 'html2canvas';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 
+const PUBLIC_TRANSCRIPPET_URL = 'https://public.aiera.com/snippet/snippet-component.html?id=';
+
 interface TranscrippetSharedProps {}
 
 /** @notExported */
 interface TranscrippetUIProps extends TranscrippetSharedProps {
+    id?: string;
     transcrippetQuery: QueryResult<TranscrippetQuery, TranscrippetQueryVariables>;
     transcrippetRef: Ref<HTMLDivElement>;
 }
@@ -62,7 +65,7 @@ async function downloadImage(id?: string) {
 }
 
 export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
-    const { transcrippetQuery, transcrippetRef } = props;
+    const { transcrippetQuery, transcrippetRef, id } = props;
     const audioPlayer = useAudioPlayer();
 
     return match(transcrippetQuery)
@@ -103,9 +106,21 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                         <p className="font-bold text-base">{getSpeakerInitials(speakerName)}</p>
                                     </div>
                                     <div className="flex flex-col justify-center ml-2 flex-1">
-                                        <p className="text-base leading-[14px] font-bold">
-                                            {speakerName || 'No Speaker Assigned'}
-                                        </p>
+                                        {id ? (
+                                            <a
+                                                href={`${PUBLIC_TRANSCRIPPET_URL}${id}`}
+                                                target="_blank"
+                                                className="text-base font-bold leading-[14px] hover:text-indigo-700 hover:underline"
+                                                title="Open Shareable Link"
+                                                rel="noreferrer"
+                                            >
+                                                {speakerName || 'No Speaker Assigned'}
+                                            </a>
+                                        ) : (
+                                            <p className="text-base leading-[14px] font-bold">
+                                                {speakerName || 'No Speaker Assigned'}
+                                            </p>
+                                        )}
                                         <p className="text-sm text-slate-500 leading-3 mt-1">
                                             {companyTicker && (
                                                 <span className="text-slate-600 mr-1 uppercase font-semibold">
@@ -180,9 +195,21 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                         </div>
                         <div className="flex items-center">
                             <div className="flex flex-col justify-center flex-1">
-                                <p className="text-base font-bold capitalize">
-                                    {companyName} | {eventType.replace(/_/g, ' ')}
-                                </p>
+                                {id ? (
+                                    <a
+                                        href={`${PUBLIC_TRANSCRIPPET_URL}${id}`}
+                                        target="_blank"
+                                        className="text-base font-bold capitalize hover:text-indigo-700 hover:underline"
+                                        title="Open Shareable Link"
+                                        rel="noreferrer"
+                                    >
+                                        {companyName} | {eventType.replace(/_/g, ' ')}
+                                    </a>
+                                ) : (
+                                    <p className="text-base font-bold capitalize">
+                                        {companyName} | {eventType.replace(/_/g, ' ')}
+                                    </p>
+                                )}
                                 {eventDate && (
                                     <p className="text-sm text-slate-500 leading-3">
                                         {new Date(eventDate).toLocaleString('en-US', {
@@ -315,5 +342,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
         }
     }, [transcrippetQuery]);
 
-    return <TranscrippetUI transcrippetRef={transcrippetRef} transcrippetQuery={transcrippetQuery} />;
+    return (
+        <TranscrippetUI id={transcrippetId} transcrippetRef={transcrippetRef} transcrippetQuery={transcrippetQuery} />
+    );
 }
