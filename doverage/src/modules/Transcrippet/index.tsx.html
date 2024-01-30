@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">59.74% </span>
+                <span class="strong">60% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>46/77</span>
+                <span class='fraction'>48/80</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45.2% </span>
+                <span class="strong">45.56% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>33/73</span>
+                <span class='fraction'>36/79</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.33% </span>
+                <span class="strong">61.53% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>46/75</span>
+                <span class='fraction'>48/78</span>
             </div>
         
             
@@ -411,7 +411,11 @@
 <a name='L346'></a><a href='#L346'>346</a>
 <a name='L347'></a><a href='#L347'>347</a>
 <a name='L348'></a><a href='#L348'>348</a>
-<a name='L349'></a><a href='#L349'>349</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L349'></a><a href='#L349'>349</a>
+<a name='L350'></a><a href='#L350'>350</a>
+<a name='L351'></a><a href='#L351'>351</a>
+<a name='L352'></a><a href='#L352'>352</a>
+<a name='L353'></a><a href='#L353'>353</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -688,18 +692,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -733,6 +736,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
@@ -742,16 +747,19 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1004,7 +1012,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
 }
 &nbsp;
 function useTranscrippetData(id = <span class="branch-0 cbranch-no" title="branch not covered" >'')</span> {
-    const transcrippetQuery = useQuery&lt;TranscrippetQuery, TranscrippetQueryVariables&gt;({
+    return useQuery&lt;TranscrippetQuery, TranscrippetQueryVariables&gt;({
         query: gql`
             query Transcrippet($transcrippetGuid: String!) {
                 transcrippet(transcrippetGuid: $transcrippetGuid) {
@@ -1035,8 +1043,6 @@ function useTranscrippetData(id = <span class="branch-0 cbranch-no" title="branc
             transcrippetGuid: id,
         },
     });
-&nbsp;
-    return transcrippetQuery;
 }
 &nbsp;
 /** @notExported */
@@ -1050,6 +1056,7 @@ export interface TranscrippetProps extends TranscrippetSharedProps {
 export function Transcrippet(props: TranscrippetProps): ReactElement {
     const { transcrippetGuid: transcrippetGuidProp = <span class="branch-0 cbranch-no" title="branch not covered" >'' </span>} = props;
     const [transcrippetId, setTranscrippetId] = useState(transcrippetGuidProp);
+    const [eventId, setEventId] = useState&lt;string | undefined&gt;(undefined);
     const [endMs, setEndMs] = useState&lt;number | null&gt;(null);
     const [startMs, setStartMs] = useState&lt;number&gt;(0);
     const audioPlayer = useAudioPlayer();
@@ -1081,6 +1088,8 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
         }
     }, [transcrippetId, config, config?.options]);
 &nbsp;
+    const transcrippetQuery = useTranscrippetData(transcrippetId);
+&nbsp;
     // Pause when reaching endMs or end of audio
     // Seek back to startMs
     useEffect(() =&gt; {
@@ -1089,17 +1098,20 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             audioPlayer.rawCurrentTime &gt;= audioPlayer.rawDuration
         ) {
             audioPlayer.rawSeek(startMs / 1000);
-            audioPlayer.pause();
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (eventId &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >audioPlayer.playing(eventId))</span> {
+<span class="cstat-no" title="statement not covered" >                audioPlayer.pause();</span>
+            }
         }
-    }, [audioPlayer.rawCurrentTime, endMs, startMs]);
-&nbsp;
-    const transcrippetQuery = useTranscrippetData(transcrippetId);
+    }, [audioPlayer.rawCurrentTime, eventId, endMs, startMs]);
 &nbsp;
     useEffect(() =&gt; {
         if (transcrippetQuery.status === 'success') {
-            const transcrippetData = transcrippetQuery.data.transcrippet;
-            setStartMs(transcrippetData.startMs || 0);
-            setEndMs(transcrippetData.endMs || null);
+            const transcrippetData = transcrippetQuery.state.data?.transcrippet;
+            if (transcrippetData) {
+                setEventId(transcrippetData.eventId);
+                setStartMs(transcrippetData.startMs || 0);
+                setEndMs(transcrippetData.endMs || null);
+            }
         }
     }, [transcrippetQuery]);
 &nbsp;
@@ -1114,7 +1126,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Jan 30 2024 12:17:01 GMT-0500 (Eastern Standard Time)
+                at Tue Jan 30 2024 16:44:10 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

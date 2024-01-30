@@ -71385,8 +71385,13 @@ function createGQLClient(config) {
     auth ? authExchange(auth) : null,
     fetchExchange
   ].filter((t2) => t2);
+  const fetchOptions = {};
+  if (config.moduleName) {
+    fetchOptions.headers = { Component: config.moduleName };
+  }
   return z(__spreadProps(__spreadValues({}, ((_b = config.gqlOptions) == null ? void 0 : _b.clientOptions) || { url: "" }), {
     exchanges,
+    fetchOptions,
     requestPolicy: "cache-and-network"
   }));
 }
@@ -73711,7 +73716,7 @@ function TranscrippetUI(props) {
   }))));
 }
 function useTranscrippetData(id = "") {
-  const transcrippetQuery = useQuery2({
+  return useQuery2({
     query: lib_default`
             query Transcrippet($transcrippetGuid: String!) {
                 transcrippet(transcrippetGuid: $transcrippetGuid) {
@@ -73742,11 +73747,11 @@ function useTranscrippetData(id = "") {
       transcrippetGuid: id
     }
   });
-  return transcrippetQuery;
 }
 function Transcrippet(props) {
   const { transcrippetGuid: transcrippetGuidProp = "" } = props;
   const [transcrippetId, setTranscrippetId] = (0, import_react27.useState)(transcrippetGuidProp);
+  const [eventId, setEventId] = (0, import_react27.useState)(void 0);
   const [endMs, setEndMs] = (0, import_react27.useState)(null);
   const [startMs, setStartMs] = (0, import_react27.useState)(0);
   const audioPlayer = useAudioPlayer();
@@ -73774,18 +73779,24 @@ function Transcrippet(props) {
       setTranscrippetId(config.options.transcrippetGuid);
     }
   }, [transcrippetId, config, config == null ? void 0 : config.options]);
+  const transcrippetQuery = useTranscrippetData(transcrippetId);
   (0, import_react27.useEffect)(() => {
     if (endMs && endMs !== startMs && audioPlayer.rawCurrentTime > endMs / 1e3 || audioPlayer.rawCurrentTime >= audioPlayer.rawDuration) {
       audioPlayer.rawSeek(startMs / 1e3);
-      audioPlayer.pause();
+      if (eventId && audioPlayer.playing(eventId)) {
+        audioPlayer.pause();
+      }
     }
-  }, [audioPlayer.rawCurrentTime, endMs, startMs]);
-  const transcrippetQuery = useTranscrippetData(transcrippetId);
+  }, [audioPlayer.rawCurrentTime, eventId, endMs, startMs]);
   (0, import_react27.useEffect)(() => {
+    var _a;
     if (transcrippetQuery.status === "success") {
-      const transcrippetData = transcrippetQuery.data.transcrippet;
-      setStartMs(transcrippetData.startMs || 0);
-      setEndMs(transcrippetData.endMs || null);
+      const transcrippetData = (_a = transcrippetQuery.state.data) == null ? void 0 : _a.transcrippet;
+      if (transcrippetData) {
+        setEventId(transcrippetData.eventId);
+        setStartMs(transcrippetData.startMs || 0);
+        setEndMs(transcrippetData.endMs || null);
+      }
     }
   }, [transcrippetQuery]);
   return /* @__PURE__ */ import_react27.default.createElement(TranscrippetUI, {

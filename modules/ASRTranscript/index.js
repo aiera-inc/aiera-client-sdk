@@ -80564,8 +80564,13 @@ function createGQLClient(config) {
     auth ? authExchange(auth) : null,
     fetchExchange
   ].filter((t2) => t2);
+  const fetchOptions = {};
+  if (config.moduleName) {
+    fetchOptions.headers = { Component: config.moduleName };
+  }
   return z(__spreadProps(__spreadValues({}, ((_b = config.gqlOptions) == null ? void 0 : _b.clientOptions) || { url: "" }), {
     exchanges,
+    fetchOptions,
     requestPolicy: "cache-and-network"
   }));
 }
