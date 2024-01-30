@@ -73543,6 +73543,7 @@ var import_react27 = __toModule(require_react());
 var import_ts_pattern4 = __toModule(require_lib());
 var import_classnames10 = __toModule(require_classnames());
 var import_html2canvas = __toModule(require_html2canvas());
+var PUBLIC_TRANSCRIPPET_URL = "https://public.aiera.com/snippet/snippet-component.html?id=";
 function getSpeakerInitials(fullName) {
   if (!fullName)
     return "??";
@@ -73585,7 +73586,7 @@ function downloadImage(id) {
   });
 }
 function TranscrippetUI(props) {
-  const { transcrippetQuery, transcrippetRef } = props;
+  const { transcrippetQuery, transcrippetRef, id } = props;
   const audioPlayer = useAudioPlayer();
   return (0, import_ts_pattern4.match)(transcrippetQuery).with({ status: "success" }, ({ data }) => {
     const transcrippet = data == null ? void 0 : data.transcrippet;
@@ -73623,7 +73624,13 @@ function TranscrippetUI(props) {
       className: "font-bold text-base"
     }, getSpeakerInitials(speakerName))), /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex flex-col justify-center ml-2 flex-1"
-    }, /* @__PURE__ */ import_react27.default.createElement("p", {
+    }, id ? /* @__PURE__ */ import_react27.default.createElement("a", {
+      href: `${PUBLIC_TRANSCRIPPET_URL}${id}`,
+      target: "_blank",
+      className: "text-base font-bold leading-[14px] hover:text-indigo-700 hover:underline",
+      title: "Open Shareable Link",
+      rel: "noreferrer"
+    }, speakerName || "No Speaker Assigned") : /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "text-base leading-[14px] font-bold"
     }, speakerName || "No Speaker Assigned"), /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "text-sm text-slate-500 leading-3 mt-1"
@@ -73671,7 +73678,13 @@ function TranscrippetUI(props) {
       className: "flex items-center"
     }, /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex flex-col justify-center flex-1"
-    }, /* @__PURE__ */ import_react27.default.createElement("p", {
+    }, id ? /* @__PURE__ */ import_react27.default.createElement("a", {
+      href: `${PUBLIC_TRANSCRIPPET_URL}${id}`,
+      target: "_blank",
+      className: "text-base font-bold capitalize hover:text-indigo-700 hover:underline",
+      title: "Open Shareable Link",
+      rel: "noreferrer"
+    }, companyName, " | ", eventType.replace(/_/g, " ")) : /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "text-base font-bold capitalize"
     }, companyName, " | ", eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "text-sm text-slate-500 leading-3"
@@ -73776,6 +73789,7 @@ function Transcrippet(props) {
     }
   }, [transcrippetQuery]);
   return /* @__PURE__ */ import_react27.default.createElement(TranscrippetUI, {
+    id: transcrippetId,
     transcrippetRef,
     transcrippetQuery
   });
