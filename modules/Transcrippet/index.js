@@ -73543,7 +73543,7 @@ var import_react27 = __toModule(require_react());
 var import_ts_pattern4 = __toModule(require_lib());
 var import_classnames10 = __toModule(require_classnames());
 var import_html2canvas = __toModule(require_html2canvas());
-var PUBLIC_TRANSCRIPPET_URL = "https://public.aiera.com/snippet/snippet-component.html?id=";
+var PUBLIC_TRANSCRIPPET_URL = "https://public.aiera.com/shared/transcrippet.html?id=";
 function getSpeakerInitials(fullName) {
   if (!fullName)
     return "??";
