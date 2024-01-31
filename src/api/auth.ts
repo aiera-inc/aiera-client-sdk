@@ -22,9 +22,9 @@ export { UrqlAuthConfig };
  * helpers for writing/reading
  */
 export interface TokenAuthConfig<T> extends UrqlAuthConfig<T> {
+    clearAuth: () => Promise<void>;
     readAuth: () => Promise<T | null>;
     writeAuth: (authState: T) => Promise<void>;
-    clearAuth: () => Promise<void>;
 }
 
 export type AuthTokens = {
@@ -33,6 +33,32 @@ export type AuthTokens = {
     /** A bearer token to be passed in HTTP Authorization header,
      * only when requesting a new accessToken */
     refreshToken: string;
+};
+
+type DecodedJWT = {
+    exp?: number;
+};
+
+const decodeJWT = (token: string): DecodedJWT | null => {
+    let decoded: DecodedJWT | null = null;
+    try {
+        const base64Url = token.split('.')[1];
+        if (base64Url) {
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(
+                atob(base64)
+                    .split('')
+                    .map(function (c) {
+                        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+                    })
+                    .join('')
+            );
+            decoded = JSON.parse(jsonPayload) as DecodedJWT;
+        }
+    } catch (error) {
+        console.error('Error decoding JWT: ', error);
+    }
+    return decoded;
 };
 
 /**
@@ -55,20 +81,16 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
 
             return Promise.resolve(null);
         },
-
         writeAuth: async (authState) => {
             await store.put('auth:accessToken', authState.accessToken);
             await store.put('auth:refreshToken', authState.refreshToken);
             return Promise.resolve();
         },
-
         clearAuth: async () => {
             await store.del('auth:accessToken');
             await store.del('auth:refreshToken');
             return Promise.resolve();
         },
-
-        // eslint-disable-next-line @typescript-eslint/require-await
         getAuth: async ({ authState, mutate }) => {
             if (!authState) {
                 return authConfig.readAuth();
@@ -93,10 +115,6 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
             }
             return null;
         },
-
-        /**
-         * some sstuff
-         */
         addAuthToOperation: ({ authState, operation }) => {
             if (!authState || !authState.accessToken) {
                 return operation;
@@ -124,7 +142,6 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
                 },
             });
         },
-
         didAuthError: ({ error }) => {
             if (error?.graphQLErrors?.some((e) => e.extensions?.code === 'UNAUTHORIZED')) {
                 return true;
@@ -133,6 +150,15 @@ export function createTokenAuthConfig(store: Storage = storage): TokenAuthConfig
                 return resp.status === 401;
             }
             return false;
+        },
+        willAuthError: ({ authState }) => {
+            if (authState?.refreshToken) {
+                const decodedToken = decodeJWT(authState.refreshToken);
+                if (decodedToken && decodedToken.exp) {
+                    return Date.now() >= decodedToken.exp * 1000; // true if expired, triggers addAuthToOperation
+                }
+            }
+            return false; // no refreshToken or unable to decode, do nothing
         },
     };
 
