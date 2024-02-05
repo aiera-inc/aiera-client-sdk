@@ -73673,13 +73673,17 @@ function TranscrippetUI(props) {
       className: (0, import_classnames10.default)("text-base py-10 px-6 relative z-10 transition-all", {
         "text-slate-400": wordHighlightEnabled && !!audioPlayer.playing(eventId)
       })
-    }, Array.isArray(content) && startMs && durations.length > 0 ? content.map((text, index) => /* @__PURE__ */ import_react27.default.createElement(import_react27.Fragment, {
-      key: `${text}-${index}`
-    }, /* @__PURE__ */ import_react27.default.createElement("span", {
-      className: (0, import_classnames10.default)("transition-all", {
-        "text-slate-900": audioPlayer.rawCurrentTime >= (startMs + sumUpToIndex(durations, index)) / 1e3
-      })
-    }, text), " ")) : content)), /* @__PURE__ */ import_react27.default.createElement("div", {
+    }, Array.isArray(content) && startMs && durations.length > 0 ? content.map((text, index) => {
+      const fullWordPosition = (startMs + sumUpToIndex(durations, index)) / 1e3;
+      return /* @__PURE__ */ import_react27.default.createElement(import_react27.Fragment, {
+        key: `${text}-${index}`
+      }, /* @__PURE__ */ import_react27.default.createElement("span", {
+        onClick: () => audioPlayer.rawSeek(fullWordPosition),
+        className: (0, import_classnames10.default)("transition-all", {
+          "text-slate-900": audioPlayer.rawCurrentTime >= fullWordPosition
+        })
+      }, text), " ");
+    }) : content)), /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex items-center"
     }, /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "flex flex-col justify-center flex-1"
