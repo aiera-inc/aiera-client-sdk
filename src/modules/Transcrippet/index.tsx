@@ -177,19 +177,22 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                 })}
                             >
                                 {Array.isArray(content) && startMs && durations.length > 0
-                                    ? content.map((text, index) => (
-                                          <Fragment key={`${text}-${index}`}>
-                                              <span
-                                                  className={classNames('transition-all', {
-                                                      'text-slate-900':
-                                                          audioPlayer.rawCurrentTime >=
-                                                          (startMs + sumUpToIndex(durations, index)) / 1000,
-                                                  })}
-                                              >
-                                                  {text}
-                                              </span>{' '}
-                                          </Fragment>
-                                      ))
+                                    ? content.map((text, index) => {
+                                          const fullWordPosition = (startMs + sumUpToIndex(durations, index)) / 1000;
+                                          return (
+                                              <Fragment key={`${text}-${index}`}>
+                                                  <span
+                                                      onClick={() => audioPlayer.rawSeek(fullWordPosition)}
+                                                      className={classNames('transition-all', {
+                                                          'text-slate-900':
+                                                              audioPlayer.rawCurrentTime >= fullWordPosition,
+                                                      })}
+                                                  >
+                                                      {text}
+                                                  </span>{' '}
+                                              </Fragment>
+                                          );
+                                      })
                                     : content}
                             </p>
                         </div>
