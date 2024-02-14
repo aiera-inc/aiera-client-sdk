@@ -81548,6 +81548,7 @@ var TranscrippetDocument = lib_default`
     eventDate
     eventId
     eventType
+    eventTitle
     id
     speakerId
     speakerName
@@ -81556,6 +81557,7 @@ var TranscrippetDocument = lib_default`
     status
     transcript
     transcriptionAudioOffsetSeconds
+    trimmedAudioUrl
     wordDurationsMs
   }
 }

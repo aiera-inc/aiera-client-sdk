@@ -33,6 +33,14 @@
             eventSnippet.on('transcrippet-height', (height) => {
                 document.getElementById('aiera').style.height = height + 'px';
             });
+            eventSnippet.on('transcrippet-meta', (meta) => {
+                console.log({ meta });
+                document.title = meta.title;
+                const metaTitle = document.createElement('meta');
+                metaTitle.setAttribute('name', 'description');
+                metaTitle.setAttribute('content', meta.description);
+                document.head.appendChild(metaTitle);
+            });
         </script>
     </body>
 </html>

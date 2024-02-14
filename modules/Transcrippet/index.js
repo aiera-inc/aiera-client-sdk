@@ -72249,6 +72249,7 @@ var TranscrippetDocument = lib_default`
     eventDate
     eventId
     eventType
+    eventTitle
     id
     speakerId
     speakerName
@@ -72257,6 +72258,7 @@ var TranscrippetDocument = lib_default`
     status
     transcript
     transcriptionAudioOffsetSeconds
+    trimmedAudioUrl
     wordDurationsMs
   }
 }
@@ -73733,6 +73735,7 @@ function useTranscrippetData(id = "") {
                     eventDate
                     eventId
                     eventType
+                    eventTitle
                     id
                     speakerId
                     speakerName
@@ -73741,6 +73744,7 @@ function useTranscrippetData(id = "") {
                     status
                     transcript
                     transcriptionAudioOffsetSeconds
+                    trimmedAudioUrl
                     wordDurationsMs
                 }
             }
@@ -73800,6 +73804,12 @@ function Transcrippet(props) {
         setEventId(transcrippetData.eventId);
         setStartMs(transcrippetData.startMs || 0);
         setEndMs(transcrippetData.endMs || null);
+        bus.emit("transcrippet-meta", {
+          title: transcrippetData.companyName && transcrippetData.eventType ? `${transcrippetData.companyName} | ${transcrippetData.eventType} | Quote` : transcrippetData.eventTitle || "Aiera | Event Quote",
+          audioUrl: transcrippetData.trimmedAudioUrl,
+          image: transcrippetData.companyLogoUrl,
+          description: transcrippetData.transcript
+        }, "out");
       }
     }
   }, [transcrippetQuery]);

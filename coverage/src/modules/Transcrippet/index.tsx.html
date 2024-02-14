@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">58.53% </span>
+                <span class="strong">59.03% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>48/82</span>
+                <span class='fraction'>49/83</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45.56% </span>
+                <span class="strong">45.88% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>36/79</span>
+                <span class='fraction'>39/85</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">60% </span>
+                <span class="strong">60.49% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>48/80</span>
+                <span class='fraction'>49/81</span>
             </div>
         
             
@@ -418,7 +418,22 @@
 <a name='L353'></a><a href='#L353'>353</a>
 <a name='L354'></a><a href='#L354'>354</a>
 <a name='L355'></a><a href='#L355'>355</a>
-<a name='L356'></a><a href='#L356'>356</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L356'></a><a href='#L356'>356</a>
+<a name='L357'></a><a href='#L357'>357</a>
+<a name='L358'></a><a href='#L358'>358</a>
+<a name='L359'></a><a href='#L359'>359</a>
+<a name='L360'></a><a href='#L360'>360</a>
+<a name='L361'></a><a href='#L361'>361</a>
+<a name='L362'></a><a href='#L362'>362</a>
+<a name='L363'></a><a href='#L363'>363</a>
+<a name='L364'></a><a href='#L364'>364</a>
+<a name='L365'></a><a href='#L365'>365</a>
+<a name='L366'></a><a href='#L366'>366</a>
+<a name='L367'></a><a href='#L367'>367</a>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -708,6 +723,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-yes">2x</span>
@@ -765,6 +782,19 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1034,6 +1064,7 @@ function useTranscrippetData(id = <span class="branch-0 cbranch-no" title="branc
                     eventDate
                     eventId
                     eventType
+                    eventTitle
                     id
                     speakerId
                     speakerName
@@ -1042,6 +1073,7 @@ function useTranscrippetData(id = <span class="branch-0 cbranch-no" title="branc
                     status
                     transcript
                     transcriptionAudioOffsetSeconds
+                    trimmedAudioUrl
                     wordDurationsMs
                 }
             }
@@ -1120,6 +1152,19 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
                 setEventId(transcrippetData.eventId);
                 setStartMs(transcrippetData.startMs || 0);
                 setEndMs(transcrippetData.endMs || null);
+                bus.emit(
+                    'transcrippet-meta',
+                    {
+                        title:
+                            transcrippetData.companyName &amp;&amp; transcrippetData.eventType
+                                ? `${transcrippetData.companyName} | ${transcrippetData.eventType} | Quote`
+                                : <span class="branch-1 cbranch-no" title="branch not covered" >transcrippetData.eventTitle || 'Aiera | Event Quote',</span>
+                        audioUrl: transcrippetData.trimmedAudioUrl,
+                        image: transcrippetData.companyLogoUrl,
+                        description: transcrippetData.transcript,
+                    },
+                    'out'
+                );
             }
         }
     }, [transcrippetQuery]);
@@ -1135,7 +1180,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Feb 05 2024 11:02:03 GMT-0500 (Eastern Standard Time)
+                at Wed Feb 14 2024 14:24:08 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
