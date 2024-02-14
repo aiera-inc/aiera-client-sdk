@@ -30,6 +30,13 @@ export interface EventAudio {
     event: EventSelected;
 }
 
+export interface TranscrippetMetaData {
+    title: string;
+    audioUrl?: string | null;
+    description: string;
+    image?: string | null;
+}
+
 export interface MessageBusEvents {
     'seek-audio-seconds': number;
     authenticate: AuthTokens;
@@ -46,6 +53,7 @@ export interface MessageBusEvents {
     'seek-transcript-seconds': number;
     'seek-transcript-timestamp': string;
     'transcrippet-height': number;
+    'transcrippet-meta': TranscrippetMetaData;
     'user-status-inactive': UserEmailStatus;
 }
 
