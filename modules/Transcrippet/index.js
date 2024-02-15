@@ -73641,9 +73641,7 @@ function TranscrippetUI(props) {
       className: "text-base leading-[14px] font-bold"
     }, speakerName || "No Speaker Assigned"), /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "text-sm text-slate-500 leading-3 mt-1"
-    }, companyTicker && /* @__PURE__ */ import_react27.default.createElement("span", {
-      className: "text-slate-600 mr-1 uppercase font-semibold"
-    }, companyTicker), speakerTitle || "Unidentified"))) : /* @__PURE__ */ import_react27.default.createElement(import_react27.Fragment, null, companyTicker && /* @__PURE__ */ import_react27.default.createElement("div", {
+    }, speakerTitle || "Title Unknown"))) : /* @__PURE__ */ import_react27.default.createElement(import_react27.Fragment, null, companyTicker && /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "h-9 mr-2 px-2 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
     }, /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "font-bold text-xs"
@@ -73699,16 +73697,22 @@ function TranscrippetUI(props) {
       className: "text-base font-bold capitalize"
     }, companyName, " | ", eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "text-sm text-slate-500 leading-3"
-    }, new Date(eventDate).toLocaleString("en-US", {
+    }, companyTicker && (companyTicker == null ? void 0 : companyTicker.toLowerCase()) !== (companyName == null ? void 0 : companyName.toLowerCase()) && /* @__PURE__ */ import_react27.default.createElement("span", {
+      className: "text-orange-600 font-bold mr-1"
+    }, companyTicker), new Date(eventDate).toLocaleString("en-US", {
       year: "numeric",
       month: "short",
       day: "numeric",
       hour: "numeric",
       minute: "numeric",
       hour12: true
-    }))), /* @__PURE__ */ import_react27.default.createElement("p", {
-      className: "text-xs tracking-wide text-orange-600 font-semibold mr-2 uppercase"
-    }, companyTicker))));
+    }))), /* @__PURE__ */ import_react27.default.createElement("a", {
+      href: "https://www.aiera.com",
+      target: "_blank",
+      title: "Learn more at Aiera.com",
+      className: "relative z-50 text-xs tracking-wide text-orange-600 hover:text-indigo-700 hover:underline font-bold mt-2 mr-3 uppercase",
+      rel: "noreferrer"
+    }, "aiera"))));
   }).otherwise(() => /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "relative flex flex-col items-center justify-center w-full h-full min-h-[4rem]"
   }, /* @__PURE__ */ import_react27.default.createElement("div", {

@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">45.88% </span>
+                <span class="strong">46.51% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>39/85</span>
+                <span class='fraction'>40/86</span>
             </div>
         
             
@@ -433,7 +433,12 @@
 <a name='L368'></a><a href='#L368'>368</a>
 <a name='L369'></a><a href='#L369'>369</a>
 <a name='L370'></a><a href='#L370'>370</a>
-<a name='L371'></a><a href='#L371'>371</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a>
+<a name='L376'></a><a href='#L376'>376</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -608,16 +613,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -927,12 +937,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                             &lt;/p&gt;
                                         )}
                                         &lt;p className="text-sm text-slate-500 leading-3 mt-1"&gt;
-                                            {companyTicker &amp;&amp; (
-                                                &lt;span className="text-slate-600 mr-1 uppercase font-semibold"&gt;
-                                                    {companyTicker}
-                                                &lt;/span&gt;
-                                            )}
-                                            {speakerTitle || <span class="branch-1 cbranch-no" title="branch not covered" >'Unidentified'}</span>
+                                            {speakerTitle || <span class="branch-1 cbranch-no" title="branch not covered" >'Title Unknown'}</span>
                                         &lt;/p&gt;
                                     &lt;/div&gt;
                                 &lt;/Fragment&gt;
@@ -1020,6 +1025,10 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                 )}
                                 {eventDate &amp;&amp; (
                                     &lt;p className="text-sm text-slate-500 leading-3"&gt;
+                                        {companyTicker &amp;&amp;
+                                            companyTicker?.toLowerCase() !== companyName?.toLowerCase() &amp;&amp; (
+                                                &lt;span className="text-orange-600 font-bold mr-1"&gt;{companyTicker}&lt;/span&gt;
+                                            )}
                                         {new Date(eventDate).toLocaleString('en-US', {
                                             year: 'numeric',
                                             month: 'short',
@@ -1031,9 +1040,15 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     &lt;/p&gt;
                                 )}
                             &lt;/div&gt;
-                            &lt;p className="text-xs tracking-wide text-orange-600 font-semibold mr-2 uppercase"&gt;
-                                {companyTicker}
-                            &lt;/p&gt;
+                            &lt;a
+                                href="https://www.aiera.com"
+                                target="_blank"
+                                title="Learn more at Aiera.com"
+                                className="relative z-50 text-xs tracking-wide text-orange-600 hover:text-indigo-700 hover:underline font-bold mt-2 mr-3 uppercase"
+                                rel="noreferrer"
+                            &gt;
+                                aiera
+                            &lt;/a&gt;
                         &lt;/div&gt;
                     &lt;/div&gt;
                 &lt;/div&gt;
@@ -1180,7 +1195,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Feb 14 2024 14:24:08 GMT-0500 (Eastern Standard Time)
+                at Thu Feb 15 2024 10:56:47 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
