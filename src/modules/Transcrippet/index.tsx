@@ -122,12 +122,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                             </p>
                                         )}
                                         <p className="text-sm text-slate-500 leading-3 mt-1">
-                                            {companyTicker && (
-                                                <span className="text-slate-600 mr-1 uppercase font-semibold">
-                                                    {companyTicker}
-                                                </span>
-                                            )}
-                                            {speakerTitle || 'Unidentified'}
+                                            {speakerTitle || 'Title Unknown'}
                                         </p>
                                     </div>
                                 </Fragment>
@@ -215,6 +210,10 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                 )}
                                 {eventDate && (
                                     <p className="text-sm text-slate-500 leading-3">
+                                        {companyTicker &&
+                                            companyTicker?.toLowerCase() !== companyName?.toLowerCase() && (
+                                                <span className="text-orange-600 font-bold mr-1">{companyTicker}</span>
+                                            )}
                                         {new Date(eventDate).toLocaleString('en-US', {
                                             year: 'numeric',
                                             month: 'short',
@@ -226,9 +225,15 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     </p>
                                 )}
                             </div>
-                            <p className="text-xs tracking-wide text-orange-600 font-semibold mr-2 uppercase">
-                                {companyTicker}
-                            </p>
+                            <a
+                                href="https://www.aiera.com"
+                                target="_blank"
+                                title="Learn more at Aiera.com"
+                                className="relative z-50 text-xs tracking-wide text-orange-600 hover:text-indigo-700 hover:underline font-bold mt-2 mr-3 uppercase"
+                                rel="noreferrer"
+                            >
+                                aiera
+                            </a>
                         </div>
                     </div>
                 </div>
