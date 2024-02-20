@@ -89,7 +89,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
             let content: string | string[] = transcript;
             let durations: number[] = [];
 
-            if (wordDurationsMs && Array.isArray(wordDurationsMs) && wordDurationsMs.length > 0) {
+            if (wordDurationsMs && !!startMs && Array.isArray(wordDurationsMs) && wordDurationsMs.length > 0) {
                 content = transcript.split(' ');
                 durations = wordDurationsMs as number[];
             }
@@ -138,20 +138,22 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     </div>
                                 </Fragment>
                             )}
-                            <div data-html2canvas-ignore="true" className="h-8 w-8">
-                                <PlayButton
-                                    metaData={{
-                                        localTicker: typeof companyTicker === 'string' ? companyTicker : undefined,
-                                        eventDate: eventDate,
-                                        eventType: eventType,
-                                        externalAudioStreamUrl: audioUrl,
-                                    }}
-                                    origin="transcrippet"
-                                    id={`${eventId}`}
-                                    url={audioUrl}
-                                    offset={startTime}
-                                />
-                            </div>
+                            {!!startMs && durations.length && (
+                                <div data-html2canvas-ignore="true" className="h-8 w-8">
+                                    <PlayButton
+                                        metaData={{
+                                            localTicker: typeof companyTicker === 'string' ? companyTicker : undefined,
+                                            eventDate: eventDate,
+                                            eventType: eventType,
+                                            externalAudioStreamUrl: audioUrl,
+                                        }}
+                                        origin="transcrippet"
+                                        id={`${eventId}`}
+                                        url={audioUrl}
+                                        offset={startTime}
+                                    />
+                                </div>
+                            )}
                         </div>
                         <div>
                             <p
