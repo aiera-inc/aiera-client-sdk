@@ -73613,7 +73613,7 @@ function TranscrippetUI(props) {
     const startTime = startMs ? startMs / 1e3 : 0;
     let content = transcript;
     let durations = [];
-    if (wordDurationsMs && Array.isArray(wordDurationsMs) && wordDurationsMs.length > 0) {
+    if (wordDurationsMs && !!startMs && Array.isArray(wordDurationsMs) && wordDurationsMs.length > 0) {
       content = transcript.split(" ");
       durations = wordDurationsMs;
     }
@@ -73649,7 +73649,7 @@ function TranscrippetUI(props) {
       className: "flex flex-col justify-center flex-1"
     }, /* @__PURE__ */ import_react27.default.createElement("p", {
       className: "text-base leading-[14px] font-bold"
-    }, "Event Participant"))), /* @__PURE__ */ import_react27.default.createElement("div", {
+    }, "Event Participant"))), !!startMs && durations.length && /* @__PURE__ */ import_react27.default.createElement("div", {
       "data-html2canvas-ignore": "true",
       className: "h-8 w-8"
     }, /* @__PURE__ */ import_react27.default.createElement(PlayButton, {

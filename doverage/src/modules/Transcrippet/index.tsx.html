@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">46.51% </span>
+                <span class="strong">44.44% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>40/86</span>
+                <span class='fraction'>40/90</span>
             </div>
         
             
@@ -438,7 +438,9 @@
 <a name='L373'></a><a href='#L373'>373</a>
 <a name='L374'></a><a href='#L374'>374</a>
 <a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L376'></a><a href='#L376'>376</a>
+<a name='L377'></a><a href='#L377'>377</a>
+<a name='L378'></a><a href='#L378'>378</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -537,6 +539,8 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -904,7 +908,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
             let content: string | string[] = transcript;
             let durations: number[] = [];
 &nbsp;
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (wordDurationsMs &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >Array.isArray(wordDurationsMs) </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >wordDurationsMs.length &gt; 0)</span> {
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (wordDurationsMs &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!!startMs </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >Array.isArray(wordDurationsMs) </span>&amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >wordDurationsMs.length &gt; 0)</span> {
 <span class="cstat-no" title="statement not covered" >                content = transcript.split(' ');</span>
 <span class="cstat-no" title="statement not covered" >                durations = wordDurationsMs as number[];</span>
             }
@@ -953,20 +957,22 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     &lt;/div&gt;
                                 &lt;/Fragment&gt;
                             )}
-                            &lt;div data-html2canvas-ignore="true" className="h-8 w-8"&gt;
-                                &lt;PlayButton
-                                    metaData={{
-                                        localTicker: typeof companyTicker === 'string' ? companyTicker : <span class="branch-1 cbranch-no" title="branch not covered" >undefined,</span>
-                                        eventDate: eventDate,
-                                        eventType: eventType,
-                                        externalAudioStreamUrl: audioUrl,
-                                    }}
-                                    origin="transcrippet"
-                                    id={`${eventId}`}
-                                    url={audioUrl}
-                                    offset={startTime}
-                                /&gt;
-                            &lt;/div&gt;
+                            {!!startMs &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >durations.length </span>&amp;&amp; (
+<span class="branch-2 cbranch-no" title="branch not covered" >                                &lt;div data-html2canvas-ignore="true" className="h-8 w-8"&gt;</span>
+                                    &lt;PlayButton
+                                        metaData={{
+                                            localTicker: typeof companyTicker === 'string' ? companyTicker : undefined,
+                                            eventDate: eventDate,
+                                            eventType: eventType,
+                                            externalAudioStreamUrl: audioUrl,
+                                        }}
+                                        origin="transcrippet"
+                                        id={`${eventId}`}
+                                        url={audioUrl}
+                                        offset={startTime}
+                                    /&gt;
+                                &lt;/div&gt;
+                            )}
                         &lt;/div&gt;
                         &lt;div&gt;
                             &lt;p
@@ -1195,7 +1201,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Feb 15 2024 10:56:47 GMT-0500 (Eastern Standard Time)
+                at Tue Feb 20 2024 14:54:45 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
