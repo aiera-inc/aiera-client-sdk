@@ -331,8 +331,17 @@ export const Auth = ({
                 userQuery.refetch({ requestPolicy: 'cache-and-network' });
                 setLoginState('none');
             } else {
-                setLoginState('error');
-                await logout();
+                // Maybe had an expired token
+                // so try logging in one more time
+                const tryAgain = await loginWithPublicApiMutation({ apiKey, origin: parentOrigin });
+                if (tryAgain?.data?.loginWithPublicApiKey) {
+                    await config.writeAuth(tryAgain.data.loginWithPublicApiKey);
+                    userQuery.refetch({ requestPolicy: 'cache-and-network' });
+                    setLoginState('none');
+                } else {
+                    setLoginState('error');
+                    await logout();
+                }
             }
         },
         [loginWithPublicApiMutation, config, parentOrigin, state, setLoginState, userQuery.refetch]
