@@ -39017,7 +39017,7 @@ var Auth = ({
     setParentOrigin
   ]);
   const loginWithApiKey = (0, import_react16.useCallback)((apiKey) => __async(void 0, null, function* () {
-    var _a;
+    var _a, _b;
     yield logout();
     setLoginState("loading");
     const result = yield loginWithPublicApiMutation({ apiKey, origin: parentOrigin });
@@ -39026,8 +39026,15 @@ var Auth = ({
       userQuery.refetch({ requestPolicy: "cache-and-network" });
       setLoginState("none");
     } else {
-      setLoginState("error");
-      yield logout();
+      const tryAgain = yield loginWithPublicApiMutation({ apiKey, origin: parentOrigin });
+      if ((_b = tryAgain == null ? void 0 : tryAgain.data) == null ? void 0 : _b.loginWithPublicApiKey) {
+        yield config.writeAuth(tryAgain.data.loginWithPublicApiKey);
+        userQuery.refetch({ requestPolicy: "cache-and-network" });
+        setLoginState("none");
+      } else {
+        setLoginState("error");
+        yield logout();
+      }
     }
   }), [loginWithPublicApiMutation, config, parentOrigin, state, setLoginState, userQuery.refetch]);
   (0, import_react16.useEffect)(() => {
