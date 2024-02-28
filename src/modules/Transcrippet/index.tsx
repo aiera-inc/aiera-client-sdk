@@ -2,14 +2,15 @@ import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 import { PlayButton } from '@aiera/client-sdk/components/PlayButton';
 import { useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { TranscrippetQuery, TranscrippetQueryVariables } from '@aiera/client-sdk/types/generated';
+import classNames from 'classnames';
 import gql from 'graphql-tag';
-import React, { Fragment, ReactElement, Ref, useEffect, useRef, useState } from 'react';
+import html2canvas from 'html2canvas';
+import React, { Fragment, ReactElement, RefObject, useEffect, useRef, useState } from 'react';
 import { match } from 'ts-pattern';
 import './styles.css';
-import classNames from 'classnames';
-import html2canvas from 'html2canvas';
-import { useMessageListener } from '@aiera/client-sdk/lib/msg';
+import { LineChart } from './LineChart';
 
 const PUBLIC_TRANSCRIPPET_URL = 'https://public.aiera.com/shared/transcrippet.html?id=';
 
@@ -18,8 +19,9 @@ interface TranscrippetSharedProps {}
 /** @notExported */
 interface TranscrippetUIProps extends TranscrippetSharedProps {
     id?: string;
+    showPriceReaction: boolean;
     transcrippetQuery: QueryResult<TranscrippetQuery, TranscrippetQueryVariables>;
-    transcrippetRef: Ref<HTMLDivElement>;
+    transcrippetRef: RefObject<HTMLDivElement>;
 }
 
 function getSpeakerInitials(fullName?: string | null) {
@@ -65,7 +67,7 @@ async function downloadImage(id?: string) {
 }
 
 export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
-    const { transcrippetQuery, transcrippetRef, id } = props;
+    const { showPriceReaction, transcrippetQuery, transcrippetRef, id } = props;
     const audioPlayer = useAudioPlayer();
 
     return match(transcrippetQuery)
@@ -80,6 +82,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                 eventType,
                 eventDate,
                 eventId,
+                equityPrices,
                 audioUrl,
                 startMs,
                 wordDurationsMs,
@@ -95,6 +98,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
             }
 
             const wordHighlightEnabled = Array.isArray(content) && startMs && durations.length > 0;
+            const showingPriceReaction = showPriceReaction && equityPrices?.prices && equityPrices.prices.length > 0;
 
             return (
                 <div ref={transcrippetRef} id="aiera-transcrippet">
@@ -164,7 +168,13 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                             </p>
                             <p
                                 data-html2canvas-ignore="true"
-                                className="text-[200px] leading-[100px] font-serif absolute bottom-0 right-2 text-slate-100"
+                                className={classNames(
+                                    'text-[200px] leading-[100px] font-serif absolute right-2 text-slate-100',
+                                    {
+                                        'bottom-0': !showingPriceReaction,
+                                        'bottom-20': showingPriceReaction,
+                                    }
+                                )}
                             >
                                 ”
                             </p>
@@ -193,6 +203,13 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     : content}
                             </p>
                         </div>
+                        {showingPriceReaction && transcrippetRef?.current && (
+                            <LineChart
+                                transcrippetRef={transcrippetRef}
+                                data={equityPrices.prices}
+                                selectedIndex={equityPrices.startIndex}
+                            />
+                        )}
                         <div className="flex items-center">
                             <div className="flex flex-col justify-center flex-1">
                                 {id ? (
@@ -267,6 +284,14 @@ function useTranscrippetData(id = '') {
                     eventId
                     eventType
                     eventTitle
+                    equityPrices {
+                        prices {
+                            date
+                            price
+                            volume
+                        }
+                        startIndex
+                    }
                     id
                     speakerId
                     speakerName
@@ -302,6 +327,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
     const [eventId, setEventId] = useState<string | undefined>(undefined);
     const [endMs, setEndMs] = useState<number | null>(null);
     const [startMs, setStartMs] = useState<number>(0);
+    const [showPriceReaction, setShowPriceReaction] = useState(true);
     const audioPlayer = useAudioPlayer();
     const config = useConfig();
     const transcrippetRef = useRef<HTMLDivElement>(null);
@@ -330,6 +356,13 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             setTranscrippetId(config.options.transcrippetGuid);
         }
     }, [transcrippetId, config, config?.options]);
+
+    // Manage Price Reaction
+    useEffect(() => {
+        if (config?.options?.showPriceReaction !== undefined) {
+            setShowPriceReaction(config.options.showPriceReaction);
+        }
+    }, [config, config?.options]);
 
     const transcrippetQuery = useTranscrippetData(transcrippetId);
 
@@ -372,6 +405,11 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
     }, [transcrippetQuery]);
 
     return (
-        <TranscrippetUI id={transcrippetId} transcrippetRef={transcrippetRef} transcrippetQuery={transcrippetQuery} />
+        <TranscrippetUI
+            id={transcrippetId}
+            showPriceReaction={showPriceReaction}
+            transcrippetRef={transcrippetRef}
+            transcrippetQuery={transcrippetQuery}
+        />
     );
 }
