@@ -1,0 +1,134 @@
+
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Code coverage report for src/components/Svg/QuoteLeft.tsx</title>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../../../prettify.css" />
+    <link rel="stylesheet" href="../../../base.css" />
+    <link rel="shortcut icon" type="image/x-icon" href="../../../favicon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style type='text/css'>
+        .coverage-summary .sorter {
+            background-image: url(../../../sort-arrow-sprite.png);
+        }
+    </style>
+</head>
+    
+<body>
+<div class='wrapper'>
+    <div class='pad1'>
+        <h1><a href="../../../index.html">All files</a> / <a href="index.html">src/components/Svg</a> QuoteLeft.tsx</h1>
+        <div class='clearfix'>
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Statements</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Branches</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Functions</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+            <div class='fl pad1y space-right2'>
+                <span class="strong">100% </span>
+                <span class="quiet">Lines</span>
+                <span class='fraction'>1/1</span>
+            </div>
+        
+            
+        </div>
+        <p class="quiet">
+            Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
+        </p>
+        <template id="filterTemplate">
+            <div class="quiet">
+                Filter:
+                <input oninput="onInput()" type="search" id="fileSearch">
+            </div>
+        </template>
+    </div>
+    <div class='status-line high'></div>
+    <pre><table class="coverage">
+<tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
+<a name='L2'></a><a href='#L2'>2</a>
+<a name='L3'></a><a href='#L3'>3</a>
+<a name='L4'></a><a href='#L4'>4</a>
+<a name='L5'></a><a href='#L5'>5</a>
+<a name='L6'></a><a href='#L6'>6</a>
+<a name='L7'></a><a href='#L7'>7</a>
+<a name='L8'></a><a href='#L8'>8</a>
+<a name='L9'></a><a href='#L9'>9</a>
+<a name='L10'></a><a href='#L10'>10</a>
+<a name='L11'></a><a href='#L11'>11</a>
+<a name='L12'></a><a href='#L12'>12</a>
+<a name='L13'></a><a href='#L13'>13</a>
+<a name='L14'></a><a href='#L14'>14</a>
+<a name='L15'></a><a href='#L15'>15</a>
+<a name='L16'></a><a href='#L16'>16</a>
+<a name='L17'></a><a href='#L17'>17</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
+import classNames from 'classnames';
+&nbsp;
+export function QuoteLeft({ className, alt = 'Quote Left' }: { className?: string; alt?: string }): ReactElement {
+    return (
+        &lt;svg
+            className={classNames(className, 'fill-current', 'Svg', 'Svg__quoteLeft')}
+            width="100%"
+            viewBox="0 0 65 53"
+            xmlns="http://www.w3.org/2000/svg"
+        &gt;
+            &lt;title&gt;{alt}&lt;/title&gt;
+            &lt;path d="M28.9062 5.85938C25.8464 7.61719 23.3724 9.14714 21.4844 10.4492C19.5964 11.6862 17.6758 13.3464 15.7227 15.4297C13.8997 17.3828 12.5 19.4336 11.5234 21.582C10.5469 23.7305 9.86328 26.4974 9.47266 29.8828H14.1602C18.1966 29.8828 21.3542 30.8919 23.6328 32.9102C25.9766 34.8633 27.1484 37.7604 27.1484 41.6016C27.1484 44.3359 26.1068 46.9076 24.0234 49.3164C22.0052 51.6602 19.2057 52.832 15.625 52.832C10.026 52.832 6.02214 51.0091 3.61328 47.3633C1.20443 43.6523 0 38.8021 0 32.8125C0 28.5807 0.911458 24.7396 2.73438 21.2891C4.55729 17.7734 6.77083 14.6484 9.375 11.9141C12.0443 9.11458 14.8763 6.73828 17.8711 4.78516C20.8659 2.83203 23.3724 1.23698 25.3906 0L28.9062 5.85938ZM65.0391 5.85938C61.9792 7.61719 59.5052 9.14714 57.6172 10.4492C55.7292 11.6862 53.8086 13.3464 51.8555 15.4297C49.9674 17.4479 48.5352 19.5312 47.5586 21.6797C46.6471 23.763 45.9961 26.4974 45.6055 29.8828H50.293C54.3294 29.8828 57.487 30.8919 59.7656 32.9102C62.1094 34.8633 63.2812 37.7604 63.2812 41.6016C63.2812 44.3359 62.2396 46.9076 60.1562 49.3164C58.138 51.6602 55.3385 52.832 51.7578 52.832C46.1589 52.832 42.1549 51.0091 39.7461 47.3633C37.3372 43.6523 36.1328 38.8021 36.1328 32.8125C36.1328 28.5807 37.0443 24.7396 38.8672 21.2891C40.6901 17.7734 42.9036 14.6484 45.5078 11.9141C48.1771 9.11458 51.0091 6.73828 54.0039 4.78516C56.9987 2.83203 59.5052 1.23698 61.5234 0L65.0391 5.85938Z" /&gt;
+        &lt;/svg&gt;
+    );
+}
+&nbsp;</pre></td></tr></table></pre>
+
+                <div class='push'></div><!-- for sticky footer -->
+            </div><!-- /wrapper -->
+            <div class='footer quiet pad2 space-top1 center small'>
+                Code coverage generated by
+                <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
+                at Thu Feb 29 2024 17:34:46 GMT-0500 (Eastern Standard Time)
+            </div>
+        </div>
+        <script src="../../../prettify.js"></script>
+        <script>
+            window.onload = function () {
+                prettyPrint();
+            };
+        </script>
+        <script src="../../../sorter.js"></script>
+        <script src="../../../block-navigation.js"></script>
+    </body>
+</html>
+    

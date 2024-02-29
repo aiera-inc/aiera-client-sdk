@@ -470,15 +470,9 @@
 <a name='L405'></a><a href='#L405'>405</a>
 <a name='L406'></a><a href='#L406'>406</a>
 <a name='L407'></a><a href='#L407'>407</a>
-<a name='L408'></a><a href='#L408'>408</a>
-<a name='L409'></a><a href='#L409'>409</a>
-<a name='L410'></a><a href='#L410'>410</a>
-<a name='L411'></a><a href='#L411'>411</a>
-<a name='L412'></a><a href='#L412'>412</a>
-<a name='L413'></a><a href='#L413'>413</a>
-<a name='L414'></a><a href='#L414'>414</a>
-<a name='L415'></a><a href='#L415'>415</a>
-<a name='L416'></a><a href='#L416'>416</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L408'></a><a href='#L408'>408</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -581,16 +575,6 @@
 <span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">2x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -906,6 +890,8 @@ import React, { Fragment, ReactElement, RefObject, useEffect, useRef, useState }
 import { match } from 'ts-pattern';
 import './styles.css';
 import { LineChart } from './LineChart';
+import { QuoteLeft } from '@aiera/client-sdk/components/Svg/QuoteLeft';
+import { QuoteRight } from '@aiera/client-sdk/components/Svg/QuoteRight';
 &nbsp;
 const PUBLIC_TRANSCRIPPET_URL = 'https://public.aiera.com/shared/transcrippet.html?id=';
 &nbsp;
@@ -997,8 +983,8 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
 &nbsp;
             return (
                 &lt;div ref={transcrippetRef} id="aiera-transcrippet"&gt;
-                    &lt;div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white px-5 py-[18px] relative antialiased"&gt;
-                        &lt;div className="flex items-center relative z-10"&gt;
+                    &lt;div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white pt-[18px] relative antialiased"&gt;
+                        &lt;div className="flex items-center relative z-10 px-5"&gt;
                             {speakerName ? (
                                 &lt;Fragment&gt;
                                     &lt;div className="h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center"&gt;
@@ -1054,28 +1040,18 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                 &lt;/div&gt;
                             )}
                         &lt;/div&gt;
-                        &lt;div&gt;
+                        &lt;div className="relative"&gt;
+                            &lt;div className="text-slate-100 h-16 w-16 overflow-hidden absolute top-5 left-4 flex items-center justify-center"&gt;
+                                &lt;QuoteLeft /&gt;
+                            &lt;/div&gt;
+                            &lt;div className="text-slate-100 h-16 w-16 overflow-hidden absolute bottom-0 right-4 flex items-center justify-center"&gt;
+                                &lt;QuoteRight /&gt;
+                            &lt;/div&gt;
                             &lt;p
-                                data-html2canvas-ignore="true"
-                                className="text-[200px] leading-[200px] font-serif absolute top-14 left-2 text-slate-100"
-                            &gt;
-                                “
-                            &lt;/p&gt;
-                            &lt;p
-                                data-html2canvas-ignore="true"
-                                className={classNames(
-                                    'text-[200px] leading-[100px] font-serif absolute right-2 text-slate-100',
-                                    {
-                                        'bottom-0': !showingPriceReaction,
-                                        'bottom-20': showingPriceReaction,
-                                    }
-                                )}
-                            &gt;
-                                ”
-                            &lt;/p&gt;
-                            &lt;p
-                                className={classNames('text-base py-10 px-6 relative z-10 transition-all', {
+                                className={classNames('text-base px-11 relative z-10 transition-all', {
                                     'text-slate-400': wordHighlightEnabled &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >!!audioPlayer.playing(eventId),</span>
+                                    'py-10': !showingPriceReaction,
+                                    'pt-10 pb-1': showingPriceReaction,
                                 })}
                             &gt;
                                 {Array.isArray(content) &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >startMs </span>&amp;&amp; <span class="branch-2 cbranch-no" title="branch not covered" >durations.length &gt; 0</span>
@@ -1105,7 +1081,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                 selectedIndex={equityPrices.startIndex}
                             /&gt;
                         )}
-                        &lt;div className="flex items-center"&gt;
+                        &lt;div className="flex items-center px-5 pb-5"&gt;
                             &lt;div className="flex flex-col justify-center flex-1"&gt;
                                 {id ? (
                                     &lt;a
@@ -1315,7 +1291,7 @@ export function Transcrippet(props: TranscrippetProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Feb 29 2024 13:15:22 GMT-0500 (Eastern Standard Time)
+                at Thu Feb 29 2024 17:34:46 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

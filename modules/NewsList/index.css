@@ -476,14 +476,14 @@ video {
 .top-\[12px\] {
   top: 12px;
 }
-.top-14 {
-  top: 3.5rem;
+.top-5 {
+  top: 1.25rem;
 }
-.left-2 {
-  left: 0.5rem;
+.left-4 {
+  left: 1rem;
 }
-.bottom-20 {
-  bottom: 5rem;
+.right-4 {
+  right: 1rem;
 }
 .-right-0\.5 {
   right: -0.125rem;
@@ -532,10 +532,6 @@ video {
 .mx-3 {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
-}
-.-mx-5 {
-  margin-left: -1.25rem;
-  margin-right: -1.25rem;
 }
 .my-3 {
   margin-top: 0.75rem;
@@ -649,9 +645,6 @@ video {
 .ml-auto {
   margin-left: auto;
 }
-.-mt-9 {
-  margin-top: -2.25rem;
-}
 .-mb-3 {
   margin-bottom: -0.75rem;
 }
@@ -762,6 +755,9 @@ video {
 }
 .h-3 {
   height: 0.75rem;
+}
+.h-16 {
+  height: 4rem;
 }
 .h-\[60px\] {
   height: 60px;
@@ -1384,9 +1380,9 @@ video {
   padding-top: 0.75rem;
   padding-bottom: 0.75rem;
 }
-.py-\[18px\] {
-  padding-top: 18px;
-  padding-bottom: 18px;
+.px-11 {
+  padding-left: 2.75rem;
+  padding-right: 2.75rem;
 }
 .py-10 {
   padding-top: 2.5rem;
@@ -1475,6 +1471,18 @@ video {
 .pb-3 {
   padding-bottom: 0.75rem;
 }
+.pt-\[18px\] {
+  padding-top: 18px;
+}
+.pt-10 {
+  padding-top: 2.5rem;
+}
+.pb-1 {
+  padding-bottom: 0.25rem;
+}
+.pb-5 {
+  padding-bottom: 1.25rem;
+}
 .pb-4 {
   padding-bottom: 1rem;
 }
@@ -1504,15 +1512,6 @@ video {
     "Courier New",
     monospace;
 }
-.font-serif {
-  font-family:
-    ui-serif,
-    Georgia,
-    Cambria,
-    "Times New Roman",
-    Times,
-    serif;
-}
 .text-base {
   font-size: .875rem;
 }
@@ -1530,9 +1529,6 @@ video {
 }
 .text-4xl {
   font-size: 1.875rem;
-}
-.text-\[200px\] {
-  font-size: 200px;
 }
 .text-xl {
   font-size: 1.125rem;
@@ -1569,12 +1565,6 @@ video {
 }
 .leading-\[14px\] {
   line-height: 14px;
-}
-.leading-\[200px\] {
-  line-height: 200px;
-}
-.leading-\[100px\] {
-  line-height: 100px;
 }
 .leading-\[1\.1875rem\] {
   line-height: 1.1875rem;
