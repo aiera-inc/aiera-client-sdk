@@ -11,6 +11,8 @@ import React, { Fragment, ReactElement, RefObject, useEffect, useRef, useState }
 import { match } from 'ts-pattern';
 import './styles.css';
 import { LineChart } from './LineChart';
+import { QuoteLeft } from '@aiera/client-sdk/components/Svg/QuoteLeft';
+import { QuoteRight } from '@aiera/client-sdk/components/Svg/QuoteRight';
 
 const PUBLIC_TRANSCRIPPET_URL = 'https://public.aiera.com/shared/transcrippet.html?id=';
 
@@ -102,8 +104,8 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
 
             return (
                 <div ref={transcrippetRef} id="aiera-transcrippet">
-                    <div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white px-5 py-[18px] relative antialiased">
-                        <div className="flex items-center relative z-10">
+                    <div className="flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white pt-[18px] relative antialiased">
+                        <div className="flex items-center relative z-10 px-5">
                             {speakerName ? (
                                 <Fragment>
                                     <div className="h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center">
@@ -159,28 +161,18 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                 </div>
                             )}
                         </div>
-                        <div>
+                        <div className="relative">
+                            <div className="text-slate-100 h-16 w-16 overflow-hidden absolute top-5 left-4 flex items-center justify-center">
+                                <QuoteLeft />
+                            </div>
+                            <div className="text-slate-100 h-16 w-16 overflow-hidden absolute bottom-0 right-4 flex items-center justify-center">
+                                <QuoteRight />
+                            </div>
                             <p
-                                data-html2canvas-ignore="true"
-                                className="text-[200px] leading-[200px] font-serif absolute top-14 left-2 text-slate-100"
-                            >
-                                “
-                            </p>
-                            <p
-                                data-html2canvas-ignore="true"
-                                className={classNames(
-                                    'text-[200px] leading-[100px] font-serif absolute right-2 text-slate-100',
-                                    {
-                                        'bottom-0': !showingPriceReaction,
-                                        'bottom-20': showingPriceReaction,
-                                    }
-                                )}
-                            >
-                                ”
-                            </p>
-                            <p
-                                className={classNames('text-base py-10 px-6 relative z-10 transition-all', {
+                                className={classNames('text-base px-11 relative z-10 transition-all', {
                                     'text-slate-400': wordHighlightEnabled && !!audioPlayer.playing(eventId),
+                                    'py-10': !showingPriceReaction,
+                                    'pt-10 pb-1': showingPriceReaction,
                                 })}
                             >
                                 {Array.isArray(content) && startMs && durations.length > 0
@@ -210,7 +202,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                 selectedIndex={equityPrices.startIndex}
                             />
                         )}
-                        <div className="flex items-center">
+                        <div className="flex items-center px-5 pb-5">
                             <div className="flex flex-col justify-center flex-1">
                                 {id ? (
                                     <a
