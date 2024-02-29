@@ -29,7 +29,7 @@ export const LineChart = ({ data, selectedIndex, transcrippetRef }: LineChartPro
     const dotX = selectedIndex * width;
     const dotY = selectedItem ? 88 - ((selectedItem.price - minPrice) / (maxPrice - minPrice)) * 88 + 12 : 0;
     return (
-        <svg viewBox={`0 0 ${containerWidth} 100`} className="-mx-5 -mt-9 mb-1">
+        <svg viewBox={`0 0 ${containerWidth} 100`} className="mb-1">
             {/* Rendering the line */}
             <polyline points={pathData} fill="none" stroke="rgba(79, 70, 229, 0.5)" strokeWidth="2" />
 
