@@ -482,6 +482,9 @@ video {
 .left-2 {
   left: 0.5rem;
 }
+.bottom-20 {
+  bottom: 5rem;
+}
 .-right-0\.5 {
   right: -0.125rem;
 }
@@ -529,6 +532,10 @@ video {
 .mx-3 {
   margin-left: 0.75rem;
   margin-right: 0.75rem;
+}
+.-mx-5 {
+  margin-left: -1.25rem;
+  margin-right: -1.25rem;
 }
 .my-3 {
   margin-top: 0.75rem;
@@ -641,6 +648,9 @@ video {
 }
 .ml-auto {
   margin-left: auto;
+}
+.-mt-9 {
+  margin-top: -2.25rem;
 }
 .-mb-3 {
   margin-bottom: -0.75rem;

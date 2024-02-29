@@ -38527,6 +38527,14 @@ var TranscrippetDocument = lib_default`
     eventId
     eventType
     eventTitle
+    equityPrices {
+      prices {
+        date
+        price
+        volume
+      }
+      startIndex
+    }
     id
     speakerId
     speakerName

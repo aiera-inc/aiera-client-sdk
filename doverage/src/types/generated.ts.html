@@ -2018,7 +2018,43 @@
 <a name='L1953'></a><a href='#L1953'>1953</a>
 <a name='L1954'></a><a href='#L1954'>1954</a>
 <a name='L1955'></a><a href='#L1955'>1955</a>
-<a name='L1956'></a><a href='#L1956'>1956</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1956'></a><a href='#L1956'>1956</a>
+<a name='L1957'></a><a href='#L1957'>1957</a>
+<a name='L1958'></a><a href='#L1958'>1958</a>
+<a name='L1959'></a><a href='#L1959'>1959</a>
+<a name='L1960'></a><a href='#L1960'>1960</a>
+<a name='L1961'></a><a href='#L1961'>1961</a>
+<a name='L1962'></a><a href='#L1962'>1962</a>
+<a name='L1963'></a><a href='#L1963'>1963</a>
+<a name='L1964'></a><a href='#L1964'>1964</a>
+<a name='L1965'></a><a href='#L1965'>1965</a>
+<a name='L1966'></a><a href='#L1966'>1966</a>
+<a name='L1967'></a><a href='#L1967'>1967</a>
+<a name='L1968'></a><a href='#L1968'>1968</a>
+<a name='L1969'></a><a href='#L1969'>1969</a>
+<a name='L1970'></a><a href='#L1970'>1970</a>
+<a name='L1971'></a><a href='#L1971'>1971</a>
+<a name='L1972'></a><a href='#L1972'>1972</a>
+<a name='L1973'></a><a href='#L1973'>1973</a>
+<a name='L1974'></a><a href='#L1974'>1974</a>
+<a name='L1975'></a><a href='#L1975'>1975</a>
+<a name='L1976'></a><a href='#L1976'>1976</a>
+<a name='L1977'></a><a href='#L1977'>1977</a>
+<a name='L1978'></a><a href='#L1978'>1978</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3716,6 +3752,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4917,6 +4961,13 @@ export type Quote = {
   ric: Scalars['String'];
 };
 &nbsp;
+export type RealtimeTranscrippetPrice = {
+  __typename?: 'RealtimeTranscrippetPrice';
+  date: Scalars['String'];
+  price: Scalars['Float'];
+  volume: Scalars['Int'];
+};
+&nbsp;
 export type RefreshResponse = MutationResponse &amp; {
   __typename?: 'RefreshResponse';
   accessToken: Scalars['String'];
@@ -5042,6 +5093,7 @@ export type Transcrippet = {
   companyTicker?: Maybe&lt;Scalars['String']&gt;;
   endMs?: Maybe&lt;Scalars['Int']&gt;;
   equityId?: Maybe&lt;Scalars['ID']&gt;;
+  equityPrices?: Maybe&lt;TranscrippetEquityPrice&gt;;
   eventDate: Scalars['DateTime'];
   eventId: Scalars['ID'];
   eventTitle?: Maybe&lt;Scalars['String']&gt;;
@@ -5059,6 +5111,12 @@ export type Transcrippet = {
   trimmedAudioUrl?: Maybe&lt;Scalars['String']&gt;;
   userId: Scalars['ID'];
   wordDurationsMs?: Maybe&lt;Scalars['JSON']&gt;;
+};
+&nbsp;
+export type TranscrippetEquityPrice = {
+  __typename?: 'TranscrippetEquityPrice';
+  prices: Array&lt;RealtimeTranscrippetPrice&gt;;
+  startIndex: Scalars['Int'];
 };
 &nbsp;
 export type TranscrippetFilter = {
@@ -5293,7 +5351,7 @@ export type TranscrippetQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type TranscrippetQuery = { __typename?: 'Query', transcrippet: { __typename?: 'Transcrippet', audioUrl?: string | null | undefined, companyId?: string | null | undefined, companyLogoUrl?: string | null | undefined, companyName?: string | null | undefined, companyTicker?: string | null | undefined, endMs?: number | null | undefined, eventDate: string, eventId: string, eventType: EventType, eventTitle?: string | null | undefined, id: string, speakerId?: string | null | undefined, speakerName?: string | null | undefined, speakerTitle?: string | null | undefined, startMs?: number | null | undefined, status: TranscrippetStatus, transcript: string, transcriptionAudioOffsetSeconds: number, trimmedAudioUrl?: string | null | undefined, wordDurationsMs?: unknown | null | undefined } };
+export type TranscrippetQuery = { __typename?: 'Query', transcrippet: { __typename?: 'Transcrippet', audioUrl?: string | null | undefined, companyId?: string | null | undefined, companyLogoUrl?: string | null | undefined, companyName?: string | null | undefined, companyTicker?: string | null | undefined, endMs?: number | null | undefined, eventDate: string, eventId: string, eventType: EventType, eventTitle?: string | null | undefined, id: string, speakerId?: string | null | undefined, speakerName?: string | null | undefined, speakerTitle?: string | null | undefined, startMs?: number | null | undefined, status: TranscrippetStatus, transcript: string, transcriptionAudioOffsetSeconds: number, trimmedAudioUrl?: string | null | undefined, wordDurationsMs?: unknown | null | undefined, equityPrices?: { __typename?: 'TranscrippetEquityPrice', startIndex: number, prices: Array&lt;{ __typename?: 'RealtimeTranscrippetPrice', date: string, price: number, volume: number }&gt; } | null | undefined } };
 &nbsp;
 export type CurrentUserQueryQueryVariables = Exact&lt;{ [key: string]: never; }&gt;;
 &nbsp;
@@ -5683,6 +5741,14 @@ export const TranscrippetDocument = gql`
     eventId
     eventType
     eventTitle
+    equityPrices {
+      prices {
+        date
+        price
+        volume
+      }
+      startIndex
+    }
     id
     speakerId
     speakerName
@@ -5935,7 +6001,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Feb 23 2024 14:40:14 GMT-0500 (Eastern Standard Time)
+                at Thu Feb 29 2024 13:15:22 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
