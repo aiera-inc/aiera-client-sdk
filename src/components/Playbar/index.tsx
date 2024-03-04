@@ -366,6 +366,7 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                     action: 'pause',
                     origin: 'playBar',
                     event: {
+                        eventId: id,
                         eventDate: metaData?.eventDate,
                         ticker: metaData?.localTicker,
                         title: metaData?.title,
@@ -390,6 +391,7 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                     action: 'play',
                     origin: 'playBar',
                     event: {
+                        eventId: id,
                         eventDate: metaData?.eventDate,
                         ticker: metaData?.localTicker,
                         title: metaData?.title,
