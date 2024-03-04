@@ -73508,6 +73508,7 @@ function PlayButton(props) {
         action: "pause",
         origin,
         event: {
+          eventId: id,
           eventDate: metaData.eventDate,
           ticker: metaData.localTicker,
           title: metaData.title,
@@ -73522,6 +73523,7 @@ function PlayButton(props) {
         action: "play",
         origin,
         event: {
+          eventId: id,
           eventDate: metaData.eventDate,
           ticker: metaData.localTicker,
           title: metaData.title,

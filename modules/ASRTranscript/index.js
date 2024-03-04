@@ -83159,6 +83159,7 @@ function usePlayer(id, url, offset = 0, metaData) {
         action: "pause",
         origin: "playBar",
         event: {
+          eventId: id,
           eventDate: metaData == null ? void 0 : metaData.eventDate,
           ticker: metaData == null ? void 0 : metaData.localTicker,
           title: metaData == null ? void 0 : metaData.title,
@@ -83177,6 +83178,7 @@ function usePlayer(id, url, offset = 0, metaData) {
         action: "play",
         origin: "playBar",
         event: {
+          eventId: id,
           eventDate: metaData == null ? void 0 : metaData.eventDate,
           ticker: metaData == null ? void 0 : metaData.localTicker,
           title: metaData == null ? void 0 : metaData.title,
@@ -85627,6 +85629,7 @@ function PlayButton(props) {
         action: "pause",
         origin,
         event: {
+          eventId: id,
           eventDate: metaData.eventDate,
           ticker: metaData.localTicker,
           title: metaData.title,
@@ -85641,6 +85644,7 @@ function PlayButton(props) {
         action: "play",
         origin,
         event: {
+          eventId: id,
           eventDate: metaData.eventDate,
           ticker: metaData.localTicker,
           title: metaData.title,
