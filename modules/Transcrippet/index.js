@@ -73493,6 +73493,7 @@ function PlayButton(props) {
   const isPlaying = audioPlayer.playing(id);
   const bus = useMessageBus();
   const togglePlayback = (0, import_react26.useCallback)((event) => {
+    const activeMetaData = metaData || audioPlayer.metaData;
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
@@ -73508,11 +73509,11 @@ function PlayButton(props) {
         action: "pause",
         origin,
         event: {
-          eventId: id,
-          eventDate: metaData.eventDate,
-          ticker: metaData.localTicker,
-          title: metaData.title,
-          eventType: metaData.eventType
+          eventId: activeMetaData.eventId,
+          eventDate: activeMetaData.eventDate,
+          ticker: activeMetaData.localTicker,
+          title: activeMetaData.title,
+          eventType: activeMetaData.eventType
         }
       }, "out");
     } else if (url) {
@@ -73523,11 +73524,11 @@ function PlayButton(props) {
         action: "play",
         origin,
         event: {
-          eventId: id,
-          eventDate: metaData.eventDate,
-          ticker: metaData.localTicker,
-          title: metaData.title,
-          eventType: metaData.eventType
+          eventId: activeMetaData.eventId,
+          eventDate: activeMetaData.eventDate,
+          ticker: activeMetaData.localTicker,
+          title: activeMetaData.title,
+          eventType: activeMetaData.eventType
         }
       }, "out");
     }
@@ -73757,6 +73758,7 @@ function TranscrippetUI(props) {
     }, /* @__PURE__ */ import_react30.default.createElement(PlayButton, {
       metaData: {
         localTicker: typeof companyTicker === "string" ? companyTicker : void 0,
+        eventId,
         eventDate,
         eventType,
         externalAudioStreamUrl: audioUrl

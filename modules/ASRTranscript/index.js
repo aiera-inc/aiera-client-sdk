@@ -83145,6 +83145,7 @@ function usePlayer(id, url, offset = 0, metaData) {
   const isPlayingAnotherEvent = isPlaying && id && !audioPlayer.playing(id);
   const bus = useMessageBus();
   const togglePlayback = (0, import_react34.useCallback)(() => {
+    const activeMetaData = metaData || (audioPlayer == null ? void 0 : audioPlayer.metaData);
     if (isPlaying) {
       void track("Click", "Audio Pause", { eventId: id, url });
       audioPlayer.pause();
@@ -83159,11 +83160,11 @@ function usePlayer(id, url, offset = 0, metaData) {
         action: "pause",
         origin: "playBar",
         event: {
-          eventId: id,
-          eventDate: metaData == null ? void 0 : metaData.eventDate,
-          ticker: metaData == null ? void 0 : metaData.localTicker,
-          title: metaData == null ? void 0 : metaData.title,
-          eventType: metaData == null ? void 0 : metaData.eventType
+          eventId: activeMetaData == null ? void 0 : activeMetaData.eventId,
+          eventDate: activeMetaData == null ? void 0 : activeMetaData.eventDate,
+          ticker: activeMetaData == null ? void 0 : activeMetaData.localTicker,
+          title: activeMetaData == null ? void 0 : activeMetaData.title,
+          eventType: activeMetaData == null ? void 0 : activeMetaData.eventType
         }
       }, "out");
     } else {
@@ -83178,11 +83179,11 @@ function usePlayer(id, url, offset = 0, metaData) {
         action: "play",
         origin: "playBar",
         event: {
-          eventId: id,
-          eventDate: metaData == null ? void 0 : metaData.eventDate,
-          ticker: metaData == null ? void 0 : metaData.localTicker,
-          title: metaData == null ? void 0 : metaData.title,
-          eventType: metaData == null ? void 0 : metaData.eventType
+          eventId: activeMetaData == null ? void 0 : activeMetaData.eventId,
+          eventDate: activeMetaData == null ? void 0 : activeMetaData.eventDate,
+          ticker: activeMetaData == null ? void 0 : activeMetaData.localTicker,
+          title: activeMetaData == null ? void 0 : activeMetaData.title,
+          eventType: activeMetaData == null ? void 0 : activeMetaData.eventType
         }
       }, "out");
     }
@@ -85614,6 +85615,7 @@ function PlayButton(props) {
   const isPlaying = audioPlayer.playing(id);
   const bus = useMessageBus();
   const togglePlayback = (0, import_react54.useCallback)((event) => {
+    const activeMetaData = metaData || audioPlayer.metaData;
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
       void track("Click", "Audio Pause", { eventId: id, url });
@@ -85629,11 +85631,11 @@ function PlayButton(props) {
         action: "pause",
         origin,
         event: {
-          eventId: id,
-          eventDate: metaData.eventDate,
-          ticker: metaData.localTicker,
-          title: metaData.title,
-          eventType: metaData.eventType
+          eventId: activeMetaData.eventId,
+          eventDate: activeMetaData.eventDate,
+          ticker: activeMetaData.localTicker,
+          title: activeMetaData.title,
+          eventType: activeMetaData.eventType
         }
       }, "out");
     } else if (url) {
@@ -85644,11 +85646,11 @@ function PlayButton(props) {
         action: "play",
         origin,
         event: {
-          eventId: id,
-          eventDate: metaData.eventDate,
-          ticker: metaData.localTicker,
-          title: metaData.title,
-          eventType: metaData.eventType
+          eventId: activeMetaData.eventId,
+          eventDate: activeMetaData.eventDate,
+          ticker: activeMetaData.localTicker,
+          title: activeMetaData.title,
+          eventType: activeMetaData.eventType
         }
       }, "out");
     }
@@ -86536,6 +86538,7 @@ function HeaderUI(props) {
       origin: "transcriptHeader",
       metaData: {
         createdBy,
+        eventId: eventId || event.id,
         eventDate: eventDate ? eventDate.toISO() : void 0,
         eventStream: event.audioStreamUri,
         eventType: event.eventType,
@@ -86971,17 +86974,21 @@ var TranscriptUI = (props) => {
     if (hidePlaybar) {
       return null;
     }
+    const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
     return ((event == null ? void 0 : event.audioProxy) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react65.default.createElement(Playbar, {
       hideEventDetails: true,
       hidePlayer: !showPlayer,
       id: event == null ? void 0 : event.id,
       metaData: {
         createdBy: getEventCreatorName(event == null ? void 0 : event.creator),
+        eventId: eventId || event.id,
         eventStream: event == null ? void 0 : event.audioStreamUri,
         eventType: event == null ? void 0 : event.eventType,
+        eventDate: event == null ? void 0 : event.eventDate,
+        localTicker: primaryQuote == null ? void 0 : primaryQuote.localTicker,
         externalAudioStreamUrl: event.externalAudioStreamUrl,
         isLive: !!(event == null ? void 0 : event.isLive),
-        quote: getPrimaryQuote(event == null ? void 0 : event.primaryCompany),
+        quote: primaryQuote,
         title: event == null ? void 0 : event.title
       },
       offset: ((event == null ? void 0 : event.audioRecordingOffsetMs) || 0) / 1e3,
