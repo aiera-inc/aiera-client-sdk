@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.26% </span>
+                <span class="strong">63.17% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>196/305</span>
+                <span class='fraction'>199/315</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">49.84% </span>
+                <span class="strong">49.53% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>159/319</span>
+                <span class='fraction'>160/323</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.68% </span>
+                <span class="strong">64.42% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>67/102</span>
+                <span class='fraction'>67/104</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.28% </span>
+                <span class="strong">63.32% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>180/280</span>
+                <span class='fraction'>183/289</span>
             </div>
         
             
@@ -1570,7 +1570,22 @@
 <a name='L1505'></a><a href='#L1505'>1505</a>
 <a name='L1506'></a><a href='#L1506'>1506</a>
 <a name='L1507'></a><a href='#L1507'>1507</a>
-<a name='L1508'></a><a href='#L1508'>1508</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1508'></a><a href='#L1508'>1508</a>
+<a name='L1509'></a><a href='#L1509'>1509</a>
+<a name='L1510'></a><a href='#L1510'>1510</a>
+<a name='L1511'></a><a href='#L1511'>1511</a>
+<a name='L1512'></a><a href='#L1512'>1512</a>
+<a name='L1513'></a><a href='#L1513'>1513</a>
+<a name='L1514'></a><a href='#L1514'>1514</a>
+<a name='L1515'></a><a href='#L1515'>1515</a>
+<a name='L1516'></a><a href='#L1516'>1516</a>
+<a name='L1517'></a><a href='#L1517'>1517</a>
+<a name='L1518'></a><a href='#L1518'>1518</a>
+<a name='L1519'></a><a href='#L1519'>1519</a>
+<a name='L1520'></a><a href='#L1520'>1520</a>
+<a name='L1521'></a><a href='#L1521'>1521</a>
+<a name='L1522'></a><a href='#L1522'>1522</a>
+<a name='L1523'></a><a href='#L1523'>1523</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2627,6 +2642,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-yes">59x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2701,7 +2717,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4133,6 +4163,7 @@ function useAudioSync(
     () =&gt; void
 ] {
     const [currentParagraph, setCurrentParagraph] = useState&lt;string | null&gt;(null);
+    const config = useConfig();
     const offset = { top: eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? <span class="branch-0 cbranch-no" title="branch not covered" >55 </span>: 5, bottom: 15 };
     const {
         scrollContainerRef,
@@ -4208,12 +4239,26 @@ function useAudioSync(
         }
         // If we don't have any audio to sync to and aren't live, go to the first paragraph
         else if (paragraphs[0]) {
-            setCurrentParagraph(paragraphs[0].id);
+            // If an initialItemId was set in the configuration
+            const initialItemId = config?.options?.initialItemId;
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (initialItemId) {
+                const pg = <span class="cstat-no" title="statement not covered" >paragraphs.find(<span class="fstat-no" title="function not covered" >({</span> sentences }) =&gt; {</span>
+                    const sentenceIds = <span class="cstat-no" title="statement not covered" >sentences.filter(<span class="fstat-no" title="function not covered" >({</span> id }) =&gt; <span class="cstat-no" title="statement not covered" >id.includes(initialItemId))</span>;</span>
+<span class="cstat-no" title="statement not covered" >                    return sentenceIds.length &gt; 0;</span>
+                });
+<span class="cstat-no" title="statement not covered" >                if (pg?.id) {</span>
+<span class="cstat-no" title="statement not covered" >                    setCurrentParagraph(pg.id);</span>
+                } else {
+<span class="cstat-no" title="statement not covered" >                    setCurrentParagraph(paragraphs[0].id);</span>
+                }
+            } else {
+                setCurrentParagraph(paragraphs[0].id);
+            }
         }
 &nbsp;
         // As long as we found one, set it so we can scroll to it and show
         // an indicator in the UI
-    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text]);
+    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, config?.options?.initialItemId]);
 &nbsp;
     const currentParagraphTimestamp = useMemo(() =&gt; {
         const currentIndex = paragraphs.findIndex(({ id }) =&gt; currentParagraph === id);
@@ -4591,7 +4636,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Mar 04 2024 16:09:10 GMT-0500 (Eastern Standard Time)
+                at Tue Mar 05 2024 12:57:16 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

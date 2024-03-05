@@ -87329,8 +87329,9 @@ function usePartials(eventId, lastParagraphId) {
   return partial;
 }
 function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
-  var _a, _b, _c, _d;
+  var _a, _b, _c, _d, _e;
   const [currentParagraph, setCurrentParagraph] = (0, import_react65.useState)(null);
+  const config = useConfig();
   const offset = { top: ((_c = (_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events) == null ? void 0 : _b[0]) == null ? void 0 : _c.hasPublishedTranscript) ? 55 : 5, bottom: 15 };
   const {
     scrollContainerRef,
@@ -87343,13 +87344,13 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   const paragraphs = (0, import_react65.useMemo)(() => speakerTurns.flatMap((s2) => s2.paragraphs), [speakerTurns]);
   const partial = usePartials(eventId, (_d = paragraphs.slice(-1)[0]) == null ? void 0 : _d.id);
   (0, import_react65.useEffect)(() => {
-    var _a2, _b2, _c2, _d2, _e;
+    var _a2, _b2, _c2, _d2, _e2, _f;
     const eventId2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.id;
     const audioParagraph = eventId2 && audioPlayer.id && audioPlayer.id === eventId2 ? [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3) : null;
     const lastSyncMs = ((_c2 = paragraphs.slice(-1)[0]) == null ? void 0 : _c2.syncMs) || 0;
     const isListening = eventId2 ? audioPlayer.playing(eventId2) : false;
     const listeningAtLiveEdge = audioParagraph && isListening && audioPlayer.rawCurrentTime * 1e3 > lastSyncMs;
-    const liveAndNotListening = !audioParagraph && ((_e = (_d2 = eventQuery.state.data) == null ? void 0 : _d2.events[0]) == null ? void 0 : _e.isLive);
+    const liveAndNotListening = !audioParagraph && ((_e2 = (_d2 = eventQuery.state.data) == null ? void 0 : _d2.events[0]) == null ? void 0 : _e2.isLive);
     if (listeningAtLiveEdge || liveAndNotListening) {
       if (partial.text) {
         setCurrentParagraph("partial");
@@ -87379,9 +87380,22 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
         setCurrentParagraph(audioParagraph.id);
       }
     } else if (paragraphs[0]) {
-      setCurrentParagraph(paragraphs[0].id);
+      const initialItemId = (_f = config == null ? void 0 : config.options) == null ? void 0 : _f.initialItemId;
+      if (initialItemId) {
+        const pg = paragraphs.find(({ sentences }) => {
+          const sentenceIds = sentences.filter(({ id }) => id.includes(initialItemId));
+          return sentenceIds.length > 0;
+        });
+        if (pg == null ? void 0 : pg.id) {
+          setCurrentParagraph(pg.id);
+        } else {
+          setCurrentParagraph(paragraphs[0].id);
+        }
+      } else {
+        setCurrentParagraph(paragraphs[0].id);
+      }
     }
-  }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text]);
+  }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, (_e = config == null ? void 0 : config.options) == null ? void 0 : _e.initialItemId]);
   const currentParagraphTimestamp = (0, import_react65.useMemo)(() => {
     var _a2;
     const currentIndex = paragraphs.findIndex(({ id }) => currentParagraph === id);
