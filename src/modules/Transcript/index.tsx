@@ -1054,6 +1054,7 @@ function useAudioSync(
     () => void
 ] {
     const [currentParagraph, setCurrentParagraph] = useState<string | null>(null);
+    const config = useConfig();
     const offset = { top: eventQuery.state.data?.events?.[0]?.hasPublishedTranscript ? 55 : 5, bottom: 15 };
     const {
         scrollContainerRef,
@@ -1129,12 +1130,26 @@ function useAudioSync(
         }
         // If we don't have any audio to sync to and aren't live, go to the first paragraph
         else if (paragraphs[0]) {
-            setCurrentParagraph(paragraphs[0].id);
+            // If an initialItemId was set in the configuration
+            const initialItemId = config?.options?.initialItemId;
+            if (initialItemId) {
+                const pg = paragraphs.find(({ sentences }) => {
+                    const sentenceIds = sentences.filter(({ id }) => id.includes(initialItemId));
+                    return sentenceIds.length > 0;
+                });
+                if (pg?.id) {
+                    setCurrentParagraph(pg.id);
+                } else {
+                    setCurrentParagraph(paragraphs[0].id);
+                }
+            } else {
+                setCurrentParagraph(paragraphs[0].id);
+            }
         }
 
         // As long as we found one, set it so we can scroll to it and show
         // an indicator in the UI
-    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text]);
+    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, config?.options?.initialItemId]);
 
     const currentParagraphTimestamp = useMemo(() => {
         const currentIndex = paragraphs.findIndex(({ id }) => currentParagraph === id);

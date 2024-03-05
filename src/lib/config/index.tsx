@@ -33,6 +33,7 @@ export interface Options {
     eventId?: string;
     eventListFilters?: EventListFilter[];
     eventListView?: EventListView;
+    initialItemId?: string;
     relativeTimestamps?: boolean;
     transcriptRawBeginSeconds?: number;
     transcriptRawEndSeconds?: number;
