@@ -265,6 +265,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                 origin="transcriptHeader"
                                                 metaData={{
                                                     createdBy,
+                                                    eventId: eventId || event.id,
                                                     eventDate: eventDate ? eventDate.toISO() : undefined,
                                                     eventStream: event.audioStreamUri,
                                                     eventType: event.eventType,

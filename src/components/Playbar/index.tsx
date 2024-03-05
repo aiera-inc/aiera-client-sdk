@@ -350,6 +350,7 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
     const isPlayingAnotherEvent = isPlaying && id && !audioPlayer.playing(id);
     const bus = useMessageBus();
     const togglePlayback = useCallback(() => {
+        const activeMetaData = metaData || audioPlayer?.metaData;
         if (isPlaying) {
             void track('Click', 'Audio Pause', { eventId: id, url });
             audioPlayer.pause();
@@ -366,11 +367,11 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                     action: 'pause',
                     origin: 'playBar',
                     event: {
-                        eventId: id,
-                        eventDate: metaData?.eventDate,
-                        ticker: metaData?.localTicker,
-                        title: metaData?.title,
-                        eventType: metaData?.eventType,
+                        eventId: activeMetaData?.eventId,
+                        eventDate: activeMetaData?.eventDate,
+                        ticker: activeMetaData?.localTicker,
+                        title: activeMetaData?.title,
+                        eventType: activeMetaData?.eventType,
                     },
                 },
                 'out'
@@ -391,11 +392,11 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                     action: 'play',
                     origin: 'playBar',
                     event: {
-                        eventId: id,
-                        eventDate: metaData?.eventDate,
-                        ticker: metaData?.localTicker,
-                        title: metaData?.title,
-                        eventType: metaData?.eventType,
+                        eventId: activeMetaData?.eventId,
+                        eventDate: activeMetaData?.eventDate,
+                        ticker: activeMetaData?.localTicker,
+                        title: activeMetaData?.title,
+                        eventType: activeMetaData?.eventType,
                     },
                 },
                 'out'

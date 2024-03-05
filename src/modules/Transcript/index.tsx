@@ -580,6 +580,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                     if (hidePlaybar) {
                         return null;
                     }
+                    const primaryQuote = getPrimaryQuote(event?.primaryCompany);
                     return (
                         (event?.audioProxy || event?.isLive) && (
                             <Playbar
@@ -588,11 +589,14 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 id={event?.id}
                                 metaData={{
                                     createdBy: getEventCreatorName(event?.creator as User),
+                                    eventId: eventId || event.id,
                                     eventStream: event?.audioStreamUri,
                                     eventType: event?.eventType,
+                                    eventDate: event?.eventDate,
+                                    localTicker: primaryQuote?.localTicker,
                                     externalAudioStreamUrl: event.externalAudioStreamUrl,
                                     isLive: !!event?.isLive,
-                                    quote: getPrimaryQuote(event?.primaryCompany),
+                                    quote: primaryQuote,
                                     title: event?.title,
                                 }}
                                 offset={(event?.audioRecordingOffsetMs || 0) / 1000}

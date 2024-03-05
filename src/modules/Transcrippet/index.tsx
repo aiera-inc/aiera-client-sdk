@@ -149,6 +149,7 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                     <PlayButton
                                         metaData={{
                                             localTicker: typeof companyTicker === 'string' ? companyTicker : undefined,
+                                            eventId,
                                             eventDate: eventDate,
                                             eventType: eventType,
                                             externalAudioStreamUrl: audioUrl,

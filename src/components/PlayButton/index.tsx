@@ -117,6 +117,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
     const bus = useMessageBus();
     const togglePlayback = useCallback(
         (event: MouseEvent) => {
+            const activeMetaData = metaData || audioPlayer.metaData;
             event.stopPropagation();
             if (audioPlayer.playing(id)) {
                 void track('Click', 'Audio Pause', { eventId: id, url });
@@ -134,11 +135,11 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
                         action: 'pause',
                         origin,
                         event: {
-                            eventId: id,
-                            eventDate: metaData.eventDate,
-                            ticker: metaData.localTicker,
-                            title: metaData.title,
-                            eventType: metaData.eventType,
+                            eventId: activeMetaData.eventId,
+                            eventDate: activeMetaData.eventDate,
+                            ticker: activeMetaData.localTicker,
+                            title: activeMetaData.title,
+                            eventType: activeMetaData.eventType,
                         },
                     },
                     'out'
@@ -154,11 +155,11 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
                         action: 'play',
                         origin,
                         event: {
-                            eventId: id,
-                            eventDate: metaData.eventDate,
-                            ticker: metaData.localTicker,
-                            title: metaData.title,
-                            eventType: metaData.eventType,
+                            eventId: activeMetaData.eventId,
+                            eventDate: activeMetaData.eventDate,
+                            ticker: activeMetaData.localTicker,
+                            title: activeMetaData.title,
+                            eventType: activeMetaData.eventType,
                         },
                     },
                     'out'

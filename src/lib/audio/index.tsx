@@ -13,6 +13,7 @@ const shakaInstance: ShakaPlayer = require('shaka-player/dist/shaka-player.ui.js
 
 export interface EventMetaData {
     createdBy?: string;
+    eventId?: string;
     eventStream?: string | null;
     eventDate?: string;
     eventType?: EventType;
