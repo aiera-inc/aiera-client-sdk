@@ -37637,7 +37637,9 @@ function createGQLClient(config) {
         ApplicationConfiguration: () => null,
         Attachment: () => null,
         EventQuotePriceInfo: () => null,
+        RealtimeTranscrippetPrice: () => null,
         Search: () => null,
+        TranscrippetEquityPrice: () => null,
         UserEmailStatus: () => null
       }
     }),
