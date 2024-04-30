@@ -766,9 +766,6 @@ video {
 .w-\[3px\] {
   width: 3px;
 }
-.w-40 {
-  width: 10rem;
-}
 .min-w-0 {
   min-width: 0px;
 }
@@ -780,6 +777,9 @@ video {
 }
 .max-w-\[300px\] {
   max-width: 300px;
+}
+.max-w-\[18rem\] {
+  max-width: 18rem;
 }
 .flex-1 {
   flex: 1 1 0%;
@@ -1168,6 +1168,9 @@ video {
 .bg-green-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(74 222 128 / var(--tw-bg-opacity));
+}
+.bg-gray-900\/20 {
+  background-color: rgb(17 24 39 / 0.2);
 }
 .bg-opacity-80 {
   --tw-bg-opacity: 0.8;
@@ -3210,6 +3213,8 @@ input.PhoneInputInput::placeholder {
 .handles__transcriptHeader-showSearch .transcript__header {
   min-height: 101px;
 }
+
+/* src/modules/Transcript/ReportIssue/styles.css */
 
 /* src/modules/EventList/FilterBy/styles.css */
 

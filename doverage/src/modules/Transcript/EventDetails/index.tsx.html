@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>13/13</span>
+                <span class='fraction'>13/14</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">87.5% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>7/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">90.9% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>10/10</span>
+                <span class='fraction'>10/11</span>
             </div>
         
             
@@ -247,7 +247,24 @@
 <a name='L182'></a><a href='#L182'>182</a>
 <a name='L183'></a><a href='#L183'>183</a>
 <a name='L184'></a><a href='#L184'>184</a>
-<a name='L185'></a><a href='#L185'>185</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L185'></a><a href='#L185'>185</a>
+<a name='L186'></a><a href='#L186'>186</a>
+<a name='L187'></a><a href='#L187'>187</a>
+<a name='L188'></a><a href='#L188'>188</a>
+<a name='L189'></a><a href='#L189'>189</a>
+<a name='L190'></a><a href='#L190'>190</a>
+<a name='L191'></a><a href='#L191'>191</a>
+<a name='L192'></a><a href='#L192'>192</a>
+<a name='L193'></a><a href='#L193'>193</a>
+<a name='L194'></a><a href='#L194'>194</a>
+<a name='L195'></a><a href='#L195'>195</a>
+<a name='L196'></a><a href='#L196'>196</a>
+<a name='L197'></a><a href='#L197'>197</a>
+<a name='L198'></a><a href='#L198'>198</a>
+<a name='L199'></a><a href='#L199'>199</a>
+<a name='L200'></a><a href='#L200'>200</a>
+<a name='L201'></a><a href='#L201'>201</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -413,6 +430,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -431,12 +462,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { ReactElement } from 'react';
-import gql from 'graphql-tag';
-import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
-import { useQuery } from '@aiera/client-sdk/api/client';
-import classNames from 'classnames';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useQuery } from '@aiera/client-sdk/api/client';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
+import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import classNames from 'classnames';
+import gql from 'graphql-tag';
+import React, { ReactElement } from 'react';
 import './styles.css';
 &nbsp;
 export type Event = TranscriptQuery['events'][0];
@@ -445,13 +477,14 @@ interface EventDetailsSharedProps {
     eventDetailsExpanded: boolean;
     toggleEventDetails: () =&gt; void;
     event: Event;
+    toggleReportIssueModal: (override?: boolean) =&gt; void;
 }
 &nbsp;
 /** @notExported */
 interface EventDetailsUIProps extends EventDetailsSharedProps {}
 &nbsp;
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
-    const { event, eventDetailsExpanded, toggleEventDetails } = props;
+    const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
     const userQuery = useQuery&lt;CurrentUserQuery&gt;({
         requestPolicy: 'cache-only',
         query: gql`
@@ -496,7 +529,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                 &lt;div className="text-sm border-[1px] rounded-lg border-gray-200 mb-3.5 dark:border-bluegray-5 dark:text-bluegray-4"&gt;
                     {event.dialInPhoneNumbers &amp;&amp; event.dialInPhoneNumbers.length &gt; 0 &amp;&amp; (
                         &lt;div className="flex my-3 px-3.5"&gt;
-                            &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Phone number&lt;/span&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Phone number&lt;/span&gt;
                             &lt;div&gt;
                                 {event.dialInPhoneNumbers.map((number: string) =&gt; (
                                     &lt;div key={number}&gt;{number}&lt;/div&gt;
@@ -506,13 +539,13 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                     )}
                     {event.dialInPin &amp;&amp; (
                         &lt;div className="flex my-3 px-3.5"&gt;
-                            &lt;span className="font-semibold flex-shrink-0 block w-28 mr-1"&gt;Pin Number&lt;/span&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Pin Number&lt;/span&gt;
                             &lt;span&gt;{event?.dialInPin}&lt;/span&gt;
                         &lt;/div&gt;
                     )}
                     {event.webcastUrls.length &gt; 0 &amp;&amp; (
                         &lt;div className="flex my-3 px-3.5"&gt;
-                            &lt;span className="font-semibold flex-shrink-0 block w-40 mr-1"&gt;Webcast&lt;/span&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Webcast&lt;/span&gt;
                             &lt;div className="overflow-hidden truncate"&gt;
                                 {event.webcastUrls?.map((url: string) =&gt; (
                                     &lt;div key={url} className="block truncate"&gt;
@@ -531,7 +564,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                     )}
                     {event.audioRecordingUrl &amp;&amp; (
                         &lt;div className="flex my-3 px-3.5"&gt;
-                            &lt;span className="font-semibold flex-shrink-0 block w-40 mr-1"&gt;Event Audio&lt;/span&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Event Audio&lt;/span&gt;
                             &lt;span className="block truncate"&gt;
                                 &lt;a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
@@ -546,7 +579,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                     )}
                     {slides &amp;&amp; (
 <span class="branch-1 cbranch-no" title="branch not covered" >                        &lt;div className="flex my-3 px-3.5"&gt;</span>
-                            &lt;span className="font-semibold flex-shrink-0 block w-40 mr-1"&gt;Presentation Slides&lt;/span&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Pres. Slides&lt;/span&gt;
                             &lt;span className="block truncate"&gt;
                                 &lt;a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
@@ -561,7 +594,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                     )}
                     {press &amp;&amp; (
 <span class="branch-1 cbranch-no" title="branch not covered" >                        &lt;div className="flex my-3 px-3.5"&gt;</span>
-                            &lt;span className="font-semibold flex-shrink-0 block w-40 mr-1"&gt;Press Release&lt;/span&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Press Release&lt;/span&gt;
                             &lt;span className="block truncate"&gt;
                                 &lt;a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
@@ -576,7 +609,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                     )}
                     {userQuery.state.data?.currentUser?.apiKey &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >event.connectionStatus === 'transcribed' </span>&amp;&amp; (
 <span class="branch-2 cbranch-no" title="branch not covered" >                        &lt;div className="flex my-3 px-3.5"&gt;</span>
-                            &lt;span className="font-semibold flex-shrink-0 block w-40 mr-1"&gt;Transcript &lt;/span&gt;
+                            &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Transcript &lt;/span&gt;
                             &lt;span className="block truncate"&gt;
                                 &lt;a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
@@ -593,6 +626,20 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                             &lt;/span&gt;
                         &lt;/div&gt;
                     )}
+                    &lt;div className="flex my-3 px-3.5"&gt;
+                        &lt;span className="font-semibold flex-shrink-0 block w-32 mr-1"&gt;Event Problems&lt;/span&gt;
+                        &lt;span className="block truncate"&gt;
+                            &lt;p
+                                onClick={<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >toggleReportIssueModal(true)}</span>
+                                className={classNames(
+                                    'text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline',
+                                    'cursor-pointer'
+                                )}
+                            &gt;
+                                Report Issue
+                            &lt;/p&gt;
+                        &lt;/span&gt;
+                    &lt;/div&gt;
                 &lt;/div&gt;
             )}
         &lt;/div&gt;
@@ -606,9 +653,10 @@ export interface EventDetailsProps extends EventDetailsSharedProps {}
  * Renders EventDetails
  */
 export function EventDetails(props: EventDetailsProps): ReactElement {
-    const { event, eventDetailsExpanded, toggleEventDetails } = props;
+    const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
     return (
         &lt;EventDetailsUI
+            toggleReportIssueModal={toggleReportIssueModal}
             event={event}
             eventDetailsExpanded={eventDetailsExpanded}
             toggleEventDetails={toggleEventDetails}
@@ -622,7 +670,7 @@ export function EventDetails(props: EventDetailsProps): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Apr 02 2024 12:52:10 GMT-0400 (Eastern Daylight Time)
+                at Tue Apr 30 2024 16:21:54 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../prettify.js"></script>

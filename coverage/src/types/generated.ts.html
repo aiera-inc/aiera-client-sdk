@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>25/25</span>
+                <span class='fraction'>26/26</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>25/25</span>
+                <span class='fraction'>26/26</span>
             </div>
         
             
@@ -2040,7 +2040,28 @@
 <a name='L1975'></a><a href='#L1975'>1975</a>
 <a name='L1976'></a><a href='#L1976'>1976</a>
 <a name='L1977'></a><a href='#L1977'>1977</a>
-<a name='L1978'></a><a href='#L1978'>1978</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1978'></a><a href='#L1978'>1978</a>
+<a name='L1979'></a><a href='#L1979'>1979</a>
+<a name='L1980'></a><a href='#L1980'>1980</a>
+<a name='L1981'></a><a href='#L1981'>1981</a>
+<a name='L1982'></a><a href='#L1982'>1982</a>
+<a name='L1983'></a><a href='#L1983'>1983</a>
+<a name='L1984'></a><a href='#L1984'>1984</a>
+<a name='L1985'></a><a href='#L1985'>1985</a>
+<a name='L1986'></a><a href='#L1986'>1986</a>
+<a name='L1987'></a><a href='#L1987'>1987</a>
+<a name='L1988'></a><a href='#L1988'>1988</a>
+<a name='L1989'></a><a href='#L1989'>1989</a>
+<a name='L1990'></a><a href='#L1990'>1990</a>
+<a name='L1991'></a><a href='#L1991'>1991</a>
+<a name='L1992'></a><a href='#L1992'>1992</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -3822,6 +3843,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -5366,6 +5394,13 @@ export type QuotePricesQueryVariables = Exact&lt;{
 &nbsp;
 export type QuotePricesQuery = { __typename?: 'Query', events: Array&lt;{ __typename?: 'Event', id: string, quotePrices: Array&lt;{ __typename?: 'EventQuotePriceInfo', id: string, currentDayClosePrice?: number | null | undefined, currentDayOpenPrice?: number | null | undefined, endPrice?: number | null | undefined, previousDayClosePrice?: number | null | undefined, startPrice?: number | null | undefined, quote: { __typename?: 'Quote', id: string, localTicker: string, exchange: { __typename?: 'Exchange', id: string, shortName: string } }, realtimePrices: Array&lt;{ __typename?: 'EventQuoteRealtimePrice', id: string, date: string, price: number, volume: number, priceChangeFromStartValue?: number | null | undefined, priceChangeFromStartPercent?: number | null | undefined, volumeChangeFromStartValue?: number | null | undefined, volumeChangeFromStartPercent?: number | null | undefined, volumeChangeFromLastValue?: number | null | undefined, volumeChangeFromLastPercent?: number | null | undefined }&gt; }&gt; }&gt; };
 &nbsp;
+export type ReportEventIssueMutationVariables = Exact&lt;{
+  input: ReportEventIssueInput;
+}&gt;;
+&nbsp;
+&nbsp;
+export type ReportEventIssueMutation = { __typename?: 'Mutation', reportEventIssue: { __typename?: 'SupportMutationResponse', success: boolean } };
+&nbsp;
 export type EventUpdatesQueryVariables = Exact&lt;{
   eventId: Scalars['ID'];
 }&gt;;
@@ -5805,6 +5840,13 @@ export const QuotePricesDocument = gql`
   }
 }
     `;
+export const ReportEventIssueDocument = gql`
+    mutation ReportEventIssue($input: ReportEventIssueInput!) {
+  reportEventIssue(input: $input) {
+    success
+  }
+}
+    `;
 export const EventUpdatesDocument = gql`
     query EventUpdates($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
@@ -6001,7 +6043,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Apr 02 2024 12:52:10 GMT-0400 (Eastern Daylight Time)
+                at Tue Apr 30 2024 16:21:54 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

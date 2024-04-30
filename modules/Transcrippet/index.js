@@ -72316,6 +72316,13 @@ var QuotePricesDocument = lib_default`
   }
 }
     `;
+var ReportEventIssueDocument = lib_default`
+    mutation ReportEventIssue($input: ReportEventIssueInput!) {
+  reportEventIssue(input: $input) {
+    success
+  }
+}
+    `;
 var EventUpdatesDocument = lib_default`
     query EventUpdates($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {

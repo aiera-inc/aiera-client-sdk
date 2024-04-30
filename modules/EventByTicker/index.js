@@ -499,7 +499,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement52 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement54 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -594,10 +594,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement52(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement54(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement52(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement54(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement2(element, config, children) {
@@ -645,7 +645,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement52(element.type, key, ref, self2, source, owner, props);
+          return ReactElement54(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -1081,7 +1081,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context8, unstable_observedBits);
         }
-        function useState21(initialState) {
+        function useState22(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1101,7 +1101,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useLayoutEffect(create, deps);
         }
-        function useCallback17(callback, deps) {
+        function useCallback19(callback, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useCallback(callback, deps);
         }
@@ -1660,7 +1660,7 @@ var require_react_development = __commonJS({
         exports2.isValidElement = isValidElement;
         exports2.lazy = lazy;
         exports2.memo = memo2;
-        exports2.useCallback = useCallback17;
+        exports2.useCallback = useCallback19;
         exports2.useContext = useContext10;
         exports2.useDebugValue = useDebugValue;
         exports2.useEffect = useEffect23;
@@ -1669,7 +1669,7 @@ var require_react_development = __commonJS({
         exports2.useMemo = useMemo10;
         exports2.useReducer = useReducer2;
         exports2.useRef = useRef12;
-        exports2.useState = useState21;
+        exports2.useState = useState22;
         exports2.version = ReactVersion;
       })();
     }
@@ -2477,11 +2477,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React55 = require_react();
+        var React57 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React55.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React57.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2513,7 +2513,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React55) {
+        if (!React57) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3729,7 +3729,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React55.Children.forEach(children, function(child) {
+          React57.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3740,7 +3740,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React55.Children.forEach(props.children, function(child) {
+              React57.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10933,7 +10933,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React55.Component().refs;
+        var emptyRefsObject = new React57.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -74032,7 +74032,7 @@ var require_highcharts_react_min = __commonJS({
 });
 
 // src/web/modules/EventByTicker/index.tsx
-var import_react66 = __toModule(require_react());
+var import_react68 = __toModule(require_react());
 var import_react_dom2 = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -81615,6 +81615,13 @@ var QuotePricesDocument = lib_default`
   }
 }
     `;
+var ReportEventIssueDocument = lib_default`
+    mutation ReportEventIssue($input: ReportEventIssueInput!) {
+  reportEventIssue(input: $input) {
+    success
+  }
+}
+    `;
 var EventUpdatesDocument = lib_default`
     query EventUpdates($eventId: ID!) {
   events(filter: {eventIds: [$eventId]}) {
@@ -82109,7 +82116,7 @@ var Auth = ({
 };
 
 // src/modules/Transcript/index.tsx
-var import_react65 = __toModule(require_react());
+var import_react67 = __toModule(require_react());
 var import_classnames38 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon2 = __toModule(require_luxon());
@@ -85846,11 +85853,11 @@ function DownloadTooltip(props) {
 }
 
 // src/modules/Transcript/EventDetails/index.tsx
-var import_react58 = __toModule(require_react());
 var import_classnames31 = __toModule(require_classnames());
+var import_react58 = __toModule(require_react());
 function EventDetailsUI(props) {
   var _a, _b, _c, _d, _e, _f;
-  const { event, eventDetailsExpanded, toggleEventDetails } = props;
+  const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
   const userQuery = useQuery2({
     requestPolicy: "cache-only",
     query: lib_default`
@@ -85888,17 +85895,17 @@ function EventDetailsUI(props) {
   }, event.dialInPhoneNumbers && event.dialInPhoneNumbers.length > 0 && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react58.default.createElement("span", {
-    className: "font-semibold flex-shrink-0 block w-28 mr-1"
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
   }, "Phone number"), /* @__PURE__ */ import_react58.default.createElement("div", null, event.dialInPhoneNumbers.map((number) => /* @__PURE__ */ import_react58.default.createElement("div", {
     key: number
   }, number)))), event.dialInPin && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react58.default.createElement("span", {
-    className: "font-semibold flex-shrink-0 block w-28 mr-1"
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
   }, "Pin Number"), /* @__PURE__ */ import_react58.default.createElement("span", null, event == null ? void 0 : event.dialInPin)), event.webcastUrls.length > 0 && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react58.default.createElement("span", {
-    className: "font-semibold flex-shrink-0 block w-40 mr-1"
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
   }, "Webcast"), /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "overflow-hidden truncate"
   }, (_d = event.webcastUrls) == null ? void 0 : _d.map((url) => /* @__PURE__ */ import_react58.default.createElement("div", {
@@ -85912,7 +85919,7 @@ function EventDetailsUI(props) {
   }, "Open in new window"))))), event.audioRecordingUrl && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react58.default.createElement("span", {
-    className: "font-semibold flex-shrink-0 block w-40 mr-1"
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
   }, "Event Audio"), /* @__PURE__ */ import_react58.default.createElement("span", {
     className: "block truncate"
   }, /* @__PURE__ */ import_react58.default.createElement("a", {
@@ -85923,8 +85930,8 @@ function EventDetailsUI(props) {
   }, "Download MP3"))), slides && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react58.default.createElement("span", {
-    className: "font-semibold flex-shrink-0 block w-40 mr-1"
-  }, "Presentation Slides"), /* @__PURE__ */ import_react58.default.createElement("span", {
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
+  }, "Pres. Slides"), /* @__PURE__ */ import_react58.default.createElement("span", {
     className: "block truncate"
   }, /* @__PURE__ */ import_react58.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
@@ -85934,7 +85941,7 @@ function EventDetailsUI(props) {
   }, "Download PDF"))), press && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react58.default.createElement("span", {
-    className: "font-semibold flex-shrink-0 block w-40 mr-1"
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
   }, "Press Release"), /* @__PURE__ */ import_react58.default.createElement("span", {
     className: "block truncate"
   }, /* @__PURE__ */ import_react58.default.createElement("a", {
@@ -85945,7 +85952,7 @@ function EventDetailsUI(props) {
   }, "Download PDF"))), ((_f = (_e = userQuery.state.data) == null ? void 0 : _e.currentUser) == null ? void 0 : _f.apiKey) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react58.default.createElement("span", {
-    className: "font-semibold flex-shrink-0 block w-40 mr-1"
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
   }, "Transcript "), /* @__PURE__ */ import_react58.default.createElement("span", {
     className: "block truncate"
   }, /* @__PURE__ */ import_react58.default.createElement("a", {
@@ -85953,11 +85960,21 @@ function EventDetailsUI(props) {
     href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
     rel: "noreferrer",
     download: true
-  }, "Download PDF")))));
+  }, "Download PDF"))), /* @__PURE__ */ import_react58.default.createElement("div", {
+    className: "flex my-3 px-3.5"
+  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+    className: "font-semibold flex-shrink-0 block w-32 mr-1"
+  }, "Event Problems"), /* @__PURE__ */ import_react58.default.createElement("span", {
+    className: "block truncate"
+  }, /* @__PURE__ */ import_react58.default.createElement("p", {
+    onClick: () => toggleReportIssueModal(true),
+    className: (0, import_classnames31.default)("text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline", "cursor-pointer")
+  }, "Report Issue")))));
 }
 function EventDetails(props) {
-  const { event, eventDetailsExpanded, toggleEventDetails } = props;
+  const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
   return /* @__PURE__ */ import_react58.default.createElement(EventDetailsUI, {
+    toggleReportIssueModal,
     event,
     eventDetailsExpanded,
     toggleEventDetails
@@ -86416,6 +86433,7 @@ function HeaderUI(props) {
     toggleHeader,
     toggleKeyMentions,
     togglePriceChart,
+    toggleReportIssueModal,
     useConfigOptions,
     startTime
   } = props;
@@ -86592,6 +86610,7 @@ function HeaderUI(props) {
     }, /* @__PURE__ */ import_react64.default.createElement(XMark, {
       className: "w-2.5"
     }))), showRecordingDetails && headerExpanded && event && /* @__PURE__ */ import_react64.default.createElement(EventDetails, {
+      toggleReportIssueModal,
       event,
       eventDetailsExpanded,
       toggleEventDetails
@@ -86626,6 +86645,7 @@ function Header(props) {
     searchTerm,
     showHeaderControls,
     showHeaderPlayButton,
+    toggleReportIssueModal,
     startTime,
     useConfigOptions
   } = props;
@@ -86683,12 +86703,164 @@ function Header(props) {
     toggleHeader,
     toggleKeyMentions,
     togglePriceChart,
+    toggleReportIssueModal,
     useConfigOptions
   });
 }
 
+// src/components/Textarea/index.tsx
+var import_react65 = __toModule(require_react());
+function TextareaUI(props) {
+  const { autoFocus, className = "", clearable, clear, id, name, onChange, onFocus, placeholder, value } = props;
+  return /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: `group items-center relative w-full dark:text-white ${className} textarea__${name}`
+  }, /* @__PURE__ */ import_react65.default.createElement("textarea", {
+    id,
+    autoFocus,
+    className: "h-full border border-gray-200 min-h-[58px] px-3 py-2 rounded-lg text-sm w-full focus:border-1 focus:border-blue-600 focus:outline-none focus:shadow-input hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5",
+    onChange,
+    onFocus,
+    placeholder,
+    value
+  }), clearable && value && /* @__PURE__ */ import_react65.default.createElement("div", {
+    className: "h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700",
+    onClick: clear
+  }, /* @__PURE__ */ import_react65.default.createElement(Close, null)));
+}
+function Textarea(props) {
+  const { autoFocus = false, id, clearable = true, placeholder, onChange, onFocus, value, name, className } = props;
+  return /* @__PURE__ */ import_react65.default.createElement(TextareaUI, {
+    autoFocus,
+    clearable,
+    clear: (0, import_react65.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
+    id,
+    placeholder,
+    onChange: (0, import_react65.useCallback)((event) => {
+      var _a;
+      return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
+    }, [onChange]),
+    onFocus,
+    value,
+    className,
+    name
+  });
+}
+
+// src/modules/Transcript/ReportIssue/index.tsx
+var import_react66 = __toModule(require_react());
+function ReportIssueUI(props) {
+  const { onToggle, onSubmit, onChangeIssue, submitState, issueText } = props;
+  return /* @__PURE__ */ import_react66.default.createElement("div", {
+    id: "reportIssueContainer",
+    className: "absolute z-50 inset-0 bg-gray-900/20 dark:opacity-60 flex items-center justify-center flex-col",
+    onClick: () => onToggle(false)
+  }, /* @__PURE__ */ import_react66.default.createElement("div", {
+    onClick: (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+    },
+    className: "w-full max-w-[18rem] px-4 py-3 bg-white shadow-md rounded-lg flex flex-col"
+  }, /* @__PURE__ */ import_react66.default.createElement("p", {
+    className: "text-sm font-semibold antialiased"
+  }, "Report Event Issue"), /* @__PURE__ */ import_react66.default.createElement("p", {
+    className: "mb-2 text-slate-500 text-xs antialiased"
+  }, "Our team will be notified immediately."), /* @__PURE__ */ import_react66.default.createElement(Textarea, {
+    placeholder: "Please enter a description of the issue...",
+    clearable: false,
+    value: issueText,
+    name: "issue",
+    onChange: onChangeIssue
+  }), submitState === "loading" ? /* @__PURE__ */ import_react66.default.createElement("div", {
+    className: "flex items-center mt-2"
+  }, /* @__PURE__ */ import_react66.default.createElement(Button, {
+    kind: "primary",
+    className: "flex-1 justify-center"
+  }, "Loading..."), /* @__PURE__ */ import_react66.default.createElement(Button, {
+    className: "ml-2",
+    kind: "secondary",
+    onClick: () => onToggle(false)
+  }, "Cancel")) : submitState === "success" ? /* @__PURE__ */ import_react66.default.createElement("div", {
+    className: "flex items-center mt-2"
+  }, /* @__PURE__ */ import_react66.default.createElement(Button, {
+    kind: "primary",
+    className: "flex-1 justify-center"
+  }, "Success!"), /* @__PURE__ */ import_react66.default.createElement(Button, {
+    className: "ml-2",
+    kind: "secondary",
+    onClick: () => onToggle(false)
+  }, "Cancel")) : submitState === "error" ? /* @__PURE__ */ import_react66.default.createElement("div", {
+    className: "mt-2 text-center text-sm"
+  }, "Error...") : /* @__PURE__ */ import_react66.default.createElement("div", {
+    className: "flex items-center mt-2"
+  }, /* @__PURE__ */ import_react66.default.createElement(Button, {
+    kind: "primary",
+    className: "flex-1 justify-center",
+    onClick: onSubmit
+  }, "Report Issue"), /* @__PURE__ */ import_react66.default.createElement(Button, {
+    className: "ml-2",
+    kind: "secondary",
+    onClick: () => onToggle(false)
+  }, "Cancel"))));
+}
+function ReportIssue(props) {
+  var _a, _b;
+  const { eventId, onToggle } = props;
+  const config = useConfig();
+  const [submitState, setSubmitState] = (0, import_react66.useState)("");
+  const [issue, setIssue] = (0, import_react66.useState)("");
+  const onChangeIssue = (0, import_react66.useCallback)((_2, { value }) => {
+    if (typeof value === "string") {
+      setIssue(value);
+    }
+  }, []);
+  const [__, reportEventIssueMutation] = useMutation(lib_default`
+        mutation ReportEventIssue($input: ReportEventIssueInput!) {
+            reportEventIssue(input: $input) {
+                success
+            }
+        }
+    `);
+  const bus = useMessageBus();
+  const trackingId = (_a = config == null ? void 0 : config.tracking) == null ? void 0 : _a.userId;
+  const userEmail = (_b = config == null ? void 0 : config.user) == null ? void 0 : _b.email;
+  const userInfo = trackingId || userEmail;
+  const reportEventIssue = (0, import_react66.useCallback)(() => __async(this, null, function* () {
+    setSubmitState("loading");
+    bus.emit("issue-reported", { issue, eventId, user: trackingId || userEmail }, "out");
+    return reportEventIssueMutation({
+      input: {
+        eventId,
+        issue: typeof userInfo === "string" ? `User: ${userInfo} | ${issue}` : issue
+      }
+    }).then((resp) => {
+      var _a2, _b2;
+      if ((_b2 = (_a2 = resp.data) == null ? void 0 : _a2.reportEventIssue) == null ? void 0 : _b2.success) {
+        setSubmitState("success");
+        setTimeout(() => {
+          setSubmitState("");
+          setIssue("");
+        }, 5e3);
+      } else {
+        throw new Error("Error reporting issue");
+      }
+    }).catch((_e) => {
+      setSubmitState("error");
+      setTimeout(() => {
+        setSubmitState("");
+      }, 5e3);
+    });
+  }), [reportEventIssueMutation, eventId, setSubmitState, issue, trackingId]);
+  return /* @__PURE__ */ import_react66.default.createElement(ReportIssueUI, {
+    issueText: issue,
+    submitState,
+    onChangeIssue,
+    onToggle,
+    onSubmit: reportEventIssue
+  });
+}
+
 // src/modules/Transcript/index.tsx
-var HandlesWrapperUI = import_react65.default.memo(({
+var HandlesWrapperUI = import_react67.default.memo(({
   showSearch,
   width,
   children,
@@ -86699,11 +86871,11 @@ var HandlesWrapperUI = import_react65.default.memo(({
   transform,
   setNodeRef
 }) => {
-  const startResizingEvent = (0, import_react65.useCallback)((e) => {
+  const startResizingEvent = (0, import_react67.useCallback)((e) => {
     if (eventId && startResize)
       startResize(e, eventId);
   }, [eventId]);
-  return /* @__PURE__ */ import_react65.default.createElement("div", {
+  return /* @__PURE__ */ import_react67.default.createElement("div", {
     className: (0, import_classnames38.default)("relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20", "border-r-slate-200/60 dark:border-r-bluegray-8", {
       handles__transcriptHeader: !showSearch,
       "handles__transcriptHeader-showSearch": showSearch
@@ -86714,7 +86886,7 @@ var HandlesWrapperUI = import_react65.default.memo(({
       transition
     },
     ref: setNodeRef
-  }, children, /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, children, /* @__PURE__ */ import_react67.default.createElement("div", {
     onMouseDown: startResizingEvent,
     className: (0, import_classnames38.default)("absolute top-0 bottom-0 w-1 -right-0.5", "active:bg-blue-500 active:cursor-none", "cursor-col-resize z-50", {
       "bg-blue-500": isResizing
@@ -86732,9 +86904,9 @@ function findSummary(summarizations) {
   return everything || pres || qa;
 }
 function NoEventFound() {
-  return /* @__PURE__ */ import_react65.default.createElement("div", {
+  return /* @__PURE__ */ import_react67.default.createElement("div", {
     className: (0, import_classnames38.default)("h-full flex flex-col flex-1 justify-center items-center")
-  }, /* @__PURE__ */ import_react65.default.createElement("p", {
+  }, /* @__PURE__ */ import_react67.default.createElement("p", {
     className: "text-sm text-slate-500 dark:text-slate-300"
   }, "Transcript Failed to Load"));
 }
@@ -86774,12 +86946,14 @@ var TranscriptUI = (props) => {
     showHeaderControls,
     showHeaderPlayButton,
     showSpeakers,
+    showReportIssueModal,
+    toggleReportIssueModal,
     speakerTurns,
     startTime,
     useConfigOptions
   } = props;
-  const [showSummary, setShowSummary] = (0, import_react65.useState)(false);
-  const toggleSummary = (0, import_react65.useCallback)(() => {
+  const [showSummary, setShowSummary] = (0, import_react67.useState)(false);
+  const toggleSummary = (0, import_react67.useCallback)(() => {
     setShowSummary((pv) => !pv);
   }, []);
   const config = useConfig();
@@ -86817,12 +86991,12 @@ var TranscriptUI = (props) => {
       showSummaryByConfig = config.options.showSummary;
     }
   }
-  return /* @__PURE__ */ import_react65.default.createElement("div", {
+  return /* @__PURE__ */ import_react67.default.createElement("div", {
     className: (0, import_classnames38.default)("h-full flex flex-col transcript bg-gray-50", { dark: theme }),
     ref: containerRef
-  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, { status: "success" }, { status: "empty" }, () => /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, { status: "success" }, { status: "empty" }, () => /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "dark:bg-bluegray-7"
-  }, (showTitleInfo || showSearch) && /* @__PURE__ */ import_react65.default.createElement(Header, {
+  }, (showTitleInfo || showSearch) && /* @__PURE__ */ import_react67.default.createElement(Header, {
     headerHandleAttributes: handlesEnabled ? headerHandleAttributes : void 0,
     headerHandleListeners: handlesEnabled ? headerHandleListeners : void 0,
     useConfigOptions,
@@ -86839,32 +87013,33 @@ var TranscriptUI = (props) => {
     searchTerm,
     showHeaderControls,
     showHeaderPlayButton,
+    toggleReportIssueModal,
     onChangeSearchTerm,
     onSeekAudioByDate,
     startTime
-  }), searchTerm && /* @__PURE__ */ import_react65.default.createElement("div", {
+  }), searchTerm && /* @__PURE__ */ import_react67.default.createElement("div", {
     className: (0, import_classnames38.default)("flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow", "dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4", "transcript__search-navigator")
-  }, /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "text-sm truncate"
-  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react65.default.createElement("span", {
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react67.default.createElement("span", {
     className: "font-semibold"
-  }, searchTerm), '"'), /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, searchTerm), '"'), /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react65.default.createElement("button", {
+  }), /* @__PURE__ */ import_react67.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600",
     onClick: prevMatch
-  }, /* @__PURE__ */ import_react65.default.createElement(Chevron, null)), /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, /* @__PURE__ */ import_react67.default.createElement(Chevron, null)), /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
-  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react65.default.createElement("button", {
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react67.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
     onClick: nextMatch
-  }, /* @__PURE__ */ import_react65.default.createElement(Chevron, null)), /* @__PURE__ */ import_react65.default.createElement("button", {
+  }, /* @__PURE__ */ import_react67.default.createElement(Chevron, null)), /* @__PURE__ */ import_react67.default.createElement("button", {
     tabIndex: 0,
     className: "w-4 cursor-pointer text-gray-400 hover:text-gray-600",
     onClick: (e) => onChangeSearchTerm(e, { value: "" })
-  }, /* @__PURE__ */ import_react65.default.createElement(Close, null))))).otherwise(() => null), /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, /* @__PURE__ */ import_react67.default.createElement(Close, null))))).otherwise(() => null), /* @__PURE__ */ import_react67.default.createElement("div", {
     id: "transcriptContainer",
     className: "overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7",
     ref: scrollContainerRef
@@ -86876,14 +87051,14 @@ var TranscriptUI = (props) => {
       if (!showSummary) {
         summaryTexts = summaryTexts.slice(0, 1);
       }
-      return /* @__PURE__ */ import_react65.default.createElement("div", {
+      return /* @__PURE__ */ import_react67.default.createElement("div", {
         onClick: toggleSummary,
         className: "mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 dark:bg-bluegray-6/50 rounded-b-lg px-3 py-2.5 summaryContainer"
-      }, /* @__PURE__ */ import_react65.default.createElement("p", {
+      }, /* @__PURE__ */ import_react67.default.createElement("p", {
         className: "text-xs tracking-wide text-slate-400 dark:text-slate-100/20 font-bold mb-1 summaryLabel"
-      }, "AI SUMMARY"), /* @__PURE__ */ import_react65.default.createElement("h2", {
+      }, "AI SUMMARY"), /* @__PURE__ */ import_react67.default.createElement("h2", {
         className: "font-bold dark:text-slate-100 dark:antialiased leading-[1.1875rem] tracking-tight text-base summaryTitle"
-      }, summaryObj == null ? void 0 : summaryObj.title), summaryTexts.map((summaryText) => /* @__PURE__ */ import_react65.default.createElement("p", {
+      }, summaryObj == null ? void 0 : summaryObj.title), summaryTexts.map((summaryText) => /* @__PURE__ */ import_react67.default.createElement("p", {
         key: summaryText.slice(0, 10),
         className: (0, import_classnames38.default)("text-sm mt-2 text-slate-700 dark:text-slate-200/30 group-hover:text-slate-900 dark:group-hover:text-slate-200/60 summaryText", {
           truncate: !showSummary
@@ -86891,93 +87066,93 @@ var TranscriptUI = (props) => {
       }, summaryText)));
     }
     return null;
-  }).otherwise(() => null), (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react65.default.createElement("div", {
+  }).otherwise(() => null), (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react67.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react65.default.createElement("div", {
+  }, /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react65.default.createElement("div", {
+  }), /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react65.default.createElement("div", {
+  }), /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react65.default.createElement("div", {
+  }), /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-6"
-  }), /* @__PURE__ */ import_react65.default.createElement("div", {
+  }), /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20 dark:bg-bluegray-6"
   })))).with({ status: "empty" }, ({ data }) => {
-    return data.events[0] ? /* @__PURE__ */ import_react65.default.createElement(EmptyMessage, {
+    return data.events[0] ? /* @__PURE__ */ import_react67.default.createElement(EmptyMessage, {
       event: data.events[0]
-    }) : /* @__PURE__ */ import_react65.default.createElement(NoEventFound, null);
+    }) : /* @__PURE__ */ import_react67.default.createElement(NoEventFound, null);
   }).with({ status: "success" }, ({ data }) => {
     return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
       var _a, _b, _c, _d, _e;
       const speakerTime = (_b = (_a = paragraphs[0]) == null ? void 0 : _a.paragraph) == null ? void 0 : _b.timestamp;
       const speakerTimeRelative = (((_d = (_c = paragraphs[0]) == null ? void 0 : _c.paragraph) == null ? void 0 : _d.syncMs) || 0) - relativeTimestampsOffset;
-      return /* @__PURE__ */ import_react65.default.createElement("div", {
+      return /* @__PURE__ */ import_react67.default.createElement("div", {
         key: `speaker-turn-${id}`
-      }, showSpeakers && speaker.identified && /* @__PURE__ */ import_react65.default.createElement("div", {
+      }, showSpeakers && speaker.identified && /* @__PURE__ */ import_react67.default.createElement("div", {
         className: (0, import_classnames38.default)("p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800", "dark:bg-bluegray-7 dark:text-gray-400", "transcript__speaker")
-      }, speaker.name && /* @__PURE__ */ import_react65.default.createElement("p", {
+      }, speaker.name && /* @__PURE__ */ import_react67.default.createElement("p", {
         className: "truncate"
-      }, /* @__PURE__ */ import_react65.default.createElement("span", {
+      }, /* @__PURE__ */ import_react67.default.createElement("span", {
         className: "font-semibold dark:text-white"
-      }, speaker.name), speaker.title && /* @__PURE__ */ import_react65.default.createElement("span", {
+      }, speaker.name), speaker.title && /* @__PURE__ */ import_react67.default.createElement("span", {
         className: "text-gray-500"
-      }, ", ", speaker.title)), speakerTime && speakerTimeRelative !== void 0 && /* @__PURE__ */ import_react65.default.createElement("p", {
+      }, ", ", speaker.title)), speakerTime && speakerTimeRelative !== void 0 && /* @__PURE__ */ import_react67.default.createElement("p", {
         className: (0, import_classnames38.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
           "-mt-[1px]": speaker.name
         })
       }, relativeTimestamps ? import_luxon2.Duration.fromMillis(speakerTimeRelative).toFormat("h:mm:ss") : import_luxon2.DateTime.fromISO(speakerTime).toFormat("h:mm:ss a"))), paragraphs.map(({ sentences, paragraph }) => {
         const { id: id2, timestamp, syncMs } = paragraph;
         const syncMsRelative = (syncMs || 0) - relativeTimestampsOffset;
-        return /* @__PURE__ */ import_react65.default.createElement("div", {
+        return /* @__PURE__ */ import_react67.default.createElement("div", {
           key: id2,
           id: `paragraph-${id2}`,
           className: "relative p-3 pb-4 transcript__paragraph",
           onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
           ref: id2 === currentParagraph ? currentParagraphRef : void 0
-        }, (!showSpeakers || !speaker.identified) && /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, relativeTimestamps ? /* @__PURE__ */ import_react65.default.createElement("div", {
+        }, (!showSpeakers || !speaker.identified) && /* @__PURE__ */ import_react67.default.createElement(import_react67.default.Fragment, null, relativeTimestamps ? /* @__PURE__ */ import_react67.default.createElement("div", {
           className: "pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50"
-        }, import_luxon2.Duration.fromMillis(syncMsRelative).toFormat("h:mm:ss")) : timestamp && /* @__PURE__ */ import_react65.default.createElement("div", {
+        }, import_luxon2.Duration.fromMillis(syncMsRelative).toFormat("h:mm:ss")) : timestamp && /* @__PURE__ */ import_react67.default.createElement("div", {
           className: "pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50"
-        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a"))), /* @__PURE__ */ import_react65.default.createElement("div", {
+        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a"))), /* @__PURE__ */ import_react67.default.createElement("div", {
           className: "text-sm dark:text-bluegray-4"
-        }, sentences.map(({ chunks, id: sId }) => /* @__PURE__ */ import_react65.default.createElement(import_react65.Fragment, {
+        }, sentences.map(({ chunks, id: sId }) => /* @__PURE__ */ import_react67.default.createElement(import_react67.Fragment, {
           key: sId
-        }, chunks.map(({ highlight, id: sentenceId, text, textSentiment }) => highlight ? /* @__PURE__ */ import_react65.default.createElement("mark", {
+        }, chunks.map(({ highlight, id: sentenceId, text, textSentiment }) => highlight ? /* @__PURE__ */ import_react67.default.createElement("mark", {
           ref: sentenceId === currentMatch ? currentMatchRef : void 0,
           className: (0, import_classnames38.default)({
             "bg-yellow-300": sentenceId === currentMatch
           }),
           key: sentenceId
-        }, text) : /* @__PURE__ */ import_react65.default.createElement("span", {
+        }, text) : /* @__PURE__ */ import_react67.default.createElement("span", {
           key: sentenceId,
           className: (0, import_classnames38.default)({
             "text-green-600": textSentiment === "positive" && showSentiment,
             "text-red-600": textSentiment === "negative" && showSentiment
           })
-        }, text)), "\xA0"))), id2 === currentParagraph && /* @__PURE__ */ import_react65.default.createElement("div", {
+        }, text)), "\xA0"))), id2 === currentParagraph && /* @__PURE__ */ import_react67.default.createElement("div", {
           className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
         }));
-      }), ((_e = data.events[0]) == null ? void 0 : _e.isLive) && (partial == null ? void 0 : partial.text) && showPartials && /* @__PURE__ */ import_react65.default.createElement("div", {
+      }), ((_e = data.events[0]) == null ? void 0 : _e.isLive) && (partial == null ? void 0 : partial.text) && showPartials && /* @__PURE__ */ import_react67.default.createElement("div", {
         className: "relative p-3 pb-4 mb-4"
-      }, partial.timestamp && partial.relativeTimestamp !== void 0 && /* @__PURE__ */ import_react65.default.createElement("div", {
+      }, partial.timestamp && partial.relativeTimestamp !== void 0 && /* @__PURE__ */ import_react67.default.createElement("div", {
         className: "pb-2 font-semibold text-sm dark:text-bluegray-5"
-      }, relativeTimestamps ? import_luxon2.Duration.fromMillis((partial.relativeTimestamp || 0) - relativeTimestampsOffset).toFormat("h:mm:ss") : import_luxon2.DateTime.fromMillis(partial.timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react65.default.createElement("div", {
+      }, relativeTimestamps ? import_luxon2.Duration.fromMillis((partial.relativeTimestamp || 0) - relativeTimestampsOffset).toFormat("h:mm:ss") : import_luxon2.DateTime.fromMillis(partial.timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react67.default.createElement("div", {
         ref: currentParagraph === "partial" ? currentParagraphRef : void 0,
         key: `${hash2(partial.text)}-${paragraphs.length}`,
         className: "text-sm dark:text-bluegray-4"
-      }, partial.text), currentParagraph === "partial" && /* @__PURE__ */ import_react65.default.createElement("div", {
+      }, partial.text), currentParagraph === "partial" && /* @__PURE__ */ import_react67.default.createElement("div", {
         className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
       })));
     });
-  }).with({ status: "error" }, () => /* @__PURE__ */ import_react65.default.createElement(NoEventFound, null)).with({ status: "paused" }, () => /* @__PURE__ */ import_react65.default.createElement(NoEventFound, null)).exhaustive()), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, { status: "empty" }, ({ data: { events: events2 } }) => {
+  }).with({ status: "error" }, () => /* @__PURE__ */ import_react67.default.createElement(NoEventFound, null)).with({ status: "paused" }, () => /* @__PURE__ */ import_react67.default.createElement(NoEventFound, null)).exhaustive()), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, { status: "empty" }, ({ data: { events: events2 } }) => {
     const event = events2[0];
     if (hidePlaybar) {
       return null;
     }
     const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
-    return ((event == null ? void 0 : event.audioProxy) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react65.default.createElement(Playbar, {
+    return ((event == null ? void 0 : event.audioProxy) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react67.default.createElement(Playbar, {
       hideEventDetails: true,
       hidePlayer: !showPlayer,
       id: event == null ? void 0 : event.id,
@@ -86995,6 +87170,15 @@ var TranscriptUI = (props) => {
       },
       offset: ((event == null ? void 0 : event.audioRecordingOffsetMs) || 0) / 1e3,
       url: (event.isLive ? event.liveStreamUrl : event.audioProxy) || ""
+    });
+  }).otherwise(() => null), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, { status: "empty" }, ({ data: { events: events2 } }) => {
+    const event = events2[0];
+    if (!showReportIssueModal || !(event == null ? void 0 : event.id)) {
+      return null;
+    }
+    return /* @__PURE__ */ import_react67.default.createElement(ReportIssue, {
+      onToggle: toggleReportIssueModal,
+      eventId: event.id
     });
   }).otherwise(() => null));
 };
@@ -87033,7 +87217,7 @@ function useEventUpdates(eventId = "") {
       eventId
     }
   });
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_changes`, "modified", (0, import_react65.useCallback)(() => eventUpdateQuery.refetch(), [eventUpdateQuery.refetch]));
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_changes`, "modified", (0, import_react67.useCallback)(() => eventUpdateQuery.refetch(), [eventUpdateQuery.refetch]));
   return eventUpdateQuery;
 }
 function useLatestEventForTicker(ticker = "") {
@@ -87203,7 +87387,7 @@ function useEventData(eventId = "", eventUpdateQuery) {
       eventId
     }
   });
-  (0, import_react65.useEffect)(() => {
+  (0, import_react67.useEffect)(() => {
     var _a2, _b2;
     if ((_b2 = (_a2 = eventUpdateQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.hasTranscript) {
       eventQuery.refetch();
@@ -87241,12 +87425,12 @@ function useLatestTranscripts(eventId = "", eventQuery) {
       eventId
     }
   });
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react65.useState)(/* @__PURE__ */ new Map());
-  const [refetchingTranscript, setRefetchingTranscript] = (0, import_react65.useState)(false);
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "modified", (0, import_react65.useCallback)(() => {
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react67.useState)(/* @__PURE__ */ new Map());
+  const [refetchingTranscript, setRefetchingTranscript] = (0, import_react67.useState)(false);
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "modified", (0, import_react67.useCallback)(() => {
     latestParagraphsQuery.refetch();
   }, [latestParagraphsQuery.refetch]));
-  (0, import_react65.useEffect)(() => {
+  (0, import_react67.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c;
@@ -87258,7 +87442,7 @@ function useLatestTranscripts(eventId = "", eventQuery) {
       });
     }
   }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
-  (0, import_react65.useEffect)(() => {
+  (0, import_react67.useEffect)(() => {
     var _a2, _b2, _c;
     if (!refetchingTranscript && latestParagraphs && latestParagraphs.size > 0) {
       const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
@@ -87267,12 +87451,12 @@ function useLatestTranscripts(eventId = "", eventQuery) {
       }
     }
   }, [eventQuery, latestParagraphs, refetchingTranscript]);
-  (0, import_react65.useEffect)(() => {
+  (0, import_react67.useEffect)(() => {
     if (refetchingTranscript) {
       eventQuery.refetch();
     }
   }, [refetchingTranscript]);
-  return (0, import_react65.useMemo)(() => {
+  return (0, import_react67.useMemo)(() => {
     var _a2, _b2, _c;
     const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
     const originalParagraphIds = new Set(speakerTurns.flatMap((s2) => s2.paragraphs.map((p2) => p2.id)));
@@ -87295,14 +87479,14 @@ function useLatestTranscripts(eventId = "", eventQuery) {
   }, [(_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.transcripts, latestParagraphs]);
 }
 function usePartials(eventId, lastParagraphId) {
-  const [partial, setPartial] = (0, import_react65.useState)({
+  const [partial, setPartial] = (0, import_react67.useState)({
     relativeTimestamp: 0,
     timestamp: 0,
     text: "",
     index: -1
   });
-  const [lastCleared, setLastCleared] = (0, import_react65.useState)(-1);
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript", (0, import_react65.useCallback)((data) => {
+  const [lastCleared, setLastCleared] = (0, import_react67.useState)(-1);
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript", (0, import_react67.useCallback)((data) => {
     const {
       start_ms: relativeTimestamp = 0,
       start_timestamp_ms: timestamp = 0,
@@ -87321,11 +87505,11 @@ function usePartials(eventId, lastParagraphId) {
       return prevState;
     });
   }, [setPartial]));
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript_clear", (0, import_react65.useCallback)((data) => {
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript_clear", (0, import_react67.useCallback)((data) => {
     const { index = -1 } = data || {};
     setLastCleared((prevIndex) => index > prevIndex ? index : prevIndex);
   }, [setLastCleared]));
-  (0, import_react65.useEffect)(() => {
+  (0, import_react67.useEffect)(() => {
     if (lastCleared >= partial.index) {
       setPartial({
         index: lastCleared,
@@ -87339,7 +87523,7 @@ function usePartials(eventId, lastParagraphId) {
 }
 function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   var _a, _b, _c, _d, _e;
-  const [currentParagraph, setCurrentParagraph] = (0, import_react65.useState)(null);
+  const [currentParagraph, setCurrentParagraph] = (0, import_react67.useState)(null);
   const config = useConfig();
   const offset = { top: ((_c = (_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events) == null ? void 0 : _b[0]) == null ? void 0 : _c.hasPublishedTranscript) ? 55 : 5, bottom: 15 };
   const {
@@ -87350,9 +87534,9 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   } = useAutoScroll({
     offset
   });
-  const paragraphs = (0, import_react65.useMemo)(() => speakerTurns.flatMap((s2) => s2.paragraphs), [speakerTurns]);
+  const paragraphs = (0, import_react67.useMemo)(() => speakerTurns.flatMap((s2) => s2.paragraphs), [speakerTurns]);
   const partial = usePartials(eventId, (_d = paragraphs.slice(-1)[0]) == null ? void 0 : _d.id);
-  (0, import_react65.useEffect)(() => {
+  (0, import_react67.useEffect)(() => {
     var _a2, _b2, _c2, _d2, _e2, _f;
     const eventId2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.id;
     const audioParagraph = eventId2 && audioPlayer.id && audioPlayer.id === eventId2 ? [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3) : null;
@@ -87405,16 +87589,16 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
       }
     }
   }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, (_e = config == null ? void 0 : config.options) == null ? void 0 : _e.initialItemId]);
-  const currentParagraphTimestamp = (0, import_react65.useMemo)(() => {
+  const currentParagraphTimestamp = (0, import_react67.useMemo)(() => {
     var _a2;
     const currentIndex = paragraphs.findIndex(({ id }) => currentParagraph === id);
     return ((_a2 = paragraphs.slice(currentIndex).find(({ syncTimestamp }) => !!syncTimestamp)) == null ? void 0 : _a2.syncTimestamp) || null;
   }, [currentParagraph, paragraphs]);
-  const startTime = (0, import_react65.useMemo)(() => {
+  const startTime = (0, import_react67.useMemo)(() => {
     var _a2;
     return ((_a2 = paragraphs.find(({ syncTimestamp }) => !!syncTimestamp)) == null ? void 0 : _a2.syncTimestamp) || null;
   }, [paragraphs]);
-  const endTime = (0, import_react65.useMemo)(() => {
+  const endTime = (0, import_react67.useMemo)(() => {
     var _a2;
     return ((_a2 = [...paragraphs].reverse().find(({ syncTimestamp }) => !!syncTimestamp)) == null ? void 0 : _a2.syncTimestamp) || null;
   }, [paragraphs]);
@@ -87435,7 +87619,7 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
   const { state, handlers } = useChangeHandlers({
     searchTerm: initialSearchTerm || controlledSearchTerm || ""
   });
-  const [currentMatch, setCurrentMatch] = (0, import_react65.useState)(null);
+  const [currentMatch, setCurrentMatch] = (0, import_react67.useState)(null);
   const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll({
     pauseOnUserScroll: false,
     behavior: "auto",
@@ -87452,7 +87636,7 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
   if (((_f = config.options) == null ? void 0 : _f.transcriptRawEndSeconds) !== void 0) {
     endSec = config.options.transcriptRawEndSeconds;
   }
-  const speakerTurnsWithMatches = (0, import_react65.useMemo)(() => speakerTurns.map((s2) => __spreadProps(__spreadValues({}, s2), {
+  const speakerTurnsWithMatches = (0, import_react67.useMemo)(() => speakerTurns.map((s2) => __spreadProps(__spreadValues({}, s2), {
     paragraphsWithMatches: s2.paragraphs.filter((p2) => {
       if (typeof beginSec === "number" && p2.syncMs) {
         const normalizedTime = p2.syncMs / 1e3;
@@ -87499,23 +87683,23 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
       };
     })
   })), [settings, speakerTurns, state.searchTerm]);
-  const matches = (0, import_react65.useMemo)(() => speakerTurnsWithMatches.flatMap((s2) => s2.paragraphsWithMatches).flatMap((p2) => p2.sentences).flatMap((s2) => s2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
-  (0, import_react65.useEffect)(() => {
+  const matches = (0, import_react67.useMemo)(() => speakerTurnsWithMatches.flatMap((s2) => s2.paragraphsWithMatches).flatMap((p2) => p2.sentences).flatMap((s2) => s2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
+  (0, import_react67.useEffect)(() => {
     var _a2;
     setCurrentMatch(((_a2 = matches[0]) == null ? void 0 : _a2.id) || null);
   }, [state.searchTerm]);
-  const matchIndex = (0, import_react65.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
-  const nextMatch = (0, import_react65.useCallback)(() => {
+  const matchIndex = (0, import_react67.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react67.useCallback)(() => {
     const match7 = matches[(matchIndex + 1) % matches.length];
     if (match7)
       setCurrentMatch(match7.id);
   }, [matches, matchIndex]);
-  const prevMatch = (0, import_react65.useCallback)(() => {
+  const prevMatch = (0, import_react67.useCallback)(() => {
     const match7 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
     if (match7)
       setCurrentMatch(match7.id);
   }, [matches, matchIndex]);
-  (0, import_react65.useEffect)(() => {
+  (0, import_react67.useEffect)(() => {
     if (typeof controlledSearchTerm === "string") {
       handlers.searchTerm(new KeyboardEvent("keydown"), { value: controlledSearchTerm });
     }
@@ -87553,10 +87737,14 @@ var Transcript = (props) => {
     startResize,
     width
   } = props;
-  const [eventId, setEventId] = (0, import_react65.useState)(eventListEventId);
+  const [eventId, setEventId] = (0, import_react67.useState)(eventListEventId);
   const config = useConfig();
   const eventIdFromTicker = useLatestEventForTicker((_a = config == null ? void 0 : config.options) == null ? void 0 : _a.ticker);
-  (0, import_react65.useEffect)(() => {
+  const [showReportIssueModal, setShowReportIssueModal] = (0, import_react67.useState)(false);
+  const toggleReportIssueModal = (0, import_react67.useCallback)((override) => {
+    setShowReportIssueModal((pv) => override !== void 0 ? override : !pv);
+  }, []);
+  (0, import_react67.useEffect)(() => {
     var _a2, _b2;
     if (!eventId && ((_a2 = config == null ? void 0 : config.options) == null ? void 0 : _a2.eventId)) {
       setEventId(config.options.eventId);
@@ -87581,11 +87769,11 @@ var Transcript = (props) => {
     forceNextScroll
   ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
   const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
-  const scrollContainerRef = (0, import_react65.useCallback)((ref) => {
+  const scrollContainerRef = (0, import_react67.useCallback)((ref) => {
     autoscrollContainerRef(ref);
     searchState.scrollContainerRef(ref);
   }, [autoscrollContainerRef, searchState.scrollContainerRef]);
-  const onSeekAudioByDate = (0, import_react65.useCallback)((date) => {
+  const onSeekAudioByDate = (0, import_react67.useCallback)((date) => {
     const p2 = searchState.speakerTurnsWithMatches.flatMap(({ paragraphsWithMatches: paragraphs }) => paragraphs.flatMap(({ paragraph }) => paragraph));
     const pastIndex = p2.findIndex(({ syncTimestamp }) => syncTimestamp ? new Date(syncTimestamp).getTime() > parseFloat(date) : false);
     if (pastIndex > 0) {
@@ -87596,10 +87784,10 @@ var Transcript = (props) => {
       }
     }
   }, [searchState.speakerTurnsWithMatches, forceNextScroll]);
-  const onSeekAudioSeconds = (0, import_react65.useCallback)((seconds, useOffset) => {
+  const onSeekAudioSeconds = (0, import_react67.useCallback)((seconds, useOffset) => {
     audioPlayer.rawSeek(seconds, useOffset);
   }, [audioPlayer]);
-  const onClickBack = (0, import_react65.useCallback)((event) => {
+  const onClickBack = (0, import_react67.useCallback)((event) => {
     if (!audioPlayer.playing(null)) {
       audioPlayer.clear();
     }
@@ -87608,7 +87796,7 @@ var Transcript = (props) => {
   const { height: containerHeight, ref: containerRef } = useElementSize();
   const bus = useMessageListener("seek-transcript-seconds", ({ data }) => void onSeekAudioSeconds(data, false), "in");
   bus.on("seek-transcript-timestamp", ({ data }) => void onSeekAudioByDate(data), "in");
-  const onClickTranscript = (0, import_react65.useCallback)((paragraph) => {
+  const onClickTranscript = (0, import_react67.useCallback)((paragraph) => {
     if (!audioPlayer.id || audioPlayer.id === eventId || eventId && audioPlayer.playing(eventId)) {
       audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
     }
@@ -87619,7 +87807,7 @@ var Transcript = (props) => {
     (_c = config.tracking) == null ? void 0 : _c.userId
   ]);
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: eventId || "" });
-  const transcriptComponent = /* @__PURE__ */ import_react65.default.createElement(TranscriptUI, {
+  const transcriptComponent = /* @__PURE__ */ import_react67.default.createElement(TranscriptUI, {
     containerHeight,
     containerRef,
     currentMatch: searchState.currentMatch,
@@ -87653,9 +87841,11 @@ var Transcript = (props) => {
     searchTerm: searchState.searchTerm,
     showHeaderControls,
     showHeaderPlayButton,
+    showReportIssueModal,
     showSpeakers: !!((_h = (_g = eventQuery.state.data) == null ? void 0 : _g.events[0]) == null ? void 0 : _h.hasPublishedTranscript),
     speakerTurns: searchState.speakerTurnsWithMatches,
     startTime,
+    toggleReportIssueModal,
     useConfigOptions
   });
   if (handlesEnabled && width && startResize) {
@@ -87665,7 +87855,7 @@ var Transcript = (props) => {
         showSearch = config.options.showSearch;
       }
     }
-    return /* @__PURE__ */ import_react65.default.createElement(HandlesWrapperUI, {
+    return /* @__PURE__ */ import_react67.default.createElement(HandlesWrapperUI, {
       transform,
       transition,
       setNodeRef,
@@ -87690,7 +87880,7 @@ var useMessageBus2 = () => {
       void window.fdc3.broadcast(context);
     }
   }, "out");
-  (0, import_react66.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     bus.setupWindowMessaging(window.parent);
     const listeners = [];
     return () => {
@@ -87702,19 +87892,19 @@ var useMessageBus2 = () => {
 };
 var App = () => {
   const bus = useMessageBus2();
-  return /* @__PURE__ */ import_react66.default.createElement(import_react66.StrictMode, null, /* @__PURE__ */ import_react66.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react68.default.createElement(import_react68.StrictMode, null, /* @__PURE__ */ import_react68.default.createElement(Provider6, {
     bus,
     config: { moduleName: "EventByTicker" }
-  }, /* @__PURE__ */ import_react66.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react68.default.createElement(Auth, {
     apiMode: true
-  }, /* @__PURE__ */ import_react66.default.createElement("div", {
+  }, /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "h-full"
-  }, /* @__PURE__ */ import_react66.default.createElement(Transcript, {
+  }, /* @__PURE__ */ import_react68.default.createElement(Transcript, {
     useConfigOptions: true,
     showHeaderControls: false
   })))));
 };
-import_react_dom2.default.render(/* @__PURE__ */ import_react66.default.createElement(App, null), document.getElementById("root"));
+import_react_dom2.default.render(/* @__PURE__ */ import_react68.default.createElement(App, null), document.getElementById("root"));
 /*
  @license
  Copyright 2006 The Closure Library Authors
