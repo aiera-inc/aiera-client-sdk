@@ -40,10 +40,21 @@ const event = {
     },
 };
 
+function onToggleReport() {
+    return null;
+}
+
 describe('EventDetails', () => {
     test('renders', () => {
         const toggle = jest.fn();
-        renderWithProvider(<EventDetails event={event as Event} eventDetailsExpanded toggleEventDetails={toggle} />);
+        renderWithProvider(
+            <EventDetails
+                event={event as Event}
+                eventDetailsExpanded
+                toggleEventDetails={toggle}
+                toggleReportIssueModal={onToggleReport}
+            />
+        );
         const eventDetails = screen.getByText('Event Details');
         fireEvent.click(eventDetails);
         screen.getByText('Open in new window');

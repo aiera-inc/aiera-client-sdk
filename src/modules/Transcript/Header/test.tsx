@@ -66,6 +66,10 @@ const eventQuery = {
     status: 'success',
 };
 
+function onToggleReport() {
+    return null;
+}
+
 describe('Header', () => {
     const onBack = jest.fn();
 
@@ -78,6 +82,7 @@ describe('Header', () => {
                 onBack={onBack}
                 onBackHeader="Events"
                 useConfigOptions={false}
+                toggleReportIssueModal={onToggleReport}
             />
         );
         screen.getByText('VERB');
@@ -93,6 +98,7 @@ describe('Header', () => {
                 onBack={onBack}
                 onBackHeader="Events"
                 useConfigOptions={false}
+                toggleReportIssueModal={onToggleReport}
             />
         );
         const eventsBtn = screen.getByText('Events');
@@ -109,6 +115,7 @@ describe('Header', () => {
                 onBack={onBack}
                 onBackHeader="Recordings"
                 useConfigOptions={false}
+                toggleReportIssueModal={onToggleReport}
             />
         );
         screen.getByText('Recordings');
@@ -125,6 +132,7 @@ describe('Header', () => {
                 onChangeSearchTerm={onChangeSearchTerm}
                 searchTerm={'test search'}
                 useConfigOptions={false}
+                toggleReportIssueModal={onToggleReport}
             />
         );
         const searchInput = screen.getByPlaceholderText('Search Transcript...');

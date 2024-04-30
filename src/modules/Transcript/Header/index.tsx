@@ -49,6 +49,7 @@ interface HeaderSharedProps {
     showHeaderControls?: boolean;
     showHeaderPlayButton?: boolean;
     startTime?: string | null;
+    toggleReportIssueModal: (override?: boolean) => void;
     useConfigOptions: boolean;
 }
 
@@ -93,6 +94,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
         toggleHeader,
         toggleKeyMentions,
         togglePriceChart,
+        toggleReportIssueModal,
         useConfigOptions,
         startTime,
     } = props;
@@ -362,6 +364,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                 </div>
                                 {showRecordingDetails && headerExpanded && event && (
                                     <EventDetails
+                                        toggleReportIssueModal={toggleReportIssueModal}
                                         event={event}
                                         eventDetailsExpanded={eventDetailsExpanded}
                                         toggleEventDetails={toggleEventDetails}
@@ -440,6 +443,7 @@ export function Header(props: HeaderProps): ReactElement {
         searchTerm,
         showHeaderControls,
         showHeaderPlayButton,
+        toggleReportIssueModal,
         startTime,
         useConfigOptions,
     } = props;
@@ -508,6 +512,7 @@ export function Header(props: HeaderProps): ReactElement {
             toggleHeader={toggleHeader}
             toggleKeyMentions={toggleKeyMentions}
             togglePriceChart={togglePriceChart}
+            toggleReportIssueModal={toggleReportIssueModal}
             useConfigOptions={useConfigOptions}
         />
     );

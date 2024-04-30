@@ -54,6 +54,7 @@ import { useSortable } from '@dnd-kit/sortable';
 import { EmptyMessage } from './EmptyMessage';
 import { Header } from './Header';
 import './styles.css';
+import { ReportIssue } from './ReportIssue';
 
 type SpeakerTurn = TranscriptQuery['events'][0]['transcripts'][0]['sections'][0]['speakerTurns'][0];
 type Paragraph = SpeakerTurn['paragraphs'][0];
@@ -177,6 +178,8 @@ interface TranscriptUIProps extends TranscriptSharedProps {
     scrollContainerRef: Ref<HTMLDivElement>;
     searchTerm: string;
     showSpeakers: boolean;
+    showReportIssueModal: boolean;
+    toggleReportIssueModal: (override?: boolean) => void;
     speakerTurns: SpeakerTurnsWithMatches[];
     startTime?: string | null;
     useConfigOptions: boolean;
@@ -245,6 +248,8 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
         showHeaderControls,
         showHeaderPlayButton,
         showSpeakers,
+        showReportIssueModal,
+        toggleReportIssueModal,
         speakerTurns,
         startTime,
         useConfigOptions,
@@ -314,6 +319,7 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                 searchTerm={searchTerm}
                                 showHeaderControls={showHeaderControls}
                                 showHeaderPlayButton={showHeaderPlayButton}
+                                toggleReportIssueModal={toggleReportIssueModal}
                                 onChangeSearchTerm={onChangeSearchTerm}
                                 onSeekAudioByDate={onSeekAudioByDate}
                                 startTime={startTime}
@@ -604,6 +610,15 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                             />
                         )
                     );
+                })
+                .otherwise(() => null)}
+            {match(eventQuery)
+                .with({ status: 'success' }, { status: 'empty' }, ({ data: { events } }) => {
+                    const event = events[0];
+                    if (!showReportIssueModal || !event?.id) {
+                        return null;
+                    }
+                    return <ReportIssue onToggle={toggleReportIssueModal} eventId={event.id} />;
                 })
                 .otherwise(() => null)}
         </div>
@@ -1362,6 +1377,10 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
     const [eventId, setEventId] = useState(eventListEventId);
     const config = useConfig();
     const eventIdFromTicker = useLatestEventForTicker(config?.options?.ticker);
+    const [showReportIssueModal, setShowReportIssueModal] = useState(false);
+    const toggleReportIssueModal = useCallback((override?: boolean) => {
+        setShowReportIssueModal((pv) => (override !== undefined ? override : !pv));
+    }, []);
 
     useEffect(() => {
         if (!eventId && config?.options?.eventId) {
@@ -1491,9 +1510,11 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
             searchTerm={searchState.searchTerm}
             showHeaderControls={showHeaderControls}
             showHeaderPlayButton={showHeaderPlayButton}
+            showReportIssueModal={showReportIssueModal}
             showSpeakers={!!eventQuery.state.data?.events[0]?.hasPublishedTranscript}
             speakerTurns={searchState.speakerTurnsWithMatches}
             startTime={startTime}
+            toggleReportIssueModal={toggleReportIssueModal}
             useConfigOptions={useConfigOptions}
         />
     );

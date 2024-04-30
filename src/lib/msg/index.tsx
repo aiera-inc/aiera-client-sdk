@@ -37,6 +37,12 @@ export interface TranscrippetMetaData {
     image?: string | null;
 }
 
+export interface IssueReported {
+    eventId?: string;
+    user?: string;
+    issue?: string;
+}
+
 export interface MessageBusEvents {
     'seek-audio-seconds': number;
     authenticate: AuthTokens;
@@ -55,6 +61,7 @@ export interface MessageBusEvents {
     'transcrippet-height': number;
     'transcrippet-meta': TranscrippetMetaData;
     'user-status-inactive': UserEmailStatus;
+    'issue-reported': IssueReported;
 }
 
 export interface Message<E extends keyof MessageBusEvents> {
