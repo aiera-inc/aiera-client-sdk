@@ -66,9 +66,7 @@ const eventQuery = {
     status: 'success',
 };
 
-function onToggleReport() {
-    return null;
-}
+const onToggleReport = jest.fn();
 
 describe('Header', () => {
     const onBack = jest.fn();

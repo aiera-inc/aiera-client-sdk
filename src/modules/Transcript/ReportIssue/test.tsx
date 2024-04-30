@@ -4,9 +4,7 @@ import React from 'react';
 import { renderWithProvider } from 'testUtils';
 import { ReportIssue } from '.';
 
-function onToggle() {
-    return null;
-}
+const onToggle = jest.fn();
 
 describe('Report Issue', () => {
     test('renders', () => {

@@ -40,9 +40,7 @@ const event = {
     },
 };
 
-function onToggleReport() {
-    return null;
-}
+const onToggleReport = jest.fn();
 
 describe('EventDetails', () => {
     test('renders', () => {
