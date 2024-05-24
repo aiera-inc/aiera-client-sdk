@@ -152,7 +152,9 @@ export class AudioPlayer {
                         if (opts?.metaData?.externalAudioStreamUrl) {
                             url = opts.metaData.externalAudioStreamUrl;
                         } else if (opts?.metaData?.eventStream) {
-                            url = `https://storage.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
+                            url = `https://storage${
+                                process.env.NODE_ENV === 'production' ? '' : '-dev'
+                            }.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
                         }
                     }
                 } else if (isLive && !ios) {

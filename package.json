@@ -1,6 +1,6 @@
 {
     "name": "@aiera/client-sdk",
-    "version": "0.0.70",
+    "version": "0.0.71",
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
