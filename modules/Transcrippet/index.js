@@ -73262,7 +73262,7 @@ var AudioPlayer = class {
               if ((_f = opts == null ? void 0 : opts.metaData) == null ? void 0 : _f.externalAudioStreamUrl) {
                 url = opts.metaData.externalAudioStreamUrl;
               } else if ((_g = opts == null ? void 0 : opts.metaData) == null ? void 0 : _g.eventStream) {
-                url = `https://storage.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
+                url = `https://storage${false ? "" : "-dev"}.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
               }
             }
           } else if (isLive && !ios) {
