@@ -87620,8 +87620,12 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
     searchTerm: initialSearchTerm || controlledSearchTerm || ""
   });
   const [currentMatch, setCurrentMatch] = (0, import_react67.useState)(null);
-  const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll({
-    pauseOnUserScroll: false,
+  const {
+    scrollContainerRef,
+    scroll,
+    targetRef: currentMatchRef
+  } = useAutoScroll({
+    pauseOnUserScroll: !!state.searchTerm,
     behavior: "auto",
     offset: { top: 5, bottom: 5 }
   });
@@ -87693,11 +87697,13 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
     const match7 = matches[(matchIndex + 1) % matches.length];
     if (match7)
       setCurrentMatch(match7.id);
+    scroll();
   }, [matches, matchIndex]);
   const prevMatch = (0, import_react67.useCallback)(() => {
     const match7 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
     if (match7)
       setCurrentMatch(match7.id);
+    scroll();
   }, [matches, matchIndex]);
   (0, import_react67.useEffect)(() => {
     if (typeof controlledSearchTerm === "string") {
