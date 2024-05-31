@@ -1204,7 +1204,11 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
 
     // Track the current match id and use it to set the proper currentMatchRef for autoscrolling
     const [currentMatch, setCurrentMatch] = useState<string | null>(null);
-    const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
+    const {
+        scrollContainerRef,
+        scroll,
+        targetRef: currentMatchRef,
+    } = useAutoScroll<HTMLDivElement>({
         pauseOnUserScroll: !!state.searchTerm,
         behavior: 'auto',
         offset: { top: 5, bottom: 5 },
@@ -1313,12 +1317,18 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
     const nextMatch = useCallback(() => {
         const match = matches[(matchIndex + 1) % matches.length];
         if (match) setCurrentMatch(match.id);
+
+        //Force scroll incase they've scrolled away
+        scroll();
     }, [matches, matchIndex]);
 
     // Jump to the previous match
     const prevMatch = useCallback(() => {
         const match = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
         if (match) setCurrentMatch(match.id);
+
+        //Force scroll incase they've scrolled away
+        scroll();
     }, [matches, matchIndex]);
 
     useEffect(() => {
