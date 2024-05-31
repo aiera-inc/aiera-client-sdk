@@ -1205,7 +1205,7 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
     // Track the current match id and use it to set the proper currentMatchRef for autoscrolling
     const [currentMatch, setCurrentMatch] = useState<string | null>(null);
     const { scrollContainerRef, targetRef: currentMatchRef } = useAutoScroll<HTMLDivElement>({
-        pauseOnUserScroll: false,
+        pauseOnUserScroll: !!state.searchTerm,
         behavior: 'auto',
         offset: { top: 5, bottom: 5 },
     });
