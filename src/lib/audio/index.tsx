@@ -109,8 +109,8 @@ export class AudioPlayer {
     };
 
     getMimeType(stream: string) {
-        const found = stream.search('storage.media');
-        if (found > 0) {
+        const found = stream.includes('storage.media') || stream.includes('storage-dev.media');
+        if (found) {
             return 'application/dash+xml';
         }
         // get the extension of the stream url to determine the mimetype
@@ -153,7 +153,7 @@ export class AudioPlayer {
                             url = opts.metaData.externalAudioStreamUrl;
                         } else if (opts?.metaData?.eventStream) {
                             url = `https://storage${
-                                process.env.NODE_ENV === 'production' ? '' : '-dev'
+                                opts?.metaData?.eventType === 'test' ? '-dev' : ''
                             }.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
                         }
                     }
