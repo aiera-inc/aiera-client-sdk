@@ -82619,8 +82619,8 @@ var AudioPlayer = class {
     this.audio.autoplay = false;
   }
   getMimeType(stream) {
-    const found = stream.search("storage.media");
-    if (found > 0) {
+    const found = stream.includes("storage.media") || stream.includes("storage-dev.media");
+    if (found) {
       return "application/dash+xml";
     }
     const streamExt = this.getStreamExtension(stream);
@@ -82637,7 +82637,7 @@ var AudioPlayer = class {
   }
   init(opts) {
     return __async(this, null, function* () {
-      var _a, _b, _c, _d, _e, _f, _g;
+      var _a, _b, _c, _d, _e, _f, _g, _h;
       const currentUrl = (_b = (_a = this.player) == null ? void 0 : _a.getAssetUri()) == null ? void 0 : _b.split("?")[0];
       const optsUrl = ((opts == null ? void 0 : opts.url) || "").split("?")[0];
       this.loadNewAsset = false;
@@ -82658,7 +82658,7 @@ var AudioPlayer = class {
               if ((_f = opts == null ? void 0 : opts.metaData) == null ? void 0 : _f.externalAudioStreamUrl) {
                 url = opts.metaData.externalAudioStreamUrl;
               } else if ((_g = opts == null ? void 0 : opts.metaData) == null ? void 0 : _g.eventStream) {
-                url = `https://storage${false ? "" : "-dev"}.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
+                url = `https://storage${((_h = opts == null ? void 0 : opts.metaData) == null ? void 0 : _h.eventType) === "test" ? "-dev" : ""}.media.aiera.com${opts.metaData.eventStream}/index.m3u8`;
               }
             }
           } else if (isLive && !ios) {
