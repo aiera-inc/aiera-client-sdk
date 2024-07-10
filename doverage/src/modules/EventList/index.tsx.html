@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.08% </span>
+                <span class="strong">55.41% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>130/236</span>
+                <span class='fraction'>133/240</span>
             </div>
         
             
@@ -1207,7 +1207,25 @@
 <a name='L1142'></a><a href='#L1142'>1142</a>
 <a name='L1143'></a><a href='#L1143'>1143</a>
 <a name='L1144'></a><a href='#L1144'>1144</a>
-<a name='L1145'></a><a href='#L1145'>1145</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1145'></a><a href='#L1145'>1145</a>
+<a name='L1146'></a><a href='#L1146'>1146</a>
+<a name='L1147'></a><a href='#L1147'>1147</a>
+<a name='L1148'></a><a href='#L1148'>1148</a>
+<a name='L1149'></a><a href='#L1149'>1149</a>
+<a name='L1150'></a><a href='#L1150'>1150</a>
+<a name='L1151'></a><a href='#L1151'>1151</a>
+<a name='L1152'></a><a href='#L1152'>1152</a>
+<a name='L1153'></a><a href='#L1153'>1153</a>
+<a name='L1154'></a><a href='#L1154'>1154</a>
+<a name='L1155'></a><a href='#L1155'>1155</a>
+<a name='L1156'></a><a href='#L1156'>1156</a>
+<a name='L1157'></a><a href='#L1157'>1157</a>
+<a name='L1158'></a><a href='#L1158'>1158</a>
+<a name='L1159'></a><a href='#L1159'>1159</a>
+<a name='L1160'></a><a href='#L1160'>1160</a>
+<a name='L1161'></a><a href='#L1161'>1161</a>
+<a name='L1162'></a><a href='#L1162'>1162</a>
+<a name='L1163'></a><a href='#L1163'>1163</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1691,6 +1709,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">15x</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -1705,8 +1734,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1752,6 +1786,8 @@
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2803,140 +2839,158 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
             )}
             &lt;div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}&gt;
                 &lt;div className="flex flex-col flex-grow"&gt;
-                    &lt;div
-                        className={classNames('sticky top-0 pb-2 z-10', {
-                            'pt-3 px-3': !hideHeader,
-                            'pt-2 px-2': hideHeader,
-                        })}
-                    &gt;
-                        &lt;FilterBy onChange={onSelectFilterBy} options={filterByTypeOptions} value={filterByTypes}&gt;
-                            {showAllEvents ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                                searchTerm &amp;&amp; searchTerm.length &gt; 0 ? (</span>
-                                    &lt;p className="text-sm font-semibold dark:text-white"&gt;Matching Events&lt;/p&gt;
-                                ) : (
-                                    &lt;p className="text-sm font-semibold dark:text-white"&gt;All Events&lt;/p&gt;
-                                )
-                            ) : (
-                                &lt;Tabs&lt;EventView&gt;
-                                    className="ml-1 eventlist__tabs"
-                                    kind="line"
-                                    onChange={onSelectListType}
-                                    options={[
-                                        {
-                                            value: EventView.LiveAndUpcoming,
-                                            label: 'Live Events',
-                                        },
-                                        { value: EventView.Recent, label: 'Recent' },
-                                    ]}
-                                    value={listType}
-                                /&gt;
-                            )}
-                        &lt;/FilterBy&gt;
-                    &lt;/div&gt;
-                    &lt;div className={classNames('flex flex-col items-center justify-center flex-1')}&gt;
-                        {match(eventsQuery)
-                            .with({ status: 'loading' }, () =&gt; &lt;LoadingEventList /&gt;)
-                            .with({ status: 'paused' }, <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >wrapMsg('There are no events.'))</span>
-                            .with({ status: 'error' }, <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >wrapMsg('There was an error loading events.'))</span>
-                            .with({ status: 'empty' }, () =&gt; wrapMsg('There are no events.'))
-                            .with({ status: 'success' }, ({ data, isPaging, isRefetching }) =&gt;
-                                loadingWatchlist !== 'complete' ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                                    &lt;LoadingEventList /&gt;</span>
-                                ) : (
-                                    &lt;ul className="w-full"&gt;
-                                        {showAllEvents &amp;&amp;
-<span class="branch-1 cbranch-no" title="branch not covered" >                                            match(eventsQueryUpcoming)</span>
-                                                .with(
-                                                    { status: 'success' },
-<span class="fstat-no" title="function not covered" >                                                    ({</span> data: dataUpcoming, isRefetching: isUpcomingRefetching }) =&gt;
-<span class="cstat-no" title="statement not covered" >                                                        dataUpcoming.search.events.hits.map(<span class="fstat-no" title="function not covered" >(h</span>it, index) =&gt; {</span>
-                                                            const eventDate = <span class="cstat-no" title="statement not covered" >DateTime.fromISO(hit.event.eventDate);</span>
-                                                            let showDivider = <span class="cstat-no" title="statement not covered" >false;</span>
-<span class="cstat-no" title="statement not covered" >                                                            if (</span>
-                                                                !prevEventDate ||
-                                                                prevEventDate.toFormat('MM/dd/yyyy') !==
-                                                                    eventDate.toFormat('MM/dd/yyyy')
-                                                            ) {
-<span class="cstat-no" title="statement not covered" >                                                                prevEventDate = eventDate;</span>
-<span class="cstat-no" title="statement not covered" >                                                                showDivider = true;</span>
-                                                            }
-<span class="cstat-no" title="statement not covered" >                                                            if (!renderedRefetch) {</span>
-<span class="cstat-no" title="statement not covered" >                                                                renderedRefetch = true;</span>
-                                                            }
-<span class="cstat-no" title="statement not covered" >                                                            return (</span>
-                                                                &lt;EventRow
-                                                                    customOnly={customOnly}
-                                                                    event={hit.event}
-                                                                    index={index}
-                                                                    isRefetching={isUpcomingRefetching}
-                                                                    key={`${hit.event.id}-${index}`}
-                                                                    onSelectEvent={onSelectEvent}
-                                                                    refetch={refetch}
-                                                                    renderedRefetch={index !== 0}
-                                                                    searchTerm={searchTerm}
-                                                                    setFocus={setFocus}
-                                                                    showDivider={showDivider}
-                                                                /&gt;
-                                                            );
-                                                        })
-                                                )
-                                                .otherwise(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >null)</span>}
-                                        {data.search.events.hits.map((hit, index) =&gt; {
-                                            const eventDate = DateTime.fromISO(hit.event.eventDate);
-                                            let showDivider = false;
-                                            if (
-                                                !prevEventDate ||
-                                                prevEventDate.toFormat('MM/dd/yyyy') !==
-                                                    eventDate.toFormat('MM/dd/yyyy')
-                                            ) {
-                                                prevEventDate = eventDate;
-                                                showDivider = true;
-                                            }
-                                            if (index &gt; 0 &amp;&amp; !renderedRefetch) {
-                                                renderedRefetch = true;
-                                            }
-                                            return (
-                                                &lt;EventRow
-                                                    customOnly={customOnly}
-                                                    event={hit.event}
-                                                    index={index}
-                                                    isRefetching={isRefetching}
-                                                    key={`${hit.event.id}-${index}`}
-                                                    onSelectEvent={onSelectEvent}
-                                                    refetch={refetch}
-                                                    renderedRefetch={renderedRefetch}
-                                                    searchTerm={searchTerm}
-                                                    setFocus={setFocus}
-                                                    showDivider={showDivider}
-                                                /&gt;
-                                            );
-                                        })}
-                                        {loadMore &amp;&amp; (
-                                            &lt;li
-                                                className="px-3 cursor-pointer"
-                                                onClick={!isPaging ? loadMore : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
-                                            &gt;
-                                                &lt;div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70"&gt;
-                                                    &lt;div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"&gt;&lt;/div&gt;
-                                                    {isPaging ? (
-<span class="branch-0 cbranch-no" title="branch not covered" >                                                        &lt;div className="flex justify-center items-center group h-[15px]"&gt;</span>
-                                                            &lt;div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" /&gt;
-                                                            &lt;div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" /&gt;
-                                                            &lt;div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" /&gt;
+                    {/* TICKER NOT FOUND  */}
+                    {!company &amp;&amp; !!config.options?.ticker ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                        &lt;div className={classNames('flex flex-col items-center justify-center flex-1')}&gt;</span>
+                            {wrapMsg(`No events found for "${config.options?.ticker}"`)}
+                        &lt;/div&gt;
+                    ) : (
+                        &lt;&gt;
+                            &lt;div
+                                className={classNames('sticky top-0 pb-2 z-10', {
+                                    'pt-3 px-3': !hideHeader,
+                                    'pt-2 px-2': hideHeader,
+                                })}
+                            &gt;
+                                &lt;FilterBy
+                                    onChange={onSelectFilterBy}
+                                    options={filterByTypeOptions}
+                                    value={filterByTypes}
+                                &gt;
+                                    {showAllEvents ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                                        searchTerm &amp;&amp; searchTerm.length &gt; 0 ? (</span>
+                                            &lt;p className="text-sm font-semibold dark:text-white"&gt;Matching Events&lt;/p&gt;
+                                        ) : (
+                                            &lt;p className="text-sm font-semibold dark:text-white"&gt;All Events&lt;/p&gt;
+                                        )
+                                    ) : (
+                                        &lt;Tabs&lt;EventView&gt;
+                                            className="ml-1 eventlist__tabs"
+                                            kind="line"
+                                            onChange={onSelectListType}
+                                            options={[
+                                                {
+                                                    value: EventView.LiveAndUpcoming,
+                                                    label: 'Live Events',
+                                                },
+                                                { value: EventView.Recent, label: 'Recent' },
+                                            ]}
+                                            value={listType}
+                                        /&gt;
+                                    )}
+                                &lt;/FilterBy&gt;
+                            &lt;/div&gt;
+                            &lt;div className={classNames('flex flex-col items-center justify-center flex-1')}&gt;
+                                {match(eventsQuery)
+                                    .with({ status: 'loading' }, () =&gt; &lt;LoadingEventList /&gt;)
+                                    .with({ status: 'paused' }, <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >wrapMsg('There are no events.'))</span>
+                                    .with({ status: 'error' }, <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >wrapMsg('There was an error loading events.'))</span>
+                                    .with({ status: 'empty' }, () =&gt; wrapMsg('There are no events.'))
+                                    .with({ status: 'success' }, ({ data, isPaging, isRefetching }) =&gt;
+                                        loadingWatchlist !== 'complete' ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                                            &lt;LoadingEventList /&gt;</span>
+                                        ) : (
+                                            &lt;ul className="w-full"&gt;
+                                                {showAllEvents &amp;&amp;
+<span class="branch-1 cbranch-no" title="branch not covered" >                                                    match(eventsQueryUpcoming)</span>
+                                                        .with(
+                                                            { status: 'success' },
+<span class="fstat-no" title="function not covered" >                                                            ({</span>
+                                                                data: dataUpcoming,
+                                                                isRefetching: isUpcomingRefetching,
+                                                            }) =&gt;
+<span class="cstat-no" title="statement not covered" >                                                                dataUpcoming.search.events.hits.map(<span class="fstat-no" title="function not covered" >(h</span>it, index) =&gt; {</span>
+                                                                    const eventDate = <span class="cstat-no" title="statement not covered" >DateTime.fromISO(</span>
+                                                                        hit.event.eventDate
+                                                                    );
+                                                                    let showDivider = <span class="cstat-no" title="statement not covered" >false;</span>
+<span class="cstat-no" title="statement not covered" >                                                                    if (</span>
+                                                                        !prevEventDate ||
+                                                                        prevEventDate.toFormat('MM/dd/yyyy') !==
+                                                                            eventDate.toFormat('MM/dd/yyyy')
+                                                                    ) {
+<span class="cstat-no" title="statement not covered" >                                                                        prevEventDate = eventDate;</span>
+<span class="cstat-no" title="statement not covered" >                                                                        showDivider = true;</span>
+                                                                    }
+<span class="cstat-no" title="statement not covered" >                                                                    if (!renderedRefetch) {</span>
+<span class="cstat-no" title="statement not covered" >                                                                        renderedRefetch = true;</span>
+                                                                    }
+<span class="cstat-no" title="statement not covered" >                                                                    return (</span>
+                                                                        &lt;EventRow
+                                                                            customOnly={customOnly}
+                                                                            event={hit.event}
+                                                                            index={index}
+                                                                            isRefetching={isUpcomingRefetching}
+                                                                            key={`${hit.event.id}-${index}`}
+                                                                            onSelectEvent={onSelectEvent}
+                                                                            refetch={refetch}
+                                                                            renderedRefetch={index !== 0}
+                                                                            searchTerm={searchTerm}
+                                                                            setFocus={setFocus}
+                                                                            showDivider={showDivider}
+                                                                        /&gt;
+                                                                    );
+                                                                })
+                                                        )
+                                                        .otherwise(<span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >null)</span>}
+                                                {data.search.events.hits.map((hit, index) =&gt; {
+                                                    const eventDate = DateTime.fromISO(hit.event.eventDate);
+                                                    let showDivider = false;
+                                                    if (
+                                                        !prevEventDate ||
+                                                        prevEventDate.toFormat('MM/dd/yyyy') !==
+                                                            eventDate.toFormat('MM/dd/yyyy')
+                                                    ) {
+                                                        prevEventDate = eventDate;
+                                                        showDivider = true;
+                                                    }
+                                                    if (index &gt; 0 &amp;&amp; !renderedRefetch) {
+                                                        renderedRefetch = true;
+                                                    }
+                                                    return (
+                                                        &lt;EventRow
+                                                            customOnly={customOnly}
+                                                            event={hit.event}
+                                                            index={index}
+                                                            isRefetching={isRefetching}
+                                                            key={`${hit.event.id}-${index}`}
+                                                            onSelectEvent={onSelectEvent}
+                                                            refetch={refetch}
+                                                            renderedRefetch={renderedRefetch}
+                                                            searchTerm={searchTerm}
+                                                            setFocus={setFocus}
+                                                            showDivider={showDivider}
+                                                        /&gt;
+                                                    );
+                                                })}
+                                                {loadMore &amp;&amp; (
+                                                    &lt;li
+                                                        className="px-3 cursor-pointer"
+                                                        onClick={!isPaging ? loadMore : <span class="branch-1 cbranch-no" title="branch not covered" >undefined}</span>
+                                                    &gt;
+                                                        &lt;div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70"&gt;
+                                                            &lt;div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"&gt;&lt;/div&gt;
+                                                            {isPaging ? (
+<span class="branch-0 cbranch-no" title="branch not covered" >                                                                &lt;div className="flex justify-center items-center group h-[15px]"&gt;</span>
+                                                                    &lt;div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" /&gt;
+                                                                    &lt;div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" /&gt;
+                                                                    &lt;div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" /&gt;
+                                                                &lt;/div&gt;
+                                                            ) : (
+                                                                'Load more'
+                                                            )}
+                                                            &lt;div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"&gt;&lt;/div&gt;
                                                         &lt;/div&gt;
-                                                    ) : (
-                                                        'Load more'
-                                                    )}
-                                                    &lt;div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"&gt;&lt;/div&gt;
-                                                &lt;/div&gt;
-                                            &lt;/li&gt;
-                                        )}
-                                    &lt;/ul&gt;
-                                )
-                            )
-                            .exhaustive()}
-                        &lt;div className="flex-1" /&gt;
-                    &lt;/div&gt;
+                                                    &lt;/li&gt;
+                                                )}
+                                            &lt;/ul&gt;
+                                        )
+                                    )
+                                    .exhaustive()}
+                                &lt;div className="flex-1" /&gt;
+                            &lt;/div&gt;
+                        &lt;/&gt;
+                    )}
                 &lt;/div&gt;
             &lt;/div&gt;
             {!hidePlaybar &amp;&amp; &lt;Playbar onClickCalendar={onSelectEventById} /&gt;}
@@ -3502,7 +3556,7 @@ export const EventList = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Mon Jun 03 2024 13:09:16 GMT-0400 (Eastern Daylight Time)
+                at Wed Jul 10 2024 18:57:00 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
