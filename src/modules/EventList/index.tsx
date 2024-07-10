@@ -450,140 +450,158 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
             )}
             <div className="flex flex-col flex-1 pb-2 pt-0 overflow-y-scroll dark:bg-bluegray-7" ref={scrollRef}>
                 <div className="flex flex-col flex-grow">
-                    <div
-                        className={classNames('sticky top-0 pb-2 z-10', {
-                            'pt-3 px-3': !hideHeader,
-                            'pt-2 px-2': hideHeader,
-                        })}
-                    >
-                        <FilterBy onChange={onSelectFilterBy} options={filterByTypeOptions} value={filterByTypes}>
-                            {showAllEvents ? (
-                                searchTerm && searchTerm.length > 0 ? (
-                                    <p className="text-sm font-semibold dark:text-white">Matching Events</p>
-                                ) : (
-                                    <p className="text-sm font-semibold dark:text-white">All Events</p>
-                                )
-                            ) : (
-                                <Tabs<EventView>
-                                    className="ml-1 eventlist__tabs"
-                                    kind="line"
-                                    onChange={onSelectListType}
-                                    options={[
-                                        {
-                                            value: EventView.LiveAndUpcoming,
-                                            label: 'Live Events',
-                                        },
-                                        { value: EventView.Recent, label: 'Recent' },
-                                    ]}
-                                    value={listType}
-                                />
-                            )}
-                        </FilterBy>
-                    </div>
-                    <div className={classNames('flex flex-col items-center justify-center flex-1')}>
-                        {match(eventsQuery)
-                            .with({ status: 'loading' }, () => <LoadingEventList />)
-                            .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
-                            .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
-                            .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
-                            .with({ status: 'success' }, ({ data, isPaging, isRefetching }) =>
-                                loadingWatchlist !== 'complete' ? (
-                                    <LoadingEventList />
-                                ) : (
-                                    <ul className="w-full">
-                                        {showAllEvents &&
-                                            match(eventsQueryUpcoming)
-                                                .with(
-                                                    { status: 'success' },
-                                                    ({ data: dataUpcoming, isRefetching: isUpcomingRefetching }) =>
-                                                        dataUpcoming.search.events.hits.map((hit, index) => {
-                                                            const eventDate = DateTime.fromISO(hit.event.eventDate);
-                                                            let showDivider = false;
-                                                            if (
-                                                                !prevEventDate ||
-                                                                prevEventDate.toFormat('MM/dd/yyyy') !==
-                                                                    eventDate.toFormat('MM/dd/yyyy')
-                                                            ) {
-                                                                prevEventDate = eventDate;
-                                                                showDivider = true;
-                                                            }
-                                                            if (!renderedRefetch) {
-                                                                renderedRefetch = true;
-                                                            }
-                                                            return (
-                                                                <EventRow
-                                                                    customOnly={customOnly}
-                                                                    event={hit.event}
-                                                                    index={index}
-                                                                    isRefetching={isUpcomingRefetching}
-                                                                    key={`${hit.event.id}-${index}`}
-                                                                    onSelectEvent={onSelectEvent}
-                                                                    refetch={refetch}
-                                                                    renderedRefetch={index !== 0}
-                                                                    searchTerm={searchTerm}
-                                                                    setFocus={setFocus}
-                                                                    showDivider={showDivider}
-                                                                />
-                                                            );
-                                                        })
-                                                )
-                                                .otherwise(() => null)}
-                                        {data.search.events.hits.map((hit, index) => {
-                                            const eventDate = DateTime.fromISO(hit.event.eventDate);
-                                            let showDivider = false;
-                                            if (
-                                                !prevEventDate ||
-                                                prevEventDate.toFormat('MM/dd/yyyy') !==
-                                                    eventDate.toFormat('MM/dd/yyyy')
-                                            ) {
-                                                prevEventDate = eventDate;
-                                                showDivider = true;
-                                            }
-                                            if (index > 0 && !renderedRefetch) {
-                                                renderedRefetch = true;
-                                            }
-                                            return (
-                                                <EventRow
-                                                    customOnly={customOnly}
-                                                    event={hit.event}
-                                                    index={index}
-                                                    isRefetching={isRefetching}
-                                                    key={`${hit.event.id}-${index}`}
-                                                    onSelectEvent={onSelectEvent}
-                                                    refetch={refetch}
-                                                    renderedRefetch={renderedRefetch}
-                                                    searchTerm={searchTerm}
-                                                    setFocus={setFocus}
-                                                    showDivider={showDivider}
-                                                />
-                                            );
-                                        })}
-                                        {loadMore && (
-                                            <li
-                                                className="px-3 cursor-pointer"
-                                                onClick={!isPaging ? loadMore : undefined}
-                                            >
-                                                <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
-                                                    <div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"></div>
-                                                    {isPaging ? (
-                                                        <div className="flex justify-center items-center group h-[15px]">
-                                                            <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
-                                                            <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
-                                                            <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                    {/* TICKER NOT FOUND  */}
+                    {!company && !!config.options?.ticker ? (
+                        <div className={classNames('flex flex-col items-center justify-center flex-1')}>
+                            {wrapMsg(`No events found for "${config.options?.ticker}"`)}
+                        </div>
+                    ) : (
+                        <>
+                            <div
+                                className={classNames('sticky top-0 pb-2 z-10', {
+                                    'pt-3 px-3': !hideHeader,
+                                    'pt-2 px-2': hideHeader,
+                                })}
+                            >
+                                <FilterBy
+                                    onChange={onSelectFilterBy}
+                                    options={filterByTypeOptions}
+                                    value={filterByTypes}
+                                >
+                                    {showAllEvents ? (
+                                        searchTerm && searchTerm.length > 0 ? (
+                                            <p className="text-sm font-semibold dark:text-white">Matching Events</p>
+                                        ) : (
+                                            <p className="text-sm font-semibold dark:text-white">All Events</p>
+                                        )
+                                    ) : (
+                                        <Tabs<EventView>
+                                            className="ml-1 eventlist__tabs"
+                                            kind="line"
+                                            onChange={onSelectListType}
+                                            options={[
+                                                {
+                                                    value: EventView.LiveAndUpcoming,
+                                                    label: 'Live Events',
+                                                },
+                                                { value: EventView.Recent, label: 'Recent' },
+                                            ]}
+                                            value={listType}
+                                        />
+                                    )}
+                                </FilterBy>
+                            </div>
+                            <div className={classNames('flex flex-col items-center justify-center flex-1')}>
+                                {match(eventsQuery)
+                                    .with({ status: 'loading' }, () => <LoadingEventList />)
+                                    .with({ status: 'paused' }, () => wrapMsg('There are no events.'))
+                                    .with({ status: 'error' }, () => wrapMsg('There was an error loading events.'))
+                                    .with({ status: 'empty' }, () => wrapMsg('There are no events.'))
+                                    .with({ status: 'success' }, ({ data, isPaging, isRefetching }) =>
+                                        loadingWatchlist !== 'complete' ? (
+                                            <LoadingEventList />
+                                        ) : (
+                                            <ul className="w-full">
+                                                {showAllEvents &&
+                                                    match(eventsQueryUpcoming)
+                                                        .with(
+                                                            { status: 'success' },
+                                                            ({
+                                                                data: dataUpcoming,
+                                                                isRefetching: isUpcomingRefetching,
+                                                            }) =>
+                                                                dataUpcoming.search.events.hits.map((hit, index) => {
+                                                                    const eventDate = DateTime.fromISO(
+                                                                        hit.event.eventDate
+                                                                    );
+                                                                    let showDivider = false;
+                                                                    if (
+                                                                        !prevEventDate ||
+                                                                        prevEventDate.toFormat('MM/dd/yyyy') !==
+                                                                            eventDate.toFormat('MM/dd/yyyy')
+                                                                    ) {
+                                                                        prevEventDate = eventDate;
+                                                                        showDivider = true;
+                                                                    }
+                                                                    if (!renderedRefetch) {
+                                                                        renderedRefetch = true;
+                                                                    }
+                                                                    return (
+                                                                        <EventRow
+                                                                            customOnly={customOnly}
+                                                                            event={hit.event}
+                                                                            index={index}
+                                                                            isRefetching={isUpcomingRefetching}
+                                                                            key={`${hit.event.id}-${index}`}
+                                                                            onSelectEvent={onSelectEvent}
+                                                                            refetch={refetch}
+                                                                            renderedRefetch={index !== 0}
+                                                                            searchTerm={searchTerm}
+                                                                            setFocus={setFocus}
+                                                                            showDivider={showDivider}
+                                                                        />
+                                                                    );
+                                                                })
+                                                        )
+                                                        .otherwise(() => null)}
+                                                {data.search.events.hits.map((hit, index) => {
+                                                    const eventDate = DateTime.fromISO(hit.event.eventDate);
+                                                    let showDivider = false;
+                                                    if (
+                                                        !prevEventDate ||
+                                                        prevEventDate.toFormat('MM/dd/yyyy') !==
+                                                            eventDate.toFormat('MM/dd/yyyy')
+                                                    ) {
+                                                        prevEventDate = eventDate;
+                                                        showDivider = true;
+                                                    }
+                                                    if (index > 0 && !renderedRefetch) {
+                                                        renderedRefetch = true;
+                                                    }
+                                                    return (
+                                                        <EventRow
+                                                            customOnly={customOnly}
+                                                            event={hit.event}
+                                                            index={index}
+                                                            isRefetching={isRefetching}
+                                                            key={`${hit.event.id}-${index}`}
+                                                            onSelectEvent={onSelectEvent}
+                                                            refetch={refetch}
+                                                            renderedRefetch={renderedRefetch}
+                                                            searchTerm={searchTerm}
+                                                            setFocus={setFocus}
+                                                            showDivider={showDivider}
+                                                        />
+                                                    );
+                                                })}
+                                                {loadMore && (
+                                                    <li
+                                                        className="px-3 cursor-pointer"
+                                                        onClick={!isPaging ? loadMore : undefined}
+                                                    >
+                                                        <div className="px-1 py-2 backdrop-filter backdrop-blur-sm bg-white bg-opacity-70 flex rounded-lg items-center text-sm whitespace-nowrap text-gray-500 font-semibold dark:bg-bluegray-7 dark:bg-opacity-70">
+                                                            <div className="mr-2 flex-1 h-[1px] bg-gradient-to-l from-gray-200 dark:from-bluegray-5"></div>
+                                                            {isPaging ? (
+                                                                <div className="flex justify-center items-center group h-[15px]">
+                                                                    <div className="w-1 h-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation" />
+                                                                    <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-100" />
+                                                                    <div className="w-1 h-1 ml-1 bg-gray-400 group-hover:bg-gray-500 rounded-full animate-bounce animation-delay-200" />
+                                                                </div>
+                                                            ) : (
+                                                                'Load more'
+                                                            )}
+                                                            <div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
                                                         </div>
-                                                    ) : (
-                                                        'Load more'
-                                                    )}
-                                                    <div className="ml-2 flex-1 h-[1px] bg-gradient-to-r from-gray-200 dark:from-bluegray-5"></div>
-                                                </div>
-                                            </li>
-                                        )}
-                                    </ul>
-                                )
-                            )
-                            .exhaustive()}
-                        <div className="flex-1" />
-                    </div>
+                                                    </li>
+                                                )}
+                                            </ul>
+                                        )
+                                    )
+                                    .exhaustive()}
+                                <div className="flex-1" />
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
             {!hidePlaybar && <Playbar onClickCalendar={onSelectEventById} />}
