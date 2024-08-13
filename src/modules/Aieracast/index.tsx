@@ -290,11 +290,14 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
                 <div className="absolute inset-0 flex">
                     <div
                         className={classNames(
-                            'h-full w-[19rem] flex-shrink-0 relative',
+                            'h-full flex-shrink-0 relative',
                             'flex flex-col',
                             'transition-all aieracast__events',
                             {
-                                '-ml-[18.75rem]': !showSidebar,
+                                'w-[28rem]': openEventIds.length === 0,
+                                '-ml-[27.75rem]': !showSidebar && openEventIds.length === 0,
+                                'w-[19rem]': openEventIds.length > 0,
+                                '-ml-[18.75rem]': !showSidebar && openEventIds.length > 0,
                             }
                         )}
                     >
