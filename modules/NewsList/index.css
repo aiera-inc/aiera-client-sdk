@@ -603,6 +603,9 @@ video {
 .ml-4 {
   margin-left: 1rem;
 }
+.-ml-\[27\.75rem\] {
+  margin-left: -27.75rem;
+}
 .-ml-\[18\.75rem\] {
   margin-left: -18.75rem;
 }
@@ -842,6 +845,9 @@ video {
 }
 .w-1 {
   width: 0.25rem;
+}
+.w-\[28rem\] {
+  width: 28rem;
 }
 .w-\[19rem\] {
   width: 19rem;
