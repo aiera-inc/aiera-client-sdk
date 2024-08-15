@@ -498,7 +498,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement24 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement25 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -593,10 +593,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement24(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement25(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement24(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement25(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement(element, config, children) {
@@ -644,7 +644,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement24(element.type, key, ref, self2, source, owner, props);
+          return ReactElement25(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -2476,11 +2476,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React25 = require_react();
+        var React26 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React25.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React26.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2512,7 +2512,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React25) {
+        if (!React26) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3728,7 +3728,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React25.Children.forEach(children, function(child) {
+          React26.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3739,7 +3739,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React25.Children.forEach(props.children, function(child) {
+              React26.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10932,7 +10932,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React25.Component().refs;
+        var emptyRefsObject = new React26.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26089,7 +26089,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames13() {
+      function classNames14() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26100,7 +26100,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames13.apply(null, arg);
+              var inner = classNames14.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26120,14 +26120,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames13.default = classNames13;
-        module2.exports = classNames13;
+        classNames14.default = classNames14;
+        module2.exports = classNames14;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames13;
+          return classNames14;
         });
       } else {
-        window.classNames = classNames13;
+        window.classNames = classNames14;
       }
     })();
   }
@@ -64853,7 +64853,7 @@ var require_html2canvas = __commonJS({
 });
 
 // src/web/modules/Transcrippet/index.tsx
-var import_react31 = __toModule(require_react());
+var import_react32 = __toModule(require_react());
 var import_react_dom = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -71906,6 +71906,16 @@ var AuthProvider = ({ children, logout }) => {
 var import_react15 = __toModule(require_react());
 
 // src/types/generated.ts
+var EventConnectionStatus = /* @__PURE__ */ ((EventConnectionStatus2) => {
+  EventConnectionStatus2["Connected"] = "connected";
+  EventConnectionStatus2["ConnectionExpected"] = "connection_expected";
+  EventConnectionStatus2["ConnectionNotExpected"] = "connection_not_expected";
+  EventConnectionStatus2["Missed"] = "missed";
+  EventConnectionStatus2["Transcribed"] = "transcribed";
+  EventConnectionStatus2["Transcribing"] = "transcribing";
+  EventConnectionStatus2["WaitingToConnect"] = "waiting_to_connect";
+  return EventConnectionStatus2;
+})(EventConnectionStatus || {});
 var RefreshDocument = lib_default`
     mutation Refresh {
   __typename
@@ -72821,14 +72831,16 @@ var import_react17 = __toModule(require_react());
 var import_classnames5 = __toModule(require_classnames());
 function Bell({ className, alt = "Bell" }) {
   return /* @__PURE__ */ import_react17.default.createElement("svg", {
-    className: (0, import_classnames5.default)(className, "fill-current", "Svg", "Svg__bell"),
+    className: (0, import_classnames5.default)(className, "stroke-current", "Svg", "Svg__bell"),
     width: "100%",
-    viewBox: "0 0 16 18",
-    xmlns: "http://www.w3.org/2000/svg"
+    viewBox: "0 0 24 24",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none"
   }, /* @__PURE__ */ import_react17.default.createElement("title", null, alt), /* @__PURE__ */ import_react17.default.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M6.30708 0.70639C6.75607 0.254096 7.36503 0 8 0C8.63497 0 9.24393 0.254096 9.69292 0.70639C10.1323 1.14897 10.3832 1.74586 10.3938 2.3706C11.4413 2.8183 12.3469 3.55191 13.0065 4.49196C13.7385 5.53518 14.1315 6.78132 14.1314 8.05882C14.1314 8.05885 14.1314 8.0588 14.1314 8.05882V11.0311C14.1313 11.2127 14.1668 11.3926 14.2358 11.5605C14.3048 11.7283 14.4059 11.8807 14.5334 12.0092C14.5334 12.0092 14.5333 12.0092 14.5334 12.0092L15.8461 13.3315C15.9964 13.4829 16.0413 13.7107 15.96 13.9085C15.8786 14.1063 15.687 14.2353 15.4744 14.2353H11.3285V14.6471C11.3285 15.5363 10.9778 16.3891 10.3536 17.0179C9.72937 17.6467 8.88276 18 8 18C7.11724 18 6.27063 17.6467 5.64642 17.0179C5.02221 16.3891 4.67154 15.5363 4.67154 14.6471V14.2353H0.525562C0.312998 14.2353 0.121365 14.1063 0.0400202 13.9085C-0.0413244 13.7107 0.00363912 13.4829 0.153944 13.3315L1.46664 12.0092C1.72406 11.7499 1.86862 11.3979 1.86862 11.032V8.05882C1.86862 5.50287 3.41034 3.31005 5.60619 2.37064C5.61676 1.74588 5.86772 1.14898 6.30708 0.70639ZM5.72263 14.2353V14.6471C5.72263 15.2555 5.96257 15.839 6.38966 16.2692C6.81675 16.6995 7.396 16.9412 8 16.9412C8.604 16.9412 9.18325 16.6995 9.61034 16.2692C10.0374 15.839 10.2774 15.2555 10.2774 14.6471V14.2353H5.72263ZM14.2057 13.1765L13.7901 12.7579C13.565 12.5311 13.3865 12.2618 13.2647 11.9655C13.1429 11.6693 13.0802 11.3517 13.0803 11.0311C13.0803 11.031 13.0803 11.0311 13.0803 11.0311V8.05882C13.0804 7.00023 12.7548 5.96757 12.1482 5.10312C11.5417 4.23868 10.684 3.5849 9.69331 3.2318C9.48339 3.15698 9.34306 2.95702 9.34306 2.73271V2.41176C9.34306 2.05294 9.20156 1.70882 8.94969 1.45509C8.69782 1.20137 8.3562 1.05882 8 1.05882C7.6438 1.05882 7.30218 1.20137 7.05031 1.45509C6.79844 1.70882 6.65694 2.05294 6.65694 2.41176V2.73271C6.65694 2.95705 6.51657 3.15703 6.30661 3.23183C4.333 3.93492 2.91972 5.83183 2.91972 8.05882V11.032C2.91972 11.6788 2.6644 12.3 2.20988 12.7579L1.79434 13.1765H14.2057Z"
+    strokeWidth: 1.5,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
   }));
 }
 
@@ -73435,12 +73447,32 @@ function useAudioPlayer(withUpdates = true) {
 }
 
 // src/components/PlayButton/index.tsx
-var import_classnames9 = __toModule(require_classnames());
+var import_classnames10 = __toModule(require_classnames());
+var import_react27 = __toModule(require_react());
+
+// src/components/Svg/BellSlash.tsx
 var import_react26 = __toModule(require_react());
+var import_classnames9 = __toModule(require_classnames());
+function BellSlash({ className, alt = "Bell Slash" }) {
+  return /* @__PURE__ */ import_react26.default.createElement("svg", {
+    className: (0, import_classnames9.default)(className, "stroke-current", "Svg", "Svg__bellSlash"),
+    width: "100%",
+    viewBox: "0 0 24 24",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none"
+  }, /* @__PURE__ */ import_react26.default.createElement("title", null, alt), /* @__PURE__ */ import_react26.default.createElement("path", {
+    strokeWidth: 1.5,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "M9.143 17.082a24.248 24.248 0 0 0 3.844.148m-3.844-.148a23.856 23.856 0 0 1-5.455-1.31 8.964 8.964 0 0 0 2.3-5.542m3.155 6.852a3 3 0 0 0 5.667 1.97m1.965-2.277L21 21m-4.225-4.225a23.81 23.81 0 0 0 3.536-1.003A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6.53 6.53m10.245 10.245L6.53 6.53M3 3l3.53 3.53"
+  }));
+}
+
+// src/components/PlayButton/index.tsx
 function PlayButtonUI(props) {
-  const { alertOnLive, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
-  return hasAudio ? /* @__PURE__ */ import_react26.default.createElement("div", {
-    className: (0, import_classnames9.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+  const { alertOnLive, connectionStatus, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+  return hasAudio ? /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: (0, import_classnames10.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -73457,25 +73489,25 @@ function PlayButtonUI(props) {
       "active:text-white": !isPlaying
     }, "button__play"),
     onClick: togglePlayback
-  }, isPlaying ? /* @__PURE__ */ import_react26.default.createElement(Pause, {
+  }, isPlaying ? /* @__PURE__ */ import_react27.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react26.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react27.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
-  })) : eventStarted ? /* @__PURE__ */ import_react26.default.createElement("div", {
+  })) : eventStarted ? /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4"
-  }, /* @__PURE__ */ import_react26.default.createElement(Calendar, {
+  }, /* @__PURE__ */ import_react27.default.createElement(Calendar, {
     className: "w-4"
-  })) : /* @__PURE__ */ import_react26.default.createElement(Tooltip, {
-    content: /* @__PURE__ */ import_react26.default.createElement("div", {
+  })) : /* @__PURE__ */ import_react27.default.createElement(Tooltip, {
+    content: /* @__PURE__ */ import_react27.default.createElement("div", {
       className: "bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7"
-    }, alertOnLive ? "A chime will ring after the audio is connected" : "Play a chime when the event is about to begin"),
+    }, connectionStatus === EventConnectionStatus.ConnectionNotExpected ? "No Connection Expected" : alertOnLive ? "A chime will ring after the audio is connected" : "Play a chime when the event is about to begin"),
     grow: "up-right",
     openOn: "hover",
     position: "bottom-right",
     yOffset: 6,
     xOffset: 4,
     hideOnDocumentScroll: true,
-    className: (0, import_classnames9.default)("border flex items-center justify-center w-full h-full rounded-full", {
+    className: (0, import_classnames10.default)("border flex items-center justify-center w-full h-full rounded-full", {
       "dark:bg-yellow-400 dark:text-yellow-800": alertOnLive,
       "dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20": alertOnLive || !alertOnLive,
       "dark:active:bg-bluegray-5 dark:active:text-bluegray-4": alertOnLive,
@@ -73487,11 +73519,16 @@ function PlayButtonUI(props) {
       "dark:bg-bluegray-7 dark:border-bluegray-6 dark:text-bluegray-4": !alertOnLive,
       "dark:active:bg-yellow-400 dark:active:border-yellow-400 dark:active:text-yellow-800": !alertOnLive
     }, "alertButton")
-  }, /* @__PURE__ */ import_react26.default.createElement("div", {
-    onClick: toggleAlert,
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    onClick: connectionStatus === EventConnectionStatus.ConnectionNotExpected ? (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    } : toggleAlert,
     className: "w-full h-full rounded-full flex items-center justify-center"
-  }, /* @__PURE__ */ import_react26.default.createElement(Bell, {
-    className: "w-3.5"
+  }, connectionStatus === EventConnectionStatus.ConnectionNotExpected ? /* @__PURE__ */ import_react27.default.createElement(BellSlash, {
+    className: "w-4"
+  }) : /* @__PURE__ */ import_react27.default.createElement(Bell, {
+    className: "w-4"
   })));
 }
 function PlayButton(props) {
@@ -73501,7 +73538,7 @@ function PlayButton(props) {
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
   const bus = useMessageBus();
-  const togglePlayback = (0, import_react26.useCallback)((event) => {
+  const togglePlayback = (0, import_react27.useCallback)((event) => {
     const activeMetaData = metaData || audioPlayer.metaData;
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
@@ -73545,7 +73582,7 @@ function PlayButton(props) {
   const eventDate = metaData.eventDate;
   const alertDateIds = eventDate ? alertList.dates[eventDate] : null;
   const alertOnLive = alertDateIds ? alertDateIds.indexOf(id) >= 0 : false;
-  const toggleAlert = (0, import_react26.useCallback)((event) => {
+  const toggleAlert = (0, import_react27.useCallback)((event) => {
     event.stopPropagation();
     if (metaData.eventDate && id) {
       if (!alertOnLive) {
@@ -73562,8 +73599,9 @@ function PlayButton(props) {
     }
   }, [id, alertOnLive]);
   const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
-  return /* @__PURE__ */ import_react26.default.createElement(PlayButtonUI, {
+  return /* @__PURE__ */ import_react27.default.createElement(PlayButtonUI, {
     alertOnLive,
+    connectionStatus: metaData.connectionStatus,
     eventStarted,
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
@@ -73573,13 +73611,13 @@ function PlayButton(props) {
 }
 
 // src/modules/Transcrippet/index.tsx
-var import_classnames12 = __toModule(require_classnames());
+var import_classnames13 = __toModule(require_classnames());
 var import_html2canvas = __toModule(require_html2canvas());
-var import_react30 = __toModule(require_react());
+var import_react31 = __toModule(require_react());
 var import_ts_pattern4 = __toModule(require_lib());
 
 // src/modules/Transcrippet/LineChart.tsx
-var import_react27 = __toModule(require_react());
+var import_react28 = __toModule(require_react());
 var LineChart = ({ data, selectedIndex, transcrippetRef }) => {
   var _a;
   const containerWidth = (_a = transcrippetRef == null ? void 0 : transcrippetRef.current) == null ? void 0 : _a.getBoundingClientRect().width;
@@ -73593,36 +73631,36 @@ var LineChart = ({ data, selectedIndex, transcrippetRef }) => {
   const pathData = prices.map((price, index) => `${index * width},${88 - (price - minPrice) / (maxPrice - minPrice) * 88 + 12}`).join(" ");
   const dotX = selectedIndex * width;
   const dotY = selectedItem ? 88 - (selectedItem.price - minPrice) / (maxPrice - minPrice) * 88 + 12 : 0;
-  return /* @__PURE__ */ import_react27.default.createElement("svg", {
+  return /* @__PURE__ */ import_react28.default.createElement("svg", {
     viewBox: `0 0 ${containerWidth} 100`,
     className: "mb-1"
-  }, /* @__PURE__ */ import_react27.default.createElement("polyline", {
+  }, /* @__PURE__ */ import_react28.default.createElement("polyline", {
     points: pathData,
     fill: "none",
     stroke: "rgba(79, 70, 229, 0.5)",
     strokeWidth: "2"
-  }), /* @__PURE__ */ import_react27.default.createElement("circle", {
+  }), /* @__PURE__ */ import_react28.default.createElement("circle", {
     cx: dotX,
     cy: dotY,
     r: 5,
     stroke: "rgb(225, 29, 72)",
     strokeWidth: 4,
     fill: "white"
-  }), /* @__PURE__ */ import_react27.default.createElement("text", {
+  }), /* @__PURE__ */ import_react28.default.createElement("text", {
     x: 20,
     y: 90,
     fill: "rgba(71, 85, 105, 0.7)",
     fontWeight: "bold",
     fontFamily: "monospace",
     fontSize: "12px"
-  }, `L: $${minPrice.toFixed(2)}`), /* @__PURE__ */ import_react27.default.createElement("text", {
+  }, `L: $${minPrice.toFixed(2)}`), /* @__PURE__ */ import_react28.default.createElement("text", {
     x: 20,
     y: 76,
     fill: "rgba(71, 85, 105, 0.7)",
     fontFamily: "monospace",
     fontWeight: "bold",
     fontSize: "12px"
-  }, `H: $${maxPrice.toFixed(2)}`), selectedItem && /* @__PURE__ */ import_react27.default.createElement("text", {
+  }, `H: $${maxPrice.toFixed(2)}`), selectedItem && /* @__PURE__ */ import_react28.default.createElement("text", {
     x: dotX + 8 > containerWidth ? dotX - 8 : dotX + 8,
     y: dotY + 14 > 90 ? dotY - 14 : dotY + 14,
     fill: "black",
@@ -73632,29 +73670,29 @@ var LineChart = ({ data, selectedIndex, transcrippetRef }) => {
 };
 
 // src/components/Svg/QuoteLeft.tsx
-var import_react28 = __toModule(require_react());
-var import_classnames10 = __toModule(require_classnames());
+var import_react29 = __toModule(require_react());
+var import_classnames11 = __toModule(require_classnames());
 function QuoteLeft({ className, alt = "Quote Left" }) {
-  return /* @__PURE__ */ import_react28.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__quoteLeft"),
+  return /* @__PURE__ */ import_react29.default.createElement("svg", {
+    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__quoteLeft"),
     width: "100%",
     viewBox: "0 0 65 53",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react28.default.createElement("title", null, alt), /* @__PURE__ */ import_react28.default.createElement("path", {
+  }, /* @__PURE__ */ import_react29.default.createElement("title", null, alt), /* @__PURE__ */ import_react29.default.createElement("path", {
     d: "M28.9062 5.85938C25.8464 7.61719 23.3724 9.14714 21.4844 10.4492C19.5964 11.6862 17.6758 13.3464 15.7227 15.4297C13.8997 17.3828 12.5 19.4336 11.5234 21.582C10.5469 23.7305 9.86328 26.4974 9.47266 29.8828H14.1602C18.1966 29.8828 21.3542 30.8919 23.6328 32.9102C25.9766 34.8633 27.1484 37.7604 27.1484 41.6016C27.1484 44.3359 26.1068 46.9076 24.0234 49.3164C22.0052 51.6602 19.2057 52.832 15.625 52.832C10.026 52.832 6.02214 51.0091 3.61328 47.3633C1.20443 43.6523 0 38.8021 0 32.8125C0 28.5807 0.911458 24.7396 2.73438 21.2891C4.55729 17.7734 6.77083 14.6484 9.375 11.9141C12.0443 9.11458 14.8763 6.73828 17.8711 4.78516C20.8659 2.83203 23.3724 1.23698 25.3906 0L28.9062 5.85938ZM65.0391 5.85938C61.9792 7.61719 59.5052 9.14714 57.6172 10.4492C55.7292 11.6862 53.8086 13.3464 51.8555 15.4297C49.9674 17.4479 48.5352 19.5312 47.5586 21.6797C46.6471 23.763 45.9961 26.4974 45.6055 29.8828H50.293C54.3294 29.8828 57.487 30.8919 59.7656 32.9102C62.1094 34.8633 63.2812 37.7604 63.2812 41.6016C63.2812 44.3359 62.2396 46.9076 60.1562 49.3164C58.138 51.6602 55.3385 52.832 51.7578 52.832C46.1589 52.832 42.1549 51.0091 39.7461 47.3633C37.3372 43.6523 36.1328 38.8021 36.1328 32.8125C36.1328 28.5807 37.0443 24.7396 38.8672 21.2891C40.6901 17.7734 42.9036 14.6484 45.5078 11.9141C48.1771 9.11458 51.0091 6.73828 54.0039 4.78516C56.9987 2.83203 59.5052 1.23698 61.5234 0L65.0391 5.85938Z"
   }));
 }
 
 // src/components/Svg/QuoteRight.tsx
-var import_react29 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
+var import_react30 = __toModule(require_react());
+var import_classnames12 = __toModule(require_classnames());
 function QuoteRight({ className, alt = "Quote Right" }) {
-  return /* @__PURE__ */ import_react29.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__quoteRight"),
+  return /* @__PURE__ */ import_react30.default.createElement("svg", {
+    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__quoteRight"),
     width: "100%",
     viewBox: "0 0 65 53",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react29.default.createElement("title", null, alt), /* @__PURE__ */ import_react29.default.createElement("path", {
+  }, /* @__PURE__ */ import_react30.default.createElement("title", null, alt), /* @__PURE__ */ import_react30.default.createElement("path", {
     d: "M28.9062 19.9219C28.9062 24.2188 27.9622 28.1576 26.0742 31.7383C24.1862 35.2539 21.9727 38.3138 19.4336 40.918C16.8294 43.5872 13.9648 45.9961 10.8398 48.1445C7.71484 50.2279 5.20833 51.7578 3.32031 52.7344L0 46.9727C2.66927 45.4102 5.20833 43.8151 7.61719 42.1875C10.0911 40.4948 11.9792 38.8997 13.2812 37.4023C15.0391 35.4492 16.4388 33.431 17.4805 31.3477C18.5221 29.1992 19.1732 26.3997 19.4336 22.9492H14.7461C10.6445 22.9492 7.45443 21.9076 5.17578 19.8242C2.89714 17.7409 1.75781 14.8438 1.75781 11.1328C1.75781 8.46354 2.79948 5.95703 4.88281 3.61328C6.96615 1.20443 9.79818 0 13.3789 0C18.9128 0 22.8841 1.85547 25.293 5.56641C27.7018 9.21224 28.9062 13.9974 28.9062 19.9219ZM65.0391 19.9219C65.0391 24.2188 64.0951 28.1576 62.207 31.7383C60.319 35.2539 58.1055 38.3138 55.5664 40.918C52.9622 43.5872 50.0977 45.9961 46.9727 48.1445C43.8477 50.2279 41.3411 51.7578 39.4531 52.7344L36.1328 46.9727C38.8021 45.4102 41.3411 43.8151 43.75 42.1875C46.224 40.4948 48.112 38.8997 49.4141 37.4023C51.1719 35.4492 52.5716 33.431 53.6133 31.3477C54.6549 29.1992 55.306 26.3997 55.5664 22.9492H50.8789C46.7773 22.9492 43.5872 21.9076 41.3086 19.8242C39.0299 17.7409 37.8906 14.8438 37.8906 11.1328C37.8906 8.46354 38.9323 5.95703 41.0156 3.61328C43.099 1.20443 45.931 0 49.5117 0C55.0456 0 59.0169 1.85547 61.4258 5.56641C63.8346 9.21224 65.0391 13.9974 65.0391 19.9219Z"
   }));
 }
@@ -73730,41 +73768,41 @@ function TranscrippetUI(props) {
     }
     const wordHighlightEnabled = Array.isArray(content) && startMs && durations.length > 0;
     const showingPriceReaction = showPriceReaction && (equityPrices == null ? void 0 : equityPrices.prices) && equityPrices.prices.length > 0;
-    return /* @__PURE__ */ import_react30.default.createElement("div", {
+    return /* @__PURE__ */ import_react31.default.createElement("div", {
       ref: transcrippetRef,
       id: "aiera-transcrippet"
-    }, /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex flex-col rounded-lg border border-slate-300/70 hover:border-slate-300 shadow-md shadow-slate-400/10 bg-white pt-[18px] relative antialiased"
-    }, /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex items-center relative z-10 px-5"
-    }, speakerName ? /* @__PURE__ */ import_react30.default.createElement(import_react30.Fragment, null, /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, speakerName ? /* @__PURE__ */ import_react31.default.createElement(import_react31.Fragment, null, /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "h-9 w-9 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
-    }, /* @__PURE__ */ import_react30.default.createElement("p", {
+    }, /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "font-bold text-base"
-    }, getSpeakerInitials(speakerName))), /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, getSpeakerInitials(speakerName))), /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex flex-col justify-center ml-2 flex-1"
-    }, id ? /* @__PURE__ */ import_react30.default.createElement("a", {
+    }, id ? /* @__PURE__ */ import_react31.default.createElement("a", {
       href: `${PUBLIC_TRANSCRIPPET_URL}${id}`,
       target: "_blank",
       className: "text-base font-bold leading-[14px] hover:text-indigo-700 hover:underline",
       title: "Open Shareable Link",
       rel: "noreferrer"
-    }, speakerName || "No Speaker Assigned") : /* @__PURE__ */ import_react30.default.createElement("p", {
+    }, speakerName || "No Speaker Assigned") : /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "text-base leading-[14px] font-bold"
-    }, speakerName || "No Speaker Assigned"), /* @__PURE__ */ import_react30.default.createElement("p", {
+    }, speakerName || "No Speaker Assigned"), /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "text-sm text-slate-500 leading-3 mt-1"
-    }, speakerTitle || "Title Unknown"))) : /* @__PURE__ */ import_react30.default.createElement(import_react30.Fragment, null, companyTicker && /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, speakerTitle || "Title Unknown"))) : /* @__PURE__ */ import_react31.default.createElement(import_react31.Fragment, null, companyTicker && /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "h-9 mr-2 px-2 rounded-lg bg-indigo-600 text-white flex items-center justify-center"
-    }, /* @__PURE__ */ import_react30.default.createElement("p", {
+    }, /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "font-bold text-xs"
-    }, companyTicker)), /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, companyTicker)), /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex flex-col justify-center flex-1"
-    }, /* @__PURE__ */ import_react30.default.createElement("p", {
+    }, /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "text-base leading-[14px] font-bold"
-    }, "Event Participant"))), !!startMs && durations.length && /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, "Event Participant"))), !!startMs && durations.length && /* @__PURE__ */ import_react31.default.createElement("div", {
       "data-html2canvas-ignore": "true",
       className: "h-8 w-8"
-    }, /* @__PURE__ */ import_react30.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react31.default.createElement(PlayButton, {
       metaData: {
         localTicker: typeof companyTicker === "string" ? companyTicker : void 0,
         eventId,
@@ -73776,47 +73814,47 @@ function TranscrippetUI(props) {
       id: `${eventId}`,
       url: audioUrl,
       offset: startTime
-    }))), /* @__PURE__ */ import_react30.default.createElement("div", {
+    }))), /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "relative"
-    }, /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "text-slate-100 h-16 w-16 overflow-hidden absolute top-5 left-4 flex items-center justify-center"
-    }, /* @__PURE__ */ import_react30.default.createElement(QuoteLeft, null)), /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, /* @__PURE__ */ import_react31.default.createElement(QuoteLeft, null)), /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "text-slate-100 h-16 w-16 overflow-hidden absolute bottom-0 right-4 flex items-center justify-center"
-    }, /* @__PURE__ */ import_react30.default.createElement(QuoteRight, null)), /* @__PURE__ */ import_react30.default.createElement("p", {
-      className: (0, import_classnames12.default)("text-base px-11 relative z-10 transition-all", {
+    }, /* @__PURE__ */ import_react31.default.createElement(QuoteRight, null)), /* @__PURE__ */ import_react31.default.createElement("p", {
+      className: (0, import_classnames13.default)("text-base px-11 relative z-10 transition-all", {
         "text-slate-400": wordHighlightEnabled && !!audioPlayer.playing(eventId),
         "py-10": !showingPriceReaction,
         "pt-10 pb-1": showingPriceReaction
       })
     }, Array.isArray(content) && startMs && durations.length > 0 ? content.map((text, index) => {
       const fullWordPosition = (startMs + sumUpToIndex(durations, index)) / 1e3;
-      return /* @__PURE__ */ import_react30.default.createElement(import_react30.Fragment, {
+      return /* @__PURE__ */ import_react31.default.createElement(import_react31.Fragment, {
         key: `${text}-${index}`
-      }, /* @__PURE__ */ import_react30.default.createElement("span", {
+      }, /* @__PURE__ */ import_react31.default.createElement("span", {
         onClick: () => audioPlayer.rawSeek(fullWordPosition),
-        className: (0, import_classnames12.default)("transition-all", {
+        className: (0, import_classnames13.default)("transition-all", {
           "text-slate-900": audioPlayer.rawCurrentTime >= fullWordPosition
         })
       }, text), " ");
-    }) : content)), showingPriceReaction && (transcrippetRef == null ? void 0 : transcrippetRef.current) && /* @__PURE__ */ import_react30.default.createElement(LineChart, {
+    }) : content)), showingPriceReaction && (transcrippetRef == null ? void 0 : transcrippetRef.current) && /* @__PURE__ */ import_react31.default.createElement(LineChart, {
       transcrippetRef,
       data: equityPrices.prices,
       selectedIndex: equityPrices.startIndex
-    }), /* @__PURE__ */ import_react30.default.createElement("div", {
+    }), /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex items-center px-5 pb-5"
-    }, /* @__PURE__ */ import_react30.default.createElement("div", {
+    }, /* @__PURE__ */ import_react31.default.createElement("div", {
       className: "flex flex-col justify-center flex-1"
-    }, id ? /* @__PURE__ */ import_react30.default.createElement("a", {
+    }, id ? /* @__PURE__ */ import_react31.default.createElement("a", {
       href: `${PUBLIC_TRANSCRIPPET_URL}${id}`,
       target: "_blank",
       className: "text-base font-bold capitalize hover:text-indigo-700 hover:underline",
       title: "Open Shareable Link",
       rel: "noreferrer"
-    }, companyName, " | ", eventType.replace(/_/g, " ")) : /* @__PURE__ */ import_react30.default.createElement("p", {
+    }, companyName, " | ", eventType.replace(/_/g, " ")) : /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "text-base font-bold capitalize"
-    }, companyName, " | ", eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react30.default.createElement("p", {
+    }, companyName, " | ", eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react31.default.createElement("p", {
       className: "text-sm text-slate-500 leading-3"
-    }, companyTicker && (companyTicker == null ? void 0 : companyTicker.toLowerCase()) !== (companyName == null ? void 0 : companyName.toLowerCase()) && /* @__PURE__ */ import_react30.default.createElement("span", {
+    }, companyTicker && (companyTicker == null ? void 0 : companyTicker.toLowerCase()) !== (companyName == null ? void 0 : companyName.toLowerCase()) && /* @__PURE__ */ import_react31.default.createElement("span", {
       className: "text-orange-600 font-bold mr-1"
     }, companyTicker), new Date(eventDate).toLocaleString("en-US", {
       year: "numeric",
@@ -73825,22 +73863,22 @@ function TranscrippetUI(props) {
       hour: "numeric",
       minute: "numeric",
       hour12: true
-    }))), /* @__PURE__ */ import_react30.default.createElement("a", {
+    }))), /* @__PURE__ */ import_react31.default.createElement("a", {
       href: "https://www.aiera.com",
       target: "_blank",
       title: "Learn more at Aiera.com",
       className: "relative z-50 text-xs tracking-wide text-orange-600 hover:text-indigo-700 hover:underline font-bold mt-2 mr-3 uppercase",
       rel: "noreferrer"
     }, "aiera"))));
-  }).otherwise(() => /* @__PURE__ */ import_react30.default.createElement("div", {
+  }).otherwise(() => /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "relative flex flex-col items-center justify-center w-full h-full min-h-[4rem]"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "flex"
-  }, /* @__PURE__ */ import_react30.default.createElement("div", {
+  }, /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
-  }), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
-  }), /* @__PURE__ */ import_react30.default.createElement("div", {
+  }), /* @__PURE__ */ import_react31.default.createElement("div", {
     className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
   }))));
 }
@@ -73889,16 +73927,16 @@ function useTranscrippetData(id = "") {
 }
 function Transcrippet(props) {
   const { transcrippetGuid: transcrippetGuidProp = "" } = props;
-  const [transcrippetId, setTranscrippetId] = (0, import_react30.useState)(transcrippetGuidProp);
-  const [eventId, setEventId] = (0, import_react30.useState)(void 0);
-  const [endMs, setEndMs] = (0, import_react30.useState)(null);
-  const [startMs, setStartMs] = (0, import_react30.useState)(0);
-  const [showPriceReaction, setShowPriceReaction] = (0, import_react30.useState)(true);
+  const [transcrippetId, setTranscrippetId] = (0, import_react31.useState)(transcrippetGuidProp);
+  const [eventId, setEventId] = (0, import_react31.useState)(void 0);
+  const [endMs, setEndMs] = (0, import_react31.useState)(null);
+  const [startMs, setStartMs] = (0, import_react31.useState)(0);
+  const [showPriceReaction, setShowPriceReaction] = (0, import_react31.useState)(true);
   const audioPlayer = useAudioPlayer();
   const config = useConfig();
-  const transcrippetRef = (0, import_react30.useRef)(null);
+  const transcrippetRef = (0, import_react31.useRef)(null);
   const bus = useMessageListener("download-screenshot", () => downloadImage(transcrippetId), "in");
-  (0, import_react30.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     const container = document.getElementById("root");
     const resizeObserver = new ResizeObserver((entries) => {
       entries.forEach(() => {
@@ -73913,20 +73951,20 @@ function Transcrippet(props) {
       resizeObserver.observe(container);
     }
   }, []);
-  (0, import_react30.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     var _a;
     if (!transcrippetId && ((_a = config == null ? void 0 : config.options) == null ? void 0 : _a.transcrippetGuid)) {
       setTranscrippetId(config.options.transcrippetGuid);
     }
   }, [transcrippetId, config, config == null ? void 0 : config.options]);
-  (0, import_react30.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     var _a;
     if (((_a = config == null ? void 0 : config.options) == null ? void 0 : _a.showPriceReaction) !== void 0) {
       setShowPriceReaction(config.options.showPriceReaction);
     }
   }, [config, config == null ? void 0 : config.options]);
   const transcrippetQuery = useTranscrippetData(transcrippetId);
-  (0, import_react30.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     if (endMs && endMs !== startMs && audioPlayer.rawCurrentTime > endMs / 1e3 || audioPlayer.rawCurrentTime >= audioPlayer.rawDuration) {
       audioPlayer.rawSeek(startMs / 1e3);
       if (eventId && audioPlayer.playing(eventId)) {
@@ -73934,7 +73972,7 @@ function Transcrippet(props) {
       }
     }
   }, [audioPlayer.rawCurrentTime, eventId, endMs, startMs]);
-  (0, import_react30.useEffect)(() => {
+  (0, import_react31.useEffect)(() => {
     var _a;
     if (transcrippetQuery.status === "success") {
       const transcrippetData = (_a = transcrippetQuery.state.data) == null ? void 0 : _a.transcrippet;
@@ -73951,7 +73989,7 @@ function Transcrippet(props) {
       }
     }
   }, [transcrippetQuery]);
-  return /* @__PURE__ */ import_react30.default.createElement(TranscrippetUI, {
+  return /* @__PURE__ */ import_react31.default.createElement(TranscrippetUI, {
     id: transcrippetId,
     showPriceReaction,
     transcrippetRef,
@@ -73970,7 +74008,7 @@ var useMessageBus2 = () => {
       void window.fdc3.broadcast(context);
     }
   }, "out");
-  (0, import_react31.useEffect)(() => {
+  (0, import_react32.useEffect)(() => {
     bus.setupWindowMessaging(window.parent);
     const listeners = [];
     return () => {
@@ -73982,16 +74020,16 @@ var useMessageBus2 = () => {
 };
 var App = () => {
   const bus = useMessageBus2();
-  return /* @__PURE__ */ import_react31.default.createElement(import_react31.StrictMode, null, /* @__PURE__ */ import_react31.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react32.default.createElement(import_react32.StrictMode, null, /* @__PURE__ */ import_react32.default.createElement(Provider6, {
     bus,
     config: { moduleName: "Transcrippet" }
-  }, /* @__PURE__ */ import_react31.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react32.default.createElement(Auth, {
     apiMode: true
-  }, /* @__PURE__ */ import_react31.default.createElement("div", {
+  }, /* @__PURE__ */ import_react32.default.createElement("div", {
     className: "h-full"
-  }, /* @__PURE__ */ import_react31.default.createElement(Transcrippet, null)))));
+  }, /* @__PURE__ */ import_react32.default.createElement(Transcrippet, null)))));
 };
-import_react_dom.default.render(/* @__PURE__ */ import_react31.default.createElement(App, null), document.getElementById("root"));
+import_react_dom.default.render(/* @__PURE__ */ import_react32.default.createElement(App, null), document.getElementById("root"));
 /*
  @license
  Copyright 2006 The Closure Library Authors

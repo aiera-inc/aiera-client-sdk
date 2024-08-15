@@ -700,9 +700,6 @@ video {
 .w-3 {
   width: 0.75rem;
 }
-.w-3\.5 {
-  width: 0.875rem;
-}
 .w-\[65px\] {
   width: 65px;
 }
@@ -768,6 +765,9 @@ video {
 }
 .w-16 {
   width: 4rem;
+}
+.w-3\.5 {
+  width: 0.875rem;
 }
 .w-\[3px\] {
   width: 3px;

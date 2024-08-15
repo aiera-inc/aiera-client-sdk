@@ -499,7 +499,7 @@ var require_react_development = __commonJS({
             }
           }
         }
-        var ReactElement54 = function(type, key, ref, self2, source, owner, props) {
+        var ReactElement55 = function(type, key, ref, self2, source, owner, props) {
           var element = {
             $$typeof: REACT_ELEMENT_TYPE,
             type,
@@ -594,10 +594,10 @@ var require_react_development = __commonJS({
               }
             }
           }
-          return ReactElement54(type, key, ref, self2, source, ReactCurrentOwner.current, props);
+          return ReactElement55(type, key, ref, self2, source, ReactCurrentOwner.current, props);
         }
         function cloneAndReplaceKey(oldElement, newKey) {
-          var newElement = ReactElement54(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
+          var newElement = ReactElement55(oldElement.type, newKey, oldElement.ref, oldElement._self, oldElement._source, oldElement._owner, oldElement.props);
           return newElement;
         }
         function cloneElement2(element, config, children) {
@@ -645,7 +645,7 @@ var require_react_development = __commonJS({
             }
             props.children = childArray;
           }
-          return ReactElement54(element.type, key, ref, self2, source, owner, props);
+          return ReactElement55(element.type, key, ref, self2, source, owner, props);
         }
         function isValidElement(object) {
           return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
@@ -2477,11 +2477,11 @@ var require_react_dom_development = __commonJS({
     if (true) {
       (function() {
         "use strict";
-        var React57 = require_react();
+        var React58 = require_react();
         var _assign = require_object_assign();
         var Scheduler = require_scheduler();
         var tracing = require_tracing();
-        var ReactSharedInternals = React57.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+        var ReactSharedInternals = React58.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
         function warn2(format) {
           {
             for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
@@ -2513,7 +2513,7 @@ var require_react_dom_development = __commonJS({
             Function.prototype.apply.call(console[level], console, argsWithFormat);
           }
         }
-        if (!React57) {
+        if (!React58) {
           {
             throw Error("ReactDOM was loaded before React. Make sure you load the React package before loading ReactDOM.");
           }
@@ -3729,7 +3729,7 @@ var require_react_dom_development = __commonJS({
         var didWarnInvalidChild = false;
         function flattenChildren(children) {
           var content = "";
-          React57.Children.forEach(children, function(child) {
+          React58.Children.forEach(children, function(child) {
             if (child == null) {
               return;
             }
@@ -3740,7 +3740,7 @@ var require_react_dom_development = __commonJS({
         function validateProps(element, props) {
           {
             if (typeof props.children === "object" && props.children !== null) {
-              React57.Children.forEach(props.children, function(child) {
+              React58.Children.forEach(props.children, function(child) {
                 if (child == null) {
                   return;
                 }
@@ -10933,7 +10933,7 @@ var require_react_dom_development = __commonJS({
         }
         var fakeInternalInstance = {};
         var isArray = Array.isArray;
-        var emptyRefsObject = new React57.Component().refs;
+        var emptyRefsObject = new React58.Component().refs;
         var didWarnAboutStateAssignmentForComponent;
         var didWarnAboutUninitializedState;
         var didWarnAboutGetSnapshotBeforeUpdateWithoutDidUpdate;
@@ -26090,7 +26090,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames39() {
+      function classNames40() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -26101,7 +26101,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames39.apply(null, arg);
+              var inner = classNames40.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -26121,14 +26121,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames39.default = classNames39;
-        module2.exports = classNames39;
+        classNames40.default = classNames40;
+        module2.exports = classNames40;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames39;
+          return classNames40;
         });
       } else {
-        window.classNames = classNames39;
+        window.classNames = classNames40;
       }
     })();
   }
@@ -74032,7 +74032,7 @@ var require_highcharts_react_min = __commonJS({
 });
 
 // src/web/modules/ASRTranscript/index.tsx
-var import_react68 = __toModule(require_react());
+var import_react69 = __toModule(require_react());
 var import_react_dom2 = __toModule(require_react_dom());
 
 // src/components/Provider/index.tsx
@@ -82116,8 +82116,8 @@ var Auth = ({
 };
 
 // src/modules/Transcript/index.tsx
-var import_react67 = __toModule(require_react());
-var import_classnames38 = __toModule(require_classnames());
+var import_react68 = __toModule(require_react());
+var import_classnames39 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon2 = __toModule(require_luxon());
 var import_ts_pattern6 = __toModule(require_lib());
@@ -85235,9 +85235,9 @@ function EmptyMessage(props) {
 }
 
 // src/modules/Transcript/Header/index.tsx
-var import_classnames37 = __toModule(require_classnames());
+var import_classnames38 = __toModule(require_classnames());
 var import_luxon = __toModule(require_luxon());
-var import_react64 = __toModule(require_react());
+var import_react65 = __toModule(require_react());
 var import_ts_pattern5 = __toModule(require_lib());
 
 // src/components/ExpandButton/index.tsx
@@ -85527,14 +85527,16 @@ var import_react52 = __toModule(require_react());
 var import_classnames25 = __toModule(require_classnames());
 function Bell({ className, alt = "Bell" }) {
   return /* @__PURE__ */ import_react52.default.createElement("svg", {
-    className: (0, import_classnames25.default)(className, "fill-current", "Svg", "Svg__bell"),
+    className: (0, import_classnames25.default)(className, "stroke-current", "Svg", "Svg__bell"),
     width: "100%",
-    viewBox: "0 0 16 18",
-    xmlns: "http://www.w3.org/2000/svg"
+    viewBox: "0 0 24 24",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none"
   }, /* @__PURE__ */ import_react52.default.createElement("title", null, alt), /* @__PURE__ */ import_react52.default.createElement("path", {
-    fillRule: "evenodd",
-    clipRule: "evenodd",
-    d: "M6.30708 0.70639C6.75607 0.254096 7.36503 0 8 0C8.63497 0 9.24393 0.254096 9.69292 0.70639C10.1323 1.14897 10.3832 1.74586 10.3938 2.3706C11.4413 2.8183 12.3469 3.55191 13.0065 4.49196C13.7385 5.53518 14.1315 6.78132 14.1314 8.05882C14.1314 8.05885 14.1314 8.0588 14.1314 8.05882V11.0311C14.1313 11.2127 14.1668 11.3926 14.2358 11.5605C14.3048 11.7283 14.4059 11.8807 14.5334 12.0092C14.5334 12.0092 14.5333 12.0092 14.5334 12.0092L15.8461 13.3315C15.9964 13.4829 16.0413 13.7107 15.96 13.9085C15.8786 14.1063 15.687 14.2353 15.4744 14.2353H11.3285V14.6471C11.3285 15.5363 10.9778 16.3891 10.3536 17.0179C9.72937 17.6467 8.88276 18 8 18C7.11724 18 6.27063 17.6467 5.64642 17.0179C5.02221 16.3891 4.67154 15.5363 4.67154 14.6471V14.2353H0.525562C0.312998 14.2353 0.121365 14.1063 0.0400202 13.9085C-0.0413244 13.7107 0.00363912 13.4829 0.153944 13.3315L1.46664 12.0092C1.72406 11.7499 1.86862 11.3979 1.86862 11.032V8.05882C1.86862 5.50287 3.41034 3.31005 5.60619 2.37064C5.61676 1.74588 5.86772 1.14898 6.30708 0.70639ZM5.72263 14.2353V14.6471C5.72263 15.2555 5.96257 15.839 6.38966 16.2692C6.81675 16.6995 7.396 16.9412 8 16.9412C8.604 16.9412 9.18325 16.6995 9.61034 16.2692C10.0374 15.839 10.2774 15.2555 10.2774 14.6471V14.2353H5.72263ZM14.2057 13.1765L13.7901 12.7579C13.565 12.5311 13.3865 12.2618 13.2647 11.9655C13.1429 11.6693 13.0802 11.3517 13.0803 11.0311C13.0803 11.031 13.0803 11.0311 13.0803 11.0311V8.05882C13.0804 7.00023 12.7548 5.96757 12.1482 5.10312C11.5417 4.23868 10.684 3.5849 9.69331 3.2318C9.48339 3.15698 9.34306 2.95702 9.34306 2.73271V2.41176C9.34306 2.05294 9.20156 1.70882 8.94969 1.45509C8.69782 1.20137 8.3562 1.05882 8 1.05882C7.6438 1.05882 7.30218 1.20137 7.05031 1.45509C6.79844 1.70882 6.65694 2.05294 6.65694 2.41176V2.73271C6.65694 2.95705 6.51657 3.15703 6.30661 3.23183C4.333 3.93492 2.91972 5.83183 2.91972 8.05882V11.032C2.91972 11.6788 2.6644 12.3 2.20988 12.7579L1.79434 13.1765H14.2057Z"
+    strokeWidth: 1.5,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0"
   }));
 }
 
@@ -85557,12 +85559,32 @@ function Calendar({ className, alt = "Calendar" }) {
 }
 
 // src/components/PlayButton/index.tsx
-var import_classnames27 = __toModule(require_classnames());
+var import_classnames28 = __toModule(require_classnames());
+var import_react55 = __toModule(require_react());
+
+// src/components/Svg/BellSlash.tsx
 var import_react54 = __toModule(require_react());
+var import_classnames27 = __toModule(require_classnames());
+function BellSlash({ className, alt = "Bell Slash" }) {
+  return /* @__PURE__ */ import_react54.default.createElement("svg", {
+    className: (0, import_classnames27.default)(className, "stroke-current", "Svg", "Svg__bellSlash"),
+    width: "100%",
+    viewBox: "0 0 24 24",
+    xmlns: "http://www.w3.org/2000/svg",
+    fill: "none"
+  }, /* @__PURE__ */ import_react54.default.createElement("title", null, alt), /* @__PURE__ */ import_react54.default.createElement("path", {
+    strokeWidth: 1.5,
+    strokeLinecap: "round",
+    strokeLinejoin: "round",
+    d: "M9.143 17.082a24.248 24.248 0 0 0 3.844.148m-3.844-.148a23.856 23.856 0 0 1-5.455-1.31 8.964 8.964 0 0 0 2.3-5.542m3.155 6.852a3 3 0 0 0 5.667 1.97m1.965-2.277L21 21m-4.225-4.225a23.81 23.81 0 0 0 3.536-1.003A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6.53 6.53m10.245 10.245L6.53 6.53M3 3l3.53 3.53"
+  }));
+}
+
+// src/components/PlayButton/index.tsx
 function PlayButtonUI(props) {
-  const { alertOnLive, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
-  return hasAudio ? /* @__PURE__ */ import_react54.default.createElement("div", {
-    className: (0, import_classnames27.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+  const { alertOnLive, connectionStatus, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+  return hasAudio ? /* @__PURE__ */ import_react55.default.createElement("div", {
+    className: (0, import_classnames28.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -85579,25 +85601,25 @@ function PlayButtonUI(props) {
       "active:text-white": !isPlaying
     }, "button__play"),
     onClick: togglePlayback
-  }, isPlaying ? /* @__PURE__ */ import_react54.default.createElement(Pause, {
+  }, isPlaying ? /* @__PURE__ */ import_react55.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react54.default.createElement(Play, {
+  }) : /* @__PURE__ */ import_react55.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
-  })) : eventStarted ? /* @__PURE__ */ import_react54.default.createElement("div", {
+  })) : eventStarted ? /* @__PURE__ */ import_react55.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4"
-  }, /* @__PURE__ */ import_react54.default.createElement(Calendar, {
+  }, /* @__PURE__ */ import_react55.default.createElement(Calendar, {
     className: "w-4"
-  })) : /* @__PURE__ */ import_react54.default.createElement(Tooltip, {
-    content: /* @__PURE__ */ import_react54.default.createElement("div", {
+  })) : /* @__PURE__ */ import_react55.default.createElement(Tooltip, {
+    content: /* @__PURE__ */ import_react55.default.createElement("div", {
       className: "bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7"
-    }, alertOnLive ? "A chime will ring after the audio is connected" : "Play a chime when the event is about to begin"),
+    }, connectionStatus === EventConnectionStatus.ConnectionNotExpected ? "No Connection Expected" : alertOnLive ? "A chime will ring after the audio is connected" : "Play a chime when the event is about to begin"),
     grow: "up-right",
     openOn: "hover",
     position: "bottom-right",
     yOffset: 6,
     xOffset: 4,
     hideOnDocumentScroll: true,
-    className: (0, import_classnames27.default)("border flex items-center justify-center w-full h-full rounded-full", {
+    className: (0, import_classnames28.default)("border flex items-center justify-center w-full h-full rounded-full", {
       "dark:bg-yellow-400 dark:text-yellow-800": alertOnLive,
       "dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20": alertOnLive || !alertOnLive,
       "dark:active:bg-bluegray-5 dark:active:text-bluegray-4": alertOnLive,
@@ -85609,11 +85631,16 @@ function PlayButtonUI(props) {
       "dark:bg-bluegray-7 dark:border-bluegray-6 dark:text-bluegray-4": !alertOnLive,
       "dark:active:bg-yellow-400 dark:active:border-yellow-400 dark:active:text-yellow-800": !alertOnLive
     }, "alertButton")
-  }, /* @__PURE__ */ import_react54.default.createElement("div", {
-    onClick: toggleAlert,
+  }, /* @__PURE__ */ import_react55.default.createElement("div", {
+    onClick: connectionStatus === EventConnectionStatus.ConnectionNotExpected ? (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+    } : toggleAlert,
     className: "w-full h-full rounded-full flex items-center justify-center"
-  }, /* @__PURE__ */ import_react54.default.createElement(Bell, {
-    className: "w-3.5"
+  }, connectionStatus === EventConnectionStatus.ConnectionNotExpected ? /* @__PURE__ */ import_react55.default.createElement(BellSlash, {
+    className: "w-4"
+  }) : /* @__PURE__ */ import_react55.default.createElement(Bell, {
+    className: "w-4"
   })));
 }
 function PlayButton(props) {
@@ -85623,7 +85650,7 @@ function PlayButton(props) {
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
   const bus = useMessageBus();
-  const togglePlayback = (0, import_react54.useCallback)((event) => {
+  const togglePlayback = (0, import_react55.useCallback)((event) => {
     const activeMetaData = metaData || audioPlayer.metaData;
     event.stopPropagation();
     if (audioPlayer.playing(id)) {
@@ -85667,7 +85694,7 @@ function PlayButton(props) {
   const eventDate = metaData.eventDate;
   const alertDateIds = eventDate ? alertList.dates[eventDate] : null;
   const alertOnLive = alertDateIds ? alertDateIds.indexOf(id) >= 0 : false;
-  const toggleAlert = (0, import_react54.useCallback)((event) => {
+  const toggleAlert = (0, import_react55.useCallback)((event) => {
     event.stopPropagation();
     if (metaData.eventDate && id) {
       if (!alertOnLive) {
@@ -85684,8 +85711,9 @@ function PlayButton(props) {
     }
   }, [id, alertOnLive]);
   const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
-  return /* @__PURE__ */ import_react54.default.createElement(PlayButtonUI, {
+  return /* @__PURE__ */ import_react55.default.createElement(PlayButtonUI, {
     alertOnLive,
+    connectionStatus: metaData.connectionStatus,
     eventStarted,
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
@@ -85695,40 +85723,40 @@ function PlayButton(props) {
 }
 
 // src/components/Svg/Handle.tsx
-var import_react55 = __toModule(require_react());
-var import_classnames28 = __toModule(require_classnames());
+var import_react56 = __toModule(require_react());
+var import_classnames29 = __toModule(require_classnames());
 function Handle({ className, alt = "Handle" }) {
-  return /* @__PURE__ */ import_react55.default.createElement("svg", {
-    className: (0, import_classnames28.default)(className, "stroke-current fill-current", "Svg", "Svg__handle"),
+  return /* @__PURE__ */ import_react56.default.createElement("svg", {
+    className: (0, import_classnames29.default)(className, "stroke-current fill-current", "Svg", "Svg__handle"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react55.default.createElement("title", null, alt), /* @__PURE__ */ import_react55.default.createElement("path", {
+  }, /* @__PURE__ */ import_react56.default.createElement("title", null, alt), /* @__PURE__ */ import_react56.default.createElement("path", {
     d: "M14.75 8C14.75 8.27614 14.5261 8.5 14.25 8.5C13.9739 8.5 13.75 8.27614 13.75 8C13.75 7.72386 13.9739 7.5 14.25 7.5C14.5261 7.5 14.75 7.72386 14.75 8Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }), /* @__PURE__ */ import_react55.default.createElement("path", {
+  }), /* @__PURE__ */ import_react56.default.createElement("path", {
     d: "M14.75 12C14.75 12.2761 14.5261 12.5 14.25 12.5C13.9739 12.5 13.75 12.2761 13.75 12C13.75 11.7239 13.9739 11.5 14.25 11.5C14.5261 11.5 14.75 11.7239 14.75 12Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }), /* @__PURE__ */ import_react55.default.createElement("path", {
+  }), /* @__PURE__ */ import_react56.default.createElement("path", {
     d: "M10.75 8C10.75 8.27614 10.5261 8.5 10.25 8.5C9.97386 8.5 9.75 8.27614 9.75 8C9.75 7.72386 9.97386 7.5 10.25 7.5C10.5261 7.5 10.75 7.72386 10.75 8Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }), /* @__PURE__ */ import_react55.default.createElement("path", {
+  }), /* @__PURE__ */ import_react56.default.createElement("path", {
     d: "M10.75 12C10.75 12.2761 10.5261 12.5 10.25 12.5C9.97386 12.5 9.75 12.2761 9.75 12C9.75 11.7239 9.97386 11.5 10.25 11.5C10.5261 11.5 10.75 11.7239 10.75 12Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }), /* @__PURE__ */ import_react55.default.createElement("path", {
+  }), /* @__PURE__ */ import_react56.default.createElement("path", {
     d: "M14.75 16C14.75 16.2761 14.5261 16.5 14.25 16.5C13.9739 16.5 13.75 16.2761 13.75 16C13.75 15.7239 13.9739 15.5 14.25 15.5C14.5261 15.5 14.75 15.7239 14.75 16Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
     strokeLinejoin: "round"
-  }), /* @__PURE__ */ import_react55.default.createElement("path", {
+  }), /* @__PURE__ */ import_react56.default.createElement("path", {
     d: "M10.75 16C10.75 16.2761 10.5261 16.5 10.25 16.5C9.97386 16.5 9.75 16.2761 9.75 16C9.75 15.7239 9.97386 15.5 10.25 15.5C10.5261 15.5 10.75 15.7239 10.75 16Z",
     strokeWidth: "1.5",
     strokeLinecap: "round",
@@ -85737,21 +85765,21 @@ function Handle({ className, alt = "Handle" }) {
 }
 
 // src/modules/Transcript/DownloadTooltip/index.tsx
-var import_classnames30 = __toModule(require_classnames());
-var import_react57 = __toModule(require_react());
+var import_classnames31 = __toModule(require_classnames());
+var import_react58 = __toModule(require_react());
 
 // src/components/Svg/Download.tsx
-var import_react56 = __toModule(require_react());
-var import_classnames29 = __toModule(require_classnames());
+var import_react57 = __toModule(require_react());
+var import_classnames30 = __toModule(require_classnames());
 function Download({ className, alt = "Download" }) {
-  return /* @__PURE__ */ import_react56.default.createElement("svg", {
-    className: (0, import_classnames29.default)(className, "fill-current", "Svg", "Svg__download"),
+  return /* @__PURE__ */ import_react57.default.createElement("svg", {
+    className: (0, import_classnames30.default)(className, "fill-current", "Svg", "Svg__download"),
     width: "20",
     height: "20",
     viewBox: "0 0 20 20",
     fill: "black",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react56.default.createElement("title", null, alt), /* @__PURE__ */ import_react56.default.createElement("path", {
+  }, /* @__PURE__ */ import_react57.default.createElement("title", null, alt), /* @__PURE__ */ import_react57.default.createElement("path", {
     fillRule: "evenodd",
     d: "M5.5 17a4.5 4.5 0 01-1.44-8.765 4.5 4.5 0 018.302-3.046 3.5 3.5 0 014.504 4.272A4 4 0 0115 17H5.5zm5.25-9.25a.75.75 0 00-1.5 0v4.59l-1.95-2.1a.75.75 0 10-1.1 1.02l3.25 3.5a.75.75 0 001.1 0l3.25-3.5a.75.75 0 10-1.1-1.02l-1.95 2.1V7.75z",
     clipRule: "evenodd"
@@ -85780,18 +85808,18 @@ function DownloadTooltipUI(props) {
   const userApiKey = (_e = (_d = userQuery.state.data) == null ? void 0 : _d.currentUser) == null ? void 0 : _e.apiKey;
   const canDownloadTranscript = ((_g = (_f = userQuery.state.data) == null ? void 0 : _f.currentUser) == null ? void 0 : _g.apiKey) && event.connectionStatus === "transcribed";
   if (!hasMP3 && !canDownloadTranscript && !press && !slides) {
-    return /* @__PURE__ */ import_react57.default.createElement(import_react57.default.Fragment, null);
+    return /* @__PURE__ */ import_react58.default.createElement(import_react58.default.Fragment, null);
   }
-  return /* @__PURE__ */ import_react57.default.createElement(Tooltip, {
+  return /* @__PURE__ */ import_react58.default.createElement(Tooltip, {
     yOffset: 6,
     xOffset: 0,
     position: "bottom-right",
     grow: "down-left",
     openOn: "click",
     modal: true,
-    content: ({ hideTooltip }) => /* @__PURE__ */ import_react57.default.createElement("div", {
+    content: ({ hideTooltip }) => /* @__PURE__ */ import_react58.default.createElement("div", {
       className: "shadow-md bg-white rounded-lg flex flex-col overflow-hidden"
-    }, hasMP3 && event.audioProxy && /* @__PURE__ */ import_react57.default.createElement("a", {
+    }, hasMP3 && event.audioProxy && /* @__PURE__ */ import_react58.default.createElement("a", {
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
       href: event.audioProxy,
       target: "_blank",
@@ -85801,9 +85829,9 @@ function DownloadTooltipUI(props) {
         e.stopPropagation();
         hideTooltip();
       }
-    }, /* @__PURE__ */ import_react57.default.createElement("p", {
+    }, /* @__PURE__ */ import_react58.default.createElement("p", {
       className: "text-sm"
-    }, "Download MP3")), canDownloadTranscript && userApiKey && /* @__PURE__ */ import_react57.default.createElement("a", {
+    }, "Download MP3")), canDownloadTranscript && userApiKey && /* @__PURE__ */ import_react58.default.createElement("a", {
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
       href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userApiKey}`,
       rel: "noreferrer",
@@ -85812,9 +85840,9 @@ function DownloadTooltipUI(props) {
         e.stopPropagation();
         hideTooltip();
       }
-    }, /* @__PURE__ */ import_react57.default.createElement("p", {
+    }, /* @__PURE__ */ import_react58.default.createElement("p", {
       className: "text-sm"
-    }, "Transcript PDF")), slides && /* @__PURE__ */ import_react57.default.createElement("a", {
+    }, "Transcript PDF")), slides && /* @__PURE__ */ import_react58.default.createElement("a", {
       href: slides,
       rel: "noreferrer",
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
@@ -85823,9 +85851,9 @@ function DownloadTooltipUI(props) {
         e.stopPropagation();
         hideTooltip();
       }
-    }, /* @__PURE__ */ import_react57.default.createElement("p", {
+    }, /* @__PURE__ */ import_react58.default.createElement("p", {
       className: "text-sm"
-    }, "Slides PDF")), press && /* @__PURE__ */ import_react57.default.createElement("a", {
+    }, "Slides PDF")), press && /* @__PURE__ */ import_react58.default.createElement("a", {
       href: press,
       rel: "noreferrer",
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
@@ -85834,27 +85862,27 @@ function DownloadTooltipUI(props) {
         e.stopPropagation();
         hideTooltip();
       }
-    }, /* @__PURE__ */ import_react57.default.createElement("p", {
+    }, /* @__PURE__ */ import_react58.default.createElement("p", {
       className: "text-sm"
     }, "Press PDF")))
-  }, /* @__PURE__ */ import_react57.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react58.default.createElement(Button, {
     testId: "downloadButton",
-    className: (0, import_classnames30.default)("ml-3", "group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__download"),
+    className: (0, import_classnames31.default)("ml-3", "group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__download"),
     kind: "primary"
-  }, /* @__PURE__ */ import_react57.default.createElement(Download, {
+  }, /* @__PURE__ */ import_react58.default.createElement(Download, {
     className: "h-5 w-5 flex-shrink-0"
   })));
 }
 function DownloadTooltip(props) {
   const { event } = props;
-  return /* @__PURE__ */ import_react57.default.createElement(DownloadTooltipUI, {
+  return /* @__PURE__ */ import_react58.default.createElement(DownloadTooltipUI, {
     event
   });
 }
 
 // src/modules/Transcript/EventDetails/index.tsx
-var import_classnames31 = __toModule(require_classnames());
-var import_react58 = __toModule(require_react());
+var import_classnames32 = __toModule(require_classnames());
+var import_react59 = __toModule(require_react());
 function EventDetailsUI(props) {
   var _a, _b, _c, _d, _e, _f;
   const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
@@ -85872,17 +85900,17 @@ function EventDetailsUI(props) {
   const attachments = (_a = event == null ? void 0 : event.attachments) == null ? void 0 : _a.filter((att) => (att == null ? void 0 : att.mimeType) === "application/pdf");
   const slides = (_b = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Slides")) == null ? void 0 : _b.archivedUrl;
   const press = (_c = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Press Release")) == null ? void 0 : _c.archivedUrl;
-  return /* @__PURE__ */ import_react58.default.createElement("div", {
-    className: (0, import_classnames31.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
-  }, /* @__PURE__ */ import_react58.default.createElement("div", {
+  return /* @__PURE__ */ import_react59.default.createElement("div", {
+    className: (0, import_classnames32.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
+  }, /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex items-center justify-start h-10 cursor-pointer group",
     onClick: toggleEventDetails
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "text-sm block font-semibold w-28 mr-1 dark:text-white"
-  }, "Event Details"), /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, "Event Details"), /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "text-gray-400 text-sm text-right flex-1 truncate group-hover:text-gray-600"
-  }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react58.default.createElement(ExpandButton, {
-    className: (0, import_classnames31.default)("ml-3", {
+  }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react59.default.createElement(ExpandButton, {
+    className: (0, import_classnames32.default)("ml-3", {
       "group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50": !eventDetailsExpanded,
       "group-hover:bg-blue-700": eventDetailsExpanded,
       "group-active:bg-gray-400 dark:group-active:bg-bluegray-7": !eventDetailsExpanded,
@@ -85890,90 +85918,90 @@ function EventDetailsUI(props) {
     }),
     onClick: toggleEventDetails,
     expanded: eventDetailsExpanded
-  })), eventDetailsExpanded && /* @__PURE__ */ import_react58.default.createElement("div", {
+  })), eventDetailsExpanded && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "text-sm border-[1px] rounded-lg border-gray-200 mb-3.5 dark:border-bluegray-5 dark:text-bluegray-4"
-  }, event.dialInPhoneNumbers && event.dialInPhoneNumbers.length > 0 && /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, event.dialInPhoneNumbers && event.dialInPhoneNumbers.length > 0 && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Phone number"), /* @__PURE__ */ import_react58.default.createElement("div", null, event.dialInPhoneNumbers.map((number) => /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Phone number"), /* @__PURE__ */ import_react59.default.createElement("div", null, event.dialInPhoneNumbers.map((number) => /* @__PURE__ */ import_react59.default.createElement("div", {
     key: number
-  }, number)))), event.dialInPin && /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, number)))), event.dialInPin && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Pin Number"), /* @__PURE__ */ import_react58.default.createElement("span", null, event == null ? void 0 : event.dialInPin)), event.webcastUrls.length > 0 && /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Pin Number"), /* @__PURE__ */ import_react59.default.createElement("span", null, event == null ? void 0 : event.dialInPin)), event.webcastUrls.length > 0 && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Webcast"), /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Webcast"), /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "overflow-hidden truncate"
-  }, (_d = event.webcastUrls) == null ? void 0 : _d.map((url) => /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, (_d = event.webcastUrls) == null ? void 0 : _d.map((url) => /* @__PURE__ */ import_react59.default.createElement("div", {
     key: url,
     className: "block truncate"
-  }, /* @__PURE__ */ import_react58.default.createElement("a", {
+  }, /* @__PURE__ */ import_react59.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: url,
     rel: "noreferrer",
     target: "_blank"
-  }, "Open in new window"))))), event.audioRecordingUrl && /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Open in new window"))))), event.audioRecordingUrl && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Event Audio"), /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, "Event Audio"), /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "block truncate"
-  }, /* @__PURE__ */ import_react58.default.createElement("a", {
+  }, /* @__PURE__ */ import_react59.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: event.audioRecordingUrl,
     rel: "noreferrer",
     target: "_blank"
-  }, "Download MP3"))), slides && /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Download MP3"))), slides && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Pres. Slides"), /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, "Pres. Slides"), /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "block truncate"
-  }, /* @__PURE__ */ import_react58.default.createElement("a", {
+  }, /* @__PURE__ */ import_react59.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: slides,
     rel: "noreferrer",
     download: true
-  }, "Download PDF"))), press && /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Download PDF"))), press && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Press Release"), /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, "Press Release"), /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "block truncate"
-  }, /* @__PURE__ */ import_react58.default.createElement("a", {
+  }, /* @__PURE__ */ import_react59.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: press,
     rel: "noreferrer",
     target: "_blank"
-  }, "Download PDF"))), ((_f = (_e = userQuery.state.data) == null ? void 0 : _e.currentUser) == null ? void 0 : _f.apiKey) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Download PDF"))), ((_f = (_e = userQuery.state.data) == null ? void 0 : _e.currentUser) == null ? void 0 : _f.apiKey) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Transcript "), /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, "Transcript "), /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "block truncate"
-  }, /* @__PURE__ */ import_react58.default.createElement("a", {
+  }, /* @__PURE__ */ import_react59.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
     href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
     rel: "noreferrer",
     download: true
-  }, "Download PDF"))), /* @__PURE__ */ import_react58.default.createElement("div", {
+  }, "Download PDF"))), /* @__PURE__ */ import_react59.default.createElement("div", {
     className: "flex my-3 px-3.5"
-  }, /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
-  }, "Event Problems"), /* @__PURE__ */ import_react58.default.createElement("span", {
+  }, "Event Problems"), /* @__PURE__ */ import_react59.default.createElement("span", {
     className: "block truncate"
-  }, /* @__PURE__ */ import_react58.default.createElement("p", {
+  }, /* @__PURE__ */ import_react59.default.createElement("p", {
     onClick: () => toggleReportIssueModal(true),
-    className: (0, import_classnames31.default)("text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline", "cursor-pointer")
+    className: (0, import_classnames32.default)("text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline", "cursor-pointer")
   }, "Report Issue")))));
 }
 function EventDetails(props) {
   const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
-  return /* @__PURE__ */ import_react58.default.createElement(EventDetailsUI, {
+  return /* @__PURE__ */ import_react59.default.createElement(EventDetailsUI, {
     toggleReportIssueModal,
     event,
     eventDetailsExpanded,
@@ -85982,25 +86010,25 @@ function EventDetails(props) {
 }
 
 // src/modules/Transcript/KeyMentions/index.tsx
-var import_react59 = __toModule(require_react());
-var import_classnames32 = __toModule(require_classnames());
+var import_react60 = __toModule(require_react());
+var import_classnames33 = __toModule(require_classnames());
 
 // src/modules/Transcript/PriceChart/index.tsx
-var import_react63 = __toModule(require_react());
-var import_classnames36 = __toModule(require_classnames());
+var import_react64 = __toModule(require_react());
+var import_classnames37 = __toModule(require_classnames());
 var import_highstock = __toModule(require_highstock());
 var import_highcharts_react_official = __toModule(require_highcharts_react_min());
 
 // src/components/Svg/Pin.tsx
-var import_react60 = __toModule(require_react());
-var import_classnames33 = __toModule(require_classnames());
+var import_react61 = __toModule(require_react());
+var import_classnames34 = __toModule(require_classnames());
 function Pin({ className, alt = "Pin" }) {
-  return /* @__PURE__ */ import_react60.default.createElement("svg", {
-    className: (0, import_classnames33.default)(className, "fill-current", "Svg", "Svg__pin"),
+  return /* @__PURE__ */ import_react61.default.createElement("svg", {
+    className: (0, import_classnames34.default)(className, "fill-current", "Svg", "Svg__pin"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react60.default.createElement("title", null, alt), /* @__PURE__ */ import_react60.default.createElement("path", {
+  }, /* @__PURE__ */ import_react61.default.createElement("title", null, alt), /* @__PURE__ */ import_react61.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M2.4119 0C2.17181 0 1.94623 0.114944 1.80512 0.309186C1.664 0.503428 1.62441 0.753489 1.69862 0.981821L2.50223 3.45438V4.77264C1.30693 5.34871 0.673665 6.32085 0.347619 7.15684C0.164168 7.62721 0.0734836 8.06276 0.0281426 8.38053C0.00534171 8.54033 -0.00635266 8.6729 -0.012365 8.76847C-0.0153756 8.81633 -0.0169749 8.85513 -0.0178223 8.88367C-0.0182463 8.89794 -0.0184827 8.90967 -0.0186132 8.9187L-0.0187396 8.93022L-0.0187624 8.93443L-0.018767 8.93615L-0.018768 8.9369C-0.0187683 8.93726 -0.0187683 8.9376 0.731232 8.9376H-0.0187683C-0.0187683 9.35181 0.317018 9.6876 0.731232 9.6876H5.23261V13.2461C5.23261 13.6604 5.5684 13.9961 5.98261 13.9961C6.39683 13.9961 6.73261 13.6604 6.73261 13.2461V9.6876H11.2354C11.6496 9.6876 11.9854 9.35181 11.9854 8.9376H11.2354C11.9854 8.9376 11.9854 8.93726 11.9854 8.9369L11.9854 8.93615L11.9854 8.93443L11.9854 8.93022L11.9852 8.9187C11.9851 8.90967 11.9849 8.89794 11.9844 8.88367C11.9836 8.85513 11.982 8.81633 11.979 8.76847C11.973 8.6729 11.9613 8.54033 11.9385 8.38053C11.8931 8.06276 11.8025 7.62721 11.619 7.15684C11.293 6.32085 10.6597 5.34871 9.46439 4.77264V3.45438L10.268 0.981821C10.3422 0.753489 10.3026 0.503428 10.1615 0.309186C10.0204 0.114944 9.79482 0 9.55473 0H2.4119ZM10.3748 8.1876H1.59183C1.62924 8.03598 1.67901 7.87133 1.74509 7.70187C2.00593 7.03308 2.50264 6.3236 3.49485 5.9844C3.79831 5.88065 4.00223 5.59543 4.00223 5.27472V3.33556C4.00223 3.25683 3.98984 3.1786 3.9655 3.10374L3.44427 1.5H8.52235L8.00112 3.10374C7.97679 3.1786 7.96439 3.25683 7.96439 3.33556V5.27472C7.96439 5.59543 8.16831 5.88065 8.47178 5.9844C9.46399 6.3236 9.96069 7.03308 10.2215 7.70187C10.2876 7.87133 10.3374 8.03598 10.3748 8.1876Z"
@@ -86008,15 +86036,15 @@ function Pin({ className, alt = "Pin" }) {
 }
 
 // src/components/Svg/PinSolid.tsx
-var import_react61 = __toModule(require_react());
-var import_classnames34 = __toModule(require_classnames());
+var import_react62 = __toModule(require_react());
+var import_classnames35 = __toModule(require_classnames());
 function PinSolid({ className, alt = "Pin" }) {
-  return /* @__PURE__ */ import_react61.default.createElement("svg", {
-    className: (0, import_classnames34.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
+  return /* @__PURE__ */ import_react62.default.createElement("svg", {
+    className: (0, import_classnames35.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react61.default.createElement("title", null, alt), /* @__PURE__ */ import_react61.default.createElement("path", {
+  }, /* @__PURE__ */ import_react62.default.createElement("title", null, alt), /* @__PURE__ */ import_react62.default.createElement("path", {
     fillRule: "evenodd",
     clipRule: "evenodd",
     d: "M2.3356 1.33475L2.8351 2.74084V4.79647C0.85057 5.41718 0.214343 7.45042 0.0103719 8.69031C-0.0792778 9.23527 0.36184 9.6838 0.914125 9.6838H5.24867V13.2466C5.24867 13.6609 5.58446 13.9966 5.99867 13.9966C6.41288 13.9966 6.74867 13.6609 6.74867 13.2466V9.6838H11.0848C11.6371 9.6838 12.0783 9.23527 11.9886 8.69031C11.7846 7.45042 11.1484 5.41718 9.16387 4.79647V2.74084L9.66338 1.33475C9.89463 0.683783 9.41189 0 8.72107 0H3.2779C2.58709 0 2.10435 0.683783 2.3356 1.33475Z"
@@ -86024,18 +86052,18 @@ function PinSolid({ className, alt = "Pin" }) {
 }
 
 // src/components/Svg/MovementArrow.tsx
-var import_react62 = __toModule(require_react());
-var import_classnames35 = __toModule(require_classnames());
+var import_react63 = __toModule(require_react());
+var import_classnames36 = __toModule(require_classnames());
 function MovementArrow({
   className,
   alt = "Movement Arrow"
 }) {
-  return /* @__PURE__ */ import_react62.default.createElement("svg", {
-    className: (0, import_classnames35.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
+  return /* @__PURE__ */ import_react63.default.createElement("svg", {
+    className: (0, import_classnames36.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
     width: "100%",
     viewBox: "0 0 8 10",
     xmlns: "http://www.w3.org/2000/svg"
-  }, /* @__PURE__ */ import_react62.default.createElement("title", null, alt), /* @__PURE__ */ import_react62.default.createElement("path", {
+  }, /* @__PURE__ */ import_react63.default.createElement("title", null, alt), /* @__PURE__ */ import_react63.default.createElement("path", {
     d: "M3.07553 1.24173C3.41575 0.416723 4.58425 0.416724 4.92447 1.24173L7.76051 8.11875C8.03196 8.77699 7.54805 9.5 6.83604 9.5H1.16396C0.451948 9.5 -0.0319641 8.77699 0.239489 8.11875L3.07553 1.24173Z"
   }));
 }
@@ -86222,19 +86250,19 @@ function PriceChartUI(props) {
       }
     }
   };
-  return /* @__PURE__ */ import_react63.default.createElement("div", {
+  return /* @__PURE__ */ import_react64.default.createElement("div", {
     className: "transcript__header__price-reaction"
-  }, /* @__PURE__ */ import_react63.default.createElement("div", {
+  }, /* @__PURE__ */ import_react64.default.createElement("div", {
     className: "flex flex-col justify-start border-t-[1px] border-gray-100 dark:border-bluegray-5"
-  }, /* @__PURE__ */ import_react63.default.createElement("div", {
+  }, /* @__PURE__ */ import_react64.default.createElement("div", {
     className: "flex items-center justify-start h-10 px-3"
-  }, /* @__PURE__ */ import_react63.default.createElement("span", {
+  }, /* @__PURE__ */ import_react64.default.createElement("span", {
     className: "text-sm block font-semibold w-28 mr-1 cursor-pointer dark:text-white",
     onClick: togglePriceChart
-  }, "Price Reaction"), /* @__PURE__ */ import_react63.default.createElement("span", {
+  }, "Price Reaction"), /* @__PURE__ */ import_react64.default.createElement("span", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react63.default.createElement("span", {
-    className: (0, import_classnames36.default)("text-sm flex cursor-pointer mr-4", {
+  }), /* @__PURE__ */ import_react64.default.createElement("span", {
+    className: (0, import_classnames37.default)("text-sm flex cursor-pointer mr-4", {
       "text-green-500": absolutePriceChange > 0,
       "hover:text-green-600": absolutePriceChange > 0,
       "active:text-green-800": absolutePriceChange > 0,
@@ -86244,11 +86272,11 @@ function PriceChartUI(props) {
       "text-black dark:text-gray-200": absolutePriceChange === 0
     }),
     onClick: togglePriceChart
-  }, `$${price.toFixed(2)} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, absolutePriceChange !== 0 && /* @__PURE__ */ import_react63.default.createElement(MovementArrow, {
-    className: (0, import_classnames36.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
-  })), /* @__PURE__ */ import_react63.default.createElement("div", {
+  }, `$${price.toFixed(2)} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, absolutePriceChange !== 0 && /* @__PURE__ */ import_react64.default.createElement(MovementArrow, {
+    className: (0, import_classnames37.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
+  })), /* @__PURE__ */ import_react64.default.createElement("div", {
     tabIndex: 0,
-    className: (0, import_classnames36.default)("flex mr-1 cursor-pointer", {
+    className: (0, import_classnames37.default)("flex mr-1 cursor-pointer", {
       "text-blue-600": pinned,
       "text-gray-400": !pinned,
       "hover:text-blue-700": pinned,
@@ -86263,12 +86291,12 @@ function PriceChartUI(props) {
     },
     onFocus: () => setFocus == null ? void 0 : setFocus(true),
     onBlur: () => setFocus == null ? void 0 : setFocus(false)
-  }, pinned ? /* @__PURE__ */ import_react63.default.createElement(PinSolid, {
+  }, pinned ? /* @__PURE__ */ import_react64.default.createElement(PinSolid, {
     className: "w-[12px]"
-  }) : /* @__PURE__ */ import_react63.default.createElement(Pin, {
+  }) : /* @__PURE__ */ import_react64.default.createElement(Pin, {
     className: "w-[12px]"
-  })), /* @__PURE__ */ import_react63.default.createElement(ExpandButton, {
-    className: (0, import_classnames36.default)("ml-2", {
+  })), /* @__PURE__ */ import_react64.default.createElement(ExpandButton, {
+    className: (0, import_classnames37.default)("ml-2", {
       "hover:bg-gray-200": !priceChartExpanded,
       "hover:bg-blue-700": priceChartExpanded,
       "active:bg-gray-400": !priceChartExpanded,
@@ -86276,9 +86304,9 @@ function PriceChartUI(props) {
     }),
     onClick: togglePriceChart,
     expanded: priceChartExpanded
-  })), priceChartExpanded && /* @__PURE__ */ import_react63.default.createElement("div", {
+  })), priceChartExpanded && /* @__PURE__ */ import_react64.default.createElement("div", {
     className: "overflow-hidden relative h-[60px]"
-  }, /* @__PURE__ */ import_react63.default.createElement(import_highcharts_react_official.default, {
+  }, /* @__PURE__ */ import_react64.default.createElement(import_highcharts_react_official.default, {
     options,
     highcharts: import_highstock.default,
     constructorType: "stockChart"
@@ -86320,9 +86348,9 @@ var PriceQuery = lib_default`
     }
 `;
 function useChartData(eventId) {
-  const [additionalPrices, setAdditionalPrices] = (0, import_react63.useState)([]);
-  const [initialPrices, setInitialPrices] = (0, import_react63.useState)([]);
-  const [startPrice, setStartPrice] = (0, import_react63.useState)(0);
+  const [additionalPrices, setAdditionalPrices] = (0, import_react64.useState)([]);
+  const [initialPrices, setInitialPrices] = (0, import_react64.useState)([]);
+  const [startPrice, setStartPrice] = (0, import_react64.useState)(0);
   const client = useClient();
   const initialPriceQuery = useQuery2({
     query: PriceQuery,
@@ -86331,7 +86359,7 @@ function useChartData(eventId) {
       eventId
     }
   });
-  (0, import_react63.useEffect)(() => {
+  (0, import_react64.useEffect)(() => {
     var _a, _b, _c, _d, _e, _f, _g, _h, _i, _j, _k;
     if (initialPriceQuery.status === "success") {
       setInitialPrices(((_f = (_e = (_d = (_c = (_b = (_a = initialPriceQuery == null ? void 0 : initialPriceQuery.data) == null ? void 0 : _a.events) == null ? void 0 : _b[0]) == null ? void 0 : _c.quotePrices) == null ? void 0 : _d[0]) == null ? void 0 : _e.realtimePrices) == null ? void 0 : _f.map(({ date, price }) => ({
@@ -86356,7 +86384,7 @@ function useChartData(eventId) {
       setAdditionalPrices((s2) => [...s2, ...newPrices]);
     }
   }), 15e3);
-  return (0, import_react63.useMemo)(() => ({
+  return (0, import_react64.useMemo)(() => ({
     chartData: [...initialPrices, ...additionalPrices],
     startPrice
   }), [initialPrices, additionalPrices, startPrice]);
@@ -86373,22 +86401,22 @@ function PriceChart(props) {
     startTime
   } = props;
   const { chartData, startPrice } = useChartData(eventId);
-  const [pinned, setPinState] = (0, import_react63.useState)(false);
-  const [currentPrice, setPrice] = (0, import_react63.useState)(startPrice);
-  const [inFocus, setFocus] = (0, import_react63.useState)(false);
-  const togglePin = (0, import_react63.useCallback)(() => setPinState(!pinned), [pinned]);
+  const [pinned, setPinState] = (0, import_react64.useState)(false);
+  const [currentPrice, setPrice] = (0, import_react64.useState)(startPrice);
+  const [inFocus, setFocus] = (0, import_react64.useState)(false);
+  const togglePin = (0, import_react64.useCallback)(() => setPinState(!pinned), [pinned]);
   useWindowListener("keydown", (event) => {
     if (inFocus && event.key === "Enter") {
       togglePin();
     }
   });
-  (0, import_react63.useEffect)(() => {
+  (0, import_react64.useEffect)(() => {
     var _a;
     setPrice(((_a = chartData[chartData.length - 1]) == null ? void 0 : _a.y) || 0);
   }, [chartData.length]);
   if (!pinned && !headerExpanded || typeof currentPrice !== "number" || chartData.length < 2)
     return null;
-  return /* @__PURE__ */ import_react63.default.createElement(PriceChartUI, {
+  return /* @__PURE__ */ import_react64.default.createElement(PriceChartUI, {
     endTime,
     togglePriceChart,
     togglePin,
@@ -86464,33 +86492,33 @@ function HeaderUI(props) {
       showDownloadButton = config.options.showDownloadButton;
     }
   }
-  return /* @__PURE__ */ import_react64.default.createElement("div", {
+  return /* @__PURE__ */ import_react65.default.createElement("div", {
     ref: headerRef,
-    className: (0, import_classnames37.default)("bg-white relative rounded-b-lg z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6", {
+    className: (0, import_classnames38.default)("bg-white relative rounded-b-lg z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6", {
       "shadow-3xl dark:shadow-3xl-dark": !headerExpanded,
       "shadow-xl": headerExpanded,
       "pb-3": !showTitleInfo,
       "pt-3": showSearch
     }, "transcript__header"),
     style: { maxHeight: containerHeight > 0 ? containerHeight - 53 : "calc(100% - 53px)" }
-  }, showSearch && /* @__PURE__ */ import_react64.default.createElement("div", {
+  }, showSearch && /* @__PURE__ */ import_react65.default.createElement("div", {
     className: "flex items-center px-3"
-  }, onBack && /* @__PURE__ */ import_react64.default.createElement(Button, {
+  }, onBack && /* @__PURE__ */ import_react65.default.createElement(Button, {
     className: "mr-2 shrink-0 button__back",
     onClick: onBack
-  }, /* @__PURE__ */ import_react64.default.createElement(ArrowLeft, {
+  }, /* @__PURE__ */ import_react65.default.createElement(ArrowLeft, {
     className: "fill-current w-3.5 z-1 relative mr-2 group-active:fill-current group-active:text-white"
-  }), onBackHeader), /* @__PURE__ */ import_react64.default.createElement(Input, {
+  }), onBackHeader), /* @__PURE__ */ import_react65.default.createElement(Input, {
     className: "transcript__header-search",
-    icon: /* @__PURE__ */ import_react64.default.createElement(MagnifyingGlass, null),
+    icon: /* @__PURE__ */ import_react65.default.createElement(MagnifyingGlass, null),
     name: "search",
     placeholder: "Search Transcript...",
     value: searchTerm,
     onChange: onChangeSearchTerm
-  }), showHeaderControls && /* @__PURE__ */ import_react64.default.createElement(SettingsButton, {
+  }), showHeaderControls && /* @__PURE__ */ import_react65.default.createElement(SettingsButton, {
     showTonalSentiment: false
-  }), !!onEdit && /* @__PURE__ */ import_react64.default.createElement(Tooltip, {
-    content: /* @__PURE__ */ import_react64.default.createElement("div", {
+  }), !!onEdit && /* @__PURE__ */ import_react65.default.createElement(Tooltip, {
+    content: /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "bg-black bg-opacity-80 px-1.5 py-0.5 rounded text-sm text-white dark:bg-bluegray-4 dark:text-bluegray-7"
     }, "Edit recording"),
     grow: "down-left",
@@ -86498,38 +86526,38 @@ function HeaderUI(props) {
     openOn: "hover",
     position: "bottom-right",
     yOffset: 6
-  }, /* @__PURE__ */ import_react64.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react65.default.createElement(Button, {
     className: "cursor-pointer flex flex-shrink-0 items-center justify-center ml-2 rounded-0.375 w-[34px]",
     kind: "primary",
     onClick: onEdit
-  }, /* @__PURE__ */ import_react64.default.createElement(Pencil, {
+  }, /* @__PURE__ */ import_react65.default.createElement(Pencil, {
     className: "h-6 text-white w-2.5"
-  }))), onClose && /* @__PURE__ */ import_react64.default.createElement(Button, {
-    className: (0, import_classnames37.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
+  }))), onClose && /* @__PURE__ */ import_react65.default.createElement(Button, {
+    className: (0, import_classnames38.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
     kind: "primary",
     onClick: onClose
-  }, /* @__PURE__ */ import_react64.default.createElement(XMark, {
+  }, /* @__PURE__ */ import_react65.default.createElement(XMark, {
     className: "w-2.5"
   }))), showTitleInfo && (0, import_ts_pattern5.match)(eventQuery).with({ status: "loading" }, () => {
-    return /* @__PURE__ */ import_react64.default.createElement("div", {
+    return /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "flex flex-row p-3 items-center"
-    }, /* @__PURE__ */ import_react64.default.createElement("div", {
+    }, /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "animate-pulse flex-1"
-    }, /* @__PURE__ */ import_react64.default.createElement("div", {
+    }, /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react64.default.createElement("div", {
+    }, /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "rounded-md bg-gray-500 h-[10px] m-1 w-7 dark:bg-bluegray-5"
-    }), /* @__PURE__ */ import_react64.default.createElement("div", {
+    }), /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "rounded-md bg-gray-400 h-[10px] m-1 w-10 dark:bg-bluegray-5"
-    }), /* @__PURE__ */ import_react64.default.createElement("div", {
+    }), /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7"
-    }), /* @__PURE__ */ import_react64.default.createElement("div", {
+    }), /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 w-20 dark:bg-bluegray-7"
-    })), /* @__PURE__ */ import_react64.default.createElement("div", {
+    })), /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "flex"
-    }, /* @__PURE__ */ import_react64.default.createElement("div", {
+    }, /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "rounded-md bg-gray-300 h-[10px] m-1 flex-1 dark:bg-bluegray-7"
-    }))), (showPriceReaction || showRecordingDetails) && /* @__PURE__ */ import_react64.default.createElement(ExpandButton, {
+    }))), (showPriceReaction || showRecordingDetails) && /* @__PURE__ */ import_react65.default.createElement(ExpandButton, {
       className: "ml-2 mt-2 self-start",
       onClick: toggleHeader,
       expanded: headerExpanded
@@ -86542,18 +86570,18 @@ function HeaderUI(props) {
     const hasEventExtras = ((_b = event == null ? void 0 : event.dialInPhoneNumbers) == null ? void 0 : _b.length) || (event == null ? void 0 : event.dialInPin) || ((_c = event == null ? void 0 : event.webcastUrls) == null ? void 0 : _c.length) || (event == null ? void 0 : event.audioRecordingUrl);
     const createdBy = getEventCreatorName(event == null ? void 0 : event.creator);
     const audioOffset = ((_d = event == null ? void 0 : event.audioRecordingOffsetMs) != null ? _d : 0) / 1e3;
-    return /* @__PURE__ */ import_react64.default.createElement(import_react64.default.Fragment, null, /* @__PURE__ */ import_react64.default.createElement("div", {
-      className: (0, import_classnames37.default)("flex flex-row p-3 items-center", {
+    return /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, /* @__PURE__ */ import_react65.default.createElement("div", {
+      className: (0, import_classnames38.default)("flex flex-row p-3 items-center", {
         "cursor-pointer": hasEventExtras && (showPriceReaction || showRecordingDetails)
       }, "transcript__header__title"),
       onClick: hasEventExtras ? toggleHeader : void 0
-    }, headerHandleAttributes && headerHandleListeners && /* @__PURE__ */ import_react64.default.createElement("div", __spreadProps(__spreadValues(__spreadValues({}, headerHandleAttributes), headerHandleListeners), {
+    }, headerHandleAttributes && headerHandleListeners && /* @__PURE__ */ import_react65.default.createElement("div", __spreadProps(__spreadValues(__spreadValues({}, headerHandleAttributes), headerHandleListeners), {
       className: "-ml-1 pr-0.5 hover:text-gray-700 text-gray-400 active:cursor-grabbing"
-    }), /* @__PURE__ */ import_react64.default.createElement(Handle, {
+    }), /* @__PURE__ */ import_react65.default.createElement(Handle, {
       className: "w-6"
-    })), showHeaderPlayButton && event && (event.isLive || event.audioProxy) && /* @__PURE__ */ import_react64.default.createElement("div", {
+    })), showHeaderPlayButton && event && (event.isLive || event.audioProxy) && /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "w-8 h-8 mr-2"
-    }, /* @__PURE__ */ import_react64.default.createElement(PlayButton, {
+    }, /* @__PURE__ */ import_react65.default.createElement(PlayButton, {
       id: event.id,
       origin: "transcriptHeader",
       metaData: {
@@ -86570,30 +86598,30 @@ function HeaderUI(props) {
       },
       url: event.isLive ? event.liveStreamUrl : event.audioProxy,
       offset: audioOffset || 0
-    })), /* @__PURE__ */ import_react64.default.createElement("div", {
+    })), /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "flex flex-col justify-center flex-1 min-w-0 group"
-    }, /* @__PURE__ */ import_react64.default.createElement("div", {
+    }, /* @__PURE__ */ import_react65.default.createElement("div", {
       className: "text-xs truncate"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react64.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react65.default.createElement("span", {
       className: "pr-1 font-semibold dark:text-white"
-    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName) && /* @__PURE__ */ import_react64.default.createElement("span", {
+    }, primaryQuote == null ? void 0 : primaryQuote.localTicker), ((_e = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _e.shortName) && /* @__PURE__ */ import_react65.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
-    }, (_f = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _f.shortName), (event == null ? void 0 : event.eventType) && (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react64.default.createElement("span", {
+    }, (_f = primaryQuote == null ? void 0 : primaryQuote.exchange) == null ? void 0 : _f.shortName), (event == null ? void 0 : event.eventType) && (primaryQuote == null ? void 0 : primaryQuote.localTicker) && /* @__PURE__ */ import_react65.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500 capitalize"
-    }, " ", "\u2022 ", event == null ? void 0 : event.eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react64.default.createElement("span", {
+    }, " ", "\u2022 ", event == null ? void 0 : event.eventType.replace(/_/g, " ")), eventDate && /* @__PURE__ */ import_react65.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
-    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && " \u2022 "), eventDate && (event == null ? void 0 : event.isLive) ? /* @__PURE__ */ import_react64.default.createElement("span", {
+    }, (primaryQuote == null ? void 0 : primaryQuote.localTicker) && " \u2022 "), eventDate && (event == null ? void 0 : event.isLive) ? /* @__PURE__ */ import_react65.default.createElement("span", {
       className: "text-xs leading-none text-red-600 dark:text-red-400 font-semibold"
-    }, `Live ${eventDate.toFormat("h:mma")}`) : eventDate && /* @__PURE__ */ import_react64.default.createElement("span", {
+    }, `Live ${eventDate.toFormat("h:mma")}`) : eventDate && /* @__PURE__ */ import_react65.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
-    }, eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react64.default.createElement("div", {
-      className: (0, import_classnames37.default)("dark:text-white", {
+    }, eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react65.default.createElement("div", {
+      className: (0, import_classnames38.default)("dark:text-white", {
         "text-sm": headerExpanded,
         "text-sm truncate whitespace-normal line-clamp-1": !headerExpanded,
         "font-semibold": !(primaryQuote == null ? void 0 : primaryQuote.localTicker)
       })
-    }, event == null ? void 0 : event.title)), hasEventExtras && (showPriceReaction || showRecordingDetails) && /* @__PURE__ */ import_react64.default.createElement(ExpandButton, {
-      className: (0, import_classnames37.default)("ml-2 mt-2 self-start", {
+    }, event == null ? void 0 : event.title)), hasEventExtras && (showPriceReaction || showRecordingDetails) && /* @__PURE__ */ import_react65.default.createElement(ExpandButton, {
+      className: (0, import_classnames38.default)("ml-2 mt-2 self-start", {
         "group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50": !headerExpanded,
         "group-hover:bg-blue-700": headerExpanded,
         "group-active:bg-gray-400 dark:group-active:bg-bluegray-7": !headerExpanded,
@@ -86601,20 +86629,20 @@ function HeaderUI(props) {
       }),
       onClick: toggleHeader,
       expanded: headerExpanded
-    }), !headerExpanded && event && showDownloadButton && /* @__PURE__ */ import_react64.default.createElement(DownloadTooltip, {
+    }), !headerExpanded && event && showDownloadButton && /* @__PURE__ */ import_react65.default.createElement(DownloadTooltip, {
       event
-    }), onClose && !showSearch && !headerExpanded && /* @__PURE__ */ import_react64.default.createElement(Button, {
-      className: (0, import_classnames37.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
+    }), onClose && !showSearch && !headerExpanded && /* @__PURE__ */ import_react65.default.createElement(Button, {
+      className: (0, import_classnames38.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
       kind: "primary",
       onClick: onClose
-    }, /* @__PURE__ */ import_react64.default.createElement(XMark, {
+    }, /* @__PURE__ */ import_react65.default.createElement(XMark, {
       className: "w-2.5"
-    }))), showRecordingDetails && headerExpanded && event && /* @__PURE__ */ import_react64.default.createElement(EventDetails, {
+    }))), showRecordingDetails && headerExpanded && event && /* @__PURE__ */ import_react65.default.createElement(EventDetails, {
       toggleReportIssueModal,
       event,
       eventDetailsExpanded,
       toggleEventDetails
-    }), false, showPriceReaction && /* @__PURE__ */ import_react64.default.createElement(PriceChart, {
+    }), false, showPriceReaction && /* @__PURE__ */ import_react65.default.createElement(PriceChart, {
       currentParagraphTimestamp,
       endTime,
       eventId,
@@ -86649,33 +86677,33 @@ function Header(props) {
     startTime,
     useConfigOptions
   } = props;
-  const [headerExpanded, setHeaderState] = (0, import_react64.useState)(false);
-  const [priceChartExpanded, setPriceChartState] = (0, import_react64.useState)(false);
-  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react64.useState)(false);
-  const [keyMentionsExpanded, setKeyMentionsState] = (0, import_react64.useState)(false);
-  const toggleHeader = (0, import_react64.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
-  const toggleKeyMentions = (0, import_react64.useCallback)(() => {
+  const [headerExpanded, setHeaderState] = (0, import_react65.useState)(false);
+  const [priceChartExpanded, setPriceChartState] = (0, import_react65.useState)(false);
+  const [eventDetailsExpanded, setEventDetailsState] = (0, import_react65.useState)(false);
+  const [keyMentionsExpanded, setKeyMentionsState] = (0, import_react65.useState)(false);
+  const toggleHeader = (0, import_react65.useCallback)(() => setHeaderState(!headerExpanded), [headerExpanded]);
+  const toggleKeyMentions = (0, import_react65.useCallback)(() => {
     setKeyMentionsState(!keyMentionsExpanded);
     setPriceChartState(false);
     setEventDetailsState(false);
   }, [keyMentionsExpanded]);
-  const toggleEventDetails = (0, import_react64.useCallback)(() => {
+  const toggleEventDetails = (0, import_react65.useCallback)(() => {
     setEventDetailsState(!eventDetailsExpanded);
     setPriceChartState(false);
     setKeyMentionsState(false);
   }, [eventDetailsExpanded]);
-  const togglePriceChart = (0, import_react64.useCallback)(() => {
+  const togglePriceChart = (0, import_react65.useCallback)(() => {
     setPriceChartState(!priceChartExpanded);
     setEventDetailsState(false);
     setKeyMentionsState(false);
   }, [priceChartExpanded]);
-  const headerRef = (0, import_react64.useRef)(null);
-  useOutsideClickHandler([headerRef], (0, import_react64.useCallback)(() => {
+  const headerRef = (0, import_react65.useRef)(null);
+  useOutsideClickHandler([headerRef], (0, import_react65.useCallback)(() => {
     if (headerExpanded) {
       toggleHeader();
     }
   }, [headerExpanded]));
-  return /* @__PURE__ */ import_react64.default.createElement(HeaderUI, {
+  return /* @__PURE__ */ import_react65.default.createElement(HeaderUI, {
     containerHeight,
     currentParagraphTimestamp,
     endTime,
@@ -86709,12 +86737,12 @@ function Header(props) {
 }
 
 // src/components/Textarea/index.tsx
-var import_react65 = __toModule(require_react());
+var import_react66 = __toModule(require_react());
 function TextareaUI(props) {
   const { autoFocus, className = "", clearable, clear, id, name, onChange, onFocus, placeholder, value } = props;
-  return /* @__PURE__ */ import_react65.default.createElement("div", {
+  return /* @__PURE__ */ import_react66.default.createElement("div", {
     className: `group items-center relative w-full dark:text-white ${className} textarea__${name}`
-  }, /* @__PURE__ */ import_react65.default.createElement("textarea", {
+  }, /* @__PURE__ */ import_react66.default.createElement("textarea", {
     id,
     autoFocus,
     className: "h-full border border-gray-200 min-h-[58px] px-3 py-2 rounded-lg text-sm w-full focus:border-1 focus:border-blue-600 focus:outline-none focus:shadow-input hover:border-blue-400 dark:bg-bluegray-6 dark:border-bluegray-5",
@@ -86722,20 +86750,20 @@ function TextareaUI(props) {
     onFocus,
     placeholder,
     value
-  }), clearable && value && /* @__PURE__ */ import_react65.default.createElement("div", {
+  }), clearable && value && /* @__PURE__ */ import_react66.default.createElement("div", {
     className: "h-full absolute flex-col items-center justify-center top-0 right-2 w-3 text-gray-300 cursor-pointer hidden group-hover:flex hover:text-gray-500 active:text-gray-700",
     onClick: clear
-  }, /* @__PURE__ */ import_react65.default.createElement(Close, null)));
+  }, /* @__PURE__ */ import_react66.default.createElement(Close, null)));
 }
 function Textarea(props) {
   const { autoFocus = false, id, clearable = true, placeholder, onChange, onFocus, value, name, className } = props;
-  return /* @__PURE__ */ import_react65.default.createElement(TextareaUI, {
+  return /* @__PURE__ */ import_react66.default.createElement(TextareaUI, {
     autoFocus,
     clearable,
-    clear: (0, import_react65.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
+    clear: (0, import_react66.useCallback)((event) => onChange == null ? void 0 : onChange(event, { name, value: "" }), [onChange]),
     id,
     placeholder,
-    onChange: (0, import_react65.useCallback)((event) => {
+    onChange: (0, import_react66.useCallback)((event) => {
       var _a;
       return onChange == null ? void 0 : onChange(event, { name, value: (_a = event == null ? void 0 : event.currentTarget) == null ? void 0 : _a.value });
     }, [onChange]),
@@ -86747,56 +86775,56 @@ function Textarea(props) {
 }
 
 // src/modules/Transcript/ReportIssue/index.tsx
-var import_react66 = __toModule(require_react());
+var import_react67 = __toModule(require_react());
 function ReportIssueUI(props) {
   const { onToggle, onSubmit, onChangeIssue, submitState, issueText } = props;
-  return /* @__PURE__ */ import_react66.default.createElement("div", {
+  return /* @__PURE__ */ import_react67.default.createElement("div", {
     id: "reportIssueContainer",
     className: "absolute z-50 inset-0 bg-gray-900/20 dark:opacity-60 flex items-center justify-center flex-col",
     onClick: () => onToggle(false)
-  }, /* @__PURE__ */ import_react66.default.createElement("div", {
+  }, /* @__PURE__ */ import_react67.default.createElement("div", {
     onClick: (e) => {
       e.stopPropagation();
       e.preventDefault();
     },
     className: "w-full max-w-[18rem] px-4 py-3 bg-white shadow-md rounded-lg flex flex-col"
-  }, /* @__PURE__ */ import_react66.default.createElement("p", {
+  }, /* @__PURE__ */ import_react67.default.createElement("p", {
     className: "text-sm font-semibold antialiased"
-  }, "Report Event Issue"), /* @__PURE__ */ import_react66.default.createElement("p", {
+  }, "Report Event Issue"), /* @__PURE__ */ import_react67.default.createElement("p", {
     className: "mb-2 text-slate-500 text-xs antialiased"
-  }, "Our team will be notified immediately."), /* @__PURE__ */ import_react66.default.createElement(Textarea, {
+  }, "Our team will be notified immediately."), /* @__PURE__ */ import_react67.default.createElement(Textarea, {
     placeholder: "Please enter a description of the issue...",
     clearable: false,
     value: issueText,
     name: "issue",
     onChange: onChangeIssue
-  }), submitState === "loading" ? /* @__PURE__ */ import_react66.default.createElement("div", {
+  }), submitState === "loading" ? /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "flex items-center mt-2"
-  }, /* @__PURE__ */ import_react66.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react67.default.createElement(Button, {
     kind: "primary",
     className: "flex-1 justify-center"
-  }, "Loading..."), /* @__PURE__ */ import_react66.default.createElement(Button, {
+  }, "Loading..."), /* @__PURE__ */ import_react67.default.createElement(Button, {
     className: "ml-2",
     kind: "secondary",
     onClick: () => onToggle(false)
-  }, "Cancel")) : submitState === "success" ? /* @__PURE__ */ import_react66.default.createElement("div", {
+  }, "Cancel")) : submitState === "success" ? /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "flex items-center mt-2"
-  }, /* @__PURE__ */ import_react66.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react67.default.createElement(Button, {
     kind: "primary",
     className: "flex-1 justify-center"
-  }, "Success!"), /* @__PURE__ */ import_react66.default.createElement(Button, {
+  }, "Success!"), /* @__PURE__ */ import_react67.default.createElement(Button, {
     className: "ml-2",
     kind: "secondary",
     onClick: () => onToggle(false)
-  }, "Cancel")) : submitState === "error" ? /* @__PURE__ */ import_react66.default.createElement("div", {
+  }, "Cancel")) : submitState === "error" ? /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "mt-2 text-center text-sm"
-  }, "Error...") : /* @__PURE__ */ import_react66.default.createElement("div", {
+  }, "Error...") : /* @__PURE__ */ import_react67.default.createElement("div", {
     className: "flex items-center mt-2"
-  }, /* @__PURE__ */ import_react66.default.createElement(Button, {
+  }, /* @__PURE__ */ import_react67.default.createElement(Button, {
     kind: "primary",
     className: "flex-1 justify-center",
     onClick: onSubmit
-  }, "Report Issue"), /* @__PURE__ */ import_react66.default.createElement(Button, {
+  }, "Report Issue"), /* @__PURE__ */ import_react67.default.createElement(Button, {
     className: "ml-2",
     kind: "secondary",
     onClick: () => onToggle(false)
@@ -86806,9 +86834,9 @@ function ReportIssue(props) {
   var _a, _b;
   const { eventId, onToggle } = props;
   const config = useConfig();
-  const [submitState, setSubmitState] = (0, import_react66.useState)("");
-  const [issue, setIssue] = (0, import_react66.useState)("");
-  const onChangeIssue = (0, import_react66.useCallback)((_2, { value }) => {
+  const [submitState, setSubmitState] = (0, import_react67.useState)("");
+  const [issue, setIssue] = (0, import_react67.useState)("");
+  const onChangeIssue = (0, import_react67.useCallback)((_2, { value }) => {
     if (typeof value === "string") {
       setIssue(value);
     }
@@ -86824,7 +86852,7 @@ function ReportIssue(props) {
   const trackingId = (_a = config == null ? void 0 : config.tracking) == null ? void 0 : _a.userId;
   const userEmail = (_b = config == null ? void 0 : config.user) == null ? void 0 : _b.email;
   const userInfo = trackingId || userEmail;
-  const reportEventIssue = (0, import_react66.useCallback)(() => __async(this, null, function* () {
+  const reportEventIssue = (0, import_react67.useCallback)(() => __async(this, null, function* () {
     setSubmitState("loading");
     bus.emit("issue-reported", { issue, eventId, user: trackingId || userEmail }, "out");
     return reportEventIssueMutation({
@@ -86850,7 +86878,7 @@ function ReportIssue(props) {
       }, 5e3);
     });
   }), [reportEventIssueMutation, eventId, setSubmitState, issue, trackingId]);
-  return /* @__PURE__ */ import_react66.default.createElement(ReportIssueUI, {
+  return /* @__PURE__ */ import_react67.default.createElement(ReportIssueUI, {
     issueText: issue,
     submitState,
     onChangeIssue,
@@ -86860,7 +86888,7 @@ function ReportIssue(props) {
 }
 
 // src/modules/Transcript/index.tsx
-var HandlesWrapperUI = import_react67.default.memo(({
+var HandlesWrapperUI = import_react68.default.memo(({
   showSearch,
   width,
   children,
@@ -86871,12 +86899,12 @@ var HandlesWrapperUI = import_react67.default.memo(({
   transform,
   setNodeRef
 }) => {
-  const startResizingEvent = (0, import_react67.useCallback)((e) => {
+  const startResizingEvent = (0, import_react68.useCallback)((e) => {
     if (eventId && startResize)
       startResize(e, eventId);
   }, [eventId]);
-  return /* @__PURE__ */ import_react67.default.createElement("div", {
-    className: (0, import_classnames38.default)("relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20", "border-r-slate-200/60 dark:border-r-bluegray-8", {
+  return /* @__PURE__ */ import_react68.default.createElement("div", {
+    className: (0, import_classnames39.default)("relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20", "border-r-slate-200/60 dark:border-r-bluegray-8", {
       handles__transcriptHeader: !showSearch,
       "handles__transcriptHeader-showSearch": showSearch
     }),
@@ -86886,9 +86914,9 @@ var HandlesWrapperUI = import_react67.default.memo(({
       transition
     },
     ref: setNodeRef
-  }, children, /* @__PURE__ */ import_react67.default.createElement("div", {
+  }, children, /* @__PURE__ */ import_react68.default.createElement("div", {
     onMouseDown: startResizingEvent,
-    className: (0, import_classnames38.default)("absolute top-0 bottom-0 w-1 -right-0.5", "active:bg-blue-500 active:cursor-none", "cursor-col-resize z-50", {
+    className: (0, import_classnames39.default)("absolute top-0 bottom-0 w-1 -right-0.5", "active:bg-blue-500 active:cursor-none", "cursor-col-resize z-50", {
       "bg-blue-500": isResizing
     })
   }));
@@ -86904,9 +86932,9 @@ function findSummary(summarizations) {
   return everything || pres || qa;
 }
 function NoEventFound() {
-  return /* @__PURE__ */ import_react67.default.createElement("div", {
-    className: (0, import_classnames38.default)("h-full flex flex-col flex-1 justify-center items-center")
-  }, /* @__PURE__ */ import_react67.default.createElement("p", {
+  return /* @__PURE__ */ import_react68.default.createElement("div", {
+    className: (0, import_classnames39.default)("h-full flex flex-col flex-1 justify-center items-center")
+  }, /* @__PURE__ */ import_react68.default.createElement("p", {
     className: "text-sm text-slate-500 dark:text-slate-300"
   }, "Transcript Failed to Load"));
 }
@@ -86952,8 +86980,8 @@ var TranscriptUI = (props) => {
     startTime,
     useConfigOptions
   } = props;
-  const [showSummary, setShowSummary] = (0, import_react67.useState)(false);
-  const toggleSummary = (0, import_react67.useCallback)(() => {
+  const [showSummary, setShowSummary] = (0, import_react68.useState)(false);
+  const toggleSummary = (0, import_react68.useCallback)(() => {
     setShowSummary((pv) => !pv);
   }, []);
   const config = useConfig();
@@ -86991,12 +87019,12 @@ var TranscriptUI = (props) => {
       showSummaryByConfig = config.options.showSummary;
     }
   }
-  return /* @__PURE__ */ import_react67.default.createElement("div", {
-    className: (0, import_classnames38.default)("h-full flex flex-col transcript bg-gray-50", { dark: theme }),
+  return /* @__PURE__ */ import_react68.default.createElement("div", {
+    className: (0, import_classnames39.default)("h-full flex flex-col transcript bg-gray-50", { dark: theme }),
     ref: containerRef
-  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, { status: "success" }, { status: "empty" }, () => /* @__PURE__ */ import_react67.default.createElement("div", {
+  }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, { status: "success" }, { status: "empty" }, () => /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "dark:bg-bluegray-7"
-  }, (showTitleInfo || showSearch) && /* @__PURE__ */ import_react67.default.createElement(Header, {
+  }, (showTitleInfo || showSearch) && /* @__PURE__ */ import_react68.default.createElement(Header, {
     headerHandleAttributes: handlesEnabled ? headerHandleAttributes : void 0,
     headerHandleListeners: handlesEnabled ? headerHandleListeners : void 0,
     useConfigOptions,
@@ -87017,29 +87045,29 @@ var TranscriptUI = (props) => {
     onChangeSearchTerm,
     onSeekAudioByDate,
     startTime
-  }), searchTerm && /* @__PURE__ */ import_react67.default.createElement("div", {
-    className: (0, import_classnames38.default)("flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow", "dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4", "transcript__search-navigator")
-  }, /* @__PURE__ */ import_react67.default.createElement("div", {
+  }), searchTerm && /* @__PURE__ */ import_react68.default.createElement("div", {
+    className: (0, import_classnames39.default)("flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow", "dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4", "transcript__search-navigator")
+  }, /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "text-sm truncate"
-  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react67.default.createElement("span", {
+  }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react68.default.createElement("span", {
     className: "font-semibold"
-  }, searchTerm), '"'), /* @__PURE__ */ import_react67.default.createElement("div", {
+  }, searchTerm), '"'), /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "flex-1"
-  }), /* @__PURE__ */ import_react67.default.createElement("button", {
+  }), /* @__PURE__ */ import_react68.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer rotate-180 hover:text-gray-600",
     onClick: prevMatch
-  }, /* @__PURE__ */ import_react67.default.createElement(Chevron, null)), /* @__PURE__ */ import_react67.default.createElement("div", {
+  }, /* @__PURE__ */ import_react68.default.createElement(Chevron, null)), /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "min-w-[35px] mr-2 text-center"
-  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react67.default.createElement("button", {
+  }, matchIndex + 1, " / ", matches.length), /* @__PURE__ */ import_react68.default.createElement("button", {
     tabIndex: 0,
     className: "w-2.5 mr-2 cursor-pointer hover:text-gray-600",
     onClick: nextMatch
-  }, /* @__PURE__ */ import_react67.default.createElement(Chevron, null)), /* @__PURE__ */ import_react67.default.createElement("button", {
+  }, /* @__PURE__ */ import_react68.default.createElement(Chevron, null)), /* @__PURE__ */ import_react68.default.createElement("button", {
     tabIndex: 0,
     className: "w-4 cursor-pointer text-gray-400 hover:text-gray-600",
     onClick: (e) => onChangeSearchTerm(e, { value: "" })
-  }, /* @__PURE__ */ import_react67.default.createElement(Close, null))))).otherwise(() => null), /* @__PURE__ */ import_react67.default.createElement("div", {
+  }, /* @__PURE__ */ import_react68.default.createElement(Close, null))))).otherwise(() => null), /* @__PURE__ */ import_react68.default.createElement("div", {
     id: "transcriptContainer",
     className: "overflow-y-scroll flex-1 bg-gray-50 dark:bg-bluegray-7",
     ref: scrollContainerRef
@@ -87051,108 +87079,108 @@ var TranscriptUI = (props) => {
       if (!showSummary) {
         summaryTexts = summaryTexts.slice(0, 1);
       }
-      return /* @__PURE__ */ import_react67.default.createElement("div", {
+      return /* @__PURE__ */ import_react68.default.createElement("div", {
         onClick: toggleSummary,
         className: "mb-2 group cursor-pointer hover:bg-slate-200/90 active:bg-slate-300 text-sm bg-slate-200/60 dark:bg-bluegray-6/50 rounded-b-lg px-3 py-2.5 summaryContainer"
-      }, /* @__PURE__ */ import_react67.default.createElement("p", {
+      }, /* @__PURE__ */ import_react68.default.createElement("p", {
         className: "text-xs tracking-wide text-slate-400 dark:text-slate-100/20 font-bold mb-1 summaryLabel"
-      }, "AI SUMMARY"), /* @__PURE__ */ import_react67.default.createElement("h2", {
+      }, "AI SUMMARY"), /* @__PURE__ */ import_react68.default.createElement("h2", {
         className: "font-bold dark:text-slate-100 dark:antialiased leading-[1.1875rem] tracking-tight text-base summaryTitle"
-      }, summaryObj == null ? void 0 : summaryObj.title), summaryTexts.map((summaryText) => /* @__PURE__ */ import_react67.default.createElement("p", {
+      }, summaryObj == null ? void 0 : summaryObj.title), summaryTexts.map((summaryText) => /* @__PURE__ */ import_react68.default.createElement("p", {
         key: summaryText.slice(0, 10),
-        className: (0, import_classnames38.default)("text-sm mt-2 text-slate-700 dark:text-slate-200/30 group-hover:text-slate-900 dark:group-hover:text-slate-200/60 summaryText", {
+        className: (0, import_classnames39.default)("text-sm mt-2 text-slate-700 dark:text-slate-200/30 group-hover:text-slate-900 dark:group-hover:text-slate-200/60 summaryText", {
           truncate: !showSummary
         })
       }, summaryText)));
     }
     return null;
-  }).otherwise(() => null), (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react67.default.createElement("div", {
+  }).otherwise(() => null), (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, () => new Array(5).fill(0).map((_2, idx) => /* @__PURE__ */ import_react68.default.createElement("div", {
     key: idx,
     className: "animate-pulse p-2"
-  }, /* @__PURE__ */ import_react67.default.createElement("div", {
+  }, /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 w-10 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react67.default.createElement("div", {
+  }), /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 ml-14 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react67.default.createElement("div", {
+  }), /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-5"
-  }), /* @__PURE__ */ import_react67.default.createElement("div", {
+  }), /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 dark:bg-bluegray-6"
-  }), /* @__PURE__ */ import_react67.default.createElement("div", {
+  }), /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "rounded-md bg-gray-300 h-3 m-1 mr-20 dark:bg-bluegray-6"
   })))).with({ status: "empty" }, ({ data }) => {
-    return data.events[0] ? /* @__PURE__ */ import_react67.default.createElement(EmptyMessage, {
+    return data.events[0] ? /* @__PURE__ */ import_react68.default.createElement(EmptyMessage, {
       event: data.events[0]
-    }) : /* @__PURE__ */ import_react67.default.createElement(NoEventFound, null);
+    }) : /* @__PURE__ */ import_react68.default.createElement(NoEventFound, null);
   }).with({ status: "success" }, ({ data }) => {
     return speakerTurns.map(({ id, speaker, paragraphsWithMatches: paragraphs }) => {
       var _a, _b, _c, _d, _e;
       const speakerTime = (_b = (_a = paragraphs[0]) == null ? void 0 : _a.paragraph) == null ? void 0 : _b.timestamp;
       const speakerTimeRelative = (((_d = (_c = paragraphs[0]) == null ? void 0 : _c.paragraph) == null ? void 0 : _d.syncMs) || 0) - relativeTimestampsOffset;
-      return /* @__PURE__ */ import_react67.default.createElement("div", {
+      return /* @__PURE__ */ import_react68.default.createElement("div", {
         key: `speaker-turn-${id}`
-      }, showSpeakers && speaker.identified && /* @__PURE__ */ import_react67.default.createElement("div", {
-        className: (0, import_classnames38.default)("p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800", "dark:bg-bluegray-7 dark:text-gray-400", "transcript__speaker")
-      }, speaker.name && /* @__PURE__ */ import_react67.default.createElement("p", {
+      }, showSpeakers && speaker.identified && /* @__PURE__ */ import_react68.default.createElement("div", {
+        className: (0, import_classnames39.default)("p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800", "dark:bg-bluegray-7 dark:text-gray-400", "transcript__speaker")
+      }, speaker.name && /* @__PURE__ */ import_react68.default.createElement("p", {
         className: "truncate"
-      }, /* @__PURE__ */ import_react67.default.createElement("span", {
+      }, /* @__PURE__ */ import_react68.default.createElement("span", {
         className: "font-semibold dark:text-white"
-      }, speaker.name), speaker.title && /* @__PURE__ */ import_react67.default.createElement("span", {
+      }, speaker.name), speaker.title && /* @__PURE__ */ import_react68.default.createElement("span", {
         className: "text-gray-500"
-      }, ", ", speaker.title)), speakerTime && speakerTimeRelative !== void 0 && /* @__PURE__ */ import_react67.default.createElement("p", {
-        className: (0, import_classnames38.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
+      }, ", ", speaker.title)), speakerTime && speakerTimeRelative !== void 0 && /* @__PURE__ */ import_react68.default.createElement("p", {
+        className: (0, import_classnames39.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
           "-mt-[1px]": speaker.name
         })
       }, relativeTimestamps ? import_luxon2.Duration.fromMillis(speakerTimeRelative).toFormat("h:mm:ss") : import_luxon2.DateTime.fromISO(speakerTime).toFormat("h:mm:ss a"))), paragraphs.map(({ sentences, paragraph }) => {
         const { id: id2, timestamp, syncMs } = paragraph;
         const syncMsRelative = (syncMs || 0) - relativeTimestampsOffset;
-        return /* @__PURE__ */ import_react67.default.createElement("div", {
+        return /* @__PURE__ */ import_react68.default.createElement("div", {
           key: id2,
           id: `paragraph-${id2}`,
           className: "relative p-3 pb-4 transcript__paragraph",
           onClick: () => onClickTranscript == null ? void 0 : onClickTranscript(paragraph),
           ref: id2 === currentParagraph ? currentParagraphRef : void 0
-        }, (!showSpeakers || !speaker.identified) && /* @__PURE__ */ import_react67.default.createElement(import_react67.default.Fragment, null, relativeTimestamps ? /* @__PURE__ */ import_react67.default.createElement("div", {
+        }, (!showSpeakers || !speaker.identified) && /* @__PURE__ */ import_react68.default.createElement(import_react68.default.Fragment, null, relativeTimestamps ? /* @__PURE__ */ import_react68.default.createElement("div", {
           className: "pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50"
-        }, import_luxon2.Duration.fromMillis(syncMsRelative).toFormat("h:mm:ss")) : timestamp && /* @__PURE__ */ import_react67.default.createElement("div", {
+        }, import_luxon2.Duration.fromMillis(syncMsRelative).toFormat("h:mm:ss")) : timestamp && /* @__PURE__ */ import_react68.default.createElement("div", {
           className: "pb-2 font-semibold text-sm dark:text-bluegray-4 dark:text-opacity-50"
-        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a"))), /* @__PURE__ */ import_react67.default.createElement("div", {
+        }, import_luxon2.DateTime.fromISO(timestamp).toFormat("h:mm:ss a"))), /* @__PURE__ */ import_react68.default.createElement("div", {
           className: "text-sm dark:text-bluegray-4"
-        }, sentences.map(({ chunks, id: sId }) => /* @__PURE__ */ import_react67.default.createElement(import_react67.Fragment, {
+        }, sentences.map(({ chunks, id: sId }) => /* @__PURE__ */ import_react68.default.createElement(import_react68.Fragment, {
           key: sId
-        }, chunks.map(({ highlight, id: sentenceId, text, textSentiment }) => highlight ? /* @__PURE__ */ import_react67.default.createElement("mark", {
+        }, chunks.map(({ highlight, id: sentenceId, text, textSentiment }) => highlight ? /* @__PURE__ */ import_react68.default.createElement("mark", {
           ref: sentenceId === currentMatch ? currentMatchRef : void 0,
-          className: (0, import_classnames38.default)({
+          className: (0, import_classnames39.default)({
             "bg-yellow-300": sentenceId === currentMatch
           }),
           key: sentenceId
-        }, text) : /* @__PURE__ */ import_react67.default.createElement("span", {
+        }, text) : /* @__PURE__ */ import_react68.default.createElement("span", {
           key: sentenceId,
-          className: (0, import_classnames38.default)({
+          className: (0, import_classnames39.default)({
             "text-green-600": textSentiment === "positive" && showSentiment,
             "text-red-600": textSentiment === "negative" && showSentiment
           })
-        }, text)), "\xA0"))), id2 === currentParagraph && /* @__PURE__ */ import_react67.default.createElement("div", {
+        }, text)), "\xA0"))), id2 === currentParagraph && /* @__PURE__ */ import_react68.default.createElement("div", {
           className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
         }));
-      }), ((_e = data.events[0]) == null ? void 0 : _e.isLive) && (partial == null ? void 0 : partial.text) && showPartials && /* @__PURE__ */ import_react67.default.createElement("div", {
+      }), ((_e = data.events[0]) == null ? void 0 : _e.isLive) && (partial == null ? void 0 : partial.text) && showPartials && /* @__PURE__ */ import_react68.default.createElement("div", {
         className: "relative p-3 pb-4 mb-4"
-      }, partial.timestamp && partial.relativeTimestamp !== void 0 && /* @__PURE__ */ import_react67.default.createElement("div", {
+      }, partial.timestamp && partial.relativeTimestamp !== void 0 && /* @__PURE__ */ import_react68.default.createElement("div", {
         className: "pb-2 font-semibold text-sm dark:text-bluegray-5"
-      }, relativeTimestamps ? import_luxon2.Duration.fromMillis((partial.relativeTimestamp || 0) - relativeTimestampsOffset).toFormat("h:mm:ss") : import_luxon2.DateTime.fromMillis(partial.timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react67.default.createElement("div", {
+      }, relativeTimestamps ? import_luxon2.Duration.fromMillis((partial.relativeTimestamp || 0) - relativeTimestampsOffset).toFormat("h:mm:ss") : import_luxon2.DateTime.fromMillis(partial.timestamp).toFormat("h:mm:ss a")), /* @__PURE__ */ import_react68.default.createElement("div", {
         ref: currentParagraph === "partial" ? currentParagraphRef : void 0,
         key: `${hash2(partial.text)}-${paragraphs.length}`,
         className: "text-sm dark:text-bluegray-4"
-      }, partial.text), currentParagraph === "partial" && /* @__PURE__ */ import_react67.default.createElement("div", {
+      }, partial.text), currentParagraph === "partial" && /* @__PURE__ */ import_react68.default.createElement("div", {
         className: "w-[3px] bg-blue-700 absolute top-0 bottom-0 left-0 rounded-r-sm"
       })));
     });
-  }).with({ status: "error" }, () => /* @__PURE__ */ import_react67.default.createElement(NoEventFound, null)).with({ status: "paused" }, () => /* @__PURE__ */ import_react67.default.createElement(NoEventFound, null)).exhaustive()), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, { status: "empty" }, ({ data: { events: events2 } }) => {
+  }).with({ status: "error" }, () => /* @__PURE__ */ import_react68.default.createElement(NoEventFound, null)).with({ status: "paused" }, () => /* @__PURE__ */ import_react68.default.createElement(NoEventFound, null)).exhaustive()), (0, import_ts_pattern6.match)(eventQuery).with({ status: "success" }, { status: "empty" }, ({ data: { events: events2 } }) => {
     const event = events2[0];
     if (hidePlaybar) {
       return null;
     }
     const primaryQuote = getPrimaryQuote(event == null ? void 0 : event.primaryCompany);
-    return ((event == null ? void 0 : event.audioProxy) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react67.default.createElement(Playbar, {
+    return ((event == null ? void 0 : event.audioProxy) || (event == null ? void 0 : event.isLive)) && /* @__PURE__ */ import_react68.default.createElement(Playbar, {
       hideEventDetails: true,
       hidePlayer: !showPlayer,
       id: event == null ? void 0 : event.id,
@@ -87176,7 +87204,7 @@ var TranscriptUI = (props) => {
     if (!showReportIssueModal || !(event == null ? void 0 : event.id)) {
       return null;
     }
-    return /* @__PURE__ */ import_react67.default.createElement(ReportIssue, {
+    return /* @__PURE__ */ import_react68.default.createElement(ReportIssue, {
       onToggle: toggleReportIssueModal,
       eventId: event.id
     });
@@ -87217,7 +87245,7 @@ function useEventUpdates(eventId = "") {
       eventId
     }
   });
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_changes`, "modified", (0, import_react67.useCallback)(() => eventUpdateQuery.refetch(), [eventUpdateQuery.refetch]));
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_changes`, "modified", (0, import_react68.useCallback)(() => eventUpdateQuery.refetch(), [eventUpdateQuery.refetch]));
   return eventUpdateQuery;
 }
 function useLatestEventForTicker(ticker = "") {
@@ -87387,7 +87415,7 @@ function useEventData(eventId = "", eventUpdateQuery) {
       eventId
     }
   });
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     var _a2, _b2;
     if ((_b2 = (_a2 = eventUpdateQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.hasTranscript) {
       eventQuery.refetch();
@@ -87425,12 +87453,12 @@ function useLatestTranscripts(eventId = "", eventQuery) {
       eventId
     }
   });
-  const [latestParagraphs, setLatestParagraphs] = (0, import_react67.useState)(/* @__PURE__ */ new Map());
-  const [refetchingTranscript, setRefetchingTranscript] = (0, import_react67.useState)(false);
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "modified", (0, import_react67.useCallback)(() => {
+  const [latestParagraphs, setLatestParagraphs] = (0, import_react68.useState)(/* @__PURE__ */ new Map());
+  const [refetchingTranscript, setRefetchingTranscript] = (0, import_react68.useState)(false);
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "modified", (0, import_react68.useCallback)(() => {
     latestParagraphsQuery.refetch();
   }, [latestParagraphsQuery.refetch]));
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     if (latestParagraphsQuery.state.data) {
       setLatestParagraphs((prev) => {
         var _a2, _b2, _c;
@@ -87442,7 +87470,7 @@ function useLatestTranscripts(eventId = "", eventQuery) {
       });
     }
   }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     var _a2, _b2, _c;
     if (!refetchingTranscript && latestParagraphs && latestParagraphs.size > 0) {
       const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
@@ -87451,12 +87479,12 @@ function useLatestTranscripts(eventId = "", eventQuery) {
       }
     }
   }, [eventQuery, latestParagraphs, refetchingTranscript]);
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     if (refetchingTranscript) {
       eventQuery.refetch();
     }
   }, [refetchingTranscript]);
-  return (0, import_react67.useMemo)(() => {
+  return (0, import_react68.useMemo)(() => {
     var _a2, _b2, _c;
     const speakerTurns = ((_c = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.transcripts[0]) == null ? void 0 : _c.sections.flatMap((section) => section.speakerTurns)) || [];
     const originalParagraphIds = new Set(speakerTurns.flatMap((s2) => s2.paragraphs.map((p2) => p2.id)));
@@ -87479,14 +87507,14 @@ function useLatestTranscripts(eventId = "", eventQuery) {
   }, [(_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events[0]) == null ? void 0 : _b.transcripts, latestParagraphs]);
 }
 function usePartials(eventId, lastParagraphId) {
-  const [partial, setPartial] = (0, import_react67.useState)({
+  const [partial, setPartial] = (0, import_react68.useState)({
     relativeTimestamp: 0,
     timestamp: 0,
     text: "",
     index: -1
   });
-  const [lastCleared, setLastCleared] = (0, import_react67.useState)(-1);
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript", (0, import_react67.useCallback)((data) => {
+  const [lastCleared, setLastCleared] = (0, import_react68.useState)(-1);
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript", (0, import_react68.useCallback)((data) => {
     const {
       start_ms: relativeTimestamp = 0,
       start_timestamp_ms: timestamp = 0,
@@ -87505,11 +87533,11 @@ function usePartials(eventId, lastParagraphId) {
       return prevState;
     });
   }, [setPartial]));
-  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript_clear", (0, import_react67.useCallback)((data) => {
+  useRealtimeEvent(`scheduled_audio_call_${eventId}_events_changes`, "partial_transcript_clear", (0, import_react68.useCallback)((data) => {
     const { index = -1 } = data || {};
     setLastCleared((prevIndex) => index > prevIndex ? index : prevIndex);
   }, [setLastCleared]));
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     if (lastCleared >= partial.index) {
       setPartial({
         index: lastCleared,
@@ -87523,7 +87551,7 @@ function usePartials(eventId, lastParagraphId) {
 }
 function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   var _a, _b, _c, _d, _e;
-  const [currentParagraph, setCurrentParagraph] = (0, import_react67.useState)(null);
+  const [currentParagraph, setCurrentParagraph] = (0, import_react68.useState)(null);
   const config = useConfig();
   const offset = { top: ((_c = (_b = (_a = eventQuery.state.data) == null ? void 0 : _a.events) == null ? void 0 : _b[0]) == null ? void 0 : _c.hasPublishedTranscript) ? 55 : 5, bottom: 15 };
   const {
@@ -87534,9 +87562,9 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
   } = useAutoScroll({
     offset
   });
-  const paragraphs = (0, import_react67.useMemo)(() => speakerTurns.flatMap((s2) => s2.paragraphs), [speakerTurns]);
+  const paragraphs = (0, import_react68.useMemo)(() => speakerTurns.flatMap((s2) => s2.paragraphs), [speakerTurns]);
   const partial = usePartials(eventId, (_d = paragraphs.slice(-1)[0]) == null ? void 0 : _d.id);
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     var _a2, _b2, _c2, _d2, _e2, _f;
     const eventId2 = (_b2 = (_a2 = eventQuery.state.data) == null ? void 0 : _a2.events[0]) == null ? void 0 : _b2.id;
     const audioParagraph = eventId2 && audioPlayer.id && audioPlayer.id === eventId2 ? [...paragraphs].reverse().find((p2) => p2.syncMs && p2.syncMs <= audioPlayer.rawCurrentTime * 1e3) : null;
@@ -87589,16 +87617,16 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
       }
     }
   }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, (_e = config == null ? void 0 : config.options) == null ? void 0 : _e.initialItemId]);
-  const currentParagraphTimestamp = (0, import_react67.useMemo)(() => {
+  const currentParagraphTimestamp = (0, import_react68.useMemo)(() => {
     var _a2;
     const currentIndex = paragraphs.findIndex(({ id }) => currentParagraph === id);
     return ((_a2 = paragraphs.slice(currentIndex).find(({ syncTimestamp }) => !!syncTimestamp)) == null ? void 0 : _a2.syncTimestamp) || null;
   }, [currentParagraph, paragraphs]);
-  const startTime = (0, import_react67.useMemo)(() => {
+  const startTime = (0, import_react68.useMemo)(() => {
     var _a2;
     return ((_a2 = paragraphs.find(({ syncTimestamp }) => !!syncTimestamp)) == null ? void 0 : _a2.syncTimestamp) || null;
   }, [paragraphs]);
-  const endTime = (0, import_react67.useMemo)(() => {
+  const endTime = (0, import_react68.useMemo)(() => {
     var _a2;
     return ((_a2 = [...paragraphs].reverse().find(({ syncTimestamp }) => !!syncTimestamp)) == null ? void 0 : _a2.syncTimestamp) || null;
   }, [paragraphs]);
@@ -87619,7 +87647,7 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
   const { state, handlers } = useChangeHandlers({
     searchTerm: initialSearchTerm || controlledSearchTerm || ""
   });
-  const [currentMatch, setCurrentMatch] = (0, import_react67.useState)(null);
+  const [currentMatch, setCurrentMatch] = (0, import_react68.useState)(null);
   const {
     scrollContainerRef,
     scroll,
@@ -87640,7 +87668,7 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
   if (((_f = config.options) == null ? void 0 : _f.transcriptRawEndSeconds) !== void 0) {
     endSec = config.options.transcriptRawEndSeconds;
   }
-  const speakerTurnsWithMatches = (0, import_react67.useMemo)(() => speakerTurns.map((s2) => __spreadProps(__spreadValues({}, s2), {
+  const speakerTurnsWithMatches = (0, import_react68.useMemo)(() => speakerTurns.map((s2) => __spreadProps(__spreadValues({}, s2), {
     paragraphsWithMatches: s2.paragraphs.filter((p2) => {
       if (typeof beginSec === "number" && p2.syncMs) {
         const normalizedTime = p2.syncMs / 1e3;
@@ -87687,25 +87715,25 @@ function useSearchState(speakerTurns, initialSearchTerm = "", controlledSearchTe
       };
     })
   })), [settings, speakerTurns, state.searchTerm]);
-  const matches = (0, import_react67.useMemo)(() => speakerTurnsWithMatches.flatMap((s2) => s2.paragraphsWithMatches).flatMap((p2) => p2.sentences).flatMap((s2) => s2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
-  (0, import_react67.useEffect)(() => {
+  const matches = (0, import_react68.useMemo)(() => speakerTurnsWithMatches.flatMap((s2) => s2.paragraphsWithMatches).flatMap((p2) => p2.sentences).flatMap((s2) => s2.chunks.filter((h3) => h3.highlight)), [speakerTurnsWithMatches]);
+  (0, import_react68.useEffect)(() => {
     var _a2;
     setCurrentMatch(((_a2 = matches[0]) == null ? void 0 : _a2.id) || null);
   }, [state.searchTerm]);
-  const matchIndex = (0, import_react67.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
-  const nextMatch = (0, import_react67.useCallback)(() => {
+  const matchIndex = (0, import_react68.useMemo)(() => matches.findIndex((m2) => m2.id === currentMatch), [matches, currentMatch]);
+  const nextMatch = (0, import_react68.useCallback)(() => {
     const match7 = matches[(matchIndex + 1) % matches.length];
     if (match7)
       setCurrentMatch(match7.id);
     scroll();
   }, [matches, matchIndex]);
-  const prevMatch = (0, import_react67.useCallback)(() => {
+  const prevMatch = (0, import_react68.useCallback)(() => {
     const match7 = matches[matchIndex ? matchIndex - 1 : matches.length - 1];
     if (match7)
       setCurrentMatch(match7.id);
     scroll();
   }, [matches, matchIndex]);
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     if (typeof controlledSearchTerm === "string") {
       handlers.searchTerm(new KeyboardEvent("keydown"), { value: controlledSearchTerm });
     }
@@ -87743,14 +87771,14 @@ var Transcript = (props) => {
     startResize,
     width
   } = props;
-  const [eventId, setEventId] = (0, import_react67.useState)(eventListEventId);
+  const [eventId, setEventId] = (0, import_react68.useState)(eventListEventId);
   const config = useConfig();
   const eventIdFromTicker = useLatestEventForTicker((_a = config == null ? void 0 : config.options) == null ? void 0 : _a.ticker);
-  const [showReportIssueModal, setShowReportIssueModal] = (0, import_react67.useState)(false);
-  const toggleReportIssueModal = (0, import_react67.useCallback)((override) => {
+  const [showReportIssueModal, setShowReportIssueModal] = (0, import_react68.useState)(false);
+  const toggleReportIssueModal = (0, import_react68.useCallback)((override) => {
     setShowReportIssueModal((pv) => override !== void 0 ? override : !pv);
   }, []);
-  (0, import_react67.useEffect)(() => {
+  (0, import_react68.useEffect)(() => {
     var _a2, _b2;
     if (!eventId && ((_a2 = config == null ? void 0 : config.options) == null ? void 0 : _a2.eventId)) {
       setEventId(config.options.eventId);
@@ -87775,11 +87803,11 @@ var Transcript = (props) => {
     forceNextScroll
   ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
   const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
-  const scrollContainerRef = (0, import_react67.useCallback)((ref) => {
+  const scrollContainerRef = (0, import_react68.useCallback)((ref) => {
     autoscrollContainerRef(ref);
     searchState.scrollContainerRef(ref);
   }, [autoscrollContainerRef, searchState.scrollContainerRef]);
-  const onSeekAudioByDate = (0, import_react67.useCallback)((date) => {
+  const onSeekAudioByDate = (0, import_react68.useCallback)((date) => {
     const p2 = searchState.speakerTurnsWithMatches.flatMap(({ paragraphsWithMatches: paragraphs }) => paragraphs.flatMap(({ paragraph }) => paragraph));
     const pastIndex = p2.findIndex(({ syncTimestamp }) => syncTimestamp ? new Date(syncTimestamp).getTime() > parseFloat(date) : false);
     if (pastIndex > 0) {
@@ -87790,10 +87818,10 @@ var Transcript = (props) => {
       }
     }
   }, [searchState.speakerTurnsWithMatches, forceNextScroll]);
-  const onSeekAudioSeconds = (0, import_react67.useCallback)((seconds, useOffset) => {
+  const onSeekAudioSeconds = (0, import_react68.useCallback)((seconds, useOffset) => {
     audioPlayer.rawSeek(seconds, useOffset);
   }, [audioPlayer]);
-  const onClickBack = (0, import_react67.useCallback)((event) => {
+  const onClickBack = (0, import_react68.useCallback)((event) => {
     if (!audioPlayer.playing(null)) {
       audioPlayer.clear();
     }
@@ -87802,7 +87830,7 @@ var Transcript = (props) => {
   const { height: containerHeight, ref: containerRef } = useElementSize();
   const bus = useMessageListener("seek-transcript-seconds", ({ data }) => void onSeekAudioSeconds(data, false), "in");
   bus.on("seek-transcript-timestamp", ({ data }) => void onSeekAudioByDate(data), "in");
-  const onClickTranscript = (0, import_react67.useCallback)((paragraph) => {
+  const onClickTranscript = (0, import_react68.useCallback)((paragraph) => {
     if (!audioPlayer.id || audioPlayer.id === eventId || eventId && audioPlayer.playing(eventId)) {
       audioPlayer.rawSeek((paragraph.syncMs || 0) / 1e3);
     }
@@ -87813,7 +87841,7 @@ var Transcript = (props) => {
     (_c = config.tracking) == null ? void 0 : _c.userId
   ]);
   const { attributes, listeners, setNodeRef, transform, transition } = useSortable({ id: eventId || "" });
-  const transcriptComponent = /* @__PURE__ */ import_react67.default.createElement(TranscriptUI, {
+  const transcriptComponent = /* @__PURE__ */ import_react68.default.createElement(TranscriptUI, {
     containerHeight,
     containerRef,
     currentMatch: searchState.currentMatch,
@@ -87861,7 +87889,7 @@ var Transcript = (props) => {
         showSearch = config.options.showSearch;
       }
     }
-    return /* @__PURE__ */ import_react67.default.createElement(HandlesWrapperUI, {
+    return /* @__PURE__ */ import_react68.default.createElement(HandlesWrapperUI, {
       transform,
       transition,
       setNodeRef,
@@ -87886,7 +87914,7 @@ var useMessageBus2 = () => {
       void window.fdc3.broadcast(context);
     }
   }, "out");
-  (0, import_react68.useEffect)(() => {
+  (0, import_react69.useEffect)(() => {
     bus.setupWindowMessaging(window.parent);
     const listeners = [];
     return () => {
@@ -87898,19 +87926,19 @@ var useMessageBus2 = () => {
 };
 var App = () => {
   const bus = useMessageBus2();
-  return /* @__PURE__ */ import_react68.default.createElement(import_react68.StrictMode, null, /* @__PURE__ */ import_react68.default.createElement(Provider6, {
+  return /* @__PURE__ */ import_react69.default.createElement(import_react69.StrictMode, null, /* @__PURE__ */ import_react69.default.createElement(Provider6, {
     bus,
     config: { moduleName: "ASR" }
-  }, /* @__PURE__ */ import_react68.default.createElement(Auth, {
+  }, /* @__PURE__ */ import_react69.default.createElement(Auth, {
     apiMode: true
-  }, /* @__PURE__ */ import_react68.default.createElement("div", {
+  }, /* @__PURE__ */ import_react69.default.createElement("div", {
     className: "h-full"
-  }, /* @__PURE__ */ import_react68.default.createElement(Transcript, {
+  }, /* @__PURE__ */ import_react69.default.createElement(Transcript, {
     useConfigOptions: true,
     showHeaderControls: false
   })))));
 };
-import_react_dom2.default.render(/* @__PURE__ */ import_react68.default.createElement(App, null), document.getElementById("root"));
+import_react_dom2.default.render(/* @__PURE__ */ import_react69.default.createElement(App, null), document.getElementById("root"));
 /*
  @license
  Copyright 2006 The Closure Library Authors
