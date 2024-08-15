@@ -1,5 +1,5 @@
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
-import { EventType, Quote } from '@aiera/client-sdk/types/generated';
+import { EventConnectionStatus, EventType, Quote } from '@aiera/client-sdk/types/generated';
 import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
 import muxjs from 'mux.js';
 import React, { ReactElement, ReactNode, createContext, useContext, useEffect, useState } from 'react';
@@ -13,6 +13,7 @@ const shakaInstance: ShakaPlayer = require('shaka-player/dist/shaka-player.ui.js
 
 export interface EventMetaData {
     createdBy?: string;
+    connectionStatus?: EventConnectionStatus;
     eventId?: string;
     eventStream?: string | null;
     eventDate?: string;

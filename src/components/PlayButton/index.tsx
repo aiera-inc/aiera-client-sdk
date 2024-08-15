@@ -9,6 +9,8 @@ import { AudioOriginUI, useMessageBus } from '@aiera/client-sdk/lib/msg';
 import classNames from 'classnames';
 import React, { MouseEvent, ReactElement, ReactNode, useCallback } from 'react';
 import './styles.css';
+import { EventConnectionStatus } from '@aiera/client-sdk/types';
+import { BellSlash } from '../Svg/BellSlash';
 
 interface PlayButtonSharedProps {
     children?: ReactNode;
@@ -16,6 +18,7 @@ interface PlayButtonSharedProps {
 
 /** @notExported */
 interface PlayButtonUIProps extends PlayButtonSharedProps {
+    connectionStatus?: EventConnectionStatus;
     alertOnLive: boolean;
     eventStarted: boolean;
     hasAudio: boolean;
@@ -25,7 +28,7 @@ interface PlayButtonUIProps extends PlayButtonSharedProps {
 }
 
 export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
-    const { alertOnLive, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+    const { alertOnLive, connectionStatus, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
     return hasAudio ? (
         <div
             className={classNames(
@@ -60,7 +63,9 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
         <Tooltip
             content={
                 <div className="bg-black bg-opacity-80 dark:bg-bluegray-4 px-1.5 py-0.5 rounded text-white dark:text-bluegray-7">
-                    {alertOnLive
+                    {connectionStatus === EventConnectionStatus.ConnectionNotExpected
+                        ? 'No Connection Expected'
+                        : alertOnLive
                         ? 'A chime will ring after the audio is connected'
                         : 'Play a chime when the event is about to begin'}
                 </div>
@@ -89,8 +94,22 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
                 'alertButton'
             )}
         >
-            <div onClick={toggleAlert} className="w-full h-full rounded-full flex items-center justify-center">
-                <Bell className="w-3.5" />
+            <div
+                onClick={
+                    connectionStatus === EventConnectionStatus.ConnectionNotExpected
+                        ? (e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                          }
+                        : toggleAlert
+                }
+                className="w-full h-full rounded-full flex items-center justify-center"
+            >
+                {connectionStatus === EventConnectionStatus.ConnectionNotExpected ? (
+                    <BellSlash className="w-4" />
+                ) : (
+                    <Bell className="w-4" />
+                )}
             </div>
         </Tooltip>
     );
@@ -194,6 +213,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
     return (
         <PlayButtonUI
             alertOnLive={alertOnLive}
+            connectionStatus={metaData.connectionStatus}
             eventStarted={eventStarted}
             hasAudio={!!url}
             isPlaying={audioPlayer.playing(id)}

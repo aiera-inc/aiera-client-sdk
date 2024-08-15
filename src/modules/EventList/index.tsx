@@ -240,6 +240,7 @@ const DefaultEventRow = ({
                             <PlayButton
                                 metaData={{
                                     createdBy,
+                                    connectionStatus: event.connectionStatus,
                                     eventId: event.id,
                                     eventDate: eventDate ? eventDate.toISO() : undefined,
                                     eventStream: event.audioStreamUri,
