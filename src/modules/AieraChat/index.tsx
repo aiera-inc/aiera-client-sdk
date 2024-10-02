@@ -2,6 +2,7 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import classNames from 'classnames';
 import React, { ReactElement } from 'react';
 import './styles.css';
+import { Header } from './Header';
 
 interface AieraChatSharedProps {}
 
@@ -27,7 +28,7 @@ export function AieraChatUI(): ReactElement {
                 'aiera-chat'
             )}
         >
-            <div className="relative">header</div>
+            <Header title="My New Chat" />
             <div className="flex-1">chat</div>
             <div>footer</div>
         </div>
