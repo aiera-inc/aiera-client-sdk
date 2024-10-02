@@ -5,12 +5,20 @@ import React from 'react';
 import { IconButton } from './IconButton';
 import { Search } from './Search';
 
-export function Header({ title }: { title: string }) {
+export function Header({
+    title,
+    onOpenMenu,
+    onOpenSources,
+}: {
+    title: string;
+    onOpenMenu: () => void;
+    onOpenSources: () => void;
+}) {
     return (
         <div className="flex items-center justify-between mx-3 mt-4">
-            <IconButton Icon={MicroBars} />
+            <IconButton Icon={MicroBars} onClick={onOpenMenu} />
             <Search title={title} />
-            <IconButton className="mx-2.5" Icon={MicroStack} />
+            <IconButton className="mx-2.5" onClick={onOpenSources} Icon={MicroStack} />
             <IconButton Icon={MicroGear} />
         </div>
     );
