@@ -76,3 +76,8 @@ declare global {
         muxjs: object;
     }
 }
+
+export interface IconProps {
+    className?: string;
+    alt?: string;
+}
