@@ -2,6 +2,7 @@ import React, { ComponentType, ReactNode, useCallback, useState } from 'react';
 import './styles.css';
 import classNames from 'classnames';
 import { IconProps } from '@aiera/client-sdk/types';
+import { MicroClose } from '@aiera/client-sdk/components/Svg/MicroClose';
 
 export function Panel({
     onClose,
@@ -38,9 +39,15 @@ export function Panel({
                     'left-24 right-0 slideInFromRight': side === 'right',
                 })}
             >
-                <div className="h-[1.875rem] mt-4 text-slate-800 ml-5 text-base flex items-center font-bold antialiased">
+                <div className="h-[1.875rem] mt-4 text-slate-800 mx-5 text-base flex items-center font-bold antialiased">
                     <Icon className="w-4 mr-1.5" />
-                    <p>{title}</p>
+                    <p className="flex-1">{title}</p>
+                    <div
+                        onClick={onClose}
+                        className="text-slate-400 mt-1 mr-0.5 hover:text-slate-800 cursor-pointer active:scale-110"
+                    >
+                        <MicroClose className="w-4" />
+                    </div>
                 </div>
                 <div className={className}>{children}</div>
             </div>
