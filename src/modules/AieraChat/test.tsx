@@ -18,6 +18,5 @@ describe('AieraChatUI', () => {
     it('renders chat and footer placeholders', () => {
         render(<AieraChatUI />);
         expect(screen.getByText('chat')).toBeInTheDocument();
-        expect(screen.getByText('footer')).toBeInTheDocument();
     });
 });

@@ -1,0 +1,8 @@
+.chatInput {
+    box-shadow: 0 0 0 3px #edf1f5;
+}
+.chatPrompt[contenteditable='true']:empty:before {
+    content: attr(placeholder);
+    pointer-events: none;
+    @apply pointer-events-none block text-slate-500;
+}

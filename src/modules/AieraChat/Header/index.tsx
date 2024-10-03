@@ -15,7 +15,7 @@ export function Header({
     onOpenSources: () => void;
 }) {
     return (
-        <div className="flex items-center justify-between mx-3 mt-4">
+        <div className="flex items-center justify-between mx-4 mt-4">
             <IconButton Icon={MicroBars} onClick={onOpenMenu} />
             <Search title={title} />
             <IconButton className="mx-2.5" onClick={onOpenSources} Icon={MicroStack} />
