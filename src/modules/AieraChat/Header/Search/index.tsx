@@ -1,20 +1,35 @@
 import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCircle';
 import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { KeyboardEvent, useCallback, useState } from 'react';
 import { IconButton } from '../IconButton';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 
 export function Search({ title }: { title: string }) {
     const [showSearch, setShowSearch] = useState(false);
+    const [_, setInFocus] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
     const onCloseSearch = useCallback(() => {
         setShowSearch(false);
         setSearchTerm('');
     }, []);
+    const onKeyDown = useCallback(
+        (e: KeyboardEvent<HTMLInputElement>) => {
+            if (e.key === 'Escape') {
+                onCloseSearch();
+            }
+        },
+        [onCloseSearch]
+    );
+    const onFocus = useCallback(() => setInFocus(true), []);
+    const onBlur = useCallback(() => setInFocus(false), []);
+
     return showSearch ? (
         <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 ml-2.5 flex items-center">
             <input
+                onFocus={onFocus}
+                onBlur={onBlur}
+                onKeyDown={onKeyDown}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 type="text"
                 autoFocus
