@@ -22,8 +22,8 @@ export function Prompt() {
             />
             <button
                 className={classNames(
-                    'h-[1.875rem] self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
-                    'bg-blue-600 rounded-xl flex items-center justify-center',
+                    'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
+                    'bg-blue-600 rounded-xl flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer hover:bg-blue-700 active:bg-blue-800 active:scale-90'
                 )}
             >
