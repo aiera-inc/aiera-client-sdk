@@ -1,26 +1,26 @@
-import React, { Fragment, ReactElement, RefObject, useCallback, useEffect, useRef, useState } from 'react';
-import './styles.css';
-import { EventList, EventListEvent, EventRowProps } from '../EventList';
-import { Transcript } from '../Transcript';
-import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
-import { Toggle } from '@aiera/client-sdk/components/Toggle';
-import { ChangeEvent, EventConnectionStatus, User } from '@aiera/client-sdk/types';
-import { DateTime } from 'luxon';
-import classNames from 'classnames';
-import { isToday } from '@aiera/client-sdk/lib/datetimes';
-import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
-import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
-import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
+import { Input } from '@aiera/client-sdk/components/Input';
 import { Playbar } from '@aiera/client-sdk/components/Playbar';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { Input } from '@aiera/client-sdk/components/Input';
 import { MagnifyingGlass } from '@aiera/client-sdk/components/Svg/MagnifyingGlass';
-import debounce from 'lodash.debounce';
+import { TimeAgo } from '@aiera/client-sdk/components/TimeAgo';
+import { Toggle } from '@aiera/client-sdk/components/Toggle';
+import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { getEventCreatorName, getPrimaryQuote, useAutoTrack } from '@aiera/client-sdk/lib/data';
+import { isToday } from '@aiera/client-sdk/lib/datetimes';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
-import { SortableContext, horizontalListSortingStrategy, arrayMove } from '@dnd-kit/sortable';
+import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
+import { ChangeHandler, EventConnectionStatus, User } from '@aiera/client-sdk/types';
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
-import { restrictToHorizontalAxis, restrictToFirstScrollableAncestor } from '@dnd-kit/modifiers';
+import { restrictToFirstScrollableAncestor, restrictToHorizontalAxis } from '@dnd-kit/modifiers';
+import { SortableContext, arrayMove, horizontalListSortingStrategy } from '@dnd-kit/sortable';
+import classNames from 'classnames';
+import debounce from 'lodash.debounce';
+import { DateTime } from 'luxon';
+import React, { Fragment, ReactElement, RefObject, useCallback, useEffect, useRef, useState } from 'react';
+import { EventList, EventListEvent, EventRowProps } from '../EventList';
+import { Transcript } from '../Transcript';
+import './styles.css';
 
 interface AieracastSharedProps {}
 
@@ -48,7 +48,7 @@ export function AieracastUI(props: AieracastUIProps): ReactElement {
     const [searchTerm, setSearchState] = useState<string>('');
     const [globalSearch, setGlobalSearchState] = useState<string>('');
     const toggleSidebar = useCallback(() => setSidebarState(!showSidebar), [showSidebar]);
-    const onSearch = useCallback((_, { value }: ChangeEvent<string | null>) => {
+    const onSearch: ChangeHandler<string | null> = useCallback((_, { value }) => {
         const newValue = value || '';
         setSearchState(newValue);
         updateGlobalSearch(newValue);

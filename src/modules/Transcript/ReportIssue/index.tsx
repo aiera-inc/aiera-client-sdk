@@ -97,7 +97,7 @@ export function ReportIssue(props: ReportIssueProps): ReactElement {
     const config = useConfig();
     const [submitState, setSubmitState] = useState<string>('');
     const [issue, setIssue] = useState<string>('');
-    const onChangeIssue = useCallback((_, { value }) => {
+    const onChangeIssue: ChangeHandler<string> = useCallback((_, { value }) => {
         if (typeof value === 'string') {
             setIssue(value);
         }

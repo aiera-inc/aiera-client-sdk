@@ -1,12 +1,12 @@
 import type { Listener } from '@finos/fdc3';
 import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 
 import { Provider } from '@aiera/client-sdk/components/Provider';
 import '@aiera/client-sdk/css/styles.css';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
+import { createRoot } from 'react-dom/client';
 
 const useMessageBus = () => {
     const bus = useMessageListener(
@@ -54,4 +54,6 @@ const App: FC = (): ReactElement => {
     );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(<App />);

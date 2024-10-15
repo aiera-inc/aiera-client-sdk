@@ -1,6 +1,6 @@
 {
     "name": "@aiera/client-sdk",
-    "version": "0.0.75",
+    "version": "0.0.76",
     "description": "The Aiera Client SDK",
     "author": "Aiera, Inc.",
     "license": "CC-BY-NC-ND-4.0",
@@ -39,8 +39,8 @@
         "pre-commit": "npm run build:lib:types && concurrently lint-staged npm:test"
     },
     "peerDependencies": {
-        "react": "17.0.2",
-        "react-dom": "17.0.2"
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1"
     },
     "devDependencies": {
         "@babel/preset-env": "^7.15.6",
@@ -64,9 +64,9 @@
         "@types/lodash.debounce": "^4.0.7",
         "@types/lodash.merge": "^4.6.6",
         "@types/luxon": "^2.0.0",
-        "@types/react": "^17.0.14",
+        "@types/react": "^18.3.11",
         "@types/react-calendar": "^3.5.2",
-        "@types/react-dom": "^17.0.9",
+        "@types/react-dom": "^18.3.1",
         "@types/react-frame-component": "^4.1.2",
         "@types/react-text-mask": "^5.4.11",
         "@types/yargs": "^17.0.3",
@@ -92,8 +92,8 @@
         "postcss": "^8.3.6",
         "postcss-load-config": "^3.1.0",
         "prettier": "^2.3.2",
-        "react": "17.0.2",
-        "react-dom": "17.0.2",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "rimraf": "^3.0.2",
         "tailwindcss": "3.0.18",
         "typedoc": "^0.21.5",

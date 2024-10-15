@@ -414,7 +414,7 @@ export function useAlertList(
     );
 
     const updateAlertList = useCallback(
-        (date: string, id: string, action, metaData?: AlertEventMetaData) => {
+        (date: string, id: string, action: string, metaData?: AlertEventMetaData) => {
             setAlertList((state: AlertList) => {
                 const cleanState: AlertList = {
                     dates: {

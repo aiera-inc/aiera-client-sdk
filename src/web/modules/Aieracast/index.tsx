@@ -1,15 +1,15 @@
-import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import type { Instrument, InstrumentList, Listener } from '@finos/fdc3';
+import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
 
-import { Provider } from '@aiera/client-sdk/components/Provider';
-import { useMessageListener } from '@aiera/client-sdk/lib/msg';
-import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import { useClient } from '@aiera/client-sdk/api/client';
+import { Provider } from '@aiera/client-sdk/components/Provider';
 import '@aiera/client-sdk/css/styles.css';
 import { usePlaySound } from '@aiera/client-sdk/lib/data';
+import { useMessageListener } from '@aiera/client-sdk/lib/msg';
 import { Aieracast } from '@aiera/client-sdk/modules/Aieracast';
+import { Auth } from '@aiera/client-sdk/modules/Auth';
+import { createRoot } from 'react-dom/client';
 
 const useMessageBus = () => {
     const { playSound } = usePlaySound();
@@ -99,4 +99,6 @@ const App: FC = (): ReactElement => {
     );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(<App />);

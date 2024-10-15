@@ -247,7 +247,7 @@ describe('usePagingQuery', () => {
     test('handles merging query results', async () => {
         const { result, rerender } = await actAndFlush(() =>
             renderHook(
-                (props) =>
+                (props: { fromIndex: number; children?: ReactNode }) =>
                     usePagingQuery({
                         mergeResults,
                         query,

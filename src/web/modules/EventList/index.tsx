@@ -1,6 +1,6 @@
 import React, { FC, ReactElement, StrictMode, useEffect } from 'react';
-import ReactDOM from 'react-dom';
 import type { Instrument, InstrumentList, Listener } from '@finos/fdc3';
+import { createRoot } from 'react-dom/client';
 
 import { Provider } from '@aiera/client-sdk/components/Provider';
 import { useMessageListener } from '@aiera/client-sdk/lib/msg';
@@ -99,4 +99,6 @@ const App: FC = (): ReactElement => {
     );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(<App />);

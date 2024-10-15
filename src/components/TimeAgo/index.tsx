@@ -14,7 +14,11 @@ interface TimeAgoUIProps extends TimeAgoSharedProps {
 
 export function TimeAgoUI(props: TimeAgoUIProps): ReactElement {
     const { className, timeAgo } = props;
-    return <div className={className}>{timeAgo}</div>;
+    if (typeof timeAgo === 'string') {
+        return <div className={className}>{timeAgo}</div>;
+    }
+
+    return <></>;
 }
 
 /** @notExported */

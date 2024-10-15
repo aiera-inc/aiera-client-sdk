@@ -1,10 +1,10 @@
 import React, { FC, ReactElement, StrictMode } from 'react';
-import ReactDOM from 'react-dom';
 
 import { Provider } from '@aiera/client-sdk/components/Provider';
+import '@aiera/client-sdk/css/styles.css';
 import { Auth } from '@aiera/client-sdk/modules/Auth';
 import { EventList } from '@aiera/client-sdk/modules/EventList';
-import '@aiera/client-sdk/css/styles.css';
+import { createRoot } from 'react-dom/client';
 
 const App: FC = (): ReactElement => {
     return (
@@ -31,4 +31,6 @@ const App: FC = (): ReactElement => {
     );
 };
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container!);
+root.render(<App />);
