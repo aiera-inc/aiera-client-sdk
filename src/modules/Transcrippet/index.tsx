@@ -292,7 +292,6 @@ function useTranscrippetData(id = '') {
                     startMs
                     status
                     transcript
-                    transcriptionAudioOffsetSeconds
                     trimmedAudioUrl
                     wordDurationsMs
                 }
