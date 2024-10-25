@@ -1,9 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, { ReactNode } from 'react';
 import { useClient } from 'urql';
-import { screen, render } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
-
+import { screen, render, renderHook } from '@testing-library/react';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useRealtime } from '@aiera/client-sdk/lib/realtime';

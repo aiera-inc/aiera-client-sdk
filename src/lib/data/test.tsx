@@ -1,7 +1,7 @@
 import React, { ReactNode, useEffect } from 'react';
 import { actAndFlush, getMockedClient, MockProvider, renderWithProvider } from 'testUtils';
 import { fromValue } from 'wonka';
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 
 import { User } from '@aiera/client-sdk/types/generated';
 import {

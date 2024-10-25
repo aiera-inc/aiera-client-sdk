@@ -351,7 +351,9 @@ describe('EventList', () => {
         );
         const eventItem = screen.getByText('TICK');
         if (eventItem.closest('li')) {
-            eventItem?.closest('li')?.focus();
+            await actAndFlush(() => {
+                eventItem?.closest('li')?.focus();
+            });
         }
 
         // Select previous item

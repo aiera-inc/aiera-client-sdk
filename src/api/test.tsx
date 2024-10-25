@@ -2,8 +2,7 @@
 import React, { ReactNode } from 'react';
 import gql from 'graphql-tag';
 import { GraphQLError } from 'graphql';
-import { render, screen } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { render, screen, renderHook } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { makeOperation, CombinedError, GraphQLRequest, OperationContext } from '@urql/core';
 import { fromValue } from 'wonka';
