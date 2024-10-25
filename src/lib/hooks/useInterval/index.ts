@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 
 /**
  * A hook that will run a callback function on a given interval. If the interval
- * changes, the existing callback is cancelled and a new one is setup with the
+ * changes, the existing callback is cancelled and a new one is set up with the
  * new interval.
  *
  * @param callback - The callback to run.
