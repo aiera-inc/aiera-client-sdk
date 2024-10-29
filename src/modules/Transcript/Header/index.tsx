@@ -236,8 +236,6 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                             event?.webcastUrls?.length ||
                             event?.audioRecordingUrl;
                         const createdBy = getEventCreatorName(event?.creator as User);
-                        const audioOffset = (event?.audioRecordingOffsetMs ?? 0) / 1000;
-
                         return (
                             <>
                                 <div
@@ -278,7 +276,7 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                     title: event.title,
                                                 }}
                                                 url={event.isLive ? event.liveStreamUrl : event.audioProxy}
-                                                offset={audioOffset || 0}
+                                                firstTranscriptItemStartMs={event?.firstTranscriptItemStartMs || 0}
                                             />
                                         </div>
                                     )}

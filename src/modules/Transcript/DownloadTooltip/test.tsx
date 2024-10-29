@@ -15,7 +15,7 @@ const event = {
     publishedTranscriptExpected: true,
     hasTranscript: true,
     hasPublishedTranscript: true,
-    audioRecordingOffsetMs: 0,
+    firstTranscriptItemStartMs: 0,
     dialInPin: '232323',
     dialInPhoneNumbers: ['23131232', '213123123'],
     webcastUrls: ['http://www.example.com'],
