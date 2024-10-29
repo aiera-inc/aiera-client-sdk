@@ -39,12 +39,12 @@ describe('audio library', () => {
 
     test('duration', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 0 });
         // @ts-ignore
         player.audio.duration = 100;
         player.rawSeek(5);
         expect(player.rawDuration).toBe(100);
-        expect(player.displayDuration).toBe(90);
+        expect(player.displayDuration).toBe(100);
     });
 
     test('play()', () => {
@@ -54,7 +54,7 @@ describe('audio library', () => {
         void player.play({
             id: '1',
             url: srcUrl,
-            offset: 0,
+            firstTranscriptItemStartMs: 0,
             metaData: { quote: quote as Quote, eventType: EventType.Earnings },
         });
 
@@ -74,54 +74,63 @@ describe('audio library', () => {
         expect(pause).toHaveBeenCalled();
     });
 
+    /**
+     * We were originally using an Event's transcriptionAudioOffsetSeconds here,
+     * but we have since deprecated that field - it was causing alignment issues when greater than 0,
+     * particularly with published transcripts.
+     * We want to load the full audio in the player, but when viewing a transcript, we need to
+     * auto-seek to the first transcript segment's startMs.
+     * This skips the opening mambo jumbo (e.g. conversing with the operator), and
+     * helps keep the published transcripts aligned with audio.
+     */
     test('seek()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
         player.rawSeek(5);
         expect(player.audio.currentTime).toBe(5);
         expect(player.rawCurrentTime).toBe(5);
-        expect(player.displayCurrentTime).toBe(0);
+        expect(player.displayCurrentTime).toBe(5);
         player.displaySeek(5);
-        expect(player.audio.currentTime).toBe(15);
-        expect(player.rawCurrentTime).toBe(15);
+        expect(player.audio.currentTime).toBe(5);
+        expect(player.rawCurrentTime).toBe(5);
         expect(player.displayCurrentTime).toBe(5);
         player.rawSeek(15);
         expect(player.audio.currentTime).toBe(15);
         expect(player.rawCurrentTime).toBe(15);
-        expect(player.displayCurrentTime).toBe(5);
+        expect(player.displayCurrentTime).toBe(15);
     });
 
     test('ff()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
         // @ts-ignore
         player.audio.duration = 100;
         player.rawSeek(15);
         player.ff(15);
         expect(player.rawCurrentTime).toBe(30);
-        expect(player.displayCurrentTime).toBe(20);
+        expect(player.displayCurrentTime).toBe(30);
         player.ff(100);
         expect(player.rawCurrentTime).toBe(100);
-        expect(player.displayCurrentTime).toBe(90);
+        expect(player.displayCurrentTime).toBe(100);
     });
 
     test('rewind()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 1000 });
         // @ts-ignore
         player.audio.duration = 100;
         player.rawSeek(30);
         player.rewind(15);
         expect(player.rawCurrentTime).toBe(15);
-        expect(player.displayCurrentTime).toBe(5);
+        expect(player.displayCurrentTime).toBe(15);
         player.rewind(100);
-        expect(player.displayCurrentTime).toBe(0);
-        expect(player.rawCurrentTime).toBe(10);
+        expect(player.displayCurrentTime).toBe(1);
+        expect(player.rawCurrentTime).toBe(1);
     });
 
     test('seekToEnd()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
         // @ts-ignore
         player.audio.duration = 100;
         player.seekToEnd();
@@ -130,15 +139,15 @@ describe('audio library', () => {
 
     test('seekToStart()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 2000 });
         // @ts-ignore
         player.seekToStart();
-        expect(player.rawCurrentTime).toBe(10);
+        expect(player.rawCurrentTime).toBe(2);
     });
 
     test('setRate()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
         // @ts-ignore
         player.setRate(1.3);
         expect(player.playbackRate).toBe(1.3);
@@ -146,7 +155,7 @@ describe('audio library', () => {
 
     test('setVolume()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
         // @ts-ignore
         player.setVolume(0.3);
         expect(player.volume).toBe(0.3);
@@ -154,7 +163,7 @@ describe('audio library', () => {
 
     test('togglePlaybackRate()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', offset: 10 });
+        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
         // @ts-ignore
         player.setRate(1.3);
         player.togglePlaybackRate();
@@ -180,7 +189,7 @@ describe('audio library', () => {
             await player.play({
                 id: '1',
                 url: srcUrl,
-                offset: 0,
+                firstTranscriptItemStartMs: 0,
                 metaData: { quote: quote as Quote, eventType: EventType.Earnings, isLive: false },
             });
 
@@ -195,7 +204,7 @@ describe('audio library', () => {
             await player.play({
                 id: '2',
                 url: 'other url',
-                offset: 0,
+                firstTranscriptItemStartMs: 0,
                 metaData: { quote: quote as Quote, eventType: EventType.Earnings },
             });
             expect(player.errorInfo.error).toBeFalsy();
@@ -206,7 +215,7 @@ describe('audio library', () => {
             await player.play({
                 id: '2',
                 url: 'other url',
-                offset: 0,
+                firstTranscriptItemStartMs: 0,
                 metaData: { quote: quote as Quote, eventType: EventType.Earnings },
             });
             expect(player.errorInfo.timeout).toBeTruthy();
@@ -222,12 +231,12 @@ describe('audio library', () => {
             await player.play({
                 id: '3',
                 url: 'other url 2',
-                offset: 0,
+                firstTranscriptItemStartMs: 0,
                 metaData: { quote: quote as Quote, eventType: EventType.Earnings },
             });
 
             // Go forward more than 2s with an adjusted currentTime
-            // and make sure it doesnt have an error
+            // and make sure it doesn't have an error
             player.audio.currentTime = 2.5;
             jest.advanceTimersByTime(2500);
             expect(player.errorInfo.error).toBeFalsy();

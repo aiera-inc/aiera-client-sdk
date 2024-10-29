@@ -19,6 +19,7 @@ export interface EventMetaData {
     eventDate?: string;
     eventType?: EventType;
     externalAudioStreamUrl?: string | null;
+    firstTranscriptItemStartMs?: number;
     isLive?: boolean;
     localTicker?: string;
     quote?: Maybe<DeepPartial<Quote>>;
@@ -26,20 +27,20 @@ export interface EventMetaData {
 }
 
 export class AudioPlayer {
-    id?: string;
-    url?: string;
-    errorInfo: {
-        timeout?: number;
-        lastPosition?: number;
-        error: boolean;
-    };
-    metaData?: EventMetaData;
-    offset = 0;
-    playingStartTime = 0;
     audio: HTMLAudioElement;
+    errorInfo: {
+        error: boolean;
+        lastPosition?: number;
+        timeout?: number;
+    };
+    firstTranscriptItemStartMs = 0;
+    id?: string;
     liveCatchupThreshold = 5;
-    player?: playerType;
     loadNewAsset?: boolean;
+    metaData?: EventMetaData;
+    player?: playerType;
+    playingStartTime = 0;
+    url?: string;
 
     constructor() {
         this.errorInfo = {
@@ -129,7 +130,12 @@ export class AudioPlayer {
         return stream.split(/[#?]/)[0]?.split('.').pop()?.trim();
     }
 
-    async init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
+    async init(opts?: {
+        firstTranscriptItemStartMs?: number;
+        id: string;
+        metaData?: EventMetaData;
+        url: string;
+    }): Promise<void> {
         // Ignore query parameters when checking if the audio url changed
         const currentUrl = this.player?.getAssetUri()?.split('?')[0];
         const optsUrl = (opts?.url || '').split('?')[0];
@@ -139,7 +145,7 @@ export class AudioPlayer {
             const { id } = opts;
             const startTime = 0;
             this.id = id;
-            this.offset = opts.offset;
+            this.firstTranscriptItemStartMs = opts.firstTranscriptItemStartMs || 0;
             if (url !== this.url || !this.playing(this.id)) {
                 // different event - load new asset/manifest
                 let mimeType: string | null = null;
@@ -182,8 +188,12 @@ export class AudioPlayer {
         }
 
         // TODO Make sure these trigger an update when they change
-        if (opts && opts.offset !== this.offset) {
-            this.offset = opts.offset;
+        if (
+            opts &&
+            opts.firstTranscriptItemStartMs &&
+            opts.firstTranscriptItemStartMs !== this.firstTranscriptItemStartMs
+        ) {
+            this.firstTranscriptItemStartMs = opts.firstTranscriptItemStartMs;
         }
 
         // TODO Make sure these trigger an update when they change
@@ -206,9 +216,14 @@ export class AudioPlayer {
         this.audio.dispatchEvent(new Event('update'));
     };
 
-    async play(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
+    async play(opts?: {
+        firstTranscriptItemStartMs: number;
+        id: string;
+        url: string;
+        metaData?: EventMetaData;
+    }): Promise<void> {
         await this.init(opts);
-        if (this.rawCurrentTime === 0) this.rawSeek(this.offset);
+        if (this.rawCurrentTime === 0) this.rawSeek(this.firstTranscriptItemStartMs / 1000);
 
         // If after 2 seconds we still haven't started actually playing, set an error state.
         // Using this instead of audio.on('error') because errors do happen that don't affect
@@ -224,7 +239,7 @@ export class AudioPlayer {
 
         const isLive = opts?.metaData?.isLive;
         if (isLive && this.player) {
-            const currentTime = this.rawCurrentTime - this.offset;
+            const currentTime = this.rawCurrentTime;
             if (this.loadNewAsset || currentTime === 0) {
                 this.player.goToLive();
                 this.player.trickPlay(1);
@@ -243,24 +258,28 @@ export class AudioPlayer {
     }
 
     displaySeek(position: number): void {
-        this.audio.currentTime = position + this.offset;
+        this.audio.currentTime = position;
     }
 
     seekToEnd(): void {
         this.audio.currentTime = this.rawDuration;
     }
 
+    /**
+     * We were originally using an Event's transcriptionAudioOffsetSeconds here,
+     * but we have since deprecated that field - it was causing alignment issues when greater than 0,
+     * particularly with published transcripts.
+     * We want to load the full audio in the player, but when viewing a transcript, we need to
+     * auto-seek to the first transcript segment's startMs.
+     * This skips the opening mambo jumbo (e.g. conversing with the operator), and
+     * helps keep the published transcripts aligned with audio.
+     */
     seekToStart(): void {
-        this.audio.currentTime = this.offset;
+        this.audio.currentTime = this.firstTranscriptItemStartMs / 1000;
     }
 
-    // The offset is generally not used, as its included in the
-    // data for paragraphMs etc. however, when getting an external
-    // value for a seek position (such as seekTranscriptSeconds),
-    // that value has no knowledge of an offset, so we should apply it
-    rawSeek(position: number, useOffset = false): void {
-        const newTime = useOffset ? position + this.offset : position;
-        this.audio.currentTime = newTime;
+    rawSeek(position: number): void {
+        this.audio.currentTime = position;
 
         // We want to re-render the audio player
         // on-seek if the audio isn't currently
@@ -276,7 +295,7 @@ export class AudioPlayer {
     }
 
     rewind(distance: number): void {
-        this.rawSeek(Math.max(this.rawCurrentTime - distance, this.offset));
+        this.rawSeek(Math.max(this.rawCurrentTime - distance, this.firstTranscriptItemStartMs / 1000));
     }
 
     setRate(rate: number): void {
@@ -339,11 +358,11 @@ export class AudioPlayer {
     }
 
     get displayDuration(): number {
-        return Math.max(0, this.rawDuration - this.offset);
+        return Math.max(0, this.rawDuration);
     }
 
     get displayCurrentTime(): number {
-        return Math.max(0, this.rawCurrentTime - this.offset);
+        return Math.max(0, this.rawCurrentTime);
     }
 
     get error(): boolean {
