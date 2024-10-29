@@ -326,14 +326,14 @@ function usePlaybarDrag(
     return [knobRef, knobLeft, onClickTrack, percentPlayed];
 }
 
-function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaData) {
+function usePlayer(id?: string, url?: string, firstTranscriptItemStartMs = 0, metaData?: EventMetaData) {
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
     useEffect(() => {
         if (id && !audioPlayer.playing(null)) {
             /* eslint-disable @typescript-eslint/no-floating-promises */
             (async (): Promise<void> => {
-                await audioPlayer.init({ id, url: url || '', offset, metaData });
+                await audioPlayer.init({ id, url: url || '', firstTranscriptItemStartMs, metaData });
             })();
         }
 
@@ -343,7 +343,7 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                 audioPlayer.player?.unload();
             }
         };
-    }, [id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
+    }, [id, url, firstTranscriptItemStartMs, ...(Object.values(metaData || {}) as unknown[])]);
 
     const isActive = audioPlayer.id;
     const isPlaying = audioPlayer.playing(null);
@@ -379,7 +379,7 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
         } else {
             void track('Click', 'Audio Play', { eventId: id, url });
             if (id) {
-                void audioPlayer.play({ id, url: url || '', offset, metaData });
+                void audioPlayer.play({ id, url: url || '', firstTranscriptItemStartMs, metaData });
             } else {
                 void audioPlayer.play();
             }
@@ -444,9 +444,15 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                 });
                 audioPlayer.setPlayingStartTime(0);
             }
-            void audioPlayer.play({ id, url: url || '', offset, metaData });
+            void audioPlayer.play({ id, url: url || '', firstTranscriptItemStartMs, metaData });
         }
-    }, [audioPlayer.playingStartTime, id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
+    }, [
+        audioPlayer.playingStartTime,
+        id,
+        url,
+        firstTranscriptItemStartMs,
+        ...(Object.values(metaData || {}) as unknown[]),
+    ]);
 
     return {
         audioPlayer,
@@ -469,7 +475,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
     hidePlayer?: boolean;
     id?: string;
     metaData?: EventMetaData;
-    offset?: number;
+    firstTranscriptItemStartMs?: number;
     onClickCalendar?: ChangeHandler<string>;
     url?: string;
 }
@@ -478,7 +484,7 @@ export interface PlaybarProps extends PlaybarSharedProps {
  * Renders Playbar
  */
 export function Playbar(props: PlaybarProps): ReactElement | null {
-    const { hideEventDetails, hidePlayer, id, url, offset = 0, metaData, showFullDetails } = props;
+    const { hideEventDetails, hidePlayer, id, url, firstTranscriptItemStartMs = 0, metaData, showFullDetails } = props;
     const {
         audioPlayer,
         isActive,
@@ -492,7 +498,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
         clear,
         swap,
         toggleRate,
-    } = usePlayer(id, url, offset, metaData);
+    } = usePlayer(id, url, firstTranscriptItemStartMs, metaData);
     const [knobRef, knobLeft, onClickTrack, percentPlayed] = usePlaybarDrag(audioPlayer);
 
     const onClickCalendar = useCallback(
