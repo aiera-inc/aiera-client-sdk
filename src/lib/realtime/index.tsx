@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState, useContext, ReactNode, ReactElement } from 'react';
+import React, { createContext, useEffect, useState, useContext, ReactNode, ReactElement, useCallback } from 'react';
 import gql from 'graphql-tag';
 import Pusher from 'pusher-js';
 import merge from 'lodash.merge';
@@ -37,6 +37,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
             }
         `,
     });
+
     useEffect(() => {
         if (!currentUser) {
             if (userQuery.status === 'success' && userQuery.state.data?.currentUser?.id) {
@@ -79,7 +80,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
         if (!client && !passedClient && appKey && cluster) {
             setClient(new Pusher(appKey, merge({ cluster }, realtimeOptions)));
         }
-    }, [appConfig, client, passedClient]);
+    }, [appConfig, client, passedClient, realtimeOptions]);
 
     return <Context.Provider value={client}>{children}</Context.Provider>;
 }
@@ -90,14 +91,28 @@ export function useRealtime(): Realtime | undefined {
 
 export function useRealtimeEvent<T>(channelName: string, eventName: string, callback: (data?: T) => void): void {
     const client = useRealtime();
+
+    // Stabilize the callback reference
+    const stableCallback = useCallback(
+        (data?: T) => {
+            callback(data);
+        },
+        [callback]
+    );
+
     useEffect(() => {
         if (!client) return;
-        const channel = client.subscribe(channelName);
-        channel.bind(eventName, callback);
 
+        // Create a stable channel reference
+        const channel = client.subscribe(channelName);
+
+        // Bind the event handler
+        channel.bind(eventName, stableCallback);
+
+        // Cleanup function
         return () => {
-            channel.unbind(eventName, callback);
-            channel.unsubscribe();
+            channel.unbind(eventName, stableCallback);
+            client.unsubscribe(channelName);
         };
-    }, [client, channelName, eventName, callback]);
+    }, [client, channelName, eventName, stableCallback]); // Include stableCallback in deps
 }
