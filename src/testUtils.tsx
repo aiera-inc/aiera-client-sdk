@@ -59,6 +59,9 @@ export function getMockedRealtime(): MockedRealtime {
             channels[channelName] = channel;
             return channel;
         }),
+        unsubscribe: jest.fn((channelName: string) => {
+            channels[channelName]?.unsubscribe();
+        }),
     };
 }
 
