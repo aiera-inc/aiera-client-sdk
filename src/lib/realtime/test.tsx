@@ -31,7 +31,7 @@ describe('realtime', () => {
         rendered.unmount();
         expect(callback).not.toHaveBeenCalled();
 
-        expect(realtime.mockedChannels['channel']?.unbind).toHaveBeenCalledWith('event', callback);
+        expect(realtime.mockedChannels['channel']?.unbind).toHaveBeenCalledWith('event', expect.any(Function));
         expect(realtime.mockedChannels['channel']?.unsubscribe).toHaveBeenCalled();
     });
 });

@@ -59,6 +59,9 @@ export function getMockedRealtime(): MockedRealtime {
             channels[channelName] = channel;
             return channel;
         }),
+        unsubscribe: jest.fn((channelName: string) => {
+            channels[channelName]?.unsubscribe();
+        }),
     };
 }
 
@@ -138,7 +141,7 @@ export function renderWithProvider(
 
 /**
  * With jest, if you have some async code and can't directly
- * wait on the promise (ie. it happens as some side effect),
+ * wait on the promise (i.e. it happens as some side effect),
  * you may need some other way to wait for those to run before
  * moving on to expect/assert statements. The runtime handles promises
  * in a queue, so this adds one to the end of the queue and waits for

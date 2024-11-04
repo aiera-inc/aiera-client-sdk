@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment, @typescript-eslint/unbound-method */
 import { RefCallback } from 'react';
-import { act, fireEvent } from '@testing-library/react';
-import { renderHook } from '@testing-library/react-hooks';
+import { act, fireEvent, renderHook } from '@testing-library/react';
 
 import { useAutoScroll } from '.';
 
