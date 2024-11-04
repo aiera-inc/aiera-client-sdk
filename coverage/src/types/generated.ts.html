@@ -2193,7 +2193,69 @@
 <a name='L2128'></a><a href='#L2128'>2128</a>
 <a name='L2129'></a><a href='#L2129'>2129</a>
 <a name='L2130'></a><a href='#L2130'>2130</a>
-<a name='L2131'></a><a href='#L2131'>2131</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L2131'></a><a href='#L2131'>2131</a>
+<a name='L2132'></a><a href='#L2132'>2132</a>
+<a name='L2133'></a><a href='#L2133'>2133</a>
+<a name='L2134'></a><a href='#L2134'>2134</a>
+<a name='L2135'></a><a href='#L2135'>2135</a>
+<a name='L2136'></a><a href='#L2136'>2136</a>
+<a name='L2137'></a><a href='#L2137'>2137</a>
+<a name='L2138'></a><a href='#L2138'>2138</a>
+<a name='L2139'></a><a href='#L2139'>2139</a>
+<a name='L2140'></a><a href='#L2140'>2140</a>
+<a name='L2141'></a><a href='#L2141'>2141</a>
+<a name='L2142'></a><a href='#L2142'>2142</a>
+<a name='L2143'></a><a href='#L2143'>2143</a>
+<a name='L2144'></a><a href='#L2144'>2144</a>
+<a name='L2145'></a><a href='#L2145'>2145</a>
+<a name='L2146'></a><a href='#L2146'>2146</a>
+<a name='L2147'></a><a href='#L2147'>2147</a>
+<a name='L2148'></a><a href='#L2148'>2148</a>
+<a name='L2149'></a><a href='#L2149'>2149</a>
+<a name='L2150'></a><a href='#L2150'>2150</a>
+<a name='L2151'></a><a href='#L2151'>2151</a>
+<a name='L2152'></a><a href='#L2152'>2152</a>
+<a name='L2153'></a><a href='#L2153'>2153</a>
+<a name='L2154'></a><a href='#L2154'>2154</a>
+<a name='L2155'></a><a href='#L2155'>2155</a>
+<a name='L2156'></a><a href='#L2156'>2156</a>
+<a name='L2157'></a><a href='#L2157'>2157</a>
+<a name='L2158'></a><a href='#L2158'>2158</a>
+<a name='L2159'></a><a href='#L2159'>2159</a>
+<a name='L2160'></a><a href='#L2160'>2160</a>
+<a name='L2161'></a><a href='#L2161'>2161</a>
+<a name='L2162'></a><a href='#L2162'>2162</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4385,6 +4447,35 @@ export enum BillingSource {
   StripeTest = 'stripe_test'
 }
 &nbsp;
+export type ChatContextScope = {
+  __typename?: 'ChatContextScope';
+  scopeId: Scalars['ID'];
+  scopeType: ChatContextScopeType;
+};
+&nbsp;
+export enum ChatContextScopeType {
+  Company = 'company',
+  Event = 'event',
+  Filing = 'filing',
+  MarketIndex = 'market_index',
+  News = 'news',
+  Research = 'research',
+  Sector = 'sector',
+  Subsector = 'subsector',
+  Watchlist = 'watchlist'
+}
+&nbsp;
+export type ChatMessageSuggestion = {
+  __typename?: 'ChatMessageSuggestion';
+  content: Scalars['String'];
+  contextScope?: Maybe&lt;ChatContextScope&gt;;
+  createdAt: Scalars['DateTime'];
+  id: Scalars['ID'];
+  retrievalRequestId?: Maybe&lt;Scalars['ID']&gt;;
+  runnerVersion: Scalars['Int'];
+  updatedAt: Scalars['DateTime'];
+};
+&nbsp;
 export type Company = {
   __typename?: 'Company';
   cik?: Maybe&lt;Scalars['String']&gt;;
@@ -4625,6 +4716,7 @@ export type Event = {
   eventGroups: Array&lt;EventGroup&gt;;
   eventType: EventType;
   externalAudioStreamUrl?: Maybe&lt;Scalars['String']&gt;;
+  firstTranscriptItemStartMs: Scalars['Int'];
   fiscalQuarter?: Maybe&lt;Scalars['Int']&gt;;
   fiscalYear?: Maybe&lt;Scalars['Int']&gt;;
   hasConnectionDetails: Scalars['Boolean'];
@@ -5208,6 +5300,7 @@ export type Query = {
   __typename?: 'Query';
   activeHosts: StatsdHostTotal;
   activeMetricsSince: StatsdActiveMetric;
+  chatMessageSuggestions: Array&lt;ChatMessageSuggestion&gt;;
   companies: Array&lt;Company&gt;;
   configuration: ApplicationConfiguration;
   containers: Container;
@@ -6460,7 +6553,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Aug 14 2024 22:44:32 GMT-0400 (Eastern Daylight Time)
+                at Mon Nov 04 2024 18:06:17 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

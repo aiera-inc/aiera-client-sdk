@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">92.5% </span>
+                <span class="strong">92.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>37/40</span>
+                <span class='fraction'>39/42</span>
             </div>
         
             
@@ -39,14 +39,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>9/9</span>
+                <span class='fraction'>10/10</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">94.87% </span>
+                <span class="strong">95.12% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>37/39</span>
+                <span class='fraction'>39/41</span>
             </div>
         
             
@@ -166,7 +166,22 @@
 <a name='L101'></a><a href='#L101'>101</a>
 <a name='L102'></a><a href='#L102'>102</a>
 <a name='L103'></a><a href='#L103'>103</a>
-<a name='L104'></a><a href='#L104'>104</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L104'></a><a href='#L104'>104</a>
+<a name='L105'></a><a href='#L105'>105</a>
+<a name='L106'></a><a href='#L106'>106</a>
+<a name='L107'></a><a href='#L107'>107</a>
+<a name='L108'></a><a href='#L108'>108</a>
+<a name='L109'></a><a href='#L109'>109</a>
+<a name='L110'></a><a href='#L110'>110</a>
+<a name='L111'></a><a href='#L111'>111</a>
+<a name='L112'></a><a href='#L112'>112</a>
+<a name='L113'></a><a href='#L113'>113</a>
+<a name='L114'></a><a href='#L114'>114</a>
+<a name='L115'></a><a href='#L115'>115</a>
+<a name='L116'></a><a href='#L116'>116</a>
+<a name='L117'></a><a href='#L117'>117</a>
+<a name='L118'></a><a href='#L118'>118</a>
+<a name='L119'></a><a href='#L119'>119</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -196,6 +211,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">237x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -253,23 +269,37 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">239x</span>
+<span class="cline-any cline-yes">247x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">238x</span>
-<span class="cline-any cline-yes">238x</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">246x</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">34x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">34x</span>
-<span class="cline-any cline-yes">34x</span>
-<span class="cline-any cline-yes">34x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { createContext, useEffect, useState, useContext, ReactNode, ReactElement } from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React, { createContext, useEffect, useState, useContext, ReactNode, ReactElement, useCallback } from 'react';
 import gql from 'graphql-tag';
 import Pusher from 'pusher-js';
 import merge from 'lodash.merge';
@@ -308,6 +338,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
             }
         `,
     });
+&nbsp;
     useEffect(() =&gt; {
         if (!currentUser) {
             if (userQuery.status === 'success' &amp;&amp; userQuery.state.data?.currentUser?.id) {
@@ -350,7 +381,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
         <span class="missing-if-branch" title="if path not taken" >I</span>if (!client &amp;&amp; !passedClient &amp;&amp; appKey &amp;&amp; <span class="branch-3 cbranch-no" title="branch not covered" >cluster)</span> {
 <span class="cstat-no" title="statement not covered" >            setClient(new Pusher(appKey, merge({ cluster }, realtimeOptions)));</span>
         }
-    }, [appConfig, client, passedClient]);
+    }, [appConfig, client, passedClient, realtimeOptions]);
 &nbsp;
     return &lt;Context.Provider value={client}&gt;{children}&lt;/Context.Provider&gt;;
 }
@@ -361,16 +392,30 @@ export function useRealtime(): Realtime | undefined {
 &nbsp;
 export function useRealtimeEvent&lt;T&gt;(channelName: string, eventName: string, callback: (data?: T) =&gt; void): void {
     const client = useRealtime();
+&nbsp;
+    // Stabilize the callback reference
+    const stableCallback = useCallback(
+        (data?: T) =&gt; {
+            callback(data);
+        },
+        [callback]
+    );
+&nbsp;
     useEffect(() =&gt; {
         <span class="missing-if-branch" title="if path not taken" >I</span>if (!client) <span class="cstat-no" title="statement not covered" >return;</span>
-        const channel = client.subscribe(channelName);
-        channel.bind(eventName, callback);
 &nbsp;
+        // Create a stable channel reference
+        const channel = client.subscribe(channelName);
+&nbsp;
+        // Bind the event handler
+        channel.bind(eventName, stableCallback);
+&nbsp;
+        // Cleanup function
         return () =&gt; {
-            channel.unbind(eventName, callback);
-            channel.unsubscribe();
+            channel.unbind(eventName, stableCallback);
+            client.unsubscribe(channelName);
         };
-    }, [client, channelName, eventName, callback]);
+    }, [client, channelName, eventName, stableCallback]); // Include stableCallback in deps
 }
 &nbsp;</pre></td></tr></table></pre>
 
@@ -379,7 +424,7 @@ export function useRealtimeEvent&lt;T&gt;(channelName: string, eventName: string
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Aug 14 2024 22:44:32 GMT-0400 (Eastern Daylight Time)
+                at Mon Nov 04 2024 18:06:17 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
