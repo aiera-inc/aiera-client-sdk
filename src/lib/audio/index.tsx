@@ -134,24 +134,25 @@ export class AudioPlayer {
     }
 
     async init(opts?: { id: string; metaData?: EventMetaData; url: string }): Promise<void> {
-        // Keep track if the player needs to the re-rendered
+        // Keep track if the player needs to be re-rendered
         let shouldTriggerUpdate = false;
+
         // Ignore query parameters when checking if the audio url changed
         const currentUrl = this.player?.getAssetUri()?.split('?')[0];
         const optsUrl = (opts?.url || '').split('?')[0];
         this.loadNewAsset = false;
+
         if (opts && (this.id !== opts.id || currentUrl !== optsUrl)) {
             let url = opts?.url;
             const { id } = opts;
             this.id = id;
-            const firstTranscriptItemStartMs = opts?.metaData?.firstTranscriptItemStartMs || 0;
-            if (firstTranscriptItemStartMs) {
-                this.timeOffset = Math.round(firstTranscriptItemStartMs / 1000);
-                this.normalizeTime = true;
-            }
+
+            // Set up normalization if we have a firstTranscriptItemStartMs
+            this.maybeSetTimeOffset(opts);
             const startTime = this.timeOffset;
+
             if (url !== this.url || !this.playing(this.id)) {
-                // different event - load new asset/manifest
+                // Different event - load new asset/manifest
                 let mimeType: string | null = null;
                 const userAgent = window.navigator.userAgent.toLowerCase();
                 const ios = /iphone|ipod|ipad/.test(userAgent);
@@ -176,7 +177,8 @@ export class AudioPlayer {
                         url = url + '&no_trim=true'; // add no_trim as the event is completed.
                     }
                 }
-                // load asset
+
+                // Load asset
                 try {
                     if (this.player) {
                         await this.player.load(url, startTime, mimeType);
@@ -188,19 +190,19 @@ export class AudioPlayer {
                     console.log(e);
                 }
             }
-            if (!shouldTriggerUpdate) {
-                shouldTriggerUpdate = true;
-            }
+
+            shouldTriggerUpdate = true;
         }
 
-        if (opts?.metaData?.firstTranscriptItemStartMs && !this.timeOffset) {
-            this.timeOffset = Math.round(opts.metaData.firstTranscriptItemStartMs / 1000);
+        if (!shouldTriggerUpdate && this.maybeSetTimeOffset(opts)) {
             shouldTriggerUpdate = true;
         }
 
         if (opts?.metaData && Object.keys(opts.metaData).length > 0 && Object.keys(this.metaData || {}).length === 0) {
             this.metaData = opts.metaData;
-            shouldTriggerUpdate = true;
+            if (!shouldTriggerUpdate) {
+                shouldTriggerUpdate = true;
+            }
         }
 
         if (shouldTriggerUpdate) {
@@ -226,14 +228,34 @@ export class AudioPlayer {
         this.audio.dispatchEvent(new Event('update'));
     };
 
+    /**
+     * Handle time normalization for non-live events.
+     * By "normalization", we mean play the audio from the firstTranscriptItemStartMs position,
+     * but show the starting position as 00:00:00 in the player,
+     * and show the duration relative to the firstTranscriptItemStartMs offset.
+     * Here's an example:
+     * Event has firstTranscriptItemStartMs value of 120000 (2 minutes).
+     * Full audio is 40 minutes long, but we're starting at the 2-minute mark.
+     * The player should show the total duration as 00:38:00 and pressing play should start at 00:00:00.
+     * Returns true/false based on whether the offset was applied.
+     */
+    maybeSetTimeOffset(opts?: { id: string; url: string; metaData?: EventMetaData }): boolean {
+        let offsetApplied = false;
+
+        if (!opts?.metaData?.isLive && opts?.metaData?.firstTranscriptItemStartMs && !this.timeOffset) {
+            this.timeOffset = Math.round((opts.metaData.firstTranscriptItemStartMs || 0) / 1000);
+            this.normalizeTime = true;
+            offsetApplied = true;
+        }
+
+        return offsetApplied;
+    }
+
     async play(opts?: { id: string; url: string; metaData?: EventMetaData }): Promise<void> {
         await this.init(opts);
 
         // Set up normalization if we have a firstTranscriptItemStartMs
-        if (opts?.metaData?.firstTranscriptItemStartMs) {
-            this.timeOffset = Math.round((opts.metaData.firstTranscriptItemStartMs || 0) / 1000);
-            this.normalizeTime = true;
-        }
+        this.maybeSetTimeOffset(opts);
 
         if (this.rawCurrentTime === 0) {
             this.rawSeek(this.timeOffset);

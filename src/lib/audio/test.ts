@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { EventType, Quote } from '@aiera/client-sdk/types/generated';
-import { AudioPlayer } from '.';
+import { AudioPlayer, EventMetaData } from '.';
 
 const quote = {
     isPrimary: true,
@@ -71,6 +71,21 @@ describe('audio library', () => {
         const player = getPlayer();
         player.pause();
         expect(pause).toHaveBeenCalled();
+    });
+
+    test('maybeSetTimeOffset()', async () => {
+        const player = getPlayer();
+        let opts: { id: string; metaData?: EventMetaData; url: string } = { id: '1', url: 'url', metaData: undefined };
+        await player.init(opts);
+        expect(player.maybeSetTimeOffset(opts)).toBe(false);
+        opts = { ...opts, metaData: { isLive: false } };
+        expect(player.maybeSetTimeOffset(opts)).toBe(false);
+        opts = { ...opts, metaData: { isLive: true, firstTranscriptItemStartMs: 1000 } };
+        expect(player.maybeSetTimeOffset(opts)).toBe(false);
+        opts = { ...opts, metaData: { isLive: false, firstTranscriptItemStartMs: 1000 } };
+        expect(player.maybeSetTimeOffset(opts)).toBe(true);
+        opts = { ...opts, metaData: { isLive: false, firstTranscriptItemStartMs: 0 } };
+        expect(player.maybeSetTimeOffset(opts)).toBe(false);
     });
 
     /**
