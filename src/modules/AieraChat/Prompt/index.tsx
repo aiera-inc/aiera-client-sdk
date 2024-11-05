@@ -17,7 +17,7 @@ export function Prompt() {
             <p
                 ref={inputRef}
                 className="flex-1 py-2 pl-4 text-base outline-none chatPrompt"
-                placeholder="Type your questions here..."
+                data-placeholder="Type your questions here..."
                 contentEditable
             />
             <button
