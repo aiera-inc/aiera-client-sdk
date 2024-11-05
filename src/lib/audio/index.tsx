@@ -194,15 +194,13 @@ export class AudioPlayer {
             shouldTriggerUpdate = true;
         }
 
-        if (!shouldTriggerUpdate && this.maybeSetTimeOffset(opts)) {
+        if (this.maybeSetTimeOffset(opts)) {
             shouldTriggerUpdate = true;
         }
 
-        if (opts?.metaData && Object.keys(opts.metaData).length > 0 && Object.keys(this.metaData || {}).length === 0) {
+        if (opts?.metaData) {
             this.metaData = opts.metaData;
-            if (!shouldTriggerUpdate) {
-                shouldTriggerUpdate = true;
-            }
+            shouldTriggerUpdate = true;
         }
 
         if (shouldTriggerUpdate) {
@@ -242,7 +240,12 @@ export class AudioPlayer {
     maybeSetTimeOffset(opts?: { id: string; url: string; metaData?: EventMetaData }): boolean {
         let offsetApplied = false;
 
-        if (!opts?.metaData?.isLive && opts?.metaData?.firstTranscriptItemStartMs && !this.timeOffset) {
+        if (
+            !opts?.metaData?.isLive &&
+            opts?.metaData?.firstTranscriptItemStartMs &&
+            opts?.metaData?.firstTranscriptItemStartMs >= 500 &&
+            this.rawCurrentTime === 0
+        ) {
             this.timeOffset = Math.round((opts.metaData.firstTranscriptItemStartMs || 0) / 1000);
             this.normalizeTime = true;
             offsetApplied = true;
