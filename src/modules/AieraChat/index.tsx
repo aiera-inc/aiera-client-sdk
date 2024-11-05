@@ -6,6 +6,7 @@ import { Menu } from './Menu';
 import { Sources } from './Sources';
 import './styles.css';
 import { Prompt } from './Prompt';
+import { Messages } from './Messages';
 
 interface AieraChatSharedProps {}
 
@@ -53,7 +54,7 @@ export function AieraChatUI(): ReactElement {
             )}
         >
             <Header onOpenMenu={onOpenMenu} onOpenSources={onOpenSources} title="My New Chat" />
-            <div className="flex-1">chat</div>
+            <Messages />
             <Prompt />
             {showSources && <Sources onClose={onCloseSources} />}
             {showMenu && <Menu onClose={onCloseMenu} />}
