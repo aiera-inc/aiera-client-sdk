@@ -601,11 +601,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     eventDate: event?.eventDate,
                                     localTicker: primaryQuote?.localTicker,
                                     externalAudioStreamUrl: event.externalAudioStreamUrl,
+                                    firstTranscriptItemStartMs: event?.firstTranscriptItemStartMs || 0,
                                     isLive: !!event?.isLive,
                                     quote: primaryQuote,
                                     title: event?.title,
                                 }}
-                                firstTranscriptItemStartMs={event?.firstTranscriptItemStartMs || 0}
                                 url={(event.isLive ? event.liveStreamUrl : event.audioProxy) || ''}
                             />
                         )

@@ -1,8 +1,8 @@
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
 import { EventConnectionStatus, EventType, Quote } from '@aiera/client-sdk/types/generated';
-import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
+import { playerType, ShakaPlayer, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
 import muxjs from 'mux.js';
-import React, { ReactElement, ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 
 // shaka player package looks for window.muxjs
 // i extended window.muxjs in the types index.ts
@@ -33,7 +33,6 @@ export class AudioPlayer {
         lastPosition?: number;
         timeout?: number;
     };
-    firstTranscriptItemStartMs = 0;
     id?: string;
     liveCatchupThreshold = 5;
     loadNewAsset?: boolean;
@@ -41,6 +40,10 @@ export class AudioPlayer {
     player?: playerType;
     playingStartTime = 0;
     url?: string;
+
+    // Properties for time normalization
+    private timeOffset = 0;
+    private normalizeTime = false;
 
     constructor() {
         this.errorInfo = {
@@ -130,12 +133,9 @@ export class AudioPlayer {
         return stream.split(/[#?]/)[0]?.split('.').pop()?.trim();
     }
 
-    async init(opts?: {
-        firstTranscriptItemStartMs?: number;
-        id: string;
-        metaData?: EventMetaData;
-        url: string;
-    }): Promise<void> {
+    async init(opts?: { id: string; metaData?: EventMetaData; url: string }): Promise<void> {
+        // Keep track if the player needs to the re-rendered
+        let shouldTriggerUpdate = false;
         // Ignore query parameters when checking if the audio url changed
         const currentUrl = this.player?.getAssetUri()?.split('?')[0];
         const optsUrl = (opts?.url || '').split('?')[0];
@@ -143,9 +143,13 @@ export class AudioPlayer {
         if (opts && (this.id !== opts.id || currentUrl !== optsUrl)) {
             let url = opts?.url;
             const { id } = opts;
-            const startTime = 0;
             this.id = id;
-            this.firstTranscriptItemStartMs = opts.firstTranscriptItemStartMs || 0;
+            const firstTranscriptItemStartMs = opts?.metaData?.firstTranscriptItemStartMs || 0;
+            if (firstTranscriptItemStartMs) {
+                this.timeOffset = Math.round(firstTranscriptItemStartMs / 1000);
+                this.normalizeTime = true;
+            }
+            const startTime = this.timeOffset;
             if (url !== this.url || !this.playing(this.id)) {
                 // different event - load new asset/manifest
                 let mimeType: string | null = null;
@@ -184,20 +188,24 @@ export class AudioPlayer {
                     console.log(e);
                 }
             }
+            if (!shouldTriggerUpdate) {
+                shouldTriggerUpdate = true;
+            }
+        }
+
+        if (opts?.metaData?.firstTranscriptItemStartMs && !this.timeOffset) {
+            this.timeOffset = Math.round(opts.metaData.firstTranscriptItemStartMs / 1000);
+            shouldTriggerUpdate = true;
+        }
+
+        if (opts?.metaData && Object.keys(opts.metaData).length > 0 && Object.keys(this.metaData || {}).length === 0) {
+            this.metaData = opts.metaData;
+            shouldTriggerUpdate = true;
+        }
+
+        if (shouldTriggerUpdate) {
             this.triggerUpdate();
         }
-
-        // TODO Make sure these trigger an update when they change
-        if (
-            opts &&
-            opts.firstTranscriptItemStartMs &&
-            opts.firstTranscriptItemStartMs !== this.firstTranscriptItemStartMs
-        ) {
-            this.firstTranscriptItemStartMs = opts.firstTranscriptItemStartMs;
-        }
-
-        // TODO Make sure these trigger an update when they change
-        if (opts?.metaData) this.metaData = opts?.metaData;
     }
 
     clear(): void {
@@ -209,6 +217,8 @@ export class AudioPlayer {
         this.errorInfo.error = false;
         this.errorInfo.lastPosition = 0;
         this.audio.src = '';
+        this.timeOffset = 0;
+        this.normalizeTime = false;
         this.triggerUpdate();
     }
 
@@ -216,14 +226,18 @@ export class AudioPlayer {
         this.audio.dispatchEvent(new Event('update'));
     };
 
-    async play(opts?: {
-        firstTranscriptItemStartMs: number;
-        id: string;
-        url: string;
-        metaData?: EventMetaData;
-    }): Promise<void> {
+    async play(opts?: { id: string; url: string; metaData?: EventMetaData }): Promise<void> {
         await this.init(opts);
-        if (this.rawCurrentTime === 0) this.rawSeek(this.firstTranscriptItemStartMs / 1000);
+
+        // Set up normalization if we have a firstTranscriptItemStartMs
+        if (opts?.metaData?.firstTranscriptItemStartMs) {
+            this.timeOffset = Math.round((opts.metaData.firstTranscriptItemStartMs || 0) / 1000);
+            this.normalizeTime = true;
+        }
+
+        if (this.rawCurrentTime === 0) {
+            this.rawSeek(this.timeOffset);
+        }
 
         // If after 2 seconds we still haven't started actually playing, set an error state.
         // Using this instead of audio.on('error') because errors do happen that don't affect
@@ -257,8 +271,9 @@ export class AudioPlayer {
         this.audio.pause();
     }
 
+    // Updated displaySeek to handle normalization
     displaySeek(position: number): void {
-        this.audio.currentTime = position;
+        this.audio.currentTime = this.normalizeTime ? position + this.timeOffset : position;
     }
 
     seekToEnd(): void {
@@ -275,7 +290,7 @@ export class AudioPlayer {
      * helps keep the published transcripts aligned with audio.
      */
     seekToStart(): void {
-        this.audio.currentTime = this.firstTranscriptItemStartMs / 1000;
+        this.audio.currentTime = this.timeOffset;
     }
 
     rawSeek(position: number): void {
@@ -291,11 +306,13 @@ export class AudioPlayer {
     }
 
     ff(distance: number): void {
-        this.rawSeek(Math.min(this.rawCurrentTime + distance, this.rawDuration));
+        const newPosition = Math.min(this.displayCurrentTime + distance, this.displayDuration);
+        this.displaySeek(newPosition);
     }
 
     rewind(distance: number): void {
-        this.rawSeek(Math.max(this.rawCurrentTime - distance, this.firstTranscriptItemStartMs / 1000));
+        const newPosition = Math.max(this.displayCurrentTime - distance, 0);
+        this.displaySeek(newPosition);
     }
 
     setRate(rate: number): void {
@@ -337,8 +354,7 @@ export class AudioPlayer {
     }
 
     get rawDuration(): number {
-        const dur = this.player ? this.player.seekRange().end : this.audio.duration || 0;
-        return dur;
+        return this.player ? this.player.seekRange().end : this.audio.duration || 0;
     }
 
     get rawCurrentTime(): number {
@@ -357,11 +373,20 @@ export class AudioPlayer {
         return this.metaData || {};
     }
 
+    /**
+     * Updated getters to handle normalization
+     */
     get displayDuration(): number {
+        if (this.normalizeTime) {
+            return Math.max(0, this.rawDuration - this.timeOffset);
+        }
         return Math.max(0, this.rawDuration);
     }
 
     get displayCurrentTime(): number {
+        if (this.normalizeTime) {
+            return Math.max(0, this.rawCurrentTime - this.timeOffset);
+        }
         return Math.max(0, this.rawCurrentTime);
     }
 

@@ -237,7 +237,6 @@ const DefaultEventRow = ({
                     <div className="flex items-center justify-center">
                         <div className="flex items-center justify-center w-8 h-8">
                             <PlayButton
-                                firstTranscriptItemStartMs={event.firstTranscriptItemStartMs}
                                 metaData={{
                                     createdBy,
                                     connectionStatus: event.connectionStatus,
@@ -246,6 +245,7 @@ const DefaultEventRow = ({
                                     eventStream: event.audioStreamUri,
                                     eventType: event.eventType,
                                     externalAudioStreamUrl: event.externalAudioStreamUrl,
+                                    firstTranscriptItemStartMs: event?.firstTranscriptItemStartMs || 0,
                                     isLive: !!event?.isLive,
                                     localTicker: primaryQuote?.localTicker,
                                     quote: primaryQuote,

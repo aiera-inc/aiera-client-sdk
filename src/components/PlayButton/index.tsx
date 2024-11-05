@@ -117,7 +117,6 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
 
 /** @notExported */
 export interface PlayButtonProps extends PlayButtonSharedProps {
-    firstTranscriptItemStartMs?: number;
     id: string;
     metaData: EventMetaData;
     origin?: AudioOriginUI;
@@ -128,7 +127,7 @@ export interface PlayButtonProps extends PlayButtonSharedProps {
  * Renders PlayButton
  */
 export function PlayButton(props: PlayButtonProps): ReactElement {
-    const { id, url, firstTranscriptItemStartMs = 0, metaData, origin = 'eventList' } = props;
+    const { id, url, metaData, origin = 'eventList' } = props;
     const { addAlert, removeAlert, alertList } = useAlertList();
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
@@ -165,7 +164,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
                 );
             } else if (url) {
                 void track('Click', 'Audio Play', { eventId: id, url });
-                void audioPlayer.play({ id, url, firstTranscriptItemStartMs, metaData });
+                void audioPlayer.play({ id, url, metaData });
 
                 audioPlayer.setPlayingStartTime(new Date().getTime());
                 bus?.emit(
@@ -185,7 +184,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
                 );
             }
         },
-        [isPlaying, id, url, firstTranscriptItemStartMs]
+        [isPlaying, id, url]
     );
     const eventDate = metaData.eventDate;
     const alertDateIds = eventDate ? alertList.dates[eventDate] : null;

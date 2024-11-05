@@ -39,7 +39,7 @@ describe('audio library', () => {
 
     test('duration', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 0 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 0 } });
         // @ts-ignore
         player.audio.duration = 100;
         player.rawSeek(5);
@@ -54,8 +54,7 @@ describe('audio library', () => {
         void player.play({
             id: '1',
             url: srcUrl,
-            firstTranscriptItemStartMs: 0,
-            metaData: { quote: quote as Quote, eventType: EventType.Earnings },
+            metaData: { firstTranscriptItemStartMs: 0, quote: quote as Quote, eventType: EventType.Earnings },
         });
 
         // mock the playing situation
@@ -85,24 +84,24 @@ describe('audio library', () => {
      */
     test('seek()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 1000 } });
         player.rawSeek(5);
         expect(player.audio.currentTime).toBe(5);
         expect(player.rawCurrentTime).toBe(5);
-        expect(player.displayCurrentTime).toBe(5);
+        expect(player.displayCurrentTime).toBe(4);
         player.displaySeek(5);
-        expect(player.audio.currentTime).toBe(5);
-        expect(player.rawCurrentTime).toBe(5);
+        expect(player.audio.currentTime).toBe(6);
+        expect(player.rawCurrentTime).toBe(6);
         expect(player.displayCurrentTime).toBe(5);
         player.rawSeek(15);
         expect(player.audio.currentTime).toBe(15);
         expect(player.rawCurrentTime).toBe(15);
-        expect(player.displayCurrentTime).toBe(15);
+        expect(player.displayCurrentTime).toBe(14);
     });
 
     test('ff()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 10 } });
         // @ts-ignore
         player.audio.duration = 100;
         player.rawSeek(15);
@@ -116,21 +115,21 @@ describe('audio library', () => {
 
     test('rewind()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 1000 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 1000 } });
         // @ts-ignore
         player.audio.duration = 100;
         player.rawSeek(30);
         player.rewind(15);
         expect(player.rawCurrentTime).toBe(15);
-        expect(player.displayCurrentTime).toBe(15);
+        expect(player.displayCurrentTime).toBe(14);
         player.rewind(100);
-        expect(player.displayCurrentTime).toBe(1);
+        expect(player.displayCurrentTime).toBe(0);
         expect(player.rawCurrentTime).toBe(1);
     });
 
     test('seekToEnd()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 10 } });
         // @ts-ignore
         player.audio.duration = 100;
         player.seekToEnd();
@@ -139,7 +138,7 @@ describe('audio library', () => {
 
     test('seekToStart()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 2000 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 2000 } });
         // @ts-ignore
         player.seekToStart();
         expect(player.rawCurrentTime).toBe(2);
@@ -147,7 +146,7 @@ describe('audio library', () => {
 
     test('setRate()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 10 } });
         // @ts-ignore
         player.setRate(1.3);
         expect(player.playbackRate).toBe(1.3);
@@ -155,7 +154,7 @@ describe('audio library', () => {
 
     test('setVolume()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 10 } });
         // @ts-ignore
         player.setVolume(0.3);
         expect(player.volume).toBe(0.3);
@@ -163,7 +162,7 @@ describe('audio library', () => {
 
     test('togglePlaybackRate()', async () => {
         const player = getPlayer();
-        await player.init({ id: '1', url: 'url', firstTranscriptItemStartMs: 10 });
+        await player.init({ id: '1', url: 'url', metaData: { firstTranscriptItemStartMs: 10 } });
         // @ts-ignore
         player.setRate(1.3);
         player.togglePlaybackRate();
@@ -189,8 +188,12 @@ describe('audio library', () => {
             await player.play({
                 id: '1',
                 url: srcUrl,
-                firstTranscriptItemStartMs: 0,
-                metaData: { quote: quote as Quote, eventType: EventType.Earnings, isLive: false },
+                metaData: {
+                    eventType: EventType.Earnings,
+                    firstTranscriptItemStartMs: 0,
+                    isLive: false,
+                    quote: quote as Quote,
+                },
             });
 
             expect(player.errorInfo.timeout).toBeTruthy();
@@ -204,8 +207,7 @@ describe('audio library', () => {
             await player.play({
                 id: '2',
                 url: 'other url',
-                firstTranscriptItemStartMs: 0,
-                metaData: { quote: quote as Quote, eventType: EventType.Earnings },
+                metaData: { firstTranscriptItemStartMs: 0, quote: quote as Quote, eventType: EventType.Earnings },
             });
             expect(player.errorInfo.error).toBeFalsy();
             expect(player.errorInfo.timeout).toBeTruthy();
@@ -215,8 +217,7 @@ describe('audio library', () => {
             await player.play({
                 id: '2',
                 url: 'other url',
-                firstTranscriptItemStartMs: 0,
-                metaData: { quote: quote as Quote, eventType: EventType.Earnings },
+                metaData: { firstTranscriptItemStartMs: 0, quote: quote as Quote, eventType: EventType.Earnings },
             });
             expect(player.errorInfo.timeout).toBeTruthy();
 
@@ -231,8 +232,7 @@ describe('audio library', () => {
             await player.play({
                 id: '3',
                 url: 'other url 2',
-                firstTranscriptItemStartMs: 0,
-                metaData: { quote: quote as Quote, eventType: EventType.Earnings },
+                metaData: { firstTranscriptItemStartMs: 0, quote: quote as Quote, eventType: EventType.Earnings },
             });
 
             // Go forward more than 2s with an adjusted currentTime

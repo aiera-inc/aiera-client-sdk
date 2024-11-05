@@ -270,13 +270,13 @@ export function HeaderUI(props: HeaderUIProps): ReactElement {
                                                     eventStream: event.audioStreamUri,
                                                     eventType: event.eventType,
                                                     externalAudioStreamUrl: event.externalAudioStreamUrl,
+                                                    firstTranscriptItemStartMs: event?.firstTranscriptItemStartMs || 0,
                                                     isLive: !!event?.isLive,
                                                     localTicker: primaryQuote?.localTicker,
                                                     quote: primaryQuote,
                                                     title: event.title,
                                                 }}
                                                 url={event.isLive ? event.liveStreamUrl : event.audioProxy}
-                                                firstTranscriptItemStartMs={event?.firstTranscriptItemStartMs || 0}
                                             />
                                         </div>
                                     )}

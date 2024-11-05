@@ -153,11 +153,11 @@ export function TranscrippetUI(props: TranscrippetUIProps): ReactElement {
                                             eventDate: eventDate,
                                             eventType: eventType,
                                             externalAudioStreamUrl: audioUrl,
+                                            firstTranscriptItemStartMs: startTime,
                                         }}
                                         origin="transcrippet"
                                         id={`${eventId}`}
                                         url={audioUrl}
-                                        firstTranscriptItemStartMs={startTime}
                                     />
                                 </div>
                             )}
