@@ -29,6 +29,6 @@ describe('AieraChat', () => {
                 }}
             />
         );
-        expect(screen.getByText('Sources')).toBeInTheDocument();
+        expect(screen.getByText('Chat Sources')).toBeInTheDocument();
     });
 });
