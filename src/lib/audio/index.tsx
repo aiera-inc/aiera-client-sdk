@@ -243,7 +243,7 @@ export class AudioPlayer {
         if (
             !opts?.metaData?.isLive &&
             opts?.metaData?.firstTranscriptItemStartMs &&
-            opts?.metaData?.firstTranscriptItemStartMs >= 500 &&
+            opts.metaData.firstTranscriptItemStartMs >= 500 &&
             this.rawCurrentTime === 0
         ) {
             this.timeOffset = Math.round((opts.metaData.firstTranscriptItemStartMs || 0) / 1000);
@@ -264,7 +264,7 @@ export class AudioPlayer {
             this.rawSeek(this.timeOffset);
         }
 
-        // If after 2 seconds we still haven't started actually playing, set an error state.
+        // If after 5 seconds we still haven't started actually playing, set an error state.
         // Using this instead of audio.on('error') because errors do happen that don't affect
         // playback, so instead we just check if playback is actually happening;
         this.errorInfo.error = false;
