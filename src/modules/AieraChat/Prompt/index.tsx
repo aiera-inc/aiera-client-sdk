@@ -1,17 +1,42 @@
 import { MicroArrowUp } from '@aiera/client-sdk/components/Svg/MicroArrowUp';
 import classNames from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 
-export function Prompt() {
+interface PromptProps {
+    onSubmit: (prompt: string) => void;
+}
+
+export function Prompt({ onSubmit }: PromptProps) {
     const [isEmpty, setIsEmpty] = useState(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
 
-    const checkEmpty = () => {
+    const checkEmpty = useCallback(() => {
         if (inputRef.current) {
             const content = inputRef.current.textContent || '';
             setIsEmpty(content.trim() === '');
         }
-    };
+    }, []);
+
+    const handleInput = useCallback(() => {
+        checkEmpty();
+    }, []);
+
+    const handleKeyDown = useCallback((e: KeyboardEvent<HTMLParagraphElement>) => {
+        checkEmpty();
+        if (e.code === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit();
+        }
+    }, []);
+
+    const handleSubmit = useCallback(() => {
+        if (inputRef.current) {
+            const promptText = inputRef.current.innerText;
+            onSubmit(promptText);
+            inputRef.current.textContent = '';
+            setTimeout(checkEmpty);
+        }
+    }, [onSubmit]);
 
     // Autofocus
     useEffect(() => {
@@ -26,7 +51,8 @@ export function Prompt() {
             <p
                 ref={inputRef}
                 className="flex-1 py-2 pl-4 text-base outline-none chatPrompt"
-                onInput={checkEmpty}
+                onKeyDown={handleKeyDown}
+                onInput={handleInput}
                 onBlur={checkEmpty}
                 contentEditable
             />
@@ -37,6 +63,7 @@ export function Prompt() {
                 </span>
             )}
             <button
+                onClick={handleSubmit}
                 className={classNames(
                     'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
                     'bg-blue-600 rounded-xl flex-shrink-0 flex items-center justify-center',

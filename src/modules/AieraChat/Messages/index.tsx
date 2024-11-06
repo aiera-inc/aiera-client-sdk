@@ -4,7 +4,8 @@ import {
     VirtuosoMessageListMethods,
     VirtuosoMessageListProps,
 } from '@virtuoso.dev/message-list';
-import React, { useRef } from 'react';
+import React, { useCallback, useRef } from 'react';
+import { Prompt } from '../Prompt';
 
 interface Message {
     key: string;
@@ -42,6 +43,34 @@ const ItemContent: VirtuosoMessageListProps<Message, null>['ItemContent'] = ({ d
 export function Messages() {
     const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
 
+    const onSubmit = useCallback((prompt: string) => {
+        const myMessage: Message = { user: 'me', key: `${idCounter++}`, text: prompt };
+        virtuoso.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
+            return {
+                index: 'LAST',
+                align: 'end',
+                behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+            };
+        });
+
+        setTimeout(() => {
+            const botMessage = randomMessage('other');
+            virtuoso.current?.data.append([botMessage]);
+
+            let counter = 0;
+            const interval = setInterval(() => {
+                if (counter++ > 20) {
+                    clearInterval(interval);
+                }
+                virtuoso.current?.data.map((message) => {
+                    return message.key === botMessage.key
+                        ? { ...message, text: message.text + ' ' + 'some message' }
+                        : message;
+                }, 'smooth');
+            }, 150);
+        }, 1000);
+    }, []);
+
     return (
         <div className="relative flex-1">
             <div className="absolute inset-0 flex flex-col flex-1">
@@ -55,38 +84,7 @@ export function Messages() {
                         ItemContent={ItemContent}
                     />
                 </VirtuosoMessageListLicense>
-
-                <button
-                    onClick={() => {
-                        const myMessage = randomMessage('me');
-                        virtuoso.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
-                            return {
-                                index: 'LAST',
-                                align: 'end',
-                                behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                            };
-                        });
-
-                        setTimeout(() => {
-                            const botMessage = randomMessage('other');
-                            virtuoso.current?.data.append([botMessage]);
-
-                            let counter = 0;
-                            const interval = setInterval(() => {
-                                if (counter++ > 20) {
-                                    clearInterval(interval);
-                                }
-                                virtuoso.current?.data.map((message) => {
-                                    return message.key === botMessage.key
-                                        ? { ...message, text: message.text + ' ' + 'some message' }
-                                        : message;
-                                }, 'smooth');
-                            }, 150);
-                        }, 1000);
-                    }}
-                >
-                    Ask the bot a question!
-                </button>
+                <Prompt onSubmit={onSubmit} />
             </div>
         </div>
     );
