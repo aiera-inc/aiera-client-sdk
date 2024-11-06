@@ -3,10 +3,10 @@ import classNames from 'classnames';
 import React, { ReactElement, useCallback, useState } from 'react';
 import { Header } from './Header';
 import { Menu } from './Menu';
+import { Messages } from './Messages';
 import { Sources } from './Sources';
 import './styles.css';
-import { Prompt } from './Prompt';
-import { Messages } from './Messages';
+import { Settings } from './Settings';
 
 interface AieraChatSharedProps {}
 
@@ -17,6 +17,7 @@ export function AieraChatUI(): ReactElement {
     const config = useConfig();
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
+    const [showSettings, setShowSettings] = useState(false);
 
     const onOpenMenu = useCallback(() => {
         setShowMenu(true);
@@ -32,6 +33,14 @@ export function AieraChatUI(): ReactElement {
 
     const onCloseSources = useCallback(() => {
         setShowSources(false);
+    }, []);
+
+    const onOpenSettings = useCallback(() => {
+        setShowSettings(true);
+    }, []);
+
+    const onCloseSettings = useCallback(() => {
+        setShowSettings(false);
     }, []);
 
     let darkMode = false;
@@ -53,11 +62,11 @@ export function AieraChatUI(): ReactElement {
                 'aiera-chat'
             )}
         >
-            <Header onOpenMenu={onOpenMenu} onOpenSources={onOpenSources} title="My New Chat" />
+            <Header onOpenMenu={onOpenMenu} onOpenSources={onOpenSources} onOpenSettings={onOpenSettings} />
             <Messages />
-            <Prompt />
             {showSources && <Sources onClose={onCloseSources} />}
             {showMenu && <Menu onClose={onCloseMenu} />}
+            {showSettings && <Settings onClose={onCloseSettings} />}
         </div>
     );
 }

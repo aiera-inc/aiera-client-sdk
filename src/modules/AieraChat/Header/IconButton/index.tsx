@@ -15,7 +15,7 @@ export function IconButton({
         <button
             onClick={onClick}
             className={classNames(
-                'h-[1.875rem] w-[1.875rem] transition-all',
+                'h-[1.875rem] w-[1.875rem] flex-shrink-0 transition-all',
                 'rounded-lg flex items-center justify-center',
                 'bg-slate-200 hover:bg-slate-300/80 active:scale-90 active:bg-slate-300/60',
                 'text-slate-600',

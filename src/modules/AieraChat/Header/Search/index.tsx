@@ -5,7 +5,7 @@ import React, { KeyboardEvent, useCallback, useState } from 'react';
 import { IconButton } from '../IconButton';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 
-export function Search({ title }: { title: string }) {
+export function Search({ title }: { title?: string }) {
     const [showSearch, setShowSearch] = useState(false);
     const [_, setInFocus] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -71,8 +71,12 @@ export function Search({ title }: { title: string }) {
     ) : (
         <>
             <IconButton onClick={() => setShowSearch(true)} className="mx-2.5" Icon={MicroSearch} />
-            <div className="flex-1 flex items-center justify-center text-base font-bold">
-                <p className="antialiased line-clamp-1">{title}</p>
+            <div className="flex-1 flex items-center text-base font-bold">
+                <input
+                    className="text-center antialiased flex-1 outline-none bg-transparent truncate"
+                    value={title}
+                    placeholder="Untitled Chat"
+                />
             </div>
         </>
     );

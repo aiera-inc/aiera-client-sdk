@@ -14,9 +14,12 @@ describe('AieraChat', () => {
                 onOpenSources={function (): void {
                     throw new Error('Function not implemented.');
                 }}
+                onOpenSettings={function (): void {
+                    throw new Error('Function not implemented.');
+                }}
             />
         );
-        expect(screen.getByText('My New Chat')).toBeInTheDocument();
+        expect(screen.getByDisplayValue('My New Chat')).toBeInTheDocument();
     });
     it('Sources panel', () => {
         render(

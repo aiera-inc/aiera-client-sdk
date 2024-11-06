@@ -8,10 +8,12 @@ import { Search } from './Search';
 export function Header({
     title,
     onOpenMenu,
+    onOpenSettings,
     onOpenSources,
 }: {
-    title: string;
+    title?: string;
     onOpenMenu: () => void;
+    onOpenSettings: () => void;
     onOpenSources: () => void;
 }) {
     return (
@@ -19,7 +21,7 @@ export function Header({
             <IconButton Icon={MicroBars} onClick={onOpenMenu} />
             <Search title={title} />
             <IconButton className="mx-2.5" onClick={onOpenSources} Icon={MicroStack} />
-            <IconButton Icon={MicroGear} />
+            <IconButton onClick={onOpenSettings} Icon={MicroGear} />
         </div>
     );
 }
