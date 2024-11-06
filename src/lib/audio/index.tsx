@@ -1,8 +1,8 @@
 import { DeepPartial, Maybe } from '@aiera/client-sdk/types';
 import { EventConnectionStatus, EventType, Quote } from '@aiera/client-sdk/types/generated';
-import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
+import { playerType, ShakaPlayer, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
 import muxjs from 'mux.js';
-import React, { ReactElement, ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, ReactElement, ReactNode, useContext, useEffect, useState } from 'react';
 
 // shaka player package looks for window.muxjs
 // i extended window.muxjs in the types index.ts
@@ -19,6 +19,7 @@ export interface EventMetaData {
     eventDate?: string;
     eventType?: EventType;
     externalAudioStreamUrl?: string | null;
+    firstTranscriptItemStartMs?: number;
     isLive?: boolean;
     localTicker?: string;
     quote?: Maybe<DeepPartial<Quote>>;
@@ -26,20 +27,23 @@ export interface EventMetaData {
 }
 
 export class AudioPlayer {
-    id?: string;
-    url?: string;
-    errorInfo: {
-        timeout?: number;
-        lastPosition?: number;
-        error: boolean;
-    };
-    metaData?: EventMetaData;
-    offset = 0;
-    playingStartTime = 0;
     audio: HTMLAudioElement;
+    errorInfo: {
+        error: boolean;
+        lastPosition?: number;
+        timeout?: number;
+    };
+    id?: string;
     liveCatchupThreshold = 5;
-    player?: playerType;
     loadNewAsset?: boolean;
+    metaData?: EventMetaData;
+    player?: playerType;
+    playingStartTime = 0;
+    url?: string;
+
+    // Properties for time normalization
+    private timeOffset = 0;
+    private normalizeTime = false;
 
     constructor() {
         this.errorInfo = {
@@ -129,19 +133,26 @@ export class AudioPlayer {
         return stream.split(/[#?]/)[0]?.split('.').pop()?.trim();
     }
 
-    async init(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
+    async init(opts?: { id: string; metaData?: EventMetaData; url: string }): Promise<void> {
+        // Keep track if the player needs to be re-rendered
+        let shouldTriggerUpdate = false;
+
         // Ignore query parameters when checking if the audio url changed
         const currentUrl = this.player?.getAssetUri()?.split('?')[0];
         const optsUrl = (opts?.url || '').split('?')[0];
         this.loadNewAsset = false;
+
         if (opts && (this.id !== opts.id || currentUrl !== optsUrl)) {
             let url = opts?.url;
             const { id } = opts;
-            const startTime = 0;
             this.id = id;
-            this.offset = opts.offset;
+
+            // Set up normalization if we have a firstTranscriptItemStartMs
+            this.maybeSetTimeOffset(opts);
+            const startTime = this.timeOffset;
+
             if (url !== this.url || !this.playing(this.id)) {
-                // different event - load new asset/manifest
+                // Different event - load new asset/manifest
                 let mimeType: string | null = null;
                 const userAgent = window.navigator.userAgent.toLowerCase();
                 const ios = /iphone|ipod|ipad/.test(userAgent);
@@ -166,7 +177,8 @@ export class AudioPlayer {
                         url = url + '&no_trim=true'; // add no_trim as the event is completed.
                     }
                 }
-                // load asset
+
+                // Load asset
                 try {
                     if (this.player) {
                         await this.player.load(url, startTime, mimeType);
@@ -178,16 +190,22 @@ export class AudioPlayer {
                     console.log(e);
                 }
             }
+
+            shouldTriggerUpdate = true;
+        }
+
+        if (this.maybeSetTimeOffset(opts)) {
+            shouldTriggerUpdate = true;
+        }
+
+        if (opts?.metaData) {
+            this.metaData = opts.metaData;
+            shouldTriggerUpdate = true;
+        }
+
+        if (shouldTriggerUpdate) {
             this.triggerUpdate();
         }
-
-        // TODO Make sure these trigger an update when they change
-        if (opts && opts.offset !== this.offset) {
-            this.offset = opts.offset;
-        }
-
-        // TODO Make sure these trigger an update when they change
-        if (opts?.metaData) this.metaData = opts?.metaData;
     }
 
     clear(): void {
@@ -199,6 +217,8 @@ export class AudioPlayer {
         this.errorInfo.error = false;
         this.errorInfo.lastPosition = 0;
         this.audio.src = '';
+        this.timeOffset = 0;
+        this.normalizeTime = false;
         this.triggerUpdate();
     }
 
@@ -206,11 +226,45 @@ export class AudioPlayer {
         this.audio.dispatchEvent(new Event('update'));
     };
 
-    async play(opts?: { id: string; url: string; offset: number; metaData?: EventMetaData }): Promise<void> {
-        await this.init(opts);
-        if (this.rawCurrentTime === 0) this.rawSeek(this.offset);
+    /**
+     * Handle time normalization for non-live events.
+     * By "normalization", we mean play the audio from the firstTranscriptItemStartMs position,
+     * but show the starting position as 00:00:00 in the player,
+     * and show the duration relative to the firstTranscriptItemStartMs offset.
+     * Here's an example:
+     * Event has firstTranscriptItemStartMs value of 120000 (2 minutes).
+     * Full audio is 40 minutes long, but we're starting at the 2-minute mark.
+     * The player should show the total duration as 00:38:00 and pressing play should start at 00:00:00.
+     * Returns true/false based on whether the offset was applied.
+     */
+    maybeSetTimeOffset(opts?: { id: string; url: string; metaData?: EventMetaData }): boolean {
+        let offsetApplied = false;
 
-        // If after 2 seconds we still haven't started actually playing, set an error state.
+        if (
+            !opts?.metaData?.isLive &&
+            opts?.metaData?.firstTranscriptItemStartMs &&
+            opts.metaData.firstTranscriptItemStartMs >= 500 &&
+            this.rawCurrentTime === 0
+        ) {
+            this.timeOffset = Math.round((opts.metaData.firstTranscriptItemStartMs || 0) / 1000);
+            this.normalizeTime = true;
+            offsetApplied = true;
+        }
+
+        return offsetApplied;
+    }
+
+    async play(opts?: { id: string; url: string; metaData?: EventMetaData }): Promise<void> {
+        await this.init(opts);
+
+        // Set up normalization if we have a firstTranscriptItemStartMs
+        this.maybeSetTimeOffset(opts);
+
+        if (this.rawCurrentTime === 0) {
+            this.rawSeek(this.timeOffset);
+        }
+
+        // If after 5 seconds we still haven't started actually playing, set an error state.
         // Using this instead of audio.on('error') because errors do happen that don't affect
         // playback, so instead we just check if playback is actually happening;
         this.errorInfo.error = false;
@@ -224,7 +278,7 @@ export class AudioPlayer {
 
         const isLive = opts?.metaData?.isLive;
         if (isLive && this.player) {
-            const currentTime = this.rawCurrentTime - this.offset;
+            const currentTime = this.rawCurrentTime;
             if (this.loadNewAsset || currentTime === 0) {
                 this.player.goToLive();
                 this.player.trickPlay(1);
@@ -242,25 +296,30 @@ export class AudioPlayer {
         this.audio.pause();
     }
 
+    // Updated displaySeek to handle normalization
     displaySeek(position: number): void {
-        this.audio.currentTime = position + this.offset;
+        this.audio.currentTime = this.normalizeTime ? position + this.timeOffset : position;
     }
 
     seekToEnd(): void {
         this.audio.currentTime = this.rawDuration;
     }
 
+    /**
+     * We were originally using an Event's transcriptionAudioOffsetSeconds here,
+     * but we have since deprecated that field - it was causing alignment issues when greater than 0,
+     * particularly with published transcripts.
+     * We want to load the full audio in the player, but when viewing a transcript, we need to
+     * auto-seek to the first transcript segment's startMs.
+     * This skips the opening mambo jumbo (e.g. conversing with the operator), and
+     * helps keep the published transcripts aligned with audio.
+     */
     seekToStart(): void {
-        this.audio.currentTime = this.offset;
+        this.audio.currentTime = this.timeOffset;
     }
 
-    // The offset is generally not used, as its included in the
-    // data for paragraphMs etc. however, when getting an external
-    // value for a seek position (such as seekTranscriptSeconds),
-    // that value has no knowledge of an offset, so we should apply it
-    rawSeek(position: number, useOffset = false): void {
-        const newTime = useOffset ? position + this.offset : position;
-        this.audio.currentTime = newTime;
+    rawSeek(position: number): void {
+        this.audio.currentTime = position;
 
         // We want to re-render the audio player
         // on-seek if the audio isn't currently
@@ -272,11 +331,13 @@ export class AudioPlayer {
     }
 
     ff(distance: number): void {
-        this.rawSeek(Math.min(this.rawCurrentTime + distance, this.rawDuration));
+        const newPosition = Math.min(this.displayCurrentTime + distance, this.displayDuration);
+        this.displaySeek(newPosition);
     }
 
     rewind(distance: number): void {
-        this.rawSeek(Math.max(this.rawCurrentTime - distance, this.offset));
+        const newPosition = Math.max(this.displayCurrentTime - distance, 0);
+        this.displaySeek(newPosition);
     }
 
     setRate(rate: number): void {
@@ -318,8 +379,7 @@ export class AudioPlayer {
     }
 
     get rawDuration(): number {
-        const dur = this.player ? this.player.seekRange().end : this.audio.duration || 0;
-        return dur;
+        return this.player ? this.player.seekRange().end : this.audio.duration || 0;
     }
 
     get rawCurrentTime(): number {
@@ -338,12 +398,21 @@ export class AudioPlayer {
         return this.metaData || {};
     }
 
+    /**
+     * Updated getters to handle normalization
+     */
     get displayDuration(): number {
-        return Math.max(0, this.rawDuration - this.offset);
+        if (this.normalizeTime) {
+            return Math.max(0, this.rawDuration - this.timeOffset);
+        }
+        return Math.max(0, this.rawDuration);
     }
 
     get displayCurrentTime(): number {
-        return Math.max(0, this.rawCurrentTime - this.offset);
+        if (this.normalizeTime) {
+            return Math.max(0, this.rawCurrentTime - this.timeOffset);
+        }
+        return Math.max(0, this.rawCurrentTime);
     }
 
     get error(): boolean {

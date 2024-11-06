@@ -13,9 +13,9 @@ const event = {
     connectionStatus: EventConnectionStatus.Connected,
     isLive: true,
     publishedTranscriptExpected: true,
+    firstTranscriptItemStartMs: 0,
     hasTranscript: true,
     hasPublishedTranscript: true,
-    audioRecordingOffsetMs: 0,
     primaryCompany: {
         instruments: [
             {

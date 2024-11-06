@@ -168,7 +168,6 @@ const DefaultEventRow = ({
 }: EventRowProps) => {
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = DateTime.fromISO(event.eventDate);
-    const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
     const createdBy = getEventCreatorName(event.creator as User);
     let divider = null;
     if (showDivider) {
@@ -246,6 +245,7 @@ const DefaultEventRow = ({
                                     eventStream: event.audioStreamUri,
                                     eventType: event.eventType,
                                     externalAudioStreamUrl: event.externalAudioStreamUrl,
+                                    firstTranscriptItemStartMs: event?.firstTranscriptItemStartMs || 0,
                                     isLive: !!event?.isLive,
                                     localTicker: primaryQuote?.localTicker,
                                     quote: primaryQuote,
@@ -253,7 +253,6 @@ const DefaultEventRow = ({
                                 }}
                                 id={event.id}
                                 url={event.isLive ? event.liveStreamUrl : event.audioProxy}
-                                offset={audioOffset || 0}
                             />
                         </div>
                     </div>
@@ -830,7 +829,6 @@ export const EventList = ({
                             id
                             audioProxy
                             audioRecordingUrl
-                            audioRecordingOffsetMs
                             audioStreamUri
                             connectionStatus
                             externalAudioStreamUrl
@@ -838,6 +836,7 @@ export const EventList = ({
                             hasTranscript
                             eventDate
                             eventType
+                            firstTranscriptItemStartMs
                             isLive
                             liveStreamUrl
                             title

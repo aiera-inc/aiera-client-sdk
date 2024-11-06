@@ -52,6 +52,7 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
         }
     }, [currentUser, userQuery.state.data?.currentUser, userQuery.status]);
 
+    // TODO stop this nonsense
     // Check every 5 seconds if we should refetch the RealtimeCurrentUser query
     useInterval(() => {
         if (shouldRefetchCurrentUser) {

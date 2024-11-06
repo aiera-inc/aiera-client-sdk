@@ -601,11 +601,11 @@ export const TranscriptUI = (props: TranscriptUIProps): ReactElement => {
                                     eventDate: event?.eventDate,
                                     localTicker: primaryQuote?.localTicker,
                                     externalAudioStreamUrl: event.externalAudioStreamUrl,
+                                    firstTranscriptItemStartMs: event?.firstTranscriptItemStartMs || 0,
                                     isLive: !!event?.isLive,
                                     quote: primaryQuote,
                                     title: event?.title,
                                 }}
-                                offset={(event?.audioRecordingOffsetMs || 0) / 1000}
                                 url={(event.isLive ? event.liveStreamUrl : event.audioProxy) || ''}
                             />
                         )
@@ -632,7 +632,6 @@ function useEventUpdates(eventId = '') {
                 events(filter: { eventIds: [$eventId] }) {
                     id
                     audioProxy
-                    audioRecordingOffsetMs
                     audioRecordingUrl
                     audioStreamUri
                     connectionStatus
@@ -645,6 +644,7 @@ function useEventUpdates(eventId = '') {
                     }
                     eventDate
                     externalAudioStreamUrl
+                    firstTranscriptItemStartMs
                     hasConnectionDetails
                     hasPublishedTranscript
                     hasTranscript
@@ -700,7 +700,6 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                     id
                     audioProxy
                     audioRecordingUrl
-                    audioRecordingOffsetMs
                     audioStreamUri
                     attachments {
                         archivedUrl
@@ -721,6 +720,7 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                     eventDate
                     eventType
                     externalAudioStreamUrl
+                    firstTranscriptItemStartMs
                     hasConnectionDetails
                     hasPublishedTranscript
                     hasTranscript
@@ -905,7 +905,7 @@ function useLatestTranscripts(
         }
     }, [latestParagraphsQuery.state.data, latestParagraphsQuery.status]);
 
-    // Watch the eventQuery and the lastestParagraphs
+    // Watch the eventQuery and the latestParagraphs
     // if we have no speakerTurns from the eventQuery
     // and we do have latestParagraphs
     // let's toggle on refetching mode
@@ -1447,8 +1447,8 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         [searchState.speakerTurnsWithMatches, forceNextScroll]
     );
     const onSeekAudioSeconds = useCallback(
-        (seconds: number, useOffset?: boolean) => {
-            audioPlayer.rawSeek(seconds, useOffset);
+        (seconds: number) => {
+            audioPlayer.rawSeek(seconds);
         },
         [audioPlayer]
     );
@@ -1464,7 +1464,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
 
     const { height: containerHeight, ref: containerRef } = useElementSize();
 
-    const bus = useMessageListener('seek-transcript-seconds', ({ data }) => void onSeekAudioSeconds(data, false), 'in');
+    const bus = useMessageListener('seek-transcript-seconds', ({ data }) => void onSeekAudioSeconds(data), 'in');
     bus.on('seek-transcript-timestamp', ({ data }) => void onSeekAudioByDate(data), 'in');
     const onClickTranscript = useCallback(
         (paragraph: Paragraph) => {
