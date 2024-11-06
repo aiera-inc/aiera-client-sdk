@@ -65,7 +65,7 @@ export function AieraChatUI(): ReactElement {
             <Header onOpenMenu={onOpenMenu} onOpenSources={onOpenSources} onOpenSettings={onOpenSettings} />
             <Messages />
             {showSources && <Sources onClose={onCloseSources} />}
-            {showMenu && <Menu onClose={onCloseMenu} />}
+            {showMenu && <Menu currentChatId="1" onClose={onCloseMenu} />}
             {showSettings && <Settings onClose={onCloseSettings} />}
         </div>
     );
