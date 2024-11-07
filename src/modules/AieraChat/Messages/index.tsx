@@ -30,12 +30,7 @@ const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = ()
     const data: Message[] = useCurrentlyRenderedData();
     const firstPrompt = data[0];
     if (!firstPrompt) return null;
-    return (
-        <Fragment key={firstPrompt.key}>
-            <div className="absolute top-0 left-0 right-0 bg-gray-50 h-2" />
-            <MessagePrompt data={firstPrompt} />
-        </Fragment>
-    );
+    return <MessagePrompt data={firstPrompt} />;
 };
 
 export function Messages() {
