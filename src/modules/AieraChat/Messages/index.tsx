@@ -5,53 +5,36 @@ import {
     VirtuosoMessageListProps,
     useCurrentlyRenderedData,
 } from '@virtuoso.dev/message-list';
-import React, { useCallback, useRef } from 'react';
-import { Prompt } from '../Prompt';
+import React, { Fragment, useCallback, useRef } from 'react';
 import './styles.css';
+import { MessageFactory, MessagePrompt } from './MessageFactory';
+import { Prompt } from '../Prompt';
 
-interface Message {
+type MessageType = 'prompt' | 'sources' | 'response';
+
+export interface Message {
+    type: MessageType;
     key: string;
     text: string;
+    prompt?: string;
     user: 'me' | 'other';
 }
 
 let idCounter = 0;
 
-function randomMessage(user: Message['user']): Message {
-    return { user, key: `${idCounter++}`, text: 'some other message' };
+function randomMessage(user: Message['user'], prompt: Message['prompt']): Message {
+    return { user, key: `${idCounter++}`, type: 'response', text: 'some other message', prompt };
 }
 
 const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = () => {
-    const firstItem = useCurrentlyRenderedData<{ text: string }>()[0] as { text: string } | undefined;
+    const data: Message[] = useCurrentlyRenderedData();
+    const firstPrompt = data[0];
+    if (!firstPrompt) return null;
     return (
-        <div style={{ width: '100%', position: 'absolute', top: 0 }}>
-            <div style={{ textAlign: 'center', fontWeight: 300 }}>
-                <span style={{ backgroundColor: '#F0F0F3', padding: '0.1rem 2rem', borderRadius: '0.5rem' }}>
-                    {firstItem?.text}
-                </span>
-            </div>
-        </div>
-    );
-};
-
-const ItemContent: VirtuosoMessageListProps<Message, null>['ItemContent'] = ({ data }: { data: Message }) => {
-    const ownMessage = data.user === 'me';
-    return (
-        <div style={{ paddingBottom: '2rem', display: 'flex' }}>
-            <div
-                style={{
-                    maxWidth: '80%',
-                    marginLeft: data.user === 'me' ? 'auto' : undefined,
-
-                    background: ownMessage ? '#0253B3' : '#F0F0F3',
-                    color: ownMessage ? 'white' : 'black',
-                    borderRadius: '1rem',
-                    padding: '1rem',
-                }}
-            >
-                {data.text}
-            </div>
-        </div>
+        <Fragment key={firstPrompt.key}>
+            <div className="absolute top-0 left-0 right-0 bg-gray-50 h-2" />
+            <MessagePrompt data={firstPrompt} />
+        </Fragment>
     );
 };
 
@@ -59,7 +42,7 @@ export function Messages() {
     const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
 
     const onSubmit = useCallback((prompt: string) => {
-        const myMessage: Message = { user: 'me', key: `${idCounter++}`, text: prompt };
+        const myMessage: Message = { user: 'me', key: `${idCounter++}`, text: prompt, prompt, type: 'prompt' };
         virtuoso.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
             return {
                 index: 'LAST',
@@ -69,19 +52,26 @@ export function Messages() {
         });
 
         setTimeout(() => {
-            const botMessage = randomMessage('other');
+            const botMessage = randomMessage('other', prompt);
             virtuoso.current?.data.append([botMessage]);
 
             let counter = 0;
             const interval = setInterval(() => {
-                if (counter++ > 20) {
+                if (counter++ > 80) {
                     clearInterval(interval);
                 }
-                virtuoso.current?.data.map((message) => {
-                    return message.key === botMessage.key
-                        ? { ...message, text: message.text + ' ' + 'some message' }
-                        : message;
-                }, 'smooth');
+                virtuoso.current?.data.map(
+                    (message) => {
+                        return message.key === botMessage.key
+                            ? { ...message, text: message.text + ' ' + 'some message' }
+                            : message;
+                    },
+                    {
+                        location() {
+                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                        },
+                    }
+                );
             }, 150);
         }, 1000);
     }, []);
@@ -97,7 +87,7 @@ export function Messages() {
                         className="px-4 messagesScrollBars"
                         initialLocation={{ index: 'LAST', align: 'end' }}
                         shortSizeAlign="bottom-smooth"
-                        ItemContent={ItemContent}
+                        ItemContent={MessageFactory}
                         StickyHeader={StickyHeader}
                     />
                 </VirtuosoMessageListLicense>
