@@ -13,11 +13,13 @@ import { Prompt } from '../Prompt';
 import classNames from 'classnames';
 
 type MessageType = 'prompt' | 'sources' | 'response';
+type MessageStatus = 'finished' | 'thinking' | 'updating';
 
 export interface Message {
     type: MessageType;
     key: string;
     text: string;
+    status: MessageStatus;
     prompt?: string;
     user: 'me' | 'other';
 }
@@ -25,7 +27,7 @@ export interface Message {
 let idCounter = 0;
 
 function randomMessage(user: Message['user'], prompt: Message['prompt']): Message {
-    return { user, key: `${idCounter++}`, type: 'response', text: 'some other message', prompt };
+    return { user, key: `${idCounter++}`, type: 'response', text: 'some other message', prompt, status: 'thinking' };
 }
 
 const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = () => {
@@ -56,7 +58,14 @@ export function Messages() {
     const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
 
     const onSubmit = useCallback((prompt: string) => {
-        const myMessage: Message = { user: 'me', key: `${idCounter++}`, text: prompt, prompt, type: 'prompt' };
+        const myMessage: Message = {
+            user: 'me',
+            key: `${idCounter++}`,
+            text: prompt,
+            prompt,
+            status: 'finished',
+            type: 'prompt',
+        };
         virtuoso.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
             return {
                 index: 'LAST',
@@ -65,19 +74,24 @@ export function Messages() {
             };
         });
 
+        const botMessage = randomMessage('other', prompt);
+        virtuoso.current?.data.append([botMessage]);
         setTimeout(() => {
-            const botMessage = randomMessage('other', prompt);
-            virtuoso.current?.data.append([botMessage]);
-
             let counter = 0;
             const interval = setInterval(() => {
+                let status: MessageStatus = 'updating';
                 if (counter++ > 80) {
                     clearInterval(interval);
+                    status = 'finished';
                 }
                 virtuoso.current?.data.map(
                     (message) => {
                         return message.key === botMessage.key
-                            ? { ...message, text: message.text + ' ' + 'some message' }
+                            ? {
+                                  ...message,
+                                  text: message.text + ' ' + 'some message',
+                                  status,
+                              }
                             : message;
                     },
                     {
@@ -87,7 +101,7 @@ export function Messages() {
                     }
                 );
             }, 150);
-        }, 1000);
+        }, 2000);
     }, []);
 
     return (

@@ -3,6 +3,13 @@ import { match } from 'ts-pattern';
 import { Message } from '..';
 import { MicroQuestionMark } from '../../../../components/Svg/MicroQuestionMark';
 import classNames from 'classnames';
+import { IconButton } from '../../Header/IconButton';
+import { MicroThumbUp } from '../../../../components/Svg/MicroThumbUp';
+import { MicroThumbDown } from '../../../../components/Svg/MicroThumbDown';
+import { MicroSparkles } from '../../../../components/Svg/MicroSparkles';
+import { MicroCalendar } from '../../../../components/Svg/MicroCalendar';
+import { MicroRefresh } from '../../../../components/Svg/MicroRefresh';
+import { MicroCopy } from '../../../../components/Svg/MicroCopy';
 
 export const MessagePrompt = ({
     data,
@@ -16,7 +23,7 @@ export const MessagePrompt = ({
     return (
         <div
             className={classNames(
-                'px-4 bg-[#ECF0F3] rounded-xl flex relative',
+                'px-4 bg-slate-200 rounded-xl flex relative',
                 {
                     'py-3.5 min-h-14': !isStickyHeader,
                     'h-14': isStickyHeader,
@@ -49,9 +56,24 @@ export const MessagePrompt = ({
 };
 
 const ItemContent = ({ data }: { data: Message }) => {
-    return (
-        <div style={{ paddingBottom: '2rem', display: 'flex' }}>
+    return data.status === 'thinking' ? (
+        <div className="flex items-center py-4 justify-center text-sm">
+            <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
+            <p className="font-semibold antialiased">Thinking...</p>
+        </div>
+    ) : (
+        <div className="pb-8 flex flex-col">
             <div className="p-4 text-base">{data.text}</div>
+            {data.status === 'finished' && (
+                <div className="flex items-center px-4">
+                    <IconButton className="mr-2" Icon={MicroRefresh} />
+                    <IconButton className="mr-2" Icon={MicroCopy} />
+                    <IconButton className="mr-2" Icon={MicroCalendar} />
+                    <div className="flex-1" />
+                    <IconButton className="mr-2" Icon={MicroThumbUp} />
+                    <IconButton Icon={MicroThumbDown} />
+                </div>
+            )}
         </div>
     );
 };
