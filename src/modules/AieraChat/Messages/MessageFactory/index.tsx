@@ -1,16 +1,48 @@
 import React from 'react';
 import { match } from 'ts-pattern';
 import { Message } from '..';
-import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestionMark';
+import { MicroQuestionMark } from '../../../../components/Svg/MicroQuestionMark';
+import classNames from 'classnames';
 
-export const MessagePrompt = ({ data }: { data: Message }) => {
+export const MessagePrompt = ({
+    data,
+    className,
+    isStickyHeader,
+}: {
+    data: Message;
+    className?: string;
+    isStickyHeader?: boolean;
+}) => {
     return (
-        <div className="px-4 py-3.5 bg-[#ECF0F3] rounded-xl flex items-center z-10 relative">
-            <div className="h-7 flex-shrink-0 w-7 mr-2.5 bg-indigo-600 flex items-center justify-center rounded-lg">
+        <div
+            className={classNames(
+                'px-4 bg-[#ECF0F3] rounded-xl flex relative',
+                {
+                    'py-3.5 min-h-14': !isStickyHeader,
+                    'h-14': isStickyHeader,
+                },
+                className
+            )}
+        >
+            <div
+                className={classNames(
+                    'h-7 self-start flex-shrink-0 w-7 mr-2.5 bg-indigo-600',
+                    'flex items-center justify-center rounded-lg',
+                    {
+                        'mt-3.5': isStickyHeader,
+                    }
+                )}
+            >
                 <MicroQuestionMark className="w-4 text-white" />
             </div>
-            <div>
-                <p className="text-base font-bold antialiased leading-4">{data.prompt}</p>
+            <div className="self-center">
+                <p
+                    className={classNames('text-base font-bold antialiased leading-4', {
+                        'line-clamp-2': isStickyHeader,
+                    })}
+                >
+                    {data.prompt}
+                </p>
             </div>
         </div>
     );
