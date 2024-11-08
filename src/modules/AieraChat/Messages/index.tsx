@@ -4,11 +4,13 @@ import {
     VirtuosoMessageListMethods,
     VirtuosoMessageListProps,
     useCurrentlyRenderedData,
+    useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import React, { Fragment, useCallback, useRef } from 'react';
 import './styles.css';
 import { MessageFactory, MessagePrompt } from './MessageFactory';
 import { Prompt } from '../Prompt';
+import classNames from 'classnames';
 
 type MessageType = 'prompt' | 'sources' | 'response';
 
@@ -28,12 +30,24 @@ function randomMessage(user: Message['user'], prompt: Message['prompt']): Messag
 
 const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = () => {
     const data: Message[] = useCurrentlyRenderedData();
+    const { getScrollLocation } = useVirtuosoMethods();
+    const { listOffset } = getScrollLocation();
     const firstPrompt = data[0];
     if (!firstPrompt) return null;
     return (
         <Fragment key={firstPrompt.key}>
-            <div className="absolute top-0 left-0 right-0 bg-gray-50 h-2" />
-            <MessagePrompt data={firstPrompt} />
+            <div
+                className={classNames('absolute top-0 left-0 right-0 bg-gray-50 h-2', {
+                    'opacity-0': listOffset > -56,
+                })}
+            />
+            <MessagePrompt
+                isStickyHeader
+                className={classNames({
+                    'opacity-0': listOffset > -56,
+                })}
+                data={firstPrompt}
+            />
         </Fragment>
     );
 };
