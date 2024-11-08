@@ -63,9 +63,9 @@ const ItemContent = ({ data }: { data: Message }) => {
         </div>
     ) : (
         <div className="pb-8 flex flex-col">
-            <div className="p-4 text-base">{data.text}</div>
+            <div className="pt-4 pl-4 pb-4 pr-2 text-base">{data.text}</div>
             {data.status === 'finished' && (
-                <div className="flex items-center px-4">
+                <div className="flex items-center pl-4 pr-2">
                     <IconButton className="mr-2" Icon={MicroRefresh} />
                     <IconButton className="mr-2" Icon={MicroCopy} />
                     <IconButton className="mr-2" Icon={MicroCalendar} />
