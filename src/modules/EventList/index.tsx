@@ -120,6 +120,7 @@ export interface EventListUIProps {
 
 export interface EventRowProps {
     customOnly: boolean;
+    showCompanyName: boolean;
     event: EventListEvent;
     index: number;
     isRefetching: boolean;
@@ -164,12 +165,18 @@ const DefaultEventRow = ({
     searchTerm,
     index,
     setFocus,
+    showCompanyName,
     showDivider,
 }: EventRowProps) => {
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = DateTime.fromISO(event.eventDate);
     const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
     const createdBy = getEventCreatorName(event.creator as User);
+    const companyText = showCompanyName
+        ? primaryQuote?.localTicker && event.primaryCompany?.commonName
+            ? `[${primaryQuote?.localTicker}] ${event.primaryCompany?.commonName}`
+            : event.primaryCompany?.commonName || primaryQuote?.localTicker
+        : primaryQuote?.localTicker;
     let divider = null;
     if (showDivider) {
         divider = (
@@ -261,10 +268,10 @@ const DefaultEventRow = ({
                         <div className="flex items-baseline">
                             {primaryQuote?.localTicker ? (
                                 <>
-                                    <span className="leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
-                                        {primaryQuote?.localTicker}
+                                    <span className="line-clamp-1 leading-none break-all text-sm text-blue-600 dark:text-blue-500 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400">
+                                        {companyText}
                                     </span>
-                                    <span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
+                                    <span className="pl-1 font-normal leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500">
                                         {primaryQuote?.exchange?.shortName}
                                     </span>
                                 </>
@@ -391,12 +398,16 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
     let renderedRefetch = false;
     let theme = darkMode;
     let showGlobalSearch = true;
+    let showCompanyNameInEventRow = false;
     if (useConfigOptions && config.options) {
         if (config.options.darkMode !== undefined) {
             theme = config.options.darkMode;
         }
         if (config.options.showGlobalSearch !== undefined) {
             showGlobalSearch = config.options.showGlobalSearch;
+        }
+        if (config.options.showCompanyNameInEventRow !== undefined) {
+            showCompanyNameInEventRow = config.options.showCompanyNameInEventRow;
         }
     }
 
@@ -529,6 +540,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                                     }
                                                                     return (
                                                                         <EventRow
+                                                                            showCompanyName={showCompanyNameInEventRow}
                                                                             customOnly={customOnly}
                                                                             event={hit.event}
                                                                             index={index}
@@ -561,6 +573,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement => {
                                                     }
                                                     return (
                                                         <EventRow
+                                                            showCompanyName={showCompanyNameInEventRow}
                                                             customOnly={customOnly}
                                                             event={hit.event}
                                                             index={index}

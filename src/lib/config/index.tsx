@@ -42,6 +42,7 @@ export interface Options {
     transcrippetGuid?: string;
     showAudioPlayer?: boolean;
     showCompanyFilter?: boolean;
+    showCompanyNameInEventRow?: boolean;
     showDownloadButton?: boolean;
     showExport?: boolean;
     showGlobalSearch?: boolean;
