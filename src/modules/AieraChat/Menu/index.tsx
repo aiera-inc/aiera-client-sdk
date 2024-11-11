@@ -3,6 +3,7 @@ import { Panel } from '../Panel';
 import { MicroBars } from '@aiera/client-sdk/components/Svg/MicroBars';
 import classNames from 'classnames';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 
 const data = [
     {
@@ -23,7 +24,15 @@ const data = [
     },
 ];
 
-export function Menu({ onClose, currentChatId }: { onClose: () => void; currentChatId: string }) {
+export function Menu({
+    onClose,
+    currentChatId,
+    onOpenConfirm,
+}: {
+    onOpenConfirm: () => void;
+    onClose: () => void;
+    currentChatId: string;
+}) {
     return (
         <Panel
             Icon={MicroBars}
@@ -52,6 +61,16 @@ export function Menu({ onClose, currentChatId }: { onClose: () => void; currentC
                         )}
                     >
                         <p className="text-sm line-clamp-1">{title}</p>
+                        <div
+                            className="ml-2 text-slate-500 hover:text-rose-600"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onOpenConfirm();
+                            }}
+                        >
+                            <MicroTrash className="w-4" />
+                        </div>
                     </div>
                 ))}
                 <div className="flex-1" />

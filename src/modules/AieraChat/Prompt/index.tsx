@@ -1,12 +1,16 @@
 import { MicroArrowUp } from '@aiera/client-sdk/components/Svg/MicroArrowUp';
+import { MicroPaperclip } from '@aiera/client-sdk/components/Svg/MicroPaperclip';
 import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { SourceMode } from '..';
 
 interface PromptProps {
+    onOpenSources: () => void;
     onSubmit: (prompt: string) => void;
+    sourceMode: SourceMode;
 }
 
-export function Prompt({ onSubmit }: PromptProps) {
+export function Prompt({ onSubmit, onOpenSources, sourceMode }: PromptProps) {
     const [isEmpty, setIsEmpty] = useState(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
 
@@ -63,9 +67,23 @@ export function Prompt({ onSubmit }: PromptProps) {
                 </span>
             )}
             <button
-                onClick={handleSubmit}
+                onClick={onOpenSources}
                 className={classNames(
                     'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
+                    'rounded-lg flex-shrink-0 flex items-center justify-center',
+                    'cursor-pointer hover:bg-slate-100 active:bg-slate-200 active:scale-90',
+                    {
+                        'text-rose-600': sourceMode === 'manual',
+                        'text-slate-400': sourceMode === 'suggest',
+                    }
+                )}
+            >
+                <MicroPaperclip className="w-4" />
+            </button>
+            <button
+                onClick={handleSubmit}
+                className={classNames(
+                    'h-[1.875rem] self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
                     'bg-blue-600 rounded-xl flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer hover:bg-blue-700 active:bg-blue-800 active:scale-90'
                 )}

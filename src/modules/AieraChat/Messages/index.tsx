@@ -11,6 +11,7 @@ import './styles.css';
 import { MessageFactory, MessagePrompt } from './MessageFactory';
 import { Prompt } from '../Prompt';
 import classNames from 'classnames';
+import { SourceMode } from '..';
 
 type MessageType = 'prompt' | 'sources' | 'response';
 type MessageStatus = 'finished' | 'thinking' | 'updating';
@@ -54,7 +55,7 @@ const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = ()
     );
 };
 
-export function Messages() {
+export function Messages({ onOpenSources, sourceMode }: { sourceMode: SourceMode; onOpenSources: () => void }) {
     const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
 
     const onSubmit = useCallback((prompt: string) => {
@@ -119,7 +120,7 @@ export function Messages() {
                         StickyHeader={StickyHeader}
                     />
                 </VirtuosoMessageListLicense>
-                <Prompt onSubmit={onSubmit} />
+                <Prompt onSubmit={onSubmit} sourceMode={sourceMode} onOpenSources={onOpenSources} />
             </div>
         </div>
     );

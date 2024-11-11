@@ -25,7 +25,7 @@ export function Search({ title }: { title?: string }) {
     const onBlur = useCallback(() => setInFocus(false), []);
 
     return showSearch ? (
-        <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 ml-2.5 flex items-center">
+        <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 flex items-center">
             <input
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -70,7 +70,6 @@ export function Search({ title }: { title?: string }) {
         </div>
     ) : (
         <>
-            <IconButton onClick={() => setShowSearch(true)} className="mx-2.5" Icon={MicroSearch} />
             <div className="flex-1 flex items-center text-base font-bold">
                 <input
                     className="text-center antialiased flex-1 outline-none bg-transparent truncate"
@@ -78,6 +77,7 @@ export function Search({ title }: { title?: string }) {
                     placeholder="Untitled Chat"
                 />
             </div>
+            <IconButton onClick={() => setShowSearch(true)} className="ml-2.5" Icon={MicroSearch} />
         </>
     );
 }

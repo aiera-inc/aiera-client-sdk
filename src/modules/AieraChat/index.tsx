@@ -6,18 +6,34 @@ import { Menu } from './Menu';
 import { Messages } from './Messages';
 import { Sources } from './Sources';
 import './styles.css';
-import { Settings } from './Settings';
+import { ConfirmDialog } from './ConfirmDialog';
 
+export type SourceMode = 'suggest' | 'manual';
 interface AieraChatSharedProps {}
 
 /** @notExported */
-// interface AieraChatUIProps extends AieraChatSharedProps {}
+interface AieraChatUIProps extends AieraChatSharedProps {
+    showMenu: boolean;
+    setShowMenu: (v: boolean) => void;
+    showSources: boolean;
+    setShowSources: (v: boolean) => void;
+    showConfirm: boolean;
+    setShowConfirm: (v: boolean) => void;
+    sourceMode: SourceMode;
+    setSourceMode: (v: SourceMode) => void;
+}
 
-export function AieraChatUI(): ReactElement {
+export function AieraChatUI({
+    showMenu,
+    setShowMenu,
+    setShowConfirm,
+    setSourceMode,
+    sourceMode,
+    showConfirm,
+    showSources,
+    setShowSources,
+}: AieraChatUIProps): ReactElement {
     const config = useConfig();
-    const [showMenu, setShowMenu] = useState(false);
-    const [showSources, setShowSources] = useState(false);
-    const [showSettings, setShowSettings] = useState(false);
 
     const onOpenMenu = useCallback(() => {
         setShowMenu(true);
@@ -35,12 +51,12 @@ export function AieraChatUI(): ReactElement {
         setShowSources(false);
     }, []);
 
-    const onOpenSettings = useCallback(() => {
-        setShowSettings(true);
+    const onOpenConfirm = useCallback(() => {
+        setShowConfirm(true);
     }, []);
 
-    const onCloseSettings = useCallback(() => {
-        setShowSettings(false);
+    const onCloseConfirm = useCallback(() => {
+        setShowConfirm(false);
     }, []);
 
     let darkMode = false;
@@ -62,11 +78,11 @@ export function AieraChatUI(): ReactElement {
                 'aiera-chat'
             )}
         >
-            <Header onOpenMenu={onOpenMenu} onOpenSources={onOpenSources} onOpenSettings={onOpenSettings} />
-            <Messages />
-            {showSources && <Sources onClose={onCloseSources} />}
-            {showMenu && <Menu currentChatId="1" onClose={onCloseMenu} />}
-            {showSettings && <Settings onClose={onCloseSettings} />}
+            <Header onOpenMenu={onOpenMenu} />
+            <Messages onOpenSources={onOpenSources} sourceMode={sourceMode} />
+            {showSources && <Sources onClose={onCloseSources} sourceMode={sourceMode} setSourceMode={setSourceMode} />}
+            {showMenu && <Menu currentChatId="1" onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
+            {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
         </div>
     );
 }
@@ -78,8 +94,23 @@ export interface AieraChatProps extends AieraChatSharedProps {}
  * Renders AieraChat
  */
 export function AieraChat(): ReactElement {
+    const [sourceMode, setSourceMode] = useState<SourceMode>('suggest');
+    const [showMenu, setShowMenu] = useState(false);
+    const [showSources, setShowSources] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     // const config = useConfig();
     // const scrollRef = useRef<HTMLDivElement>(null);
     // useAutoTrack('View', 'AieraChat', { widgetUserId: config.tracking?.userId }, [config.tracking?.userId]);
-    return <AieraChatUI />;
+    return (
+        <AieraChatUI
+            sourceMode={sourceMode}
+            setSourceMode={setSourceMode}
+            showMenu={showMenu}
+            setShowMenu={setShowMenu}
+            showSources={showSources}
+            setShowSources={setShowSources}
+            showConfirm={showConfirm}
+            setShowConfirm={setShowConfirm}
+        />
+    );
 }
