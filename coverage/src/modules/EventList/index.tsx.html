@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.03% </span>
+                <span class="strong">63.79% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>146/228</span>
+                <span class='fraction'>148/232</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">55.41% </span>
+                <span class="strong">53.6% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>133/240</span>
+                <span class='fraction'>134/250</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">64.41% </span>
+                <span class="strong">64.15% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>143/222</span>
+                <span class='fraction'>145/226</span>
             </div>
         
             
@@ -1226,7 +1226,21 @@
 <a name='L1161'></a><a href='#L1161'>1161</a>
 <a name='L1162'></a><a href='#L1162'>1162</a>
 <a name='L1163'></a><a href='#L1163'>1163</a>
-<a name='L1164'></a><a href='#L1164'>1164</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1164'></a><a href='#L1164'>1164</a>
+<a name='L1165'></a><a href='#L1165'>1165</a>
+<a name='L1166'></a><a href='#L1166'>1166</a>
+<a name='L1167'></a><a href='#L1167'>1167</a>
+<a name='L1168'></a><a href='#L1168'>1168</a>
+<a name='L1169'></a><a href='#L1169'>1169</a>
+<a name='L1170'></a><a href='#L1170'>1170</a>
+<a name='L1171'></a><a href='#L1171'>1171</a>
+<a name='L1172'></a><a href='#L1172'>1172</a>
+<a name='L1173'></a><a href='#L1173'>1173</a>
+<a name='L1174'></a><a href='#L1174'>1174</a>
+<a name='L1175'></a><a href='#L1175'>1175</a>
+<a name='L1176'></a><a href='#L1176'>1176</a>
+<a name='L1177'></a><a href='#L1177'>1177</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1394,10 +1408,16 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-yes">53x</span>
+<span class="cline-any cline-yes">53x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-yes">53x</span>
@@ -1620,6 +1640,10 @@
 <span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-yes">53x</span>
 <span class="cline-any cline-yes">53x</span>
+<span class="cline-any cline-yes">53x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1772,6 +1796,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
@@ -1788,6 +1813,7 @@
 <span class="cline-any cline-yes">25x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">59x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2511,6 +2537,7 @@ export interface EventListUIProps {
 &nbsp;
 export interface EventRowProps {
     customOnly: boolean;
+    showCompanyName: boolean;
     event: EventListEvent;
     index: number;
     isRefetching: boolean;
@@ -2555,12 +2582,18 @@ const DefaultEventRow = ({
     searchTerm,
     index,
     setFocus,
+    showCompanyName,
     showDivider,
 }: EventRowProps) =&gt; {
     const primaryQuote = getPrimaryQuote(event.primaryCompany);
     const eventDate = DateTime.fromISO(event.eventDate);
     const audioOffset = (event.audioRecordingOffsetMs ?? 0) / 1000;
     const createdBy = getEventCreatorName(event.creator as User);
+    const companyText = showCompanyName
+        ? <span class="branch-0 cbranch-no" title="branch not covered" >primaryQuote?.localTicker &amp;&amp; event.primaryCompany?.commonName</span>
+            ? `[${primaryQuote?.localTicker}] ${event.primaryCompany?.commonName}`
+            : event.primaryCompany?.commonName || primaryQuote?.localTicker
+        : primaryQuote?.localTicker;
     let divider = null;
     if (showDivider) {
         divider = (
@@ -2652,10 +2685,10 @@ const DefaultEventRow = ({
                         &lt;div className="flex items-baseline"&gt;
                             {primaryQuote?.localTicker ? (
                                 &lt;&gt;
-                                    &lt;span className="leading-none text-sm text-blue-600 dark:text-blue-500 pr-1 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400"&gt;
-                                        {primaryQuote?.localTicker}
+                                    &lt;span className="line-clamp-1 leading-none break-all text-sm text-blue-600 dark:text-blue-500 font-bold group-hover:text-yellow-600 dark:group-hover:text-yellow-400"&gt;
+                                        {companyText}
                                     &lt;/span&gt;
-                                    &lt;span className="leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"&gt;
+                                    &lt;span className="pl-1 font-normal leading-none mb-[1px] tracking-wider text-xs text-gray-400 group-hover:text-gray-500"&gt;
                                         {primaryQuote?.exchange?.shortName}
                                     &lt;/span&gt;
                                 &lt;/&gt;
@@ -2782,12 +2815,16 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
     let renderedRefetch = false;
     let theme = darkMode;
     let showGlobalSearch = true;
+    let showCompanyNameInEventRow = false;
     <span class="missing-if-branch" title="if path not taken" >I</span>if (useConfigOptions &amp;&amp; config.options) {
 <span class="cstat-no" title="statement not covered" >        if (config.options.darkMode !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >            theme = config.options.darkMode;</span>
         }
 <span class="cstat-no" title="statement not covered" >        if (config.options.showGlobalSearch !== undefined) {</span>
 <span class="cstat-no" title="statement not covered" >            showGlobalSearch = config.options.showGlobalSearch;</span>
+        }
+<span class="cstat-no" title="statement not covered" >        if (config.options.showCompanyNameInEventRow !== undefined) {</span>
+<span class="cstat-no" title="statement not covered" >            showCompanyNameInEventRow = config.options.showCompanyNameInEventRow;</span>
         }
     }
 &nbsp;
@@ -2920,6 +2957,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                                                                     }
 <span class="cstat-no" title="statement not covered" >                                                                    return (</span>
                                                                         &lt;EventRow
+                                                                            showCompanyName={showCompanyNameInEventRow}
                                                                             customOnly={customOnly}
                                                                             event={hit.event}
                                                                             index={index}
@@ -2952,6 +2990,7 @@ export const EventListUI = (props: EventListUIProps): ReactElement =&gt; {
                                                     }
                                                     return (
                                                         &lt;EventRow
+                                                            showCompanyName={showCompanyNameInEventRow}
                                                             customOnly={customOnly}
                                                             event={hit.event}
                                                             index={index}
@@ -3559,7 +3598,7 @@ export const EventList = ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Nov 06 2024 10:58:59 GMT-0500 (Eastern Standard Time)
+                at Mon Nov 11 2024 10:27:43 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
