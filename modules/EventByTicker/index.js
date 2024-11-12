@@ -88492,10 +88492,6 @@ function Handle({ className, alt = "Handle" }) {
   }));
 }
 
-// src/modules/Transcript/DownloadTooltip/index.tsx
-var import_classnames31 = __toModule(require_classnames());
-var import_react58 = __toModule(require_react());
-
 // src/components/Svg/Download.tsx
 var import_react57 = __toModule(require_react());
 var import_classnames30 = __toModule(require_classnames());
@@ -88515,6 +88511,8 @@ function Download({ className, alt = "Download" }) {
 }
 
 // src/modules/Transcript/DownloadTooltip/index.tsx
+var import_classnames31 = __toModule(require_classnames());
+var import_react58 = __toModule(require_react());
 function DownloadTooltipUI(props) {
   var _a, _b, _c, _d, _e, _f, _g;
   const { event } = props;
@@ -88593,10 +88591,9 @@ function DownloadTooltipUI(props) {
     }, /* @__PURE__ */ import_react58.default.createElement("p", {
       className: "text-sm"
     }, "Press PDF")))
-  }, /* @__PURE__ */ import_react58.default.createElement(Button, {
-    testId: "downloadButton",
-    className: (0, import_classnames31.default)("ml-3", "group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__download"),
-    kind: "primary"
+  }, /* @__PURE__ */ import_react58.default.createElement("button", {
+    "data-testId": "downloadButton",
+    className: (0, import_classnames31.default)("ml-3", "group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__download")
   }, /* @__PURE__ */ import_react58.default.createElement(Download, {
     className: "h-5 w-5 flex-shrink-0"
   })));
