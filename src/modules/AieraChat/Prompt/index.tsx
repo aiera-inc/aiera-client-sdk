@@ -3,6 +3,7 @@ import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { useSourcesStore } from '../store';
+import { MicroFolderOpen } from '../../../components/Svg/MicroFolderOpen';
 
 interface PromptProps {
     onOpenSources: () => void;
@@ -78,10 +79,14 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                     }
                 )}
             >
-                {sourceMode === 'manual' && sources.length > 0 && (
-                    <p className="text-sm font-bold antialiased mr-0.5">{sources.length}</p>
+                {sourceMode === 'manual' && sources.length > 0 ? (
+                    <>
+                        <p className="text-sm font-bold antialiased mr-0.5">{sources.length}</p>
+                        <MicroFolderOpen className="w-4" />
+                    </>
+                ) : (
+                    <MicroFolder className="w-4" />
                 )}
-                <MicroFolder className="w-4" />
             </button>
             <button
                 onClick={handleSubmit}
