@@ -1,12 +1,11 @@
 import { useQuery } from '@aiera/client-sdk/api/client';
+import { Download } from '@aiera/client-sdk/components/Svg/Download';
+import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
 import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import React, { ReactElement } from 'react';
 import './styles.css';
-import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
-import { Button } from '@aiera/client-sdk/components/Button';
-import { Download } from '@aiera/client-sdk/components/Svg/Download';
 
 export type Event = TranscriptQuery['events'][0];
 
@@ -116,8 +115,8 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                 </div>
             )}
         >
-            <Button
-                testId="downloadButton"
+            <button
+                data-testId="downloadButton"
                 className={classNames(
                     'ml-3',
                     'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',
@@ -127,10 +126,9 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                     'dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8',
                     'button__download'
                 )}
-                kind="primary"
             >
                 <Download className="h-5 w-5 flex-shrink-0" />
-            </Button>
+            </button>
         </Tooltip>
     );
 }
