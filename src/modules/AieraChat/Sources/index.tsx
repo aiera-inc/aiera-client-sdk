@@ -1,5 +1,5 @@
 import { MicroExclamationCircle } from '@aiera/client-sdk/components/Svg/MicroExclamationCircle';
-import { MicroPaperclip } from '@aiera/client-sdk/components/Svg/MicroPaperclip';
+import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import classNames from 'classnames';
 import React from 'react';
@@ -44,7 +44,7 @@ function SourcesUI({
     return (
         <Panel
             className="px-5 mt-2 flex-1 flex flex-col"
-            Icon={MicroPaperclip}
+            Icon={MicroFolder}
             title="Chat Sources"
             onClose={onClose}
             side="right"
