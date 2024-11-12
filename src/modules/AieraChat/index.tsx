@@ -8,7 +8,6 @@ import { Sources } from './Sources';
 import './styles.css';
 import { ConfirmDialog } from './ConfirmDialog';
 
-export type SourceMode = 'suggest' | 'manual';
 interface AieraChatSharedProps {}
 
 /** @notExported */
@@ -19,16 +18,12 @@ interface AieraChatUIProps extends AieraChatSharedProps {
     setShowSources: (v: boolean) => void;
     showConfirm: boolean;
     setShowConfirm: (v: boolean) => void;
-    sourceMode: SourceMode;
-    setSourceMode: (v: SourceMode) => void;
 }
 
 export function AieraChatUI({
     showMenu,
     setShowMenu,
     setShowConfirm,
-    setSourceMode,
-    sourceMode,
     showConfirm,
     showSources,
     setShowSources,
@@ -79,8 +74,8 @@ export function AieraChatUI({
             )}
         >
             <Header onOpenMenu={onOpenMenu} />
-            <Messages onOpenSources={onOpenSources} sourceMode={sourceMode} />
-            {showSources && <Sources onClose={onCloseSources} sourceMode={sourceMode} setSourceMode={setSourceMode} />}
+            <Messages onOpenSources={onOpenSources} />
+            {showSources && <Sources onClose={onCloseSources} />}
             {showMenu && <Menu currentChatId="1" onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
             {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
         </div>
@@ -94,7 +89,6 @@ export interface AieraChatProps extends AieraChatSharedProps {}
  * Renders AieraChat
  */
 export function AieraChat(): ReactElement {
-    const [sourceMode, setSourceMode] = useState<SourceMode>('suggest');
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
@@ -103,8 +97,6 @@ export function AieraChat(): ReactElement {
     // useAutoTrack('View', 'AieraChat', { widgetUserId: config.tracking?.userId }, [config.tracking?.userId]);
     return (
         <AieraChatUI
-            sourceMode={sourceMode}
-            setSourceMode={setSourceMode}
             showMenu={showMenu}
             setShowMenu={setShowMenu}
             showSources={showSources}

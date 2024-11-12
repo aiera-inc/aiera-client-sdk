@@ -6,12 +6,11 @@ import {
     useCurrentlyRenderedData,
     useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
-import React, { Fragment, useCallback, useRef } from 'react';
-import './styles.css';
-import { MessageFactory, MessagePrompt } from './MessageFactory';
-import { Prompt } from '../Prompt';
 import classNames from 'classnames';
-import { SourceMode } from '..';
+import React, { Fragment, useCallback, useRef } from 'react';
+import { Prompt } from '../Prompt';
+import { MessageFactory, MessagePrompt } from './MessageFactory';
+import './styles.css';
 
 type MessageType = 'prompt' | 'sources' | 'response';
 type MessageStatus = 'finished' | 'thinking' | 'updating';
@@ -55,7 +54,7 @@ const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = ()
     );
 };
 
-export function Messages({ onOpenSources, sourceMode }: { sourceMode: SourceMode; onOpenSources: () => void }) {
+export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
     const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
 
     const onSubmit = useCallback((prompt: string) => {
@@ -120,7 +119,7 @@ export function Messages({ onOpenSources, sourceMode }: { sourceMode: SourceMode
                         StickyHeader={StickyHeader}
                     />
                 </VirtuosoMessageListLicense>
-                <Prompt onSubmit={onSubmit} sourceMode={sourceMode} onOpenSources={onOpenSources} />
+                <Prompt onSubmit={onSubmit} onOpenSources={onOpenSources} />
             </div>
         </div>
     );

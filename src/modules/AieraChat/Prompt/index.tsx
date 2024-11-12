@@ -2,15 +2,15 @@ import { MicroArrowUp } from '@aiera/client-sdk/components/Svg/MicroArrowUp';
 import { MicroPaperclip } from '@aiera/client-sdk/components/Svg/MicroPaperclip';
 import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { SourceMode } from '..';
+import { useSourcesStore } from '../store';
 
 interface PromptProps {
     onOpenSources: () => void;
     onSubmit: (prompt: string) => void;
-    sourceMode: SourceMode;
 }
 
-export function Prompt({ onSubmit, onOpenSources, sourceMode }: PromptProps) {
+export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
+    const { sourceMode, sources } = useSourcesStore();
     const [isEmpty, setIsEmpty] = useState(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
 
@@ -69,15 +69,18 @@ export function Prompt({ onSubmit, onOpenSources, sourceMode }: PromptProps) {
             <button
                 onClick={onOpenSources}
                 className={classNames(
-                    'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
+                    'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] px-1.5 transition-all',
                     'rounded-lg flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer hover:bg-slate-100 active:bg-slate-200 active:scale-90',
                     {
-                        'text-rose-600': sourceMode === 'manual',
-                        'text-slate-400': sourceMode === 'suggest',
+                        'text-rose-600': sourceMode === 'manual' && sources.length > 0,
+                        'text-slate-400': sourceMode === 'suggest' || sources.length === 0,
                     }
                 )}
             >
+                {sourceMode === 'manual' && sources.length > 0 && (
+                    <p className="text-sm font-bold antialiased mr-0.5">{sources.length}</p>
+                )}
                 <MicroPaperclip className="w-4" />
             </button>
             <button
