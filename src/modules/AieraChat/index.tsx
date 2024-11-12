@@ -7,6 +7,8 @@ import { Messages } from './Messages';
 import { Sources } from './Sources';
 import './styles.css';
 import { ConfirmDialog } from './ConfirmDialog';
+import { Source, useSourcesStore } from './store';
+import { Transcript } from '../Transcript';
 
 interface AieraChatSharedProps {}
 
@@ -18,6 +20,8 @@ interface AieraChatUIProps extends AieraChatSharedProps {
     setShowSources: (v: boolean) => void;
     showConfirm: boolean;
     setShowConfirm: (v: boolean) => void;
+    onSelectSource: (s?: Source) => void;
+    selectedSource?: Source;
 }
 
 export function AieraChatUI({
@@ -27,8 +31,12 @@ export function AieraChatUI({
     showConfirm,
     showSources,
     setShowSources,
+    onSelectSource,
+    selectedSource,
 }: AieraChatUIProps): ReactElement {
     const config = useConfig();
+
+    const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
 
     const onOpenMenu = useCallback(() => {
         setShowMenu(true);
@@ -63,22 +71,45 @@ export function AieraChatUI({
     }
 
     return (
-        <div
-            className={classNames(
-                'flex flex-col relative h-full overflow-hidden',
-                {
-                    dark: darkMode,
-                    'bg-gray-50': !darkMode,
-                },
-                'aiera-chat'
+        <>
+            {selectedSource && (
+                <div
+                    className={classNames('fixed inset-0 slideInFromRight z-50', {
+                        slideOutToRight: animateTranscriptExit,
+                    })}
+                    onAnimationEnd={() => {
+                        if (animateTranscriptExit) {
+                            onSelectSource(undefined);
+                            setTimeout(() => {
+                                setAnimateTranscriptExit(false);
+                            });
+                        }
+                    }}
+                >
+                    <Transcript
+                        onBackHeader="Back"
+                        eventId={selectedSource.targetId}
+                        onBack={() => setAnimateTranscriptExit(true)}
+                    />
+                </div>
             )}
-        >
-            <Header onOpenMenu={onOpenMenu} />
-            <Messages onOpenSources={onOpenSources} />
-            {showSources && <Sources onClose={onCloseSources} />}
-            {showMenu && <Menu currentChatId="1" onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
-            {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
-        </div>
+            <div
+                className={classNames(
+                    'flex flex-col relative h-full overflow-hidden',
+                    {
+                        dark: darkMode,
+                        'bg-gray-50': !darkMode,
+                    },
+                    'aiera-chat'
+                )}
+            >
+                <Header onOpenMenu={onOpenMenu} />
+                <Messages onOpenSources={onOpenSources} />
+                {showSources && <Sources onClose={onCloseSources} />}
+                {showMenu && <Menu currentChatId="1" onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
+                {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
+            </div>
+        </>
     );
 }
 
@@ -92,11 +123,11 @@ export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    // const config = useConfig();
-    // const scrollRef = useRef<HTMLDivElement>(null);
-    // useAutoTrack('View', 'AieraChat', { widgetUserId: config.tracking?.userId }, [config.tracking?.userId]);
+    const { selectedSource, onSelectSource } = useSourcesStore();
     return (
         <AieraChatUI
+            selectedSource={selectedSource}
+            onSelectSource={onSelectSource}
             showMenu={showMenu}
             setShowMenu={setShowMenu}
             showSources={showSources}

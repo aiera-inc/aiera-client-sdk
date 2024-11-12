@@ -1,15 +1,15 @@
+import classNames from 'classnames';
 import React from 'react';
 import { match } from 'ts-pattern';
 import { Message } from '..';
-import { MicroQuestionMark } from '../../../../components/Svg/MicroQuestionMark';
-import classNames from 'classnames';
-import { IconButton } from '../../Header/IconButton';
-import { MicroThumbUp } from '../../../../components/Svg/MicroThumbUp';
-import { MicroThumbDown } from '../../../../components/Svg/MicroThumbDown';
-import { MicroSparkles } from '../../../../components/Svg/MicroSparkles';
-import { MicroCalendar } from '../../../../components/Svg/MicroCalendar';
-import { MicroRefresh } from '../../../../components/Svg/MicroRefresh';
 import { MicroCopy } from '../../../../components/Svg/MicroCopy';
+import { MicroQuestionMark } from '../../../../components/Svg/MicroQuestionMark';
+import { MicroRefresh } from '../../../../components/Svg/MicroRefresh';
+import { MicroSparkles } from '../../../../components/Svg/MicroSparkles';
+import { MicroThumbDown } from '../../../../components/Svg/MicroThumbDown';
+import { MicroThumbUp } from '../../../../components/Svg/MicroThumbUp';
+import { IconButton } from '../../Header/IconButton';
+import { useSourcesStore } from '../../store';
 
 export const MessagePrompt = ({
     data,
@@ -56,6 +56,7 @@ export const MessagePrompt = ({
 };
 
 const ItemContent = ({ data }: { data: Message }) => {
+    const { onSelectSource } = useSourcesStore();
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-sm">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
@@ -63,12 +64,30 @@ const ItemContent = ({ data }: { data: Message }) => {
         </div>
     ) : (
         <div className="pb-8 flex flex-col">
-            <div className="pt-4 pl-4 pb-4 pr-2 text-base">{data.text}</div>
+            <div className="pt-4 pl-4 pb-4 pr-2 text-base">
+                {data.text}
+                <span
+                    onClick={() =>
+                        onSelectSource({
+                            targetId: '2639849',
+                            targetType: 'event',
+                            title: 'TSLA Q3 2024 Earnings Call',
+                        })
+                    }
+                    className={classNames(
+                        'text-xs px-[3px] cursor-pointer hover:bg-indigo-800 ml-1 py-0.5 font-bold antialiased text-white bg-indigo-600 rounded',
+                        {
+                            'opacity-0': data.status !== 'finished',
+                        }
+                    )}
+                >
+                    C1
+                </span>
+            </div>
             {data.status === 'finished' && (
                 <div className="flex items-center pl-4 pr-2">
                     <IconButton className="mr-2" Icon={MicroRefresh} />
                     <IconButton className="mr-2" Icon={MicroCopy} />
-                    <IconButton className="mr-2" Icon={MicroCalendar} />
                     <div className="flex-1" />
                     <IconButton className="mr-2" Icon={MicroThumbUp} />
                     <IconButton Icon={MicroThumbDown} />

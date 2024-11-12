@@ -31,10 +31,12 @@ function SourcesUI({
     mode,
     onSetSourceMode,
     onRemoveSource,
+    onSelectSource,
 }: {
     sources: Source[];
     onRemoveSource: (id: string, type: string) => void;
     onSetSourceMode: (m: SourceMode) => void;
+    onSelectSource: (s?: Source) => void;
     onClose: () => void;
     mode: SourceMode;
 }) {
@@ -79,9 +81,19 @@ function SourcesUI({
                             <div
                                 key={targetId}
                                 className="flex hover:bg-slate-200/80 pl-2.5 ml-0.5 pr-1.5 mr-1.5 rounded-lg justify-between items-center py-1 text-slate-600"
+                                onClick={() => {
+                                    onSelectSource({ targetId, targetType, title });
+                                }}
                             >
                                 <p className="text-sm line-clamp-1 hover:text-blue-700 cursor-pointer">{title}</p>
-                                <div className="ml-2" onClick={() => onRemoveSource(targetId, targetType)}>
+                                <div
+                                    className="ml-2"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        onRemoveSource(targetId, targetType);
+                                    }}
+                                >
                                     <MicroTrash className="w-4 hover:text-red-600 cursor-pointer" />
                                 </div>
                             </div>
@@ -102,7 +114,7 @@ function SourcesUI({
 }
 
 export function Sources({ onClose }: { onClose: () => void }) {
-    const { sourceMode, setSourceMode, onRemoveSource, sources } = useSourcesStore();
+    const { sourceMode, setSourceMode, onRemoveSource, sources, onSelectSource } = useSourcesStore();
     return (
         <SourcesUI
             sources={sources}
@@ -110,6 +122,7 @@ export function Sources({ onClose }: { onClose: () => void }) {
             mode={sourceMode}
             onRemoveSource={onRemoveSource}
             onSetSourceMode={setSourceMode}
+            onSelectSource={onSelectSource}
         />
     );
 }
