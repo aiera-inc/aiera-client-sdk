@@ -2,14 +2,14 @@ import classNames from 'classnames';
 import React from 'react';
 import { match } from 'ts-pattern';
 import { Message } from '..';
-import { MicroCopy } from '../../../../components/Svg/MicroCopy';
-import { MicroQuestionMark } from '../../../../components/Svg/MicroQuestionMark';
-import { MicroRefresh } from '../../../../components/Svg/MicroRefresh';
-import { MicroSparkles } from '../../../../components/Svg/MicroSparkles';
-import { MicroThumbDown } from '../../../../components/Svg/MicroThumbDown';
-import { MicroThumbUp } from '../../../../components/Svg/MicroThumbUp';
+import { useChatStore } from '../../store';
+import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
+import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
+import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestionMark';
+import { MicroRefresh } from '@aiera/client-sdk/components/Svg/MicroRefresh';
+import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
+import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
 import { IconButton } from '../../Header/IconButton';
-import { useSourcesStore } from '../../store';
 
 export const MessagePrompt = ({
     data,
@@ -56,7 +56,7 @@ export const MessagePrompt = ({
 };
 
 const ItemContent = ({ data }: { data: Message }) => {
-    const { onSelectSource } = useSourcesStore();
+    const { onSelectSource } = useChatStore();
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-sm">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />

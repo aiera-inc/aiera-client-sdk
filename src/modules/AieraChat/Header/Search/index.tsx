@@ -4,8 +4,10 @@ import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useState } from 'react';
 import { IconButton } from '../IconButton';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
+import { useChatStore } from '../../store';
 
-export function Search({ title }: { title?: string }) {
+export function Search() {
+    const { chatTitle } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
     const [_, setInFocus] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -23,10 +25,10 @@ export function Search({ title }: { title?: string }) {
     );
     const onFocus = useCallback(() => setInFocus(true), []);
     const onBlur = useCallback(() => setInFocus(false), []);
-
     return showSearch ? (
         <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 flex items-center">
             <input
+                key="searchInput"
                 onFocus={onFocus}
                 onBlur={onBlur}
                 onKeyDown={onKeyDown}
@@ -58,7 +60,8 @@ export function Search({ title }: { title?: string }) {
                     </div>
                 </>
             )}
-            <div
+            <button
+                name="close"
                 onClick={onCloseSearch}
                 className={classNames(
                     'absolute right-2 top-0 bottom-0 z-20 flex items-center justify-center',
@@ -66,14 +69,15 @@ export function Search({ title }: { title?: string }) {
                 )}
             >
                 <MicroCloseCircle className="w-4" />
-            </div>
+            </button>
         </div>
     ) : (
         <>
             <div className="flex-1 flex items-center text-base font-bold">
                 <input
+                    key="titleInput"
                     className="text-center antialiased flex-1 outline-none bg-transparent truncate"
-                    value={title}
+                    value={chatTitle ?? ''}
                     placeholder="Untitled Chat"
                 />
             </div>

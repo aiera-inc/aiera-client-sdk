@@ -7,7 +7,7 @@ import { Messages } from './Messages';
 import { Sources } from './Sources';
 import './styles.css';
 import { ConfirmDialog } from './ConfirmDialog';
-import { Source, useSourcesStore } from './store';
+import { Source, useChatStore } from './store';
 import { Transcript } from '../Transcript';
 
 interface AieraChatSharedProps {}
@@ -106,7 +106,7 @@ export function AieraChatUI({
                 <Header onOpenMenu={onOpenMenu} />
                 <Messages onOpenSources={onOpenSources} />
                 {showSources && <Sources onClose={onCloseSources} />}
-                {showMenu && <Menu currentChatId="1" onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
+                {showMenu && <Menu onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
                 {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
             </div>
         </>
@@ -123,7 +123,7 @@ export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    const { selectedSource, onSelectSource } = useSourcesStore();
+    const { selectedSource, onSelectSource } = useChatStore();
     return (
         <AieraChatUI
             selectedSource={selectedSource}

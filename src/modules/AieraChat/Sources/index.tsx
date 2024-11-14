@@ -4,7 +4,7 @@ import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import classNames from 'classnames';
 import React from 'react';
 import { Panel } from '../Panel';
-import { Source, SourceMode, useSourcesStore } from '../store';
+import { Source, SourceMode, useChatStore } from '../store';
 
 interface SourceModeType {
     id: SourceMode;
@@ -114,7 +114,7 @@ function SourcesUI({
 }
 
 export function Sources({ onClose }: { onClose: () => void }) {
-    const { sourceMode, setSourceMode, onRemoveSource, sources, onSelectSource } = useSourcesStore();
+    const { sourceMode, setSourceMode, onRemoveSource, sources, onSelectSource } = useChatStore();
     return (
         <SourcesUI
             sources={sources}

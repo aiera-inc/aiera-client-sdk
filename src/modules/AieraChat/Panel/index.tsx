@@ -4,6 +4,8 @@ import classNames from 'classnames';
 import { IconProps } from '@aiera/client-sdk/types';
 import { MicroClose } from '@aiera/client-sdk/components/Svg/MicroClose';
 
+type ChildrenProp = ReactNode | ((props: { onStartExit: () => void }) => ReactNode);
+
 export function Panel({
     onClose,
     side = 'left',
@@ -15,7 +17,7 @@ export function Panel({
     className?: string;
     Icon: ComponentType<IconProps>;
     title: string;
-    children: ReactNode;
+    children: ChildrenProp;
     onClose: () => void;
     side: 'left' | 'right';
 }) {
@@ -48,13 +50,13 @@ export function Panel({
                     <Icon className="w-4 mr-1.5" />
                     <p className="flex-1">{title}</p>
                     <div
-                        onClick={onClose}
+                        onClick={onStartExit}
                         className="text-slate-400 mt-1 mr-0.5 hover:text-slate-800 cursor-pointer active:scale-110"
                     >
                         <MicroClose className="w-4" />
                     </div>
                 </div>
-                <div className={className}>{children}</div>
+                <div className={className}>{typeof children === 'function' ? children({ onStartExit }) : children}</div>
             </div>
             <div
                 onAnimationEnd={onAnimationEnd}

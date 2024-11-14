@@ -2,8 +2,8 @@ import { MicroArrowUp } from '@aiera/client-sdk/components/Svg/MicroArrowUp';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { useSourcesStore } from '../store';
 import { MicroFolderOpen } from '../../../components/Svg/MicroFolderOpen';
+import { useChatStore } from '../store';
 
 interface PromptProps {
     onOpenSources: () => void;
@@ -11,7 +11,7 @@ interface PromptProps {
 }
 
 export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
-    const { sourceMode, sources } = useSourcesStore();
+    const { sourceMode, sources } = useChatStore();
     const [isEmpty, setIsEmpty] = useState(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
 
