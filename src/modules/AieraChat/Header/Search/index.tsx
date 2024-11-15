@@ -7,7 +7,7 @@ import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { useChatStore } from '../../store';
 
 export function Search() {
-    const { chatTitle } = useChatStore();
+    const { chatTitle, onSetTitle } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
     const [_, setInFocus] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
@@ -75,6 +75,7 @@ export function Search() {
         <>
             <div className="flex-1 flex items-center text-base font-bold">
                 <input
+                    onChange={(e) => onSetTitle(e.target.value)}
                     key="titleInput"
                     className="text-center antialiased flex-1 outline-none bg-transparent truncate"
                     value={chatTitle ?? ''}

@@ -63,7 +63,7 @@ const ItemContent = ({ data }: { data: Message }) => {
             <p className="font-semibold antialiased">Thinking...</p>
         </div>
     ) : (
-        <div className="pb-8 flex flex-col">
+        <div className="pb-12 flex flex-col">
             <div className="pt-4 pl-4 pb-4 pr-2 text-base">
                 {data.text}
                 <span

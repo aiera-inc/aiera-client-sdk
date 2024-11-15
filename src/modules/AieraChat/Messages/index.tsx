@@ -7,10 +7,13 @@ import {
     useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { Fragment, useCallback, useRef } from 'react';
+import React, { Fragment, useCallback, useEffect, useRef } from 'react';
 import { Prompt } from '../Prompt';
 import { MessageFactory, MessagePrompt } from './MessageFactory';
 import './styles.css';
+import { useChatMessages } from '../services/messages';
+import { useChatStore } from '../store';
+import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 
 type MessageType = 'prompt' | 'sources' | 'response';
 type MessageStatus = 'finished' | 'thinking' | 'updating';
@@ -29,6 +32,14 @@ let idCounter = 0;
 function randomMessage(user: Message['user'], prompt: Message['prompt']): Message {
     return { user, key: `${idCounter++}`, type: 'response', text: 'some other message', prompt, status: 'thinking' };
 }
+
+const EmptyPlaceholder: VirtuosoMessageListProps<Message, null>['EmptyPlaceholder'] = () => {
+    return (
+        <div className="flex-1 flex flex-col justify-end h-full pb-4">
+            <p className="text-sm text-center">Suggested questions (based on watchlist)</p>
+        </div>
+    );
+};
 
 const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = () => {
     const data: Message[] = useCurrentlyRenderedData();
@@ -55,7 +66,16 @@ const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = ()
 };
 
 export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
+    const { chatId } = useChatStore();
+    const { messages, isLoading } = useChatMessages(chatId);
     const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
+
+    // Reset when starting new chat
+    useEffect(() => {
+        if (chatId === null && virtuoso.current?.data) {
+            virtuoso.current.data.replace([]);
+        }
+    }, [chatId]);
 
     const onSubmit = useCallback((prompt: string) => {
         const myMessage: Message = {
@@ -107,18 +127,27 @@ export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
     return (
         <div className="relative flex-1">
             <div className="absolute bottom-0 left-0 right-0 top-4 flex flex-col flex-1">
-                <VirtuosoMessageListLicense licenseKey="">
-                    <VirtuosoMessageList<Message, null>
-                        ref={virtuoso}
-                        style={{ flex: 1 }}
-                        computeItemKey={({ data }: { data: Message }) => data.key}
-                        className="px-4 messagesScrollBars"
-                        initialLocation={{ index: 'LAST', align: 'end' }}
-                        shortSizeAlign="bottom-smooth"
-                        ItemContent={MessageFactory}
-                        StickyHeader={StickyHeader}
-                    />
-                </VirtuosoMessageListLicense>
+                {isLoading ? (
+                    <div className="flex-1 flex flex-col items-center justify-center pb-3">
+                        <LoadingSpinner />
+                    </div>
+                ) : (
+                    <VirtuosoMessageListLicense licenseKey="">
+                        <VirtuosoMessageList<Message, null>
+                            key={chatId}
+                            ref={virtuoso}
+                            style={{ flex: 1 }}
+                            computeItemKey={({ data }: { data: Message }) => data.key}
+                            className="px-4 messagesScrollBars"
+                            initialLocation={{ index: 'LAST', align: 'end' }}
+                            initialData={messages}
+                            shortSizeAlign="bottom-smooth"
+                            ItemContent={MessageFactory}
+                            EmptyPlaceholder={EmptyPlaceholder}
+                            StickyHeader={StickyHeader}
+                        />
+                    </VirtuosoMessageListLicense>
+                )}
                 <Prompt onSubmit={onSubmit} onOpenSources={onOpenSources} />
             </div>
         </div>
