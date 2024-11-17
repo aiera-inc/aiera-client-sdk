@@ -165,7 +165,7 @@ export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn
         } finally {
             setIsLoading(false);
         }
-    }, []);
+    }, [sessionId]);
 
     useEffect(() => {
         void fetchMessages();
