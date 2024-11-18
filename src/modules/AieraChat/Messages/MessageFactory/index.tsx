@@ -86,11 +86,11 @@ const ItemContent = ({ data }: { data: Message }) => {
             </div>
             {data.status === 'finished' && (
                 <div className="flex items-center pl-4 pr-2">
-                    <IconButton className="mr-2" Icon={MicroRefresh} />
                     <IconButton className="mr-2" Icon={MicroCopy} />
-                    <div className="flex-1" />
                     <IconButton className="mr-2" Icon={MicroThumbUp} />
                     <IconButton Icon={MicroThumbDown} />
+                    <div className="flex-1" />
+                    <IconButton Icon={MicroRefresh} />
                 </div>
             )}
         </div>
