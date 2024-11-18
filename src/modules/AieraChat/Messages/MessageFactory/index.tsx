@@ -23,7 +23,7 @@ export const MessagePrompt = ({
     return (
         <div
             className={classNames(
-                'px-4 bg-slate-200 rounded-xl flex relative',
+                'px-4 bg-slate-200/60-solid rounded-xl flex relative',
                 {
                     'py-3.5 min-h-14': !isStickyHeader,
                     'h-14': isStickyHeader,

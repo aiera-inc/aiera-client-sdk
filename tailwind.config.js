@@ -35,6 +35,7 @@ module.exports = {
                     7: '#242434',
                     8: '#1A1A28',
                 },
+                'slate-200/60-solid': '#EBEFF5',
             },
             cursor: {
                 grab: 'grab',
