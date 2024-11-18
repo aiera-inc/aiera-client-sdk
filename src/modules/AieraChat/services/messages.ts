@@ -152,9 +152,11 @@ export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn
 
     const fetchMessages = useCallback(async () => {
         try {
-            setIsLoading(true);
+            if (sessionId !== 'new') {
+                setIsLoading(true);
+            }
             setError(null);
-            if (sessionId) {
+            if (sessionId && sessionId !== 'new') {
                 const data = await fetchChatMessages(sessionId);
                 setMessages(data);
             } else {

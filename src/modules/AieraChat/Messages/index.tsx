@@ -66,7 +66,7 @@ const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = ()
 };
 
 export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
-    const { chatId } = useChatStore();
+    const { chatId, selectChat } = useChatStore();
     const { messages, isLoading } = useChatMessages(chatId);
     const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
 
@@ -77,52 +77,56 @@ export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
         }
     }, [chatId]);
 
-    const onSubmit = useCallback((prompt: string) => {
-        const myMessage: Message = {
-            user: 'me',
-            key: `${idCounter++}`,
-            text: prompt,
-            prompt,
-            status: 'finished',
-            type: 'prompt',
-        };
-        virtuoso.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
-            return {
-                index: 'LAST',
-                align: 'end',
-                behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+    const onSubmit = useCallback(
+        (prompt: string) => {
+            selectChat('new');
+            const myMessage: Message = {
+                user: 'me',
+                key: `${idCounter++}`,
+                text: prompt,
+                prompt,
+                status: 'finished',
+                type: 'prompt',
             };
-        });
+            virtuoso.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
+                return {
+                    index: 'LAST',
+                    align: 'end',
+                    behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                };
+            });
 
-        const botMessage = randomMessage('other', prompt);
-        virtuoso.current?.data.append([botMessage]);
-        setTimeout(() => {
-            let counter = 0;
-            const interval = setInterval(() => {
-                let status: MessageStatus = 'updating';
-                if (counter++ > 80) {
-                    clearInterval(interval);
-                    status = 'finished';
-                }
-                virtuoso.current?.data.map(
-                    (message) => {
-                        return message.key === botMessage.key
-                            ? {
-                                  ...message,
-                                  text: message.text + ' ' + 'some message',
-                                  status,
-                              }
-                            : message;
-                    },
-                    {
-                        location() {
-                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                        },
+            const botMessage = randomMessage('other', prompt);
+            virtuoso.current?.data.append([botMessage]);
+            setTimeout(() => {
+                let counter = 0;
+                const interval = setInterval(() => {
+                    let status: MessageStatus = 'updating';
+                    if (counter++ > 80) {
+                        clearInterval(interval);
+                        status = 'finished';
                     }
-                );
-            }, 150);
-        }, 2000);
-    }, []);
+                    virtuoso.current?.data.map(
+                        (message) => {
+                            return message.key === botMessage.key
+                                ? {
+                                      ...message,
+                                      text: message.text + ' ' + 'some message',
+                                      status,
+                                  }
+                                : message;
+                        },
+                        {
+                            location() {
+                                return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                            },
+                        }
+                    );
+                }, 150);
+            }, 2000);
+        },
+        [chatId]
+    );
 
     return (
         <div className="relative flex-1">
@@ -134,7 +138,7 @@ export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
                 ) : (
                     <VirtuosoMessageListLicense licenseKey="">
                         <VirtuosoMessageList<Message, null>
-                            key={chatId}
+                            key={chatId || 'new'}
                             ref={virtuoso}
                             style={{ flex: 1 }}
                             computeItemKey={({ data }: { data: Message }) => data.key}
