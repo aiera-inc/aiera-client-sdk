@@ -10,12 +10,14 @@ export interface Source {
 export interface ChatState {
     chatId: string | null;
     chatTitle?: string;
+    searchTerm?: string;
     selectChat: (chatId: string | null, chatTitle?: string) => void;
     selectedSource?: Source;
     sourceMode: SourceMode;
     sources: Source[];
     setSourceMode: (mode: SourceMode) => void;
     onNewChat: () => void;
+    onSetSearchTerm: (searchTerm?: string) => void;
     onSetTitle: (title?: string) => void;
     onAddSource: (source: Source) => void;
     onRemoveSource: (targetId: string, targetType: string) => void;
@@ -25,6 +27,7 @@ export interface ChatState {
 export const useChatStore = create<ChatState>((set) => ({
     chatId: null,
     chatTitle: undefined,
+    searchTerm: undefined,
     selectedSource: undefined,
     sourceMode: 'suggest',
     sources: [
@@ -33,7 +36,8 @@ export const useChatStore = create<ChatState>((set) => ({
         { targetId: '2639939', targetType: 'event', title: 'META Q3 2024 Earnings Call' },
     ],
     selectChat: (chatId: string | null, chatTitle?: string) => set({ chatId, chatTitle, sourceMode: 'suggest' }),
-    onNewChat: () => set({ chatId: null, chatTitle: undefined, sourceMode: 'suggest' }),
+    onNewChat: () => set({ chatId: null, chatTitle: undefined, sourceMode: 'suggest', searchTerm: undefined }),
+    onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
     setSourceMode: (sourceMode: SourceMode) => set({ sourceMode }),

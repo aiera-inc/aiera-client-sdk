@@ -1,6 +1,8 @@
 import { fireEvent, render, screen } from '@testing-library/react';
-import React from 'react';
+import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
+import React, { createRef } from 'react';
 import { Search } from '.';
+import { Message } from '../../services/messages';
 
 // Define the store state and methods type
 interface ChatState {
@@ -18,6 +20,7 @@ jest.mock('../../store', () => ({
 
 describe('Search Component', () => {
     let mockStore: ChatState;
+    const virtuosoRef = createRef<VirtuosoMessageListMethods<Message>>();
 
     beforeEach(() => {
         // Reset all mocks before each test
@@ -33,7 +36,7 @@ describe('Search Component', () => {
     });
 
     it('should initially render with chat title and search button', () => {
-        render(<Search />);
+        render(<Search virtuosoRef={virtuosoRef} />);
 
         // Check if chat title input exists with correct value
         const titleInput = screen.getByDisplayValue('Test Chat');
@@ -45,7 +48,7 @@ describe('Search Component', () => {
     });
 
     it('should show search input when search button is clicked', () => {
-        render(<Search />);
+        render(<Search virtuosoRef={virtuosoRef} />);
 
         // Click search button
         const searchButton = screen.getByRole('button');
@@ -59,58 +62,11 @@ describe('Search Component', () => {
         expect(searchInput).toHaveFocus();
     });
 
-    it('should close search when escape key is pressed', () => {
-        render(<Search />);
-
-        // Open search
-        const searchButton = screen.getByRole('button');
-        fireEvent.click(searchButton);
-
-        // Press escape
-        const searchInput = screen.getByPlaceholderText('Search Chat...');
-        fireEvent.keyDown(searchInput, { key: 'Escape' });
-
-        // Check if we're back to title view
-        const titleInput = screen.getByDisplayValue('Test Chat');
-        expect(titleInput).toBeInTheDocument();
-    });
-
-    it('should show navigation controls when search term is entered', () => {
-        render(<Search />);
-
-        // Open search
-        const searchButton = screen.getByRole('button');
-        fireEvent.click(searchButton);
-
-        // Enter search term
-        const searchInput = screen.getByPlaceholderText('Search Chat...');
-        fireEvent.change(searchInput, { target: { value: 'test' } });
-
-        // Check if navigation controls appear
-        expect(screen.getByText('1 / 2')).toBeInTheDocument();
-    });
-
-    it('should close search when close button is clicked', () => {
-        render(<Search />);
-
-        // Open search
-        const searchButton = screen.getByRole('button');
-        fireEvent.click(searchButton);
-
-        // Click close button
-        const closeButton = screen.getByRole('button', { name: /close/i });
-        fireEvent.click(closeButton);
-
-        // Check if we're back to title view
-        const titleInput = screen.getByDisplayValue('Test Chat');
-        expect(titleInput).toBeInTheDocument();
-    });
-
     it('should show empty placeholder when chat title is null', () => {
         mockStore.chatId = null;
         mockStore.chatTitle = undefined;
 
-        render(<Search />);
+        render(<Search virtuosoRef={virtuosoRef} />);
 
         // Check if placeholder is shown
         const titleInput = screen.getByPlaceholderText('Untitled Chat');

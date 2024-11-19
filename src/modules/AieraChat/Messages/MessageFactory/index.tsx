@@ -1,7 +1,6 @@
 import classNames from 'classnames';
 import React from 'react';
 import { match } from 'ts-pattern';
-import { Message } from '..';
 import { useChatStore } from '../../store';
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
 import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
@@ -10,6 +9,7 @@ import { MicroRefresh } from '@aiera/client-sdk/components/Svg/MicroRefresh';
 import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
 import { IconButton } from '../../Header/IconButton';
+import { Message } from '../../services/messages';
 
 export const MessagePrompt = ({
     data,

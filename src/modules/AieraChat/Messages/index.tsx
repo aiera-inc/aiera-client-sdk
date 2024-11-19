@@ -1,3 +1,4 @@
+import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import {
     VirtuosoMessageList,
     VirtuosoMessageListLicense,
@@ -7,25 +8,12 @@ import {
     useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { Fragment, useCallback, useEffect, useRef } from 'react';
+import React, { Fragment, RefObject, useCallback, useEffect } from 'react';
 import { Prompt } from '../Prompt';
+import { Message, MessageStatus, useChatMessages } from '../services/messages';
+import { useChatStore } from '../store';
 import { MessageFactory, MessagePrompt } from './MessageFactory';
 import './styles.css';
-import { useChatMessages } from '../services/messages';
-import { useChatStore } from '../store';
-import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
-
-type MessageType = 'prompt' | 'sources' | 'response';
-type MessageStatus = 'finished' | 'thinking' | 'updating';
-
-export interface Message {
-    type: MessageType;
-    key: string;
-    text: string;
-    status: MessageStatus;
-    prompt?: string;
-    user: 'me' | 'other';
-}
 
 let idCounter = 0;
 
@@ -65,15 +53,20 @@ const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = ()
     );
 };
 
-export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
+export function Messages({
+    onOpenSources,
+    virtuosoRef,
+}: {
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>>;
+    onOpenSources: () => void;
+}) {
     const { chatId, selectChat } = useChatStore();
     const { messages, isLoading } = useChatMessages(chatId);
-    const virtuoso = useRef<VirtuosoMessageListMethods<Message>>(null);
 
     // Reset when starting new chat
     useEffect(() => {
-        if (chatId === null && virtuoso.current?.data) {
-            virtuoso.current.data.replace([]);
+        if (chatId === null && virtuosoRef.current?.data) {
+            virtuosoRef.current.data.replace([]);
         }
     }, [chatId]);
 
@@ -88,7 +81,7 @@ export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
                 status: 'finished',
                 type: 'prompt',
             };
-            virtuoso.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
+            virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
                 return {
                     index: 'LAST',
                     align: 'end',
@@ -97,7 +90,7 @@ export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
             });
 
             const botMessage = randomMessage('other', prompt);
-            virtuoso.current?.data.append([botMessage]);
+            virtuosoRef.current?.data.append([botMessage]);
             setTimeout(() => {
                 let counter = 0;
                 const interval = setInterval(() => {
@@ -106,7 +99,7 @@ export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
                         clearInterval(interval);
                         status = 'finished';
                     }
-                    virtuoso.current?.data.map(
+                    virtuosoRef.current?.data.map(
                         (message) => {
                             return message.key === botMessage.key
                                 ? {
@@ -139,7 +132,7 @@ export function Messages({ onOpenSources }: { onOpenSources: () => void }) {
                     <VirtuosoMessageListLicense licenseKey="">
                         <VirtuosoMessageList<Message, null>
                             key={chatId || 'new'}
-                            ref={virtuoso}
+                            ref={virtuosoRef}
                             style={{ flex: 1 }}
                             computeItemKey={({ data }: { data: Message }) => data.key}
                             className="px-4 messagesScrollBars"

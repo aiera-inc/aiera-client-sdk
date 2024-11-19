@@ -1,10 +1,10 @@
 import { useState, useEffect, useCallback } from 'react';
 
 type MessageType = 'prompt' | 'sources' | 'response';
-type MessageStatus = 'finished' | 'thinking' | 'updating';
+export type MessageStatus = 'finished' | 'thinking' | 'updating';
 type User = 'me' | 'other';
 
-interface Message {
+export interface Message {
     type: MessageType;
     key: string;
     text: string;

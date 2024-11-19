@@ -1,14 +1,16 @@
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { ReactElement, useCallback, useState } from 'react';
+import React, { ReactElement, useCallback, useRef, useState } from 'react';
+import { Transcript } from '../Transcript';
+import { ConfirmDialog } from './ConfirmDialog';
 import { Header } from './Header';
 import { Menu } from './Menu';
 import { Messages } from './Messages';
 import { Sources } from './Sources';
-import './styles.css';
-import { ConfirmDialog } from './ConfirmDialog';
+import { Message } from './services/messages';
 import { Source, useChatStore } from './store';
-import { Transcript } from '../Transcript';
+import './styles.css';
 
 interface AieraChatSharedProps {}
 
@@ -35,6 +37,7 @@ export function AieraChatUI({
     selectedSource,
 }: AieraChatUIProps): ReactElement {
     const config = useConfig();
+    const virtuosoRef = useRef<VirtuosoMessageListMethods<Message>>(null);
 
     const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
 
@@ -103,8 +106,8 @@ export function AieraChatUI({
                     'aiera-chat'
                 )}
             >
-                <Header onOpenMenu={onOpenMenu} />
-                <Messages onOpenSources={onOpenSources} />
+                <Header onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
+                <Messages onOpenSources={onOpenSources} virtuosoRef={virtuosoRef} />
                 {showSources && <Sources onClose={onCloseSources} />}
                 {showMenu && <Menu onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
                 {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
