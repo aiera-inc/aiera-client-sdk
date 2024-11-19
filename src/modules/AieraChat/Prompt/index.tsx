@@ -37,7 +37,9 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
     const handleSubmit = useCallback(() => {
         if (inputRef.current) {
             const promptText = inputRef.current.innerText;
-            onSubmit(promptText);
+            if (promptText && promptText.length > 0) {
+                onSubmit(promptText);
+            }
             inputRef.current.textContent = '';
             setTimeout(checkEmpty);
         }

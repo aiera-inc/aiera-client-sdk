@@ -29,11 +29,9 @@ export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessage
     );
     const onFocus = useCallback(() => setInFocus(true), []);
     const onBlur = useCallback(() => setInFocus(false), []);
-    const onChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            const term = e.target.value;
-            onSetSearchTerm(term);
-
+    const onSearchMatches = useCallback(
+        (override?: string) => {
+            const term = override || searchTerm;
             const messages = virtuosoRef.current?.data.get();
             if (!messages) return;
             const matchingIndexes = messages.reduce<number[]>((acc, message, index) => {
@@ -50,7 +48,15 @@ export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessage
                 virtuosoRef.current?.scrollIntoView({ index: matchingIndexes[0], behavior: 'smooth', align: 'center' });
             }
         },
-        [virtuosoRef, onSetSearchTerm]
+        [virtuosoRef, searchTerm]
+    );
+    const onChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            const term = e.target.value;
+            onSetSearchTerm(term);
+            onSearchMatches(term);
+        },
+        [onSetSearchTerm]
     );
 
     const onNextMatch = useCallback(() => {
@@ -86,10 +92,9 @@ export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessage
 
     // Close search when starting new chat
     useEffect(() => {
-        if (chatId === null) {
-            setShowSearch(false);
-        }
-    }, [chatId]);
+        onSetSearchTerm(undefined);
+        setShowSearch(false);
+    }, [chatId, onSetSearchTerm]);
 
     return showSearch ? (
         <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 flex items-center">

@@ -20,6 +20,9 @@ export const MessagePrompt = ({
     className?: string;
     isStickyHeader?: boolean;
 }) => {
+    const { searchTerm } = useChatStore();
+    const prompt = data.prompt;
+    if (!prompt) return null;
     return (
         <div
             className={classNames(
@@ -48,7 +51,19 @@ export const MessagePrompt = ({
                         'line-clamp-2': isStickyHeader,
                     })}
                 >
-                    {data.prompt}
+                    {searchTerm
+                        ? prompt
+                              .split(new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
+                              .map((part, index) =>
+                                  part.toLowerCase() === searchTerm.toLowerCase() ? (
+                                      <mark key={index} className="bg-yellow-400">
+                                          {part}
+                                      </mark>
+                                  ) : (
+                                      part
+                                  )
+                              )
+                        : prompt}
                 </p>
             </div>
         </div>
@@ -56,7 +71,7 @@ export const MessagePrompt = ({
 };
 
 const ItemContent = ({ data }: { data: Message }) => {
-    const { onSelectSource } = useChatStore();
+    const { onSelectSource, searchTerm } = useChatStore();
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-sm">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
@@ -65,7 +80,19 @@ const ItemContent = ({ data }: { data: Message }) => {
     ) : (
         <div className="pb-12 flex flex-col">
             <div className="pt-4 pl-4 pb-4 pr-2 text-base">
-                {data.text}
+                {searchTerm
+                    ? data.text
+                          .split(new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
+                          .map((part, index) =>
+                              part.toLowerCase() === searchTerm.toLowerCase() ? (
+                                  <mark key={index} className="bg-yellow-400">
+                                      {part}
+                                  </mark>
+                              ) : (
+                                  part
+                              )
+                          )
+                    : data.text}
                 <span
                     onClick={() =>
                         onSelectSource({
