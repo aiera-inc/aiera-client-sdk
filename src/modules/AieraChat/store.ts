@@ -30,11 +30,7 @@ export const useChatStore = create<ChatState>((set) => ({
     searchTerm: undefined,
     selectedSource: undefined,
     sourceMode: 'suggest',
-    sources: [
-        { targetId: '2639849', targetType: 'event', title: 'TSLA Q3 2024 Earnings Call' },
-        { targetId: '2611970', targetType: 'event', title: 'AAPL Q3 2024 Earnings Call' },
-        { targetId: '2639939', targetType: 'event', title: 'META Q3 2024 Earnings Call' },
-    ],
+    sources: [],
     selectChat: (chatId: string | null, chatTitle?: string) => set({ chatId, chatTitle, sourceMode: 'suggest' }),
     onNewChat: () => set({ chatId: null, chatTitle: undefined, sourceMode: 'suggest', searchTerm: undefined }),
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
