@@ -10,7 +10,7 @@ import { useChatStore } from '../store';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 
 export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; onClose: () => void }) {
-    const { chatId, selectChat, onNewChat } = useChatStore();
+    const { chatId, onSelectChat, onNewChat } = useChatStore();
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
     const { sessions, isLoading } = useChatSessions();
 
@@ -50,7 +50,7 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
                             <div
                                 key={id}
                                 onClick={() => {
-                                    selectChat(id, title);
+                                    onSelectChat(id, title);
                                     onStartExit();
                                 }}
                                 className={classNames(

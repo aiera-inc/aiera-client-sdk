@@ -216,7 +216,7 @@ function SourcesUI({
 }
 
 export function Sources({ onClose }: { onClose: () => void }) {
-    const { sourceMode, setSourceMode, onRemoveSource, sources, onSelectSource, onAddSource } = useChatStore();
+    const { sourceMode, onSetSourceMode, onRemoveSource, sources, onSelectSource, onAddSource } = useChatStore();
     return (
         <SourcesUI
             sources={sources}
@@ -224,7 +224,7 @@ export function Sources({ onClose }: { onClose: () => void }) {
             mode={sourceMode}
             onAddSource={onAddSource}
             onRemoveSource={onRemoveSource}
-            onSetSourceMode={setSourceMode}
+            onSetSourceMode={onSetSourceMode}
             onSelectSource={onSelectSource}
         />
     );

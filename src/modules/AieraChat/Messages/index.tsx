@@ -60,7 +60,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>>;
     onOpenSources: () => void;
 }) {
-    const { chatId, selectChat } = useChatStore();
+    const { chatId, onSelectChat } = useChatStore();
     const { messages, isLoading } = useChatMessages(chatId);
 
     // Reset when starting new chat
@@ -72,7 +72,7 @@ export function Messages({
 
     const onSubmit = useCallback(
         (prompt: string) => {
-            selectChat('new');
+            onSelectChat('new');
             const myMessage: Message = {
                 user: 'me',
                 key: `${idCounter++}`,
@@ -118,7 +118,7 @@ export function Messages({
                 }, 150);
             }, 2000);
         },
-        [chatId]
+        [chatId, onSelectChat]
     );
 
     return (
