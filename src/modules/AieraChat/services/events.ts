@@ -17,6 +17,7 @@ const eventsGQL = (type = '') => gql`
 
 export function useEvents(searchTerm?: string) {
     const eventsQuery: QueryResult<EventsQuery, EventsQueryVariables> = useQuery<EventsQuery, EventsQueryVariables>({
+        pause: !searchTerm,
         variables: {
             view: EventView.Recent,
             filter: {

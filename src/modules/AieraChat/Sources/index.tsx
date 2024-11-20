@@ -5,11 +5,12 @@ import { MicroDocumentPlus } from '@aiera/client-sdk/components/Svg/MicroDocumen
 import { MicroExclamationCircle } from '@aiera/client-sdk/components/Svg/MicroExclamationCircle';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { match } from 'ts-pattern';
 import { Panel } from '../Panel';
 import { useEvents } from '../services/events';
 import { Source, SourceMode, useChatStore } from '../store';
+import debounce from 'lodash.debounce';
 
 interface SourceModeType {
     id: SourceMode;
@@ -62,9 +63,28 @@ function SourcesUI({
     onClose: () => void;
     mode: SourceMode;
 }) {
+    // Separate state for immediate UI updates
+    const [inputValue, setInputValue] = useState<string>('');
+    // State that will be debounced before being used in queries
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
+
     const currentModeDescription = sourceModes.find(({ id }) => id === mode)?.description;
     const { eventsQuery } = useEvents(searchTerm);
+
+    // Create a debounced function that will update the searchTerm
+    const debouncedSetSearchTerm = useCallback(
+        debounce((value: string) => {
+            setSearchTerm(value || undefined);
+        }, 300),
+        [] // Empty dependency array since we don't want this to change
+    );
+
+    // Cleanup the debounced function on component unmount
+    useEffect(() => {
+        return () => {
+            debouncedSetSearchTerm.cancel();
+        };
+    }, [debouncedSetSearchTerm]);
     return (
         <Panel
             className="mt-2 flex-1 flex flex-col"
@@ -95,84 +115,98 @@ function SourcesUI({
                 </div>
                 {mode === 'manual' && (
                     <>
-                        <div className="relative mt-6 mx-5 mb-3">
+                        <div className="relative flex items-center mt-6 mx-5">
                             <input
                                 type="text"
                                 name="source_autocomplete"
                                 className="text-sm border border-slate-200 focus:outline focus:border-transparent outline-2 outline-blue-700 rounded-full h-8 px-3 w-full"
                                 placeholder="Find Source by Event Title..."
-                                value={searchTerm ?? ''}
+                                value={inputValue}
                                 autoFocus
                                 onChange={(e) => {
-                                    setSearchTerm(e.target.value);
+                                    const newValue = e.target.value;
+                                    setInputValue(newValue); // Update the input immediately
+                                    debouncedSetSearchTerm(newValue); // Debounce the search term update
                                 }}
                             />
                             {searchTerm && searchTerm.length > 0 && (
                                 <div
-                                    onClick={() => setSearchTerm(undefined)}
-                                    className="cursor-pointer absolute text-slate-400 hover:text-slate-600 right-2 top-2"
+                                    onClick={() => {
+                                        setSearchTerm(undefined);
+                                        setInputValue('');
+                                    }}
+                                    className="cursor-pointer absolute text-slate-400 hover:text-slate-600 right-2.5 top-2"
                                 >
                                     <MicroCloseCircle className="w-4" />
                                 </div>
                             )}
                         </div>
                         <div className="flex-1 flex flex-col relative">
-                            <div className="absolute inset-0 overflow-y-auto flex flex-col flex-1">
+                            <div className="absolute inset-0 overflow-y-auto py-4 flex flex-col flex-1">
                                 {searchTerm && searchTerm?.length > 2
                                     ? match(eventsQuery)
                                           .with({ status: 'loading' }, () => (
-                                              <div className="flex-1 flex flex-col items-center justify-center">
-                                                  <LoadingSpinner />
+                                              <div className="mt-6 flex items-center justify-center">
+                                                  <LoadingSpinner heightClass="h-6" widthClass="w-6" />
                                               </div>
                                           ))
                                           .with({ status: 'success' }, ({ data }) =>
-                                              data.events.map(({ id, title }) => (
-                                                  <div
-                                                      key={id}
-                                                      className="flex hover:bg-slate-200/80 pl-2.5 pr-1.5 mx-5 rounded-lg justify-between items-center py-1 text-slate-600"
-                                                      onClick={() => {
-                                                          onSelectSource({
-                                                              targetId: id,
-                                                              targetType: 'event',
-                                                              title,
-                                                          });
-                                                      }}
-                                                  >
-                                                      <p className="text-sm line-clamp-1 hover:text-blue-700 cursor-pointer">
-                                                          {title}
+                                              data.events.length > 0 ? (
+                                                  data.events.map(({ id, title }) => (
+                                                      <div
+                                                          key={id}
+                                                          className="flex hover:bg-slate-200/80 pl-2.5 pr-1.5 mx-5 rounded-lg justify-between items-center py-1 text-slate-600"
+                                                          onClick={() => {
+                                                              onSelectSource({
+                                                                  targetId: id,
+                                                                  targetType: 'event',
+                                                                  title,
+                                                              });
+                                                          }}
+                                                      >
+                                                          <p className="text-sm line-clamp-1 hover:text-blue-700 cursor-pointer">
+                                                              {title}
+                                                          </p>
+                                                          {hasSource(
+                                                              { targetId: id, targetType: 'event', title },
+                                                              sources
+                                                          ) ? (
+                                                              <div
+                                                                  className="ml-2"
+                                                                  onClick={(e) => {
+                                                                      e.stopPropagation();
+                                                                      e.preventDefault();
+                                                                      onRemoveSource(id, 'event');
+                                                                  }}
+                                                              >
+                                                                  <MicroDocumentMinus className="w-4 text-red-500 hover:text-red-700 cursor-pointer" />
+                                                              </div>
+                                                          ) : (
+                                                              <div
+                                                                  className="ml-2"
+                                                                  onClick={(e) => {
+                                                                      e.stopPropagation();
+                                                                      e.preventDefault();
+                                                                      onAddSource({
+                                                                          targetId: id,
+                                                                          targetType: 'event',
+                                                                          title,
+                                                                      });
+                                                                  }}
+                                                              >
+                                                                  <MicroDocumentPlus className="w-4 hover:text-blue-600 cursor-pointer" />
+                                                              </div>
+                                                          )}
+                                                      </div>
+                                                  ))
+                                              ) : (
+                                                  <div className="text-slate-600 py-1 flex items-center justify-center mx-5">
+                                                      <p className="text-sm text-center text-balance">
+                                                          No results found for{' '}
+                                                          <span className="font-bold antialiased">{searchTerm}</span>
                                                       </p>
-                                                      {hasSource(
-                                                          { targetId: id, targetType: 'event', title },
-                                                          sources
-                                                      ) ? (
-                                                          <div
-                                                              className="ml-2"
-                                                              onClick={(e) => {
-                                                                  e.stopPropagation();
-                                                                  e.preventDefault();
-                                                                  onRemoveSource(id, 'event');
-                                                              }}
-                                                          >
-                                                              <MicroDocumentMinus className="w-4 text-red-500 hover:text-red-700 cursor-pointer" />
-                                                          </div>
-                                                      ) : (
-                                                          <div
-                                                              className="ml-2"
-                                                              onClick={(e) => {
-                                                                  e.stopPropagation();
-                                                                  e.preventDefault();
-                                                                  onAddSource({
-                                                                      targetId: id,
-                                                                      targetType: 'event',
-                                                                      title,
-                                                                  });
-                                                              }}
-                                                          >
-                                                              <MicroDocumentPlus className="w-4 hover:text-blue-600 cursor-pointer" />
-                                                          </div>
-                                                      )}
                                                   </div>
-                                              ))
+                                              )
                                           )
                                           .otherwise(() => null)
                                     : sources.map(({ targetId, targetType, title }) => (
@@ -199,9 +233,9 @@ function SourcesUI({
                                           </div>
                                       ))}
                                 {!searchTerm && sources.length === 0 && (
-                                    <div className="flex items-center justify-center mx-7">
-                                        <MicroExclamationCircle className="flex-shrink-0 w-4 mr-2 text-slate-600" />
-                                        <p className="text-sm text-slate-600 leading-4 text-balance">
+                                    <div className="flex items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800">
+                                        <MicroExclamationCircle className="flex-shrink-0 w-4 mr-2" />
+                                        <p className="text-sm leading-4 text-balance">
                                             Sources will be suggested if you do not add a source.
                                         </p>
                                     </div>
