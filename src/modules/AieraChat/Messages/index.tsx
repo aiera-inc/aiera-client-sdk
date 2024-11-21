@@ -76,10 +76,12 @@ export function Messages({
                 let counter = 0;
                 let newMessage = '';
                 const interval = setInterval(() => {
-                    let status: MessageStatus = 'updating';
+                    let status: MessageStatus = 'thinking';
                     if (counter++ > 80) {
                         clearInterval(interval);
                         status = 'finished';
+                    } else if (counter > 10) {
+                        status = 'updating';
                     }
                     virtuosoRef.current?.data.map(
                         (message) => {
