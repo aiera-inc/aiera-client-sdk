@@ -6,7 +6,7 @@ import classNames from 'classnames';
 import React, { ChangeEvent, KeyboardEvent, RefObject, useCallback, useEffect, useState } from 'react';
 import { Message } from '../../services/messages';
 import { useChatStore } from '../../store';
-import { IconButton } from '../IconButton';
+import { IconButton } from '../../IconButton';
 
 export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>> }) {
     const { chatId, searchTerm, onSetSearchTerm } = useChatStore();

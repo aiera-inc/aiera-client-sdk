@@ -6,12 +6,12 @@ import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown'
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
 import { VirtuosoMessageListProps } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React from 'react';
+import React, { useState } from 'react';
 import { match } from 'ts-pattern';
 import { MessageListContext } from '..';
-import { IconButton } from '../../Header/IconButton';
 import { Message } from '../../services/messages';
 import { useChatStore } from '../../store';
+import { IconButton } from '../../IconButton';
 
 export const MessagePrompt = ({
     data,
@@ -72,8 +72,12 @@ export const MessagePrompt = ({
     );
 };
 
+type MessageFeedback = 'pos' | 'neg' | undefined;
+
 const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Message }) => {
     const { onSelectSource, searchTerm } = useChatStore();
+    // TODO getMessage from network / cache for managing feedback
+    const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-sm">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
@@ -116,8 +120,27 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
             {data.status === 'finished' && (
                 <div className="flex items-center pl-4 pr-2">
                     <IconButton className="mr-2" Icon={MicroCopy} />
-                    <IconButton className="mr-2" Icon={MicroThumbUp} />
-                    <IconButton Icon={MicroThumbDown} />
+                    <IconButton
+                        onClick={() => setFeedback((pv) => (pv === 'pos' ? undefined : 'pos'))}
+                        className={classNames('mr-2')}
+                        textClass={classNames({
+                            'text-green-600': feedback === 'pos',
+                        })}
+                        bgClass={classNames({
+                            'bg-green-600/10 hover:bg-green-600/20 active:bg-green-600/30': feedback === 'pos',
+                        })}
+                        Icon={MicroThumbUp}
+                    />
+                    <IconButton
+                        textClass={classNames({
+                            'text-red-600': feedback === 'neg',
+                        })}
+                        bgClass={classNames({
+                            'bg-red-600/10 hover:bg-red-600/20 active:bg-red-600/30': feedback === 'neg',
+                        })}
+                        onClick={() => setFeedback((pv) => (pv === 'neg' ? undefined : 'neg'))}
+                        Icon={MicroThumbDown}
+                    />
                     <div className="flex-1" />
                     <IconButton Icon={MicroRefresh} onClick={() => onReRun(data.key)} />
                 </div>

@@ -1,9 +1,9 @@
 import { MicroBars } from '@aiera/client-sdk/components/Svg/MicroBars';
 import React, { RefObject } from 'react';
-import { IconButton } from './IconButton';
 import { Search } from './Search';
 import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import { Message } from '../services/messages';
+import { IconButton } from '../IconButton';
 
 export function Header({
     onOpenMenu,
