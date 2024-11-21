@@ -24,6 +24,7 @@ function randomMessage(user: Message['user'], prompt: Message['prompt']): Messag
 
 export interface MessageListContext {
     onSubmit: (p: string) => void;
+    onReRun: (k: string) => void;
 }
 
 const StickyHeader: VirtuosoMessageListProps<Message, MessageListContext>['StickyHeader'] = () => {
@@ -66,6 +67,43 @@ export function Messages({
             virtuosoRef.current.data.replace([]);
         }
     }, [chatId]);
+
+    const onReRun = useCallback((key: string) => {
+        const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.key === key);
+
+        if (originalIndex) {
+            setTimeout(() => {
+                let counter = 0;
+                let newMessage = '';
+                const interval = setInterval(() => {
+                    let status: MessageStatus = 'updating';
+                    if (counter++ > 80) {
+                        clearInterval(interval);
+                        status = 'finished';
+                    }
+                    virtuosoRef.current?.data.map(
+                        (message) => {
+                            if (message.key === key) {
+                                newMessage = newMessage + ' ' + 'some message';
+                                return {
+                                    ...message,
+                                    text: newMessage,
+                                    status,
+                                };
+                            }
+
+                            return message;
+                        },
+                        {
+                            location() {
+                                return { index: originalIndex, align: 'end', behavior: 'smooth' };
+                            },
+                        }
+                    );
+                }, 150);
+            });
+        }
+    }, []);
 
     const onSubmit = useCallback(
         (prompt: string) => {
@@ -137,7 +175,7 @@ export function Messages({
                             initialData={messages}
                             shortSizeAlign="bottom-smooth"
                             ItemContent={MessageFactory}
-                            context={{ onSubmit }}
+                            context={{ onSubmit, onReRun }}
                             EmptyPlaceholder={SuggestedPrompts}
                             StickyHeader={StickyHeader}
                         />

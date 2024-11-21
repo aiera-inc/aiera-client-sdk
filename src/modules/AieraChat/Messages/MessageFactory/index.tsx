@@ -1,15 +1,17 @@
-import classNames from 'classnames';
-import React from 'react';
-import { match } from 'ts-pattern';
-import { useChatStore } from '../../store';
-import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
 import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
 import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestionMark';
 import { MicroRefresh } from '@aiera/client-sdk/components/Svg/MicroRefresh';
 import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
+import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
+import { VirtuosoMessageListProps } from '@virtuoso.dev/message-list';
+import classNames from 'classnames';
+import React from 'react';
+import { match } from 'ts-pattern';
+import { MessageListContext } from '..';
 import { IconButton } from '../../Header/IconButton';
 import { Message } from '../../services/messages';
+import { useChatStore } from '../../store';
 
 export const MessagePrompt = ({
     data,
@@ -70,7 +72,7 @@ export const MessagePrompt = ({
     );
 };
 
-const ItemContent = ({ data }: { data: Message }) => {
+const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Message }) => {
     const { onSelectSource, searchTerm } = useChatStore();
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-sm">
@@ -117,15 +119,18 @@ const ItemContent = ({ data }: { data: Message }) => {
                     <IconButton className="mr-2" Icon={MicroThumbUp} />
                     <IconButton Icon={MicroThumbDown} />
                     <div className="flex-1" />
-                    <IconButton Icon={MicroRefresh} />
+                    <IconButton Icon={MicroRefresh} onClick={() => onReRun(data.key)} />
                 </div>
             )}
         </div>
     );
 };
 
-export function MessageFactory({ data }: { data: Message }) {
+export const MessageFactory: VirtuosoMessageListProps<Message, MessageListContext>['ItemContent'] = ({
+    data,
+    context,
+}) => {
     return match(data.type)
         .with('prompt', () => <MessagePrompt data={data} />)
-        .otherwise(() => <ItemContent data={data} />);
-}
+        .otherwise(() => <ItemContent data={data} onReRun={context.onReRun} />);
+};
