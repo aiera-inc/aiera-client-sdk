@@ -925,7 +925,7 @@ export const EventList = ({
                     : state.watchlist?.length && settings.syncWatchlist
                     ? state.watchlist
                     : undefined,
-                watchlistId: state.watchlistId,
+                watchlistId: state.company?.id ? undefined : state.watchlistId,
             },
         },
     });
@@ -949,7 +949,7 @@ export const EventList = ({
                     : state.watchlist?.length && settings.syncWatchlist
                     ? state.watchlist
                     : undefined,
-                watchlistId: state.watchlistId,
+                watchlistId: state.company?.id ? undefined : state.watchlistId,
             },
         },
     });
