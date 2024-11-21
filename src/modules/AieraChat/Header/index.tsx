@@ -14,7 +14,7 @@ export function Header({
 }) {
     return (
         <div className="flex items-center justify-between mx-4 mt-4">
-            <IconButton className="mr-2.5" Icon={MicroBars} onClick={onOpenMenu} />
+            <IconButton hintText="All Chats" className="mr-2.5" Icon={MicroBars} onClick={onOpenMenu} />
             <Search virtuosoRef={virtuosoRef} />
         </div>
     );

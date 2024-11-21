@@ -172,7 +172,14 @@ export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessage
                     placeholder="Untitled Chat"
                 />
             </div>
-            <IconButton onClick={() => setShowSearch(true)} className="ml-2.5" Icon={MicroSearch} />
+            <IconButton
+                hintText="Search Messages"
+                hintAnchor="bottom-right"
+                hintGrow="down-left"
+                onClick={() => setShowSearch(true)}
+                className="ml-2.5"
+                Icon={MicroSearch}
+            />
         </>
     );
 }

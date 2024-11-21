@@ -6,12 +6,13 @@ import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown'
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
 import { VirtuosoMessageListProps } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { match } from 'ts-pattern';
 import { MessageListContext } from '..';
 import { Message } from '../../services/messages';
 import { useChatStore } from '../../store';
 import { IconButton } from '../../IconButton';
+import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 
 export const MessagePrompt = ({
     data,
@@ -76,8 +77,20 @@ type MessageFeedback = 'pos' | 'neg' | undefined;
 
 const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Message }) => {
     const { onSelectSource, searchTerm } = useChatStore();
+    const [copied, setCopied] = useState(false);
     // TODO getMessage from network / cache for managing feedback
     const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
+
+    const onHandleCopy = useCallback(() => {
+        setCopied(true);
+        // TODO - hook up real copy
+
+        // We want to let them copy again
+        setTimeout(() => {
+            setCopied(false);
+        }, 5000);
+    }, []);
+
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-sm">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
@@ -119,8 +132,20 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
             </div>
             {data.status === 'finished' && (
                 <div className="flex items-center pl-4 pr-2">
-                    <IconButton className="mr-2" Icon={MicroCopy} />
                     <IconButton
+                        hintText={copied ? 'Copied!' : 'Copy to Clipboard'}
+                        onClick={onHandleCopy}
+                        textClass={classNames({
+                            'text-indigo-600': copied,
+                        })}
+                        bgClass={classNames({
+                            'bg-indigo-600/10 hover:bg-indigo-600/20 active:bg-indigo-600/30': copied,
+                        })}
+                        className="mr-2"
+                        Icon={copied ? MicroCheck : MicroCopy}
+                    />
+                    <IconButton
+                        hintText="Good Response"
                         onClick={() => setFeedback((pv) => (pv === 'pos' ? undefined : 'pos'))}
                         className={classNames('mr-2')}
                         textClass={classNames({
@@ -132,6 +157,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                         Icon={MicroThumbUp}
                     />
                     <IconButton
+                        hintText="Poor Response"
                         textClass={classNames({
                             'text-red-600': feedback === 'neg',
                         })}
@@ -142,7 +168,13 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                         Icon={MicroThumbDown}
                     />
                     <div className="flex-1" />
-                    <IconButton Icon={MicroRefresh} onClick={() => onReRun(data.key)} />
+                    <IconButton
+                        hintText="Re-run Response"
+                        hintAnchor="bottom-right"
+                        hintGrow="down-left"
+                        Icon={MicroRefresh}
+                        onClick={() => onReRun(data.key)}
+                    />
                 </div>
             )}
         </div>
