@@ -47,7 +47,7 @@ function Hint({ text, anchor, grow }: { text: string; anchor: HintAnchor; grow: 
                 right,
             }}
             className={classNames(
-                'absolute bg-slate-900/90 text-white rounded-md',
+                'absolute bg-slate-900/90 text-white rounded-md z-50',
                 'text-sm font-semibold antialiased px-2 py-0.5 text-nowrap'
             )}
         >
@@ -90,7 +90,7 @@ export function IconButton({
             className={classNames(
                 'flex-shrink-0 transition-all',
                 'rounded-lg flex items-center justify-center',
-                'active:scale-90 relative',
+                'active:scale-90 relative z-20',
                 {
                     'text-slate-600': !textClass,
                     'bg-slate-200/60-solid hover:bg-slate-300/80 active:bg-slate-300/60': !bgClass,
