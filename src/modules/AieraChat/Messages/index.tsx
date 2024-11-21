@@ -14,6 +14,7 @@ import { Message, MessageStatus, useChatMessages } from '../services/messages';
 import { useChatStore } from '../store';
 import { MessageFactory, MessagePrompt } from './MessageFactory';
 import './styles.css';
+import { SuggestedPrompts } from './SuggestedPrompts';
 
 let idCounter = 0;
 
@@ -21,15 +22,11 @@ function randomMessage(user: Message['user'], prompt: Message['prompt']): Messag
     return { user, key: `${idCounter++}`, type: 'response', text: 'some other message', prompt, status: 'thinking' };
 }
 
-const EmptyPlaceholder: VirtuosoMessageListProps<Message, null>['EmptyPlaceholder'] = () => {
-    return (
-        <div className="flex-1 flex flex-col justify-end h-full pb-4">
-            <p className="text-sm text-center">Suggested questions (based on watchlist)</p>
-        </div>
-    );
-};
+export interface MessageListContext {
+    onSubmit: (p: string) => void;
+}
 
-const StickyHeader: VirtuosoMessageListProps<Message, null>['StickyHeader'] = () => {
+const StickyHeader: VirtuosoMessageListProps<Message, MessageListContext>['StickyHeader'] = () => {
     const data: Message[] = useCurrentlyRenderedData();
     const { getScrollLocation } = useVirtuosoMethods();
     const { listOffset } = getScrollLocation();
@@ -130,7 +127,7 @@ export function Messages({
                     </div>
                 ) : (
                     <VirtuosoMessageListLicense licenseKey="">
-                        <VirtuosoMessageList<Message, null>
+                        <VirtuosoMessageList<Message, MessageListContext>
                             key={chatId || 'new'}
                             ref={virtuosoRef}
                             style={{ flex: 1 }}
@@ -140,7 +137,8 @@ export function Messages({
                             initialData={messages}
                             shortSizeAlign="bottom-smooth"
                             ItemContent={MessageFactory}
-                            EmptyPlaceholder={EmptyPlaceholder}
+                            context={{ onSubmit }}
+                            EmptyPlaceholder={SuggestedPrompts}
                             StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
