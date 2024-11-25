@@ -51,7 +51,7 @@ export const SuggestedPrompts: VirtuosoMessageListProps<Message, MessageListCont
                             key={suggestedPrompt.id}
                             className="cursor-pointer hover:text-blue-600 border border-slate-200 rounded-lg px-2.5 py-1.5"
                         >
-                            <p className="text-base italic">{suggestedPrompt.prompt}</p>
+                            <p className="text-base italic select-none">{suggestedPrompt.prompt}</p>
                         </div>
                         <div className="flex items-center justify-between mt-2">
                             <div className="flex items-center ml-1.5">
@@ -62,7 +62,9 @@ export const SuggestedPrompts: VirtuosoMessageListProps<Message, MessageListCont
                                     <Chevron className="w-2 -rotate-90" />
                                 </div>
                             </div>
-                            <p className="mr-2 text-sm text-slate-500">{`${page + 1} / ${prompts.length}`}</p>
+                            <p className="mr-2 select-none text-sm text-slate-500">{`${page + 1} / ${
+                                prompts.length
+                            }`}</p>
                         </div>
                     </>
                 )
