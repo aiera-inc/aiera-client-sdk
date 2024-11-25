@@ -23,11 +23,11 @@ const sourceModes: SourceModeType[] = [
     {
         id: 'manual',
         label: 'Manual',
-        description: 'All questions will run against the sources you specify.',
+        description: 'All questions will run against the sources you add below.',
     },
     {
         id: 'suggest',
-        label: 'Automatic',
+        label: 'Suggested',
         description: 'Sources will be suggested based on each question asked.',
     },
 ];
