@@ -13,6 +13,7 @@ import { Message } from '../../services/messages';
 import { useChatStore } from '../../store';
 import { IconButton } from '../../IconButton';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
+import { Button } from '@aiera/client-sdk/components/Button';
 
 export const MessagePrompt = ({
     data,
@@ -181,11 +182,80 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
     );
 };
 
+const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: Message }) => {
+    const { onSelectSource } = useChatStore();
+
+    return data.status === 'thinking' ? (
+        <div className="flex items-center py-4 justify-center text-sm">
+            <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
+            <p className="font-semibold antialiased">Thinking...</p>
+        </div>
+    ) : (
+        <div className="flex flex-col pt-4">
+            <div
+                className="mx-5 text-sm px-2 py-1 rounded-lg border"
+                onClick={() =>
+                    onSelectSource({
+                        targetId: '2639849',
+                        targetType: 'event',
+                        title: 'TSLA Q3 2024 Earnings Call',
+                    })
+                }
+            >
+                TSLA Q3 2024 Earnings Call
+            </div>
+            <div
+                className="mx-5 text-sm px-2 py-1 rounded-lg border"
+                onClick={() =>
+                    onSelectSource({
+                        targetId: '2639849',
+                        targetType: 'event',
+                        title: 'TSLA Q3 2024 Earnings Call',
+                    })
+                }
+            >
+                TSLA Q2 2024 Earnings Call
+            </div>
+            <div
+                className="mx-5 text-sm px-2 py-1 rounded-lg border"
+                onClick={() =>
+                    onSelectSource({
+                        targetId: '2639849',
+                        targetType: 'event',
+                        title: 'TSLA Q3 2024 Earnings Call',
+                    })
+                }
+            >
+                TSLA Q1 2024 Earnings Call
+            </div>
+            <div
+                className="mx-5 text-sm px-2 py-1 rounded-lg border"
+                onClick={() =>
+                    onSelectSource({
+                        targetId: '2639849',
+                        targetType: 'event',
+                        title: 'TSLA Q3 2024 Earnings Call',
+                    })
+                }
+            >
+                TSLA Q4 2023 Earnings Call
+            </div>
+            {data.status === 'finished' && (
+                <div className="flex items-center pl-4 pr-2 mt-4 pb-4 text-sm">
+                    <Button onClick={() => onConfirm(data.key)}>Confirm Sources</Button>
+                    <p className="ml-2">Add Source</p>
+                </div>
+            )}
+        </div>
+    );
+};
+
 export const MessageFactory: VirtuosoMessageListProps<Message, MessageListContext>['ItemContent'] = ({
     data,
     context,
 }) => {
     return match(data.type)
         .with('prompt', () => <MessagePrompt data={data} />)
+        .with('sources', () => <SourcesResponse data={data} onConfirm={context.onConfirm} />)
         .otherwise(() => <ItemContent data={data} onReRun={context.onReRun} />);
 };

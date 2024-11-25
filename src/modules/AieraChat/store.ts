@@ -8,14 +8,14 @@ export interface Source {
 }
 
 export interface ChatState {
-    chatId: string | null;
+    chatId: string;
     chatTitle?: string;
     searchTerm?: string;
     selectedSource?: Source;
     sourceMode: SourceMode;
     sources: Source[];
     onSetSourceMode: (mode: SourceMode) => void;
-    onSelectChat: (chatId: string | null, chatTitle?: string) => void;
+    onSelectChat: (chatId: string, chatTitle?: string) => void;
     onNewChat: () => void;
     onSetSearchTerm: (searchTerm?: string) => void;
     onSetTitle: (title?: string) => void;
@@ -25,16 +25,16 @@ export interface ChatState {
 }
 
 export const useChatStore = create<ChatState>((set) => ({
-    chatId: null,
+    chatId: 'new',
     chatTitle: undefined,
     searchTerm: undefined,
     selectedSource: undefined,
     sourceMode: 'suggest',
     sources: [],
-    onSelectChat: (chatId: string | null, chatTitle?: string) =>
+    onSelectChat: (chatId: string, chatTitle?: string) =>
         set({ chatId, chatTitle, sourceMode: 'suggest', sources: [] }),
     onNewChat: () =>
-        set({ chatId: null, chatTitle: undefined, sourceMode: 'suggest', searchTerm: undefined, sources: [] }),
+        set({ chatId: 'new', chatTitle: undefined, sourceMode: 'suggest', searchTerm: undefined, sources: [] }),
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),

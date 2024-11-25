@@ -25,6 +25,7 @@ function randomMessage(user: Message['user'], prompt: Message['prompt']): Messag
 export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
+    onConfirm: (k: string) => void;
 }
 
 const StickyHeader: VirtuosoMessageListProps<Message, MessageListContext>['StickyHeader'] = () => {
@@ -58,7 +59,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>>;
     onOpenSources: () => void;
 }) {
-    const { chatId, onSelectChat } = useChatStore();
+    const { chatId, sourceMode, sources } = useChatStore();
     const { messages, isLoading } = useChatMessages(chatId);
 
     // Reset when starting new chat
@@ -107,9 +108,51 @@ export function Messages({
         }
     }, []);
 
+    const onConfirm = useCallback((key: string) => {
+        const originalMessage = virtuosoRef.current?.data.find((m) => m.key === key);
+        const botMessage = randomMessage('other', originalMessage?.prompt);
+        virtuosoRef.current?.data.append([botMessage]);
+
+        virtuosoRef.current?.data.map((message) => {
+            if (message.key === key) {
+                return {
+                    ...message,
+                    status: 'confirmed',
+                };
+            }
+
+            return message;
+        });
+        setTimeout(() => {
+            let counter = 0;
+            const interval = setInterval(() => {
+                let status: MessageStatus = 'updating';
+                if (counter++ > 80) {
+                    clearInterval(interval);
+                    status = 'finished';
+                }
+                virtuosoRef.current?.data.map(
+                    (message) => {
+                        return message.key === botMessage.key
+                            ? {
+                                  ...message,
+                                  text: message.text + ' ' + 'some message',
+                                  status,
+                              }
+                            : message;
+                    },
+                    {
+                        location() {
+                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                        },
+                    }
+                );
+            }, 150);
+        }, 2000);
+    }, []);
+
     const onSubmit = useCallback(
         (prompt: string) => {
-            onSelectChat('new');
             const myMessage: Message = {
                 user: 'me',
                 key: `${idCounter++}`,
@@ -126,36 +169,54 @@ export function Messages({
                 };
             });
 
-            const botMessage = randomMessage('other', prompt);
-            virtuosoRef.current?.data.append([botMessage]);
-            setTimeout(() => {
-                let counter = 0;
-                const interval = setInterval(() => {
-                    let status: MessageStatus = 'updating';
-                    if (counter++ > 80) {
-                        clearInterval(interval);
-                        status = 'finished';
-                    }
-                    virtuosoRef.current?.data.map(
-                        (message) => {
-                            return message.key === botMessage.key
-                                ? {
-                                      ...message,
-                                      text: message.text + ' ' + 'some message',
-                                      status,
-                                  }
-                                : message;
-                        },
-                        {
-                            location() {
-                                return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                            },
+            if (sourceMode === 'suggest' || sources.length === 0) {
+                const sourceMessage: Message = {
+                    user: 'other',
+                    key: `${idCounter++}`,
+                    text: 'sourcess',
+                    prompt,
+                    status: 'finished',
+                    type: 'sources',
+                };
+                virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
+                    return {
+                        index: 'LAST',
+                        align: 'end',
+                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                    };
+                });
+            } else {
+                const botMessage = randomMessage('other', prompt);
+                virtuosoRef.current?.data.append([botMessage]);
+                setTimeout(() => {
+                    let counter = 0;
+                    const interval = setInterval(() => {
+                        let status: MessageStatus = 'updating';
+                        if (counter++ > 80) {
+                            clearInterval(interval);
+                            status = 'finished';
                         }
-                    );
-                }, 150);
-            }, 2000);
+                        virtuosoRef.current?.data.map(
+                            (message) => {
+                                return message.key === botMessage.key
+                                    ? {
+                                          ...message,
+                                          text: message.text + ' ' + 'some message',
+                                          status,
+                                      }
+                                    : message;
+                            },
+                            {
+                                location() {
+                                    return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                                },
+                            }
+                        );
+                    }, 150);
+                }, 2000);
+            }
         },
-        [chatId, onSelectChat]
+        [chatId, sourceMode, sources]
     );
 
     return (
@@ -177,7 +238,7 @@ export function Messages({
                             initialData={messages}
                             shortSizeAlign="bottom-smooth"
                             ItemContent={MessageFactory}
-                            context={{ onSubmit, onReRun }}
+                            context={{ onSubmit, onReRun, onConfirm }}
                             EmptyPlaceholder={SuggestedPrompts}
                             StickyHeader={StickyHeader}
                         />
