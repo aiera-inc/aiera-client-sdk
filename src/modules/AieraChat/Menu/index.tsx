@@ -1,13 +1,13 @@
 import { Button } from '@aiera/client-sdk/components/Button';
+import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { MicroBars } from '@aiera/client-sdk/components/Svg/MicroBars';
-import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCircle';
 import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Panel } from '../Panel';
+import { PanelSearchInput } from '../PanelSearchInput';
 import { useChatSessions } from '../services/chats';
 import { useChatStore } from '../store';
-import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 
 export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; onClose: () => void }) {
     const { chatId, onSelectChat, onNewChat } = useChatStore();
@@ -21,24 +21,13 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
         <Panel Icon={MicroBars} className="mt-4 flex flex-col flex-1" onClose={onClose} title="Chat Menu" side="left">
             {({ onStartExit }) => (
                 <div className="flex flex-col flex-1 pb-6">
-                    <div className="relative flex items-center mx-5">
-                        <input
-                            value={searchTerm ?? ''}
-                            onChange={(e) => setSearchTerm(e.target.value)}
-                            type="text"
-                            name="search_chats"
-                            className="text-sm border flex-1 border-slate-200 focus:outline focus:border-transparent outline-2 outline-blue-700 rounded-full h-8 px-3"
-                            placeholder="Search..."
-                        />
-                        {searchTerm && (
-                            <div
-                                onClick={() => setSearchTerm(undefined)}
-                                className="absolute right-2.5 top-2 cursor-pointer hover:text-slate-600 text-slate-400"
-                            >
-                                <MicroCloseCircle className="w-4" />
-                            </div>
-                        )}
-                    </div>
+                    <PanelSearchInput
+                        onChange={setSearchTerm}
+                        value={searchTerm}
+                        name="search_chats"
+                        placeholder="Search..."
+                        className="mx-5"
+                    />
                     <div className="flex-1 flex flex-col relative">
                         <div className="absolute inset-0 overflow-y-auto py-4 flex flex-col flex-1">
                             {!isLoading &&

@@ -1,16 +1,16 @@
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
-import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCircle';
 import { MicroDocumentMinus } from '@aiera/client-sdk/components/Svg/MicroDocumentMinus';
 import { MicroDocumentPlus } from '@aiera/client-sdk/components/Svg/MicroDocumentPlus';
 import { MicroExclamationCircle } from '@aiera/client-sdk/components/Svg/MicroExclamationCircle';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import classNames from 'classnames';
+import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { match } from 'ts-pattern';
 import { Panel } from '../Panel';
+import { PanelSearchInput } from '../PanelSearchInput';
 import { useEvents } from '../services/events';
 import { Source, SourceMode, useChatStore } from '../store';
-import debounce from 'lodash.debounce';
 
 interface SourceModeType {
     id: SourceMode;
@@ -115,32 +115,22 @@ function SourcesUI({
                 </div>
                 {mode === 'manual' && (
                     <>
-                        <div className="relative flex items-center mt-6 mx-5">
-                            <input
-                                type="text"
-                                name="source_autocomplete"
-                                className="text-sm border border-slate-200 focus:outline focus:border-transparent outline-2 outline-blue-700 rounded-full h-8 px-3 w-full"
-                                placeholder="Find Source by Event Title..."
-                                value={inputValue}
-                                autoFocus
-                                onChange={(e) => {
-                                    const newValue = e.target.value;
+                        <PanelSearchInput
+                            autoFocus
+                            onChange={(newValue) => {
+                                if (newValue) {
                                     setInputValue(newValue); // Update the input immediately
                                     debouncedSetSearchTerm(newValue); // Debounce the search term update
-                                }}
-                            />
-                            {searchTerm && searchTerm.length > 0 && (
-                                <div
-                                    onClick={() => {
-                                        setSearchTerm(undefined);
-                                        setInputValue('');
-                                    }}
-                                    className="cursor-pointer absolute text-slate-400 hover:text-slate-600 right-2.5 top-2"
-                                >
-                                    <MicroCloseCircle className="w-4" />
-                                </div>
-                            )}
-                        </div>
+                                } else {
+                                    setSearchTerm(undefined);
+                                    setInputValue('');
+                                }
+                            }}
+                            name="source_autocomplete"
+                            value={inputValue}
+                            placeholder="Find Source by Event Title..."
+                            className="mt-6 mx-5"
+                        />
                         <div className="flex-1 flex flex-col relative">
                             <div className="absolute inset-0 overflow-y-auto py-4 flex flex-col flex-1">
                                 {searchTerm && searchTerm?.length > 2
