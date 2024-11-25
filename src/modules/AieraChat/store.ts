@@ -29,7 +29,7 @@ export const useChatStore = create<ChatState>((set) => ({
     chatTitle: undefined,
     searchTerm: undefined,
     selectedSource: undefined,
-    sourceMode: 'suggest',
+    sourceMode: 'manual',
     sources: [],
     onSelectChat: (chatId: string, chatTitle?: string) =>
         set({ chatId, chatTitle, sourceMode: 'suggest', sources: [] }),

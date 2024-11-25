@@ -21,14 +21,14 @@ interface SourceModeType {
 
 const sourceModes: SourceModeType[] = [
     {
-        id: 'suggest',
-        label: 'Automatic',
-        description: 'Sources will be suggested based on each question asked.',
-    },
-    {
         id: 'manual',
         label: 'Manual',
         description: 'All questions will run against the sources you specify.',
+    },
+    {
+        id: 'suggest',
+        label: 'Automatic',
+        description: 'Sources will be suggested based on each question asked.',
     },
 ];
 
