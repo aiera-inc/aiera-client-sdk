@@ -47,23 +47,8 @@ export const hasSource = (
     return sources.some((existingSource) => matchFields.every((field) => existingSource[field] === source[field]));
 };
 
-function SourcesUI({
-    sources,
-    onClose,
-    mode,
-    onSetSourceMode,
-    onRemoveSource,
-    onAddSource,
-    onSelectSource,
-}: {
-    sources: Source[];
-    onAddSource: (s: Source) => void;
-    onRemoveSource: (id: string, type: string) => void;
-    onSetSourceMode: (m: SourceMode) => void;
-    onSelectSource: (s?: Source) => void;
-    onClose: () => void;
-    mode: SourceMode;
-}) {
+export function Sources({ onClose }: { onClose: () => void }) {
+    const { sourceMode: mode, onSetSourceMode, onRemoveSource, sources, onSelectSource, onAddSource } = useChatStore();
     // Separate state for immediate UI updates
     const [inputValue, setInputValue] = useState<string>('');
     // State that will be debounced before being used in queries
@@ -220,20 +205,5 @@ function SourcesUI({
                 )}
             </div>
         </Panel>
-    );
-}
-
-export function Sources({ onClose }: { onClose: () => void }) {
-    const { sourceMode, onSetSourceMode, onRemoveSource, sources, onSelectSource, onAddSource } = useChatStore();
-    return (
-        <SourcesUI
-            sources={sources}
-            onClose={onClose}
-            mode={sourceMode}
-            onAddSource={onAddSource}
-            onRemoveSource={onRemoveSource}
-            onSetSourceMode={onSetSourceMode}
-            onSelectSource={onSelectSource}
-        />
     );
 }

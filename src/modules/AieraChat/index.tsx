@@ -9,33 +9,14 @@ import { Menu } from './Menu';
 import { Messages } from './Messages';
 import { Sources } from './Sources';
 import { Message } from './services/messages';
-import { Source, useChatStore } from './store';
+import { useChatStore } from './store';
 import './styles.css';
 
-interface AieraChatSharedProps {}
-
-/** @notExported */
-interface AieraChatUIProps extends AieraChatSharedProps {
-    showMenu: boolean;
-    setShowMenu: (v: boolean) => void;
-    showSources: boolean;
-    setShowSources: (v: boolean) => void;
-    showConfirm: boolean;
-    setShowConfirm: (v: boolean) => void;
-    onSelectSource: (s?: Source) => void;
-    selectedSource?: Source;
-}
-
-export function AieraChatUI({
-    showMenu,
-    setShowMenu,
-    setShowConfirm,
-    showConfirm,
-    showSources,
-    setShowSources,
-    onSelectSource,
-    selectedSource,
-}: AieraChatUIProps): ReactElement {
+export function AieraChat(): ReactElement {
+    const [showMenu, setShowMenu] = useState(false);
+    const [showSources, setShowSources] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
+    const { selectedSource, onSelectSource } = useChatStore();
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<Message>>(null);
 
@@ -113,30 +94,5 @@ export function AieraChatUI({
                 {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
             </div>
         </>
-    );
-}
-
-/** @notExported */
-export interface AieraChatProps extends AieraChatSharedProps {}
-
-/**
- * Renders AieraChat
- */
-export function AieraChat(): ReactElement {
-    const [showMenu, setShowMenu] = useState(false);
-    const [showSources, setShowSources] = useState(false);
-    const [showConfirm, setShowConfirm] = useState(false);
-    const { selectedSource, onSelectSource } = useChatStore();
-    return (
-        <AieraChatUI
-            selectedSource={selectedSource}
-            onSelectSource={onSelectSource}
-            showMenu={showMenu}
-            setShowMenu={setShowMenu}
-            showSources={showSources}
-            setShowSources={setShowSources}
-            showConfirm={showConfirm}
-            setShowConfirm={setShowConfirm}
-        />
     );
 }

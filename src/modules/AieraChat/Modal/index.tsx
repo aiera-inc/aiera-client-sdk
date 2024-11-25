@@ -4,7 +4,7 @@ import { IconProps } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { ComponentType, ReactElement, ReactNode } from 'react';
 
-interface ModalSharedProps {
+interface ModalProps {
     onClose: () => void;
     children: ReactNode;
     Icon: ComponentType<IconProps>;
@@ -12,10 +12,7 @@ interface ModalSharedProps {
     className?: string;
 }
 
-/** @notExported */
-interface ModalUIProps extends ModalSharedProps {}
-
-export function ModalUI({ onClose, children, Icon, title, className }: ModalUIProps): ReactElement {
+export function Modal({ onClose, children, Icon, title, className }: ModalProps): ReactElement {
     const config = useConfig();
 
     let darkMode = false;
@@ -54,16 +51,5 @@ export function ModalUI({ onClose, children, Icon, title, className }: ModalUIPr
                 <div className={classNames('mt-4 flex flex-col', className)}>{children}</div>
             </div>
         </div>
-    );
-}
-
-/** @notExported */
-export interface ModalProps extends ModalSharedProps {}
-
-export function Modal({ children, onClose, Icon, title, className }: ModalProps): ReactElement {
-    return (
-        <ModalUI onClose={onClose} Icon={Icon} title={title} className={className}>
-            {children}
-        </ModalUI>
     );
 }

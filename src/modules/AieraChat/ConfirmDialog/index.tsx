@@ -3,14 +3,11 @@ import React, { ReactElement } from 'react';
 import { Modal } from '../Modal';
 import { Button } from '@aiera/client-sdk/components/Button';
 
-interface ConfirmDialogSharedProps {
+interface ConfirmDialogProps {
     onClose: () => void;
 }
 
-/** @notExported */
-interface ConfirmDialogUIProps extends ConfirmDialogSharedProps {}
-
-export function ConfirmDialogUI({ onClose }: ConfirmDialogUIProps): ReactElement {
+export function ConfirmDialog({ onClose }: ConfirmDialogProps): ReactElement {
     return (
         <Modal onClose={onClose} title="Confirm Delete" className="justify-center items-center" Icon={MicroTrash}>
             <p className="text-base mt-1 leading-5 text-slate-600 text-balance text-center">
@@ -26,11 +23,4 @@ export function ConfirmDialogUI({ onClose }: ConfirmDialogUIProps): ReactElement
             </div>
         </Modal>
     );
-}
-
-/** @notExported */
-export interface ConfirmDialogProps extends ConfirmDialogSharedProps {}
-
-export function ConfirmDialog({ onClose }: ConfirmDialogProps): ReactElement {
-    return <ConfirmDialogUI onClose={onClose} />;
 }
