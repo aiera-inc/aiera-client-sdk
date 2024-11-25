@@ -8,6 +8,7 @@ import { Panel } from '../Panel';
 import { PanelSearchInput } from '../PanelSearchInput';
 import { useChatSessions } from '../services/chats';
 import { useChatStore } from '../store';
+import { PanelContentRow } from '../PanelContentRow';
 
 export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; onClose: () => void }) {
     const { chatId, onSelectChat, onNewChat } = useChatStore();
@@ -32,33 +33,22 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
                         <div className="absolute inset-0 overflow-y-auto py-4 flex flex-col flex-1">
                             {!isLoading &&
                                 filteredResults.map(({ id, title }) => (
-                                    <div
+                                    <PanelContentRow
+                                        text={title}
                                         key={id}
                                         onClick={() => {
                                             onSelectChat(id, title);
                                             onStartExit();
                                         }}
-                                        className={classNames(
-                                            'cursor-pointer flex hover:bg-slate-200/80 hover:text-blue-700',
-                                            'pl-2.5 mx-5 pr-1.5 rounded-lg',
-                                            'justify-between items-center py-1 text-slate-600',
-                                            {
-                                                'bg-slate-200/50': chatId === id,
-                                            }
-                                        )}
-                                    >
-                                        <p className="text-sm line-clamp-1">{title}</p>
-                                        <div
-                                            className="ml-2 text-slate-500 hover:text-rose-600"
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                onOpenConfirm();
-                                            }}
-                                        >
-                                            <MicroTrash className="w-4" />
-                                        </div>
-                                    </div>
+                                        onClickIcon={() => {
+                                            onOpenConfirm();
+                                        }}
+                                        Icon={MicroTrash}
+                                        iconClassName="text-slate-500 hover:text-rose-600"
+                                        className={classNames({
+                                            'bg-slate-200/50': chatId === id,
+                                        })}
+                                    />
                                 ))}
                             {filteredResults.length === 0 && searchTerm && !isLoading && (
                                 <div className="text-slate-600 py-1 flex items-center justify-center mx-5">

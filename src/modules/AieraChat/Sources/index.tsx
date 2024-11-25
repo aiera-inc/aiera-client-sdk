@@ -11,6 +11,7 @@ import { Panel } from '../Panel';
 import { PanelSearchInput } from '../PanelSearchInput';
 import { useEvents } from '../services/events';
 import { Source, SourceMode, useChatStore } from '../store';
+import { PanelContentRow } from '../PanelContentRow';
 
 interface SourceModeType {
     id: SourceMode;
@@ -142,53 +143,43 @@ function SourcesUI({
                                           ))
                                           .with({ status: 'success' }, ({ data }) =>
                                               data.events.length > 0 ? (
-                                                  data.events.map(({ id, title }) => (
-                                                      <div
-                                                          key={id}
-                                                          className="flex hover:bg-slate-200/80 pl-2.5 pr-1.5 mx-5 rounded-lg justify-between items-center py-1 text-slate-600"
-                                                          onClick={() => {
-                                                              onSelectSource({
-                                                                  targetId: id,
-                                                                  targetType: 'event',
-                                                                  title,
-                                                              });
-                                                          }}
-                                                      >
-                                                          <p className="text-sm line-clamp-1 hover:text-blue-700 cursor-pointer">
-                                                              {title}
-                                                          </p>
-                                                          {hasSource(
-                                                              { targetId: id, targetType: 'event', title },
-                                                              sources
-                                                          ) ? (
-                                                              <div
-                                                                  className="ml-2"
-                                                                  onClick={(e) => {
-                                                                      e.stopPropagation();
-                                                                      e.preventDefault();
-                                                                      onRemoveSource(id, 'event');
-                                                                  }}
-                                                              >
-                                                                  <MicroDocumentMinus className="w-4 text-red-500 hover:text-red-700 cursor-pointer" />
-                                                              </div>
-                                                          ) : (
-                                                              <div
-                                                                  className="ml-2"
-                                                                  onClick={(e) => {
-                                                                      e.stopPropagation();
-                                                                      e.preventDefault();
-                                                                      onAddSource({
-                                                                          targetId: id,
-                                                                          targetType: 'event',
-                                                                          title,
-                                                                      });
-                                                                  }}
-                                                              >
-                                                                  <MicroDocumentPlus className="w-4 hover:text-blue-600 cursor-pointer" />
-                                                              </div>
-                                                          )}
-                                                      </div>
-                                                  ))
+                                                  data.events.map(({ id, title }) => {
+                                                      const sourceAdded = hasSource(
+                                                          { targetId: id, targetType: 'event', title },
+                                                          sources
+                                                      );
+                                                      return (
+                                                          <PanelContentRow
+                                                              text={title}
+                                                              key={id}
+                                                              onClick={() => {
+                                                                  onSelectSource({
+                                                                      targetId: id,
+                                                                      targetType: 'event',
+                                                                      title,
+                                                                  });
+                                                              }}
+                                                              onClickIcon={
+                                                                  sourceAdded
+                                                                      ? () => onRemoveSource(id, 'event')
+                                                                      : () =>
+                                                                            onAddSource({
+                                                                                targetId: id,
+                                                                                targetType: 'event',
+                                                                                title,
+                                                                            })
+                                                              }
+                                                              Icon={
+                                                                  sourceAdded ? MicroDocumentMinus : MicroDocumentPlus
+                                                              }
+                                                              iconClassName={
+                                                                  sourceAdded
+                                                                      ? 'text-red-500 hover:text-red-700'
+                                                                      : 'hover:text-blue-600'
+                                                              }
+                                                          />
+                                                      );
+                                                  })
                                               ) : (
                                                   <div className="text-slate-600 py-1 flex items-center justify-center mx-5">
                                                       <p className="text-sm text-center text-balance">
@@ -200,27 +191,20 @@ function SourcesUI({
                                           )
                                           .otherwise(() => null)
                                     : sources.map(({ targetId, targetType, title }) => (
-                                          <div
+                                          <PanelContentRow
+                                              text={title}
                                               key={targetId}
-                                              className="flex hover:bg-slate-200/80 pl-2.5 mx-5 pr-1.5 rounded-lg justify-between items-center py-1 text-slate-600"
                                               onClick={() => {
-                                                  onSelectSource({ targetId, targetType, title });
+                                                  onSelectSource({
+                                                      targetId,
+                                                      targetType,
+                                                      title,
+                                                  });
                                               }}
-                                          >
-                                              <p className="text-sm line-clamp-1 hover:text-blue-700 cursor-pointer">
-                                                  {title}
-                                              </p>
-                                              <div
-                                                  className="ml-2"
-                                                  onClick={(e) => {
-                                                      e.stopPropagation();
-                                                      e.preventDefault();
-                                                      onRemoveSource(targetId, targetType);
-                                                  }}
-                                              >
-                                                  <MicroDocumentMinus className="w-4 text-red-500 hover:text-red-700 cursor-pointer" />
-                                              </div>
-                                          </div>
+                                              onClickIcon={() => onRemoveSource(targetId, targetType)}
+                                              Icon={MicroDocumentMinus}
+                                              iconClassName={'text-red-500 hover:text-red-700'}
+                                          />
                                       ))}
                                 {!searchTerm && sources.length === 0 && (
                                     <div className="flex items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800">
