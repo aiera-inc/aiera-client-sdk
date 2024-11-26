@@ -83842,7 +83842,7 @@ function ButtonUI(props) {
     "data-testid": testId,
     disabled,
     tabIndex: 0,
-    className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base disabled:opacity-75 ${buttonStyle} ${className}`, { "px-2.5": !iconButton, "justify-center": iconButton }),
+    className: (0, import_classnames3.default)(`group flex h-8 items-center font-semibold leading-3 text-base disabled:opacity-75 ${buttonStyle} ${className}`, { "px-2.5": !iconButton, "justify-center": iconButton, "rounded-lg": !className.includes("rounded") }),
     onClick,
     type
   }, children);
