@@ -170,12 +170,13 @@ export function Messages({
             });
 
             if (sourceMode === 'suggest' || sources.length === 0) {
+                const newKey = `${idCounter++}`;
                 const sourceMessage: Message = {
                     user: 'other',
-                    key: `${idCounter++}`,
+                    key: newKey,
                     text: 'sourcess',
                     prompt,
-                    status: 'finished',
+                    status: 'thinking',
                     type: 'sources',
                 };
                 virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
@@ -185,6 +186,18 @@ export function Messages({
                         behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
                     };
                 });
+                setTimeout(() => {
+                    virtuosoRef.current?.data.map((message) => {
+                        if (message.key === newKey) {
+                            return {
+                                ...message,
+                                status: 'finished',
+                            };
+                        }
+
+                        return message;
+                    });
+                }, 2000);
             } else {
                 const botMessage = randomMessage('other', prompt);
                 virtuosoRef.current?.data.append([botMessage]);

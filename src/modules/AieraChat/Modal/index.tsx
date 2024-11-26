@@ -2,7 +2,8 @@ import { MicroClose } from '@aiera/client-sdk/components/Svg/MicroClose';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { IconProps } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
-import React, { ComponentType, ReactElement, ReactNode } from 'react';
+import React, { ComponentType, ReactElement, ReactNode, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 
 interface ModalProps {
     onClose: () => void;
@@ -12,18 +13,17 @@ interface ModalProps {
     className?: string;
 }
 
-export function Modal({ onClose, children, Icon, title, className }: ModalProps): ReactElement {
+export function Modal({ onClose, children, Icon, title, className }: ModalProps): ReactElement | null {
+    const [mounted, setMounted] = useState(false);
     const config = useConfig();
+    const darkMode = config.options?.darkMode ?? false;
 
-    let darkMode = false;
+    useEffect(() => {
+        setMounted(true);
+        return () => setMounted(false);
+    }, []);
 
-    if (config.options) {
-        if (config.options.darkMode !== undefined) {
-            darkMode = config.options.darkMode;
-        }
-    }
-
-    return (
+    const modalContent = (
         <div
             onClick={onClose}
             className={classNames(
@@ -52,4 +52,18 @@ export function Modal({ onClose, children, Icon, title, className }: ModalProps)
             </div>
         </div>
     );
+
+    // Check if we're in a browser environment and the dialog container exists
+    if (typeof document !== 'undefined' && mounted) {
+        const dialogContainer = document.getElementById('dialog');
+
+        if (!dialogContainer) {
+            console.warn('Dialog container with id "dialog" not found. Modal will not render.');
+            return null;
+        }
+
+        return createPortal(modalContent, dialogContainer);
+    }
+
+    return null;
 }

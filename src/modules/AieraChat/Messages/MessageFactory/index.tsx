@@ -14,6 +14,8 @@ import { useChatStore } from '../../store';
 import { IconButton } from '../../IconButton';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 import { Button } from '@aiera/client-sdk/components/Button';
+import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
+import { AddSourceDialog } from '../../AddSourceDialog';
 
 export const MessagePrompt = ({
     data,
@@ -184,68 +186,89 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
 
 const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: Message }) => {
     const { onSelectSource } = useChatStore();
+    const [showSourceDialog, setShowSourceDialog] = useState(false);
+    const [localSources, setLocalSources] = useState([
+        {
+            title: 'Tesla Q3 2024 Earnings Call',
+            id: '2639849',
+        },
+        {
+            title: 'Meta Platforms Q2 2024 Earnings Call',
+            id: '2639849',
+        },
+        {
+            title: 'Apple Inc Q3 2024 Earnings Call',
+            id: '2639849',
+        },
+        {
+            title: 'Tesla Q2 2024 Earnings Call',
+            id: '2639849',
+        },
+    ]);
+
+    const onRemoveSource = useCallback(
+        (index: number) => {
+            const newSources = [...localSources];
+            newSources.splice(index, 1);
+            setLocalSources(newSources);
+        },
+        [localSources]
+    );
 
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-sm">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
-            <p className="font-semibold antialiased">Thinking...</p>
+            <p className="font-semibold antialiased">Finding sources...</p>
         </div>
     ) : (
         <div className="flex flex-col pt-4">
-            <div
-                className="mx-5 text-sm px-2 py-1 rounded-lg border"
-                onClick={() =>
-                    onSelectSource({
-                        targetId: '2639849',
-                        targetType: 'event',
-                        title: 'TSLA Q3 2024 Earnings Call',
-                    })
-                }
-            >
-                TSLA Q3 2024 Earnings Call
-            </div>
-            <div
-                className="mx-5 text-sm px-2 py-1 rounded-lg border"
-                onClick={() =>
-                    onSelectSource({
-                        targetId: '2639849',
-                        targetType: 'event',
-                        title: 'TSLA Q3 2024 Earnings Call',
-                    })
-                }
-            >
-                TSLA Q2 2024 Earnings Call
-            </div>
-            <div
-                className="mx-5 text-sm px-2 py-1 rounded-lg border"
-                onClick={() =>
-                    onSelectSource({
-                        targetId: '2639849',
-                        targetType: 'event',
-                        title: 'TSLA Q3 2024 Earnings Call',
-                    })
-                }
-            >
-                TSLA Q1 2024 Earnings Call
-            </div>
-            <div
-                className="mx-5 text-sm px-2 py-1 rounded-lg border"
-                onClick={() =>
-                    onSelectSource({
-                        targetId: '2639849',
-                        targetType: 'event',
-                        title: 'TSLA Q3 2024 Earnings Call',
-                    })
-                }
-            >
-                TSLA Q4 2023 Earnings Call
-            </div>
-            {data.status === 'finished' && (
+            {localSources.map(({ title, id }, idx) => (
+                <div
+                    key={`${idx}-${id}`}
+                    className={classNames(
+                        'mx-4 mt-1 text-sm px-2 py-1 rounded-lg border',
+                        'cursor-pointer flex items-center justify-between'
+                    )}
+                    onClick={() =>
+                        onSelectSource({
+                            targetId: id,
+                            targetType: 'event',
+                            title,
+                        })
+                    }
+                >
+                    <p className="text-sm">{title}</p>
+                    <div
+                        className="ml-4 text-slate-600 hover:text-red-600"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            e.stopPropagation();
+                            onRemoveSource(idx);
+                        }}
+                    >
+                        <MicroTrash className="w-4" />
+                    </div>
+                </div>
+            ))}
+            {data.status === 'finished' && localSources.length > 0 && (
                 <div className="flex items-center pl-4 pr-2 mt-4 pb-4 text-sm">
-                    <Button onClick={() => onConfirm(data.key)}>Confirm Sources</Button>
+                    <Button kind="primary" onClick={() => onConfirm(data.key)}>
+                        Confirm Sources
+                    </Button>
+                    <p className="ml-2" onClick={() => setShowSourceDialog(true)}>
+                        Add Source
+                    </p>
+                </div>
+            )}
+            {data.status === 'finished' && localSources.length === 0 && (
+                <div
+                    onClick={() => setShowSourceDialog(true)}
+                    className="flex items-center pl-4 pr-2 mt-4 pb-4 text-sm"
+                >
                     <p className="ml-2">Add Source</p>
                 </div>
             )}
+            {showSourceDialog && <AddSourceDialog onClose={() => setShowSourceDialog(false)} />}
         </div>
     );
 };
