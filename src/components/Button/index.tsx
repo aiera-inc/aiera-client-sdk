@@ -60,8 +60,8 @@ export function ButtonUI(props: ButtonUIProps): ReactElement {
             disabled={disabled}
             tabIndex={0}
             className={classNames(
-                `group flex h-8 items-center font-semibold  rounded-lg leading-3 text-base disabled:opacity-75 ${buttonStyle} ${className}`,
-                { 'px-2.5': !iconButton, 'justify-center': iconButton }
+                `group flex h-8 items-center font-semibold leading-3 text-base disabled:opacity-75 ${buttonStyle} ${className}`,
+                { 'px-2.5': !iconButton, 'justify-center': iconButton, 'rounded-lg': !className.includes('rounded') }
             )}
             onClick={onClick}
             type={type}
