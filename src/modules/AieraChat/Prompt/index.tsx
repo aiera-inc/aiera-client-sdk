@@ -24,15 +24,7 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
 
     const handleInput = useCallback(() => {
         checkEmpty();
-    }, []);
-
-    const handleKeyDown = useCallback((e: KeyboardEvent<HTMLParagraphElement>) => {
-        checkEmpty();
-        if (e.code === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            handleSubmit();
-        }
-    }, []);
+    }, [checkEmpty]);
 
     const handleSubmit = useCallback(() => {
         if (inputRef.current) {
@@ -44,6 +36,17 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
             setTimeout(checkEmpty);
         }
     }, [onSubmit]);
+
+    const handleKeyDown = useCallback(
+        (e: KeyboardEvent<HTMLParagraphElement>) => {
+            checkEmpty();
+            if (e.code === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit();
+            }
+        },
+        [checkEmpty, handleSubmit]
+    );
 
     // Autofocus
     useEffect(() => {

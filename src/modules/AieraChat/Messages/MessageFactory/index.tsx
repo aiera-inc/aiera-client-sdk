@@ -10,7 +10,7 @@ import React, { useCallback, useState } from 'react';
 import { match } from 'ts-pattern';
 import { MessageListContext } from '..';
 import { Message } from '../../services/messages';
-import { useChatStore } from '../../store';
+import { useChatStore, Source } from '../../store';
 import { IconButton } from '../../IconButton';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 import { Button } from '@aiera/client-sdk/components/Button';
@@ -185,24 +185,28 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
 };
 
 const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: Message }) => {
-    const { onSelectSource } = useChatStore();
+    const { onSelectSource, onAddSource } = useChatStore();
     const [showSourceDialog, setShowSourceDialog] = useState(false);
-    const [localSources, setLocalSources] = useState([
+    const [localSources, setLocalSources] = useState<Source[]>([
         {
             title: 'Tesla Q3 2024 Earnings Call',
-            id: '2639849',
+            targetId: '2639849',
+            targetType: 'event',
         },
         {
             title: 'Meta Platforms Q2 2024 Earnings Call',
-            id: '2639849',
+            targetId: '2639849',
+            targetType: 'event',
         },
         {
             title: 'Apple Inc Q3 2024 Earnings Call',
-            id: '2639849',
+            targetId: '2639849',
+            targetType: 'event',
         },
         {
             title: 'Tesla Q2 2024 Earnings Call',
-            id: '2639849',
+            targetId: '2639849',
+            targetType: 'event',
         },
     ]);
 
@@ -222,9 +226,9 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
         </div>
     ) : (
         <div className="flex flex-col pt-4">
-            {localSources.map(({ title, id }, idx) => (
+            {localSources.map(({ title, targetId }, idx) => (
                 <div
-                    key={`${idx}-${id}`}
+                    key={`${idx}-${targetId}`}
                     className={classNames(
                         'mx-3 mt-1 text-sm px-3 py-1.5 rounded-lg border border-slate-300/60',
                         'hover:bg-slate-200/40',
@@ -232,7 +236,7 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
                     )}
                     onClick={() =>
                         onSelectSource({
-                            targetId: id,
+                            targetId,
                             targetType: 'event',
                             title,
                         })
@@ -255,7 +259,14 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
             ))}
             {data.status === 'finished' && localSources.length > 0 && (
                 <div className="flex items-center justify-center px-3 mt-3 pb-5 text-sm">
-                    <Button kind="primary" className="px-5" onClick={() => onConfirm(data.key)}>
+                    <Button
+                        kind="primary"
+                        className="px-5"
+                        onClick={() => {
+                            onConfirm(data.key);
+                            onAddSource(localSources);
+                        }}
+                    >
                         Confirm Sources
                     </Button>
                     <Button className="ml-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>

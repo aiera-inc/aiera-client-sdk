@@ -8,7 +8,7 @@ import {
     useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { Fragment, RefObject, useCallback, useEffect } from 'react';
+import React, { Fragment, RefObject, useCallback, useEffect, useMemo } from 'react';
 import { Prompt } from '../Prompt';
 import { Message, MessageStatus, useChatMessages } from '../services/messages';
 import { useChatStore } from '../store';
@@ -232,6 +232,16 @@ export function Messages({
         [chatId, sourceMode, sources]
     );
 
+    // Create a memoized context object that updates when any of its values change
+    const context = useMemo(
+        () => ({
+            onSubmit,
+            onReRun,
+            onConfirm,
+        }),
+        [onSubmit, onReRun, onConfirm]
+    );
+
     return (
         <div className="relative flex-1">
             <div className="absolute bottom-0 left-0 right-0 top-4 flex flex-col flex-1">
@@ -251,7 +261,7 @@ export function Messages({
                             initialData={messages}
                             shortSizeAlign="bottom-smooth"
                             ItemContent={MessageFactory}
-                            context={{ onSubmit, onReRun, onConfirm }}
+                            context={context}
                             EmptyPlaceholder={SuggestedPrompts}
                             StickyHeader={StickyHeader}
                         />
