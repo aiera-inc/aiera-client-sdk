@@ -100,7 +100,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
             <p className="font-semibold antialiased">Thinking...</p>
         </div>
     ) : (
-        <div className="pb-12 flex flex-col">
+        <div className="pb-10 flex flex-col">
             <div className="pt-4 pl-4 pb-4 pr-2 text-base">
                 {searchTerm
                     ? data.text
@@ -226,7 +226,8 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
                 <div
                     key={`${idx}-${id}`}
                     className={classNames(
-                        'mx-4 mt-1 text-sm px-2 py-1 rounded-lg border',
+                        'mx-3 mt-1 text-sm px-3 py-1.5 rounded-lg border border-slate-300/60',
+                        'hover:bg-slate-200/40',
                         'cursor-pointer flex items-center justify-between'
                     )}
                     onClick={() =>
@@ -237,35 +238,36 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
                         })
                     }
                 >
-                    <p className="text-sm">{title}</p>
-                    <div
-                        className="ml-4 text-slate-600 hover:text-red-600"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            onRemoveSource(idx);
-                        }}
-                    >
-                        <MicroTrash className="w-4" />
-                    </div>
+                    <p className="text-base line-clamp-1">{title}</p>
+                    {data.status !== 'confirmed' && (
+                        <div
+                            className="ml-4 text-slate-600 hover:text-red-600"
+                            onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                onRemoveSource(idx);
+                            }}
+                        >
+                            <MicroTrash className="w-4" />
+                        </div>
+                    )}
                 </div>
             ))}
             {data.status === 'finished' && localSources.length > 0 && (
-                <div className="flex items-center pl-4 pr-2 mt-4 pb-4 text-sm">
-                    <Button kind="primary" onClick={() => onConfirm(data.key)}>
+                <div className="flex items-center justify-center px-3 mt-3 pb-5 text-sm">
+                    <Button kind="primary" className="px-5" onClick={() => onConfirm(data.key)}>
                         Confirm Sources
                     </Button>
-                    <p className="ml-2" onClick={() => setShowSourceDialog(true)}>
+                    <Button className="ml-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
                         Add Source
-                    </p>
+                    </Button>
                 </div>
             )}
             {data.status === 'finished' && localSources.length === 0 && (
-                <div
-                    onClick={() => setShowSourceDialog(true)}
-                    className="flex items-center pl-4 pr-2 mt-4 pb-4 text-sm"
-                >
-                    <p className="ml-2">Add Source</p>
+                <div className="flex items-center justify-center pb-5 text-sm">
+                    <Button kind="primary" onClick={() => setShowSourceDialog(true)}>
+                        Add Sources
+                    </Button>
                 </div>
             )}
             {showSourceDialog && <AddSourceDialog onClose={() => setShowSourceDialog(false)} />}
