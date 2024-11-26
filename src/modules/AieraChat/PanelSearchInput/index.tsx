@@ -25,7 +25,7 @@ export function PanelSearchInput({
                 onChange={(e) => onChange(e.target.value)}
                 type="text"
                 name={name}
-                className="text-sm border flex-1 border-slate-200 focus:outline focus:border-transparent outline-2 outline-blue-700 rounded-full h-8 px-3"
+                className="text-base border flex-1 border-slate-200 focus:outline focus:border-transparent outline-2 outline-blue-700 rounded-full h-8 px-3"
                 placeholder={placeholder}
             />
             {value && (

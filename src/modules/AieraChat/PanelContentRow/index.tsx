@@ -26,7 +26,7 @@ export function PanelContentRow({
             )}
             onClick={onClick}
         >
-            <p className="text-sm line-clamp-1 hover:text-blue-700 cursor-pointer">{text}</p>
+            <p className="text-base line-clamp-1 hover:text-blue-700 cursor-pointer">{text}</p>
             {Icon && (
                 <div
                     className="ml-2"

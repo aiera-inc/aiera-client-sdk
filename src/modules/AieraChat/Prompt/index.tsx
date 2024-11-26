@@ -11,7 +11,7 @@ interface PromptProps {
 }
 
 export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
-    const { sourceMode, sources } = useChatStore();
+    const { sources } = useChatStore();
     const [isEmpty, setIsEmpty] = useState(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
 
@@ -79,12 +79,12 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                     'rounded-lg flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer hover:bg-slate-100 active:bg-slate-200 active:scale-90',
                     {
-                        'text-rose-600': sourceMode === 'manual' && sources.length > 0,
-                        'text-slate-400': sourceMode === 'suggest' || sources.length === 0,
+                        'text-rose-600': sources.length > 0,
+                        'text-slate-400': sources.length === 0,
                     }
                 )}
             >
-                {sourceMode === 'manual' && sources.length > 0 ? (
+                {sources.length > 0 ? (
                     <>
                         <p className="text-sm font-bold antialiased mr-0.5">{sources.length}</p>
                         <MicroFolderOpen className="w-4" />

@@ -59,7 +59,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>>;
     onOpenSources: () => void;
 }) {
-    const { chatId, sourceMode, sources } = useChatStore();
+    const { chatId, sources } = useChatStore();
     const { messages, isLoading } = useChatMessages(chatId);
 
     // Reset when starting new chat
@@ -169,7 +169,7 @@ export function Messages({
                 };
             });
 
-            if (sourceMode === 'suggest' || sources.length === 0) {
+            if (sources.length === 0) {
                 const newKey = `${idCounter++}`;
                 const sourceMessage: Message = {
                     user: 'other',
@@ -229,7 +229,7 @@ export function Messages({
                 }, 2000);
             }
         },
-        [chatId, sourceMode, sources]
+        [chatId, sources]
     );
 
     // Create a memoized context object that updates when any of its values change

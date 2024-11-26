@@ -72,7 +72,7 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
                             onStartExit();
                         }}
                     >
-                        <p className="text-center text-sm flex-1">Start New Chat</p>
+                        <p className="text-center text-base flex-1">Start New Chat</p>
                     </Button>
                 </div>
             )}

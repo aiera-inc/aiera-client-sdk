@@ -16,6 +16,7 @@ import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import { AddSourceDialog } from '../../AddSourceDialog';
+import { MicroFolderOpen } from '@aiera/client-sdk/components/Svg/MicroFolderOpen';
 
 export const MessagePrompt = ({
     data,
@@ -172,6 +173,13 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                     />
                     <div className="flex-1" />
                     <IconButton
+                        hintAnchor="bottom-right"
+                        hintGrow="down-left"
+                        hintText="Add Sources"
+                        Icon={MicroFolderOpen}
+                    />
+                    <IconButton
+                        className="ml-2"
                         hintText="Re-run Response"
                         hintAnchor="bottom-right"
                         hintGrow="down-left"
@@ -185,7 +193,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
 };
 
 const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: Message }) => {
-    const { onSelectSource, onAddSource, sourceMode } = useChatStore();
+    const { onSelectSource, onAddSource } = useChatStore();
     const [showSourceDialog, setShowSourceDialog] = useState(false);
     const [localSources, setLocalSources] = useState<Source[]>([
         {
@@ -264,9 +272,7 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
                         className="px-5"
                         onClick={() => {
                             onConfirm(data.key);
-                            if (sourceMode === 'manual') {
-                                onAddSource(localSources);
-                            }
+                            onAddSource(localSources);
                         }}
                     >
                         Confirm Sources

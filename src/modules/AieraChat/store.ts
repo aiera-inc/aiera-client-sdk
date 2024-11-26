@@ -1,6 +1,5 @@
 import { create } from 'zustand';
 
-export type SourceMode = 'suggest' | 'manual';
 export interface Source {
     targetId: string;
     targetType: string;
@@ -12,9 +11,7 @@ export interface ChatState {
     chatTitle?: string;
     searchTerm?: string;
     selectedSource?: Source;
-    sourceMode: SourceMode;
     sources: Source[];
-    onSetSourceMode: (mode: SourceMode) => void;
     onSelectChat: (chatId: string, chatTitle?: string) => void;
     onNewChat: () => void;
     onSetSearchTerm: (searchTerm?: string) => void;
@@ -30,16 +27,12 @@ export const useChatStore = create<ChatState>((set) => ({
     chatTitle: undefined,
     searchTerm: undefined,
     selectedSource: undefined,
-    sourceMode: 'manual',
     sources: [],
-    onSelectChat: (chatId: string, chatTitle?: string) =>
-        set({ chatId, chatTitle, sourceMode: 'suggest', sources: [] }),
-    onNewChat: () =>
-        set({ chatId: 'new', chatTitle: undefined, sourceMode: 'suggest', searchTerm: undefined, sources: [] }),
+    onSelectChat: (chatId: string, chatTitle?: string) => set({ chatId, chatTitle, sources: [] }),
+    onNewChat: () => set({ chatId: 'new', chatTitle: undefined, searchTerm: undefined, sources: [] }),
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
-    onSetSourceMode: (sourceMode: SourceMode) => set({ sourceMode }),
     onAddSource: (source: Source | Source[]) =>
         set((state) => ({
             sources: [...state.sources, ...(Array.isArray(source) ? source : [source])],
