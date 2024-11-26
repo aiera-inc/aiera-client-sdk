@@ -42,7 +42,7 @@ export const SuggestedPrompts: VirtuosoMessageListProps<Message, MessageListCont
                 suggestedPrompt && (
                     <>
                         <div className="flex items-center justify-between mb-2">
-                            <p className="ml-3 text-sm font-semibold">Suggested Questions</p>
+                            <p className="ml-3 text-base font-semibold">Suggested Questions</p>
                         </div>
                         <div
                             onClick={() => {

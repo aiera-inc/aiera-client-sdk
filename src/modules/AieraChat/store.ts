@@ -20,6 +20,7 @@ export interface ChatState {
     onSetSearchTerm: (searchTerm?: string) => void;
     onSetTitle: (title?: string) => void;
     onAddSource: (source: Source | Source[]) => void;
+    onClearSources: () => void;
     onRemoveSource: (targetId: string, targetType: string) => void;
     onSelectSource: (source?: Source) => void;
 }
@@ -43,6 +44,7 @@ export const useChatStore = create<ChatState>((set) => ({
         set((state) => ({
             sources: [...state.sources, ...(Array.isArray(source) ? source : [source])],
         })),
+    onClearSources: () => set({ sources: [] }),
     onRemoveSource: (targetId: string, targetType: string) =>
         set((state) => ({
             sources: state.sources.filter(

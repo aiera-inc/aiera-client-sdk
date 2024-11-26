@@ -12,6 +12,7 @@ import { PanelSearchInput } from '../PanelSearchInput';
 import { useEvents } from '../services/events';
 import { Source, SourceMode, useChatStore } from '../store';
 import { PanelContentRow } from '../PanelContentRow';
+import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCircle';
 
 interface SourceModeType {
     id: SourceMode;
@@ -48,7 +49,15 @@ export const hasSource = (
 };
 
 export function Sources({ onClose }: { onClose: () => void }) {
-    const { sourceMode: mode, onSetSourceMode, onRemoveSource, sources, onSelectSource, onAddSource } = useChatStore();
+    const {
+        sourceMode: mode,
+        onSetSourceMode,
+        onRemoveSource,
+        sources,
+        onSelectSource,
+        onAddSource,
+        onClearSources,
+    } = useChatStore();
     // Separate state for immediate UI updates
     const [inputValue, setInputValue] = useState<string>('');
     // State that will be debounced before being used in queries
@@ -198,6 +207,18 @@ export function Sources({ onClose }: { onClose: () => void }) {
                                             Sources will be suggested if you do not add a source.
                                         </p>
                                     </div>
+                                )}
+                                {!searchTerm && sources.length > 0 && (
+                                    <>
+                                        <div className="flex-1" />
+                                        <div
+                                            onClick={onClearSources}
+                                            className="flex cursor-pointer items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800 hover:bg-rose-200"
+                                        >
+                                            <MicroCloseCircle className="flex-shrink-0 w-4 mr-2" />
+                                            <p className="text-sm leading-4 text-balance">Clear all sources</p>
+                                        </div>
+                                    </>
                                 )}
                             </div>
                         </div>

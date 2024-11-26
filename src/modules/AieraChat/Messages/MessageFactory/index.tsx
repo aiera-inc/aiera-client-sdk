@@ -53,7 +53,7 @@ export const MessagePrompt = ({
             </div>
             <div className="self-center">
                 <p
-                    className={classNames('text-base font-bold antialiased leading-4', {
+                    className={classNames('text-base font-bold antialiased leading-[1.125rem]', {
                         'line-clamp-2': isStickyHeader,
                     })}
                 >
@@ -95,7 +95,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
     }, []);
 
     return data.status === 'thinking' ? (
-        <div className="flex items-center py-4 justify-center text-sm">
+        <div className="flex items-center py-4 justify-center text-base">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
             <p className="font-semibold antialiased">Thinking...</p>
         </div>
@@ -185,7 +185,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
 };
 
 const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: Message }) => {
-    const { onSelectSource, onAddSource } = useChatStore();
+    const { onSelectSource, onAddSource, sourceMode } = useChatStore();
     const [showSourceDialog, setShowSourceDialog] = useState(false);
     const [localSources, setLocalSources] = useState<Source[]>([
         {
@@ -220,7 +220,7 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
     );
 
     return data.status === 'thinking' ? (
-        <div className="flex items-center py-4 justify-center text-sm">
+        <div className="flex items-center py-4 justify-center text-base">
             <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
             <p className="font-semibold antialiased">Finding sources...</p>
         </div>
@@ -264,7 +264,9 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
                         className="px-5"
                         onClick={() => {
                             onConfirm(data.key);
-                            onAddSource(localSources);
+                            if (sourceMode === 'manual') {
+                                onAddSource(localSources);
+                            }
                         }}
                     >
                         Confirm Sources
