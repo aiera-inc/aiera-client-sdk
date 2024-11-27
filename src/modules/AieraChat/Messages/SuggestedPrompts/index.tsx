@@ -55,10 +55,16 @@ export const SuggestedPrompts: VirtuosoMessageListProps<Message, MessageListCont
                         </div>
                         <div className="flex items-center justify-between mt-2">
                             <div className="flex items-center ml-1.5">
-                                <div className="px-2 cursor-pointer hover:text-blue-600" onClick={onPrevPage}>
+                                <div
+                                    className="px-2 h-[1.125rem] flex items-center justify-center cursor-pointer hover:text-blue-600"
+                                    onClick={onPrevPage}
+                                >
                                     <Chevron className="w-2 rotate-90" />
                                 </div>
-                                <div className="px-2 cursor-pointer hover:text-blue-600" onClick={onNextPage}>
+                                <div
+                                    className="px-2 h-[1.125rem] flex items-center justify-center cursor-pointer hover:text-blue-600"
+                                    onClick={onNextPage}
+                                >
                                     <Chevron className="w-2 -rotate-90" />
                                 </div>
                             </div>
