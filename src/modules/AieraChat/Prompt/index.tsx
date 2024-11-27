@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { MicroFolderOpen } from '../../../components/Svg/MicroFolderOpen';
 import { useChatStore } from '../store';
+import { Hint } from '../Hint';
 
 interface PromptProps {
     onOpenSources: () => void;
@@ -78,6 +79,7 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                     'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] px-1.5 transition-all',
                     'rounded-lg flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer hover:bg-slate-100 active:bg-slate-200 active:scale-90',
+                    'hintTarget relative',
                     {
                         'text-rose-600': sources.length > 0,
                         'text-slate-400': sources.length === 0,
@@ -92,16 +94,33 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                 ) : (
                     <MicroFolder className="w-4" />
                 )}
+                <Hint
+                    targetHeight={30}
+                    targetWidth={28}
+                    text={sources.length === 0 ? 'Auto Sources' : 'Manage Sources'}
+                    anchor={'top-right'}
+                    grow={'up-left'}
+                    yOffset={8}
+                />
             </button>
             <button
                 onClick={handleSubmit}
                 className={classNames(
                     'h-[1.875rem] self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
                     'bg-blue-600 rounded-xl flex-shrink-0 flex items-center justify-center',
-                    'cursor-pointer hover:bg-blue-700 active:bg-blue-800 active:scale-90'
+                    'cursor-pointer hover:bg-blue-700 active:bg-blue-800 active:scale-90',
+                    'relative hintTarget'
                 )}
             >
                 <MicroArrowUp className="w-4 text-white" />
+                <Hint
+                    targetHeight={30}
+                    targetWidth={28}
+                    yOffset={8}
+                    text={'Ask Question'}
+                    anchor={'top-right'}
+                    grow={'up-left'}
+                />
             </button>
         </div>
     );

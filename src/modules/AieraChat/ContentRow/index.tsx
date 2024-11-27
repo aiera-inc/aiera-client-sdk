@@ -2,7 +2,7 @@ import { IconProps } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { ComponentType } from 'react';
 
-export function PanelContentRow({
+export function ContentRow({
     text,
     onClick,
     onClickIcon,
@@ -20,7 +20,7 @@ export function PanelContentRow({
     return (
         <div
             className={classNames(
-                'flex hover:bg-slate-200/80 pl-2.5 pr-1.5 mx-5',
+                'flex hover:bg-slate-200/80 pl-2.5 pr-1.5',
                 'rounded-lg justify-between items-center py-1 text-slate-600',
                 className
             )}

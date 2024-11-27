@@ -8,7 +8,7 @@ import { Panel } from '../Panel';
 import { PanelSearchInput } from '../PanelSearchInput';
 import { useChatSessions } from '../services/chats';
 import { useChatStore } from '../store';
-import { PanelContentRow } from '../PanelContentRow';
+import { ContentRow } from '../ContentRow';
 
 export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; onClose: () => void }) {
     const { chatId, onSelectChat, onNewChat } = useChatStore();
@@ -33,7 +33,7 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
                         <div className="absolute inset-0 overflow-y-auto py-4 flex flex-col flex-1">
                             {!isLoading &&
                                 filteredResults.map(({ id, title }) => (
-                                    <PanelContentRow
+                                    <ContentRow
                                         text={title}
                                         key={id}
                                         onClick={() => {
@@ -45,7 +45,7 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
                                         }}
                                         Icon={MicroTrash}
                                         iconClassName="text-slate-500 hover:text-rose-600"
-                                        className={classNames({
+                                        className={classNames('mx-5', {
                                             'bg-slate-200/50': chatId === id,
                                         })}
                                     />

@@ -1,22 +1,22 @@
+import { Button } from '@aiera/client-sdk/components/Button';
+import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
 import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestionMark';
 import { MicroRefresh } from '@aiera/client-sdk/components/Svg/MicroRefresh';
 import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
+import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import { VirtuosoMessageListProps } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { match } from 'ts-pattern';
 import { MessageListContext } from '..';
-import { Message } from '../../services/messages';
-import { useChatStore, Source } from '../../store';
-import { IconButton } from '../../IconButton';
-import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
-import { Button } from '@aiera/client-sdk/components/Button';
-import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import { AddSourceDialog } from '../../AddSourceDialog';
-import { MicroFolderOpen } from '@aiera/client-sdk/components/Svg/MicroFolderOpen';
+import { IconButton } from '../../IconButton';
+import { Message } from '../../services/messages';
+import { Source, useChatStore } from '../../store';
+import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 
 export const MessagePrompt = ({
     data,
@@ -84,6 +84,39 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
     const [copied, setCopied] = useState(false);
     // TODO getMessage from network / cache for managing feedback
     const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
+    const [showSourceDialog, setShowSourceDialog] = useState(false);
+    const [localSources, setLocalSources] = useState<Source[]>([
+        {
+            title: 'Tesla Q3 2024 Earnings Call',
+            targetId: '2639849',
+            targetType: 'event',
+        },
+        {
+            title: 'Meta Platforms Q2 2024 Earnings Call',
+            targetId: '2658051',
+            targetType: 'event',
+        },
+        {
+            title: 'Apple Inc Q3 2024 Earnings Call',
+            targetId: '2656780',
+            targetType: 'event',
+        },
+        {
+            title: 'Tesla Q2 2024 Earnings Call',
+            targetId: '2613061',
+            targetType: 'event',
+        },
+    ]);
+
+    const onAddLocalSource = useCallback((s: Source) => {
+        setLocalSources((pv) => [...pv, s]);
+    }, []);
+
+    const onRemoveSource = useCallback((s: Source) => {
+        setLocalSources((pv) =>
+            pv.filter((source) => !(source.targetId === s.targetId && source.targetType === s.targetType))
+        );
+    }, []);
 
     const onHandleCopy = useCallback(() => {
         setCopied(true);
@@ -135,8 +168,9 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                 </span>
             </div>
             {data.status === 'finished' && (
-                <div className="flex items-center pl-4 pr-2">
+                <div className="flex items-center px-3">
                     <IconButton
+                        hintAnchor="top-left"
                         hintText={copied ? 'Copied!' : 'Copy to Clipboard'}
                         onClick={onHandleCopy}
                         textClass={classNames({
@@ -149,6 +183,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                         Icon={copied ? MicroCheck : MicroCopy}
                     />
                     <IconButton
+                        hintAnchor="top-left"
                         hintText="Good Response"
                         onClick={() => setFeedback((pv) => (pv === 'pos' ? undefined : 'pos'))}
                         className={classNames('mr-2')}
@@ -161,6 +196,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                         Icon={MicroThumbUp}
                     />
                     <IconButton
+                        hintAnchor="top-left"
                         hintText="Poor Response"
                         textClass={classNames({
                             'text-red-600': feedback === 'neg',
@@ -173,20 +209,32 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                     />
                     <div className="flex-1" />
                     <IconButton
-                        hintAnchor="bottom-right"
-                        hintGrow="down-left"
-                        hintText="Add Sources"
-                        Icon={MicroFolderOpen}
-                    />
+                        className="ml-2"
+                        hintText="Manage Sources"
+                        hintAnchor="top-right"
+                        hintGrow="up-left"
+                        Icon={MicroFolder}
+                        onClick={() => setShowSourceDialog(true)}
+                    >
+                        {localSources.length}
+                    </IconButton>
                     <IconButton
                         className="ml-2"
                         hintText="Re-run Response"
-                        hintAnchor="bottom-right"
-                        hintGrow="down-left"
+                        hintAnchor="top-right"
+                        hintGrow="up-left"
                         Icon={MicroRefresh}
                         onClick={() => onReRun(data.key)}
                     />
                 </div>
+            )}
+            {showSourceDialog && (
+                <AddSourceDialog
+                    onAddSource={onAddLocalSource}
+                    onRemoveSource={onRemoveSource}
+                    onClose={() => setShowSourceDialog(false)}
+                    sources={localSources}
+                />
             )}
         </div>
     );
@@ -203,29 +251,34 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
         },
         {
             title: 'Meta Platforms Q2 2024 Earnings Call',
-            targetId: '2639849',
+            targetId: '2658051',
             targetType: 'event',
         },
         {
             title: 'Apple Inc Q3 2024 Earnings Call',
-            targetId: '2639849',
+            targetId: '2656780',
             targetType: 'event',
         },
         {
             title: 'Tesla Q2 2024 Earnings Call',
-            targetId: '2639849',
+            targetId: '2613061',
             targetType: 'event',
         },
     ]);
 
-    const onRemoveSource = useCallback(
-        (index: number) => {
-            const newSources = [...localSources];
-            newSources.splice(index, 1);
-            setLocalSources(newSources);
-        },
-        [localSources]
-    );
+    const onAddLocalSource = useCallback((s: Source) => {
+        setLocalSources((pv) => [...pv, s]);
+    }, []);
+
+    const onRemoveSource = useCallback((s: Source) => {
+        setLocalSources((pv) =>
+            pv.filter((source) => !(source.targetId === s.targetId && source.targetType === s.targetType))
+        );
+    }, []);
+
+    if (data.status === 'confirmed') {
+        return <div />;
+    }
 
     return data.status === 'thinking' ? (
         <div className="flex items-center py-4 justify-center text-base">
@@ -257,7 +310,7 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
                             onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                onRemoveSource(idx);
+                                onRemoveSource({ targetId, targetType: 'event', title });
                             }}
                         >
                             <MicroTrash className="w-4" />
@@ -284,12 +337,19 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
             )}
             {data.status === 'finished' && localSources.length === 0 && (
                 <div className="flex items-center justify-center pb-5 text-sm">
-                    <Button kind="primary" onClick={() => setShowSourceDialog(true)}>
+                    <Button kind="primary" className="px-5" onClick={() => setShowSourceDialog(true)}>
                         Add Sources
                     </Button>
                 </div>
             )}
-            {showSourceDialog && <AddSourceDialog onClose={() => setShowSourceDialog(false)} />}
+            {showSourceDialog && (
+                <AddSourceDialog
+                    onAddSource={onAddLocalSource}
+                    onRemoveSource={onRemoveSource}
+                    onClose={() => setShowSourceDialog(false)}
+                    sources={localSources}
+                />
+            )}
         </div>
     );
 };

@@ -8,10 +8,10 @@ import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useState } from 'react';
 import { match } from 'ts-pattern';
 import { Panel } from '../Panel';
-import { PanelContentRow } from '../PanelContentRow';
 import { PanelSearchInput } from '../PanelSearchInput';
 import { useEvents } from '../services/events';
 import { Source, useChatStore } from '../store';
+import { ContentRow } from '../ContentRow';
 
 /**
  * Checks if a given source exists in an array of sources
@@ -93,7 +93,7 @@ export function Sources({ onClose }: { onClose: () => void }) {
                                                   sources
                                               );
                                               return (
-                                                  <PanelContentRow
+                                                  <ContentRow
                                                       text={title}
                                                       key={id}
                                                       onClick={() => {
@@ -113,6 +113,7 @@ export function Sources({ onClose }: { onClose: () => void }) {
                                                                         title,
                                                                     })
                                                       }
+                                                      className="mx-5"
                                                       Icon={sourceAdded ? MicroDocumentMinus : MicroDocumentPlus}
                                                       iconClassName={
                                                           sourceAdded
@@ -133,7 +134,8 @@ export function Sources({ onClose }: { onClose: () => void }) {
                                   )
                                   .otherwise(() => null)
                             : sources.map(({ targetId, targetType, title }) => (
-                                  <PanelContentRow
+                                  <ContentRow
+                                      className="mx-5"
                                       text={title}
                                       key={targetId}
                                       onClick={() => {

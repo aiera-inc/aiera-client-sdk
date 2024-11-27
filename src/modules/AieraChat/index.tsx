@@ -58,7 +58,7 @@ export function AieraChat(): ReactElement {
         <>
             {selectedSource && (
                 <div
-                    className={classNames('fixed inset-0 slideInFromRight z-50', {
+                    className={classNames('fixed inset-0 slideInFromRight z-[100]', {
                         slideOutToRight: animateTranscriptExit,
                     })}
                     onAnimationEnd={() => {
