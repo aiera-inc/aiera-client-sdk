@@ -19,7 +19,7 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
         title.toLowerCase().includes(searchTerm?.toLowerCase() || '')
     );
     return (
-        <Panel Icon={MicroBars} className="mt-4 flex flex-col flex-1" onClose={onClose} title="Chat Menu" side="left">
+        <Panel Icon={MicroBars} className="mt-4 flex flex-col flex-1" onClose={onClose} title="All Chats" side="left">
             {({ onStartExit }) => (
                 <div className="flex flex-col flex-1 pb-6">
                     <PanelSearchInput
