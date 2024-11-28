@@ -1,12 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { VirtuosoMessageListProps } from '@virtuoso.dev/message-list';
-import { Message } from '../../services/messages';
 import { useSuggestedPrompts } from '../../services/suggestedPrompts';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { MessageListContext } from '..';
+import { ChatMessage } from '../../services/messages';
 
-export const SuggestedPrompts: VirtuosoMessageListProps<Message, MessageListContext>['EmptyPlaceholder'] = ({
+export const SuggestedPrompts: VirtuosoMessageListProps<ChatMessage, MessageListContext>['EmptyPlaceholder'] = ({
     context,
 }: {
     context: MessageListContext;

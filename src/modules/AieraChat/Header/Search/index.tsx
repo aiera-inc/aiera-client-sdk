@@ -4,11 +4,11 @@ import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
 import React, { ChangeEvent, KeyboardEvent, RefObject, useCallback, useEffect, useState } from 'react';
-import { Message } from '../../services/messages';
 import { useChatStore } from '../../store';
 import { IconButton } from '../../IconButton';
+import { ChatMessage } from '../../services/messages';
 
-export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>> }) {
+export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>> }) {
     const { chatId, searchTerm, onSetSearchTerm } = useChatStore();
     const { chatTitle, onSetTitle } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);

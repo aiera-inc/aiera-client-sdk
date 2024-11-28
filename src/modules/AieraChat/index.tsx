@@ -8,9 +8,9 @@ import { Header } from './Header';
 import { Menu } from './Menu';
 import { Messages } from './Messages';
 import { Sources } from './Sources';
-import { Message } from './services/messages';
 import { useChatStore } from './store';
 import './styles.css';
+import { ChatMessage } from './services/messages';
 
 export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
@@ -18,7 +18,7 @@ export function AieraChat(): ReactElement {
     const [showConfirm, setShowConfirm] = useState(false);
     const { selectedSource, onSelectSource } = useChatStore();
     const config = useConfig();
-    const virtuosoRef = useRef<VirtuosoMessageListMethods<Message>>(null);
+    const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
     const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
 

@@ -10,15 +10,16 @@ import {
 import classNames from 'classnames';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo } from 'react';
 import { Prompt } from '../Prompt';
-import { Message, MessageStatus, useChatMessages } from '../services/messages';
+import { ChatMessage, ChatMessageStatus, useChatMessages } from '../services/messages';
 import { useChatStore } from '../store';
-import { MessageFactory, MessagePrompt } from './MessageFactory';
+import { MessageFactory } from './MessageFactory';
 import './styles.css';
 import { SuggestedPrompts } from './SuggestedPrompts';
+import { MessagePrompt } from './MessageFactory/MessagePrompt';
 
 let idCounter = 0;
 
-function randomMessage(user: Message['user'], prompt: Message['prompt']): Message {
+function randomMessage(user: ChatMessage['user'], prompt: ChatMessage['prompt']): ChatMessage {
     return { user, key: `${idCounter++}`, type: 'response', text: 'some other message', prompt, status: 'thinking' };
 }
 
@@ -28,8 +29,8 @@ export interface MessageListContext {
     onConfirm: (k: string) => void;
 }
 
-const StickyHeader: VirtuosoMessageListProps<Message, MessageListContext>['StickyHeader'] = () => {
-    const data: Message[] = useCurrentlyRenderedData();
+const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
+    const data: ChatMessage[] = useCurrentlyRenderedData();
     const { getScrollLocation } = useVirtuosoMethods();
     const { listOffset } = getScrollLocation();
     const firstPrompt = data[0];
@@ -56,7 +57,7 @@ export function Messages({
     onOpenSources,
     virtuosoRef,
 }: {
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>>;
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
     onOpenSources: () => void;
 }) {
     const { chatId, sources } = useChatStore();
@@ -77,7 +78,7 @@ export function Messages({
                 let counter = 0;
                 let newMessage = '';
                 const interval = setInterval(() => {
-                    let status: MessageStatus = 'thinking';
+                    let status: ChatMessageStatus = 'thinking';
                     if (counter++ > 80) {
                         clearInterval(interval);
                         status = 'finished';
@@ -126,7 +127,7 @@ export function Messages({
         setTimeout(() => {
             let counter = 0;
             const interval = setInterval(() => {
-                let status: MessageStatus = 'updating';
+                let status: ChatMessageStatus = 'updating';
                 if (counter++ > 80) {
                     clearInterval(interval);
                     status = 'finished';
@@ -153,7 +154,7 @@ export function Messages({
 
     const onSubmit = useCallback(
         (prompt: string) => {
-            const myMessage: Message = {
+            const myMessage: ChatMessage = {
                 user: 'me',
                 key: `${idCounter++}`,
                 text: prompt,
@@ -171,7 +172,7 @@ export function Messages({
 
             if (sources.length === 0) {
                 const newKey = `${idCounter++}`;
-                const sourceMessage: Message = {
+                const sourceMessage: ChatMessage = {
                     user: 'other',
                     key: newKey,
                     text: 'sourcess',
@@ -204,7 +205,7 @@ export function Messages({
                 setTimeout(() => {
                     let counter = 0;
                     const interval = setInterval(() => {
-                        let status: MessageStatus = 'updating';
+                        let status: ChatMessageStatus = 'updating';
                         if (counter++ > 80) {
                             clearInterval(interval);
                             status = 'finished';
@@ -251,11 +252,11 @@ export function Messages({
                     </div>
                 ) : (
                     <VirtuosoMessageListLicense licenseKey="">
-                        <VirtuosoMessageList<Message, MessageListContext>
+                        <VirtuosoMessageList<ChatMessage, MessageListContext>
                             key={chatId || 'new'}
                             ref={virtuosoRef}
                             style={{ flex: 1 }}
-                            computeItemKey={({ data }: { data: Message }) => data.key}
+                            computeItemKey={({ data }: { data: ChatMessage }) => data.key}
                             className="px-4 messagesScrollBars"
                             initialLocation={{ index: 'LAST', align: 'end' }}
                             initialData={messages}

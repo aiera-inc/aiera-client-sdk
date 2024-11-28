@@ -1,26 +1,26 @@
 import { useState, useEffect, useCallback } from 'react';
 
-type MessageType = 'prompt' | 'sources' | 'response';
-export type MessageStatus = 'finished' | 'thinking' | 'updating' | 'confirmed';
+type ChatMessageType = 'prompt' | 'sources' | 'response';
+export type ChatMessageStatus = 'finished' | 'thinking' | 'updating' | 'confirmed';
 type User = 'me' | 'other';
 
-export interface Message {
-    type: MessageType;
+export interface ChatMessage {
+    type: ChatMessageType;
     key: string;
     text: string;
-    status: MessageStatus;
+    status: ChatMessageStatus;
     prompt?: string;
     user: User;
 }
 
 interface UseChatMessagesReturn {
-    messages: Message[];
+    messages: ChatMessage[];
     isLoading: boolean;
     error: string | null;
     refresh: () => void;
 }
 
-const sampleMessages: Message[] = [
+const sampleMessages: ChatMessage[] = [
     {
         key: 'msg-1',
         type: 'prompt',
@@ -113,8 +113,8 @@ const sampleMessages: Message[] = [
     },
 ];
 
-const generateRandomMessages = (count: number): Message[] => {
-    const messages: Message[] = [];
+const generateRandomMessages = (count: number): ChatMessage[] => {
+    const messages: ChatMessage[] = [];
     const promptMessages = sampleMessages.filter((m) => m.type === 'prompt');
     const responseMessages = sampleMessages.filter((m) => m.type === 'response');
 
@@ -139,14 +139,14 @@ const generateRandomMessages = (count: number): Message[] => {
     return messages;
 };
 
-const fetchChatMessages = async (_: string): Promise<Message[]> => {
+const fetchChatMessages = async (_: string): Promise<ChatMessage[]> => {
     await new Promise((resolve) => setTimeout(resolve, 800));
     const messageCount = (Math.floor(Math.random() * 4) + 4) * 2; // Generates 8, 10, 12, or 14 messages
     return generateRandomMessages(messageCount);
 };
 
 export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn => {
-    const [messages, setMessages] = useState<Message[]>([]);
+    const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 

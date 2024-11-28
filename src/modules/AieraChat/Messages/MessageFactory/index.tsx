@@ -1,7 +1,7 @@
 import { Button } from '@aiera/client-sdk/components/Button';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
-import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestionMark';
+import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import { MicroRefresh } from '@aiera/client-sdk/components/Svg/MicroRefresh';
 import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
@@ -14,72 +14,13 @@ import { match } from 'ts-pattern';
 import { MessageListContext } from '..';
 import { AddSourceDialog } from '../../AddSourceDialog';
 import { IconButton } from '../../IconButton';
-import { Message } from '../../services/messages';
 import { Source, useChatStore } from '../../store';
-import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
-
-export const MessagePrompt = ({
-    data,
-    className,
-    isStickyHeader,
-}: {
-    data: Message;
-    className?: string;
-    isStickyHeader?: boolean;
-}) => {
-    const { searchTerm } = useChatStore();
-    const prompt = data.prompt;
-    if (!prompt) return null;
-    return (
-        <div
-            className={classNames(
-                'px-4 bg-slate-200/60-solid rounded-xl flex relative',
-                {
-                    'py-3.5 min-h-14': !isStickyHeader,
-                    'h-14': isStickyHeader,
-                },
-                className
-            )}
-        >
-            <div
-                className={classNames(
-                    'h-7 self-start flex-shrink-0 w-7 mr-2.5 bg-indigo-600',
-                    'flex items-center justify-center rounded-lg',
-                    {
-                        'mt-3.5': isStickyHeader,
-                    }
-                )}
-            >
-                <MicroQuestionMark className="w-4 text-white" />
-            </div>
-            <div className="self-center">
-                <p
-                    className={classNames('text-base font-bold antialiased leading-[1.125rem]', {
-                        'line-clamp-2': isStickyHeader,
-                    })}
-                >
-                    {searchTerm
-                        ? prompt
-                              .split(new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
-                              .map((part, index) =>
-                                  part.toLowerCase() === searchTerm.toLowerCase() ? (
-                                      <mark key={index} className="bg-yellow-400">
-                                          {part}
-                                      </mark>
-                                  ) : (
-                                      part
-                                  )
-                              )
-                        : prompt}
-                </p>
-            </div>
-        </div>
-    );
-};
+import { MessagePrompt } from './MessagePrompt';
+import { ChatMessage } from '../../services/messages';
 
 type MessageFeedback = 'pos' | 'neg' | undefined;
 
-const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Message }) => {
+const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: ChatMessage }) => {
     const { onSelectSource, searchTerm } = useChatStore();
     const [copied, setCopied] = useState(false);
     // TODO getMessage from network / cache for managing feedback
@@ -216,11 +157,11 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
                         Icon={MicroFolder}
                         onClick={() => setShowSourceDialog(true)}
                     >
-                        {localSources.length}
+                        {localSources.length || ''}
                     </IconButton>
                     <IconButton
                         className="ml-2"
-                        hintText="Re-run Response"
+                        hintText="Retry Response"
                         hintAnchor="top-right"
                         hintGrow="up-left"
                         Icon={MicroRefresh}
@@ -240,7 +181,7 @@ const ItemContent = ({ data, onReRun }: { onReRun: (k: string) => void; data: Me
     );
 };
 
-const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: Message }) => {
+const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: ChatMessage }) => {
     const { onSelectSource, onAddSource } = useChatStore();
     const [showSourceDialog, setShowSourceDialog] = useState(false);
     const [localSources, setLocalSources] = useState<Source[]>([
@@ -354,7 +295,7 @@ const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; 
     );
 };
 
-export const MessageFactory: VirtuosoMessageListProps<Message, MessageListContext>['ItemContent'] = ({
+export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListContext>['ItemContent'] = ({
     data,
     context,
 }) => {

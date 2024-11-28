@@ -2,14 +2,14 @@ import { MicroBars } from '@aiera/client-sdk/components/Svg/MicroBars';
 import React, { RefObject } from 'react';
 import { Search } from './Search';
 import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
-import { Message } from '../services/messages';
 import { IconButton } from '../IconButton';
+import { ChatMessage } from '../services/messages';
 
 export function Header({
     onOpenMenu,
     virtuosoRef,
 }: {
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<Message>>;
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
     onOpenMenu: () => void;
 }) {
     return (
