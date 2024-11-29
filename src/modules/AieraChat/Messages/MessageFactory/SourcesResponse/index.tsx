@@ -84,6 +84,9 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
             ))}
             {data.status === 'finished' && localSources.length > 0 && (
                 <div className="flex items-center justify-center px-3 mt-3 pb-5 text-sm">
+                    <Button className="mr-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
+                        Add Source
+                    </Button>
                     <Button
                         kind="primary"
                         className="px-5"
@@ -93,9 +96,6 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                         }}
                     >
                         Confirm Sources
-                    </Button>
-                    <Button className="ml-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
-                        Add Source
                     </Button>
                 </div>
             )}
