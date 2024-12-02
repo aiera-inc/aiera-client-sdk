@@ -1,23 +1,63 @@
-import React from 'react';
+import React, { Fragment } from 'react';
+import { BaseBlock, CitableContent } from '../../../types';
+import { Citation } from '../../Citation';
 
-export interface TableBlockProps {
-    headers: CellType[];
-    rows: TableRow[];
+// Table cell metadata
+interface CellMeta {
+    currency?: string;
+    unit?: string;
+    format?: 'number' | 'percentage' | 'date';
+    decimals?: number;
 }
 
-export interface TableRow {
-    cells: CellType[];
+// Table block types
+export interface TableBlock extends BaseBlock {
+    type: 'table';
+    headers: string[];
+    rows: CitableContent[][];
+    meta: {
+        columnAlignment: ('left' | 'center' | 'right')[];
+        columnMeta?: CellMeta[]; // Metadata for each column
+    };
 }
 
-interface CellValue {
-    value: string | number;
-    alignment: 'left' | 'right';
-    truncate?: boolean;
-    // format / formatter
-}
-
-type CellType = string | number | CellValue;
-
-export function TableBlock() {
-    return <div>Table block</div>;
+export function TableBlock({ headers, rows }: TableBlock) {
+    return (
+        <table>
+            {headers.length > 0 && (
+                <thead>
+                    {headers.map((header, headerIndex) => (
+                        <th key={`header-${headerIndex}`}>{header}</th>
+                    ))}
+                </thead>
+            )}
+            {rows.length > 0 && (
+                <tbody>
+                    {rows.map((cells, rowIndex) => (
+                        <tr key={`row-${rowIndex}`}>
+                            {cells.map((content, cellIndex) => {
+                                return (
+                                    <td key={`cell-${cellIndex}`}>
+                                        {content.map((c, contentIndex) =>
+                                            typeof c === 'string' ? (
+                                                <Fragment
+                                                    key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                >
+                                                    {c}
+                                                </Fragment>
+                                            ) : (
+                                                <Citation
+                                                    key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                />
+                                            )
+                                        )}
+                                    </td>
+                                );
+                            })}
+                        </tr>
+                    ))}
+                </tbody>
+            )}
+        </table>
+    );
 }
