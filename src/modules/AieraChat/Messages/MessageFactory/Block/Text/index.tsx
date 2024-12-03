@@ -1,7 +1,7 @@
 import React from 'react';
-import { BaseBlock, BlockType, CitableContent } from '../types';
 import { Citation } from '../../Citation';
 import { match } from 'ts-pattern';
+import { BaseBlock, BlockType, CitableContent } from '..';
 
 // Text block types
 export interface TextBlock extends BaseBlock {

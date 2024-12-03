@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { BaseBlock, BlockType, CitableContent } from '../types';
+import { BaseBlock, BlockType, CitableContent } from '..';
 import { Citation } from '../../Citation';
 
 // Table cell metadata

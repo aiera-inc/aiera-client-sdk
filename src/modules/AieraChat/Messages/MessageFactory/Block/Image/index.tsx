@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseBlock, BlockType } from '../types';
+import { BaseBlock, BlockType } from '..';
 
 // Image block types
 export interface ImageBlock extends BaseBlock {

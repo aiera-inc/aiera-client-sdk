@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseBlock, BlockType } from '../types';
+import { BaseBlock, BlockType } from '..';
 import { match } from 'ts-pattern';
 
 // Chart series configuration

@@ -1,5 +1,5 @@
 import React from 'react';
-import { BaseBlock, BlockType } from '../types';
+import { BaseBlock, BlockType } from '..';
 
 // Quote block
 export interface QuoteBlock extends BaseBlock {

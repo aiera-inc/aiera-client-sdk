@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { BaseBlock, BlockType, CitableContent, ContentBlock } from '../types';
+import { BaseBlock, BlockType, CitableContent, ContentBlock } from '..';
 import { Block } from '..';
 import { Citation } from '../../Citation';
 
