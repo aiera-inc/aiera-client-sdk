@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import { BaseBlock, CitableContent } from '../../../types';
+import { BaseBlock, BlockType, CitableContent } from '../types';
 import { Citation } from '../../Citation';
 
 // Table cell metadata
@@ -12,7 +12,7 @@ interface CellMeta {
 
 // Table block types
 export interface TableBlock extends BaseBlock {
-    type: 'table';
+    type: BlockType.table;
     headers: string[];
     rows: CitableContent[][];
     meta: {
@@ -21,7 +21,7 @@ export interface TableBlock extends BaseBlock {
     };
 }
 
-export function TableBlock({ headers, rows }: TableBlock) {
+export function Table({ headers, rows }: TableBlock) {
     return (
         <table>
             {headers.length > 0 && (

@@ -1,9 +1,9 @@
 import React from 'react';
-import { BaseBlock } from '../../../types';
+import { BaseBlock, BlockType } from '../types';
 
 // Quote block
 export interface QuoteBlock extends BaseBlock {
-    type: 'quote';
+    type: BlockType.quote;
     content: string; // The quote itself
     meta: {
         author: string;
@@ -13,7 +13,7 @@ export interface QuoteBlock extends BaseBlock {
     };
 }
 
-export function QuoteBlock({ content, meta }: QuoteBlock) {
+export function Quote({ content, meta }: QuoteBlock) {
     const { author, source, date } = meta;
     return (
         <div>

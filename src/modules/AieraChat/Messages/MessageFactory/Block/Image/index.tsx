@@ -1,9 +1,9 @@
 import React from 'react';
-import { BaseBlock } from '../../../types';
+import { BaseBlock, BlockType } from '../types';
 
 // Image block types
 export interface ImageBlock extends BaseBlock {
-    type: 'image';
+    type: BlockType.image;
     url: string;
     meta: {
         title: string;
