@@ -38,7 +38,11 @@ export interface BaseBlock {
 // Union type for all content blocks
 export type ContentBlock = TextBlock | TableBlock | ListBlock | ImageBlock | QuoteBlock | ChartBlock;
 
-export function Block(props: ContentBlock) {
+type BlockProps = ContentBlock & {
+    isNested?: boolean;
+};
+
+export function Block(props: BlockProps) {
     return match(props)
         .with({ type: BlockType.text }, (p) => (
             <Text type={BlockType.text} content={p.content} meta={p.meta} id={p.id} />
@@ -46,7 +50,9 @@ export function Block(props: ContentBlock) {
         .with({ type: BlockType.table }, (p) => (
             <Table type={BlockType.table} headers={p.headers} rows={p.rows} meta={p.meta} id={p.id} />
         ))
-        .with({ type: BlockType.list }, (p) => <List type={BlockType.list} items={p.items} meta={p.meta} id={p.id} />)
+        .with({ type: BlockType.list }, (p) => (
+            <List isNested={props.isNested} type={BlockType.list} items={p.items} meta={p.meta} id={p.id} />
+        ))
         .with({ type: BlockType.quote }, (p) => (
             <Quote type={BlockType.quote} content={p.content} meta={p.meta} id={p.id} />
         ))

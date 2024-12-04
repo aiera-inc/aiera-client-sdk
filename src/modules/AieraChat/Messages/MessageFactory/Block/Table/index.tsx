@@ -1,6 +1,7 @@
-import React, { Fragment } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { BaseBlock, BlockType, CitableContent } from '..';
 import { Citation } from '../../Citation';
+import { SearchableText } from '../../SearchableText';
 
 // Table cell metadata
 interface CellMeta {
@@ -22,42 +23,58 @@ export interface TableBlock extends BaseBlock {
 }
 
 export function Table({ headers, rows }: TableBlock) {
+    const tableRef = useRef<HTMLTableElement | null>(null);
+    const [tableHeight, setTableHeight] = useState<number | undefined>(undefined);
+
+    useEffect(() => {
+        if (tableRef.current) {
+            const { height } = tableRef.current.getBoundingClientRect();
+            setTableHeight(height + 12);
+        }
+    }, []);
+
     return (
-        <table>
-            {headers.length > 0 && (
-                <thead>
-                    {headers.map((header, headerIndex) => (
-                        <th key={`header-${headerIndex}`}>{header}</th>
-                    ))}
-                </thead>
-            )}
-            {rows.length > 0 && (
-                <tbody>
-                    {rows.map((cells, rowIndex) => (
-                        <tr key={`row-${rowIndex}`}>
-                            {cells.map((content, cellIndex) => {
-                                return (
-                                    <td key={`cell-${cellIndex}`}>
-                                        {content.map((c, contentIndex) =>
-                                            typeof c === 'string' ? (
-                                                <Fragment
-                                                    key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                >
-                                                    {c}
-                                                </Fragment>
-                                            ) : (
-                                                <Citation
-                                                    key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                />
-                                            )
-                                        )}
-                                    </td>
-                                );
-                            })}
-                        </tr>
-                    ))}
-                </tbody>
-            )}
-        </table>
+        <div
+            style={{ height: tableHeight }}
+            className="relative w-full max-w-full overflow-x-auto overflow-y-hidden border bg-slate-400/10 rounded-md border-slate-500/30 px-2 py-1.5"
+        >
+            <table ref={tableRef} className="absolute text-base antialiased w-full">
+                {headers.length > 0 && (
+                    <thead>
+                        {headers.map((header, headerIndex) => (
+                            <th key={`header-${headerIndex}`} className="text-nowrap">
+                                <SearchableText text={header} />
+                            </th>
+                        ))}
+                    </thead>
+                )}
+                {rows.length > 0 && (
+                    <tbody>
+                        {rows.map((cells, rowIndex) => (
+                            <tr key={`row-${rowIndex}`}>
+                                {cells.map((content, cellIndex) => {
+                                    return (
+                                        <td key={`cell-${cellIndex}`} className="text-nowrap">
+                                            {content.map((c, contentIndex) =>
+                                                typeof c === 'string' ? (
+                                                    <SearchableText
+                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                        text={c}
+                                                    />
+                                                ) : (
+                                                    <Citation
+                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                    />
+                                                )
+                                            )}
+                                        </td>
+                                    );
+                                })}
+                            </tr>
+                        ))}
+                    </tbody>
+                )}
+            </table>
+        </div>
     );
 }

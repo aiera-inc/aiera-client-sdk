@@ -1,5 +1,6 @@
 import React from 'react';
 import { BaseBlock, BlockType } from '..';
+import { SearchableText } from '../../SearchableText';
 
 // Image block types
 export interface ImageBlock extends BaseBlock {
@@ -20,8 +21,20 @@ export function Image({ url, meta }: ImageBlock) {
         return (
             <div>
                 {content}
-                {meta.date ? <p>{`${meta.title}, ${meta.date}`}</p> : <p>{meta.title}</p>}
-                <p>{meta.source}</p>
+                {meta.date ? (
+                    <p>
+                        <SearchableText text={meta.title} />, <SearchableText text={meta.date} />
+                    </p>
+                ) : (
+                    <p>
+                        <SearchableText text={meta.title} />
+                    </p>
+                )}
+                {meta.source && (
+                    <p>
+                        <SearchableText text={meta.source} />
+                    </p>
+                )}
             </div>
         );
     }

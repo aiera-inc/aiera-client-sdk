@@ -1,7 +1,8 @@
-import React from 'react';
-import { Citation } from '../../Citation';
-import { match } from 'ts-pattern';
+import classNames from 'classnames';
+import React, { Fragment } from 'react';
 import { BaseBlock, BlockType, CitableContent } from '..';
+import { Citation } from '../../Citation';
+import { SearchableText } from '../../SearchableText';
 
 // Text block types
 export interface TextBlock extends BaseBlock {
@@ -13,20 +14,28 @@ export interface TextBlock extends BaseBlock {
 }
 
 export function Text({ content, meta }: TextBlock) {
+    const Container = meta.style === 'paragraph' ? 'p' : meta.style;
     return (
-        <>
+        <Container
+            className={classNames({
+                'text-balance': meta.style !== 'paragraph',
+                'text-base pt-2': meta.style === 'paragraph',
+                'text-lg font-bold leading-4': meta.style === 'h3',
+                'text-xl leading-5 tracking-tight font-black pt-4 antialiased': meta.style === 'h2',
+                'text-2xl leading-5 tracking-tight font-black pt-4 antialiased': meta.style === 'h1',
+            })}
+        >
             {content.map((c, idx) => {
                 if (typeof c === 'string') {
-                    return match(meta.style)
-                        .with('paragraph', () => <p key={idx}>{c}</p>)
-                        .with('h1', () => <h1 key={idx}>{c}</h1>)
-                        .with('h2', () => <h2 key={idx}>{c}</h2>)
-                        .with('h3', () => <h3 key={idx}>{c}</h3>)
-                        .exhaustive();
+                    return (
+                        <Fragment key={idx}>
+                            <SearchableText text={c} />
+                        </Fragment>
+                    );
                 } else {
                     return <Citation key={idx} />;
                 }
             })}
-        </>
+        </Container>
     );
 }

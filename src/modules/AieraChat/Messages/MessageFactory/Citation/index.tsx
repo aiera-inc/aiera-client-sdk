@@ -15,7 +15,7 @@ export const Citation = () => {
                 })
             }
             className={classNames(
-                'text-xs px-[3px] cursor-pointer hover:bg-indigo-800 ml-1 py-0.5 font-bold antialiased text-white bg-indigo-600 rounded'
+                'text-xs px-[3px] cursor-pointer hover:bg-indigo-800 py-0.5 font-bold antialiased text-white bg-indigo-600 rounded'
             )}
         >
             C1

@@ -1,7 +1,8 @@
-import React, { Fragment } from 'react';
-import { BaseBlock, BlockType, CitableContent, ContentBlock } from '..';
-import { Block } from '..';
+import React from 'react';
+import { BaseBlock, Block, BlockType, CitableContent, ContentBlock } from '..';
 import { Citation } from '../../Citation';
+import { SearchableText } from '../../SearchableText';
+import classNames from 'classnames';
 
 // List item with primary/secondary text
 interface ListItemText {
@@ -14,6 +15,7 @@ type ListItemContent = ListItemText | ContentBlock;
 
 // List block types
 export interface ListBlock extends BaseBlock {
+    isNested?: boolean;
     type: BlockType.list;
     items: ListItemContent[];
     meta: {
@@ -29,22 +31,22 @@ function ListItem({ item }: { item: ListItemContent }) {
     if (isContentBlock(item)) {
         return (
             <li>
-                <Block {...item} />
+                <Block {...item} isNested />
             </li>
         );
     }
 
     return (
-        <li>
-            <p>
+        <li className="relative">
+            <p className="text-base font-bold">
                 {item.primary.map((c, idx) =>
-                    typeof c === 'string' ? <Fragment key={idx}>{c}</Fragment> : <Citation key={idx} />
+                    typeof c === 'string' ? <SearchableText key={idx} text={c} /> : <Citation key={idx} />
                 )}
             </p>
             {item.secondary && item.secondary.length > 0 && (
-                <p>
+                <p className="text-base">
                     {item.secondary.map((c, idx) =>
-                        typeof c === 'string' ? <Fragment key={idx}>{c}</Fragment> : <Citation key={idx} />
+                        typeof c === 'string' ? <SearchableText key={idx} text={c} /> : <Citation key={idx} />
                     )}
                 </p>
             )}
@@ -52,11 +54,18 @@ function ListItem({ item }: { item: ListItemContent }) {
     );
 }
 
-export function List({ items, meta }: ListBlock) {
+export function List({ isNested, items, meta }: ListBlock) {
     const ListType = meta.style === 'ordered' ? 'ol' : 'ul';
 
     return (
-        <ListType>
+        <ListType
+            className={classNames('text-base space-y-2', {
+                'list-disc': meta.style === 'unordered',
+                'list-decimal': meta.style === 'ordered',
+                'pt-4 ml-6': !isNested,
+                'ml-4': isNested,
+            })}
+        >
             {items.map((item, idx) => (
                 <ListItem item={item} key={idx} />
             ))}
