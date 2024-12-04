@@ -19,22 +19,24 @@ export function Image({ url, meta }: ImageBlock) {
 
     if (meta.title) {
         return (
-            <div>
+            <div className="border border-gray-300 rounded overflow-hidden text-sm my-2">
                 {content}
-                {meta.date ? (
-                    <p>
-                        <SearchableText text={meta.title} />, <SearchableText text={meta.date} />
-                    </p>
-                ) : (
-                    <p>
-                        <SearchableText text={meta.title} />
-                    </p>
-                )}
-                {meta.source && (
-                    <p>
-                        <SearchableText text={meta.source} />
-                    </p>
-                )}
+                <div className="bg-gray-100 px-3 py-2 leading-4">
+                    {meta.date ? (
+                        <p className="font-bold">
+                            <SearchableText text={meta.title} />, <SearchableText text={meta.date} />
+                        </p>
+                    ) : (
+                        <p className="font-bold">
+                            <SearchableText text={meta.title} />
+                        </p>
+                    )}
+                    {meta.source && (
+                        <p className="text-gray-600">
+                            <SearchableText text={meta.source} />
+                        </p>
+                    )}
+                </div>
             </div>
         );
     }

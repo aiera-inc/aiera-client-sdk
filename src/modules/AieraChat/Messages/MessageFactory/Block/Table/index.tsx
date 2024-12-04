@@ -29,20 +29,20 @@ export function Table({ headers, rows }: TableBlock) {
     useEffect(() => {
         if (tableRef.current) {
             const { height } = tableRef.current.getBoundingClientRect();
-            setTableHeight(height + 12);
+            setTableHeight(height + 16);
         }
     }, []);
 
     return (
         <div
             style={{ height: tableHeight }}
-            className="relative w-full max-w-full overflow-x-auto overflow-y-hidden border bg-slate-400/10 rounded-md border-slate-500/30 px-2 py-1.5"
+            className="relative w-full max-w-full overflow-x-auto overflow-y-hidden border bg-slate-400/10 rounded-md border-slate-500/30 px-3.5 py-2"
         >
             <table ref={tableRef} className="absolute text-base antialiased w-full">
                 {headers.length > 0 && (
                     <thead>
                         {headers.map((header, headerIndex) => (
-                            <th key={`header-${headerIndex}`} className="text-nowrap">
+                            <th key={`header-${headerIndex}`} className="text-nowrap pr-4">
                                 <SearchableText text={header} />
                             </th>
                         ))}
@@ -54,7 +54,7 @@ export function Table({ headers, rows }: TableBlock) {
                             <tr key={`row-${rowIndex}`}>
                                 {cells.map((content, cellIndex) => {
                                     return (
-                                        <td key={`cell-${cellIndex}`} className="text-nowrap">
+                                        <td key={`cell-${cellIndex}`} className="text-nowrap pr-4 font-mono">
                                             {content.map((c, contentIndex) =>
                                                 typeof c === 'string' ? (
                                                     <SearchableText

@@ -9,7 +9,7 @@ export const MessageResponse = ({ data, onReRun }: { onReRun: (k: string) => voi
         <Loading>Thinking...</Loading>
     ) : (
         <div className="pb-10 flex flex-col">
-            <div className="flex flex-col pl-4 pr-2">
+            <div className="flex flex-col px-4 pb-2">
                 {data.blocks?.map((block) => (
                     <Block {...block} />
                 ))}

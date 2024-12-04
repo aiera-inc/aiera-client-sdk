@@ -1,16 +1,24 @@
 import React from 'react';
-import { BaseBlock, BlockType } from '..';
 import { match } from 'ts-pattern';
+import { BaseBlock, BlockType } from '..';
+import { AreaChartBlock, AreaChartMeta } from './Area';
+import { BarChartBlock, BarChartMeta } from './Bar';
+import { LineChartBlock, LineChartMeta } from './Line';
+import { PieChartBlock, PieChartMeta } from './Pie';
+import { ScatterChartBlock, ScatterChartMeta } from './Scatter';
+import { TreeMapBlock, TreeMapMeta } from './Tree';
+
+export const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff7300', '#00C49F', '#FFBB28', '#FF8042'];
 
 // Chart series configuration
-interface ChartSeries {
+export interface ChartSeries {
     key: string;
     label: string;
     color?: string;
 }
 
 // Updated chart metadata types
-type ChartMetaBase = {
+export type ChartMetaBase = {
     title?: string;
     xAxis?: string;
     yAxis?: string;
@@ -23,46 +31,6 @@ export enum ChartType {
     pie = 'pie',
     scatter = 'scatter',
     treemap = 'treemap',
-}
-
-interface AreaChartMeta extends ChartMetaBase {
-    chartType: ChartType.area;
-    series: ChartSeries[];
-    stackedSeries?: boolean;
-}
-
-interface LineChartMeta extends ChartMetaBase {
-    chartType: ChartType.line;
-    series: ChartSeries[];
-}
-
-interface BarChartMeta extends ChartMetaBase {
-    chartType: ChartType.bar;
-    series: ChartSeries[];
-    stackedBars?: boolean;
-}
-
-interface PieChartMeta extends ChartMetaBase {
-    chartType: ChartType.pie;
-    valueKey: string; // Which field to use for values
-    nameKey: string; // Which field to use for segment names
-    colors?: string[]; // Optional array of colors for segments
-}
-
-interface ScatterChartMeta extends ChartMetaBase {
-    chartType: ChartType.scatter;
-    xKey: string; // Field for X coordinates
-    yKey: string; // Field for Y coordinates
-    sizeKey?: string; // Optional field for point sizes
-    nameKey: string; // Field for point labels
-    colors?: string[]; // Optional array of colors
-}
-
-interface TreeMapMeta extends ChartMetaBase {
-    chartType: ChartType.treemap;
-    valueKey: string; // Field for box sizes
-    nameKey: string; // Field for box labels
-    colors?: string[]; // Optional array of colors
 }
 
 // Common chart data type
@@ -81,13 +49,13 @@ export interface ChartBlock extends BaseBlock {
     meta: ChartMeta;
 }
 
-export function Chart({ meta }: ChartBlock) {
-    return match(meta.chartType)
-        .with(ChartType.area, () => <div>Area</div>)
-        .with(ChartType.bar, () => <div>Bar</div>)
-        .with(ChartType.line, () => <div>Line</div>)
-        .with(ChartType.pie, () => <div>Pie</div>)
-        .with(ChartType.scatter, () => <div>Scatter</div>)
-        .with(ChartType.treemap, () => <div>Treemap</div>)
+export function Chart(props: ChartBlock) {
+    return match(props.meta.chartType)
+        .with(ChartType.area, () => <AreaChartBlock {...props} />)
+        .with(ChartType.bar, () => <BarChartBlock {...props} />)
+        .with(ChartType.line, () => <LineChartBlock {...props} />)
+        .with(ChartType.pie, () => <PieChartBlock {...props} />)
+        .with(ChartType.scatter, () => <ScatterChartBlock {...props} />)
+        .with(ChartType.treemap, () => <TreeMapBlock {...props} />)
         .exhaustive();
 }
