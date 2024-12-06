@@ -65,13 +65,13 @@ interface UseChatMessagesReturn {
 }
 
 const sampleMessages = [
-    // First conversation cycle - Language Model Performance
+    // First conversation - Comprehensive AI Report
     {
         id: 'msg1',
         ordinalId: '001',
         timestamp: '2024-12-06T10:00:00Z',
         status: ChatMessageStatus.COMPLETED,
-        prompt: 'What are the performance metrics of leading language models?',
+        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
         type: ChatMessageType.prompt,
     },
     {
@@ -79,14 +79,14 @@ const sampleMessages = [
         ordinalId: '002',
         timestamp: '2024-12-06T10:00:01Z',
         status: ChatMessageStatus.COMPLETED,
-        prompt: 'What are the performance metrics of leading language models?',
+        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
         type: ChatMessageType.sources,
         confirmed: true,
         sources: [
             {
                 targetType: 'report',
-                targetId: 'nlp-market-analysis',
-                targetTitle: 'NLP Market Analysis 2024',
+                targetId: 'ai-market-2024',
+                targetTitle: '2024 AI Industry Analysis',
             },
         ],
     },
@@ -95,19 +95,125 @@ const sampleMessages = [
         ordinalId: '003',
         timestamp: '2024-12-06T10:00:02Z',
         status: ChatMessageStatus.COMPLETED,
-        prompt: 'What are the performance metrics of leading language models?',
+        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
         type: ChatMessageType.response,
         blocks: [
             {
-                id: 'context-intro',
+                id: 'report-title',
+                type: 'text',
+                content: ['2024 Artificial Intelligence Industry Analysis'],
+                meta: { style: 'h1' },
+            },
+            {
+                id: 'report-subtitle',
+                type: 'text',
+                content: ['Market Overview and Key Trends'],
+                meta: { style: 'h2' },
+            },
+            {
+                id: 'executive-summary',
                 type: 'text',
                 content: [
-                    'Latest performance analysis of leading language models shows significant improvements in accuracy and latency, while maintaining competitive pricing. Here is a detailed comparison across key metrics:',
+                    'The AI industry has experienced unprecedented growth in 2024, with global revenues reaching new heights and adoption accelerating across all sectors.',
                 ],
                 meta: { style: 'paragraph' },
             },
             {
-                id: 'llm-performance',
+                id: 'key-findings',
+                type: 'list',
+                items: [
+                    {
+                        primary: ['Market Growth'],
+                        secondary: [
+                            'Global AI revenue reached $500 billion, representing a 45% year-over-year increase',
+                        ],
+                    },
+                    {
+                        primary: ['Technology Adoption'],
+                        secondary: ['Enterprise AI implementation grew by 65% across Fortune 500 companies'],
+                    },
+                ],
+                meta: { style: 'ordered' },
+            },
+            {
+                id: 'market-share',
+                type: 'chart',
+                data: [
+                    { name: 'North America', value: 450, color: '#8884d8' },
+                    { name: 'Europe', value: 380, color: '#82ca9d' },
+                    { name: 'Asia Pacific', value: 350, color: '#ffc658' },
+                    { name: 'Rest of World', value: 150, color: '#ff8042' },
+                ],
+                meta: {
+                    chartType: 'treemap',
+                    title: 'Regional Market Distribution (Billion USD)',
+                    valueKey: 'value',
+                    nameKey: 'name',
+                },
+            },
+            {
+                id: 'system-architecture',
+                type: 'image',
+                url: '/api/placeholder/800/400',
+                meta: {
+                    title: 'Modern AI System Architecture',
+                    altText: 'Diagram showing the components and relationships in modern AI systems',
+                    caption: 'Typical enterprise AI system architecture in 2024',
+                },
+            },
+        ],
+        sources: [
+            {
+                targetType: 'report',
+                targetId: 'ai-market-2024',
+                targetTitle: '2024 AI Industry Analysis',
+            },
+        ],
+    },
+
+    // Second conversation - Model Performance
+    {
+        id: 'msg4',
+        ordinalId: '004',
+        timestamp: '2024-12-06T10:01:00Z',
+        status: ChatMessageStatus.COMPLETED,
+        prompt: 'Compare the performance of top AI models across different metrics.',
+        type: ChatMessageType.prompt,
+    },
+    {
+        id: 'msg5',
+        ordinalId: '005',
+        timestamp: '2024-12-06T10:01:01Z',
+        status: ChatMessageStatus.COMPLETED,
+        prompt: 'Compare the performance of top AI models across different metrics.',
+        type: ChatMessageType.sources,
+        confirmed: true,
+        sources: [
+            {
+                targetType: 'benchmark',
+                targetId: 'model-performance',
+                targetTitle: 'AI Model Performance Benchmark 2024',
+            },
+        ],
+    },
+    {
+        id: 'msg6',
+        ordinalId: '006',
+        timestamp: '2024-12-06T10:01:02Z',
+        status: ChatMessageStatus.COMPLETED,
+        prompt: 'Compare the performance of top AI models across different metrics.',
+        type: ChatMessageType.response,
+        blocks: [
+            {
+                id: 'perf-intro',
+                type: 'text',
+                content: [
+                    'Analysis of leading AI models reveals significant variations in performance across key metrics:',
+                ],
+                meta: { style: 'paragraph' },
+            },
+            {
+                id: 'model-comparison',
                 type: 'table',
                 headers: ['Model', 'Accuracy', 'Latency', 'Cost/1M Tokens'],
                 rows: [
@@ -125,94 +231,38 @@ const sampleMessages = [
                     ],
                 },
             },
+            {
+                id: 'key-features',
+                type: 'list',
+                items: [
+                    {
+                        primary: ['Specialized Capabilities'],
+                        secondary: ['Each model exhibits unique strengths in specific domains'],
+                    },
+                    {
+                        primary: ['Trade-offs'],
+                        secondary: ['Higher accuracy generally correlates with increased cost'],
+                    },
+                ],
+                meta: { style: 'unordered' },
+            },
         ],
         sources: [
             {
-                targetType: 'report',
-                targetId: 'nlp-market-analysis',
-                targetTitle: 'NLP Market Analysis 2024',
+                targetType: 'benchmark',
+                targetId: 'model-performance',
+                targetTitle: 'AI Model Performance Benchmark 2024',
             },
         ],
     },
 
-    // Second conversation cycle - Industry Adoption
-    {
-        id: 'msg4',
-        ordinalId: '004',
-        timestamp: '2024-12-06T10:01:00Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Show me the AI adoption rates across industries.',
-        type: ChatMessageType.prompt,
-    },
-    {
-        id: 'msg5',
-        ordinalId: '005',
-        timestamp: '2024-12-06T10:01:01Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Show me the AI adoption rates across industries.',
-        type: ChatMessageType.sources,
-        confirmed: true,
-        sources: [
-            {
-                targetType: 'report',
-                targetId: 'industry-adoption',
-                targetTitle: 'Global AI Industry Adoption Report 2024',
-            },
-        ],
-    },
-    {
-        id: 'msg6',
-        ordinalId: '006',
-        timestamp: '2024-12-06T10:01:02Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Show me the AI adoption rates across industries.',
-        type: ChatMessageType.response,
-        blocks: [
-            {
-                id: 'adoption-intro',
-                type: 'text',
-                content: [
-                    'AI adoption continues to accelerate across all major industries, with the financial sector leading implementation rates. The following chart shows current adoption rates and projected growth through 2025:',
-                ],
-                meta: { style: 'paragraph' },
-            },
-            {
-                id: 'market-share',
-                type: 'chart',
-                data: [
-                    { industry: 'Finance', current: 75, projected: 90 },
-                    { industry: 'Healthcare', current: 60, projected: 85 },
-                    { industry: 'Manufacturing', current: 45, projected: 70 },
-                    { industry: 'Retail', current: 40, projected: 65 },
-                ],
-                meta: {
-                    chartType: 'bar',
-                    title: 'Industry-wise AI Adoption',
-                    xAxis: 'Industry',
-                    yAxis: 'Adoption Rate (%)',
-                    series: [
-                        { key: 'current', label: 'Current Adoption', color: '#8884d8' },
-                        { key: 'projected', label: '2025 Projection', color: '#82ca9d' },
-                    ],
-                },
-            },
-        ],
-        sources: [
-            {
-                targetType: 'report',
-                targetId: 'industry-adoption',
-                targetTitle: 'Global AI Industry Adoption Report 2024',
-            },
-        ],
-    },
-
-    // Third conversation cycle - Regional Market Distribution
+    // Third conversation - Expert Commentary
     {
         id: 'msg7',
         ordinalId: '007',
         timestamp: '2024-12-06T10:02:00Z',
         status: ChatMessageStatus.COMPLETED,
-        prompt: 'What is the global distribution of AI market value?',
+        prompt: 'What are experts saying about the future of AI?',
         type: ChatMessageType.prompt,
     },
     {
@@ -220,14 +270,14 @@ const sampleMessages = [
         ordinalId: '008',
         timestamp: '2024-12-06T10:02:01Z',
         status: ChatMessageStatus.COMPLETED,
-        prompt: 'What is the global distribution of AI market value?',
+        prompt: 'What are experts saying about the future of AI?',
         type: ChatMessageType.sources,
         confirmed: true,
         sources: [
             {
-                targetType: 'report',
-                targetId: 'global-market',
-                targetTitle: 'Global AI Market Distribution Report',
+                targetType: 'conference',
+                targetId: 'future-ai-summit',
+                targetTitle: 'Future of AI Summit 2024',
             },
         ],
     },
@@ -236,101 +286,59 @@ const sampleMessages = [
         ordinalId: '009',
         timestamp: '2024-12-06T10:02:02Z',
         status: ChatMessageStatus.COMPLETED,
-        prompt: 'What is the global distribution of AI market value?',
+        prompt: 'What are experts saying about the future of AI?',
         type: ChatMessageType.response,
         blocks: [
             {
-                id: 'distribution-intro',
+                id: 'future-heading',
+                type: 'text',
+                content: ['Expert Perspectives on AI Evolution'],
+                meta: { style: 'h3' },
+            },
+            {
+                id: 'future-context',
                 type: 'text',
                 content: [
-                    'The global AI market shows significant regional variations in market value, with North America maintaining its leadership position. Key factors influencing this distribution include technological infrastructure, talent availability, and regulatory environments.',
+                    'Leading experts at the Future of AI Summit 2024 shared insights on emerging trends and future developments:',
                 ],
                 meta: { style: 'paragraph' },
             },
             {
-                id: 'regional-distribution',
-                type: 'chart',
-                data: [
-                    { name: 'North America', value: 450, color: '#8884d8' },
-                    { name: 'Europe', value: 380, color: '#82ca9d' },
-                    { name: 'Asia Pacific', value: 350, color: '#ffc658' },
-                    { name: 'Rest of World', value: 150, color: '#ff8042' },
-                ],
-                meta: {
-                    chartType: 'treemap',
-                    title: 'Regional Market Distribution (Billion USD)',
-                    valueKey: 'value',
-                    nameKey: 'name',
-                },
-            },
-        ],
-        sources: [
-            {
-                targetType: 'report',
-                targetId: 'global-market',
-                targetTitle: 'Global AI Market Distribution Report',
-            },
-        ],
-    },
-
-    // Fourth conversation cycle - Expert Insights
-    {
-        id: 'msg10',
-        ordinalId: '010',
-        timestamp: '2024-12-06T10:03:00Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'What do industry experts say about enterprise AI adoption?',
-        type: ChatMessageType.prompt,
-    },
-    {
-        id: 'msg11',
-        ordinalId: '011',
-        timestamp: '2024-12-06T10:03:01Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'What do industry experts say about enterprise AI adoption?',
-        type: ChatMessageType.sources,
-        confirmed: true,
-        sources: [
-            {
-                targetType: 'conference',
-                targetId: 'ai-summit-2024',
-                targetTitle: 'Enterprise AI Summit 2024 Keynote',
-            },
-        ],
-    },
-    {
-        id: 'msg12',
-        ordinalId: '012',
-        timestamp: '2024-12-06T10:03:02Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'What do industry experts say about enterprise AI adoption?',
-        type: ChatMessageType.response,
-        blocks: [
-            {
-                id: 'expert-context',
-                type: 'text',
-                content: [
-                    'Industry leaders at the Enterprise AI Summit 2024 emphasized the transformative impact of AI on business operations. A particularly noteworthy perspective came from Dr. Michael Chang, a leading researcher in enterprise AI implementation:',
-                ],
-                meta: { style: 'paragraph' },
-            },
-            {
-                id: 'expert-insights',
+                id: 'expert-quote',
                 type: 'quote',
                 content:
-                    'The integration of AI into enterprise workflows has reached a critical inflection point. Organizations are now moving beyond experimentation to full-scale deployment, fundamentally transforming their operational models.',
+                    'We are witnessing the emergence of truly general-purpose AI systems that can seamlessly adapt to diverse tasks while maintaining high performance and reliability.',
                 meta: {
-                    author: 'Dr. Michael Chang',
-                    source: 'Enterprise AI Summit 2024',
+                    author: 'Dr. Sarah Chen',
+                    source: 'Future of AI Summit 2024',
                     date: '2024-03-15',
                 },
             },
+            {
+                id: 'future-metrics',
+                type: 'chart',
+                data: [
+                    { year: '2024', capability: 65, adoption: 45 },
+                    { year: '2025', capability: 80, adoption: 60 },
+                    { year: '2026', capability: 90, adoption: 75 },
+                ],
+                meta: {
+                    chartType: 'line',
+                    title: 'Projected AI Evolution',
+                    xAxis: 'Year',
+                    yAxis: 'Score',
+                    series: [
+                        { key: 'capability', label: 'Capability Score', color: '#8884d8' },
+                        { key: 'adoption', label: 'Adoption Rate', color: '#82ca9d' },
+                    ],
+                },
+            },
         ],
         sources: [
             {
                 targetType: 'conference',
-                targetId: 'ai-summit-2024',
-                targetTitle: 'Enterprise AI Summit 2024 Keynote',
+                targetId: 'future-ai-summit',
+                targetTitle: 'Future of AI Summit 2024',
             },
         ],
     },

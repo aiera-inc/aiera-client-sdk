@@ -155,7 +155,7 @@ export function Messages({
                 let counter = 0;
                 const interval = setInterval(() => {
                     let status = ChatMessageStatus.STREAMING;
-                    if (counter++ > 80) {
+                    if (counter++ > 45) {
                         clearInterval(interval);
                         status = ChatMessageStatus.COMPLETED;
                     }
@@ -259,7 +259,7 @@ export function Messages({
                     let counter = 0;
                     const interval = setInterval(() => {
                         let status = ChatMessageStatus.STREAMING;
-                        if (counter++ > 80) {
+                        if (counter++ > 45) {
                             clearInterval(interval);
                             status = ChatMessageStatus.COMPLETED;
                         }
