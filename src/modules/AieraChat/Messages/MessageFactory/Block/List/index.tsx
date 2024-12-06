@@ -11,7 +11,7 @@ interface ListItemText {
 }
 
 // List content can be text, another block, or nested list
-type ListItemContent = ListItemText | ContentBlock;
+export type ListItemContent = ListItemText | ContentBlock;
 
 // List block types
 export interface ListBlock extends BaseBlock {
