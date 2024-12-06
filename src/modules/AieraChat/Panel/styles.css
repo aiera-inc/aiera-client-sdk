@@ -1,0 +1,113 @@
+.fadeIn {
+    animation-name: fadeIn;
+    animation-duration: 0.1s;
+}
+
+.fadeInSlow {
+    animation-name: fadeIn;
+    animation-duration: 0.4s;
+}
+
+.fadeOut {
+    animation-name: fadeOut;
+    animation-duration: 0.2s;
+}
+
+.fadeOutSlow {
+    animation-name: fadeOut;
+    animation-duration: 0.4s;
+}
+
+.slideInFromLeft {
+    animation-duration: 0.2s;
+    animation-name: slideInFromLeft;
+}
+
+.slideInFromLeftSlow {
+    animation-duration: 0.4s;
+    animation-name: slideInFromLeft;
+}
+
+.slideInFromRight {
+    animation-duration: 0.2s;
+    animation-name: slideInFromRight;
+}
+
+.slideInFromRightSlow {
+    animation-duration: 0.4s;
+    animation-name: slideInFromRight;
+}
+
+.slideOutToLeft {
+    animation-duration: 0.2s;
+    animation-name: slideOutToLeft;
+}
+
+.slideOutToLeftSlow {
+    animation-duration: 0.4s;
+    animation-name: slideOutToLeft;
+}
+
+.slideOutToRight {
+    animation-duration: 0.2s;
+    animation-name: slideOutToRight;
+}
+
+.slideOutToRightSlow {
+    animation-duration: 0.4s;
+    animation-name: slideOutToRight;
+}
+
+@keyframes slideInFromRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideOutToRight {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+@keyframes slideInFromLeft {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0%);
+    }
+}
+
+@keyframes slideOutToLeft {
+    from {
+        transform: translateX(0%);
+    }
+    to {
+        transform: translateX(-100%);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 100%;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 100%;
+    }
+    to {
+        opacity: 0%;
+    }
+}

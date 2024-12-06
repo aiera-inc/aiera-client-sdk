@@ -1,5 +1,4 @@
 module.exports = {
-    mode: 'jit',
     content: ['./src/**/*.html', './src/**/*.css', './src/**/*.ts*'],
     darkMode: 'class', // or 'media' or 'class'
     theme: {
@@ -36,25 +35,12 @@ module.exports = {
                     7: '#242434',
                     8: '#1A1A28',
                 },
+                'slate-200/60-solid': '#EBEFF5',
             },
             cursor: {
                 grab: 'grab',
                 grabbing: 'grabbing',
             },
-        },
-    },
-    variants: {
-        extend: {
-            boxShadow: ['hover', 'active', 'focus', 'focus-within'],
-            backgroundColor: ['odd', 'active'],
-            border: ['focus', 'focus-within', 'hover', 'active'],
-            ringColor: ['focus', 'focus-within', 'hover', 'active'],
-            fill: ['hover', 'active', 'group-active', 'group-focus-within'],
-            stroke: ['hover', 'active', 'group-active', 'group-focus-within'],
-            margin: ['first', 'last'],
-            opacity: ['disabled'],
-            padding: ['first', 'last'],
-            textColor: ['hover', 'active', 'group-active', 'group-focus-within'],
         },
     },
     plugins: [require('@tailwindcss/line-clamp'), require('tailwindcss-interaction-variants')],

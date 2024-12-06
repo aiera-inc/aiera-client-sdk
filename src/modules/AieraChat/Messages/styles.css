@@ -1,0 +1,14 @@
+/* SCROLL BARS */
+.messagesScrollBars::-webkit-scrollbar {
+    width: 4px;
+}
+
+.messagesScrollBars::-webkit-scrollbar-thumb {
+    @apply bg-slate-200 transition-all;
+    border-top-left-radius: 2.5px;
+    border-bottom-left-radius: 2.5px;
+}
+
+.messagesScrollBars:hover::-webkit-scrollbar-thumb {
+    @apply bg-slate-400 transition-all;
+}

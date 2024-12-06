@@ -134,6 +134,11 @@ export interface TooltipProps {
     content: ReactNode | TooltipRenderProps;
 
     /**
+     * Disable the tooltip
+     */
+    disabled?: boolean;
+
+    /**
      * Force the tooltip content to match the width of the target element.
      *
      * This is useful for dropdowns/autocompletes where you want the tooltip
@@ -373,6 +378,7 @@ export function Tooltip(props: TooltipProps): ReactElement {
         className,
         closeDelay = 0,
         content,
+        disabled = false,
         grow = 'down-right',
         hideOnDocumentScroll = false,
         matchWidth,
@@ -385,6 +391,10 @@ export function Tooltip(props: TooltipProps): ReactElement {
         xOffset = 0,
         yOffset = 0,
     } = props;
+
+    if (disabled) {
+        return <>{children}</>;
+    }
 
     // If no closeOn is provided, default to the same type as openOn
     let { closeOn } = props;

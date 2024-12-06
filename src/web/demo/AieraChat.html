@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            iframe {
+                border: none;
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            const eventList = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+            eventList.load().then(() => {
+                eventList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+            });
+
+            eventList.on('authenticated', () => {
+                eventList.configure({
+                    hideSettings: true,
+                    options: {
+                        showSearch: true,
+                        // showGlobalSearch: false,
+                        darkMode: false,
+                        eventListFilters: [
+                            { name: 'transcripts', visible: false, defaultValue: true },
+                            { name: 'earningsOnly', visible: true, defaultValue: false },
+                        ],
+                    },
+                    overrides: {
+                        // style: `
+                        //         .eventlist__filterby {
+                        //                background-color: blue
+                        //             }
+                        //             .eventlist__filterby__option {
+                        //                 display: none
+                        //             }
+                        //     `,
+                    },
+                    tracking: {
+                        userId: 'vich-component-user',
+                    },
+                });
+
+                /**
+                 * Once authenticated and the config is set, create a watchlist.
+                 *
+                 * Warning: calling setWatchlist before the configure call is finished
+                 * will NOT create the watchlist because we expect a userId to be defined
+                 * in the tracking configuration.
+                 *
+                 * To prevent a race condition, use the on('configured') event listener
+                 * and call setWatchlist once the config options are set in state.
+                 */
+                // eventList.on('configured', () => {
+                //     eventList.setWatchlist([
+                //         { ticker: 'AAPL' },
+                //         { ticker: 'GOOGL' },
+                //         { ticker: 'TLSA' }, // invalid tickers are ignored
+                //         { ticker: 'PTON' },
+                //     ]);
+                // });
+
+                eventList.on('event-audio', (event) => {
+                    console.log('play audio: ', event);
+                });
+                eventList.on('event-selected', (event) => {
+                    console.log('selected event: ', event);
+                });
+            });
+        </script>
+    </body>
+</html>
