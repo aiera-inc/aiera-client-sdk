@@ -35,7 +35,9 @@ export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessage
             const messages = virtuosoRef.current?.data.get();
             if (!messages) return;
             const matchingIndexes = messages.reduce<number[]>((acc, message, index) => {
-                const textContent = (message.text || '').toLowerCase();
+                // TODO fix this - it shouldn't be searching the prompt, it needs to be searching the text content
+                // which is different by block
+                const textContent = (message.prompt || '').toLowerCase();
                 if (term && textContent.includes(term)) {
                     acc.push(index);
                 }

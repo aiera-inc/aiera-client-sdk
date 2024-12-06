@@ -10,7 +10,7 @@ export interface PieChartMeta extends ChartMetaBase {
 }
 
 export function PieChartBlock({ data, meta }: ChartBlock) {
-    const { valueKey, nameKey, colors = COLORS, title } = meta as PieChartMeta;
+    const { valueKey, nameKey, colors = COLORS } = meta as PieChartMeta;
     return (
         <ResponsiveContainer width="100%" height={400}>
             <PieChart>

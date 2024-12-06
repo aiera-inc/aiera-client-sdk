@@ -15,9 +15,15 @@ export function AreaChartBlock({ data, meta }: ChartBlock) {
             <AreaChart data={data}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="name" label={xAxis ? { value: xAxis, position: 'bottom' } : undefined} />
-                <YAxis label={yAxis ? { value: yAxis, angle: -90, position: 'left' } : undefined} />
+                <YAxis label={yAxis ? { value: yAxis, angle: -90, position: 'insideLeft' } : undefined} />
                 <Tooltip />
-                <Legend />
+                <Legend
+                    layout="horizontal"
+                    verticalAlign="bottom"
+                    align="center"
+                    height={36}
+                    margin={{ top: 10, bottom: 0 }}
+                />
                 {series.map((s, index) => (
                     <Area
                         key={s.key}

@@ -1,15 +1,15 @@
 import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestionMark';
 import classNames from 'classnames';
 import React from 'react';
+import { ChatMessagePrompt } from '../../../services/messages';
 import { useChatStore } from '../../../store';
-import { ChatMessage } from '../../../services/messages';
 
 export const MessagePrompt = ({
     data,
     className,
     isStickyHeader,
 }: {
-    data: ChatMessage;
+    data: ChatMessagePrompt;
     className?: string;
     isStickyHeader?: boolean;
 }) => {

@@ -3,11 +3,11 @@ import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { AddSourceDialog } from '../../../AddSourceDialog';
-import { ChatMessage } from '../../../services/messages';
+import { ChatMessageSources, ChatMessageStatus } from '../../../services/messages';
 import { Source, useChatStore } from '../../../store';
 import { Loading } from '../Loading';
 
-export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: ChatMessage }) => {
+export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: ChatMessageSources }) => {
     const { onSelectSource, onAddSource } = useChatStore();
     const [showSourceDialog, setShowSourceDialog] = useState(false);
     const [localSources, setLocalSources] = useState<Source[]>([
@@ -43,11 +43,14 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
         );
     }, []);
 
-    if (data.status === 'confirmed') {
+    if (data.confirmed) {
         return <div />;
     }
 
-    return data.status === 'thinking' ? (
+    const isLoading = data.status === ChatMessageStatus.PENDING || data.status === ChatMessageStatus.QUEUED;
+    const isComplete = !isLoading && data.status !== ChatMessageStatus.STREAMING;
+
+    return isLoading ? (
         <Loading>Finding Sources...</Loading>
     ) : (
         <div className="flex flex-col pt-4">
@@ -68,7 +71,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                     }
                 >
                     <p className="text-base line-clamp-1">{title}</p>
-                    {data.status !== 'confirmed' && (
+                    {!data.confirmed && (
                         <div
                             className="ml-4 text-slate-600 hover:text-red-600"
                             onClick={(e) => {
@@ -82,7 +85,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                     )}
                 </div>
             ))}
-            {data.status === 'finished' && localSources.length > 0 && (
+            {isComplete && localSources.length > 0 && (
                 <div className="flex items-center justify-center px-3 mt-3 pb-5 text-sm">
                     <Button className="mr-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
                         Add Source
@@ -91,7 +94,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                         kind="primary"
                         className="px-5"
                         onClick={() => {
-                            onConfirm(data.key);
+                            onConfirm(data.ordinalId);
                             onAddSource(localSources);
                         }}
                     >
@@ -99,7 +102,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                     </Button>
                 </div>
             )}
-            {data.status === 'finished' && localSources.length === 0 && (
+            {isComplete && localSources.length === 0 && (
                 <div className="flex items-center justify-center pb-5 text-sm">
                     <Button kind="primary" className="px-5" onClick={() => setShowSourceDialog(true)}>
                         Add Sources

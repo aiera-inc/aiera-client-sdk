@@ -118,7 +118,7 @@ export const Footer = ({ data, onReRun }: { onReRun: (k: string) => void; data: 
                     hintAnchor="top-right"
                     hintGrow="up-left"
                     Icon={MicroRefresh}
-                    onClick={() => onReRun(data.key)}
+                    onClick={() => onReRun(data.ordinalId)}
                 />
             </div>
             {showSourceDialog && (

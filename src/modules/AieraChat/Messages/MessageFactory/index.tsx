@@ -2,7 +2,7 @@ import { VirtuosoMessageListProps } from '@virtuoso.dev/message-list';
 import React from 'react';
 import { match } from 'ts-pattern';
 import { MessageListContext } from '..';
-import { ChatMessage } from '../../services/messages';
+import { ChatMessage, ChatMessageType } from '../../services/messages';
 import { MessagePrompt } from './MessagePrompt';
 import { MessageResponse } from './MessageResponse';
 import { SourcesResponse } from './SourcesResponse';
@@ -11,8 +11,13 @@ export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListCo
     data,
     context,
 }) => {
-    return match(data.type)
-        .with('prompt', () => <MessagePrompt data={data} />)
-        .with('sources', () => <SourcesResponse data={data} onConfirm={context.onConfirm} />)
-        .otherwise(() => <MessageResponse data={data} onReRun={context.onReRun} />);
+    return match(data)
+        .with({ type: ChatMessageType.prompt }, (promptData) => <MessagePrompt data={promptData} />)
+        .with({ type: ChatMessageType.sources }, (sourcesData) => (
+            <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
+        ))
+        .with({ type: ChatMessageType.response }, (responseData) => (
+            <MessageResponse data={responseData} onReRun={context.onReRun} />
+        ))
+        .exhaustive();
 };

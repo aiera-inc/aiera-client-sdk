@@ -12,7 +12,7 @@ export interface ScatterChartMeta extends ChartMetaBase {
 }
 
 export function ScatterChartBlock({ data, meta }: ChartBlock) {
-    const { xKey, yKey, sizeKey, nameKey, colors = COLORS, xAxis, yAxis } = meta as ScatterChartMeta;
+    const { xKey, yKey, nameKey, colors = COLORS, xAxis, yAxis } = meta as ScatterChartMeta;
     return (
         <ResponsiveContainer width="100%" height={400}>
             <ScatterChart>

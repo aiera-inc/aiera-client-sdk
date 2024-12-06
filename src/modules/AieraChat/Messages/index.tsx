@@ -10,17 +10,36 @@ import {
 import classNames from 'classnames';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo } from 'react';
 import { Prompt } from '../Prompt';
-import { ChatMessage, ChatMessageStatus, useChatMessages } from '../services/messages';
+import {
+    ChatMessage,
+    ChatMessagePrompt,
+    ChatMessageResponse,
+    ChatMessageSources,
+    ChatMessageStatus,
+    ChatMessageType,
+    useChatMessages,
+} from '../services/messages';
 import { useChatStore } from '../store';
 import { MessageFactory } from './MessageFactory';
 import './styles.css';
 import { SuggestedPrompts } from './SuggestedPrompts';
 import { MessagePrompt } from './MessageFactory/MessagePrompt';
+import { BlockType } from './MessageFactory/Block';
+import { TextBlock } from './MessageFactory/Block/Text';
 
 let idCounter = 0;
 
-function randomMessage(user: ChatMessage['user'], prompt: ChatMessage['prompt']): ChatMessage {
-    return { user, key: `${idCounter++}`, type: 'response', text: 'some other message', prompt, status: 'thinking' };
+function randomMessage(prompt: ChatMessage['prompt']): ChatMessageResponse {
+    return {
+        id: `${idCounter++}`,
+        ordinalId: `${idCounter++}`,
+        timestamp: '',
+        sources: [],
+        type: ChatMessageType.response,
+        blocks: [{ type: BlockType.text, content: ['some other message'], id: '0', meta: { style: 'paragraph' } }],
+        prompt,
+        status: ChatMessageStatus.PENDING,
+    };
 }
 
 export interface MessageListContext {
@@ -36,7 +55,7 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
     const firstPrompt = data[0];
     if (!firstPrompt) return null;
     return (
-        <Fragment key={firstPrompt.key}>
+        <Fragment key={firstPrompt.ordinalId}>
             <div
                 className={classNames('absolute top-0 left-0 right-0 bg-gray-50 h-2', {
                     'opacity-0': listOffset > -56,
@@ -47,7 +66,7 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
                 className={classNames({
                     'opacity-0': listOffset > -56,
                 })}
-                data={firstPrompt}
+                data={firstPrompt as ChatMessagePrompt}
             />
         </Fragment>
     );
@@ -65,29 +84,29 @@ export function Messages({
 
     // Reset when starting new chat
     useEffect(() => {
-        if (chatId === null && virtuosoRef.current?.data) {
+        if (chatId === 'new' && virtuosoRef.current?.data) {
             virtuosoRef.current.data.replace([]);
         }
     }, [chatId]);
 
-    const onReRun = useCallback((key: string) => {
-        const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.key === key);
+    const onReRun = useCallback((ordinalId: string) => {
+        const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
 
         if (originalIndex) {
             setTimeout(() => {
                 let counter = 0;
                 let newMessage = '';
                 const interval = setInterval(() => {
-                    let status: ChatMessageStatus = 'thinking';
+                    let status = ChatMessageStatus.QUEUED;
                     if (counter++ > 80) {
                         clearInterval(interval);
-                        status = 'finished';
+                        status = ChatMessageStatus.COMPLETED;
                     } else if (counter > 10) {
-                        status = 'updating';
+                        status = ChatMessageStatus.STREAMING;
                     }
                     virtuosoRef.current?.data.map(
                         (message) => {
-                            if (message.key === key) {
+                            if (message.ordinalId === ordinalId) {
                                 newMessage = newMessage + ' ' + 'some message';
                                 return {
                                     ...message,
@@ -109,58 +128,90 @@ export function Messages({
         }
     }, []);
 
-    const onConfirm = useCallback((key: string) => {
-        const originalMessage = virtuosoRef.current?.data.find((m) => m.key === key);
-        const botMessage = randomMessage('other', originalMessage?.prompt);
-        virtuosoRef.current?.data.append([botMessage]);
+    const isMatchingResponse = (
+        message: ChatMessage,
+        botMessage: ChatMessageResponse
+    ): message is ChatMessageResponse => {
+        return message.ordinalId === botMessage.ordinalId;
+    };
 
-        virtuosoRef.current?.data.map((message) => {
-            if (message.key === key) {
-                return {
-                    ...message,
-                    status: 'confirmed',
-                };
-            }
+    const onConfirm = useCallback((ordinalId: string) => {
+        const originalMessage = virtuosoRef.current?.data.find((m) => m.ordinalId === ordinalId);
+        if (originalMessage) {
+            const botMessage: ChatMessageResponse = randomMessage(originalMessage?.prompt);
+            virtuosoRef.current?.data.append([botMessage]);
 
-            return message;
-        });
-        setTimeout(() => {
-            let counter = 0;
-            const interval = setInterval(() => {
-                let status: ChatMessageStatus = 'updating';
-                if (counter++ > 80) {
-                    clearInterval(interval);
-                    status = 'finished';
+            virtuosoRef.current?.data.map((message) => {
+                if (message.ordinalId === ordinalId) {
+                    return {
+                        ...message,
+                        confirmed: true,
+                    };
                 }
-                virtuosoRef.current?.data.map(
-                    (message) => {
-                        return message.key === botMessage.key
-                            ? {
-                                  ...message,
-                                  text: message.text + ' ' + 'some message',
-                                  status,
-                              }
-                            : message;
-                    },
-                    {
-                        location() {
-                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                        },
+
+                return message;
+            });
+            setTimeout(() => {
+                let counter = 0;
+                const interval = setInterval(() => {
+                    let status = ChatMessageStatus.STREAMING;
+                    if (counter++ > 80) {
+                        clearInterval(interval);
+                        status = ChatMessageStatus.COMPLETED;
                     }
-                );
-            }, 150);
-        }, 2000);
+                    virtuosoRef.current?.data.map(
+                        (message) => {
+                            if (isMatchingResponse(message, botMessage)) {
+                                const firstBlock =
+                                    (message.blocks[0] as TextBlock) ||
+                                    ({
+                                        id: `${message.blocks.length}`,
+                                        type: BlockType.text,
+                                        content: ['some text...'],
+                                        meta: { style: 'paragraph' },
+                                    } as TextBlock);
+                                return {
+                                    ...message,
+                                    blocks: [
+                                        {
+                                            ...firstBlock,
+                                            content: [
+                                                ...firstBlock.content,
+                                                firstBlock.content.length % 8 === 0
+                                                    ? {
+                                                          id: '1',
+                                                          text: 'citation',
+                                                          source: 'source',
+                                                      }
+                                                    : 'some more text...',
+                                            ],
+                                        },
+                                    ],
+                                    status,
+                                };
+                            }
+                            return message;
+                        },
+                        {
+                            location() {
+                                return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                            },
+                        }
+                    );
+                }, 150);
+            }, 2000);
+        }
     }, []);
 
     const onSubmit = useCallback(
         (prompt: string) => {
-            const myMessage: ChatMessage = {
-                user: 'me',
-                key: `${idCounter++}`,
-                text: prompt,
+            const myMessage: ChatMessagePrompt = {
+                id: `${idCounter++}`,
+                ordinalId: `${idCounter++}`,
                 prompt,
-                status: 'finished',
-                type: 'prompt',
+                type: ChatMessageType.prompt,
+                status: ChatMessageStatus.COMPLETED,
+                timestamp: '',
             };
             virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
                 return {
@@ -172,13 +223,15 @@ export function Messages({
 
             if (sources.length === 0) {
                 const newKey = `${idCounter++}`;
-                const sourceMessage: ChatMessage = {
-                    user: 'other',
-                    key: newKey,
-                    text: 'sourcess',
+                const sourceMessage: ChatMessageSources = {
+                    id: newKey,
+                    ordinalId: newKey,
+                    confirmed: false,
+                    sources: [],
+                    timestamp: '',
                     prompt,
-                    status: 'thinking',
-                    type: 'sources',
+                    status: ChatMessageStatus.PENDING,
+                    type: ChatMessageType.sources,
                 };
                 virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
                     return {
@@ -189,10 +242,10 @@ export function Messages({
                 });
                 setTimeout(() => {
                     virtuosoRef.current?.data.map((message) => {
-                        if (message.key === newKey) {
+                        if (message.ordinalId === newKey) {
                             return {
                                 ...message,
-                                status: 'finished',
+                                status: ChatMessageStatus.COMPLETED,
                             };
                         }
 
@@ -200,25 +253,48 @@ export function Messages({
                     });
                 }, 2000);
             } else {
-                const botMessage = randomMessage('other', prompt);
+                const botMessage = randomMessage(prompt);
                 virtuosoRef.current?.data.append([botMessage]);
                 setTimeout(() => {
                     let counter = 0;
                     const interval = setInterval(() => {
-                        let status: ChatMessageStatus = 'updating';
+                        let status = ChatMessageStatus.STREAMING;
                         if (counter++ > 80) {
                             clearInterval(interval);
-                            status = 'finished';
+                            status = ChatMessageStatus.COMPLETED;
                         }
                         virtuosoRef.current?.data.map(
                             (message) => {
-                                return message.key === botMessage.key
-                                    ? {
-                                          ...message,
-                                          text: message.text + ' ' + 'some message',
-                                          status,
-                                      }
-                                    : message;
+                                if (isMatchingResponse(message, botMessage)) {
+                                    const firstBlock =
+                                        (message.blocks[0] as TextBlock) ||
+                                        ({
+                                            id: `${message.blocks.length}`,
+                                            type: BlockType.text,
+                                            content: ['some text...'],
+                                            meta: { style: 'paragraph' },
+                                        } as TextBlock);
+                                    return {
+                                        ...message,
+                                        blocks: [
+                                            {
+                                                ...firstBlock,
+                                                content: [
+                                                    ...firstBlock.content,
+                                                    firstBlock.content.length % 7 === 0
+                                                        ? {
+                                                              id: '1',
+                                                              text: 'citation',
+                                                              source: 'source',
+                                                          }
+                                                        : 'some more text...',
+                                                ],
+                                            },
+                                        ],
+                                        status,
+                                    };
+                                }
+                                return message;
                             },
                             {
                                 location() {
@@ -256,7 +332,7 @@ export function Messages({
                             key={chatId || 'new'}
                             ref={virtuosoRef}
                             style={{ flex: 1 }}
-                            computeItemKey={({ data }: { data: ChatMessage }) => data.key}
+                            computeItemKey={({ data }: { data: ChatMessage }) => data.ordinalId}
                             className="px-4 messagesScrollBars"
                             initialLocation={{ index: 'LAST', align: 'end' }}
                             initialData={messages}
