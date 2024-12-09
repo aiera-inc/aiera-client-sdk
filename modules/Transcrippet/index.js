@@ -74742,6 +74742,19 @@ var RealtimeCurrentUserDocument = lib_default`
   }
 }
     `;
+var EventsDocument = lib_default`
+    query Events($filter: EventFilter, $view: EventView!) {
+  events(filter: $filter, view: $view) {
+    id
+    hasPublishedTranscript
+    hasTranscript
+    eventDate
+    eventType
+    isLive
+    title
+  }
+}
+    `;
 var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
@@ -75796,6 +75809,7 @@ function Tooltip(props) {
     className,
     closeDelay = 0,
     content,
+    disabled = false,
     grow = "down-right",
     hideOnDocumentScroll = false,
     matchWidth,
@@ -75808,6 +75822,9 @@ function Tooltip(props) {
     xOffset = 0,
     yOffset = 0
   } = props;
+  if (disabled) {
+    return /* @__PURE__ */ import_react24.default.createElement(import_react24.default.Fragment, null, children);
+  }
   let { closeOn } = props;
   if (closeOn === void 0) {
     closeOn = openOn;
