@@ -45,6 +45,19 @@ export function AieraChat(): ReactElement {
         setShowConfirm(false);
     }, []);
 
+    const onTranscriptAnimationEnd = useCallback(() => {
+        if (animateTranscriptExit) {
+            onSelectSource(undefined);
+            setTimeout(() => {
+                setAnimateTranscriptExit(false);
+            });
+        }
+    }, [animateTranscriptExit, onSelectSource]);
+
+    const onAnimateTranscriptExit = useCallback(() => {
+        setAnimateTranscriptExit(true);
+    }, []);
+
     let darkMode = false;
 
     if (config.options) {
@@ -60,19 +73,12 @@ export function AieraChat(): ReactElement {
                     className={classNames('fixed inset-0 slideInFromRight z-[100]', {
                         slideOutToRight: animateTranscriptExit,
                     })}
-                    onAnimationEnd={() => {
-                        if (animateTranscriptExit) {
-                            onSelectSource(undefined);
-                            setTimeout(() => {
-                                setAnimateTranscriptExit(false);
-                            });
-                        }
-                    }}
+                    onAnimationEnd={onTranscriptAnimationEnd}
                 >
                     <Transcript
                         onBackHeader="Back"
                         eventId={selectedSource.targetId}
-                        onBack={() => setAnimateTranscriptExit(true)}
+                        onBack={onAnimateTranscriptExit}
                     />
                 </div>
             )}
