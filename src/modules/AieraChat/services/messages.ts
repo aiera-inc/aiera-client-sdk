@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { ContentBlock } from '../Messages/MessageFactory/Block';
+import { ContentBlock } from '../components/Messages/MessageFactory/Block';
 
 export enum ChatMessageType {
     prompt = 'prompt',

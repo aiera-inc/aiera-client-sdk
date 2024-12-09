@@ -3,13 +3,12 @@ import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
 import React, { ReactElement, useCallback, useRef, useState } from 'react';
 import { Transcript } from '../Transcript';
-import { ConfirmDialog } from './ConfirmDialog';
-import { Header } from './Header';
-import { Menu } from './Menu';
-import { Messages } from './Messages';
-import { Sources } from './Sources';
+import { ConfirmDialog } from './modals/ConfirmDialog';
+import { Header } from './components/Header';
+import { Menu } from './panels/Menu';
+import { Messages } from './components/Messages';
+import { Sources } from './panels/Sources';
 import { useChatStore } from './store';
-import './styles.css';
 import { ChatMessage } from './services/messages';
 
 export function AieraChat(): ReactElement {
