@@ -2,7 +2,7 @@ import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestio
 import classNames from 'classnames';
 import React from 'react';
 import { ChatMessagePrompt } from '../../../../services/messages';
-import { useChatStore } from '../../../../store';
+import { SearchableText } from '../SearchableText';
 
 export const MessagePrompt = ({
     data,
@@ -13,7 +13,6 @@ export const MessagePrompt = ({
     className?: string;
     isStickyHeader?: boolean;
 }) => {
-    const { searchTerm } = useChatStore();
     const prompt = data.prompt;
     if (!prompt) return null;
     return (
@@ -44,19 +43,7 @@ export const MessagePrompt = ({
                         'line-clamp-2': isStickyHeader,
                     })}
                 >
-                    {searchTerm
-                        ? prompt
-                              .split(new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'))
-                              .map((part, index) =>
-                                  part.toLowerCase() === searchTerm.toLowerCase() ? (
-                                      <mark key={index} className="bg-yellow-400">
-                                          {part}
-                                      </mark>
-                                  ) : (
-                                      part
-                                  )
-                              )
-                        : prompt}
+                    <SearchableText text={prompt} />
                 </p>
             </div>
         </div>
