@@ -12,11 +12,11 @@ export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListCo
     context,
 }) => {
     return match(data)
-        .with({ type: ChatMessageType.prompt }, (promptData) => <MessagePrompt data={promptData} />)
-        .with({ type: ChatMessageType.sources }, (sourcesData) => (
+        .with({ type: ChatMessageType.PROMPT }, (promptData) => <MessagePrompt data={promptData} />)
+        .with({ type: ChatMessageType.SOURCES }, (sourcesData) => (
             <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
         ))
-        .with({ type: ChatMessageType.response }, (responseData) => (
+        .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
             <MessageResponse data={responseData} onReRun={context.onReRun} />
         ))
         .exhaustive();

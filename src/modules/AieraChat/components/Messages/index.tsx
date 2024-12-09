@@ -35,7 +35,7 @@ function randomMessage(prompt: ChatMessage['prompt']): ChatMessageResponse {
         ordinalId: `${idCounter++}`,
         timestamp: '',
         sources: [],
-        type: ChatMessageType.response,
+        type: ChatMessageType.RESPONSE,
         blocks: [{ type: BlockType.text, content: ['some other message'], id: '0', meta: { style: 'paragraph' } }],
         prompt,
         status: ChatMessageStatus.PENDING,
@@ -209,7 +209,7 @@ export function Messages({
                 id: `${idCounter++}`,
                 ordinalId: `${idCounter++}`,
                 prompt,
-                type: ChatMessageType.prompt,
+                type: ChatMessageType.PROMPT,
                 status: ChatMessageStatus.COMPLETED,
                 timestamp: '',
             };
@@ -231,7 +231,7 @@ export function Messages({
                     timestamp: '',
                     prompt,
                     status: ChatMessageStatus.PENDING,
-                    type: ChatMessageType.sources,
+                    type: ChatMessageType.SOURCES,
                 };
                 virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
                     return {

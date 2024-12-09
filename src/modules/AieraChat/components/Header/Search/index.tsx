@@ -122,9 +122,9 @@ export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessage
             if (!messages) return;
             const matchingIndexes = messages.reduce<number[]>((acc, message, index) => {
                 let textContent = '';
-                if (message.type === ChatMessageType.response) {
+                if (message.type === ChatMessageType.RESPONSE) {
                     textContent = getSearchableContent(message.blocks).toLowerCase();
-                } else if (message.type === ChatMessageType.prompt) {
+                } else if (message.type === ChatMessageType.PROMPT) {
                     textContent = message.prompt;
                 }
                 if (term && textContent.includes(term)) {

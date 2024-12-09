@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from 'react';
 import { ContentBlock } from '../components/Messages/MessageFactory/Block';
 
 export enum ChatMessageType {
-    prompt = 'prompt',
-    sources = 'sources',
-    response = 'response',
+    PROMPT = 'prompt',
+    SOURCES = 'sources',
+    RESPONSE = 'response',
 }
 
 interface ChatMessageSource {
@@ -40,17 +40,17 @@ export interface ChatMessageBase {
 }
 
 export interface ChatMessageResponse extends ChatMessageBase {
-    type: ChatMessageType.response;
+    type: ChatMessageType.RESPONSE;
     blocks: ContentBlock[];
     sources: ChatMessageSource[];
 }
 
 export interface ChatMessagePrompt extends ChatMessageBase {
-    type: ChatMessageType.prompt;
+    type: ChatMessageType.PROMPT;
 }
 
 export interface ChatMessageSources extends ChatMessageBase {
-    type: ChatMessageType.sources;
+    type: ChatMessageType.SOURCES;
     confirmed: boolean;
     sources: ChatMessageSource[];
 }
@@ -72,7 +72,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:00:00Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
-        type: ChatMessageType.prompt,
+        type: ChatMessageType.PROMPT,
     },
     {
         id: 'msg2',
@@ -80,7 +80,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:00:01Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
-        type: ChatMessageType.sources,
+        type: ChatMessageType.SOURCES,
         confirmed: true,
         sources: [
             {
@@ -96,7 +96,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:00:02Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
-        type: ChatMessageType.response,
+        type: ChatMessageType.RESPONSE,
         blocks: [
             {
                 id: 'report-title',
@@ -178,7 +178,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:01:00Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'Compare the performance of top AI models across different metrics.',
-        type: ChatMessageType.prompt,
+        type: ChatMessageType.PROMPT,
     },
     {
         id: 'msg5',
@@ -186,7 +186,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:01:01Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'Compare the performance of top AI models across different metrics.',
-        type: ChatMessageType.sources,
+        type: ChatMessageType.SOURCES,
         confirmed: true,
         sources: [
             {
@@ -202,7 +202,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:01:02Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'Compare the performance of top AI models across different metrics.',
-        type: ChatMessageType.response,
+        type: ChatMessageType.RESPONSE,
         blocks: [
             {
                 id: 'perf-intro',
@@ -263,7 +263,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:02:00Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'What are experts saying about the future of AI?',
-        type: ChatMessageType.prompt,
+        type: ChatMessageType.PROMPT,
     },
     {
         id: 'msg8',
@@ -271,7 +271,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:02:01Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'What are experts saying about the future of AI?',
-        type: ChatMessageType.sources,
+        type: ChatMessageType.SOURCES,
         confirmed: true,
         sources: [
             {
@@ -287,7 +287,7 @@ const sampleMessages = [
         timestamp: '2024-12-06T10:02:02Z',
         status: ChatMessageStatus.COMPLETED,
         prompt: 'What are experts saying about the future of AI?',
-        type: ChatMessageType.response,
+        type: ChatMessageType.RESPONSE,
         blocks: [
             {
                 id: 'future-heading',
