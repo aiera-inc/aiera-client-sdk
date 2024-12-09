@@ -3,7 +3,7 @@ import { Cell, ResponsiveContainer, Treemap } from 'recharts';
 import { COLORS, ChartBlock, ChartMetaBase, ChartType } from '..';
 
 export interface TreeMapMeta extends ChartMetaBase {
-    chartType: ChartType.treemap;
+    chartType: ChartType.TREEMAP;
     valueKey: string; // Field for box sizes
     nameKey: string; // Field for box labels
     colors?: string[]; // Optional array of colors

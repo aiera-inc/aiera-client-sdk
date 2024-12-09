@@ -13,7 +13,7 @@ interface CellMeta {
 
 // Table block types
 export interface TableBlock extends BaseBlock {
-    type: BlockType.table;
+    type: BlockType.TABLE;
     headers: string[];
     rows: CitableContent[][];
     meta: {

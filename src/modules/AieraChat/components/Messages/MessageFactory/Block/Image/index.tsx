@@ -4,7 +4,7 @@ import { SearchableText } from '../../SearchableText';
 
 // Image block types
 export interface ImageBlock extends BaseBlock {
-    type: BlockType.image;
+    type: BlockType.IMAGE;
     url: string;
     meta: {
         title: string;

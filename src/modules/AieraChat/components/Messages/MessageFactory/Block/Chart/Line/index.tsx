@@ -3,7 +3,7 @@ import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, X
 import { ChartMetaBase, ChartType, ChartSeries, ChartBlock, COLORS } from '..';
 
 export interface LineChartMeta extends ChartMetaBase {
-    chartType: ChartType.line;
+    chartType: ChartType.LINE;
     series: ChartSeries[];
 }
 

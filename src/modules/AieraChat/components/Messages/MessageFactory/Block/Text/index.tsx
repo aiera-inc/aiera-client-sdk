@@ -6,7 +6,7 @@ import { SearchableText } from '../../SearchableText';
 
 // Text block types
 export interface TextBlock extends BaseBlock {
-    type: BlockType.text;
+    type: BlockType.TEXT;
     content: CitableContent;
     meta: {
         style: 'paragraph' | 'h1' | 'h2' | 'h3';

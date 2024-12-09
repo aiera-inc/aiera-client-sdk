@@ -21,12 +21,12 @@ type Citation = {
 export type CitableContent = (string | Citation)[];
 
 export enum BlockType {
-    text = 'text',
-    table = 'table',
-    list = 'list',
-    image = 'image',
-    quote = 'quote',
-    chart = 'chart',
+    TEXT = 'text',
+    TABLE = 'table',
+    LIST = 'list',
+    IMAGE = 'image',
+    QUOTE = 'quote',
+    CHART = 'chart',
 }
 
 // Base type for all content blocks
@@ -44,19 +44,19 @@ type BlockProps = ContentBlock & {
 
 export function Block(props: BlockProps) {
     return match(props)
-        .with({ type: BlockType.text }, (p) => (
-            <Text type={BlockType.text} content={p.content} meta={p.meta} id={p.id} />
+        .with({ type: BlockType.TEXT }, (p) => (
+            <Text type={BlockType.TEXT} content={p.content} meta={p.meta} id={p.id} />
         ))
-        .with({ type: BlockType.table }, (p) => (
-            <Table type={BlockType.table} headers={p.headers} rows={p.rows} meta={p.meta} id={p.id} />
+        .with({ type: BlockType.TABLE }, (p) => (
+            <Table type={BlockType.TABLE} headers={p.headers} rows={p.rows} meta={p.meta} id={p.id} />
         ))
-        .with({ type: BlockType.list }, (p) => (
-            <List isNested={props.isNested} type={BlockType.list} items={p.items} meta={p.meta} id={p.id} />
+        .with({ type: BlockType.LIST }, (p) => (
+            <List isNested={props.isNested} type={BlockType.LIST} items={p.items} meta={p.meta} id={p.id} />
         ))
-        .with({ type: BlockType.quote }, (p) => (
-            <Quote type={BlockType.quote} content={p.content} meta={p.meta} id={p.id} />
+        .with({ type: BlockType.QUOTE }, (p) => (
+            <Quote type={BlockType.QUOTE} content={p.content} meta={p.meta} id={p.id} />
         ))
-        .with({ type: BlockType.image }, (p) => <Image type={BlockType.image} url={p.url} meta={p.meta} id={p.id} />)
-        .with({ type: BlockType.chart }, (p) => <Chart type={BlockType.chart} data={p.data} meta={p.meta} id={p.id} />)
+        .with({ type: BlockType.IMAGE }, (p) => <Image type={BlockType.IMAGE} url={p.url} meta={p.meta} id={p.id} />)
+        .with({ type: BlockType.CHART }, (p) => <Chart type={BlockType.CHART} data={p.data} meta={p.meta} id={p.id} />)
         .exhaustive();
 }

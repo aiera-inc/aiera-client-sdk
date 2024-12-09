@@ -3,7 +3,7 @@ import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAx
 import { COLORS, ChartBlock, ChartMetaBase, ChartSeries, ChartType } from '..';
 
 export interface BarChartMeta extends ChartMetaBase {
-    chartType: ChartType.bar;
+    chartType: ChartType.BAR;
     series: ChartSeries[];
     stackedBars?: boolean;
 }

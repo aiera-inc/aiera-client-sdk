@@ -36,7 +36,7 @@ function randomMessage(prompt: ChatMessage['prompt']): ChatMessageResponse {
         timestamp: '',
         sources: [],
         type: ChatMessageType.RESPONSE,
-        blocks: [{ type: BlockType.text, content: ['some other message'], id: '0', meta: { style: 'paragraph' } }],
+        blocks: [{ type: BlockType.TEXT, content: ['some other message'], id: '0', meta: { style: 'paragraph' } }],
         prompt,
         status: ChatMessageStatus.PENDING,
     };
@@ -166,7 +166,7 @@ export function Messages({
                                     (message.blocks[0] as TextBlock) ||
                                     ({
                                         id: `${message.blocks.length}`,
-                                        type: BlockType.text,
+                                        type: BlockType.TEXT,
                                         content: ['some text...'],
                                         meta: { style: 'paragraph' },
                                     } as TextBlock);
@@ -270,7 +270,7 @@ export function Messages({
                                         (message.blocks[0] as TextBlock) ||
                                         ({
                                             id: `${message.blocks.length}`,
-                                            type: BlockType.text,
+                                            type: BlockType.TEXT,
                                             content: ['some text...'],
                                             meta: { style: 'paragraph' },
                                         } as TextBlock);

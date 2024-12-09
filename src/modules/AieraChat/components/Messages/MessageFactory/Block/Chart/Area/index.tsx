@@ -3,7 +3,7 @@ import { Area, AreaChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, X
 import { COLORS, ChartBlock, ChartMetaBase, ChartSeries, ChartType } from '..';
 
 export interface AreaChartMeta extends ChartMetaBase {
-    chartType: ChartType.area;
+    chartType: ChartType.AREA;
     series: ChartSeries[];
     stackedSeries?: boolean;
 }

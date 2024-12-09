@@ -16,7 +16,7 @@ export type ListItemContent = ListItemText | ContentBlock;
 // List block types
 export interface ListBlock extends BaseBlock {
     isNested?: boolean;
-    type: BlockType.list;
+    type: BlockType.LIST;
     items: ListItemContent[];
     meta: {
         style: 'ordered' | 'unordered';

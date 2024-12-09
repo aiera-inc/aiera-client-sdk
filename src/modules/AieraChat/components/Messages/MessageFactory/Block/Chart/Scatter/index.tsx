@@ -3,7 +3,7 @@ import { CartesianGrid, Legend, ResponsiveContainer, Scatter, ScatterChart, Tool
 import { ChartMetaBase, ChartType, ChartBlock, COLORS } from '..';
 
 export interface ScatterChartMeta extends ChartMetaBase {
-    chartType: ChartType.scatter;
+    chartType: ChartType.SCATTER;
     xKey: string; // Field for X coordinates
     yKey: string; // Field for Y coordinates
     sizeKey?: string; // Optional field for point sizes

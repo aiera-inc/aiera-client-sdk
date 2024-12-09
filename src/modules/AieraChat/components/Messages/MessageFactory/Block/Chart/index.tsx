@@ -25,12 +25,12 @@ export type ChartMetaBase = {
 };
 
 export enum ChartType {
-    area = 'area',
-    line = 'line',
-    bar = 'bar',
-    pie = 'pie',
-    scatter = 'scatter',
-    treemap = 'treemap',
+    AREA = 'area',
+    LINE = 'line',
+    BAR = 'bar',
+    PIE = 'pie',
+    SCATTER = 'scatter',
+    TREEMAP = 'treemap',
 }
 
 // Common chart data type
@@ -44,18 +44,18 @@ type ChartMeta = AreaChartMeta | LineChartMeta | BarChartMeta | PieChartMeta | S
 
 // Updated chart block type
 export interface ChartBlock extends BaseBlock {
-    type: BlockType.chart;
+    type: BlockType.CHART;
     data: ChartData[];
     meta: ChartMeta;
 }
 
 export function Chart(props: ChartBlock) {
     return match(props.meta.chartType)
-        .with(ChartType.area, () => <AreaChartBlock {...props} />)
-        .with(ChartType.bar, () => <BarChartBlock {...props} />)
-        .with(ChartType.line, () => <LineChartBlock {...props} />)
-        .with(ChartType.pie, () => <PieChartBlock {...props} />)
-        .with(ChartType.scatter, () => <ScatterChartBlock {...props} />)
-        .with(ChartType.treemap, () => <TreeMapBlock {...props} />)
+        .with(ChartType.AREA, () => <AreaChartBlock {...props} />)
+        .with(ChartType.BAR, () => <BarChartBlock {...props} />)
+        .with(ChartType.LINE, () => <LineChartBlock {...props} />)
+        .with(ChartType.PIE, () => <PieChartBlock {...props} />)
+        .with(ChartType.SCATTER, () => <ScatterChartBlock {...props} />)
+        .with(ChartType.TREEMAP, () => <TreeMapBlock {...props} />)
         .exhaustive();
 }

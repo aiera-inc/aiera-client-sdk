@@ -3,7 +3,7 @@ import { Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip } from 'recha
 import { COLORS, ChartBlock, ChartMetaBase, ChartType } from '..';
 
 export interface PieChartMeta extends ChartMetaBase {
-    chartType: ChartType.pie;
+    chartType: ChartType.PIE;
     valueKey: string; // Which field to use for values
     nameKey: string; // Which field to use for segment names
     colors?: string[]; // Optional array of colors for segments

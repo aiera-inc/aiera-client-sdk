@@ -4,7 +4,7 @@ import { SearchableText } from '../../SearchableText';
 
 // Quote block
 export interface QuoteBlock extends BaseBlock {
-    type: BlockType.quote;
+    type: BlockType.QUOTE;
     content: string; // The quote itself
     meta: {
         author: string;
