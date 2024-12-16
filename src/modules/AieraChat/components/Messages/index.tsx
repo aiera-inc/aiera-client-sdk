@@ -327,7 +327,7 @@ export function Messages({
                         <LoadingSpinner />
                     </div>
                 ) : (
-                    <VirtuosoMessageListLicense licenseKey="">
+                    <VirtuosoMessageListLicense licenseKey="84cd6e10ad72f8f5ee54534d509f9754TzoyNjtFOjE3NjU5MDQxMzIzMzI=">
                         <VirtuosoMessageList<ChatMessage, MessageListContext>
                             key={chatId || 'new'}
                             ref={virtuosoRef}
