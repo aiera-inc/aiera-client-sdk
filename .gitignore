@@ -7,3 +7,5 @@ node_modules/
 .jest/coverage
 .nvmrc
 .vimspector.json
+*.env
+!example.env

@@ -94,6 +94,7 @@ export interface Config {
     overrides?: Overrides;
     user?: User;
     tracking?: Tracking;
+    virtualListKey?: string;
 }
 
 // Setup default values for env
@@ -105,6 +106,7 @@ const defaultConfig: Config = {
     gqlOptions: {
         clientOptions: { url: defaultEnv.apiUrl },
     },
+    virtualListKey: defaultEnv.virtualListKey,
 };
 
 export const Context = createContext<Config>(defaultConfig);

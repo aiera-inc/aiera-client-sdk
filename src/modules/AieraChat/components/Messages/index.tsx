@@ -26,6 +26,7 @@ import { SuggestedPrompts } from './SuggestedPrompts';
 import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
 import { TextBlock } from './MessageFactory/Block/Text';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 let idCounter = 0;
 
@@ -319,6 +320,8 @@ export function Messages({
         [onSubmit, onReRun, onConfirm]
     );
 
+    const config = useConfig();
+
     return (
         <div className="relative flex-1">
             <div className="absolute bottom-0 left-0 right-0 top-4 flex flex-col flex-1">
@@ -327,7 +330,7 @@ export function Messages({
                         <LoadingSpinner />
                     </div>
                 ) : (
-                    <VirtuosoMessageListLicense licenseKey="84cd6e10ad72f8f5ee54534d509f9754TzoyNjtFOjE3NjU5MDQxMzIzMzI=">
+                    <VirtuosoMessageListLicense licenseKey={config.virtualListKey || ''}>
                         <VirtuosoMessageList<ChatMessage, MessageListContext>
                             key={chatId || 'new'}
                             ref={virtuosoRef}
