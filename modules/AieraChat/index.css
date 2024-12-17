@@ -3211,19 +3211,7 @@ video {
   background-color: rgb(36 36 52 / var(--tw-bg-opacity));
 }
 
-/* src/components/Input/styles.css */
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-input[type=number] {
-  -moz-appearance: textfield;
-}
-
 /* src/components/Button/styles.css */
-
-/* src/modules/Auth/styles.css */
 
 /* src/components/Tooltip/styles.css */
 
@@ -3245,6 +3233,16 @@ input[type=number] {
 /* src/modules/Transcript/EmptyMessage/styles.css */
 
 /* src/components/ExpandButton/styles.css */
+
+/* src/components/Input/styles.css */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
 
 /* src/components/Toggle/styles.css */
 :root {
@@ -3508,4 +3506,6 @@ input[type=number] {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }
+
+/* src/modules/Auth/styles.css */
 /*# sourceMappingURL=index.css.map */

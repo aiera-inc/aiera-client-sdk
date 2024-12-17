@@ -82843,9 +82843,10 @@ var import_lodash = __toModule(require_lodash());
 
 // src/lib/config/env.ts
 var defaultEnv = {
-  apiUrl: "https://api-dev.aiera.com/graphql",
-  assetPath: "bundle/",
-  platform: "aiera-sdk-dev"
+  apiUrl: "undefined",
+  assetPath: "undefined",
+  platform: "undefined",
+  virtualListKey: "undefined"
 };
 
 // src/lib/msg/index.tsx
@@ -82940,7 +82941,8 @@ var defaultConfig = {
   platform: defaultEnv.platform,
   gqlOptions: {
     clientOptions: { url: defaultEnv.apiUrl }
-  }
+  },
+  virtualListKey: defaultEnv.virtualListKey
 };
 var Context2 = (0, import_react3.createContext)(defaultConfig);
 function Provider2({ config, children }) {
