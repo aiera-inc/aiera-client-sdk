@@ -9,6 +9,7 @@ import { Menu } from './panels/Menu';
 import { Messages } from './components/Messages';
 import { Sources } from './panels/Sources';
 import { useChatStore } from './store';
+import { useChatSessions } from './services/chats';
 import { ChatMessage } from './services/messages';
 
 export function AieraChat(): ReactElement {
@@ -18,6 +19,24 @@ export function AieraChat(): ReactElement {
     const { selectedSource, onSelectSource } = useChatStore();
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
+
+    const { deleteSession, sessions, isLoading } = useChatSessions();
+    const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
+
+    const handleDeleteConfirm = useCallback(
+        (e: React.MouseEvent) => {
+            e.preventDefault();
+            if (deletedSessionId) {
+                deleteSession(Number(deletedSessionId))
+                    .then(() => {
+                        setDeletedSessionId(null);
+                        setShowConfirm(false);
+                    })
+                    .catch(() => setShowConfirm(false));
+            }
+        },
+        [deletedSessionId, setDeletedSessionId]
+    );
 
     const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
 
@@ -37,11 +56,13 @@ export function AieraChat(): ReactElement {
         setShowSources(false);
     }, []);
 
-    const onOpenConfirm = useCallback(() => {
+    const onOpenConfirm = useCallback((sessionId: string) => {
+        setDeletedSessionId(sessionId);
         setShowConfirm(true);
     }, []);
 
     const onCloseConfirm = useCallback(() => {
+        setDeletedSessionId(null);
         setShowConfirm(false);
     }, []);
 
@@ -95,8 +116,10 @@ export function AieraChat(): ReactElement {
                 <Header onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
                 <Messages onOpenSources={onOpenSources} virtuosoRef={virtuosoRef} />
                 {showSources && <Sources onClose={onCloseSources} />}
-                {showMenu && <Menu onClose={onCloseMenu} onOpenConfirm={onOpenConfirm} />}
-                {showConfirm && <ConfirmDialog onClose={onCloseConfirm} />}
+                {showMenu && (
+                    <Menu isLoading={isLoading} onClickIcon={onOpenConfirm} onClose={onCloseMenu} sessions={sessions} />
+                )}
+                {showConfirm && <ConfirmDialog onDelete={handleDeleteConfirm} onClose={onCloseConfirm} />}
             </div>
         </>
     );

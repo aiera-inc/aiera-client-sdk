@@ -116,7 +116,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
             )}
         >
             <button
-                data-testId="downloadButton"
+                data-testid="downloadButton"
                 className={classNames(
                     'ml-3',
                     'group flex h-8 w-8 items-center justify-center font-semibold rounded-lg',

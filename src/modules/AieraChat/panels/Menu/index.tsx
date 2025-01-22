@@ -6,14 +6,23 @@ import classNames from 'classnames';
 import React, { useState } from 'react';
 import { Panel } from '../Panel';
 import { SearchInput } from '../../components/SearchInput';
-import { useChatSessions } from '../../services/chats';
 import { useChatStore } from '../../store';
 import { ContentRow } from '../../components/ContentRow';
+import { ChatSession } from '../../services/chats';
 
-export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; onClose: () => void }) {
+export function Menu({
+    isLoading,
+    onClickIcon,
+    onClose,
+    sessions,
+}: {
+    isLoading: boolean;
+    onClickIcon: (sessionId: string) => void;
+    onClose: () => void;
+    sessions: ChatSession[];
+}) {
     const { chatId, onSelectChat, onNewChat } = useChatStore();
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-    const { sessions, isLoading } = useChatSessions();
 
     const filteredResults = sessions.filter(({ title }) =>
         title.toLowerCase().includes(searchTerm?.toLowerCase() || '')
@@ -40,9 +49,7 @@ export function Menu({ onClose, onOpenConfirm }: { onOpenConfirm: () => void; on
                                             onSelectChat(id, title);
                                             onStartExit();
                                         }}
-                                        onClickIcon={() => {
-                                            onOpenConfirm();
-                                        }}
+                                        onClickIcon={() => onClickIcon(id)}
                                         Icon={MicroTrash}
                                         iconClassName="text-slate-500 hover:text-rose-600"
                                         className={classNames('mx-5', {
