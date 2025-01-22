@@ -1,4 +1,7 @@
+import gql from 'graphql-tag';
 import { useState, useEffect, useCallback } from 'react';
+import { useQuery } from '@aiera/client-sdk/api/client';
+import { ChatSessionsQuery, ChatSessionsQueryVariables } from '@aiera/client-sdk/types/generated';
 
 interface ChatSession {
     id: string;
@@ -12,43 +15,52 @@ interface UseChatSessionsReturn {
     refresh: () => void;
 }
 
-// Simulated async fetch function
-const fetchChatSessions = async (): Promise<ChatSession[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    return [
-        { id: '1', title: 'My New Chat' },
-        { id: '2', title: '2024 Tech Trends' },
-        { id: '3', title: 'Talking About Guidance and stuff...' },
-        { id: '4', title: 'Supply Chain Disruptions and stuff' },
-    ];
-};
-
 export const useChatSessions = (): UseChatSessionsReturn => {
     const [sessions, setSessions] = useState<ChatSession[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const query = useQuery<ChatSessionsQuery, ChatSessionsQueryVariables>({
+        query: gql`
+            query ChatSessions {
+                chatSessions {
+                    id
+                    title
+                }
+            }
+        `,
+        requestPolicy: 'cache-and-network',
+    });
+
+    // Update state based on query status
+    useEffect(() => {
+        if (query.status === 'success') {
+            setSessions(query.data.chatSessions);
+        } else if (query.status === 'error') {
+            setError(query.error.message);
+        }
+        if (!isLoading && query.status === 'loading') {
+            setIsLoading(true);
+        } else if (isLoading && query.status !== 'loading') {
+            setIsLoading(false);
+        }
+    }, [query, isLoading]);
+
     // Use useCallback to memoize the fetch function
-    const fetchSessions = useCallback(async () => {
+    const fetchSessions = useCallback(() => {
         try {
             setIsLoading(true);
             setError(null);
-            const data = await fetchChatSessions();
-            setSessions(data);
+            query.refetch();
         } catch (err) {
             setError(err instanceof Error ? err.message : 'An error occurred');
         } finally {
             setIsLoading(false);
         }
-    }, []); // Empty dependency array since it doesn't depend on any props or state
+    }, [query]);
 
-    useEffect(() => {
-        void fetchSessions();
-    }, [fetchSessions]);
-
-    const refresh = async () => {
-        await fetchSessions();
+    const refresh = () => {
+        fetchSessions();
     };
 
     return {
