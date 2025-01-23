@@ -32,6 +32,7 @@ describe('Provider', () => {
             assetPath: 'assets',
             platform: 'aiera-sdk-dev',
             gqlOptions: { clientOptions: { url: 'test' } },
+            virtualListKey: process.env.AIERA_SDK_VIRTUAL_LIST_KEY,
         };
         const realtime = getMockedRealtime() as unknown as Realtime;
         const storage = jest.fn() as unknown as Storage;

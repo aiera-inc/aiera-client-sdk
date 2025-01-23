@@ -1,7 +1,7 @@
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { ReactElement, useCallback, useRef, useState } from 'react';
+import React, { ChangeEvent, ReactElement, useCallback, useRef, useState } from 'react';
 import { Transcript } from '../Transcript';
 import { ConfirmDialog } from './modals/ConfirmDialog';
 import { Header } from './components/Header';
@@ -16,11 +16,11 @@ export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    const { selectedSource, onSelectSource } = useChatStore();
+    const { chatId, chatTitle, onSelectChat, onSelectSource, selectedSource } = useChatStore();
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
-    const { deleteSession, sessions, isLoading } = useChatSessions();
+    const { createSession, deleteSession, sessions, isLoading } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
 
     const handleDeleteConfirm = useCallback(
@@ -36,6 +36,27 @@ export function AieraChat(): ReactElement {
             }
         },
         [deletedSessionId, setDeletedSessionId]
+    );
+
+    const handleTitleChange = useCallback(
+        (e: ChangeEvent<HTMLInputElement>) => {
+            const title = e.target.value;
+            if (title && chatId === 'new') {
+                createSession(title)
+                    .then((newSession) => {
+                        if (newSession && newSession.id && newSession.title) {
+                            onSelectChat(newSession.id, newSession.title);
+                        }
+                    })
+                    .catch(() => setShowConfirm(false));
+            } else if (title && chatId) {
+                // implement updateChatSession mutation here
+                // updateChatSession(sessionId)
+                //     .then(() => onSelectChat(newSession.id, newSession.title))
+                //     .catch(() => setError('Error updating chat session');
+            }
+        },
+        [chatId, chatTitle, createSession, onSelectChat]
     );
 
     const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
@@ -113,7 +134,7 @@ export function AieraChat(): ReactElement {
                     'aiera-chat'
                 )}
             >
-                <Header onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
+                <Header onOpenMenu={onOpenMenu} onTitleChange={handleTitleChange} virtuosoRef={virtuosoRef} />
                 <Messages onOpenSources={onOpenSources} virtuosoRef={virtuosoRef} />
                 {showSources && <Sources onClose={onCloseSources} />}
                 {showMenu && (

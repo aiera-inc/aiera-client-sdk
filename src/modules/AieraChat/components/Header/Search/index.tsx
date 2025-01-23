@@ -3,7 +3,15 @@ import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCir
 import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { ChangeEvent, KeyboardEvent, RefObject, useCallback, useEffect, useState } from 'react';
+import React, {
+    ChangeEvent,
+    ChangeEventHandler,
+    KeyboardEvent,
+    RefObject,
+    useCallback,
+    useEffect,
+    useState,
+} from 'react';
 import { useChatStore } from '../../../store';
 import { IconButton } from '../../IconButton';
 import { ChatMessage, ChatMessageType } from '../../../services/messages';
@@ -94,9 +102,15 @@ function getSearchableContent(blocks: ContentBlock[]): string {
         .trim();
 }
 
-export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>> }) {
+export function Search({
+    onTitleChange,
+    virtuosoRef,
+}: {
+    onTitleChange: ChangeEventHandler<HTMLInputElement>;
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
+}) {
     const { chatId, searchTerm, onSetSearchTerm } = useChatStore();
-    const { chatTitle, onSetTitle } = useChatStore();
+    const { chatTitle } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
     const [matches, setMatches] = useState<number[]>([]);
     const [matchIndex, setMatchIndex] = useState(1);
@@ -256,7 +270,7 @@ export function Search({ virtuosoRef }: { virtuosoRef: RefObject<VirtuosoMessage
         <>
             <div className="flex-1 flex items-center text-base font-bold">
                 <input
-                    onChange={(e) => onSetTitle(e.target.value)}
+                    onChange={onTitleChange}
                     key="titleInput"
                     className="text-center antialiased flex-1 outline-none bg-transparent truncate"
                     value={chatTitle ?? ''}
