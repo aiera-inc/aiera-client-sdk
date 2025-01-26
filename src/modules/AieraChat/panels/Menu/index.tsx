@@ -25,7 +25,7 @@ export function Menu({
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
 
     const filteredResults = sessions.filter(({ title }) =>
-        title.toLowerCase().includes(searchTerm?.toLowerCase() || '')
+        title ? title.toLowerCase().includes(searchTerm?.toLowerCase() || '') : false
     );
     return (
         <Panel Icon={MicroBars} className="mt-4 flex flex-col flex-1" onClose={onClose} title="All Chats" side="left">
@@ -43,10 +43,10 @@ export function Menu({
                             {!isLoading &&
                                 filteredResults.map(({ id, title }) => (
                                     <ContentRow
-                                        text={title}
+                                        text={title || ''}
                                         key={id}
                                         onClick={() => {
-                                            onSelectChat(id, title);
+                                            onSelectChat(id, title || '');
                                             onStartExit();
                                         }}
                                         onClickIcon={() => onClickIcon(id)}

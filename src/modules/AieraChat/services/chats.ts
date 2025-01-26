@@ -13,11 +13,11 @@ import {
 
 export interface ChatSession {
     id: string;
-    title: string;
+    title?: string | null;
 }
 
 interface UseChatSessionsReturn {
-    createSession: (title: string) => Promise<ChatSession | null>;
+    createSession: (title?: string, prompt?: string) => Promise<ChatSession | null>;
     deleteSession: (sessionId: number) => Promise<void>;
     error: string | null;
     isLoading: boolean;
@@ -41,8 +41,8 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         }
     `);
     const createSession = useCallback(
-        (title: string) => {
-            return createChatMutation({ input: { title } })
+        (title?: string, prompt?: string) => {
+            return createChatMutation({ input: { prompt, title } })
                 .then((resp) => {
                     const newSession = resp.data?.createChatSession?.chatSession as ChatSession;
                     if (newSession) {
@@ -58,7 +58,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     return null;
                 });
         },
-        [createChatMutation, setError, setIsLoading, setSessions]
+        [createChatMutation, setError, setSessions]
     );
 
     const [__, deleteChatMutation] = useMutation<DeleteChatSessionMutation, DeleteChatSessionMutationVariables>(gql`

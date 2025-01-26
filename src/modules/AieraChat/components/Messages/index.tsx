@@ -75,10 +75,12 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
 
 export function Messages({
     onOpenSources,
+    onSubmit,
     virtuosoRef,
 }: {
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
     onOpenSources: () => void;
+    onSubmit: (prompt: string) => Promise<void>;
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const { chatId, sources } = useChatStore();
     const { messages, isLoading } = useChatMessages(chatId);
@@ -204,108 +206,112 @@ export function Messages({
         }
     }, []);
 
-    const onSubmit = useCallback(
+    const handleSubmit = useCallback(
         (prompt: string) => {
-            const myMessage: ChatMessagePrompt = {
-                id: `${idCounter++}`,
-                ordinalId: `${idCounter++}`,
-                prompt,
-                type: ChatMessageType.PROMPT,
-                status: ChatMessageStatus.COMPLETED,
-                timestamp: '',
-            };
-            virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
-                return {
-                    index: 'LAST',
-                    align: 'end',
-                    behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                };
-            });
-
-            if (sources.length === 0) {
-                const newKey = `${idCounter++}`;
-                const sourceMessage: ChatMessageSources = {
-                    id: newKey,
-                    ordinalId: newKey,
-                    confirmed: false,
-                    sources: [],
-                    timestamp: '',
-                    prompt,
-                    status: ChatMessageStatus.PENDING,
-                    type: ChatMessageType.SOURCES,
-                };
-                virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
-                    return {
-                        index: 'LAST',
-                        align: 'end',
-                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+            onSubmit(prompt)
+                .then(() => {
+                    const myMessage: ChatMessagePrompt = {
+                        id: `${idCounter++}`,
+                        ordinalId: `${idCounter++}`,
+                        prompt,
+                        type: ChatMessageType.PROMPT,
+                        status: ChatMessageStatus.COMPLETED,
+                        timestamp: '',
                     };
-                });
-                setTimeout(() => {
-                    virtuosoRef.current?.data.map((message) => {
-                        if (message.ordinalId === newKey) {
-                            return {
-                                ...message,
-                                status: ChatMessageStatus.COMPLETED,
-                            };
-                        }
-
-                        return message;
+                    virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
+                        return {
+                            index: 'LAST',
+                            align: 'end',
+                            behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                        };
                     });
-                }, 2000);
-            } else {
-                const botMessage = randomMessage(prompt);
-                virtuosoRef.current?.data.append([botMessage]);
-                setTimeout(() => {
-                    let counter = 0;
-                    const interval = setInterval(() => {
-                        let status = ChatMessageStatus.STREAMING;
-                        if (counter++ > 45) {
-                            clearInterval(interval);
-                            status = ChatMessageStatus.COMPLETED;
-                        }
-                        virtuosoRef.current?.data.map(
-                            (message) => {
-                                if (isMatchingResponse(message, botMessage)) {
-                                    const firstBlock =
-                                        (message.blocks[0] as TextBlock) ||
-                                        ({
-                                            id: `${message.blocks.length}`,
-                                            type: BlockType.TEXT,
-                                            content: ['some text...'],
-                                            meta: { style: 'paragraph' },
-                                        } as TextBlock);
+
+                    if (sources.length === 0) {
+                        const newKey = `${idCounter++}`;
+                        const sourceMessage: ChatMessageSources = {
+                            id: newKey,
+                            ordinalId: newKey,
+                            confirmed: false,
+                            sources: [],
+                            timestamp: '',
+                            prompt,
+                            status: ChatMessageStatus.PENDING,
+                            type: ChatMessageType.SOURCES,
+                        };
+                        virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
+                            return {
+                                index: 'LAST',
+                                align: 'end',
+                                behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                            };
+                        });
+                        setTimeout(() => {
+                            virtuosoRef.current?.data.map((message) => {
+                                if (message.ordinalId === newKey) {
                                     return {
                                         ...message,
-                                        blocks: [
-                                            {
-                                                ...firstBlock,
-                                                content: [
-                                                    ...firstBlock.content,
-                                                    firstBlock.content.length % 7 === 0
-                                                        ? {
-                                                              id: '1',
-                                                              text: 'citation',
-                                                              source: 'source',
-                                                          }
-                                                        : 'some more text...',
-                                                ],
-                                            },
-                                        ],
-                                        status,
+                                        status: ChatMessageStatus.COMPLETED,
                                     };
                                 }
+
                                 return message;
-                            },
-                            {
-                                location() {
-                                    return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                                },
-                            }
-                        );
-                    }, 150);
-                }, 2000);
-            }
+                            });
+                        }, 2000);
+                    } else {
+                        const botMessage = randomMessage(prompt);
+                        virtuosoRef.current?.data.append([botMessage]);
+                        setTimeout(() => {
+                            let counter = 0;
+                            const interval = setInterval(() => {
+                                let status = ChatMessageStatus.STREAMING;
+                                if (counter++ > 45) {
+                                    clearInterval(interval);
+                                    status = ChatMessageStatus.COMPLETED;
+                                }
+                                virtuosoRef.current?.data.map(
+                                    (message) => {
+                                        if (isMatchingResponse(message, botMessage)) {
+                                            const firstBlock =
+                                                (message.blocks[0] as TextBlock) ||
+                                                ({
+                                                    id: `${message.blocks.length}`,
+                                                    type: BlockType.TEXT,
+                                                    content: ['some text...'],
+                                                    meta: { style: 'paragraph' },
+                                                } as TextBlock);
+                                            return {
+                                                ...message,
+                                                blocks: [
+                                                    {
+                                                        ...firstBlock,
+                                                        content: [
+                                                            ...firstBlock.content,
+                                                            firstBlock.content.length % 7 === 0
+                                                                ? {
+                                                                      id: '1',
+                                                                      text: 'citation',
+                                                                      source: 'source',
+                                                                  }
+                                                                : 'some more text...',
+                                                        ],
+                                                    },
+                                                ],
+                                                status,
+                                            };
+                                        }
+                                        return message;
+                                    },
+                                    {
+                                        location() {
+                                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                                        },
+                                    }
+                                );
+                            }, 150);
+                        }, 2000);
+                    }
+                })
+                .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
         },
         [chatId, sources]
     );
@@ -313,11 +319,11 @@ export function Messages({
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(
         () => ({
-            onSubmit,
+            onSubmit: handleSubmit,
             onReRun,
             onConfirm,
         }),
-        [onSubmit, onReRun, onConfirm]
+        [handleSubmit, onReRun, onConfirm]
     );
 
     const config = useConfig();
@@ -347,7 +353,7 @@ export function Messages({
                         />
                     </VirtuosoMessageListLicense>
                 )}
-                <Prompt onSubmit={onSubmit} onOpenSources={onOpenSources} />
+                <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} />
             </div>
         </div>
     );
