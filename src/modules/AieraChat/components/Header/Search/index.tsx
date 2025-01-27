@@ -1,9 +1,10 @@
+import classNames from 'classnames';
+import debounce from 'lodash.debounce';
+import React, { ChangeEvent, KeyboardEvent, RefObject, useCallback, useEffect, useState } from 'react';
+import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCircle';
 import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
-import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
-import classNames from 'classnames';
-import React, { ChangeEvent, KeyboardEvent, RefObject, useCallback, useEffect, useState } from 'react';
 import { useChatStore } from '../../../store';
 import { IconButton } from '../../IconButton';
 import { ChatMessage, ChatMessageType } from '../../../services/messages';
@@ -108,13 +109,12 @@ export function Search({
     const [matchIndex, setMatchIndex] = useState(1);
     const [_, setInFocus] = useState(false);
 
-    const handleTitleChange = useCallback(
-        (e: ChangeEvent<HTMLInputElement>) => {
-            const title = e.target.value;
-            onSetTitle(title);
+    // Debounce calling the mutation with each change
+    const debouncedTitleChange = useCallback(
+        debounce((title: string) => {
             onChangeTitle(title);
-        },
-        [onChangeTitle, onSetTitle]
+        }, 300),
+        [onChangeTitle]
     );
 
     const onCloseSearch = useCallback(() => {
@@ -272,7 +272,11 @@ export function Search({
         <>
             <div className="flex-1 flex items-center text-base font-bold">
                 <input
-                    onChange={handleTitleChange}
+                    onChange={(e) => {
+                        const title = e.target.value;
+                        onSetTitle(title);
+                        debouncedTitleChange(title);
+                    }}
                     key="titleInput"
                     className="text-center antialiased flex-1 outline-none bg-transparent truncate"
                     value={chatTitle ?? ''}
