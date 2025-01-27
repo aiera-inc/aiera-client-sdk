@@ -9,6 +9,8 @@ import {
     CreateChatSessionMutationVariables,
     DeleteChatSessionMutation,
     DeleteChatSessionMutationVariables,
+    UpdateChatSessionMutation,
+    UpdateChatSessionMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 
 export interface ChatSession {
@@ -18,11 +20,12 @@ export interface ChatSession {
 
 interface UseChatSessionsReturn {
     createSession: (title?: string, prompt?: string) => Promise<ChatSession | null>;
-    deleteSession: (sessionId: number) => Promise<void>;
+    deleteSession: (sessionId: string) => Promise<void>;
     error: string | null;
     isLoading: boolean;
     refresh: () => void;
     sessions: ChatSession[];
+    updateSession: (sessionId: string, title: string) => Promise<void>;
 }
 
 export const useChatSessions = (): UseChatSessionsReturn => {
@@ -62,19 +65,53 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     );
 
     const [__, deleteChatMutation] = useMutation<DeleteChatSessionMutation, DeleteChatSessionMutationVariables>(gql`
-        mutation DeleteChatSession($sessionId: Int!) {
+        mutation DeleteChatSession($sessionId: ID!) {
             deleteChatSession(sessionId: $sessionId) {
                 success
             }
         }
     `);
     const deleteSession = useCallback(
-        (sessionId: number) => {
+        (sessionId: string) => {
             return deleteChatMutation({ sessionId })
                 .then((resp) => {
                     if (resp.data?.deleteChatSession?.success) {
+                        setSessions((prevSessions) => prevSessions.filter((session) => session.id !== sessionId));
+                    } else {
+                        setError('Error deleting chat session');
+                    }
+                })
+                .catch(() => {
+                    setError('Error deleting chat session');
+                });
+        },
+        [deleteChatMutation, setError, setSessions]
+    );
+
+    const [___, updateChatMutation] = useMutation<UpdateChatSessionMutation, UpdateChatSessionMutationVariables>(gql`
+        mutation UpdateChatSession($input: UpdateChatSessionInput!) {
+            updateChatSession(input: $input) {
+                chatSession {
+                    id
+                    title
+                }
+            }
+        }
+    `);
+    const updateSession = useCallback(
+        (sessionId: string, title: string) => {
+            return updateChatMutation({ input: { sessionId, title } })
+                .then((resp) => {
+                    const updatedSession = resp.data?.updateChatSession as ChatSession;
+                    if (updatedSession) {
                         setSessions((prevSessions) =>
-                            prevSessions.filter((session) => session.id.toString() !== sessionId.toString())
+                            prevSessions.filter((session) => {
+                                if (session.id === sessionId) {
+                                    return { id: session.id, title: session.title };
+                                } else {
+                                    return session;
+                                }
+                            })
                         );
                     } else {
                         setError('Error deleting chat session');
@@ -84,7 +121,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     setError('Error deleting chat session');
                 });
         },
-        [deleteChatMutation, setError, setIsLoading, setSessions]
+        [deleteChatMutation, sessions, setError, setSessions]
     );
 
     const query = useQuery<ChatSessionsQuery, ChatSessionsQueryVariables>({
@@ -124,7 +161,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         } finally {
             setIsLoading(false);
         }
-    }, [query]);
+    }, [query, setError, setIsLoading, setSessions]);
 
     const refresh = () => {
         fetchSessions();
@@ -137,5 +174,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         isLoading,
         refresh,
         sessions,
+        updateSession,
     };
 };

@@ -6,16 +6,18 @@ import { IconButton } from '../IconButton';
 import { ChatMessage } from '../../services/messages';
 
 export function Header({
+    onChangeTitle,
     onOpenMenu,
     virtuosoRef,
 }: {
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
+    onChangeTitle: (title: string) => void;
     onOpenMenu: () => void;
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     return (
         <div className="flex items-center justify-between mx-4 mt-4">
             <IconButton hintText="All Chats" className="mr-2.5" Icon={MicroBars} onClick={onOpenMenu} />
-            <Search virtuosoRef={virtuosoRef} />
+            <Search onChangeTitle={onChangeTitle} virtuosoRef={virtuosoRef} />
         </div>
     );
 }

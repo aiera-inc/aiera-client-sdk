@@ -20,14 +20,14 @@ export function AieraChat(): ReactElement {
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
-    const { createSession, deleteSession, sessions, isLoading } = useChatSessions();
+    const { createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
 
     const handleDeleteConfirm = useCallback(
         (e: React.MouseEvent) => {
             e.preventDefault();
             if (deletedSessionId) {
-                deleteSession(Number(deletedSessionId))
+                deleteSession(deletedSessionId)
                     .then(() => {
                         setDeletedSessionId(null);
                         setShowConfirm(false);
@@ -46,6 +46,17 @@ export function AieraChat(): ReactElement {
                 }
             }),
         [chatId, chatTitle, createSession, onSelectChat]
+    );
+
+    const handleTitleChange = useCallback(
+        (title: string) => {
+            if (chatId !== 'new' && title) {
+                updateSession(chatId, title).catch((error: Error) =>
+                    console.log(`Error updating session title: ${error.message}`)
+                );
+            }
+        },
+        [chatId, updateSession]
     );
 
     const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
@@ -123,7 +134,7 @@ export function AieraChat(): ReactElement {
                     'aiera-chat'
                 )}
             >
-                <Header onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
+                <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
                 <Messages onOpenSources={onOpenSources} onSubmit={handleMessageSubmit} virtuosoRef={virtuosoRef} />
                 {showSources && <Sources onClose={onCloseSources} />}
                 {showMenu && (
