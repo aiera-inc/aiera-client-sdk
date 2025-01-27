@@ -117,6 +117,13 @@ export function Search({
         [onChangeTitle]
     );
 
+    // Cleanup the debounced function on component unmount
+    useEffect(() => {
+        return () => {
+            debouncedTitleChange.cancel();
+        };
+    }, [debouncedTitleChange]);
+
     const onCloseSearch = useCallback(() => {
         setShowSearch(false);
         onSetSearchTerm('');
