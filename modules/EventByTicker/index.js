@@ -84036,6 +84036,41 @@ var RealtimeCurrentUserDocument = lib_default`
   }
 }
     `;
+var CreateChatSessionDocument = lib_default`
+    mutation CreateChatSession($input: CreateChatSessionInput!) {
+  createChatSession(input: $input) {
+    chatSession {
+      id
+      title
+    }
+  }
+}
+    `;
+var DeleteChatSessionDocument = lib_default`
+    mutation DeleteChatSession($sessionId: ID!) {
+  deleteChatSession(sessionId: $sessionId) {
+    success
+  }
+}
+    `;
+var UpdateChatSessionDocument = lib_default`
+    mutation UpdateChatSession($input: UpdateChatSessionInput!) {
+  updateChatSession(input: $input) {
+    chatSession {
+      id
+      title
+    }
+  }
+}
+    `;
+var ChatSessionsDocument = lib_default`
+    query ChatSessions {
+  chatSessions {
+    id
+    title
+  }
+}
+    `;
 var EventsDocument = lib_default`
     query Events($filter: EventFilter, $view: EventView!) {
   events(filter: $filter, view: $view) {
@@ -88611,7 +88646,7 @@ function DownloadTooltipUI(props) {
       className: "text-sm"
     }, "Press PDF")))
   }, /* @__PURE__ */ import_react58.default.createElement("button", {
-    "data-testId": "downloadButton",
+    "data-testid": "downloadButton",
     className: (0, import_classnames31.default)("ml-3", "group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__download")
   }, /* @__PURE__ */ import_react58.default.createElement(Download, {
     className: "h-5 w-5 flex-shrink-0"

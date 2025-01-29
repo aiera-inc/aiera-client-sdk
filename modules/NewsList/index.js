@@ -41011,6 +41011,41 @@ var RealtimeCurrentUserDocument = lib_default`
   }
 }
     `;
+var CreateChatSessionDocument = lib_default`
+    mutation CreateChatSession($input: CreateChatSessionInput!) {
+  createChatSession(input: $input) {
+    chatSession {
+      id
+      title
+    }
+  }
+}
+    `;
+var DeleteChatSessionDocument = lib_default`
+    mutation DeleteChatSession($sessionId: ID!) {
+  deleteChatSession(sessionId: $sessionId) {
+    success
+  }
+}
+    `;
+var UpdateChatSessionDocument = lib_default`
+    mutation UpdateChatSession($input: UpdateChatSessionInput!) {
+  updateChatSession(input: $input) {
+    chatSession {
+      id
+      title
+    }
+  }
+}
+    `;
+var ChatSessionsDocument = lib_default`
+    query ChatSessions {
+  chatSessions {
+    id
+    title
+  }
+}
+    `;
 var EventsDocument = lib_default`
     query Events($filter: EventFilter, $view: EventView!) {
   events(filter: $filter, view: $view) {
