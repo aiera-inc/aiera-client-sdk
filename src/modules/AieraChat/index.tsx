@@ -16,7 +16,8 @@ export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    const { chatId, chatTitle, onSelectChat, onSelectSource, selectedSource } = useChatStore();
+    const { chatId, chatTitle, onSelectChat, onSelectSource, selectedSource, sources } = useChatStore();
+
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
@@ -40,12 +41,12 @@ export function AieraChat(): ReactElement {
 
     const handleMessageSubmit = useCallback(
         (prompt: string) =>
-            createSession(chatTitle || 'Untitled Chat', prompt).then((newSession) => {
+            createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' }).then((newSession) => {
                 if (newSession && newSession.id) {
                     onSelectChat(newSession.id, newSession.title || chatTitle);
                 }
             }),
-        [chatId, chatTitle, createSession, onSelectChat]
+        [chatId, chatTitle, createSession, onSelectChat, sources]
     );
 
     const handleTitleChange = useCallback(

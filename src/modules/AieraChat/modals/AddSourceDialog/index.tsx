@@ -119,6 +119,7 @@ export function AddSourceDialog({
                                                                     })
                                                               : () =>
                                                                     onAddSource({
+                                                                        confirmed: true,
                                                                         targetId: id,
                                                                         targetType: 'event',
                                                                         title,

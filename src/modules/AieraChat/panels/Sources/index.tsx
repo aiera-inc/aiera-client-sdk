@@ -108,6 +108,7 @@ export function Sources({ onClose }: { onClose: () => void }) {
                                                               ? () => onRemoveSource(id, 'event')
                                                               : () =>
                                                                     onAddSource({
+                                                                        confirmed: true,
                                                                         targetId: id,
                                                                         targetType: 'event',
                                                                         title,

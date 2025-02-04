@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 export interface Source {
+    confirmed?: boolean;
     targetId: string;
     targetType: string;
     title: string;
