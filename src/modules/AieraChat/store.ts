@@ -13,7 +13,7 @@ export interface ChatState {
     searchTerm?: string;
     selectedSource?: Source;
     sources: Source[];
-    onSelectChat: (chatId: string, chatTitle?: string) => void;
+    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) => void;
     onNewChat: () => void;
     onSetSearchTerm: (searchTerm?: string) => void;
     onSetTitle: (title?: string) => void;
@@ -29,7 +29,7 @@ export const useChatStore = create<ChatState>((set) => ({
     searchTerm: undefined,
     selectedSource: undefined,
     sources: [],
-    onSelectChat: (chatId: string, chatTitle?: string) => set({ chatId, chatTitle, sources: [] }),
+    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) => set({ chatId, chatTitle, sources }),
     onNewChat: () => set({ chatId: 'new', chatTitle: undefined, searchTerm: undefined, sources: [] }),
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),

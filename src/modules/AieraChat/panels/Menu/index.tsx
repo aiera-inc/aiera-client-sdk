@@ -41,12 +41,12 @@ export function Menu({
                     <div className="flex-1 flex flex-col relative">
                         <div className="absolute inset-0 overflow-y-auto py-4 flex flex-col flex-1">
                             {!isLoading &&
-                                filteredResults.map(({ id, title }) => (
+                                filteredResults.map(({ id, sources, title }) => (
                                     <ContentRow
                                         text={title || ''}
                                         key={id}
                                         onClick={() => {
-                                            onSelectChat(id, title || '');
+                                            onSelectChat(id, title || '', sources);
                                             onStartExit();
                                         }}
                                         onClickIcon={() => onClickIcon(id)}

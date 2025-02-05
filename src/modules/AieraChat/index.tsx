@@ -43,7 +43,7 @@ export function AieraChat(): ReactElement {
         (prompt: string) =>
             createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' }).then((newSession) => {
                 if (newSession && newSession.id) {
-                    onSelectChat(newSession.id, newSession.title || chatTitle);
+                    onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
                 }
             }),
         [chatId, chatTitle, createSession, onSelectChat, sources]
