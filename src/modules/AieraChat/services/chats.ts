@@ -4,8 +4,6 @@ import { useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import {
     ChatSession as ChatSessionType,
-    ChatSessionQuery,
-    ChatSessionQueryVariables,
     ChatSessionsQuery,
     ChatSessionsQueryVariables,
     ChatSessionStatus,
@@ -16,10 +14,11 @@ import {
     CreateChatSessionMutationVariables,
     DeleteChatSessionMutation,
     DeleteChatSessionMutationVariables,
+    UpdateChatSessionInput,
     UpdateChatSessionMutation,
     UpdateChatSessionMutationVariables,
 } from '@aiera/client-sdk/types/generated';
-import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
+import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 
 export interface ChatSession {
     createdAt: string;
@@ -38,10 +37,10 @@ interface UseChatSessionsReturn {
     isLoading: boolean;
     refresh: () => void;
     sessions: ChatSession[];
-    updateSession: (sessionId: string, title: string) => Promise<void>;
+    updateSession: (input: { sessionId: string; sources?: Source[]; title?: string }) => Promise<void>;
 }
 
-function mapSourcesToInput(sources?: Source[]): ChatSourceInput[] {
+function mapSourcesToInput(sources?: Source[] | null): ChatSourceInput[] {
     return (sources || []).map((source: Source) => ({
         confirmed: source.confirmed,
         sourceId: source.targetId,
@@ -74,7 +73,6 @@ function normalizeSession(session: ChatSessionType): ChatSession {
 }
 
 export const useChatSessions = (): UseChatSessionsReturn => {
-    const { chatId } = useChatStore();
     const [sessions, setSessions] = useState<ChatSession[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
@@ -152,42 +150,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
             updateChatSession(input: $input) {
                 chatSession {
                     id
-                    title
-                }
-            }
-        }
-    `);
-    const updateSession = useCallback(
-        (sessionId: string, title: string) => {
-            return updateChatMutation({ input: { sessionId, title } })
-                .then((resp) => {
-                    const updatedSession = resp.data?.updateChatSession as ChatSession;
-                    if (updatedSession) {
-                        setSessions((prevSessions) =>
-                            prevSessions.filter((session) => {
-                                if (session.id === sessionId) {
-                                    return { id: session.id, title: session.title };
-                                } else {
-                                    return session;
-                                }
-                            })
-                        );
-                    } else {
-                        setError('Error deleting chat session');
-                    }
-                })
-                .catch(() => {
-                    setError('Error deleting chat session');
-                });
-        },
-        [deleteChatMutation, sessions, setError, setSessions]
-    );
-
-    const chatSessionQuery = useQuery<ChatSessionQuery, ChatSessionQueryVariables>({
-        query: gql`
-            query ChatSession($filter: ChatSessionFilter!) {
-                chatSession(filter: $filter) {
-                    id
                     createdAt
                     sources {
                         id
@@ -202,20 +164,37 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     userId
                 }
             }
-        `,
-        requestPolicy: 'cache-and-network',
-        pause: !chatId || chatId === 'new',
-        variables:
-            chatId && chatId !== 'new'
-                ? {
-                      filter: {
-                          includeMessages: true,
-                          sessionId: chatId,
-                      },
-                  }
-                : undefined,
-    });
-    useEffect(() => console.log({ chatSessionQuery }), []); // TODO remove this
+        }
+    `);
+    const updateSession = useCallback(
+        ({ sessionId, sources, title }: { sessionId: string; sources?: Source[]; title?: string }) => {
+            const input: UpdateChatSessionInput = { sessionId };
+            // Allow nullifying the sources
+            if (sources !== undefined) {
+                input.sources = sources ? mapSourcesToInput(sources) : null;
+            }
+            if (title) {
+                input.title = title;
+            }
+            return updateChatMutation({ input })
+                .then((resp) => {
+                    const updatedSession = resp.data?.updateChatSession.chatSession;
+                    if (updatedSession) {
+                        setSessions((prevSessions) =>
+                            prevSessions.map((session) =>
+                                session.id === sessionId ? normalizeSession(updatedSession) : session
+                            )
+                        );
+                    } else {
+                        setError('Error updating chat session');
+                    }
+                })
+                .catch(() => {
+                    setError('Error updating chat session');
+                });
+        },
+        [updateChatMutation, setError, setSessions]
+    );
 
     const chatSessionsQuery = useQuery<ChatSessionsQuery, ChatSessionsQueryVariables>({
         query: gql`

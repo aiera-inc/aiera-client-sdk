@@ -40,19 +40,30 @@ export function AieraChat(): ReactElement {
     );
 
     const handleMessageSubmit = useCallback(
-        (prompt: string) =>
-            createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' }).then((newSession) => {
-                if (newSession && newSession.id) {
-                    onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
-                }
-            }),
+        (prompt: string) => {
+            if (chatId && chatId !== 'new') {
+                // TODO replace with createChatMessagePrompt
+                // return createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' }).then((newSession) => {
+                //     if (newSession && newSession.id) {
+                //         onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
+                //     }
+                // });
+                return Promise.resolve();
+            } else {
+                return createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' }).then((newSession) => {
+                    if (newSession && newSession.id) {
+                        onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
+                    }
+                });
+            }
+        },
         [chatId, chatTitle, createSession, onSelectChat, sources]
     );
 
     const handleTitleChange = useCallback(
         (title: string) => {
             if (chatId !== 'new' && title) {
-                updateSession(chatId, title).catch((error: Error) =>
+                updateSession({ sessionId: chatId, sources, title }).catch((error: Error) =>
                     console.log(`Error updating session title: ${error.message}`)
                 );
             }
