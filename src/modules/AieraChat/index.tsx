@@ -94,8 +94,15 @@ export function AieraChat(): ReactElement {
     }, []);
 
     const onCloseSources = useCallback(() => {
-        setShowSources(false);
-    }, []);
+        if (chatId !== 'new' && sources) {
+            updateSession({ sessionId: chatId, sources })
+                .then(() => setShowSources(false))
+                .catch((error: Error) => {
+                    console.log(`Error updating session sources: ${error.message}`);
+                    setShowSources(false);
+                });
+        }
+    }, [sources, updateSession]);
 
     const onOpenConfirm = useCallback((sessionId: string) => {
         setDeletedSessionId(sessionId);
