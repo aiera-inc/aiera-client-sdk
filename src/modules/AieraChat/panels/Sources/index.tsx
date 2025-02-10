@@ -28,8 +28,14 @@ export const hasSource = (
     return sources.some((existingSource) => matchFields.every((field) => existingSource[field] === source[field]));
 };
 
-export function Sources({ onClose }: { onClose: () => void }) {
-    const { onRemoveSource, sources, onSelectSource, onAddSource, onClearSources } = useChatStore();
+export function Sources({ onClearSources, onClose }: { onClearSources: () => void; onClose: () => void }) {
+    const {
+        onRemoveSource,
+        sources,
+        onSelectSource,
+        onAddSource,
+        onClearSources: onClearStoreSources,
+    } = useChatStore();
     // Separate state for immediate UI updates
     const [inputValue, setInputValue] = useState<string>('');
     // State that will be debounced before being used in queries
@@ -163,7 +169,10 @@ export function Sources({ onClose }: { onClose: () => void }) {
                             <>
                                 <div className="flex-1" />
                                 <div
-                                    onClick={onClearSources}
+                                    onClick={() => {
+                                        onClearStoreSources();
+                                        onClearSources();
+                                    }}
                                     className="flex cursor-pointer items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800 hover:bg-rose-200"
                                 >
                                     <MicroCloseCircle className="flex-shrink-0 w-4 mr-2" />

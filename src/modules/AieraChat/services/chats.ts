@@ -10,6 +10,8 @@ import {
     ChatSource,
     ChatSourceInput,
     ChatSourceType,
+    ClearChatSessionSourcesMutation,
+    ClearChatSessionSourcesMutationVariables,
     CreateChatSessionMutation,
     CreateChatSessionMutationVariables,
     DeleteChatSessionMutation,
@@ -31,6 +33,7 @@ export interface ChatSession {
 }
 
 interface UseChatSessionsReturn {
+    clearSources: (sessionId: string) => Promise<void>;
     createSession: (input: { prompt?: string; sources?: Source[]; title?: string }) => Promise<ChatSession | null>;
     deleteSession: (sessionId: string) => Promise<void>;
     error: string | null;
@@ -77,7 +80,51 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const [_, createChatMutation] = useMutation<CreateChatSessionMutation, CreateChatSessionMutationVariables>(gql`
+    const [_, clearSourcesChatMutation] = useMutation<
+        ClearChatSessionSourcesMutation,
+        ClearChatSessionSourcesMutationVariables
+    >(gql`
+        mutation ClearChatSessionSources($sessionId: ID!) {
+            clearChatSessionSources(sessionId: $sessionId) {
+                success
+            }
+        }
+    `);
+    const clearSources = useCallback(
+        (sessionId: string) => {
+            return clearSourcesChatMutation({ sessionId })
+                .then((resp) => {
+                    if (resp.data?.clearChatSessionSources?.success) {
+                        setSessions((prevSessions) => {
+                            const indexToUpdate = prevSessions.findIndex((s) => s.id === sessionId);
+                            if (indexToUpdate) {
+                                const updatedSession = prevSessions[indexToUpdate];
+                                if (updatedSession) {
+                                    const normalizedSession = normalizeSession({
+                                        ...updatedSession,
+                                        sources: undefined,
+                                    });
+                                    return [
+                                        ...prevSessions.slice(0, indexToUpdate),
+                                        normalizedSession,
+                                        ...prevSessions.slice(indexToUpdate + 1),
+                                    ];
+                                }
+                            }
+                            return prevSessions;
+                        });
+                    } else {
+                        setError('Error clearing sources for chat session');
+                    }
+                })
+                .catch(() => {
+                    setError('Error clearing sources for chat session');
+                });
+        },
+        [clearSourcesChatMutation, setError, setSessions]
+    );
+
+    const [__, createChatMutation] = useMutation<CreateChatSessionMutation, CreateChatSessionMutationVariables>(gql`
         mutation CreateChatSession($input: CreateChatSessionInput!) {
             createChatSession(input: $input) {
                 chatSession {
@@ -121,7 +168,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         [createChatMutation, setError, setSessions]
     );
 
-    const [__, deleteChatMutation] = useMutation<DeleteChatSessionMutation, DeleteChatSessionMutationVariables>(gql`
+    const [___, deleteChatMutation] = useMutation<DeleteChatSessionMutation, DeleteChatSessionMutationVariables>(gql`
         mutation DeleteChatSession($sessionId: ID!) {
             deleteChatSession(sessionId: $sessionId) {
                 success
@@ -145,7 +192,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         [deleteChatMutation, setError, setSessions]
     );
 
-    const [___, updateChatMutation] = useMutation<UpdateChatSessionMutation, UpdateChatSessionMutationVariables>(gql`
+    const [____, updateChatMutation] = useMutation<UpdateChatSessionMutation, UpdateChatSessionMutationVariables>(gql`
         mutation UpdateChatSession($input: UpdateChatSessionInput!) {
             updateChatSession(input: $input) {
                 chatSession {
@@ -256,6 +303,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     };
 
     return {
+        clearSources,
         createSession,
         deleteSession,
         error,

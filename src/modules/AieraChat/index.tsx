@@ -21,8 +21,16 @@ export function AieraChat(): ReactElement {
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
-    const { createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
+    const { clearSources, createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
+
+    const handleClearSources = useCallback(() => {
+        if (chatId !== 'new') {
+            clearSources(chatId).catch((error: Error) =>
+                console.log(`Error clearing sources for session: ${error.message}`)
+            );
+        }
+    }, [chatId, clearSources]);
 
     const handleDeleteConfirm = useCallback(
         (e: React.MouseEvent) => {
@@ -63,7 +71,7 @@ export function AieraChat(): ReactElement {
     const handleTitleChange = useCallback(
         (title: string) => {
             if (chatId !== 'new' && title) {
-                updateSession({ sessionId: chatId, sources, title }).catch((error: Error) =>
+                updateSession({ sessionId: chatId, title }).catch((error: Error) =>
                     console.log(`Error updating session title: ${error.message}`)
                 );
             }
@@ -148,7 +156,7 @@ export function AieraChat(): ReactElement {
             >
                 <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
                 <Messages onOpenSources={onOpenSources} onSubmit={handleMessageSubmit} virtuosoRef={virtuosoRef} />
-                {showSources && <Sources onClose={onCloseSources} />}
+                {showSources && <Sources onClearSources={handleClearSources} onClose={onCloseSources} />}
                 {showMenu && (
                     <Menu isLoading={isLoading} onClickIcon={onOpenConfirm} onClose={onCloseMenu} sessions={sessions} />
                 )}
