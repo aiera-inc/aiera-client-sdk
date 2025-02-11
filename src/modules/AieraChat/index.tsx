@@ -16,7 +16,8 @@ export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    const { chatId, chatTitle, onSelectChat, onSelectSource, selectedSource, sources } = useChatStore();
+    const { chatId, chatTitle, hasChanges, onSelectChat, onSelectSource, selectedSource, setHasChanges, sources } =
+        useChatStore();
 
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
@@ -94,15 +95,24 @@ export function AieraChat(): ReactElement {
     }, []);
 
     const onCloseSources = useCallback(() => {
-        if (chatId !== 'new' && sources) {
+        if (hasChanges && chatId !== 'new' && sources) {
             updateSession({ sessionId: chatId, sources })
-                .then(() => setShowSources(false))
+                .then(() => {
+                    setHasChanges(false);
+                    setShowSources(false);
+                })
                 .catch((error: Error) => {
                     console.log(`Error updating session sources: ${error.message}`);
+                    setHasChanges(false);
                     setShowSources(false);
                 });
+        } else {
+            if (hasChanges) {
+                setHasChanges(false);
+            }
+            setShowSources(false);
         }
-    }, [sources, updateSession]);
+    }, [hasChanges, setHasChanges, sources, updateSession]);
 
     const onOpenConfirm = useCallback((sessionId: string) => {
         setDeletedSessionId(sessionId);

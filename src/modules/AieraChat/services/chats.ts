@@ -71,7 +71,7 @@ function normalizeSession(session: ChatSessionType): ChatSession {
     return {
         ...session,
         sources: normalizeSources(session.sources || []),
-        title: session.title || null,
+        title: session.title || 'Untitled Chat',
     };
 }
 
