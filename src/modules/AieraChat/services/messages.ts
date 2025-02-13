@@ -1,4 +1,12 @@
+import gql from 'graphql-tag';
 import { useState, useEffect, useCallback } from 'react';
+import { useMutation } from 'urql';
+// import { useQuery } from '@aiera/client-sdk/api/client';
+import {
+    ChatMessagePrompt as ChatMessagePromptType,
+    CreateChatMessagePromptMutation,
+    CreateChatMessagePromptMutationVariables,
+} from '@aiera/client-sdk/types/generated';
 import { ContentBlock } from '../components/Messages/MessageFactory/Block';
 
 export enum ChatMessageType {
@@ -32,7 +40,7 @@ export enum ChatMessageStatus {
 
 export interface ChatMessageBase {
     id: string;
-    ordinalId: string;
+    ordinalId?: string | null;
     timestamp: string;
     status: ChatMessageStatus;
     prompt: string;
@@ -58,6 +66,7 @@ export interface ChatMessageSources extends ChatMessageBase {
 export type ChatMessage = ChatMessageResponse | ChatMessagePrompt | ChatMessageSources;
 
 interface UseChatMessagesReturn {
+    createChatMessagePrompt: ({ content, sessionId }: { content: string; sessionId: string }) => void;
     messages: ChatMessage[];
     isLoading: boolean;
     error: string | null;
@@ -344,6 +353,17 @@ const sampleMessages = [
     },
 ];
 
+function normalizeChatMessagePrompt(rawMessage: ChatMessagePromptType): ChatMessagePrompt {
+    return {
+        id: rawMessage.id,
+        ordinalId: rawMessage.ordinalId,
+        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
+        status: ChatMessageStatus.COMPLETED,
+        timestamp: rawMessage.createdAt,
+        type: ChatMessageType.PROMPT,
+    };
+}
+
 const fetchChatMessages = async (_: string): Promise<ChatMessage[]> => {
     await new Promise((resolve) => setTimeout(resolve, 800));
     return sampleMessages as ChatMessage[];
@@ -353,6 +373,49 @@ export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    const [_, createChatMessagePromptMutation] = useMutation<
+        CreateChatMessagePromptMutation,
+        CreateChatMessagePromptMutationVariables
+    >(gql`
+        mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
+            createChatMessagePrompt(input: $input) {
+                chatMessage {
+                    id
+                    content
+                    createdAt
+                    messageType
+                    ordinalId
+                    runnerVersion
+                    sessionId
+                    updatedAt
+                    userId
+                }
+            }
+        }
+    `);
+    const createChatMessagePrompt = useCallback(
+        ({ content, sessionId }: { content: string; sessionId: string }) => {
+            return createChatMessagePromptMutation({ input: { content, sessionId } })
+                .then((resp) => {
+                    const newMessage = resp.data?.createChatMessagePrompt?.chatMessage as ChatMessagePromptType;
+                    if (newMessage) {
+                        // Ensure we normalize the session before adding it to state and returning
+                        const normalizedMessage = normalizeChatMessagePrompt(newMessage);
+                        setMessages((prevMessages) => [...prevMessages, normalizedMessage]);
+                        return normalizedMessage;
+                    } else {
+                        setError('Error creating chat message prompt');
+                    }
+                    return null;
+                })
+                .catch(() => {
+                    setError('Error creating chat message prompt');
+                    return null;
+                });
+        },
+        [createChatMessagePromptMutation, setError, setMessages]
+    );
 
     const fetchMessages = useCallback(async () => {
         try {
@@ -382,9 +445,10 @@ export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn
     };
 
     return {
-        messages,
-        isLoading,
+        createChatMessagePrompt,
         error,
+        isLoading,
+        messages,
         refresh,
     };
 };

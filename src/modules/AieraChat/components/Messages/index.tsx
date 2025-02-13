@@ -341,7 +341,7 @@ export function Messages({
                             key={chatId || 'new'}
                             ref={virtuosoRef}
                             style={{ flex: 1 }}
-                            computeItemKey={({ data }: { data: ChatMessage }) => data.ordinalId}
+                            computeItemKey={({ data }: { data: ChatMessage }) => data.id}
                             className="px-4 messagesScrollBars"
                             initialLocation={{ index: 'LAST', align: 'end' }}
                             initialData={messages}

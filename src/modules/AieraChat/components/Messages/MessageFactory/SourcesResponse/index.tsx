@@ -94,7 +94,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                         kind="primary"
                         className="px-5"
                         onClick={() => {
-                            onConfirm(data.ordinalId);
+                            onConfirm(data.id);
                             onAddSource(localSources);
                         }}
                     >
