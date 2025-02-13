@@ -143,8 +143,8 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     const [channelSubscribed, setChannelSubscribed] = useState(false);
 
     const [, createAblyTokenMutationFn] = useMutation<CreateAblyTokenMutation>(gql`
-        mutation CreateAblyToken($input: CreateAblyInput!) {
-            createAblyToken(input: $input) {
+        mutation CreateAblyToken($sessionId: ID!) {
+            createAblyToken(sessionId: $sessionId) {
                 data {
                     keyName
                     clientId
@@ -162,7 +162,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         async (tokenParams: TokenParamsData, callback: Callback) => {
             try {
                 const response = await createAblyTokenMutationFn({
-                    input: { sessionId: tokenParams.sessionId },
+                    sessionId: tokenParams.sessionId,
                 });
 
                 const tokenData = response.data?.createAblyToken?.data;
