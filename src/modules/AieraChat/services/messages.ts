@@ -1,13 +1,44 @@
 import gql from 'graphql-tag';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'urql';
-// import { useQuery } from '@aiera/client-sdk/api/client';
+import { useQuery } from '@aiera/client-sdk/api/client';
 import {
+    BaseBlock,
+    ChartBlock,
+    ChartBlockMeta,
+    ChartData,
+    ChartType as ChartTypeEnum,
     ChatMessagePrompt as ChatMessagePromptType,
+    ChatMessageResponse as ChatMessageResponseType,
+    ChatMessageSourceConfirmation as ChatMessageSourceConfirmationType,
+    ChatMessageType as ChatMessageTypeEnum,
+    ChatSessionWithMessagesQuery,
+    ChatSessionWithMessagesQueryVariables,
+    ChatSource,
+    Citation as RawCitation,
+    ContentBlockType,
     CreateChatMessagePromptMutation,
     CreateChatMessagePromptMutationVariables,
+    ImageBlock,
+    ListBlock,
+    QuoteBlock,
+    TableBlock,
+    TableCellMeta,
+    TextBlock,
+    TextContent,
 } from '@aiera/client-sdk/types/generated';
-import { ContentBlock } from '../components/Messages/MessageFactory/Block';
+import {
+    BlockType,
+    CitableContent,
+    Citation,
+    ContentBlock,
+} from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import {
+    ChartMeta,
+    ChartSeries,
+    ChartType,
+} from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart';
+import { CellMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Table';
 
 export enum ChatMessageType {
     PROMPT = 'prompt',
@@ -16,9 +47,9 @@ export enum ChatMessageType {
 }
 
 interface ChatMessageSource {
-    targetType: string;
     targetId: string;
     targetTitle: string;
+    targetType: string;
 }
 
 export enum ChatMessageStatus {
@@ -353,15 +384,306 @@ const sampleMessages = [
     },
 ];
 
-function normalizeChatMessagePrompt(rawMessage: ChatMessagePromptType): ChatMessagePrompt {
+function normalizeChartMeta(meta: ChartBlockMeta): ChartMeta {
+    const properties = meta.properties as Record<string, unknown>;
+    const baseMeta = {
+        title: typeof properties?.title === 'string' ? properties.title : undefined,
+        xAxis: typeof properties?.xAxis === 'string' ? properties.xAxis : undefined,
+        yAxis: typeof properties?.yAxis === 'string' ? properties.yAxis : undefined,
+    };
+    switch (meta.chartType) {
+        case ChartTypeEnum.Area:
+            return {
+                ...baseMeta,
+                chartType: ChartType.AREA,
+                series: Array.isArray(properties?.series)
+                    ? properties.series.map((s: ChartSeries) => ({
+                          key: s.key,
+                          label: s.label,
+                          color: s.color,
+                      }))
+                    : [],
+                stackedSeries: typeof properties?.stackedSeries === 'boolean' ? properties.stackedSeries : false,
+            };
+
+        case ChartTypeEnum.Bar:
+            return {
+                ...baseMeta,
+                chartType: ChartType.BAR,
+                series: Array.isArray(properties?.series)
+                    ? properties.series.map((s: ChartSeries) => ({
+                          key: s.key,
+                          label: s.label,
+                          color: s.color,
+                      }))
+                    : [],
+                stackedBars: typeof properties?.stackedBars === 'boolean' ? properties.stackedBars : false,
+            };
+
+        case ChartTypeEnum.Line:
+            return {
+                ...baseMeta,
+                chartType: ChartType.LINE,
+                series: Array.isArray(properties?.series)
+                    ? properties.series.map((s: ChartSeries) => ({
+                          key: s.key,
+                          label: s.label,
+                          color: s.color,
+                      }))
+                    : [],
+            };
+
+        case ChartTypeEnum.Pie:
+            return {
+                ...baseMeta,
+                chartType: ChartType.PIE,
+                colors: Array.isArray(properties?.colors) ? properties.colors : [],
+                nameKey: typeof properties?.nameKey === 'string' ? properties.nameKey : '',
+                valueKey: typeof properties?.valueKey === 'string' ? properties.valueKey : '',
+            };
+
+        case ChartTypeEnum.Scatter:
+            return {
+                ...baseMeta,
+                chartType: ChartType.SCATTER,
+                colors: Array.isArray(properties?.colors) ? properties.colors : [],
+                nameKey: typeof properties?.nameKey === 'string' ? properties.nameKey : '',
+                sizeKey: typeof properties?.sizeKey === 'string' ? properties.sizeKey : undefined,
+                xKey: typeof properties?.xKey === 'string' ? properties.xKey : '',
+                yKey: typeof properties?.yKey === 'string' ? properties.yKey : '',
+            };
+
+        case ChartTypeEnum.Treemap:
+            return {
+                ...baseMeta,
+                chartType: ChartType.TREEMAP,
+                colors: Array.isArray(properties?.colors) ? properties.colors : [],
+                nameKey: typeof properties?.nameKey === 'string' ? properties.nameKey : '',
+                valueKey: typeof properties?.valueKey === 'string' ? properties.valueKey : '',
+            };
+
+        default:
+            throw new Error('Unknown chart type');
+    }
+}
+
+// Redeclare types to avoid name conflicts, but retain all the type definitions
+type RawCitableContent = RawCitation | TextContent;
+type RawTableCellMeta = TableCellMeta;
+
+function isNonNullable<T>(value: T): value is NonNullable<T> {
+    return value !== null && value !== undefined;
+}
+
+function normalizeCitableContent(rawContent: RawCitableContent[]): CitableContent {
+    return rawContent.map((content): string | Citation => {
+        if (content.__typename === 'TextContent') {
+            return content.value;
+        }
+        if (content.__typename === 'Citation') {
+            return {
+                author: content.author as string,
+                date: content.date as string,
+                id: content.id,
+                source: content.source,
+                text: content.quote,
+                url: content.url as string,
+            };
+        }
+        throw new Error('Unknown citable content type');
+    });
+}
+
+function normalizeSources(sources: ChatSource[] | undefined): ChatMessageSource[] {
+    if (!sources || !Array.isArray(sources)) {
+        return [];
+    }
+
+    return sources
+        .filter((s: ChatSource) => s)
+        .map(
+            (source): ChatMessageSource => ({
+                targetId: source.sourceId,
+                targetTitle: source.sourceName,
+                targetType: source.sourceType,
+            })
+        );
+}
+
+function normalizeTableCellMeta(rawMeta: RawTableCellMeta): CellMeta | undefined {
+    if (!rawMeta) {
+        return undefined;
+    }
+
     return {
+        ...(rawMeta.currency ? { currency: rawMeta.currency } : {}),
+        ...(rawMeta.unit ? { unit: rawMeta.unit } : {}),
+        ...(rawMeta.format ? { format: rawMeta.format.toLowerCase() as CellMeta['format'] } : {}),
+        ...(rawMeta.decimals ? { decimals: rawMeta.decimals } : {}),
+    };
+}
+
+function normalizeTableMeta(rawColumnMeta: RawTableCellMeta | undefined): CellMeta[] | undefined {
+    // Early return if the input is null/undefined
+    if (!rawColumnMeta || !Array.isArray(rawColumnMeta)) {
+        return undefined;
+    }
+
+    // Filter out nulls and undefined values with type assertion
+    const validRawMeta = rawColumnMeta.filter(isNonNullable).filter((meta: RawTableCellMeta) => {
+        return meta.__typename === 'TableCellMeta';
+    });
+
+    // If we have no valid metadata, return undefined
+    if (validRawMeta.length === 0) {
+        return undefined;
+    }
+
+    // Process each valid metadata item
+    const normalizedMeta = validRawMeta
+        .map((meta) => normalizeTableCellMeta(meta as RawTableCellMeta))
+        .filter(isNonNullable);
+
+    // Return undefined if we end up with an empty array
+    return normalizedMeta.length > 0 ? normalizedMeta : undefined;
+}
+
+function normalizeContentBlock(rawBlock: BaseBlock): ContentBlock {
+    switch (rawBlock.type) {
+        case ContentBlockType.Chart: {
+            const block = rawBlock as ChartBlock;
+            return {
+                data: (block.data ?? []).map((d: ChartData) => ({
+                    name: d.name,
+                    value: d.value,
+                    ...(d.properties as object),
+                })),
+                id: block.id,
+                meta: normalizeChartMeta(block.meta),
+                type: BlockType.CHART,
+            };
+        }
+
+        case ContentBlockType.Image: {
+            const block = rawBlock as ImageBlock;
+            return {
+                id: block.id,
+                meta: {
+                    altText: block.meta.altText ?? '',
+                    date: (block.meta.date as string) ?? '',
+                    source: block.meta.source ?? '',
+                    title: block.meta.title,
+                },
+                type: BlockType.IMAGE,
+                url: block.url,
+            };
+        }
+
+        case ContentBlockType.List: {
+            const block = rawBlock as ListBlock;
+            return {
+                id: block.id,
+                items: block.items.map(normalizeContentBlock), // TODO add support for ListItemText
+                meta: {
+                    style: block.meta.style,
+                },
+                type: BlockType.LIST,
+            };
+        }
+
+        case ContentBlockType.Quote: {
+            const block = rawBlock as QuoteBlock;
+            return {
+                content: block.content,
+                id: block.id,
+                meta: {
+                    author: block.meta.author,
+                    source: block.meta.source,
+                    date: block.meta.date as string,
+                    url: block.meta.url ?? '',
+                },
+                type: BlockType.QUOTE,
+            };
+        }
+
+        case ContentBlockType.Table: {
+            const block = rawBlock as TableBlock;
+            return {
+                headers: block.headers,
+                id: block.id,
+                rows: [block.rows.map(normalizeCitableContent)],
+                meta: {
+                    columnAlignment: block.meta.columnAlignment,
+                    columnMeta: normalizeTableMeta(block.meta.columnMeta as RawTableCellMeta),
+                },
+                type: BlockType.TABLE,
+            };
+        }
+
+        case ContentBlockType.Text: {
+            const block = rawBlock as TextBlock;
+            return {
+                content: normalizeCitableContent([block.content]),
+                id: block.id,
+                meta: {
+                    style: block.meta.style,
+                },
+                type: BlockType.TEXT,
+            };
+        }
+
+        default: {
+            throw new Error('Unhandled content block type');
+        }
+    }
+}
+
+function normalizeChatMessage(
+    rawMessage: ChatMessagePromptType | ChatMessageResponseType | ChatMessageSourceConfirmationType
+): ChatMessage {
+    const baseMessage = {
         id: rawMessage.id,
         ordinalId: rawMessage.ordinalId,
-        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
-        status: ChatMessageStatus.COMPLETED,
         timestamp: rawMessage.createdAt,
-        type: ChatMessageType.PROMPT,
+        status: ChatMessageStatus.COMPLETED,
     };
+
+    switch (rawMessage.messageType) {
+        case ChatMessageTypeEnum.Prompt: {
+            const promptMessage = rawMessage as ChatMessagePromptType;
+            return {
+                ...baseMessage,
+                type: ChatMessageType.PROMPT,
+                prompt: promptMessage.content,
+            };
+        }
+
+        case ChatMessageTypeEnum.Response: {
+            const responseMessage = rawMessage as ChatMessageResponseType;
+            return {
+                ...baseMessage,
+                type: ChatMessageType.RESPONSE,
+                prompt: '', // Response messages don't have a prompt
+                blocks: (responseMessage.blocks ?? []).map(normalizeContentBlock),
+                sources: normalizeSources(responseMessage.sources as ChatSource[]),
+            };
+        }
+
+        case ChatMessageTypeEnum.SourceConfirmation: {
+            const sourceMessage = rawMessage as ChatMessageSourceConfirmationType;
+            return {
+                ...baseMessage,
+                type: ChatMessageType.SOURCES,
+                prompt: '',
+                confirmed: false,
+                sources: normalizeSources(sourceMessage.sources as ChatSource[]),
+            };
+        }
+
+        default: {
+            throw new Error('Unknown message type');
+        }
+    }
 }
 
 const fetchChatMessages = async (_: string): Promise<ChatMessage[]> => {
@@ -369,7 +691,7 @@ const fetchChatMessages = async (_: string): Promise<ChatMessage[]> => {
     return sampleMessages as ChatMessage[];
 };
 
-export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn => {
+export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -398,10 +720,10 @@ export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn
         ({ content, sessionId }: { content: string; sessionId: string }) => {
             return createChatMessagePromptMutation({ input: { content, sessionId } })
                 .then((resp) => {
-                    const newMessage = resp.data?.createChatMessagePrompt?.chatMessage as ChatMessagePromptType;
+                    const newMessage = resp.data?.createChatMessagePrompt?.chatMessage;
                     if (newMessage) {
-                        // Ensure we normalize the session before adding it to state and returning
-                        const normalizedMessage = normalizeChatMessagePrompt(newMessage);
+                        // Normalize the message before updating state
+                        const normalizedMessage = normalizeChatMessage(newMessage);
                         setMessages((prevMessages) => [...prevMessages, normalizedMessage]);
                         return normalizedMessage;
                     } else {
@@ -416,6 +738,142 @@ export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn
         },
         [createChatMessagePromptMutation, setError, setMessages]
     );
+
+    const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
+        query: gql`
+            query ChatSessionWithMessages($filter: ChatSessionFilter!) {
+                chatSession(filter: $filter) {
+                    id
+                    messages {
+                        ... on ChatMessagePrompt {
+                            id
+                            createdAt
+                            messageType
+                            ordinalId
+                            runnerVersion
+                            sessionId
+                            updatedAt
+                            userId
+                            content
+                        }
+                        ... on ChatMessageResponse {
+                            id
+                            createdAt
+                            messageType
+                            ordinalId
+                            runnerVersion
+                            sessionId
+                            updatedAt
+                            userId
+                            blocks {
+                                ... on TextBlock {
+                                    id
+                                    type
+                                    textContent: content {
+                                        ... on Citation {
+                                            id
+                                            author
+                                            contentId
+                                            contentType
+                                            date
+                                            quote
+                                            source
+                                            url
+                                        }
+                                        ... on TextContent {
+                                            value
+                                        }
+                                    }
+                                    textMeta: meta {
+                                        style
+                                    }
+                                }
+                                ... on ListBlock {
+                                    id
+                                    type
+                                    items {
+                                        ... on TextBlock {
+                                            id
+                                            type
+                                            content {
+                                                ... on Citation {
+                                                    id
+                                                    author
+                                                    contentId
+                                                    contentType
+                                                    date
+                                                    quote
+                                                    source
+                                                    url
+                                                }
+                                                ... on TextContent {
+                                                    value
+                                                }
+                                            }
+                                        }
+                                    }
+                                    listMeta: meta {
+                                        style
+                                    }
+                                }
+                                ... on QuoteBlock {
+                                    id
+                                    type
+                                    quoteContent: content
+                                    quoteMeta: meta {
+                                        author
+                                        date
+                                        source
+                                        url
+                                    }
+                                }
+                            }
+                        }
+                        ... on ChatMessageSourceConfirmation {
+                            id
+                            createdAt
+                            messageType
+                            ordinalId
+                            runnerVersion
+                            sessionId
+                            updatedAt
+                            userId
+                            sources {
+                                id
+                                confirmed
+                                sourceId
+                                sourceName
+                                sourceType
+                            }
+                        }
+                    }
+                }
+            }
+        `,
+        pause: !sessionId,
+        requestPolicy: 'cache-and-network',
+        variables: {
+            filter: { includeMessages: true, sessionId },
+        },
+    });
+
+    // Update state based on query status
+    useEffect(() => {
+        if (messagesQuery.status === 'success' && messagesQuery.data.chatSession?.messages) {
+            // Normalize the message before updating state
+            const rawMessages = messagesQuery.data.chatSession.messages as Array<
+                ChatMessagePromptType | ChatMessageResponseType | ChatMessageSourceConfirmationType
+            >;
+            setMessages(rawMessages.map(normalizeChatMessage));
+        } else if (messagesQuery.status === 'error') {
+            setError(messagesQuery.error.message);
+        }
+        if (!isLoading && messagesQuery.status === 'loading') {
+            setIsLoading(true);
+        } else if (isLoading && messagesQuery.status !== 'loading') {
+            setIsLoading(false);
+        }
+    }, [isLoading, sessionId, setIsLoading, setMessages]);
 
     const fetchMessages = useCallback(async () => {
         try {
@@ -435,10 +893,6 @@ export const useChatMessages = (sessionId: string | null): UseChatMessagesReturn
             setIsLoading(false);
         }
     }, [sessionId]);
-
-    useEffect(() => {
-        void fetchMessages();
-    }, [sessionId, fetchMessages]);
 
     const refresh = async () => {
         await fetchMessages();

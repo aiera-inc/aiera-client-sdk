@@ -4,7 +4,7 @@ import { Citation } from '../../Citation';
 import { SearchableText } from '../../SearchableText';
 
 // Table cell metadata
-interface CellMeta {
+export interface CellMeta {
     currency?: string;
     unit?: string;
     format?: 'number' | 'percentage' | 'date';

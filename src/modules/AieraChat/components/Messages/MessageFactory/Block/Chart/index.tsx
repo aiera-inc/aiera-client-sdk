@@ -40,7 +40,7 @@ type ChartData = {
     [key: string]: string | number; // Additional properties for different chart types
 };
 
-type ChartMeta = AreaChartMeta | LineChartMeta | BarChartMeta | PieChartMeta | ScatterChartMeta | TreeMapMeta;
+export type ChartMeta = AreaChartMeta | LineChartMeta | BarChartMeta | PieChartMeta | ScatterChartMeta | TreeMapMeta;
 
 // Updated chart block type
 export interface ChartBlock extends BaseBlock {

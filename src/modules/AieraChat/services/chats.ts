@@ -132,7 +132,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         id
-                        confirmed
                         sourceId
                         sourceName
                         sourceType
@@ -200,7 +199,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         id
-                        confirmed
                         sourceId
                         sourceName
                         sourceType
@@ -251,7 +249,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         id
-                        confirmed
                         sourceId
                         sourceName
                         sourceType

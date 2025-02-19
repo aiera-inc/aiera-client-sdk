@@ -8,7 +8,7 @@ import { TableBlock, Table } from './Table';
 import { TextBlock, Text } from './Text';
 
 // Citation type for referencing sources
-type Citation = {
+export type Citation = {
     id: string;
     text: string;
     source: string;
