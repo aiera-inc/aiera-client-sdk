@@ -22,7 +22,7 @@ import {
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import './styles.css';
-import { SuggestedPrompts } from './SuggestedPrompts';
+// import { SuggestedPrompts } from './SuggestedPrompts';
 import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
 import { TextBlock } from './MessageFactory/Block/Text';
@@ -368,7 +368,7 @@ export function Messages({
                             shortSizeAlign="bottom-smooth"
                             ItemContent={MessageFactory}
                             context={context}
-                            EmptyPlaceholder={SuggestedPrompts}
+                            // EmptyPlaceholder={SuggestedPrompts}
                             StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>

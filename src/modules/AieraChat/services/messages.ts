@@ -448,7 +448,8 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                     }
                     return null;
                 })
-                .catch(() => {
+                .catch((error: Error) => {
+                    console.log(`Error creating chat message prompt: ${error.message}`);
                     setError('Error creating chat message prompt');
                     return null;
                 });
