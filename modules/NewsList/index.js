@@ -41171,6 +41171,21 @@ var RealtimeCurrentUserDocument = lib_default`
   }
 }
     `;
+var CreateAblyTokenDocument = lib_default`
+    mutation CreateAblyToken($sessionId: ID!) {
+  createAblyToken(sessionId: $sessionId) {
+    data {
+      keyName
+      clientId
+      ttl
+      nonce
+      capability
+      timestamp
+      mac
+    }
+  }
+}
+    `;
 var ClearChatSessionSourcesDocument = lib_default`
     mutation ClearChatSessionSources($sessionId: ID!) {
   clearChatSessionSources(sessionId: $sessionId) {

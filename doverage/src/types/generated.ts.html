@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>40/40</span>
+                <span class='fraction'>41/41</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>40/40</span>
+                <span class='fraction'>41/41</span>
             </div>
         
             
@@ -3008,7 +3008,36 @@
 <a name='L2943'></a><a href='#L2943'>2943</a>
 <a name='L2944'></a><a href='#L2944'>2944</a>
 <a name='L2945'></a><a href='#L2945'>2945</a>
-<a name='L2946'></a><a href='#L2946'>2946</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L2946'></a><a href='#L2946'>2946</a>
+<a name='L2947'></a><a href='#L2947'>2947</a>
+<a name='L2948'></a><a href='#L2948'>2948</a>
+<a name='L2949'></a><a href='#L2949'>2949</a>
+<a name='L2950'></a><a href='#L2950'>2950</a>
+<a name='L2951'></a><a href='#L2951'>2951</a>
+<a name='L2952'></a><a href='#L2952'>2952</a>
+<a name='L2953'></a><a href='#L2953'>2953</a>
+<a name='L2954'></a><a href='#L2954'>2954</a>
+<a name='L2955'></a><a href='#L2955'>2955</a>
+<a name='L2956'></a><a href='#L2956'>2956</a>
+<a name='L2957'></a><a href='#L2957'>2957</a>
+<a name='L2958'></a><a href='#L2958'>2958</a>
+<a name='L2959'></a><a href='#L2959'>2959</a>
+<a name='L2960'></a><a href='#L2960'>2960</a>
+<a name='L2961'></a><a href='#L2961'>2961</a>
+<a name='L2962'></a><a href='#L2962'>2962</a>
+<a name='L2963'></a><a href='#L2963'>2963</a>
+<a name='L2964'></a><a href='#L2964'>2964</a>
+<a name='L2965'></a><a href='#L2965'>2965</a>
+<a name='L2966'></a><a href='#L2966'>2966</a>
+<a name='L2967'></a><a href='#L2967'>2967</a>
+<a name='L2968'></a><a href='#L2968'>2968</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -5254,6 +5283,21 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7749,6 +7793,13 @@ export type RealtimeCurrentUserQueryVariables = Exact&lt;{ [key: string]: never;
 &nbsp;
 export type RealtimeCurrentUserQuery = { __typename?: 'Query', currentUser: { __typename?: 'User', id: string } };
 &nbsp;
+export type CreateAblyTokenMutationVariables = Exact&lt;{
+  sessionId: Scalars['ID'];
+}&gt;;
+&nbsp;
+&nbsp;
+export type CreateAblyTokenMutation = { __typename?: 'Mutation', createAblyToken: { __typename?: 'AblyResponse', data: { __typename?: 'AblyData', keyName: string, clientId: string, ttl: number, nonce: string, capability: string, timestamp: string, mac: string } } };
+&nbsp;
 export type ClearChatSessionSourcesMutationVariables = Exact&lt;{
   sessionId: Scalars['ID'];
 }&gt;;
@@ -8202,6 +8253,21 @@ export const RealtimeCurrentUserDocument = gql`
     query RealtimeCurrentUser {
   currentUser {
     id
+  }
+}
+    `;
+export const CreateAblyTokenDocument = gql`
+    mutation CreateAblyToken($sessionId: ID!) {
+  createAblyToken(sessionId: $sessionId) {
+    data {
+      keyName
+      clientId
+      ttl
+      nonce
+      capability
+      timestamp
+      mac
+    }
   }
 }
     `;
@@ -8905,7 +8971,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Feb 21 2025 17:16:28 GMT-0500 (Eastern Standard Time)
+                at Fri Feb 21 2025 18:55:11 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
