@@ -14,7 +14,7 @@ import {
     ChatSourceType,
     ClearChatSessionSourcesMutation,
     ClearChatSessionSourcesMutationVariables,
-    CreateAblyTokenMutation
+    CreateAblyTokenMutation,
     CreateChatSessionMutation,
     CreateChatSessionMutationVariables,
     DeleteChatSessionMutation,
