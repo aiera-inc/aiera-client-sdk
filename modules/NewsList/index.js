@@ -40910,6 +40910,166 @@ var ContentType = /* @__PURE__ */ ((ContentType2) => {
   ContentType2["Streetaccount"] = "streetaccount";
   return ContentType2;
 })(ContentType || {});
+var ChartBlockFieldsFragmentDoc = lib_default`
+    fragment ChartBlockFields on ChartBlock {
+  __typename
+  id
+  type
+  data {
+    name
+    properties
+    value
+  }
+  meta {
+    chartType
+    properties
+  }
+}
+    `;
+var ImageBlockFieldsFragmentDoc = lib_default`
+    fragment ImageBlockFields on ImageBlock {
+  __typename
+  id
+  type
+  url
+  meta {
+    altText
+    imageDate: date
+    imageSource: source
+    title
+  }
+}
+    `;
+var QuoteBlockFieldsFragmentDoc = lib_default`
+    fragment QuoteBlockFields on QuoteBlock {
+  __typename
+  id
+  type
+  quoteContent: content
+  meta {
+    author
+    quoteDate: date
+    quoteSource: source
+    url
+  }
+}
+    `;
+var TableBlockFieldsFragmentDoc = lib_default`
+    fragment TableBlockFields on TableBlock {
+  __typename
+  id
+  type
+  headers
+  meta {
+    columnAlignment
+    columnMeta {
+      currency
+      decimals
+      format
+      unit
+    }
+  }
+  rows {
+    citation {
+      id
+      author
+      contentId
+      contentType
+      date
+      quote
+      source {
+        id
+        name
+        type
+      }
+      url
+    }
+    value
+  }
+}
+    `;
+var TextBlockFieldsFragmentDoc = lib_default`
+    fragment TextBlockFields on TextBlock {
+  __typename
+  id
+  type
+  content {
+    citation {
+      id
+      author
+      contentId
+      contentType
+      date
+      quote
+      source {
+        id
+        name
+        type
+      }
+      url
+    }
+    value
+  }
+  meta {
+    textStyle: style
+  }
+}
+    `;
+var ListBlockFieldsFragmentDoc = lib_default`
+    fragment ListBlockFields on ListBlock {
+  __typename
+  id
+  type
+  items {
+    ... on ChartBlock {
+      ...ChartBlockFields
+    }
+    ... on ImageBlock {
+      ...ImageBlockFields
+    }
+    ... on ListBlock {
+      id
+      type
+      meta {
+        listStyle: style
+      }
+      items {
+        ... on ChartBlock {
+          ...ChartBlockFields
+        }
+        ... on ImageBlock {
+          ...ImageBlockFields
+        }
+        ... on QuoteBlock {
+          ...QuoteBlockFields
+        }
+        ... on TableBlock {
+          ...TableBlockFields
+        }
+        ... on TextBlock {
+          ...TextBlockFields
+        }
+      }
+    }
+    ... on QuoteBlock {
+      ...QuoteBlockFields
+    }
+    ... on TableBlock {
+      ...TableBlockFields
+    }
+    ... on TextBlock {
+      ...TextBlockFields
+    }
+  }
+  meta {
+    listStyle: style
+  }
+}
+    ${ChartBlockFieldsFragmentDoc}
+${ImageBlockFieldsFragmentDoc}
+${QuoteBlockFieldsFragmentDoc}
+${TableBlockFieldsFragmentDoc}
+${TextBlockFieldsFragmentDoc}`;
 var RefreshDocument = lib_default`
     mutation Refresh {
   __typename
@@ -41011,12 +41171,41 @@ var RealtimeCurrentUserDocument = lib_default`
   }
 }
     `;
+var ClearChatSessionSourcesDocument = lib_default`
+    mutation ClearChatSessionSources($sessionId: ID!) {
+  clearChatSessionSources(sessionId: $sessionId) {
+    success
+  }
+}
+    `;
 var CreateChatSessionDocument = lib_default`
     mutation CreateChatSession($input: CreateChatSessionInput!) {
   createChatSession(input: $input) {
     chatSession {
       id
+      createdAt
+      messages {
+        ... on ChatMessagePrompt {
+          id
+          content
+          createdAt
+          messageType
+          ordinalId
+          runnerVersion
+          sessionId
+          updatedAt
+          userId
+        }
+      }
+      sources {
+        id
+        name
+        type
+      }
+      status
       title
+      updatedAt
+      userId
     }
   }
 }
@@ -41033,7 +41222,16 @@ var UpdateChatSessionDocument = lib_default`
   updateChatSession(input: $input) {
     chatSession {
       id
+      createdAt
+      sources {
+        id
+        name
+        type
+      }
+      status
       title
+      updatedAt
+      userId
     }
   }
 }
@@ -41042,7 +41240,16 @@ var ChatSessionsDocument = lib_default`
     query ChatSessions {
   chatSessions {
     id
+    createdAt
+    sources {
+      id
+      name
+      type
+    }
+    status
     title
+    updatedAt
+    userId
   }
 }
     `;
@@ -41059,6 +41266,99 @@ var EventsDocument = lib_default`
   }
 }
     `;
+var CreateChatMessagePromptDocument = lib_default`
+    mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
+  createChatMessagePrompt(input: $input) {
+    chatMessage {
+      id
+      content
+      createdAt
+      messageType
+      ordinalId
+      runnerVersion
+      sessionId
+      updatedAt
+      userId
+    }
+  }
+}
+    `;
+var ChatSessionWithMessagesDocument = lib_default`
+    query ChatSessionWithMessages($filter: ChatSessionFilter!) {
+  chatSession(filter: $filter) {
+    id
+    messages {
+      ... on ChatMessagePrompt {
+        id
+        createdAt
+        messageType
+        ordinalId
+        runnerVersion
+        sessionId
+        updatedAt
+        userId
+        content
+      }
+      ... on ChatMessageResponse {
+        id
+        createdAt
+        messageType
+        ordinalId
+        runnerVersion
+        sessionId
+        updatedAt
+        userId
+        blocks {
+          ... on ChartBlock {
+            ...ChartBlockFields
+          }
+          ... on ImageBlock {
+            ...ImageBlockFields
+          }
+          ... on ListBlock {
+            ...ListBlockFields
+          }
+          ... on QuoteBlock {
+            ...QuoteBlockFields
+          }
+          ... on TableBlock {
+            ...TableBlockFields
+          }
+          ... on TextBlock {
+            ...TextBlockFields
+          }
+        }
+        responseSources: sources {
+          id
+          name
+          type
+        }
+      }
+      ... on ChatMessageSourceConfirmation {
+        id
+        createdAt
+        messageType
+        ordinalId
+        runnerVersion
+        sessionId
+        updatedAt
+        userId
+        confirmationSources: sources {
+          id
+          confirmed
+          name
+          type
+        }
+      }
+    }
+  }
+}
+    ${ChartBlockFieldsFragmentDoc}
+${ImageBlockFieldsFragmentDoc}
+${ListBlockFieldsFragmentDoc}
+${QuoteBlockFieldsFragmentDoc}
+${TableBlockFieldsFragmentDoc}
+${TextBlockFieldsFragmentDoc}`;
 var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
