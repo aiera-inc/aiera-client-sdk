@@ -458,8 +458,78 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
 
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
         query: gql`
-            # First define fragments for each block type
+            query ChatSessionWithMessages($filter: ChatSessionFilter!) {
+                chatSession(filter: $filter) {
+                    id
+                    messages {
+                        ... on ChatMessagePrompt {
+                            id
+                            createdAt
+                            messageType
+                            ordinalId
+                            runnerVersion
+                            sessionId
+                            updatedAt
+                            userId
+                            content
+                        }
+                        ... on ChatMessageResponse {
+                            id
+                            createdAt
+                            messageType
+                            ordinalId
+                            runnerVersion
+                            sessionId
+                            updatedAt
+                            userId
+                            blocks {
+                                ... on ChartBlock {
+                                    ...ChartBlockFields
+                                }
+                                ... on ImageBlock {
+                                    ...ImageBlockFields
+                                }
+                                ... on ListBlock {
+                                    ...ListBlockFields
+                                }
+                                ... on QuoteBlock {
+                                    ...QuoteBlockFields
+                                }
+                                ... on TableBlock {
+                                    ...TableBlockFields
+                                }
+                                ... on TextBlock {
+                                    ...TextBlockFields
+                                }
+                            }
+                            responseSources: sources {
+                                id
+                                name
+                                type
+                            }
+                        }
+                        ... on ChatMessageSourceConfirmation {
+                            id
+                            createdAt
+                            messageType
+                            ordinalId
+                            runnerVersion
+                            sessionId
+                            updatedAt
+                            userId
+                            confirmationSources: sources {
+                                id
+                                confirmed
+                                name
+                                type
+                            }
+                        }
+                    }
+                }
+            }
+
             fragment ChartBlockFields on ChartBlock {
+                __typename
                 id
                 type
                 data {
@@ -474,6 +544,7 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
             }
 
             fragment ImageBlockFields on ImageBlock {
+                __typename
                 id
                 type
                 url
@@ -486,6 +557,7 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
             }
 
             fragment QuoteBlockFields on QuoteBlock {
+                __typename
                 id
                 type
                 quoteContent: content
@@ -498,6 +570,7 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
             }
 
             fragment TableBlockFields on TableBlock {
+                __typename
                 id
                 type
                 headers
@@ -530,6 +603,7 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
             }
 
             fragment TextBlockFields on TextBlock {
+                __typename
                 id
                 type
                 content {
@@ -554,33 +628,8 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                 }
             }
 
-            # Define a fragment for nested list items
-            fragment NestedBlockFields on ListBlockItem {
-                ... on ChartBlock {
-                    ...ChartBlockFields
-                }
-                ... on ImageBlock {
-                    ...ImageBlockFields
-                }
-                ... on ListBlock {
-                    id
-                    type
-                    meta {
-                        listStyle: style
-                    }
-                }
-                ... on QuoteBlock {
-                    ...QuoteBlockFields
-                }
-                ... on TableBlock {
-                    ...TableBlockFields
-                }
-                ... on TextBlock {
-                    ...TextBlockFields
-                }
-            }
-
             fragment ListBlockFields on ListBlock {
+                __typename
                 id
                 type
                 items {
@@ -597,7 +646,21 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                             listStyle: style
                         }
                         items {
-                            ...NestedBlockFields
+                            ... on ChartBlock {
+                                ...ChartBlockFields
+                            }
+                            ... on ImageBlock {
+                                ...ImageBlockFields
+                            }
+                            ... on QuoteBlock {
+                                ...QuoteBlockFields
+                            }
+                            ... on TableBlock {
+                                ...TableBlockFields
+                            }
+                            ... on TextBlock {
+                                ...TextBlockFields
+                            }
                         }
                     }
                     ... on QuoteBlock {
@@ -614,73 +677,8 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                     listStyle: style
                 }
             }
-
-            query ChatSessionWithMessages($filter: ChatSessionFilter!) {
-                chatSession(filter: $filter) {
-                    id
-                    messages {
-                        ... on ChatMessagePrompt {
-                            id
-                            content
-                            createdAt
-                            messageType
-                            ordinalId
-                            runnerVersion
-                            sessionId
-                            updatedAt
-                            userId
-                        }
-                        ... on ChatMessageResponse {
-                            id
-                            createdAt
-                            messageType
-                            ordinalId
-                            runnerVersion
-                            sessionId
-                            updatedAt
-                            userId
-                            blocks {
-                                ... on ChartBlock {
-                                    ...ChartBlockFields
-                                }
-                                ... on ImageBlock {
-                                    ...ImageBlockFields
-                                }
-                                ... on ListBlock {
-                                    ...ListBlockFields
-                                }
-                                ... on QuoteBlock {
-                                    ...QuoteBlockFields
-                                }
-                                ... on TableBlock {
-                                    ...TableBlockFields
-                                }
-                                ... on TextBlock {
-                                    ...TextBlockFields
-                                }
-                            }
-                        }
-                        ... on ChatMessageSourceConfirmation {
-                            id
-                            createdAt
-                            messageType
-                            ordinalId
-                            runnerVersion
-                            sessionId
-                            updatedAt
-                            userId
-                            sources {
-                                id
-                                confirmed
-                                name
-                                type
-                            }
-                        }
-                    }
-                }
-            }
         `,
-        pause: !sessionId,
+        pause: !sessionId || sessionId === 'new',
         requestPolicy: 'cache-and-network',
         variables: {
             filter: { includeMessages: true, sessionId },
@@ -689,27 +687,24 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
 
     // Update state based on query status
     useEffect(() => {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        if (messagesQuery.status === 'success' && messagesQuery.data.chatSession?.messages) {
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // Only update loading state when it actually changes
+        const queryLoading = messagesQuery.status === 'loading';
+        if (queryLoading !== isLoading) {
+            setIsLoading(queryLoading);
+        }
+
+        // Handle data updates
+        if (messagesQuery.status === 'success' && messagesQuery.data?.chatSession?.messages) {
             const rawMessages = messagesQuery.data.chatSession.messages as Array<
                 ChatMessagePromptType | ChatMessageResponseType | ChatMessageSourceConfirmationType
             >;
-            // Normalize the message before updating state
             setMessages(rawMessages.map(normalizeChatMessage));
-            // Remove error if previously set
-            if (error) {
-                setError(null);
-            }
+            // Only clear error if we have one
+            if (error) setError(null);
         } else if (messagesQuery.status === 'error') {
             setError(messagesQuery.error.message);
         }
-        if (!isLoading && messagesQuery.status === 'loading') {
-            setIsLoading(true);
-        } else if (isLoading && messagesQuery.status !== 'loading') {
-            setIsLoading(false);
-        }
-    }, [error, isLoading, sessionId, setError, setIsLoading, setMessages]);
+    }, [error, isLoading, messagesQuery, setError, setIsLoading, setMessages]);
 
     const refresh = () => messagesQuery.refetch();
 
