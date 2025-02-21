@@ -15,7 +15,7 @@ import {
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
-    Citation as RawCitation,
+    CitableContent as RawCitableContent,
     ContentBlockType,
     CreateChatMessagePromptMutation,
     CreateChatMessagePromptMutationVariables,
@@ -25,7 +25,6 @@ import {
     TableBlock,
     TableCellMeta,
     TextBlock,
-    TextContent,
 } from '@aiera/client-sdk/types/generated';
 import {
     BlockType,
@@ -97,292 +96,18 @@ export interface ChatMessageSources extends ChatMessageBase {
 export type ChatMessage = ChatMessageResponse | ChatMessagePrompt | ChatMessageSources;
 
 interface UseChatMessagesReturn {
-    createChatMessagePrompt: ({ content, sessionId }: { content: string; sessionId: string }) => void;
+    createChatMessagePrompt: ({
+        content,
+        sessionId,
+    }: {
+        content: string;
+        sessionId: string;
+    }) => Promise<ChatMessagePrompt | null>;
     messages: ChatMessage[];
     isLoading: boolean;
     error: string | null;
     refresh: () => void;
 }
-
-const sampleMessages = [
-    // First conversation - Comprehensive AI Report
-    {
-        id: 'msg1',
-        ordinalId: '001',
-        timestamp: '2024-12-06T10:00:00Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
-        type: ChatMessageType.PROMPT,
-    },
-    {
-        id: 'msg2',
-        ordinalId: '002',
-        timestamp: '2024-12-06T10:00:01Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
-        type: ChatMessageType.SOURCES,
-        confirmed: true,
-        sources: [
-            {
-                targetType: 'report',
-                targetId: 'ai-market-2024',
-                targetTitle: '2024 AI Industry Analysis',
-            },
-        ],
-    },
-    {
-        id: 'msg3',
-        ordinalId: '003',
-        timestamp: '2024-12-06T10:00:02Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Give me a comprehensive overview of the AI industry in 2024.',
-        type: ChatMessageType.RESPONSE,
-        blocks: [
-            {
-                id: 'report-title',
-                type: 'text',
-                content: ['2024 Artificial Intelligence Industry Analysis'],
-                meta: { style: 'h1' },
-            },
-            {
-                id: 'report-subtitle',
-                type: 'text',
-                content: ['Market Overview and Key Trends'],
-                meta: { style: 'h2' },
-            },
-            {
-                id: 'executive-summary',
-                type: 'text',
-                content: [
-                    'The AI industry has experienced unprecedented growth in 2024, with global revenues reaching new heights and adoption accelerating across all sectors.',
-                ],
-                meta: { style: 'paragraph' },
-            },
-            {
-                id: 'key-findings',
-                type: 'list',
-                items: [
-                    {
-                        primary: ['Market Growth'],
-                        secondary: [
-                            'Global AI revenue reached $500 billion, representing a 45% year-over-year increase',
-                        ],
-                    },
-                    {
-                        primary: ['Technology Adoption'],
-                        secondary: ['Enterprise AI implementation grew by 65% across Fortune 500 companies'],
-                    },
-                ],
-                meta: { style: 'ordered' },
-            },
-            {
-                id: 'market-share',
-                type: 'chart',
-                data: [
-                    { name: 'North America', value: 450, color: '#8884d8' },
-                    { name: 'Europe', value: 380, color: '#82ca9d' },
-                    { name: 'Asia Pacific', value: 350, color: '#ffc658' },
-                    { name: 'Rest of World', value: 150, color: '#ff8042' },
-                ],
-                meta: {
-                    chartType: 'treemap',
-                    title: 'Regional Market Distribution (Billion USD)',
-                    valueKey: 'value',
-                    nameKey: 'name',
-                },
-            },
-            {
-                id: 'system-architecture',
-                type: 'image',
-                url: '/api/placeholder/800/400',
-                meta: {
-                    title: 'Modern AI System Architecture',
-                    altText: 'Diagram showing the components and relationships in modern AI systems',
-                    caption: 'Typical enterprise AI system architecture in 2024',
-                },
-            },
-        ],
-        sources: [
-            {
-                targetType: 'report',
-                targetId: 'ai-market-2024',
-                targetTitle: '2024 AI Industry Analysis',
-            },
-        ],
-    },
-
-    // Second conversation - Model Performance
-    {
-        id: 'msg4',
-        ordinalId: '004',
-        timestamp: '2024-12-06T10:01:00Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Compare the performance of top AI models across different metrics.',
-        type: ChatMessageType.PROMPT,
-    },
-    {
-        id: 'msg5',
-        ordinalId: '005',
-        timestamp: '2024-12-06T10:01:01Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Compare the performance of top AI models across different metrics.',
-        type: ChatMessageType.SOURCES,
-        confirmed: true,
-        sources: [
-            {
-                targetType: 'benchmark',
-                targetId: 'model-performance',
-                targetTitle: 'AI Model Performance Benchmark 2024',
-            },
-        ],
-    },
-    {
-        id: 'msg6',
-        ordinalId: '006',
-        timestamp: '2024-12-06T10:01:02Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'Compare the performance of top AI models across different metrics.',
-        type: ChatMessageType.RESPONSE,
-        blocks: [
-            {
-                id: 'perf-intro',
-                type: 'text',
-                content: [
-                    'Analysis of leading AI models reveals significant variations in performance across key metrics:',
-                ],
-                meta: { style: 'paragraph' },
-            },
-            {
-                id: 'model-comparison',
-                type: 'table',
-                headers: ['Model', 'Accuracy', 'Latency', 'Cost/1M Tokens'],
-                rows: [
-                    [['GPT-4'], ['98.5%'], ['120ms'], ['$0.60']],
-                    [['Claude-3'], ['97.8%'], ['115ms'], ['$0.55']],
-                    [['PaLM'], ['96.5%'], ['125ms'], ['$0.45']],
-                ],
-                meta: {
-                    columnAlignment: ['left', 'center', 'center', 'right'],
-                    columnMeta: [
-                        {},
-                        { format: 'percentage', decimals: 1 },
-                        { unit: 'ms', format: 'number' },
-                        { currency: 'USD', format: 'number' },
-                    ],
-                },
-            },
-            {
-                id: 'key-features',
-                type: 'list',
-                items: [
-                    {
-                        primary: ['Specialized Capabilities'],
-                        secondary: ['Each model exhibits unique strengths in specific domains'],
-                    },
-                    {
-                        primary: ['Trade-offs'],
-                        secondary: ['Higher accuracy generally correlates with increased cost'],
-                    },
-                ],
-                meta: { style: 'unordered' },
-            },
-        ],
-        sources: [
-            {
-                targetType: 'benchmark',
-                targetId: 'model-performance',
-                targetTitle: 'AI Model Performance Benchmark 2024',
-            },
-        ],
-    },
-
-    // Third conversation - Expert Commentary
-    {
-        id: 'msg7',
-        ordinalId: '007',
-        timestamp: '2024-12-06T10:02:00Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'What are experts saying about the future of AI?',
-        type: ChatMessageType.PROMPT,
-    },
-    {
-        id: 'msg8',
-        ordinalId: '008',
-        timestamp: '2024-12-06T10:02:01Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'What are experts saying about the future of AI?',
-        type: ChatMessageType.SOURCES,
-        confirmed: true,
-        sources: [
-            {
-                targetType: 'conference',
-                targetId: 'future-ai-summit',
-                targetTitle: 'Future of AI Summit 2024',
-            },
-        ],
-    },
-    {
-        id: 'msg9',
-        ordinalId: '009',
-        timestamp: '2024-12-06T10:02:02Z',
-        status: ChatMessageStatus.COMPLETED,
-        prompt: 'What are experts saying about the future of AI?',
-        type: ChatMessageType.RESPONSE,
-        blocks: [
-            {
-                id: 'future-heading',
-                type: 'text',
-                content: ['Expert Perspectives on AI Evolution'],
-                meta: { style: 'h3' },
-            },
-            {
-                id: 'future-context',
-                type: 'text',
-                content: [
-                    'Leading experts at the Future of AI Summit 2024 shared insights on emerging trends and future developments:',
-                ],
-                meta: { style: 'paragraph' },
-            },
-            {
-                id: 'expert-quote',
-                type: 'quote',
-                content:
-                    'We are witnessing the emergence of truly general-purpose AI systems that can seamlessly adapt to diverse tasks while maintaining high performance and reliability.',
-                meta: {
-                    author: 'Dr. Sarah Chen',
-                    source: 'Future of AI Summit 2024',
-                    date: '2024-03-15',
-                },
-            },
-            {
-                id: 'future-metrics',
-                type: 'chart',
-                data: [
-                    { year: '2024', capability: 65, adoption: 45 },
-                    { year: '2025', capability: 80, adoption: 60 },
-                    { year: '2026', capability: 90, adoption: 75 },
-                ],
-                meta: {
-                    chartType: 'line',
-                    title: 'Projected AI Evolution',
-                    xAxis: 'Year',
-                    yAxis: 'Score',
-                    series: [
-                        { key: 'capability', label: 'Capability Score', color: '#8884d8' },
-                        { key: 'adoption', label: 'Adoption Rate', color: '#82ca9d' },
-                    ],
-                },
-            },
-        ],
-        sources: [
-            {
-                targetType: 'conference',
-                targetId: 'future-ai-summit',
-                targetTitle: 'Future of AI Summit 2024',
-            },
-        ],
-    },
-];
 
 function normalizeChartMeta(meta: ChartBlockMeta): ChartMeta {
     const properties = meta.properties as Record<string, unknown>;
@@ -468,7 +193,6 @@ function normalizeChartMeta(meta: ChartBlockMeta): ChartMeta {
 }
 
 // Redeclare types to avoid name conflicts, but retain all the type definitions
-type RawCitableContent = RawCitation | TextContent;
 type RawTableCellMeta = TableCellMeta;
 
 function isNonNullable<T>(value: T): value is NonNullable<T> {
@@ -477,20 +201,18 @@ function isNonNullable<T>(value: T): value is NonNullable<T> {
 
 function normalizeCitableContent(rawContent: RawCitableContent[]): CitableContent {
     return rawContent.map((content): string | Citation => {
-        if (content.__typename === 'TextContent') {
+        if (content.citation) {
+            return {
+                author: content.citation.author as string,
+                date: content.citation.date as string,
+                id: content.citation.id,
+                source: content.citation.source.name,
+                text: content.citation.quote,
+                url: content.citation.url as string,
+            };
+        } else {
             return content.value;
         }
-        if (content.__typename === 'Citation') {
-            return {
-                author: content.author as string,
-                date: content.date as string,
-                id: content.id,
-                source: content.source,
-                text: content.quote,
-                url: content.url as string,
-            };
-        }
-        throw new Error('Unknown citable content type');
     });
 }
 
@@ -503,9 +225,9 @@ function normalizeSources(sources: ChatSource[] | undefined): ChatMessageSource[
         .filter((s: ChatSource) => s)
         .map(
             (source): ChatMessageSource => ({
-                targetId: source.sourceId,
-                targetTitle: source.sourceName,
-                targetType: source.sourceType,
+                targetId: source.id,
+                targetTitle: source.name,
+                targetType: source.type,
             })
         );
 }
@@ -663,7 +385,7 @@ function normalizeChatMessage(
             return {
                 ...baseMessage,
                 type: ChatMessageType.RESPONSE,
-                prompt: '', // Response messages don't have a prompt
+                prompt: '', // TODO add prompt to base chat message class in server
                 blocks: (responseMessage.blocks ?? []).map(normalizeContentBlock),
                 sources: normalizeSources(responseMessage.sources as ChatSource[]),
             };
@@ -685,11 +407,6 @@ function normalizeChatMessage(
         }
     }
 }
-
-const fetchChatMessages = async (_: string): Promise<ChatMessage[]> => {
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    return sampleMessages as ChatMessage[];
-};
 
 export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -725,7 +442,7 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                         // Normalize the message before updating state
                         const normalizedMessage = normalizeChatMessage(newMessage);
                         setMessages((prevMessages) => [...prevMessages, normalizedMessage]);
-                        return normalizedMessage;
+                        return normalizedMessage as ChatMessagePrompt;
                     } else {
                         setError('Error creating chat message prompt');
                     }
@@ -741,12 +458,170 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
 
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
         query: gql`
+            # First define fragments for each block type
+            fragment ChartBlockFields on ChartBlock {
+                id
+                type
+                data {
+                    name
+                    properties
+                    value
+                }
+                meta {
+                    chartType
+                    properties
+                }
+            }
+
+            fragment ImageBlockFields on ImageBlock {
+                id
+                type
+                url
+                meta {
+                    altText
+                    imageDate: date
+                    imageSource: source
+                    title
+                }
+            }
+
+            fragment QuoteBlockFields on QuoteBlock {
+                id
+                type
+                quoteContent: content
+                meta {
+                    author
+                    quoteDate: date
+                    quoteSource: source
+                    url
+                }
+            }
+
+            fragment TableBlockFields on TableBlock {
+                id
+                type
+                headers
+                meta {
+                    columnAlignment
+                    columnMeta {
+                        currency
+                        decimals
+                        format
+                        unit
+                    }
+                }
+                rows {
+                    citation {
+                        id
+                        author
+                        contentId
+                        contentType
+                        date
+                        quote
+                        source {
+                            id
+                            name
+                            type
+                        }
+                        url
+                    }
+                    value
+                }
+            }
+
+            fragment TextBlockFields on TextBlock {
+                id
+                type
+                content {
+                    citation {
+                        id
+                        author
+                        contentId
+                        contentType
+                        date
+                        quote
+                        source {
+                            id
+                            name
+                            type
+                        }
+                        url
+                    }
+                    value
+                }
+                meta {
+                    textStyle: style
+                }
+            }
+
+            # Define a fragment for nested list items
+            fragment NestedBlockFields on ListBlockItem {
+                ... on ChartBlock {
+                    ...ChartBlockFields
+                }
+                ... on ImageBlock {
+                    ...ImageBlockFields
+                }
+                ... on ListBlock {
+                    id
+                    type
+                    meta {
+                        listStyle: style
+                    }
+                }
+                ... on QuoteBlock {
+                    ...QuoteBlockFields
+                }
+                ... on TableBlock {
+                    ...TableBlockFields
+                }
+                ... on TextBlock {
+                    ...TextBlockFields
+                }
+            }
+
+            fragment ListBlockFields on ListBlock {
+                id
+                type
+                items {
+                    ... on ChartBlock {
+                        ...ChartBlockFields
+                    }
+                    ... on ImageBlock {
+                        ...ImageBlockFields
+                    }
+                    ... on ListBlock {
+                        id
+                        type
+                        meta {
+                            listStyle: style
+                        }
+                        items {
+                            ...NestedBlockFields
+                        }
+                    }
+                    ... on QuoteBlock {
+                        ...QuoteBlockFields
+                    }
+                    ... on TableBlock {
+                        ...TableBlockFields
+                    }
+                    ... on TextBlock {
+                        ...TextBlockFields
+                    }
+                }
+                meta {
+                    listStyle: style
+                }
+            }
+
             query ChatSessionWithMessages($filter: ChatSessionFilter!) {
                 chatSession(filter: $filter) {
                     id
                     messages {
                         ... on ChatMessagePrompt {
                             id
+                            content
                             createdAt
                             messageType
                             ordinalId
@@ -754,7 +629,6 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                             sessionId
                             updatedAt
                             userId
-                            content
                         }
                         ... on ChatMessageResponse {
                             id
@@ -766,66 +640,23 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                             updatedAt
                             userId
                             blocks {
-                                ... on TextBlock {
-                                    id
-                                    type
-                                    textContent: content {
-                                        ... on Citation {
-                                            id
-                                            author
-                                            contentId
-                                            contentType
-                                            date
-                                            quote
-                                            source
-                                            url
-                                        }
-                                        ... on TextContent {
-                                            value
-                                        }
-                                    }
-                                    textMeta: meta {
-                                        style
-                                    }
+                                ... on ChartBlock {
+                                    ...ChartBlockFields
+                                }
+                                ... on ImageBlock {
+                                    ...ImageBlockFields
                                 }
                                 ... on ListBlock {
-                                    id
-                                    type
-                                    items {
-                                        ... on TextBlock {
-                                            id
-                                            type
-                                            content {
-                                                ... on Citation {
-                                                    id
-                                                    author
-                                                    contentId
-                                                    contentType
-                                                    date
-                                                    quote
-                                                    source
-                                                    url
-                                                }
-                                                ... on TextContent {
-                                                    value
-                                                }
-                                            }
-                                        }
-                                    }
-                                    listMeta: meta {
-                                        style
-                                    }
+                                    ...ListBlockFields
                                 }
                                 ... on QuoteBlock {
-                                    id
-                                    type
-                                    quoteContent: content
-                                    quoteMeta: meta {
-                                        author
-                                        date
-                                        source
-                                        url
-                                    }
+                                    ...QuoteBlockFields
+                                }
+                                ... on TableBlock {
+                                    ...TableBlockFields
+                                }
+                                ... on TextBlock {
+                                    ...TextBlockFields
                                 }
                             }
                         }
@@ -841,9 +672,8 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                             sources {
                                 id
                                 confirmed
-                                sourceId
-                                sourceName
-                                sourceType
+                                name
+                                type
                             }
                         }
                     }
@@ -859,12 +689,18 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
 
     // Update state based on query status
     useEffect(() => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         if (messagesQuery.status === 'success' && messagesQuery.data.chatSession?.messages) {
-            // Normalize the message before updating state
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
             const rawMessages = messagesQuery.data.chatSession.messages as Array<
                 ChatMessagePromptType | ChatMessageResponseType | ChatMessageSourceConfirmationType
             >;
+            // Normalize the message before updating state
             setMessages(rawMessages.map(normalizeChatMessage));
+            // Remove error if previously set
+            if (error) {
+                setError(null);
+            }
         } else if (messagesQuery.status === 'error') {
             setError(messagesQuery.error.message);
         }
@@ -873,30 +709,9 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
         } else if (isLoading && messagesQuery.status !== 'loading') {
             setIsLoading(false);
         }
-    }, [isLoading, sessionId, setIsLoading, setMessages]);
+    }, [error, isLoading, sessionId, setError, setIsLoading, setMessages]);
 
-    const fetchMessages = useCallback(async () => {
-        try {
-            if (sessionId !== 'new') {
-                setIsLoading(true);
-            }
-            setError(null);
-            if (sessionId && sessionId !== 'new') {
-                const data = await fetchChatMessages(sessionId);
-                setMessages(data);
-            } else {
-                setMessages([]);
-            }
-        } catch (err) {
-            setError(err instanceof Error ? err.message : 'An error occurred');
-        } finally {
-            setIsLoading(false);
-        }
-    }, [sessionId]);
-
-    const refresh = async () => {
-        await fetchMessages();
-    };
+    const refresh = () => messagesQuery.refetch();
 
     return {
         createChatMessagePrompt,

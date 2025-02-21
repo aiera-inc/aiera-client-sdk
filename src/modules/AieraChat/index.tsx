@@ -50,21 +50,21 @@ export function AieraChat(): ReactElement {
 
     const handleMessageSubmit = useCallback(
         (prompt: string) => {
-            if (chatId && chatId !== 'new') {
-                // TODO replace with createChatMessagePrompt
-                // return createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' }).then((newSession) => {
-                //     if (newSession && newSession.id) {
-                //         onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
-                //     }
-                // });
-                return Promise.resolve();
-            } else {
-                return createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' }).then((newSession) => {
-                    if (newSession && newSession.id) {
-                        onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
-                    }
-                });
+            if (chatId === 'new') {
+                return createSession({ prompt, sources, title: chatTitle || 'Untitled Chat' })
+                    .then((newSession) => {
+                        if (newSession && newSession.id) {
+                            onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
+                            return newSession;
+                        }
+                        return null;
+                    })
+                    .catch((error: Error) => {
+                        console.log(`Error creating chat session: ${error.message}`);
+                        return null;
+                    });
             }
+            return Promise.resolve(null);
         },
         [chatId, chatTitle, createSession, onSelectChat, sources]
     );

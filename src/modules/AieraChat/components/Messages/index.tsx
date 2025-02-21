@@ -19,7 +19,7 @@ import {
     ChatMessageType,
     useChatMessages,
 } from '../../services/messages';
-import { useChatStore } from '../../store';
+import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import './styles.css';
 import { SuggestedPrompts } from './SuggestedPrompts';
@@ -27,6 +27,7 @@ import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
 import { TextBlock } from './MessageFactory/Block/Text';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/chats';
 
 let idCounter = 0;
 
@@ -73,17 +74,129 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
     );
 };
 
+function isMatchingResponse(message: ChatMessage, botMessage: ChatMessageResponse): message is ChatMessageResponse {
+    return message.ordinalId === botMessage.ordinalId;
+}
+
+function updateVirtuoso(
+    prompt: string,
+    message: ChatMessagePrompt | null,
+    sources: Source[],
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>
+) {
+    const myMessage: ChatMessagePrompt = {
+        id: `${idCounter++}`,
+        ordinalId: `${idCounter++}`,
+        prompt: message?.prompt || '',
+        type: ChatMessageType.PROMPT,
+        status: ChatMessageStatus.COMPLETED,
+        timestamp: '',
+    };
+    virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
+        return {
+            index: 'LAST',
+            align: 'end',
+            behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+        };
+    });
+
+    if (sources.length === 0) {
+        const newKey = `${idCounter++}`;
+        const sourceMessage: ChatMessageSources = {
+            id: newKey,
+            ordinalId: newKey,
+            confirmed: false,
+            sources: [],
+            timestamp: '',
+            prompt: message?.prompt || '',
+            status: ChatMessageStatus.PENDING,
+            type: ChatMessageType.SOURCES,
+        };
+        virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
+            return {
+                index: 'LAST',
+                align: 'end',
+                behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+            };
+        });
+        setTimeout(() => {
+            virtuosoRef.current?.data.map((message) => {
+                if (message.ordinalId === newKey) {
+                    return {
+                        ...message,
+                        status: ChatMessageStatus.COMPLETED,
+                    };
+                }
+
+                return message;
+            });
+        }, 2000);
+    } else {
+        const botMessage = randomMessage(prompt);
+        virtuosoRef.current?.data.append([botMessage]);
+        setTimeout(() => {
+            let counter = 0;
+            const interval = setInterval(() => {
+                let status = ChatMessageStatus.STREAMING;
+                if (counter++ > 45) {
+                    clearInterval(interval);
+                    status = ChatMessageStatus.COMPLETED;
+                }
+                virtuosoRef.current?.data.map(
+                    (message) => {
+                        if (isMatchingResponse(message, botMessage)) {
+                            const firstBlock =
+                                (message.blocks[0] as TextBlock) ||
+                                ({
+                                    id: `${message.blocks.length}`,
+                                    type: BlockType.TEXT,
+                                    content: ['some text...'],
+                                    meta: { style: 'paragraph' },
+                                } as TextBlock);
+                            return {
+                                ...message,
+                                blocks: [
+                                    {
+                                        ...firstBlock,
+                                        content: [
+                                            ...firstBlock.content,
+                                            firstBlock.content.length % 7 === 0
+                                                ? {
+                                                      id: '1',
+                                                      text: 'citation',
+                                                      source: 'source',
+                                                  }
+                                                : 'some more text...',
+                                        ],
+                                    },
+                                ],
+                                status,
+                            };
+                        }
+                        return message;
+                    },
+                    {
+                        location() {
+                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                        },
+                    }
+                );
+            }, 150);
+        }, 2000);
+    }
+}
+
 export function Messages({
     onOpenSources,
     onSubmit,
     virtuosoRef,
 }: {
     onOpenSources: () => void;
-    onSubmit: (prompt: string) => Promise<void>;
+    onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const { chatId, sources } = useChatStore();
-    const { messages, isLoading } = useChatMessages(chatId);
+    const { createChatMessagePrompt, messages, isLoading } = useChatMessages(chatId);
 
     // Reset when starting new chat
     useEffect(() => {
@@ -130,13 +243,6 @@ export function Messages({
             });
         }
     }, []);
-
-    const isMatchingResponse = (
-        message: ChatMessage,
-        botMessage: ChatMessageResponse
-    ): message is ChatMessageResponse => {
-        return message.ordinalId === botMessage.ordinalId;
-    };
 
     const onConfirm = useCallback((ordinalId: string) => {
         const originalMessage = virtuosoRef.current?.data.find((m) => m.ordinalId === ordinalId);
@@ -208,110 +314,24 @@ export function Messages({
 
     const handleSubmit = useCallback(
         (prompt: string) => {
-            onSubmit(prompt)
-                .then(() => {
-                    const myMessage: ChatMessagePrompt = {
-                        id: `${idCounter++}`,
-                        ordinalId: `${idCounter++}`,
-                        prompt,
-                        type: ChatMessageType.PROMPT,
-                        status: ChatMessageStatus.COMPLETED,
-                        timestamp: '',
-                    };
-                    virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
-                        return {
-                            index: 'LAST',
-                            align: 'end',
-                            behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                        };
-                    });
-
-                    if (sources.length === 0) {
-                        const newKey = `${idCounter++}`;
-                        const sourceMessage: ChatMessageSources = {
-                            id: newKey,
-                            ordinalId: newKey,
-                            confirmed: false,
-                            sources: [],
-                            timestamp: '',
-                            prompt,
-                            status: ChatMessageStatus.PENDING,
-                            type: ChatMessageType.SOURCES,
-                        };
-                        virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
-                            return {
-                                index: 'LAST',
-                                align: 'end',
-                                behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                            };
-                        });
-                        setTimeout(() => {
-                            virtuosoRef.current?.data.map((message) => {
-                                if (message.ordinalId === newKey) {
-                                    return {
-                                        ...message,
-                                        status: ChatMessageStatus.COMPLETED,
-                                    };
-                                }
-
-                                return message;
-                            });
-                        }, 2000);
-                    } else {
-                        const botMessage = randomMessage(prompt);
-                        virtuosoRef.current?.data.append([botMessage]);
-                        setTimeout(() => {
-                            let counter = 0;
-                            const interval = setInterval(() => {
-                                let status = ChatMessageStatus.STREAMING;
-                                if (counter++ > 45) {
-                                    clearInterval(interval);
-                                    status = ChatMessageStatus.COMPLETED;
-                                }
-                                virtuosoRef.current?.data.map(
-                                    (message) => {
-                                        if (isMatchingResponse(message, botMessage)) {
-                                            const firstBlock =
-                                                (message.blocks[0] as TextBlock) ||
-                                                ({
-                                                    id: `${message.blocks.length}`,
-                                                    type: BlockType.TEXT,
-                                                    content: ['some text...'],
-                                                    meta: { style: 'paragraph' },
-                                                } as TextBlock);
-                                            return {
-                                                ...message,
-                                                blocks: [
-                                                    {
-                                                        ...firstBlock,
-                                                        content: [
-                                                            ...firstBlock.content,
-                                                            firstBlock.content.length % 7 === 0
-                                                                ? {
-                                                                      id: '1',
-                                                                      text: 'citation',
-                                                                      source: 'source',
-                                                                  }
-                                                                : 'some more text...',
-                                                        ],
-                                                    },
-                                                ],
-                                                status,
-                                            };
-                                        }
-                                        return message;
-                                    },
-                                    {
-                                        location() {
-                                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                                        },
-                                    }
-                                );
-                            }, 150);
-                        }, 2000);
-                    }
-                })
-                .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
+            if (chatId === 'new') {
+                onSubmit(prompt)
+                    .then((session) => {
+                        if (session && session.promptMessage) {
+                            // Only prompt messages can be created when creating a chat session
+                            updateVirtuoso(prompt, session.promptMessage as ChatMessagePrompt, sources, virtuosoRef);
+                        }
+                    })
+                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
+            } else {
+                createChatMessagePrompt({ content: prompt, sessionId: chatId })
+                    .then((message) => {
+                        if (message) {
+                            updateVirtuoso(prompt, message, sources, virtuosoRef);
+                        }
+                    })
+                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
+            }
         },
         [chatId, sources]
     );

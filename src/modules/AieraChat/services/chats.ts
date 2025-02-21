@@ -1,9 +1,10 @@
 import gql from 'graphql-tag';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import {
-    ChatSession as ChatSessionType,
+    ChatMessagePrompt,
+    ChatSession as RawChatSession,
     ChatSessionsQuery,
     ChatSessionsQueryVariables,
     ChatSessionStatus,
@@ -21,6 +22,7 @@ import {
     UpdateChatSessionMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
+import { ChatMessageStatus, ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 
 export interface ChatSession {
     createdAt: string;
@@ -32,9 +34,24 @@ export interface ChatSession {
     userId: string;
 }
 
-interface UseChatSessionsReturn {
+export interface ChatSessionWithPromptMessage extends ChatSession {
+    promptMessage?: {
+        id: string;
+        ordinalId?: string | null;
+        prompt: string;
+        status: ChatMessageStatus;
+        timestamp: string;
+        type: ChatMessageType;
+    };
+}
+
+export interface UseChatSessionsReturn {
     clearSources: (sessionId: string) => Promise<void>;
-    createSession: (input: { prompt?: string; sources?: Source[]; title?: string }) => Promise<ChatSession | null>;
+    createSession: (input: {
+        prompt?: string;
+        sources?: Source[];
+        title?: string;
+    }) => Promise<ChatSessionWithPromptMessage | null>;
     deleteSession: (sessionId: string) => Promise<void>;
     error: string | null;
     isLoading: boolean;
@@ -55,23 +72,46 @@ function mapSourcesToInput(sources?: Source[] | null): ChatSourceInput[] {
 function normalizeSources(sources?: ChatSource[]): Source[] {
     const normalized: Source[] = [];
     if (sources && sources.length > 0) {
-        sources.forEach((source: ChatSourceInput) => {
+        sources.forEach((source) => {
             normalized.push({
-                confirmed: source.confirmed || false,
-                targetId: source.sourceId,
-                targetType: source.sourceType,
-                title: source.sourceName,
+                confirmed: true,
+                targetId: source.id,
+                targetType: source.type as string,
+                title: source.name,
             });
         });
     }
     return normalized;
 }
 
-function normalizeSession(session: ChatSessionType): ChatSession {
+function normalizeSession(session: RawChatSession): ChatSession {
     return {
-        ...session,
+        createdAt: session.createdAt,
+        id: session.id,
         sources: normalizeSources(session.sources || []),
+        status: session.status,
         title: session.title || 'Untitled Chat',
+        updatedAt: session.updatedAt,
+        userId: session.userId,
+    } as ChatSession;
+}
+
+function normalizeSessionWithPromptMessage(session: RawChatSession): ChatSessionWithPromptMessage | undefined {
+    const rawMessage = session.messages?.[0] as ChatMessagePrompt;
+    let promptMessage;
+    if (rawMessage) {
+        promptMessage = {
+            id: rawMessage.id,
+            ordinalId: rawMessage.ordinalId,
+            prompt: rawMessage.content,
+            status: ChatMessageStatus.COMPLETED,
+            timestamp: rawMessage.createdAt,
+            type: ChatMessageType.PROMPT,
+        };
+    }
+    return {
+        ...normalizeSession(session),
+        promptMessage,
     };
 }
 
@@ -103,7 +143,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                                     const normalizedSession = normalizeSession({
                                         ...updatedSession,
                                         sources: undefined,
-                                    });
+                                    } as RawChatSession);
                                     return [
                                         ...prevSessions.slice(0, indexToUpdate),
                                         normalizedSession,
@@ -130,11 +170,23 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                 chatSession {
                     id
                     createdAt
+                    messages {
+                        ... on ChatMessagePrompt {
+                            id
+                            content
+                            createdAt
+                            messageType
+                            ordinalId
+                            runnerVersion
+                            sessionId
+                            updatedAt
+                            userId
+                        }
+                    }
                     sources {
                         id
-                        sourceId
-                        sourceName
-                        sourceType
+                        name
+                        type
                     }
                     status
                     title
@@ -151,9 +203,9 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     const newSession = resp.data?.createChatSession?.chatSession;
                     if (newSession) {
                         // Ensure we normalize the session before adding it to state and returning
-                        const normalizedSession = normalizeSession(newSession);
+                        const normalizedSession = normalizeSession(newSession as RawChatSession);
                         setSessions((prevSessions) => [...prevSessions, normalizedSession]);
-                        return normalizedSession;
+                        return normalizeSessionWithPromptMessage(newSession as RawChatSession) || null;
                     } else {
                         setError('Error creating chat session');
                     }
@@ -199,9 +251,8 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         id
-                        sourceId
-                        sourceName
-                        sourceType
+                        name
+                        type
                     }
                     status
                     title
@@ -249,9 +300,8 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         id
-                        sourceId
-                        sourceName
-                        sourceType
+                        name
+                        type
                     }
                     status
                     title
