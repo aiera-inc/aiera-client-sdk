@@ -100,7 +100,9 @@ function updateVirtuoso(
         };
     });
 
-    if (sources.length === 0) {
+    // TODO enable this once we have actual source confirmation messages to show
+    // eslint-disable-next-line no-constant-condition
+    if (sources.length === 0 && false) {
         const newKey = `${idCounter++}`;
         const sourceMessage: ChatMessageSources = {
             id: newKey,
