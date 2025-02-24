@@ -14,7 +14,7 @@ export interface TextBlock extends BaseBlock {
 }
 
 export function Text({ content, meta }: TextBlock) {
-    const Container = meta.style === 'paragraph' ? 'p' : meta.style;
+    const Container = meta.style === 'paragraph' ? 'p' : meta.style ?? 'p';
     return (
         <Container
             className={classNames({

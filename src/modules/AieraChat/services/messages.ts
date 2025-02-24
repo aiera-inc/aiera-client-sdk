@@ -38,6 +38,9 @@ import {
     ChartType,
 } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart';
 import { CellMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Table';
+import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
+
+const POLLING_INTERVAL = 2000; // 2 seconds
 
 export enum ChatMessageType {
     PROMPT = 'prompt',
@@ -408,7 +411,7 @@ function normalizeChatMessage(
     }
 }
 
-export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
+export const useChatMessages = (sessionId: string, enablePolling = false): UseChatMessagesReturn => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -484,122 +487,12 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                             updatedAt
                             userId
                             blocks {
-                                ... on ChartBlock {
-                                    ...ChartBlockFields
-                                }
-                                ... on ImageBlock {
-                                    ...ImageBlockFields
-                                }
-                                ... on ListBlock {
-                                    ...ListBlockFields
-                                }
-                                ... on QuoteBlock {
-                                    ...QuoteBlockFields
-                                }
-                                ... on TableBlock {
-                                    ...TableBlockFields
-                                }
                                 ... on TextBlock {
                                     ...TextBlockFields
                                 }
                             }
-                            responseSources: sources {
-                                id
-                                name
-                                type
-                            }
-                        }
-                        ... on ChatMessageSourceConfirmation {
-                            id
-                            createdAt
-                            messageType
-                            ordinalId
-                            runnerVersion
-                            sessionId
-                            updatedAt
-                            userId
-                            confirmationSources: sources {
-                                id
-                                confirmed
-                                name
-                                type
-                            }
                         }
                     }
-                }
-            }
-
-            fragment ChartBlockFields on ChartBlock {
-                __typename
-                id
-                type
-                data {
-                    name
-                    properties
-                    value
-                }
-                meta {
-                    chartType
-                    properties
-                }
-            }
-
-            fragment ImageBlockFields on ImageBlock {
-                __typename
-                id
-                type
-                url
-                meta {
-                    altText
-                    imageDate: date
-                    imageSource: source
-                    title
-                }
-            }
-
-            fragment QuoteBlockFields on QuoteBlock {
-                __typename
-                id
-                type
-                quoteContent: content
-                meta {
-                    author
-                    quoteDate: date
-                    quoteSource: source
-                    url
-                }
-            }
-
-            fragment TableBlockFields on TableBlock {
-                __typename
-                id
-                type
-                headers
-                meta {
-                    columnAlignment
-                    columnMeta {
-                        currency
-                        decimals
-                        format
-                        unit
-                    }
-                }
-                rows {
-                    citation {
-                        id
-                        author
-                        contentId
-                        contentType
-                        date
-                        quote
-                        source {
-                            id
-                            name
-                            type
-                        }
-                        url
-                    }
-                    value
                 }
             }
 
@@ -626,56 +519,6 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
                 }
                 meta {
                     textStyle: style
-                }
-            }
-
-            fragment ListBlockFields on ListBlock {
-                __typename
-                id
-                type
-                items {
-                    ... on ChartBlock {
-                        ...ChartBlockFields
-                    }
-                    ... on ImageBlock {
-                        ...ImageBlockFields
-                    }
-                    ... on ListBlock {
-                        id
-                        type
-                        meta {
-                            listStyle: style
-                        }
-                        items {
-                            ... on ChartBlock {
-                                ...ChartBlockFields
-                            }
-                            ... on ImageBlock {
-                                ...ImageBlockFields
-                            }
-                            ... on QuoteBlock {
-                                ...QuoteBlockFields
-                            }
-                            ... on TableBlock {
-                                ...TableBlockFields
-                            }
-                            ... on TextBlock {
-                                ...TextBlockFields
-                            }
-                        }
-                    }
-                    ... on QuoteBlock {
-                        ...QuoteBlockFields
-                    }
-                    ... on TableBlock {
-                        ...TableBlockFields
-                    }
-                    ... on TextBlock {
-                        ...TextBlockFields
-                    }
-                }
-                meta {
-                    listStyle: style
                 }
             }
         `,
@@ -708,6 +551,11 @@ export const useChatMessages = (sessionId: string): UseChatMessagesReturn => {
     }, [error, isLoading, messagesQuery, setError, setIsLoading, setMessages]);
 
     const refresh = () => messagesQuery.refetch();
+
+    // If polling is enabled, refresh messages on the set interval
+    if (enablePolling) {
+        useInterval(() => refresh(), POLLING_INTERVAL);
+    }
 
     return {
         createChatMessagePrompt,
