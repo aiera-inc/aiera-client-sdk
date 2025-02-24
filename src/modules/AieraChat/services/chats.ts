@@ -39,7 +39,7 @@ export interface ChatSession {
     updatedAt: string;
     userId: string;
 }
- 
+
 export interface ChatSessionWithPromptMessage extends ChatSession {
     promptMessage?: {
         id: string;
@@ -454,33 +454,33 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         requestPolicy: 'cache-and-network',
     });
 
-    useEffect(() => {
-        return () => {
-            if (ably) {
-                ably.close();
-                setAbly(null);
-                setIsConnected(false);
-            }
-        };
-    }, [ably]);
+    // useEffect(() => {
+    //     return () => {
+    //         if (ably) {
+    //             ably.close();
+    //             setAbly(null);
+    //             setIsConnected(false);
+    //         }
+    //     };
+    // }, [ably]);
 
-    useEffect(() => {
-        const fetchToken = async () => {
-            try {
-                const sessionId = '1234567'; // Test with a constant session
-                await createAblyToken(sessionId);
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'An error occurred');
-            }
-        };
-
-        if (!isConnected && !ably) {
-            // Ensure promise is awaited
-            fetchToken().catch((err) => {
-                console.error('Error in fetchToken:', err);
-            });
-        }
-    }, [ably, isConnected]);
+    // useEffect(() => {
+    //     const fetchToken = async () => {
+    //         try {
+    //             const sessionId = '1234567'; // Test with a constant session
+    //             await createAblyToken(sessionId);
+    //         } catch (err) {
+    //             setError(err instanceof Error ? err.message : 'An error occurred');
+    //         }
+    //     };
+    //
+    //     if (!isConnected && !ably) {
+    //         // Ensure promise is awaited
+    //         fetchToken().catch((err) => {
+    //             console.error('Error in fetchToken:', err);
+    //         });
+    //     }
+    // }, [ably, isConnected]);
 
     useEffect(() => {
         if (chatSessionsQuery.status === 'success') {
