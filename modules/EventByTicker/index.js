@@ -83935,84 +83935,6 @@ var EventSummarizationSummaryType = /* @__PURE__ */ ((EventSummarizationSummaryT
   EventSummarizationSummaryType2["QAndA"] = "q_and_a";
   return EventSummarizationSummaryType2;
 })(EventSummarizationSummaryType || {});
-var ChartBlockFieldsFragmentDoc = lib_default`
-    fragment ChartBlockFields on ChartBlock {
-  __typename
-  id
-  type
-  data {
-    name
-    properties
-    value
-  }
-  meta {
-    chartType
-    properties
-  }
-}
-    `;
-var ImageBlockFieldsFragmentDoc = lib_default`
-    fragment ImageBlockFields on ImageBlock {
-  __typename
-  id
-  type
-  url
-  meta {
-    altText
-    imageDate: date
-    imageSource: source
-    title
-  }
-}
-    `;
-var QuoteBlockFieldsFragmentDoc = lib_default`
-    fragment QuoteBlockFields on QuoteBlock {
-  __typename
-  id
-  type
-  quoteContent: content
-  meta {
-    author
-    quoteDate: date
-    quoteSource: source
-    url
-  }
-}
-    `;
-var TableBlockFieldsFragmentDoc = lib_default`
-    fragment TableBlockFields on TableBlock {
-  __typename
-  id
-  type
-  headers
-  meta {
-    columnAlignment
-    columnMeta {
-      currency
-      decimals
-      format
-      unit
-    }
-  }
-  rows {
-    citation {
-      id
-      author
-      contentId
-      contentType
-      date
-      quote
-      source {
-        id
-        name
-        type
-      }
-      url
-    }
-    value
-  }
-}
-    `;
 var TextBlockFieldsFragmentDoc = lib_default`
     fragment TextBlockFields on TextBlock {
   __typename
@@ -84040,61 +83962,6 @@ var TextBlockFieldsFragmentDoc = lib_default`
   }
 }
     `;
-var ListBlockFieldsFragmentDoc = lib_default`
-    fragment ListBlockFields on ListBlock {
-  __typename
-  id
-  type
-  items {
-    ... on ChartBlock {
-      ...ChartBlockFields
-    }
-    ... on ImageBlock {
-      ...ImageBlockFields
-    }
-    ... on ListBlock {
-      id
-      type
-      meta {
-        listStyle: style
-      }
-      items {
-        ... on ChartBlock {
-          ...ChartBlockFields
-        }
-        ... on ImageBlock {
-          ...ImageBlockFields
-        }
-        ... on QuoteBlock {
-          ...QuoteBlockFields
-        }
-        ... on TableBlock {
-          ...TableBlockFields
-        }
-        ... on TextBlock {
-          ...TextBlockFields
-        }
-      }
-    }
-    ... on QuoteBlock {
-      ...QuoteBlockFields
-    }
-    ... on TableBlock {
-      ...TableBlockFields
-    }
-    ... on TextBlock {
-      ...TextBlockFields
-    }
-  }
-  meta {
-    listStyle: style
-  }
-}
-    ${ChartBlockFieldsFragmentDoc}
-${ImageBlockFieldsFragmentDoc}
-${QuoteBlockFieldsFragmentDoc}
-${TableBlockFieldsFragmentDoc}
-${TextBlockFieldsFragmentDoc}`;
 var RefreshDocument = lib_default`
     mutation Refresh {
   __typename
@@ -84349,56 +84216,15 @@ var ChatSessionWithMessagesDocument = lib_default`
         updatedAt
         userId
         blocks {
-          ... on ChartBlock {
-            ...ChartBlockFields
-          }
-          ... on ImageBlock {
-            ...ImageBlockFields
-          }
-          ... on ListBlock {
-            ...ListBlockFields
-          }
-          ... on QuoteBlock {
-            ...QuoteBlockFields
-          }
-          ... on TableBlock {
-            ...TableBlockFields
-          }
           ... on TextBlock {
             ...TextBlockFields
           }
-        }
-        responseSources: sources {
-          id
-          name
-          type
-        }
-      }
-      ... on ChatMessageSourceConfirmation {
-        id
-        createdAt
-        messageType
-        ordinalId
-        runnerVersion
-        sessionId
-        updatedAt
-        userId
-        confirmationSources: sources {
-          id
-          confirmed
-          name
-          type
         }
       }
     }
   }
 }
-    ${ChartBlockFieldsFragmentDoc}
-${ImageBlockFieldsFragmentDoc}
-${ListBlockFieldsFragmentDoc}
-${QuoteBlockFieldsFragmentDoc}
-${TableBlockFieldsFragmentDoc}
-${TextBlockFieldsFragmentDoc}`;
+    ${TextBlockFieldsFragmentDoc}`;
 var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
