@@ -133,7 +133,8 @@ function updateVirtuoso(
                 return message;
             });
         }, 2000);
-    } else {
+        // eslint-disable-next-line no-constant-condition
+    } else if (sources.length > 0 && false) {
         const botMessage = randomMessage(prompt);
         virtuosoRef.current?.data.append([botMessage]);
         setTimeout(() => {
