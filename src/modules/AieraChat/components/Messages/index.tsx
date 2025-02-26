@@ -102,7 +102,7 @@ function updateVirtuoso(
 
     // TODO enable this once we have actual source confirmation messages to show
     // eslint-disable-next-line no-constant-condition
-    if (sources.length === 0 && false) {
+    if (sources && sources.length === 0 && false) {
         const newKey = `${idCounter++}`;
         const sourceMessage: ChatMessageSources = {
             id: newKey,
@@ -133,8 +133,9 @@ function updateVirtuoso(
                 return message;
             });
         }, 2000);
+        // TODO enable once we have chat response streaming
         // eslint-disable-next-line no-constant-condition
-    } else if (sources.length > 0 && false) {
+    } else if (sources && sources.length > 0 && false) {
         const botMessage = randomMessage(prompt);
         virtuosoRef.current?.data.append([botMessage]);
         setTimeout(() => {
