@@ -105,6 +105,7 @@ function createGQLClient(config: Config): Client {
                 QuoteBlock: (data) => data.id as string,
                 TableBlock: (data) => data.id as string,
                 ChartBlock: (data) => data.id as string,
+                BaseBlock: () => null, // interfaces should return null
             },
         }),
         auth ? authExchange(auth) : null,

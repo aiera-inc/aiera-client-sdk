@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import {
-    BaseBlock,
     ChartBlock,
     ChartBlockMeta,
     ChartData,
@@ -16,7 +15,7 @@ import {
     ChatSource,
     CitableContent as RawCitableContent,
     ConfirmableChatSource,
-    ContentBlockType,
+    ContentBlock as BaseBlock,
     CreateChatMessagePromptMutation,
     CreateChatMessagePromptMutationVariables,
     ImageBlock,
@@ -114,6 +113,51 @@ type RawChatMessageSourceConfirmation = {
     userId: number;
 };
 
+// Define interface for aliased blocks to match the GraphQL query structure
+interface AliasedTextBlock extends Omit<TextBlock, 'content' | 'meta'> {
+    textContent: TextBlock['content'];
+    textMeta: {
+        textStyle: TextBlockMeta['style'];
+    };
+}
+
+interface AliasedListBlock extends Omit<ListBlock, 'meta' | 'items'> {
+    listMeta: {
+        listStyle: ListBlockMeta['style'];
+    };
+    items: Array<BaseBlock>;
+}
+
+interface AliasedImageBlock extends Omit<ImageBlock, 'meta'> {
+    imageMeta: {
+        altText: ImageBlockMeta['altText'];
+        title: ImageBlockMeta['title'];
+        imageSource: ImageBlockMeta['source'];
+        imageDate: ImageBlockMeta['date'];
+    };
+}
+
+interface AliasedQuoteBlock extends Omit<QuoteBlock, 'content' | 'meta'> {
+    quoteContent: QuoteBlock['content'];
+    quoteMeta: {
+        author: QuoteBlockMeta['author'];
+        quoteSource: QuoteBlockMeta['source'];
+        quoteDate: QuoteBlockMeta['date'];
+        url: QuoteBlockMeta['url'];
+    };
+}
+
+interface AliasedTableBlock extends Omit<TableBlock, 'meta'> {
+    tableMeta: {
+        columnAlignment: TableBlock['meta']['columnAlignment'];
+        columnMeta: TableBlock['meta']['columnMeta'];
+    };
+}
+
+interface AliasedChartBlock extends Omit<ChartBlock, 'meta'> {
+    chartMeta: ChartBlock['meta'];
+}
+
 // Interface to help with TypeScript typings for GraphQL responses
 interface GraphQLResponse {
     __typename?: string;
@@ -131,6 +175,11 @@ interface UseChatMessagesReturn {
     isLoading: boolean;
     error: string | null;
     refresh: () => void;
+}
+
+// Type guard utility function
+function isNonNullable<T>(value: T): value is NonNullable<T> {
+    return value !== null && value !== undefined;
 }
 
 function normalizeChartMeta(meta: ChartBlockMeta): ChartMeta {
@@ -216,11 +265,6 @@ function normalizeChartMeta(meta: ChartBlockMeta): ChartMeta {
     }
 }
 
-// Type guard utility function
-function isNonNullable<T>(value: T): value is NonNullable<T> {
-    return value !== null && value !== undefined;
-}
-
 function normalizeCitableContent(rawContent: RawCitableContent[]): CitableContent {
     if (!rawContent || !Array.isArray(rawContent)) {
         return [];
@@ -240,22 +284,6 @@ function normalizeCitableContent(rawContent: RawCitableContent[]): CitableConten
             return content.value || '';
         }
     });
-}
-
-function normalizeSources(sources: ChatSource[] | undefined | null): ChatMessageSource[] {
-    if (!sources || !Array.isArray(sources)) {
-        return [];
-    }
-
-    return sources
-        .filter((s: ChatSource) => s)
-        .map(
-            (source): ChatMessageSource => ({
-                targetId: source.id || '',
-                targetTitle: source.name || '',
-                targetType: source.type || '',
-            })
-        );
 }
 
 function normalizeTableCellMeta(rawMeta: TableCellMeta): CellMeta | undefined {
@@ -294,51 +322,6 @@ function normalizeTableMeta(rawColumnMeta: TableCellMeta[] | undefined | null): 
     return normalizedMeta.length > 0 ? normalizedMeta : undefined;
 }
 
-// Define interface for aliased blocks to match the GraphQL query structure
-interface AliasedTextBlock extends Omit<TextBlock, 'content' | 'meta'> {
-    textContent: TextBlock['content'];
-    textMeta: {
-        textStyle: TextBlockMeta['style'];
-    };
-}
-
-interface AliasedListBlock extends Omit<ListBlock, 'meta' | 'items'> {
-    listMeta: {
-        listStyle: ListBlockMeta['style'];
-    };
-    items: Array<BaseBlock>;
-}
-
-interface AliasedImageBlock extends Omit<ImageBlock, 'meta'> {
-    imageMeta: {
-        altText: ImageBlockMeta['altText'];
-        title: ImageBlockMeta['title'];
-        imageSource: ImageBlockMeta['source'];
-        imageDate: ImageBlockMeta['date'];
-    };
-}
-
-interface AliasedQuoteBlock extends Omit<QuoteBlock, 'content' | 'meta'> {
-    quoteContent: QuoteBlock['content'];
-    quoteMeta: {
-        author: QuoteBlockMeta['author'];
-        quoteSource: QuoteBlockMeta['source'];
-        quoteDate: QuoteBlockMeta['date'];
-        url: QuoteBlockMeta['url'];
-    };
-}
-
-interface AliasedTableBlock extends Omit<TableBlock, 'meta'> {
-    tableMeta: {
-        columnAlignment: TableBlock['meta']['columnAlignment'];
-        columnMeta: TableBlock['meta']['columnMeta'];
-    };
-}
-
-interface AliasedChartBlock extends Omit<ChartBlock, 'meta'> {
-    chartMeta: ChartBlock['meta'];
-}
-
 // Generic function to normalize a content block with aliased fields
 function normalizeContentBlock(rawBlock: BaseBlock | null | undefined): ContentBlock | null {
     if (!rawBlock) {
@@ -349,22 +332,35 @@ function normalizeContentBlock(rawBlock: BaseBlock | null | undefined): ContentB
     try {
         console.log('Normalizing block:', { type: rawBlock.type, id: rawBlock.id });
 
-        switch (rawBlock.type) {
-            case ContentBlockType.Chart: {
-                const block = rawBlock as unknown as AliasedChartBlock;
+        switch (rawBlock.__typename) {
+            case 'TextBlock': {
+                const block = rawBlock as unknown as AliasedTextBlock;
                 return {
-                    data: (block.data ?? []).map((d: ChartData) => ({
-                        name: d.name || '',
-                        value: d.value || 0,
-                        ...((d.properties as object) || {}),
-                    })),
+                    content: block.textContent ? normalizeCitableContent([block.textContent]) : [],
                     id: block.id,
-                    meta: normalizeChartMeta(block.chartMeta),
-                    type: BlockType.CHART,
+                    meta: {
+                        style: block.textMeta?.textStyle || 'paragraph',
+                    },
+                    type: BlockType.TEXT,
                 };
             }
 
-            case ContentBlockType.Image: {
+            case 'ListBlock': {
+                const block = rawBlock as unknown as AliasedListBlock;
+                const meta = block.listMeta || { listStyle: 'bullet' };
+                const items = block.items || [];
+
+                return {
+                    id: block.id,
+                    items: items.map((item) => normalizeContentBlock(item)).filter(isNonNullable),
+                    meta: {
+                        style: meta.listStyle || 'bullet',
+                    },
+                    type: BlockType.LIST,
+                };
+            }
+
+            case 'ImageBlock': {
                 const block = rawBlock as unknown as AliasedImageBlock;
                 const meta = block.imageMeta || ({} as AliasedImageBlock['imageMeta']);
                 return {
@@ -380,22 +376,7 @@ function normalizeContentBlock(rawBlock: BaseBlock | null | undefined): ContentB
                 };
             }
 
-            case ContentBlockType.List: {
-                const block = rawBlock as unknown as AliasedListBlock;
-                const meta = block.listMeta || { listStyle: 'bullet' };
-                const items = block.items || [];
-
-                return {
-                    id: block.id,
-                    items: items.map((item) => normalizeContentBlock(item)).filter(isNonNullable),
-                    meta: {
-                        style: meta.listStyle || 'bullet',
-                    },
-                    type: BlockType.LIST,
-                };
-            }
-
-            case ContentBlockType.Quote: {
+            case 'QuoteBlock': {
                 const block = rawBlock as unknown as AliasedQuoteBlock;
                 const meta = block.quoteMeta || ({} as AliasedQuoteBlock['quoteMeta']);
                 return {
@@ -411,7 +392,7 @@ function normalizeContentBlock(rawBlock: BaseBlock | null | undefined): ContentB
                 };
             }
 
-            case ContentBlockType.Table: {
+            case 'TableBlock': {
                 const block = rawBlock as unknown as AliasedTableBlock;
                 const meta = block.tableMeta || { columnAlignment: [], columnMeta: [] };
                 return {
@@ -426,24 +407,24 @@ function normalizeContentBlock(rawBlock: BaseBlock | null | undefined): ContentB
                 };
             }
 
-            case ContentBlockType.Text: {
-                const block = rawBlock as unknown as AliasedTextBlock;
-                const content = block.textContent;
-                const meta = block.textMeta || { textStyle: 'paragraph' };
-
+            case 'ChartBlock': {
+                const block = rawBlock as unknown as AliasedChartBlock;
                 return {
-                    content: content ? normalizeCitableContent([content]) : [],
+                    data: (block.data ?? []).map((d: ChartData) => ({
+                        name: d.name || '',
+                        value: d.value || 0,
+                        ...((d.properties as object) || {}),
+                    })),
                     id: block.id,
-                    meta: {
-                        style: meta.textStyle || 'paragraph',
-                    },
-                    type: BlockType.TEXT,
+                    meta: normalizeChartMeta(block.chartMeta),
+                    type: BlockType.CHART,
                 };
             }
 
             default: {
-                console.error('Unhandled content block type:', rawBlock.type, 'for block:', rawBlock);
-                throw new Error(`Unhandled content block type: ${rawBlock.type}`);
+                const blockTypename = (rawBlock as GraphQLResponse).__typename ?? '';
+                console.error('Unhandled content block type:', blockTypename, 'for block:', rawBlock);
+                throw new Error(`Unhandled content block type: ${blockTypename}`);
             }
         }
     } catch (error) {
@@ -545,7 +526,23 @@ function normalizeChatMessage(rawMessage: unknown): ChatMessage {
     }
 }
 
-// Define fragments separately for better reusability and clarity
+function normalizeSources(sources: ChatSource[] | undefined | null): ChatMessageSource[] {
+    if (!sources || !Array.isArray(sources)) {
+        return [];
+    }
+
+    return sources
+        .filter((s: ChatSource) => s)
+        .map(
+            (source): ChatMessageSource => ({
+                targetId: source.id || '',
+                targetTitle: source.name || '',
+                targetType: source.type || '',
+            })
+        );
+}
+
+// // Define fragments separately for better re-usability and clarity
 const TEXT_BLOCK_FRAGMENT = gql`
     fragment TextBlockFragment on TextBlock {
         id
@@ -562,8 +559,10 @@ const TEXT_BLOCK_FRAGMENT = gql`
                     id
                     name
                     type
+                    __typename
                 }
                 url
+                __typename
             }
             value
             __typename
@@ -609,7 +608,7 @@ const QUOTE_BLOCK_FRAGMENT = gql`
 `;
 
 const LIST_ITEM_FRAGMENT = gql`
-    fragment ListItemFragment on BaseBlock {
+    fragment ListItemFragment on ContentBlock {
         __typename
         ... on TextBlock {
             ...TextBlockFragment
@@ -619,6 +618,21 @@ const LIST_ITEM_FRAGMENT = gql`
         }
         ... on QuoteBlock {
             ...QuoteBlockFragment
+        }
+        ... on TableBlock {
+            id
+            type
+            __typename
+        }
+        ... on ChartBlock {
+            id
+            type
+            __typename
+        }
+        ... on ListBlock {
+            id
+            type
+            __typename
         }
     }
 `;
@@ -639,8 +653,67 @@ const LIST_BLOCK_FRAGMENT = gql`
     }
 `;
 
+const TABLE_BLOCK_FRAGMENT = gql`
+    fragment TableBlockFragment on TableBlock {
+        id
+        type
+        headers
+        rows {
+            citation {
+                id
+                author
+                contentId
+                contentType
+                date
+                quote
+                source {
+                    id
+                    name
+                    type
+                    __typename
+                }
+                url
+                __typename
+            }
+            value
+            __typename
+        }
+        tableMeta: meta {
+            columnAlignment
+            columnMeta {
+                currency
+                unit
+                format
+                decimals
+                __typename
+            }
+            __typename
+        }
+        __typename
+    }
+`;
+
+const CHART_BLOCK_FRAGMENT = gql`
+    fragment ChartBlockFragment on ChartBlock {
+        id
+        type
+        data {
+            name
+            value
+            properties
+            __typename
+        }
+        chartMeta: meta {
+            chartType
+            properties
+            __typename
+        }
+        __typename
+    }
+`;
+
 const CONTENT_BLOCK_FRAGMENT = gql`
-    fragment ContentBlockFragment on BaseBlock {
+    fragment ContentBlockFragment on ContentBlock {
         __typename
         ... on TextBlock {
             ...TextBlockFragment
@@ -655,65 +728,22 @@ const CONTENT_BLOCK_FRAGMENT = gql`
             ...QuoteBlockFragment
         }
         ... on TableBlock {
-            id
-            type
-            headers
-            rows {
-                citation {
-                    id
-                    author
-                    contentId
-                    contentType
-                    date
-                    quote
-                    source {
-                        id
-                        name
-                        type
-                    }
-                    url
-                }
-                value
-            }
-            tableMeta: meta {
-                columnAlignment
-                columnMeta {
-                    currency
-                    unit
-                    format
-                    decimals
-                    __typename
-                }
-                __typename
-            }
-            __typename
+            ...TableBlockFragment
         }
         ... on ChartBlock {
-            id
-            type
-            data {
-                name
-                value
-                properties
-                __typename
-            }
-            chartMeta: meta {
-                chartType
-                properties
-                __typename
-            }
-            __typename
+            ...ChartBlockFragment
         }
     }
 `;
 
-// Improved GraphQL query using fragments and explicit __typename
 const CHAT_SESSION_QUERY = gql`
     ${TEXT_BLOCK_FRAGMENT}
     ${IMAGE_BLOCK_FRAGMENT}
     ${QUOTE_BLOCK_FRAGMENT}
     ${LIST_ITEM_FRAGMENT}
     ${LIST_BLOCK_FRAGMENT}
+    ${TABLE_BLOCK_FRAGMENT}
+    ${CHART_BLOCK_FRAGMENT}
     ${CONTENT_BLOCK_FRAGMENT}
 
     query ChatSessionWithMessages($filter: ChatSessionFilter!) {
@@ -838,46 +868,6 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
         },
         [createChatMessagePromptMutation, setError, setMessages]
     );
-
-    // Extra debugging output for response structure
-    // const logQueryResponseStructure = useCallback((data: any) => {
-    //     if (!data) return;
-    //
-    //     try {
-    //         const session = data.chatSession;
-    //         if (!session) {
-    //             console.log('No chatSession in response');
-    //             return;
-    //         }
-    //
-    //         console.log('Chat session ID:', session.id);
-    //
-    //         const messages = session.messages || [];
-    //         console.log(`Found ${messages.length} messages in response`);
-    //
-    //         messages.forEach((msg: any, index: number) => {
-    //             console.log(`Message ${index}:`, {
-    //                 id: msg.id,
-    //                 type: msg.__typename,
-    //                 messageType: msg.messageType,
-    //                 hasBlocks: msg.blocks ? `Yes (${msg.blocks.length})` : 'No',
-    //                 hasSources: msg.sources ? `Yes (${msg.sources.length})` : 'No',
-    //             });
-    //
-    //             // Log block types if present
-    //             if (Array.isArray(msg.blocks)) {
-    //                 const blockTypes = msg.blocks.map((b: any) => ({
-    //                     id: b.id,
-    //                     type: b.type,
-    //                     typename: b.__typename,
-    //                 }));
-    //                 console.log(`Message ${index} blocks:`, blockTypes);
-    //             }
-    //         });
-    //     } catch (e) {
-    //         console.error('Error logging query structure:', e);
-    //     }
-    // }, []);
 
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
         query: CHAT_SESSION_QUERY,
