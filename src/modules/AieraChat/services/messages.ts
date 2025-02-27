@@ -8,23 +8,27 @@ import {
     ChartBlockMeta,
     ChartData,
     ChartType as ChartTypeEnum,
-    ChatMessagePrompt as ChatMessagePromptType,
-    ChatMessageResponse as ChatMessageResponseType,
-    ChatMessageSourceConfirmation as ChatMessageSourceConfirmationType,
+    ChatMessagePrompt as RawChatMessagePrompt,
+    ChatMessageResponse as RawChatMessageResponse,
     ChatMessageType as ChatMessageTypeEnum,
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
     CitableContent as RawCitableContent,
+    ConfirmableChatSource,
     ContentBlockType,
     CreateChatMessagePromptMutation,
     CreateChatMessagePromptMutationVariables,
     ImageBlock,
+    ImageBlockMeta,
     ListBlock,
+    ListBlockMeta,
     QuoteBlock,
+    QuoteBlockMeta,
     TableBlock,
     TableCellMeta,
     TextBlock,
+    TextBlockMeta,
 } from '@aiera/client-sdk/types/generated';
 import {
     BlockType,
@@ -38,7 +42,6 @@ import {
     ChartType,
 } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart';
 import { CellMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Table';
-import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 
 const POLLING_INTERVAL = 2000; // 2 seconds
 
@@ -97,6 +100,24 @@ export interface ChatMessageSources extends ChatMessageBase {
 }
 
 export type ChatMessage = ChatMessageResponse | ChatMessagePrompt | ChatMessageSources;
+type RawChatMessageSourceConfirmation = {
+    __typename?: 'ChatMessageSourceConfirmation';
+    createdAt: string;
+    id: string;
+    messageType: ChatMessageTypeEnum;
+    ordinalId?: string;
+    promptMessageId?: number;
+    runnerVersion?: string;
+    sessionId: string;
+    confirmableSources: ConfirmableChatSource[]; // renamed to avoid conflict with sources field in query
+    updatedAt: string;
+    userId: number;
+};
+
+// Interface to help with TypeScript typings for GraphQL responses
+interface GraphQLResponse {
+    __typename?: string;
+}
 
 interface UseChatMessagesReturn {
     createChatMessagePrompt: ({
@@ -195,31 +216,33 @@ function normalizeChartMeta(meta: ChartBlockMeta): ChartMeta {
     }
 }
 
-// Redeclare types to avoid name conflicts, but retain all the type definitions
-type RawTableCellMeta = TableCellMeta;
-
+// Type guard utility function
 function isNonNullable<T>(value: T): value is NonNullable<T> {
     return value !== null && value !== undefined;
 }
 
 function normalizeCitableContent(rawContent: RawCitableContent[]): CitableContent {
+    if (!rawContent || !Array.isArray(rawContent)) {
+        return [];
+    }
+
     return rawContent.map((content): string | Citation => {
         if (content.citation) {
             return {
-                author: content.citation.author as string,
-                date: content.citation.date as string,
-                id: content.citation.id,
-                source: content.citation.source.name,
-                text: content.citation.quote,
-                url: content.citation.url as string,
+                author: (content.citation.author as string) || '',
+                date: (content.citation.date as string) || '',
+                id: content.citation.id || '',
+                source: content.citation.source?.name || '',
+                text: content.citation.quote || '',
+                url: (content.citation.url as string) || '',
             };
         } else {
-            return content.value;
+            return content.value || '';
         }
     });
 }
 
-function normalizeSources(sources: ChatSource[] | undefined): ChatMessageSource[] {
+function normalizeSources(sources: ChatSource[] | undefined | null): ChatMessageSource[] {
     if (!sources || !Array.isArray(sources)) {
         return [];
     }
@@ -228,14 +251,14 @@ function normalizeSources(sources: ChatSource[] | undefined): ChatMessageSource[
         .filter((s: ChatSource) => s)
         .map(
             (source): ChatMessageSource => ({
-                targetId: source.id,
-                targetTitle: source.name,
-                targetType: source.type,
+                targetId: source.id || '',
+                targetTitle: source.name || '',
+                targetType: source.type || '',
             })
         );
 }
 
-function normalizeTableCellMeta(rawMeta: RawTableCellMeta): CellMeta | undefined {
+function normalizeTableCellMeta(rawMeta: TableCellMeta): CellMeta | undefined {
     if (!rawMeta) {
         return undefined;
     }
@@ -244,18 +267,18 @@ function normalizeTableCellMeta(rawMeta: RawTableCellMeta): CellMeta | undefined
         ...(rawMeta.currency ? { currency: rawMeta.currency } : {}),
         ...(rawMeta.unit ? { unit: rawMeta.unit } : {}),
         ...(rawMeta.format ? { format: rawMeta.format.toLowerCase() as CellMeta['format'] } : {}),
-        ...(rawMeta.decimals ? { decimals: rawMeta.decimals } : {}),
+        ...(rawMeta.decimals !== null && rawMeta.decimals !== undefined ? { decimals: rawMeta.decimals } : {}),
     };
 }
 
-function normalizeTableMeta(rawColumnMeta: RawTableCellMeta | undefined): CellMeta[] | undefined {
+function normalizeTableMeta(rawColumnMeta: TableCellMeta[] | undefined | null): CellMeta[] | undefined {
     // Early return if the input is null/undefined
     if (!rawColumnMeta || !Array.isArray(rawColumnMeta)) {
         return undefined;
     }
 
     // Filter out nulls and undefined values with type assertion
-    const validRawMeta = rawColumnMeta.filter(isNonNullable).filter((meta: RawTableCellMeta) => {
+    const validRawMeta = rawColumnMeta.filter(isNonNullable).filter((meta: TableCellMeta) => {
         return meta.__typename === 'TableCellMeta';
     });
 
@@ -265,151 +288,512 @@ function normalizeTableMeta(rawColumnMeta: RawTableCellMeta | undefined): CellMe
     }
 
     // Process each valid metadata item
-    const normalizedMeta = validRawMeta
-        .map((meta) => normalizeTableCellMeta(meta as RawTableCellMeta))
-        .filter(isNonNullable);
+    const normalizedMeta = validRawMeta.map((meta) => normalizeTableCellMeta(meta)).filter(isNonNullable);
 
     // Return undefined if we end up with an empty array
     return normalizedMeta.length > 0 ? normalizedMeta : undefined;
 }
 
-function normalizeContentBlock(rawBlock: BaseBlock): ContentBlock {
-    switch (rawBlock.type) {
-        case ContentBlockType.Chart: {
-            const block = rawBlock as ChartBlock;
-            return {
-                data: (block.data ?? []).map((d: ChartData) => ({
-                    name: d.name,
-                    value: d.value,
-                    ...(d.properties as object),
-                })),
-                id: block.id,
-                meta: normalizeChartMeta(block.meta),
-                type: BlockType.CHART,
-            };
-        }
+// Define interface for aliased blocks to match the GraphQL query structure
+interface AliasedTextBlock extends Omit<TextBlock, 'content' | 'meta'> {
+    textContent: TextBlock['content'];
+    textMeta: {
+        textStyle: TextBlockMeta['style'];
+    };
+}
 
-        case ContentBlockType.Image: {
-            const block = rawBlock as ImageBlock;
-            return {
-                id: block.id,
-                meta: {
-                    altText: block.meta.altText ?? '',
-                    date: (block.meta.date as string) ?? '',
-                    source: block.meta.source ?? '',
-                    title: block.meta.title,
-                },
-                type: BlockType.IMAGE,
-                url: block.url,
-            };
-        }
+interface AliasedListBlock extends Omit<ListBlock, 'meta' | 'items'> {
+    listMeta: {
+        listStyle: ListBlockMeta['style'];
+    };
+    items: Array<BaseBlock>;
+}
 
-        case ContentBlockType.List: {
-            const block = rawBlock as ListBlock;
-            return {
-                id: block.id,
-                items: block.items.map(normalizeContentBlock), // TODO add support for ListItemText
-                meta: {
-                    style: block.meta.style,
-                },
-                type: BlockType.LIST,
-            };
-        }
+interface AliasedImageBlock extends Omit<ImageBlock, 'meta'> {
+    imageMeta: {
+        altText: ImageBlockMeta['altText'];
+        title: ImageBlockMeta['title'];
+        imageSource: ImageBlockMeta['source'];
+        imageDate: ImageBlockMeta['date'];
+    };
+}
 
-        case ContentBlockType.Quote: {
-            const block = rawBlock as QuoteBlock;
-            return {
-                content: block.content,
-                id: block.id,
-                meta: {
-                    author: block.meta.author,
-                    source: block.meta.source,
-                    date: block.meta.date as string,
-                    url: block.meta.url ?? '',
-                },
-                type: BlockType.QUOTE,
-            };
-        }
+interface AliasedQuoteBlock extends Omit<QuoteBlock, 'content' | 'meta'> {
+    quoteContent: QuoteBlock['content'];
+    quoteMeta: {
+        author: QuoteBlockMeta['author'];
+        quoteSource: QuoteBlockMeta['source'];
+        quoteDate: QuoteBlockMeta['date'];
+        url: QuoteBlockMeta['url'];
+    };
+}
 
-        case ContentBlockType.Table: {
-            const block = rawBlock as TableBlock;
-            return {
-                headers: block.headers,
-                id: block.id,
-                rows: [block.rows.map(normalizeCitableContent)],
-                meta: {
-                    columnAlignment: block.meta.columnAlignment,
-                    columnMeta: normalizeTableMeta(block.meta.columnMeta as RawTableCellMeta),
-                },
-                type: BlockType.TABLE,
-            };
-        }
+interface AliasedTableBlock extends Omit<TableBlock, 'meta'> {
+    tableMeta: {
+        columnAlignment: TableBlock['meta']['columnAlignment'];
+        columnMeta: TableBlock['meta']['columnMeta'];
+    };
+}
 
-        case ContentBlockType.Text: {
-            const block = rawBlock as TextBlock;
-            return {
-                content: normalizeCitableContent([block.content]),
-                id: block.id,
-                meta: {
-                    style: block.meta.style,
-                },
-                type: BlockType.TEXT,
-            };
-        }
+interface AliasedChartBlock extends Omit<ChartBlock, 'meta'> {
+    chartMeta: ChartBlock['meta'];
+}
 
-        default: {
-            throw new Error('Unhandled content block type');
+// Generic function to normalize a content block with aliased fields
+function normalizeContentBlock(rawBlock: BaseBlock | null | undefined): ContentBlock | null {
+    if (!rawBlock) {
+        console.warn('Received null or undefined block');
+        return null;
+    }
+
+    try {
+        console.log('Normalizing block:', { type: rawBlock.type, id: rawBlock.id });
+
+        switch (rawBlock.type) {
+            case ContentBlockType.Chart: {
+                const block = rawBlock as unknown as AliasedChartBlock;
+                return {
+                    data: (block.data ?? []).map((d: ChartData) => ({
+                        name: d.name || '',
+                        value: d.value || 0,
+                        ...((d.properties as object) || {}),
+                    })),
+                    id: block.id,
+                    meta: normalizeChartMeta(block.chartMeta),
+                    type: BlockType.CHART,
+                };
+            }
+
+            case ContentBlockType.Image: {
+                const block = rawBlock as unknown as AliasedImageBlock;
+                const meta = block.imageMeta || ({} as AliasedImageBlock['imageMeta']);
+                return {
+                    id: block.id,
+                    meta: {
+                        altText: meta.altText || '',
+                        date: meta.imageDate as string,
+                        source: meta.imageSource || '',
+                        title: meta.title || '',
+                    },
+                    type: BlockType.IMAGE,
+                    url: block.url || '',
+                };
+            }
+
+            case ContentBlockType.List: {
+                const block = rawBlock as unknown as AliasedListBlock;
+                const meta = block.listMeta || { listStyle: 'bullet' };
+                const items = block.items || [];
+
+                return {
+                    id: block.id,
+                    items: items.map((item) => normalizeContentBlock(item)).filter(isNonNullable),
+                    meta: {
+                        style: meta.listStyle || 'bullet',
+                    },
+                    type: BlockType.LIST,
+                };
+            }
+
+            case ContentBlockType.Quote: {
+                const block = rawBlock as unknown as AliasedQuoteBlock;
+                const meta = block.quoteMeta || ({} as AliasedQuoteBlock['quoteMeta']);
+                return {
+                    content: block.quoteContent || '',
+                    id: block.id,
+                    meta: {
+                        author: meta.author || '',
+                        source: meta.quoteSource || '',
+                        date: meta.quoteDate as string,
+                        url: meta.url || '',
+                    },
+                    type: BlockType.QUOTE,
+                };
+            }
+
+            case ContentBlockType.Table: {
+                const block = rawBlock as unknown as AliasedTableBlock;
+                const meta = block.tableMeta || { columnAlignment: [], columnMeta: [] };
+                return {
+                    headers: block.headers || [],
+                    id: block.id,
+                    rows: block.rows ? [block.rows.map(normalizeCitableContent)] : [[]],
+                    meta: {
+                        columnAlignment: meta.columnAlignment || [],
+                        columnMeta: normalizeTableMeta(meta.columnMeta as TableCellMeta[]),
+                    },
+                    type: BlockType.TABLE,
+                };
+            }
+
+            case ContentBlockType.Text: {
+                const block = rawBlock as unknown as AliasedTextBlock;
+                const content = block.textContent;
+                const meta = block.textMeta || { textStyle: 'paragraph' };
+
+                return {
+                    content: content ? normalizeCitableContent([content]) : [],
+                    id: block.id,
+                    meta: {
+                        style: meta.textStyle || 'paragraph',
+                    },
+                    type: BlockType.TEXT,
+                };
+            }
+
+            default: {
+                console.error('Unhandled content block type:', rawBlock.type, 'for block:', rawBlock);
+                throw new Error(`Unhandled content block type: ${rawBlock.type}`);
+            }
         }
+    } catch (error) {
+        console.error('Error normalizing content block:', error, rawBlock);
+        return null;
     }
 }
 
-function normalizeChatMessage(
-    rawMessage: ChatMessagePromptType | ChatMessageResponseType | ChatMessageSourceConfirmationType
-): ChatMessage {
+// Type guard to check if an object is a ChatMessagePrompt
+function isChatMessagePrompt(obj: unknown): obj is RawChatMessagePrompt {
+    if (!obj || typeof obj !== 'object') return false;
+    const msg = obj as RawChatMessagePrompt;
+    return (
+        msg.messageType === ChatMessageTypeEnum.Prompt || (obj as GraphQLResponse).__typename === 'ChatMessagePrompt'
+    );
+}
+
+// Type guard to check if an object is a ChatMessageResponse
+function isChatMessageResponse(obj: unknown): obj is RawChatMessageResponse {
+    if (!obj || typeof obj !== 'object') return false;
+    const msg = obj as RawChatMessageResponse;
+    return (
+        msg.messageType === ChatMessageTypeEnum.Response ||
+        (obj as GraphQLResponse).__typename === 'ChatMessageResponse'
+    );
+}
+
+// Type guard to check if an object is a ChatMessageSourceConfirmation
+function isChatMessageSourceConfirmation(obj: unknown): obj is RawChatMessageSourceConfirmation {
+    if (!obj || typeof obj !== 'object') return false;
+    const msg = obj as RawChatMessageSourceConfirmation;
+    return (
+        msg.messageType === ChatMessageTypeEnum.SourceConfirmation ||
+        (obj as GraphQLResponse).__typename === 'ChatMessageSourceConfirmation'
+    );
+}
+
+// Convert GraphQL response messages to our internal ChatMessage format
+function normalizeChatMessage(rawMessage: unknown): ChatMessage {
+    if (!rawMessage) {
+        console.warn('Received null or undefined message');
+        // Return a minimal valid message to prevent UI crashes
+        return {
+            id: 'error-placeholder',
+            timestamp: new Date().toISOString(),
+            status: ChatMessageStatus.FAILED,
+            prompt: 'Error processing message',
+            type: ChatMessageType.PROMPT,
+        };
+    }
+
+    // Debug the message structure
+    console.log('Normalizing message:', {
+        __typename: (rawMessage as GraphQLResponse).__typename,
+        id: (rawMessage as { id: string }).id,
+        messageType: (rawMessage as { messageType: string }).messageType,
+    });
+
     const baseMessage = {
-        id: rawMessage.id,
-        ordinalId: rawMessage.ordinalId,
-        timestamp: rawMessage.createdAt,
+        id: (rawMessage as { id: string }).id,
+        ordinalId: (rawMessage as { ordinalId?: string | null }).ordinalId,
+        timestamp: (rawMessage as { createdAt: string }).createdAt,
         status: ChatMessageStatus.COMPLETED,
     };
 
-    switch (rawMessage.messageType) {
-        case ChatMessageTypeEnum.Prompt: {
-            const promptMessage = rawMessage as ChatMessagePromptType;
-            return {
-                ...baseMessage,
-                type: ChatMessageType.PROMPT,
-                prompt: promptMessage.content,
-            };
-        }
+    if (isChatMessagePrompt(rawMessage)) {
+        return {
+            ...baseMessage,
+            type: ChatMessageType.PROMPT,
+            prompt: rawMessage.content || '',
+        };
+    } else if (isChatMessageResponse(rawMessage)) {
+        // Make extra sure blocks is always an array
+        const blocks = Array.isArray(rawMessage.blocks) ? rawMessage.blocks : [];
 
-        case ChatMessageTypeEnum.Response: {
-            const responseMessage = rawMessage as ChatMessageResponseType;
-            return {
-                ...baseMessage,
-                type: ChatMessageType.RESPONSE,
-                prompt: '', // TODO add prompt to base chat message class in server
-                blocks: (responseMessage.blocks ?? []).map(normalizeContentBlock),
-                sources: normalizeSources(responseMessage.sources as ChatSource[]),
-            };
-        }
-
-        case ChatMessageTypeEnum.SourceConfirmation: {
-            const sourceMessage = rawMessage as ChatMessageSourceConfirmationType;
-            return {
-                ...baseMessage,
-                type: ChatMessageType.SOURCES,
-                prompt: '',
-                confirmed: false,
-                sources: normalizeSources(sourceMessage.sources as ChatSource[]),
-            };
-        }
-
-        default: {
-            throw new Error('Unknown message type');
-        }
+        return {
+            ...baseMessage,
+            type: ChatMessageType.RESPONSE,
+            prompt: '',
+            blocks: blocks.map((block: BaseBlock) => normalizeContentBlock(block)).filter(isNonNullable),
+            sources: normalizeSources(rawMessage.sources),
+        };
+    } else if (isChatMessageSourceConfirmation(rawMessage)) {
+        return {
+            ...baseMessage,
+            type: ChatMessageType.SOURCES,
+            prompt: '',
+            confirmed: false,
+            sources: normalizeSources(rawMessage.confirmableSources as ChatSource[]),
+        };
+    } else {
+        console.error('Unknown message type:', rawMessage);
+        // Default to a prompt message as fallback
+        return {
+            ...baseMessage,
+            type: ChatMessageType.PROMPT,
+            prompt: 'Unknown message type',
+        };
     }
 }
+
+// Define fragments separately for better reusability and clarity
+const TEXT_BLOCK_FRAGMENT = gql`
+    fragment TextBlockFragment on TextBlock {
+        id
+        type
+        textContent: content {
+            citation {
+                id
+                author
+                contentId
+                contentType
+                date
+                quote
+                source {
+                    id
+                    name
+                    type
+                }
+                url
+            }
+            value
+            __typename
+        }
+        textMeta: meta {
+            textStyle: style
+            __typename
+        }
+        __typename
+    }
+`;
+
+const IMAGE_BLOCK_FRAGMENT = gql`
+    fragment ImageBlockFragment on ImageBlock {
+        id
+        type
+        url
+        imageMeta: meta {
+            altText
+            title
+            imageSource: source
+            imageDate: date
+            __typename
+        }
+        __typename
+    }
+`;
+
+const QUOTE_BLOCK_FRAGMENT = gql`
+    fragment QuoteBlockFragment on QuoteBlock {
+        id
+        type
+        quoteContent: content
+        quoteMeta: meta {
+            author
+            quoteSource: source
+            quoteDate: date
+            url
+            __typename
+        }
+        __typename
+    }
+`;
+
+const LIST_ITEM_FRAGMENT = gql`
+    fragment ListItemFragment on BaseBlock {
+        __typename
+        ... on TextBlock {
+            ...TextBlockFragment
+        }
+        ... on ImageBlock {
+            ...ImageBlockFragment
+        }
+        ... on QuoteBlock {
+            ...QuoteBlockFragment
+        }
+    }
+`;
+
+const LIST_BLOCK_FRAGMENT = gql`
+    fragment ListBlockFragment on ListBlock {
+        id
+        type
+        listMeta: meta {
+            listStyle: style
+            __typename
+        }
+        items {
+            ...ListItemFragment
+            __typename
+        }
+        __typename
+    }
+`;
+
+const CONTENT_BLOCK_FRAGMENT = gql`
+    fragment ContentBlockFragment on BaseBlock {
+        __typename
+        ... on TextBlock {
+            ...TextBlockFragment
+        }
+        ... on ListBlock {
+            ...ListBlockFragment
+        }
+        ... on ImageBlock {
+            ...ImageBlockFragment
+        }
+        ... on QuoteBlock {
+            ...QuoteBlockFragment
+        }
+        ... on TableBlock {
+            id
+            type
+            headers
+            rows {
+                citation {
+                    id
+                    author
+                    contentId
+                    contentType
+                    date
+                    quote
+                    source {
+                        id
+                        name
+                        type
+                    }
+                    url
+                }
+                value
+            }
+            tableMeta: meta {
+                columnAlignment
+                columnMeta {
+                    currency
+                    unit
+                    format
+                    decimals
+                    __typename
+                }
+                __typename
+            }
+            __typename
+        }
+        ... on ChartBlock {
+            id
+            type
+            data {
+                name
+                value
+                properties
+                __typename
+            }
+            chartMeta: meta {
+                chartType
+                properties
+                __typename
+            }
+            __typename
+        }
+    }
+`;
+
+// Improved GraphQL query using fragments and explicit __typename
+const CHAT_SESSION_QUERY = gql`
+    ${TEXT_BLOCK_FRAGMENT}
+    ${IMAGE_BLOCK_FRAGMENT}
+    ${QUOTE_BLOCK_FRAGMENT}
+    ${LIST_ITEM_FRAGMENT}
+    ${LIST_BLOCK_FRAGMENT}
+    ${CONTENT_BLOCK_FRAGMENT}
+
+    query ChatSessionWithMessages($filter: ChatSessionFilter!) {
+        chatSession(filter: $filter) {
+            id
+            messages {
+                __typename
+                ... on ChatMessagePrompt {
+                    id
+                    createdAt
+                    messageType
+                    ordinalId
+                    runnerVersion
+                    sessionId
+                    updatedAt
+                    userId
+                    content
+                    __typename
+                }
+                ... on ChatMessageResponse {
+                    id
+                    createdAt
+                    messageType
+                    ordinalId
+                    runnerVersion
+                    sessionId
+                    updatedAt
+                    userId
+                    blocks {
+                        ...ContentBlockFragment
+                    }
+                    sources {
+                        id
+                        name
+                        type
+                        __typename
+                    }
+                    __typename
+                }
+                ... on ChatMessageSourceConfirmation {
+                    id
+                    createdAt
+                    messageType
+                    ordinalId
+                    runnerVersion
+                    sessionId
+                    updatedAt
+                    userId
+                    confirmableSources: sources {
+                        id
+                        confirmed
+                        name
+                        type
+                        __typename
+                    }
+                    __typename
+                }
+            }
+            __typename
+        }
+    }
+`;
+
+const CREATE_CHAT_MESSAGE_MUTATION = gql`
+    mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
+        createChatMessagePrompt(input: $input) {
+            chatMessage {
+                id
+                content
+                createdAt
+                messageType
+                ordinalId
+                runnerVersion
+                sessionId
+                updatedAt
+                userId
+            }
+        }
+    }
+`;
 
 export const useChatMessages = (sessionId: string, enablePolling = false): UseChatMessagesReturn => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -419,40 +803,35 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
     const [_, createChatMessagePromptMutation] = useMutation<
         CreateChatMessagePromptMutation,
         CreateChatMessagePromptMutationVariables
-    >(gql`
-        mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
-            createChatMessagePrompt(input: $input) {
-                chatMessage {
-                    id
-                    content
-                    createdAt
-                    messageType
-                    ordinalId
-                    runnerVersion
-                    sessionId
-                    updatedAt
-                    userId
-                }
-            }
-        }
-    `);
+    >(CREATE_CHAT_MESSAGE_MUTATION);
+
     const createChatMessagePrompt = useCallback(
         ({ content, sessionId }: { content: string; sessionId: string }) => {
+            console.log('Creating chat message prompt:', { content, sessionId });
             return createChatMessagePromptMutation({ input: { content, sessionId } })
                 .then((resp) => {
+                    console.log('Mutation response:', resp);
                     const newMessage = resp.data?.createChatMessagePrompt?.chatMessage;
                     if (newMessage) {
-                        // Normalize the message before updating state
-                        const normalizedMessage = normalizeChatMessage(newMessage);
-                        setMessages((prevMessages) => [...prevMessages, normalizedMessage]);
-                        return normalizedMessage as ChatMessagePrompt;
+                        try {
+                            // Normalize the message before updating state
+                            const normalizedMessage = normalizeChatMessage(newMessage);
+                            console.log('Normalized message:', normalizedMessage);
+                            setMessages((prevMessages) => [...prevMessages, normalizedMessage]);
+                            return normalizedMessage as ChatMessagePrompt;
+                        } catch (normalizationError) {
+                            console.error('Error normalizing new message:', normalizationError);
+                            setError('Error processing new message data');
+                            return null;
+                        }
                     } else {
+                        console.error('No chat message returned from mutation', resp);
                         setError('Error creating chat message prompt');
                     }
                     return null;
                 })
                 .catch((error: Error) => {
-                    console.log(`Error creating chat message prompt: ${error.message}`);
+                    console.error(`Error creating chat message prompt:`, error);
                     setError('Error creating chat message prompt');
                     return null;
                 });
@@ -460,68 +839,48 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
         [createChatMessagePromptMutation, setError, setMessages]
     );
 
-    const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
-        query: gql`
-            query ChatSessionWithMessages($filter: ChatSessionFilter!) {
-                chatSession(filter: $filter) {
-                    id
-                    messages {
-                        ... on ChatMessagePrompt {
-                            id
-                            createdAt
-                            messageType
-                            ordinalId
-                            runnerVersion
-                            sessionId
-                            updatedAt
-                            userId
-                            content
-                        }
-                        ... on ChatMessageResponse {
-                            id
-                            createdAt
-                            messageType
-                            ordinalId
-                            runnerVersion
-                            sessionId
-                            updatedAt
-                            userId
-                            blocks {
-                                ... on TextBlock {
-                                    ...TextBlockFields
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    // Extra debugging output for response structure
+    // const logQueryResponseStructure = useCallback((data: any) => {
+    //     if (!data) return;
+    //
+    //     try {
+    //         const session = data.chatSession;
+    //         if (!session) {
+    //             console.log('No chatSession in response');
+    //             return;
+    //         }
+    //
+    //         console.log('Chat session ID:', session.id);
+    //
+    //         const messages = session.messages || [];
+    //         console.log(`Found ${messages.length} messages in response`);
+    //
+    //         messages.forEach((msg: any, index: number) => {
+    //             console.log(`Message ${index}:`, {
+    //                 id: msg.id,
+    //                 type: msg.__typename,
+    //                 messageType: msg.messageType,
+    //                 hasBlocks: msg.blocks ? `Yes (${msg.blocks.length})` : 'No',
+    //                 hasSources: msg.sources ? `Yes (${msg.sources.length})` : 'No',
+    //             });
+    //
+    //             // Log block types if present
+    //             if (Array.isArray(msg.blocks)) {
+    //                 const blockTypes = msg.blocks.map((b: any) => ({
+    //                     id: b.id,
+    //                     type: b.type,
+    //                     typename: b.__typename,
+    //                 }));
+    //                 console.log(`Message ${index} blocks:`, blockTypes);
+    //             }
+    //         });
+    //     } catch (e) {
+    //         console.error('Error logging query structure:', e);
+    //     }
+    // }, []);
 
-            fragment TextBlockFields on TextBlock {
-                __typename
-                id
-                type
-                content {
-                    citation {
-                        id
-                        author
-                        contentId
-                        contentType
-                        date
-                        quote
-                        source {
-                            id
-                            name
-                            type
-                        }
-                        url
-                    }
-                    value
-                }
-                meta {
-                    textStyle: style
-                }
-            }
-        `,
+    const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
+        query: CHAT_SESSION_QUERY,
         pause: !sessionId || sessionId === 'new',
         requestPolicy: 'cache-and-network',
         variables: {
@@ -538,24 +897,73 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
         }
 
         // Handle data updates
-        if (messagesQuery.status === 'success' && messagesQuery.data?.chatSession?.messages) {
-            const rawMessages = messagesQuery.data.chatSession.messages as Array<
-                ChatMessagePromptType | ChatMessageResponseType | ChatMessageSourceConfirmationType
-            >;
-            setMessages(rawMessages.map(normalizeChatMessage));
-            // Only clear error if we have one
-            if (error) setError(null);
+        if (!queryLoading && messagesQuery.status === 'success' && messagesQuery.data?.chatSession?.messages) {
+            try {
+                const chatSession = messagesQuery.data.chatSession;
+                console.log('Processing chat session:', chatSession.id);
+
+                const rawMessages = chatSession.messages || [];
+                console.log(`Processing ${rawMessages.length} messages`);
+
+                // Try to process each message individually to avoid one bad message breaking everything
+                const normalizedMessages: ChatMessage[] = [];
+
+                for (let i = 0; i < rawMessages.length; i++) {
+                    try {
+                        const msg = rawMessages[i];
+                        const normalized = normalizeChatMessage(msg);
+                        normalizedMessages.push(normalized);
+                    } catch (msgError) {
+                        console.error(`Error processing message at index ${i}:`, msgError);
+                        // Continue processing other messages
+                    }
+                }
+
+                console.log(`Successfully normalized ${normalizedMessages.length} messages`);
+                setMessages(normalizedMessages);
+
+                // Only clear error if we have one
+                if (error) setError(null);
+            } catch (err) {
+                console.error('Error processing messages:', err);
+                setError('Error processing messages data');
+            }
         } else if (messagesQuery.status === 'error') {
+            console.error('Query error:', messagesQuery.error);
             setError(messagesQuery.error.message);
         }
-    }, [error, isLoading, messagesQuery, setError, setIsLoading, setMessages]);
+    }, [error, isLoading, messagesQuery]);
 
-    const refresh = () => messagesQuery.refetch();
+    const refresh = useCallback(() => {
+        console.log('Refreshing chat messages...');
+        messagesQuery.refetch();
+    }, [messagesQuery]);
 
-    // If polling is enabled, refresh messages on the set interval
-    if (enablePolling) {
-        useInterval(() => refresh(), POLLING_INTERVAL);
-    }
+    // Setup polling if enabled
+    useEffect(() => {
+        if (!enablePolling) return;
+
+        console.log(`Setting up polling interval (${POLLING_INTERVAL}ms)`);
+        const intervalId = setInterval(() => {
+            refresh();
+        }, POLLING_INTERVAL);
+
+        return () => {
+            console.log('Clearing polling interval');
+            clearInterval(intervalId);
+        };
+    }, [enablePolling, refresh]);
+
+    // Debug output to help diagnose issues
+    useEffect(() => {
+        console.log('Current chat state:', {
+            sessionId,
+            messageCount: messages.length,
+            isLoading,
+            hasError: error !== null,
+            lastRawResponseExists: messagesQuery.status === 'success' && messagesQuery.data !== undefined,
+        });
+    }, [sessionId, messages.length, isLoading, error, messagesQuery]);
 
     return {
         createChatMessagePrompt,
