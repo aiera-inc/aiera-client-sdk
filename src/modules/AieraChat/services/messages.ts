@@ -17,16 +17,11 @@ import {
     CitableContent as RawCitableContent,
     ContentBlock as RawContentBlock,
     ImageBlock,
-    ImageBlockMeta,
     ListBlock,
-    ListBlockMeta,
     QuoteBlock,
-    QuoteBlockMeta,
     TableBlock,
-    TableBlockMeta,
     TableCellMeta,
     TextBlock,
-    TextBlockMeta,
 } from '@aiera/client-sdk/types/generated';
 import {
     BlockType,
@@ -251,7 +246,7 @@ export function normalizeCitableContent(rawContent: RawCitableContent[]): Citabl
             } else {
                 return content.value || '';
             }
-        }) as CitableContent;
+        });
     } catch (error) {
         console.error('Error normalizing citable content:', error);
         return [];
@@ -347,7 +342,7 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
         switch (blockType) {
             case 'ChartBlock': {
                 const block = rawBlock as ChartBlock;
-                const meta = block.chartMeta as ChartBlockMeta;
+                const meta = block.chartMeta;
                 const rawData = block.data || [];
                 return {
                     data: rawData.map((d: ChartData) => ({
@@ -363,7 +358,7 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
 
             case 'ImageBlock': {
                 const block = rawBlock as ImageBlock;
-                const meta = block.imageMeta as ImageBlockMeta;
+                const meta = block.imageMeta;
                 return {
                     id: blockId,
                     meta: {
@@ -379,7 +374,7 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
 
             case 'ListBlock': {
                 const block = rawBlock as ListBlock;
-                const meta = block.listMeta as ListBlockMeta;
+                const meta = block.listMeta;
                 return {
                     id: blockId,
                     items: block.items.map((item) => normalizeContentBlock(item)).filter(isNonNullable),
@@ -392,9 +387,9 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
 
             case 'QuoteBlock': {
                 const block = rawBlock as QuoteBlock;
-                const meta = block.quoteMeta as QuoteBlockMeta;
+                const meta = block.quoteMeta;
                 return {
-                    content: (block.quoteContent as string) || '',
+                    content: block.quoteContent || '',
                     id: blockId,
                     meta: {
                         author: meta.author || '',
@@ -408,7 +403,7 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
 
             case 'TableBlock': {
                 const block = rawBlock as TableBlock;
-                const meta = block.tableMeta as TableBlockMeta;
+                const meta = block.tableMeta;
                 return {
                     headers: block.headers || [],
                     id: blockId,
@@ -423,9 +418,24 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
 
             case 'TextBlock': {
                 const block = rawBlock as TextBlock;
-                const meta = block.textMeta as TextBlockMeta;
+                const meta = block.textMeta;
                 return {
-                    content: normalizeCitableContent(block.textContent),
+                    content: block.textContent.map((c) => {
+                        if (!c) return '';
+
+                        if (c.citation) {
+                            return {
+                                author: c.citation.author || '',
+                                date: (c.citation.date as string) || '',
+                                id: generateId('citation'), // Generate an ID since it's not provided by the server
+                                source: c.citation.source?.name || '',
+                                text: c.citation.quote || '',
+                                url: c.citation.url || '',
+                            };
+                        } else {
+                            return c.value || '';
+                        }
+                    }),
                     id: blockId,
                     meta: {
                         style: meta.style || 'paragraph',

@@ -6,7 +6,7 @@ export type playerType = {
     new (audioEl: HTMLAudioElement): playerType;
     configure(opts: object): void;
     getMediaElement(): HTMLAudioElement;
-    getAssetUri():string;
+    getAssetUri(): string;
     goToLive(): void;
     isBrowserSupported(): void;
     load(url: string, opt_startTime?: number, mimetype?: string): Promise<void>;
