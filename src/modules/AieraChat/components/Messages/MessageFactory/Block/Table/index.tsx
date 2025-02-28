@@ -15,7 +15,7 @@ export interface CellMeta {
 export interface TableBlock extends BaseBlock {
     type: BlockType.TABLE;
     headers: string[];
-    rows: CitableContent[][];
+    rows: CitableContent[];
     meta: {
         columnAlignment: ('left' | 'center' | 'right')[];
         columnMeta?: CellMeta[]; // Metadata for each column
@@ -52,24 +52,11 @@ export function Table({ headers, rows }: TableBlock) {
                     <tbody>
                         {rows.map((cells, rowIndex) => (
                             <tr key={`row-${rowIndex}`}>
-                                {cells.map((content, cellIndex) => {
-                                    return (
-                                        <td key={`cell-${cellIndex}`} className="text-nowrap pr-4 font-mono">
-                                            {content.map((c, contentIndex) =>
-                                                typeof c === 'string' ? (
-                                                    <SearchableText
-                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                        text={c}
-                                                    />
-                                                ) : (
-                                                    <Citation
-                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                    />
-                                                )
-                                            )}
-                                        </td>
-                                    );
-                                })}
+                                {cells.map((content, cellIndex) => (
+                                    <td key={`cell-${cellIndex}`} className="text-nowrap pr-4 font-mono">
+                                        {typeof content === 'string' ? <SearchableText text={content} /> : <Citation />}
+                                    </td>
+                                ))}
                             </tr>
                         ))}
                     </tbody>
