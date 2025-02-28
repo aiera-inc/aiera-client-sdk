@@ -224,28 +224,30 @@ export function normalizeChartMeta(meta: ChartBlockMeta | null | undefined): Cha
 /**
  * Normalize citable content with better error handling
  */
-export function normalizeCitableContent(rawContent: RawCitableContent[]): CitableContent {
+export function normalizeCitableContent(rawContent: RawCitableContent[][]): CitableContent[] {
     // Handle no content case
     if (!rawContent || !Array.isArray(rawContent) || rawContent.length === 0) {
         return [];
     }
 
     try {
-        return rawContent.map((content): string | Citation => {
-            if (!content) return '';
+        return rawContent.map((content) => {
+            return content.map((c): string | Citation => {
+                if (!c) return '';
 
-            if (content.citation) {
-                return {
-                    author: content.citation.author || '',
-                    date: (content.citation.date as string) || '',
-                    id: generateId('citation'), // Generate an ID since it's not provided by the server
-                    source: content.citation.source?.name || '',
-                    text: content.citation.quote || '',
-                    url: content.citation.url || '',
-                };
-            } else {
-                return content.value || '';
-            }
+                if (c.citation) {
+                    return {
+                        author: c.citation.author || '',
+                        date: (c.citation.date as string) || '',
+                        id: generateId('citation'), // Generate an ID since it's not provided by the server
+                        source: c.citation.source?.name || '',
+                        text: c.citation.quote || '',
+                        url: c.citation.url || '',
+                    };
+                } else {
+                    return c.value || '';
+                }
+            });
         });
     } catch (error) {
         console.error('Error normalizing citable content:', error);

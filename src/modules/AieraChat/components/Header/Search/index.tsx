@@ -51,7 +51,9 @@ function getSearchableContent(blocks: ContentBlock[]): string {
             case 'table': {
                 // Process headers and all row content
                 const headerText = block.headers.join(' ');
-                const rowsText = block.rows.map((row) => processCitableContent(row)).join(' ');
+                const rowsText = block.rows
+                    .map((row) => row.map((cell) => processCitableContent(cell)).join(' '))
+                    .join(' ');
                 return `${headerText} ${rowsText}`;
             }
             case 'list':
