@@ -85,8 +85,8 @@ function normalizeSources(sources?: ChatSource[]): Source[] {
         sources.forEach((source) => {
             normalized.push({
                 confirmed: true,
-                targetId: source.id,
-                targetType: source.type as string,
+                targetId: source.sourceId,
+                targetType: source.type,
                 title: source.name,
             });
         });
@@ -107,7 +107,7 @@ function normalizeSession(session: RawChatSession): ChatSession {
 }
 
 function normalizeSessionWithPromptMessage(session: RawChatSession): ChatSessionWithPromptMessage | undefined {
-    const rawMessage = session.messages?.[0] as ChatMessagePrompt;
+    const rawMessage = session.promptMessages?.[0] as ChatMessagePrompt;
     let promptMessage;
     if (rawMessage) {
         promptMessage = {
@@ -310,22 +310,21 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                 chatSession {
                     id
                     createdAt
-                    messages {
-                        ... on ChatMessagePrompt {
-                            id
-                            content
-                            createdAt
-                            messageType
-                            ordinalId
-                            runnerVersion
-                            sessionId
-                            updatedAt
-                            userId
-                        }
+                    promptMessages {
+                        id
+                        content
+                        createdAt
+                        messageType
+                        ordinalId
+                        runnerVersion
+                        sessionId
+                        updatedAt
+                        userId
                     }
                     sources {
-                        id
+                        confirmed
                         name
+                        sourceId
                         type
                     }
                     status
@@ -391,8 +390,9 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     id
                     createdAt
                     sources {
-                        id
+                        confirmed
                         name
+                        sourceId
                         type
                     }
                     status
@@ -440,8 +440,9 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     id
                     createdAt
                     sources {
-                        id
+                        confirmed
                         name
+                        sourceId
                         type
                     }
                     status
