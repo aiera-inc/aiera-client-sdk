@@ -1,5 +1,5 @@
 /**
- * To setup a GQL provider for your react app:
+ * To set up a GQL provider for your React app:
  *
  * ```typescript
  * import { Provider } from 'api/client';
@@ -12,6 +12,10 @@
  * ```
  * @module
  */
+import { devtoolsExchange } from '@urql/devtools';
+import { authExchange } from '@urql/exchange-auth';
+import { cacheExchange } from '@urql/exchange-graphcache';
+import { DocumentNode } from 'graphql';
 import React, { createContext, ReactElement, ReactNode, useContext, useEffect, useMemo, useState } from 'react';
 import {
     Client,
@@ -28,11 +32,6 @@ import {
     UseQueryArgs,
 } from 'urql';
 import { pipe, map } from 'wonka';
-import { devtoolsExchange } from '@urql/devtools';
-import { DocumentNode } from 'graphql';
-
-import { authExchange } from '@urql/exchange-auth';
-import { cacheExchange } from '@urql/exchange-graphcache';
 
 import { useConfig, Config } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
@@ -76,44 +75,60 @@ const opNameExchange: Exchange = ({ forward }) => {
         );
 };
 
-function createGQLClient(config: Config): Client {
+/**
+ * Creates a configured GraphQL client with proper cache normalization and resolvers
+ */
+export function createGQLClient(config: Config): Client {
     const { auth = defaultTokenAuthConfig } = config.gqlOptions?.exchangeOptions || {};
+
+    // Enhanced cache exchange with more robust keys and resolvers
+    const enhancedCacheExchange = cacheExchange({
+        // Define keys for all types to ensure proper cache normalization
+        keys: {
+            // Application-specific types
+            ApplicationConfiguration: () => null,
+            Attachment: () => null,
+            ChatSource: () => null,
+            CitableContent: () => null,
+            EventQuotePriceInfo: () => null,
+            ListBlock: () => null,
+            ListBlockMeta: () => null,
+            RealtimeTranscrippetPrice: () => null,
+            Search: () => null,
+            TextBlock: () => null,
+            TextBlockMeta: () => null,
+            TranscrippetEquityPrice: () => null,
+            UserEmailStatus: () => null,
+
+            // Chat message types
+            ChatMessage: ({ id }) => (id ? `ChatMessage:${id}` : null),
+            ChatMessagePrompt: ({ id }) => (id ? `ChatMessagePrompt:${id}` : null),
+            ChatMessageResponse: ({ id }) => (id ? `ChatMessageResponse:${id}` : null),
+            ChatMessageSourceConfirmation: ({ id }) => (id ? `ChatMessageSourceConfirmation:${id}` : null),
+        },
+
+        // Type conditions used in fragments
+        typePolicies: {
+            ChatMessagePrompt: { __typename: 'ChatMessagePrompt' },
+            ChatMessageResponse: { __typename: 'ChatMessageResponse' },
+            ChatMessageSourceConfirmation: { __typename: 'ChatMessageSourceConfirmation' },
+            TextBlock: { __typename: 'TextBlock' },
+            ListBlock: { __typename: 'ListBlock' },
+            ImageBlock: { __typename: 'ImageBlock' },
+            QuoteBlock: { __typename: 'QuoteBlock' },
+            TableBlock: { __typename: 'TableBlock' },
+            ChartBlock: { __typename: 'ChartBlock' },
+            ContentBlock: { __typename: true }, // Mark as interface
+        },
+    });
+
     const exchanges = [
         devtoolsExchange,
         opNameExchange,
-        cacheExchange({
-            // Silence Graphcache warning about missing id fields for non-keyable types
-            // See: https://formidable.com/open-source/urql/docs/graphcache/normalized-caching/#custom-keys-and-non-keyable-entities
-            keys: {
-                ApplicationConfiguration: () => null,
-                Attachment: () => null,
-                CitableContent: () => null,
-                EventQuotePriceInfo: () => null,
-                ListBlockMeta: () => null,
-                RealtimeTranscrippetPrice: () => null,
-                Search: () => null,
-                TextBlockMeta: () => null,
-                TranscrippetEquityPrice: () => null,
-                UserEmailStatus: () => null,
-                // Chat types
-                ChatMessagePrompt: (data) => data.id as string,
-                ChatMessageResponse: (data) => data.id as string,
-                ChatMessageSourceConfirmation: (data) => data.id as string,
-                TextBlock: (data) => data.id as string,
-                ListBlock: (data) => data.id as string,
-                ImageBlock: (data) => data.id as string,
-                QuoteBlock: (data) => data.id as string,
-                TableBlock: (data) => data.id as string,
-                ChartBlock: (data) => data.id as string,
-                BaseBlock: () => null, // interfaces should return null
-            },
-        }),
+        enhancedCacheExchange,
         auth ? authExchange(auth) : null,
         fetchExchange,
-    ].filter(
-        (t) => t
-        // Cast needed because of the filter
-    ) as Exchange[];
+    ].filter((t) => t) as Exchange[];
 
     const fetchOptions: RequestInit = {};
     if (config.moduleName) {
