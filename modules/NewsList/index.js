@@ -38074,263 +38074,9 @@ function createTokenAuthConfig(store = local) {
 }
 var defaultTokenAuthConfig = createTokenAuthConfig();
 
-// src/api/client.tsx
-var import_react5 = __toModule(require_react());
-
-// node_modules/urql/dist/urql.es.js
-var import_react2 = __toModule(require_react());
-var d = z({
-  url: "/graphql"
-});
-var x = (0, import_react2.createContext)(d);
-var h2 = x.Provider;
-var y = x.Consumer;
-x.displayName = "UrqlContext";
-var g = false;
-function useClient() {
-  var e = (0, import_react2.useContext)(x);
-  if (e === d && !g) {
-    g = true;
-    console.warn("Default Client: No client has been specified using urql's Provider.This means that urql will be falling back to defaults including making requests to `/graphql`.\nIf that's not what you want, please create a client and add a Provider.");
-  }
-  return e;
-}
-function _extends3() {
-  return (_extends3 = Object.assign || function(e) {
-    for (var t2 = 1; t2 < arguments.length; t2++) {
-      var n2 = arguments[t2];
-      for (var r3 in n2) {
-        if (Object.prototype.hasOwnProperty.call(n2, r3)) {
-          e[r3] = n2[r3];
-        }
-      }
-    }
-    return e;
-  }).apply(this, arguments);
-}
-var b = {
-  fetching: false,
-  stale: false,
-  error: void 0,
-  data: void 0,
-  extensions: void 0,
-  operation: void 0
-};
-function computeNextState(e, t2) {
-  var n2 = _extends3({}, e, t2, {
-    fetching: !!t2.fetching,
-    stale: !!t2.stale
-  });
-  return function isShallowDifferent(e2, t3) {
-    if (typeof e2 != "object" || typeof t3 != "object") {
-      return e2 !== t3;
-    }
-    for (var n3 in e2) {
-      if (!(n3 in t3)) {
-        return true;
-      }
-    }
-    for (var r3 in t3) {
-      if (e2[r3] !== t3[r3]) {
-        return true;
-      }
-    }
-    return false;
-  }(e, n2) ? n2 : e;
-}
-function hasDepsChanged(e, t2) {
-  for (var n2 = 0, r3 = t2.length; n2 < r3; n2++) {
-    if (e[n2] !== t2[n2]) {
-      return true;
-    }
-  }
-  return false;
-}
-function useMutation(e) {
-  var n2 = (0, import_react2.useRef)(true);
-  var r3 = useClient();
-  var c3 = (0, import_react2.useState)(b);
-  var f2 = c3[0];
-  var l4 = c3[1];
-  var v2 = (0, import_react2.useCallback)(function(u4, i3) {
-    l4(_extends3({}, b, {
-      fetching: true
-    }));
-    return toPromise$1(r3.executeMutation(createRequest(e, u4), i3 || {})).then(function(e2) {
-      if (n2.current) {
-        l4({
-          fetching: false,
-          stale: !!e2.stale,
-          data: e2.data,
-          error: e2.error,
-          extensions: e2.extensions,
-          operation: e2.operation
-        });
-      }
-      return e2;
-    });
-  }, [r3, e, l4]);
-  (0, import_react2.useEffect)(function() {
-    return function() {
-      n2.current = false;
-    };
-  }, []);
-  return [f2, v2];
-}
-function useRequest(e, n2) {
-  var r3 = (0, import_react2.useRef)(void 0);
-  return (0, import_react2.useMemo)(function() {
-    var u4 = createRequest(e, n2);
-    if (r3.current !== void 0 && r3.current.key === u4.key) {
-      return r3.current;
-    } else {
-      r3.current = u4;
-      return u4;
-    }
-  }, [e, n2]);
-}
-var q = false;
-function useQuery(e) {
-  var t2 = useClient();
-  var n2 = function getCacheForClient(e2) {
-    if (!e2._react) {
-      var t3 = /* @__PURE__ */ new Set();
-      var n3 = /* @__PURE__ */ new Map();
-      if (e2.operations$) {
-        N(function(e3) {
-          if (e3.kind === "teardown" && t3.has(e3.key)) {
-            t3.delete(e3.key);
-            n3.delete(e3.key);
-          }
-        })(e2.operations$);
-      }
-      e2._react = {
-        get: function get(e3) {
-          return n3.get(e3);
-        },
-        set: function set(e3, r4) {
-          t3.delete(e3);
-          n3.set(e3, r4);
-        },
-        dispose: function dispose(e3) {
-          t3.add(e3);
-        }
-      };
-    }
-    return e2._react;
-  }(t2);
-  var r3 = function isSuspense(e2, t3) {
-    return e2.suspense && (!t3 || t3.suspense !== false);
-  }(t2, e.context);
-  var u4 = useRequest(e.query, e.variables);
-  var s2 = (0, import_react2.useMemo)(function() {
-    if (e.pause) {
-      return null;
-    }
-    var i3 = t2.executeQuery(u4, _extends3({}, {
-      requestPolicy: e.requestPolicy
-    }, e.context));
-    return r3 ? H(function(e2) {
-      n2.set(u4.key, e2);
-    })(i3) : i3;
-  }, [n2, t2, u4, r3, e.pause, e.requestPolicy, e.context]);
-  var d2 = (0, import_react2.useCallback)(function(e2, t3) {
-    if (!e2) {
-      return {
-        fetching: false
-      };
-    }
-    var r4 = n2.get(u4.key);
-    if (!r4) {
-      var i3;
-      var a3 = N(function(e3) {
-        r4 = e3;
-        if (i3) {
-          i3(r4);
-        }
-      })(takeWhile$1(function() {
-        return t3 && !i3 || !r4;
-      })(e2));
-      if (r4 == null && t3) {
-        var o2 = new Promise(function(e3) {
-          i3 = e3;
-        });
-        n2.set(u4.key, o2);
-        throw o2;
-      } else {
-        a3.unsubscribe();
-      }
-    } else if (t3 && r4 != null && "then" in r4) {
-      throw r4;
-    }
-    return r4 || {
-      fetching: true
-    };
-  }, [n2, u4]);
-  var x3 = [t2, u4, e.requestPolicy, e.context, e.pause];
-  var h4 = (0, import_react2.useState)(function() {
-    q = true;
-    try {
-      return [s2, computeNextState(b, d2(s2, r3)), x3];
-    } finally {
-      q = false;
-    }
-  });
-  var y2 = h4[0];
-  var g2 = h4[1];
-  var m2 = y2[1];
-  if (s2 !== y2[0] && hasDepsChanged(y2[2], x3)) {
-    g2([s2, m2 = computeNextState(y2[1], d2(s2, r3)), x3]);
-  }
-  (0, import_react2.useEffect)(function() {
-    var e2 = y2[0];
-    var t3 = y2[2][1];
-    var r4 = false;
-    function updateResult(e3) {
-      r4 = true;
-      if (!q) {
-        g2(function(t4) {
-          var n3 = computeNextState(t4[1], e3);
-          return t4[1] !== n3 ? [t4[0], n3, t4[2]] : t4;
-        });
-      }
-    }
-    if (e2) {
-      var u5 = N(updateResult)(onEnd$1(function() {
-        updateResult({
-          fetching: false
-        });
-      })(e2));
-      if (!r4) {
-        updateResult({
-          fetching: true
-        });
-      }
-      return function() {
-        n2.dispose(t3.key);
-        u5.unsubscribe();
-      };
-    } else {
-      updateResult({
-        fetching: false
-      });
-    }
-  }, [n2, y2[0], y2[2][1]]);
-  return [m2, (0, import_react2.useCallback)(function(i3) {
-    var a3 = _extends3({}, {
-      requestPolicy: e.requestPolicy
-    }, e.context, i3);
-    g2(function(e2) {
-      return [r3 ? H(function(e3) {
-        n2.set(u4.key, e3);
-      })(t2.executeQuery(u4, a3)) : t2.executeQuery(u4, a3), e2[1], x3];
-    });
-  }, [t2, n2, u4, r3, d2, e.requestPolicy, e.context])];
-}
-
 // node_modules/@urql/devtools/dist/urql-devtools-exchange.es.js
-function _extends4() {
-  return (_extends4 = Object.assign || function(target) {
+function _extends3() {
+  return (_extends3 = Object.assign || function(target) {
     for (var i3 = 1; i3 < arguments.length; i3++) {
       var source = arguments[i3];
       for (var key in source) {
@@ -38346,7 +38092,7 @@ var createDebugMessage = function(debug) {
   return {
     type: "debug-event",
     source: "exchange",
-    data: _extends4(_extends4({}, debug), {
+    data: _extends3(_extends3({}, debug), {
       source: "devtoolsExchange",
       timestamp: Date.now()
     })
@@ -38569,8 +38315,8 @@ var devtoolsExchange = function() {
 }();
 
 // node_modules/@urql/exchange-graphcache/dist/5301ccd2.mjs
-function _extends5() {
-  return (_extends5 = Object.assign || function(t2) {
+function _extends4() {
+  return (_extends4 = Object.assign || function(t2) {
     for (var e = 1; e < arguments.length; e++) {
       var n2 = arguments[e];
       for (var r3 in n2) {
@@ -38817,7 +38563,7 @@ function makeDict() {
 }
 var _ = null;
 var E2 = null;
-var b2 = null;
+var b = null;
 var D2 = null;
 var w = null;
 var F = null;
@@ -38834,7 +38580,7 @@ function makeData(e) {
     if (_.has(e)) {
       return e;
     }
-    t2 = E2.get(e) || _extends5({}, e);
+    t2 = E2.get(e) || _extends4({}, e);
     E2.set(e, t2);
   } else {
     t2 = {};
@@ -38848,7 +38594,7 @@ function ownsData(e) {
 function initDataState(e, t2, r3, i3) {
   _ = /* @__PURE__ */ new Set();
   E2 = /* @__PURE__ */ new Map();
-  b2 = e;
+  b = e;
   D2 = t2;
   w = makeDict();
   S = !!i3;
@@ -38895,7 +38641,7 @@ function clearDataState() {
   }
   _ = null;
   E2 = null;
-  b2 = null;
+  b = null;
   D2 = null;
   w = null;
   if (true) {
@@ -38933,7 +38679,7 @@ function clearDataState() {
       !function persistData() {
         if (D2.storage) {
           S = true;
-          b2 = "read";
+          b = "read";
           var t3 = makeDict();
           D2.persist.forEach(function(r4) {
             var i4 = deserializeKeyInfo(r4);
@@ -38966,8 +38712,8 @@ function noopDataState(e, t2, r3) {
   clearDataState();
 }
 function getCurrentOperation() {
-  invariant2(b2 !== null, true ? "Invalid Cache call: The cache may only be accessed or mutated duringoperations like write or query, or as part of its resolvers, updaters, or optimistic configs." : "", 2);
-  return b2;
+  invariant2(b !== null, true ? "Invalid Cache call: The cache may only be accessed or mutated duringoperations like write or query, or as part of its resolvers, updaters, or optimistic configs." : "", 2);
+  return b;
 }
 function getCurrentDependencies() {
   invariant2(w !== null, true ? "Invalid Cache call: The cache may only be accessed or mutated duringoperations like write or query, or as part of its resolvers, updaters, or optimistic configs." : "", 2);
@@ -38987,12 +38733,12 @@ function setNode(e, t2, r3, i3) {
 }
 function getNode(e, t2, r3) {
   var i3;
-  var n2 = !S && b2 === "read" && F && D2.commutativeKeys.has(F);
+  var n2 = !S && b === "read" && F && D2.commutativeKeys.has(F);
   for (var a3 = 0, o2 = D2.optimisticOrder.length; a3 < o2; a3++) {
     var s2 = D2.optimisticOrder[a3];
     var u4 = e.optimistic[s2];
     n2 = n2 && s2 !== F;
-    if (u4 && (!n2 || !D2.commutativeKeys.has(s2)) && (!S || b2 === "write" || D2.commutativeKeys.has(s2)) && (i3 = u4.get(t2)) !== void 0 && r3 in i3) {
+    if (u4 && (!n2 || !D2.commutativeKeys.has(s2)) && (!S || b === "write" || D2.commutativeKeys.has(s2)) && (i3 = u4.get(t2)) !== void 0 && r3 in i3) {
       return i3[r3];
     }
   }
@@ -39158,7 +38904,7 @@ function inspectFields(e) {
 var L2 = {
   current: null
 };
-var x2 = {
+var x = {
   current: false
 };
 function getFieldError(e) {
@@ -39230,8 +38976,8 @@ function makeSelectionIterator(e, t2, r3, i3) {
   var a3;
   var o2 = 0;
   return function next() {
-    if (!x2.current && n2) {
-      x2.current = n2;
+    if (!x.current && n2) {
+      x.current = n2;
     }
     if (a3) {
       var s2 = a3();
@@ -39256,8 +39002,8 @@ function makeSelectionIterator(e, t2, r3, i3) {
               pushDebugNode(e, c3);
             }
             n2 = !!isDeferred(u4, i3.variables);
-            if (!x2.current && n2) {
-              x2.current = n2;
+            if (!x.current && n2) {
+              x.current = n2;
             }
             return (a3 = makeSelectionIterator(e, t2, getSelectionSet(c3), i3))();
           }
@@ -39331,14 +39077,14 @@ function writeSelection(e, t2, r3, i3) {
     var f2 = getFieldAlias(u4);
     var p2 = i3[f2];
     if (true) {
-      if (!a3 && p2 === void 0 && !x2.current) {
+      if (!a3 && p2 === void 0 && !x.current) {
         warn("Invalid undefined: The field at `" + d2 + "` is `undefined`, but the GraphQL query expects a " + (u4.selectionSet === void 0 ? "scalar (number, boolean, etc)" : "selection set") + " for this field." + (e.optimistic ? "\nYour optimistic result may be missing a field!" : ""), 13);
         continue;
       } else if (e.store.schema && o2 && c3 !== "__typename") {
         isFieldAvailableOnType(e.store.schema, o2, c3);
       }
     }
-    if (c3 === "__typename" || p2 === void 0 && x2.current) {
+    if (c3 === "__typename" || p2 === void 0 && x.current) {
       continue;
     }
     e.__internal.path.push(f2);
@@ -39371,7 +39117,7 @@ function writeSelection(e, t2, r3, i3) {
     e.__internal.path.pop();
   }
 }
-var q2 = /^__|PageInfo|(Connection|Edge)$/;
+var q = /^__|PageInfo|(Connection|Edge)$/;
 function writeField(e, t2, r3, i3) {
   if (Array.isArray(r3)) {
     var n2 = new Array(r3.length);
@@ -39389,7 +39135,7 @@ function writeField(e, t2, r3, i3) {
   var c3 = e.store.keyOfEntity(r3);
   var l4 = r3.__typename;
   if (true) {
-    if (i3 && !e.store.keys[r3.__typename] && c3 === null && typeof l4 == "string" && !q2.test(l4)) {
+    if (i3 && !e.store.keys[r3.__typename] && c3 === null && typeof l4 == "string" && !q.test(l4)) {
       warn("Invalid key: The GraphQL query at the field at `" + i3 + "` has a selection set, but no key could be generated for the data at this field.\nYou have to request `id` or `_id` fields for all selection sets or create a custom `keys` config for `" + l4 + "`.\nEntities without keys will be embedded directly on the parent entity. If this is intentional, create a `keys` config for `" + l4 + "` that always returns null.", 15);
     }
   }
@@ -39700,7 +39446,7 @@ Store.prototype.writeFragment = function writeFragment$1(e, t2, i3) {
       return true ? warn("writeFragment(...) was called with an empty fragment.\nYou have to call it with at least one fragment in your GraphQL document.", 11) : void 0;
     }
     var o2 = getFragmentTypeName(a3);
-    var s2 = _extends5({}, {
+    var s2 = _extends4({}, {
       __typename: o2
     }, r3);
     var u4 = e2.keyOfEntity(s2);
@@ -39862,7 +39608,7 @@ function readSelection(e, t2, r3, i3, n2) {
         E3 = k2;
       }
     }
-    if (E3 === void 0 && x2.current) {
+    if (E3 === void 0 && x.current) {
       l4 = true;
     } else if (E3 === void 0 && (a3.schema && isFieldNullable(a3.schema, u4, y2) || getFieldError(e))) {
       d2 = true;
@@ -39940,14 +39686,14 @@ function resolveLink(e, t2, r3, i3, n2, a3, o2) {
   return readSelection(e, t2, n2, a3 || makeData());
 }
 function addCacheOutcome(e, t2) {
-  return makeOperation(e.kind, e, _extends5({}, e.context, {
-    meta: _extends5({}, e.context.meta, {
+  return makeOperation(e.kind, e, _extends4({}, e.context, {
+    meta: _extends4({}, e.context.meta, {
       cacheOutcome: t2
     })
   }));
 }
 function toRequestPolicy(e, t2) {
-  return makeOperation(e.kind, e, _extends5({}, e.context, {
+  return makeOperation(e.kind, e, _extends4({}, e.context, {
     requestPolicy: t2
   }));
 }
@@ -40199,6 +39945,260 @@ function cacheExchange2(e) {
   };
 }
 
+// src/api/client.tsx
+var import_react5 = __toModule(require_react());
+
+// node_modules/urql/dist/urql.es.js
+var import_react2 = __toModule(require_react());
+var d = z({
+  url: "/graphql"
+});
+var x2 = (0, import_react2.createContext)(d);
+var h2 = x2.Provider;
+var y = x2.Consumer;
+x2.displayName = "UrqlContext";
+var g = false;
+function useClient() {
+  var e = (0, import_react2.useContext)(x2);
+  if (e === d && !g) {
+    g = true;
+    console.warn("Default Client: No client has been specified using urql's Provider.This means that urql will be falling back to defaults including making requests to `/graphql`.\nIf that's not what you want, please create a client and add a Provider.");
+  }
+  return e;
+}
+function _extends5() {
+  return (_extends5 = Object.assign || function(e) {
+    for (var t2 = 1; t2 < arguments.length; t2++) {
+      var n2 = arguments[t2];
+      for (var r3 in n2) {
+        if (Object.prototype.hasOwnProperty.call(n2, r3)) {
+          e[r3] = n2[r3];
+        }
+      }
+    }
+    return e;
+  }).apply(this, arguments);
+}
+var b2 = {
+  fetching: false,
+  stale: false,
+  error: void 0,
+  data: void 0,
+  extensions: void 0,
+  operation: void 0
+};
+function computeNextState(e, t2) {
+  var n2 = _extends5({}, e, t2, {
+    fetching: !!t2.fetching,
+    stale: !!t2.stale
+  });
+  return function isShallowDifferent(e2, t3) {
+    if (typeof e2 != "object" || typeof t3 != "object") {
+      return e2 !== t3;
+    }
+    for (var n3 in e2) {
+      if (!(n3 in t3)) {
+        return true;
+      }
+    }
+    for (var r3 in t3) {
+      if (e2[r3] !== t3[r3]) {
+        return true;
+      }
+    }
+    return false;
+  }(e, n2) ? n2 : e;
+}
+function hasDepsChanged(e, t2) {
+  for (var n2 = 0, r3 = t2.length; n2 < r3; n2++) {
+    if (e[n2] !== t2[n2]) {
+      return true;
+    }
+  }
+  return false;
+}
+function useMutation(e) {
+  var n2 = (0, import_react2.useRef)(true);
+  var r3 = useClient();
+  var c3 = (0, import_react2.useState)(b2);
+  var f2 = c3[0];
+  var l4 = c3[1];
+  var v2 = (0, import_react2.useCallback)(function(u4, i3) {
+    l4(_extends5({}, b2, {
+      fetching: true
+    }));
+    return toPromise$1(r3.executeMutation(createRequest(e, u4), i3 || {})).then(function(e2) {
+      if (n2.current) {
+        l4({
+          fetching: false,
+          stale: !!e2.stale,
+          data: e2.data,
+          error: e2.error,
+          extensions: e2.extensions,
+          operation: e2.operation
+        });
+      }
+      return e2;
+    });
+  }, [r3, e, l4]);
+  (0, import_react2.useEffect)(function() {
+    return function() {
+      n2.current = false;
+    };
+  }, []);
+  return [f2, v2];
+}
+function useRequest(e, n2) {
+  var r3 = (0, import_react2.useRef)(void 0);
+  return (0, import_react2.useMemo)(function() {
+    var u4 = createRequest(e, n2);
+    if (r3.current !== void 0 && r3.current.key === u4.key) {
+      return r3.current;
+    } else {
+      r3.current = u4;
+      return u4;
+    }
+  }, [e, n2]);
+}
+var q2 = false;
+function useQuery(e) {
+  var t2 = useClient();
+  var n2 = function getCacheForClient(e2) {
+    if (!e2._react) {
+      var t3 = /* @__PURE__ */ new Set();
+      var n3 = /* @__PURE__ */ new Map();
+      if (e2.operations$) {
+        N(function(e3) {
+          if (e3.kind === "teardown" && t3.has(e3.key)) {
+            t3.delete(e3.key);
+            n3.delete(e3.key);
+          }
+        })(e2.operations$);
+      }
+      e2._react = {
+        get: function get(e3) {
+          return n3.get(e3);
+        },
+        set: function set(e3, r4) {
+          t3.delete(e3);
+          n3.set(e3, r4);
+        },
+        dispose: function dispose(e3) {
+          t3.add(e3);
+        }
+      };
+    }
+    return e2._react;
+  }(t2);
+  var r3 = function isSuspense(e2, t3) {
+    return e2.suspense && (!t3 || t3.suspense !== false);
+  }(t2, e.context);
+  var u4 = useRequest(e.query, e.variables);
+  var s2 = (0, import_react2.useMemo)(function() {
+    if (e.pause) {
+      return null;
+    }
+    var i3 = t2.executeQuery(u4, _extends5({}, {
+      requestPolicy: e.requestPolicy
+    }, e.context));
+    return r3 ? H(function(e2) {
+      n2.set(u4.key, e2);
+    })(i3) : i3;
+  }, [n2, t2, u4, r3, e.pause, e.requestPolicy, e.context]);
+  var d2 = (0, import_react2.useCallback)(function(e2, t3) {
+    if (!e2) {
+      return {
+        fetching: false
+      };
+    }
+    var r4 = n2.get(u4.key);
+    if (!r4) {
+      var i3;
+      var a3 = N(function(e3) {
+        r4 = e3;
+        if (i3) {
+          i3(r4);
+        }
+      })(takeWhile$1(function() {
+        return t3 && !i3 || !r4;
+      })(e2));
+      if (r4 == null && t3) {
+        var o2 = new Promise(function(e3) {
+          i3 = e3;
+        });
+        n2.set(u4.key, o2);
+        throw o2;
+      } else {
+        a3.unsubscribe();
+      }
+    } else if (t3 && r4 != null && "then" in r4) {
+      throw r4;
+    }
+    return r4 || {
+      fetching: true
+    };
+  }, [n2, u4]);
+  var x3 = [t2, u4, e.requestPolicy, e.context, e.pause];
+  var h4 = (0, import_react2.useState)(function() {
+    q2 = true;
+    try {
+      return [s2, computeNextState(b2, d2(s2, r3)), x3];
+    } finally {
+      q2 = false;
+    }
+  });
+  var y2 = h4[0];
+  var g2 = h4[1];
+  var m2 = y2[1];
+  if (s2 !== y2[0] && hasDepsChanged(y2[2], x3)) {
+    g2([s2, m2 = computeNextState(y2[1], d2(s2, r3)), x3]);
+  }
+  (0, import_react2.useEffect)(function() {
+    var e2 = y2[0];
+    var t3 = y2[2][1];
+    var r4 = false;
+    function updateResult(e3) {
+      r4 = true;
+      if (!q2) {
+        g2(function(t4) {
+          var n3 = computeNextState(t4[1], e3);
+          return t4[1] !== n3 ? [t4[0], n3, t4[2]] : t4;
+        });
+      }
+    }
+    if (e2) {
+      var u5 = N(updateResult)(onEnd$1(function() {
+        updateResult({
+          fetching: false
+        });
+      })(e2));
+      if (!r4) {
+        updateResult({
+          fetching: true
+        });
+      }
+      return function() {
+        n2.dispose(t3.key);
+        u5.unsubscribe();
+      };
+    } else {
+      updateResult({
+        fetching: false
+      });
+    }
+  }, [n2, y2[0], y2[2][1]]);
+  return [m2, (0, import_react2.useCallback)(function(i3) {
+    var a3 = _extends5({}, {
+      requestPolicy: e.requestPolicy
+    }, e.context, i3);
+    g2(function(e2) {
+      return [r3 ? H(function(e3) {
+        n2.set(u4.key, e3);
+      })(t2.executeQuery(u4, a3)) : t2.executeQuery(u4, a3), e2[1], x3];
+    });
+  }, [t2, n2, u4, r3, d2, e.requestPolicy, e.context])];
+}
+
 // src/lib/config/index.tsx
 var import_react4 = __toModule(require_react());
 var import_lodash = __toModule(require_lodash());
@@ -40353,20 +40353,43 @@ var opNameExchange = ({ forward }) => {
 function createGQLClient(config) {
   var _a, _b;
   const { auth = defaultTokenAuthConfig } = ((_a = config.gqlOptions) == null ? void 0 : _a.exchangeOptions) || {};
+  const enhancedCacheExchange = cacheExchange2({
+    keys: {
+      ApplicationConfiguration: () => null,
+      Attachment: () => null,
+      ChatSource: () => null,
+      CitableContent: () => null,
+      EventQuotePriceInfo: () => null,
+      ListBlock: () => null,
+      ListBlockMeta: () => null,
+      RealtimeTranscrippetPrice: () => null,
+      Search: () => null,
+      TextBlock: () => null,
+      TextBlockMeta: () => null,
+      TranscrippetEquityPrice: () => null,
+      UserEmailStatus: () => null,
+      ChatMessage: ({ id }) => id ? `ChatMessage:${id}` : null,
+      ChatMessagePrompt: ({ id }) => id ? `ChatMessagePrompt:${id}` : null,
+      ChatMessageResponse: ({ id }) => id ? `ChatMessageResponse:${id}` : null,
+      ChatMessageSourceConfirmation: ({ id }) => id ? `ChatMessageSourceConfirmation:${id}` : null
+    },
+    typePolicies: {
+      ChatMessagePrompt: { __typename: "ChatMessagePrompt" },
+      ChatMessageResponse: { __typename: "ChatMessageResponse" },
+      ChatMessageSourceConfirmation: { __typename: "ChatMessageSourceConfirmation" },
+      TextBlock: { __typename: "TextBlock" },
+      ListBlock: { __typename: "ListBlock" },
+      ImageBlock: { __typename: "ImageBlock" },
+      QuoteBlock: { __typename: "QuoteBlock" },
+      TableBlock: { __typename: "TableBlock" },
+      ChartBlock: { __typename: "ChartBlock" },
+      ContentBlock: { __typename: true }
+    }
+  });
   const exchanges = [
     devtoolsExchange,
     opNameExchange,
-    cacheExchange2({
-      keys: {
-        ApplicationConfiguration: () => null,
-        Attachment: () => null,
-        EventQuotePriceInfo: () => null,
-        RealtimeTranscrippetPrice: () => null,
-        Search: () => null,
-        TranscrippetEquityPrice: () => null,
-        UserEmailStatus: () => null
-      }
-    }),
+    enhancedCacheExchange,
     auth ? authExchange(auth) : null,
     fetchExchange
   ].filter((t2) => t2);
@@ -40910,30 +40933,270 @@ var ContentType = /* @__PURE__ */ ((ContentType2) => {
   ContentType2["Streetaccount"] = "streetaccount";
   return ContentType2;
 })(ContentType || {});
-var TextBlockFieldsFragmentDoc = lib_default`
-    fragment TextBlockFields on TextBlock {
+var ChatMessagePromptFragmentFragmentDoc = lib_default`
+    fragment ChatMessagePromptFragment on ChatMessagePrompt {
+  id
+  __typename
+  content
+  createdAt
+  messageType
+  ordinalId
+  runnerVersion
+  sessionId
+  updatedAt
+  userId
+}
+    `;
+var ChatMessageResponseFragmentFragmentDoc = lib_default`
+    fragment ChatMessageResponseFragment on ChatMessageResponse {
   __typename
   id
-  type
-  content {
-    citation {
-      id
-      author
-      contentId
-      contentType
-      date
-      quote
-      source {
-        id
+  createdAt
+  messageType
+  ordinalId
+  runnerVersion
+  sessionId
+  updatedAt
+  userId
+  blocks {
+    ... on ChartBlock {
+      __typename
+      type
+      data {
+        __typename
         name
-        type
+        properties
+        value
       }
-      url
+      chartMeta {
+        __typename
+        chartType
+        properties
+      }
     }
-    value
+    ... on ImageBlock {
+      __typename
+      type
+      url
+      imageMeta {
+        __typename
+        altText
+        title
+        source
+        date
+      }
+    }
+    ... on ListBlock {
+      __typename
+      type
+      listMeta {
+        __typename
+        style
+      }
+      items {
+        ... on ChartBlock {
+          __typename
+          type
+          data {
+            __typename
+            name
+            properties
+            value
+          }
+          chartMeta {
+            __typename
+            chartType
+            properties
+          }
+        }
+        ... on ImageBlock {
+          __typename
+          type
+          url
+          imageMeta {
+            __typename
+            altText
+            title
+            source
+            date
+          }
+        }
+        ... on QuoteBlock {
+          __typename
+          type
+          quoteContent
+          quoteMeta {
+            __typename
+            author
+            source
+            date
+            url
+          }
+        }
+        ... on TableBlock {
+          __typename
+          headers
+          type
+          rows {
+            __typename
+            value
+            citation {
+              __typename
+              author
+              contentId
+              contentType
+              date
+              quote
+              source {
+                __typename
+                sourceId
+                name
+                type
+              }
+              url
+            }
+          }
+          tableMeta {
+            __typename
+            columnAlignment
+            columnMeta {
+              __typename
+              currency
+              unit
+              format
+              decimals
+            }
+          }
+        }
+        ... on TextBlock {
+          __typename
+          type
+          textContent {
+            __typename
+            value
+            citation {
+              __typename
+              author
+              contentId
+              contentType
+              date
+              quote
+              source {
+                __typename
+                sourceId
+                name
+                type
+              }
+              url
+            }
+          }
+          textMeta {
+            __typename
+            style
+          }
+        }
+      }
+    }
+    ... on QuoteBlock {
+      __typename
+      quoteContent
+      type
+      quoteMeta {
+        __typename
+        author
+        source
+        date
+        url
+      }
+    }
+    ... on TableBlock {
+      __typename
+      headers
+      type
+      rows {
+        __typename
+        value
+        citation {
+          __typename
+          author
+          contentId
+          contentType
+          date
+          quote
+          source {
+            __typename
+            sourceId
+            name
+            type
+          }
+          url
+        }
+      }
+      tableMeta {
+        __typename
+        columnAlignment
+        columnMeta {
+          __typename
+          currency
+          unit
+          format
+          decimals
+        }
+      }
+    }
+    ... on TextBlock {
+      __typename
+      type
+      textContent {
+        __typename
+        value
+        citation {
+          __typename
+          author
+          contentId
+          contentType
+          date
+          quote
+          source {
+            __typename
+            sourceId
+            name
+            type
+          }
+          url
+        }
+      }
+      textMeta {
+        __typename
+        style
+      }
+    }
   }
-  meta {
-    textStyle: style
+  sources {
+    __typename
+    sourceId
+    name
+    type
+  }
+}
+    `;
+var ChatMessageSourceConfirmationFragmentFragmentDoc = lib_default`
+    fragment ChatMessageSourceConfirmationFragment on ChatMessageSourceConfirmation {
+  id
+  __typename
+  createdAt
+  messageType
+  ordinalId
+  runnerVersion
+  sessionId
+  updatedAt
+  userId
+  sources {
+    sourceId
+    __typename
+    confirmed
+    name
+    type
   }
 }
     `;
@@ -41066,22 +41329,21 @@ var CreateChatSessionDocument = lib_default`
     chatSession {
       id
       createdAt
-      messages {
-        ... on ChatMessagePrompt {
-          id
-          content
-          createdAt
-          messageType
-          ordinalId
-          runnerVersion
-          sessionId
-          updatedAt
-          userId
-        }
+      promptMessages {
+        id
+        content
+        createdAt
+        messageType
+        ordinalId
+        runnerVersion
+        sessionId
+        updatedAt
+        userId
       }
       sources {
-        id
+        confirmed
         name
+        sourceId
         type
       }
       status
@@ -41106,8 +41368,9 @@ var UpdateChatSessionDocument = lib_default`
       id
       createdAt
       sources {
-        id
+        confirmed
         name
+        sourceId
         type
       }
       status
@@ -41124,8 +41387,9 @@ var ChatSessionsDocument = lib_default`
     id
     createdAt
     sources {
-      id
+      confirmed
       name
+      sourceId
       type
     }
     status
@@ -41148,58 +41412,47 @@ var EventsDocument = lib_default`
   }
 }
     `;
-var CreateChatMessagePromptDocument = lib_default`
-    mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
-  createChatMessagePrompt(input: $input) {
-    chatMessage {
-      id
-      content
-      createdAt
-      messageType
-      ordinalId
-      runnerVersion
-      sessionId
-      updatedAt
-      userId
-    }
-  }
-}
-    `;
 var ChatSessionWithMessagesDocument = lib_default`
     query ChatSessionWithMessages($filter: ChatSessionFilter!) {
   chatSession(filter: $filter) {
     id
-    messages {
-      ... on ChatMessagePrompt {
-        id
-        createdAt
-        messageType
-        ordinalId
-        runnerVersion
-        sessionId
-        updatedAt
-        userId
-        content
-      }
-      ... on ChatMessageResponse {
-        id
-        createdAt
-        messageType
-        ordinalId
-        runnerVersion
-        sessionId
-        updatedAt
-        userId
-        blocks {
-          ... on TextBlock {
-            ...TextBlockFields
-          }
-        }
-      }
+    __typename
+    activeMessageId
+    createdAt
+    status
+    title
+    updatedAt
+    userId
+    modelId
+    modelGenerationParams
+    promptMessages {
+      ...ChatMessagePromptFragment
+    }
+    responseMessages {
+      ...ChatMessageResponseFragment
+    }
+    sourceConfirmationMessages {
+      ...ChatMessageSourceConfirmationFragment
+    }
+    sources {
+      sourceId
+      name
+      type
     }
   }
 }
-    ${TextBlockFieldsFragmentDoc}`;
+    ${ChatMessagePromptFragmentFragmentDoc}
+${ChatMessageResponseFragmentFragmentDoc}
+${ChatMessageSourceConfirmationFragmentFragmentDoc}`;
+var CreateChatMessagePromptDocument = lib_default`
+    mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
+  createChatMessagePrompt(input: $input) {
+    chatMessage {
+      ...ChatMessagePromptFragment
+    }
+  }
+}
+    ${ChatMessagePromptFragmentFragmentDoc}`;
 var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
