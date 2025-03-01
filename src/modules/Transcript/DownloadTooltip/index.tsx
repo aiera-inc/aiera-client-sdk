@@ -69,11 +69,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
                     {canDownloadTranscript && userApiKey && (
                         <a
                             className="h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center"
-                            href={
-                                `https://audio` +
-                                (process.env.NODE_ENV !== 'production' ? `-dev` : '') +
-                                `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userApiKey}`
-                            }
+                            href={`https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userApiKey}`}
                             rel="noreferrer"
                             download
                             onClick={(e) => {

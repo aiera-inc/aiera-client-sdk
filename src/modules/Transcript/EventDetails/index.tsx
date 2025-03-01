@@ -148,11 +148,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                             <span className="block truncate">
                                 <a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
-                                    href={
-                                        `https://audio` +
-                                        (process.env.NODE_ENV !== 'production' ? `-dev` : '') +
-                                        `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`
-                                    }
+                                    href={`https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`}
                                     rel="noreferrer"
                                     download={true}
                                 >
