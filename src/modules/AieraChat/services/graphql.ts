@@ -118,8 +118,8 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                                 quote
                                 source {
                                     __typename
-                                    sourceId
                                     name
+                                    sourceId
                                     type
                                 }
                                 url
@@ -152,8 +152,8 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                                 quote
                                 source {
                                     __typename
-                                    sourceId
                                     name
+                                    sourceId
                                     type
                                 }
                                 url
@@ -194,8 +194,8 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                         quote
                         source {
                             __typename
-                            sourceId
                             name
+                            sourceId
                             type
                         }
                         url
@@ -228,8 +228,8 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                         quote
                         source {
                             __typename
-                            sourceId
                             name
+                            sourceId
                             type
                         }
                         url
@@ -240,12 +240,6 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                     style
                 }
             }
-        }
-        sources {
-            __typename
-            sourceId
-            name
-            type
         }
     }
 `;
@@ -262,10 +256,10 @@ const CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT = gql`
         updatedAt
         userId
         sources {
-            sourceId
             __typename
             confirmed
             name
+            sourceId
             type
         }
     }
@@ -274,18 +268,22 @@ const CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT = gql`
 export const CHAT_SESSION_QUERY = gql`
     query ChatSessionWithMessages($filter: ChatSessionFilter!) {
         chatSession(filter: $filter) {
-            id
             __typename
+            id
             activeMessageId
             createdAt
+            modelId
+            modelGenerationParams
             status
             title
             updatedAt
             userId
-            modelId
-            modelGenerationParams
-
-            # Using separate fields for different message types
+            sources {
+                __typename
+                name
+                sourceId
+                type
+            }
             promptMessages {
                 ...ChatMessagePromptFragment
             }
@@ -294,12 +292,6 @@ export const CHAT_SESSION_QUERY = gql`
             }
             sourceConfirmationMessages {
                 ...ChatMessageSourceConfirmationFragment
-            }
-
-            sources {
-                sourceId
-                name
-                type
             }
         }
     }

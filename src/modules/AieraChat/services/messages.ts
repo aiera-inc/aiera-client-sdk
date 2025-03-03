@@ -26,7 +26,6 @@ import {
 import {
     BlockType,
     CitableContent,
-    Citation,
     ContentBlock,
 } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 import {
@@ -43,7 +42,7 @@ import { PieChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Mes
 import { ScatterChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Scatter';
 import { TreeMapMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Tree';
 
-const POLLING_INTERVAL = 3000; // 3 seconds
+const POLLING_INTERVAL = 5000; // 5 seconds
 
 export enum ChatMessageType {
     PROMPT = 'prompt',
@@ -221,6 +220,25 @@ export function normalizeChartMeta(meta: ChartBlockMeta | null | undefined): Cha
     }
 }
 
+export function normalizeTextContent(rawContent: RawCitableContent[]): CitableContent {
+    return rawContent.map((c: RawCitableContent) => {
+        if (!c) return '';
+
+        if (c.citation) {
+            return {
+                author: c.citation.author || '',
+                date: (c.citation.date as string) || '',
+                id: generateId('citation'), // Generate an ID since it's not provided by the server
+                source: c.citation.source?.name || '',
+                text: c.citation.quote || '',
+                url: c.citation.url || '',
+            };
+        } else {
+            return c.value || '';
+        }
+    });
+}
+
 /**
  * Normalize citable content with better error handling
  */
@@ -231,24 +249,7 @@ export function normalizeCitableContent(rawContent: RawCitableContent[][]): Cita
     }
 
     try {
-        return rawContent.map((content) => {
-            return content.map((c): string | Citation => {
-                if (!c) return '';
-
-                if (c.citation) {
-                    return {
-                        author: c.citation.author || '',
-                        date: (c.citation.date as string) || '',
-                        id: generateId('citation'), // Generate an ID since it's not provided by the server
-                        source: c.citation.source?.name || '',
-                        text: c.citation.quote || '',
-                        url: c.citation.url || '',
-                    };
-                } else {
-                    return c.value || '';
-                }
-            });
-        });
+        return rawContent.map(normalizeTextContent);
     } catch (error) {
         console.error('Error normalizing citable content:', error);
         return [];
@@ -407,11 +408,11 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
                 const block = rawBlock as TableBlock;
                 const meta = block.tableMeta;
                 return {
-                    headers: block.headers || [],
+                    headers: block.headers,
                     id: blockId,
                     meta: {
-                        columnAlignment: meta.columnAlignment || [],
-                        columnMeta: normalizeTableMeta(meta.columnMeta || []),
+                        columnAlignment: meta.columnAlignment,
+                        columnMeta: normalizeTableMeta(meta.columnMeta),
                     },
                     rows: block.rows.map(normalizeCitableContent),
                     type: BlockType.TABLE,
@@ -422,22 +423,7 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
                 const block = rawBlock as TextBlock;
                 const meta = block.textMeta;
                 return {
-                    content: block.textContent.map((c) => {
-                        if (!c) return '';
-
-                        if (c.citation) {
-                            return {
-                                author: c.citation.author || '',
-                                date: (c.citation.date as string) || '',
-                                id: generateId('citation'), // Generate an ID since it's not provided by the server
-                                source: c.citation.source?.name || '',
-                                text: c.citation.quote || '',
-                                url: c.citation.url || '',
-                            };
-                        } else {
-                            return c.value || '';
-                        }
-                    }),
+                    content: normalizeTextContent(block.textContent),
                     id: blockId,
                     meta: {
                         style: meta.style || 'paragraph',
@@ -641,14 +627,16 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
 
         console.log(`Setting up polling interval (${POLLING_INTERVAL}ms)`);
         const intervalId = setInterval(() => {
-            messagesQuery.refetch();
+            if (sessionId && sessionId !== 'new') {
+                messagesQuery.refetch();
+            }
         }, POLLING_INTERVAL);
 
         return () => {
             console.log('Clearing polling interval');
             clearInterval(intervalId);
         };
-    }, [enablePolling, messagesQuery]);
+    }, [enablePolling, messagesQuery, sessionId]);
 
     const refresh = useCallback(() => {
         console.log('Refreshing chat messages...');

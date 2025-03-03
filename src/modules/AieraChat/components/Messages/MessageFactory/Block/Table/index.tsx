@@ -41,11 +41,13 @@ export function Table({ headers, rows }: TableBlock) {
             <table ref={tableRef} className="absolute text-base antialiased w-full">
                 {headers.length > 0 && (
                     <thead>
-                        {headers.map((header, headerIndex) => (
-                            <th key={`header-${headerIndex}`} className="text-nowrap pr-4">
-                                <SearchableText text={header} />
-                            </th>
-                        ))}
+                        <tr>
+                            {headers.map((header, headerIndex) => (
+                                <th key={`header-${headerIndex}`} className="text-nowrap pr-4">
+                                    <SearchableText text={header} />
+                                </th>
+                            ))}
+                        </tr>
                     </thead>
                 )}
                 {rows.length > 0 && (

@@ -199,8 +199,12 @@ export function Messages({
     onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
+    const config = useConfig();
     const { chatId, sources } = useChatStore();
-    const { createChatMessagePrompt, messages, isLoading } = useChatMessages(chatId);
+    const { createChatMessagePrompt, messages, isLoading } = useChatMessages(
+        chatId,
+        config.options?.aieraChatEnablePolling ?? false
+    );
 
     // Reset when starting new chat
     useEffect(() => {
@@ -349,8 +353,6 @@ export function Messages({
         }),
         [handleSubmit, onReRun, onConfirm]
     );
-
-    const config = useConfig();
 
     return (
         <div className="relative flex-1">
