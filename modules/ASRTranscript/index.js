@@ -89007,7 +89007,7 @@ function DownloadTooltipUI(props) {
       className: "text-sm"
     }, "Download MP3")), canDownloadTranscript && userApiKey && /* @__PURE__ */ import_react58.default.createElement("a", {
       className: "h-9 px-3 hover:bg-blue-500 hover:text-white flex items-center",
-      href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userApiKey}`,
+      href: `https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userApiKey}`,
       rel: "noreferrer",
       download: true,
       onClick: (e) => {
@@ -89158,7 +89158,7 @@ function EventDetailsUI(props) {
     className: "block truncate"
   }, /* @__PURE__ */ import_react59.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
-    href: `https://audio` + (true ? `-dev` : "") + `.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
+    href: `https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
     rel: "noreferrer",
     download: true
   }, "Download PDF"))), /* @__PURE__ */ import_react59.default.createElement("div", {
