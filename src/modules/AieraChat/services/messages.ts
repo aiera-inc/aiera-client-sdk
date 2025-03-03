@@ -43,6 +43,9 @@ import { ScatterChartMeta } from '@aiera/client-sdk/modules/AieraChat/components
 import { TreeMapMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Tree';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
+// const MAX_POLLING_DURATION = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
+const MAX_POLLING_DURATION = 30000; // 30 seconds in milliseconds
+const MAX_REFETCH_COUNT = Math.floor(MAX_POLLING_DURATION / POLLING_INTERVAL); // Maximum number of refetches
 
 export enum ChatMessageType {
     PROMPT = 'prompt',
@@ -454,8 +457,12 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
  */
 export const useChatMessages = (sessionId: string, enablePolling = false): UseChatMessagesReturn => {
     const [messages, setMessages] = useState<ChatMessage[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+
+    // Add state for tracking refetch count and whether to stop polling
+    const [_refetchCount, setRefetchCount] = useState<number>(0);
+    const [shouldStopPolling, setShouldStopPolling] = useState<boolean>(false);
 
     // Use the create message mutation with the optimized query
     const [_, createChatMessagePromptMutation] = useMutation<
@@ -612,23 +619,58 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
             } catch (err) {
                 console.error('Error processing messages data:', err);
                 setError('Error processing messages data');
+                // If polling is enabled, stop it when an error occurs
+                if (enablePolling) {
+                    console.log('Stopping polling due to data normalization error');
+                    setShouldStopPolling(true);
+                }
             }
         }
         // Handle error state
         else if (messagesQuery.status === 'error') {
             console.error('Query error:', messagesQuery.error);
             setError(messagesQuery.error.message);
+            // If polling is enabled, stop it when an error occurs
+            if (enablePolling) {
+                console.log('Stopping polling due to query error');
+                setShouldStopPolling(true);
+            }
         }
-    }, [error, isLoading, messagesQuery]);
+    }, [enablePolling, error, isLoading, messagesQuery, setError, setMessages]);
 
-    // Setup polling
+    // Reset refetch count and polling when the sessionId changes
     useEffect(() => {
-        if (!enablePolling) return;
+        if (sessionId && sessionId !== 'new') {
+            setRefetchCount(0);
+            setShouldStopPolling(false);
+        }
+    }, [sessionId]);
 
-        console.log(`Setting up polling interval (${POLLING_INTERVAL}ms)`);
+    // Setup polling with max refetch limit
+    useEffect(() => {
+        if (!enablePolling) {
+            // Reset refetch count and polling
+            setRefetchCount(0);
+            setShouldStopPolling(false);
+            return;
+        }
+
+        console.log(`Setting up polling interval (${POLLING_INTERVAL}ms) with max refetch count: ${MAX_REFETCH_COUNT}`);
         const intervalId = setInterval(() => {
-            if (sessionId && sessionId !== 'new') {
+            if (sessionId && sessionId !== 'new' && !shouldStopPolling) {
                 messagesQuery.refetch();
+                // Increment refetch count
+                setRefetchCount((prevCount) => {
+                    const newCount = prevCount + 1;
+                    console.log(`Refetch count: ${newCount}/${MAX_REFETCH_COUNT}`);
+                    // Check if we've reached the limit
+                    if (newCount >= MAX_REFETCH_COUNT) {
+                        console.log(`Reached max refetch count (${MAX_REFETCH_COUNT}). Stopping polling.`);
+                        setShouldStopPolling(true);
+                    }
+
+                    return newCount;
+                });
             }
         }, POLLING_INTERVAL);
 
@@ -636,12 +678,20 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
             console.log('Clearing polling interval');
             clearInterval(intervalId);
         };
-    }, [enablePolling, messagesQuery, sessionId]);
+    }, [enablePolling, messagesQuery, sessionId, shouldStopPolling]);
 
     const refresh = useCallback(() => {
-        console.log('Refreshing chat messages...');
+        console.log('Refreshing chat messages and resetting polling limits...');
+        // Reset refetch count and polling state when manually refreshing
+        setRefetchCount(0);
+        setShouldStopPolling(false);
         messagesQuery.refetch();
-    }, [messagesQuery]);
+        console.log(
+            `Polling reset. Will continue for up to ${MAX_REFETCH_COUNT} more refetches (${
+                MAX_POLLING_DURATION / 1000 / 60 / 60
+            } hours).`
+        );
+    }, [messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
 
     return {
         createChatMessagePrompt,
