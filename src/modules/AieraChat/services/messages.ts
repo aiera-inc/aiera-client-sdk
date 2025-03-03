@@ -43,8 +43,7 @@ import { ScatterChartMeta } from '@aiera/client-sdk/modules/AieraChat/components
 import { TreeMapMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Tree';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
-// const MAX_POLLING_DURATION = 4 * 60 * 60 * 1000; // 4 hours in milliseconds
-const MAX_POLLING_DURATION = 30000; // 30 seconds in milliseconds
+const MAX_POLLING_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
 const MAX_REFETCH_COUNT = Math.floor(MAX_POLLING_DURATION / POLLING_INTERVAL); // Maximum number of refetches
 
 export enum ChatMessageType {
