@@ -41049,8 +41049,8 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
               quote
               source {
                 __typename
-                sourceId
                 name
+                sourceId
                 type
               }
               url
@@ -41083,8 +41083,8 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
               quote
               source {
                 __typename
-                sourceId
                 name
+                sourceId
                 type
               }
               url
@@ -41125,8 +41125,8 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
           quote
           source {
             __typename
-            sourceId
             name
+            sourceId
             type
           }
           url
@@ -41159,8 +41159,8 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
           quote
           source {
             __typename
-            sourceId
             name
+            sourceId
             type
           }
           url
@@ -41171,12 +41171,6 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
         style
       }
     }
-  }
-  sources {
-    __typename
-    sourceId
-    name
-    type
   }
 }
     `;
@@ -41192,10 +41186,10 @@ var ChatMessageSourceConfirmationFragmentFragmentDoc = lib_default`
   updatedAt
   userId
   sources {
-    sourceId
     __typename
     confirmed
     name
+    sourceId
     type
   }
 }
@@ -41415,16 +41409,22 @@ var EventsDocument = lib_default`
 var ChatSessionWithMessagesDocument = lib_default`
     query ChatSessionWithMessages($filter: ChatSessionFilter!) {
   chatSession(filter: $filter) {
-    id
     __typename
+    id
     activeMessageId
     createdAt
+    modelId
+    modelGenerationParams
     status
     title
     updatedAt
     userId
-    modelId
-    modelGenerationParams
+    sources {
+      __typename
+      name
+      sourceId
+      type
+    }
     promptMessages {
       ...ChatMessagePromptFragment
     }
@@ -41433,11 +41433,6 @@ var ChatSessionWithMessagesDocument = lib_default`
     }
     sourceConfirmationMessages {
       ...ChatMessageSourceConfirmationFragment
-    }
-    sources {
-      sourceId
-      name
-      type
     }
   }
 }
