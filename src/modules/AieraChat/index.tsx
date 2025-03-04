@@ -16,8 +16,17 @@ export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    const { chatId, chatTitle, hasChanges, onSelectChat, onSelectSource, selectedSource, setHasChanges, sources } =
-        useChatStore();
+    const {
+        chatId,
+        chatTitle,
+        hasChanges,
+        onNewChat,
+        onSelectChat,
+        onSelectSource,
+        selectedSource,
+        setHasChanges,
+        sources,
+    } = useChatStore();
 
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
@@ -41,11 +50,15 @@ export function AieraChat(): ReactElement {
                     .then(() => {
                         setDeletedSessionId(null);
                         setShowConfirm(false);
+                        // Start new chat if deleting the currently-selected one
+                        if (chatId === deletedSessionId) {
+                            onNewChat();
+                        }
                     })
                     .catch(() => setShowConfirm(false));
             }
         },
-        [deletedSessionId, setDeletedSessionId]
+        [deleteSession, deletedSessionId, onNewChat, setDeletedSessionId, setShowConfirm]
     );
 
     const handleMessageSubmit = useCallback(
