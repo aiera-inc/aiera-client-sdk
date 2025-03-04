@@ -344,6 +344,27 @@ export function Messages({
         [chatId, sources]
     );
 
+    // Append new messages to virtuoso as they're created
+    useEffect(() => {
+        if (messages && messages.length > 0) {
+            // Find new messages
+            const newMessages = messages.filter(
+                (message) => !(virtuosoRef.current?.data || []).find((m) => m.id === message.id)
+            );
+
+            // Append any new messages
+            if (newMessages.length > 0) {
+                virtuosoRef.current?.data.append(newMessages, ({ scrollInProgress, atBottom }) => {
+                    return {
+                        index: 'LAST',
+                        align: 'end',
+                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                    };
+                });
+            }
+        }
+    }, [messages]);
+
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(
         () => ({
