@@ -29,7 +29,8 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
     }, [checkEmpty]);
 
     const handleSubmit = useCallback(() => {
-        if (inputRef.current) {
+        // Disable submit until user enters a prompt and selects sources
+        if (inputRef.current && sources.length > 0) {
             const promptText = inputRef.current.innerText;
             if (promptText && promptText.length > 0) {
                 onSubmit(promptText);
