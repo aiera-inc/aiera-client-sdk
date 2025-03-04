@@ -550,11 +550,15 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
                 console.log('Processing chat session:', chatSession.id);
 
                 const normalizedMessages: ChatMessage[] = [];
+                let lastPromptValue = ''; // Track the last prompt value
 
                 // Process prompt messages
                 if (chatSession.promptMessages) {
                     (chatSession.promptMessages as RawChatMessagePrompt[]).forEach((msg) => {
                         if (!msg) return;
+
+                        const promptValue = msg.content || '';
+                        lastPromptValue = promptValue; // Update the last prompt value
 
                         normalizedMessages.push({
                             id: msg.id,
@@ -562,7 +566,7 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
                             timestamp: msg.createdAt,
                             status: ChatMessageStatus.COMPLETED,
                             type: ChatMessageType.PROMPT,
-                            prompt: msg.content || '',
+                            prompt: promptValue,
                         });
                     });
                 }
@@ -582,7 +586,7 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
                             timestamp: msg.createdAt,
                             status: ChatMessageStatus.COMPLETED,
                             type: ChatMessageType.RESPONSE,
-                            prompt: '',
+                            prompt: lastPromptValue, // Use the last prompt value
                             blocks,
                             sources: normalizeSources(msg.sources),
                         });
@@ -600,7 +604,7 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
                             timestamp: msg.createdAt,
                             status: ChatMessageStatus.COMPLETED,
                             type: ChatMessageType.SOURCES,
-                            prompt: '',
+                            prompt: lastPromptValue, // Use the last prompt value
                             confirmed: false,
                             sources: normalizeSources(msg.sources),
                         });
@@ -610,8 +614,23 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
                 // Sort all messages by timestamp
                 normalizedMessages.sort((a, b) => new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime());
 
-                console.log(`Successfully normalized ${normalizedMessages.length} messages`);
-                setMessages(normalizedMessages);
+                // Additional pass to ensure prompt values are historically accurate
+                // This handles the case where messages might not be in chronological order in the API response
+                let currentPromptValue = '';
+                const finalNormalizedMessages = normalizedMessages.map((message) => {
+                    if (message.type === ChatMessageType.PROMPT) {
+                        currentPromptValue = message.prompt;
+                        return message;
+                    } else {
+                        return {
+                            ...message,
+                            prompt: currentPromptValue,
+                        };
+                    }
+                });
+
+                console.log(`Successfully normalized ${finalNormalizedMessages.length} messages`);
+                setMessages(finalNormalizedMessages);
 
                 // Clear error state
                 if (error) setError(null);
