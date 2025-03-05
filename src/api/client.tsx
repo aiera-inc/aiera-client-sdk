@@ -32,9 +32,9 @@ import {
     UseQueryArgs,
 } from 'urql';
 import { pipe, map } from 'wonka';
-
 import { useConfig, Config } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
+import { DeleteChatSessionMutation, DeleteChatSessionMutationVariables } from '@aiera/client-sdk/types/generated';
 
 /**
  * Function to extract the query names from a GQL document
@@ -106,7 +106,6 @@ export function createGQLClient(config: Config): Client {
             ChatMessageResponse: ({ id }) => (id ? `ChatMessageResponse:${id}` : null),
             ChatMessageSourceConfirmation: ({ id }) => (id ? `ChatMessageSourceConfirmation:${id}` : null),
         },
-
         // Type conditions used in fragments
         typePolicies: {
             ChatMessagePrompt: { __typename: 'ChatMessagePrompt' },
@@ -119,6 +118,20 @@ export function createGQLClient(config: Config): Client {
             TableBlock: { __typename: 'TableBlock' },
             ChartBlock: { __typename: 'ChartBlock' },
             ContentBlock: { __typename: true }, // Mark as interface
+        },
+        // Add update policies for mutations
+        updates: {
+            Mutation: {
+                deleteChatSession: (
+                    result: DeleteChatSessionMutation,
+                    args: DeleteChatSessionMutationVariables,
+                    cache
+                ) => {
+                    if (result.deleteChatSession?.success) {
+                        cache.invalidate({ __typename: 'ChatSession', id: args.sessionId });
+                    }
+                },
+            },
         },
     });
 
