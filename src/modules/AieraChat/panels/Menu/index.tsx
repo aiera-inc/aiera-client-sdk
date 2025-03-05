@@ -8,7 +8,7 @@ import { Panel } from '../Panel';
 import { SearchInput } from '../../components/SearchInput';
 import { useChatStore } from '../../store';
 import { ContentRow } from '../../components/ContentRow';
-import { ChatSession } from '../../services/chats';
+import { ChatSession } from '@aiera/client-sdk/modules/AieraChat/services/types';
 
 export function Menu({
     isLoading,

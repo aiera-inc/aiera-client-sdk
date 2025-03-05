@@ -8,7 +8,6 @@ import {
     ChatSession as RawChatSession,
     ChatSessionsQuery,
     ChatSessionsQueryVariables,
-    ChatSessionStatus,
     ChatSource,
     ChatSourceInput,
     ChatSourceType,
@@ -25,30 +24,10 @@ import {
 } from '@aiera/client-sdk/types/generated';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatMessageStatus, ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
+import { ChatSession, ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 
 export interface AblyToken {
     client_id: string;
-}
-
-export interface ChatSession {
-    createdAt: string;
-    id: string;
-    sources?: Source[];
-    status: ChatSessionStatus;
-    title: string | null;
-    updatedAt: string;
-    userId: string;
-}
-
-export interface ChatSessionWithPromptMessage extends ChatSession {
-    promptMessage?: {
-        id: string;
-        ordinalId?: string | null;
-        prompt: string;
-        status: ChatMessageStatus;
-        timestamp: string;
-        type: ChatMessageType;
-    };
 }
 
 export interface UseChatSessionsReturn {

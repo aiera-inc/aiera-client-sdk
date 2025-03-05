@@ -17,7 +17,7 @@ import {
     ChatMessageSources,
     ChatMessageStatus,
     ChatMessageType,
-    useChatMessages,
+    useChatSession,
 } from '../../services/messages';
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
@@ -27,7 +27,7 @@ import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
 import { TextBlock } from './MessageFactory/Block/Text';
 import { useConfig } from '@aiera/client-sdk/lib/config';
-import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/chats';
+import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 
 let idCounter = 0;
 
@@ -200,18 +200,31 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { chatId, sources } = useChatStore();
-    const { createChatMessagePrompt, messages, isLoading } = useChatMessages(
-        chatId,
-        config.options?.aieraChatEnablePolling ?? false
-    );
+    const { chatId, chatTitle, onSetTitle, sources } = useChatStore();
+    const { createChatMessagePrompt, currentSession, messages, isLoading, setCurrentSession } = useChatSession({
+        sessionId: chatId,
+        enablePolling: config.options?.aieraChatEnablePolling || false,
+    });
 
     // Reset when starting new chat
     useEffect(() => {
-        if (chatId === 'new' && virtuosoRef.current?.data) {
-            virtuosoRef.current.data.replace([]);
+        if (chatId === 'new') {
+            if (virtuosoRef.current?.data) {
+                virtuosoRef.current.data.replace([]);
+            }
+            if (currentSession) {
+                setCurrentSession(undefined);
+            }
         }
-    }, [chatId]);
+    }, [chatId, currentSession, setCurrentSession]);
+
+    // Update the chat title in the store if the messages query returns a session with an updated title
+    useEffect(() => {
+        console.log({ currentSession, chatTitle });
+        if (currentSession?.title && currentSession.title !== chatTitle) {
+            onSetTitle(currentSession.title);
+        }
+    }, [chatTitle, currentSession, onSetTitle]);
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);

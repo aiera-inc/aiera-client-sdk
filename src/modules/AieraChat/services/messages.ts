@@ -1,21 +1,22 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useMutation } from 'urql';
+import { useCallback, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { RequestPolicy, useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import {
-    ChatMessagePrompt as RawChatMessagePrompt,
-    ChatMessageResponse as RawChatMessageResponse,
-    ChatMessageSourceConfirmation as RawChatMessageSourceConfirmation,
-    ChatSessionWithMessagesQuery,
-    ChatSessionWithMessagesQueryVariables,
-    CreateChatMessagePromptMutation,
-    CreateChatMessagePromptMutationVariables,
     ChartBlock,
     ChartBlockMeta,
     ChartData,
     ChartType as ChartTypeEnum,
+    ChatMessagePrompt as RawChatMessagePrompt,
+    ChatMessageResponse as RawChatMessageResponse,
+    ChatMessageSourceConfirmation as RawChatMessageSourceConfirmation,
+    ChatSession as RawChatSession,
+    ChatSessionWithMessagesQuery,
+    ChatSessionWithMessagesQueryVariables,
     ChatSource,
     CitableContent as RawCitableContent,
     ContentBlock as RawContentBlock,
+    CreateChatMessagePromptMutation,
+    CreateChatMessagePromptMutationVariables,
     ImageBlock,
     ListBlock,
     QuoteBlock,
@@ -41,6 +42,7 @@ import { LineChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Me
 import { PieChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Pie';
 import { ScatterChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Scatter';
 import { TreeMapMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Tree';
+import { ChatSession } from '@aiera/client-sdk/modules/AieraChat/services/types';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
 const MAX_POLLING_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -102,7 +104,13 @@ export interface ChatMessageSources extends ChatMessageBase {
 
 export type ChatMessage = ChatMessageResponse | ChatMessagePrompt | ChatMessageSources;
 
-interface UseChatMessagesReturn {
+interface UseChatSessionOptions {
+    enablePolling?: boolean;
+    requestPolicy?: RequestPolicy;
+    sessionId: string;
+}
+
+interface UseChatSessionReturn {
     createChatMessagePrompt: ({
         content,
         sessionId,
@@ -110,10 +118,12 @@ interface UseChatMessagesReturn {
         content: string;
         sessionId: string;
     }) => Promise<ChatMessagePrompt | null>;
-    messages: ChatMessage[];
-    isLoading: boolean;
+    currentSession?: ChatSession;
     error: string | null;
+    isLoading: boolean;
+    messages: ChatMessage[];
     refresh: () => void;
+    setCurrentSession: Dispatch<SetStateAction<ChatSession | undefined>>;
 }
 
 /**
@@ -451,10 +461,26 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
     }
 }
 
+function normalizeSession(session: RawChatSession): ChatSession {
+    return {
+        createdAt: session.createdAt,
+        id: session.id,
+        status: session.status,
+        title: session.title ?? 'Untitled Chat',
+        updatedAt: session.updatedAt,
+        userId: session.userId,
+    };
+}
+
 /**
- * Enhanced hook for chat messages with better error handling and normalized data
+ * Hook for getting a chat session with messages, including data normalization and error handling
  */
-export const useChatMessages = (sessionId: string, enablePolling = false): UseChatMessagesReturn => {
+export const useChatSession = ({
+    enablePolling = false,
+    requestPolicy = 'cache-and-network',
+    sessionId,
+}: UseChatSessionOptions): UseChatSessionReturn => {
+    const [currentSession, setCurrentSession] = useState<ChatSession | undefined>(undefined);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -529,7 +555,7 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
         query: CHAT_SESSION_QUERY,
         pause: !sessionId || sessionId === 'new',
-        requestPolicy: 'cache-and-network',
+        requestPolicy,
         variables: {
             filter: { includeMessages: true, sessionId },
         },
@@ -548,6 +574,10 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
             try {
                 const chatSession = messagesQuery.data.chatSession;
                 console.log('Processing chat session:', chatSession.id);
+
+                if (!currentSession && chatSession) {
+                    setCurrentSession(normalizeSession(chatSession as RawChatSession));
+                }
 
                 const normalizedMessages: ChatMessage[] = [];
                 let lastPromptValue = ''; // Track the last prompt value
@@ -654,11 +684,12 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
                 setShouldStopPolling(true);
             }
         }
-    }, [enablePolling, error, isLoading, messagesQuery, setError, setMessages]);
+    }, [currentSession, enablePolling, error, isLoading, messagesQuery, setCurrentSession, setError, setMessages]);
 
     // Reset refetch count and polling when the sessionId changes
     useEffect(() => {
         if (sessionId && sessionId !== 'new') {
+            setCurrentSession(undefined);
             setRefetchCount(0);
             setShouldStopPolling(false);
         }
@@ -713,9 +744,11 @@ export const useChatMessages = (sessionId: string, enablePolling = false): UseCh
 
     return {
         createChatMessagePrompt,
+        currentSession,
         error,
         isLoading,
         messages,
         refresh,
+        setCurrentSession,
     };
 };
