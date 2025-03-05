@@ -332,13 +332,9 @@ export function Messages({
                     })
                     .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
             } else {
-                createChatMessagePrompt({ content: prompt, sessionId: chatId })
-                    .then((message) => {
-                        if (message) {
-                            updateVirtuoso(prompt, message, sources, virtuosoRef);
-                        }
-                    })
-                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
+                createChatMessagePrompt({ content: prompt, sessionId: chatId }).catch((error: Error) =>
+                    console.log(`Error creating session with prompt: ${error.message}`)
+                );
             }
         },
         [chatId, sources]
