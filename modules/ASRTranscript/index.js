@@ -83307,6 +83307,16 @@ function createGQLClient(config) {
       TableBlock: { __typename: "TableBlock" },
       ChartBlock: { __typename: "ChartBlock" },
       ContentBlock: { __typename: true }
+    },
+    updates: {
+      Mutation: {
+        deleteChatSession: (result, args, cache) => {
+          var _a2;
+          if ((_a2 = result.deleteChatSession) == null ? void 0 : _a2.success) {
+            cache.invalidate({ __typename: "ChatSession", id: args.sessionId });
+          }
+        }
+      }
     }
   });
   const exchanges = [
