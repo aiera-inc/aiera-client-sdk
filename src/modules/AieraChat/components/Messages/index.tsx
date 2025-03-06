@@ -200,8 +200,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { sources } = useChatStore();
-    const { chatId } = useChatSession({ requestPolicy: 'cache-only' });
+    const { chatId, sources } = useChatStore();
     const { createChatMessagePrompt, messages, isLoading } = useChatSession({
         sessionId: chatId,
         enablePolling: config.options?.aieraChatEnablePolling || false,

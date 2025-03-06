@@ -6,7 +6,6 @@ import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
 import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCircle';
 import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import { useChatStore } from '../../../store';
-import { useChatSession } from '../../../services/messages';
 import { IconButton } from '../../IconButton';
 import { ChatMessage, ChatMessageType } from '../../../services/messages';
 import { CitableContent, ContentBlock } from '../../Messages/MessageFactory/Block';
@@ -103,8 +102,7 @@ export function Search({
     onChangeTitle: (title: string) => void;
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
-    const { searchTerm, onSetSearchTerm } = useChatStore();
-    const { chatId, chatTitle, setChatTitle } = useChatSession({ requestPolicy: 'cache-only' });
+    const { chatId, chatTitle, onSetTitle, searchTerm, onSetSearchTerm } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
     const [matches, setMatches] = useState<number[]>([]);
     const [matchIndex, setMatchIndex] = useState(1);
@@ -282,7 +280,7 @@ export function Search({
                 <input
                     onChange={(e) => {
                         const title = e.target.value;
-                        setChatTitle(title);
+                        onSetTitle(title);
                         debouncedTitleChange(title);
                     }}
                     key="titleInput"

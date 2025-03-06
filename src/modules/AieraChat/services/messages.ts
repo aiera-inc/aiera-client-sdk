@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, Dispatch, SetStateAction } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { RequestPolicy, useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import {
@@ -41,7 +41,7 @@ import { LineChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Me
 import { PieChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Pie';
 import { ScatterChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Scatter';
 import { TreeMapMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Tree';
-import { ChatSession } from '@aiera/client-sdk/modules/AieraChat/services/types';
+import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
 const MAX_POLLING_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -110,8 +110,6 @@ interface UseChatSessionOptions {
 }
 
 interface UseChatSessionReturn {
-    chatId: string;
-    chatTitle?: string;
     createChatMessagePrompt: ({
         content,
         sessionId,
@@ -119,14 +117,10 @@ interface UseChatSessionReturn {
         content: string;
         sessionId: string;
     }) => Promise<ChatMessagePrompt | null>;
-    currentSession?: ChatSession;
     error: string | null;
     isLoading: boolean;
     messages: ChatMessage[];
     refresh: () => void;
-    resetChat: () => void;
-    setChatId: Dispatch<SetStateAction<string>>;
-    setChatTitle: Dispatch<SetStateAction<string | undefined>>;
 }
 
 /**
@@ -472,8 +466,8 @@ export const useChatSession = ({
     requestPolicy = 'cache-and-network',
     sessionId,
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const [chatId, setChatId] = useState<string>('new');
-    const [chatTitle, setChatTitle] = useState<string | undefined>(undefined);
+    const { chatId, chatTitle, onSetTitle } = useChatStore();
+    console.log({ chatId, chatTitle, enablePolling, requestPolicy, sessionId });
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -544,14 +538,17 @@ export const useChatSession = ({
         [createChatMessagePromptMutation]
     );
 
+    // Either use the passed sessionId (for initial render) or chatId from store (for updates)
+    const effectiveSessionId = sessionId || chatId || '';
+
     // Use the query with separate message fields
     // The empty string default for sessionId is just to appease TS, the query won't actually fire
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
         query: CHAT_SESSION_QUERY,
-        pause: !sessionId || sessionId === 'new',
+        pause: !effectiveSessionId || effectiveSessionId === 'new',
         requestPolicy,
         variables: {
-            filter: { includeMessages: true, sessionId: sessionId || '' },
+            filter: { includeMessages: true, sessionId: effectiveSessionId },
         },
     });
 
@@ -569,14 +566,9 @@ export const useChatSession = ({
                 const chatSession = messagesQuery.data.chatSession;
                 console.log('Processing chat session:', chatSession.id);
 
-                // Update state values if query results change
-                if (chatSession) {
-                    if (chatId !== chatSession.id) {
-                        setChatId(chatSession.id);
-                    }
-                    if (chatSession.title && chatTitle !== chatSession.title) {
-                        setChatTitle(chatSession.title);
-                    }
+                // Update chat title in store if changed
+                if (chatSession.title && chatSession.title !== chatTitle) {
+                    onSetTitle(chatSession.title);
                 }
 
                 const normalizedMessages: ChatMessage[] = [];
@@ -684,24 +676,11 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [
-        chatId,
-        chatTitle,
-        enablePolling,
-        error,
-        isLoading,
-        messagesQuery,
-        setChatId,
-        setChatTitle,
-        setError,
-        setMessages,
-    ]);
+    }, [chatTitle, enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
 
     // Reset refetch count and polling when the sessionId changes
     useEffect(() => {
         if (sessionId && sessionId !== 'new') {
-            setChatId('new');
-            setChatTitle(undefined);
             setRefetchCount(0);
             setShouldStopPolling(false);
         }
@@ -754,21 +733,11 @@ export const useChatSession = ({
         );
     }, [messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
 
-    const resetChat = useCallback(() => {
-        setChatId('new');
-        setChatTitle(undefined);
-    }, [setChatId, setChatTitle]);
-
     return {
-        chatId,
-        chatTitle,
         createChatMessagePrompt,
         error,
         isLoading,
         messages,
         refresh,
-        resetChat,
-        setChatId,
-        setChatTitle,
     };
 };

@@ -4,7 +4,6 @@ import { Button } from '@aiera/client-sdk/components/Button';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { MicroBars } from '@aiera/client-sdk/components/Svg/MicroBars';
 import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
-import { useChatSession } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { ChatSession } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { Panel } from '../Panel';
 import { SearchInput } from '../../components/SearchInput';
@@ -22,8 +21,7 @@ export function Menu({
     onClose: () => void;
     sessions: ChatSession[];
 }) {
-    const { onSelectChatSources, onNewChat } = useChatStore();
-    const { chatId, resetChat, setChatId, setChatTitle } = useChatSession({ requestPolicy: 'cache-only' });
+    const { chatId, onSelectChat, onNewChat } = useChatStore();
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
 
     const filteredResults = sessions.filter(({ title }) =>
@@ -48,9 +46,7 @@ export function Menu({
                                         text={title || ''}
                                         key={id}
                                         onClick={() => {
-                                            onSelectChatSources(sources);
-                                            setChatId(id);
-                                            setChatTitle(title ?? undefined);
+                                            onSelectChat(id, title ?? undefined, sources);
                                             onStartExit();
                                         }}
                                         onClickIcon={() => onClickIcon(id)}
@@ -80,7 +76,6 @@ export function Menu({
                         kind="primary"
                         onClick={() => {
                             onNewChat();
-                            resetChat();
                             onStartExit();
                         }}
                     >
