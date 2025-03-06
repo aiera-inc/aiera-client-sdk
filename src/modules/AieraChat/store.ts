@@ -8,17 +8,14 @@ export interface Source {
 }
 
 export interface ChatState {
-    chatId: string;
-    chatTitle?: string;
     hasChanges: boolean;
     onAddSource: (source: Source | Source[]) => void;
     onClearSources: () => void;
     onNewChat: () => void;
     onRemoveSource: (targetId: string, targetType: string) => void;
-    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) => void;
+    onSelectChatSources: (sources?: Source[]) => void;
     onSelectSource: (source?: Source) => void;
     onSetSearchTerm: (searchTerm?: string) => void;
-    onSetTitle: (title?: string) => void;
     searchTerm?: string;
     selectedSource?: Source;
     setHasChanges: (hasChanges: boolean) => void;
@@ -26,8 +23,6 @@ export interface ChatState {
 }
 
 export const useChatStore = create<ChatState>((set) => ({
-    chatId: 'new',
-    chatTitle: undefined,
     hasChanges: false,
     onAddSource: (source: Source | Source[]) =>
         set((state) => ({
@@ -35,7 +30,7 @@ export const useChatStore = create<ChatState>((set) => ({
             sources: [...state.sources, ...(Array.isArray(source) ? source : [source])],
         })),
     onClearSources: () => set({ sources: [] }),
-    onNewChat: () => set({ chatId: 'new', chatTitle: undefined, searchTerm: undefined, sources: [] }),
+    onNewChat: () => set({ searchTerm: undefined, sources: [] }),
     onRemoveSource: (targetId: string, targetType: string) =>
         set((state) => ({
             hasChanges: true,
@@ -43,10 +38,9 @@ export const useChatStore = create<ChatState>((set) => ({
                 (source) => !(source.targetId === targetId && source.targetType === targetType)
             ),
         })),
-    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) => set({ chatId, chatTitle, sources }),
+    onSelectChatSources: (sources?: Source[]) => set({ sources }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
-    onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     searchTerm: undefined,
     selectedSource: undefined,
     setHasChanges: (hasChanges: boolean) => set({ hasChanges }),

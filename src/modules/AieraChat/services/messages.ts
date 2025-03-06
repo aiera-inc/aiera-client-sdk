@@ -9,7 +9,6 @@ import {
     ChatMessagePrompt as RawChatMessagePrompt,
     ChatMessageResponse as RawChatMessageResponse,
     ChatMessageSourceConfirmation as RawChatMessageSourceConfirmation,
-    ChatSession as RawChatSession,
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
@@ -107,10 +106,12 @@ export type ChatMessage = ChatMessageResponse | ChatMessagePrompt | ChatMessageS
 interface UseChatSessionOptions {
     enablePolling?: boolean;
     requestPolicy?: RequestPolicy;
-    sessionId: string;
+    sessionId?: string;
 }
 
 interface UseChatSessionReturn {
+    chatId: string;
+    chatTitle?: string;
     createChatMessagePrompt: ({
         content,
         sessionId,
@@ -123,7 +124,9 @@ interface UseChatSessionReturn {
     isLoading: boolean;
     messages: ChatMessage[];
     refresh: () => void;
-    setCurrentSession: Dispatch<SetStateAction<ChatSession | undefined>>;
+    resetChat: () => void;
+    setChatId: Dispatch<SetStateAction<string>>;
+    setChatTitle: Dispatch<SetStateAction<string | undefined>>;
 }
 
 /**
@@ -461,17 +464,6 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
     }
 }
 
-function normalizeSession(session: RawChatSession): ChatSession {
-    return {
-        createdAt: session.createdAt,
-        id: session.id,
-        status: session.status,
-        title: session.title ?? 'Untitled Chat',
-        updatedAt: session.updatedAt,
-        userId: session.userId,
-    };
-}
-
 /**
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
@@ -480,7 +472,8 @@ export const useChatSession = ({
     requestPolicy = 'cache-and-network',
     sessionId,
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const [currentSession, setCurrentSession] = useState<ChatSession | undefined>(undefined);
+    const [chatId, setChatId] = useState<string>('new');
+    const [chatTitle, setChatTitle] = useState<string | undefined>(undefined);
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -552,12 +545,13 @@ export const useChatSession = ({
     );
 
     // Use the query with separate message fields
+    // The empty string default for sessionId is just to appease TS, the query won't actually fire
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
         query: CHAT_SESSION_QUERY,
         pause: !sessionId || sessionId === 'new',
         requestPolicy,
         variables: {
-            filter: { includeMessages: true, sessionId },
+            filter: { includeMessages: true, sessionId: sessionId || '' },
         },
     });
 
@@ -575,8 +569,14 @@ export const useChatSession = ({
                 const chatSession = messagesQuery.data.chatSession;
                 console.log('Processing chat session:', chatSession.id);
 
-                if (!currentSession && chatSession) {
-                    setCurrentSession(normalizeSession(chatSession as RawChatSession));
+                // Update state values if query results change
+                if (chatSession) {
+                    if (chatId !== chatSession.id) {
+                        setChatId(chatSession.id);
+                    }
+                    if (chatSession.title && chatTitle !== chatSession.title) {
+                        setChatTitle(chatSession.title);
+                    }
                 }
 
                 const normalizedMessages: ChatMessage[] = [];
@@ -684,12 +684,24 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [currentSession, enablePolling, error, isLoading, messagesQuery, setCurrentSession, setError, setMessages]);
+    }, [
+        chatId,
+        chatTitle,
+        enablePolling,
+        error,
+        isLoading,
+        messagesQuery,
+        setChatId,
+        setChatTitle,
+        setError,
+        setMessages,
+    ]);
 
     // Reset refetch count and polling when the sessionId changes
     useEffect(() => {
         if (sessionId && sessionId !== 'new') {
-            setCurrentSession(undefined);
+            setChatId('new');
+            setChatTitle(undefined);
             setRefetchCount(0);
             setShouldStopPolling(false);
         }
@@ -742,13 +754,21 @@ export const useChatSession = ({
         );
     }, [messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
 
+    const resetChat = useCallback(() => {
+        setChatId('new');
+        setChatTitle(undefined);
+    }, [setChatId, setChatTitle]);
+
     return {
+        chatId,
+        chatTitle,
         createChatMessagePrompt,
-        currentSession,
         error,
         isLoading,
         messages,
         refresh,
-        setCurrentSession,
+        resetChat,
+        setChatId,
+        setChatTitle,
     };
 };

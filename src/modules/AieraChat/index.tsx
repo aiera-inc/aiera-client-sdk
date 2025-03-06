@@ -10,28 +10,20 @@ import { Messages } from './components/Messages';
 import { Sources } from './panels/Sources';
 import { useChatStore } from './store';
 import { useChatSessions } from './services/chats';
-import { ChatMessage } from './services/messages';
+import { ChatMessage, useChatSession } from './services/messages';
 
 export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
     const [showSources, setShowSources] = useState(false);
     const [showConfirm, setShowConfirm] = useState(false);
-    const {
-        chatId,
-        chatTitle,
-        hasChanges,
-        onNewChat,
-        onSelectChat,
-        onSelectSource,
-        selectedSource,
-        setHasChanges,
-        sources,
-    } = useChatStore();
+    const { hasChanges, onNewChat, onSelectChatSources, onSelectSource, selectedSource, setHasChanges, sources } =
+        useChatStore();
 
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
     const { clearSources, createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
+    const { chatId, chatTitle, resetChat, setChatId, setChatTitle } = useChatSession({ requestPolicy: 'cache-only' });
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
 
     const handleClearSources = useCallback(() => {
@@ -53,12 +45,13 @@ export function AieraChat(): ReactElement {
                         // Start new chat if deleting the currently-selected one
                         if (chatId === deletedSessionId) {
                             onNewChat();
+                            resetChat();
                         }
                     })
                     .catch(() => setShowConfirm(false));
             }
         },
-        [deleteSession, deletedSessionId, onNewChat, setDeletedSessionId, setShowConfirm]
+        [deleteSession, deletedSessionId, onNewChat, resetChat, setDeletedSessionId, setShowConfirm]
     );
 
     const handleMessageSubmit = useCallback(
@@ -67,7 +60,11 @@ export function AieraChat(): ReactElement {
                 return createSession({ prompt, sources, title: chatTitle })
                     .then((newSession) => {
                         if (newSession && newSession.id) {
-                            onSelectChat(newSession.id, newSession.title || chatTitle, newSession.sources);
+                            setChatId(newSession.id);
+                            if (newSession.title) {
+                                setChatTitle(newSession.title);
+                            }
+                            onSelectChatSources(newSession.sources);
                             return newSession;
                         }
                         return null;
@@ -79,7 +76,7 @@ export function AieraChat(): ReactElement {
             }
             return Promise.resolve(null);
         },
-        [chatId, chatTitle, createSession, onSelectChat, sources]
+        [chatId, chatTitle, createSession, onSelectChatSources, setChatId, setChatTitle, sources]
     );
 
     const handleTitleChange = useCallback(

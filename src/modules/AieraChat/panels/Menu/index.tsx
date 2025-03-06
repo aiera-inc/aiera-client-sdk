@@ -1,14 +1,15 @@
+import classNames from 'classnames';
+import React, { useState } from 'react';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { MicroBars } from '@aiera/client-sdk/components/Svg/MicroBars';
 import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
-import classNames from 'classnames';
-import React, { useState } from 'react';
+import { useChatSession } from '@aiera/client-sdk/modules/AieraChat/services/messages';
+import { ChatSession } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { Panel } from '../Panel';
 import { SearchInput } from '../../components/SearchInput';
 import { useChatStore } from '../../store';
 import { ContentRow } from '../../components/ContentRow';
-import { ChatSession } from '@aiera/client-sdk/modules/AieraChat/services/types';
 
 export function Menu({
     isLoading,
@@ -21,7 +22,8 @@ export function Menu({
     onClose: () => void;
     sessions: ChatSession[];
 }) {
-    const { chatId, onSelectChat, onNewChat } = useChatStore();
+    const { onSelectChatSources, onNewChat } = useChatStore();
+    const { chatId, resetChat, setChatId, setChatTitle } = useChatSession({ requestPolicy: 'cache-only' });
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
 
     const filteredResults = sessions.filter(({ title }) =>
@@ -46,7 +48,9 @@ export function Menu({
                                         text={title || ''}
                                         key={id}
                                         onClick={() => {
-                                            onSelectChat(id, title || '', sources);
+                                            onSelectChatSources(sources);
+                                            setChatId(id);
+                                            setChatTitle(title ?? undefined);
                                             onStartExit();
                                         }}
                                         onClickIcon={() => onClickIcon(id)}
@@ -76,6 +80,7 @@ export function Menu({
                         kind="primary"
                         onClick={() => {
                             onNewChat();
+                            resetChat();
                             onStartExit();
                         }}
                     >

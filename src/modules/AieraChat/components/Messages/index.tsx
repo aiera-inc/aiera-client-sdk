@@ -200,31 +200,19 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { chatId, chatTitle, onSetTitle, sources } = useChatStore();
-    const { createChatMessagePrompt, currentSession, messages, isLoading, setCurrentSession } = useChatSession({
+    const { sources } = useChatStore();
+    const { chatId } = useChatSession({ requestPolicy: 'cache-only' });
+    const { createChatMessagePrompt, messages, isLoading } = useChatSession({
         sessionId: chatId,
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
 
     // Reset when starting new chat
     useEffect(() => {
-        if (chatId === 'new') {
-            if (virtuosoRef.current?.data) {
-                virtuosoRef.current.data.replace([]);
-            }
-            if (currentSession) {
-                setCurrentSession(undefined);
-            }
+        if (chatId === 'new' && virtuosoRef.current?.data) {
+            virtuosoRef.current.data.replace([]);
         }
-    }, [chatId, currentSession, setCurrentSession]);
-
-    // Update the chat title in the store if the messages query returns a session with an updated title
-    useEffect(() => {
-        console.log({ currentSession, chatTitle });
-        if (currentSession?.title && currentSession.title !== chatTitle) {
-            onSetTitle(currentSession.title);
-        }
-    }, [chatTitle, currentSession, onSetTitle]);
+    }, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
