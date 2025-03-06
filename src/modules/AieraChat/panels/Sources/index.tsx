@@ -13,6 +13,8 @@ import { useEvents } from '../../services/events';
 import { Source, useChatStore } from '../../store';
 import { ContentRow } from '../../components/ContentRow';
 
+const EMPTY_SOURCES_MESSAGE = 'You must select at least one source to submit a question.';
+
 /**
  * Checks if a given source exists in an array of sources
  * @param source The source to check for
@@ -160,9 +162,7 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                         {!searchTerm && sources.length === 0 && (
                             <div className="flex items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800">
                                 <MicroExclamationCircle className="flex-shrink-0 w-4 mr-2" />
-                                <p className="text-base leading-[1.125rem] text-balance">
-                                    Sources will be suggested until a source is added.
-                                </p>
+                                <p className="text-base leading-[1.125rem] text-balance">{EMPTY_SOURCES_MESSAGE}</p>
                             </div>
                         )}
                         {!searchTerm && sources.length > 0 && (

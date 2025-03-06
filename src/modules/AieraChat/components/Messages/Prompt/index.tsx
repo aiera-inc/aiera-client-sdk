@@ -15,7 +15,31 @@ interface PromptProps {
 export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
     const { sources } = useChatStore();
     const [isEmpty, setIsEmpty] = useState(true);
+    const [highlightSources, setHighlightSources] = useState(false);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
+
+    // Add jiggle animation for the sources icon
+    useEffect(() => {
+        const styleEl = document.createElement('style');
+        styleEl.textContent = `
+            @keyframes jiggle {
+                0% { transform: translateX(0); }
+                25% { transform: translateX(-3px); }
+                50% { transform: translateX(3px); }
+                75% { transform: translateX(-3px); }
+                100% { transform: translateX(0); }
+            }
+            
+            .jiggle-animation {
+                animation: jiggle 0.5s ease-in-out;
+            }
+        `;
+        document.head.appendChild(styleEl);
+
+        return () => {
+            document.head.removeChild(styleEl);
+        };
+    }, []);
 
     const checkEmpty = useCallback(() => {
         if (inputRef.current) {
@@ -26,19 +50,36 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
 
     const handleInput = useCallback(() => {
         checkEmpty();
-    }, [checkEmpty]);
+        // Reset highlight when user starts typing
+        if (highlightSources) {
+            setHighlightSources(false);
+        }
+    }, [checkEmpty, highlightSources]);
 
     const handleSubmit = useCallback(() => {
-        // Disable submit until user enters a prompt and selects sources
-        if (inputRef.current && sources.length > 0) {
+        if (inputRef.current) {
             const promptText = inputRef.current.innerText;
-            if (promptText && promptText.length > 0) {
-                onSubmit(promptText);
+
+            // If text is entered but no sources selected, highlight sources icon
+            if (promptText && promptText.length > 0 && sources.length === 0) {
+                setHighlightSources(true);
+
+                // Reset highlight after animation completes
+                setTimeout(() => {
+                    setHighlightSources(false);
+                }, 3000);
+
+                return;
             }
-            inputRef.current.textContent = '';
-            setTimeout(checkEmpty);
+
+            // Normal submit if we have both prompt and sources
+            if (promptText && promptText.length > 0 && sources.length > 0) {
+                onSubmit(promptText);
+                inputRef.current.textContent = '';
+                setTimeout(checkEmpty);
+            }
         }
-    }, [onSubmit]);
+    }, [onSubmit, sources.length, checkEmpty]);
 
     const handleKeyDown = useCallback(
         (e: KeyboardEvent<HTMLParagraphElement>) => {
@@ -57,7 +98,7 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
             inputRef.current.focus();
         }
         checkEmpty();
-    }, []);
+    }, [checkEmpty]);
 
     return (
         <div className="mb-5 mx-5 flex min-h-10 relative bg-white rounded-2xl border border-slate-300/80 focus-within:ring-2 ring-yellow-200/80 chatInput">
@@ -79,12 +120,14 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                 onClick={onOpenSources}
                 className={classNames(
                     'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] px-1.5 transition-all',
-                    'rounded-lg flex-shrink-0 flex items-center justify-center',
+                    'rounded-xl flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer hover:bg-slate-100 active:bg-slate-200 active:scale-90',
                     'hintTarget relative',
+                    highlightSources ? 'jiggle-animation' : '',
+                    highlightSources ? 'ring-2 ring-rose-500 shadow-lg shadow-rose-300' : '',
                     {
-                        'text-rose-600': sources.length > 0,
-                        'text-slate-400': sources.length === 0,
+                        'text-rose-600': sources.length > 0 || highlightSources,
+                        'text-slate-400': sources.length === 0 && !highlightSources,
                     }
                 )}
             >
