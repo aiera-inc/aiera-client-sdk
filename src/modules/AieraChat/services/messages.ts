@@ -467,7 +467,6 @@ export const useChatSession = ({
     sessionId,
 }: UseChatSessionOptions): UseChatSessionReturn => {
     const { chatId, chatTitle, onSetTitle } = useChatStore();
-    console.log({ chatId, chatTitle, enablePolling, requestPolicy, sessionId });
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
