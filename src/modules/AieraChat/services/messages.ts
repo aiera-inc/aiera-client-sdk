@@ -722,9 +722,10 @@ export const useChatSession = ({
         }
     }, [chatTitle, enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
 
-    // Reset refetch count and polling when the sessionId changes
+    // Reset messages and polling when the sessionId changes
     useEffect(() => {
         if (sessionId && sessionId !== 'new') {
+            setMessages([]);
             setRefetchCount(0);
             setShouldStopPolling(false);
         }
