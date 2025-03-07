@@ -1,5 +1,6 @@
+import gql from 'graphql-tag';
 import { useCallback, useEffect, useState } from 'react';
-import { RequestPolicy, useMutation } from 'urql';
+import { RequestPolicy, useClient, useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import {
     ChartBlock,
@@ -9,6 +10,8 @@ import {
     ChatMessagePrompt as RawChatMessagePrompt,
     ChatMessageResponse as RawChatMessageResponse,
     ChatMessageSourceConfirmation as RawChatMessageSourceConfirmation,
+    ChatSessionsQuery,
+    ChatSessionsQueryVariables,
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
@@ -471,6 +474,9 @@ export const useChatSession = ({
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    // Get urql client for manual cache updates
+    const client = useClient();
+
     // Add state for tracking refetch count and whether to stop polling
     const [_refetchCount, setRefetchCount] = useState<number>(0);
     const [shouldStopPolling, setShouldStopPolling] = useState<boolean>(false);
@@ -551,6 +557,44 @@ export const useChatSession = ({
         },
     });
 
+    /**
+     * Helper function to refresh chat sessions in the GraphQL cache
+     * We mainly need this to update the titles in the Menu panel list
+     */
+    const refreshChatSessions = useCallback(() => {
+        try {
+            // Refetch the ChatSessions query to update the titles in the list
+            const chatSessionsQuery = client
+                .query<ChatSessionsQuery, ChatSessionsQueryVariables>(
+                    gql`
+                        query ChatSessions {
+                            chatSessions {
+                                id
+                                createdAt
+                                sources {
+                                    confirmed
+                                    name
+                                    sourceId
+                                    type
+                                }
+                                status
+                                title
+                                updatedAt
+                                userId
+                            }
+                        }
+                    `
+                )
+                .toPromise();
+            chatSessionsQuery
+                .then((result) => result.data)
+                .catch((err: Error) => console.log(`Error refetching ChatSessions query: ${err.message}`));
+        } catch (err) {
+            console.error('Error updating session title in cache:', err);
+        }
+        return null;
+    }, [client]);
+
     // Process messages from the separate fields
     useEffect(() => {
         // Update loading state based on query status
@@ -568,6 +612,7 @@ export const useChatSession = ({
                 // Update chat title in store if changed
                 if (chatSession.title && chatSession.title !== chatTitle) {
                     onSetTitle(chatSession.title);
+                    refreshChatSessions();
                 }
 
                 const normalizedMessages: ChatMessage[] = [];

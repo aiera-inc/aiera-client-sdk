@@ -43,7 +43,8 @@ export const useChatStore = create<ChatState>((set) => ({
                 (source) => !(source.targetId === targetId && source.targetType === targetType)
             ),
         })),
-    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) => set({ chatId, chatTitle, sources }),
+    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) =>
+        set({ chatId, chatTitle, sources, hasChanges: false }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
