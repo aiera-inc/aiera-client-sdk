@@ -74115,7 +74115,8 @@ function createGQLClient(config) {
       ChatMessage: ({ id }) => id ? `ChatMessage:${id}` : null,
       ChatMessagePrompt: ({ id }) => id ? `ChatMessagePrompt:${id}` : null,
       ChatMessageResponse: ({ id }) => id ? `ChatMessageResponse:${id}` : null,
-      ChatMessageSourceConfirmation: ({ id }) => id ? `ChatMessageSourceConfirmation:${id}` : null
+      ChatMessageSourceConfirmation: ({ id }) => id ? `ChatMessageSourceConfirmation:${id}` : null,
+      ChatSession: ({ id }) => id ? `ChatSession:${id}` : null
     },
     typePolicies: {
       ChatMessagePrompt: { __typename: "ChatMessagePrompt" },
