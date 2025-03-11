@@ -84378,6 +84378,7 @@ var CreateChatSessionDocument = lib_default`
       }
       status
       title
+      titleStatus
       updatedAt
       userId
     }
@@ -84405,6 +84406,7 @@ var UpdateChatSessionDocument = lib_default`
       }
       status
       title
+      titleStatus
       updatedAt
       userId
     }
@@ -84424,6 +84426,7 @@ var ChatSessionsDocument = lib_default`
     }
     status
     title
+    titleStatus
     updatedAt
     userId
   }
@@ -84453,6 +84456,7 @@ var ChatSessionWithMessagesDocument = lib_default`
     modelGenerationParams
     status
     title
+    titleStatus
     updatedAt
     userId
     sources {
