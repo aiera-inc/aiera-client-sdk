@@ -28,6 +28,7 @@ import { BlockType } from './MessageFactory/Block';
 import { TextBlock } from './MessageFactory/Block/Text';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
+import { ChatSessionStatus } from '@aiera/client-sdk/types';
 
 let idCounter = 0;
 
@@ -45,6 +46,7 @@ function randomMessage(prompt: ChatMessage['prompt']): ChatMessageResponse {
 }
 
 export interface MessageListContext {
+    chatStatus: ChatSessionStatus;
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
     onConfirm: (k: string) => void;
@@ -200,7 +202,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { chatId, sources } = useChatStore();
+    const { chatId, chatStatus, sources } = useChatStore();
     const { createChatMessagePrompt, messages, isLoading } = useChatSession({
         sessionId: chatId,
         enablePolling: config.options?.aieraChatEnablePolling || false,
@@ -364,11 +366,12 @@ export function Messages({
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(
         () => ({
+            chatStatus,
             onSubmit: handleSubmit,
             onReRun,
             onConfirm,
         }),
-        [handleSubmit, onReRun, onConfirm]
+        [chatStatus, handleSubmit, onReRun, onConfirm]
     );
 
     return (

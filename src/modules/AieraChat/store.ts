@@ -1,5 +1,7 @@
 import { create } from 'zustand';
 
+import { ChatSessionStatus } from '@aiera/client-sdk/types';
+
 export interface Source {
     confirmed?: boolean;
     targetId: string;
@@ -9,15 +11,17 @@ export interface Source {
 
 export interface ChatState {
     chatId: string;
+    chatStatus: ChatSessionStatus;
     chatTitle?: string;
     hasChanges: boolean;
     onAddSource: (source: Source | Source[]) => void;
     onClearSources: () => void;
     onNewChat: () => void;
     onRemoveSource: (targetId: string, targetType: string) => void;
-    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) => void;
+    onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) => void;
     onSelectSource: (source?: Source) => void;
     onSetSearchTerm: (searchTerm?: string) => void;
+    onSetStatus: (chatStatus: ChatSessionStatus) => void;
     onSetTitle: (title?: string) => void;
     searchTerm?: string;
     selectedSource?: Source;
@@ -27,6 +31,7 @@ export interface ChatState {
 
 export const useChatStore = create<ChatState>((set) => ({
     chatId: 'new',
+    chatStatus: ChatSessionStatus.Active,
     chatTitle: undefined,
     hasChanges: false,
     onAddSource: (source: Source | Source[]) =>
@@ -35,7 +40,14 @@ export const useChatStore = create<ChatState>((set) => ({
             sources: [...state.sources, ...(Array.isArray(source) ? source : [source])],
         })),
     onClearSources: () => set({ sources: [] }),
-    onNewChat: () => set({ chatId: 'new', chatTitle: undefined, searchTerm: undefined, sources: [] }),
+    onNewChat: () =>
+        set({
+            chatId: 'new',
+            chatStatus: ChatSessionStatus.Active,
+            chatTitle: undefined,
+            searchTerm: undefined,
+            sources: [],
+        }),
     onRemoveSource: (targetId: string, targetType: string) =>
         set((state) => ({
             hasChanges: true,
@@ -43,10 +55,11 @@ export const useChatStore = create<ChatState>((set) => ({
                 (source) => !(source.targetId === targetId && source.targetType === targetType)
             ),
         })),
-    onSelectChat: (chatId: string, chatTitle?: string, sources?: Source[]) =>
-        set({ chatId, chatTitle, sources, hasChanges: false }),
+    onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) =>
+        set({ chatId, chatStatus, chatTitle, sources, hasChanges: false }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
+    onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     searchTerm: undefined,
     selectedSource: undefined,
