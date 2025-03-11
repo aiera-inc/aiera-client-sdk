@@ -35,8 +35,8 @@ export function AnimatedLoadingStatus({ sources = [] }: AnimatedLoadingProps) {
             { text: 'Reasoning...', durationMs: [3000, 5000] },
             { text: 'Invoking agent...', durationMs: [2000, 4000] },
             { text: 'Processing results...', durationMs: [3000, 4000] },
-            { text: 'Finalizing response...', durationMs: [4000, 5000] },
-            { text: 'Brace yourselves!', durationMs: 2000 }, // Fixed at 2 seconds
+            { text: 'Finalizing response...', durationMs: [4000, 6000] },
+            { text: 'Brace yourselves!', durationMs: [6000, 10000] }, // the last message should take the longest
         ],
         [sources]
     );
