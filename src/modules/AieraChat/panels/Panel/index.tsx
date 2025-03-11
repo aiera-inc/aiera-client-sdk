@@ -60,7 +60,7 @@ export function Panel({
             </div>
             <div
                 onAnimationEnd={onAnimationEnd}
-                className={classNames('absolute inset-0 bg-slate-600/20 fadeIn', {
+                className={classNames('absolute animate-forwards inset-0 bg-slate-600/20 fadeIn', {
                     fadeOut: startExit,
                 })}
                 onClick={onStartExit}
