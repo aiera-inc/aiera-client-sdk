@@ -398,7 +398,9 @@ export function Messages({
                         />
                     </VirtuosoMessageListLicense>
                 )}
-                {chatStatus === ChatSessionStatus.GeneratingResponse && <AnimatedLoadingStatus sources={sources} />}
+                {!isLoading && chatStatus === ChatSessionStatus.GeneratingResponse && (
+                    <AnimatedLoadingStatus sources={sources} />
+                )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} />
             </div>
         </div>
