@@ -1,3 +1,7 @@
+.animate-forwards {
+    animation-fill-mode: forwards;
+}
+
 .fadeIn {
     animation-name: fadeIn;
     animation-duration: 0.1s;

@@ -36,7 +36,7 @@ export function Panel({
             <div
                 className={classNames(
                     'absolute z-20 top-0 bottom-0',
-                    'flex flex-col flex-1',
+                    'flex flex-col flex-1 animate-forwards',
                     'bg-slate-50 shadow-xl shadow-metal-800/40',
                     {
                         slideOutToLeft: startExit && side === 'left',
