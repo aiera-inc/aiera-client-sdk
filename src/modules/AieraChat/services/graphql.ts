@@ -276,6 +276,7 @@ export const CHAT_SESSION_QUERY = gql`
             modelGenerationParams
             status
             title
+            titleStatus
             updatedAt
             userId
             sources {

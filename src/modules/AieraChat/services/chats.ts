@@ -308,6 +308,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     }
                     status
                     title
+                    titleStatus
                     updatedAt
                     userId
                 }
@@ -376,6 +377,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     }
                     status
                     title
+                    titleStatus
                     updatedAt
                     userId
                 }
@@ -426,6 +428,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     }
                     status
                     title
+                    titleStatus
                     updatedAt
                     userId
                 }

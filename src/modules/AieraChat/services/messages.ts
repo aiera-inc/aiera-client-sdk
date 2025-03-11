@@ -579,6 +579,7 @@ export const useChatSession = ({
                                 }
                                 status
                                 title
+                                titleStatus
                                 updatedAt
                                 userId
                             }
@@ -609,8 +610,8 @@ export const useChatSession = ({
                 const chatSession = messagesQuery.data.chatSession;
                 console.log('Processing chat session:', chatSession.id);
 
-                // Update chat title in store if changed
-                if (chatSession.title && chatSession.title !== chatTitle) {
+                // Update chat title in store if the session got a generated title
+                if (!chatSession.titleStatus && chatSession.title && chatSession.title !== chatTitle) {
                     onSetTitle(chatSession.title);
                     refreshChatSessions();
                 }
