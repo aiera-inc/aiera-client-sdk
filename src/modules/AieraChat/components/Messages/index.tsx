@@ -27,6 +27,7 @@ import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
 import { TextBlock } from './MessageFactory/Block/Text';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 
@@ -46,7 +47,6 @@ function randomMessage(prompt: ChatMessage['prompt']): ChatMessageResponse {
 }
 
 export interface MessageListContext {
-    chatStatus: ChatSessionStatus;
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
     onConfirm: (k: string) => void;
@@ -134,7 +134,7 @@ function updateVirtuoso(
 
                 return message;
             });
-        }, 2000);
+        }, 200);
         // TODO enable once we have chat response streaming
         // eslint-disable-next-line no-constant-condition
     } else if (sources && sources.length > 0 && false) {
@@ -188,7 +188,7 @@ function updateVirtuoso(
                     }
                 );
             }, 150);
-        }, 2000);
+        }, 200);
     }
 }
 
@@ -366,12 +366,11 @@ export function Messages({
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(
         () => ({
-            chatStatus,
             onSubmit: handleSubmit,
             onReRun,
             onConfirm,
         }),
-        [chatStatus, handleSubmit, onReRun, onConfirm]
+        [handleSubmit, onReRun, onConfirm]
     );
 
     return (
@@ -399,6 +398,7 @@ export function Messages({
                         />
                     </VirtuosoMessageListLicense>
                 )}
+                {chatStatus === ChatSessionStatus.GeneratingResponse && <AnimatedLoadingStatus sources={sources} />}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} />
             </div>
         </div>
