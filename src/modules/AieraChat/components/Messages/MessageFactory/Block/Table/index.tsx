@@ -57,23 +57,19 @@ export function Table({ headers, rows }: TableBlock) {
                                 {cells.map((content, cellIndex) => {
                                     return (
                                         <td key={`cell-${cellIndex}`} className="text-nowrap pr-4 font-mono">
-                                            {content.map((c, contentIndex) => {
-                                                if (typeof c === 'string') {
-                                                    return (
-                                                        <SearchableText
-                                                            key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                            text={c}
-                                                        />
-                                                    );
-                                                } else {
-                                                    return (
-                                                        <Citation
-                                                            citation={{ ...c }}
-                                                            key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                        />
-                                                    );
-                                                }
-                                            })}
+                                            {content.map((c, contentIndex) =>
+                                                typeof c === 'string' ? (
+                                                    <SearchableText
+                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                        text={c}
+                                                    />
+                                                ) : (
+                                                    <Citation
+                                                        citation={c}
+                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                    />
+                                                )
+                                            )}
                                         </td>
                                     );
                                 })}

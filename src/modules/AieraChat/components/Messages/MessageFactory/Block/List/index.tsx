@@ -28,13 +28,9 @@ function isContentBlock(item: ListItemContent): item is ContentBlock {
 }
 
 function renderItems(content: CitableContent) {
-    return content.map((c, idx) => {
-        if (typeof c === 'string') {
-            return <SearchableText key={idx} text={c} />;
-        } else {
-            return <Citation citation={{ ...c }} key={idx} />;
-        }
-    });
+    return content.map((c, idx) =>
+        typeof c === 'string' ? <SearchableText key={idx} text={c} /> : <Citation citation={c} key={idx} />
+    );
 }
 
 function ListItem({ item }: { item: ListItemContent }) {

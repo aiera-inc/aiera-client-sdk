@@ -33,7 +33,7 @@ export function Text({ content, meta }: TextBlock) {
                         </Fragment>
                     );
                 } else {
-                    return <Citation citation={{ ...c }} key={idx} />;
+                    return <Citation citation={c} key={idx} />;
                 }
             })}
         </Container>
