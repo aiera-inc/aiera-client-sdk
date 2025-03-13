@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            .main-container {
+                display: flex;
+                gap: 20px;
+                align-items: flex-start;
+                padding: 10px;
+            }
+            iframe {
+                border: none;
+                resize: both;
+                height: 575px;
+                width: 375px;
+                overflow: hidden;
+            }
+            .api-key-container {
+                display: flex;
+                flex-direction: column;
+                width: 300px;
+                padding: 15px;
+                border: 1px solid #eaeaea;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+            .current-key {
+                margin: 0 0 15px 0;
+                /*font-family: Arial, sans-serif;*/
+                font-size: 15px;
+            }
+            .input-container {
+                display: flex;
+            }
+            #apiKeyInput {
+                flex-grow: 1;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px 0 0 4px;
+            }
+            #saveButton {
+                padding: 8px 15px;
+                background-color: #4285f4;
+                color: white;
+                border: none;
+                border-radius: 0 4px 4px 0;
+                cursor: pointer;
+            }
+            #saveButton:hover {
+                background-color: #3367d6;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <div class="main-container">
+            <iframe id="aiera"></iframe>
+
+            <div class="api-key-container">
+                <p class="current-key" id="currentApiKey">Current public api key: e0f401666db84a6f92cb6b1381ecaada</p>
+                <div class="input-container">
+                    <input type="text" id="apiKeyInput" placeholder="Enter your Aiera public api key..." />
+                    <button id="saveButton">Save</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            let apiKey = 'e0f401666db84a6f92cb6b1381ecaada';
+            const eventList = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+
+            // Initial load with default API key
+            loadWithApiKey(apiKey);
+
+            // Function to load with a specific API key
+            function loadWithApiKey(key) {
+                eventList.load().then(() => {
+                    eventList.authenticateApiKey(key);
+                });
+            }
+
+            // Update the display of current API key
+            function updateCurrentKeyDisplay() {
+                document.getElementById('currentApiKey').textContent = `Current public api key: ${apiKey}`;
+            }
+
+            // Save button click handler
+            document.getElementById('saveButton').addEventListener('click', function () {
+                const newApiKey = document.getElementById('apiKeyInput').value.trim();
+
+                if (newApiKey !== '') {
+                    apiKey = newApiKey;
+                    updateCurrentKeyDisplay();
+
+                    // Reload with new API key
+                    loadWithApiKey(apiKey);
+
+                    // Clear the input field
+                    document.getElementById('apiKeyInput').value = '';
+                }
+            });
+
+            eventList.on('authenticated', () => {
+                eventList.configure({
+                    hideSettings: true,
+                    options: {
+                        aieraChatEnableAbly: false,
+                        aieraChatEnablePolling: true,
+                        showSearch: true,
+                        // showGlobalSearch: false,
+                        darkMode: false,
+                        eventListFilters: [
+                            { name: 'transcripts', visible: false, defaultValue: true },
+                            { name: 'earningsOnly', visible: true, defaultValue: false },
+                        ],
+                    },
+                    overrides: {
+                        // style: `
+                        //         .eventlist__filterby {
+                        //                background-color: blue
+                        //             }
+                        //             .eventlist__filterby__option {
+                        //                 display: none
+                        //             }
+                        //     `,
+                    },
+                    tracking: {
+                        userId: 'vich-component-user',
+                    },
+                });
+
+                /**
+                 * Once authenticated and the config is set, create a watchlist.
+                 *
+                 * Warning: calling setWatchlist before the configure call is finished
+                 * will NOT create the watchlist because we expect a userId to be defined
+                 * in the tracking configuration.
+                 *
+                 * To prevent a race condition, use the on('configured') event listener
+                 * and call setWatchlist once the config options are set in state.
+                 */
+                // eventList.on('configured', () => {
+                //     eventList.setWatchlist([
+                //         { ticker: 'AAPL' },
+                //         { ticker: 'GOOGL' },
+                //         { ticker: 'TLSA' }, // invalid tickers are ignored
+                //         { ticker: 'PTON' },
+                //     ]);
+                // });
+
+                eventList.on('event-audio', (event) => {
+                    console.log('play audio: ', event);
+                });
+                eventList.on('event-selected', (event) => {
+                    console.log('selected event: ', event);
+                });
+            });
+        </script>
+    </body>
+</html>

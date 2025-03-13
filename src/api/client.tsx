@@ -152,14 +152,6 @@ export function createGQLClient(config: Config): Client {
         fetchOptions.headers = { Component: config.moduleName };
     }
 
-    if (config.tracking?.userId) {
-        if (fetchOptions.headers) {
-            fetchOptions.headers = { ...fetchOptions.headers, TrackingUserId: config.tracking.userId };
-        } else {
-            fetchOptions.headers = { TrackingUserId: config.tracking.userId };
-        }
-    }
-
     return createClient({
         ...(config.gqlOptions?.clientOptions || { url: '' }),
         exchanges,
