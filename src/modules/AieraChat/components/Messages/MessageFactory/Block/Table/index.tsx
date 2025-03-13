@@ -55,7 +55,6 @@ export function Table({ headers, rows }: TableBlock) {
                         {rows.map((cells, rowIndex) => (
                             <tr key={`row-${rowIndex}`}>
                                 {cells.map((content, cellIndex) => {
-                                    let numCitations = 0;
                                     return (
                                         <td key={`cell-${cellIndex}`} className="text-nowrap pr-4 font-mono">
                                             {content.map((c, contentIndex) => {
@@ -67,12 +66,10 @@ export function Table({ headers, rows }: TableBlock) {
                                                         />
                                                     );
                                                 } else {
-                                                    numCitations++;
                                                     return (
                                                         <Citation
                                                             citation={{ ...c }}
                                                             key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                            number={numCitations}
                                                         />
                                                     );
                                                 }

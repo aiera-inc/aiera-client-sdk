@@ -204,13 +204,12 @@ export function Messages({
     const config = useConfig();
     const { chatId, chatStatus, sources } = useChatStore();
     const { createChatMessagePrompt, messages, isLoading } = useChatSession({
-        sessionId: chatId,
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
 
-    // Reset when starting new chat
+    // Reset messages when the selected chat changes
     useEffect(() => {
-        if (chatId === 'new' && virtuosoRef.current?.data) {
+        if (virtuosoRef.current?.data) {
             virtuosoRef.current.data.replace([]);
         }
     }, [chatId]);

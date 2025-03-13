@@ -109,7 +109,6 @@ export type ChatMessage = ChatMessageResponse | ChatMessagePrompt | ChatMessageS
 interface UseChatSessionOptions {
     enablePolling?: boolean;
     requestPolicy?: RequestPolicy;
-    sessionId?: string;
 }
 
 interface UseChatSessionReturn {
@@ -240,7 +239,7 @@ export function normalizeTextContent(rawContent: RawCitableContent[]): CitableCo
             return {
                 author: c.citation.author || '',
                 date: (c.citation.date as string) || '',
-                id: c.citation.contentId,
+                id: c.citation.source?.sourceId || c.citation.contentId,
                 source: c.citation.source?.name || '',
                 text: c.citation.quote || '',
                 url: c.citation.url || '',
@@ -467,7 +466,6 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
 export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
-    sessionId,
 }: UseChatSessionOptions): UseChatSessionReturn => {
     const { chatId, chatStatus, chatTitle, onSetStatus, onSetTitle } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -543,17 +541,12 @@ export const useChatSession = ({
         [createChatMessagePromptMutation]
     );
 
-    // Either use the passed sessionId (for initial render) or chatId from store (for updates)
-    const effectiveSessionId = sessionId || chatId || '';
-
-    // Use the query with separate message fields
-    // The empty string default for sessionId is just to appease TS, the query won't actually fire
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
         query: CHAT_SESSION_QUERY,
-        pause: !effectiveSessionId || effectiveSessionId === 'new',
+        pause: !chatId || chatId === 'new',
         requestPolicy,
         variables: {
-            filter: { includeMessages: true, sessionId: effectiveSessionId },
+            filter: { includeMessages: true, sessionId: chatId },
         },
     });
 
@@ -739,14 +732,10 @@ export const useChatSession = ({
         setMessages,
     ]);
 
-    // Reset messages and polling when the sessionId changes
     useEffect(() => {
-        if (sessionId && sessionId !== 'new') {
-            setMessages([]);
-            setRefetchCount(0);
-            setShouldStopPolling(false);
-        }
-    }, [sessionId]);
+        // Immediately clear messages when changing sessions
+        setMessages([]);
+    }, [chatId]);
 
     // Setup polling with max refetch limit
     useEffect(() => {
@@ -759,7 +748,7 @@ export const useChatSession = ({
 
         console.log(`Setting up polling interval (${POLLING_INTERVAL}ms) with max refetch count: ${MAX_REFETCH_COUNT}`);
         const intervalId = setInterval(() => {
-            if (sessionId && sessionId !== 'new' && !shouldStopPolling) {
+            if (chatId && chatId !== 'new' && !shouldStopPolling) {
                 messagesQuery.refetch();
                 // Increment refetch count
                 setRefetchCount((prevCount) => {
@@ -780,11 +769,12 @@ export const useChatSession = ({
             console.log('Clearing polling interval');
             clearInterval(intervalId);
         };
-    }, [enablePolling, messagesQuery, sessionId, shouldStopPolling]);
+    }, [chatId, enablePolling, messagesQuery, shouldStopPolling]);
 
     const refresh = useCallback(() => {
         console.log('Refreshing chat messages and resetting polling limits...');
         // Reset refetch count and polling state when manually refreshing
+        setMessages([]);
         setRefetchCount(0);
         setShouldStopPolling(false);
         messagesQuery.refetch();

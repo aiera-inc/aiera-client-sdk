@@ -28,22 +28,20 @@ function isContentBlock(item: ListItemContent): item is ContentBlock {
 }
 
 function renderItems(content: CitableContent) {
-    let numCitations = 0;
     return content.map((c, idx) => {
         if (typeof c === 'string') {
             return <SearchableText key={idx} text={c} />;
         } else {
-            numCitations++;
-            return <Citation citation={{ ...c }} key={idx} number={numCitations} />;
+            return <Citation citation={{ ...c }} key={idx} />;
         }
     });
 }
 
-function ListItem({ item, itemIndex }: { item: ListItemContent; itemIndex: number }) {
+function ListItem({ item }: { item: ListItemContent }) {
     if (isContentBlock(item)) {
         return (
             <li>
-                <Block {...item} blockIndex={itemIndex} isNested />
+                <Block {...item} isNested />
             </li>
         );
     }
@@ -69,7 +67,7 @@ export function List({ isNested, items, meta }: ListBlock) {
             })}
         >
             {items.map((item, idx) => (
-                <ListItem item={item} itemIndex={idx} key={idx} />
+                <ListItem item={item} key={idx} />
             ))}
         </ListType>
     );

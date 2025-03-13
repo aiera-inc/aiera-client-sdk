@@ -8,14 +8,12 @@ import { SearchableText } from '../../SearchableText';
 export interface TextBlock extends BaseBlock {
     type: BlockType.TEXT;
     content: CitableContent;
-    contentIndex?: number;
     meta: {
         style: 'paragraph' | 'h1' | 'h2' | 'h3';
     };
 }
 
-export function Text({ content, contentIndex, meta }: TextBlock) {
-    let numCitations = contentIndex || 0;
+export function Text({ content, meta }: TextBlock) {
     const Container = meta.style === 'paragraph' ? 'p' : meta.style ?? 'p';
     return (
         <Container
@@ -35,8 +33,7 @@ export function Text({ content, contentIndex, meta }: TextBlock) {
                         </Fragment>
                     );
                 } else {
-                    numCitations++;
-                    return <Citation citation={{ ...c }} key={idx} number={numCitations} />;
+                    return <Citation citation={{ ...c }} key={idx} />;
                 }
             })}
         </Container>
