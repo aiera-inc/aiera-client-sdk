@@ -12,6 +12,7 @@ import {
     ChatMessageSourceConfirmation as RawChatMessageSourceConfirmation,
     ChatSessionsQuery,
     ChatSessionsQueryVariables,
+    ChatSessionTitleStatus,
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
@@ -609,7 +610,12 @@ export const useChatSession = ({
                 }
 
                 // Update chat title in store if the session got a generated title
-                if (!chatSession.titleStatus && chatSession.title && chatSession.title !== chatTitle) {
+                if (
+                    chatSession.title &&
+                    ((!chatSession.titleStatus && chatSession.title !== chatTitle) ||
+                        (chatSession.titleStatus === ChatSessionTitleStatus.Generated &&
+                            (!chatTitle || chatTitle === 'Untitled Chat')))
+                ) {
                     onSetTitle(chatSession.title);
                     refreshChatSessions();
                 }
