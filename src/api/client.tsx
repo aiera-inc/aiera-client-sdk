@@ -154,9 +154,9 @@ export function createGQLClient(config: Config): Client {
 
     if (config.tracking?.userId) {
         if (fetchOptions.headers) {
-            fetchOptions.headers = { ...fetchOptions.headers, trackingUserId: config.tracking.userId };
+            fetchOptions.headers = { ...fetchOptions.headers, TrackingUserId: config.tracking.userId };
         } else {
-            fetchOptions.headers = { trackingUserId: config.tracking.userId };
+            fetchOptions.headers = { TrackingUserId: config.tracking.userId };
         }
     }
 

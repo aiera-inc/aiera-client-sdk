@@ -35,20 +35,25 @@ export function AnimatedLoadingStatus({ sources = [] }: AnimatedLoadingProps) {
             { text: 'Reasoning...', durationMs: [3000, 5000] },
             { text: 'Invoking agent...', durationMs: [2000, 4000] },
             { text: 'Processing results...', durationMs: [3000, 4000] },
-            { text: 'Finalizing response...', durationMs: [4000, 6000] },
-            { text: 'Brace yourselves!', durationMs: [6000, 10000] }, // the last message should take the longest
+            { text: 'Finalizing response...', durationMs: [6000, 10000] },
+            { text: 'Still working...', durationMs: 10000 }, // duration doesn't matter for the last message
         ],
         [sources]
     );
 
     // Function to get the message text at a specific index
     const getMessageText = (index: number): string => {
-        return messages[index % messages.length]?.text ?? '';
+        return index < messages.length ? messages[index]?.text || '' : messages[messages.length - 1]?.text || '';
     };
 
     // Function to get the duration for a message at a specific index
     const getMessageDuration = (index: number): number => {
-        const durationSetting = messages[index % messages.length]?.durationMs ?? 0;
+        // If we're at or beyond the last message, return 0 to stop cycling
+        if (index >= messages.length - 1) {
+            return 0;
+        }
+
+        const durationSetting = messages[index]?.durationMs || 0;
 
         if (Array.isArray(durationSetting)) {
             // If duration is a range [min, max], generate a random duration within that range
@@ -67,13 +72,20 @@ export function AnimatedLoadingStatus({ sources = [] }: AnimatedLoadingProps) {
 
         // After fade out completes, update text and fade back in
         timeoutRef.current = setTimeout(() => {
-            indexRef.current = (indexRef.current + 1) % messages.length;
+            // Move to next message index
+            indexRef.current += 1;
+
+            // Set the new text
             setLoadingText(getMessageText(indexRef.current));
             setIsVisible(true);
 
             // Schedule next update using the custom duration for the current message
             const nextDuration = getMessageDuration(indexRef.current);
-            timeoutRef.current = setTimeout(updateLoadingText, nextDuration);
+
+            // Only schedule next update if we haven't reached the last message
+            if (nextDuration > 0) {
+                timeoutRef.current = setTimeout(updateLoadingText, nextDuration);
+            }
         }, 300); // Time for fade out animation to complete
     };
 
