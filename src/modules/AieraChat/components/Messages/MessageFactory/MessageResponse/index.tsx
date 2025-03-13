@@ -35,7 +35,7 @@ export const MessageResponse = ({ data, onReRun }: { onReRun: (k: string) => voi
         <div className="pb-10 flex flex-col">
             <div className="flex flex-col px-4 pb-2">
                 {data.blocks?.map((block, index) => (
-                    <Block {...block} key={index} />
+                    <Block {...block} blockIndex={index} key={index} />
                 ))}
             </div>
             {data.status !== ChatMessageStatus.STREAMING && (

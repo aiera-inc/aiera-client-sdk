@@ -1,25 +1,36 @@
 import classNames from 'classnames';
-import React from 'react';
+import React, { Fragment } from 'react';
 import { useChatStore } from '../../../../store';
+import { SearchableText } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/SearchableText';
+import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 
-export const Citation = () => {
+interface CitationProps {
+    citation: CitationType;
+    number: number;
+}
+
+export const Citation = ({ citation, number }: CitationProps) => {
     const { onSelectSource } = useChatStore();
-
+    const { id, source, text } = citation;
     return (
-        <span
-            onClick={() =>
-                onSelectSource({
-                    targetId: '2639849',
-                    targetType: 'event',
-                    title: 'TSLA Q3 2024 Earnings Call',
-                })
-            }
-            className={classNames(
-                'text-xs px-[3px] cursor-pointer hover:bg-indigo-800 py-0.5 font-bold antialiased text-white bg-indigo-600 rounded',
-                'mr-1'
-            )}
-        >
-            C1
-        </span>
+        <Fragment>
+            <SearchableText text={text} />
+            &nbsp;
+            <span
+                onClick={() =>
+                    onSelectSource({
+                        targetId: id,
+                        targetType: 'event',
+                        title: source,
+                    })
+                }
+                className={classNames(
+                    'text-xs px-[3px] cursor-pointer hover:bg-indigo-800 py-0.5 font-bold antialiased text-white bg-indigo-600 rounded',
+                    'mr-1'
+                )}
+            >
+                C{number}
+            </span>
+        </Fragment>
     );
 };

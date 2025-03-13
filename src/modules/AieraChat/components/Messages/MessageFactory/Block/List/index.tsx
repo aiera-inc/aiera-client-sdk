@@ -27,29 +27,31 @@ function isContentBlock(item: ListItemContent): item is ContentBlock {
     return 'type' in item;
 }
 
-function ListItem({ item }: { item: ListItemContent }) {
+function renderItems(content: CitableContent) {
+    let numCitations = 0;
+    return content.map((c, idx) => {
+        if (typeof c === 'string') {
+            return <SearchableText key={idx} text={c} />;
+        } else {
+            numCitations++;
+            return <Citation citation={{ ...c }} key={idx} number={numCitations} />;
+        }
+    });
+}
+
+function ListItem({ item, itemIndex }: { item: ListItemContent; itemIndex: number }) {
     if (isContentBlock(item)) {
         return (
             <li>
-                <Block {...item} isNested />
+                <Block {...item} blockIndex={itemIndex} isNested />
             </li>
         );
     }
 
     return (
         <li className="relative">
-            <p className="text-base font-bold">
-                {item.primary.map((c, idx) =>
-                    typeof c === 'string' ? <SearchableText key={idx} text={c} /> : <Citation key={idx} />
-                )}
-            </p>
-            {item.secondary && item.secondary.length > 0 && (
-                <p className="text-base">
-                    {item.secondary.map((c, idx) =>
-                        typeof c === 'string' ? <SearchableText key={idx} text={c} /> : <Citation key={idx} />
-                    )}
-                </p>
-            )}
+            <p className="text-base font-bold">{renderItems(item.primary)}</p>
+            {item.secondary && item.secondary.length > 0 && <p className="text-base">{renderItems(item.secondary)}</p>}
         </li>
     );
 }
@@ -67,7 +69,7 @@ export function List({ isNested, items, meta }: ListBlock) {
             })}
         >
             {items.map((item, idx) => (
-                <ListItem item={item} key={idx} />
+                <ListItem item={item} itemIndex={idx} key={idx} />
             ))}
         </ListType>
     );

@@ -55,20 +55,28 @@ export function Table({ headers, rows }: TableBlock) {
                         {rows.map((cells, rowIndex) => (
                             <tr key={`row-${rowIndex}`}>
                                 {cells.map((content, cellIndex) => {
+                                    let numCitations = 0;
                                     return (
                                         <td key={`cell-${cellIndex}`} className="text-nowrap pr-4 font-mono">
-                                            {content.map((c, contentIndex) =>
-                                                typeof c === 'string' ? (
-                                                    <SearchableText
-                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                        text={c}
-                                                    />
-                                                ) : (
-                                                    <Citation
-                                                        key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
-                                                    />
-                                                )
-                                            )}
+                                            {content.map((c, contentIndex) => {
+                                                if (typeof c === 'string') {
+                                                    return (
+                                                        <SearchableText
+                                                            key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                            text={c}
+                                                        />
+                                                    );
+                                                } else {
+                                                    numCitations++;
+                                                    return (
+                                                        <Citation
+                                                            citation={{ ...c }}
+                                                            key={`row-${rowIndex}-cell-${cellIndex}-content-${contentIndex}`}
+                                                            number={numCitations}
+                                                        />
+                                                    );
+                                                }
+                                            })}
                                         </td>
                                     );
                                 })}

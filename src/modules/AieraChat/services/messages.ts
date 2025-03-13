@@ -240,7 +240,7 @@ export function normalizeTextContent(rawContent: RawCitableContent[]): CitableCo
             return {
                 author: c.citation.author || '',
                 date: (c.citation.date as string) || '',
-                id: generateId('citation'), // Generate an ID since it's not provided by the server
+                id: c.citation.contentId,
                 source: c.citation.source?.name || '',
                 text: c.citation.quote || '',
                 url: c.citation.url || '',

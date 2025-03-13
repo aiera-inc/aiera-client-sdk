@@ -39,13 +39,14 @@ export interface BaseBlock {
 export type ContentBlock = TextBlock | TableBlock | ListBlock | ImageBlock | QuoteBlock | ChartBlock;
 
 type BlockProps = ContentBlock & {
+    blockIndex: number;
     isNested?: boolean;
 };
 
 export function Block(props: BlockProps) {
     return match(props)
         .with({ type: BlockType.TEXT }, (p) => (
-            <Text type={BlockType.TEXT} content={p.content} meta={p.meta} id={p.id} />
+            <Text type={BlockType.TEXT} content={p.content} contentIndex={props.blockIndex} meta={p.meta} id={p.id} />
         ))
         .with({ type: BlockType.TABLE }, (p) => (
             <Table type={BlockType.TABLE} headers={p.headers} rows={p.rows} meta={p.meta} id={p.id} />
