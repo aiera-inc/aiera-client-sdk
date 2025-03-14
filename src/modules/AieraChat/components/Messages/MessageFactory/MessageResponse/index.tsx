@@ -101,7 +101,8 @@ export const MessageResponse = ({ data, onReRun }: { onReRun: (k: string) => voi
                     return block.items
                         .map((item, index) => {
                             const prefix = block.meta.style === 'ordered' ? `${index + 1}. ` : '• ';
-                            return processListItem(item, prefix);
+                            const postfix = index === block.items.length - 1 ? '' : '\n';
+                            return `${processListItem(item, prefix)}${postfix}`;
                         })
                         .join('\n');
                 }
