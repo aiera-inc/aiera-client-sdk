@@ -168,9 +168,9 @@ function updateVirtuoso(
                                             ...firstBlock.content,
                                             firstBlock.content.length % 7 === 0
                                                 ? {
-                                                      id: '1',
                                                       text: 'citation',
                                                       source: 'source',
+                                                      sourceId: '1',
                                                   }
                                                 : 'some more text...',
                                         ],
@@ -297,7 +297,7 @@ export function Messages({
                                                 ...firstBlock.content,
                                                 firstBlock.content.length % 8 === 0
                                                     ? {
-                                                          id: '1',
+                                                          sourceId: '1',
                                                           text: 'citation',
                                                           source: 'source',
                                                       }

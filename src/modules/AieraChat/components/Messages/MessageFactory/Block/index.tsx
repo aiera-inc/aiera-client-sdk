@@ -9,12 +9,13 @@ import { TextBlock, Text } from './Text';
 
 // Citation type for referencing sources
 export type Citation = {
-    id: string;
-    text: string;
-    source: string;
-    url?: string;
-    date?: string;
     author?: string;
+    contentId?: string;
+    date?: string;
+    source: string;
+    sourceId: string;
+    text: string;
+    url?: string;
 };
 
 // Type for content that can include citations

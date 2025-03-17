@@ -4,6 +4,7 @@ import { ChatSessionStatus } from '@aiera/client-sdk/types';
 
 export interface Source {
     confirmed?: boolean;
+    contentId?: string;
     targetId: string;
     targetType: string;
     title: string;

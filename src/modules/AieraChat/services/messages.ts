@@ -239,10 +239,11 @@ export function normalizeTextContent(rawContent: RawCitableContent[]): CitableCo
         if (c.citation) {
             return {
                 author: c.citation.author || '',
+                contentId: c.citation.contentId,
                 date: (c.citation.date as string) || '',
-                id: c.citation.source?.sourceId || c.citation.contentId,
-                source: c.citation.source?.name || '',
-                text: c.citation.quote || '',
+                source: c.citation.source.name,
+                sourceId: c.citation.source.sourceId,
+                text: c.value || c.citation.quote || '', // always try to use the value first
                 url: c.citation.url || '',
             };
         } else {
