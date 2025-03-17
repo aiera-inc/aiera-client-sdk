@@ -173,9 +173,10 @@ export function AieraChat(): ReactElement {
                     onAnimationEnd={onTranscriptAnimationEnd}
                 >
                     <Transcript
-                        onBackHeader="Back"
                         eventId={selectedSource.targetId}
+                        initialItemId={selectedSource.contentId}
                         onBack={onAnimateTranscriptExit}
+                        onBackHeader="Back"
                     />
                 </div>
             )}

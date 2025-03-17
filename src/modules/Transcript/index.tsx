@@ -1060,7 +1060,8 @@ function useAudioSync(
     eventId = '',
     speakerTurns: SpeakerTurn[],
     eventQuery: QueryResult<TranscriptQuery, TranscriptQueryVariables>,
-    audioPlayer: AudioPlayer
+    audioPlayer: AudioPlayer,
+    initialItemId?: string
 ): [
     string | null,
     Dispatch<SetStateAction<string | null>>,
@@ -1149,11 +1150,11 @@ function useAudioSync(
         }
         // If we don't have any audio to sync to and aren't live, go to the first paragraph
         else if (paragraphs[0]) {
-            // If an initialItemId was set in the configuration
-            const initialItemId = config?.options?.initialItemId;
-            if (initialItemId) {
+            // If an initialItemId was passed in or set in the configuration
+            const itemId = initialItemId || config?.options?.initialItemId;
+            if (itemId) {
                 const pg = paragraphs.find(({ sentences }) => {
-                    const sentenceIds = sentences.filter(({ id }) => id.includes(initialItemId));
+                    const sentenceIds = sentences.filter(({ id }) => id.includes(itemId));
                     return sentenceIds.length > 0;
                 });
                 if (pg?.id) {
@@ -1166,9 +1167,14 @@ function useAudioSync(
             }
         }
 
-        // As long as we found one, set it so we can scroll to it and show
-        // an indicator in the UI
-    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, config?.options?.initialItemId]);
+        // As long as we found one, set it, so we can scroll to it and show an indicator in the UI
+    }, [
+        paragraphs.length,
+        Math.floor(audioPlayer.rawCurrentTime),
+        !!partial.text,
+        config?.options?.initialItemId,
+        initialItemId,
+    ]);
 
     const currentParagraphTimestamp = useMemo(() => {
         const currentIndex = paragraphs.findIndex(({ id }) => currentParagraph === id);
@@ -1353,13 +1359,14 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
 
 /** @notExported */
 export interface TranscriptProps extends TranscriptSharedProps {
-    width?: string;
-    isResizing?: boolean;
-    startResize?: (e: React.MouseEvent<HTMLDivElement>, id: string) => void;
     controlledSearchTerm?: string;
+    initialItemId?: string;
     initialSearchTerm?: string;
+    isResizing?: boolean;
     onBackHeader?: string;
+    startResize?: (e: React.MouseEvent<HTMLDivElement>, id: string) => void;
     useConfigOptions?: boolean;
+    width?: string;
 }
 
 /**
@@ -1372,6 +1379,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         handlesEnabled = false,
         hidePlaybar,
         hideSearch,
+        initialItemId,
         onBack,
         onBackHeader = 'Events',
         onClose,
@@ -1417,7 +1425,7 @@ export const Transcript = (props: TranscriptProps): ReactElement => {
         startTime,
         endTime,
         forceNextScroll,
-    ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
+    ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer, initialItemId);
     const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
