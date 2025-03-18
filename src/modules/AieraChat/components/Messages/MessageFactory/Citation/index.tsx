@@ -9,9 +9,9 @@ interface CitationProps {
 }
 
 export const Citation = ({ citation }: CitationProps) => {
-    const { onSelectSource, sources } = useChatStore();
-    const { id, source, text } = citation;
-    const citationIndex = sources.findIndex((s) => s.targetId === id);
+    const { citations, onSelectSource } = useChatStore();
+    const { contentId, source, sourceId, text } = citation;
+    const citationIndex = (citations || []).findIndex((s) => s.contentId === contentId);
     const number = citationIndex >= 0 ? citationIndex + 1 : null;
     return (
         <Fragment>
@@ -22,7 +22,8 @@ export const Citation = ({ citation }: CitationProps) => {
                     <span
                         onClick={() =>
                             onSelectSource({
-                                targetId: id,
+                                contentId,
+                                targetId: sourceId,
                                 targetType: 'event',
                                 title: source,
                             })

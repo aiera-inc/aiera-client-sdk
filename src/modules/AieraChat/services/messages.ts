@@ -30,6 +30,7 @@ import {
 import {
     BlockType,
     CitableContent,
+    Citation,
     ContentBlock,
 } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 import {
@@ -138,6 +139,67 @@ function isNonNullable<T>(value: T): value is NonNullable<T> {
  */
 function generateId(prefix = 'gen'): string {
     return `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+}
+
+/**
+ * Extract all citations in all content blocks, in all response messages
+ */
+function getAllCitations(blocks: ContentBlock[]): Citation[] {
+    let allCitations: Citation[] = [];
+    // Extract citations from Text, List, and Table blocks
+    blocks.forEach((block) => {
+        // Handle TEXT blocks
+        if (block.type === BlockType.TEXT && Array.isArray(block.content)) {
+            block.content.forEach((contentItem) => {
+                if (typeof contentItem !== 'string' && contentItem.contentId) {
+                    allCitations.push({
+                        author: contentItem.author || '',
+                        contentId: contentItem.contentId,
+                        date: contentItem.date || '',
+                        source: contentItem.source || '',
+                        sourceId: contentItem.sourceId || '',
+                        text: contentItem.text || '',
+                        url: contentItem.url || '',
+                    });
+                }
+            });
+        }
+
+        // Handle LIST blocks that contain TEXT blocks
+        if (block.type === BlockType.LIST && Array.isArray(block.items)) {
+            allCitations = [...allCitations, ...getAllCitations(block.items as ContentBlock[])];
+        }
+
+        // Handle TABLE blocks - extract citations from each table cell
+        if (block.type === BlockType.TABLE && Array.isArray(block.rows)) {
+            block.rows.forEach((row) => {
+                if (Array.isArray(row)) {
+                    row.forEach((cell) => {
+                        // Each cell can contain multiple content items
+                        if (Array.isArray(cell)) {
+                            cell.forEach((contentItem) => {
+                                if (typeof contentItem !== 'string' && contentItem.contentId) {
+                                    allCitations.push({
+                                        author: contentItem.author || '',
+                                        contentId: contentItem.contentId,
+                                        date: contentItem.date || '',
+                                        source: contentItem.source || '',
+                                        sourceId: contentItem.sourceId || '',
+                                        text: contentItem.text || '',
+                                        url: contentItem.url || '',
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    });
+    // Remove duplicates based on contentId
+    return allCitations.filter(
+        (citation, index, self) => index === self.findIndex((c) => c.contentId === citation.contentId)
+    );
 }
 
 /**
@@ -469,7 +531,7 @@ export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const { chatId, chatStatus, chatTitle, onSetStatus, onSetTitle } = useChatStore();
+    const { chatId, chatStatus, chatTitle, onSetStatus, onSetTitle, setCitations } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -651,6 +713,12 @@ export const useChatSession = ({
                         const blocks = Array.isArray(msg.blocks)
                             ? msg.blocks.map((block) => normalizeContentBlock(block)).filter(isNonNullable)
                             : [];
+
+                        // Keep track of all citations used in all chat messages to properly display their numbering
+                        const citations = getAllCitations(blocks);
+                        if (citations && citations.length > 0) {
+                            setCitations(citations);
+                        }
 
                         normalizedMessages.push({
                             id: msg.id,

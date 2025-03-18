@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 
 export interface Source {
     confirmed?: boolean;
@@ -14,6 +15,7 @@ export interface ChatState {
     chatId: string;
     chatStatus: ChatSessionStatus;
     chatTitle?: string;
+    citations?: Citation[];
     hasChanges: boolean;
     onAddSource: (source: Source | Source[]) => void;
     onClearSources: () => void;
@@ -26,6 +28,7 @@ export interface ChatState {
     onSetTitle: (title?: string) => void;
     searchTerm?: string;
     selectedSource?: Source;
+    setCitations: (citations: Citation[]) => void;
     setHasChanges: (hasChanges: boolean) => void;
     sources: Source[];
 }
@@ -34,6 +37,7 @@ export const useChatStore = create<ChatState>((set) => ({
     chatId: 'new',
     chatStatus: ChatSessionStatus.Active,
     chatTitle: undefined,
+    citations: undefined,
     hasChanges: false,
     onAddSource: (source: Source | Source[]) =>
         set((state) => ({
@@ -64,6 +68,7 @@ export const useChatStore = create<ChatState>((set) => ({
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     searchTerm: undefined,
     selectedSource: undefined,
+    setCitations: (citations: Citation[]) => set({ citations }),
     setHasChanges: (hasChanges: boolean) => set({ hasChanges }),
     sources: [],
 }));

@@ -1162,6 +1162,10 @@ function useAudioSync(
                 } else {
                     setCurrentParagraph(paragraphs[0].id);
                 }
+                // If initialItemId is passed in, seek the audio to the selected paragraph
+                if (initialItemId && pg) {
+                    audioPlayer.rawSeek((pg.syncMs || 0) / 1000);
+                }
             } else {
                 setCurrentParagraph(paragraphs[0].id);
             }
