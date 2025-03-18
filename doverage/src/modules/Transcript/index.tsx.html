@@ -23,16 +23,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">62.69% </span>
+                <span class="strong">62.31% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>205/327</span>
+                <span class='fraction'>205/329</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">49.24% </span>
+                <span class="strong">48.67% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>163/331</span>
+                <span class='fraction'>165/339</span>
             </div>
         
             
@@ -44,9 +44,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">63% </span>
+                <span class="strong">62.58% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>189/300</span>
+                <span class='fraction'>189/302</span>
             </div>
         
             
@@ -1620,7 +1620,19 @@
 <a name='L1555'></a><a href='#L1555'>1555</a>
 <a name='L1556'></a><a href='#L1556'>1556</a>
 <a name='L1557'></a><a href='#L1557'>1557</a>
-<a name='L1558'></a><a href='#L1558'>1558</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L1558'></a><a href='#L1558'>1558</a>
+<a name='L1559'></a><a href='#L1559'>1559</a>
+<a name='L1560'></a><a href='#L1560'>1560</a>
+<a name='L1561'></a><a href='#L1561'>1561</a>
+<a name='L1562'></a><a href='#L1562'>1562</a>
+<a name='L1563'></a><a href='#L1563'>1563</a>
+<a name='L1564'></a><a href='#L1564'>1564</a>
+<a name='L1565'></a><a href='#L1565'>1565</a>
+<a name='L1566'></a><a href='#L1566'>1566</a>
+<a name='L1567'></a><a href='#L1567'>1567</a>
+<a name='L1568'></a><a href='#L1568'>1568</a>
+<a name='L1569'></a><a href='#L1569'>1569</a>
+<a name='L1570'></a><a href='#L1570'>1570</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2694,6 +2706,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-yes">61x</span>
 <span class="cline-any cline-yes">61x</span>
@@ -2784,7 +2797,16 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -2987,7 +3009,9 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4239,7 +4263,8 @@ function useAudioSync(
     eventId = <span class="branch-0 cbranch-no" title="branch not covered" >'',</span>
     speakerTurns: SpeakerTurn[],
     eventQuery: QueryResult&lt;TranscriptQuery, TranscriptQueryVariables&gt;,
-    audioPlayer: AudioPlayer
+    audioPlayer: AudioPlayer,
+    initialItemId?: string
 ): [
     string | null,
     Dispatch&lt;SetStateAction&lt;string | null&gt;&gt;,
@@ -4328,11 +4353,11 @@ function useAudioSync(
         }
         // If we don't have any audio to sync to and aren't live, go to the first paragraph
         else if (paragraphs[0]) {
-            // If an initialItemId was set in the configuration
-            const initialItemId = config?.options?.initialItemId;
-            <span class="missing-if-branch" title="if path not taken" >I</span>if (initialItemId) {
+            // If an initialItemId was passed in or set in the configuration
+            const itemId = initialItemId || config?.options?.initialItemId;
+            <span class="missing-if-branch" title="if path not taken" >I</span>if (itemId) {
                 const pg = <span class="cstat-no" title="statement not covered" >paragraphs.find(<span class="fstat-no" title="function not covered" >({</span> sentences }) =&gt; {</span>
-                    const sentenceIds = <span class="cstat-no" title="statement not covered" >sentences.filter(<span class="fstat-no" title="function not covered" >({</span> id }) =&gt; <span class="cstat-no" title="statement not covered" >id.includes(initialItemId))</span>;</span>
+                    const sentenceIds = <span class="cstat-no" title="statement not covered" >sentences.filter(<span class="fstat-no" title="function not covered" >({</span> id }) =&gt; <span class="cstat-no" title="statement not covered" >id.includes(itemId))</span>;</span>
 <span class="cstat-no" title="statement not covered" >                    return sentenceIds.length &gt; 0;</span>
                 });
 <span class="cstat-no" title="statement not covered" >                if (pg?.id) {</span>
@@ -4340,14 +4365,23 @@ function useAudioSync(
                 } else {
 <span class="cstat-no" title="statement not covered" >                    setCurrentParagraph(paragraphs[0].id);</span>
                 }
+                // If initialItemId is passed in, seek the audio to the selected paragraph
+<span class="cstat-no" title="statement not covered" >                if (initialItemId &amp;&amp; pg) {</span>
+<span class="cstat-no" title="statement not covered" >                    audioPlayer.rawSeek((pg.syncMs || 0) / 1000);</span>
+                }
             } else {
                 setCurrentParagraph(paragraphs[0].id);
             }
         }
 &nbsp;
-        // As long as we found one, set it so we can scroll to it and show
-        // an indicator in the UI
-    }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, config?.options?.initialItemId]);
+        // As long as we found one, set it, so we can scroll to it and show an indicator in the UI
+    }, [
+        paragraphs.length,
+        Math.floor(audioPlayer.rawCurrentTime),
+        !!partial.text,
+        config?.options?.initialItemId,
+        initialItemId,
+    ]);
 &nbsp;
     const currentParagraphTimestamp = useMemo(() =&gt; {
         const currentIndex = paragraphs.findIndex(({ id }) =&gt; currentParagraph === id);
@@ -4532,13 +4566,14 @@ function useSearchState(speakerTurns: SpeakerTurn[], initialSearchTerm = '', con
 &nbsp;
 /** @notExported */
 export interface TranscriptProps extends TranscriptSharedProps {
-    width?: string;
-    isResizing?: boolean;
-    startResize?: (e: React.MouseEvent&lt;HTMLDivElement&gt;, id: string) =&gt; void;
     controlledSearchTerm?: string;
+    initialItemId?: string;
     initialSearchTerm?: string;
+    isResizing?: boolean;
     onBackHeader?: string;
+    startResize?: (e: React.MouseEvent&lt;HTMLDivElement&gt;, id: string) =&gt; void;
     useConfigOptions?: boolean;
+    width?: string;
 }
 &nbsp;
 /**
@@ -4551,6 +4586,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
         handlesEnabled = false,
         hidePlaybar,
         hideSearch,
+        initialItemId,
         onBack,
         onBackHeader = 'Events',
         onClose,
@@ -4596,7 +4632,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
         startTime,
         endTime,
         forceNextScroll,
-    ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
+    ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer, initialItemId);
     const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
     // We need to set two separate refs to the scroll container, so this just wraps those 2 into 1 to pass to the
     // scrollContiainer ref. May make this a helper hook at some point
@@ -4741,7 +4777,7 @@ export const Transcript = (props: TranscriptProps): ReactElement =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Mar 14 2025 15:30:27 GMT-0400 (Eastern Daylight Time)
+                at Tue Mar 18 2025 10:01:52 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

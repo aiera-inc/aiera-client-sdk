@@ -90735,7 +90735,7 @@ function usePartials(eventId, lastParagraphId) {
   }, [lastParagraphId]);
   return partial;
 }
-function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
+function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer, initialItemId) {
   var _a, _b, _c, _d, _e;
   const [currentParagraph, setCurrentParagraph] = (0, import_react68.useState)(null);
   const config = useConfig();
@@ -90787,10 +90787,10 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
         setCurrentParagraph(audioParagraph.id);
       }
     } else if (paragraphs[0]) {
-      const initialItemId = (_f = config == null ? void 0 : config.options) == null ? void 0 : _f.initialItemId;
-      if (initialItemId) {
+      const itemId = initialItemId || ((_f = config == null ? void 0 : config.options) == null ? void 0 : _f.initialItemId);
+      if (itemId) {
         const pg = paragraphs.find(({ sentences }) => {
-          const sentenceIds = sentences.filter(({ id }) => id.includes(initialItemId));
+          const sentenceIds = sentences.filter(({ id }) => id.includes(itemId));
           return sentenceIds.length > 0;
         });
         if (pg == null ? void 0 : pg.id) {
@@ -90798,11 +90798,20 @@ function useAudioSync(eventId = "", speakerTurns, eventQuery, audioPlayer) {
         } else {
           setCurrentParagraph(paragraphs[0].id);
         }
+        if (initialItemId && pg) {
+          audioPlayer.rawSeek((pg.syncMs || 0) / 1e3);
+        }
       } else {
         setCurrentParagraph(paragraphs[0].id);
       }
     }
-  }, [paragraphs.length, Math.floor(audioPlayer.rawCurrentTime), !!partial.text, (_e = config == null ? void 0 : config.options) == null ? void 0 : _e.initialItemId]);
+  }, [
+    paragraphs.length,
+    Math.floor(audioPlayer.rawCurrentTime),
+    !!partial.text,
+    (_e = config == null ? void 0 : config.options) == null ? void 0 : _e.initialItemId,
+    initialItemId
+  ]);
   const currentParagraphTimestamp = (0, import_react68.useMemo)(() => {
     var _a2;
     const currentIndex = paragraphs.findIndex(({ id }) => currentParagraph === id);
@@ -90945,6 +90954,7 @@ var Transcript = (props) => {
     handlesEnabled = false,
     hidePlaybar,
     hideSearch,
+    initialItemId,
     onBack,
     onBackHeader = "Events",
     onClose,
@@ -90987,7 +90997,7 @@ var Transcript = (props) => {
     startTime,
     endTime,
     forceNextScroll
-  ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer);
+  ] = useAudioSync(eventId, speakerTurns, eventQuery, audioPlayer, initialItemId);
   const searchState = useSearchState(speakerTurns, initialSearchTerm, controlledSearchTerm);
   const scrollContainerRef = (0, import_react68.useCallback)((ref) => {
     autoscrollContainerRef(ref);
