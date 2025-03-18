@@ -72,6 +72,7 @@
 
         <script>
             let apiKey = 'e0f401666db84a6f92cb6b1381ecaada';
+            let userId = 'vich-component-user'; // Initialize userId with default value
             const eventList = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
 
             // Initial load with default API key
@@ -89,23 +90,8 @@
                 document.getElementById('currentApiKey').textContent = `Current public api key: ${apiKey}`;
             }
 
-            // Save button click handler
-            document.getElementById('saveButton').addEventListener('click', function () {
-                const newApiKey = document.getElementById('apiKeyInput').value.trim();
-
-                if (newApiKey !== '') {
-                    apiKey = newApiKey;
-                    updateCurrentKeyDisplay();
-
-                    // Reload with new API key
-                    loadWithApiKey(apiKey);
-
-                    // Clear the input field
-                    document.getElementById('apiKeyInput').value = '';
-                }
-            });
-
-            eventList.on('authenticated', () => {
+            // Configure function that can be called whenever we need to update configuration
+            function configureEventList() {
                 eventList.configure({
                     hideSettings: true,
                     options: {
@@ -131,9 +117,30 @@
                         //     `,
                     },
                     tracking: {
-                        userId: 'vich-component-user',
+                        userId: userId, // Use the current userId value
                     },
                 });
+            }
+
+            // Save button click handler
+            document.getElementById('saveButton').addEventListener('click', function () {
+                const newApiKey = document.getElementById('apiKeyInput').value.trim();
+
+                if (newApiKey !== '') {
+                    apiKey = newApiKey;
+                    userId = newApiKey; // Update userId to match the API key
+                    updateCurrentKeyDisplay();
+
+                    // Reload with new API key
+                    loadWithApiKey(apiKey);
+
+                    // Clear the input field
+                    document.getElementById('apiKeyInput').value = '';
+                }
+            });
+
+            eventList.on('authenticated', () => {
+                configureEventList(); // Call the configure function
 
                 /**
                  * Once authenticated and the config is set, create a watchlist.

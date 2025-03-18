@@ -132,7 +132,7 @@ export function createGQLClient(config: Config): Client {
                     cache
                 ) => {
                     if (result.deleteChatSession?.success) {
-                        cache.invalidate({ __typename: 'ChatSession', id: args.sessionId });
+                        cache.invalidate({ __typename: 'ChatSession', id: args.input.sessionId });
                     }
                 },
             },
