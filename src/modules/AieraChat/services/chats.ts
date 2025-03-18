@@ -25,14 +25,15 @@ import {
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatMessageStatus, ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { ChatSession, ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
+import { useAblyStore } from '@aiera/client-sdk/modules/AieraChat/store';
 
 export interface AblyToken {
     client_id: string;
 }
 
 export interface UseChatSessionsReturn {
-    ably: Realtime | null;
-    channelSubscribed: boolean;
+    // ably: Realtime | null;
+    // channelSubscribed: boolean;
     clearSources: (sessionId: string) => Promise<void>;
     createAblyToken: (session_id?: string) => Promise<AblyToken | null>;
     createSession: (input: {
@@ -117,9 +118,11 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     const [sessions, setSessions] = useState<ChatSession[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [ably, setAbly] = useState<Realtime | null>(null);
+    // const [ably, setAbly] = useState<Realtime | null>(null);
     const [isConnected, setIsConnected] = useState(false);
-    const [channelSubscribed, setChannelSubscribed] = useState(false);
+    // const [channelSubscribed, setChannelSubscribed] = useState(false);
+    const setAbly = useAblyStore(state => state.setAbly);
+
 
     const [, createAblyTokenMutationFn] = useMutation<CreateAblyTokenMutation>(gql`
         mutation CreateAblyToken($sessionId: ID!) {
@@ -186,26 +189,35 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     console.log('Connected to Ably!');
                     setIsConnected(true);
                     setError(null);
+                    setAbly(ablyInstance);
 
-                    if (!channelSubscribed) {
-                        setChannelSubscribed(true);
-                        const channelName = `user-chat:${session_id}`;
-                        const chatChannel = ablyInstance.channels.get(channelName);
+                    // if (!channelSubscribed) {
+                    //     console.log("need to subscribe..........................")
+                    //     const channelName = `user-chat:1234567`;
+                    //     const chatChannel = ablyInstance.channels.get(channelName);
 
-                        // Subscribe to ably channel
-                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                        chatChannel.subscribe((message) => {
-                            try {
-                                const decoder = new TextDecoder('utf-8'); // Assuming the message is UTF-8 encoded
-                                const decodedMessage = decoder.decode(message.data as BufferSource);
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                const jsonObject = JSON.parse(decodedMessage);
-                                console.log('Message from Ably: ', jsonObject);
-                            } catch (err) {
-                                setError(`Error handling message`);
-                            }
-                        });
-                    }
+
+                    //     // Subscribe to ably channel
+                    //     // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                    //     // chatChannel.subscribe((message) => {
+                    //     //     console.log("getting messages.....", message)
+                    //     //     // try {
+                    //     //     //     const decoder = new TextDecoder('utf-8'); // Assuming the message is UTF-8 encoded
+                    //     //     //     const decodedMessage = decoder.decode(message.data as BufferSource);
+                    //     //     //     // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                    //     //     //     const jsonObject = JSON.parse(decodedMessage);
+                    //     //     //     console.log('Message from Ably: ', jsonObject);
+                    //     //     // } catch (err) {
+                    //     //     //     setError(`Error handling message`);
+                    //     //     // }
+                    //     //     setChannelSubscribed(true);
+                    //     // });
+
+                    //     // chatChannel.on('failed', (err) => {
+                    //     //   console.error('Channel subscription failed:', err);
+                    //     // });
+
+                    // }
                 });
 
                 ablyInstance.connection.on('failed', (err) => {
@@ -214,20 +226,21 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                 });
 
                 ablyInstance.connection.on('disconnected', () => {
+                    console.log("ably disconnected");
                     setIsConnected(false);
                     const channelName = `user-chat:${session_id}`;
                     const chatChannel = ablyInstance.channels.get(channelName);
                     chatChannel.unsubscribe();
                 });
 
-                setAbly(ablyInstance);
-
-                return createAblyTokenMutationFn({ input: { sessionId: session_id } })
+                return createAblyTokenMutationFn({ sessionId: session_id })
                     .then((resp) => {
+                        console.log('Mutation response:', resp);
                         const tokenData = resp.data?.createAblyToken?.data;
                         return tokenData ? { client_id: tokenData.clientId } : null;
                     })
                     .catch(() => {
+                        console.error('Error creating Ably token:', error);
                         setError('Error creating Ably token');
                         return null;
                     });
@@ -321,7 +334,13 @@ export const useChatSessions = (): UseChatSessionsReturn => {
             return createChatMutation({ input: { prompt, sources: mapSourcesToInput(sources), title } })
                 .then((resp) => {
                     const newSession = resp.data?.createChatSession?.chatSession;
+                    
                     if (newSession) {
+                        console.log("------------------ new session", newSession.id)
+                        // create ably 
+                        createAblyToken(newSession.id).then(() => {
+                            console.log("am in..............................++++ ....", newSession.id)
+                        })
                         // Ensure we normalize the session before adding it to state and returning
                         const normalizedSession = normalizeSession(newSession as RawChatSession);
                         setSessions((prevSessions) => [...prevSessions, normalizedSession]);
@@ -447,6 +466,8 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     //     };
     // }, [ably]);
 
+
+
     // useEffect(() => {
     //     const fetchToken = async () => {
     //         try {
@@ -456,14 +477,14 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     //             setError(err instanceof Error ? err.message : 'An error occurred');
     //         }
     //     };
-    //
-    //     if (!isConnected && !ably) {
+    
+    //     if (!isConnected) {
     //         // Ensure promise is awaited
     //         fetchToken().catch((err) => {
     //             console.error('Error in fetchToken:', err);
     //         });
     //     }
-    // }, [ably, isConnected]);
+    // }, [isConnected]);
 
     useEffect(() => {
         if (chatSessionsQuery.status === 'success') {
@@ -481,7 +502,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         } else if (isLoading && chatSessionsQuery.status !== 'loading') {
             setIsLoading(false);
         }
-    }, [channelSubscribed, chatSessionsQuery, isConnected, isLoading]);
+    }, [chatSessionsQuery, isConnected, isLoading]);
 
     // Use useCallback to memoize the fetch function
     const fetchSessions = useCallback(() => {
@@ -501,8 +522,8 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     };
 
     return {
-        ably,
-        channelSubscribed,
+        // ably,
+        // channelSubscribed,
         clearSources,
         createAblyToken,
         createSession,

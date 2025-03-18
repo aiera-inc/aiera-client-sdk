@@ -44,7 +44,7 @@ import { LineChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Me
 import { PieChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Pie';
 import { ScatterChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Scatter';
 import { TreeMapMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Tree';
-import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
+import { useAblyStore, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
 const MAX_POLLING_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -344,6 +344,52 @@ export function normalizeSources(
  * Comprehensive normalizer for content blocks with better error handling
  * Handles renamed fields and generates IDs when missing
  */
+export function normalizeContentBlock2(rawBlock: RawContentBlock): ContentBlock | null {
+    if (!rawBlock) {
+        return null;
+    }
+
+    console.log(`TEST normalizeContentBlock2 ${rawBlock.type} -- ${JSON.stringify(rawBlock, null, 2)}`)
+    // const blockType = 
+
+    try{
+        const blockType = rawBlock.type;
+        const blockId = generateId(`block-${blockType}`);
+
+        switch (blockType) {
+            case 'text': {
+                const block = rawBlock as TextBlock;
+                // @ts-ignore
+                const meta = block.meta;
+                return {
+                    // @ts-ignore
+                    content: normalizeTextContent(block.content),
+                    id: blockId,
+                    meta: {
+                        style: meta.style || 'paragraph',
+                    },
+                    type: BlockType.TEXT,
+                };
+            }
+
+            default: {
+                console.warn('Unhandled content block type:', blockType);
+                // Return a basic text block as fallback
+                return {
+                    content: ['Unsupported content type: ' + blockType],
+                    id: blockId,
+                    meta: { style: 'paragraph' },
+                    type: BlockType.TEXT,
+                };
+            }
+        }
+
+    } catch (error) {
+        console.error('Error normalizing content block:', error, rawBlock);
+        return null;
+    }
+
+}
 export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock | null {
     if (!rawBlock) {
         return null;
@@ -473,13 +519,14 @@ export const useChatSession = ({
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
+    const [channelSubscribed, setChannelSubscribed] = useState<boolean>(false);
 
     // Get urql client for manual cache updates
     const client = useClient();
 
     // Add state for tracking refetch count and whether to stop polling
     const [_refetchCount, setRefetchCount] = useState<number>(0);
-    const [shouldStopPolling, setShouldStopPolling] = useState<boolean>(false);
+    // const [shouldStopPolling, setShouldStopPolling] = useState<boolean>(false);
 
     // Use the create message mutation with the optimized query
     const [_, createChatMessagePromptMutation] = useMutation<
@@ -543,6 +590,9 @@ export const useChatSession = ({
         [createChatMessagePromptMutation]
     );
 
+    // get ably instance
+    const ably = useAblyStore(state => state.ably);
+
     // Either use the passed sessionId (for initial render) or chatId from store (for updates)
     const effectiveSessionId = sessionId || chatId || '';
 
@@ -596,6 +646,84 @@ export const useChatSession = ({
         return null;
     }, [client]);
 
+    //setup ably channel subscription
+    useEffect(() => {
+        // Only proceed if we have a valid session and Ably instance
+        if (!effectiveSessionId || effectiveSessionId === 'new' || !ably || channelSubscribed) {
+          return;
+        }
+        setChannelSubscribed(true);
+        try {
+            
+            // Create a channel for the specific chat session
+            console.log("TEST: ably instance ", ably)
+            const channelName = `user-chat:${effectiveSessionId}`;
+            const channel = ably.channels.get(channelName);
+            console.log("TEST channel name", channelName)
+            console.log(`TEST Subscribing to Ably channel: ${channelName}`);
+
+            // Subscribe to all messages on this channel
+            channel.subscribe((message) => {
+
+                const base64String = message.data; // Your encoded string
+                const decodedString = atob(base64String);
+                const msg = JSON.parse(decodedString);
+
+                console.log("TEST message(s) from ably is ", msg);
+
+                const blocks = Array.isArray(msg.blocks)
+                            // @ts-ignore
+                            ? msg.blocks.map((block) => normalizeContentBlock2(block)).filter(isNonNullable)
+                            : [];
+
+                console.log(`TEST blocks `, blocks)
+
+                const normalizedMessages: ChatMessage[] = [];
+                let lastPromptValue = ''; // Track the last prompt value
+
+                normalizedMessages.push({
+                    id: msg.id,
+                    ordinalId: msg.ordinalId,
+                    timestamp: msg.createdAt,
+                    status: ChatMessageStatus.COMPLETED,
+                    type: ChatMessageType.RESPONSE,
+                    prompt: lastPromptValue, // Use the last prompt value
+                    blocks,
+                    sources: normalizeSources(msg.sources),
+                });
+
+                console.log(`TEST normalizedMessages ${normalizedMessages}`);
+                let currentPromptValue = '';
+                const finalNormalizedMessages = normalizedMessages.map((message) => {
+                    if (message.type === ChatMessageType.PROMPT) {
+                        currentPromptValue = message.prompt;
+                        return message;
+                    } else {
+                        return {
+                            ...message,
+                            prompt: currentPromptValue,
+                        };
+                    }
+                });
+                console.log(`TEST final message ${JSON.stringify(finalNormalizedMessages)}`)
+                setMessages(finalNormalizedMessages);
+                // setMessages((prevMessages) => [...prevMessages, finalNormalizedMessages]);
+
+            });
+
+            channel.on('failed', (err) => {
+              console.log('TEST Channel subscription failed:', err);
+            });
+            
+
+        } catch (err) {
+          console.error('Error setting up Ably subscription:', err);
+          setError('Failed to set up real-time updates');
+        }
+
+    }, [ably, effectiveSessionId, channelSubscribed, chatStatus, chatTitle, onSetStatus, onSetTitle, setMessages]);
+
+
     // Process messages from the separate fields
     useEffect(() => {
         // Update loading state based on query status
@@ -647,7 +775,8 @@ export const useChatSession = ({
                 if (chatSession.responseMessages) {
                     (chatSession.responseMessages as RawChatMessageResponse[]).forEach((msg) => {
                         if (!msg) return;
-
+      
+                        console.log(`TEST blocks response `, msg.blocks)
                         const blocks = Array.isArray(msg.blocks)
                             ? msg.blocks.map((block) => normalizeContentBlock(block)).filter(isNonNullable)
                             : [];
@@ -712,7 +841,7 @@ export const useChatSession = ({
                 // If polling is enabled, stop it when an error occurs
                 if (enablePolling) {
                     console.log('Stopping polling due to data normalization error');
-                    setShouldStopPolling(true);
+                    // setShouldStopPolling(true);
                 }
             }
         }
@@ -723,7 +852,7 @@ export const useChatSession = ({
             // If polling is enabled, stop it when an error occurs
             if (enablePolling) {
                 console.log('Stopping polling due to query error');
-                setShouldStopPolling(true);
+                // setShouldStopPolling(true);
             }
         }
     }, [
@@ -744,49 +873,49 @@ export const useChatSession = ({
         if (sessionId && sessionId !== 'new') {
             setMessages([]);
             setRefetchCount(0);
-            setShouldStopPolling(false);
+            // setShouldStopPolling(false);
         }
     }, [sessionId]);
 
     // Setup polling with max refetch limit
-    useEffect(() => {
-        if (!enablePolling) {
-            // Reset refetch count and polling
-            setRefetchCount(0);
-            setShouldStopPolling(false);
-            return;
-        }
+    // useEffect(() => {
+    //     if (!enablePolling) {
+    //         // Reset refetch count and polling
+    //         setRefetchCount(0);
+    //         setShouldStopPolling(false);
+    //         return;
+    //     }
 
-        console.log(`Setting up polling interval (${POLLING_INTERVAL}ms) with max refetch count: ${MAX_REFETCH_COUNT}`);
-        const intervalId = setInterval(() => {
-            if (sessionId && sessionId !== 'new' && !shouldStopPolling) {
-                messagesQuery.refetch();
-                // Increment refetch count
-                setRefetchCount((prevCount) => {
-                    const newCount = prevCount + 1;
-                    console.log(`Refetch count: ${newCount}/${MAX_REFETCH_COUNT}`);
-                    // Check if we've reached the limit
-                    if (newCount >= MAX_REFETCH_COUNT) {
-                        console.log(`Reached max refetch count (${MAX_REFETCH_COUNT}). Stopping polling.`);
-                        setShouldStopPolling(true);
-                    }
+    //     console.log(`Setting up polling interval (${POLLING_INTERVAL}ms) with max refetch count: ${MAX_REFETCH_COUNT}`);
+    //     const intervalId = setInterval(() => {
+    //         if (sessionId && sessionId !== 'new' && !shouldStopPolling) {
+    //             messagesQuery.refetch();
+    //             // Increment refetch count
+    //             setRefetchCount((prevCount) => {
+    //                 const newCount = prevCount + 1;
+    //                 console.log(`Refetch count: ${newCount}/${MAX_REFETCH_COUNT}`);
+    //                 // Check if we've reached the limit
+    //                 if (newCount >= MAX_REFETCH_COUNT) {
+    //                     console.log(`Reached max refetch count (${MAX_REFETCH_COUNT}). Stopping polling.`);
+    //                     setShouldStopPolling(true);
+    //                 }
 
-                    return newCount;
-                });
-            }
-        }, POLLING_INTERVAL);
+    //                 return newCount;
+    //             });
+    //         }
+    //     }, POLLING_INTERVAL);
 
-        return () => {
-            console.log('Clearing polling interval');
-            clearInterval(intervalId);
-        };
-    }, [enablePolling, messagesQuery, sessionId, shouldStopPolling]);
+    //     return () => {
+    //         console.log('Clearing polling interval');
+    //         clearInterval(intervalId);
+    //     };
+    // }, [enablePolling, messagesQuery, sessionId, shouldStopPolling]);
 
     const refresh = useCallback(() => {
         console.log('Refreshing chat messages and resetting polling limits...');
         // Reset refetch count and polling state when manually refreshing
         setRefetchCount(0);
-        setShouldStopPolling(false);
+        // setShouldStopPolling(false);
         messagesQuery.refetch();
         console.log(
             `Polling reset. Will continue for up to ${MAX_REFETCH_COUNT} more refetches (${

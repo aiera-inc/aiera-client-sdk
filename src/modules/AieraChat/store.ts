@@ -1,6 +1,17 @@
 import { create } from 'zustand';
+import { Realtime } from 'ably';
 
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
+
+interface AblyStoreState {
+  ably: Realtime| null;
+  setAbly: (ably: Realtime | null) => void;
+}
+
+export const useAblyStore = create<AblyStoreState>((set) => ({
+  ably: null,
+  setAbly: (ably) => set({ ably }),
+}));
 
 export interface Source {
     confirmed?: boolean;
@@ -27,6 +38,8 @@ export interface ChatState {
     selectedSource?: Source;
     setHasChanges: (hasChanges: boolean) => void;
     sources: Source[];
+    // ablyInstance?: Realtime | null; // Add this
+    // setAblyInstance: (ably: Realtime | null) => void;
 }
 
 export const useChatStore = create<ChatState>((set) => ({

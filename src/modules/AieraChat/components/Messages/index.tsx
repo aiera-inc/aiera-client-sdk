@@ -86,6 +86,7 @@ function updateVirtuoso(
     sources: Source[],
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>
 ) {
+
     const myMessage: ChatMessagePrompt = {
         id: `${idCounter++}`,
         ordinalId: `${idCounter++}`,
@@ -94,6 +95,7 @@ function updateVirtuoso(
         status: ChatMessageStatus.COMPLETED,
         timestamp: '',
     };
+    console.log(`TEST updateVirtuoso: `)
     virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
         return {
             index: 'LAST',
@@ -345,23 +347,45 @@ export function Messages({
     // Append new messages to virtuoso as they're created
     useEffect(() => {
         if (messages && messages.length > 0) {
-            // Find new messages
-            const newMessages = messages.filter(
-                (message) => !(virtuosoRef.current?.data || []).find((m) => m.id === message.id)
-            );
-
+    
             // Append any new messages
-            if (newMessages.length > 0) {
-                virtuosoRef.current?.data.append(newMessages, ({ scrollInProgress, atBottom }) => {
+            if (messages.length > 0) {
+                console.log(`TEST message within ${JSON.stringify(messages)}`)
+                virtuosoRef.current?.data.append(messages, ({ scrollInProgress, atBottom }) => {
                     return {
                         index: 'LAST',
                         align: 'end',
                         behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
                     };
                 });
+
+                virtuosoRef.current?.data.map((message) => {
+                      console.log(`TEST --> ${message.id}`)
+                      
+  
+                      // Append additional content
+                      // if(message.id === 123 ){
+                      //    if (typeof message.blocks[0].content === 'string') {
+                      //       message.blocks[0].content += lastMessage.blocks[0].content;
+                      //     } else if (Array.isArray(message.blocks[0].content)) {
+                      //       // If it's an array, append to each item or add a new item
+                      //       message.blocks[0].content.push(message.blocks[0].content);
+                      //     }
+                      // } else if (message.type === 'prompt'){
+                      //   message.prompt += "";
+                      // }
+                      
+                      return {
+                        ...message
+                      }
+                    },
+                    'smooth'
+                )
             }
         }
     }, [messages]);
+
+
 
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(

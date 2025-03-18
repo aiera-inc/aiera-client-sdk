@@ -73,6 +73,7 @@ export function AieraChat(): ReactElement {
                                 newSession.title || chatTitle,
                                 newSession.sources
                             );
+                            console.log("--------- *****  new session created", newSession)
                             return newSession;
                         }
                         return null;
