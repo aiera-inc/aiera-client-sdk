@@ -37,12 +37,6 @@
             .input-container {
                 display: flex;
             }
-            #apiKeyInput {
-                flex-grow: 1;
-                padding: 8px;
-                border: 1px solid #ccc;
-                border-radius: 4px 0 0 4px;
-            }
             #saveButton {
                 padding: 8px 15px;
                 background-color: #4285f4;
@@ -54,6 +48,12 @@
             #saveButton:hover {
                 background-color: #3367d6;
             }
+            #usernameInput {
+                flex-grow: 1;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px 0 0 4px;
+            }
         </style>
     </head>
     <body>
@@ -62,9 +62,9 @@
             <iframe id="aiera"></iframe>
 
             <div class="api-key-container">
-                <p class="current-key" id="currentApiKey">Current public api key: e0f401666db84a6f92cb6b1381ecaada</p>
+                <p class="current-key" id="currentUsername">Current username: vich-component-user</p>
                 <div class="input-container">
-                    <input type="text" id="apiKeyInput" placeholder="Enter your Aiera public api key..." />
+                    <input type="text" id="usernameInput" placeholder="Enter username..." />
                     <button id="saveButton">Save</button>
                 </div>
             </div>
@@ -85,9 +85,9 @@
                 });
             }
 
-            // Update the display of current API key
-            function updateCurrentKeyDisplay() {
-                document.getElementById('currentApiKey').textContent = `Current public api key: ${apiKey}`;
+            // Update the display of current username
+            function updateCurrentUsernameDisplay() {
+                document.getElementById('currentUsername').textContent = `Current username: ${userId}`;
             }
 
             // Configure function that can be called whenever we need to update configuration
@@ -117,25 +117,41 @@
                         //     `,
                     },
                     tracking: {
-                        userId: userId, // Use the current userId value
+                        userId, // Use the current userId value
                     },
                 });
             }
 
-            // Save button click handler
-            document.getElementById('saveButton').addEventListener('click', function () {
-                const newApiKey = document.getElementById('apiKeyInput').value.trim();
+            // Function to save the username
+            function saveUsername() {
+                let newUsername = document.getElementById('usernameInput').value.trim();
 
-                if (newApiKey !== '') {
-                    apiKey = newApiKey;
-                    userId = newApiKey; // Update userId to match the API key
-                    updateCurrentKeyDisplay();
+                if (newUsername !== '') {
+                    // Replace whitespaces with dashes
+                    newUsername = newUsername.replace(/\s+/g, '-').toLowerCase();
 
-                    // Reload with new API key
-                    loadWithApiKey(apiKey);
+                    userId = newUsername; // Update userId with formatted username
+                    updateCurrentUsernameDisplay();
+
+                    // Configure with new userId
+                    configureEventList();
 
                     // Clear the input field
-                    document.getElementById('apiKeyInput').value = '';
+                    document.getElementById('usernameInput').value = '';
+                }
+            }
+
+            // Save button click handler
+            document.getElementById('saveButton').addEventListener('click', saveUsername);
+
+            // Add keypress event listener to the input field
+            document.getElementById('usernameInput').addEventListener('keypress', function (event) {
+                // If the Enter key is pressed (key code 13)
+                if (event.key === 'Enter') {
+                    // Prevent the default action (form submission if in a form)
+                    event.preventDefault();
+                    // Trigger the save function
+                    saveUsername();
                 }
             });
 
