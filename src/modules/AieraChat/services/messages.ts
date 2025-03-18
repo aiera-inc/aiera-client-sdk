@@ -624,7 +624,7 @@ export const useChatSession = ({
             const chatSessionsQuery = client
                 .query<ChatSessionsQuery, ChatSessionsQueryVariables>(
                     gql`
-                        query ChatSessions {
+                        query ChatSessionsRefetch {
                             chatSessions {
                                 id
                                 createdAt

@@ -14,6 +14,7 @@ import {
     ClearChatSessionSourcesMutation,
     ClearChatSessionSourcesMutationVariables,
     CreateAblyTokenMutation,
+    CreateAblyTokenMutationVariables,
     CreateChatSessionMutation,
     CreateChatSessionMutationVariables,
     DeleteChatSessionMutation,
@@ -22,6 +23,7 @@ import {
     UpdateChatSessionMutation,
     UpdateChatSessionMutationVariables,
 } from '@aiera/client-sdk/types/generated';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatMessageStatus, ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { ChatSession, ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
@@ -121,9 +123,11 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     const [isConnected, setIsConnected] = useState(false);
     const [channelSubscribed, setChannelSubscribed] = useState(false);
 
-    const [, createAblyTokenMutationFn] = useMutation<CreateAblyTokenMutation>(gql`
-        mutation CreateAblyToken($sessionId: ID!) {
-            createAblyToken(sessionId: $sessionId) {
+    const config = useConfig();
+
+    const [, createAblyTokenMutationFn] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
+        mutation CreateAblyToken($input: CreateAblyTokenInput!) {
+            createAblyToken(input: $input) {
                 data {
                     keyName
                     clientId
@@ -141,7 +145,10 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         async (tokenParams: TokenParamsData, callback: Callback) => {
             try {
                 const response = await createAblyTokenMutationFn({
-                    sessionId: tokenParams.sessionId,
+                    input: {
+                        sessionId: tokenParams.sessionId,
+                        sessionUserId: config.tracking?.userId,
+                    },
                 });
 
                 const tokenData = response.data?.createAblyToken?.data;
@@ -222,7 +229,9 @@ export const useChatSessions = (): UseChatSessionsReturn => {
 
                 setAbly(ablyInstance);
 
-                return createAblyTokenMutationFn({ input: { sessionId: session_id } })
+                return createAblyTokenMutationFn({
+                    input: { sessionId: session_id, sessionUserId: config.tracking?.userId },
+                })
                     .then((resp) => {
                         const tokenData = resp.data?.createAblyToken?.data;
                         return tokenData ? { client_id: tokenData.clientId } : null;
@@ -243,15 +252,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         ClearChatSessionSourcesMutation,
         ClearChatSessionSourcesMutationVariables
     >(gql`
-        mutation ClearChatSessionSources($sessionId: ID!) {
-            clearChatSessionSources(sessionId: $sessionId) {
+        mutation ClearChatSessionSources($input: ClearSourcesInput!) {
+            clearChatSessionSources(input: $input) {
                 success
             }
         }
     `);
     const clearSources = useCallback(
         (sessionId: string) => {
-            return clearSourcesChatMutation({ sessionId })
+            return clearSourcesChatMutation({ input: { sessionId, sessionUserId: config.tracking?.userId } })
                 .then((resp) => {
                     if (resp.data?.clearChatSessionSources?.success) {
                         setSessions((prevSessions) => {
@@ -318,7 +327,9 @@ export const useChatSessions = (): UseChatSessionsReturn => {
 
     const createSession = useCallback(
         ({ prompt, sources, title }: { prompt?: string; sources?: Source[]; title?: string }) => {
-            return createChatMutation({ input: { prompt, sources: mapSourcesToInput(sources), title } })
+            return createChatMutation({
+                input: { prompt, sessionUserId: config.tracking?.userId, sources: mapSourcesToInput(sources), title },
+            })
                 .then((resp) => {
                     const newSession = resp.data?.createChatSession?.chatSession;
                     if (newSession) {
@@ -340,15 +351,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     );
 
     const [___, deleteChatMutation] = useMutation<DeleteChatSessionMutation, DeleteChatSessionMutationVariables>(gql`
-        mutation DeleteChatSession($sessionId: ID!) {
-            deleteChatSession(sessionId: $sessionId) {
+        mutation DeleteChatSession($input: DeleteChatSessionInput!) {
+            deleteChatSession(input: $input) {
                 success
             }
         }
     `);
     const deleteSession = useCallback(
         (sessionId: string) => {
-            return deleteChatMutation({ sessionId })
+            return deleteChatMutation({ input: { sessionId, sessionUserId: config.tracking?.userId } })
                 .then((resp) => {
                     if (resp.data?.deleteChatSession?.success) {
                         setSessions((prevSessions) => prevSessions.filter((session) => session.id !== sessionId));
@@ -386,7 +397,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     `);
     const updateSession = useCallback(
         ({ sessionId, sources, title }: { sessionId: string; sources?: Source[]; title?: string }) => {
-            const input: UpdateChatSessionInput = { sessionId };
+            const input: UpdateChatSessionInput = { sessionId, sessionUserId: config.tracking?.userId };
             // Allow nullifying the sources
             if (sources !== undefined) {
                 input.sources = sources ? mapSourcesToInput(sources) : null;
@@ -416,8 +427,8 @@ export const useChatSessions = (): UseChatSessionsReturn => {
 
     const chatSessionsQuery = useQuery<ChatSessionsQuery, ChatSessionsQueryVariables>({
         query: gql`
-            query ChatSessions {
-                chatSessions {
+            query ChatSessions($filter: ChatSessionsFilter) {
+                chatSessions(filter: $filter) {
                     id
                     createdAt
                     sources {
@@ -435,6 +446,9 @@ export const useChatSessions = (): UseChatSessionsReturn => {
             }
         `,
         requestPolicy: 'cache-and-network',
+        variables: {
+            filter: { sessionUserId: config.tracking?.userId },
+        },
     });
 
     // useEffect(() => {
