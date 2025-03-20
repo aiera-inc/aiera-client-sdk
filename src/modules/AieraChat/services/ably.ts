@@ -91,78 +91,75 @@ export const useAbly = (): UseAblyReturn => {
         [createAblyTokenMutation]
     );
 
-    const createAblyToken = useCallback(
-        (sessionId?: string) => {
-            if (!sessionId) {
-                return Promise.resolve(null);
-            }
+    const createAblyToken = useCallback(() => {
+        if (!chatId || chatId === 'new') {
+            return Promise.resolve(null);
+        }
 
-            try {
-                // Initialize Ably with the auth callback
-                const ablyInstance = new Realtime({
-                    authCallback: (data: TokenParams, callback: Callback) =>
-                        authCallback({ ...data, sessionId }, callback),
-                });
+        try {
+            // Initialize Ably with the auth callback
+            const ablyInstance = new Realtime({
+                authCallback: (data: TokenParams, callback: Callback) =>
+                    authCallback({ ...data, sessionId: chatId }, callback),
+            });
 
-                // Set up ably connection listeners
-                ablyInstance.connection.on('connected', () => {
-                    console.log('Connected to Ably!');
-                    setIsConnected(true);
-                    setError(undefined);
+            // Set up ably connection listeners
+            ablyInstance.connection.on('connected', () => {
+                console.log('Connected to Ably!');
+                setIsConnected(true);
+                setError(undefined);
 
-                    if (!channelSubscribed) {
-                        setChannelSubscribed(true);
-                        const channelName = `user-chat:${sessionId}`;
-                        const chatChannel = ablyInstance.channels.get(channelName);
-
-                        // Subscribe to ably channel
-                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                        chatChannel.subscribe((message) => {
-                            try {
-                                const decoder = new TextDecoder('utf-8'); // Assuming the message is UTF-8 encoded
-                                const decodedMessage = decoder.decode(message.data as BufferSource);
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                const jsonObject = JSON.parse(decodedMessage);
-                                console.log('Message from Ably: ', jsonObject);
-                            } catch (err) {
-                                setError(`Error handling message`);
-                            }
-                        });
-                    }
-                });
-
-                ablyInstance.connection.on('failed', (err) => {
-                    setError(err instanceof Error ? err.message : 'Connection to Ably failed');
-                    setIsConnected(false);
-                });
-
-                ablyInstance.connection.on('disconnected', () => {
-                    setIsConnected(false);
-                    const channelName = `user-chat:${sessionId}`;
+                if (!channelSubscribed) {
+                    setChannelSubscribed(true);
+                    const channelName = `user-chat:${chatId}`;
                     const chatChannel = ablyInstance.channels.get(channelName);
-                    chatChannel.unsubscribe();
-                });
 
-                setAbly(ablyInstance);
-
-                return createAblyTokenMutation({
-                    input: { sessionId, sessionUserId: config.tracking?.userId },
-                })
-                    .then((resp) => {
-                        const tokenData = resp.data?.createAblyToken?.data;
-                        return tokenData ? { clientId: tokenData.clientId } : null;
-                    })
-                    .catch(() => {
-                        setError('Error creating Ably token');
-                        return null;
+                    // Subscribe to ably channel
+                    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+                    chatChannel.subscribe((message) => {
+                        try {
+                            const decoder = new TextDecoder('utf-8'); // Assuming the message is UTF-8 encoded
+                            const decodedMessage = decoder.decode(message.data as BufferSource);
+                            // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                            const jsonObject = JSON.parse(decodedMessage);
+                            console.log('Message from Ably: ', jsonObject);
+                        } catch (err) {
+                            setError(`Error handling message`);
+                        }
                     });
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Error initializing Ably');
-                return Promise.resolve(null);
-            }
-        },
-        [authCallback, createAblyTokenMutation]
-    );
+                }
+            });
+
+            ablyInstance.connection.on('failed', (err) => {
+                setError(err instanceof Error ? err.message : 'Connection to Ably failed');
+                setIsConnected(false);
+            });
+
+            ablyInstance.connection.on('disconnected', () => {
+                setIsConnected(false);
+                const channelName = `user-chat:${chatId}`;
+                const chatChannel = ablyInstance.channels.get(channelName);
+                chatChannel.unsubscribe();
+            });
+
+            setAbly(ablyInstance);
+
+            return createAblyTokenMutation({
+                input: { sessionId: chatId, sessionUserId: config.tracking?.userId },
+            })
+                .then((resp) => {
+                    const tokenData = resp.data?.createAblyToken?.data;
+                    return tokenData ? { clientId: tokenData.clientId } : null;
+                })
+                .catch(() => {
+                    setError('Error creating Ably token');
+                    return null;
+                });
+        } catch (err) {
+            setError(err instanceof Error ? err.message : 'Error initializing Ably');
+            return Promise.resolve(null);
+        }
+    }, [authCallback, chatId, createAblyTokenMutation]);
 
     useEffect(() => {
         // Immediately clear messages when changing sessions
