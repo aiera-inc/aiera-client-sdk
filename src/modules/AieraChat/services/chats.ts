@@ -1,7 +1,6 @@
 import gql from 'graphql-tag';
 import { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'urql';
-import { ErrorInfo, Realtime, TokenDetails, TokenParams, TokenRequest } from 'ably';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import {
     ChatMessagePrompt,
@@ -13,8 +12,6 @@ import {
     ChatSourceType,
     ClearChatSessionSourcesMutation,
     ClearChatSessionSourcesMutationVariables,
-    CreateAblyTokenMutation,
-    CreateAblyTokenMutationVariables,
     CreateChatSessionMutation,
     CreateChatSessionMutationVariables,
     DeleteChatSessionMutation,
@@ -28,15 +25,8 @@ import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatMessageStatus, ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { ChatSession, ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 
-export interface AblyToken {
-    client_id: string;
-}
-
 export interface UseChatSessionsReturn {
-    ably: Realtime | null;
-    channelSubscribed: boolean;
     clearSources: (sessionId: string) => Promise<void>;
-    createAblyToken: (session_id?: string) => Promise<AblyToken | null>;
     createSession: (input: {
         prompt?: string;
         sources?: Source[];
@@ -44,7 +34,6 @@ export interface UseChatSessionsReturn {
     }) => Promise<ChatSessionWithPromptMessage | null>;
     deleteSession: (sessionId: string) => Promise<void>;
     error: string | null;
-    isConnected: boolean;
     isLoading: boolean;
     refresh: () => void;
     sessions: ChatSession[];
@@ -106,147 +95,12 @@ function normalizeSessionWithPromptMessage(session: RawChatSession): ChatSession
     };
 }
 
-type TokenParamsData = {
-    sessionId: string;
-};
-
-type Callback = (
-    error: string | ErrorInfo | null,
-    tokenRequestOrDetails: string | TokenDetails | TokenRequest | null
-) => void;
-
 export const useChatSessions = (): UseChatSessionsReturn => {
     const [sessions, setSessions] = useState<ChatSession[]>([]);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [ably, setAbly] = useState<Realtime | null>(null);
-    const [isConnected, setIsConnected] = useState(false);
-    const [channelSubscribed, setChannelSubscribed] = useState(false);
 
     const config = useConfig();
-
-    const [, createAblyTokenMutationFn] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
-        mutation CreateAblyToken($input: CreateAblyTokenInput!) {
-            createAblyToken(input: $input) {
-                data {
-                    keyName
-                    clientId
-                    ttl
-                    nonce
-                    capability
-                    timestamp
-                    mac
-                }
-            }
-        }
-    `);
-
-    const authCallback = useCallback(
-        async (tokenParams: TokenParamsData, callback: Callback) => {
-            try {
-                const response = await createAblyTokenMutationFn({
-                    input: {
-                        sessionId: tokenParams.sessionId,
-                        sessionUserId: config.tracking?.userId,
-                    },
-                });
-
-                const tokenData = response.data?.createAblyToken?.data;
-                if (tokenData) {
-                    const tokenDetails = {
-                        mac: tokenData.mac,
-                        capability: tokenData.capability,
-                        clientId: tokenData.clientId,
-                        keyName: tokenData.keyName,
-                        nonce: tokenData.nonce,
-                        timestamp: Number(tokenData.timestamp),
-                        ttl: tokenData.ttl,
-                    };
-                    callback(null, tokenDetails as TokenRequest);
-                } else {
-                    throw new Error('Invalid token response');
-                }
-            } catch (err) {
-                const error = err instanceof Error ? err : new Error('Failed to fetch Ably token');
-                setError(error.message);
-                // callback(error);
-            }
-        },
-        [config.tracking?.userId, createAblyTokenMutationFn]
-    );
-
-    const createAblyToken = useCallback(
-        (session_id?: string) => {
-            if (!session_id) {
-                return Promise.resolve(null);
-            }
-
-            try {
-                // Initialize Ably with the auth callback
-                const ablyInstance = new Realtime({
-                    authCallback: (data: TokenParams, callback: Callback) =>
-                        authCallback({ ...data, sessionId: session_id }, callback),
-                });
-
-                // Set up ably connection listeners
-                ablyInstance.connection.on('connected', () => {
-                    console.log('Connected to Ably!');
-                    setIsConnected(true);
-                    setError(null);
-
-                    if (!channelSubscribed) {
-                        setChannelSubscribed(true);
-                        const channelName = `user-chat:${session_id}`;
-                        const chatChannel = ablyInstance.channels.get(channelName);
-
-                        // Subscribe to ably channel
-                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                        chatChannel.subscribe((message) => {
-                            try {
-                                const decoder = new TextDecoder('utf-8'); // Assuming the message is UTF-8 encoded
-                                const decodedMessage = decoder.decode(message.data as BufferSource);
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                const jsonObject = JSON.parse(decodedMessage);
-                                console.log('Message from Ably: ', jsonObject);
-                            } catch (err) {
-                                setError(`Error handling message`);
-                            }
-                        });
-                    }
-                });
-
-                ablyInstance.connection.on('failed', (err) => {
-                    setError(err instanceof Error ? err.message : 'Connection to Ably failed');
-                    setIsConnected(false);
-                });
-
-                ablyInstance.connection.on('disconnected', () => {
-                    setIsConnected(false);
-                    const channelName = `user-chat:${session_id}`;
-                    const chatChannel = ablyInstance.channels.get(channelName);
-                    chatChannel.unsubscribe();
-                });
-
-                setAbly(ablyInstance);
-
-                return createAblyTokenMutationFn({
-                    input: { sessionId: session_id, sessionUserId: config.tracking?.userId },
-                })
-                    .then((resp) => {
-                        const tokenData = resp.data?.createAblyToken?.data;
-                        return tokenData ? { client_id: tokenData.clientId } : null;
-                    })
-                    .catch(() => {
-                        setError('Error creating Ably token');
-                        return null;
-                    });
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Error initializing Ably');
-                return Promise.resolve(null);
-            }
-        },
-        [authCallback, createAblyTokenMutationFn]
-    );
 
     const [_, clearSourcesChatMutation] = useMutation<
         ClearChatSessionSourcesMutation,
@@ -451,34 +305,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         },
     });
 
-    // useEffect(() => {
-    //     return () => {
-    //         if (ably) {
-    //             ably.close();
-    //             setAbly(null);
-    //             setIsConnected(false);
-    //         }
-    //     };
-    // }, [ably]);
-
-    // useEffect(() => {
-    //     const fetchToken = async () => {
-    //         try {
-    //             const sessionId = '1234567'; // Test with a constant session
-    //             await createAblyToken(sessionId);
-    //         } catch (err) {
-    //             setError(err instanceof Error ? err.message : 'An error occurred');
-    //         }
-    //     };
-    //
-    //     if (!isConnected && !ably) {
-    //         // Ensure promise is awaited
-    //         fetchToken().catch((err) => {
-    //             console.error('Error in fetchToken:', err);
-    //         });
-    //     }
-    // }, [ably, isConnected]);
-
     useEffect(() => {
         if (chatSessionsQuery.status === 'success') {
             let normalizedSessions: ChatSession[] = [];
@@ -495,7 +321,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         } else if (isLoading && chatSessionsQuery.status !== 'loading') {
             setIsLoading(false);
         }
-    }, [channelSubscribed, chatSessionsQuery, isConnected, isLoading]);
+    }, [chatSessionsQuery, isLoading]);
 
     // Use useCallback to memoize the fetch function
     const fetchSessions = useCallback(() => {
@@ -515,14 +341,10 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     };
 
     return {
-        ably,
-        channelSubscribed,
         clearSources,
-        createAblyToken,
         createSession,
         deleteSession,
         error,
-        isConnected,
         isLoading,
         refresh,
         sessions,
