@@ -24,6 +24,7 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatMessageStatus, ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { ChatSession, ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
+import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 
 export interface UseChatSessionsReturn {
     clearSources: (sessionId: string) => Promise<void>;
@@ -100,6 +101,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
+    const { createAblyToken } = useAbly();
     const config = useConfig();
 
     const [_, clearSourcesChatMutation] = useMutation<
@@ -187,10 +189,17 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                 .then((resp) => {
                     const newSession = resp.data?.createChatSession?.chatSession;
                     if (newSession) {
-                        // Ensure we normalize the session before adding it to state and returning
-                        const normalizedSession = normalizeSession(newSession as RawChatSession);
-                        setSessions((prevSessions) => [...prevSessions, normalizedSession]);
-                        return normalizeSessionWithPromptMessage(newSession as RawChatSession) || null;
+                        createAblyToken(newSession.id)
+                            .then((tokenData) => {
+                                console.log({ note: `Successfully created session ${newSession.id}`, tokenData });
+                                // Ensure we normalize the session before adding it to state and returning
+                                const normalizedSession = normalizeSession(newSession as RawChatSession);
+                                setSessions((prevSessions) => [...prevSessions, normalizedSession]);
+                                return normalizeSessionWithPromptMessage(newSession as RawChatSession) || null;
+                            })
+                            .catch((ablyError: Error) => {
+                                setError(`Error creating Ably token: ${ablyError.message}`);
+                            });
                     } else {
                         setError('Error creating chat session');
                     }
