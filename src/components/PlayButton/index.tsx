@@ -7,7 +7,7 @@ import { EventMetaData, useAudioPlayer } from '@aiera/client-sdk/lib/audio';
 import { useAlertList, useTrack } from '@aiera/client-sdk/lib/data';
 import { AudioOriginUI, useMessageBus } from '@aiera/client-sdk/lib/msg';
 import classNames from 'classnames';
-import React, { MouseEvent, ReactElement, ReactNode, useCallback } from 'react';
+import React, { MouseEvent, ReactElement, ReactNode, useCallback, useEffect, useState } from 'react';
 import './styles.css';
 import { EventConnectionStatus } from '@aiera/client-sdk/types';
 import { BellSlash } from '../Svg/BellSlash';
@@ -23,16 +23,18 @@ interface PlayButtonUIProps extends PlayButtonSharedProps {
     eventStarted: boolean;
     hasAudio: boolean;
     isPlaying: boolean;
+    isLoading: boolean;
     toggleAlert: (event: MouseEvent) => void;
     togglePlayback: (event: MouseEvent) => void;
 }
 
 export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
-    const { alertOnLive, connectionStatus, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+    const { alertOnLive, connectionStatus, eventStarted, hasAudio, isLoading, isPlaying, toggleAlert, togglePlayback } =
+        props;
     return hasAudio ? (
         <div
             className={classNames(
-                'group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600',
+                'group flex items-center justify-center relative w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600',
                 {
                     'hover:border-blue-500 dark:hover:border-blue-500': !isPlaying,
                     'active:border-blue-600 dark:hover:border-blue-700': !isPlaying,
@@ -53,7 +55,16 @@ export function PlayButtonUI(props: PlayButtonUIProps): ReactElement {
             )}
             onClick={togglePlayback}
         >
-            {isPlaying ? <Pause className="w-3" /> : <Play className="ml-1 w-4 h-4 group-active:text-current" />}
+            {isPlaying ? (
+                <Pause className="w-3" />
+            ) : isLoading ? (
+                <div className="absolute inset-[1px]">
+                    <div className="absolute inset-0 rounded-full border-4 border-blue-300 opacity-25"></div>
+                    <div className="absolute inset-0 rounded-full border-4 border-t-orange-600 animate-spin"></div>
+                </div>
+            ) : (
+                <Play className="ml-1 w-4 h-4 group-active:text-current" />
+            )}
         </div>
     ) : eventStarted ? (
         <div className="flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4">
@@ -130,6 +141,7 @@ export interface PlayButtonProps extends PlayButtonSharedProps {
 export function PlayButton(props: PlayButtonProps): ReactElement {
     const { id, url, offset = 0, metaData, origin = 'eventList' } = props;
     const { addAlert, removeAlert, alertList } = useAlertList();
+    const [isLoading, setIsLoading] = useState(false);
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
     const isPlaying = audioPlayer.playing(id);
@@ -163,7 +175,9 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
                     },
                     'out'
                 );
+                setIsLoading(false);
             } else if (url) {
+                setIsLoading(true);
                 void track('Click', 'Audio Play', { eventId: id, url });
                 void audioPlayer.play({ id, url, offset, metaData });
 
@@ -210,6 +224,13 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
         [id, alertOnLive]
     );
     const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
+
+    useEffect(() => {
+        if (audioPlayer.playing(id) && isLoading) {
+            setIsLoading(false);
+        }
+    }, [isLoading, audioPlayer.playing(id)]);
+
     return (
         <PlayButtonUI
             alertOnLive={alertOnLive}
@@ -217,6 +238,7 @@ export function PlayButton(props: PlayButtonProps): ReactElement {
             eventStarted={eventStarted}
             hasAudio={!!url}
             isPlaying={audioPlayer.playing(id)}
+            isLoading={isLoading}
             toggleAlert={toggleAlert}
             togglePlayback={togglePlayback}
         />

@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { MouseEvent, ReactElement, RefObject, useCallback, useEffect, useRef } from 'react';
+import React, { MouseEvent, ReactElement, RefObject, useCallback, useEffect, useRef, useState } from 'react';
 
 import { Button } from '@aiera/client-sdk/components/Button';
 import { Back15 } from '@aiera/client-sdk/components/Svg/Back15';
@@ -48,6 +48,7 @@ interface PlaybarUIProps extends PlaybarSharedProps {
     fastForward: () => void;
     fixed?: boolean;
     isPlaying: boolean;
+    isLoading: boolean;
     knobLeft?: number;
     knobRef: RefObject<HTMLDivElement>;
     onClickCalendar: (event: MouseEvent) => void;
@@ -75,6 +76,7 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
         fastForward,
         fixed,
         isPlaying,
+        isLoading,
         hideEventDetails,
         knobLeft = 0,
         knobRef,
@@ -220,10 +222,23 @@ export function PlaybarUI(props: PlaybarUIProps): ReactElement {
                     </button>
                     <Button
                         kind="primary"
-                        className={classNames('flex items-center justify-center w-[30px] h-[30px] rounded-full mx-0.5')}
+                        className={classNames(
+                            'flex relative items-center justify-center w-[32px] h-[32px] rounded-full mx-0.5'
+                        )}
                         onClick={togglePlayback}
                     >
-                        <div>{isPlaying ? <Pause className="w-2.5" /> : <Play className="ml-0.5 w-3" />}</div>
+                        <div>
+                            {isPlaying ? (
+                                <Pause className="w-3" />
+                            ) : isLoading ? (
+                                <div className="absolute inset-0">
+                                    <div className="absolute inset-0 rounded-full border-4 border-blue-300 opacity-25"></div>
+                                    <div className="absolute inset-0 rounded-full border-4 border-t-orange-600 animate-spin"></div>
+                                </div>
+                            ) : (
+                                <Play className="ml-0.5 w-3" />
+                            )}
+                        </div>
                     </Button>
                     <button
                         id="playbar-forward15"
@@ -327,6 +342,7 @@ function usePlaybarDrag(
 }
 
 function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaData) {
+    const [isLoading, setIsLoading] = useState(false);
     const audioPlayer = useAudioPlayer();
     const track = useTrack();
     useEffect(() => {
@@ -376,7 +392,9 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
                 },
                 'out'
             );
+            setIsLoading(false);
         } else {
+            setIsLoading(true);
             void track('Click', 'Audio Play', { eventId: id, url });
             if (id) {
                 void audioPlayer.play({ id, url: url || '', offset, metaData });
@@ -448,10 +466,17 @@ function usePlayer(id?: string, url?: string, offset = 0, metaData?: EventMetaDa
         }
     }, [audioPlayer.playingStartTime, id, url, offset, ...(Object.values(metaData || {}) as unknown[])]);
 
+    useEffect(() => {
+        if (isPlaying && isLoading) {
+            setIsLoading(false);
+        }
+    }, [isLoading, isPlaying]);
+
     return {
         audioPlayer,
         seekToEnd,
         isActive,
+        isLoading,
         isPlaying,
         isPlayingAnotherEvent,
         togglePlayback,
@@ -484,6 +509,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
         isActive,
         isPlaying,
         isPlayingAnotherEvent,
+        isLoading,
         togglePlayback,
         fastForward,
         rewind,
@@ -516,6 +542,7 @@ export function Playbar(props: PlaybarProps): ReactElement | null {
             fastForward={fastForward}
             fixed={!!(id && url)}
             hideEventDetails={hideEventDetails}
+            isLoading={isLoading}
             isPlaying={isPlaying}
             knobLeft={knobLeft}
             knobRef={knobRef}
