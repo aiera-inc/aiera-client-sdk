@@ -173,6 +173,7 @@ export function AieraChat(): ReactElement {
                     onAnimationEnd={onTranscriptAnimationEnd}
                 >
                     <Transcript
+                        useConfigOptions
                         eventId={selectedSource.targetId}
                         initialItemId={selectedSource.contentId}
                         onBack={onAnimateTranscriptExit}
