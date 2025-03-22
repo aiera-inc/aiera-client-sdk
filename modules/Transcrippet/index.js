@@ -1033,7 +1033,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context7);
         }
-        function useState10(initialState) {
+        function useState11(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1045,7 +1045,7 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect15(create, deps) {
+        function useEffect16(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1826,7 +1826,7 @@ var require_react_development = __commonJS({
         exports2.useContext = useContext8;
         exports2.useDebugValue = useDebugValue;
         exports2.useDeferredValue = useDeferredValue;
-        exports2.useEffect = useEffect15;
+        exports2.useEffect = useEffect16;
         exports2.useId = useId;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useInsertionEffect = useInsertionEffect;
@@ -1834,7 +1834,7 @@ var require_react_development = __commonJS({
         exports2.useMemo = useMemo5;
         exports2.useReducer = useReducer;
         exports2.useRef = useRef6;
-        exports2.useState = useState10;
+        exports2.useState = useState11;
         exports2.useSyncExternalStore = useSyncExternalStore;
         exports2.useTransition = useTransition;
         exports2.version = ReactVersion;
@@ -76656,9 +76656,9 @@ function BellSlash({ className, alt = "Bell Slash" }) {
 
 // src/components/PlayButton/index.tsx
 function PlayButtonUI(props) {
-  const { alertOnLive, connectionStatus, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+  const { alertOnLive, connectionStatus, eventStarted, hasAudio, isLoading, isPlaying, toggleAlert, togglePlayback } = props;
   return hasAudio ? /* @__PURE__ */ import_react27.default.createElement("div", {
-    className: (0, import_classnames10.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+    className: (0, import_classnames10.default)("group flex items-center justify-center relative w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -76677,7 +76677,13 @@ function PlayButtonUI(props) {
     onClick: togglePlayback
   }, isPlaying ? /* @__PURE__ */ import_react27.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react27.default.createElement(Play, {
+  }) : isLoading ? /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "absolute inset-[1px]"
+  }, /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "absolute inset-0 rounded-full border-4 border-blue-300 opacity-25"
+  }), /* @__PURE__ */ import_react27.default.createElement("div", {
+    className: "absolute inset-0 rounded-full border-4 border-t-orange-600 animate-spin"
+  })) : /* @__PURE__ */ import_react27.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
   })) : eventStarted ? /* @__PURE__ */ import_react27.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4"
@@ -76720,6 +76726,7 @@ function PlayButtonUI(props) {
 function PlayButton(props) {
   const { id, url, offset = 0, metaData, origin = "eventList" } = props;
   const { addAlert, removeAlert, alertList } = useAlertList();
+  const [isLoading, setIsLoading] = (0, import_react27.useState)(false);
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
@@ -76748,7 +76755,9 @@ function PlayButton(props) {
           eventType: activeMetaData.eventType
         }
       }, "out");
+      setIsLoading(false);
     } else if (url) {
+      setIsLoading(true);
       void track("Click", "Audio Play", { eventId: id, url });
       void audioPlayer.play({ id, url, offset, metaData });
       audioPlayer.setPlayingStartTime(new Date().getTime());
@@ -76785,12 +76794,18 @@ function PlayButton(props) {
     }
   }, [id, alertOnLive]);
   const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
+  (0, import_react27.useEffect)(() => {
+    if (audioPlayer.playing(id) && isLoading) {
+      setIsLoading(false);
+    }
+  }, [isLoading, audioPlayer.playing(id)]);
   return /* @__PURE__ */ import_react27.default.createElement(PlayButtonUI, {
     alertOnLive,
     connectionStatus: metaData.connectionStatus,
     eventStarted,
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
+    isLoading,
     toggleAlert,
     togglePlayback
   });

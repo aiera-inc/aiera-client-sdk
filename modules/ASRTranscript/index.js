@@ -1034,7 +1034,7 @@ var require_react_development = __commonJS({
           }
           return dispatcher.useContext(Context8);
         }
-        function useState22(initialState) {
+        function useState24(initialState) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useState(initialState);
         }
@@ -1042,11 +1042,11 @@ var require_react_development = __commonJS({
           var dispatcher = resolveDispatcher();
           return dispatcher.useReducer(reducer, initialArg, init);
         }
-        function useRef12(initialValue) {
+        function useRef13(initialValue) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useRef(initialValue);
         }
-        function useEffect23(create, deps) {
+        function useEffect24(create, deps) {
           var dispatcher = resolveDispatcher();
           return dispatcher.useEffect(create, deps);
         }
@@ -1827,15 +1827,15 @@ var require_react_development = __commonJS({
         exports2.useContext = useContext10;
         exports2.useDebugValue = useDebugValue;
         exports2.useDeferredValue = useDeferredValue;
-        exports2.useEffect = useEffect23;
+        exports2.useEffect = useEffect24;
         exports2.useId = useId;
         exports2.useImperativeHandle = useImperativeHandle;
         exports2.useInsertionEffect = useInsertionEffect;
         exports2.useLayoutEffect = useLayoutEffect4;
         exports2.useMemo = useMemo10;
         exports2.useReducer = useReducer2;
-        exports2.useRef = useRef12;
-        exports2.useState = useState22;
+        exports2.useRef = useRef13;
+        exports2.useState = useState24;
         exports2.useSyncExternalStore = useSyncExternalStore;
         exports2.useTransition = useTransition;
         exports2.version = ReactVersion;
@@ -86026,10 +86026,20 @@ function useDrag(dragOpts) {
   const [isDragging, setIsDragging] = (0, import_react32.useState)(false);
   const [initialPos, setPosition] = (0, import_react32.useState)({ x: 0, y: 0 });
   const [movePos, setMovement] = (0, import_react32.useState)({ x: 0, y: 0 });
+  const lastTouchPosition = (0, import_react32.useRef)(null);
   (0, import_react32.useEffect)(() => {
     function onMouseDown(event) {
       onDragStart == null ? void 0 : onDragStart(event, setPosition);
       setIsDragging(true);
+    }
+    function onTouchStart(event) {
+      if (event.touches.length === 1) {
+        event.preventDefault();
+        onDragStart == null ? void 0 : onDragStart(event, setPosition);
+        const touch = event.touches[0];
+        lastTouchPosition.current = { x: (touch == null ? void 0 : touch.clientX) || 0, y: (touch == null ? void 0 : touch.clientY) || 0 };
+        setIsDragging(true);
+      }
     }
     function onMouseMove(event) {
       if (isDragging) {
@@ -86037,6 +86047,22 @@ function useDrag(dragOpts) {
           x: prevMovement.x + event.movementX,
           y: prevMovement.y + event.movementY
         }));
+      }
+    }
+    function onTouchMove(event) {
+      if (isDragging && event.touches.length === 1) {
+        event.preventDefault();
+        const touch = event.touches[0];
+        const currentPosition = { x: (touch == null ? void 0 : touch.clientX) || 0, y: (touch == null ? void 0 : touch.clientY) || 0 };
+        if (lastTouchPosition.current) {
+          const deltaX = currentPosition.x - lastTouchPosition.current.x;
+          const deltaY = currentPosition.y - lastTouchPosition.current.y;
+          setMovement((prevMovement) => ({
+            x: prevMovement.x + deltaX,
+            y: prevMovement.y + deltaY
+          }));
+        }
+        lastTouchPosition.current = currentPosition;
       }
     }
     function onMouseUp(event) {
@@ -86047,19 +86073,36 @@ function useDrag(dragOpts) {
         setMovement({ x: 0, y: 0 });
       }
     }
-    if (dragTarget.current) {
-      dragTarget.current.addEventListener("mousedown", onMouseDown);
+    function onTouchEnd(event) {
+      if (isDragging) {
+        event.preventDefault();
+        onDragEnd == null ? void 0 : onDragEnd(event);
+        setIsDragging(false);
+        setPosition({ x: 0, y: 0 });
+        setMovement({ x: 0, y: 0 });
+        lastTouchPosition.current = null;
+      }
+    }
+    const target = dragTarget.current;
+    if (target) {
+      target.addEventListener("mousedown", onMouseDown);
       document.addEventListener("mousemove", onMouseMove);
       document.addEventListener("mouseup", onMouseUp);
+      target.addEventListener("touchstart", onTouchStart, { passive: false });
+      document.addEventListener("touchmove", onTouchMove, { passive: false });
+      document.addEventListener("touchend", onTouchEnd, { passive: false });
     }
     return () => {
-      if (dragTarget.current) {
-        dragTarget.current.removeEventListener("mousedown", onMouseDown);
+      if (target) {
+        target.removeEventListener("mousedown", onMouseDown);
         document.removeEventListener("mousemove", onMouseMove);
         document.removeEventListener("mouseup", onMouseUp);
+        target.removeEventListener("touchstart", onTouchStart);
+        document.removeEventListener("touchmove", onTouchMove);
+        document.removeEventListener("touchend", onTouchEnd);
       }
     };
-  }, [dragTarget.current, isDragging]);
+  }, [dragTarget.current, isDragging, onDragStart, onDragEnd]);
   return [isDragging, initialPos.x + movePos.x, initialPos.y + movePos.y];
 }
 
@@ -86115,6 +86158,7 @@ function PlaybarUI(props) {
     fastForward,
     fixed,
     isPlaying,
+    isLoading,
     hideEventDetails,
     knobLeft = 0,
     knobRef,
@@ -86236,11 +86280,17 @@ function PlaybarUI(props) {
     className: "w-[16px]"
   })), /* @__PURE__ */ import_react34.default.createElement(Button, {
     kind: "primary",
-    className: (0, import_classnames15.default)("flex items-center justify-center w-[30px] h-[30px] rounded-full mx-0.5"),
+    className: (0, import_classnames15.default)("flex relative items-center justify-center w-[32px] h-[32px] rounded-full mx-0.5"),
     onClick: togglePlayback
   }, /* @__PURE__ */ import_react34.default.createElement("div", null, isPlaying ? /* @__PURE__ */ import_react34.default.createElement(Pause, {
-    className: "w-2.5"
-  }) : /* @__PURE__ */ import_react34.default.createElement(Play, {
+    className: "w-3"
+  }) : isLoading ? /* @__PURE__ */ import_react34.default.createElement("div", {
+    className: "absolute inset-0"
+  }, /* @__PURE__ */ import_react34.default.createElement("div", {
+    className: "absolute inset-0 rounded-full border-4 border-blue-300 opacity-25"
+  }), /* @__PURE__ */ import_react34.default.createElement("div", {
+    className: "absolute inset-0 rounded-full border-4 border-t-orange-600 animate-spin"
+  })) : /* @__PURE__ */ import_react34.default.createElement(Play, {
     className: "ml-0.5 w-3"
   }))), /* @__PURE__ */ import_react34.default.createElement("button", {
     id: "playbar-forward15",
@@ -86323,6 +86373,7 @@ function usePlaybarDrag(audioPlayer) {
   return [knobRef, knobLeft, onClickTrack, percentPlayed];
 }
 function usePlayer(id, url, offset = 0, metaData) {
+  const [isLoading, setIsLoading] = (0, import_react34.useState)(false);
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   (0, import_react34.useEffect)(() => {
@@ -86365,7 +86416,9 @@ function usePlayer(id, url, offset = 0, metaData) {
           eventType: activeMetaData == null ? void 0 : activeMetaData.eventType
         }
       }, "out");
+      setIsLoading(false);
     } else {
+      setIsLoading(true);
       void track("Click", "Audio Play", { eventId: id, url });
       if (id) {
         void audioPlayer.play({ id, url: url || "", offset, metaData });
@@ -86430,10 +86483,16 @@ function usePlayer(id, url, offset = 0, metaData) {
       void audioPlayer.play({ id, url: url || "", offset, metaData });
     }
   }, [audioPlayer.playingStartTime, id, url, offset, ...Object.values(metaData || {})]);
+  (0, import_react34.useEffect)(() => {
+    if (isPlaying && isLoading) {
+      setIsLoading(false);
+    }
+  }, [isLoading, isPlaying]);
   return {
     audioPlayer,
     seekToEnd,
     isActive,
+    isLoading,
     isPlaying,
     isPlayingAnotherEvent,
     togglePlayback,
@@ -86452,6 +86511,7 @@ function Playbar(props) {
     isActive,
     isPlaying,
     isPlayingAnotherEvent,
+    isLoading,
     togglePlayback,
     fastForward,
     rewind,
@@ -86477,6 +86537,7 @@ function Playbar(props) {
     fastForward,
     fixed: !!(id && url),
     hideEventDetails,
+    isLoading,
     isPlaying,
     knobLeft,
     knobRef,
@@ -88771,9 +88832,9 @@ function BellSlash({ className, alt = "Bell Slash" }) {
 
 // src/components/PlayButton/index.tsx
 function PlayButtonUI(props) {
-  const { alertOnLive, connectionStatus, eventStarted, hasAudio, isPlaying, toggleAlert, togglePlayback } = props;
+  const { alertOnLive, connectionStatus, eventStarted, hasAudio, isLoading, isPlaying, toggleAlert, togglePlayback } = props;
   return hasAudio ? /* @__PURE__ */ import_react55.default.createElement("div", {
-    className: (0, import_classnames28.default)("group flex items-center justify-center w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+    className: (0, import_classnames28.default)("group flex items-center justify-center relative w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -88792,7 +88853,13 @@ function PlayButtonUI(props) {
     onClick: togglePlayback
   }, isPlaying ? /* @__PURE__ */ import_react55.default.createElement(Pause, {
     className: "w-3"
-  }) : /* @__PURE__ */ import_react55.default.createElement(Play, {
+  }) : isLoading ? /* @__PURE__ */ import_react55.default.createElement("div", {
+    className: "absolute inset-[1px]"
+  }, /* @__PURE__ */ import_react55.default.createElement("div", {
+    className: "absolute inset-0 rounded-full border-4 border-blue-300 opacity-25"
+  }), /* @__PURE__ */ import_react55.default.createElement("div", {
+    className: "absolute inset-0 rounded-full border-4 border-t-orange-600 animate-spin"
+  })) : /* @__PURE__ */ import_react55.default.createElement(Play, {
     className: "ml-1 w-4 h-4 group-active:text-current"
   })) : eventStarted ? /* @__PURE__ */ import_react55.default.createElement("div", {
     className: "flex items-center justify-center w-full h-full text-blue-100 dark:text-bluegray-6 group-hover:text-blue-300 dark:group-hover:text-bluegray-4"
@@ -88835,6 +88902,7 @@ function PlayButtonUI(props) {
 function PlayButton(props) {
   const { id, url, offset = 0, metaData, origin = "eventList" } = props;
   const { addAlert, removeAlert, alertList } = useAlertList();
+  const [isLoading, setIsLoading] = (0, import_react55.useState)(false);
   const audioPlayer = useAudioPlayer();
   const track = useTrack();
   const isPlaying = audioPlayer.playing(id);
@@ -88863,7 +88931,9 @@ function PlayButton(props) {
           eventType: activeMetaData.eventType
         }
       }, "out");
+      setIsLoading(false);
     } else if (url) {
+      setIsLoading(true);
       void track("Click", "Audio Play", { eventId: id, url });
       void audioPlayer.play({ id, url, offset, metaData });
       audioPlayer.setPlayingStartTime(new Date().getTime());
@@ -88900,12 +88970,18 @@ function PlayButton(props) {
     }
   }, [id, alertOnLive]);
   const eventStarted = metaData.eventDate ? new Date(metaData.eventDate).getTime() < new Date().getTime() : false;
+  (0, import_react55.useEffect)(() => {
+    if (audioPlayer.playing(id) && isLoading) {
+      setIsLoading(false);
+    }
+  }, [isLoading, audioPlayer.playing(id)]);
   return /* @__PURE__ */ import_react55.default.createElement(PlayButtonUI, {
     alertOnLive,
     connectionStatus: metaData.connectionStatus,
     eventStarted,
     hasAudio: !!url,
     isPlaying: audioPlayer.playing(id),
+    isLoading,
     toggleAlert,
     togglePlayback
   });
