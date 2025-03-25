@@ -2,6 +2,7 @@ import gql from 'graphql-tag';
 import { useCallback, useEffect, useState } from 'react';
 import { RequestPolicy, useClient, useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import {
     ChartBlock,
     ChartBlockMeta,
@@ -536,6 +537,8 @@ export const useChatSession = ({
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
+    const config = useConfig();
+
     // Get urql client for manual cache updates
     const client = useClient();
 
@@ -561,7 +564,7 @@ export const useChatSession = ({
             console.log('Creating chat message prompt:', { content, sessionId });
 
             return createChatMessagePromptMutation({
-                input: { content, sessionId },
+                input: { content, sessionId, sessionUserId: config.tracking?.userId },
             })
                 .then((resp) => {
                     if (resp.error) {
@@ -610,7 +613,7 @@ export const useChatSession = ({
         pause: !chatId || chatId === 'new',
         requestPolicy,
         variables: {
-            filter: { includeMessages: true, sessionId: chatId },
+            filter: { includeMessages: true, sessionId: chatId, sessionUserId: config.tracking?.userId },
         },
     });
 
