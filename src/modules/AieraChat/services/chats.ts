@@ -172,7 +172,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                 // callback(error);
             }
         },
-        [createAblyTokenMutationFn]
+        [config.tracking?.userId, createAblyTokenMutationFn]
     );
 
     const createAblyToken = useCallback(
@@ -289,7 +289,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     setError('Error clearing sources for chat session');
                 });
         },
-        [clearSourcesChatMutation, setError, setSessions]
+        [config.tracking?.userId, clearSourcesChatMutation, setError, setSessions]
     );
 
     const [__, createChatMutation] = useMutation<CreateChatSessionMutation, CreateChatSessionMutationVariables>(gql`
@@ -347,7 +347,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     return null;
                 });
         },
-        [createChatMutation, setError, setSessions]
+        [config.tracking?.userId, createChatMutation, setError, setSessions]
     );
 
     const [___, deleteChatMutation] = useMutation<DeleteChatSessionMutation, DeleteChatSessionMutationVariables>(gql`
@@ -371,7 +371,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     setError('Error deleting chat session');
                 });
         },
-        [deleteChatMutation, setError, setSessions]
+        [config.tracking?.userId, deleteChatMutation, setError, setSessions]
     );
 
     const [____, updateChatMutation] = useMutation<UpdateChatSessionMutation, UpdateChatSessionMutationVariables>(gql`
@@ -422,7 +422,7 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     setError('Error updating chat session');
                 });
         },
-        [updateChatMutation, setError, setSessions]
+        [config.tracking?.userId, setError, setSessions, updateChatMutation]
     );
 
     const chatSessionsQuery = useQuery<ChatSessionsQuery, ChatSessionsQueryVariables>({

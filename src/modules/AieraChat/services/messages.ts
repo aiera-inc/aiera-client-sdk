@@ -605,7 +605,7 @@ export const useChatSession = ({
                     return null;
                 });
         },
-        [createChatMessagePromptMutation]
+        [config.tracking?.userId, createChatMessagePromptMutation]
     );
 
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({
