@@ -74138,7 +74138,7 @@ function createGQLClient(config) {
         deleteChatSession: (result, args, cache) => {
           var _a2;
           if ((_a2 = result.deleteChatSession) == null ? void 0 : _a2.success) {
-            cache.invalidate({ __typename: "ChatSession", id: args.sessionId });
+            cache.invalidate({ __typename: "ChatSession", id: args.input.sessionId });
           }
         }
       }
@@ -75043,8 +75043,8 @@ var RealtimeCurrentUserDocument = lib_default`
 }
     `;
 var CreateAblyTokenDocument = lib_default`
-    mutation CreateAblyToken($sessionId: ID!) {
-  createAblyToken(sessionId: $sessionId) {
+    mutation CreateAblyToken($input: CreateAblyTokenInput!) {
+  createAblyToken(input: $input) {
     data {
       keyName
       clientId
@@ -75058,8 +75058,8 @@ var CreateAblyTokenDocument = lib_default`
 }
     `;
 var ClearChatSessionSourcesDocument = lib_default`
-    mutation ClearChatSessionSources($sessionId: ID!) {
-  clearChatSessionSources(sessionId: $sessionId) {
+    mutation ClearChatSessionSources($input: ClearSourcesInput!) {
+  clearChatSessionSources(input: $input) {
     success
   }
 }
@@ -75097,8 +75097,8 @@ var CreateChatSessionDocument = lib_default`
 }
     `;
 var DeleteChatSessionDocument = lib_default`
-    mutation DeleteChatSession($sessionId: ID!) {
-  deleteChatSession(sessionId: $sessionId) {
+    mutation DeleteChatSession($input: DeleteChatSessionInput!) {
+  deleteChatSession(input: $input) {
     success
   }
 }
@@ -75125,8 +75125,8 @@ var UpdateChatSessionDocument = lib_default`
 }
     `;
 var ChatSessionsDocument = lib_default`
-    query ChatSessions {
-  chatSessions {
+    query ChatSessions($filter: ChatSessionsFilter) {
+  chatSessions(filter: $filter) {
     id
     createdAt
     sources {
@@ -75199,6 +75199,25 @@ var CreateChatMessagePromptDocument = lib_default`
   }
 }
     ${ChatMessagePromptFragmentFragmentDoc}`;
+var ChatSessionsRefetchDocument = lib_default`
+    query ChatSessionsRefetch {
+  chatSessions {
+    id
+    createdAt
+    sources {
+      confirmed
+      name
+      sourceId
+      type
+    }
+    status
+    title
+    titleStatus
+    updatedAt
+    userId
+  }
+}
+    `;
 var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
