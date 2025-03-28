@@ -96,7 +96,6 @@ export const useAbly = (): UseAblyReturn => {
             if (!sessionId || sessionId === 'new') {
                 return Promise.resolve(null);
             }
-            console.log({ createAblyToken: true, sessionId });
 
             try {
                 // Initialize Ably with the auth callback
@@ -118,18 +117,29 @@ export const useAbly = (): UseAblyReturn => {
                         console.log(`Subscribed to channel ${channelName}`);
 
                         // Subscribe to ably channel
-                        // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                        chatChannel.subscribe((message) => {
-                            try {
-                                const decoder = new TextDecoder('utf-8'); // Assuming the message is UTF-8 encoded
-                                const decodedMessage = decoder.decode(message.data as BufferSource);
-                                // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                                const jsonObject = JSON.parse(decodedMessage);
-                                console.log('Message from Ably: ', jsonObject);
-                            } catch (err) {
-                                setError(`Error handling message`);
-                            }
-                        });
+                        chatChannel
+                            .subscribe((message) => {
+                                try {
+                                    console.log('Received message from Ably:', message);
+
+                                    // The data is already a string, not a BufferSource
+                                    // So we don't need to use TextDecoder
+                                    const base64EncodedData = message.data as string;
+
+                                    // Decode the base64 string
+                                    const decodedData = atob(base64EncodedData);
+                                    console.log({ decodedData });
+
+                                    // Parse the JSON
+                                    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                                    const jsonObject = JSON.parse(decodedData);
+                                    console.log('Parsed message from Ably:', jsonObject);
+                                } catch (err) {
+                                    console.error('Error handling message:', err);
+                                    setError(`Error handling message: ${(err as Error).message}`);
+                                }
+                            })
+                            .catch((err: Error) => console.log('Error with Ably channel subscription', err.message));
                     }
                 });
 
