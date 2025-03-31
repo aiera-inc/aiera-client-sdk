@@ -59,7 +59,7 @@ export enum ChatMessageType {
     RESPONSE = 'response',
 }
 
-interface ChatMessageSource {
+export interface ChatMessageSource {
     targetId: string;
     targetTitle: string;
     targetType: string;
@@ -131,7 +131,7 @@ interface UseChatSessionReturn {
 /**
  * Utility function to check if a value is not null or undefined
  */
-function isNonNullable<T>(value: T): value is NonNullable<T> {
+export function isNonNullable<T>(value: T): value is NonNullable<T> {
     return value !== null && value !== undefined;
 }
 
