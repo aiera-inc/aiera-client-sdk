@@ -12,7 +12,7 @@ import {
     normalizeContentBlock,
 } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables } from '@aiera/client-sdk/types';
-import { ChatSource, ContentBlock } from '@aiera/client-sdk/types/generated';
+import { ChatSource, Citation, ContentBlockType, TextBlock as RawTextBlock } from '@aiera/client-sdk/types/generated';
 
 interface AblyToken {
     clientId: string;
@@ -35,9 +35,23 @@ type TokenParamsData = {
     sessionId: string;
 };
 
+type PartialTextContent = {
+    citation?: Citation;
+    value: string;
+};
+
+type PartialTextBlock = {
+    content: PartialTextContent[];
+    meta: {
+        style: 'paragraph' | 'h1' | 'h2' | 'h3';
+    };
+    type: ContentBlockType.Text;
+};
+
 // Interface for the base structure of the message data
 interface AblyMessageData {
-    blocks?: ContentBlock[];
+    __typename: string;
+    blocks?: PartialTextBlock[];
     id: string | null;
     created_at: string;
     message_type: string; // 'response', 'prompt', etc.
@@ -130,7 +144,14 @@ export const useAbly = (): UseAblyReturn => {
                     console.log('We got a response here!');
                     // Transform blocks to the expected format
                     const blocks = (jsonObject.blocks || [])
-                        .map((block) => normalizeContentBlock(block))
+                        .map((block) =>
+                            normalizeContentBlock({
+                                __typename: 'TextBlock',
+                                textContent: block.content,
+                                textMeta: block.meta,
+                                type: ContentBlockType.Text,
+                            } as RawTextBlock)
+                        )
                         .filter(isNonNullable);
                     console.log({ blocks });
                     return {
@@ -220,6 +241,7 @@ export const useAbly = (): UseAblyReturn => {
                                             const existingIndex = prev.findIndex(
                                                 (msg) => msg.ordinalId === parsedMessage.ordinalId
                                             );
+                                            console.log({ prev, parsedMessage, existingIndex });
 
                                             if (existingIndex >= 0) {
                                                 // Update existing message
@@ -277,10 +299,10 @@ export const useAbly = (): UseAblyReturn => {
     );
 
     useEffect(() => {
+        console.log({ chatId, partials });
         // Immediately clear messages when changing sessions
         setPartials([]);
     }, [chatId]);
 
-    console.log({ partials });
     return { ably, createAblyToken, error, isConnected, partialMessages: partials };
 };
