@@ -8,7 +8,7 @@ import {
     useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { Fragment, RefObject, useCallback, useEffect, useMemo } from 'react';
 import { Prompt } from './Prompt';
 import {
     ChatMessage,
@@ -30,7 +30,6 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
-import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 
 let idCounter = 0;
 
@@ -119,35 +118,6 @@ export function updateVirtuoso(
     }
 }
 
-// Helper function to check if a message matches by ordinalId
-function isMatchingMessage(message: ChatMessage, targetMessage: ChatMessage): boolean {
-    console.log({ isMatchingMessage: true, message, targetMessage });
-    return message.ordinalId === targetMessage.ordinalId;
-}
-
-// Helper function to update a streaming message with new content
-function updateStreamingMessage(
-    streamingMessage: ChatMessageResponse,
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>
-) {
-    console.log({ updateStreamingMessage: true, streamingMessage });
-    virtuosoRef.current?.data.map(
-        (message) => {
-            if (isMatchingMessage(message, streamingMessage)) {
-                return {
-                    ...streamingMessage,
-                };
-            }
-            return message;
-        },
-        {
-            location() {
-                return { index: 'LAST', align: 'end', behavior: 'smooth' };
-            },
-        }
-    );
-}
-
 export function Messages({
     onOpenSources,
     onSubmit,
@@ -162,10 +132,6 @@ export function Messages({
     const { createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { partialMessages } = useAbly();
-    console.log({ Messages: true, partialMessages, chatId, chatStatus });
-    // Track last prompt for context in streaming responses
-    const lastPromptRef = useRef<string>('');
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -262,46 +228,6 @@ export function Messages({
             }
         }
     }, [messages]);
-
-    // Process partial messages from Ably for streaming
-    useEffect(() => {
-        console.log({ partialMessages, chatStatus });
-        if (partialMessages.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
-            const latestPartial = partialMessages[partialMessages.length - 1];
-            console.log({ latestPartial });
-
-            // Make sure we have the last prompt content
-            if (latestPartial?.type === ChatMessageType.RESPONSE) {
-                // Enhance the partial with the last prompt content for context
-                const enhancedPartial = {
-                    ...latestPartial,
-                    prompt: lastPromptRef.current,
-                };
-
-                // Find if this partial is already in the Virtuoso list
-                const existingInVirtuoso = virtuosoRef.current?.data.find(
-                    (m) =>
-                        m.type === ChatMessageType.RESPONSE &&
-                        (m.id === latestPartial.id || m.ordinalId === latestPartial.ordinalId)
-                );
-                console.log({ existingInVirtuoso });
-
-                if (existingInVirtuoso) {
-                    // Update existing response message
-                    updateStreamingMessage(enhancedPartial as ChatMessageResponse, virtuosoRef);
-                } else {
-                    // This is a new response, append it
-                    virtuosoRef.current?.data.append([enhancedPartial], ({ scrollInProgress, atBottom }) => {
-                        return {
-                            index: 'LAST',
-                            align: 'end',
-                            behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                        };
-                    });
-                }
-            }
-        }
-    }, [partialMessages, chatStatus]);
 
     // Reset messages when the selected chat changes
     useEffect(() => {
