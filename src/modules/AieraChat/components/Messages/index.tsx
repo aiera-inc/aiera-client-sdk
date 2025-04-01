@@ -134,7 +134,7 @@ export function Messages({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
     console.log({ MessagesComponent: true, messages });
-    const { partials } = useAbly();
+    const { createAblyToken, partials } = useAbly();
     console.log({ MessagesComponent: true, partials });
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -201,6 +201,16 @@ export function Messages({
                             console.log('Updating virtuoso with new prompt message:', session.promptMessage);
                             // Only prompt messages can be created when creating a chat session
                             updateVirtuoso(prompt, session.promptMessage as ChatMessagePrompt, virtuosoRef);
+                            createAblyToken(session.id)
+                                .then((tokenData) => {
+                                    console.log(
+                                        `Successfully created ably token for session ${session.id}:`,
+                                        tokenData
+                                    );
+                                })
+                                .catch((ablyError: Error) => {
+                                    console.log(`Error creating Ably token: ${ablyError.message}`);
+                                });
                         }
                     })
                     .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
