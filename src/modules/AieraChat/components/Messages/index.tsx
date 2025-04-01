@@ -30,6 +30,7 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 
 let idCounter = 0;
 
@@ -72,8 +73,8 @@ export function updateVirtuoso(
 ) {
     // Add the user's message
     const myMessage: ChatMessagePrompt = {
-        id: `${idCounter++}`,
-        ordinalId: `${idCounter++}`,
+        id: message ? message.id : `${idCounter++}`,
+        ordinalId: message ? message.ordinalId : `${idCounter++}`,
         prompt: message?.prompt || prompt,
         type: ChatMessageType.PROMPT,
         status: ChatMessageStatus.COMPLETED,
@@ -132,6 +133,9 @@ export function Messages({
     const { createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
+    console.log({ MessagesComponent: true, messages });
+    const { partials } = useAbly();
+    console.log({ MessagesComponent: true, partials });
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -192,7 +196,9 @@ export function Messages({
             if (chatId === 'new') {
                 onSubmit(prompt)
                     .then((session) => {
+                        console.log({ Messages: true, handleSubmit: true, session });
                         if (session && session.promptMessage) {
+                            console.log('Updating virtuoso with new prompt message:', session.promptMessage);
                             // Only prompt messages can be created when creating a chat session
                             updateVirtuoso(prompt, session.promptMessage as ChatMessagePrompt, virtuosoRef);
                         }

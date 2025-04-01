@@ -69,6 +69,7 @@ interface AblyMessageData {
  */
 export const useAbly = (): UseAblyReturn => {
     const { chatId } = useChatStore();
+    const [localChatId, setLocalChatId] = useState<string | undefined>(chatId);
     const [partials, setPartials] = useState<ChatMessage[]>([]);
     const [ably, setAbly] = useState<Realtime | undefined>(undefined);
     const [channelSubscribed, setChannelSubscribed] = useState(false);
@@ -318,12 +319,19 @@ export const useAbly = (): UseAblyReturn => {
     );
 
     useEffect(() => {
-        console.log('Chat ID changed:', chatId);
-        // Immediately clear messages when changing sessions
-        setPartials([]);
-        setLastMessageId(null);
-        setChannelSubscribed(false); // Reset subscription state when chat changes
+        console.log(`Setting useAbly local chatId to ${chatId}`);
+        setLocalChatId(chatId);
     }, [chatId]);
+
+    useEffect(() => {
+        if (localChatId && localChatId !== chatId) {
+            console.log('Chat ID changed:', chatId);
+            // Immediately clear messages when changing sessions
+            setPartials([]);
+            setLastMessageId(null);
+            setChannelSubscribed(false); // Reset subscription state when chat changes
+        }
+    }, [chatId, localChatId]);
 
     console.log({ useAbly: true, partials });
     return { ably, createAblyToken, error, isConnected, partials };

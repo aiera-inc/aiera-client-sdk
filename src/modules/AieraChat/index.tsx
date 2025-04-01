@@ -66,6 +66,7 @@ export function AieraChat(): ReactElement {
             if (chatId === 'new') {
                 return createSession({ prompt, sources, title: chatTitle })
                     .then((newSession) => {
+                        console.log({ AieraChat: true, handleMessageSubmit: true, newSession });
                         if (newSession && newSession.id) {
                             onSelectChat(
                                 newSession.id,
