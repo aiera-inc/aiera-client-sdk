@@ -4,15 +4,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useMutation } from 'urql';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
-import {
-    ChatMessage,
-    ChatMessageStatus,
-    ChatMessageType,
-    isNonNullable,
-    normalizeContentBlock,
-} from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables } from '@aiera/client-sdk/types';
-import { ChatSource, Citation, ContentBlockType, TextBlock as RawTextBlock } from '@aiera/client-sdk/types/generated';
+import { ChatSource, Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
 
 interface AblyToken {
     clientId: string;
@@ -23,7 +16,7 @@ interface UseAblyReturn {
     createAblyToken: (sessionId: string) => Promise<AblyToken | null>;
     error?: string;
     isConnected: boolean;
-    partials: ChatMessage[];
+    partials: string[];
 }
 
 type Callback = (
@@ -70,12 +63,11 @@ interface AblyMessageData {
 export const useAbly = (): UseAblyReturn => {
     const { chatId } = useChatStore();
     const [localChatId, setLocalChatId] = useState<string | undefined>(chatId);
-    const [partials, setPartials] = useState<ChatMessage[]>([]);
+    const [partials, setPartials] = useState<string[]>([]);
     const [ably, setAbly] = useState<Realtime | undefined>(undefined);
     const [channelSubscribed, setChannelSubscribed] = useState(false);
     const [isConnected, setIsConnected] = useState(false);
     const [error, setError] = useState<string | undefined>(undefined);
-    const [lastMessageId, setLastMessageId] = useState<string | null>(null);
 
     const config = useConfig();
 
@@ -128,86 +120,6 @@ export const useAbly = (): UseAblyReturn => {
         [config.tracking?.userId, createAblyTokenMutation]
     );
 
-    // Function to process Ably message and convert to ChatMessage
-    const processAblyMessage = useCallback(
-        (jsonObject: AblyMessageData): ChatMessage | null => {
-            try {
-                // Basic validation
-                if (!jsonObject || !jsonObject.message_type) {
-                    console.error('Invalid message format', jsonObject);
-                    return null;
-                }
-
-                // Skip if this is the same message we processed last (prevents duplicate processing)
-                if (jsonObject.id === lastMessageId && lastMessageId !== null) {
-                    console.log('Skipping duplicate message:', jsonObject.id);
-                    return null;
-                }
-
-                // Update the last message ID we've seen
-                if (jsonObject.id) {
-                    setLastMessageId(jsonObject.id);
-                }
-
-                const timestamp = jsonObject.created_at || new Date().toISOString();
-                const ordinalId = jsonObject.ordinal_id || `temp-${Date.now()}`;
-
-                // Process based on message type
-                switch (jsonObject.message_type) {
-                    case 'response': {
-                        console.log('We got a response here!');
-                        // Transform blocks to the expected format
-                        const blocks = (jsonObject.blocks || [])
-                            .map((block) =>
-                                normalizeContentBlock({
-                                    __typename: 'TextBlock',
-                                    textContent: block.content,
-                                    textMeta: block.meta,
-                                    type: ContentBlockType.Text,
-                                } as RawTextBlock)
-                            )
-                            .filter(isNonNullable);
-                        console.log({ blocks });
-
-                        return {
-                            id: jsonObject.id || `temp-${Date.now()}`,
-                            ordinalId: ordinalId,
-                            timestamp: timestamp,
-                            status: ChatMessageStatus.STREAMING,
-                            type: ChatMessageType.RESPONSE,
-                            prompt: '', // Will be filled in by the UI layer
-                            blocks,
-                            sources: [], // Process sources if needed
-                        };
-                    }
-
-                    case 'prompt': {
-                        console.log('We got a prompt here!');
-                        // Extract prompt content from the first block if available
-                        const promptContent = jsonObject.blocks?.[0]?.content?.[0]?.value || '';
-
-                        return {
-                            id: jsonObject.id || `temp-${Date.now()}`,
-                            ordinalId: ordinalId,
-                            timestamp: timestamp,
-                            status: ChatMessageStatus.COMPLETED,
-                            type: ChatMessageType.PROMPT,
-                            prompt: promptContent,
-                        };
-                    }
-
-                    default:
-                        console.warn('Unhandled message type:', jsonObject.message_type);
-                        return null;
-                }
-            } catch (err) {
-                console.error('Error processing Ably message:', err);
-                return null;
-            }
-        },
-        [lastMessageId]
-    );
-
     const createAblyToken = useCallback(
         (sessionId: string) => {
             if (!sessionId || sessionId === 'new') {
@@ -248,31 +160,15 @@ export const useAbly = (): UseAblyReturn => {
 
                                     // Parse the JSON
                                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
-                                    console.log('Parsed message from Ably:', jsonObject);
+                                    console.log('Decoded Ably message:', jsonObject);
 
                                     // Process the message and update partials
-                                    const parsedMessage = processAblyMessage(jsonObject);
-                                    console.log({ parsedMessage });
-
-                                    if (parsedMessage) {
-                                        // Update partials state with the new message
-                                        setPartials((prev) => {
-                                            // Check if we already have a message with this ordinalId
-                                            const existingIndex = prev.findIndex(
-                                                (msg) => msg.ordinalId === parsedMessage.ordinalId
-                                            );
-                                            console.log({ prev, parsedMessage, existingIndex });
-
-                                            if (existingIndex >= 0) {
-                                                // Update existing message
-                                                const updatedPartials = [...prev];
-                                                updatedPartials[existingIndex] = parsedMessage;
-                                                return updatedPartials;
-                                            } else {
-                                                // Add new message
-                                                return [...prev, parsedMessage];
-                                            }
-                                        });
+                                    if (jsonObject.blocks) {
+                                        const parsedMessage = jsonObject.blocks?.[0]?.content?.[0]?.value;
+                                        if (parsedMessage) {
+                                            // Update partials state with the new message
+                                            setPartials((prev) => [...prev, parsedMessage]);
+                                        }
                                     }
                                 } catch (err) {
                                     console.error('Error handling message:', err);
@@ -284,7 +180,7 @@ export const useAbly = (): UseAblyReturn => {
                 });
 
                 ablyInstance.connection.on('failed', (err) => {
-                    setError(err instanceof Error ? err.message : 'Connection to Ably failed');
+                    setError(err?.reason?.message || 'Connection to Ably failed');
                     setIsConnected(false);
                 });
 
@@ -302,7 +198,6 @@ export const useAbly = (): UseAblyReturn => {
                 })
                     .then((resp) => {
                         console.log(`Successfully created Ably token for chat ${sessionId}`);
-                        console.log({ resp });
                         const tokenData = resp.data?.createAblyToken?.data;
                         return tokenData ? { clientId: tokenData.clientId } : null;
                     })
@@ -315,7 +210,7 @@ export const useAbly = (): UseAblyReturn => {
                 return Promise.resolve(null);
             }
         },
-        [authCallback, config.tracking?.userId, createAblyTokenMutation, processAblyMessage, channelSubscribed]
+        [authCallback, config.tracking?.userId, createAblyTokenMutation, channelSubscribed]
     );
 
     useEffect(() => {
@@ -328,11 +223,9 @@ export const useAbly = (): UseAblyReturn => {
             console.log('Chat ID changed:', chatId);
             // Immediately clear messages when changing sessions
             setPartials([]);
-            setLastMessageId(null);
             setChannelSubscribed(false); // Reset subscription state when chat changes
         }
     }, [chatId, localChatId]);
 
-    console.log({ useAbly: true, partials });
     return { ably, createAblyToken, error, isConnected, partials };
 };
