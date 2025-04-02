@@ -850,7 +850,6 @@ export const useChatSession = ({
     }, [chatId, enablePolling, messagesQuery, shouldStopPolling]);
 
     const refresh = useCallback(() => {
-        console.log({ refresh: true, enablePolling, chatId });
         if (enablePolling) {
             console.log('Refreshing chat messages and resetting polling limits...');
             // Reset refetch count and polling state when manually refreshing
