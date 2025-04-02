@@ -850,18 +850,23 @@ export const useChatSession = ({
     }, [chatId, enablePolling, messagesQuery, shouldStopPolling]);
 
     const refresh = useCallback(() => {
-        console.log('Refreshing chat messages and resetting polling limits...');
-        // Reset refetch count and polling state when manually refreshing
-        setMessages([]);
-        setRefetchCount(0);
-        setShouldStopPolling(false);
-        messagesQuery.refetch();
-        console.log(
-            `Polling reset. Will continue for up to ${MAX_REFETCH_COUNT} more refetches (${
-                MAX_POLLING_DURATION / 1000 / 60 / 60
-            } hours).`
-        );
-    }, [messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
+        console.log({ refresh: true, enablePolling, chatId });
+        if (enablePolling) {
+            console.log('Refreshing chat messages and resetting polling limits...');
+            // Reset refetch count and polling state when manually refreshing
+            setMessages([]);
+            setRefetchCount(0);
+            setShouldStopPolling(false);
+            messagesQuery.refetch();
+            console.log(
+                `Polling reset. Will continue for up to ${MAX_REFETCH_COUNT} more refetches (${
+                    MAX_POLLING_DURATION / 1000 / 60 / 60
+                } hours).`
+            );
+        } else {
+            messagesQuery.refetch();
+        }
+    }, [chatId, enablePolling, messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
 
     return {
         createChatMessagePrompt,

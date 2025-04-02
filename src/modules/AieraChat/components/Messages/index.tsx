@@ -73,11 +73,11 @@ export function Messages({
 }) {
     const config = useConfig();
     const { chatId, chatStatus, sources } = useChatStore();
-    const { createChatMessagePrompt, messages, isLoading } = useChatSession({
+    const { createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { createAblyToken, partials } = useAbly();
-    console.log({ MessagesComponent: true, partials });
+    const { createAblyToken, isStreaming, partials } = useAbly();
+    console.log({ MessagesComponent: true, isStreaming, partials });
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -199,8 +199,14 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        console.log({ partials, chatStatus });
+        console.log({ partials, chatStatus, isStreaming });
         if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+            // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
+            // to get the final response and updated chat title
+            if (!isStreaming) {
+                console.log('Streaming stopped!');
+                // refresh();
+            }
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
             // Set the streaming message if one already exists in virtuoso
@@ -264,7 +270,7 @@ export function Messages({
                 });
             }
         }
-    }, [chatStatus, partials]);
+    }, [chatStatus, isStreaming, partials, refresh]);
 
     // Reset messages when the selected chat changes
     useEffect(() => {

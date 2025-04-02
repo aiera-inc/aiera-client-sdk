@@ -1,6 +1,6 @@
 import gql from 'graphql-tag';
 import { ErrorInfo, Realtime, TokenDetails, TokenParams, TokenRequest } from 'ably';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'urql';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
@@ -16,7 +16,9 @@ interface UseAblyReturn {
     createAblyToken: (sessionId: string) => Promise<AblyToken | null>;
     error?: string;
     isConnected: boolean;
+    isStreaming: boolean;
     partials: string[];
+    reset: () => void;
 }
 
 type Callback = (
@@ -57,6 +59,11 @@ interface AblyMessageData {
     user_id: number;
 }
 
+type AblyEncodedData = {
+    content: string;
+    is_final: boolean;
+};
+
 /**
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
@@ -65,9 +72,19 @@ export const useAbly = (): UseAblyReturn => {
     const [localChatId, setLocalChatId] = useState<string | undefined>(chatId);
     const [partials, setPartials] = useState<string[]>([]);
     const [ably, setAbly] = useState<Realtime | undefined>(undefined);
-    const [channelSubscribed, setChannelSubscribed] = useState(false);
-    const [isConnected, setIsConnected] = useState(false);
+    const [channelSubscribed, setChannelSubscribed] = useState<boolean>(false);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
     const [error, setError] = useState<string | undefined>(undefined);
+
+    // Add both a state and a ref for isStreaming
+    const [isStreaming, setIsStreaming] = useState<boolean>(false);
+    // Ref to avoid closure issues in the callback
+    const isStreamingRef = useRef<boolean>(false);
+
+    // Keep the ref and state in sync
+    useEffect(() => {
+        isStreamingRef.current = isStreaming;
+    }, [isStreaming]);
 
     const config = useConfig();
 
@@ -150,13 +167,24 @@ export const useAbly = (): UseAblyReturn => {
                             .subscribe((message) => {
                                 try {
                                     console.log('Received message from Ably:', message);
+                                    const data = message.data as AblyEncodedData;
 
-                                    // The data is already a string, not a BufferSource
-                                    const base64EncodedData = message.data as string;
+                                    // If it's the final partial, ignore it and begin post-partial cleanup
+                                    if (data.is_final) {
+                                        console.log('Received final partial:', data);
+                                        if (isStreamingRef.current) {
+                                            console.log('Stopping partials stream.');
+                                            setIsStreaming(false);
+                                        }
+                                        return;
+                                    } else if (!isStreamingRef.current) {
+                                        console.log('Starting to stream partials...');
+                                        // Update the streaming status if it's the first partial
+                                        setIsStreaming(true);
+                                    }
 
                                     // Decode the base64 string
-                                    const decodedData = atob(base64EncodedData);
-                                    console.log({ decodedData });
+                                    const decodedData = atob(data.content);
 
                                     // Parse the JSON
                                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
@@ -210,8 +238,15 @@ export const useAbly = (): UseAblyReturn => {
                 return Promise.resolve(null);
             }
         },
-        [authCallback, config.tracking?.userId, createAblyTokenMutation, channelSubscribed]
+        [authCallback, config.tracking?.userId, createAblyTokenMutation, channelSubscribed, isStreamingRef]
     );
+
+    const reset = useCallback(() => {
+        setError(undefined);
+        setIsStreaming(false);
+        setPartials([]);
+        setChannelSubscribed(false); // Reset subscription state when chat changes
+    }, []);
 
     useEffect(() => {
         console.log(`Setting useAbly local chatId to ${chatId}`);
@@ -222,10 +257,9 @@ export const useAbly = (): UseAblyReturn => {
         if (localChatId && localChatId !== chatId) {
             console.log('Chat ID changed:', chatId);
             // Immediately clear messages when changing sessions
-            setPartials([]);
-            setChannelSubscribed(false); // Reset subscription state when chat changes
+            reset();
         }
     }, [chatId, localChatId]);
 
-    return { ably, createAblyToken, error, isConnected, partials };
+    return { ably, createAblyToken, error, isConnected, isStreaming, partials, reset };
 };
