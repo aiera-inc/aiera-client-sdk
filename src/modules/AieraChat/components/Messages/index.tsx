@@ -26,7 +26,6 @@ import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
 // import { TextBlock } from './MessageFactory/Block/Text';
 import { useConfig } from '@aiera/client-sdk/lib/config';
-import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
@@ -159,11 +158,8 @@ export function Messages({
                                 };
                             });
                             createAblyToken(session.id)
-                                .then((tokenData) => {
-                                    console.log(
-                                        `Successfully created ably token for session ${session.id}:`,
-                                        tokenData
-                                    );
+                                .then(() => {
+                                    console.log(`Successfully created ably token for session ${session.id}:`);
                                 })
                                 .catch((ablyError: Error) => {
                                     console.log(`Error creating Ably token: ${ablyError.message}`);
@@ -245,7 +241,7 @@ export function Messages({
                 const initialMessageResponse: ChatMessageResponse = {
                     id: `chat-${chatId}-temp-response-${idCounter++}`,
                     ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
-                    prompt: '', // response messages aren't using prompts right now
+                    prompt: latestMessage?.prompt || '', // TODO all messages need to know the prompt
                     status: ChatMessageStatus.STREAMING,
                     timestamp: new Date().toISOString(),
                     type: ChatMessageType.RESPONSE,
@@ -311,9 +307,6 @@ export function Messages({
                             StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
-                )}
-                {!isLoading && chatStatus === ChatSessionStatus.GeneratingResponse && (
-                    <AnimatedLoadingStatus sources={sources} />
                 )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} />
             </div>
