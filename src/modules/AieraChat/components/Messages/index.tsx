@@ -76,7 +76,7 @@ export function Messages({
     const { createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { createAblyToken, isStreaming, partials } = useAbly();
+    const { createAblyToken, isStreaming, partials, reset } = useAbly();
     console.log({ MessagesComponent: true, isStreaming, partials });
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -205,7 +205,9 @@ export function Messages({
             // to get the final response and updated chat title
             if (!isStreaming) {
                 console.log('Streaming stopped!');
-                // refresh();
+                reset()
+                    .then(() => refresh())
+                    .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
             }
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);

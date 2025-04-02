@@ -18,7 +18,7 @@ interface UseAblyReturn {
     isConnected: boolean;
     isStreaming: boolean;
     partials: string[];
-    reset: () => void;
+    reset: () => Promise<void>;
 }
 
 type Callback = (
@@ -241,11 +241,23 @@ export const useAbly = (): UseAblyReturn => {
         [authCallback, config.tracking?.userId, createAblyTokenMutation, channelSubscribed, isStreamingRef]
     );
 
-    const reset = useCallback(() => {
-        setError(undefined);
-        setIsStreaming(false);
-        setPartials([]);
-        setChannelSubscribed(false); // Reset subscription state when chat changes
+    const reset = useCallback((): Promise<void> => {
+        return new Promise<void>((resolve) => {
+            // Batch multiple state updates in a requestAnimationFrame
+            // to ensure they're processed in the same render cycle
+            requestAnimationFrame(() => {
+                setError(undefined);
+                setIsStreaming(false);
+                setPartials([]);
+                setChannelSubscribed(false);
+
+                // Use setTimeout with 0 delay to ensure the state updates
+                // have been processed before resolving the promise
+                setTimeout(() => {
+                    resolve();
+                }, 0);
+            });
+        });
     }, []);
 
     useEffect(() => {
@@ -257,7 +269,7 @@ export const useAbly = (): UseAblyReturn => {
         if (localChatId && localChatId !== chatId) {
             console.log('Chat ID changed:', chatId);
             // Immediately clear messages when changing sessions
-            reset();
+            reset().catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
         }
     }, [chatId, localChatId]);
 

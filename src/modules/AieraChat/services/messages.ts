@@ -864,7 +864,7 @@ export const useChatSession = ({
                 } hours).`
             );
         } else {
-            messagesQuery.refetch();
+            messagesQuery.refetch({ requestPolicy: 'network-only' });
         }
     }, [chatId, enablePolling, messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
 
