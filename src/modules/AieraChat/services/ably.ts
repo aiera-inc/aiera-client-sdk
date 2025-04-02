@@ -3,7 +3,6 @@ import { ErrorInfo, Realtime, TokenDetails, TokenParams, TokenRequest } from 'ab
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'urql';
 import { useConfig } from '@aiera/client-sdk/lib/config';
-import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables } from '@aiera/client-sdk/types';
 import { ChatSource, Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
 
@@ -68,8 +67,6 @@ type AblyEncodedData = {
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
-    const { chatId } = useChatStore();
-    const [localChatId, setLocalChatId] = useState<string | undefined>(chatId);
     const [partials, setPartials] = useState<string[]>([]);
     const [ably, setAbly] = useState<Realtime | undefined>(undefined);
     const [channelSubscribed, setChannelSubscribed] = useState<boolean>(false);
@@ -259,19 +256,6 @@ export const useAbly = (): UseAblyReturn => {
             });
         });
     }, []);
-
-    useEffect(() => {
-        console.log(`Setting useAbly local chatId to ${chatId}`);
-        setLocalChatId(chatId);
-    }, [chatId]);
-
-    useEffect(() => {
-        if (localChatId && localChatId !== chatId) {
-            console.log('Chat ID changed:', chatId);
-            // Immediately clear messages when changing sessions
-            reset().catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
-        }
-    }, [chatId, localChatId]);
 
     return { ably, createAblyToken, error, isConnected, isStreaming, partials, reset };
 };

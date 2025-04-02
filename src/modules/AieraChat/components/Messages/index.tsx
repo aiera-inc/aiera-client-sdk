@@ -72,7 +72,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { chatId, chatStatus, sources } = useChatStore();
+    const { chatId, chatStatus, onSetStatus, sources } = useChatStore();
     const { createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
@@ -167,9 +167,20 @@ export function Messages({
                     })
                     .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
             } else {
-                createChatMessagePrompt({ content: prompt, sessionId: chatId }).catch((error: Error) =>
-                    console.log(`Error creating session with prompt: ${error.message}`)
-                );
+                createChatMessagePrompt({ content: prompt, sessionId: chatId })
+                    .then(() => {
+                        // Update the session status to reflect what the server will persist
+                        // This is needed to restart streaming partials for an existing session
+                        onSetStatus(ChatSessionStatus.GeneratingResponse);
+                        createAblyToken(chatId)
+                            .then(() => {
+                                console.log(`Successfully created ably token for session ${chatId}:`);
+                            })
+                            .catch((ablyError: Error) => {
+                                console.log(`Error creating Ably token: ${ablyError.message}`);
+                            });
+                    })
+                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
             }
         },
         [chatId, sources]
@@ -198,6 +209,7 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
+        console.log({ chatId, chatStatus, partials, isStreaming });
         if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
             // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
             // to get the final response and updated chat title
