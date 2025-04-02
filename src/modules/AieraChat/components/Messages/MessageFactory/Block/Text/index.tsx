@@ -29,7 +29,12 @@ export function Text({ content, meta }: TextBlock) {
                 if (typeof c === 'string') {
                     return (
                         <Fragment key={idx}>
-                            <SearchableText text={c} />
+                            {c.split('\n').map((line, i) => (
+                                <Fragment key={i}>
+                                    <SearchableText text={line} />
+                                    {i < c.split('\n').length - 1 && <br />}
+                                </Fragment>
+                            ))}
                         </Fragment>
                     );
                 } else {
