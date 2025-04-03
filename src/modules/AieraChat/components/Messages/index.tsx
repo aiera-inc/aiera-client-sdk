@@ -209,7 +209,7 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+        if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse && isStreaming) {
             // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
             // to get the final response and updated chat title
             if (!isStreaming) {
