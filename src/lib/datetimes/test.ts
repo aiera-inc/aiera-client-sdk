@@ -4,9 +4,9 @@ describe('Datetimes', () => {
     test('areDatesSameDay', () => {
         const today = new Date();
         const laterToday = new Date(new Date().getTime() + 600000); // 10 minutes from now
-        const yesterday = new Date(new Date().getTime() - 90000000); // 25 hours ago
+        const lastWeek = new Date(new Date().getTime() - 7 * 24 * 60 * 60 * 1000); // 1 week ago
         expect(areDatesSameDay(today, laterToday)).toBe(true);
-        expect(areDatesSameDay(today, yesterday)).toBe(false);
+        expect(areDatesSameDay(today, lastWeek)).toBe(false);
     });
 
     test('isToday', () => {

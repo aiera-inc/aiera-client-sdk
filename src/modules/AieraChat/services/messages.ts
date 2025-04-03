@@ -59,7 +59,7 @@ export enum ChatMessageType {
     RESPONSE = 'response',
 }
 
-interface ChatMessageSource {
+export interface ChatMessageSource {
     targetId: string;
     targetTitle: string;
     targetType: string;
@@ -131,7 +131,7 @@ interface UseChatSessionReturn {
 /**
  * Utility function to check if a value is not null or undefined
  */
-function isNonNullable<T>(value: T): value is NonNullable<T> {
+export function isNonNullable<T>(value: T): value is NonNullable<T> {
     return value !== null && value !== undefined;
 }
 
@@ -532,7 +532,7 @@ export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const { chatId, chatStatus, chatTitle, onSetStatus, onSetTitle, setCitations } = useChatStore();
+    const { chatId, chatTitle, onSetTitle, setCitations } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -670,11 +670,6 @@ export const useChatSession = ({
                 const chatSession = messagesQuery.data.chatSession;
                 console.log('Processing chat session:', chatSession.id);
 
-                // Update chat status in store if it changes
-                if (chatStatus !== chatSession.status) {
-                    onSetStatus(chatSession.status);
-                }
-
                 // Update chat title in store if the session got a generated title
                 if (
                     chatSession.title &&
@@ -797,18 +792,7 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [
-        chatStatus,
-        chatTitle,
-        enablePolling,
-        error,
-        isLoading,
-        messagesQuery,
-        onSetStatus,
-        onSetTitle,
-        setError,
-        setMessages,
-    ]);
+    }, [chatTitle, enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
 
     useEffect(() => {
         // Immediately clear messages when changing sessions
@@ -850,18 +834,22 @@ export const useChatSession = ({
     }, [chatId, enablePolling, messagesQuery, shouldStopPolling]);
 
     const refresh = useCallback(() => {
-        console.log('Refreshing chat messages and resetting polling limits...');
-        // Reset refetch count and polling state when manually refreshing
-        setMessages([]);
-        setRefetchCount(0);
-        setShouldStopPolling(false);
-        messagesQuery.refetch();
-        console.log(
-            `Polling reset. Will continue for up to ${MAX_REFETCH_COUNT} more refetches (${
-                MAX_POLLING_DURATION / 1000 / 60 / 60
-            } hours).`
-        );
-    }, [messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
+        if (enablePolling) {
+            console.log('Refreshing chat messages and resetting polling limits...');
+            // Reset refetch count and polling state when manually refreshing
+            setMessages([]);
+            setRefetchCount(0);
+            setShouldStopPolling(false);
+            messagesQuery.refetch();
+            console.log(
+                `Polling reset. Will continue for up to ${MAX_REFETCH_COUNT} more refetches (${
+                    MAX_POLLING_DURATION / 1000 / 60 / 60
+                } hours).`
+            );
+        } else {
+            messagesQuery.refetch({ requestPolicy: 'network-only' });
+        }
+    }, [chatId, enablePolling, messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
 
     return {
         createChatMessagePrompt,

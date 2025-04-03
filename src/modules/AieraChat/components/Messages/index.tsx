@@ -1,11 +1,11 @@
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import {
+    useCurrentlyRenderedData,
+    useVirtuosoMethods,
     VirtuosoMessageList,
     VirtuosoMessageListLicense,
     VirtuosoMessageListMethods,
     VirtuosoMessageListProps,
-    useCurrentlyRenderedData,
-    useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo } from 'react';
@@ -14,37 +14,23 @@ import {
     ChatMessage,
     ChatMessagePrompt,
     ChatMessageResponse,
-    ChatMessageSources,
     ChatMessageStatus,
     ChatMessageType,
     useChatSession,
 } from '../../services/messages';
-import { Source, useChatStore } from '../../store';
+import { useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import './styles.css';
 // import { SuggestedPrompts } from './SuggestedPrompts';
 import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
-import { TextBlock } from './MessageFactory/Block/Text';
+// import { TextBlock } from './MessageFactory/Block/Text';
 import { useConfig } from '@aiera/client-sdk/lib/config';
-import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 
 let idCounter = 0;
-
-function randomMessage(prompt: ChatMessage['prompt']): ChatMessageResponse {
-    return {
-        id: `${idCounter++}`,
-        ordinalId: `${idCounter++}`,
-        timestamp: '',
-        sources: [],
-        type: ChatMessageType.RESPONSE,
-        blocks: [{ type: BlockType.TEXT, content: ['some other message'], id: '0', meta: { style: 'paragraph' } }],
-        prompt,
-        status: ChatMessageStatus.PENDING,
-    };
-}
 
 export interface MessageListContext {
     onSubmit: (p: string) => void;
@@ -76,122 +62,6 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
     );
 };
 
-function isMatchingResponse(message: ChatMessage, botMessage: ChatMessageResponse): message is ChatMessageResponse {
-    return message.ordinalId === botMessage.ordinalId;
-}
-
-function updateVirtuoso(
-    prompt: string,
-    message: ChatMessagePrompt | null,
-    sources: Source[],
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>
-) {
-    const myMessage: ChatMessagePrompt = {
-        id: `${idCounter++}`,
-        ordinalId: `${idCounter++}`,
-        prompt: message?.prompt || '',
-        type: ChatMessageType.PROMPT,
-        status: ChatMessageStatus.COMPLETED,
-        timestamp: '',
-    };
-    virtuosoRef.current?.data.append([myMessage], ({ scrollInProgress, atBottom }) => {
-        return {
-            index: 'LAST',
-            align: 'end',
-            behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-        };
-    });
-
-    // TODO enable this once we have actual source confirmation messages to show
-    // eslint-disable-next-line no-constant-condition
-    if (sources && sources.length === 0 && false) {
-        const newKey = `${idCounter++}`;
-        const sourceMessage: ChatMessageSources = {
-            id: newKey,
-            ordinalId: newKey,
-            confirmed: false,
-            sources: [],
-            timestamp: '',
-            prompt: message?.prompt || '',
-            status: ChatMessageStatus.PENDING,
-            type: ChatMessageType.SOURCES,
-        };
-        virtuosoRef.current?.data.append([sourceMessage], ({ scrollInProgress, atBottom }) => {
-            return {
-                index: 'LAST',
-                align: 'end',
-                behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-            };
-        });
-        setTimeout(() => {
-            virtuosoRef.current?.data.map((message) => {
-                if (message.ordinalId === newKey) {
-                    return {
-                        ...message,
-                        status: ChatMessageStatus.COMPLETED,
-                    };
-                }
-
-                return message;
-            });
-        }, 200);
-        // TODO enable once we have chat response streaming
-        // eslint-disable-next-line no-constant-condition
-    } else if (sources && sources.length > 0 && false) {
-        const botMessage = randomMessage(prompt);
-        virtuosoRef.current?.data.append([botMessage]);
-        setTimeout(() => {
-            let counter = 0;
-            const interval = setInterval(() => {
-                let status = ChatMessageStatus.STREAMING;
-                if (counter++ > 45) {
-                    clearInterval(interval);
-                    status = ChatMessageStatus.COMPLETED;
-                }
-                virtuosoRef.current?.data.map(
-                    (message) => {
-                        if (isMatchingResponse(message, botMessage)) {
-                            const firstBlock =
-                                (message.blocks[0] as TextBlock) ||
-                                ({
-                                    id: `${message.blocks.length}`,
-                                    type: BlockType.TEXT,
-                                    content: ['some text...'],
-                                    meta: { style: 'paragraph' },
-                                } as TextBlock);
-                            return {
-                                ...message,
-                                blocks: [
-                                    {
-                                        ...firstBlock,
-                                        content: [
-                                            ...firstBlock.content,
-                                            firstBlock.content.length % 7 === 0
-                                                ? {
-                                                      text: 'citation',
-                                                      source: 'source',
-                                                      sourceId: '1',
-                                                  }
-                                                : 'some more text...',
-                                        ],
-                                    },
-                                ],
-                                status,
-                            };
-                        }
-                        return message;
-                    },
-                    {
-                        location() {
-                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                        },
-                    }
-                );
-            }, 150);
-        }, 200);
-    }
-}
-
 export function Messages({
     onOpenSources,
     onSubmit,
@@ -202,21 +72,14 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { chatId, chatStatus, sources } = useChatStore();
-    const { createChatMessagePrompt, messages, isLoading } = useChatSession({
+    const { chatId, chatStatus, onSetStatus, sources } = useChatStore();
+    const { createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-
-    // Reset messages when the selected chat changes
-    useEffect(() => {
-        if (virtuosoRef.current?.data) {
-            virtuosoRef.current.data.replace([]);
-        }
-    }, [chatId]);
+    const { createAblyToken, isStreaming, partials, reset } = useAbly();
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
-
         if (originalIndex) {
             setTimeout(() => {
                 let counter = 0;
@@ -256,9 +119,6 @@ export function Messages({
     const onConfirm = useCallback((ordinalId: string) => {
         const originalMessage = virtuosoRef.current?.data.find((m) => m.ordinalId === ordinalId);
         if (originalMessage) {
-            const botMessage: ChatMessageResponse = randomMessage(originalMessage?.prompt);
-            virtuosoRef.current?.data.append([botMessage]);
-
             virtuosoRef.current?.data.map((message) => {
                 if (message.ordinalId === ordinalId) {
                     return {
@@ -269,55 +129,6 @@ export function Messages({
 
                 return message;
             });
-            setTimeout(() => {
-                let counter = 0;
-                const interval = setInterval(() => {
-                    let status = ChatMessageStatus.STREAMING;
-                    if (counter++ > 45) {
-                        clearInterval(interval);
-                        status = ChatMessageStatus.COMPLETED;
-                    }
-                    virtuosoRef.current?.data.map(
-                        (message) => {
-                            if (isMatchingResponse(message, botMessage)) {
-                                const firstBlock =
-                                    (message.blocks[0] as TextBlock) ||
-                                    ({
-                                        id: `${message.blocks.length}`,
-                                        type: BlockType.TEXT,
-                                        content: ['some text...'],
-                                        meta: { style: 'paragraph' },
-                                    } as TextBlock);
-                                return {
-                                    ...message,
-                                    blocks: [
-                                        {
-                                            ...firstBlock,
-                                            content: [
-                                                ...firstBlock.content,
-                                                firstBlock.content.length % 8 === 0
-                                                    ? {
-                                                          sourceId: '1',
-                                                          text: 'citation',
-                                                          source: 'source',
-                                                      }
-                                                    : 'some more text...',
-                                            ],
-                                        },
-                                    ],
-                                    status,
-                                };
-                            }
-                            return message;
-                        },
-                        {
-                            location() {
-                                return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                            },
-                        }
-                    );
-                }, 150);
-            }, 2000);
         }
     }, []);
 
@@ -327,18 +138,52 @@ export function Messages({
                 onSubmit(prompt)
                     .then((session) => {
                         if (session && session.promptMessage) {
+                            console.log('Updating virtuoso with new prompt message:', session.promptMessage);
                             // Only prompt messages can be created when creating a chat session
-                            updateVirtuoso(prompt, session.promptMessage as ChatMessagePrompt, sources, virtuosoRef);
+                            const promptMessage: ChatMessagePrompt = {
+                                id: session.promptMessage.id,
+                                ordinalId: session.promptMessage.ordinalId,
+                                prompt: session.promptMessage.prompt,
+                                status: ChatMessageStatus.COMPLETED,
+                                timestamp: new Date().toISOString(),
+                                type: ChatMessageType.PROMPT,
+                            };
+                            // Append new message to virtuoso
+                            virtuosoRef.current?.data.append([promptMessage], ({ scrollInProgress, atBottom }) => {
+                                return {
+                                    index: 'LAST',
+                                    align: 'end',
+                                    behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                                };
+                            });
+                            createAblyToken(session.id)
+                                .then(() => {
+                                    console.log(`Successfully created ably token for session ${session.id}:`);
+                                })
+                                .catch((ablyError: Error) => {
+                                    console.log(`Error creating Ably token: ${ablyError.message}`);
+                                });
                         }
                     })
                     .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
             } else {
-                createChatMessagePrompt({ content: prompt, sessionId: chatId }).catch((error: Error) =>
-                    console.log(`Error creating session with prompt: ${error.message}`)
-                );
+                createChatMessagePrompt({ content: prompt, sessionId: chatId })
+                    .then(() => {
+                        // Update the session status to reflect what the server will persist
+                        // This is needed to restart streaming partials for an existing session
+                        onSetStatus(ChatSessionStatus.GeneratingResponse);
+                        createAblyToken(chatId)
+                            .then(() => {
+                                console.log(`Successfully created ably token for session ${chatId}:`);
+                            })
+                            .catch((ablyError: Error) => {
+                                console.log(`Error creating Ably token: ${ablyError.message}`);
+                            });
+                    })
+                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
             }
         },
-        [chatId, sources]
+        [chatId, createAblyToken, onSetStatus, sources]
     );
 
     // Append new messages to virtuoso as they're created
@@ -361,6 +206,95 @@ export function Messages({
             }
         }
     }, [messages]);
+
+    // Process partial messages from Ably for streaming
+    useEffect(() => {
+        if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+            // Get the latest message in virtuoso
+            const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
+            // Set the streaming message if one already exists in virtuoso
+            if (
+                latestMessage &&
+                latestMessage.type === ChatMessageType.RESPONSE &&
+                latestMessage.status === ChatMessageStatus.STREAMING
+            ) {
+                // Get the latest partial
+                const latestPartial = partials[partials.length - 1] as string;
+                virtuosoRef.current?.data.map(
+                    (message) => {
+                        if (latestMessage.id === message.id) {
+                            return {
+                                ...latestMessage,
+                                blocks: latestMessage.blocks.map((b) => {
+                                    if (b.type === BlockType.TEXT) {
+                                        return {
+                                            ...b,
+                                            content: [...b.content, latestPartial],
+                                        };
+                                    } else {
+                                        return b;
+                                    }
+                                }),
+                            };
+                        }
+                        return message;
+                    },
+                    {
+                        location() {
+                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                        },
+                    }
+                );
+            } else {
+                // If there's no streaming message yet, append one to virtuoso using existing partials
+                const initialMessageResponse: ChatMessageResponse = {
+                    id: `chat-${chatId}-temp-response-${idCounter++}`,
+                    ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
+                    prompt: latestMessage?.prompt || '', // TODO all messages need to know the prompt
+                    status: ChatMessageStatus.STREAMING,
+                    timestamp: new Date().toISOString(),
+                    type: ChatMessageType.RESPONSE,
+                    blocks: [
+                        {
+                            id: 'initial-block',
+                            type: BlockType.TEXT,
+                            content: partials,
+                            meta: { style: 'paragraph' },
+                        },
+                    ],
+                    sources: [], // partial messages won't have sources, yet
+                };
+                virtuosoRef.current?.data.append([initialMessageResponse], ({ scrollInProgress, atBottom }) => {
+                    return {
+                        index: 'LAST',
+                        align: 'end',
+                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                    };
+                });
+            }
+        }
+    }, [chatStatus, partials]);
+
+    useEffect(() => {
+        if (!isStreaming && partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+            // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
+            // to get the final response and updated chat title
+            reset()
+                .then(() => {
+                    setTimeout(() => {
+                        refresh();
+                    }, 500);
+                })
+                .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
+        }
+    }, [chatStatus, isStreaming, partials, refresh, reset]);
+
+    // Reset messages when the selected chat changes
+    useEffect(() => {
+        if (virtuosoRef.current?.data) {
+            virtuosoRef.current.data.replace([]);
+        }
+    }, [chatId]);
 
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(
@@ -396,9 +330,6 @@ export function Messages({
                             StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
-                )}
-                {!isLoading && chatStatus === ChatSessionStatus.GeneratingResponse && (
-                    <AnimatedLoadingStatus sources={sources} />
                 )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} />
             </div>
