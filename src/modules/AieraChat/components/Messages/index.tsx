@@ -209,18 +209,7 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse && isStreaming) {
-            // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
-            // to get the final response and updated chat title
-            if (!isStreaming) {
-                reset()
-                    .then(() => {
-                        setTimeout(() => {
-                            refresh();
-                        }, 500);
-                    })
-                    .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
-            }
+        if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
             // Set the streaming message if one already exists in virtuoso
@@ -284,7 +273,21 @@ export function Messages({
                 });
             }
         }
-    }, [chatStatus, isStreaming, partials, refresh]);
+    }, [chatStatus, partials]);
+
+    useEffect(() => {
+        if (!isStreaming && partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+            // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
+            // to get the final response and updated chat title
+            reset()
+                .then(() => {
+                    setTimeout(() => {
+                        refresh();
+                    }, 500);
+                })
+                .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
+        }
+    }, [chatStatus, isStreaming, partials, refresh, reset]);
 
     // Reset messages when the selected chat changes
     useEffect(() => {
