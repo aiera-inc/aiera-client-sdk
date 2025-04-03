@@ -183,7 +183,7 @@ export function Messages({
                     .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
             }
         },
-        [chatId, sources]
+        [chatId, createAblyToken, onSetStatus, sources]
     );
 
     // Append new messages to virtuoso as they're created
@@ -209,7 +209,6 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        console.log({ chatId, chatStatus, partials, isStreaming });
         if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
             // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
             // to get the final response and updated chat title
