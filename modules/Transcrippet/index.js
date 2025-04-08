@@ -75046,13 +75046,13 @@ var CreateAblyTokenDocument = lib_default`
     mutation CreateAblyToken($input: CreateAblyTokenInput!) {
   createAblyToken(input: $input) {
     data {
-      keyName
-      clientId
-      ttl
-      nonce
       capability
-      timestamp
+      clientId
+      keyName
       mac
+      nonce
+      timestamp
+      ttl
     }
   }
 }
