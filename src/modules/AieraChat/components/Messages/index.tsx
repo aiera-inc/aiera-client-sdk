@@ -30,6 +30,7 @@ import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraCha
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 
+const STREAMING_STATUSES = [ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse];
 let idCounter = 0;
 
 export interface MessageListContext {
@@ -171,7 +172,11 @@ export function Messages({
                     .then(() => {
                         // Update the session status to reflect what the server will persist
                         // This is needed to restart streaming partials for an existing session
-                        onSetStatus(ChatSessionStatus.GeneratingResponse);
+                        onSetStatus(
+                            sources && sources.length > 0
+                                ? ChatSessionStatus.GeneratingResponse
+                                : ChatSessionStatus.FindingSources
+                        );
                         createAblyToken(chatId)
                             .then(() => {
                                 console.log(`Successfully created ably token for session ${chatId}:`);
@@ -209,7 +214,7 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+        if (partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
             // Set the streaming message if one already exists in virtuoso
@@ -276,7 +281,7 @@ export function Messages({
     }, [chatStatus, partials]);
 
     useEffect(() => {
-        if (!isStreaming && partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+        if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
             // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
             // to get the final response and updated chat title
             reset()
