@@ -15,31 +15,7 @@ interface PromptProps {
 export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
     const { sources } = useChatStore();
     const [isEmpty, setIsEmpty] = useState(true);
-    const [highlightSources, setHighlightSources] = useState(false);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
-
-    // Add jiggle animation for the sources icon
-    useEffect(() => {
-        const styleEl = document.createElement('style');
-        styleEl.textContent = `
-            @keyframes jiggle {
-                0% { transform: translateX(0); }
-                25% { transform: translateX(-3px); }
-                50% { transform: translateX(3px); }
-                75% { transform: translateX(-3px); }
-                100% { transform: translateX(0); }
-            }
-            
-            .jiggle-animation {
-                animation: jiggle 0.5s ease-in-out;
-            }
-        `;
-        document.head.appendChild(styleEl);
-
-        return () => {
-            document.head.removeChild(styleEl);
-        };
-    }, []);
 
     const checkEmpty = useCallback(() => {
         if (inputRef.current) {
@@ -50,30 +26,12 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
 
     const handleInput = useCallback(() => {
         checkEmpty();
-        // Reset highlight when user starts typing
-        if (highlightSources) {
-            setHighlightSources(false);
-        }
-    }, [checkEmpty, highlightSources]);
+    }, [checkEmpty]);
 
     const handleSubmit = useCallback(() => {
         if (inputRef.current) {
             const promptText = inputRef.current.innerText;
-
-            // If text is entered but no sources selected, highlight sources icon
-            if (promptText && promptText.length > 0 && sources.length === 0) {
-                setHighlightSources(true);
-
-                // Reset highlight after animation completes
-                setTimeout(() => {
-                    setHighlightSources(false);
-                }, 3000);
-
-                return;
-            }
-
-            // Normal submit if we have both prompt and sources
-            if (promptText && promptText.length > 0 && sources.length > 0) {
+            if (promptText && promptText.length > 0) {
                 onSubmit(promptText);
                 inputRef.current.textContent = '';
                 setTimeout(checkEmpty);
@@ -123,11 +81,9 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                     'rounded-xl flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer hover:bg-slate-100 active:bg-slate-200 active:scale-90',
                     'hintTarget relative',
-                    highlightSources ? 'jiggle-animation' : '',
-                    highlightSources ? 'ring-2 ring-rose-500 shadow-lg shadow-rose-300' : '',
                     {
-                        'text-rose-600': sources.length > 0 || highlightSources,
-                        'text-slate-400': sources.length === 0 && !highlightSources,
+                        'text-rose-600': sources.length > 0,
+                        'text-slate-400': sources.length === 0,
                     }
                 )}
             >

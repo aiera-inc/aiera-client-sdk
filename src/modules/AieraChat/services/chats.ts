@@ -40,13 +40,15 @@ export interface UseChatSessionsReturn {
     updateSession: (input: { sessionId: string; sources?: Source[]; title?: string }) => Promise<void>;
 }
 
-function mapSourcesToInput(sources?: Source[] | null): ChatSourceInput[] {
-    return (sources || []).map((source: Source) => ({
-        confirmed: source.confirmed,
-        sourceId: source.targetId,
-        sourceName: source.title,
-        sourceType: source.targetType as ChatSourceType,
-    }));
+function mapSourcesToInput(sources?: Source[] | null): ChatSourceInput[] | null {
+    return sources && sources.length > 0
+        ? sources.map((source: Source) => ({
+              confirmed: source.confirmed,
+              sourceId: source.targetId,
+              sourceName: source.title,
+              sourceType: source.targetType as ChatSourceType,
+          }))
+        : null;
 }
 
 function normalizeSources(sources?: ChatSource[]): Source[] {
