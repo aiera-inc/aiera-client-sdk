@@ -325,7 +325,7 @@ export function Messages({
                             ref={virtuosoRef}
                             style={{ flex: 1 }}
                             computeItemKey={({ data }: { data: ChatMessage }) => data.id}
-                            className="px-4 messagesScrollBars"
+                            className="mb-4 px-4 messagesScrollBars"
                             initialLocation={{ index: 'LAST', align: 'end' }}
                             initialData={messages}
                             shortSizeAlign="bottom-smooth"
