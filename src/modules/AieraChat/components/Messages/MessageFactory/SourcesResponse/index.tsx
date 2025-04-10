@@ -1,7 +1,7 @@
 import { Button } from '@aiera/client-sdk/components/Button';
 import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AddSourceDialog } from '../../../../modals/AddSourceDialog';
 import { ChatMessageSources, ChatMessageStatus } from '../../../../services/messages';
 import { Source, useChatStore } from '../../../../store';
@@ -10,28 +10,7 @@ import { Loading } from '../Loading';
 export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: ChatMessageSources }) => {
     const { onSelectSource, onAddSource } = useChatStore();
     const [showSourceDialog, setShowSourceDialog] = useState(false);
-    const [localSources, setLocalSources] = useState<Source[]>([
-        {
-            title: 'Tesla Q3 2024 Earnings Call',
-            targetId: '2639849',
-            targetType: 'event',
-        },
-        {
-            title: 'Meta Platforms Q2 2024 Earnings Call',
-            targetId: '2658051',
-            targetType: 'event',
-        },
-        {
-            title: 'Apple Inc Q3 2024 Earnings Call',
-            targetId: '2656780',
-            targetType: 'event',
-        },
-        {
-            title: 'Tesla Q2 2024 Earnings Call',
-            targetId: '2613061',
-            targetType: 'event',
-        },
-    ]);
+    const [localSources, setLocalSources] = useState<Source[]>(data.sources);
 
     const onAddLocalSource = useCallback((s: Source) => {
         setLocalSources((pv) => [...pv, s]);
@@ -46,6 +25,11 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
     if (data.confirmed) {
         return <div />;
     }
+
+    useEffect(() => {
+        console.log('Setting local data sources!');
+        setLocalSources(data.sources);
+    }, [data.sources]);
 
     const isLoading = data.status === ChatMessageStatus.PENDING || data.status === ChatMessageStatus.QUEUED;
     const isComplete = !isLoading && data.status !== ChatMessageStatus.STREAMING;

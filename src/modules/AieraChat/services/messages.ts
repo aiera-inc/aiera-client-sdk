@@ -67,12 +67,6 @@ export enum ChatMessageType {
     RESPONSE = 'response',
 }
 
-export interface ChatMessageSource {
-    targetId: string;
-    targetTitle: string;
-    targetType: string;
-}
-
 export enum ChatMessageStatus {
     // Initial states
     QUEUED = 'queued', // Message is queued for processing
@@ -102,7 +96,7 @@ export interface ChatMessageBase {
 export interface ChatMessageResponse extends ChatMessageBase {
     type: ChatMessageType.RESPONSE;
     blocks: ContentBlock[];
-    sources: ChatMessageSource[];
+    sources: Source[];
 }
 
 export interface ChatMessagePrompt extends ChatMessageBase {
@@ -112,7 +106,7 @@ export interface ChatMessagePrompt extends ChatMessageBase {
 export interface ChatMessageSources extends ChatMessageBase {
     type: ChatMessageType.SOURCES;
     confirmed: boolean;
-    sources: ChatMessageSource[];
+    sources: Source[];
 }
 
 export type ChatMessage = ChatMessageResponse | ChatMessagePrompt | ChatMessageSources;
@@ -409,18 +403,18 @@ export function normalizeTableMeta(rawColumnMeta: TableCellMeta[] | undefined | 
  * Normalize chat message sources with error handling
  * Uses sourceId instead of id
  */
-export function normalizeSources(
-    sources: ChatSource[] | null | undefined
-): { targetId: string; targetTitle: string; targetType: string }[] {
+export function normalizeSources(sources: ChatSource[] | null | undefined): Source[] {
     if (!sources || !Array.isArray(sources)) {
         return [];
     }
 
     try {
         return sources.filter(isNonNullable).map((source) => ({
-            targetId: source.sourceId || '', // Use sourceId instead of id
-            targetTitle: source.name || '',
-            targetType: source.type || '',
+            confirmed: !!source.confirmed,
+            contentId: source.sourceId,
+            targetId: source.sourceId,
+            targetType: source.type,
+            title: source.name,
         }));
     } catch (error) {
         console.error('Error normalizing sources:', error);
