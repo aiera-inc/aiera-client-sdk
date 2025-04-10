@@ -73,7 +73,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { chatId, chatStatus, onSetStatus, sources } = useChatStore();
+    const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
@@ -121,6 +121,8 @@ export function Messages({
         (messageId: string, sources: Source[]) => {
             confirmSourceConfirmation(messageId, sources)
                 .then(() => {
+                    // Update sources in the global store
+                    onAddSource(sources);
                     const originalMessage = virtuosoRef.current?.data.find((m) => m.id === messageId);
                     if (originalMessage) {
                         virtuosoRef.current?.data.map((message) => {
