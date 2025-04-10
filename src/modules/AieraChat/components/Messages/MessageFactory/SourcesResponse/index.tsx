@@ -15,7 +15,8 @@ export const SourcesResponse = ({
     data: ChatMessageSources;
 }) => {
     const { onSelectSource } = useChatStore();
-    const [showSourceDialog, setShowSourceDialog] = useState(false);
+    const [isConfirming, setIsConfirming] = useState<boolean>(false);
+    const [showSourceDialog, setShowSourceDialog] = useState<boolean>(false);
     const [localSources, setLocalSources] = useState<Source[]>(data.sources);
 
     const onAddSource = useCallback((s: Source) => {
@@ -28,14 +29,13 @@ export const SourcesResponse = ({
         );
     }, []);
 
+    useEffect(() => {
+        setLocalSources(data.sources);
+    }, [data.sources]);
+
     if (data.confirmed) {
         return <div />;
     }
-
-    useEffect(() => {
-        console.log('Setting local data sources!');
-        setLocalSources(data.sources);
-    }, [data.sources]);
 
     const isLoading = data.status === ChatMessageStatus.PENDING || data.status === ChatMessageStatus.QUEUED;
     const isComplete = !isLoading && data.status !== ChatMessageStatus.STREAMING;
@@ -80,7 +80,15 @@ export const SourcesResponse = ({
                     <Button className="mr-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
                         Add Source
                     </Button>
-                    <Button kind="primary" className="px-5" onClick={() => onConfirm(data.id, localSources)}>
+                    <Button
+                        className="px-5"
+                        disabled={isConfirming}
+                        kind="primary"
+                        onClick={() => {
+                            setIsConfirming(true);
+                            onConfirm(data.id, localSources);
+                        }}
+                    >
                         Confirm Sources
                     </Button>
                 </div>
