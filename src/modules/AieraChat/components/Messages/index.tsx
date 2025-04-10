@@ -18,7 +18,7 @@ import {
     ChatMessageType,
     useChatSession,
 } from '../../services/messages';
-import { useChatStore } from '../../store';
+import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import './styles.css';
 // import { SuggestedPrompts } from './SuggestedPrompts';
@@ -36,7 +36,7 @@ let idCounter = 0;
 export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
-    onConfirm: (k: string) => void;
+    onConfirm: (messageId: string, sources: Source[]) => void;
 }
 
 const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
@@ -74,7 +74,7 @@ export function Messages({
 }) {
     const config = useConfig();
     const { chatId, chatStatus, onSetStatus, sources } = useChatStore();
-    const { createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
+    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
     const { createAblyToken, isStreaming, partials, reset } = useAbly();
@@ -117,21 +117,30 @@ export function Messages({
         }
     }, []);
 
-    const onConfirm = useCallback((ordinalId: string) => {
-        const originalMessage = virtuosoRef.current?.data.find((m) => m.ordinalId === ordinalId);
-        if (originalMessage) {
-            virtuosoRef.current?.data.map((message) => {
-                if (message.ordinalId === ordinalId) {
-                    return {
-                        ...message,
-                        confirmed: true,
-                    };
-                }
+    const onConfirm = useCallback(
+        (messageId: string, sources: Source[]) => {
+            confirmSourceConfirmation(messageId, sources)
+                .then(() => {
+                    const originalMessage = virtuosoRef.current?.data.find((m) => m.id === messageId);
+                    if (originalMessage) {
+                        virtuosoRef.current?.data.map((message) => {
+                            if (message.id === messageId) {
+                                return {
+                                    ...message,
+                                    confirmed: true,
+                                };
+                            }
 
-                return message;
-            });
-        }
-    }, []);
+                            return message;
+                        });
+                    }
+                })
+                .catch((err: Error) =>
+                    console.log('Error confirming sources for chat message source confirmation:', err)
+                );
+        },
+        [confirmSourceConfirmation]
+    );
 
     const handleSubmit = useCallback(
         (prompt: string) => {
