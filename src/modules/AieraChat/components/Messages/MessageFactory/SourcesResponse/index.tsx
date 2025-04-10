@@ -7,12 +7,18 @@ import { ChatMessageSources, ChatMessageStatus } from '../../../../services/mess
 import { Source, useChatStore } from '../../../../store';
 import { Loading } from '../Loading';
 
-export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: ChatMessageSources }) => {
-    const { onSelectSource, onAddSource } = useChatStore();
+export const SourcesResponse = ({
+    data,
+    onConfirm,
+}: {
+    onConfirm: (messageId: string, sources: Source[]) => void;
+    data: ChatMessageSources;
+}) => {
+    const { onSelectSource } = useChatStore();
     const [showSourceDialog, setShowSourceDialog] = useState(false);
     const [localSources, setLocalSources] = useState<Source[]>(data.sources);
 
-    const onAddLocalSource = useCallback((s: Source) => {
+    const onAddSource = useCallback((s: Source) => {
         setLocalSources((pv) => [...pv, s]);
     }, []);
 
@@ -74,14 +80,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                     <Button className="mr-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
                         Add Source
                     </Button>
-                    <Button
-                        kind="primary"
-                        className="px-5"
-                        onClick={() => {
-                            onConfirm(data.id);
-                            onAddSource(localSources);
-                        }}
-                    >
+                    <Button kind="primary" className="px-5" onClick={() => onConfirm(data.id, localSources)}>
                         Confirm Sources
                     </Button>
                 </div>
@@ -95,7 +94,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
             )}
             {showSourceDialog && (
                 <AddSourceDialog
-                    onAddSource={onAddLocalSource}
+                    onAddSource={onAddSource}
                     onRemoveSource={onRemoveSource}
                     onClose={() => setShowSourceDialog(false)}
                     sources={localSources}

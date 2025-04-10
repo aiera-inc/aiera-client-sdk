@@ -118,7 +118,7 @@ interface UseChatSessionOptions {
 
 interface UseChatSessionReturn {
     confirmSourceConfirmation: (
-        messageId: number,
+        messageId: string,
         sources: Source[]
     ) => Promise<RawChatMessageSourceConfirmation | null>;
     createChatMessagePrompt: ({
@@ -570,7 +570,7 @@ export const useChatSession = ({
     >(CONFIRM_SOURCE_CONFIRMATION_MUTATION);
 
     const confirmSourceConfirmation = useCallback(
-        (messageId: number, sources: Source[]) => {
+        (messageId: string, sources: Source[]) => {
             return confirmSourceConfirmationMutation({
                 input: {
                     messageId: String(messageId),
