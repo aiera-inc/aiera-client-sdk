@@ -212,9 +212,9 @@ function getAllCitations(blocks: ContentBlock[]): Citation[] {
 /**
  * Map local sources to the generated ChatSource type for mutation inputs
  */
-function mapSourcesToInput(sources: Source[]): ChatSourceInput[] {
+function mapConfirmedSourcesToInput(sources: Source[]): ChatSourceInput[] {
     return sources.map((source: Source) => ({
-        confirmed: source.confirmed === undefined ? false : source.confirmed,
+        confirmed: true,
         sourceId: source.targetId,
         sourceName: source.title,
         sourceType: source.targetType as ChatSourceType,
@@ -575,7 +575,7 @@ export const useChatSession = ({
                 input: {
                     messageId: String(messageId),
                     sessionId: chatId,
-                    sources: mapSourcesToInput(sources),
+                    sources: mapConfirmedSourcesToInput(sources),
                     sessionUserId: config.tracking?.userId,
                 },
             })
@@ -589,7 +589,7 @@ export const useChatSession = ({
                     const message = resp.data?.confirmChatMessageSourceConfirmation
                         ?.chatMessage as RawChatMessageSourceConfirmation;
                     if (!message) {
-                        throw new Error('No chat message returned from mutation');
+                        console.log('No chat message returned from mutation!');
                     }
                     return message;
                 })
