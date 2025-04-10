@@ -281,6 +281,7 @@ export const CHAT_SESSION_QUERY = gql`
             userId
             sources {
                 __typename
+                confirmed
                 name
                 sourceId
                 type
@@ -298,6 +299,17 @@ export const CHAT_SESSION_QUERY = gql`
     }
     ${CHAT_MESSAGE_PROMPT_FRAGMENT}
     ${CHAT_MESSAGE_RESPONSE_FRAGMENT}
+    ${CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT}
+`;
+
+export const CONFIRM_SOURCE_CONFIRMATION_MUTATION = gql`
+    mutation ConfirmChatMessageSourceConfirmation($input: ConfirmSourceConfirmationInput!) {
+        confirmChatMessageSourceConfirmation(input: $input) {
+            chatMessage {
+                ...ChatMessageSourceConfirmationFragment
+            }
+        }
+    }
     ${CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT}
 `;
 

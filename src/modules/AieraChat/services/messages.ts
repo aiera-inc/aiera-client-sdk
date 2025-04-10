@@ -17,7 +17,11 @@ import {
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
+    ChatSourceInput,
+    ChatSourceType,
     CitableContent as RawCitableContent,
+    ConfirmChatMessageSourceConfirmationMutation,
+    ConfirmChatMessageSourceConfirmationMutationVariables,
     ContentBlock as RawContentBlock,
     CreateChatMessagePromptMutation,
     CreateChatMessagePromptMutationVariables,
@@ -40,14 +44,18 @@ import {
     ChartType,
 } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart';
 import { CellMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Table';
-import { CHAT_SESSION_QUERY, CREATE_CHAT_MESSAGE_MUTATION } from '@aiera/client-sdk/modules/AieraChat/services/graphql';
+import {
+    CHAT_SESSION_QUERY,
+    CONFIRM_SOURCE_CONFIRMATION_MUTATION,
+    CREATE_CHAT_MESSAGE_MUTATION,
+} from '@aiera/client-sdk/modules/AieraChat/services/graphql';
 import { AreaChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Area';
 import { BarChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Bar';
 import { LineChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Line';
 import { PieChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Pie';
 import { ScatterChartMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Scatter';
 import { TreeMapMeta } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Chart/Tree';
-import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
+import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
 const MAX_POLLING_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -115,6 +123,10 @@ interface UseChatSessionOptions {
 }
 
 interface UseChatSessionReturn {
+    confirmSourceConfirmation: (
+        messageId: number,
+        sources: Source[]
+    ) => Promise<RawChatMessageSourceConfirmation | null>;
     createChatMessagePrompt: ({
         content,
         sessionId,
@@ -201,6 +213,18 @@ function getAllCitations(blocks: ContentBlock[]): Citation[] {
     return allCitations.filter(
         (citation, index, self) => index === self.findIndex((c) => c.contentId === citation.contentId)
     );
+}
+
+/**
+ * Map local sources to the generated ChatSource type for mutation inputs
+ */
+function mapSourcesToInput(sources: Source[]): ChatSourceInput[] {
+    return sources.map((source: Source) => ({
+        confirmed: source.confirmed === undefined ? false : source.confirmed,
+        sourceId: source.targetId,
+        sourceName: source.title,
+        sourceType: source.targetType as ChatSourceType,
+    }));
 }
 
 /**
@@ -546,8 +570,46 @@ export const useChatSession = ({
     const [_refetchCount, setRefetchCount] = useState<number>(0);
     const [shouldStopPolling, setShouldStopPolling] = useState<boolean>(false);
 
-    // Use the create message mutation with the optimized query
-    const [_, createChatMessagePromptMutation] = useMutation<
+    const [_, confirmSourceConfirmationMutation] = useMutation<
+        ConfirmChatMessageSourceConfirmationMutation,
+        ConfirmChatMessageSourceConfirmationMutationVariables
+    >(CONFIRM_SOURCE_CONFIRMATION_MUTATION);
+
+    const confirmSourceConfirmation = useCallback(
+        (messageId: number, sources: Source[]) => {
+            return confirmSourceConfirmationMutation({
+                input: {
+                    messageId: String(messageId),
+                    sessionId: chatId,
+                    sources: mapSourcesToInput(sources),
+                    sessionUserId: config.tracking?.userId,
+                },
+            })
+                .then((resp) => {
+                    if (resp.error) {
+                        throw new Error(
+                            resp.error.message || 'Error confirming sources for chat message source confirmation'
+                        );
+                    }
+
+                    const message = resp.data?.confirmChatMessageSourceConfirmation
+                        ?.chatMessage as RawChatMessageSourceConfirmation;
+                    if (!message) {
+                        throw new Error('No chat message returned from mutation');
+                    }
+                    return message;
+                })
+                .catch((error: Error) => {
+                    const errorMessage = error.message || 'Error creating chat message prompt';
+                    console.error(errorMessage, error);
+                    setError(errorMessage);
+                    return null;
+                });
+        },
+        [chatId, config.tracking?.userId, confirmSourceConfirmationMutation]
+    );
+
+    const [__, createChatMessagePromptMutation] = useMutation<
         CreateChatMessagePromptMutation,
         CreateChatMessagePromptMutationVariables
     >(CREATE_CHAT_MESSAGE_MUTATION);
@@ -852,6 +914,7 @@ export const useChatSession = ({
     }, [chatId, enablePolling, messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
 
     return {
+        confirmSourceConfirmation,
         createChatMessagePrompt,
         error,
         isLoading,
