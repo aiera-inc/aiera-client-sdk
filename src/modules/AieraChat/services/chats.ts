@@ -43,7 +43,7 @@ export interface UseChatSessionsReturn {
 function mapSourcesToInput(sources?: Source[] | null): ChatSourceInput[] | null {
     return sources && sources.length > 0
         ? sources.map((source: Source) => ({
-              confirmed: source.confirmed,
+              confirmed: source.confirmed === undefined ? false : source.confirmed,
               sourceId: source.targetId,
               sourceName: source.title,
               sourceType: source.targetType as ChatSourceType,

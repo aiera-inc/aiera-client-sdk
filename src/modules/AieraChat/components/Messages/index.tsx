@@ -139,7 +139,6 @@ export function Messages({
                 onSubmit(prompt)
                     .then((session) => {
                         if (session && session.promptMessage) {
-                            console.log('Updating virtuoso with new prompt message:', session.promptMessage);
                             // Only prompt messages can be created when creating a chat session
                             const promptMessage: ChatMessagePrompt = {
                                 id: session.promptMessage.id,
@@ -267,7 +266,7 @@ export function Messages({
                             meta: { style: 'paragraph' },
                         },
                     ],
-                    sources: [], // partial messages won't have sources, yet
+                    sources: [], // partial messages won't have sources
                 };
                 virtuosoRef.current?.data.append([initialMessageResponse], ({ scrollInProgress, atBottom }) => {
                     return {
