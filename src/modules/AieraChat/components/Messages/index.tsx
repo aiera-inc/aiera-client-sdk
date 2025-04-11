@@ -18,7 +18,7 @@ import {
     ChatMessageType,
     useChatSession,
 } from '../../services/messages';
-import { useChatStore } from '../../store';
+import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import './styles.css';
 // import { SuggestedPrompts } from './SuggestedPrompts';
@@ -30,12 +30,13 @@ import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraCha
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 
+const STREAMING_STATUSES = [ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse];
 let idCounter = 0;
 
 export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
-    onConfirm: (k: string) => void;
+    onConfirm: (messageId: string, sources: Source[]) => void;
 }
 
 const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
@@ -72,8 +73,8 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const { chatId, chatStatus, onSetStatus, sources } = useChatStore();
-    const { createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
+    const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
+    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
     const { createAblyToken, isStreaming, partials, reset } = useAbly();
@@ -116,21 +117,32 @@ export function Messages({
         }
     }, []);
 
-    const onConfirm = useCallback((ordinalId: string) => {
-        const originalMessage = virtuosoRef.current?.data.find((m) => m.ordinalId === ordinalId);
-        if (originalMessage) {
-            virtuosoRef.current?.data.map((message) => {
-                if (message.ordinalId === ordinalId) {
-                    return {
-                        ...message,
-                        confirmed: true,
-                    };
-                }
+    const onConfirm = useCallback(
+        (messageId: string, sources: Source[]) => {
+            confirmSourceConfirmation(messageId, sources)
+                .then(() => {
+                    // Update sources in the global store
+                    onAddSource(sources);
+                    const originalMessage = virtuosoRef.current?.data.find((m) => m.id === messageId);
+                    if (originalMessage) {
+                        virtuosoRef.current?.data.map((message) => {
+                            if (message.id === messageId) {
+                                return {
+                                    ...message,
+                                    confirmed: true,
+                                };
+                            }
 
-                return message;
-            });
-        }
-    }, []);
+                            return message;
+                        });
+                    }
+                })
+                .catch((err: Error) =>
+                    console.log('Error confirming sources for chat message source confirmation:', err)
+                );
+        },
+        [confirmSourceConfirmation]
+    );
 
     const handleSubmit = useCallback(
         (prompt: string) => {
@@ -138,7 +150,6 @@ export function Messages({
                 onSubmit(prompt)
                     .then((session) => {
                         if (session && session.promptMessage) {
-                            console.log('Updating virtuoso with new prompt message:', session.promptMessage);
                             // Only prompt messages can be created when creating a chat session
                             const promptMessage: ChatMessagePrompt = {
                                 id: session.promptMessage.id,
@@ -171,7 +182,11 @@ export function Messages({
                     .then(() => {
                         // Update the session status to reflect what the server will persist
                         // This is needed to restart streaming partials for an existing session
-                        onSetStatus(ChatSessionStatus.GeneratingResponse);
+                        onSetStatus(
+                            sources && sources.length > 0
+                                ? ChatSessionStatus.GeneratingResponse
+                                : ChatSessionStatus.FindingSources
+                        );
                         createAblyToken(chatId)
                             .then(() => {
                                 console.log(`Successfully created ably token for session ${chatId}:`);
@@ -209,7 +224,7 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        if (partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+        if (partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
             // Set the streaming message if one already exists in virtuoso
@@ -262,7 +277,7 @@ export function Messages({
                             meta: { style: 'paragraph' },
                         },
                     ],
-                    sources: [], // partial messages won't have sources, yet
+                    sources: [], // partial messages won't have sources
                 };
                 virtuosoRef.current?.data.append([initialMessageResponse], ({ scrollInProgress, atBottom }) => {
                     return {
@@ -276,7 +291,7 @@ export function Messages({
     }, [chatStatus, partials]);
 
     useEffect(() => {
-        if (!isStreaming && partials && partials.length > 0 && chatStatus === ChatSessionStatus.GeneratingResponse) {
+        if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
             // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
             // to get the final response and updated chat title
             reset()
@@ -320,7 +335,7 @@ export function Messages({
                             ref={virtuosoRef}
                             style={{ flex: 1 }}
                             computeItemKey={({ data }: { data: ChatMessage }) => data.id}
-                            className="px-4 messagesScrollBars"
+                            className="mb-4 px-4 messagesScrollBars"
                             initialLocation={{ index: 'LAST', align: 'end' }}
                             initialData={messages}
                             shortSizeAlign="bottom-smooth"

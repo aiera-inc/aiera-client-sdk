@@ -173,7 +173,12 @@ export const useAbly = (): UseAblyReturn => {
                                             console.log('Stopping partials stream.');
                                             setIsStreaming(false);
                                         }
-                                        return;
+                                        // If this final partial is the only one, then still process it.
+                                        // This usually happens when something goes wrong with message streaming
+                                        // in the lambdas and the only partial that is generated is the final one.
+                                        if (partials && partials.length > 0) {
+                                            return;
+                                        }
                                     } else if (!isStreamingRef.current) {
                                         console.log('Starting to stream partials...');
                                         // Update the streaming status if it's the first partial

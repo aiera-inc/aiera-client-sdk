@@ -1,39 +1,25 @@
 import { Button } from '@aiera/client-sdk/components/Button';
 import { MicroTrash } from '@aiera/client-sdk/components/Svg/MicroTrash';
 import classNames from 'classnames';
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { AddSourceDialog } from '../../../../modals/AddSourceDialog';
 import { ChatMessageSources, ChatMessageStatus } from '../../../../services/messages';
 import { Source, useChatStore } from '../../../../store';
 import { Loading } from '../Loading';
 
-export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) => void; data: ChatMessageSources }) => {
-    const { onSelectSource, onAddSource } = useChatStore();
-    const [showSourceDialog, setShowSourceDialog] = useState(false);
-    const [localSources, setLocalSources] = useState<Source[]>([
-        {
-            title: 'Tesla Q3 2024 Earnings Call',
-            targetId: '2639849',
-            targetType: 'event',
-        },
-        {
-            title: 'Meta Platforms Q2 2024 Earnings Call',
-            targetId: '2658051',
-            targetType: 'event',
-        },
-        {
-            title: 'Apple Inc Q3 2024 Earnings Call',
-            targetId: '2656780',
-            targetType: 'event',
-        },
-        {
-            title: 'Tesla Q2 2024 Earnings Call',
-            targetId: '2613061',
-            targetType: 'event',
-        },
-    ]);
+export const SourcesResponse = ({
+    data,
+    onConfirm,
+}: {
+    onConfirm: (messageId: string, sources: Source[]) => void;
+    data: ChatMessageSources;
+}) => {
+    const { onSelectSource } = useChatStore();
+    const [isConfirming, setIsConfirming] = useState<boolean>(false);
+    const [showSourceDialog, setShowSourceDialog] = useState<boolean>(false);
+    const [localSources, setLocalSources] = useState<Source[]>(data.sources);
 
-    const onAddLocalSource = useCallback((s: Source) => {
+    const onAddSource = useCallback((s: Source) => {
         setLocalSources((pv) => [...pv, s]);
     }, []);
 
@@ -42,6 +28,10 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
             pv.filter((source) => !(source.targetId === s.targetId && source.targetType === s.targetType))
         );
     }, []);
+
+    useEffect(() => {
+        setLocalSources(data.sources);
+    }, [data.sources]);
 
     if (data.confirmed) {
         return <div />;
@@ -91,11 +81,12 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
                         Add Source
                     </Button>
                     <Button
-                        kind="primary"
                         className="px-5"
+                        disabled={isConfirming}
+                        kind="primary"
                         onClick={() => {
-                            onConfirm(data.id);
-                            onAddSource(localSources);
+                            setIsConfirming(true);
+                            onConfirm(data.id, localSources);
                         }}
                     >
                         Confirm Sources
@@ -111,7 +102,7 @@ export const SourcesResponse = ({ data, onConfirm }: { onConfirm: (k: string) =>
             )}
             {showSourceDialog && (
                 <AddSourceDialog
-                    onAddSource={onAddLocalSource}
+                    onAddSource={onAddSource}
                     onRemoveSource={onRemoveSource}
                     onClose={() => setShowSourceDialog(false)}
                     sources={localSources}
