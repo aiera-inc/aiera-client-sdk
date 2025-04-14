@@ -4,14 +4,21 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'urql';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables } from '@aiera/client-sdk/types';
-import { ChatSource, Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
+import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
+import {
+    ChatMessageSources,
+    ChatMessageStatus,
+    ChatMessageType,
+} from '@aiera/client-sdk/modules/AieraChat/services/messages';
+import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 
 interface AblyToken {
     clientId: string;
 }
 
 interface UseAblyReturn {
-    ably: Realtime | undefined;
+    ably?: Realtime;
+    confirmation?: ChatMessageSources;
     createAblyToken: (sessionId: string) => Promise<AblyToken | null>;
     error?: string;
     isConnected: boolean;
@@ -43,6 +50,13 @@ type PartialTextBlock = {
 };
 
 // Interface for the base structure of the message data
+interface AblyConfirmationSource {
+    confirmed: boolean;
+    id: number;
+    name: string;
+    type: string;
+}
+
 interface AblyMessageData {
     __typename: string;
     blocks?: PartialTextBlock[];
@@ -53,7 +67,7 @@ interface AblyMessageData {
     prompt_message_id: string | null;
     runner_version: string;
     session_id: number;
-    sources?: ChatSource[];
+    sources?: AblyConfirmationSource[];
     updated_at: string;
     user_id: number;
 }
@@ -67,6 +81,7 @@ type AblyEncodedData = {
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
+    const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [partials, setPartials] = useState<string[]>([]);
     const [ably, setAbly] = useState<Realtime | undefined>(undefined);
     const [channelSubscribed, setChannelSubscribed] = useState<boolean>(false);
@@ -192,12 +207,40 @@ export const useAbly = (): UseAblyReturn => {
                                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
                                     console.log('Decoded Ably message:', jsonObject);
 
-                                    // Process the message and update partials
+                                    // Process the response message and update partials
                                     if (jsonObject.blocks) {
                                         const parsedMessage = jsonObject.blocks?.[0]?.content?.[0]?.value;
                                         if (parsedMessage) {
                                             // Update partials state with the new message
                                             setPartials((prev) => [...prev, parsedMessage]);
+                                        }
+                                    }
+
+                                    // If this is a source confirmation message, parse and store it in state
+                                    if (jsonObject.message_type === 'source_confirmation') {
+                                        if (jsonObject.sources && jsonObject.sources.length > 0) {
+                                            const sources: Source[] = jsonObject.sources.map((source) => ({
+                                                confirmed: source.confirmed,
+                                                targetId: String(source.id),
+                                                targetType: source.type,
+                                                title: source.name,
+                                            }));
+                                            const confirmation: ChatMessageSources = {
+                                                confirmed: false, // user action will confirm it
+                                                id: `temp-confirmation-${sessionId}-${
+                                                    jsonObject.prompt_message_id ?? ''
+                                                }`,
+                                                ordinalId: jsonObject.ordinal_id,
+                                                prompt: '', // placeholder, get text from virtuoso using the prompt id
+                                                promptMessageId: jsonObject.prompt_message_id ?? undefined,
+                                                sources,
+                                                status: ChatMessageStatus.COMPLETED,
+                                                timestamp: jsonObject.created_at,
+                                                type: ChatMessageType.SOURCES,
+                                            };
+                                            setConfirmation(confirmation); // overwrite
+                                        } else {
+                                            setError('Received source confirmation message without sources');
                                         }
                                     }
                                 } catch (err) {
@@ -262,5 +305,5 @@ export const useAbly = (): UseAblyReturn => {
         });
     }, []);
 
-    return { ably, createAblyToken, error, isConnected, isStreaming, partials, reset };
+    return { ably, confirmation, createAblyToken, error, isConnected, isStreaming, partials, reset };
 };

@@ -90,6 +90,7 @@ export interface ChatMessageBase {
     timestamp: string;
     status: ChatMessageStatus;
     prompt: string;
+    promptMessageId?: string;
     type: ChatMessageType;
 }
 
