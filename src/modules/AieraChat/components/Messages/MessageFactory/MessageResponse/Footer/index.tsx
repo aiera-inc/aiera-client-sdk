@@ -10,6 +10,8 @@ import { ChatMessage } from '@aiera/client-sdk/modules/AieraChat/services/messag
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
+import { FeedbackDialog } from '@aiera/client-sdk/modules/AieraChat/modals/FeedbackDialog';
+import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
 
 type MessageFeedback = 'pos' | 'neg' | undefined;
 
@@ -33,6 +35,7 @@ export const Footer = ({
     const [copied, setCopied] = useState(false);
     // TODO getMessage from network / cache for managing feedback
     const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
+    const [showFeedback, setShowFeedback] = useState(false);
     const [showSourceDialog, setShowSourceDialog] = useState(false);
     const [localSources, setLocalSources] = useState<Source[]>([
         {
@@ -64,6 +67,10 @@ export const Footer = ({
         setLocalSources((pv) =>
             pv.filter((source) => !(source.targetId === s.targetId && source.targetType === s.targetType))
         );
+    }, []);
+
+    const onSubmitFeedback = useCallback(() => {
+        console.log('submitted!');
     }, []);
 
     const onHandleCopy = useCallback(() => {
@@ -127,6 +134,16 @@ export const Footer = ({
                     />
                 )}
                 <div className="flex-1" />
+                <IconButton
+                    className="ml-2"
+                    hintText="Submit Feedback"
+                    hintAnchor="top-right"
+                    hintGrow="up-left"
+                    Icon={MicroChatLeftRight}
+                    onClick={() => setShowFeedback(true)}
+                >
+                    Feedback
+                </IconButton>
                 {showEditSources && (
                     <IconButton
                         className="ml-2"
@@ -158,6 +175,7 @@ export const Footer = ({
                     sources={localSources}
                 />
             )}
+            {showFeedback && <FeedbackDialog onClose={() => setShowFeedback(false)} onSubmit={onSubmitFeedback} />}
         </>
     );
 };
