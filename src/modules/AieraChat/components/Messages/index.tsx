@@ -77,7 +77,7 @@ export function Messages({
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { createAblyToken, isStreaming, partials, reset } = useAbly();
+    const { confirmation, createAblyToken, isStreaming, partials, reset } = useAbly();
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -288,7 +288,7 @@ export function Messages({
                 });
             }
         }
-    }, [chatStatus, partials]);
+    }, [chatStatus, partials, virtuosoRef.current?.data]);
 
     useEffect(() => {
         if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
@@ -303,6 +303,22 @@ export function Messages({
                 .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
         }
     }, [chatStatus, isStreaming, partials, refresh, reset]);
+
+    // Update virtuoso with any source confirmation messages coming from Ably
+    useEffect(() => {
+        if (confirmation) {
+            const existing = virtuosoRef.current?.data.find((m) => m.id === confirmation.id);
+            if (!existing) {
+                virtuosoRef.current?.data.append([confirmation], ({ scrollInProgress, atBottom }) => {
+                    return {
+                        index: 'LAST',
+                        align: 'end',
+                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                    };
+                });
+            }
+        }
+    }, [confirmation, virtuosoRef.current?.data]);
 
     // Reset messages when the selected chat changes
     useEffect(() => {

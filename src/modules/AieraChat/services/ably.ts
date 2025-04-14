@@ -291,6 +291,7 @@ export const useAbly = (): UseAblyReturn => {
             // Batch multiple state updates in a requestAnimationFrame
             // to ensure they're processed in the same render cycle
             requestAnimationFrame(() => {
+                setConfirmation(undefined);
                 setError(undefined);
                 setIsStreaming(false);
                 setPartials([]);
