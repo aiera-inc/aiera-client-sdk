@@ -2,6 +2,7 @@ import { Button } from '@aiera/client-sdk/components/Button';
 import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
 import React, { ReactElement, ReactNode, useState } from 'react';
 import { Modal } from '../Modal';
+import classNames from 'classnames';
 
 interface FeedbackDialogProps {
     onClose: () => void;
@@ -116,6 +117,10 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
         }
     };
 
+    const selectClassName =
+        'mt-1 block py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md';
+    const selectOptionClassName = 'px-3';
+    const formSectionClassName = 'space-y-2 flex flex-col';
     return (
         <Modal
             variant="minimal"
@@ -127,10 +132,10 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
             {/* Questions Start */}
             <div className="max-h-96 overflow-y-auto px-6 pb-4 space-y-4">
                 {/* 1. Source Suggestion */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Source Suggestion</SectionHeader>
                     <div className="ml-4">
-                        <label className="block text-sm font-medium text-slate-700">1.a. Sources were suggested:</label>
+                        <label className="block text-sm font-medium text-slate-700">Sources were suggested:</label>
                         <div className="mt-1 flex items-center space-x-4">
                             <label className="inline-flex items-center">
                                 <input
@@ -159,43 +164,57 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
 
                     {formData.sourceSuggested === 'y' && (
                         <>
-                            <div className="ml-8">
+                            <div className="mx-4 flex flex-col">
                                 <label className="block text-sm font-medium text-slate-700">
-                                    1.b. Sources were relevant:
+                                    Sources were relevant:
                                 </label>
                                 <select
                                     size={4}
                                     name="sourcesRelevant"
                                     value={formData.sourcesRelevant}
                                     onChange={handleChange}
-                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                    className={selectClassName}
                                 >
-                                    <option value="">Select an option</option>
-                                    <option value="2">2 - Suggested sources are relevant and comprehensive</option>
-                                    <option value="1">1 - Suggested sources are missing necessary sources</option>
-                                    <option value="0">0 - Suggested sources are completely off-topic</option>
+                                    <option className={selectOptionClassName} value="">
+                                        Select an option
+                                    </option>
+                                    <option className={selectOptionClassName} value="2">
+                                        2 - Suggested sources are relevant and comprehensive
+                                    </option>
+                                    <option className={selectOptionClassName} value="1">
+                                        1 - Suggested sources are missing necessary sources
+                                    </option>
+                                    <option className={selectOptionClassName} value="0">
+                                        0 - Suggested sources are completely off-topic
+                                    </option>
                                 </select>
                             </div>
 
                             {(formData.sourcesRelevant === '1' || formData.sourcesRelevant === '2') && (
-                                <div className="ml-8">
-                                    <label className="block text-sm font-medium text-slate-700">
-                                        1.c. Source ordering:
-                                    </label>
+                                <div className="mx-4 flex flex-col">
+                                    <label className="block text-sm font-medium text-slate-700">Source ordering:</label>
                                     <select
                                         size={5}
                                         name="sourceOrdering"
                                         value={formData.sourceOrdering}
                                         onChange={handleChange}
-                                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                        className={selectClassName}
                                     >
-                                        <option value="">Select an option</option>
-                                        <option value="3">3 - Ordered from most-to-least relevant</option>
-                                        <option value="2">
+                                        <option className={selectOptionClassName} value="">
+                                            Select an option
+                                        </option>
+                                        <option className={selectOptionClassName} value="3">
+                                            3 - Ordered from most-to-least relevant
+                                        </option>
+                                        <option className={selectOptionClassName} value="2">
                                             2 - Not exactly ordered but relevant sources appear early
                                         </option>
-                                        <option value="1">1 - Sources provided in seemingly random order</option>
-                                        <option value="0">0 - Ordered from least-to-most relevant</option>
+                                        <option className={selectOptionClassName} value="1">
+                                            1 - Sources provided in seemingly random order
+                                        </option>
+                                        <option className={selectOptionClassName} value="0">
+                                            0 - Ordered from least-to-most relevant
+                                        </option>
                                     </select>
                                 </div>
                             )}
@@ -204,89 +223,136 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                 </div>
 
                 {/* 2. Relevance & Completeness */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Relevance & Completeness</SectionHeader>
                     <select
                         name="relevanceCompleteness"
                         value={formData.relevanceCompleteness}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className={classNames(selectClassName, 'mx-4')}
                         size={7}
                     >
-                        <option value="">Select an option</option>
-                        <option value="5">5 - Response fully addresses all aspects (perfect)</option>
-                        <option value="4">4 - Response addresses main aspects with sufficient detail</option>
-                        <option value="3">3 - Response addresses main question but misses some details</option>
-                        <option value="2">2 - Response partially addresses question with significant omissions</option>
-                        <option value="1">1 - Response is minimally relevant to question</option>
-                        <option value="0">0 - Response is completely off-topic</option>
+                        <option className={selectOptionClassName} value="">
+                            Select an option
+                        </option>
+                        <option className={selectOptionClassName} value="5">
+                            5 - Response fully addresses all aspects (perfect)
+                        </option>
+                        <option className={selectOptionClassName} value="4">
+                            4 - Response addresses main aspects with sufficient detail
+                        </option>
+                        <option className={selectOptionClassName} value="3">
+                            3 - Response addresses main question but misses some details
+                        </option>
+                        <option className={selectOptionClassName} value="2">
+                            2 - Response partially addresses question with significant omissions
+                        </option>
+                        <option className={selectOptionClassName} value="1">
+                            1 - Response is minimally relevant to question
+                        </option>
+                        <option className={selectOptionClassName} value="0">
+                            0 - Response is completely off-topic
+                        </option>
                     </select>
                 </div>
 
                 {/* 3. Conciseness */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Conciseness</SectionHeader>
                     <select
                         name="conciseness"
                         value={formData.conciseness}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className={classNames(selectClassName, 'mx-4')}
                         size={7}
                     >
-                        <option value="">Select an option</option>
-                        <option value="5">5 - Optimal length and structure (perfect)</option>
-                        <option value="4">4 - Clear with good organization and appropriate detail</option>
-                        <option value="3">3 - Mostly clear but with some confusing elements or verbosity</option>
-                        <option value="2">2 - Difficult to follow with poor organization</option>
-                        <option value="1">1 - Very confusing or inappropriately lengthy/brief</option>
-                        <option value="0">0 - Incomprehensible</option>
+                        <option className={selectOptionClassName} value="">
+                            Select an option
+                        </option>
+                        <option className={selectOptionClassName} value="5">
+                            5 - Optimal length and structure (perfect)
+                        </option>
+                        <option className={selectOptionClassName} value="4">
+                            4 - Clear with good organization and appropriate detail
+                        </option>
+                        <option className={selectOptionClassName} value="3">
+                            3 - Mostly clear but with some confusing elements or verbosity
+                        </option>
+                        <option className={selectOptionClassName} value="2">
+                            2 - Difficult to follow with poor organization
+                        </option>
+                        <option className={selectOptionClassName} value="1">
+                            1 - Very confusing or inappropriately lengthy/brief
+                        </option>
+                        <option className={selectOptionClassName} value="0">
+                            0 - Incomprehensible
+                        </option>
                     </select>
                 </div>
 
                 {/* 4. Conversational Flow */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Conversational Flow</SectionHeader>
                     <select
                         size={5}
                         name="conversationalFlow"
                         value={formData.conversationalFlow}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className={classNames(selectClassName, 'mx-4')}
                     >
-                        <option value="">Select an option</option>
-                        <option value="3">3 - Natural, engaging conversation that builds rapport</option>
-                        <option value="2">2 - Awkward conversation that creates friction</option>
-                        <option value="1">1 - Inappropriate tone or style that hinders communication</option>
-                        <option value="0">0 - Completely fails at maintaining conversation</option>
+                        <option className={selectOptionClassName} value="">
+                            Select an option
+                        </option>
+                        <option className={selectOptionClassName} value="3">
+                            3 - Natural, engaging conversation that builds rapport
+                        </option>
+                        <option className={selectOptionClassName} value="2">
+                            2 - Awkward conversation that creates friction
+                        </option>
+                        <option className={selectOptionClassName} value="1">
+                            1 - Inappropriate tone or style that hinders communication
+                        </option>
+                        <option className={selectOptionClassName} value="0">
+                            0 - Completely fails at maintaining conversation
+                        </option>
                     </select>
                 </div>
 
                 {/* 5. Citation Quality */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Citation Quality</SectionHeader>
-                    <div className="ml-4">
-                        <label className="block text-sm font-medium text-slate-700">
-                            5.a. Generation of citations:
-                        </label>
+                    <div className="mx-4">
+                        <label className="block text-sm font-medium text-slate-700">Generation of citations:</label>
                         <select
                             name="citationQuality"
                             value={formData.citationQuality}
                             onChange={handleChange}
-                            className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                            className={selectClassName}
                             size={5}
                         >
-                            <option value="">Select an option</option>
-                            <option value="3">3 - Citations accurately reference relevant source documents</option>
-                            <option value="2">2 - Citations were generated, but contain irrelevant references</option>
-                            <option value="1">1 - Citations were generated, but missing critical references</option>
-                            <option value="0">0 - No citations generated</option>
+                            <option className={selectOptionClassName} value="">
+                                Select an option
+                            </option>
+                            <option className={selectOptionClassName} value="3">
+                                3 - Citations accurately reference relevant source documents
+                            </option>
+                            <option className={selectOptionClassName} value="2">
+                                2 - Citations were generated, but contain irrelevant references
+                            </option>
+                            <option className={selectOptionClassName} value="1">
+                                1 - Citations were generated, but missing critical references
+                            </option>
+                            <option className={selectOptionClassName} value="0">
+                                0 - No citations generated
+                            </option>
                         </select>
                     </div>
 
                     {formData.citationQuality && formData.citationQuality !== '0' && (
-                        <div className="ml-4">
+                        <div className="mx-4">
                             <label className="block text-sm font-medium text-slate-700">
-                                5.b. When engaging with citations, did the click-through bring you to the relevant item?
+                                When engaging with citations, <br />
+                                did the click-through bring you to the relevant item?
                             </label>
                             <div className="mt-1 flex items-center space-x-4">
                                 <label className="inline-flex items-center">
@@ -317,9 +383,9 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                 </div>
 
                 {/* 6. Handling Ambiguity */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Handling Ambiguity</SectionHeader>
-                    <div className="ml-4">
+                    <div className="mx-4 flex flex-col">
                         <label className="block text-sm font-medium text-slate-700">
                             Did your question involve ambiguity?
                         </label>
@@ -350,7 +416,7 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                     </div>
 
                     {formData.questionAmbiguity === 'y' && (
-                        <div className="ml-8">
+                        <div className="mx-4 flex flex-col">
                             <label className="block text-sm font-medium text-slate-700">
                                 How did Aiera Chat handle the ambiguity?
                             </label>
@@ -358,20 +424,28 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                                 name="handlingAmbiguity"
                                 value={formData.handlingAmbiguity}
                                 onChange={handleChange}
-                                className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                className={selectClassName}
                                 size={4}
                             >
-                                <option value="">Select an option</option>
-                                <option value="2">2 - Able to disambiguate or ask clarifying questions</option>
-                                <option value="1">1 - Attempts to resolve ambiguity</option>
-                                <option value="0">0 - Makes no attempt to resolve ambiguity</option>
+                                <option className={selectOptionClassName} value="">
+                                    Select an option
+                                </option>
+                                <option className={selectOptionClassName} value="2">
+                                    2 - Able to disambiguate or ask clarifying questions
+                                </option>
+                                <option className={selectOptionClassName} value="1">
+                                    1 - Attempts to resolve ambiguity
+                                </option>
+                                <option className={selectOptionClassName} value="0">
+                                    0 - Makes no attempt to resolve ambiguity
+                                </option>
                             </select>
                         </div>
                     )}
                 </div>
 
                 {/* 7. Knowledge Boundaries */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Knowledge Boundaries</SectionHeader>
                     <label className="block text-sm ml-4 font-medium text-slate-700">
                         Is Aiera Chat aware of the bounds of information it has access to?
@@ -380,58 +454,78 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                         name="knowledgeBoundaries"
                         value={formData.knowledgeBoundaries}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className={classNames(selectClassName, 'mx-4')}
                         size={4}
                     >
-                        <option value="">Select an option</option>
-                        <option value="2">2 - Understands and communicates knowledge boundaries</option>
-                        <option value="1">1 - Unclear about information limitations</option>
-                        <option value="0">0 - Misleads about knowledge boundaries</option>
+                        <option className={selectOptionClassName} value="">
+                            Select an option
+                        </option>
+                        <option className={selectOptionClassName} value="2">
+                            2 - Understands and communicates knowledge boundaries
+                        </option>
+                        <option className={selectOptionClassName} value="1">
+                            1 - Unclear about information limitations
+                        </option>
+                        <option className={selectOptionClassName} value="0">
+                            0 - Misleads about knowledge boundaries
+                        </option>
                     </select>
                 </div>
 
                 {/* 8. Follow-up Handling */}
-                <div className="space-y-2">
+                <div className={formSectionClassName}>
                     <SectionHeader>Follow-up Handling</SectionHeader>
                     <select
                         name="followUpHandling"
                         value={formData.followUpHandling}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className={classNames(selectClassName, 'mx-4')}
                         size={6}
                     >
-                        <option value="">Select an option</option>
-                        <option value="3">3 - Handles follow-up questions with context retention</option>
-                        <option value="2">2 - Good handling of follow-ups with minor context issues</option>
-                        <option value="1">1 - Poor follow-up handling with significant context loss</option>
-                        <option value="0">0 - Unable to maintain context across interactions</option>
-                        <option value="N/A">N/A - Not applicable</option>
+                        <option className={selectOptionClassName} value="">
+                            Select an option
+                        </option>
+                        <option className={selectOptionClassName} value="3">
+                            3 - Handles follow-up questions with context retention
+                        </option>
+                        <option className={selectOptionClassName} value="2">
+                            2 - Good handling of follow-ups with minor context issues
+                        </option>
+                        <option className={selectOptionClassName} value="1">
+                            1 - Poor follow-up handling with significant context loss
+                        </option>
+                        <option className={selectOptionClassName} value="0">
+                            0 - Unable to maintain context across interactions
+                        </option>
+                        <option className={selectOptionClassName} value="N/A">
+                            N/A - Not applicable
+                        </option>
                     </select>
                 </div>
 
                 {/* Qualitative Assessment */}
-                <div className="space-y-2">
+                <div className="space-y-4">
                     <SectionHeader>Qualitative Assessment</SectionHeader>
-                    <div className="ml-4">
+                    <div className="mx-4 flex flex-col">
                         <label className="block text-sm font-medium text-slate-700">Strengths:</label>
                         <textarea
                             name="strengths"
                             value={formData.strengths}
                             onChange={handleChange}
                             rows={3}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             placeholder="Note specific strengths..."
                         ></textarea>
                     </div>
 
-                    <div className="ml-4">
+                    <div className="mx-4 flex flex-col">
                         <label className="block text-sm font-medium text-slate-700">Areas for Improvement:</label>
                         <textarea
                             name="improvements"
                             value={formData.improvements}
                             onChange={handleChange}
                             rows={3}
-                            className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                            className="mt-1 block border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
                             placeholder="Note specific improvement opportunities..."
                         ></textarea>
                     </div>
