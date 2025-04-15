@@ -12,6 +12,7 @@ import { SearchInput } from '../../components/SearchInput';
 import { useEvents } from '../../services/events';
 import { Source, useChatStore } from '../../store';
 import { ContentRow } from '../../components/ContentRow';
+import { MicroDocumentSearch } from '@aiera/client-sdk/components/Svg/MicroDocumentSearch';
 
 const EMPTY_SOURCES_MESSAGE = 'You must select at least one source to submit a question.';
 
@@ -100,35 +101,43 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                                   { targetId: id, targetType: 'event', title },
                                                   sources
                                               );
+
+                                              const toggleSource = sourceAdded
+                                                  ? () => onRemoveSource(id, 'event')
+                                                  : () =>
+                                                        onAddSource({
+                                                            confirmed: true,
+                                                            targetId: id,
+                                                            targetType: 'event',
+                                                            title,
+                                                        });
+
                                               return (
                                                   <ContentRow
                                                       text={title}
                                                       key={id}
-                                                      onClick={() => {
-                                                          onSelectSource({
-                                                              targetId: id,
-                                                              targetType: 'event',
-                                                              title,
-                                                          });
-                                                      }}
-                                                      onClickIcon={
-                                                          sourceAdded
-                                                              ? () => onRemoveSource(id, 'event')
-                                                              : () =>
-                                                                    onAddSource({
-                                                                        confirmed: true,
-                                                                        targetId: id,
-                                                                        targetType: 'event',
-                                                                        title,
-                                                                    })
-                                                      }
+                                                      onClickIcon={[
+                                                          toggleSource,
+                                                          () => {
+                                                              onSelectSource({
+                                                                  targetId: id,
+                                                                  targetType: 'event',
+                                                                  title,
+                                                              });
+                                                          },
+                                                      ]}
+                                                      onClick={toggleSource}
                                                       className="mx-5"
-                                                      Icon={sourceAdded ? MicroDocumentMinus : MicroDocumentPlus}
-                                                      iconClassName={
+                                                      Icon={[
+                                                          sourceAdded ? MicroDocumentMinus : MicroDocumentPlus,
+                                                          MicroDocumentSearch,
+                                                      ]}
+                                                      iconClassName={[
                                                           sourceAdded
                                                               ? 'text-red-500 hover:text-red-700'
-                                                              : 'hover:text-blue-600'
-                                                      }
+                                                              : 'hover:text-blue-600',
+                                                          'hover:text-blue-600',
+                                                      ]}
                                                   />
                                               );
                                           })
@@ -144,19 +153,22 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                   .otherwise(() => null)
                             : sources.map(({ targetId, targetType, title }) => (
                                   <ContentRow
-                                      className="mx-5"
+                                      className="mx-5 group"
                                       text={title}
                                       key={targetId}
-                                      onClick={() => {
-                                          onSelectSource({
-                                              targetId,
-                                              targetType,
-                                              title,
-                                          });
-                                      }}
-                                      onClickIcon={() => onRemoveSource(targetId, targetType)}
-                                      Icon={MicroDocumentMinus}
-                                      iconClassName={'text-red-500 hover:text-red-700'}
+                                      onClickIcon={[
+                                          () => onRemoveSource(targetId, targetType),
+                                          () => {
+                                              onSelectSource({
+                                                  targetId,
+                                                  targetType,
+                                                  title,
+                                              });
+                                          },
+                                      ]}
+                                      onClick={() => onRemoveSource(targetId, targetType)}
+                                      Icon={[MicroDocumentMinus, MicroDocumentSearch]}
+                                      iconClassName={['group-hover:text-red-500', 'hover:text-blue-600']}
                                   />
                               ))}
                         {!searchTerm && sources.length === 0 && (

@@ -1,10 +1,9 @@
 import { Button } from '@aiera/client-sdk/components/Button';
 import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
-import React, { MouseEvent, ReactElement, useState } from 'react';
+import React, { ReactElement, ReactNode, useState } from 'react';
 import { Modal } from '../Modal';
 
 interface FeedbackDialogProps {
-    onSubmit?: (e: MouseEvent, formData: any) => void;
     onClose: () => void;
     messageId: string;
     prompt: string;
@@ -13,7 +12,15 @@ interface FeedbackDialogProps {
 const googleSheetUrl =
     'https://script.google.com/macros/s/AKfycbxCuM7iY64onqnhxKPzd5nbHANzBbVT3v2xiDYA3TnOqSVgfSVfqlBFzPmfrNSwDlmv-Q/exec';
 
-export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: FeedbackDialogProps): ReactElement {
+function SectionHeader({ children }: { children: ReactNode }) {
+    return (
+        <div className="px-4 bg-slate-200/60-solid rounded-xl flex relative py-3.5">
+            <p className="text-base font-bold antialiased leading-[1.125rem]">{children}</p>
+        </div>
+    );
+}
+
+export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogProps): ReactElement {
     // State to track all form values and submission status
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
@@ -70,11 +77,7 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
     };
 
     // Handle the form submission
-    const handleSubmit = async (e: MouseEvent) => {
-        if (onSubmit) {
-            onSubmit(e, formData);
-        }
-
+    const handleSubmit = async () => {
         // If Google Sheets integration is enabled
         if (googleSheetUrl) {
             try {
@@ -121,16 +124,12 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
             className="justify-center items-center"
             Icon={MicroChatLeftRight}
         >
-            <p className="text-base mt-1 mb-4 leading-5 text-slate-600 text-balance text-center">
-                Please answer the following questions
-            </p>
             {/* Questions Start */}
-            <div className="max-h-96 overflow-y-auto px-4 py-2 space-y-4">
+            <div className="max-h-96 overflow-y-auto px-6 pb-4 space-y-4">
                 {/* 1. Source Suggestion */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Source Suggestion</h3>
-
-                    <div className="ml-2">
+                    <SectionHeader>Source Suggestion</SectionHeader>
+                    <div className="ml-4">
                         <label className="block text-sm font-medium text-slate-700">1.a. Sources were suggested:</label>
                         <div className="mt-1 flex items-center space-x-4">
                             <label className="inline-flex items-center">
@@ -160,15 +159,16 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                     {formData.sourceSuggested === 'y' && (
                         <>
-                            <div className="ml-2">
+                            <div className="ml-8">
                                 <label className="block text-sm font-medium text-slate-700">
                                     1.b. Sources were relevant:
                                 </label>
                                 <select
+                                    size={4}
                                     name="sourcesRelevant"
                                     value={formData.sourcesRelevant}
                                     onChange={handleChange}
-                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                    className="mt-1 block w-full pl-3 pr-10 py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                                 >
                                     <option value="">Select an option</option>
                                     <option value="2">2 - Suggested sources are relevant and comprehensive</option>
@@ -178,11 +178,12 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
                             </div>
 
                             {(formData.sourcesRelevant === '1' || formData.sourcesRelevant === '2') && (
-                                <div className="ml-2">
+                                <div className="ml-8">
                                     <label className="block text-sm font-medium text-slate-700">
                                         1.c. Source ordering:
                                     </label>
                                     <select
+                                        size={5}
                                         name="sourceOrdering"
                                         value={formData.sourceOrdering}
                                         onChange={handleChange}
@@ -204,12 +205,13 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* 2. Relevance & Completeness */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Relevance & Completeness</h3>
+                    <SectionHeader>Relevance & Completeness</SectionHeader>
                     <select
                         name="relevanceCompleteness"
                         value={formData.relevanceCompleteness}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        size={7}
                     >
                         <option value="">Select an option</option>
                         <option value="5">5 - Response fully addresses all aspects (perfect)</option>
@@ -223,12 +225,13 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* 3. Conciseness */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Conciseness</h3>
+                    <SectionHeader>Conciseness</SectionHeader>
                     <select
                         name="conciseness"
                         value={formData.conciseness}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        size={7}
                     >
                         <option value="">Select an option</option>
                         <option value="5">5 - Optimal length and structure (perfect)</option>
@@ -242,12 +245,13 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* 4. Conversational Flow */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Conversational Flow</h3>
+                    <SectionHeader>Conversational Flow</SectionHeader>
                     <select
+                        size={5}
                         name="conversationalFlow"
                         value={formData.conversationalFlow}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
                     >
                         <option value="">Select an option</option>
                         <option value="3">3 - Natural, engaging conversation that builds rapport</option>
@@ -259,9 +263,8 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* 5. Citation Quality */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Citation Quality</h3>
-
-                    <div className="ml-2">
+                    <SectionHeader>Citation Quality</SectionHeader>
+                    <div className="ml-4">
                         <label className="block text-sm font-medium text-slate-700">
                             5.a. Generation of citations:
                         </label>
@@ -269,7 +272,8 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
                             name="citationQuality"
                             value={formData.citationQuality}
                             onChange={handleChange}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                            className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                            size={5}
                         >
                             <option value="">Select an option</option>
                             <option value="3">3 - Citations accurately reference relevant source documents</option>
@@ -280,7 +284,7 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
                     </div>
 
                     {formData.citationQuality && formData.citationQuality !== '0' && (
-                        <div className="ml-2">
+                        <div className="ml-4">
                             <label className="block text-sm font-medium text-slate-700">
                                 5.b. When engaging with citations, did the click-through bring you to the relevant item?
                             </label>
@@ -314,9 +318,8 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* 6. Handling Ambiguity */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Handling Ambiguity</h3>
-
-                    <div>
+                    <SectionHeader>Handling Ambiguity</SectionHeader>
+                    <div className="ml-4">
                         <label className="block text-sm font-medium text-slate-700">
                             Did your question involve ambiguity?
                         </label>
@@ -347,7 +350,7 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
                     </div>
 
                     {formData.questionAmbiguity === 'y' && (
-                        <div className="ml-2">
+                        <div className="ml-8">
                             <label className="block text-sm font-medium text-slate-700">
                                 How did Aiera Chat handle the ambiguity?
                             </label>
@@ -355,7 +358,8 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
                                 name="handlingAmbiguity"
                                 value={formData.handlingAmbiguity}
                                 onChange={handleChange}
-                                className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                                size={4}
                             >
                                 <option value="">Select an option</option>
                                 <option value="2">2 - Able to disambiguate or ask clarifying questions</option>
@@ -368,15 +372,16 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* 7. Knowledge Boundaries */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Knowledge Boundaries</h3>
-                    <label className="block text-sm font-medium text-slate-700">
+                    <SectionHeader>Knowledge Boundaries</SectionHeader>
+                    <label className="block text-sm ml-4 font-medium text-slate-700">
                         Is Aiera Chat aware of the bounds of information it has access to?
                     </label>
                     <select
                         name="knowledgeBoundaries"
                         value={formData.knowledgeBoundaries}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        size={4}
                     >
                         <option value="">Select an option</option>
                         <option value="2">2 - Understands and communicates knowledge boundaries</option>
@@ -387,12 +392,13 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* 8. Follow-up Handling */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Follow-up Handling</h3>
+                    <SectionHeader>Follow-up Handling</SectionHeader>
                     <select
                         name="followUpHandling"
                         value={formData.followUpHandling}
                         onChange={handleChange}
-                        className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        className="mt-1 block w-full pl-4 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md"
+                        size={6}
                     >
                         <option value="">Select an option</option>
                         <option value="3">3 - Handles follow-up questions with context retention</option>
@@ -405,9 +411,8 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
 
                 {/* Qualitative Assessment */}
                 <div className="space-y-2">
-                    <h3 className="font-medium text-slate-800">Qualitative Assessment</h3>
-
-                    <div>
+                    <SectionHeader>Qualitative Assessment</SectionHeader>
+                    <div className="ml-4">
                         <label className="block text-sm font-medium text-slate-700">Strengths:</label>
                         <textarea
                             name="strengths"
@@ -419,7 +424,7 @@ export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: Feedbac
                         ></textarea>
                     </div>
 
-                    <div>
+                    <div className="ml-4">
                         <label className="block text-sm font-medium text-slate-700">Areas for Improvement:</label>
                         <textarea
                             name="improvements"

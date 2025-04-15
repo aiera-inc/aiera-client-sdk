@@ -69,10 +69,6 @@ export const Footer = ({
         );
     }, []);
 
-    const onSubmitFeedback = useCallback(() => {
-        console.log('submitted!');
-    }, []);
-
     const onHandleCopy = useCallback(() => {
         setCopied(true);
 
@@ -176,12 +172,7 @@ export const Footer = ({
                 />
             )}
             {showFeedback && (
-                <FeedbackDialog
-                    messageId={data.id}
-                    prompt={data.prompt}
-                    onClose={() => setShowFeedback(false)}
-                    onSubmit={onSubmitFeedback}
-                />
+                <FeedbackDialog messageId={data.id} prompt={data.prompt} onClose={() => setShowFeedback(false)} />
             )}
         </>
     );

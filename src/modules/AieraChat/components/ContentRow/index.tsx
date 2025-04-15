@@ -12,10 +12,10 @@ export function ContentRow({
 }: {
     text: string;
     className?: string;
-    iconClassName?: string;
-    Icon?: ComponentType<IconProps>;
+    iconClassName?: string | string[];
+    Icon?: ComponentType<IconProps> | ComponentType<IconProps>[];
     onClick: () => void;
-    onClickIcon: () => void;
+    onClickIcon: (() => void) | (() => void)[];
 }) {
     return (
         <div
@@ -26,19 +26,41 @@ export function ContentRow({
             )}
             onClick={onClick}
         >
-            <p className="text-base line-clamp-1 hover:text-blue-700 cursor-pointer">{text}</p>
-            {Icon && (
-                <div
-                    className="ml-2"
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        e.preventDefault();
-                        onClickIcon();
-                    }}
-                >
-                    <Icon className={classNames('w-4 cursor-pointer', iconClassName)} />
-                </div>
-            )}
+            <p className="text-base flex-1 line-clamp-1 hover:text-blue-700 cursor-pointer">{text}</p>
+            {Array.isArray(Icon)
+                ? Icon.map((IconItem, index) => {
+                      const iconClass = Array.isArray(iconClassName) ? iconClassName[index] : iconClassName;
+                      const fn = Array.isArray(onClickIcon) ? onClickIcon[index] : onClickIcon;
+                      return (
+                          <div
+                              key={`icon-${index}`}
+                              className="ml-2 flex-shrink-0"
+                              onClick={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  if (fn) {
+                                      fn();
+                                  }
+                              }}
+                          >
+                              <IconItem className={classNames('w-4 cursor-pointer', iconClass)} />
+                          </div>
+                      );
+                  })
+                : Icon && (
+                      <div
+                          className="ml-2 flex-shrink-0"
+                          onClick={(e) => {
+                              e.stopPropagation();
+                              e.preventDefault();
+                              if (!Array.isArray(onClickIcon)) {
+                                  onClickIcon();
+                              }
+                          }}
+                      >
+                          <Icon className={classNames('w-4 cursor-pointer', iconClassName)} />
+                      </div>
+                  )}
         </div>
     );
 }
