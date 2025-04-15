@@ -3136,7 +3136,65 @@
 <a name='L3071'></a><a href='#L3071'>3071</a>
 <a name='L3072'></a><a href='#L3072'>3072</a>
 <a name='L3073'></a><a href='#L3073'>3073</a>
-<a name='L3074'></a><a href='#L3074'>3074</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L3074'></a><a href='#L3074'>3074</a>
+<a name='L3075'></a><a href='#L3075'>3075</a>
+<a name='L3076'></a><a href='#L3076'>3076</a>
+<a name='L3077'></a><a href='#L3077'>3077</a>
+<a name='L3078'></a><a href='#L3078'>3078</a>
+<a name='L3079'></a><a href='#L3079'>3079</a>
+<a name='L3080'></a><a href='#L3080'>3080</a>
+<a name='L3081'></a><a href='#L3081'>3081</a>
+<a name='L3082'></a><a href='#L3082'>3082</a>
+<a name='L3083'></a><a href='#L3083'>3083</a>
+<a name='L3084'></a><a href='#L3084'>3084</a>
+<a name='L3085'></a><a href='#L3085'>3085</a>
+<a name='L3086'></a><a href='#L3086'>3086</a>
+<a name='L3087'></a><a href='#L3087'>3087</a>
+<a name='L3088'></a><a href='#L3088'>3088</a>
+<a name='L3089'></a><a href='#L3089'>3089</a>
+<a name='L3090'></a><a href='#L3090'>3090</a>
+<a name='L3091'></a><a href='#L3091'>3091</a>
+<a name='L3092'></a><a href='#L3092'>3092</a>
+<a name='L3093'></a><a href='#L3093'>3093</a>
+<a name='L3094'></a><a href='#L3094'>3094</a>
+<a name='L3095'></a><a href='#L3095'>3095</a>
+<a name='L3096'></a><a href='#L3096'>3096</a>
+<a name='L3097'></a><a href='#L3097'>3097</a>
+<a name='L3098'></a><a href='#L3098'>3098</a>
+<a name='L3099'></a><a href='#L3099'>3099</a>
+<a name='L3100'></a><a href='#L3100'>3100</a>
+<a name='L3101'></a><a href='#L3101'>3101</a>
+<a name='L3102'></a><a href='#L3102'>3102</a>
+<a name='L3103'></a><a href='#L3103'>3103</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6327,6 +6385,7 @@ export type ChatMessageBase = {
   id: Scalars['ID'];
   messageType: ChatMessageType;
   ordinalId?: Maybe&lt;Scalars['String']&gt;;
+  promptMessageId?: Maybe&lt;Scalars['Int']&gt;;
   runnerVersion?: Maybe&lt;Scalars['String']&gt;;
   sessionId: Scalars['ID'];
   sources?: Maybe&lt;Array&lt;ChatSource&gt;&gt;;
@@ -6341,6 +6400,7 @@ export type ChatMessagePrompt = ChatMessageBase &amp; {
   id: Scalars['ID'];
   messageType: ChatMessageType;
   ordinalId?: Maybe&lt;Scalars['String']&gt;;
+  promptMessageId?: Maybe&lt;Scalars['Int']&gt;;
   runnerVersion?: Maybe&lt;Scalars['String']&gt;;
   sessionId: Scalars['ID'];
   sources?: Maybe&lt;Array&lt;ChatSource&gt;&gt;;
@@ -6382,6 +6442,13 @@ export type ChatMessageSourceConfirmation = ChatMessageBase &amp; {
   sources?: Maybe&lt;Array&lt;ChatSource&gt;&gt;;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['ID'];
+};
+&nbsp;
+export type ChatMessageSourceConfirmationResponse = MutationResponse &amp; {
+  __typename?: 'ChatMessageSourceConfirmationResponse';
+  chatMessage?: Maybe&lt;ChatMessageSourceConfirmation&gt;;
+  errors: Array&lt;ChatMutationError&gt;;
+  success: Scalars['Boolean'];
 };
 &nbsp;
 export type ChatMessageSuggestion = {
@@ -6584,6 +6651,20 @@ export type Conference = EventGroup &amp; {
   year: Scalars['Int'];
 };
 &nbsp;
+export type ConfirmSourceConfirmationInput = {
+  promptMessageId: Scalars['ID'];
+  sessionId: Scalars['ID'];
+  sessionUserId?: InputMaybe&lt;Scalars['ID']&gt;;
+  sources: Array&lt;ConfirmationChatSourceInput&gt;;
+};
+&nbsp;
+export type ConfirmationChatSourceInput = {
+  confirmed: Scalars['Boolean'];
+  sourceId: Scalars['ID'];
+  sourceName: Scalars['String'];
+  sourceType: ChatSourceType;
+};
+&nbsp;
 export type Container = {
   __typename?: 'Container';
   containers: Array&lt;StatsdContainer&gt;;
@@ -6688,7 +6769,7 @@ export type CreateChatMessagePromptInput = {
 export type CreateChatSessionInput = {
   prompt?: InputMaybe&lt;Scalars['String']&gt;;
   sessionUserId?: InputMaybe&lt;Scalars['ID']&gt;;
-  sources: Array&lt;ChatSourceInput&gt;;
+  sources?: InputMaybe&lt;Array&lt;ChatSourceInput&gt;&gt;;
   title?: InputMaybe&lt;Scalars['String']&gt;;
 };
 &nbsp;
@@ -7197,6 +7278,7 @@ export type LoginResponse = MutationResponse &amp; {
 export type Mutation = {
   __typename?: 'Mutation';
   clearChatSessionSources: ChatSessionResponse;
+  confirmChatMessageSourceConfirmation: ChatMessageSourceConfirmationResponse;
   createAblyToken: AblyResponse;
   createChatMessagePrompt: ChatMessagePromptResponse;
   createChatSession: ChatSessionResponse;
@@ -7219,6 +7301,11 @@ export type Mutation = {
 &nbsp;
 export type MutationClearChatSessionSourcesArgs = {
   input: ClearSourcesInput;
+};
+&nbsp;
+&nbsp;
+export type MutationConfirmChatMessageSourceConfirmationArgs = {
+  input: ConfirmSourceConfirmationInput;
 };
 &nbsp;
 &nbsp;
@@ -9289,7 +9376,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Apr 08 2025 13:46:22 GMT-0400 (Eastern Daylight Time)
+                at Tue Apr 15 2025 16:29:00 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
