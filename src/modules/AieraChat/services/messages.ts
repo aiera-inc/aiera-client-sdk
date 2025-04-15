@@ -17,7 +17,7 @@ import {
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
-    ChatSourceInput,
+    ConfirmationChatSourceInput,
     ChatSourceType,
     CitableContent as RawCitableContent,
     ConfirmChatMessageSourceConfirmationMutation,
@@ -213,7 +213,7 @@ function getAllCitations(blocks: ContentBlock[]): Citation[] {
 /**
  * Map local sources to the generated ChatSource type for mutation inputs
  */
-function mapConfirmedSourcesToInput(sources: Source[]): ChatSourceInput[] {
+function mapConfirmedSourcesToInput(sources: Source[]): ConfirmationChatSourceInput[] {
     return sources.map((source: Source) => ({
         confirmed: true,
         sourceId: source.targetId,
