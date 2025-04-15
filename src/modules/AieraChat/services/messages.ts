@@ -794,13 +794,16 @@ export const useChatSession = ({
                     (chatSession.sourceConfirmationMessages as RawChatMessageSourceConfirmation[]).forEach((msg) => {
                         if (!msg) return;
 
+                        const sources = normalizeSources(msg.sources);
+                        const confirmed = !!sources.find((s) => s.confirmed);
+
                         normalizedMessages.push({
-                            confirmed: false,
+                            confirmed,
                             id: msg.id,
                             ordinalId: msg.ordinalId,
                             prompt: lastPromptValue, // Use the last prompt value
                             promptMessageId: String(msg.promptMessageId) ?? undefined,
-                            sources: normalizeSources(msg.sources),
+                            sources,
                             status: ChatMessageStatus.COMPLETED,
                             timestamp: msg.createdAt,
                             type: ChatMessageType.SOURCES,
