@@ -85,8 +85,10 @@ export const SourcesResponse = ({
                         disabled={isConfirming}
                         kind="primary"
                         onClick={() => {
-                            setIsConfirming(true);
-                            onConfirm(data.id, localSources);
+                            if (data.promptMessageId) {
+                                setIsConfirming(true);
+                                onConfirm(data.promptMessageId, localSources);
+                            }
                         }}
                     >
                         Confirm Sources

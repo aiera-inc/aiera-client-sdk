@@ -119,7 +119,7 @@ interface UseChatSessionOptions {
 
 interface UseChatSessionReturn {
     confirmSourceConfirmation: (
-        messageId: string,
+        promptMessageId: string,
         sources: Source[]
     ) => Promise<RawChatMessageSourceConfirmation | null>;
     createChatMessagePrompt: ({
@@ -571,10 +571,10 @@ export const useChatSession = ({
     >(CONFIRM_SOURCE_CONFIRMATION_MUTATION);
 
     const confirmSourceConfirmation = useCallback(
-        (messageId: string, sources: Source[]) => {
+        (promptMessageId: string, sources: Source[]) => {
             return confirmSourceConfirmationMutation({
                 input: {
-                    messageId: String(messageId),
+                    promptMessageId,
                     sessionId: chatId,
                     sources: mapConfirmedSourcesToInput(sources),
                     sessionUserId: config.tracking?.userId,
@@ -776,14 +776,15 @@ export const useChatSession = ({
                         }
 
                         normalizedMessages.push({
+                            blocks,
                             id: msg.id,
                             ordinalId: msg.ordinalId,
-                            timestamp: msg.createdAt,
-                            status: ChatMessageStatus.COMPLETED,
-                            type: ChatMessageType.RESPONSE,
                             prompt: lastPromptValue, // Use the last prompt value
-                            blocks,
+                            promptMessageId: String(msg.promptMessageId) ?? undefined,
                             sources: normalizeSources(msg.sources),
+                            status: ChatMessageStatus.COMPLETED,
+                            timestamp: msg.createdAt,
+                            type: ChatMessageType.RESPONSE,
                         });
                     });
                 }
@@ -794,14 +795,15 @@ export const useChatSession = ({
                         if (!msg) return;
 
                         normalizedMessages.push({
+                            confirmed: false,
                             id: msg.id,
                             ordinalId: msg.ordinalId,
-                            timestamp: msg.createdAt,
-                            status: ChatMessageStatus.COMPLETED,
-                            type: ChatMessageType.SOURCES,
                             prompt: lastPromptValue, // Use the last prompt value
-                            confirmed: false,
+                            promptMessageId: String(msg.promptMessageId) ?? undefined,
                             sources: normalizeSources(msg.sources),
+                            status: ChatMessageStatus.COMPLETED,
+                            timestamp: msg.createdAt,
+                            type: ChatMessageType.SOURCES,
                         });
                     });
                 }
