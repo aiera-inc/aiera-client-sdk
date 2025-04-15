@@ -38,6 +38,7 @@ export interface EventListFilter {
 export interface Options {
     aieraChatEnableAbly?: boolean;
     aieraChatEnablePolling?: boolean;
+    aieraChatCollectInternalFeedback?: boolean;
     customOnly?: boolean;
     darkMode?: boolean;
     eventId?: string;

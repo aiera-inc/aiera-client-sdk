@@ -12,6 +12,7 @@ import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { FeedbackDialog } from '@aiera/client-sdk/modules/AieraChat/modals/FeedbackDialog';
 import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 type MessageFeedback = 'pos' | 'neg' | undefined;
 
@@ -32,10 +33,11 @@ export const Footer = ({
     showRetry?: boolean;
     showVoting?: boolean;
 }) => {
+    const config = useConfig();
     const [copied, setCopied] = useState(false);
     // TODO getMessage from network / cache for managing feedback
     const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
-    const [showFeedback, setShowFeedback] = useState(false);
+    const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
     const [showSourceDialog, setShowSourceDialog] = useState(false);
     const [localSources, setLocalSources] = useState<Source[]>([
         {
@@ -130,16 +132,20 @@ export const Footer = ({
                     />
                 )}
                 <div className="flex-1" />
-                <IconButton
-                    className="ml-2"
-                    hintText="Submit Feedback"
-                    hintAnchor="top-right"
-                    hintGrow="up-left"
-                    Icon={MicroChatLeftRight}
-                    onClick={() => setShowFeedback(true)}
-                >
-                    Feedback
-                </IconButton>
+                {config.options?.aieraChatCollectInternalFeedback &&
+                    config.options.aieraChatCollectInternalFeedback === true && (
+                        <IconButton
+                            className="ml-2"
+                            hintText="Submit Feedback"
+                            hintAnchor="top-right"
+                            textClass="pr-0.5"
+                            hintGrow="up-left"
+                            Icon={MicroChatLeftRight}
+                            onClick={() => setShowFeedbackDialog(true)}
+                        >
+                            Feedback
+                        </IconButton>
+                    )}
                 {showEditSources && (
                     <IconButton
                         className="ml-2"
@@ -171,8 +177,8 @@ export const Footer = ({
                     sources={localSources}
                 />
             )}
-            {showFeedback && (
-                <FeedbackDialog messageId={data.id} prompt={data.prompt} onClose={() => setShowFeedback(false)} />
+            {showFeedbackDialog && (
+                <FeedbackDialog messageId={data.id} prompt={data.prompt} onClose={() => setShowFeedbackDialog(false)} />
             )}
         </>
     );
