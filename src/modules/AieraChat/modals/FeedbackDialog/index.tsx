@@ -6,17 +6,21 @@ import { Modal } from '../Modal';
 interface FeedbackDialogProps {
     onSubmit?: (e: MouseEvent, formData: any) => void;
     onClose: () => void;
+    messageId: string;
+    prompt: string;
 }
 
 const googleSheetUrl =
     'https://script.google.com/macros/s/AKfycbxCuM7iY64onqnhxKPzd5nbHANzBbVT3v2xiDYA3TnOqSVgfSVfqlBFzPmfrNSwDlmv-Q/exec';
 
-export function FeedbackDialog({ onClose, onSubmit }: FeedbackDialogProps): ReactElement {
+export function FeedbackDialog({ onClose, onSubmit, messageId, prompt }: FeedbackDialogProps): ReactElement {
     // State to track all form values and submission status
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
     const [submitSuccess, setSubmitSuccess] = useState(false);
     const [formData, setFormData] = useState({
+        messageId,
+        prompt,
         sourceSuggested: 'n',
         sourcesRelevant: '',
         sourceOrdering: '',
@@ -77,29 +81,33 @@ export function FeedbackDialog({ onClose, onSubmit }: FeedbackDialogProps): Reac
                 setIsSubmitting(true);
                 setSubmitError('');
 
-                // Submit to Google Sheets using the Apps Script Web App URL
-                const response = await fetch(googleSheetUrl, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        ...formData,
-                        timestamp: new Date().toISOString(),
-                    }),
+                const body = JSON.stringify({
+                    ...formData,
+                    timestamp: new Date().toISOString(),
                 });
 
-                if (response.ok) {
-                    setSubmitSuccess(true);
-                    // Optional: reset form after successful submission
-                    // setFormData({ ... }); // Reset form values
-                } else {
-                    setSubmitError('Failed to submit feedback. Please try again.');
-                }
+                // Submit to Google Sheets using the Apps Script Web App URL
+                await fetch(googleSheetUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Content-Length': `${body.length}`,
+                        Host: 'script.google.com',
+                    },
+                    body: body,
+                });
+
+                // Since we can't reliably check response.ok with an opaque response,
+                // we'll assume success if the request doesn't throw an error
+                setSubmitSuccess(true);
             } catch (error) {
                 console.error('Error submitting feedback:', error);
                 setSubmitError('An error occurred while submitting feedback. Please try again.');
             } finally {
+                if (!submitError) {
+                    onClose();
+                }
                 setIsSubmitting(false);
             }
         }
@@ -107,6 +115,7 @@ export function FeedbackDialog({ onClose, onSubmit }: FeedbackDialogProps): Reac
 
     return (
         <Modal
+            variant="minimal"
             onClose={onClose}
             title="Provide Feedback"
             className="justify-center items-center"
@@ -422,26 +431,27 @@ export function FeedbackDialog({ onClose, onSubmit }: FeedbackDialogProps): Reac
                         ></textarea>
                     </div>
                 </div>
-            </div>
-            {/* Questions End */}
-            {/* Submission status messages */}
-            {submitError && (
-                <div className="mt-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">{submitError}</div>
-            )}
 
-            {submitSuccess && (
-                <div className="mt-4 p-2 bg-green-100 border border-green-400 text-green-700 rounded">
-                    Feedback submitted successfully!
+                {/* Questions End */}
+                {/* Submission status messages */}
+                {submitError && (
+                    <div className="mt-4 p-2 bg-red-100 border border-red-400 text-red-700 rounded">{submitError}</div>
+                )}
+
+                {submitSuccess && (
+                    <div className="mt-4 p-2 bg-green-100 border border-green-400 text-green-700 rounded">
+                        Feedback submitted successfully!
+                    </div>
+                )}
+
+                <div className="flex items-center justify-center mt-6">
+                    <Button kind="primary" onClick={handleSubmit} disabled={isSubmitting}>
+                        {isSubmitting ? 'Submitting...' : 'Submit'}
+                    </Button>
+                    <Button kind="secondary" onClick={onClose} className="ml-2" disabled={isSubmitting}>
+                        Cancel
+                    </Button>
                 </div>
-            )}
-
-            <div className="flex items-center justify-center mt-6">
-                <Button kind="primary" onClick={handleSubmit} disabled={isSubmitting}>
-                    {isSubmitting ? 'Submitting...' : 'Submit'}
-                </Button>
-                <Button kind="secondary" onClick={onClose} className="ml-2" disabled={isSubmitting}>
-                    Cancel
-                </Button>
             </div>
         </Modal>
     );

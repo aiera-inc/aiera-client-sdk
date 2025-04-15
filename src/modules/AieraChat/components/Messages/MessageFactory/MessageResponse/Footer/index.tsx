@@ -175,7 +175,14 @@ export const Footer = ({
                     sources={localSources}
                 />
             )}
-            {showFeedback && <FeedbackDialog onClose={() => setShowFeedback(false)} onSubmit={onSubmitFeedback} />}
+            {showFeedback && (
+                <FeedbackDialog
+                    messageId={data.id}
+                    prompt={data.prompt}
+                    onClose={() => setShowFeedback(false)}
+                    onSubmit={onSubmitFeedback}
+                />
+            )}
         </>
     );
 };

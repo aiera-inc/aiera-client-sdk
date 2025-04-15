@@ -11,9 +11,17 @@ interface ModalProps {
     Icon: ComponentType<IconProps>;
     title: string;
     className?: string;
+    variant?: 'default' | 'minimal';
 }
 
-export function Modal({ onClose, children, Icon, title, className }: ModalProps): ReactElement | null {
+export function Modal({
+    onClose,
+    children,
+    variant = 'default',
+    Icon,
+    title,
+    className,
+}: ModalProps): ReactElement | null {
     const [mounted, setMounted] = useState(false);
     const config = useConfig();
     const darkMode = config.options?.darkMode ?? false;
@@ -39,9 +47,15 @@ export function Modal({ onClose, children, Icon, title, className }: ModalProps)
                 onClick={(e) => {
                     e.stopPropagation();
                 }}
-                className="bg-white rounded-lg px-6 pt-4 pb-5 w-[80%] shadow-lg shadow-gray-900/10"
+                className={classNames('bg-white rounded-lg shadow-lg shadow-gray-900/10', {
+                    'px-6 pt-4 pb-5 w-[80%]': variant === 'default',
+                })}
             >
-                <div className="flex items-center justify-between">
+                <div
+                    className={classNames('flex items-center justify-between', {
+                        'px-6 pt-4': variant === 'minimal',
+                    })}
+                >
                     <Icon className="w-4 mr-1.5" />
                     <p className="text-base font-semibold flex-1">{title}</p>
                     <div onClick={onClose} className="cursor-pointer hover:text-blue-700">
