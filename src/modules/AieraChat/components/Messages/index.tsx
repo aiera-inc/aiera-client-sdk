@@ -118,23 +118,31 @@ export function Messages({
     }, []);
 
     const onConfirm = useCallback(
-        (messageId: string, sources: Source[]) => {
-            confirmSourceConfirmation(messageId, sources)
-                .then(() => {
+        (promptMessageId: string, sources: Source[]) => {
+            confirmSourceConfirmation(promptMessageId, sources)
+                .then((confirmationMessage) => {
                     // Update sources in the global store
                     onAddSource(sources);
-                    const originalMessage = virtuosoRef.current?.data.find((m) => m.id === messageId);
-                    if (originalMessage) {
-                        virtuosoRef.current?.data.map((message) => {
-                            if (message.id === messageId) {
-                                return {
-                                    ...message,
-                                    confirmed: true,
-                                };
-                            }
+                    if (confirmationMessage?.id) {
+                        // Find the matching confirmation message in the virtuoso list by type and prompt id
+                        // We can't match by id because the confirmation message in virtuoso has a temp id
+                        const originalMessage = virtuosoRef.current?.data.find(
+                            (m) =>
+                                m.type === ChatMessageType.SOURCES &&
+                                m.promptMessageId === confirmationMessage.promptMessageId
+                        );
+                        if (originalMessage) {
+                            virtuosoRef.current?.data.map((message) => {
+                                if (message.id === originalMessage.id) {
+                                    return {
+                                        ...message,
+                                        confirmed: true,
+                                    };
+                                }
 
-                            return message;
-                        });
+                                return message;
+                            });
+                        }
                     }
                 })
                 .catch((err: Error) =>
