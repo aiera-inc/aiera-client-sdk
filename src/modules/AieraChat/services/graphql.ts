@@ -23,6 +23,7 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
         createdAt
         messageType
         ordinalId
+        promptMessageId
         runnerVersion
         sessionId
         updatedAt
@@ -246,11 +247,12 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
 
 const CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT = gql`
     fragment ChatMessageSourceConfirmationFragment on ChatMessageSourceConfirmation {
-        id
         __typename
+        id
         createdAt
         messageType
         ordinalId
+        promptMessageId
         runnerVersion
         sessionId
         updatedAt
