@@ -138,7 +138,7 @@ export const Footer = ({
                             className="ml-2"
                             hintText="Submit Feedback"
                             hintAnchor="top-right"
-                            textClass="pr-0.5"
+                            iconClassName="ml-0.5"
                             hintGrow="up-left"
                             Icon={MicroChatLeftRight}
                             onClick={() => setShowFeedbackDialog(true)}

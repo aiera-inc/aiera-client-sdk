@@ -1,6 +1,6 @@
 import { Button } from '@aiera/client-sdk/components/Button';
 import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
-import React, { ReactElement, ReactNode, useState } from 'react';
+import React, { ReactElement, ReactNode, useCallback, useState } from 'react';
 import { Modal } from '../Modal';
 import classNames from 'classnames';
 
@@ -23,6 +23,7 @@ function SectionHeader({ children }: { children: ReactNode }) {
 
 export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogProps): ReactElement {
     // State to track all form values and submission status
+    const [hasChanges, setHasChanges] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitError, setSubmitError] = useState('');
     const [submitSuccess, setSubmitSuccess] = useState(false);
@@ -49,6 +50,7 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
+        setHasChanges(true);
 
         // Clear conditional fields if parent field changes
         if (name === 'sourceSuggested' && value === 'n') {
@@ -117,6 +119,18 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
         }
     };
 
+    // For modal
+    const handleModalClose = useCallback(() => {
+        if (hasChanges) {
+            const confirm = window.confirm('You have unsubmitted changes, are you sure you want to exit?');
+            if (confirm) {
+                onClose();
+            }
+        } else {
+            onClose();
+        }
+    }, [onClose, hasChanges]);
+
     const selectClassName =
         'mt-1 block py-2 text-base border border-gray-300 focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm rounded-md';
     const selectOptionClassName = 'px-3';
@@ -124,7 +138,7 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
     return (
         <Modal
             variant="minimal"
-            onClose={onClose}
+            onClose={handleModalClose}
             title="Provide Feedback"
             className="justify-center items-center"
             Icon={MicroChatLeftRight}

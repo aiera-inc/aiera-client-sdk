@@ -19,6 +19,7 @@ export function IconButton({
     hintText,
     hintAnchor = 'bottom-left',
     hintGrow = 'down-right',
+    iconClassName,
 }: {
     children?: ReactNode;
     hintAnchor?: HintAnchor;
@@ -29,6 +30,7 @@ export function IconButton({
     textClass?: string;
     bgClass?: string;
     Icon: ComponentType<IconProps>;
+    iconClassName?: string;
 }) {
     return (
         <button
@@ -55,7 +57,7 @@ export function IconButton({
                 <Hint targetHeight={HEIGHT} targetWidth={WIDTH} grow={hintGrow} anchor={hintAnchor} text={hintText} />
             )}
             {children && <p className="text-sm font-bold antialiased ml-0.5 mr-0.5">{children}</p>}
-            <Icon className="w-4 pointer-events-none" />
+            <Icon className={classNames('w-4 pointer-events-none', iconClassName)} />
         </button>
     );
 }
