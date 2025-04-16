@@ -274,11 +274,14 @@ export function Messages({
                     }
                 );
             } else {
+                // Get the latest prompt to ensure the sticky header works
+                const items = virtuosoRef.current?.data.get() || [];
+                const latestPrompt = [...items].reverse().find((message) => message.type === ChatMessageType.PROMPT);
                 // If there's no streaming message yet, append one to virtuoso using existing partials
                 const initialMessageResponse: ChatMessageResponse = {
                     id: `chat-${chatId}-temp-response-${idCounter++}`,
                     ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
-                    prompt: latestMessage?.prompt || '', // TODO all messages need to know the prompt
+                    prompt: latestPrompt?.prompt || '',
                     status: ChatMessageStatus.STREAMING,
                     timestamp: new Date().toISOString(),
                     type: ChatMessageType.RESPONSE,
