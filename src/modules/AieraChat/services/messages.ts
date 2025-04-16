@@ -551,7 +551,7 @@ export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const { chatId, chatStatus, chatTitle, onSetStatus, onSetTitle, setCitations } = useChatStore();
+    const { chatId, chatTitle, onSetTitle, setCitations } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -615,6 +615,7 @@ export const useChatSession = ({
             // Don't send empty messages
             if (!content.trim()) {
                 console.warn('Attempted to send empty message');
+                console.warn('Attempted to send empty message');
                 return Promise.resolve(null);
             }
 
@@ -641,7 +642,7 @@ export const useChatSession = ({
                             timestamp: newMessage.createdAt,
                             status: ChatMessageStatus.COMPLETED,
                             type: ChatMessageType.PROMPT,
-                            prompt: newMessage.content || '',
+                            prompt: newMessage.content,
                         };
 
                         console.log('Created new message:', normalizedMessage);
@@ -684,8 +685,8 @@ export const useChatSession = ({
             const chatSessionsQuery = client
                 .query<ChatSessionsQuery, ChatSessionsQueryVariables>(
                     gql`
-                        query ChatSessionsRefetch {
-                            chatSessions {
+                        query ChatSessionsRefetch($filter: ChatSessionsFilter) {
+                            chatSessions(filter: $filter) {
                                 id
                                 createdAt
                                 sources {
@@ -701,7 +702,10 @@ export const useChatSession = ({
                                 userId
                             }
                         }
-                    `
+                    `,
+                    {
+                        filter: { sessionUserId: config.tracking?.userId },
+                    }
                 )
                 .toPromise();
             chatSessionsQuery
@@ -711,7 +715,7 @@ export const useChatSession = ({
             console.error('Error updating session title in cache:', err);
         }
         return null;
-    }, [client]);
+    }, [client, config.tracking?.userId]);
 
     // Process messages from the separate fields
     useEffect(() => {
@@ -726,11 +730,6 @@ export const useChatSession = ({
             try {
                 const chatSession = messagesQuery.data.chatSession;
                 console.log('Processing chat session:', chatSession.id);
-
-                // Update chat status in store if it changes
-                if (chatStatus !== chatSession.status) {
-                    onSetStatus(chatSession.status);
-                }
 
                 // Update chat title in store if the session got a generated title
                 if (
@@ -859,18 +858,7 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [
-        chatStatus,
-        chatTitle,
-        enablePolling,
-        error,
-        isLoading,
-        messagesQuery,
-        onSetStatus,
-        onSetTitle,
-        setError,
-        setMessages,
-    ]);
+    }, [chatTitle, enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
 
     useEffect(() => {
         // Immediately clear messages when changing sessions
