@@ -40968,6 +40968,7 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
   createdAt
   messageType
   ordinalId
+  promptMessageId
   runnerVersion
   sessionId
   updatedAt
@@ -41190,11 +41191,12 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
     `;
 var ChatMessageSourceConfirmationFragmentFragmentDoc = lib_default`
     fragment ChatMessageSourceConfirmationFragment on ChatMessageSourceConfirmation {
-  id
   __typename
+  id
   createdAt
   messageType
   ordinalId
+  promptMessageId
   runnerVersion
   sessionId
   updatedAt
@@ -41439,6 +41441,7 @@ var ChatSessionWithMessagesDocument = lib_default`
     userId
     sources {
       __typename
+      confirmed
       name
       sourceId
       type
@@ -41457,6 +41460,15 @@ var ChatSessionWithMessagesDocument = lib_default`
     ${ChatMessagePromptFragmentFragmentDoc}
 ${ChatMessageResponseFragmentFragmentDoc}
 ${ChatMessageSourceConfirmationFragmentFragmentDoc}`;
+var ConfirmChatMessageSourceConfirmationDocument = lib_default`
+    mutation ConfirmChatMessageSourceConfirmation($input: ConfirmSourceConfirmationInput!) {
+  confirmChatMessageSourceConfirmation(input: $input) {
+    chatMessage {
+      ...ChatMessageSourceConfirmationFragment
+    }
+  }
+}
+    ${ChatMessageSourceConfirmationFragmentFragmentDoc}`;
 var CreateChatMessagePromptDocument = lib_default`
     mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
   createChatMessagePrompt(input: $input) {
