@@ -551,7 +551,7 @@ export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const { chatId, chatTitle, onSetTitle, setCitations } = useChatStore();
+    const { chatId, chatStatus, chatTitle, onSetStatus, onSetTitle, setCitations } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -727,6 +727,11 @@ export const useChatSession = ({
                 const chatSession = messagesQuery.data.chatSession;
                 console.log('Processing chat session:', chatSession.id);
 
+                // Update chat status in store if it changes
+                if (chatStatus !== chatSession.status) {
+                    onSetStatus(chatSession.status);
+                }
+
                 // Update chat title in store if the session got a generated title
                 if (
                     chatSession.title &&
@@ -854,7 +859,18 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [chatTitle, enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
+    }, [
+        chatStatus,
+        chatTitle,
+        enablePolling,
+        error,
+        isLoading,
+        messagesQuery,
+        onSetStatus,
+        onSetTitle,
+        setError,
+        setMessages,
+    ]);
 
     useEffect(() => {
         // Immediately clear messages when changing sessions

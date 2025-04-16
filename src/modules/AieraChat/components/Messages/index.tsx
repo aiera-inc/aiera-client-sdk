@@ -29,6 +29,7 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
+import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 
 const STREAMING_STATUSES = [ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse];
 let idCounter = 0;
@@ -317,7 +318,13 @@ export function Messages({
         if (confirmation) {
             const existing = virtuosoRef.current?.data.find((m) => m.id === confirmation.id);
             if (!existing) {
-                virtuosoRef.current?.data.append([confirmation], ({ scrollInProgress, atBottom }) => {
+                // Find the associated prompt message to ensure sticky header works
+                const promptMessage = virtuosoRef.current?.data.find((m) => m.id === confirmation.promptMessageId);
+                const updatedConfirmation = {
+                    ...confirmation,
+                    prompt: promptMessage?.prompt ?? '',
+                };
+                virtuosoRef.current?.data.append([updatedConfirmation], ({ scrollInProgress, atBottom }) => {
                     return {
                         index: 'LAST',
                         align: 'end',
@@ -359,7 +366,7 @@ export function Messages({
                             ref={virtuosoRef}
                             style={{ flex: 1 }}
                             computeItemKey={({ data }: { data: ChatMessage }) => data.id}
-                            className="mb-4 px-4 messagesScrollBars"
+                            className="px-4 messagesScrollBars"
                             initialLocation={{ index: 'LAST', align: 'end' }}
                             initialData={messages}
                             shortSizeAlign="bottom-smooth"
@@ -370,6 +377,7 @@ export function Messages({
                         />
                     </VirtuosoMessageListLicense>
                 )}
+                {chatStatus === ChatSessionStatus.FindingSources && !confirmation && <AnimatedLoadingStatus />}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} />
             </div>
         </div>

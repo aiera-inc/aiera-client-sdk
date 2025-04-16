@@ -1,11 +1,6 @@
 import classNames from 'classnames';
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Loading } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Loading';
-import { Source } from '../../store';
-
-interface AnimatedLoadingProps {
-    sources: Source[];
-}
 
 // Define an interface for message configuration
 interface StatusMessage {
@@ -13,7 +8,7 @@ interface StatusMessage {
     durationMs: number | [number, number]; // Fixed duration or [min, max] for random range
 }
 
-export function AnimatedLoadingStatus({ sources = [] }: AnimatedLoadingProps) {
+export function AnimatedLoadingStatus() {
     const [loadingText, setLoadingText] = useState('Thinking...');
     const [isVisible, setIsVisible] = useState(true);
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -22,23 +17,11 @@ export function AnimatedLoadingStatus({ sources = [] }: AnimatedLoadingProps) {
     // Define messages with custom durations
     const messages = useMemo(
         (): StatusMessage[] => [
-            { text: 'Thinking...', durationMs: [3000, 5000] }, // Random between 3-5 seconds
-            { text: 'Finding sources...', durationMs: [2000, 3000] }, // Random between 2-4 seconds
-            {
-                text: `Successfully found ${sources.length} ${sources.length === 1 ? 'source' : 'sources'}`,
-                durationMs: 1000, // Fixed at 1 second - shorter duration
-            },
-            {
-                text: `Analyzing ${sources.length} ${sources.length === 1 ? 'source' : 'sources'}...`,
-                durationMs: [4000, 6000],
-            },
-            { text: 'Reasoning...', durationMs: [3000, 5000] },
-            { text: 'Invoking agent...', durationMs: [2000, 4000] },
-            { text: 'Processing results...', durationMs: [3000, 4000] },
-            { text: 'Finalizing response...', durationMs: [6000, 10000] },
-            { text: 'Still working...', durationMs: 10000 }, // duration doesn't matter for the last message
+            { text: 'Thinking...', durationMs: [2000, 3000] }, // Random between 2-3 seconds
+            { text: 'Finding sources...', durationMs: [3000, 5000] }, // Random between 3-5 seconds
+            { text: 'Still working...', durationMs: 1000 }, // Duration doesn't matter for the last message
         ],
-        [sources]
+        []
     );
 
     // Function to get the message text at a specific index
