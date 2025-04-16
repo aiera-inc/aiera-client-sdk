@@ -14,7 +14,7 @@ import { Source, useChatStore } from '../../store';
 import { ContentRow } from '../../components/ContentRow';
 import { MicroDocumentSearch } from '@aiera/client-sdk/components/Svg/MicroDocumentSearch';
 
-const EMPTY_SOURCES_MESSAGE = 'You must select at least one source to submit a question.';
+const EMPTY_SOURCES_MESSAGE = 'Sources will be suggested until a source is added.';
 
 /**
  * Checks if a given source exists in an array of sources

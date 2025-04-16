@@ -8,7 +8,7 @@ import {
     VirtuosoMessageListProps,
 } from '@virtuoso.dev/message-list';
 import classNames from 'classnames';
-import React, { Fragment, RefObject, useCallback, useEffect, useMemo } from 'react';
+import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import { Prompt } from './Prompt';
 import {
     ChatMessage,
@@ -74,6 +74,7 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
+    const [submitting, setSubmitting] = useState<boolean>(false);
     const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
@@ -155,6 +156,7 @@ export function Messages({
 
     const handleSubmit = useCallback(
         (prompt: string) => {
+            setSubmitting(true);
             if (chatId === 'new') {
                 onSubmit(prompt)
                     .then((session) => {
@@ -185,7 +187,8 @@ export function Messages({
                                 });
                         }
                     })
-                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
+                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`))
+                    .finally(() => setSubmitting(false));
             } else {
                 createChatMessagePrompt({ content: prompt, sessionId: chatId })
                     .then(() => {
@@ -204,10 +207,11 @@ export function Messages({
                                 console.log(`Error creating Ably token: ${ablyError.message}`);
                             });
                     })
-                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`));
+                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`))
+                    .finally(() => setSubmitting(false));
             }
         },
-        [chatId, createAblyToken, onSetStatus, sources]
+        [chatId, createAblyToken, onSetStatus, setSubmitting, sources]
     );
 
     // Append new messages to virtuoso as they're created
@@ -378,7 +382,7 @@ export function Messages({
                     </VirtuosoMessageListLicense>
                 )}
                 {chatStatus === ChatSessionStatus.FindingSources && !confirmation && <AnimatedLoadingStatus />}
-                <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} />
+                <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
         </div>
     );

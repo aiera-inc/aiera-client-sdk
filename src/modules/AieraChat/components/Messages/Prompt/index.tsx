@@ -6,15 +6,17 @@ import { MicroFolderOpen } from '../../../../../components/Svg/MicroFolderOpen';
 import { useChatStore } from '../../../store';
 import { Hint } from '../../Hint';
 import './styles.css';
+import { ChatSessionStatus } from '@aiera/client-sdk/types';
 
 interface PromptProps {
     onOpenSources: () => void;
     onSubmit: (prompt: string) => void;
+    submitting: boolean;
 }
 
-export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
-    const { sources } = useChatStore();
-    const [isEmpty, setIsEmpty] = useState(true);
+export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
+    const { chatStatus, sources } = useChatStore();
+    const [isEmpty, setIsEmpty] = useState<boolean>(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
 
     const checkEmpty = useCallback(() => {
@@ -75,6 +77,7 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                 </span>
             )}
             <button
+                disabled={chatStatus !== ChatSessionStatus.Active}
                 onClick={onOpenSources}
                 className={classNames(
                     'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] px-1.5 transition-all',
@@ -105,6 +108,7 @@ export function Prompt({ onSubmit, onOpenSources }: PromptProps) {
                 />
             </button>
             <button
+                disabled={submitting}
                 onClick={handleSubmit}
                 className={classNames(
                     'h-[1.875rem] self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
