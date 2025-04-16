@@ -307,9 +307,12 @@ export function Messages({
     }, [chatStatus, partials, virtuosoRef.current?.data]);
 
     useEffect(() => {
+        // If streaming has stopped
         if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
-            // If streaming has stopped, refetch the ChatSessionWithMessagesQuery query
-            // to get the final response and updated chat title
+            // Set chat session status back to active
+            onSetStatus(ChatSessionStatus.Active);
+
+            // Refetch the ChatSessionWithMessagesQuery query to get the final response and updated chat title
             reset()
                 .then(() => {
                     setTimeout(() => {
@@ -318,7 +321,7 @@ export function Messages({
                 })
                 .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
         }
-    }, [chatStatus, isStreaming, partials, refresh, reset]);
+    }, [chatStatus, isStreaming, onSetStatus, partials, refresh, reset]);
 
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
