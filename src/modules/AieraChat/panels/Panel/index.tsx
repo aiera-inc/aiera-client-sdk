@@ -5,6 +5,7 @@ import { IconProps } from '@aiera/client-sdk/types';
 import { MicroClose } from '@aiera/client-sdk/components/Svg/MicroClose';
 
 type ChildrenProp = ReactNode | ((props: { onStartExit: () => void }) => ReactNode);
+const MAX_WIDTH = 480;
 
 export function Panel({
     onClose,
@@ -22,6 +23,17 @@ export function Panel({
     side: 'left' | 'right';
 }) {
     const [startExit, setStartExit] = useState(false);
+    const [enableGutter, setEnableGutter] = useState(false);
+
+    const handleGutter = useCallback((node: HTMLDivElement) => {
+        if (node && node.getBoundingClientRect) {
+            const { width } = node.getBoundingClientRect();
+            if (width && width <= MAX_WIDTH) {
+                setEnableGutter(true);
+            }
+        }
+    }, []);
+
     const onStartExit = useCallback(() => {
         setStartExit(true);
     }, []);
@@ -32,7 +44,7 @@ export function Panel({
         }
     }, [startExit, onClose]);
     return (
-        <div className="fixed inset-0 z-30">
+        <div ref={handleGutter} className="fixed inset-0 z-30">
             <div
                 className={classNames(
                     'absolute z-20 top-0 bottom-0',
@@ -40,9 +52,12 @@ export function Panel({
                     'bg-slate-50 shadow-xl shadow-metal-800/40',
                     {
                         slideOutToLeft: startExit && side === 'left',
-                        'left-0 right-24 slideInFromLeft': side === 'left',
+                        'left-0 slideInFromLeft': side === 'left',
+                        'right-24': side === 'left' && enableGutter,
                         slideOutToRight: startExit && side === 'right',
-                        'left-24 right-0 slideInFromRight': side === 'right',
+                        'right-0 slideInFromRight': side === 'right',
+                        'left-24': side === 'right' && enableGutter,
+                        'max-w-[30rem] w-full': !enableGutter,
                     }
                 )}
             >

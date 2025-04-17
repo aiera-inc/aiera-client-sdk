@@ -61,7 +61,13 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
     }, [checkEmpty]);
 
     return (
-        <div className="mb-5 mx-5 flex min-h-10 relative bg-white rounded-2xl border border-slate-300/80 focus-within:ring-2 ring-yellow-200/80 chatInput">
+        <div
+            className={classNames(
+                'mb-5 mx-5 flex min-h-10 max-w-[50rem] self-center',
+                'relative bg-white rounded-2xl',
+                'border border-slate-300/80 focus-within:ring-2 ring-yellow-200/80 chatInput'
+            )}
+        >
             <p
                 ref={inputRef}
                 className="flex-1 py-2 pl-4 text-base outline-none chatPrompt"

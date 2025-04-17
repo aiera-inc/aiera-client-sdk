@@ -7,17 +7,21 @@ import { MessagePrompt } from './MessagePrompt';
 import { MessageResponse } from './MessageResponse';
 import { SourcesResponse } from './SourcesResponse';
 
+/* eslint-disable react/prop-types */
 export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListContext>['ItemContent'] = ({
     data,
     context,
-}) => {
-    return match(data)
-        .with({ type: ChatMessageType.PROMPT }, (promptData) => <MessagePrompt data={promptData} />)
-        .with({ type: ChatMessageType.SOURCES }, (sourcesData) => (
-            <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
-        ))
-        .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
-            <MessageResponse data={responseData} onReRun={context.onReRun} />
-        ))
-        .exhaustive();
-};
+}) => (
+    <div className="flex flex-col max-w-[50rem] w-full m-auto">
+        {match(data)
+            .with({ type: ChatMessageType.PROMPT }, (promptData) => <MessagePrompt data={promptData} />)
+            .with({ type: ChatMessageType.SOURCES }, (sourcesData) => (
+                <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
+            ))
+            .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
+                <MessageResponse data={responseData} onReRun={context.onReRun} />
+            ))
+            .exhaustive()}
+    </div>
+);
+/* eslint-enable react/prop-types */

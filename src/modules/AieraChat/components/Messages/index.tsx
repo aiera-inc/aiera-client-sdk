@@ -55,7 +55,7 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
             />
             <MessagePrompt
                 isStickyHeader
-                className={classNames({
+                className={classNames('max-w-[50rem] m-auto', {
                     'opacity-0': listOffset > -56,
                 })}
                 data={firstPrompt as ChatMessagePrompt}
