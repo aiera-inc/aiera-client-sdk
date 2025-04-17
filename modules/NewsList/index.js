@@ -41479,8 +41479,8 @@ var CreateChatMessagePromptDocument = lib_default`
 }
     ${ChatMessagePromptFragmentFragmentDoc}`;
 var ChatSessionsRefetchDocument = lib_default`
-    query ChatSessionsRefetch {
-  chatSessions {
+    query ChatSessionsRefetch($filter: ChatSessionsFilter) {
+  chatSessions(filter: $filter) {
     id
     createdAt
     sources {
