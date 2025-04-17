@@ -1,16 +1,18 @@
 import { IconProps } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
-import React, { ComponentType } from 'react';
+import React, { ComponentType, ReactNode } from 'react';
 
 export function ContentRow({
     text,
+    children,
     onClick,
     onClickIcon,
     Icon,
     iconClassName,
     className,
 }: {
-    text: string;
+    children?: ReactNode;
+    text?: string;
     className?: string;
     iconClassName?: string | string[];
     Icon?: ComponentType<IconProps> | ComponentType<IconProps>[];
@@ -26,7 +28,11 @@ export function ContentRow({
             )}
             onClick={onClick}
         >
-            <p className="text-base flex-1 line-clamp-1 hover:text-blue-700 cursor-pointer">{text}</p>
+            {children ? (
+                children
+            ) : (
+                <p className="text-base flex-1 line-clamp-1 hover:text-blue-700 cursor-pointer">{text}</p>
+            )}
             {Array.isArray(Icon)
                 ? Icon.map((IconItem, index) => {
                       const iconClass = Array.isArray(iconClassName) ? iconClassName[index] : iconClassName;

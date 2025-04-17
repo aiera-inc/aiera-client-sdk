@@ -96,7 +96,7 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                   ))
                                   .with({ status: 'success' }, ({ data }) =>
                                       data.events.length > 0 ? (
-                                          data.events.map(({ id, title }) => {
+                                          data.events.map(({ id, title, eventDate }) => {
                                               const sourceAdded = hasSource(
                                                   { targetId: id, targetType: 'event', title },
                                                   sources
@@ -110,11 +110,11 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                                             targetId: id,
                                                             targetType: 'event',
                                                             title,
+                                                            date: eventDate,
                                                         });
 
                                               return (
                                                   <ContentRow
-                                                      text={title}
                                                       key={id}
                                                       onClickIcon={[
                                                           toggleSource,
@@ -138,7 +138,16 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                                               : 'hover:text-blue-600',
                                                           'hover:text-blue-600',
                                                       ]}
-                                                  />
+                                                  >
+                                                      <div className="flex flex-1 justify-between text-base hover:text-blue-700 cursor-pointer">
+                                                          <p className="line-clamp-1">{title}</p>
+                                                          <p className="flex-shrink-0 ml-3">
+                                                              {new Date(eventDate).toLocaleDateString('en-US', {
+                                                                  dateStyle: 'medium',
+                                                              })}
+                                                          </p>
+                                                      </div>
+                                                  </ContentRow>
                                               );
                                           })
                                       ) : (
@@ -151,10 +160,9 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                       )
                                   )
                                   .otherwise(() => null)
-                            : sources.map(({ targetId, targetType, title }) => (
+                            : sources.map(({ targetId, targetType, title, date }) => (
                                   <ContentRow
                                       className="mx-5 group"
-                                      text={title}
                                       key={targetId}
                                       onClickIcon={[
                                           () => onRemoveSource(targetId, targetType),
@@ -169,7 +177,18 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                       onClick={() => onRemoveSource(targetId, targetType)}
                                       Icon={[MicroDocumentMinus, MicroDocumentSearch]}
                                       iconClassName={['group-hover:text-red-500', 'hover:text-blue-600']}
-                                  />
+                                  >
+                                      <div className="flex flex-1 justify-between text-base hover:text-blue-700 cursor-pointer">
+                                          <p className="line-clamp-1">{title}</p>
+                                          {date && (
+                                              <p className="flex-shrink-0 ml-3">
+                                                  {new Date(date).toLocaleDateString('en-US', {
+                                                      dateStyle: 'medium',
+                                                  })}
+                                              </p>
+                                          )}
+                                      </div>
+                                  </ContentRow>
                               ))}
                         {!searchTerm && sources.length === 0 && (
                             <div className="flex items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800">

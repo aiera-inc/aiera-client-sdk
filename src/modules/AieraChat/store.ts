@@ -9,6 +9,7 @@ export interface Source {
     targetId: string;
     targetType: string;
     title: string;
+    date?: string;
 }
 
 export interface ChatState {
