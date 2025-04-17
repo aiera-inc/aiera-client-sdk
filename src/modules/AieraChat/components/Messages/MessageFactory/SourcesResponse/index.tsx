@@ -19,19 +19,25 @@ export const SourcesResponse = ({
     const [showSourceDialog, setShowSourceDialog] = useState<boolean>(false);
     const [localSources, setLocalSources] = useState<Source[]>(data.sources);
 
-    const onAddSource = useCallback((s: Source) => {
-        setLocalSources((pv) => [...pv, s]);
-    }, []);
+    const onAddSource = useCallback(
+        (s: Source) => {
+            setLocalSources((pv) => [...pv, s]);
+        },
+        [setLocalSources]
+    );
 
-    const onRemoveSource = useCallback((s: Source) => {
-        setLocalSources((pv) =>
-            pv.filter((source) => !(source.targetId === s.targetId && source.targetType === s.targetType))
-        );
-    }, []);
+    const onRemoveSource = useCallback(
+        (s: Source) => {
+            setLocalSources((pv) =>
+                pv.filter((source) => !(source.targetId === s.targetId && source.targetType === s.targetType))
+            );
+        },
+        [setLocalSources]
+    );
 
     useEffect(() => {
         setLocalSources(data.sources);
-    }, [data.sources]);
+    }, [data.sources, setLocalSources]);
 
     if (data.confirmed) {
         return <div />;

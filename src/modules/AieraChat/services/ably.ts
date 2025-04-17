@@ -201,7 +201,13 @@ export const useAbly = (): UseAblyReturn => {
                                     }
 
                                     // Decode the base64 string
-                                    const decodedData = atob(data.content);
+                                    let decodedData;
+                                    try {
+                                        decodedData = atob(data.content);
+                                    } catch (decodingError) {
+                                        console.log('Error handling message:', decodingError);
+                                        return; // ignore message if there's no encoded content
+                                    }
 
                                     // Parse the JSON
                                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
@@ -232,7 +238,9 @@ export const useAbly = (): UseAblyReturn => {
                                                 }`,
                                                 ordinalId: jsonObject.ordinal_id,
                                                 prompt: '', // placeholder, get text from virtuoso using the prompt id
-                                                promptMessageId: jsonObject.prompt_message_id ?? undefined,
+                                                promptMessageId: jsonObject.prompt_message_id
+                                                    ? String(jsonObject.prompt_message_id)
+                                                    : undefined,
                                                 sources,
                                                 status: ChatMessageStatus.COMPLETED,
                                                 timestamp: jsonObject.created_at,

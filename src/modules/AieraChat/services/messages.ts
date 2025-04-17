@@ -639,10 +639,10 @@ export const useChatSession = ({
                         const normalizedMessage: ChatMessagePrompt = {
                             id: newMessage.id,
                             ordinalId: newMessage.ordinalId,
-                            timestamp: newMessage.createdAt,
-                            status: ChatMessageStatus.COMPLETED,
-                            type: ChatMessageType.PROMPT,
                             prompt: newMessage.content,
+                            status: ChatMessageStatus.COMPLETED,
+                            timestamp: newMessage.createdAt,
+                            type: ChatMessageType.PROMPT,
                         };
 
                         console.log('Created new message:', normalizedMessage);
@@ -784,7 +784,7 @@ export const useChatSession = ({
                             id: msg.id,
                             ordinalId: msg.ordinalId,
                             prompt: lastPromptValue, // Use the last prompt value
-                            promptMessageId: String(msg.promptMessageId) ?? undefined,
+                            promptMessageId: msg.promptMessageId ? String(msg.promptMessageId) : undefined,
                             sources: normalizeSources(msg.sources),
                             status: ChatMessageStatus.COMPLETED,
                             timestamp: msg.createdAt,
@@ -806,7 +806,7 @@ export const useChatSession = ({
                             id: msg.id,
                             ordinalId: msg.ordinalId,
                             prompt: lastPromptValue, // Use the last prompt value
-                            promptMessageId: String(msg.promptMessageId) ?? undefined,
+                            promptMessageId: msg.promptMessageId ? String(msg.promptMessageId) : undefined,
                             sources,
                             status: ChatMessageStatus.COMPLETED,
                             timestamp: msg.createdAt,

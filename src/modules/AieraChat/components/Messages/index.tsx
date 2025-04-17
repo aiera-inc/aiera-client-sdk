@@ -151,7 +151,7 @@ export function Messages({
                     console.log('Error confirming sources for chat message source confirmation:', err)
                 );
         },
-        [confirmSourceConfirmation]
+        [confirmSourceConfirmation, onAddSource, virtuosoRef.current?.data]
     );
 
     const handleSubmit = useCallback(
@@ -211,7 +211,7 @@ export function Messages({
                     .finally(() => setSubmitting(false));
             }
         },
-        [chatId, createAblyToken, onSetStatus, setSubmitting, sources]
+        [chatId, createAblyToken, onSetStatus, setSubmitting, sources, virtuosoRef.current?.data]
     );
 
     // Append new messages to virtuoso as they're created
@@ -233,7 +233,7 @@ export function Messages({
                 });
             }
         }
-    }, [messages]);
+    }, [messages, virtuosoRef.current?.data]);
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
@@ -276,12 +276,14 @@ export function Messages({
             } else {
                 // Get the latest prompt to ensure the sticky header works
                 const items = virtuosoRef.current?.data.get() || [];
-                const latestPrompt = [...items].reverse().find((message) => message.type === ChatMessageType.PROMPT);
+                const latestPrompt = items.reverse().find((message) => message.type === ChatMessageType.PROMPT);
+
                 // If there's no streaming message yet, append one to virtuoso using existing partials
                 const initialMessageResponse: ChatMessageResponse = {
                     id: `chat-${chatId}-temp-response-${idCounter++}`,
                     ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
                     prompt: latestPrompt?.prompt || '',
+                    promptMessageId: latestPrompt?.id ? String(latestPrompt.id) : undefined,
                     status: ChatMessageStatus.STREAMING,
                     timestamp: new Date().toISOString(),
                     type: ChatMessageType.RESPONSE,
