@@ -2565,6 +2565,10 @@ video {
 .hover\:underline:hover {
   text-decoration-line: underline;
 }
+.hover\:brightness-95:hover {
+  --tw-brightness: brightness(.95);
+  filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
 .first\:hover\:rounded-t:hover:first-child {
   border-top-left-radius: 0.25rem;
   border-top-right-radius: 0.25rem;
