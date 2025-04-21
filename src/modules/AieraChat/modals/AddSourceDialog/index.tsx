@@ -11,6 +11,7 @@ import { Modal } from '../Modal';
 import { SearchInput } from '../../components/SearchInput';
 import { useEvents } from '../../services/events';
 import { Source, useChatStore } from '../../store';
+import { MicroDocumentSearch } from '@aiera/client-sdk/components/Svg/MicroDocumentSearch';
 
 /**
  * Checks if a given source exists in an array of sources
@@ -92,46 +93,56 @@ export function AddSourceDialog({
                                   ))
                                   .with({ status: 'success' }, ({ data }) =>
                                       data.events.length > 0 ? (
-                                          data.events.map(({ id, title }) => {
+                                          data.events.map(({ id, title, eventDate }) => {
                                               const sourceAdded = hasSource(
                                                   { targetId: id, targetType: 'event', title },
                                                   sources
                                               );
+                                              const toggleSource = sourceAdded
+                                                  ? () => onRemoveSource({ targetId: id, targetType: 'event', title })
+                                                  : () =>
+                                                        onAddSource({
+                                                            confirmed: true,
+                                                            targetId: id,
+                                                            targetType: 'event',
+                                                            title,
+                                                            date: eventDate,
+                                                        });
                                               return (
                                                   <ContentRow
-                                                      className="mx-5"
-                                                      text={title}
                                                       key={id}
-                                                      onClick={() => {
-                                                          onSelectSource({
-                                                              targetId: id,
-                                                              targetType: 'event',
-                                                              title,
-                                                          });
-                                                      }}
-                                                      onClickIcon={
-                                                          sourceAdded
-                                                              ? () =>
-                                                                    onRemoveSource({
-                                                                        targetId: id,
-                                                                        targetType: 'event',
-                                                                        title,
-                                                                    })
-                                                              : () =>
-                                                                    onAddSource({
-                                                                        confirmed: true,
-                                                                        targetId: id,
-                                                                        targetType: 'event',
-                                                                        title,
-                                                                    })
-                                                      }
-                                                      Icon={sourceAdded ? MicroDocumentMinus : MicroDocumentPlus}
-                                                      iconClassName={
+                                                      onClickIcon={[
+                                                          toggleSource,
+                                                          () => {
+                                                              onSelectSource({
+                                                                  targetId: id,
+                                                                  targetType: 'event',
+                                                                  title,
+                                                              });
+                                                          },
+                                                      ]}
+                                                      onClick={toggleSource}
+                                                      className="mx-5"
+                                                      Icon={[
+                                                          sourceAdded ? MicroDocumentMinus : MicroDocumentPlus,
+                                                          MicroDocumentSearch,
+                                                      ]}
+                                                      iconClassName={[
                                                           sourceAdded
                                                               ? 'text-red-500 hover:text-red-700'
-                                                              : 'hover:text-blue-600'
-                                                      }
-                                                  />
+                                                              : 'hover:text-blue-600',
+                                                          'hover:text-blue-600',
+                                                      ]}
+                                                  >
+                                                      <div className="flex flex-1 justify-between text-base hover:text-blue-700 cursor-pointer">
+                                                          <p className="line-clamp-1">{title}</p>
+                                                          <p className="flex-shrink-0 ml-3">
+                                                              {new Date(eventDate).toLocaleDateString('en-US', {
+                                                                  dateStyle: 'medium',
+                                                              })}
+                                                          </p>
+                                                      </div>
+                                                  </ContentRow>
                                               );
                                           })
                                       ) : (
@@ -144,22 +155,35 @@ export function AddSourceDialog({
                                       )
                                   )
                                   .otherwise(() => null)
-                            : sources.map(({ targetId, targetType, title }) => (
+                            : sources.map(({ targetId, targetType, title, date }) => (
                                   <ContentRow
-                                      className="mx-5"
-                                      text={title}
+                                      className="mx-5 group"
                                       key={targetId}
-                                      onClick={() => {
-                                          onSelectSource({
-                                              targetId,
-                                              targetType,
-                                              title,
-                                          });
-                                      }}
-                                      onClickIcon={() => onRemoveSource({ targetId, targetType, title })}
-                                      Icon={MicroDocumentMinus}
-                                      iconClassName={'text-red-500 hover:text-red-700'}
-                                  />
+                                      onClickIcon={[
+                                          () => onRemoveSource({ title, targetId, targetType }),
+                                          () => {
+                                              onSelectSource({
+                                                  targetId,
+                                                  targetType,
+                                                  title,
+                                              });
+                                          },
+                                      ]}
+                                      onClick={() => onRemoveSource({ targetId, targetType, title })}
+                                      Icon={[MicroDocumentMinus, MicroDocumentSearch]}
+                                      iconClassName={['group-hover:text-red-500', 'hover:text-blue-600']}
+                                  >
+                                      <div className="flex flex-1 justify-between text-base hover:text-blue-700 cursor-pointer">
+                                          <p className="line-clamp-1">{title}</p>
+                                          {date && (
+                                              <p className="flex-shrink-0 ml-3">
+                                                  {new Date(date).toLocaleDateString('en-US', {
+                                                      dateStyle: 'medium',
+                                                  })}
+                                              </p>
+                                          )}
+                                      </div>
+                                  </ContentRow>
                               ))}
                         {!searchTerm && sources.length === 0 && (
                             <div className="flex items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800">
