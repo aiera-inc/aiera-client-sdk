@@ -232,6 +232,9 @@ export function Messages({
                     };
                 });
             }
+        } else if (virtuosoRef.current?.data.get()) {
+            // Wipe all items from virtuoso if messages are cleared out
+            virtuosoRef.current.data.replace([]);
         }
     }, [messages, virtuosoRef.current?.data]);
 

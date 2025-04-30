@@ -897,7 +897,7 @@ export const useChatSession = ({
             console.log('Clearing polling interval');
             clearInterval(intervalId);
         };
-    }, [chatId, enablePolling, messagesQuery, shouldStopPolling]);
+    }, [chatId, enablePolling, messagesQuery, shouldStopPolling, setRefetchCount, setShouldStopPolling]);
 
     const refresh = useCallback(() => {
         if (enablePolling) {
@@ -915,7 +915,16 @@ export const useChatSession = ({
         } else {
             messagesQuery.refetch({ requestPolicy: 'network-only' });
         }
-    }, [chatId, enablePolling, messagesQuery, MAX_REFETCH_COUNT, MAX_POLLING_DURATION]);
+    }, [
+        chatId,
+        enablePolling,
+        messagesQuery,
+        MAX_REFETCH_COUNT,
+        MAX_POLLING_DURATION,
+        setMessages,
+        setRefetchCount,
+        setShouldStopPolling,
+    ]);
 
     return {
         confirmSourceConfirmation,

@@ -51,6 +51,8 @@ export const useChatStore = create<ChatState>((set) => ({
             chatId: 'new',
             chatStatus: ChatSessionStatus.Active,
             chatTitle: undefined,
+            citations: undefined,
+            hasChanges: false,
             searchTerm: undefined,
             sources: [],
         }),
