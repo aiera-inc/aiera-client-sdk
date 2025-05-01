@@ -32,10 +32,6 @@ type Callback = (
     tokenRequestOrDetails: TokenDetails | TokenRequest | string | null
 ) => void;
 
-type TokenParamsData = {
-    sessionId: string;
-};
-
 type PartialTextContent = {
     citation?: Citation;
     value: string;
@@ -47,6 +43,10 @@ type PartialTextBlock = {
         style: 'paragraph' | 'h1' | 'h2' | 'h3';
     };
     type: ContentBlockType.Text;
+};
+
+type TokenParamsData = {
+    sessionId: string;
 };
 
 // Interface for the base structure of the message data
@@ -116,50 +116,87 @@ export const useAbly = (): UseAblyReturn => {
         }
     `);
 
-    const authCallback = useCallback(
-        async (tokenParams: TokenParamsData, callback: Callback) => {
+    // This function handles the actual token creation, will be used by both
+    // the auth callback and the explicit call
+    const getAblyToken = useCallback(
+        async (sessionId: string) => {
             try {
                 const response = await createAblyTokenMutation({
                     input: {
-                        sessionId: tokenParams.sessionId,
+                        sessionId,
                         sessionUserId: config.tracking?.userId,
                     },
                 });
+
                 const tokenData = response.data?.createAblyToken?.data;
                 if (tokenData) {
-                    const tokenDetails = {
-                        mac: tokenData.mac,
-                        capability: tokenData.capability,
+                    console.log(`Successfully created Ably token for chat ${sessionId}`);
+                    return {
+                        tokenDetails: {
+                            mac: tokenData.mac,
+                            capability: tokenData.capability,
+                            clientId: tokenData.clientId,
+                            keyName: tokenData.keyName,
+                            nonce: tokenData.nonce,
+                            timestamp: Number(tokenData.timestamp),
+                            ttl: tokenData.ttl,
+                        },
                         clientId: tokenData.clientId,
-                        keyName: tokenData.keyName,
-                        nonce: tokenData.nonce,
-                        timestamp: Number(tokenData.timestamp),
-                        ttl: tokenData.ttl,
                     };
-                    callback(null, tokenDetails as TokenRequest);
                 } else {
                     throw new Error('Invalid token response');
                 }
             } catch (err) {
-                const error = err instanceof Error ? err : new Error('Failed to fetch Ably token');
-                setError(error.message);
-                // callback(error);
+                const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
+                setError(errorMessage);
+                throw new Error(errorMessage);
             }
         },
         [config.tracking?.userId, createAblyTokenMutation]
     );
 
+    // Auth callback that will be passed to Ably - uses the getAblyToken function
+    const authCallback = useCallback(
+        async (tokenParams: TokenParamsData, callback: Callback) => {
+            try {
+                // Use the sessionId from the closure, not from tokenParams
+                // This ensures we're using the correct session
+                if (!tokenParams.sessionId) {
+                    throw new Error('No active session ID');
+                }
+
+                const result = await getAblyToken(tokenParams.sessionId);
+                callback(null, result.tokenDetails as TokenRequest);
+            } catch (err) {
+                const error = err instanceof Error ? err.message : 'Failed to fetch Ably token';
+                console.log(error);
+                // callback(error, null);
+            }
+        },
+        [getAblyToken]
+    );
+
     const createAblyToken = useCallback(
-        (sessionId: string) => {
+        async (sessionId: string) => {
             if (!sessionId || sessionId === 'new') {
                 return Promise.resolve(null);
             }
 
+            // If we're already connected to this session, don't reconnect
+            if (ably && isConnected) {
+                console.log(`Already connected to session ${sessionId}`);
+                return Promise.resolve({ clientId: ably.auth.clientId });
+            }
+
             try {
-                // Initialize Ably with the auth callback
+                // First, get the token
+                const tokenResult = await getAblyToken(sessionId);
+
+                // Then, initialize Ably with the auth callback for future token refreshes
                 const ablyInstance = new Realtime({
                     authCallback: (data: TokenParams, callback: Callback) =>
                         authCallback({ ...data, sessionId }, callback),
+                    clientId: tokenResult.clientId,
                 });
 
                 // Set up ably connection listeners
@@ -274,24 +311,14 @@ export const useAbly = (): UseAblyReturn => {
 
                 setAbly(ablyInstance);
 
-                return createAblyTokenMutation({
-                    input: { sessionId, sessionUserId: config.tracking?.userId },
-                })
-                    .then((resp) => {
-                        console.log(`Successfully created Ably token for chat ${sessionId}`);
-                        const tokenData = resp.data?.createAblyToken?.data;
-                        return tokenData ? { clientId: tokenData.clientId } : null;
-                    })
-                    .catch(() => {
-                        setError('Error creating Ably token');
-                        return null;
-                    });
+                // Return client ID from our initial token request
+                return { clientId: tokenResult.clientId };
             } catch (err) {
                 setError(err instanceof Error ? err.message : 'Error initializing Ably');
                 return Promise.resolve(null);
             }
         },
-        [authCallback, config.tracking?.userId, createAblyTokenMutation, channelSubscribed, isStreamingRef]
+        [authCallback, getAblyToken, channelSubscribed, isStreamingRef, ably, isConnected]
     );
 
     const reset = useCallback((): Promise<void> => {
