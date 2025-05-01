@@ -283,7 +283,7 @@ export function Messages({
 
                 // If there's no streaming message yet, append one to virtuoso using existing partials
                 const initialMessageResponse: ChatMessageResponse = {
-                    id: `chat-${chatId}-temp-response-${idCounter++}`,
+                    id: `chat-${chatId}-temp-response-${latestPrompt?.id || items.length + 1}-${idCounter++}`,
                     ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
                     prompt: latestPrompt?.prompt || '',
                     promptMessageId: latestPrompt?.id ? String(latestPrompt.id) : undefined,
@@ -312,12 +312,22 @@ export function Messages({
     }, [chatStatus, partials, virtuosoRef.current?.data]);
 
     useEffect(() => {
+        if (!isStreaming && STREAMING_STATUSES.includes(chatStatus)) {
+            console.log('Streaming stopped. Setting chat status to active.');
+            onSetStatus(ChatSessionStatus.Active);
+        }
+        if (isStreaming && !STREAMING_STATUSES.includes(chatStatus)) {
+            console.log('Streaming started. Setting chat status to generating_response.');
+            onSetStatus(ChatSessionStatus.GeneratingResponse);
+        }
+    }, [chatStatus, isStreaming, onSetStatus]);
+
+    useEffect(() => {
         // If streaming has stopped
         if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
-            // Set chat session status back to active
-            onSetStatus(ChatSessionStatus.Active);
-
-            // Refetch the ChatSessionWithMessagesQuery query to get the final response and updated chat title
+            console.log('Streaming stopped. Refreshing chat session with messages...');
+            // Reset partials and refetch the ChatSessionWithMessagesQuery query to get the final response
+            // and updated chat title
             reset()
                 .then(() => {
                     setTimeout(() => {
@@ -326,7 +336,7 @@ export function Messages({
                 })
                 .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
         }
-    }, [chatStatus, isStreaming, onSetStatus, partials, refresh, reset]);
+    }, [chatStatus, isStreaming, partials, refresh, reset]);
 
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
