@@ -24,7 +24,6 @@ import './styles.css';
 // import { SuggestedPrompts } from './SuggestedPrompts';
 import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
-// import { TextBlock } from './MessageFactory/Block/Text';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
@@ -214,6 +213,17 @@ export function Messages({
         [chatId, createAblyToken, onSetStatus, setSubmitting, sources, virtuosoRef.current?.data]
     );
 
+    const maybeClearVirtuoso = useCallback(
+        (message: string) => {
+            const existingItems = virtuosoRef.current?.data.get();
+            if (existingItems && existingItems.length > 0) {
+                console.log(message);
+                virtuosoRef.current?.data.replace([]);
+            }
+        },
+        [virtuosoRef.current?.data]
+    );
+
     // Append new messages to virtuoso as they're created
     useEffect(() => {
         if (messages && messages.length > 0) {
@@ -232,9 +242,9 @@ export function Messages({
                     };
                 });
             }
-        } else if (virtuosoRef.current?.data.get()) {
+        } else {
             // Wipe all items from virtuoso if messages are cleared out
-            virtuosoRef.current.data.replace([]);
+            maybeClearVirtuoso('Removing stale items from virtuoso list...');
         }
     }, [messages, virtuosoRef.current?.data]);
 
@@ -317,10 +327,12 @@ export function Messages({
             onSetStatus(ChatSessionStatus.Active);
         }
         if (isStreaming && !STREAMING_STATUSES.includes(chatStatus)) {
-            console.log('Streaming started. Setting chat status to generating_response.');
-            onSetStatus(ChatSessionStatus.GeneratingResponse);
+            const newChatStatus =
+                sources && sources.length > 0 ? ChatSessionStatus.GeneratingResponse : ChatSessionStatus.FindingSources;
+            console.log(`Streaming started. Setting chat status to ${newChatStatus}.`);
+            onSetStatus(newChatStatus);
         }
-    }, [chatStatus, isStreaming, onSetStatus]);
+    }, [chatStatus, isStreaming, onSetStatus, sources]);
 
     useEffect(() => {
         // If streaming has stopped
@@ -362,9 +374,7 @@ export function Messages({
 
     // Reset messages when the selected chat changes
     useEffect(() => {
-        if (virtuosoRef.current?.data) {
-            virtuosoRef.current.data.replace([]);
-        }
+        maybeClearVirtuoso('New chat detected. Clearing virtuoso items...');
     }, [chatId]);
 
     // Create a memoized context object that updates when any of its values change

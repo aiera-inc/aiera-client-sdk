@@ -326,11 +326,13 @@ export const useAbly = (): UseAblyReturn => {
             // Batch multiple state updates in a requestAnimationFrame
             // to ensure they're processed in the same render cycle
             requestAnimationFrame(() => {
+                setAbly(undefined);
+                setChannelSubscribed(false);
                 setConfirmation(undefined);
                 setError(undefined);
+                setIsConnected(false);
                 setIsStreaming(false);
                 setPartials([]);
-                setChannelSubscribed(false);
 
                 // Use setTimeout with 0 delay to ensure the state updates
                 // have been processed before resolving the promise
