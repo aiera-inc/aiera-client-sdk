@@ -166,11 +166,11 @@ export const useAbly = (): UseAblyReturn => {
                 }
 
                 const result = await getAblyToken(tokenParams.sessionId);
-                callback(null, result.tokenDetails as TokenRequest);
+                callback(null, result.tokenDetails);
             } catch (err) {
                 const error = err instanceof Error ? err.message : 'Failed to fetch Ably token';
                 console.log(error);
-                // callback(error, null);
+                callback(error, null);
             }
         },
         [getAblyToken]
