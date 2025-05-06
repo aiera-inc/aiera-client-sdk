@@ -305,7 +305,7 @@ export function Messages({
                             id: 'initial-block',
                             type: BlockType.TEXT,
                             content: partials,
-                            meta: { style: 'paragraph' },
+                            meta: { style: 'markdown' },
                         },
                     ],
                     sources: [], // partial messages won't have sources

@@ -1,148 +1,223 @@
-import React from 'react';
-import { CitableContent } from '..';
-import { Citation } from '../../Citation';
-import { SearchableText } from '../../SearchableText';
+import React, { useMemo } from 'react';
+import { compiler, MarkdownToJSX } from 'markdown-to-jsx';
+import './markdown.css';
 
-interface MarkdownContentProps {
-    content: CitableContent;
+interface MarkdownRendererProps {
+    content: string[];
     className?: string;
 }
 
-export function MarkdownContent({ content, className = '' }: MarkdownContentProps) {
-    // Render markdown-styled content using Tailwind classes
-    const processedContent: React.ReactNode[] = [];
-    let key = 0;
+// Function to handle unclosed markdown elements in partial content
+const preparePartialMarkdown = (content: string[]): string => {
+    // Join all content parts
+    let text = content.join('');
 
-    content.forEach((c) => {
-        if (typeof c === 'string') {
-            // Split the content by lines to process each line
-            const lines = c.split('\n');
+    // Handle unclosed code blocks
+    const codeBlockMatches = text.match(/```[a-zA-Z0-9]*\n[\s\S]*?(?:```|$)/g);
+    if (codeBlockMatches) {
+        codeBlockMatches.forEach((match) => {
+            if (!match.endsWith('```')) {
+                // If code block is not closed, close it
+                const fixedMatch = match + '\n```';
+                text = text.replace(match, fixedMatch);
+            }
+        });
+    }
 
-            lines.forEach((line) => {
-                // Process headings
-                if (line.startsWith('# ')) {
-                    processedContent.push(
-                        <h1 key={key++} className="text-2xl font-bold mt-4 mb-2">
-                            <SearchableText text={line.substring(2)} />
-                        </h1>
-                    );
-                } else if (line.startsWith('## ')) {
-                    processedContent.push(
-                        <h2 key={key++} className="text-xl font-bold mt-3 mb-2">
-                            <SearchableText text={line.substring(3)} />
-                        </h2>
-                    );
-                } else if (line.startsWith('### ')) {
-                    processedContent.push(
-                        <h3 key={key++} className="text-lg font-bold mt-2 mb-1">
-                            <SearchableText text={line.substring(4)} />
-                        </h3>
-                    );
-                }
-                // Handle bold text with regex
-                else if (line.includes('**')) {
-                    // Split by bold markers
-                    const segments = line.split(/(\*\*.*?\*\*)/g);
-                    processedContent.push(
-                        <p key={key++} className="my-1">
-                            {segments.map((segment, i) => {
-                                if (segment.startsWith('**') && segment.endsWith('**')) {
-                                    // Bold text
-                                    return (
-                                        <strong key={i} className="font-bold">
-                                            <SearchableText text={segment.substring(2, segment.length - 2)} />
-                                        </strong>
-                                    );
-                                } else {
-                                    // Regular text
-                                    return <SearchableText key={i} text={segment} />;
-                                }
-                            })}
-                        </p>
-                    );
-                }
-                // Handle italic text
-                else if (line.includes('*')) {
-                    // Split by italic markers
-                    const segments = line.split(/(\*.*?\*)/g);
-                    processedContent.push(
-                        <p key={key++} className="my-1">
-                            {segments.map((segment, i) => {
-                                if (segment.startsWith('*') && segment.endsWith('*')) {
-                                    // Italic text
-                                    return (
-                                        <em key={i} className="italic">
-                                            <SearchableText text={segment.substring(1, segment.length - 1)} />
-                                        </em>
-                                    );
-                                } else {
-                                    // Regular text
-                                    return <SearchableText key={i} text={segment} />;
-                                }
-                            })}
-                        </p>
-                    );
-                }
-                // Handle code blocks/inline code
-                else if (line.includes('`')) {
-                    // Split by code markers
-                    const segments = line.split(/(`.*?`)/g);
-                    processedContent.push(
-                        <p key={key++} className="my-1">
-                            {segments.map((segment, i) => {
-                                if (segment.startsWith('`') && segment.endsWith('`')) {
-                                    // Code text
-                                    return (
-                                        <code key={i} className="font-mono bg-gray-100 text-sm px-1 rounded">
-                                            <SearchableText text={segment.substring(1, segment.length - 1)} />
-                                        </code>
-                                    );
-                                } else {
-                                    // Regular text
-                                    return <SearchableText key={i} text={segment} />;
-                                }
-                            })}
-                        </p>
-                    );
-                }
-                // Handle links [text](url)
-                else if (line.match(/\[.*?\]\(.*?\)/)) {
-                    // Split by link markers
-                    const segments = line.split(/(\[.*?\]\(.*?\))/g);
-                    processedContent.push(
-                        <p key={key++} className="my-1">
-                            {segments.map((segment, i) => {
-                                const linkMatch = segment.match(/\[(.*?)\]\((.*?)\)/);
-                                if (linkMatch) {
-                                    const [_, text, url] = linkMatch;
-                                    return (
-                                        <a key={i} href={url} className="text-blue-600 hover:underline">
-                                            <SearchableText text={text ?? 'link'} />
-                                        </a>
-                                    );
-                                } else {
-                                    return <SearchableText key={i} text={segment} />;
-                                }
-                            })}
-                        </p>
-                    );
-                } else if (line.trim()) {
-                    // Default paragraph text
-                    processedContent.push(
-                        <p key={key++} className="my-1">
-                            <SearchableText text={line} />
-                        </p>
-                    );
-                } else {
-                    // Empty line creates spacing
-                    processedContent.push(<div key={key++} className="h-2" />);
-                }
-            });
-        } else {
-            // Handle citation objects
-            processedContent.push(<Citation citation={c} key={key++} />);
+    // Handle unclosed inline code
+    let backtickCount = 0;
+    for (let i = 0; i < text.length; i++) {
+        if (text[i] === '`' && (i === 0 || text[i - 1] !== '\\')) {
+            backtickCount++;
         }
-    });
+    }
+    if (backtickCount % 2 !== 0) {
+        text += '`';
+    }
 
-    return <div className={className}>{processedContent}</div>;
+    // Handle unclosed bold/italic formatting
+    let asteriskCount = 0;
+    let underscoreCount = 0;
+    for (let i = 0; i < text.length; i++) {
+        if (text[i] === '*' && (i === 0 || text[i - 1] !== '\\')) {
+            asteriskCount++;
+        }
+        if (text[i] === '_' && (i === 0 || text[i - 1] !== '\\')) {
+            underscoreCount++;
+        }
+    }
+    if (asteriskCount % 2 !== 0) {
+        text += '*';
+    }
+    if (underscoreCount % 2 !== 0) {
+        text += '_';
+    }
+
+    // Handle unclosed links
+    const linkMatches = text.match(/\[([^\]]+)(?:\]\([^)]*|\]$|\]\([^)]*$)/g);
+    if (linkMatches) {
+        linkMatches.forEach((match) => {
+            if (match.includes('](') && !match.includes(')')) {
+                text = text.replace(match, match + ')');
+            } else if (match.endsWith(']')) {
+                text = text.replace(match, match + '()');
+            }
+        });
+    }
+
+    return text;
+};
+
+// Define type for component props to fix TypeScript errors
+type CustomComponentProps = {
+    children: React.ReactNode;
+    [key: string]: any;
+};
+
+// Custom component overrides for markdown-to-jsx
+const CustomCode = ({ children }: CustomComponentProps) => {
+    return (
+        <code className="px-1 py-0.5 rounded bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 font-mono text-sm">
+            {children}
+        </code>
+    );
+};
+
+const CustomPre = ({ children }: CustomComponentProps) => {
+    return (
+        <pre className="p-4 rounded-md bg-gray-100 dark:bg-gray-800 overflow-auto text-gray-800 dark:text-gray-200 my-4 font-mono text-sm">
+            {children}
+        </pre>
+    );
+};
+
+const CustomLink = ({ href, children }: CustomComponentProps & { href?: string }) => {
+    return (
+        <a
+            href={href}
+            className="text-blue-600 dark:text-blue-400 hover:underline"
+            target="_blank"
+            rel="noopener noreferrer"
+        >
+            {children}
+        </a>
+    );
+};
+
+const CustomTable = ({ children }: CustomComponentProps) => {
+    return (
+        <div className="overflow-x-auto my-4">
+            <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">{children}</table>
+        </div>
+    );
+};
+
+const CustomTableHead = ({ children }: CustomComponentProps) => (
+    <thead className="bg-gray-50 dark:bg-gray-800">{children}</thead>
+);
+
+const CustomTableBody = ({ children }: CustomComponentProps) => (
+    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">{children}</tbody>
+);
+
+const CustomTableCell = ({ children }: CustomComponentProps) => <td className="px-3 py-2 text-sm">{children}</td>;
+
+const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
+    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+        {children}
+    </th>
+);
+
+export function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
+    const preparedMarkdown = useMemo(() => preparePartialMarkdown(content), [content]);
+
+    // Define overrides for markdown-to-jsx with proper types
+    const overrides: MarkdownToJSX.Options['overrides'] = {
+        code: CustomCode,
+        pre: CustomPre,
+        a: CustomLink,
+        table: CustomTable,
+        thead: CustomTableHead,
+        tbody: CustomTableBody,
+        td: CustomTableCell,
+        th: CustomTableHeaderCell,
+        h1: {
+            component: 'h1',
+            props: {
+                className: 'text-2xl font-bold mt-6 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700',
+            },
+        },
+        h2: {
+            component: 'h2',
+            props: {
+                className: 'text-xl font-bold mt-6 mb-3 pb-1 border-b border-gray-200 dark:border-gray-700',
+            },
+        },
+        h3: {
+            component: 'h3',
+            props: {
+                className: 'text-lg font-bold mt-5 mb-2',
+            },
+        },
+        h4: {
+            component: 'h4',
+            props: {
+                className: 'text-base font-bold mt-4 mb-2',
+            },
+        },
+        p: {
+            component: 'p',
+            props: {
+                className: 'my-4 leading-relaxed',
+            },
+        },
+        ul: {
+            component: 'ul',
+            props: {
+                className: 'list-disc pl-6 my-4',
+            },
+        },
+        ol: {
+            component: 'ol',
+            props: {
+                className: 'list-decimal pl-6 my-4',
+            },
+        },
+        li: {
+            component: 'li',
+            props: {
+                className: 'mb-1',
+            },
+        },
+        blockquote: {
+            component: 'blockquote',
+            props: {
+                className: 'pl-4 border-l-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 my-4',
+            },
+        },
+        hr: {
+            component: 'hr',
+            props: {
+                className: 'my-6 border-t border-gray-200 dark:border-gray-700',
+            },
+        },
+    };
+
+    const markdownOutput = useMemo(
+        () =>
+            compiler(preparedMarkdown, {
+                overrides,
+                forceBlock: true,
+            }),
+        [preparedMarkdown, overrides]
+    );
+
+    return (
+        <div className={`prose dark:prose-invert max-w-none ${className || ''}`}>
+            {markdownOutput}
+            {className?.includes('streaming-markdown') && (
+                <span className="inline-block w-2 h-4 bg-gray-800 dark:bg-gray-200 ml-1 animate-pulse"></span>
+            )}
+        </div>
+    );
 }

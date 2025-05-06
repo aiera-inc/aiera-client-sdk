@@ -1,0 +1,36 @@
+/* Markdown cursor animation for streaming content */
+
+@keyframes blink {
+    0%,
+    100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Animation for cursor in streaming markdown */
+.streaming-markdown::after {
+    content: '';
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background-color: currentColor;
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 1s step-end infinite;
+}
+
+/* Make sure tables are properly scrollable */
+.prose table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Ensure code blocks don't overflow */
+.prose pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+}

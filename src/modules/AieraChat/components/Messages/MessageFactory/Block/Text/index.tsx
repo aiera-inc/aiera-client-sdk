@@ -4,7 +4,7 @@ import { match } from 'ts-pattern';
 import { BaseBlock, BlockType, CitableContent } from '..';
 import { Citation } from '../../Citation';
 import { SearchableText } from '../../SearchableText';
-import { MarkdownContent } from './markdown';
+import { MarkdownRenderer } from './markdown';
 
 // Text block types
 export interface TextBlock extends BaseBlock {
@@ -29,7 +29,12 @@ export function Text({ content, meta }: TextBlock) {
             })}
         >
             {match(meta.style)
-                .with('markdown', () => <MarkdownContent content={content} className="markdown-content" />)
+                .with('markdown', () => (
+                    <MarkdownRenderer
+                        content={content.filter((c) => typeof c === 'string') as string[]}
+                        className="streaming-markdown"
+                    />
+                ))
                 .otherwise(() =>
                     content.map((c, idx) => {
                         if (typeof c === 'string') {
