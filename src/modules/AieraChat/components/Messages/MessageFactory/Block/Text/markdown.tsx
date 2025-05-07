@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 import { compiler, MarkdownToJSX } from 'markdown-to-jsx';
+import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import './markdown.css';
 
 interface MarkdownRendererProps {
     content: string[];
-    className?: string;
 }
 
 // Function to handle unclosed markdown elements in partial content
@@ -128,7 +128,7 @@ const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
     </th>
 );
 
-export function MarkdownRenderer({ content, className }: MarkdownRendererProps) {
+export function MarkdownRenderer({ content }: MarkdownRendererProps) {
     const preparedMarkdown = useMemo(() => preparePartialMarkdown(content), [content]);
 
     // Define overrides for markdown-to-jsx with proper types
@@ -213,11 +213,9 @@ export function MarkdownRenderer({ content, className }: MarkdownRendererProps) 
     );
 
     return (
-        <div className={`prose dark:prose-invert max-w-none ${className || ''}`}>
+        <div className="prose dark:prose-invert max-w-none">
             {markdownOutput}
-            {className?.includes('streaming-markdown') && (
-                <span className="inline-block w-2 h-4 bg-gray-800 dark:bg-gray-200 ml-1 animate-pulse"></span>
-            )}
+            <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
         </div>
     );
 }

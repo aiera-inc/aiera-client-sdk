@@ -20,9 +20,8 @@ export function Text({ content, meta }: TextBlock) {
     return (
         <Container
             className={classNames({
-                'prose max-w-none': meta.style === 'markdown',
                 'text-balance': ['h1', 'h2', 'h3'].includes(meta.style),
-                'text-base pt-2': meta.style === 'paragraph',
+                'text-base pt-2': ['markdown', 'paragraph'].includes(meta.style),
                 'text-lg font-bold leading-4': meta.style === 'h3',
                 'text-xl leading-5 tracking-tight font-black pt-4 antialiased': meta.style === 'h2',
                 'text-2xl leading-5 tracking-tight font-black pt-4 antialiased': meta.style === 'h1',
@@ -30,10 +29,7 @@ export function Text({ content, meta }: TextBlock) {
         >
             {match(meta.style)
                 .with('markdown', () => (
-                    <MarkdownRenderer
-                        content={content.filter((c) => typeof c === 'string') as string[]}
-                        className="streaming-markdown"
-                    />
+                    <MarkdownRenderer content={content.filter((c) => typeof c === 'string') as string[]} />
                 ))
                 .otherwise(() =>
                     content.map((c, idx) => {
