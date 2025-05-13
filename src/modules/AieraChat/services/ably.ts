@@ -130,7 +130,6 @@ export const useAbly = (): UseAblyReturn => {
 
                 const tokenData = response.data?.createAblyToken?.data;
                 if (tokenData) {
-                    console.log(`Successfully created Ably token for chat ${sessionId}`);
                     return {
                         tokenDetails: {
                             mac: tokenData.mac,
@@ -214,28 +213,14 @@ export const useAbly = (): UseAblyReturn => {
                         // Subscribe to ably channel
                         chatChannel
                             .subscribe((message) => {
+                                if (!isStreamingRef.current) {
+                                    console.log('Starting to stream partials...');
+                                    // Update the streaming status if it's the first partial
+                                    setIsStreaming(true);
+                                }
                                 try {
                                     console.log('Received message from Ably:', message);
                                     const data = message.data as AblyEncodedData;
-
-                                    // If it's the final partial, ignore it and begin post-partial cleanup
-                                    if (data.is_final) {
-                                        console.log('Received final partial:', data);
-                                        if (isStreamingRef.current) {
-                                            console.log('Stopping partials stream.');
-                                            setIsStreaming(false);
-                                        }
-                                        // If this final partial is the only one, then still process it.
-                                        // This usually happens when something goes wrong with message streaming
-                                        // in the lambdas and the only partial that is generated is the final one.
-                                        if (partials && partials.length > 0) {
-                                            return;
-                                        }
-                                    } else if (!isStreamingRef.current) {
-                                        console.log('Starting to stream partials...');
-                                        // Update the streaming status if it's the first partial
-                                        setIsStreaming(true);
-                                    }
 
                                     // Decode the base64 string
                                     let decodedData;
@@ -286,6 +271,15 @@ export const useAbly = (): UseAblyReturn => {
                                             setConfirmation(confirmation); // overwrite
                                         } else {
                                             setError('Received source confirmation message without sources');
+                                        }
+                                    }
+
+                                    // Stop streaming if this is the final partial
+                                    if (data.is_final) {
+                                        console.log('Received final partial:', data);
+                                        if (isStreamingRef.current) {
+                                            console.log('Stopping partials stream.');
+                                            setIsStreaming(false);
                                         }
                                     }
                                 } catch (err) {
