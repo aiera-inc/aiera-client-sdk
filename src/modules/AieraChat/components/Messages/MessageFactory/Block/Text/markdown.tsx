@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { compiler, MarkdownToJSX } from 'markdown-to-jsx';
 import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
+import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import { Citation } from '../../Citation';
 import './markdown.css';
 
 interface MarkdownRendererProps {
@@ -68,6 +70,21 @@ const preparePartialMarkdown = (content: string[]): string => {
     return text;
 };
 
+// Custom Citation component that parses citation tags
+const CustomCitation = ({ author, contentId, date, source, sourceId, text, url }: CitationType) => {
+    const citation: CitationType = {
+        author,
+        contentId,
+        date,
+        source,
+        sourceId,
+        text,
+        url,
+    };
+
+    return <Citation citation={citation} />;
+};
+
 // Define type for component props to fix TypeScript errors
 type CustomComponentProps = {
     children: React.ReactNode;
@@ -129,10 +146,39 @@ const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
 );
 
 export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-    const preparedMarkdown = useMemo(() => preparePartialMarkdown(content), [content]);
+    // Preprocess content to convert Citation tags into a format markdown-to-jsx can understand
+    const processedContent = useMemo(() => {
+        let processedText = preparePartialMarkdown(content);
+
+        // Convert Citation tags to a format that markdown-to-jsx can process
+        const citationRegex = /<Citation\s+([^>]+)\/>/g;
+        processedText = processedText.replace(citationRegex, (_match, attrs: string) => {
+            // Parse attributes
+            const attributes: Record<string, string> = {};
+            const attrRegex = /(\w+)="([^"]+)"/g;
+            let attrMatch: RegExpExecArray | null;
+
+            while ((attrMatch = attrRegex.exec(attrs)) !== null) {
+                // TypeScript now knows attrMatch is not null, but we need to ensure indices exist
+                const [, key, value] = attrMatch;
+                if (key && value) {
+                    attributes[key] = value;
+                }
+            }
+
+            // Convert to markdown-to-jsx compatible format
+            const attrString = Object.entries(attributes)
+                .map(([key, value]) => `${key}="${value}"`)
+                .join(' ');
+            return `<citation ${attrString} />`;
+        });
+
+        return processedText;
+    }, [content]);
 
     // Define overrides for markdown-to-jsx with proper types
     const overrides: MarkdownToJSX.Options['overrides'] = {
+        citation: CustomCitation,
         code: CustomCode,
         pre: CustomPre,
         a: CustomLink,
@@ -205,11 +251,11 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
 
     const markdownOutput = useMemo(
         () =>
-            compiler(preparedMarkdown, {
+            compiler(processedContent, {
                 overrides,
                 forceBlock: true,
             }),
-        [preparedMarkdown, overrides]
+        [processedContent, overrides]
     );
 
     return (
