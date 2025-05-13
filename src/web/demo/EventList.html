@@ -136,7 +136,7 @@
                         //     { name: 'earningsOnly', visible: false, defaultValue: true },
                         // ],
                         // eventListView: 'combined',
-                        // showCompanyFilter: false,
+                        showCompanyFilter: false,
                         // showCompanyNameInEventRow: true,
                         // showGlobalSearch: false,
                         // showSearch: false,
@@ -169,9 +169,9 @@
              * To prevent a race condition, use the on('configured') event listener
              * and call setWatchlist once the config options are set in state.
              */
-            // eventList.on('configured', () => {
-            //     eventList.setWatchlist(stockTickers.map(({ ticker }) => ({ ticker })));
-            // });
+            eventList.on('configured', () => {
+                eventList.setWatchlist(stockTickers.map(({ ticker }) => ({ ticker })));
+            });
 
             eventList.on('instrument-selected', (ticker) => {
                 console.log('selected ticker: ', ticker);
