@@ -81,12 +81,12 @@ type AblyEncodedData = {
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
-    const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
-    const [partials, setPartials] = useState<string[]>([]);
     const [ably, setAbly] = useState<Realtime | undefined>(undefined);
     const [channelSubscribed, setChannelSubscribed] = useState<boolean>(false);
-    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
+    const [isConnected, setIsConnected] = useState<boolean>(false);
+    const [partials, setPartials] = useState<string[]>([]);
 
     // Add both a state and a ref for isStreaming
     const [isStreaming, setIsStreaming] = useState<boolean>(false);
@@ -239,6 +239,7 @@ export const useAbly = (): UseAblyReturn => {
                                     if (jsonObject.blocks) {
                                         const parsedMessage = jsonObject.blocks?.[0]?.content?.[0]?.value;
                                         if (parsedMessage) {
+                                            console.log('Updating partials with new parsed message:', parsedMessage);
                                             // Update partials state with the new message
                                             setPartials((prev) => [...prev, parsedMessage]);
                                         }
@@ -277,10 +278,8 @@ export const useAbly = (): UseAblyReturn => {
                                     // Stop streaming if this is the final partial
                                     if (data.is_final) {
                                         console.log('Received final partial:', data);
-                                        if (isStreamingRef.current) {
-                                            console.log('Stopping partials stream.');
-                                            setIsStreaming(false);
-                                        }
+                                        console.log('Stopping partials stream.');
+                                        setIsStreaming(false);
                                     }
                                 } catch (err) {
                                     console.error('Error handling message:', err);
