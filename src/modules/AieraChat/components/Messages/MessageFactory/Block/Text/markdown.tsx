@@ -144,7 +144,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         h1: {
             component: 'h1',
             props: {
-                className: 'text-2xl font-bold pt-4 pb-4 pt-4 border-b border-gray-200 dark:border-gray-700',
+                className: 'text-2xl font-bold pt-4 pb-4 border-b border-gray-200 dark:border-gray-700',
             },
         },
         h2: {
