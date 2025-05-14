@@ -144,25 +144,25 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         h1: {
             component: 'h1',
             props: {
-                className: 'text-2xl font-bold mt-6 mb-4 pb-2 border-b border-gray-200 dark:border-gray-700',
+                className: 'text-2xl font-bold pt-4 pb-4 pt-4 border-b border-gray-200 dark:border-gray-700',
             },
         },
         h2: {
             component: 'h2',
             props: {
-                className: 'text-xl font-bold mt-6 mb-3 pb-1 border-b border-gray-200 dark:border-gray-700',
+                className: 'text-xl font-bold pt-4 pb-3 border-b border-gray-200 dark:border-gray-700',
             },
         },
         h3: {
             component: 'h3',
             props: {
-                className: 'text-lg font-bold mt-5 mb-2',
+                className: 'text-lg font-bold pt-3 pb-2',
             },
         },
         h4: {
             component: 'h4',
             props: {
-                className: 'text-base font-bold mt-4 mb-2',
+                className: 'text-base font-bold pt-3 pb-2',
             },
         },
         p: {
