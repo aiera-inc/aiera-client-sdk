@@ -78,7 +78,7 @@ export function Messages({
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { confirmation, createAblyToken, isStreaming, partials, reset } = useAbly();
+    const { confirmation, isStreaming, partials, reset } = useAbly();
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -177,13 +177,6 @@ export function Messages({
                                     behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
                                 };
                             });
-                            createAblyToken(session.id)
-                                .then(() => {
-                                    console.log(`Successfully created ably token for session ${session.id}:`);
-                                })
-                                .catch((ablyError: Error) => {
-                                    console.log(`Error creating Ably token: ${ablyError.message}`);
-                                });
                         }
                     })
                     .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`))
@@ -198,25 +191,19 @@ export function Messages({
                                 ? ChatSessionStatus.GeneratingResponse
                                 : ChatSessionStatus.FindingSources
                         );
-                        createAblyToken(chatId)
-                            .then(() => {
-                                console.log(`Successfully created ably token for session ${chatId}:`);
-                            })
-                            .catch((ablyError: Error) => {
-                                console.log(`Error creating Ably token: ${ablyError.message}`);
-                            });
                     })
                     .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`))
                     .finally(() => setSubmitting(false));
             }
         },
-        [chatId, createAblyToken, onSetStatus, setSubmitting, sources, virtuosoRef.current?.data]
+        [chatId, onSetStatus, setSubmitting, sources, virtuosoRef.current?.data]
     );
 
     const maybeClearVirtuoso = useCallback(
         (message: string) => {
             const existingItems = virtuosoRef.current?.data.get();
             if (existingItems && existingItems.length > 0) {
+                // Log the provided message depending on invocation
                 console.log(message);
                 virtuosoRef.current?.data.replace([]);
             }
@@ -253,7 +240,7 @@ export function Messages({
         if (partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
-            // Set the streaming message if one already exists in virtuoso
+            // If the latest message is the one currently streaming partials, then update its content
             if (
                 latestMessage &&
                 latestMessage.type === ChatMessageType.RESPONSE &&
@@ -263,6 +250,8 @@ export function Messages({
                 const latestPartial = partials[partials.length - 1] as string;
                 virtuosoRef.current?.data.map(
                     (message) => {
+                        // When the latest partial is found in the existing virtuoso list,
+                        // update its Text block's content with the latest partial message
                         if (latestMessage.id === message.id) {
                             return {
                                 ...latestMessage,
@@ -321,6 +310,7 @@ export function Messages({
         }
     }, [chatStatus, partials, virtuosoRef.current?.data]);
 
+    // Manage the chat session status depending on streaming
     useEffect(() => {
         if (!isStreaming && STREAMING_STATUSES.includes(chatStatus)) {
             console.log('Streaming stopped. Setting chat status to active.');

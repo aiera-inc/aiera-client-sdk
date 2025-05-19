@@ -3,23 +3,15 @@ import { ErrorInfo, Realtime, TokenDetails, TokenParams, TokenRequest } from 'ab
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'urql';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { ChatMessageSources } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables } from '@aiera/client-sdk/types';
-import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
-import {
-    ChatMessageSources,
-    ChatMessageStatus,
-    ChatMessageType,
-} from '@aiera/client-sdk/modules/AieraChat/services/messages';
-import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
+// import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
 
-interface AblyToken {
-    clientId: string;
-}
+export const CHANNEL_PREFIX = 'user-chat';
 
 interface UseAblyReturn {
-    ably?: Realtime;
     confirmation?: ChatMessageSources;
-    createAblyToken: (sessionId: string) => Promise<AblyToken | null>;
+    createAblyRealtimeClient: () => Promise<Realtime | null>;
     error?: string;
     isConnected: boolean;
     isStreaming: boolean;
@@ -32,57 +24,50 @@ type Callback = (
     tokenRequestOrDetails: TokenDetails | TokenRequest | string | null
 ) => void;
 
-type PartialTextContent = {
-    citation?: Citation;
-    value: string;
-};
+// type PartialTextContent = {
+//     citation?: Citation;
+//     value: string;
+// };
+//
+// type PartialTextBlock = {
+//     content: PartialTextContent[];
+//     meta: {
+//         style: 'paragraph' | 'h1' | 'h2' | 'h3';
+//     };
+//     type: ContentBlockType.Text;
+// };
+//
+// interface AblyConfirmationSource {
+//     confirmed: boolean;
+//     id: number;
+//     name: string;
+//     type: string;
+// }
 
-type PartialTextBlock = {
-    content: PartialTextContent[];
-    meta: {
-        style: 'paragraph' | 'h1' | 'h2' | 'h3';
-    };
-    type: ContentBlockType.Text;
-};
-
-type TokenParamsData = {
-    sessionId: string;
-};
-
-// Interface for the base structure of the message data
-interface AblyConfirmationSource {
-    confirmed: boolean;
-    id: number;
-    name: string;
-    type: string;
-}
-
-interface AblyMessageData {
-    __typename: string;
-    blocks?: PartialTextBlock[];
-    id: string | null;
-    created_at: string;
-    message_type: string; // 'response', 'prompt', etc.
-    ordinal_id: string | null;
-    prompt_message_id: string | null;
-    runner_version: string;
-    session_id: number;
-    sources?: AblyConfirmationSource[];
-    updated_at: string;
-    user_id: number;
-}
-
-type AblyEncodedData = {
-    content: string;
-    is_final: boolean;
-};
+// interface AblyMessageData {
+//     __typename: string;
+//     blocks?: PartialTextBlock[];
+//     created_at: string;
+//     id: string | null;
+//     message_type: string; // 'response', 'prompt', etc.
+//     ordinal_id: string | null;
+//     prompt_message_id: string | null;
+//     runner_version: string;
+//     session_id: number;
+//     sources?: AblyConfirmationSource[];
+//     updated_at: string;
+//     user_id: number;
+// }
+//
+// type AblyEncodedData = {
+//     content: string;
+//     is_final: boolean;
+// };
 
 /**
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
-    const [ably, setAbly] = useState<Realtime | undefined>(undefined);
-    const [channelSubscribed, setChannelSubscribed] = useState<boolean>(false);
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [isConnected, setIsConnected] = useState<boolean>(false);
@@ -117,54 +102,44 @@ export const useAbly = (): UseAblyReturn => {
     `);
 
     // This function handles the actual token creation, will be used by both
-    // the auth callback and the explicit call
-    const getAblyToken = useCallback(
-        async (sessionId: string) => {
-            try {
-                const response = await createAblyTokenMutation({
-                    input: {
-                        sessionId,
-                        sessionUserId: config.tracking?.userId,
-                    },
-                });
+    // the auth callback (to refresh the token) and the explicit call
+    const createAblyToken = useCallback(async () => {
+        try {
+            const response = await createAblyTokenMutation({
+                input: {
+                    sessionUserId: config.tracking?.userId,
+                },
+            });
 
-                const tokenData = response.data?.createAblyToken?.data;
-                if (tokenData) {
-                    return {
-                        tokenDetails: {
-                            mac: tokenData.mac,
-                            capability: tokenData.capability,
-                            clientId: tokenData.clientId,
-                            keyName: tokenData.keyName,
-                            nonce: tokenData.nonce,
-                            timestamp: Number(tokenData.timestamp),
-                            ttl: tokenData.ttl,
-                        },
+            const tokenData = response.data?.createAblyToken?.data;
+            if (tokenData) {
+                return {
+                    tokenDetails: {
+                        mac: tokenData.mac,
+                        capability: tokenData.capability,
                         clientId: tokenData.clientId,
-                    };
-                } else {
-                    throw new Error('Invalid token response');
-                }
-            } catch (err) {
-                const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
-                setError(errorMessage);
-                throw new Error(errorMessage);
+                        keyName: tokenData.keyName,
+                        nonce: tokenData.nonce,
+                        timestamp: Number(tokenData.timestamp),
+                        ttl: tokenData.ttl,
+                    },
+                    clientId: tokenData.clientId,
+                };
+            } else {
+                throw new Error('Invalid token response');
             }
-        },
-        [config.tracking?.userId, createAblyTokenMutation]
-    );
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
+            setError(errorMessage);
+            throw new Error(errorMessage);
+        }
+    }, [config.tracking?.userId, createAblyTokenMutation]);
 
-    // Auth callback that will be passed to Ably - uses the getAblyToken function
+    // Auth callback that will be passed to Ably - uses the createAblyToken function
     const authCallback = useCallback(
-        async (tokenParams: TokenParamsData, callback: Callback) => {
+        async (callback: Callback) => {
             try {
-                // Use the sessionId from the closure, not from tokenParams
-                // This ensures we're using the correct session
-                if (!tokenParams.sessionId) {
-                    throw new Error('No active session ID');
-                }
-
-                const result = await getAblyToken(tokenParams.sessionId);
+                const result = await createAblyToken();
                 callback(null, result.tokenDetails);
             } catch (err) {
                 const error = err instanceof Error ? err.message : 'Failed to fetch Ably token';
@@ -172,155 +147,31 @@ export const useAbly = (): UseAblyReturn => {
                 callback(error, null);
             }
         },
-        [getAblyToken]
+        [createAblyToken]
     );
 
-    const createAblyToken = useCallback(
-        async (sessionId: string) => {
-            if (!sessionId || sessionId === 'new') {
-                return Promise.resolve(null);
-            }
-
-            // If we're already connected to this session, don't reconnect
-            if (ably && isConnected) {
-                console.log(`Already connected to session ${sessionId}`);
-                return Promise.resolve({ clientId: ably.auth.clientId });
-            }
-
-            try {
-                // First, get the token
-                const tokenResult = await getAblyToken(sessionId);
-
-                // Then, initialize Ably with the auth callback for future token refreshes
-                const ablyInstance = new Realtime({
-                    authCallback: (data: TokenParams, callback: Callback) =>
-                        authCallback({ ...data, sessionId }, callback),
+    const createAblyRealtimeClient = useCallback(async () => {
+        try {
+            // First, get the token
+            const tokenResult = await createAblyToken();
+            // Then, initialize Ably with the auth callback for future token refreshes and return the instance
+            return Promise.resolve(
+                new Realtime({
+                    authCallback: (_data: TokenParams, callback: Callback) => authCallback(callback),
                     clientId: tokenResult.clientId,
-                });
-
-                // Set up ably connection listeners
-                ablyInstance.connection.on('connected', () => {
-                    console.log('Connected to Ably!');
-                    setIsConnected(true);
-                    setError(undefined);
-
-                    if (!channelSubscribed) {
-                        setChannelSubscribed(true);
-                        const channelName = `user-chat:${sessionId}`;
-                        const chatChannel = ablyInstance.channels.get(channelName);
-                        console.log(`Subscribed to channel ${channelName}`);
-
-                        // Subscribe to ably channel
-                        chatChannel
-                            .subscribe((message) => {
-                                if (!isStreamingRef.current) {
-                                    console.log('Starting to stream partials...');
-                                    // Update the streaming status if it's the first partial
-                                    setIsStreaming(true);
-                                }
-                                try {
-                                    console.log('Received message from Ably:', message);
-                                    const data = message.data as AblyEncodedData;
-
-                                    // Decode the base64 string
-                                    let decodedData;
-                                    try {
-                                        decodedData = atob(data.content);
-                                    } catch (decodingError) {
-                                        console.log('Error handling message:', decodingError);
-                                        return; // ignore message if there's no encoded content
-                                    }
-
-                                    // Parse the JSON
-                                    const jsonObject = JSON.parse(decodedData) as AblyMessageData;
-                                    console.log('Decoded Ably message:', jsonObject);
-
-                                    // Process the response message and update partials
-                                    if (jsonObject.blocks) {
-                                        const parsedMessage = jsonObject.blocks?.[0]?.content?.[0]?.value;
-                                        if (parsedMessage) {
-                                            console.log('Updating partials with new parsed message:', parsedMessage);
-                                            // Update partials state with the new message
-                                            setPartials((prev) => [...prev, parsedMessage]);
-                                        }
-                                    }
-
-                                    // If this is a source confirmation message, parse and store it in state
-                                    if (jsonObject.message_type === 'source_confirmation') {
-                                        if (jsonObject.sources && jsonObject.sources.length > 0) {
-                                            const sources: Source[] = jsonObject.sources.map((source) => ({
-                                                confirmed: source.confirmed,
-                                                targetId: String(source.id),
-                                                targetType: source.type,
-                                                title: source.name,
-                                            }));
-                                            const confirmation: ChatMessageSources = {
-                                                confirmed: false, // user action will confirm it
-                                                id: `temp-confirmation-${sessionId}-${
-                                                    jsonObject.prompt_message_id ?? ''
-                                                }`,
-                                                ordinalId: jsonObject.ordinal_id,
-                                                prompt: '', // placeholder, get text from virtuoso using the prompt id
-                                                promptMessageId: jsonObject.prompt_message_id
-                                                    ? String(jsonObject.prompt_message_id)
-                                                    : undefined,
-                                                sources,
-                                                status: ChatMessageStatus.COMPLETED,
-                                                timestamp: jsonObject.created_at,
-                                                type: ChatMessageType.SOURCES,
-                                            };
-                                            setConfirmation(confirmation); // overwrite
-                                        } else {
-                                            setError('Received source confirmation message without sources');
-                                        }
-                                    }
-
-                                    // Stop streaming if this is the final partial
-                                    if (data.is_final) {
-                                        console.log('Received final partial:', data);
-                                        console.log('Stopping partials stream.');
-                                        setIsStreaming(false);
-                                    }
-                                } catch (err) {
-                                    console.error('Error handling message:', err);
-                                    setError(`Error handling message: ${(err as Error).message}`);
-                                }
-                            })
-                            .catch((err: Error) => console.log('Error with Ably channel subscription', err.message));
-                    }
-                });
-
-                ablyInstance.connection.on('failed', (err) => {
-                    setError(err?.reason?.message || 'Connection to Ably failed');
-                    setIsConnected(false);
-                });
-
-                ablyInstance.connection.on('disconnected', () => {
-                    setIsConnected(false);
-                    const channelName = `user-chat:${sessionId}`;
-                    const chatChannel = ablyInstance.channels.get(channelName);
-                    chatChannel.unsubscribe();
-                });
-
-                setAbly(ablyInstance);
-
-                // Return client ID from our initial token request
-                return { clientId: tokenResult.clientId };
-            } catch (err) {
-                setError(err instanceof Error ? err.message : 'Error initializing Ably');
-                return Promise.resolve(null);
-            }
-        },
-        [authCallback, getAblyToken, channelSubscribed, isStreamingRef, ably, isConnected]
-    );
+                })
+            );
+        } catch (err) {
+            setError(err instanceof Error ? `Error initializing Ably: ${err.message}` : 'Error initializing Ably');
+            return Promise.resolve(null);
+        }
+    }, [authCallback, createAblyToken]);
 
     const reset = useCallback((): Promise<void> => {
         return new Promise<void>((resolve) => {
             // Batch multiple state updates in a requestAnimationFrame
             // to ensure they're processed in the same render cycle
             requestAnimationFrame(() => {
-                setAbly(undefined);
-                setChannelSubscribed(false);
                 setConfirmation(undefined);
                 setError(undefined);
                 setIsConnected(false);
@@ -336,5 +187,13 @@ export const useAbly = (): UseAblyReturn => {
         });
     }, []);
 
-    return { ably, confirmation, createAblyToken, error, isConnected, isStreaming, partials, reset };
+    return {
+        confirmation,
+        createAblyRealtimeClient,
+        error,
+        isConnected,
+        isStreaming,
+        partials,
+        reset,
+    };
 };

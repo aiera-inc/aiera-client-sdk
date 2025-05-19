@@ -1,7 +1,9 @@
-import { useConfig } from '@aiera/client-sdk/lib/config';
 import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
+import * as Ably from 'ably';
+import { AblyProvider } from 'ably/react';
 import classNames from 'classnames';
-import React, { ReactElement, useCallback, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { Transcript } from '../Transcript';
 import { ConfirmDialog } from './modals/ConfirmDialog';
 import { Header } from './components/Header';
@@ -9,8 +11,10 @@ import { Menu } from './panels/Menu';
 import { Messages } from './components/Messages';
 import { Sources } from './panels/Sources';
 import { useChatStore } from './store';
+import { useAbly } from './services/ably';
 import { useChatSessions } from './services/chats';
 import { ChatMessage } from './services/messages';
+import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 
 export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
@@ -30,6 +34,32 @@ export function AieraChat(): ReactElement {
 
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
+
+    // Set up Ably realtime client
+    const { createAblyRealtimeClient } = useAbly();
+    const [client, setClient] = useState<Ably.Realtime | undefined>(undefined);
+
+    // Initialize Ably client on component mount
+    useEffect(() => {
+        try {
+            createAblyRealtimeClient()
+                .then((client) => {
+                    if (client) {
+                        setClient(client);
+                    }
+                })
+                .catch((e) => console.error('Failed to create Ably realtime client:', e));
+        } catch (error) {
+            console.error('Failed to initialize Ably client:', error);
+        }
+
+        // Clean up function to close the connection when component unmounts
+        return () => {
+            if (client) {
+                client.close();
+            }
+        };
+    }, [createAblyRealtimeClient]);
 
     const { clearSources, createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
@@ -163,8 +193,8 @@ export function AieraChat(): ReactElement {
         }
     }
 
-    return (
-        <>
+    return client ? (
+        <AblyProvider client={client}>
             {selectedSource && (
                 <div
                     className={classNames('fixed inset-0 slideInFromRight z-[100]', {
@@ -199,6 +229,10 @@ export function AieraChat(): ReactElement {
                 )}
                 {showConfirm && <ConfirmDialog onDelete={handleDeleteConfirm} onClose={onCloseConfirm} />}
             </div>
-        </>
+        </AblyProvider>
+    ) : (
+        <div className="flex-1 flex flex-col items-center justify-center pb-3">
+            <LoadingSpinner />
+        </div>
     );
 }
