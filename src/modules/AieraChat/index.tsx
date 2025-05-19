@@ -2,8 +2,12 @@ import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import * as Ably from 'ably';
 import { AblyProvider } from 'ably/react';
 import classNames from 'classnames';
+import gql from 'graphql-tag';
 import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
+import { useQuery } from '@aiera/client-sdk/api/client';
+import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { AieraChatCurrentUserQuery } from '@aiera/client-sdk/types';
 import { Transcript } from '../Transcript';
 import { ConfirmDialog } from './modals/ConfirmDialog';
 import { Header } from './components/Header';
@@ -14,7 +18,6 @@ import { useChatStore } from './store';
 import { useAbly } from './services/ably';
 import { useChatSessions } from './services/chats';
 import { ChatMessage } from './services/messages';
-import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 
 export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
@@ -39,18 +42,32 @@ export function AieraChat(): ReactElement {
     const { createAblyRealtimeClient } = useAbly();
     const [client, setClient] = useState<Ably.Realtime | undefined>(undefined);
 
-    // Initialize Ably client on component mount
+    const userQuery = useQuery<AieraChatCurrentUserQuery>({
+        requestPolicy: 'cache-only',
+        query: gql`
+            query AieraChatCurrentUser {
+                currentUser {
+                    id
+                }
+            }
+        `,
+    });
+
+    // Initialize Ably client once the user is authenticated and tracking userId is set in the config
     useEffect(() => {
-        try {
-            createAblyRealtimeClient()
-                .then((client) => {
-                    if (client) {
-                        setClient(client);
-                    }
-                })
-                .catch((e) => console.error('Failed to create Ably realtime client:', e));
-        } catch (error) {
-            console.error('Failed to initialize Ably client:', error);
+        if (userQuery.status === 'success' && userQuery.data.currentUser && config.tracking?.userId && !client) {
+            try {
+                createAblyRealtimeClient(config.tracking.userId)
+                    .then((client) => {
+                        if (client) {
+                            console.log('Successfully initialized Ably realtime client.');
+                            setClient(client);
+                        }
+                    })
+                    .catch((e) => console.error('Failed to create Ably realtime client:', e));
+            } catch (error) {
+                console.error('Failed to initialize Ably client:', error);
+            }
         }
 
         // Clean up function to close the connection when component unmounts
@@ -59,7 +76,7 @@ export function AieraChat(): ReactElement {
                 client.close();
             }
         };
-    }, [createAblyRealtimeClient]);
+    }, [client, config.tracking?.userId, createAblyRealtimeClient, userQuery]);
 
     const { clearSources, createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);

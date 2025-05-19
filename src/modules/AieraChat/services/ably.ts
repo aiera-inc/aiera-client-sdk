@@ -2,16 +2,15 @@ import gql from 'graphql-tag';
 import { ErrorInfo, Realtime, TokenDetails, TokenParams, TokenRequest } from 'ably';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'urql';
-import { useConfig } from '@aiera/client-sdk/lib/config';
 import { ChatMessageSources } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables } from '@aiera/client-sdk/types';
 // import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
 
-export const CHANNEL_PREFIX = 'user-chat';
+// export const CHANNEL_PREFIX = 'user-chat';
 
 interface UseAblyReturn {
     confirmation?: ChatMessageSources;
-    createAblyRealtimeClient: () => Promise<Realtime | null>;
+    createAblyRealtimeClient: (sessionUserId?: string) => Promise<Realtime | null>;
     error?: string;
     isConnected: boolean;
     isStreaming: boolean;
@@ -83,8 +82,6 @@ export const useAbly = (): UseAblyReturn => {
         isStreamingRef.current = isStreaming;
     }, [isStreaming]);
 
-    const config = useConfig();
-
     const [, createAblyTokenMutation] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
         mutation CreateAblyToken($input: CreateAblyTokenInput!) {
             createAblyToken(input: $input) {
@@ -103,43 +100,46 @@ export const useAbly = (): UseAblyReturn => {
 
     // This function handles the actual token creation, will be used by both
     // the auth callback (to refresh the token) and the explicit call
-    const createAblyToken = useCallback(async () => {
-        try {
-            const response = await createAblyTokenMutation({
-                input: {
-                    sessionUserId: config.tracking?.userId,
-                },
-            });
-
-            const tokenData = response.data?.createAblyToken?.data;
-            if (tokenData) {
-                return {
-                    tokenDetails: {
-                        mac: tokenData.mac,
-                        capability: tokenData.capability,
-                        clientId: tokenData.clientId,
-                        keyName: tokenData.keyName,
-                        nonce: tokenData.nonce,
-                        timestamp: Number(tokenData.timestamp),
-                        ttl: tokenData.ttl,
+    const createAblyToken = useCallback(
+        async (sessionUserId?: string) => {
+            try {
+                const response = await createAblyTokenMutation({
+                    input: {
+                        sessionUserId,
                     },
-                    clientId: tokenData.clientId,
-                };
-            } else {
-                throw new Error('Invalid token response');
+                });
+
+                const tokenData = response.data?.createAblyToken?.data;
+                if (tokenData) {
+                    return {
+                        tokenDetails: {
+                            mac: tokenData.mac,
+                            capability: tokenData.capability,
+                            clientId: tokenData.clientId,
+                            keyName: tokenData.keyName,
+                            nonce: tokenData.nonce,
+                            timestamp: Number(tokenData.timestamp),
+                            ttl: tokenData.ttl,
+                        },
+                        clientId: tokenData.clientId,
+                    };
+                } else {
+                    throw new Error('Invalid token response');
+                }
+            } catch (err) {
+                const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
+                setError(errorMessage);
+                throw new Error(errorMessage);
             }
-        } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
-            setError(errorMessage);
-            throw new Error(errorMessage);
-        }
-    }, [config.tracking?.userId, createAblyTokenMutation]);
+        },
+        [createAblyTokenMutation]
+    );
 
     // Auth callback that will be passed to Ably - uses the createAblyToken function
     const authCallback = useCallback(
-        async (callback: Callback) => {
+        async (callback: Callback, sessionUserId?: string) => {
             try {
-                const result = await createAblyToken();
+                const result = await createAblyToken(sessionUserId);
                 callback(null, result.tokenDetails);
             } catch (err) {
                 const error = err instanceof Error ? err.message : 'Failed to fetch Ably token';
@@ -150,22 +150,25 @@ export const useAbly = (): UseAblyReturn => {
         [createAblyToken]
     );
 
-    const createAblyRealtimeClient = useCallback(async () => {
-        try {
-            // First, get the token
-            const tokenResult = await createAblyToken();
-            // Then, initialize Ably with the auth callback for future token refreshes and return the instance
-            return Promise.resolve(
-                new Realtime({
-                    authCallback: (_data: TokenParams, callback: Callback) => authCallback(callback),
-                    clientId: tokenResult.clientId,
-                })
-            );
-        } catch (err) {
-            setError(err instanceof Error ? `Error initializing Ably: ${err.message}` : 'Error initializing Ably');
-            return Promise.resolve(null);
-        }
-    }, [authCallback, createAblyToken]);
+    const createAblyRealtimeClient = useCallback(
+        async (sessionUserId?: string) => {
+            try {
+                // First, get the token
+                const tokenResult = await createAblyToken(sessionUserId);
+                // Then, initialize Ably with the auth callback for future token refreshes and return the instance
+                return Promise.resolve(
+                    new Realtime({
+                        authCallback: (_data: TokenParams, callback: Callback) => authCallback(callback, sessionUserId),
+                        clientId: tokenResult.clientId,
+                    })
+                );
+            } catch (err) {
+                setError(err instanceof Error ? `Error initializing Ably: ${err.message}` : 'Error initializing Ably');
+                return Promise.resolve(null);
+            }
+        },
+        [authCallback, createAblyToken]
+    );
 
     const reset = useCallback((): Promise<void> => {
         return new Promise<void>((resolve) => {
