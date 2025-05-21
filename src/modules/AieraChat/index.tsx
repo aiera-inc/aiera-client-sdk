@@ -64,33 +64,38 @@ export function AieraChat(): ReactElement {
         initializingRef.current = true;
         console.log('Initializing Ably client in component with userId:', chatUserId);
 
-        createAblyRealtimeClient(chatUserId)
-            .then((client) => {
-                if (client) {
-                    clientRef.current = client;
+        // Wait a tick before calling the mutation to let the state update finish (avoids race condition)
+        setTimeout(
+            () =>
+                void createAblyRealtimeClient(chatUserId)
+                    .then((client) => {
+                        if (client) {
+                            clientRef.current = client;
 
-                    // Listen for connection events
-                    const onConnected = () => {
-                        console.log('Ably client connected in component');
-                        setClientReady(true);
-                    };
+                            // Listen for connection events
+                            const onConnected = () => {
+                                console.log('Ably client connected in component');
+                                setClientReady(true);
+                            };
 
-                    // Check if already connected
-                    if (client.connection.state === 'connected') {
-                        onConnected();
-                    } else {
-                        client.connection.once('connected', onConnected);
-                    }
-                } else {
-                    console.error('Failed to initialize Ably client');
-                }
+                            // Check if already connected
+                            if (client.connection.state === 'connected') {
+                                onConnected();
+                            } else {
+                                client.connection.once('connected', onConnected);
+                            }
+                        } else {
+                            console.error('Failed to initialize Ably client');
+                        }
 
-                initializingRef.current = false;
-            })
-            .catch((error) => {
-                console.error('Error initializing Ably client:', error);
-                initializingRef.current = false;
-            });
+                        initializingRef.current = false;
+                    })
+                    .catch((error) => {
+                        console.error('Error initializing Ably client:', error);
+                        initializingRef.current = false;
+                    }),
+            100
+        );
 
         // Clean up on unmount
         return () => {
