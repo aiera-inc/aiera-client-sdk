@@ -16,6 +16,7 @@ export interface ChatState {
     chatId: string;
     chatStatus: ChatSessionStatus;
     chatTitle?: string;
+    chatUserId?: string;
     citations?: Citation[];
     hasChanges: boolean;
     onAddSource: (source: Source | Source[]) => void;
@@ -27,6 +28,7 @@ export interface ChatState {
     onSetSearchTerm: (searchTerm?: string) => void;
     onSetStatus: (chatStatus: ChatSessionStatus) => void;
     onSetTitle: (title?: string) => void;
+    onSetUserId: (chatUserId?: string) => void;
     searchTerm?: string;
     selectedSource?: Source;
     setCitations: (citations: Citation[]) => void;
@@ -38,6 +40,7 @@ export const useChatStore = create<ChatState>((set) => ({
     chatId: 'new',
     chatStatus: ChatSessionStatus.Active,
     chatTitle: undefined,
+    chatUserId: undefined,
     citations: undefined,
     hasChanges: false,
     onAddSource: (source: Source | Source[]) =>
@@ -69,6 +72,7 @@ export const useChatStore = create<ChatState>((set) => ({
     onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
     onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
+    onSetUserId: (chatUserId?: string) => set({ chatUserId }),
     searchTerm: undefined,
     selectedSource: undefined,
     setCitations: (citations: Citation[]) => set({ citations }),

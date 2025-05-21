@@ -6,7 +6,6 @@ import merge from 'lodash.merge';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useAppConfig } from '@aiera/client-sdk/lib/data';
-import { useInterval } from '@aiera/client-sdk/lib/hooks/useInterval';
 import { AppConfigQuery, RealtimeCurrentUserQuery } from '@aiera/client-sdk/types/generated';
 
 type AppConfiguration = AppConfigQuery['configuration'];
@@ -24,7 +23,6 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
     // And only then set the Pusher client
     const [appConfig, setAppConfig] = useState<AppConfiguration | undefined>(undefined);
     const [currentUser, setCurrentUser] = useState<RealtimeCurrentUser | undefined>(undefined);
-    const [shouldRefetchCurrentUser, setShouldRefetchCurrentUser] = useState<boolean>(false);
 
     // Auth needed to retrieve Pusher config from server
     const userQuery = useQuery<RealtimeCurrentUserQuery>({
@@ -41,23 +39,13 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
     useEffect(() => {
         if (!currentUser) {
             if (userQuery.status === 'success' && userQuery.state.data?.currentUser?.id) {
-                setShouldRefetchCurrentUser(false);
                 setCurrentUser(userQuery.state.data.currentUser);
-            } else if (
-                userQuery.status === 'error' ||
-                (userQuery.status === 'success' && !userQuery.state.data?.currentUser?.id)
-            ) {
-                setShouldRefetchCurrentUser(true);
+            } else if (userQuery.status === 'error') {
+                // Wait a tick before refetching to let the state update finish (avoids extra queries)
+                setTimeout(() => userQuery.refetch({ requestPolicy: 'cache-and-network' }), 100);
             }
         }
     }, [currentUser, userQuery.state.data?.currentUser, userQuery.status]);
-
-    // Check every 5 seconds if we should refetch the RealtimeCurrentUser query
-    useInterval(() => {
-        if (shouldRefetchCurrentUser) {
-            userQuery.refetch({ requestPolicy: 'cache-and-network' });
-        }
-    }, 5000);
 
     const configQuery = useAppConfig();
     useEffect(() => {
@@ -68,7 +56,8 @@ export function Provider({ children, client: passedClient }: { children: ReactNo
                 configQuery.status === 'error' ||
                 (configQuery.status === 'success' && !configQuery.data?.configuration)
             ) {
-                configQuery.refetch();
+                // Wait a tick before refetching to let the state update finish (avoids extra queries)
+                setTimeout(() => configQuery.refetch(), 100);
             }
         }
     }, [appConfig, configQuery.state.data?.configuration, configQuery.status, currentUser]);

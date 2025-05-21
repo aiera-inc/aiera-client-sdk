@@ -23,10 +23,12 @@ export function AieraChat(): ReactElement {
     const {
         chatId,
         chatTitle,
+        chatUserId,
         hasChanges,
         onNewChat,
         onSelectChat,
         onSelectSource,
+        onSetUserId,
         selectedSource,
         setHasChanges,
         sources,
@@ -37,7 +39,6 @@ export function AieraChat(): ReactElement {
 
     // Set up Ably realtime client
     const { createAblyRealtimeClient } = useAbly();
-    const [chatUserId, setChatUserId] = useState<string | undefined>(undefined);
     const [clientReady, setClientReady] = useState(false);
     const initializingRef = useRef(false);
     const clientRef = useRef<Ably.Realtime | null>(null);
@@ -47,9 +48,10 @@ export function AieraChat(): ReactElement {
             (!chatUserId && config.tracking?.userId) ||
             (chatUserId && config.tracking?.userId && chatUserId !== config.tracking?.userId)
         ) {
-            setChatUserId(config.tracking.userId);
+            console.log(`Updating chat user id in global state to: ${config.tracking.userId}`);
+            onSetUserId(config.tracking.userId);
         }
-    }, [chatUserId, config.tracking?.userId, setChatUserId]);
+    }, [chatUserId, config.tracking?.userId, onSetUserId]);
 
     // Initialize Ably client only once when the tracking user id is loaded in the config
     useEffect(() => {
@@ -96,7 +98,7 @@ export function AieraChat(): ReactElement {
             setClientReady(false);
             initializingRef.current = false;
         };
-    }, [chatUserId]);
+    }, [chatUserId, setClientReady]);
 
     const { clearSources, createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
