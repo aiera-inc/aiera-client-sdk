@@ -2,12 +2,9 @@ import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import * as Ably from 'ably';
 import { AblyProvider } from 'ably/react';
 import classNames from 'classnames';
-import gql from 'graphql-tag';
 import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
-import { useQuery } from '@aiera/client-sdk/api/client';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { useConfig } from '@aiera/client-sdk/lib/config';
-import { AieraChatCurrentUserQuery } from '@aiera/client-sdk/types';
 import { Transcript } from '../Transcript';
 import { ConfirmDialog } from './modals/ConfirmDialog';
 import { Header } from './components/Header';
@@ -40,43 +37,66 @@ export function AieraChat(): ReactElement {
 
     // Set up Ably realtime client
     const { createAblyRealtimeClient } = useAbly();
-    const [client, setClient] = useState<Ably.Realtime | undefined>(undefined);
+    const [chatUserId, setChatUserId] = useState<string | undefined>(undefined);
+    const [clientReady, setClientReady] = useState(false);
+    const initializingRef = useRef(false);
+    const clientRef = useRef<Ably.Realtime | null>(null);
 
-    const userQuery = useQuery<AieraChatCurrentUserQuery>({
-        requestPolicy: 'cache-only',
-        query: gql`
-            query AieraChatCurrentUser {
-                currentUser {
-                    id
-                }
-            }
-        `,
-    });
-
-    // Initialize Ably client once the user is authenticated and tracking userId is set in the config
     useEffect(() => {
-        if (userQuery.status === 'success' && userQuery.data.currentUser && config.tracking?.userId && !client) {
-            try {
-                createAblyRealtimeClient(config.tracking.userId)
-                    .then((client) => {
-                        if (client) {
-                            console.log('Successfully initialized Ably realtime client.');
-                            setClient(client);
-                        }
-                    })
-                    .catch((e) => console.error('Failed to create Ably realtime client:', e));
-            } catch (error) {
-                console.error('Failed to initialize Ably client:', error);
-            }
+        if (
+            (!chatUserId && config.tracking?.userId) ||
+            (chatUserId && config.tracking?.userId && chatUserId !== config.tracking?.userId)
+        ) {
+            setChatUserId(config.tracking.userId);
+        }
+    }, [chatUserId, config.tracking?.userId, setChatUserId]);
+
+    // Initialize Ably client only once when the tracking user id is loaded in the config
+    useEffect(() => {
+        // Avoid duplicate initializations
+        if (initializingRef.current || clientRef.current || !chatUserId) {
+            return;
         }
 
-        // Clean up function to close the connection when component unmounts
+        // Set initializing flag
+        initializingRef.current = true;
+        console.log('Initializing Ably client in component with userId:', chatUserId);
+
+        createAblyRealtimeClient(chatUserId)
+            .then((client) => {
+                if (client) {
+                    clientRef.current = client;
+
+                    // Listen for connection events
+                    const onConnected = () => {
+                        console.log('Ably client connected in component');
+                        setClientReady(true);
+                    };
+
+                    // Check if already connected
+                    if (client.connection.state === 'connected') {
+                        onConnected();
+                    } else {
+                        client.connection.once('connected', onConnected);
+                    }
+                } else {
+                    console.error('Failed to initialize Ably client');
+                }
+
+                initializingRef.current = false;
+            })
+            .catch((error) => {
+                console.error('Error initializing Ably client:', error);
+                initializingRef.current = false;
+            });
+
+        // Clean up on unmount
         return () => {
-            if (client) {
-                client.close();
-            }
+            clientRef.current = null;
+            setClientReady(false);
+            initializingRef.current = false;
         };
-    }, [client, config.tracking?.userId, createAblyRealtimeClient, userQuery]);
+    }, [chatUserId]);
 
     const { clearSources, createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
@@ -210,8 +230,8 @@ export function AieraChat(): ReactElement {
         }
     }
 
-    return client ? (
-        <AblyProvider client={client}>
+    return clientReady && clientRef.current ? (
+        <AblyProvider client={clientRef.current}>
             {selectedSource && (
                 <div
                     className={classNames('fixed inset-0 slideInFromRight z-[100]', {
