@@ -214,29 +214,50 @@ export function Messages({
         [virtuosoRef.current?.data]
     );
 
+    const unsubscribe = useCallback(
+        (resetState = true) => {
+            if (subscribedChannel) {
+                subscribedChannel
+                    .detach()
+                    .then(() => subscribedChannel.unsubscribe())
+                    .catch((err) =>
+                        console.log(`Failed to detach from subscribed Ably channel ${subscribedChannel.name}`, err)
+                    )
+                    .finally(() => {
+                        if (resetState) {
+                            setSubscribedChannel(undefined);
+                        }
+                    });
+            }
+        },
+        [setSubscribedChannel, subscribedChannel]
+    );
+
     // Subscribe/unsubscribe to partial messages
     useEffect(() => {
-        if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== subscribedChannel.name)) {
-            subscribeToChannel(channelName)
-                .then((channel) => {
-                    if (channel) {
-                        console.log(`Subscribing to Ably channel ${channelName}`);
-                        setSubscribedChannel(channel);
-                    }
-                })
-                .catch((err) => console.log(`Subscribing to Ably channel ${channelName}:`, err));
+        if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== channelName)) {
+            // Unsubscribe from current channel without updating local state
+            // because we'll update it after subscribing to the new channel
+            unsubscribe(false);
+            try {
+                const channel = subscribeToChannel(channelName);
+                if (channel) {
+                    console.log(`Subscribing to Ably channel ${channelName}`);
+                    setSubscribedChannel(channel);
+                }
+            } catch (e) {
+                console.log(`Failed to subscribe to Ably channel ${channelName}:`, e);
+            }
         }
         if (chatId === 'new' && subscribedChannel) {
-            subscribedChannel.unsubscribe();
-            setSubscribedChannel(undefined);
+            unsubscribe();
         }
         return () => {
             if (subscribedChannel) {
-                subscribedChannel.unsubscribe();
-                setSubscribedChannel(undefined);
+                unsubscribe();
             }
         };
-    }, [channelName, chatId, setSubscribedChannel, subscribedChannel]);
+    }, [channelName, chatId, setSubscribedChannel, subscribedChannel, unsubscribe]);
 
     // Append new messages to virtuoso as they're created
     useEffect(() => {
