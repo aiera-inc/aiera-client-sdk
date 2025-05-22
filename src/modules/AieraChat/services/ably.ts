@@ -1,13 +1,17 @@
+import { Realtime, RealtimeChannel } from 'ably';
 import gql from 'graphql-tag';
-import { Realtime } from 'ably';
-// import { ErrorInfo, Realtime, TokenDetails, TokenRequest } from 'ably';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useMutation } from 'urql';
-import { ChatMessageSources } from '@aiera/client-sdk/modules/AieraChat/services/messages';
+import {
+    ChatMessageSources,
+    ChatMessageStatus,
+    ChatMessageType,
+} from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables, AblyData } from '@aiera/client-sdk/types';
-// import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
+import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
+import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 
-// export const CHANNEL_PREFIX = 'user-chat';
+export const CHANNEL_PREFIX = 'user-chat';
 
 interface UseAblyReturn {
     confirmation?: ChatMessageSources;
@@ -16,52 +20,48 @@ interface UseAblyReturn {
     isStreaming: boolean;
     partials: string[];
     reset: () => Promise<void>;
+    subscribeToChannel: (channelName: string) => Promise<RealtimeChannel | undefined>;
 }
 
-// type Callback = (
-//     error: ErrorInfo | string | null,
-//     tokenRequestOrDetails: TokenDetails | TokenRequest | string | null
-// ) => void;
+type PartialTextContent = {
+    citation?: Citation;
+    value: string;
+};
 
-// type PartialTextContent = {
-//     citation?: Citation;
-//     value: string;
-// };
-//
-// type PartialTextBlock = {
-//     content: PartialTextContent[];
-//     meta: {
-//         style: 'paragraph' | 'h1' | 'h2' | 'h3';
-//     };
-//     type: ContentBlockType.Text;
-// };
-//
-// interface AblyConfirmationSource {
-//     confirmed: boolean;
-//     id: number;
-//     name: string;
-//     type: string;
-// }
+type PartialTextBlock = {
+    content: PartialTextContent[];
+    meta: {
+        style: 'paragraph' | 'h1' | 'h2' | 'h3';
+    };
+    type: ContentBlockType.Text;
+};
 
-// interface AblyMessageData {
-//     __typename: string;
-//     blocks?: PartialTextBlock[];
-//     created_at: string;
-//     id: string | null;
-//     message_type: string; // 'response', 'prompt', etc.
-//     ordinal_id: string | null;
-//     prompt_message_id: string | null;
-//     runner_version: string;
-//     session_id: number;
-//     sources?: AblyConfirmationSource[];
-//     updated_at: string;
-//     user_id: number;
-// }
-//
-// type AblyEncodedData = {
-//     content: string;
-//     is_final: boolean;
-// };
+interface AblyConfirmationSource {
+    confirmed: boolean;
+    id: number;
+    name: string;
+    type: string;
+}
+
+interface AblyMessageData {
+    __typename: string;
+    blocks?: PartialTextBlock[];
+    created_at: string;
+    id: string | null;
+    message_type: string; // 'response', 'prompt', etc.
+    ordinal_id: string | null;
+    prompt_message_id: string | null;
+    runner_version: string;
+    session_id: number;
+    sources?: AblyConfirmationSource[];
+    updated_at: string;
+    user_id: number;
+}
+
+type AblyEncodedData = {
+    content: string;
+    is_final: boolean;
+};
 
 interface AblyTokenCache {
     clientId: string;
@@ -90,8 +90,17 @@ const globalAblyState: GlobalAblyState = {
 export const useAbly = (): UseAblyReturn => {
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
-    const [isStreaming, setIsStreaming] = useState<boolean>(false);
     const [partials, setPartials] = useState<string[]>([]);
+
+    // Add both a state and a ref for isStreaming
+    const [isStreaming, setIsStreaming] = useState<boolean>(false);
+    // Ref to avoid closure issues in the callback
+    const isStreamingRef = useRef<boolean>(false);
+
+    // Keep the ref and state in sync
+    useEffect(() => {
+        isStreamingRef.current = isStreaming;
+    }, [isStreaming]);
 
     const [, createAblyTokenMutation] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
         mutation CreateAblyToken($input: CreateAblyTokenInput!) {
@@ -247,6 +256,89 @@ export const useAbly = (): UseAblyReturn => {
         [getAblyToken]
     );
 
+    // Function to subscribe to realtime messages for a given Ably channel
+    const subscribeToChannel = useCallback(async (channelName: string) => {
+        const channel = globalAblyState.client?.channels.get(channelName);
+        if (channel) {
+            await channel.subscribe((message) => {
+                console.log(`Subscribed to Ably channel ${channelName}`);
+                if (!isStreamingRef.current) {
+                    console.log('Starting to stream partials...');
+                    // Update the streaming status if it's the first partial
+                    setIsStreaming(true);
+                }
+                try {
+                    console.log('Received message from Ably:', message);
+                    const data = message.data as AblyEncodedData;
+
+                    // Decode the base64 string
+                    let decodedData;
+                    try {
+                        decodedData = atob(data.content);
+                    } catch (decodingError) {
+                        console.log('Error handling message:', decodingError);
+                        return; // ignore message if there's no encoded content
+                    }
+
+                    // Parse the JSON
+                    const jsonObject = JSON.parse(decodedData) as AblyMessageData;
+                    console.log('Decoded Ably message:', jsonObject);
+
+                    // Process the response message and update partials
+                    if (jsonObject.blocks) {
+                        const parsedMessage = jsonObject.blocks?.[0]?.content?.[0]?.value;
+                        if (parsedMessage) {
+                            console.log('Updating partials with new parsed message:', parsedMessage);
+                            // Update partials state with the new message
+                            setPartials((prev) => [...prev, parsedMessage]);
+                        }
+                    }
+
+                    // If this is a source confirmation message, parse and store it in state
+                    if (jsonObject.message_type === 'source_confirmation') {
+                        if (jsonObject.sources && jsonObject.sources.length > 0) {
+                            const sources: Source[] = jsonObject.sources.map((source) => ({
+                                confirmed: source.confirmed,
+                                targetId: String(source.id),
+                                targetType: source.type,
+                                title: source.name,
+                            }));
+                            const confirmation: ChatMessageSources = {
+                                confirmed: false, // user action will confirm it
+                                id: `temp-confirmation-${jsonObject.session_id}-${jsonObject.prompt_message_id ?? ''}`,
+                                ordinalId: jsonObject.ordinal_id,
+                                prompt: '', // placeholder, get text from virtuoso using the prompt id
+                                promptMessageId: jsonObject.prompt_message_id
+                                    ? String(jsonObject.prompt_message_id)
+                                    : undefined,
+                                sources,
+                                status: ChatMessageStatus.COMPLETED,
+                                timestamp: jsonObject.created_at,
+                                type: ChatMessageType.SOURCES,
+                            };
+                            setConfirmation(confirmation); // overwrite
+                        } else {
+                            setError('Received source confirmation message without sources');
+                        }
+                    }
+
+                    // Stop streaming if this is the final partial
+                    if (data.is_final) {
+                        console.log('Received final partial:', data);
+                        console.log('Stopping partials stream.');
+                        setIsStreaming(false);
+                    }
+                } catch (err) {
+                    console.error('Error handling message:', err);
+                    setError(`Error handling message: ${(err as Error).message}`);
+                }
+            });
+        } else {
+            console.log(`Unable to subscribe to Ably channel ${channelName} because it was not found.`);
+        }
+        return channel;
+    }, []);
+
     // Reset function
     const reset = useCallback((): Promise<void> => {
         return new Promise<void>((resolve) => {
@@ -268,5 +360,6 @@ export const useAbly = (): UseAblyReturn => {
         isStreaming,
         partials,
         reset,
+        subscribeToChannel,
     };
 };

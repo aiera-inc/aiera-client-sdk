@@ -1,4 +1,3 @@
-import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import {
     useCurrentlyRenderedData,
     useVirtuosoMethods,
@@ -7,9 +6,15 @@ import {
     VirtuosoMessageListMethods,
     VirtuosoMessageListProps,
 } from '@virtuoso.dev/message-list';
+import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
-import { Prompt } from './Prompt';
+import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
+import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
+import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
+import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import {
     ChatMessage,
     ChatMessagePrompt,
@@ -20,15 +25,11 @@ import {
 } from '../../services/messages';
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
-import './styles.css';
-// import { SuggestedPrompts } from './SuggestedPrompts';
-import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { BlockType } from './MessageFactory/Block';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
-import { ChatSessionStatus } from '@aiera/client-sdk/types';
-import { useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
-import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
+import { MessagePrompt } from './MessageFactory/MessagePrompt';
+import { Prompt } from './Prompt';
+// import { SuggestedPrompts } from './SuggestedPrompts';
+import './styles.css';
 
 const STREAMING_STATUSES = [ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse];
 let idCounter = 0;
@@ -73,12 +74,14 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
+    const [subscribedChannel, setSubscribedChannel] = useState<RealtimeChannel | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
     const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { confirmation, isStreaming, partials, reset } = useAbly();
+    const { confirmation, isStreaming, partials, reset, subscribeToChannel } = useAbly();
+    const channelName = useMemo(() => `${CHANNEL_PREFIX}-${chatId}`, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -210,6 +213,30 @@ export function Messages({
         },
         [virtuosoRef.current?.data]
     );
+
+    // Subscribe/unsubscribe to partial messages
+    useEffect(() => {
+        if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== subscribedChannel.name)) {
+            subscribeToChannel(channelName)
+                .then((channel) => {
+                    if (channel) {
+                        console.log(`Subscribing to Ably channel ${channelName}`);
+                        setSubscribedChannel(channel);
+                    }
+                })
+                .catch((err) => console.log(`Subscribing to Ably channel ${channelName}:`, err));
+        }
+        if (chatId === 'new' && subscribedChannel) {
+            subscribedChannel.unsubscribe();
+            setSubscribedChannel(undefined);
+        }
+        return () => {
+            if (subscribedChannel) {
+                subscribedChannel.unsubscribe();
+                setSubscribedChannel(undefined);
+            }
+        };
+    }, [channelName, chatId, setSubscribedChannel, subscribedChannel]);
 
     // Append new messages to virtuoso as they're created
     useEffect(() => {
