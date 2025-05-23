@@ -1,6 +1,6 @@
 module.exports = {
     schema:
-        process.env.NODE_ENV === 'production' ? 'https://api.aiera.com/graphql' : 'http://127.0.0.1:5001/graphql',
+        process.env.NODE_ENV === 'production' ? 'https://api.aiera.com/graphql' : 'https://api-dev.aiera.com/graphql',
     documents: ['./src/**/*.tsx', './src/**/*.ts', '!src/**/*test.{ts,tsx}'],
     overwrite: true,
     generates: {
