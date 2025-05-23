@@ -81,7 +81,7 @@ export function Messages({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
     const { confirmation, isStreaming, partials, reset, subscribeToChannel } = useAbly();
-    const channelName = useMemo(() => `${CHANNEL_PREFIX}-${chatId}`, [chatId]);
+    const channelName = useMemo(() => `${CHANNEL_PREFIX}:${chatId}`, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
