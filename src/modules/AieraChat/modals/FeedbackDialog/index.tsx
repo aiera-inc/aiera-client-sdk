@@ -3,6 +3,7 @@ import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLe
 import React, { ReactElement, ReactNode, useCallback, useState } from 'react';
 import { Modal } from '../Modal';
 import classNames from 'classnames';
+import { log } from '@aiera/client-sdk/lib/utils';
 
 interface FeedbackDialogProps {
     onClose: () => void;
@@ -108,7 +109,7 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                 // we'll assume success if the request doesn't throw an error
                 setSubmitSuccess(true);
             } catch (error) {
-                console.error('Error submitting feedback:', error);
+                log(`Error submitting feedback: ${String(error)}`, 'error');
                 setSubmitError('An error occurred while submitting feedback. Please try again.');
             } finally {
                 if (!submitError) {

@@ -8,6 +8,7 @@ import {
 } from '@virtuoso.dev/message-list';
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
+import { log } from '@aiera/client-sdk/lib/utils';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
 import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
@@ -150,7 +151,7 @@ export function Messages({
                     }
                 })
                 .catch((err: Error) =>
-                    console.log('Error confirming sources for chat message source confirmation:', err)
+                    log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
                 );
         },
         [confirmSourceConfirmation, onAddSource, virtuosoRef.current?.data]
@@ -182,7 +183,7 @@ export function Messages({
                             });
                         }
                     })
-                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`))
+                    .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
                     .finally(() => setSubmitting(false));
             } else {
                 createChatMessagePrompt({ content: prompt, sessionId: chatId })
@@ -195,7 +196,7 @@ export function Messages({
                                 : ChatSessionStatus.FindingSources
                         );
                     })
-                    .catch((error: Error) => console.log(`Error creating session with prompt: ${error.message}`))
+                    .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
                     .finally(() => setSubmitting(false));
             }
         },
@@ -207,7 +208,7 @@ export function Messages({
             const existingItems = virtuosoRef.current?.data.get();
             if (existingItems && existingItems.length > 0) {
                 // Log the provided message depending on invocation
-                console.log(message);
+                log(`Message: ${JSON.stringify(message)}`, 'debug');
                 virtuosoRef.current?.data.replace([]);
             }
         },
@@ -221,7 +222,10 @@ export function Messages({
                     .detach()
                     .then(() => subscribedChannel.unsubscribe())
                     .catch((err) =>
-                        console.log(`Failed to detach from subscribed Ably channel ${subscribedChannel.name}`, err)
+                        log(
+                            `Failed to detach from subscribed Ably channel ${subscribedChannel.name}: ${String(err)}`,
+                            'error'
+                        )
                     )
                     .finally(() => {
                         if (resetState) {
@@ -242,11 +246,11 @@ export function Messages({
             try {
                 const channel = subscribeToChannel(channelName);
                 if (channel) {
-                    console.log(`Subscribing to Ably channel ${channelName}`);
+                    log(`Subscribing to Ably channel ${channelName}`);
                     setSubscribedChannel(channel);
                 }
             } catch (e) {
-                console.log(`Failed to subscribe to Ably channel ${channelName}:`, e);
+                log(`Failed to subscribe to Ably channel ${channelName}: ${String(e)}`, 'error');
             }
         }
         if (chatId === 'new' && subscribedChannel) {
@@ -361,13 +365,13 @@ export function Messages({
     // Manage the chat session status depending on streaming
     useEffect(() => {
         if (!isStreaming && STREAMING_STATUSES.includes(chatStatus)) {
-            console.log('Streaming stopped. Setting chat status to active.');
+            log('Streaming stopped. Setting chat status to active.');
             onSetStatus(ChatSessionStatus.Active);
         }
         if (isStreaming && !STREAMING_STATUSES.includes(chatStatus)) {
             const newChatStatus =
                 sources && sources.length > 0 ? ChatSessionStatus.GeneratingResponse : ChatSessionStatus.FindingSources;
-            console.log(`Streaming started. Setting chat status to ${newChatStatus}.`);
+            log(`Streaming started. Setting chat status to ${newChatStatus}.`);
             onSetStatus(newChatStatus);
         }
     }, [chatStatus, isStreaming, onSetStatus, sources]);
@@ -375,7 +379,7 @@ export function Messages({
     useEffect(() => {
         // If streaming has stopped
         if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
-            console.log('Streaming stopped. Refreshing chat session with messages...');
+            log('Streaming stopped. Refreshing chat session with messages...');
             // Reset partials and refetch the ChatSessionWithMessagesQuery query to get the final response
             // and updated chat title
             reset()
@@ -384,7 +388,7 @@ export function Messages({
                         refresh();
                     }, 500);
                 })
-                .catch((err: Error) => console.log(`Error resetting useAbly state: ${err.message}`));
+                .catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
         }
     }, [chatStatus, isStreaming, partials, refresh, reset]);
 

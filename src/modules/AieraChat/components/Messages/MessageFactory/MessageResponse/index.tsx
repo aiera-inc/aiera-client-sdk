@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { ListItemContent } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/List';
-import { copyToClipboard } from '@aiera/client-sdk/lib/utils';
+import { copyToClipboard, log } from '@aiera/client-sdk/lib/utils';
 import { ChatMessageResponse, ChatMessageStatus } from '../../../../services/messages';
 import { Block, BlockType, CitableContent, Citation, ContentBlock } from '../Block';
 import { Loading } from '../Loading';
@@ -139,10 +139,10 @@ export const MessageResponse = ({ data, onReRun }: { onReRun: (k: string) => voi
         if (fullContent) {
             copyToClipboard(fullContent)
                 .then(() => {
-                    console.log('Full message content copied successfully');
+                    log('Full message content copied successfully');
                 })
                 .catch((error: Error) => {
-                    console.error('Failed to copy content:', error.message);
+                    log(`Failed to copy content: ${error.message}`, 'error');
                 });
         }
     }, [data]);

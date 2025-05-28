@@ -4,6 +4,7 @@ import { IconProps } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { ComponentType, ReactElement, ReactNode, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { log } from '@aiera/client-sdk/lib/utils';
 
 interface ModalProps {
     onClose: () => void;
@@ -72,7 +73,7 @@ export function Modal({
         const dialogContainer = document.getElementById('dialog');
 
         if (!dialogContainer) {
-            console.warn('Dialog container with id "dialog" not found. Modal will not render.');
+            log('Dialog container with id "dialog" not found. Modal will not render.', 'warn');
             return null;
         }
 

@@ -50,3 +50,21 @@ export async function copyToClipboard(text: string): Promise<void> {
     // Fall back to legacy method if any of the above fails
     return fallbackCopyToClipboard(text);
 }
+
+type LogLevel = 'log' | 'debug' | 'info' | 'warn' | 'error';
+
+function isProductionEnvironment(): boolean {
+    const nodeEnv = process.env.NODE_ENV;
+    const apiUrl = process.env.AIERA_SDK_API_URL || '';
+
+    return nodeEnv === 'production' || (apiUrl.includes('api.aiera.com') && !apiUrl.includes('api-dev'));
+}
+
+export function log(message: string, logLevel: LogLevel = 'log'): void {
+    if (isProductionEnvironment()) {
+        return;
+    }
+
+    const logMethod = console[logLevel] || console.log;
+    logMethod(message);
+}

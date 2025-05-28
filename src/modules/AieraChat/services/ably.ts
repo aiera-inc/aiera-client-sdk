@@ -10,6 +10,7 @@ import {
 import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables, AblyData } from '@aiera/client-sdk/types';
 import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
+import { log } from '@aiera/client-sdk/lib/utils';
 
 export const CHANNEL_PREFIX = 'user-chat';
 
@@ -124,7 +125,7 @@ export const useAbly = (): UseAblyReturn => {
             const now = Date.now();
 
             if (sessionUserId) {
-                console.log(`Requesting new token for user: ${sessionUserId}`);
+                log(`Requesting new token for user: ${sessionUserId}`);
                 try {
                     const response = await createAblyTokenMutation({
                         input: { sessionUserId },
@@ -157,7 +158,7 @@ export const useAbly = (): UseAblyReturn => {
                     };
                     globalAblyState.userId = sessionUserId;
 
-                    console.log(`Token cached, expires in ${Math.floor((expiresAt - now) / 1000)}s`);
+                    log(`Token cached, expires in ${Math.floor((expiresAt - now) / 1000)}s`);
 
                     return {
                         clientId: tokenData.clientId,
@@ -165,7 +166,7 @@ export const useAbly = (): UseAblyReturn => {
                     };
                 } catch (err) {
                     const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
-                    console.error(`Token error:`, errorMessage);
+                    log(`Token error: ${errorMessage}`, 'error');
                     setError(errorMessage);
                     throw new Error(errorMessage);
                 }
@@ -180,14 +181,14 @@ export const useAbly = (): UseAblyReturn => {
         async (sessionUserId?: string) => {
             // If client already exists for this user, return it
             if (sessionUserId && globalAblyState.client && globalAblyState.userId === sessionUserId) {
-                console.log(`Reusing existing Ably client for user: ${sessionUserId}`);
+                log(`Reusing existing Ably client for user: ${sessionUserId}`);
                 return globalAblyState.client;
             }
 
             try {
                 // Close existing client if it's for a different user
                 if (globalAblyState.client) {
-                    console.log(`Closing existing client for different user`);
+                    log(`Closing existing client for different user`);
                     globalAblyState.client.close();
                     globalAblyState.client = undefined;
                 }
@@ -195,12 +196,12 @@ export const useAbly = (): UseAblyReturn => {
                 // Get initial token
                 const initialToken = await getAblyToken(sessionUserId);
 
-                console.log(`Creating new Ably client`);
+                log(`Creating new Ably client`);
 
                 // Create new client
                 const client = new Realtime({
                     authCallback: (_, callback) => {
-                        console.log('Ably token auth callback triggered');
+                        log('Ably token auth callback triggered');
 
                         // Check if we have a valid cached token
                         const now = Date.now();
@@ -210,13 +211,13 @@ export const useAbly = (): UseAblyReturn => {
                             globalAblyState.tokenCache.expiresAt &&
                             globalAblyState.tokenCache.expiresAt > now
                         ) {
-                            console.log('Using cached token in auth callback');
+                            log('Using cached token in auth callback');
                             callback(null, globalAblyState.tokenCache.tokenDetails);
                             return;
                         }
 
                         // Otherwise get a new token
-                        console.log('Getting fresh token in auth callback');
+                        log('Getting fresh token in auth callback');
                         getAblyToken(sessionUserId)
                             .then((token) => callback(null, token?.tokenDetails || null))
                             .catch((err) => callback(err instanceof Error ? err.message : String(err), null));
@@ -226,15 +227,15 @@ export const useAbly = (): UseAblyReturn => {
 
                 // Set up connection listeners
                 client.connection.on('connected', () => {
-                    console.log('Ably connection established');
+                    log('Ably connection established');
                 });
 
                 client.connection.on('disconnected', () => {
-                    console.log('Ably connection disconnected');
+                    log('Ably connection disconnected');
                 });
 
                 client.connection.on('failed', (err) => {
-                    console.error('Ably connection failed:', err);
+                    log(`Ably connection failed: ${String(err)}`, 'error');
                     setError(`Connection failed: ${err.reason?.message || ''}`);
 
                     // Clean up global state on failure
@@ -248,7 +249,7 @@ export const useAbly = (): UseAblyReturn => {
 
                 return client;
             } catch (err) {
-                console.error('Error initializing Ably:', err);
+                log(`Error initializing Ably: ${String(err)}`, 'error');
                 setError(err instanceof Error ? `Error initializing Ably: ${err.message}` : 'Error initializing Ably');
                 return null;
             }
@@ -267,7 +268,7 @@ export const useAbly = (): UseAblyReturn => {
                     channel
                         .subscribe((message) => {
                             try {
-                                console.log('Received message from Ably:', message);
+                                log('Received message from Ably:', 'debug');
                                 const data = message.data as AblyEncodedData;
 
                                 // Decode the base64 string
@@ -275,19 +276,19 @@ export const useAbly = (): UseAblyReturn => {
                                 try {
                                     decodedData = atob(data.content);
                                 } catch (decodingError) {
-                                    console.log('Error handling message:', decodingError);
+                                    log(`Error handling message: ${String(decodingError)}`, 'error');
                                     return; // ignore message if there's no encoded content
                                 }
 
                                 // Parse the JSON
                                 const jsonObject = JSON.parse(decodedData) as AblyMessageData;
-                                console.log('Decoded Ably message:', jsonObject);
+                                log('Decoded Ably message:', 'debug');
 
                                 // Process the response message and update partials
                                 if (jsonObject.blocks) {
                                     const parsedMessage = jsonObject.blocks?.[0]?.content?.[0]?.value;
                                     if (parsedMessage) {
-                                        console.log('Updating partials with new parsed message:', parsedMessage);
+                                        log('Updating partials with new parsed message:', 'debug');
                                         // Update partials state with the new message
                                         setPartials((prev) => [...prev, parsedMessage]);
                                     }
@@ -325,28 +326,30 @@ export const useAbly = (): UseAblyReturn => {
 
                                 // Stop streaming if this is the final partial
                                 if (data.is_final) {
-                                    console.log('Received final partial:', data);
-                                    console.log('Stopping partials stream.');
+                                    log('Received final partial:', 'debug');
+                                    log('Stopping partials stream.');
                                     setIsStreaming(false);
                                 }
                             } catch (err) {
-                                console.error('Error handling message:', err);
+                                log(`Error handling message: ${String(err)}`, 'error');
                                 setError(`Error handling message: ${(err as Error).message}`);
                             }
                         })
                         .then(() => {
-                            console.log(`Subscribed to Ably channel ${channelName}`);
+                            log(`Subscribed to Ably channel ${channelName}`);
                             if (!isStreamingRef.current) {
-                                console.log('Starting to stream partials...');
+                                log('Starting to stream partials...');
                                 // Update the streaming status if it's the first partial
                                 setIsStreaming(true);
                             }
                         })
-                        .catch((err) => console.log(`Error subscribing to Ably channel ${channelName}:`, err))
+                        .catch((err) =>
+                            log(`Error subscribing to Ably channel ${channelName}: ${String(err)}`, 'error')
+                        )
                 )
-                .catch((e) => console.log(`Error attaching Ably channel ${channelName}:`, e));
+                .catch((e) => log(`Error attaching Ably channel ${channelName}: ${String(e)}`, 'error'));
         } else {
-            console.log(`Unable to subscribe to Ably channel ${channelName} because it was not found.`);
+            log(`Unable to subscribe to Ably channel ${channelName} because it was not found.`, 'warn');
         }
         return channel;
     }, []);
@@ -354,7 +357,7 @@ export const useAbly = (): UseAblyReturn => {
     // Reset function
     const reset = useCallback((): Promise<void> => {
         return new Promise<void>((resolve) => {
-            console.log('Resetting Ably state');
+            log('Resetting Ably state');
             requestAnimationFrame(() => {
                 setConfirmation(undefined);
                 setError(undefined);

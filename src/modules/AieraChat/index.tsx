@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { log } from '@aiera/client-sdk/lib/utils';
 import { Transcript } from '../Transcript';
 import { ConfirmDialog } from './modals/ConfirmDialog';
 import { Header } from './components/Header';
@@ -48,7 +49,7 @@ export function AieraChat(): ReactElement {
             (!chatUserId && config.tracking?.userId) ||
             (chatUserId && config.tracking?.userId && chatUserId !== config.tracking?.userId)
         ) {
-            console.log(`Updating chat user id in global state to: ${config.tracking.userId}`);
+            log(`Updating chat user id in global state to: ${config.tracking.userId}`);
             onSetUserId(config.tracking.userId);
         }
     }, [chatUserId, config.tracking?.userId, onSetUserId]);
@@ -62,7 +63,7 @@ export function AieraChat(): ReactElement {
 
         // Set initializing flag
         initializingRef.current = true;
-        console.log('Initializing Ably client in component with userId:', chatUserId);
+        log(`Initializing Ably client in component with userId: ${chatUserId}`);
 
         // Wait a tick before calling the mutation to let the state update finish (avoids race condition)
         setTimeout(
@@ -74,7 +75,7 @@ export function AieraChat(): ReactElement {
 
                             // Listen for connection events
                             const onConnected = () => {
-                                console.log('Ably client connected in component');
+                                log('Ably client connected in component');
                                 setClientReady(true);
                             };
 
@@ -85,13 +86,13 @@ export function AieraChat(): ReactElement {
                                 client.connection.once('connected', onConnected);
                             }
                         } else {
-                            console.error('Failed to initialize Ably client');
+                            log('Failed to initialize Ably client', 'error');
                         }
 
                         initializingRef.current = false;
                     })
                     .catch((error) => {
-                        console.error('Error initializing Ably client:', error);
+                        log(`Error initializing Ably client: ${String(error)}`, 'error');
                         initializingRef.current = false;
                     }),
             100
@@ -111,7 +112,7 @@ export function AieraChat(): ReactElement {
     const handleClearSources = useCallback(() => {
         if (chatId !== 'new') {
             clearSources(chatId).catch((error: Error) =>
-                console.log(`Error clearing sources for session: ${error.message}`)
+                log(`Error clearing sources for session: ${error.message}`, 'error')
             );
         }
     }, [chatId, clearSources]);
@@ -152,7 +153,7 @@ export function AieraChat(): ReactElement {
                         return null;
                     })
                     .catch((error: Error) => {
-                        console.log(`Error creating chat session: ${error.message}`);
+                        log(`Error creating chat session: ${error.message}`, 'error');
                         return null;
                     });
             }
@@ -165,7 +166,7 @@ export function AieraChat(): ReactElement {
         (title: string) => {
             if (chatId !== 'new' && title) {
                 updateSession({ sessionId: chatId, title }).catch((error: Error) =>
-                    console.log(`Error updating session title: ${error.message}`)
+                    log(`Error updating session title: ${error.message}`, 'error')
                 );
             }
         },
@@ -194,7 +195,7 @@ export function AieraChat(): ReactElement {
                     setShowSources(false);
                 })
                 .catch((error: Error) => {
-                    console.log(`Error updating session sources: ${error.message}`);
+                    log(`Error updating session sources: ${error.message}`, 'error');
                     setHasChanges(false);
                     setShowSources(false);
                 });

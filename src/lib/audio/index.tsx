@@ -3,6 +3,7 @@ import { EventConnectionStatus, EventType, Quote } from '@aiera/client-sdk/types
 import { ShakaPlayer, playerType, shakaUI, shakaUIControls } from '@aiera/client-sdk/types/shaka';
 import muxjs from 'mux.js';
 import React, { ReactElement, ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { log } from '@aiera/client-sdk/lib/utils';
 
 // shaka player package looks for window.muxjs
 // i extended window.muxjs in the types index.ts
@@ -57,7 +58,7 @@ export class AudioPlayer {
     initShaka(audioElem: HTMLAudioElement) {
         shakaInstance?.polyfill?.installAll();
         if (!shakaInstance?.Player?.isBrowserSupported()) {
-            console.log('Browser not supported.');
+            log('Browser not supported.', 'error');
             return;
         }
         const localPlayer = new shakaInstance.Player(audioElem);
@@ -175,7 +176,7 @@ export class AudioPlayer {
                         this.loadNewAsset = true;
                     }
                 } catch (e) {
-                    console.log(e);
+                    log(`Error loading audio: ${String(e)}`, 'error');
                 }
             }
             this.triggerUpdate();

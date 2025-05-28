@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import { RequestPolicy, useClient, useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { log } from '@aiera/client-sdk/lib/utils';
 import {
     ChartBlock,
     ChartBlockMeta,
@@ -309,7 +310,7 @@ export function normalizeChartMeta(meta: ChartBlockMeta | null | undefined): Cha
                 return defaultMeta;
         }
     } catch (error) {
-        console.error('Error normalizing chart meta:', error);
+        log(`Error normalizing chart meta: ${String(error)}`, 'error');
         return defaultMeta;
     }
 }
@@ -346,7 +347,7 @@ export function normalizeCitableContent(rawContent: RawCitableContent[][]): Cita
     try {
         return rawContent.map(normalizeTextContent);
     } catch (error) {
-        console.error('Error normalizing citable content:', error);
+        log(`Error normalizing citable content: ${String(error)}`, 'error');
         return [];
     }
 }
@@ -367,7 +368,7 @@ export function normalizeTableCellMeta(rawMeta: TableCellMeta | null | undefined
             ...(rawMeta.decimals !== null && rawMeta.decimals !== undefined ? { decimals: rawMeta.decimals } : {}),
         };
     } catch (error) {
-        console.error('Error normalizing table cell meta:', error);
+        log(`Error normalizing table cell meta: ${String(error)}`, 'error');
         return undefined;
     }
 }
@@ -395,7 +396,7 @@ export function normalizeTableMeta(rawColumnMeta: TableCellMeta[] | undefined | 
         // Return undefined if we end up with an empty array
         return normalizedMeta.length > 0 ? normalizedMeta : undefined;
     } catch (error) {
-        console.error('Error normalizing table meta:', error);
+        log(`Error normalizing table meta: ${String(error)}`, 'error');
         return undefined;
     }
 }
@@ -418,7 +419,7 @@ export function normalizeSources(sources: ChatSource[] | null | undefined): Sour
             title: source.name,
         }));
     } catch (error) {
-        console.error('Error normalizing sources:', error);
+        log(`Error normalizing sources: ${String(error)}`, 'error');
         return [];
     }
 }
@@ -528,7 +529,7 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
             }
 
             default: {
-                console.warn('Unhandled content block type:', blockType);
+                log(`Unhandled content block type: ${blockType}`, 'warn');
                 // Return a basic text block as fallback
                 return {
                     content: ['Unsupported content type: ' + blockType],
@@ -539,7 +540,7 @@ export function normalizeContentBlock(rawBlock: RawContentBlock): ContentBlock |
             }
         }
     } catch (error) {
-        console.error('Error normalizing content block:', error, rawBlock);
+        log(`Error normalizing content block: ${String(error)}`, 'error');
         return null;
     }
 }
@@ -590,13 +591,13 @@ export const useChatSession = ({
                     const message = resp.data?.confirmChatMessageSourceConfirmation
                         ?.chatMessage as RawChatMessageSourceConfirmation;
                     if (!message) {
-                        console.log('No chat message returned from mutation!');
+                        log('No chat message returned from mutation!', 'warn');
                     }
                     return message;
                 })
                 .catch((error: Error) => {
                     const errorMessage = error.message || 'Error creating chat message prompt';
-                    console.error(errorMessage, error);
+                    log(`${errorMessage}: ${String(error)}`, 'error');
                     setError(errorMessage);
                     return null;
                 });
@@ -614,12 +615,11 @@ export const useChatSession = ({
         ({ content, sessionId }: { content: string; sessionId: string }) => {
             // Don't send empty messages
             if (!content.trim()) {
-                console.warn('Attempted to send empty message');
-                console.warn('Attempted to send empty message');
+                log('Attempted to send empty message', 'warn');
                 return Promise.resolve(null);
             }
 
-            console.log('Creating chat message prompt:', { content, sessionId });
+            log(`Creating chat message prompt: content=${content}, sessionId=${sessionId}`);
 
             return createChatMessagePromptMutation({
                 input: { content, sessionId, sessionUserId: config.tracking?.userId },
@@ -645,20 +645,20 @@ export const useChatSession = ({
                             type: ChatMessageType.PROMPT,
                         };
 
-                        console.log('Created new message:', normalizedMessage);
+                        log('Created new message', 'debug');
 
                         // Update local state immediately for better UX
                         setMessages((prevMessages) => [...prevMessages, normalizedMessage]);
 
                         return normalizedMessage;
                     } catch (normalizationError) {
-                        console.error('Error normalizing new message:', normalizationError);
+                        log(`Error normalizing new message: ${String(normalizationError)}`, 'error');
                         throw new Error('Error processing new message data');
                     }
                 })
                 .catch((error: Error) => {
                     const errorMessage = error.message || 'Error creating chat message prompt';
-                    console.error(errorMessage, error);
+                    log(`${errorMessage}: ${String(error)}`, 'error');
                     setError(errorMessage);
                     return null;
                 });
@@ -710,9 +710,9 @@ export const useChatSession = ({
                 .toPromise();
             chatSessionsQuery
                 .then((result) => result.data)
-                .catch((err: Error) => console.log(`Error refetching ChatSessions query: ${err.message}`));
+                .catch((err: Error) => log(`Error refetching ChatSessions query: ${err.message}`, 'error'));
         } catch (err) {
-            console.error('Error updating session title in cache:', err);
+            log(`Error updating session title in cache: ${String(err)}`, 'error');
         }
         return null;
     }, [client, config.tracking?.userId]);
@@ -729,7 +729,7 @@ export const useChatSession = ({
         if (messagesQuery.status === 'success' && messagesQuery.data?.chatSession) {
             try {
                 const chatSession = messagesQuery.data.chatSession;
-                console.log('Processing chat session:', chatSession.id);
+                log(`Processing chat session: ${chatSession.id}`, 'debug');
 
                 // Update chat title in store if the session got a generated title
                 if (
@@ -833,28 +833,28 @@ export const useChatSession = ({
                     }
                 });
 
-                console.log(`Successfully normalized ${finalNormalizedMessages.length} messages`);
+                log(`Successfully normalized ${finalNormalizedMessages.length} messages`);
                 setMessages(finalNormalizedMessages);
 
                 // Clear error state
                 if (error) setError(null);
             } catch (err) {
-                console.error('Error processing messages data:', err);
+                log(`Error processing messages data: ${String(err)}`, 'error');
                 setError('Error processing messages data');
                 // If polling is enabled, stop it when an error occurs
                 if (enablePolling) {
-                    console.log('Stopping polling due to data normalization error');
+                    log('Stopping polling due to data normalization error', 'warn');
                     setShouldStopPolling(true);
                 }
             }
         }
         // Handle error state
         else if (messagesQuery.status === 'error') {
-            console.error('Query error:', messagesQuery.error);
+            log(`Query error: ${String(messagesQuery.error)}`, 'error');
             setError(messagesQuery.error.message);
             // If polling is enabled, stop it when an error occurs
             if (enablePolling) {
-                console.log('Stopping polling due to query error');
+                log('Stopping polling due to query error', 'warn');
                 setShouldStopPolling(true);
             }
         }
@@ -874,17 +874,17 @@ export const useChatSession = ({
             return;
         }
 
-        console.log(`Setting up polling interval (${POLLING_INTERVAL}ms) with max refetch count: ${MAX_REFETCH_COUNT}`);
+        log(`Setting up polling interval (${POLLING_INTERVAL}ms) with max refetch count: ${MAX_REFETCH_COUNT}`);
         const intervalId = setInterval(() => {
             if (chatId && chatId !== 'new' && !shouldStopPolling) {
                 messagesQuery.refetch();
                 // Increment refetch count
                 setRefetchCount((prevCount) => {
                     const newCount = prevCount + 1;
-                    console.log(`Refetch count: ${newCount}/${MAX_REFETCH_COUNT}`);
+                    log(`Refetch count: ${newCount}/${MAX_REFETCH_COUNT}`);
                     // Check if we've reached the limit
                     if (newCount >= MAX_REFETCH_COUNT) {
-                        console.log(`Reached max refetch count (${MAX_REFETCH_COUNT}). Stopping polling.`);
+                        log(`Reached max refetch count (${MAX_REFETCH_COUNT}). Stopping polling.`);
                         setShouldStopPolling(true);
                     }
 
@@ -894,20 +894,20 @@ export const useChatSession = ({
         }, POLLING_INTERVAL);
 
         return () => {
-            console.log('Clearing polling interval');
+            log('Clearing polling interval');
             clearInterval(intervalId);
         };
     }, [chatId, enablePolling, messagesQuery, shouldStopPolling, setRefetchCount, setShouldStopPolling]);
 
     const refresh = useCallback(() => {
         if (enablePolling) {
-            console.log('Refreshing chat messages and resetting polling limits...');
+            log('Refreshing chat messages and resetting polling limits...');
             // Reset refetch count and polling state when manually refreshing
             setMessages([]);
             setRefetchCount(0);
             setShouldStopPolling(false);
             messagesQuery.refetch();
-            console.log(
+            log(
                 `Polling reset. Will continue for up to ${MAX_REFETCH_COUNT} more refetches (${
                     MAX_POLLING_DURATION / 1000 / 60 / 60
                 } hours).`
