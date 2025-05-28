@@ -257,7 +257,7 @@ export function Messages({
                 unsubscribe();
             }
         };
-    }, [channelName, chatId, setSubscribedChannel, subscribedChannel, unsubscribe]);
+    }, [channelName, chatId, setSubscribedChannel, subscribedChannel, subscribeToChannel, unsubscribe]);
 
     // Append new messages to virtuoso as they're created
     useEffect(() => {
