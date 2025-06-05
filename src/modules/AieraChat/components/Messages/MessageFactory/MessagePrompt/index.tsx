@@ -13,6 +13,7 @@ export const MessagePrompt = ({
     className?: string;
     isStickyHeader?: boolean;
 }) => {
+    console.log({ MessagePrompt: true, data });
     const prompt = data.prompt;
     if (!prompt) return null;
     return (

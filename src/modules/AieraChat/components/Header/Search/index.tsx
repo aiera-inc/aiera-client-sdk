@@ -8,89 +8,30 @@ import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import { useChatStore } from '../../../store';
 import { IconButton } from '../../IconButton';
 import { ChatMessage, ChatMessageType } from '../../../services/messages';
-import { CitableContent, ContentBlock } from '../../Messages/MessageFactory/Block';
-import { ListItemContent } from '../../Messages/MessageFactory/Block/List';
+import { TextBlock } from '../../Messages/MessageFactory/TextBlock';
 
 /**
- * Extracts searchable text content from an array of content blocks
- * @param blocks Array of content blocks to extract text from
+ * Extracts searchable text content from an array of text blocks
+ * @param blocks Array of text blocks to extract text from
  * @returns A single string containing all searchable text content
  */
-function getSearchableContent(blocks: ContentBlock[]): string {
-    // Helper function to handle CitableContent arrays
-    function processCitableContent(content: CitableContent): string {
-        return content
-            .map((item) => {
-                if (typeof item === 'string') {
-                    return item;
-                }
-                // For citations, include the text and optional author
-                return `${item.text} ${item.author || ''}`.trim();
-            })
-            .join(' ');
-    }
-
-    // Helper function to process list items recursively
-    function processListItem(item: ListItemContent): string {
-        if ('primary' in item) {
-            const primary = processCitableContent(item.primary);
-            const secondary = item.secondary ? processCitableContent(item.secondary) : '';
-            return `${primary} ${secondary}`.trim();
-        } else if ('type' in item) {
-            return processBlock(item);
-        }
-        return '';
-    }
-
-    // Main function to process each block
-    function processBlock(block: ContentBlock): string {
-        switch (block.type) {
-            case 'text':
-                return processCitableContent(block.content);
-
-            case 'table': {
-                // Process headers and all row content
-                const headerText = block.headers.join(' ');
-                const rowsText = block.rows
-                    .map((row) => row.map((cell) => processCitableContent(cell)).join(' '))
-                    .join(' ');
-                return `${headerText} ${rowsText}`;
-            }
-            case 'list':
-                return block.items.map((item) => processListItem(item)).join(' ');
-
-            case 'image':
-                // Include image title, alt text, and source information
-                return [block.meta.title, block.meta.altText, block.meta.source].filter(Boolean).join(' ');
-
-            case 'quote':
-                // Include the quote content, author, and source
-                return [block.content, block.meta.author, block.meta.source].join(' ');
-
-            case 'chart': {
-                // Process chart title and data
-                const chartText = [block.meta.title, block.meta.xAxis, block.meta.yAxis].filter(Boolean).join(' ');
-
-                // Include data points based on chart type
-                const dataText = block.data
-                    .map((item) => {
-                        const values = Object.values(item)
-                            .filter((val) => typeof val === 'string' || typeof val === 'number')
-                            .join(' ');
-                        return values;
-                    })
-                    .join(' ');
-
-                return `${chartText} ${dataText}`;
-            }
-            default:
-                return '';
-        }
-    }
-
+function getSearchableContent(blocks: TextBlock[]): string {
     // Process all blocks and join with spaces
     return blocks
-        .map((block) => processBlock(block))
+        .map((block) => {
+            // Get the main content
+            let content = block.content;
+
+            // Add citation text if available
+            if (block.citations) {
+                const citationText = block.citations
+                    .map((citation) => `${citation.text} ${citation.author || ''}`)
+                    .join(' ');
+                content += ' ' + citationText;
+            }
+
+            return content;
+        })
         .join(' ')
         .trim();
 }

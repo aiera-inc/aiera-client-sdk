@@ -1,19 +1,16 @@
 import React, { useMemo } from 'react';
 import { compiler, MarkdownToJSX } from 'markdown-to-jsx';
 import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
-import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
-import { Citation } from '../../Citation';
+import { Citation, CitationProps as CitationType } from '../Citation';
 import './markdown.css';
 
 interface MarkdownRendererProps {
-    content: string[];
+    content: string;
 }
 
 // Function to handle unclosed markdown elements in partial content
-const preparePartialMarkdown = (content: string[]): string => {
-    // Join all content parts
-    let text = content.join('');
-
+const preparePartialMarkdown = (content: string): string => {
+    let text = String(content);
     // Handle unclosed code blocks
     const codeBlockMatches = text.match(/```[a-zA-Z0-9]*\n[\s\S]*?(?:```|$)/g);
     if (codeBlockMatches) {
@@ -71,24 +68,14 @@ const preparePartialMarkdown = (content: string[]): string => {
 };
 
 // Custom Citation component that parses citation tags
-const CustomCitation = ({ author, contentId, date, source, sourceId, text, url }: CitationType) => {
-    const citation: CitationType = {
-        author,
-        contentId,
-        date,
-        source,
-        sourceId,
-        text,
-        url,
-    };
-
-    return <Citation citation={citation} />;
+const CustomCitation = (props: CitationType) => {
+    return <Citation {...props} />;
 };
 
 // Define type for component props to fix TypeScript errors
 type CustomComponentProps = {
     children: React.ReactNode;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 // Custom component overrides for markdown-to-jsx

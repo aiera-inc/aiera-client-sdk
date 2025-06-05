@@ -2,15 +2,21 @@ import classNames from 'classnames';
 import React, { Fragment } from 'react';
 import { useChatStore } from '../../../../store';
 import { SearchableText } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/SearchableText';
-import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 
-interface CitationProps {
-    citation: CitationType;
+export interface CitationProps {
+    author?: string;
+    contentId?: string;
+    date?: string;
+    marker: string;
+    meta?: object;
+    source: string;
+    sourceId: string;
+    text: string;
+    url?: string;
 }
 
-export const Citation = ({ citation }: CitationProps) => {
+export const Citation = ({ contentId, source, sourceId, text }: CitationProps) => {
     const { citations, onSelectSource } = useChatStore();
-    const { contentId, source, sourceId, text } = citation;
     const citationIndex = (citations || []).findIndex((s) => s.contentId === contentId);
     const number = citationIndex >= 0 ? citationIndex + 1 : null;
     return (

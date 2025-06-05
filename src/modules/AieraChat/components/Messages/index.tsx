@@ -26,7 +26,6 @@ import {
 } from '../../services/messages';
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
-import { BlockType } from './MessageFactory/Block';
 import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { Prompt } from './Prompt';
 // import { SuggestedPrompts } from './SuggestedPrompts';
@@ -239,29 +238,56 @@ export function Messages({
 
     // Subscribe/unsubscribe to partial messages
     useEffect(() => {
-        if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== channelName)) {
-            // Unsubscribe from current channel without updating local state
-            // because we'll update it after subscribing to the new channel
-            unsubscribe(false);
-            try {
-                const channel = subscribeToChannel(channelName);
-                if (channel) {
-                    log(`Subscribing to Ably channel ${channelName}`);
-                    setSubscribedChannel(channel);
-                }
-            } catch (e) {
-                log(`Failed to subscribe to Ably channel ${channelName}: ${String(e)}`, 'error');
-            }
-        }
-        if (chatId === 'new' && subscribedChannel) {
-            unsubscribe();
-        }
-        return () => {
+        // Skip if chatId is new
+        if (chatId === 'new') {
             if (subscribedChannel) {
                 unsubscribe();
             }
+            return;
+        }
+
+        // Store current channel name in a variable to avoid closure issues
+        const targetChannelName = channelName;
+
+        // Clean up function that will be called on unmount or when dependencies change
+        const cleanup = () => {
+            if (subscribedChannel && subscribedChannel.name === targetChannelName) {
+                log(`Cleaning up subscription for channel ${targetChannelName}`);
+                unsubscribe();
+            }
         };
-    }, [channelName, chatId, setSubscribedChannel, subscribedChannel, subscribeToChannel, unsubscribe]);
+
+        // If we need to subscribe to a new channel
+        if (!subscribedChannel || subscribedChannel.name !== targetChannelName) {
+            // First unsubscribe from any existing channel
+            if (subscribedChannel) {
+                log(`Unsubscribing from previous channel ${subscribedChannel.name}`);
+                unsubscribe();
+            }
+
+            // Add a small delay to avoid race conditions
+            const timeoutId = setTimeout(() => {
+                try {
+                    log(`Attempting to subscribe to Ably channel ${targetChannelName}`);
+                    const channel = subscribeToChannel(targetChannelName);
+                    if (channel) {
+                        log(`Successfully subscribed to Ably channel ${targetChannelName}`);
+                        setSubscribedChannel(channel);
+                    }
+                } catch (e) {
+                    log(`Failed to subscribe to Ably channel ${targetChannelName}: ${String(e)}`, 'error');
+                }
+            }, 100);
+
+            // Return cleanup that clears the timeout if component unmounts
+            return () => {
+                clearTimeout(timeoutId);
+                cleanup();
+            };
+        }
+
+        return cleanup;
+    }, [channelName, chatId, subscribeToChannel, unsubscribe]);
 
     // Append new messages to virtuoso as they're created
     useEffect(() => {
@@ -270,6 +296,15 @@ export function Messages({
             const newMessages = messages.filter(
                 (message) => !(virtuosoRef.current?.data || []).find((m) => m.id === message.id)
             );
+            log(`Virtuoso: Current messages count: ${messages.length}, New messages: ${newMessages.length}`, 'debug');
+            if (newMessages.length > 0) {
+                log(
+                    `Virtuoso: Adding new messages: ${JSON.stringify(
+                        newMessages.map((m) => ({ id: m.id, type: m.type }))
+                    )}`,
+                    'debug'
+                );
+            }
 
             // Append any new messages
             if (newMessages.length > 0) {
@@ -307,16 +342,10 @@ export function Messages({
                         if (latestMessage.id === message.id) {
                             return {
                                 ...latestMessage,
-                                blocks: latestMessage.blocks.map((b) => {
-                                    if (b.type === BlockType.TEXT) {
-                                        return {
-                                            ...b,
-                                            content: [...b.content, latestPartial],
-                                        };
-                                    } else {
-                                        return b;
-                                    }
-                                }),
+                                blocks: latestMessage.blocks.map((b) => ({
+                                    ...b,
+                                    content: b.content + latestPartial,
+                                })),
                             };
                         }
                         return message;
@@ -343,10 +372,9 @@ export function Messages({
                     type: ChatMessageType.RESPONSE,
                     blocks: [
                         {
+                            content: partials.join(''),
+                            citations: undefined,
                             id: 'initial-block',
-                            type: BlockType.TEXT,
-                            content: partials,
-                            meta: { style: 'markdown' },
                         },
                     ],
                     sources: [], // partial messages won't have sources
