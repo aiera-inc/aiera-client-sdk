@@ -45,6 +45,12 @@ export function AieraChat(): ReactElement {
     const clientRef = useRef<Ably.Realtime | null>(null);
 
     useEffect(() => {
+        log(
+            `[AieraChat] Config tracking userId: ${config.tracking?.userId || 'undefined'}, Current chatUserId: ${
+                chatUserId || 'undefined'
+            }`,
+            'debug'
+        );
         if (
             (!chatUserId && config.tracking?.userId) ||
             (chatUserId && config.tracking?.userId && chatUserId !== config.tracking?.userId)

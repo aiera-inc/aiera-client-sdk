@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
-import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import { CitationProps as Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Citation';
 
 export interface Source {
     confirmed?: boolean;

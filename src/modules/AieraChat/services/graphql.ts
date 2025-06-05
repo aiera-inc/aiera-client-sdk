@@ -29,216 +29,27 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
         updatedAt
         userId
         blocks {
-            ... on ChartBlock {
+            content
+            type
+            citations {
                 __typename
-                type
-                data {
+                author
+                date
+                marker
+                meta
+                quote
+                url
+                source {
                     __typename
                     name
-                    properties
-                    value
-                }
-                chartMeta {
-                    __typename
-                    chartType
-                    properties
-                }
-            }
-            ... on ImageBlock {
-                __typename
-                type
-                url
-                imageMeta {
-                    __typename
-                    altText
-                    title
-                    source
-                    date
-                }
-            }
-            ... on ListBlock {
-                __typename
-                type
-                listMeta {
-                    __typename
-                    style
-                }
-                items {
-                    ... on ChartBlock {
+                    sourceId
+                    type
+                    parent {
                         __typename
+                        name
+                        sourceId
                         type
-                        data {
-                            __typename
-                            name
-                            properties
-                            value
-                        }
-                        chartMeta {
-                            __typename
-                            chartType
-                            properties
-                        }
                     }
-                    ... on ImageBlock {
-                        __typename
-                        type
-                        url
-                        imageMeta {
-                            __typename
-                            altText
-                            title
-                            source
-                            date
-                        }
-                    }
-                    ... on QuoteBlock {
-                        __typename
-                        type
-                        quoteContent
-                        quoteMeta {
-                            __typename
-                            author
-                            source
-                            date
-                            url
-                        }
-                    }
-                    ... on TableBlock {
-                        __typename
-                        headers
-                        type
-                        rows {
-                            __typename
-                            value
-                            citation {
-                                __typename
-                                author
-                                contentId
-                                contentType
-                                date
-                                quote
-                                source {
-                                    __typename
-                                    name
-                                    sourceId
-                                    type
-                                }
-                                url
-                            }
-                        }
-                        tableMeta {
-                            __typename
-                            columnAlignment
-                            columnMeta {
-                                __typename
-                                currency
-                                unit
-                                format
-                                decimals
-                            }
-                        }
-                    }
-                    ... on TextBlock {
-                        __typename
-                        type
-                        textContent {
-                            __typename
-                            value
-                            citation {
-                                __typename
-                                author
-                                contentId
-                                contentType
-                                date
-                                quote
-                                source {
-                                    __typename
-                                    name
-                                    sourceId
-                                    type
-                                }
-                                url
-                            }
-                        }
-                        textMeta {
-                            __typename
-                            style
-                        }
-                    }
-                }
-            }
-            ... on QuoteBlock {
-                __typename
-                quoteContent
-                type
-                quoteMeta {
-                    __typename
-                    author
-                    source
-                    date
-                    url
-                }
-            }
-            ... on TableBlock {
-                __typename
-                headers
-                type
-                rows {
-                    __typename
-                    value
-                    citation {
-                        __typename
-                        author
-                        contentId
-                        contentType
-                        date
-                        quote
-                        source {
-                            __typename
-                            name
-                            sourceId
-                            type
-                        }
-                        url
-                    }
-                }
-                tableMeta {
-                    __typename
-                    columnAlignment
-                    columnMeta {
-                        __typename
-                        currency
-                        unit
-                        format
-                        decimals
-                    }
-                }
-            }
-            ... on TextBlock {
-                __typename
-                type
-                textContent {
-                    __typename
-                    value
-                    citation {
-                        __typename
-                        author
-                        contentId
-                        contentType
-                        date
-                        quote
-                        source {
-                            __typename
-                            name
-                            sourceId
-                            type
-                        }
-                        url
-                    }
-                }
-                textMeta {
-                    __typename
-                    style
                 }
             }
         }
@@ -263,6 +74,12 @@ const CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT = gql`
             name
             sourceId
             type
+            parent {
+                __typename
+                name
+                sourceId
+                type
+            }
         }
     }
 `;
@@ -287,6 +104,12 @@ export const CHAT_SESSION_QUERY = gql`
                 name
                 sourceId
                 type
+                parent {
+                    __typename
+                    name
+                    sourceId
+                    type
+                }
             }
             promptMessages {
                 ...ChatMessagePromptFragment

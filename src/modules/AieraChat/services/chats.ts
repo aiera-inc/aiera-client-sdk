@@ -307,6 +307,16 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         },
     });
 
+    // Debug logging for chat sessions query
+    useEffect(() => {
+        console.log('[ChatSessions] Query state:', {
+            userId: config.tracking?.userId,
+            status: chatSessionsQuery.status,
+            data: chatSessionsQuery.status === 'success' ? chatSessionsQuery.data?.chatSessions?.length || 0 : 0,
+            error: chatSessionsQuery.status === 'error' ? chatSessionsQuery.error?.message || null : null,
+        });
+    }, [config.tracking?.userId, chatSessionsQuery]);
+
     useEffect(() => {
         if (chatSessionsQuery.status === 'success') {
             let normalizedSessions: ChatSession[] = [];
