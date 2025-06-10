@@ -23,6 +23,7 @@ export const MessageResponse = ({ data, onReRun }: { onReRun: (k: string) => voi
                 });
         }
     }, [data]);
+    console.log({ MessageResponse: true, status: data.status, blocks: data.blocks });
 
     return data.status === ChatMessageStatus.PENDING || data.status === ChatMessageStatus.QUEUED ? (
         <Loading>Thinking...</Loading>

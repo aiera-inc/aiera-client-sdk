@@ -38,6 +38,15 @@ export function AieraChat(): ReactElement {
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
+    // Debug logging on mount
+    useEffect(() => {
+        log('[AieraChat] Component mounted with initial state:', 'info');
+        log(`[AieraChat] - chatId: ${chatId}`, 'info');
+        log(`[AieraChat] - chatUserId: ${chatUserId || 'undefined'}`, 'info');
+        log(`[AieraChat] - config.tracking?.userId: ${config.tracking?.userId || 'undefined'}`, 'info');
+        log(`[AieraChat] - virtualListKey: ${config.virtualListKey ? 'present' : 'missing'}`, 'info');
+    }, []);
+
     // Set up Ably realtime client
     const { createAblyRealtimeClient } = useAbly();
     const [clientReady, setClientReady] = useState(false);
@@ -49,13 +58,13 @@ export function AieraChat(): ReactElement {
             `[AieraChat] Config tracking userId: ${config.tracking?.userId || 'undefined'}, Current chatUserId: ${
                 chatUserId || 'undefined'
             }`,
-            'debug'
+            'info'
         );
         if (
             (!chatUserId && config.tracking?.userId) ||
             (chatUserId && config.tracking?.userId && chatUserId !== config.tracking?.userId)
         ) {
-            log(`Updating chat user id in global state to: ${config.tracking.userId}`);
+            log(`[AieraChat] Updating chat user id in global state to: ${config.tracking.userId}`, 'info');
             onSetUserId(config.tracking.userId);
         }
     }, [chatUserId, config.tracking?.userId, onSetUserId]);
@@ -69,7 +78,7 @@ export function AieraChat(): ReactElement {
 
         // Set initializing flag
         initializingRef.current = true;
-        log(`Initializing Ably client in component with userId: ${chatUserId}`);
+        log(`[AieraChat] Initializing Ably client in component with userId: ${chatUserId}`, 'info');
 
         // Wait a tick before calling the mutation to let the state update finish (avoids race condition)
         setTimeout(
@@ -81,7 +90,7 @@ export function AieraChat(): ReactElement {
 
                             // Listen for connection events
                             const onConnected = () => {
-                                log('Ably client connected in component');
+                                log('[AieraChat] Ably client connected in component', 'info');
                                 setClientReady(true);
                             };
 

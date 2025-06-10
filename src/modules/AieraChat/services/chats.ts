@@ -21,6 +21,7 @@ import {
     UpdateChatSessionMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { log } from '@aiera/client-sdk/lib/utils';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatMessageStatus, ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { ChatSession, ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
@@ -309,12 +310,17 @@ export const useChatSessions = (): UseChatSessionsReturn => {
 
     // Debug logging for chat sessions query
     useEffect(() => {
-        console.log('[ChatSessions] Query state:', {
-            userId: config.tracking?.userId,
-            status: chatSessionsQuery.status,
-            data: chatSessionsQuery.status === 'success' ? chatSessionsQuery.data?.chatSessions?.length || 0 : 0,
-            error: chatSessionsQuery.status === 'error' ? chatSessionsQuery.error?.message || null : null,
-        });
+        log(
+            '[ChatSessions] Query state: ' +
+                JSON.stringify({
+                    userId: config.tracking?.userId,
+                    status: chatSessionsQuery.status,
+                    data:
+                        chatSessionsQuery.status === 'success' ? chatSessionsQuery.data?.chatSessions?.length || 0 : 0,
+                    error: chatSessionsQuery.status === 'error' ? chatSessionsQuery.error?.message || null : null,
+                }),
+            'info'
+        );
     }, [config.tracking?.userId, chatSessionsQuery]);
 
     useEffect(() => {

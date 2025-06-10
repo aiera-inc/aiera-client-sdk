@@ -297,6 +297,8 @@ export function Messages({
                 (message) => !(virtuosoRef.current?.data || []).find((m) => m.id === message.id)
             );
             log(`Virtuoso: Current messages count: ${messages.length}, New messages: ${newMessages.length}`, 'debug');
+
+            // Append any new messages
             if (newMessages.length > 0) {
                 log(
                     `Virtuoso: Adding new messages: ${JSON.stringify(
@@ -304,10 +306,6 @@ export function Messages({
                     )}`,
                     'debug'
                 );
-            }
-
-            // Append any new messages
-            if (newMessages.length > 0) {
                 virtuosoRef.current?.data.append(newMessages, ({ scrollInProgress, atBottom }) => {
                     return {
                         index: 'LAST',

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>AieraChat Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            gap: 20px;
+            height: 100vh;
+        }
+        iframe {
+            border: 1px solid #ccc;
+            width: 60%;
+            height: 700px;
+        }
+        .console-output {
+            width: 40%;
+            height: 700px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background: #f5f5f5;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .console-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-bottom: 1px solid #ddd;
+        }
+        .console-error {
+            color: red;
+            background: #fee;
+        }
+        .console-warn {
+            color: orange;
+            background: #ffd;
+        }
+        .console-log {
+            color: #333;
+        }
+        .console-info {
+            color: blue;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <iframe id="aiera-chat" src="http://localhost:8000/web/demo/AieraChatInternal.html"></iframe>
+        <div id="console-output" class="console-output">
+            <h3>Console Output:</h3>
+        </div>
+    </div>
+
+    <script>
+        // Capture console messages from the iframe
+        const consoleOutput = document.getElementById('console-output');
+        
+        function addConsoleEntry(type, message, source = 'main') {
+            const entry = document.createElement('div');
+            entry.className = `console-entry console-${type}`;
+            const timestamp = new Date().toLocaleTimeString();
+            entry.innerHTML = `<strong>[${timestamp}] ${source} ${type}:</strong> ${message}`;
+            consoleOutput.appendChild(entry);
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        // Override console methods for main window
+        const originalConsole = {
+            log: console.log,
+            error: console.error,
+            warn: console.warn,
+            info: console.info
+        };
+
+        ['log', 'error', 'warn', 'info'].forEach(method => {
+            console[method] = function(...args) {
+                originalConsole[method].apply(console, args);
+                addConsoleEntry(method, args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                ).join(' '));
+            };
+        });
+
+        // Listen for messages from iframe
+        window.addEventListener('message', (event) => {
+            if (event.data && event.data.type === 'console') {
+                addConsoleEntry(event.data.method, event.data.message, 'iframe');
+            }
+        });
+
+        // Inject console override into iframe when it loads
+        const iframe = document.getElementById('aiera-chat');
+        iframe.addEventListener('load', () => {
+            try {
+                const iframeWindow = iframe.contentWindow;
+                if (iframeWindow) {
+                    iframeWindow.eval(`
+                        (function() {
+                            const originalConsole = {
+                                log: console.log,
+                                error: console.error,
+                                warn: console.warn,
+                                info: console.info
+                            };
+                            
+                            ['log', 'error', 'warn', 'info'].forEach(method => {
+                                console[method] = function(...args) {
+                                    originalConsole[method].apply(console, args);
+                                    parent.postMessage({
+                                        type: 'console',
+                                        method: method,
+                                        message: args.map(arg => 
+                                            typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                                        ).join(' ')
+                                    }, '*');
+                                };
+                            });
+                        })();
+                    `);
+                    console.info('Console capture injected into iframe');
+                }
+            } catch (e) {
+                console.error('Failed to inject console capture:', e);
+            }
+        });
+
+        console.log('Debug test page loaded');
+    </script>
+</body>
+</html>

@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { log } from '@aiera/client-sdk/lib/utils';
 
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { CitationProps as Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Citation';
@@ -36,46 +37,51 @@ export interface ChatState {
     sources: Source[];
 }
 
-export const useChatStore = create<ChatState>((set) => ({
-    chatId: 'new',
-    chatStatus: ChatSessionStatus.Active,
-    chatTitle: undefined,
-    chatUserId: undefined,
-    citations: undefined,
-    hasChanges: false,
-    onAddSource: (source: Source | Source[]) =>
-        set((state) => ({
-            hasChanges: true,
-            sources: [...state.sources, ...(Array.isArray(source) ? source : [source])],
-        })),
-    onClearSources: () => set({ sources: [] }),
-    onNewChat: () =>
-        set({
-            chatId: 'new',
-            chatStatus: ChatSessionStatus.Active,
-            chatTitle: undefined,
-            citations: undefined,
-            hasChanges: false,
-            searchTerm: undefined,
-            sources: [],
-        }),
-    onRemoveSource: (targetId: string, targetType: string) =>
-        set((state) => ({
-            hasChanges: true,
-            sources: state.sources.filter(
-                (source) => !(source.targetId === targetId && source.targetType === targetType)
-            ),
-        })),
-    onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) =>
-        set({ chatId, chatStatus, chatTitle, sources, hasChanges: false }),
-    onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
-    onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
-    onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
-    onSetTitle: (chatTitle?: string) => set({ chatTitle }),
-    onSetUserId: (chatUserId?: string) => set({ chatUserId }),
-    searchTerm: undefined,
-    selectedSource: undefined,
-    setCitations: (citations: Citation[]) => set({ citations }),
-    setHasChanges: (hasChanges: boolean) => set({ hasChanges }),
-    sources: [],
-}));
+export const useChatStore = create<ChatState>((set) => {
+    log('[ChatStore] Initializing store with chatId: new', 'info');
+    return {
+        chatId: 'new',
+        chatStatus: ChatSessionStatus.Active,
+        chatTitle: undefined,
+        chatUserId: undefined,
+        citations: undefined,
+        hasChanges: false,
+        onAddSource: (source: Source | Source[]) =>
+            set((state) => ({
+                hasChanges: true,
+                sources: [...state.sources, ...(Array.isArray(source) ? source : [source])],
+            })),
+        onClearSources: () => set({ sources: [] }),
+        onNewChat: () =>
+            set({
+                chatId: 'new',
+                chatStatus: ChatSessionStatus.Active,
+                chatTitle: undefined,
+                citations: undefined,
+                hasChanges: false,
+                searchTerm: undefined,
+                sources: [],
+            }),
+        onRemoveSource: (targetId: string, targetType: string) =>
+            set((state) => ({
+                hasChanges: true,
+                sources: state.sources.filter(
+                    (source) => !(source.targetId === targetId && source.targetType === targetType)
+                ),
+            })),
+        onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) => {
+            log(`[ChatStore] Selecting chat: ${chatId}, status: ${chatStatus}, title: ${chatTitle || 'none'}`, 'info');
+            return set({ chatId, chatStatus, chatTitle, sources, hasChanges: false });
+        },
+        onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
+        onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
+        onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
+        onSetTitle: (chatTitle?: string) => set({ chatTitle }),
+        onSetUserId: (chatUserId?: string) => set({ chatUserId }),
+        searchTerm: undefined,
+        selectedSource: undefined,
+        setCitations: (citations: Citation[]) => set({ citations }),
+        setHasChanges: (hasChanges: boolean) => set({ hasChanges }),
+        sources: [],
+    };
+});

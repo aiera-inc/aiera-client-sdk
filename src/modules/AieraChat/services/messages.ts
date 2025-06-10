@@ -374,10 +374,10 @@ export const useChatSession = ({
     // Debug logging
     useEffect(() => {
         log(
-            `Messages query state - chatId: ${chatId}, userId: ${config.tracking?.userId || 'undefined'}, paused: ${
-                !chatId || chatId === 'new' ? 'true' : 'false'
-            }`,
-            'debug'
+            `[useChatSession] Messages query state - chatId: ${chatId}, userId: ${
+                config.tracking?.userId || 'undefined'
+            }, paused: ${!chatId || chatId === 'new' ? 'true' : 'false'}`,
+            'info'
         );
     }, [chatId, config.tracking?.userId]);
 
@@ -442,7 +442,8 @@ export const useChatSession = ({
         if (messagesQuery.status === 'success' && messagesQuery.data?.chatSession) {
             try {
                 const chatSession = messagesQuery.data.chatSession;
-                log(`Processing chat session: ${chatSession.id}`, 'debug');
+                log(`[useChatSession] Processing chat session: ${chatSession.id}`, 'info');
+                log('[useChatSession] Chat session data: ' + JSON.stringify(chatSession), 'info');
 
                 // Update chat title in store if the session got a generated title
                 if (
@@ -459,6 +460,7 @@ export const useChatSession = ({
                 let lastPromptValue = ''; // Track the last prompt value
 
                 // Process prompt messages
+                log(`[useChatSession] Processing ${chatSession.promptMessages?.length || 0} prompt messages`, 'info');
                 if (chatSession.promptMessages) {
                     (chatSession.promptMessages as RawChatMessagePrompt[]).forEach((msg) => {
                         if (!msg) return;
@@ -546,13 +548,14 @@ export const useChatSession = ({
                     }
                 });
 
-                log(`Successfully normalized ${finalNormalizedMessages.length} messages`);
+                log(`[useChatSession] Successfully normalized ${finalNormalizedMessages.length} messages`, 'info');
+                log('[useChatSession] Normalized messages: ' + JSON.stringify(finalNormalizedMessages), 'info');
                 setMessages(finalNormalizedMessages);
 
                 // Clear error state
                 if (error) setError(null);
             } catch (err) {
-                log(`Error processing messages data: ${String(err)}`, 'error');
+                log(`[useChatSession] Error processing messages data: ${String(err)}`, 'error');
                 setError('Error processing messages data');
                 // If polling is enabled, stop it when an error occurs
                 if (enablePolling) {

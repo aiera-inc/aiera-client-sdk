@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import React from 'react';
 import { ChatMessagePrompt } from '../../../../services/messages';
 import { SearchableText } from '../SearchableText';
+import { log } from '@aiera/client-sdk/lib/utils';
 
 export const MessagePrompt = ({
     data,
@@ -13,7 +14,7 @@ export const MessagePrompt = ({
     className?: string;
     isStickyHeader?: boolean;
 }) => {
-    console.log({ MessagePrompt: true, data });
+    log(JSON.stringify({ MessagePrompt: true, data }), 'info');
     const prompt = data.prompt;
     if (!prompt) return null;
     return (
