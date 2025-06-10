@@ -296,6 +296,12 @@ export const useAbly = (): UseAblyReturn => {
                             log('Updating partials with new parsed message:', 'debug');
                             // Update partials state with the new message
                             setPartials((prev) => [...prev, parsedMessage]);
+
+                            // Set streaming to true only when we receive the first partial
+                            if (!isStreamingRef.current) {
+                                log('Starting to stream partials...');
+                                setIsStreaming(true);
+                            }
                         }
                     }
 
@@ -345,11 +351,6 @@ export const useAbly = (): UseAblyReturn => {
                     void channel.subscribe(messageHandler);
                     globalAblyState.subscribedChannels.add(channelName);
                     log(`Subscribed to Ably channel ${channelName}`);
-                    if (!isStreamingRef.current) {
-                        log('Starting to stream partials...');
-                        // Update the streaming status if it's the first partial
-                        setIsStreaming(true);
-                    }
                 })
                 .catch((e) => log(`Error attaching Ably channel ${channelName}: ${String(e)}`, 'error'));
         } else {
