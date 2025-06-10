@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { compiler, MarkdownToJSX } from 'markdown-to-jsx';
-import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import './markdown.css';
 
 interface MarkdownRendererProps {
@@ -167,7 +166,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         p: {
             component: 'p',
             props: {
-                className: 'my-4 leading-relaxed',
+                className: 'leading-relaxed',
             },
         },
         ul: {
@@ -211,10 +210,5 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         [preparedMarkdown, overrides]
     );
 
-    return (
-        <div className="prose dark:prose-invert max-w-none">
-            {markdownOutput}
-            <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
-        </div>
-    );
+    return <div className="prose dark:prose-invert max-w-none">{markdownOutput}</div>;
 }
