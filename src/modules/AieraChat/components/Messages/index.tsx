@@ -81,7 +81,7 @@ export function Messages({
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { confirmation, isStreaming, partials, reset, subscribeToChannel } = useAbly();
+    const { confirmation, isStreaming, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
     const channelName = useMemo(() => `${CHANNEL_PREFIX}:${chatId}`, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -200,7 +200,7 @@ export function Messages({
                     .finally(() => setSubmitting(false));
             }
         },
-        [chatId, onSetStatus, setSubmitting, sources, virtuosoRef.current?.data]
+        [chatId, createChatMessagePrompt, onSetStatus, onSubmit, sources]
     );
 
     const maybeClearVirtuoso = useCallback(
@@ -215,53 +215,84 @@ export function Messages({
         [virtuosoRef.current?.data]
     );
 
-    const unsubscribe = useCallback(
-        (resetState = true) => {
-            if (subscribedChannel) {
-                subscribedChannel
-                    .detach()
-                    .then(() => subscribedChannel.unsubscribe())
-                    .catch((err) =>
-                        log(
-                            `Failed to detach from subscribed Ably channel ${subscribedChannel.name}: ${String(err)}`,
-                            'error'
-                        )
-                    )
-                    .finally(() => {
-                        if (resetState) {
-                            setSubscribedChannel(undefined);
-                        }
-                    });
-            }
-        },
-        [setSubscribedChannel, subscribedChannel]
-    );
-
     // Subscribe/unsubscribe to partial messages
     useEffect(() => {
-        if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== channelName)) {
-            // Unsubscribe from current channel without updating local state
-            // because we'll update it after subscribing to the new channel
-            unsubscribe(false);
-            try {
-                const channel = subscribeToChannel(channelName);
-                if (channel) {
-                    log(`Subscribing to Ably channel ${channelName}`);
-                    setSubscribedChannel(channel);
+        let isEffectActive = true;
+        let currentChannel: RealtimeChannel | undefined;
+
+        const handleChannelSwitch = async () => {
+            // If we're switching to a new chat or don't have a channel yet
+            if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== channelName)) {
+                // Store reference to the old channel
+                const oldChannel = subscribedChannel;
+
+                // Clear the subscribed channel state immediately to prevent race conditions
+                setSubscribedChannel(undefined);
+
+                // Detach from old channel if it exists
+                if (oldChannel) {
+                    log(`Detaching from old channel: ${oldChannel.name}`);
+                    await unsubscribeFromChannel(oldChannel.name);
                 }
-            } catch (e) {
-                log(`Failed to subscribe to Ably channel ${channelName}: ${String(e)}`, 'error');
+
+                // Only proceed if effect is still active
+                if (!isEffectActive) {
+                    log(`Effect no longer active, skipping channel subscription`);
+                    return;
+                }
+
+                // Small delay to ensure clean detachment
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
+                // Only proceed if effect is still active after delay
+                if (!isEffectActive) {
+                    log(`Effect no longer active after delay, skipping channel subscription`);
+                    return;
+                }
+
+                // Now subscribe to the new channel
+                try {
+                    log(`Attempting to subscribe to channel: ${channelName}`);
+                    const channel = subscribeToChannel(channelName);
+                    if (channel && isEffectActive) {
+                        currentChannel = channel;
+                        log(`Successfully subscribed to Ably channel ${channelName}`);
+                        setSubscribedChannel(channel);
+                    }
+                } catch (e) {
+                    log(`Failed to subscribe to Ably channel ${channelName}: ${String(e)}`, 'error');
+                }
             }
-        }
-        if (chatId === 'new' && subscribedChannel) {
-            unsubscribe();
-        }
-        return () => {
-            if (subscribedChannel) {
-                unsubscribe();
+
+            // If switching to 'new' chat, unsubscribe from any existing channel
+            if (chatId === 'new' && subscribedChannel) {
+                const channelToUnsubscribe = subscribedChannel.name;
+                setSubscribedChannel(undefined);
+                await unsubscribeFromChannel(channelToUnsubscribe);
             }
         };
-    }, [channelName, chatId, setSubscribedChannel, subscribedChannel, subscribeToChannel, unsubscribe]);
+
+        void handleChannelSwitch();
+
+        // Cleanup function
+        return () => {
+            isEffectActive = false;
+
+            // Clean up the current channel if it exists
+            if (currentChannel) {
+                const channelName = currentChannel.name;
+                log(`Cleanup: detaching from channel ${channelName}`);
+                void unsubscribeFromChannel(channelName);
+            }
+
+            // Also clean up any subscribed channel that might still be set
+            if (subscribedChannel && subscribedChannel !== currentChannel) {
+                const channelName = subscribedChannel.name;
+                log(`Cleanup: detaching from subscribed channel ${channelName}`);
+                void unsubscribeFromChannel(channelName);
+            }
+        };
+    }, [channelName, chatId, subscribeToChannel, unsubscribeFromChannel]);
 
     // Append new messages to virtuoso as they're created
     useEffect(() => {
@@ -416,7 +447,9 @@ export function Messages({
     // Reset messages when the selected chat changes
     useEffect(() => {
         maybeClearVirtuoso('New chat detected. Clearing virtuoso items...');
-    }, [chatId]);
+        // Reset Ably state when switching chats
+        reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
+    }, [chatId, reset]);
 
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(
