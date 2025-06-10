@@ -166,8 +166,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                         userId
                     }
                     sources {
+                        __typename
                         confirmed
                         name
+                        parent {
+                            __typename
+                            name
+                            sourceId
+                            type
+                        }
                         sourceId
                         type
                     }
@@ -237,8 +244,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     id
                     createdAt
                     sources {
+                        __typename
                         confirmed
                         name
+                        parent {
+                            __typename
+                            name
+                            sourceId
+                            type
+                        }
                         sourceId
                         type
                     }
@@ -288,8 +302,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     id
                     createdAt
                     sources {
+                        __typename
                         confirmed
                         name
+                        parent {
+                            __typename
+                            name
+                            sourceId
+                            type
+                        }
                         sourceId
                         type
                     }

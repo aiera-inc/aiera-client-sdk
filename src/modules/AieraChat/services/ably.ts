@@ -24,16 +24,9 @@ interface UseAblyReturn {
     subscribeToChannel: (channelName: string) => RealtimeChannel | undefined;
 }
 
-type PartialTextContent = {
-    citation?: Citation;
-    value: string;
-};
-
 type PartialTextBlock = {
-    content: PartialTextContent[];
-    meta: {
-        style: 'paragraph' | 'h1' | 'h2' | 'h3';
-    };
+    citations?: Citation[];
+    content: string;
     type: ContentBlockType.Text;
 };
 
@@ -286,7 +279,7 @@ export const useAbly = (): UseAblyReturn => {
 
                                 // Process the response message and update partials
                                 if (jsonObject.blocks) {
-                                    const parsedMessage = jsonObject.blocks?.[0]?.content?.[0]?.value;
+                                    const parsedMessage = jsonObject.blocks?.[0]?.content;
                                     if (parsedMessage) {
                                         log('Updating partials with new parsed message:', 'debug');
                                         // Update partials state with the new message

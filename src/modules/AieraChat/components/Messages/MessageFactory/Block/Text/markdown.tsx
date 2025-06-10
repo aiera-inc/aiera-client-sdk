@@ -4,13 +4,12 @@ import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import './markdown.css';
 
 interface MarkdownRendererProps {
-    content: string[];
+    content: string;
 }
 
 // Function to handle unclosed markdown elements in partial content
-const preparePartialMarkdown = (content: string[]): string => {
-    // Join all content parts
-    let text = content.join('');
+const preparePartialMarkdown = (content: string): string => {
+    let text = content;
 
     // Handle unclosed code blocks
     const codeBlockMatches = text.match(/```[a-zA-Z0-9]*\n[\s\S]*?(?:```|$)/g);
@@ -71,7 +70,7 @@ const preparePartialMarkdown = (content: string[]): string => {
 // Define type for component props to fix TypeScript errors
 type CustomComponentProps = {
     children: React.ReactNode;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 
 // Custom component overrides for markdown-to-jsx

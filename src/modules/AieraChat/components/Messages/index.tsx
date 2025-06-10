@@ -311,7 +311,7 @@ export function Messages({
                                     if (b.type === BlockType.TEXT) {
                                         return {
                                             ...b,
-                                            content: [...b.content, latestPartial],
+                                            content: b.content + latestPartial,
                                         };
                                     } else {
                                         return b;
@@ -343,10 +343,9 @@ export function Messages({
                     type: ChatMessageType.RESPONSE,
                     blocks: [
                         {
+                            content: partials.join(' '),
                             id: 'initial-block',
                             type: BlockType.TEXT,
-                            content: partials,
-                            meta: { style: 'markdown' },
                         },
                     ],
                     sources: [], // partial messages won't have sources
