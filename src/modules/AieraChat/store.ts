@@ -19,6 +19,7 @@ export interface ChatState {
     chatUserId?: string;
     citations?: Citation[];
     hasChanges: boolean;
+    onAddCitations: (citations: Citation[]) => void;
     onAddSource: (source: Source | Source[]) => void;
     onClearSources: () => void;
     onNewChat: () => void;
@@ -43,6 +44,14 @@ export const useChatStore = create<ChatState>((set) => ({
     chatUserId: undefined,
     citations: undefined,
     hasChanges: false,
+    onAddCitations: (citations: Citation[]) =>
+        set((state) => {
+            const existingCitations = state.citations || [];
+            const existingContentIds = new Set(existingCitations.map((c) => c.contentId));
+            return {
+                citations: [...existingCitations, ...citations.filter((c) => !existingContentIds.has(c.contentId))],
+            };
+        }),
     onAddSource: (source: Source | Source[]) =>
         set((state) => ({
             hasChanges: true,

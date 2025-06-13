@@ -159,7 +159,7 @@ function mapConfirmedSourcesToInput(sources: Source[]): ConfirmationChatSourceIn
 }
 
 /**
- *
+ * Map raw citations from the server
  */
 function normalizeCitation(rawCitation: RawCitation): Citation {
     const source = rawCitation.source;

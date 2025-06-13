@@ -7,9 +7,15 @@ import {
     ChatMessageStatus,
     ChatMessageType,
 } from '@aiera/client-sdk/modules/AieraChat/services/messages';
-import { CreateAblyTokenMutation, CreateAblyTokenMutationVariables, AblyData } from '@aiera/client-sdk/types';
-import { Citation, ContentBlockType } from '@aiera/client-sdk/types/generated';
-import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
+import {
+    AblyData,
+    Citation as RawCitation,
+    ContentBlockType,
+    CreateAblyTokenMutation,
+    CreateAblyTokenMutationVariables,
+} from '@aiera/client-sdk/types/generated';
+import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { log } from '@aiera/client-sdk/lib/utils';
 
 export const CHANNEL_PREFIX = 'user-chat';
@@ -26,7 +32,7 @@ interface UseAblyReturn {
 }
 
 type PartialTextBlock = {
-    citations?: Citation[];
+    citations?: RawCitation[];
     content: string;
     type: ContentBlockType.Text;
 };
@@ -82,9 +88,29 @@ const globalAblyState: GlobalAblyState = {
 };
 
 /**
+ * Map raw citations from the server
+ */
+function normalizeCitation(rawCitation: RawCitation): Citation {
+    const source = rawCitation.source;
+    const sourceParent = source?.parent;
+    return {
+        author: rawCitation.author || '',
+        contentId: sourceParent?.sourceId || source.sourceId,
+        date: rawCitation.date as string,
+        marker: rawCitation.marker,
+        meta: rawCitation.meta as object,
+        source: source.name,
+        sourceId: source.sourceId,
+        text: rawCitation.quote,
+        url: rawCitation.url || undefined,
+    };
+}
+
+/**
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
+    const { onAddCitations } = useChatStore();
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [partials, setPartials] = useState<string[]>([]);
@@ -301,6 +327,15 @@ export const useAbly = (): UseAblyReturn => {
                             if (!isStreamingRef.current) {
                                 log('Starting to stream partials...');
                                 setIsStreaming(true);
+                            }
+                        }
+
+                        // Parse any citations
+                        const citations = jsonObject.blocks?.[0]?.citations;
+                        if (citations) {
+                            const parsedCitations = citations.map(normalizeCitation);
+                            if (parsedCitations) {
+                                onAddCitations(parsedCitations);
                             }
                         }
                     }
