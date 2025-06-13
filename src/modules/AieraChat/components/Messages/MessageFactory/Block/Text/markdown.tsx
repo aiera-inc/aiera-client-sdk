@@ -69,7 +69,7 @@ const preparePartialMarkdown = (content: string, citations?: CitationType[]): st
                 .filter((c) => c) // filter out nulls
                 .join(' ');
             const citation = `<citation ${attrString} />`;
-            text.replace(c.marker, citation);
+            text = text.replace(c.marker, citation);
         });
     }
 
@@ -164,7 +164,6 @@ const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
 );
 
 export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) {
-    console.log({ content, citations });
     const preparedMarkdown = useMemo(() => preparePartialMarkdown(content, citations), [citations, content]);
 
     // Define overrides for markdown-to-jsx with proper types
