@@ -9,6 +9,7 @@ import {
 } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import {
     AblyData,
+    ChatSessionStatus,
     Citation as RawCitation,
     ContentBlockType,
     CreateAblyTokenMutation,
@@ -110,7 +111,7 @@ function normalizeCitation(rawCitation: RawCitation): Citation {
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
-    const { onAddCitations } = useChatStore();
+    const { onAddCitations, onSetStatus } = useChatStore();
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [partials, setPartials] = useState<string[]>([]);
@@ -373,6 +374,7 @@ export const useAbly = (): UseAblyReturn => {
                         log('Received final partial:', 'debug');
                         log('Stopping partials stream.');
                         setIsStreaming(false);
+                        onSetStatus(ChatSessionStatus.Active);
                     }
                 } catch (err) {
                     log(`Error handling message: ${String(err)}`, 'error');

@@ -10,8 +10,8 @@ import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
 import { log } from '@aiera/client-sdk/lib/utils';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
-import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
+import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
@@ -78,10 +78,10 @@ export function Messages({
     const [subscribedChannel, setSubscribedChannel] = useState<RealtimeChannel | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
     const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
-    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
+    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { confirmation, isStreaming, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
+    const { confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
     const channelName = useMemo(() => `${CHANNEL_PREFIX}:${chatId}`, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -150,11 +150,18 @@ export function Messages({
                         }
                     }
                 })
+                .then(() => {
+                    // Reset existing partials before new ones start streaming
+                    if (partials && partials.length > 0) {
+                        reset().catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
+                    }
+                })
+                .then(() => onSetStatus(ChatSessionStatus.GeneratingResponse))
                 .catch((err: Error) =>
                     log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
                 );
         },
-        [confirmSourceConfirmation, onAddSource, virtuosoRef.current?.data]
+        [confirmSourceConfirmation, onAddSource, partials, virtuosoRef.current?.data]
     );
 
     const handleSubmit = useCallback(
@@ -183,6 +190,13 @@ export function Messages({
                             });
                         }
                     })
+                    .then(() =>
+                        onSetStatus(
+                            sources && sources.length > 0
+                                ? ChatSessionStatus.GeneratingResponse
+                                : ChatSessionStatus.FindingSources
+                        )
+                    )
                     .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
                     .finally(() => setSubmitting(false));
             } else {
@@ -196,11 +210,19 @@ export function Messages({
                                 : ChatSessionStatus.FindingSources
                         );
                     })
+                    .then(() => {
+                        // Reset existing partials before new ones start streaming
+                        if (partials && partials.length > 0) {
+                            reset().catch((err: Error) =>
+                                log(`Error resetting useAbly state: ${err.message}`, 'error')
+                            );
+                        }
+                    })
                     .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
                     .finally(() => setSubmitting(false));
             }
         },
-        [chatId, createChatMessagePrompt, onSetStatus, onSubmit, sources]
+        [chatId, createChatMessagePrompt, onSetStatus, onSubmit, partials, sources]
     );
 
     const maybeClearVirtuoso = useCallback(
@@ -392,36 +414,6 @@ export function Messages({
         }
     }, [chatStatus, partials, virtuosoRef.current?.data]);
 
-    // Manage the chat session status depending on streaming
-    useEffect(() => {
-        if (!isStreaming && STREAMING_STATUSES.includes(chatStatus)) {
-            log('Streaming stopped. Setting chat status to active.');
-            onSetStatus(ChatSessionStatus.Active);
-        }
-        if (isStreaming && !STREAMING_STATUSES.includes(chatStatus)) {
-            const newChatStatus =
-                sources && sources.length > 0 ? ChatSessionStatus.GeneratingResponse : ChatSessionStatus.FindingSources;
-            log(`Streaming started. Setting chat status to ${newChatStatus}.`);
-            onSetStatus(newChatStatus);
-        }
-    }, [chatStatus, isStreaming, onSetStatus, sources]);
-
-    useEffect(() => {
-        // If streaming has stopped
-        if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
-            log('Streaming stopped. Refreshing chat session with messages...');
-            // Reset partials and refetch the ChatSessionWithMessagesQuery query to get the final response
-            // and updated chat title
-            reset()
-                .then(() => {
-                    setTimeout(() => {
-                        refresh();
-                    }, 500);
-                })
-                .catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
-        }
-    }, [chatStatus, isStreaming, partials, refresh, reset]);
-
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
         if (confirmation) {
@@ -486,7 +478,10 @@ export function Messages({
                         />
                     </VirtuosoMessageListLicense>
                 )}
-                {chatStatus === ChatSessionStatus.FindingSources && !confirmation && <AnimatedLoadingStatus />}
+                {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
+                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
+                    <MicroSparkles className="w-4 my-3 mx-6 animate-bounce text-yellow-400" />
+                )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
         </div>
