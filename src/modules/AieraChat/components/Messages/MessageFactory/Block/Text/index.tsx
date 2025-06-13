@@ -1,7 +1,5 @@
 import React from 'react';
 import { BaseBlock, BlockType, Citation as CitationType } from '..';
-// import { Citation } from '../../Citation';
-// import { SearchableText } from '../../SearchableText';
 import { MarkdownRenderer } from './markdown';
 
 // Text block types
@@ -11,10 +9,10 @@ export interface TextBlock extends BaseBlock {
     type: BlockType.TEXT;
 }
 
-export function Text({ content }: TextBlock) {
+export function Text({ citations, content }: TextBlock) {
     return (
         <div className="text-base pt-2">
-            <MarkdownRenderer content={content} />
+            <MarkdownRenderer citations={citations} content={content} />
         </div>
     );
 }
