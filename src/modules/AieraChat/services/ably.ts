@@ -1,6 +1,6 @@
 import { Message, Realtime, RealtimeChannel } from 'ably';
 import gql from 'graphql-tag';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useMutation } from 'urql';
 import {
     ChatMessageSources,
@@ -25,7 +25,6 @@ interface UseAblyReturn {
     confirmation?: ChatMessageSources;
     createAblyRealtimeClient: (sessionUserId?: string) => Promise<Realtime | null>;
     error?: string;
-    isStreaming: boolean;
     partials: string[];
     reset: () => Promise<void>;
     subscribeToChannel: (channelName: string) => RealtimeChannel | undefined;
@@ -115,16 +114,6 @@ export const useAbly = (): UseAblyReturn => {
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [partials, setPartials] = useState<string[]>([]);
-
-    // Add both a state and a ref for isStreaming
-    const [isStreaming, setIsStreaming] = useState<boolean>(false);
-    // Ref to avoid closure issues in the callback
-    const isStreamingRef = useRef<boolean>(false);
-
-    // Keep the ref and state in sync
-    useEffect(() => {
-        isStreamingRef.current = isStreaming;
-    }, [isStreaming]);
 
     const [, createAblyTokenMutation] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
         mutation CreateAblyToken($input: CreateAblyTokenInput!) {
@@ -323,12 +312,6 @@ export const useAbly = (): UseAblyReturn => {
                             log('Updating partials with new parsed message:', 'debug');
                             // Update partials state with the new message
                             setPartials((prev) => [...prev, parsedMessage]);
-
-                            // Set streaming to true only when we receive the first partial
-                            if (!isStreamingRef.current) {
-                                log('Starting to stream partials...');
-                                setIsStreaming(true);
-                            }
                         }
 
                         // Parse any citations
@@ -372,8 +355,6 @@ export const useAbly = (): UseAblyReturn => {
                     // Stop streaming if this is the final partial
                     if (data.is_final) {
                         log('Received final partial:', 'debug');
-                        log('Stopping partials stream.');
-                        setIsStreaming(false);
                         onSetStatus(ChatSessionStatus.Active);
                     }
                 } catch (err) {
@@ -422,7 +403,6 @@ export const useAbly = (): UseAblyReturn => {
             requestAnimationFrame(() => {
                 setConfirmation(undefined);
                 setError(undefined);
-                setIsStreaming(false);
                 setPartials([]);
                 setTimeout(resolve, 0);
             });
@@ -433,7 +413,6 @@ export const useAbly = (): UseAblyReturn => {
         confirmation,
         createAblyRealtimeClient,
         error,
-        isStreaming,
         partials,
         reset,
         subscribeToChannel,
