@@ -4,9 +4,6 @@ import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/co
 import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Citation';
 import './markdown.css';
 
-// These fields cannot be rendered and should be parsed instead
-const CITATION_HIDDEN_FIELDS = ['marker'];
-
 interface MarkdownRendererProps {
     citations?: CitationType[];
     content: string;
@@ -63,9 +60,7 @@ const preparePartialMarkdown = (content: string, citations?: CitationType[]): st
         citations.forEach((c) => {
             // Convert to markdown-to-jsx compatible format
             const attrString = Object.entries(c)
-                .map(([key, value]) =>
-                    CITATION_HIDDEN_FIELDS.includes(key) || typeof value === 'object' ? null : `${key}="${value}"`
-                )
+                .map(([key, value]) => (typeof value === 'object' ? null : `${key}="${value}"`))
                 .filter((c) => c) // filter out nulls
                 .join(' ');
             const citation = `<citation ${attrString} />`;

@@ -7,11 +7,9 @@ interface CitationProps {
 }
 
 export const Citation = ({ citation }: CitationProps) => {
-    const { citations, onSelectSource } = useChatStore();
-    const { contentId, source, sourceId } = citation;
-    const citationIndex = (citations || []).findIndex((s) => s.contentId === contentId);
-    const number = citationIndex >= 0 ? citationIndex + 1 : null;
-    return number !== null ? (
+    const { onSelectSource } = useChatStore();
+    const { contentId, marker, source, sourceId } = citation;
+    return (
         <Fragment>
             &nbsp;
             <span
@@ -25,8 +23,8 @@ export const Citation = ({ citation }: CitationProps) => {
                 }
                 className="text-xs px-[3px] cursor-pointer hover:bg-indigo-800 py-0.5 font-bold antialiased text-white bg-indigo-600 rounded"
             >
-                C{number}
+                {marker.slice(1, -1).replace(/^./, (char) => char.toUpperCase())}
             </span>
         </Fragment>
-    ) : null;
+    );
 };
