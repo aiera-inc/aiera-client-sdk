@@ -10,6 +10,7 @@ import {
 import {
     AblyData,
     ChatSessionStatus,
+    ChatSource,
     Citation as RawCitation,
     ContentBlockType,
     CreateAblyTokenMutation,
@@ -92,7 +93,7 @@ const globalAblyState: GlobalAblyState = {
  */
 function normalizeCitation(rawCitation: RawCitation): Citation {
     const source = rawCitation.source;
-    const sourceParent = source?.parent;
+    const sourceParent = source?.parent as ChatSource;
     return {
         author: rawCitation.author || '',
         contentId: sourceParent?.sourceId || source.sourceId,
@@ -289,27 +290,27 @@ export const useAbly = (): UseAblyReturn => {
 
             const messageHandler = (message: Message) => {
                 try {
-                    log('Received message from Ably:', 'debug');
                     const data = message.data as AblyEncodedData;
+                    log('Received message from Ably:', 'debug', data);
 
                     // Decode the base64 string
                     let decodedData;
                     try {
                         decodedData = atob(data.content);
                     } catch (decodingError) {
-                        log(`Error handling message: ${String(decodingError)}`, 'error');
+                        log(`Error handling message: ${String(decodingError)}`, 'debug');
                         return; // ignore message if there's no encoded content
                     }
 
                     // Parse the JSON
                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
-                    log('Decoded Ably message:', 'debug');
+                    log('Decoded Ably message:', 'log', jsonObject);
 
                     // Process the response message and update partials
                     if (jsonObject.blocks) {
                         const parsedMessage = jsonObject.blocks?.[0]?.content;
                         if (parsedMessage) {
-                            log('Updating partials with new parsed message:', 'debug');
+                            log(`Updating partials with new parsed message: ${parsedMessage}`);
                             // Update partials state with the new message
                             setPartials((prev) => [...prev, parsedMessage]);
                         }

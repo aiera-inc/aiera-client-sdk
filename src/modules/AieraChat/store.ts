@@ -47,9 +47,12 @@ export const useChatStore = create<ChatState>((set) => ({
     onAddCitations: (citations: Citation[]) =>
         set((state) => {
             const existingCitations = state.citations || [];
-            const existingContentIds = new Set(existingCitations.map((c) => c.contentId));
+            const existingIds = new Set(existingCitations.map((c) => `${c.marker}${c.contentId || c.sourceId}`));
             return {
-                citations: [...existingCitations, ...citations.filter((c) => !existingContentIds.has(c.contentId))],
+                citations: [
+                    ...existingCitations,
+                    ...citations.filter((c) => !existingIds.has(`${c.marker}${c.contentId || c.sourceId}`)),
+                ],
             };
         }),
     onAddSource: (source: Source | Source[]) =>

@@ -128,25 +128,6 @@ function generateId(prefix = 'gen'): string {
 }
 
 /**
- * Extract all citations in all content blocks, in all response messages
- */
-function getAllCitations(blocks: TextBlock[]): Citation[] {
-    const allCitations: Citation[] = [];
-    // Extract citations from Text, List, and Table blocks
-    blocks.forEach((block) => {
-        if (block.citations) {
-            block.citations.forEach((citation) => {
-                allCitations.push(normalizeCitation(citation));
-            });
-        }
-    });
-    // Remove duplicates based on contentId
-    return allCitations.filter(
-        (citation, index, self) => index === self.findIndex((c) => c.contentId === citation.contentId)
-    );
-}
-
-/**
  * Map local sources to the generated ChatSource type for mutation inputs
  */
 function mapConfirmedSourcesToInput(sources: Source[]): ConfirmationChatSourceInput[] {
@@ -247,7 +228,7 @@ export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const { chatId, chatTitle, onSetTitle, setCitations } = useChatStore();
+    const { chatId, chatTitle, onSetTitle } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -474,12 +455,6 @@ export const useChatSession = ({
                         const blocks = Array.isArray(msg.blocks)
                             ? msg.blocks.map(normalizeContentBlock).filter(isNonNullable)
                             : [];
-
-                        // Keep track of all citations used in all chat messages to properly display their numbering
-                        const citations = getAllCitations(msg.blocks);
-                        if (citations && citations.length > 0) {
-                            setCitations(citations);
-                        }
 
                         normalizedMessages.push({
                             blocks,
