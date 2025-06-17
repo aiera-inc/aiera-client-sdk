@@ -144,15 +144,14 @@ function mapConfirmedSourcesToInput(sources: Source[]): ConfirmationChatSourceIn
  */
 function normalizeCitation(rawCitation: RawCitation): Citation {
     const source = rawCitation.source;
-    const sourceParent = source?.parent;
     return {
         author: rawCitation.author || '',
-        contentId: sourceParent?.sourceId || source.sourceId,
+        contentId: source.sourceId,
         date: rawCitation.date as string,
         marker: rawCitation.marker,
         meta: rawCitation.meta as object,
         source: source.name,
-        sourceId: source.sourceId,
+        sourceId: source.parent?.sourceId || source.sourceId,
         text: rawCitation.quote,
         url: rawCitation.url || undefined,
     };

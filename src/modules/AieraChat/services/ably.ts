@@ -23,6 +23,7 @@ import { log } from '@aiera/client-sdk/lib/utils';
 export const CHANNEL_PREFIX = 'user-chat';
 
 interface UseAblyReturn {
+    citations?: Citation[];
     confirmation?: ChatMessageSources;
     createAblyRealtimeClient: (sessionUserId?: string) => Promise<Realtime | null>;
     error?: string;
@@ -93,7 +94,7 @@ const globalAblyState: GlobalAblyState = {
  */
 function normalizeCitation(rawCitation: RawCitation): Citation {
     const source = rawCitation.source;
-    const sourceParent = source?.parent as ChatSource;
+    const sourceParent = source.parent as ChatSource;
     return {
         author: rawCitation.author || '',
         contentId: sourceParent?.sourceId || source.sourceId,
@@ -111,9 +112,10 @@ function normalizeCitation(rawCitation: RawCitation): Citation {
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
-    const { onAddCitations, onSetStatus } = useChatStore();
+    const { onSetStatus } = useChatStore();
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
+    const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
     const [partials, setPartials] = useState<string[]>([]);
 
     const [, createAblyTokenMutation] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
@@ -280,7 +282,6 @@ export const useAbly = (): UseAblyReturn => {
         }
 
         const channel = globalAblyState.client.channels.get(channelName);
-
         if (channel) {
             // Check if we're already subscribed to avoid duplicate subscriptions
             if (globalAblyState.subscribedChannels.has(channelName)) {
@@ -320,7 +321,18 @@ export const useAbly = (): UseAblyReturn => {
                         if (citations) {
                             const parsedCitations = citations.map(normalizeCitation);
                             if (parsedCitations) {
-                                onAddCitations(parsedCitations);
+                                setCitations((prev) => {
+                                    const existing = prev || [];
+                                    const existingIds = new Set(
+                                        existing.map((c) => `${c.marker}${c.contentId || c.sourceId}`)
+                                    );
+                                    return [
+                                        ...existing,
+                                        ...parsedCitations.filter(
+                                            (c) => !existingIds.has(`${c.marker}${c.contentId || c.sourceId}`)
+                                        ),
+                                    ];
+                                });
                             }
                         }
                     }
@@ -355,7 +367,7 @@ export const useAbly = (): UseAblyReturn => {
 
                     // Stop streaming if this is the final partial
                     if (data.is_final) {
-                        log('Received final partial:', 'debug');
+                        log('Received final partial:', 'log', data);
                         onSetStatus(ChatSessionStatus.Active);
                     }
                 } catch (err) {
@@ -411,6 +423,7 @@ export const useAbly = (): UseAblyReturn => {
     }, []);
 
     return {
+        citations,
         confirmation,
         createAblyRealtimeClient,
         error,

@@ -32,7 +32,6 @@ import { Prompt } from './Prompt';
 // import { SuggestedPrompts } from './SuggestedPrompts';
 import './styles.css';
 
-const STREAMING_STATUSES = [ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse];
 let idCounter = 0;
 
 export interface MessageListContext {
@@ -81,7 +80,7 @@ export function Messages({
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
+    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
     const channelName = useMemo(() => `${CHANNEL_PREFIX}:${chatId}`, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -161,7 +160,7 @@ export function Messages({
                     log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
                 );
         },
-        [confirmSourceConfirmation, onAddSource, partials, virtuosoRef.current?.data]
+        [confirmSourceConfirmation, onAddSource, partials, reset, virtuosoRef.current?.data]
     );
 
     const handleSubmit = useCallback(
@@ -222,7 +221,7 @@ export function Messages({
                     .finally(() => setSubmitting(false));
             }
         },
-        [chatId, createChatMessagePrompt, onSetStatus, onSubmit, partials, sources]
+        [chatId, createChatMessagePrompt, onSetStatus, onSubmit, partials, reset, sources]
     );
 
     const maybeClearVirtuoso = useCallback(
@@ -342,7 +341,7 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        if (partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
+        if (partials && partials.length > 0) {
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
             // If the latest message is the one currently streaming partials, then update its content
@@ -364,6 +363,7 @@ export function Messages({
                                     if (b.type === BlockType.TEXT) {
                                         return {
                                             ...b,
+                                            citations,
                                             content: b.content + latestPartial,
                                         };
                                     } else {
@@ -396,6 +396,7 @@ export function Messages({
                     type: ChatMessageType.RESPONSE,
                     blocks: [
                         {
+                            citations,
                             content: partials.join(' '),
                             id: 'initial-block',
                             type: BlockType.TEXT,
@@ -412,7 +413,7 @@ export function Messages({
                 });
             }
         }
-    }, [chatStatus, partials, virtuosoRef.current?.data]);
+    }, [citations, partials, virtuosoRef.current?.data]);
 
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
