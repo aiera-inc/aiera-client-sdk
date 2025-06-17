@@ -14,7 +14,6 @@ import {
     ChatSessionWithMessagesQuery,
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
-    Citation as RawCitation,
     ConfirmationChatSourceInput,
     ChatSourceType,
     ConfirmChatMessageSourceConfirmationMutation,
@@ -23,17 +22,14 @@ import {
     CreateChatMessagePromptMutationVariables,
     TextBlock,
 } from '@aiera/client-sdk/types/generated';
-import {
-    BlockType,
-    Citation,
-    ContentBlock,
-} from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import { BlockType, ContentBlock } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 import {
     CHAT_SESSION_QUERY,
     CONFIRM_SOURCE_CONFIRMATION_MUTATION,
     CREATE_CHAT_MESSAGE_MUTATION,
 } from '@aiera/client-sdk/modules/AieraChat/services/graphql';
 import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
+import { normalizeCitation } from '@aiera/client-sdk/modules/AieraChat/services/utils';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
 const MAX_POLLING_DURATION = 60 * 60 * 1000; // 1 hour in milliseconds
@@ -137,24 +133,6 @@ function mapConfirmedSourcesToInput(sources: Source[]): ConfirmationChatSourceIn
         sourceName: source.title,
         sourceType: source.targetType as ChatSourceType,
     }));
-}
-
-/**
- * Map raw citations from the server
- */
-function normalizeCitation(rawCitation: RawCitation): Citation {
-    const source = rawCitation.source;
-    return {
-        author: rawCitation.author || '',
-        contentId: source.sourceId,
-        date: rawCitation.date as string,
-        marker: rawCitation.marker,
-        meta: rawCitation.meta as object,
-        source: source.name,
-        sourceId: source.parent?.sourceId || source.sourceId,
-        text: rawCitation.quote,
-        url: rawCitation.url || undefined,
-    };
 }
 
 /**

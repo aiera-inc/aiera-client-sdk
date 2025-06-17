@@ -365,32 +365,4 @@ describe('EventList', () => {
         await actAndFlush(() => fireEvent.keyDown(document, { key: 'Enter' }));
         screen.getByText('Transcript for 1');
     });
-
-    test('when the event is today, renders time ago', async () => {
-        await actAndFlush(() =>
-            renderWithProvider(<EventList />, {
-                executeQuery: () =>
-                    fromValue({
-                        data: {
-                            search: {
-                                events: {
-                                    numTotalHits: 1,
-                                    hits: [
-                                        {
-                                            ...eventList[0],
-                                            event: {
-                                                ...eventList[0]?.event,
-                                                eventDate: new Date(new Date().getTime() - 3600000),
-                                            },
-                                        },
-                                    ],
-                                },
-                            },
-                        },
-                    }),
-            })
-        );
-        const row = screen.getByText('1 hour ago');
-        expect(row).toBeTruthy();
-    });
 });

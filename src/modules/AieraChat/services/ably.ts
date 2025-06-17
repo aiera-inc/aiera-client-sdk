@@ -10,7 +10,6 @@ import {
 import {
     AblyData,
     ChatSessionStatus,
-    ChatSource,
     Citation as RawCitation,
     ContentBlockType,
     CreateAblyTokenMutation,
@@ -19,6 +18,7 @@ import {
 import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { log } from '@aiera/client-sdk/lib/utils';
+import { normalizeCitation } from '@aiera/client-sdk/modules/AieraChat/services/utils';
 
 export const CHANNEL_PREFIX = 'user-chat';
 
@@ -88,25 +88,6 @@ const globalAblyState: GlobalAblyState = {
     hookInstances: 0,
     subscribedChannels: new Set<string>(),
 };
-
-/**
- * Map raw citations from the server
- */
-function normalizeCitation(rawCitation: RawCitation): Citation {
-    const source = rawCitation.source;
-    const sourceParent = source.parent as ChatSource;
-    return {
-        author: rawCitation.author || '',
-        contentId: sourceParent?.sourceId || source.sourceId,
-        date: rawCitation.date as string,
-        marker: rawCitation.marker,
-        meta: rawCitation.meta as object,
-        source: source.name,
-        sourceId: source.sourceId,
-        text: rawCitation.quote,
-        url: rawCitation.url || undefined,
-    };
-}
 
 /**
  * Hook for getting a chat session with messages, including data normalization and error handling
