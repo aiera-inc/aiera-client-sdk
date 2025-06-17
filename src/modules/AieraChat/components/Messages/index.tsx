@@ -64,6 +64,17 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
     );
 };
 
+// Sticky loading indicator with similar wrapper styles to the prompt input bar
+const LoadingFooter: VirtuosoMessageListProps<ChatMessage, MessageListContext>['Footer'] = () => {
+    return (
+        <div className="flex justify-center">
+            <div className="max-w-[50rem] w-full flex">
+                <MicroSparkles className="w-4 mb-3 ml-4 animate-bounce text-yellow-400" />
+            </div>
+        </div>
+    );
+};
+
 export function Messages({
     onOpenSources,
     onSubmit,
@@ -464,24 +475,27 @@ export function Messages({
                 ) : (
                     <VirtuosoMessageListLicense licenseKey={config.virtualListKey || ''}>
                         <VirtuosoMessageList<ChatMessage, MessageListContext>
+                            className="px-4 messagesScrollBars"
+                            computeItemKey={({ data }: { data: ChatMessage }) => data.id}
+                            initialData={messages}
+                            initialLocation={{ index: 'LAST', align: 'end' }}
                             key={chatId || 'new'}
                             ref={virtuosoRef}
-                            style={{ flex: 1 }}
-                            computeItemKey={({ data }: { data: ChatMessage }) => data.id}
-                            className="px-4 messagesScrollBars"
-                            initialLocation={{ index: 'LAST', align: 'end' }}
-                            initialData={messages}
                             shortSizeAlign="bottom-smooth"
-                            ItemContent={MessageFactory}
+                            style={{ flex: 1 }}
                             context={context}
                             // EmptyPlaceholder={SuggestedPrompts}
+                            Footer={
+                                ![ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse].includes(
+                                    chatStatus
+                                )
+                                    ? LoadingFooter
+                                    : undefined
+                            }
+                            ItemContent={MessageFactory}
                             StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
-                )}
-                {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
-                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
-                    <MicroSparkles className="w-4 my-3 mx-6 animate-bounce text-yellow-400" />
                 )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>

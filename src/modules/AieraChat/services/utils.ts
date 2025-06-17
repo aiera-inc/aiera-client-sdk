@@ -14,7 +14,7 @@ export function normalizeCitation(rawCitation: RawCitation): Citation {
         marker: rawCitation.marker,
         meta: rawCitation.meta as object,
         source: source.name,
-        sourceId: sourceParent.sourceId || source.sourceId,
+        sourceId: sourceParent ? sourceParent.sourceId : source.sourceId,
         text: rawCitation.quote,
         url: rawCitation.url || undefined,
     };
