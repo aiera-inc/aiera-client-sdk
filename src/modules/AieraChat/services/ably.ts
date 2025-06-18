@@ -10,7 +10,7 @@ import {
 import {
     AblyData,
     ChatSessionStatus,
-    Citation as RawCitation,
+    ChatSourceType,
     ContentBlockType,
     CreateAblyTokenMutation,
     CreateAblyTokenMutationVariables,
@@ -18,9 +18,31 @@ import {
 import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { log } from '@aiera/client-sdk/lib/utils';
-import { normalizeCitation } from '@aiera/client-sdk/modules/AieraChat/services/utils';
 
 export const CHANNEL_PREFIX = 'user-chat';
+
+interface PartialChatSource {
+    confirmed?: boolean;
+    id: string;
+    name: string;
+    parent?: {
+        confirmed?: boolean;
+        id: string;
+        name: string;
+        type: ChatSourceType;
+    };
+    type: ChatSourceType;
+}
+
+interface PartialCitation {
+    author?: string;
+    date?: string;
+    marker: string;
+    meta?: object;
+    quote: string;
+    source: PartialChatSource;
+    url?: string;
+}
 
 interface UseAblyReturn {
     citations?: Citation[];
@@ -34,7 +56,7 @@ interface UseAblyReturn {
 }
 
 type PartialTextBlock = {
-    citations?: RawCitation[];
+    citations?: PartialCitation[];
     content: string;
     type: ContentBlockType.Text;
 };
@@ -88,6 +110,25 @@ const globalAblyState: GlobalAblyState = {
     hookInstances: 0,
     subscribedChannels: new Set<string>(),
 };
+
+/**
+ * Map raw citations coming from Kafka
+ */
+export function normalizeCitation(rawCitation: PartialCitation): Citation {
+    const source = rawCitation.source;
+    const sourceParent = source.parent;
+    return {
+        author: rawCitation.author || '',
+        contentId: source.id,
+        date: rawCitation.date as string,
+        marker: rawCitation.marker,
+        meta: rawCitation.meta as object,
+        source: source.name,
+        sourceId: sourceParent ? sourceParent.id : source.id,
+        text: rawCitation.quote,
+        url: rawCitation.url || undefined,
+    };
+}
 
 /**
  * Hook for getting a chat session with messages, including data normalization and error handling
