@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
-import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 
 export interface Source {
     confirmed?: boolean;
@@ -17,7 +16,6 @@ export interface ChatState {
     chatStatus: ChatSessionStatus;
     chatTitle?: string;
     chatUserId?: string;
-    citations?: Citation[];
     hasChanges: boolean;
     onAddSource: (source: Source | Source[]) => void;
     onClearSources: () => void;
@@ -31,7 +29,6 @@ export interface ChatState {
     onSetUserId: (chatUserId?: string) => void;
     searchTerm?: string;
     selectedSource?: Source;
-    setCitations: (citations: Citation[]) => void;
     setHasChanges: (hasChanges: boolean) => void;
     sources: Source[];
 }
@@ -41,7 +38,6 @@ export const useChatStore = create<ChatState>((set) => ({
     chatStatus: ChatSessionStatus.Active,
     chatTitle: undefined,
     chatUserId: undefined,
-    citations: undefined,
     hasChanges: false,
     onAddSource: (source: Source | Source[]) =>
         set((state) => ({
@@ -54,7 +50,6 @@ export const useChatStore = create<ChatState>((set) => ({
             chatId: 'new',
             chatStatus: ChatSessionStatus.Active,
             chatTitle: undefined,
-            citations: undefined,
             hasChanges: false,
             searchTerm: undefined,
             sources: [],
@@ -75,7 +70,6 @@ export const useChatStore = create<ChatState>((set) => ({
     onSetUserId: (chatUserId?: string) => set({ chatUserId }),
     searchTerm: undefined,
     selectedSource: undefined,
-    setCitations: (citations: Citation[]) => set({ citations }),
     setHasChanges: (hasChanges: boolean) => set({ hasChanges }),
     sources: [],
 }));

@@ -1,16 +1,17 @@
 import React, { useMemo } from 'react';
 import { compiler, MarkdownToJSX } from 'markdown-to-jsx';
-import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
+import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Citation';
 import './markdown.css';
 
 interface MarkdownRendererProps {
-    content: string[];
+    citations?: CitationType[];
+    content: string;
 }
 
 // Function to handle unclosed markdown elements in partial content
-const preparePartialMarkdown = (content: string[]): string => {
-    // Join all content parts
-    let text = content.join('');
+const preparePartialMarkdown = (content: string, citations?: CitationType[]): string => {
+    let text = content;
 
     // Handle unclosed code blocks
     const codeBlockMatches = text.match(/```[a-zA-Z0-9]*\n[\s\S]*?(?:```|$)/g);
@@ -53,6 +54,20 @@ const preparePartialMarkdown = (content: string[]): string => {
         text += '_';
     }
 
+    // Convert inline citations to CustomCitation component using markers
+    // Important: process citations before links because they both use square-bracket notation
+    if (citations && citations.length > 0) {
+        citations.forEach((c) => {
+            // Convert to markdown-to-jsx compatible format
+            const attrString = Object.entries(c)
+                .map(([key, value]) => (typeof value === 'object' ? null : `${key}="${value}"`))
+                .filter((c) => c) // filter out nulls
+                .join(' ');
+            const citation = `<citation ${attrString} />`;
+            text = text.replace(c.marker, citation);
+        });
+    }
+
     // Handle unclosed links
     const linkMatches = text.match(/\[([^\]]+)(?:\]\([^)]*|\]$|\]\([^)]*$)/g);
     if (linkMatches) {
@@ -71,7 +86,22 @@ const preparePartialMarkdown = (content: string[]): string => {
 // Define type for component props to fix TypeScript errors
 type CustomComponentProps = {
     children: React.ReactNode;
-    [key: string]: any;
+    [key: string]: unknown;
+};
+
+// Custom Citation component that parses citation tags
+const CustomCitation = ({ author, contentId, date, marker, source, sourceId, text, url }: CitationType) => {
+    const citation: CitationType = {
+        author,
+        contentId,
+        date,
+        marker,
+        source,
+        sourceId,
+        text,
+        url,
+    };
+    return <Citation citation={citation} />;
 };
 
 // Custom component overrides for markdown-to-jsx
@@ -128,11 +158,12 @@ const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
     </th>
 );
 
-export function MarkdownRenderer({ content }: MarkdownRendererProps) {
-    const preparedMarkdown = useMemo(() => preparePartialMarkdown(content), [content]);
+export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) {
+    const preparedMarkdown = useMemo(() => preparePartialMarkdown(content, citations), [citations, content]);
 
     // Define overrides for markdown-to-jsx with proper types
     const overrides: MarkdownToJSX.Options['overrides'] = {
+        citation: CustomCitation,
         code: CustomCode,
         pre: CustomPre,
         a: CustomLink,
@@ -168,7 +199,7 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         p: {
             component: 'p',
             props: {
-                className: 'my-4 leading-relaxed',
+                className: 'leading-relaxed',
             },
         },
         ul: {
@@ -212,10 +243,5 @@ export function MarkdownRenderer({ content }: MarkdownRendererProps) {
         [preparedMarkdown, overrides]
     );
 
-    return (
-        <div className="prose dark:prose-invert max-w-none">
-            {markdownOutput}
-            <MicroSparkles className="w-4 mr-1.5 animate-bounce text-yellow-400" />
-        </div>
-    );
+    return <div className="prose dark:prose-invert max-w-none">{markdownOutput}</div>;
 }

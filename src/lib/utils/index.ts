@@ -60,11 +60,11 @@ function isProductionEnvironment(): boolean {
     return nodeEnv === 'production' || (apiUrl.includes('api.aiera.com') && !apiUrl.includes('api-dev'));
 }
 
-export function log(message: string, logLevel: LogLevel = 'log'): void {
+export function log(message: string, logLevel: LogLevel = 'log', data?: object): void {
     if (isProductionEnvironment()) {
         return;
     }
 
     const logMethod = console[logLevel] || console.log;
-    logMethod(message);
+    data ? logMethod(message, data) : logMethod(message);
 }

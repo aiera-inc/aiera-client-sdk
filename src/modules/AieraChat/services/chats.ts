@@ -38,6 +38,7 @@ export interface UseChatSessionsReturn {
     refresh: () => void;
     sessions: ChatSession[];
     updateSession: (input: { sessionId: string; sources?: Source[]; title?: string }) => Promise<void>;
+    updateSessionTitleLocally: (sessionId: string, title: string) => void;
 }
 
 function mapSourcesToInput(sources?: Source[] | null): ChatSourceInput[] | null {
@@ -104,6 +105,16 @@ export const useChatSessions = (): UseChatSessionsReturn => {
 
     const config = useConfig();
 
+    // Function to update session title in local state without API call
+    const updateSessionTitleLocally = useCallback(
+        (sessionId: string, title: string) => {
+            setSessions((prevSessions) =>
+                prevSessions.map((session) => (session.id === sessionId ? { ...session, title } : session))
+            );
+        },
+        [setSessions]
+    );
+
     const [_, clearSourcesChatMutation] = useMutation<
         ClearChatSessionSourcesMutation,
         ClearChatSessionSourcesMutationVariables
@@ -166,8 +177,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                         userId
                     }
                     sources {
+                        __typename
                         confirmed
                         name
+                        parent {
+                            __typename
+                            name
+                            sourceId
+                            type
+                        }
                         sourceId
                         type
                     }
@@ -237,8 +255,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     id
                     createdAt
                     sources {
+                        __typename
                         confirmed
                         name
+                        parent {
+                            __typename
+                            name
+                            sourceId
+                            type
+                        }
                         sourceId
                         type
                     }
@@ -288,8 +313,15 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     id
                     createdAt
                     sources {
+                        __typename
                         confirmed
                         name
+                        parent {
+                            __typename
+                            name
+                            sourceId
+                            type
+                        }
                         sourceId
                         type
                     }
@@ -351,5 +383,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
         refresh,
         sessions,
         updateSession,
+        updateSessionTitleLocally,
     };
 };

@@ -10,8 +10,8 @@ import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
 import { log } from '@aiera/client-sdk/lib/utils';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
-import { AnimatedLoadingStatus } from '@aiera/client-sdk/modules/AieraChat/components/AnimatedLoadingStatus';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
+import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
@@ -32,7 +32,6 @@ import { Prompt } from './Prompt';
 // import { SuggestedPrompts } from './SuggestedPrompts';
 import './styles.css';
 
-const STREAMING_STATUSES = [ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse];
 let idCounter = 0;
 
 export interface MessageListContext {
@@ -78,10 +77,10 @@ export function Messages({
     const [subscribedChannel, setSubscribedChannel] = useState<RealtimeChannel | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
     const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
-    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading, refresh } = useChatSession({
+    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { confirmation, isStreaming, partials, reset, subscribeToChannel } = useAbly();
+    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
     const channelName = useMemo(() => `${CHANNEL_PREFIX}:${chatId}`, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -150,11 +149,18 @@ export function Messages({
                         }
                     }
                 })
+                .then(() => {
+                    // Reset existing partials before new ones start streaming
+                    if (partials && partials.length > 0) {
+                        reset().catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
+                    }
+                })
+                .then(() => onSetStatus(ChatSessionStatus.GeneratingResponse))
                 .catch((err: Error) =>
                     log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
                 );
         },
-        [confirmSourceConfirmation, onAddSource, virtuosoRef.current?.data]
+        [confirmSourceConfirmation, onAddSource, partials, reset, virtuosoRef.current?.data]
     );
 
     const handleSubmit = useCallback(
@@ -183,6 +189,13 @@ export function Messages({
                             });
                         }
                     })
+                    .then(() =>
+                        onSetStatus(
+                            sources && sources.length > 0
+                                ? ChatSessionStatus.GeneratingResponse
+                                : ChatSessionStatus.FindingSources
+                        )
+                    )
                     .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
                     .finally(() => setSubmitting(false));
             } else {
@@ -196,11 +209,19 @@ export function Messages({
                                 : ChatSessionStatus.FindingSources
                         );
                     })
+                    .then(() => {
+                        // Reset existing partials before new ones start streaming
+                        if (partials && partials.length > 0) {
+                            reset().catch((err: Error) =>
+                                log(`Error resetting useAbly state: ${err.message}`, 'error')
+                            );
+                        }
+                    })
                     .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
                     .finally(() => setSubmitting(false));
             }
         },
-        [chatId, onSetStatus, setSubmitting, sources, virtuosoRef.current?.data]
+        [chatId, createChatMessagePrompt, onSetStatus, onSubmit, partials, reset, sources]
     );
 
     const maybeClearVirtuoso = useCallback(
@@ -215,53 +236,84 @@ export function Messages({
         [virtuosoRef.current?.data]
     );
 
-    const unsubscribe = useCallback(
-        (resetState = true) => {
-            if (subscribedChannel) {
-                subscribedChannel
-                    .detach()
-                    .then(() => subscribedChannel.unsubscribe())
-                    .catch((err) =>
-                        log(
-                            `Failed to detach from subscribed Ably channel ${subscribedChannel.name}: ${String(err)}`,
-                            'error'
-                        )
-                    )
-                    .finally(() => {
-                        if (resetState) {
-                            setSubscribedChannel(undefined);
-                        }
-                    });
-            }
-        },
-        [setSubscribedChannel, subscribedChannel]
-    );
-
     // Subscribe/unsubscribe to partial messages
     useEffect(() => {
-        if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== channelName)) {
-            // Unsubscribe from current channel without updating local state
-            // because we'll update it after subscribing to the new channel
-            unsubscribe(false);
-            try {
-                const channel = subscribeToChannel(channelName);
-                if (channel) {
-                    log(`Subscribing to Ably channel ${channelName}`);
-                    setSubscribedChannel(channel);
+        let isEffectActive = true;
+        let currentChannel: RealtimeChannel | undefined;
+
+        const handleChannelSwitch = async () => {
+            // If we're switching to a new chat or don't have a channel yet
+            if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== channelName)) {
+                // Store reference to the old channel
+                const oldChannel = subscribedChannel;
+
+                // Clear the subscribed channel state immediately to prevent race conditions
+                setSubscribedChannel(undefined);
+
+                // Detach from old channel if it exists
+                if (oldChannel) {
+                    log(`Detaching from old channel: ${oldChannel.name}`);
+                    await unsubscribeFromChannel(oldChannel.name);
                 }
-            } catch (e) {
-                log(`Failed to subscribe to Ably channel ${channelName}: ${String(e)}`, 'error');
+
+                // Only proceed if effect is still active
+                if (!isEffectActive) {
+                    log(`Effect no longer active, skipping channel subscription`);
+                    return;
+                }
+
+                // Small delay to ensure clean detachment
+                await new Promise((resolve) => setTimeout(resolve, 100));
+
+                // Only proceed if effect is still active after delay
+                if (!isEffectActive) {
+                    log(`Effect no longer active after delay, skipping channel subscription`);
+                    return;
+                }
+
+                // Now subscribe to the new channel
+                try {
+                    log(`Attempting to subscribe to channel: ${channelName}`);
+                    const channel = subscribeToChannel(channelName);
+                    if (channel && isEffectActive) {
+                        currentChannel = channel;
+                        log(`Successfully subscribed to Ably channel ${channelName}`);
+                        setSubscribedChannel(channel);
+                    }
+                } catch (e) {
+                    log(`Failed to subscribe to Ably channel ${channelName}: ${String(e)}`, 'error');
+                }
             }
-        }
-        if (chatId === 'new' && subscribedChannel) {
-            unsubscribe();
-        }
-        return () => {
-            if (subscribedChannel) {
-                unsubscribe();
+
+            // If switching to 'new' chat, unsubscribe from any existing channel
+            if (chatId === 'new' && subscribedChannel) {
+                const channelToUnsubscribe = subscribedChannel.name;
+                setSubscribedChannel(undefined);
+                await unsubscribeFromChannel(channelToUnsubscribe);
             }
         };
-    }, [channelName, chatId, setSubscribedChannel, subscribedChannel, subscribeToChannel, unsubscribe]);
+
+        void handleChannelSwitch();
+
+        // Cleanup function
+        return () => {
+            isEffectActive = false;
+
+            // Clean up the current channel if it exists
+            if (currentChannel) {
+                const channelName = currentChannel.name;
+                log(`Cleanup: detaching from channel ${channelName}`);
+                void unsubscribeFromChannel(channelName);
+            }
+
+            // Also clean up any subscribed channel that might still be set
+            if (subscribedChannel && subscribedChannel !== currentChannel) {
+                const channelName = subscribedChannel.name;
+                log(`Cleanup: detaching from subscribed channel ${channelName}`);
+                void unsubscribeFromChannel(channelName);
+            }
+        };
+    }, [channelName, chatId, subscribeToChannel, unsubscribeFromChannel]);
 
     // Append new messages to virtuoso as they're created
     useEffect(() => {
@@ -289,7 +341,7 @@ export function Messages({
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
-        if (partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
+        if (partials && partials.length > 0) {
             // Get the latest message in virtuoso
             const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
             // If the latest message is the one currently streaming partials, then update its content
@@ -309,10 +361,18 @@ export function Messages({
                                 ...latestMessage,
                                 blocks: latestMessage.blocks.map((b) => {
                                     if (b.type === BlockType.TEXT) {
-                                        return {
+                                        // Only update citations if new ones are available, otherwise preserve existing
+                                        const updatedBlock = {
                                             ...b,
-                                            content: [...b.content, latestPartial],
+                                            content: b.content + latestPartial,
                                         };
+
+                                        // Only update citations if we have new ones from Ably
+                                        if (citations && citations.length > 0) {
+                                            updatedBlock.citations = citations;
+                                        }
+
+                                        return updatedBlock;
                                     } else {
                                         return b;
                                     }
@@ -343,10 +403,11 @@ export function Messages({
                     type: ChatMessageType.RESPONSE,
                     blocks: [
                         {
+                            // Only include citations if they exist, don't set to undefined
+                            ...(citations && citations.length > 0 && { citations }),
+                            content: partials.join(' '),
                             id: 'initial-block',
                             type: BlockType.TEXT,
-                            content: partials,
-                            meta: { style: 'markdown' },
                         },
                     ],
                     sources: [], // partial messages won't have sources
@@ -360,37 +421,7 @@ export function Messages({
                 });
             }
         }
-    }, [chatStatus, partials, virtuosoRef.current?.data]);
-
-    // Manage the chat session status depending on streaming
-    useEffect(() => {
-        if (!isStreaming && STREAMING_STATUSES.includes(chatStatus)) {
-            log('Streaming stopped. Setting chat status to active.');
-            onSetStatus(ChatSessionStatus.Active);
-        }
-        if (isStreaming && !STREAMING_STATUSES.includes(chatStatus)) {
-            const newChatStatus =
-                sources && sources.length > 0 ? ChatSessionStatus.GeneratingResponse : ChatSessionStatus.FindingSources;
-            log(`Streaming started. Setting chat status to ${newChatStatus}.`);
-            onSetStatus(newChatStatus);
-        }
-    }, [chatStatus, isStreaming, onSetStatus, sources]);
-
-    useEffect(() => {
-        // If streaming has stopped
-        if (!isStreaming && partials && partials.length > 0 && STREAMING_STATUSES.includes(chatStatus)) {
-            log('Streaming stopped. Refreshing chat session with messages...');
-            // Reset partials and refetch the ChatSessionWithMessagesQuery query to get the final response
-            // and updated chat title
-            reset()
-                .then(() => {
-                    setTimeout(() => {
-                        refresh();
-                    }, 500);
-                })
-                .catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
-        }
-    }, [chatStatus, isStreaming, partials, refresh, reset]);
+    }, [citations, partials, virtuosoRef.current?.data]);
 
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
@@ -417,7 +448,9 @@ export function Messages({
     // Reset messages when the selected chat changes
     useEffect(() => {
         maybeClearVirtuoso('New chat detected. Clearing virtuoso items...');
-    }, [chatId]);
+        // Reset Ably state when switching chats
+        reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
+    }, [chatId, reset]);
 
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(
@@ -439,22 +472,29 @@ export function Messages({
                 ) : (
                     <VirtuosoMessageListLicense licenseKey={config.virtualListKey || ''}>
                         <VirtuosoMessageList<ChatMessage, MessageListContext>
+                            className="px-4 messagesScrollBars"
+                            computeItemKey={({ data }: { data: ChatMessage }) => data.id}
+                            initialData={messages}
+                            initialLocation={{ index: 'LAST', align: 'end' }}
                             key={chatId || 'new'}
                             ref={virtuosoRef}
-                            style={{ flex: 1 }}
-                            computeItemKey={({ data }: { data: ChatMessage }) => data.id}
-                            className="px-4 messagesScrollBars"
-                            initialLocation={{ index: 'LAST', align: 'end' }}
-                            initialData={messages}
                             shortSizeAlign="bottom-smooth"
-                            ItemContent={MessageFactory}
+                            style={{ flex: 1 }}
                             context={context}
                             // EmptyPlaceholder={SuggestedPrompts}
+                            ItemContent={MessageFactory}
                             StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
                 )}
-                {chatStatus === ChatSessionStatus.FindingSources && !confirmation && <AnimatedLoadingStatus />}
+                {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
+                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
+                    <div className="flex justify-center">
+                        <div className="max-w-[50rem] w-full flex">
+                            <MicroSparkles className="w-4 my-3 ml-4 animate-bounce text-yellow-400" />
+                        </div>
+                    </div>
+                )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
         </div>
