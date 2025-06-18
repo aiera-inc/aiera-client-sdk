@@ -110,7 +110,15 @@ export function AieraChat(): ReactElement {
         };
     }, [chatUserId, setClientReady]);
 
-    const { clearSources, createSession, deleteSession, isLoading, sessions, updateSession } = useChatSessions();
+    const {
+        clearSources,
+        createSession,
+        deleteSession,
+        isLoading,
+        sessions,
+        updateSession,
+        updateSessionTitleLocally,
+    } = useChatSessions();
     const [deletedSessionId, setDeletedSessionId] = useState<string | null>(null);
 
     const handleClearSources = useCallback(() => {
@@ -224,6 +232,9 @@ export function AieraChat(): ReactElement {
                                 if (data.title) {
                                     log(`Received title update: ${data.title}`);
                                     onSetTitle(data.title);
+
+                                    // Update the sessions list locally to reflect the new title in the Menu panel
+                                    updateSessionTitleLocally(chatId, data.title);
                                 }
                             } catch (err) {
                                 log(`Error handling title message: ${String(err)}`, 'error');
@@ -276,7 +287,7 @@ export function AieraChat(): ReactElement {
                 void unsubscribeFromChannel(channelName);
             }
         };
-    }, [titleChannelName, onSetTitle, subscribeToChannel, unsubscribeFromChannel]);
+    }, [titleChannelName, chatId, onSetTitle, subscribeToChannel, unsubscribeFromChannel, updateSessionTitleLocally]);
 
     const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
 
