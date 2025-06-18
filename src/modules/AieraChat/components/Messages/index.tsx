@@ -64,17 +64,6 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
     );
 };
 
-// Sticky loading indicator with similar wrapper styles to the prompt input bar
-const LoadingFooter: VirtuosoMessageListProps<ChatMessage, MessageListContext>['Footer'] = () => {
-    return (
-        <div className="flex justify-center">
-            <div className="max-w-[50rem] w-full flex">
-                <MicroSparkles className="w-4 mb-3 ml-4 animate-bounce text-yellow-400" />
-            </div>
-        </div>
-    );
-};
-
 export function Messages({
     onOpenSources,
     onSubmit,
@@ -372,11 +361,18 @@ export function Messages({
                                 ...latestMessage,
                                 blocks: latestMessage.blocks.map((b) => {
                                     if (b.type === BlockType.TEXT) {
-                                        return {
+                                        // Only update citations if new ones are available, otherwise preserve existing
+                                        const updatedBlock = {
                                             ...b,
-                                            citations,
                                             content: b.content + latestPartial,
                                         };
+
+                                        // Only update citations if we have new ones from Ably
+                                        if (citations && citations.length > 0) {
+                                            updatedBlock.citations = citations;
+                                        }
+
+                                        return updatedBlock;
                                     } else {
                                         return b;
                                     }
@@ -407,7 +403,8 @@ export function Messages({
                     type: ChatMessageType.RESPONSE,
                     blocks: [
                         {
-                            citations,
+                            // Only include citations if they exist, don't set to undefined
+                            ...(citations && citations.length > 0 && { citations }),
                             content: partials.join(' '),
                             id: 'initial-block',
                             type: BlockType.TEXT,
@@ -485,17 +482,18 @@ export function Messages({
                             style={{ flex: 1 }}
                             context={context}
                             // EmptyPlaceholder={SuggestedPrompts}
-                            Footer={
-                                ![ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse].includes(
-                                    chatStatus
-                                )
-                                    ? LoadingFooter
-                                    : undefined
-                            }
                             ItemContent={MessageFactory}
                             StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
+                )}
+                {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
+                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
+                    <div className="flex justify-center">
+                        <div className="max-w-[50rem] w-full flex">
+                            <MicroSparkles className="w-4 my-3 ml-4 animate-bounce text-yellow-400" />
+                        </div>
+                    </div>
                 )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>

@@ -56,7 +56,7 @@ const preparePartialMarkdown = (content: string, citations?: CitationType[]): st
 
     // Convert inline citations to CustomCitation component using markers
     // Important: process citations before links because they both use square-bracket notation
-    if (citations) {
+    if (citations && citations.length > 0) {
         citations.forEach((c) => {
             // Convert to markdown-to-jsx compatible format
             const attrString = Object.entries(c)

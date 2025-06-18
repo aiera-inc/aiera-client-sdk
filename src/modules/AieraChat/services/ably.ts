@@ -1,6 +1,6 @@
 import { Message, Realtime, RealtimeChannel } from 'ably';
 import gql from 'graphql-tag';
-import { useCallback, useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { useMutation } from 'urql';
 import {
     ChatMessageSources,
@@ -98,6 +98,7 @@ export const useAbly = (): UseAblyReturn => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
     const [partials, setPartials] = useState<string[]>([]);
+    const partialKeys = useRef<string[]>([]);
 
     const [, createAblyTokenMutation] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
         mutation CreateAblyToken($input: CreateAblyTokenInput!) {
@@ -288,6 +289,14 @@ export const useAbly = (): UseAblyReturn => {
                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
                     log('Decoded Ably message:', 'log', jsonObject);
 
+                    // Short-circuit if we already processed this message
+                    if (partialKeys.current.includes(jsonObject.created_at)) {
+                        log('Skipping duplicate partial message:', 'log', jsonObject);
+                        return;
+                    } else {
+                        partialKeys.current = [...partialKeys.current, jsonObject.created_at];
+                    }
+
                     // Process the response message and update partials
                     if (jsonObject.blocks) {
                         const parsedMessage = jsonObject.blocks?.[0]?.content;
@@ -300,6 +309,7 @@ export const useAbly = (): UseAblyReturn => {
                         // Parse any citations
                         const citations = jsonObject.blocks?.[0]?.citations;
                         if (citations) {
+                            log('Parsing citations:', 'log', citations);
                             const parsedCitations = citations.map(normalizeCitation);
                             if (parsedCitations) {
                                 setCitations((prev) => {
@@ -394,9 +404,11 @@ export const useAbly = (): UseAblyReturn => {
     const reset = useCallback((): Promise<void> => {
         return new Promise<void>((resolve) => {
             log('Resetting Ably state');
+            partialKeys.current = [];
             requestAnimationFrame(() => {
                 setConfirmation(undefined);
                 setError(undefined);
+                setCitations(undefined);
                 setPartials([]);
                 setTimeout(resolve, 0);
             });
