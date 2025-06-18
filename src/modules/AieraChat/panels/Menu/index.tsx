@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Button } from '@aiera/client-sdk/components/Button';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { MicroBars } from '@aiera/client-sdk/components/Svg/MicroBars';
@@ -24,9 +24,17 @@ export function Menu({
     const { chatId, onSelectChat, onNewChat } = useChatStore();
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
 
-    const filteredResults = sessions.filter(({ title }) =>
-        title ? title.toLowerCase().includes(searchTerm?.toLowerCase() || '') : false
-    );
+    const filteredResults = useMemo(() => {
+        const filtered = sessions.filter(({ title }) =>
+            title ? title.toLowerCase().includes(searchTerm?.toLowerCase() || '') : false
+        );
+        filtered.sort((a, b) => {
+            const dateA = new Date(a.updatedAt);
+            const dateB = new Date(b.updatedAt);
+            return dateB.getTime() - dateA.getTime();
+        });
+        return filtered;
+    }, [searchTerm, sessions]);
     return (
         <Panel Icon={MicroBars} className="mt-4 flex flex-col flex-1" onClose={onClose} title="All Chats" side="left">
             {({ onStartExit }) => (
