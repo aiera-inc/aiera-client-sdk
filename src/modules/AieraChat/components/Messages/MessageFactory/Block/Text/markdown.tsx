@@ -199,7 +199,7 @@ export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) 
         p: {
             component: 'p',
             props: {
-                className: 'leading-relaxed',
+                className: 'leading-relaxed pb-2.5',
             },
         },
         ul: {

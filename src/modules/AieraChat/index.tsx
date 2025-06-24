@@ -2,7 +2,7 @@ import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import * as Ably from 'ably';
 import { AblyProvider } from 'ably/react';
 import classNames from 'classnames';
-import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { log } from '@aiera/client-sdk/lib/utils';
@@ -45,8 +45,7 @@ export function AieraChat(): ReactElement {
     const [clientReady, setClientReady] = useState(false);
     const initializingRef = useRef(false);
     const clientRef = useRef<Ably.Realtime | null>(null);
-    const [subscribedTitleChannel, setSubscribedTitleChannel] = useState<RealtimeChannel | undefined>(undefined);
-    const titleChannelName = useMemo(() => (chatId !== 'new' ? `${CHANNEL_PREFIX}:${chatId}:title` : ''), [chatId]);
+    const subscribedTitleChannel = useRef<RealtimeChannel | null>(null);
 
     useEffect(() => {
         if (
@@ -187,17 +186,20 @@ export function AieraChat(): ReactElement {
 
     // Subscribe to title updates channel
     useEffect(() => {
-        let isEffectActive = true;
-        let currentChannel: RealtimeChannel | undefined;
+        let currentChannel: RealtimeChannel | null;
 
         const handleTitleChannelSwitch = async () => {
+            const titleChannelName = chatId !== 'new' ? `${CHANNEL_PREFIX}:${chatId}:title` : '';
             // If we're switching to a chat with a title channel
-            if (titleChannelName && (!subscribedTitleChannel || subscribedTitleChannel.name !== titleChannelName)) {
+            if (
+                titleChannelName &&
+                (!subscribedTitleChannel.current || subscribedTitleChannel.current.name !== titleChannelName)
+            ) {
                 // Store reference to the old channel
-                const oldChannel = subscribedTitleChannel;
+                const oldChannel = subscribedTitleChannel.current;
 
                 // Clear the subscribed channel state immediately
-                setSubscribedTitleChannel(undefined);
+                subscribedTitleChannel.current = null;
 
                 // Detach from old channel if it exists
                 if (oldChannel) {
@@ -205,24 +207,11 @@ export function AieraChat(): ReactElement {
                     await unsubscribeFromChannel(oldChannel.name);
                 }
 
-                // Only proceed if effect is still active
-                if (!isEffectActive) {
-                    return;
-                }
-
-                // Small delay to ensure clean detachment
-                await new Promise((resolve) => setTimeout(resolve, 100));
-
-                // Only proceed if effect is still active after delay
-                if (!isEffectActive) {
-                    return;
-                }
-
                 // Now subscribe to the new channel
                 try {
                     log(`Subscribing to title channel: ${titleChannelName}`);
                     const channel = subscribeToChannel(titleChannelName);
-                    if (channel && isEffectActive) {
+                    if (channel) {
                         currentChannel = channel;
 
                         // Set up custom message handler for title updates
@@ -252,7 +241,7 @@ export function AieraChat(): ReactElement {
                                 log(`Error attaching title channel ${titleChannelName}: ${String(e)}`, 'error')
                             );
 
-                        setSubscribedTitleChannel(channel);
+                        subscribedTitleChannel.current = channel;
                     }
                 } catch (e) {
                     log(`Failed to subscribe to title channel ${titleChannelName}: ${String(e)}`, 'error');
@@ -260,9 +249,9 @@ export function AieraChat(): ReactElement {
             }
 
             // If switching to 'new' chat or no title channel, unsubscribe from any existing channel
-            if (!titleChannelName && subscribedTitleChannel) {
-                const channelToUnsubscribe = subscribedTitleChannel.name;
-                setSubscribedTitleChannel(undefined);
+            if (!titleChannelName && subscribedTitleChannel.current) {
+                const channelToUnsubscribe = subscribedTitleChannel.current.name;
+                subscribedTitleChannel.current = null;
                 await unsubscribeFromChannel(channelToUnsubscribe);
             }
         };
@@ -271,8 +260,6 @@ export function AieraChat(): ReactElement {
 
         // Cleanup function
         return () => {
-            isEffectActive = false;
-
             // Clean up the current channel if it exists
             if (currentChannel) {
                 const channelName = currentChannel.name;
@@ -281,13 +268,13 @@ export function AieraChat(): ReactElement {
             }
 
             // Also clean up any subscribed channel that might still be set
-            if (subscribedTitleChannel && subscribedTitleChannel !== currentChannel) {
-                const channelName = subscribedTitleChannel.name;
+            if (subscribedTitleChannel.current && subscribedTitleChannel.current.name !== currentChannel?.name) {
+                const channelName = subscribedTitleChannel.current.name;
                 log(`Cleanup: detaching from subscribed title channel ${channelName}`);
                 void unsubscribeFromChannel(channelName);
             }
         };
-    }, [titleChannelName, chatId, onSetTitle, subscribeToChannel, unsubscribeFromChannel, updateSessionTitleLocally]);
+    }, [chatId, onSetTitle, subscribeToChannel, unsubscribeFromChannel, updateSessionTitleLocally]);
 
     const [animateTranscriptExit, setAnimateTranscriptExit] = useState(false);
 
