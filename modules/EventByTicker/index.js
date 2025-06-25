@@ -83976,217 +83976,31 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
   updatedAt
   userId
   blocks {
-    ... on ChartBlock {
-      __typename
-      type
-      data {
-        __typename
-        name
-        properties
-        value
-      }
-      chartMeta {
-        __typename
-        chartType
-        properties
-      }
-    }
-    ... on ImageBlock {
-      __typename
-      type
-      url
-      imageMeta {
-        __typename
-        altText
-        title
-        source
-        date
-      }
-    }
-    ... on ListBlock {
-      __typename
-      type
-      listMeta {
-        __typename
-        style
-      }
-      items {
-        ... on ChartBlock {
-          __typename
-          type
-          data {
-            __typename
-            name
-            properties
-            value
-          }
-          chartMeta {
-            __typename
-            chartType
-            properties
-          }
-        }
-        ... on ImageBlock {
-          __typename
-          type
-          url
-          imageMeta {
-            __typename
-            altText
-            title
-            source
-            date
-          }
-        }
-        ... on QuoteBlock {
-          __typename
-          type
-          quoteContent
-          quoteMeta {
-            __typename
-            author
-            source
-            date
-            url
-          }
-        }
-        ... on TableBlock {
-          __typename
-          headers
-          type
-          rows {
-            __typename
-            value
-            citation {
-              __typename
-              author
-              contentId
-              contentType
-              date
-              quote
-              source {
-                __typename
-                name
-                sourceId
-                type
-              }
-              url
-            }
-          }
-          tableMeta {
-            __typename
-            columnAlignment
-            columnMeta {
-              __typename
-              currency
-              unit
-              format
-              decimals
-            }
-          }
-        }
-        ... on TextBlock {
-          __typename
-          type
-          textContent {
-            __typename
-            value
-            citation {
-              __typename
-              author
-              contentId
-              contentType
-              date
-              quote
-              source {
-                __typename
-                name
-                sourceId
-                type
-              }
-              url
-            }
-          }
-          textMeta {
-            __typename
-            style
-          }
-        }
-      }
-    }
-    ... on QuoteBlock {
-      __typename
-      quoteContent
-      type
-      quoteMeta {
-        __typename
-        author
-        source
-        date
-        url
-      }
-    }
-    ... on TableBlock {
-      __typename
-      headers
-      type
-      rows {
-        __typename
-        value
-        citation {
-          __typename
-          author
-          contentId
-          contentType
-          date
-          quote
-          source {
-            __typename
-            name
-            sourceId
-            type
-          }
-          url
-        }
-      }
-      tableMeta {
-        __typename
-        columnAlignment
-        columnMeta {
-          __typename
-          currency
-          unit
-          format
-          decimals
-        }
-      }
-    }
     ... on TextBlock {
       __typename
-      type
-      textContent {
+      content
+      citations {
         __typename
-        value
-        citation {
+        author
+        date
+        marker
+        meta
+        quote
+        source {
           __typename
-          author
-          contentId
-          contentType
-          date
-          quote
-          source {
+          name
+          parent {
             __typename
             name
             sourceId
             type
           }
-          url
+          sourceId
+          type
         }
+        url
       }
-      textMeta {
-        __typename
-        style
-      }
+      type
     }
   }
 }
@@ -84207,6 +84021,12 @@ var ChatMessageSourceConfirmationFragmentFragmentDoc = lib_default`
     __typename
     confirmed
     name
+    parent {
+      __typename
+      name
+      sourceId
+      type
+    }
     sourceId
     type
   }
@@ -84353,8 +84173,15 @@ var CreateChatSessionDocument = lib_default`
         userId
       }
       sources {
+        __typename
         confirmed
         name
+        parent {
+          __typename
+          name
+          sourceId
+          type
+        }
         sourceId
         type
       }
@@ -84381,8 +84208,15 @@ var UpdateChatSessionDocument = lib_default`
       id
       createdAt
       sources {
+        __typename
         confirmed
         name
+        parent {
+          __typename
+          name
+          sourceId
+          type
+        }
         sourceId
         type
       }
@@ -84401,8 +84235,15 @@ var ChatSessionsDocument = lib_default`
     id
     createdAt
     sources {
+      __typename
       confirmed
       name
+      parent {
+        __typename
+        name
+        sourceId
+        type
+      }
       sourceId
       type
     }
@@ -84445,6 +84286,12 @@ var ChatSessionWithMessagesDocument = lib_default`
       __typename
       confirmed
       name
+      parent {
+        __typename
+        name
+        sourceId
+        type
+      }
       sourceId
       type
     }
@@ -84486,8 +84333,15 @@ var ChatSessionsRefetchDocument = lib_default`
     id
     createdAt
     sources {
+      __typename
       confirmed
       name
+      parent {
+        __typename
+        name
+        sourceId
+        type
+      }
       sourceId
       type
     }
@@ -85745,12 +85599,12 @@ function isProductionEnvironment() {
   const apiUrl = "undefined";
   return nodeEnv === "production" || apiUrl.includes("api.aiera.com") && !apiUrl.includes("api-dev");
 }
-function log(message, logLevel = "log") {
+function log(message, logLevel = "log", data) {
   if (isProductionEnvironment()) {
     return;
   }
   const logMethod = console[logLevel] || console.log;
-  logMethod(message);
+  data ? logMethod(message, data) : logMethod(message);
 }
 
 // src/lib/audio/index.tsx

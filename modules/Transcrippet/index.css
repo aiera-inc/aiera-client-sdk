@@ -404,9 +404,6 @@ video {
 .-bottom-0\.5 {
   bottom: -0.125rem;
 }
-.-bottom-\[6\.25rem\] {
-  bottom: -6.25rem;
-}
 .-right-0\.5 {
   right: -0.125rem;
 }
@@ -424,9 +421,6 @@ video {
 }
 .left-0 {
   left: 0px;
-}
-.left-0\.5 {
-  left: 0.125rem;
 }
 .left-1\.5 {
   left: 0.375rem;
@@ -460,9 +454,6 @@ video {
 }
 .top-0 {
   top: 0px;
-}
-.top-0\.5 {
-  top: 0.125rem;
 }
 .top-1\.5 {
   top: 0.375rem;
@@ -636,9 +627,6 @@ video {
 }
 .ml-4 {
   margin-left: 1rem;
-}
-.ml-6 {
-  margin-left: 1.5rem;
 }
 .ml-9 {
   margin-left: 2.25rem;
@@ -997,9 +985,6 @@ video {
 .max-w-\[50rem\] {
   max-width: 50rem;
 }
-.max-w-full {
-  max-width: 100%;
-}
 .max-w-none {
   max-width: none;
 }
@@ -1168,9 +1153,6 @@ video {
 }
 .overflow-y-auto {
   overflow-y: auto;
-}
-.overflow-y-hidden {
-  overflow-y: hidden;
 }
 .overflow-y-scroll {
   overflow-y: scroll;
@@ -1353,9 +1335,6 @@ video {
 .border-slate-300\/80 {
   border-color: rgb(203 213 225 / 0.8);
 }
-.border-slate-500\/30 {
-  border-color: rgb(100 116 139 / 0.3);
-}
 .border-white {
   --tw-border-opacity: 1;
   border-color: rgb(255 255 255 / var(--tw-border-opacity));
@@ -1529,9 +1508,6 @@ video {
 .bg-slate-400 {
   --tw-bg-opacity: 1;
   background-color: rgb(148 163 184 / var(--tw-bg-opacity));
-}
-.bg-slate-400\/10 {
-  background-color: rgb(148 163 184 / 0.1);
 }
 .bg-slate-50 {
   --tw-bg-opacity: 1;
@@ -1722,11 +1698,11 @@ video {
 .pb-1 {
   padding-bottom: 0.25rem;
 }
-.pb-10 {
-  padding-bottom: 2.5rem;
-}
 .pb-2 {
   padding-bottom: 0.5rem;
+}
+.pb-2\.5 {
+  padding-bottom: 0.625rem;
 }
 .pb-3 {
   padding-bottom: 0.75rem;
@@ -1739,6 +1715,9 @@ video {
 }
 .pb-6 {
   padding-bottom: 1.5rem;
+}
+.pb-8 {
+  padding-bottom: 2rem;
 }
 .pb-\[2px\] {
   padding-bottom: 2px;
@@ -1760,9 +1739,6 @@ video {
 }
 .pl-3 {
   padding-left: 0.75rem;
-}
-.pl-3\.5 {
-  padding-left: 0.875rem;
 }
 .pl-4 {
   padding-left: 1rem;
@@ -1844,15 +1820,6 @@ video {
     "Courier New",
     monospace;
 }
-.font-serif {
-  font-family:
-    ui-serif,
-    Georgia,
-    Cambria,
-    "Times New Roman",
-    Times,
-    serif;
-}
 .text-2xl {
   font-size: 1.25rem;
 }
@@ -1861,9 +1828,6 @@ video {
 }
 .text-4xl {
   font-size: 1.875rem;
-}
-.text-\[120px\] {
-  font-size: 120px;
 }
 .text-base {
   font-size: .875rem;
@@ -1882,9 +1846,6 @@ video {
 }
 .text-xxs {
   font-size: .5rem;
-}
-.font-black {
-  font-weight: 900;
 }
 .font-bold {
   font-weight: 700;
@@ -2075,9 +2036,6 @@ video {
 .text-slate-100 {
   --tw-text-opacity: 1;
   color: rgb(241 245 249 / var(--tw-text-opacity));
-}
-.text-slate-200\/60 {
-  color: rgb(226 232 240 / 0.6);
 }
 .text-slate-400 {
   --tw-text-opacity: 1;
