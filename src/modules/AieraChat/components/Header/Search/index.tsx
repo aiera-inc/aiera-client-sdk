@@ -36,6 +36,11 @@ function getSearchableContent(blocks: TextBlock[]): string {
         .trim();
 }
 
+interface SearchMatch {
+    messageIndex: number;
+    matchOffset: number;
+}
+
 export function Search({
     onChangeTitle,
     virtuosoRef,
@@ -45,8 +50,8 @@ export function Search({
 }) {
     const { chatId, chatTitle, onSetTitle, searchTerm, onSetSearchTerm } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
-    const [matches, setMatches] = useState<number[]>([]);
-    const [matchIndex, setMatchIndex] = useState(1);
+    const [matches, setMatches] = useState<SearchMatch[]>([]);
+    const [matchIndex, setMatchIndex] = useState(0);
     const [_, setInFocus] = useState(false);
 
     // Debounce calling the mutation with each change
@@ -82,24 +87,41 @@ export function Search({
         (override?: string) => {
             const term = override || searchTerm;
             const messages = virtuosoRef.current?.data.get();
-            if (!messages) return;
-            const matchingIndexes = messages.reduce<number[]>((acc, message, index) => {
+            if (!messages || !term) {
+                setMatches([]);
+                setMatchIndex(0);
+                return;
+            }
+
+            const allMatches: SearchMatch[] = [];
+            const searchRegex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+
+            messages.forEach((message, messageIndex) => {
                 let textContent = '';
                 if (message.type === ChatMessageType.RESPONSE) {
-                    textContent = getSearchableContent(message.blocks).toLowerCase();
+                    textContent = getSearchableContent(message.blocks);
                 } else if (message.type === ChatMessageType.PROMPT) {
                     textContent = message.prompt;
                 }
-                if (term && textContent.includes(term)) {
-                    acc.push(index);
+
+                let match;
+                while ((match = searchRegex.exec(textContent)) !== null) {
+                    allMatches.push({
+                        messageIndex,
+                        matchOffset: match.index,
+                    });
                 }
-                return acc;
-            }, []);
+                searchRegex.lastIndex = 0;
+            });
 
             setMatchIndex(0);
-            setMatches(matchingIndexes);
-            if (matchingIndexes.length > 0 && matchingIndexes[0]) {
-                virtuosoRef.current?.scrollIntoView({ index: matchingIndexes[0], behavior: 'smooth', align: 'center' });
+            setMatches(allMatches);
+            if (allMatches.length > 0 && allMatches[0]) {
+                virtuosoRef.current?.scrollIntoView({
+                    index: allMatches[0].messageIndex,
+                    behavior: 'smooth',
+                    align: 'center',
+                });
             }
         },
         [virtuosoRef, searchTerm]
@@ -110,39 +132,40 @@ export function Search({
             onSetSearchTerm(term);
             onSearchMatches(term);
         },
-        [onSetSearchTerm]
+        [onSetSearchTerm, onSearchMatches]
     );
 
     const onNextMatch = useCallback(() => {
-        if (matchIndex + 1 < matches.length) {
-            setMatchIndex((pv) => pv + 1);
-            const nextIndex = matches[matchIndex + 1];
-            if (nextIndex) {
-                virtuosoRef.current?.scrollIntoView({ index: nextIndex, behavior: 'smooth', align: 'center' });
-            }
-        } else {
-            setMatchIndex(0);
-            if (matches[0]) {
-                virtuosoRef.current?.scrollIntoView({ index: matches[0], behavior: 'smooth', align: 'center' });
-            }
+        if (matches.length === 0) return;
+
+        const nextIndex = (matchIndex + 1) % matches.length;
+        setMatchIndex(nextIndex);
+
+        const nextMatch = matches[nextIndex];
+        if (nextMatch) {
+            virtuosoRef.current?.scrollIntoView({
+                index: nextMatch.messageIndex,
+                behavior: 'smooth',
+                align: 'center',
+            });
         }
-    }, [matchIndex, matches]);
+    }, [matchIndex, matches, virtuosoRef]);
 
     const onPrevMatch = useCallback(() => {
-        if (matchIndex - 1 >= 0) {
-            setMatchIndex((pv) => pv - 1);
-            const nextIndex = matches[matchIndex - 1];
-            if (nextIndex) {
-                virtuosoRef.current?.scrollIntoView({ index: nextIndex, behavior: 'smooth', align: 'center' });
-            }
-        } else {
-            setMatchIndex(matches.length - 1);
-            const prevIndex = matches[matches.length - 1];
-            if (prevIndex) {
-                virtuosoRef.current?.scrollIntoView({ index: prevIndex, behavior: 'smooth', align: 'center' });
-            }
+        if (matches.length === 0) return;
+
+        const prevIndex = matchIndex === 0 ? matches.length - 1 : matchIndex - 1;
+        setMatchIndex(prevIndex);
+
+        const prevMatch = matches[prevIndex];
+        if (prevMatch) {
+            virtuosoRef.current?.scrollIntoView({
+                index: prevMatch.messageIndex,
+                behavior: 'smooth',
+                align: 'center',
+            });
         }
-    }, [matchIndex, matches]);
+    }, [matchIndex, matches, virtuosoRef]);
 
     // Close search when starting new chat
     useEffect(() => {
