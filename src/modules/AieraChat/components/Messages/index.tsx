@@ -81,7 +81,6 @@ export function Messages({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
     const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
-    const channelName = useMemo(() => `${CHANNEL_PREFIX}:${chatId}`, [chatId]);
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -238,8 +237,8 @@ export function Messages({
 
     // Subscribe/unsubscribe to partial messages
     useEffect(() => {
-        let isEffectActive = true;
-        let currentChannel: RealtimeChannel | undefined;
+        const channelName = `${CHANNEL_PREFIX}:${chatId}`;
+        let currentChannel: RealtimeChannel | null;
 
         const handleChannelSwitch = async () => {
             // If we're switching to a new chat or don't have a channel yet
@@ -256,26 +255,11 @@ export function Messages({
                     await unsubscribeFromChannel(oldChannel.name);
                 }
 
-                // Only proceed if effect is still active
-                if (!isEffectActive) {
-                    log(`Effect no longer active, skipping channel subscription`);
-                    return;
-                }
-
-                // Small delay to ensure clean detachment
-                await new Promise((resolve) => setTimeout(resolve, 100));
-
-                // Only proceed if effect is still active after delay
-                if (!isEffectActive) {
-                    log(`Effect no longer active after delay, skipping channel subscription`);
-                    return;
-                }
-
                 // Now subscribe to the new channel
                 try {
                     log(`Attempting to subscribe to channel: ${channelName}`);
                     const channel = subscribeToChannel(channelName);
-                    if (channel && isEffectActive) {
+                    if (channel) {
                         currentChannel = channel;
                         log(`Successfully subscribed to Ably channel ${channelName}`);
                         setSubscribedChannel(channel);
@@ -297,8 +281,6 @@ export function Messages({
 
         // Cleanup function
         return () => {
-            isEffectActive = false;
-
             // Clean up the current channel if it exists
             if (currentChannel) {
                 const channelName = currentChannel.name;
@@ -313,7 +295,7 @@ export function Messages({
                 void unsubscribeFromChannel(channelName);
             }
         };
-    }, [channelName, chatId, subscribeToChannel, unsubscribeFromChannel]);
+    }, [chatId, subscribeToChannel, unsubscribeFromChannel]);
 
     // Append new messages to virtuoso as they're created
     useEffect(() => {
