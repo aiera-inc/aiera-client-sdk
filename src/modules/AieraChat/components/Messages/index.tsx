@@ -9,7 +9,7 @@ import {
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
 import { log } from '@aiera/client-sdk/lib/utils';
-import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { useConfig } from '@aiera/client-sdk/lib/config';
@@ -74,13 +74,13 @@ export function Messages({
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
-    const [subscribedChannel, setSubscribedChannel] = useState<RealtimeChannel | undefined>(undefined);
     const [submitting, setSubmitting] = useState<boolean>(false);
     const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
     const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
+    const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
     const onReRun = useCallback((ordinalId: string) => {
         const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
@@ -242,12 +242,12 @@ export function Messages({
 
         const handleChannelSwitch = async () => {
             // If we're switching to a new chat or don't have a channel yet
-            if (chatId !== 'new' && (!subscribedChannel || subscribedChannel.name !== channelName)) {
+            if (chatId !== 'new' && (!subscribedChannel.current || subscribedChannel.current.name !== channelName)) {
                 // Store reference to the old channel
-                const oldChannel = subscribedChannel;
+                const oldChannel = subscribedChannel.current;
 
                 // Clear the subscribed channel state immediately to prevent race conditions
-                setSubscribedChannel(undefined);
+                subscribedChannel.current = null;
 
                 // Detach from old channel if it exists
                 if (oldChannel) {
@@ -262,7 +262,7 @@ export function Messages({
                     if (channel) {
                         currentChannel = channel;
                         log(`Successfully subscribed to Ably channel ${channelName}`);
-                        setSubscribedChannel(channel);
+                        subscribedChannel.current = channel;
                     }
                 } catch (e) {
                     log(`Failed to subscribe to Ably channel ${channelName}: ${String(e)}`, 'error');
@@ -270,9 +270,9 @@ export function Messages({
             }
 
             // If switching to 'new' chat, unsubscribe from any existing channel
-            if (chatId === 'new' && subscribedChannel) {
-                const channelToUnsubscribe = subscribedChannel.name;
-                setSubscribedChannel(undefined);
+            if (chatId === 'new' && subscribedChannel.current) {
+                const channelToUnsubscribe = subscribedChannel.current.name;
+                subscribedChannel.current = null;
                 await unsubscribeFromChannel(channelToUnsubscribe);
             }
         };
@@ -289,8 +289,8 @@ export function Messages({
             }
 
             // Also clean up any subscribed channel that might still be set
-            if (subscribedChannel && subscribedChannel !== currentChannel) {
-                const channelName = subscribedChannel.name;
+            if (subscribedChannel.current && subscribedChannel.current.name !== currentChannel?.name) {
+                const channelName = subscribedChannel.current.name;
                 log(`Cleanup: detaching from subscribed channel ${channelName}`);
                 void unsubscribeFromChannel(channelName);
             }
