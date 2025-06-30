@@ -1,11 +1,21 @@
-import React, { useCallback } from 'react';
 import { copyToClipboard, log } from '@aiera/client-sdk/lib/utils';
-import { ChatMessageResponse, ChatMessageStatus } from '../../../../services/messages';
+import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
+import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import React, { useCallback } from 'react';
+import { ChatMessageResponse } from '../../../../services/messages';
 import { Block } from '../Block';
-import { Loading } from '../Loading';
 import { Footer } from './Footer';
 
-export const MessageResponse = ({ data, onReRun }: { onReRun: (k: string) => void; data: ChatMessageResponse }) => {
+export const MessageResponse = ({
+    data,
+    onReRun,
+    isLastItem,
+}: {
+    onReRun: (k: string) => void;
+    data: ChatMessageResponse;
+    isLastItem: boolean;
+}) => {
+    const { chatStatus } = useChatStore();
     const handleCopy = useCallback(() => {
         if (!data.blocks || data.blocks.length === 0) return;
 
@@ -24,16 +34,14 @@ export const MessageResponse = ({ data, onReRun }: { onReRun: (k: string) => voi
         }
     }, [data]);
 
-    return data.status === ChatMessageStatus.PENDING || data.status === ChatMessageStatus.QUEUED ? (
-        <Loading>Thinking...</Loading>
-    ) : (
-        <div className="pb-8 flex flex-col">
+    return (
+        <div className="flex flex-col">
             <div className="flex flex-col px-4 pb-2">
                 {data.blocks?.map((block, index) => (
                     <Block {...block} key={index} />
                 ))}
             </div>
-            {data.status !== ChatMessageStatus.STREAMING && (
+            {!(chatStatus !== ChatSessionStatus.Active && isLastItem) && (
                 <Footer data={data} onCopy={handleCopy} onReRun={onReRun} />
             )}
         </div>

@@ -11,6 +11,7 @@ import { SourcesResponse } from './SourcesResponse';
 export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListContext>['ItemContent'] = ({
     data,
     context,
+    nextData,
 }) => (
     <div className="flex flex-col max-w-[50rem] w-full m-auto">
         {match(data)
@@ -19,7 +20,7 @@ export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListCo
                 <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
             ))
             .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
-                <MessageResponse data={responseData} onReRun={context.onReRun} />
+                <MessageResponse data={responseData} onReRun={context.onReRun} isLastItem={!nextData} />
             ))
             .exhaustive()}
     </div>

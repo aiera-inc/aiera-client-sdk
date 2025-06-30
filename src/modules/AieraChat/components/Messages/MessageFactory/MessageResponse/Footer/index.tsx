@@ -86,7 +86,7 @@ export const Footer = ({
 
     return (
         <>
-            <div className="flex items-center px-3">
+            <div className="flex items-center px-3 pb-8">
                 {showCopy && (
                     <IconButton
                         hintAnchor="top-left"

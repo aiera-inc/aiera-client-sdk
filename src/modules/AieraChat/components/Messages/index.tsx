@@ -1,21 +1,20 @@
+import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { log } from '@aiera/client-sdk/lib/utils';
+import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
+import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
+import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import {
-    useCurrentlyRenderedData,
-    useVirtuosoMethods,
     VirtuosoMessageList,
     VirtuosoMessageListLicense,
     VirtuosoMessageListMethods,
     VirtuosoMessageListProps,
+    useCurrentlyRenderedData,
+    useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
-import { log } from '@aiera/client-sdk/lib/utils';
 import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
-import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
-import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
-import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import {
     ChatMessage,
     ChatMessagePrompt,
@@ -30,6 +29,7 @@ import { BlockType } from './MessageFactory/Block';
 import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { Prompt } from './Prompt';
 // import { SuggestedPrompts } from './SuggestedPrompts';
+import { Loading } from './MessageFactory/Loading';
 import './styles.css';
 
 let idCounter = 0;
@@ -470,12 +470,7 @@ export function Messages({
                     </VirtuosoMessageListLicense>
                 )}
                 {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
-                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
-                    <div className="flex justify-center mx-10 my-3">
-                        <MicroSparkles className="w-4 animate-bounce text-yellow-400" />
-                        <p className="text-sm ml-2">Thinking...</p>
-                    </div>
-                )}
+                    chatStatus === ChatSessionStatus.GeneratingResponse) && <Loading>Thinking...</Loading>}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
         </div>
