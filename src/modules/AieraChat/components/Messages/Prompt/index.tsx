@@ -27,6 +27,34 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
     }, []);
 
     const handleInput = useCallback(() => {
+        if (inputRef.current) {
+            // Store cursor position
+            const selection = window.getSelection();
+            let cursorPosition = 0;
+            if (selection && selection.rangeCount > 0) {
+                const range = selection.getRangeAt(0);
+                cursorPosition = range.startOffset;
+            }
+
+            // Get plain text content and normalize it
+            const plainText = inputRef.current.textContent || '';
+
+            // Only update if content has HTML or if textContent differs from innerHTML
+            if (inputRef.current.innerHTML !== plainText) {
+                inputRef.current.textContent = plainText;
+
+                // Restore cursor position
+                if (selection && inputRef.current.firstChild) {
+                    const range = document.createRange();
+                    const textNode = inputRef.current.firstChild;
+                    const maxOffset = textNode.textContent?.length || 0;
+                    range.setStart(textNode, Math.min(cursorPosition, maxOffset));
+                    range.setEnd(textNode, Math.min(cursorPosition, maxOffset));
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+                }
+            }
+        }
         checkEmpty();
     }, [checkEmpty]);
 
