@@ -471,10 +471,9 @@ export function Messages({
                 )}
                 {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
                     chatStatus === ChatSessionStatus.GeneratingResponse) && (
-                    <div className="flex justify-center">
-                        <div className="max-w-[50rem] w-full flex">
-                            <MicroSparkles className="w-4 my-3 ml-4 animate-bounce text-yellow-400" />
-                        </div>
+                    <div className="flex justify-center mx-10 my-3">
+                        <MicroSparkles className="w-4 animate-bounce text-yellow-400" />
+                        <p className="text-sm ml-2">Thinking...</p>
                     </div>
                 )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
