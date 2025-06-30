@@ -1,12 +1,12 @@
 import { MicroArrowUp } from '@aiera/client-sdk/components/Svg/MicroArrowUp';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
+import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
 import { MicroFolderOpen } from '../../../../../components/Svg/MicroFolderOpen';
 import { useChatStore } from '../../../store';
 import { Hint } from '../../Hint';
 import './styles.css';
-import { ChatSessionStatus } from '@aiera/client-sdk/types';
 
 interface PromptProps {
     onOpenSources: () => void;
@@ -19,6 +19,8 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
     const [isEmpty, setIsEmpty] = useState<boolean>(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
 
+    // Disable submission if submitting or if chat is in a non-active state
+    const isDisabled = submitting || chatStatus !== ChatSessionStatus.Active;
     const checkEmpty = useCallback(() => {
         if (inputRef.current) {
             const content = inputRef.current.textContent || '';
@@ -59,25 +61,27 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
     }, [checkEmpty]);
 
     const handleSubmit = useCallback(() => {
-        if (inputRef.current) {
-            const promptText = inputRef.current.innerText;
-            if (promptText && promptText.length > 0) {
-                onSubmit(promptText);
-                inputRef.current.textContent = '';
-                setTimeout(checkEmpty);
-            }
+        if (isDisabled || !inputRef.current) return;
+
+        const promptText = inputRef.current.innerText;
+        if (promptText && promptText.length > 0) {
+            onSubmit(promptText);
+            inputRef.current.textContent = '';
+            setTimeout(checkEmpty);
         }
-    }, [onSubmit, sources.length, checkEmpty]);
+    }, [isDisabled, onSubmit, checkEmpty]);
 
     const handleKeyDown = useCallback(
         (e: KeyboardEvent<HTMLParagraphElement>) => {
             checkEmpty();
             if (e.code === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
-                handleSubmit();
+                if (!isDisabled) {
+                    handleSubmit();
+                }
             }
         },
-        [checkEmpty, handleSubmit]
+        [checkEmpty, handleSubmit, isDisabled]
     );
 
     // Autofocus
@@ -142,13 +146,16 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
                 />
             </button>
             <button
-                disabled={submitting}
+                disabled={isDisabled}
                 onClick={handleSubmit}
                 className={classNames(
                     'h-[1.875rem] self-end mb-1 mr-[5px] w-[1.875rem] transition-all',
-                    'bg-blue-600 rounded-xl flex-shrink-0 flex items-center justify-center',
-                    'cursor-pointer hover:bg-blue-700 active:bg-blue-800 active:scale-90',
-                    'relative hintTarget'
+                    'rounded-xl flex-shrink-0 flex items-center justify-center',
+                    'relative hintTarget',
+                    {
+                        'bg-blue-600 cursor-pointer hover:bg-blue-700 active:bg-blue-800 active:scale-90': !isDisabled,
+                        'bg-gray-400 cursor-not-allowed': isDisabled,
+                    }
                 )}
             >
                 <MicroArrowUp className="w-4 text-white" />
