@@ -41,7 +41,7 @@ export const MessageResponse = ({
                     <Block {...block} key={index} />
                 ))}
             </div>
-            {!(chatStatus !== ChatSessionStatus.Active && isLastItem) && (
+            {(chatStatus === ChatSessionStatus.Active || !isLastItem) && (
                 <Footer data={data} onCopy={handleCopy} onReRun={onReRun} />
             )}
         </div>
