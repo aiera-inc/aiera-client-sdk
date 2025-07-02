@@ -6,8 +6,8 @@ export function SearchableText({ text }: { text: string }) {
     const { searchTerm, currentSearchMatch } = useChatStore();
     const searchContext = useSearchContext();
     const matchIndicesRef = useRef<number[]>([]);
-    const lastTextRef = useRef(text);
-    const lastSearchTermRef = useRef(searchTerm);
+    const lastTextRef = useRef<string>(text);
+    const lastSearchTermRef = useRef<string | undefined>(searchTerm);
 
     const processedText = useMemo(() => {
         if (!searchTerm || !searchContext) return text;
