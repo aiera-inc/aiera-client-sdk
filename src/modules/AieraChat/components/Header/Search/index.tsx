@@ -8,33 +8,6 @@ import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import { useChatStore } from '../../../store';
 import { IconButton } from '../../IconButton';
 import { ChatMessage, ChatMessageType } from '../../../services/messages';
-import { TextBlock } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Text';
-
-/**
- * Extracts searchable text content from an array of content blocks
- * @param blocks Array of content blocks to extract text from
- * @returns A single string containing all searchable text content
- */
-function getSearchableContent(blocks: TextBlock[]): string {
-    // Process all blocks and join with spaces
-    return blocks
-        .map((block) => {
-            // Get the main content
-            let content = block.content;
-
-            // Add citation text if available
-            if (block.citations) {
-                const citationText = block.citations
-                    .map((citation) => `${citation.text} ${citation.author || ''}`)
-                    .join(' ');
-                content += ' ' + citationText;
-            }
-
-            return content;
-        })
-        .join(' ')
-        .trim();
-}
 
 interface SearchMatch {
     messageIndex: number;
@@ -99,7 +72,7 @@ export function Search({
             messages.forEach((message, messageIndex) => {
                 let textContent = '';
                 if (message.type === ChatMessageType.RESPONSE) {
-                    textContent = getSearchableContent(message.blocks);
+                    textContent = message.blocks.map((b) => b.content).join(' ');
                 } else if (message.type === ChatMessageType.PROMPT) {
                     textContent = message.prompt;
                 }
