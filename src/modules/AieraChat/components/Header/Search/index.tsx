@@ -12,6 +12,7 @@ import { ChatMessage, ChatMessageType } from '../../../services/messages';
 interface SearchMatch {
     messageIndex: number;
     matchOffset: number;
+    matchIndexInMessage: number;
 }
 
 export function Search({
@@ -21,7 +22,7 @@ export function Search({
     onChangeTitle: (title: string) => void;
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
-    const { chatId, chatTitle, onSetTitle, searchTerm, onSetSearchTerm } = useChatStore();
+    const { chatId, chatTitle, onSetTitle, searchTerm, onSetSearchTerm, onSetCurrentSearchMatch } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
     const [matches, setMatches] = useState<SearchMatch[]>([]);
     const [matchIndex, setMatchIndex] = useState(0);
@@ -45,7 +46,8 @@ export function Search({
     const onCloseSearch = useCallback(() => {
         setShowSearch(false);
         onSetSearchTerm('');
-    }, [onSetSearchTerm]);
+        onSetCurrentSearchMatch(undefined);
+    }, [onSetSearchTerm, onSetCurrentSearchMatch]);
     const onKeyDown = useCallback(
         (e: KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Escape') {
@@ -78,10 +80,12 @@ export function Search({
                 }
 
                 let match;
+                let matchIndexInMessage = 0;
                 while ((match = searchRegex.exec(textContent)) !== null) {
                     allMatches.push({
                         messageIndex,
                         matchOffset: match.index,
+                        matchIndexInMessage: matchIndexInMessage++,
                     });
                 }
                 searchRegex.lastIndex = 0;
@@ -90,14 +94,20 @@ export function Search({
             setMatchIndex(0);
             setMatches(allMatches);
             if (allMatches.length > 0 && allMatches[0]) {
+                onSetCurrentSearchMatch({
+                    messageIndex: allMatches[0].messageIndex,
+                    matchIndex: allMatches[0].matchIndexInMessage,
+                });
                 virtuosoRef.current?.scrollIntoView({
                     index: allMatches[0].messageIndex,
                     behavior: 'smooth',
                     align: 'center',
                 });
+            } else {
+                onSetCurrentSearchMatch(undefined);
             }
         },
-        [virtuosoRef, searchTerm]
+        [virtuosoRef, searchTerm, onSetCurrentSearchMatch]
     );
     const onChange = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
@@ -116,13 +126,17 @@ export function Search({
 
         const nextMatch = matches[nextIndex];
         if (nextMatch) {
+            onSetCurrentSearchMatch({
+                messageIndex: nextMatch.messageIndex,
+                matchIndex: nextMatch.matchIndexInMessage,
+            });
             virtuosoRef.current?.scrollIntoView({
                 index: nextMatch.messageIndex,
                 behavior: 'smooth',
                 align: 'center',
             });
         }
-    }, [matchIndex, matches, virtuosoRef]);
+    }, [matchIndex, matches, virtuosoRef, onSetCurrentSearchMatch]);
 
     const onPrevMatch = useCallback(() => {
         if (matches.length === 0) return;
@@ -132,19 +146,24 @@ export function Search({
 
         const prevMatch = matches[prevIndex];
         if (prevMatch) {
+            onSetCurrentSearchMatch({
+                messageIndex: prevMatch.messageIndex,
+                matchIndex: prevMatch.matchIndexInMessage,
+            });
             virtuosoRef.current?.scrollIntoView({
                 index: prevMatch.messageIndex,
                 behavior: 'smooth',
                 align: 'center',
             });
         }
-    }, [matchIndex, matches, virtuosoRef]);
+    }, [matchIndex, matches, virtuosoRef, onSetCurrentSearchMatch]);
 
     // Close search when starting new chat
     useEffect(() => {
         onSetSearchTerm(undefined);
+        onSetCurrentSearchMatch(undefined);
         setShowSearch(false);
-    }, [chatId, onSetSearchTerm]);
+    }, [chatId, onSetSearchTerm, onSetCurrentSearchMatch]);
 
     return showSearch ? (
         <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 flex items-center">

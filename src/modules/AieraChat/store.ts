@@ -16,6 +16,7 @@ export interface ChatState {
     chatStatus: ChatSessionStatus;
     chatTitle?: string;
     chatUserId?: string;
+    currentSearchMatch?: { messageIndex: number; matchIndex: number };
     hasChanges: boolean;
     onAddSource: (source: Source | Source[]) => void;
     onClearSources: () => void;
@@ -23,6 +24,7 @@ export interface ChatState {
     onRemoveSource: (targetId: string, targetType: string) => void;
     onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) => void;
     onSelectSource: (source?: Source) => void;
+    onSetCurrentSearchMatch: (match?: { messageIndex: number; matchIndex: number }) => void;
     onSetSearchTerm: (searchTerm?: string) => void;
     onSetStatus: (chatStatus: ChatSessionStatus) => void;
     onSetTitle: (title?: string) => void;
@@ -38,6 +40,7 @@ export const useChatStore = create<ChatState>((set) => ({
     chatStatus: ChatSessionStatus.Active,
     chatTitle: undefined,
     chatUserId: undefined,
+    currentSearchMatch: undefined,
     hasChanges: false,
     onAddSource: (source: Source | Source[]) =>
         set((state) => ({
@@ -52,6 +55,7 @@ export const useChatStore = create<ChatState>((set) => ({
             chatTitle: undefined,
             hasChanges: false,
             searchTerm: undefined,
+            currentSearchMatch: undefined,
             sources: [],
         }),
     onRemoveSource: (targetId: string, targetType: string) =>
@@ -64,7 +68,9 @@ export const useChatStore = create<ChatState>((set) => ({
     onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) =>
         set({ chatId, chatStatus, chatTitle, sources, hasChanges: false }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
-    onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
+    onSetCurrentSearchMatch: (currentSearchMatch?: { messageIndex: number; matchIndex: number }) =>
+        set({ currentSearchMatch }),
+    onSetSearchTerm: (searchTerm?: string) => set({ searchTerm, currentSearchMatch: undefined }),
     onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     onSetUserId: (chatUserId?: string) => set({ chatUserId }),
