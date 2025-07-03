@@ -326,6 +326,13 @@ export const useAbly = (): UseAblyReturn => {
                         return; // ignore message if there's no encoded content
                     }
 
+                    // Stop streaming if this is the final partial
+                    if (data.is_final) {
+                        log('Received final partial:', 'log', data);
+                        onSetStatus(ChatSessionStatus.Active);
+                        return;
+                    }
+
                     // Parse the JSON
                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
                     log('Decoded Ably message:', 'log', jsonObject);
@@ -397,11 +404,6 @@ export const useAbly = (): UseAblyReturn => {
                         }
                     }
 
-                    // Stop streaming if this is the final partial
-                    if (data.is_final) {
-                        log('Received final partial:', 'log', data);
-                        onSetStatus(ChatSessionStatus.Active);
-                    }
                 } catch (err) {
                     log(`Error handling message: ${String(err)}`, 'error');
                     setError(`Error handling message: ${(err as Error).message}`);
