@@ -8,7 +8,10 @@
       "Bash(npm run lint:*)",
       "Bash(npm start)",
       "Bash(git add:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(git worktree:*)",
+      "Bash(git branch:*)",
+      "Bash(rm:*)"
     ],
     "deny": []
   }
