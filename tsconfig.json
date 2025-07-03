@@ -1,5 +1,5 @@
 {
-    "include": ["src/**/*", "src/types/node-modules-patches.d.ts"],
+    "include": ["src/**/*", "src/types/node-modules-patches.d.ts", "tests/**/*"],
     "exclude": ["node_modules", "src/dev/docs"],
     "compilerOptions": {
         /* Basic Options */

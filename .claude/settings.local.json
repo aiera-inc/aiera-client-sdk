@@ -11,7 +11,16 @@
       "Bash(git commit:*)",
       "Bash(git worktree:*)",
       "Bash(git branch:*)",
-      "Bash(rm:*)"
+      "Bash(rm:*)",
+      "Bash(grep:*)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(npm run test:e2e:validate:*)",
+      "Bash(npm run test:e2e:*)",
+      "Bash(curl:*)",
+      "Bash(npm run ts:*)",
+      "Bash(npx eslint:*)",
+      "Bash(find:*)"
     ],
     "deny": []
   }
