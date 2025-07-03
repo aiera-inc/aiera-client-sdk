@@ -15,7 +15,6 @@
       "Bash(grep:*)",
       "Bash(npm install:*)",
       "Bash(mkdir:*)",
-      "Bash(npm run test:e2e:validate:*)",
       "Bash(npm run test:e2e:*)",
       "Bash(curl:*)",
       "Bash(npm run ts:*)",

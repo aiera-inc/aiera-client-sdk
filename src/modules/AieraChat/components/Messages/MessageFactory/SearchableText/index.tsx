@@ -21,21 +21,19 @@ export function SearchableText({ text }: { text: string }) {
 
         const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
         const parts = text.split(regex);
-        let localMatchIndex = 0;
 
         return parts.map((part, index) => {
             if (part.toLowerCase() === searchTerm.toLowerCase()) {
                 // Get or generate the match index for this part
-                if (matchIndicesRef.current[localMatchIndex] === undefined) {
-                    matchIndicesRef.current[localMatchIndex] = searchContext.getNextMatchIndex();
+                if (matchIndicesRef.current[index] === undefined) {
+                    matchIndicesRef.current[index] = searchContext.getNextMatchIndex();
                 }
 
-                const matchIndex = matchIndicesRef.current[localMatchIndex];
+                const matchIndex = matchIndicesRef.current[index];
                 const isCurrentMatch =
                     currentSearchMatch?.messageIndex === searchContext.messageIndex &&
                     currentSearchMatch?.matchIndex === matchIndex;
 
-                localMatchIndex++;
                 return (
                     <mark key={index} className={isCurrentMatch ? 'bg-orange-400' : 'bg-yellow-400'}>
                         {part}
