@@ -10,9 +10,9 @@ import { IconButton } from '../../IconButton';
 import { ChatMessage, ChatMessageType } from '../../../services/messages';
 
 interface SearchMatch {
-    messageIndex: number;
-    matchOffset: number;
     matchIndexInMessage: number;
+    matchOffset: number;
+    messageIndex: number;
 }
 
 export function Search({
@@ -26,7 +26,6 @@ export function Search({
     const [showSearch, setShowSearch] = useState(false);
     const [matches, setMatches] = useState<SearchMatch[]>([]);
     const [matchIndex, setMatchIndex] = useState(0);
-    const [_, setInFocus] = useState(false);
 
     // Debounce calling the mutation with each change
     const debouncedTitleChange = useCallback(
@@ -56,8 +55,6 @@ export function Search({
         },
         [onCloseSearch]
     );
-    const onFocus = useCallback(() => setInFocus(true), []);
-    const onBlur = useCallback(() => setInFocus(false), []);
     const onSearchMatches = useCallback(
         (override?: string) => {
             const term = override || searchTerm;
@@ -170,8 +167,6 @@ export function Search({
             <input
                 value={searchTerm ?? ''}
                 key="searchInput"
-                onFocus={onFocus}
-                onBlur={onBlur}
                 onKeyDown={onKeyDown}
                 onChange={onChange}
                 type="text"
