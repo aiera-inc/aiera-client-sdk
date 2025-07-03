@@ -339,7 +339,7 @@ export const useAbly = (): UseAblyReturn => {
                     }
 
                     // Process the response message and update partials
-                    if (jsonObject.blocks) {
+                    if (jsonObject.message_type === 'response' && jsonObject.blocks && !data.is_final) {
                         const parsedMessage = jsonObject.blocks?.[0]?.content;
                         if (parsedMessage) {
                             log(`Updating partials with new parsed message: ${parsedMessage}`);
