@@ -5,13 +5,11 @@ import { MarkdownRenderer } from './markdown';
 
 // Mock the citation component
 jest.mock('@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Citation', () => ({
-    Citation: ({ citation }: { citation: Citation }) => (
-        <span data-testid="citation">{citation.marker}</span>
-    ),
+    Citation: ({ citation }: { citation: Citation }) => <span data-testid="citation">{citation.marker}</span>,
 }));
 
 // Mock the chat store
-jest.mock('../../../store', () => ({
+jest.mock('../../../../../store', () => ({
     useChatStore: () => ({
         onSelectSource: jest.fn(),
     }),
@@ -71,7 +69,7 @@ describe('MarkdownRenderer', () => {
     });
 
     test('handles redundant citation markers as described in issue', () => {
-        const content = 
+        const content =
             'Closing out 2024, we remain on track to fully complete the first 400 megawatts case of our Corsicana Facility by year-end. [c2] ' +
             'Driven by longer lead times on substation equipment for Corsicana now expect 2 buildings to come online in 2025 versus our previous expectation of 3 buildings pushing out some of the expected Kentucky expansion for 2025 into 2026 and 2027. [c2]';
         const citations = [mockCitation];
