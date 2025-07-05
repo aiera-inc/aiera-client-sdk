@@ -64,7 +64,7 @@ const preparePartialMarkdown = (content: string, citations?: CitationType[]): st
                 .filter((c) => c) // filter out nulls
                 .join(' ');
             const citation = `<citation ${attrString} />`;
-            text = text.replace(c.marker, citation);
+            text = text.replace(new RegExp(c.marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), citation);
         });
     }
 
