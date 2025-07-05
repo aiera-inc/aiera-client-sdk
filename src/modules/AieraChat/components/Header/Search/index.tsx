@@ -8,32 +8,11 @@ import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import { useChatStore } from '../../../store';
 import { IconButton } from '../../IconButton';
 import { ChatMessage, ChatMessageType } from '../../../services/messages';
-import { TextBlock } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block/Text';
 
-/**
- * Extracts searchable text content from an array of content blocks
- * @param blocks Array of content blocks to extract text from
- * @returns A single string containing all searchable text content
- */
-function getSearchableContent(blocks: TextBlock[]): string {
-    // Process all blocks and join with spaces
-    return blocks
-        .map((block) => {
-            // Get the main content
-            let content = block.content;
-
-            // Add citation text if available
-            if (block.citations) {
-                const citationText = block.citations
-                    .map((citation) => `${citation.text} ${citation.author || ''}`)
-                    .join(' ');
-                content += ' ' + citationText;
-            }
-
-            return content;
-        })
-        .join(' ')
-        .trim();
+interface SearchMatch {
+    matchIndexInMessage: number;
+    matchOffset: number;
+    messageIndex: number;
 }
 
 export function Search({
@@ -43,11 +22,10 @@ export function Search({
     onChangeTitle: (title: string) => void;
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
-    const { chatId, chatTitle, onSetTitle, searchTerm, onSetSearchTerm } = useChatStore();
+    const { chatId, chatTitle, onSetTitle, searchTerm, onSetSearchTerm, onSetCurrentSearchMatch } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
-    const [matches, setMatches] = useState<number[]>([]);
-    const [matchIndex, setMatchIndex] = useState(1);
-    const [_, setInFocus] = useState(false);
+    const [matches, setMatches] = useState<SearchMatch[]>([]);
+    const [matchIndex, setMatchIndex] = useState(0);
 
     // Debounce calling the mutation with each change
     const debouncedTitleChange = useCallback(
@@ -67,7 +45,8 @@ export function Search({
     const onCloseSearch = useCallback(() => {
         setShowSearch(false);
         onSetSearchTerm('');
-    }, [onSetSearchTerm]);
+        onSetCurrentSearchMatch(undefined);
+    }, [onSetSearchTerm, onSetCurrentSearchMatch]);
     const onKeyDown = useCallback(
         (e: KeyboardEvent<HTMLInputElement>) => {
             if (e.key === 'Escape') {
@@ -76,33 +55,56 @@ export function Search({
         },
         [onCloseSearch]
     );
-    const onFocus = useCallback(() => setInFocus(true), []);
-    const onBlur = useCallback(() => setInFocus(false), []);
     const onSearchMatches = useCallback(
         (override?: string) => {
             const term = override || searchTerm;
             const messages = virtuosoRef.current?.data.get();
-            if (!messages) return;
-            const matchingIndexes = messages.reduce<number[]>((acc, message, index) => {
+            if (!messages || !term) {
+                setMatches([]);
+                setMatchIndex(0);
+                return;
+            }
+
+            const allMatches: SearchMatch[] = [];
+            const searchRegex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+
+            messages.forEach((message, messageIndex) => {
                 let textContent = '';
                 if (message.type === ChatMessageType.RESPONSE) {
-                    textContent = getSearchableContent(message.blocks).toLowerCase();
+                    textContent = message.blocks.map((b) => b.content).join(' ');
                 } else if (message.type === ChatMessageType.PROMPT) {
                     textContent = message.prompt;
                 }
-                if (term && textContent.includes(term)) {
-                    acc.push(index);
+
+                let match;
+                let matchIndexInMessage = 0;
+                while ((match = searchRegex.exec(textContent)) !== null) {
+                    allMatches.push({
+                        messageIndex,
+                        matchOffset: match.index,
+                        matchIndexInMessage: matchIndexInMessage++,
+                    });
                 }
-                return acc;
-            }, []);
+                searchRegex.lastIndex = 0;
+            });
 
             setMatchIndex(0);
-            setMatches(matchingIndexes);
-            if (matchingIndexes.length > 0 && matchingIndexes[0]) {
-                virtuosoRef.current?.scrollIntoView({ index: matchingIndexes[0], behavior: 'smooth', align: 'center' });
+            setMatches(allMatches);
+            if (allMatches.length > 0 && allMatches[0]) {
+                onSetCurrentSearchMatch({
+                    messageIndex: allMatches[0].messageIndex,
+                    matchIndex: allMatches[0].matchIndexInMessage,
+                });
+                virtuosoRef.current?.scrollIntoView({
+                    index: allMatches[0].messageIndex,
+                    behavior: 'smooth',
+                    align: 'center',
+                });
+            } else {
+                onSetCurrentSearchMatch(undefined);
             }
         },
-        [virtuosoRef, searchTerm]
+        [virtuosoRef, searchTerm, onSetCurrentSearchMatch]
     );
     const onChange = useCallback(
         (e: ChangeEvent<HTMLInputElement>) => {
@@ -110,53 +112,61 @@ export function Search({
             onSetSearchTerm(term);
             onSearchMatches(term);
         },
-        [onSetSearchTerm]
+        [onSetSearchTerm, onSearchMatches]
     );
 
     const onNextMatch = useCallback(() => {
-        if (matchIndex + 1 < matches.length) {
-            setMatchIndex((pv) => pv + 1);
-            const nextIndex = matches[matchIndex + 1];
-            if (nextIndex) {
-                virtuosoRef.current?.scrollIntoView({ index: nextIndex, behavior: 'smooth', align: 'center' });
-            }
-        } else {
-            setMatchIndex(0);
-            if (matches[0]) {
-                virtuosoRef.current?.scrollIntoView({ index: matches[0], behavior: 'smooth', align: 'center' });
-            }
+        if (matches.length === 0) return;
+
+        const nextIndex = (matchIndex + 1) % matches.length;
+        setMatchIndex(nextIndex);
+
+        const nextMatch = matches[nextIndex];
+        if (nextMatch) {
+            onSetCurrentSearchMatch({
+                messageIndex: nextMatch.messageIndex,
+                matchIndex: nextMatch.matchIndexInMessage,
+            });
+            virtuosoRef.current?.scrollIntoView({
+                index: nextMatch.messageIndex,
+                behavior: 'smooth',
+                align: 'center',
+            });
         }
-    }, [matchIndex, matches]);
+    }, [matchIndex, matches, virtuosoRef, onSetCurrentSearchMatch]);
 
     const onPrevMatch = useCallback(() => {
-        if (matchIndex - 1 >= 0) {
-            setMatchIndex((pv) => pv - 1);
-            const nextIndex = matches[matchIndex - 1];
-            if (nextIndex) {
-                virtuosoRef.current?.scrollIntoView({ index: nextIndex, behavior: 'smooth', align: 'center' });
-            }
-        } else {
-            setMatchIndex(matches.length - 1);
-            const prevIndex = matches[matches.length - 1];
-            if (prevIndex) {
-                virtuosoRef.current?.scrollIntoView({ index: prevIndex, behavior: 'smooth', align: 'center' });
-            }
+        if (matches.length === 0) return;
+
+        const prevIndex = matchIndex === 0 ? matches.length - 1 : matchIndex - 1;
+        setMatchIndex(prevIndex);
+
+        const prevMatch = matches[prevIndex];
+        if (prevMatch) {
+            onSetCurrentSearchMatch({
+                messageIndex: prevMatch.messageIndex,
+                matchIndex: prevMatch.matchIndexInMessage,
+            });
+            virtuosoRef.current?.scrollIntoView({
+                index: prevMatch.messageIndex,
+                behavior: 'smooth',
+                align: 'center',
+            });
         }
-    }, [matchIndex, matches]);
+    }, [matchIndex, matches, virtuosoRef, onSetCurrentSearchMatch]);
 
     // Close search when starting new chat
     useEffect(() => {
         onSetSearchTerm(undefined);
+        onSetCurrentSearchMatch(undefined);
         setShowSearch(false);
-    }, [chatId, onSetSearchTerm]);
+    }, [chatId, onSetSearchTerm, onSetCurrentSearchMatch]);
 
     return showSearch ? (
         <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 flex items-center">
             <input
                 value={searchTerm ?? ''}
                 key="searchInput"
-                onFocus={onFocus}
-                onBlur={onBlur}
                 onKeyDown={onKeyDown}
                 onChange={onChange}
                 type="text"
