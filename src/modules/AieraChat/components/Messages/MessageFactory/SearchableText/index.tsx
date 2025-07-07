@@ -19,10 +19,12 @@ export function SearchableText({ text }: { text: string }) {
             lastSearchTermRef.current = searchTerm;
         }
 
-        const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+        const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
         const parts = text.split(regex);
 
         return parts.map((part, index) => {
+            // Check if this part matches the search term (case-insensitive)
             if (part.toLowerCase() === searchTerm.toLowerCase()) {
                 // Get or generate the match index for this part
                 if (matchIndicesRef.current[index] === undefined) {

@@ -97,7 +97,12 @@ const SearchableWrapper = ({ children }: { children: React.ReactNode }) => {
             return <SearchableText text={node} />;
         }
         if (React.isValidElement(node)) {
-            return node;
+            // Process the children of React elements recursively
+            const props = { ...node.props } as Record<string, unknown>;
+            if (props.children) {
+                props.children = processChildren(props.children as React.ReactNode);
+            }
+            return React.cloneElement(node, props);
         }
         if (Array.isArray(node)) {
             return node.map((child, index) => (

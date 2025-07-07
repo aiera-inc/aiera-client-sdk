@@ -10,7 +10,7 @@ export const Citation = ({ citation }: CitationProps) => {
     const { onSelectSource } = useChatStore();
     const { contentId, marker, source, sourceId } = citation;
     return (
-        <span className="relative inline-block h-3.5 mr-1.5">
+        <span className="relative inline-block h-3.5">
             <span
                 onClick={() =>
                     onSelectSource({
