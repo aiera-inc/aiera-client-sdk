@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "mcp__Context7__get-library-docs"
+      "mcp__Context7__get-library-docs",
+      "Bash(rg:*)",
+      "Bash(npm run lint:*)",
+      "Bash(mv:*)"
     ],
     "deny": []
   }
