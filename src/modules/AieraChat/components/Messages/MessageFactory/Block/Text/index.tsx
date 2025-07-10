@@ -18,14 +18,14 @@ export function Text({
     highlightText?: (text: string, messageIndex: number) => ReactNode;
     messageIndex?: number;
 }) {
-    console.log({ content, citations, highlightText, messageIndex });
     return (
         <div className="text-base pt-2">
-            {highlightText && messageIndex !== undefined ? (
-                <div className="leading-relaxed pb-2.5">{highlightText(content, messageIndex)}</div>
-            ) : (
-                <MarkdownRenderer citations={citations} content={content} />
-            )}
+            <MarkdownRenderer
+                citations={citations}
+                content={content}
+                highlightText={highlightText}
+                messageIndex={messageIndex}
+            />
         </div>
     );
 }

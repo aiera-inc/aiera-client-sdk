@@ -7,6 +7,8 @@ import './markdown.css';
 interface MarkdownRendererProps {
     citations?: CitationType[];
     content: string;
+    highlightText?: (text: string, messageIndex: number) => React.ReactNode;
+    messageIndex?: number;
 }
 
 // Function to handle unclosed markdown elements in partial content
@@ -158,7 +160,56 @@ const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
     </th>
 );
 
-export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) {
+// Helper function to recursively process React nodes and apply highlighting
+const processChildrenWithHighlight = (
+    children: React.ReactNode,
+    highlightText?: (text: string, messageIndex: number) => React.ReactNode,
+    messageIndex?: number
+): React.ReactNode => {
+    if (!highlightText || messageIndex === undefined) {
+        return children;
+    }
+
+    const processNode = (node: React.ReactNode): React.ReactNode => {
+        // If it's a string, apply highlighting
+        if (typeof node === 'string') {
+            return highlightText(node, messageIndex);
+        }
+
+        // If it's a React element, process its children
+        if (React.isValidElement(node)) {
+            const element = node as React.ReactElement;
+
+            // Don't process code blocks or citations
+            if (element.type === 'code' || element.type === 'pre' || element.type === CustomCitation) {
+                return node;
+            }
+
+            // Process children recursively
+            const children = (element.props as { children?: React.ReactNode }).children;
+            const processedChildren = React.Children.map(children, processNode);
+
+            return React.cloneElement(element, {
+                ...element.props,
+                children: processedChildren,
+            } as React.Attributes);
+        }
+
+        // If it's an array, process each item
+        if (Array.isArray(node)) {
+            return node.map((item: React.ReactNode, index) => (
+                <React.Fragment key={index}>{processNode(item)}</React.Fragment>
+            ));
+        }
+
+        // For other types (null, undefined, etc.), return as-is
+        return node;
+    };
+
+    return processNode(children);
+};
+
+export function MarkdownRenderer({ citations, content, highlightText, messageIndex }: MarkdownRendererProps) {
     const preparedMarkdown = useMemo(() => preparePartialMarkdown(content, citations), [citations, content]);
 
     // Define overrides for markdown-to-jsx with proper types
@@ -243,5 +294,11 @@ export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) 
         [preparedMarkdown, overrides]
     );
 
-    return <div className="prose dark:prose-invert max-w-none">{markdownOutput}</div>;
+    // Apply highlighting to the rendered markdown
+    const highlightedOutput = useMemo(
+        () => processChildrenWithHighlight(markdownOutput, highlightText, messageIndex),
+        [markdownOutput, highlightText, messageIndex]
+    );
+
+    return <div className="prose dark:prose-invert max-w-none">{highlightedOutput}</div>;
 }

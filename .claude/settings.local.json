@@ -11,7 +11,17 @@
       "Bash(npm run pre-commit:*)",
       "Bash(npm run build:lib:types:*)",
       "Bash(rm:*)",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(npm run build:*)",
+      "Bash(node:*)",
+      "Bash(open http://localhost:8000/demo/AieraChat.html)",
+      "Bash(screencapture:*)",
+      "Bash(open:*)",
+      "Bash(osascript:*)",
+      "Bash(curl:*)",
+      "Bash(pkill:*)",
+      "Bash(python3:*)",
+      "Bash(npm test:*)"
     ],
     "deny": []
   }
