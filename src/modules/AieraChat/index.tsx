@@ -15,7 +15,8 @@ import { Sources } from './panels/Sources';
 import { useChatStore } from './store';
 import { useAbly, CHANNEL_PREFIX } from './services/ably';
 import { useChatSessions } from './services/chats';
-import { ChatMessage } from './services/messages';
+import { ChatMessage, useChatSession } from './services/messages';
+import { useSearch } from './services/search';
 import { RealtimeChannel, Message } from 'ably';
 
 export function AieraChat(): ReactElement {
@@ -39,6 +40,19 @@ export function AieraChat(): ReactElement {
 
     const config = useConfig();
     const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
+
+    // Get chat session data (messages, etc.)
+    const {
+        confirmSourceConfirmation,
+        createChatMessagePrompt,
+        messages,
+        isLoading: messagesLoading,
+    } = useChatSession({
+        enablePolling: config.options?.aieraChatEnablePolling || false,
+    });
+
+    // Initialize search functionality
+    const searchHook = useSearch({ data: messages, virtuosoRef });
 
     // Set up Ably realtime client
     const { createAblyRealtimeClient, subscribeToChannel, unsubscribeFromChannel } = useAbly();
@@ -369,8 +383,17 @@ export function AieraChat(): ReactElement {
                     'aiera-chat'
                 )}
             >
-                <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
-                <Messages onOpenSources={onOpenSources} onSubmit={handleMessageSubmit} virtuosoRef={virtuosoRef} />
+                <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} searchHook={searchHook} />
+                <Messages
+                    onOpenSources={onOpenSources}
+                    onSubmit={handleMessageSubmit}
+                    virtuosoRef={virtuosoRef}
+                    messages={messages}
+                    confirmSourceConfirmation={confirmSourceConfirmation}
+                    createChatMessagePrompt={createChatMessagePrompt}
+                    isLoading={messagesLoading}
+                    highlightText={searchHook.highlightText}
+                />
                 {showSources && <Sources onClearSources={handleClearSources} onClose={onCloseSources} />}
                 {showMenu && (
                     <Menu isLoading={isLoading} onClickIcon={onOpenConfirm} onClose={onCloseMenu} sessions={sessions} />

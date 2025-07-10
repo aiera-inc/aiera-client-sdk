@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { match } from 'ts-pattern';
 import { TextBlock, Text } from './Text';
 
@@ -30,12 +30,21 @@ export type ContentBlock = TextBlock;
 
 type BlockProps = ContentBlock & {
     isNested?: boolean;
+    highlightText?: (text: string, messageIndex: number) => ReactNode;
+    messageIndex?: number;
 };
 
 export function Block(props: BlockProps) {
     return match(props)
         .with({ type: BlockType.TEXT }, (p) => (
-            <Text citations={p.citations} content={p.content} id={p.id} type={BlockType.TEXT} />
+            <Text
+                citations={p.citations}
+                content={p.content}
+                id={p.id}
+                type={BlockType.TEXT}
+                highlightText={props.highlightText}
+                messageIndex={props.messageIndex}
+            />
         ))
         .exhaustive();
 }

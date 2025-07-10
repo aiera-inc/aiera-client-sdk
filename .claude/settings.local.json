@@ -4,7 +4,14 @@
       "mcp__Context7__get-library-docs",
       "Bash(rg:*)",
       "Bash(npm run lint:*)",
-      "Bash(mv:*)"
+      "Bash(mv:*)",
+      "Bash(grep:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(npm run pre-commit:*)",
+      "Bash(npm run build:lib:types:*)",
+      "Bash(rm:*)",
+      "Bash(npm start)"
     ],
     "deny": []
   }

@@ -3,7 +3,10 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { log } from '@aiera/client-sdk/lib/utils';
 import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
-import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import {
+    ChatMessageSourceConfirmation as RawChatMessageSourceConfirmation,
+    ChatSessionStatus,
+} from '@aiera/client-sdk/types';
 import {
     VirtuosoMessageList,
     VirtuosoMessageListLicense,
@@ -14,14 +17,13 @@ import {
 } from '@virtuoso.dev/message-list';
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
-import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef, useState, ReactNode } from 'react';
 import {
     ChatMessage,
     ChatMessagePrompt,
     ChatMessageResponse,
     ChatMessageStatus,
     ChatMessageType,
-    useChatSession,
 } from '../../services/messages';
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
@@ -38,6 +40,7 @@ export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
     onConfirm: (messageId: string, sources: Source[]) => void;
+    highlightText: (text: string, messageIndex: number) => ReactNode;
 }
 
 const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
@@ -68,17 +71,33 @@ export function Messages({
     onOpenSources,
     onSubmit,
     virtuosoRef,
+    messages,
+    confirmSourceConfirmation,
+    createChatMessagePrompt,
+    isLoading,
+    highlightText,
 }: {
     onOpenSources: () => void;
     onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
     virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
+    messages: ChatMessage[];
+    confirmSourceConfirmation: (
+        promptMessageId: string,
+        sources: Source[]
+    ) => Promise<RawChatMessageSourceConfirmation | null>;
+    createChatMessagePrompt: ({
+        content,
+        sessionId,
+    }: {
+        content: string;
+        sessionId: string;
+    }) => Promise<ChatMessagePrompt | null>;
+    isLoading: boolean;
+    highlightText: (text: string, messageIndex: number) => ReactNode;
 }) {
     const config = useConfig();
     const [submitting, setSubmitting] = useState<boolean>(false);
     const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
-    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
-        enablePolling: config.options?.aieraChatEnablePolling || false,
-    });
     const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
@@ -440,8 +459,9 @@ export function Messages({
             onSubmit: handleSubmit,
             onReRun,
             onConfirm,
+            highlightText,
         }),
-        [handleSubmit, onReRun, onConfirm]
+        [handleSubmit, onReRun, onConfirm, highlightText]
     );
 
     return (

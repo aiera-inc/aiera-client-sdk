@@ -12,15 +12,24 @@ export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListCo
     data,
     context,
     nextData,
+    index,
 }) => (
     <div className="flex flex-col max-w-[50rem] w-full m-auto">
         {match(data)
-            .with({ type: ChatMessageType.PROMPT }, (promptData) => <MessagePrompt data={promptData} />)
+            .with({ type: ChatMessageType.PROMPT }, (promptData) => (
+                <MessagePrompt data={promptData} highlightText={context.highlightText} messageIndex={index} />
+            ))
             .with({ type: ChatMessageType.SOURCES }, (sourcesData) => (
                 <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
             ))
             .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
-                <MessageResponse data={responseData} onReRun={context.onReRun} isLastItem={!nextData} />
+                <MessageResponse
+                    data={responseData}
+                    onReRun={context.onReRun}
+                    isLastItem={!nextData}
+                    highlightText={context.highlightText}
+                    messageIndex={index}
+                />
             ))
             .exhaustive()}
     </div>

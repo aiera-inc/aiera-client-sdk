@@ -1,17 +1,20 @@
 import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestionMark';
 import classNames from 'classnames';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { ChatMessagePrompt } from '../../../../services/messages';
-import { SearchableText } from '../SearchableText';
 
 export const MessagePrompt = ({
     data,
     className,
     isStickyHeader,
+    highlightText,
+    messageIndex,
 }: {
     data: ChatMessagePrompt;
     className?: string;
     isStickyHeader?: boolean;
+    highlightText?: (text: string, messageIndex: number) => ReactNode;
+    messageIndex?: number;
 }) => {
     const prompt = data.prompt;
     if (!prompt) return null;
@@ -43,7 +46,7 @@ export const MessagePrompt = ({
                         'line-clamp-2': isStickyHeader,
                     })}
                 >
-                    <SearchableText text={prompt} />
+                    {highlightText && messageIndex !== undefined ? highlightText(prompt, messageIndex) : prompt}
                 </p>
             </div>
         </div>

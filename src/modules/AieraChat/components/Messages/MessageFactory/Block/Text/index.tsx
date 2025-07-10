@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { BaseBlock, BlockType, Citation as CitationType } from '..';
 import { MarkdownRenderer } from './markdown';
 
@@ -9,10 +9,23 @@ export interface TextBlock extends BaseBlock {
     type: BlockType.TEXT;
 }
 
-export function Text({ citations, content }: TextBlock) {
+export function Text({
+    citations,
+    content,
+    highlightText,
+    messageIndex,
+}: TextBlock & {
+    highlightText?: (text: string, messageIndex: number) => ReactNode;
+    messageIndex?: number;
+}) {
+    console.log({ content, citations, highlightText, messageIndex });
     return (
         <div className="text-base pt-2">
-            <MarkdownRenderer citations={citations} content={content} />
+            {highlightText && messageIndex !== undefined ? (
+                <div className="leading-relaxed pb-2.5">{highlightText(content, messageIndex)}</div>
+            ) : (
+                <MarkdownRenderer citations={citations} content={content} />
+            )}
         </div>
     );
 }
