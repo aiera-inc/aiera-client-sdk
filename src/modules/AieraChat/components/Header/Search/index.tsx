@@ -6,22 +6,21 @@ import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCir
 import { MicroSearch } from '@aiera/client-sdk/components/Svg/MicroSearch';
 import { useChatStore } from '../../../store';
 import { IconButton } from '../../IconButton';
-import { UseSearchReturn } from '../../../services/search';
+import { UseSearchResponse } from '../../../services/search';
 
 export function Search({
     onChangeTitle,
-    searchHook,
+    useSearch,
 }: {
     onChangeTitle: (title: string) => void;
-    searchHook: UseSearchReturn;
+    useSearch: UseSearchResponse;
 }) {
     const { chatId, chatTitle, onSetTitle } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
-    const [_, setInFocus] = useState(false);
 
     // Destructure search hook
     const { searchTerm, onSearchTermChange, onNextMatch, onPrevMatch, currentMatchIndex, totalMatches, clearSearch } =
-        searchHook;
+        useSearch;
 
     // Debounce calling the mutation with each change
     const debouncedTitleChange = useCallback(
@@ -52,9 +51,6 @@ export function Search({
         [onCloseSearch]
     );
 
-    const onFocus = useCallback(() => setInFocus(true), []);
-    const onBlur = useCallback(() => setInFocus(false), []);
-
     const onChange = useCallback(
         (e: React.ChangeEvent<HTMLInputElement>) => {
             const term = e.target.value;
@@ -74,8 +70,6 @@ export function Search({
             <input
                 value={searchTerm ?? ''}
                 key="searchInput"
-                onFocus={onFocus}
-                onBlur={onBlur}
                 onKeyDown={onKeyDown}
                 onChange={onChange}
                 type="text"

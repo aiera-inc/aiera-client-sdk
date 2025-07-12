@@ -14,9 +14,11 @@ export function Text({
     content,
     highlightText,
     messageIndex,
+    blockIndex,
 }: TextBlock & {
-    highlightText?: (text: string, messageIndex: number) => ReactNode;
+    highlightText?: (text: string, messageIndex: number, blockIndex?: number) => ReactNode;
     messageIndex?: number;
+    blockIndex?: number;
 }) {
     return (
         <div className="text-base pt-2">
@@ -25,6 +27,7 @@ export function Text({
                 content={content}
                 highlightText={highlightText}
                 messageIndex={messageIndex}
+                blockIndex={blockIndex}
             />
         </div>
     );

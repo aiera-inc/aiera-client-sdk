@@ -16,7 +16,7 @@ export const MessageResponse = ({
     onReRun: (k: string) => void;
     data: ChatMessageResponse;
     isLastItem: boolean;
-    highlightText?: (text: string, messageIndex: number) => ReactNode;
+    highlightText?: (text: string, messageIndex: number, blockIndex?: number) => ReactNode;
     messageIndex?: number;
 }) => {
     const { chatStatus } = useChatStore();
@@ -42,7 +42,13 @@ export const MessageResponse = ({
         <div className="flex flex-col">
             <div className="flex flex-col px-4 pb-2">
                 {data.blocks?.map((block, index) => (
-                    <Block {...block} key={index} highlightText={highlightText} messageIndex={messageIndex} />
+                    <Block
+                        {...block}
+                        key={index}
+                        highlightText={highlightText}
+                        messageIndex={messageIndex}
+                        blockIndex={index}
+                    />
                 ))}
             </div>
             {(chatStatus === ChatSessionStatus.Active || !isLastItem) && (

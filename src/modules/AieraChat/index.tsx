@@ -52,7 +52,7 @@ export function AieraChat(): ReactElement {
     });
 
     // Initialize search functionality
-    const searchHook = useSearch({ data: messages, virtuosoRef });
+    const searchHook = useSearch({ virtuosoRef });
 
     // Set up Ably realtime client
     const { createAblyRealtimeClient, subscribeToChannel, unsubscribeFromChannel } = useAbly();
@@ -383,16 +383,16 @@ export function AieraChat(): ReactElement {
                     'aiera-chat'
                 )}
             >
-                <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} searchHook={searchHook} />
+                <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} useSearch={searchHook} />
                 <Messages
+                    confirmSourceConfirmation={confirmSourceConfirmation}
+                    createChatMessagePrompt={createChatMessagePrompt}
+                    highlightText={searchHook.highlightText}
+                    isLoading={messagesLoading}
+                    messages={messages}
                     onOpenSources={onOpenSources}
                     onSubmit={handleMessageSubmit}
                     virtuosoRef={virtuosoRef}
-                    messages={messages}
-                    confirmSourceConfirmation={confirmSourceConfirmation}
-                    createChatMessagePrompt={createChatMessagePrompt}
-                    isLoading={messagesLoading}
-                    highlightText={searchHook.highlightText}
                 />
                 {showSources && <Sources onClearSources={handleClearSources} onClose={onCloseSources} />}
                 {showMenu && (

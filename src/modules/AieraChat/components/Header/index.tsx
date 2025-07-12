@@ -4,22 +4,22 @@ import { Search } from './Search';
 import { IconButton } from '../IconButton';
 import { useChatStore } from '../../store';
 import { MicroPlusCircle } from '@aiera/client-sdk/components/Svg/MicroPlusCircle';
-import { UseSearchReturn } from '../../services/search';
+import { UseSearchResponse } from '../../services/search';
 
 export function Header({
     onChangeTitle,
     onOpenMenu,
-    searchHook,
+    useSearch,
 }: {
     onChangeTitle: (title: string) => void;
     onOpenMenu: () => void;
-    searchHook: UseSearchReturn;
+    useSearch: UseSearchResponse;
 }) {
     const { onNewChat } = useChatStore();
     return (
         <div className="flex items-center justify-between mx-4 mt-4">
             <IconButton hintText="All Chats" className="mr-2.5" Icon={MicroBars} onClick={onOpenMenu} />
-            <Search onChangeTitle={onChangeTitle} searchHook={searchHook} />
+            <Search onChangeTitle={onChangeTitle} useSearch={useSearch} />
             <IconButton
                 hintAnchor="bottom-right"
                 hintGrow="down-left"

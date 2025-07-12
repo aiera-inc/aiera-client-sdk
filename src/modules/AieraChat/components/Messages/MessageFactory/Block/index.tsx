@@ -30,8 +30,9 @@ export type ContentBlock = TextBlock;
 
 type BlockProps = ContentBlock & {
     isNested?: boolean;
-    highlightText?: (text: string, messageIndex: number) => ReactNode;
+    highlightText?: (text: string, messageIndex: number, blockIndex?: number) => ReactNode;
     messageIndex?: number;
+    blockIndex?: number;
 };
 
 export function Block(props: BlockProps) {
@@ -44,6 +45,7 @@ export function Block(props: BlockProps) {
                 type={BlockType.TEXT}
                 highlightText={props.highlightText}
                 messageIndex={props.messageIndex}
+                blockIndex={props.blockIndex}
             />
         ))
         .exhaustive();

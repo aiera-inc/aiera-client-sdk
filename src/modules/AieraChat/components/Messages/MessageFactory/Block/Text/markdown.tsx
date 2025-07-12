@@ -7,8 +7,9 @@ import './markdown.css';
 interface MarkdownRendererProps {
     citations?: CitationType[];
     content: string;
-    highlightText?: (text: string, messageIndex: number) => React.ReactNode;
+    highlightText?: (text: string, messageIndex: number, blockIndex?: number) => React.ReactNode;
     messageIndex?: number;
+    blockIndex?: number;
 }
 
 // Function to handle unclosed markdown elements in partial content
@@ -163,8 +164,9 @@ const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
 // Helper function to recursively process React nodes and apply highlighting
 const processChildrenWithHighlight = (
     children: React.ReactNode,
-    highlightText?: (text: string, messageIndex: number) => React.ReactNode,
-    messageIndex?: number
+    highlightText?: (text: string, messageIndex: number, blockIndex?: number) => React.ReactNode,
+    messageIndex?: number,
+    blockIndex?: number
 ): React.ReactNode => {
     if (!highlightText || messageIndex === undefined) {
         return children;
@@ -173,7 +175,7 @@ const processChildrenWithHighlight = (
     const processNode = (node: React.ReactNode): React.ReactNode => {
         // If it's a string, apply highlighting
         if (typeof node === 'string') {
-            return highlightText(node, messageIndex);
+            return highlightText(node, messageIndex, blockIndex);
         }
 
         // If it's a React element, process its children
@@ -209,7 +211,13 @@ const processChildrenWithHighlight = (
     return processNode(children);
 };
 
-export function MarkdownRenderer({ citations, content, highlightText, messageIndex }: MarkdownRendererProps) {
+export function MarkdownRenderer({
+    citations,
+    content,
+    highlightText,
+    messageIndex,
+    blockIndex,
+}: MarkdownRendererProps) {
     const preparedMarkdown = useMemo(() => preparePartialMarkdown(content, citations), [citations, content]);
 
     // Define overrides for markdown-to-jsx with proper types
@@ -296,8 +304,8 @@ export function MarkdownRenderer({ citations, content, highlightText, messageInd
 
     // Apply highlighting to the rendered markdown
     const highlightedOutput = useMemo(
-        () => processChildrenWithHighlight(markdownOutput, highlightText, messageIndex),
-        [markdownOutput, highlightText, messageIndex]
+        () => processChildrenWithHighlight(markdownOutput, highlightText, messageIndex, blockIndex),
+        [markdownOutput, highlightText, messageIndex, blockIndex]
     );
 
     return <div className="prose dark:prose-invert max-w-none">{highlightedOutput}</div>;
