@@ -14,7 +14,12 @@ interface MarkdownRendererProps {
 
 // Function to handle unclosed markdown elements in partial content
 const preparePartialMarkdown = (content: string, citations?: CitationType[]): string => {
-    let text = content;
+    // First, convert literal \n escape sequences to actual newlines
+    let text = content.replace(/\\n/g, '\n');
+
+    // Ensure proper paragraph breaks before bold headers by converting single newlines
+    // before ** markers to double newlines
+    text = text.replace(/\n(\*\*)/g, '\n\n$1');
 
     // Handle unclosed code blocks
     const codeBlockMatches = text.match(/```[a-zA-Z0-9]*\n[\s\S]*?(?:```|$)/g);
