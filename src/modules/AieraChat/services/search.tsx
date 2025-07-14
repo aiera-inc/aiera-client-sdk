@@ -33,7 +33,6 @@ const escapeRegex = (str: string): string => {
 
 export interface SearchMatch {
     blockIndex: number;
-    matchIndexInBlock: number;
     matchOffset: number;
     messageIndex: number;
 }
@@ -100,6 +99,40 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
     const [currentMatchIndex, setCurrentMatchIndex] = useState<number>(0);
     const [matches, setMatches] = useState<SearchMatch[]>([]);
 
+    // Helper function to find matches in text content
+    const findMatchesInText = useCallback(
+        (text: string, messageIndex: number, blockIndex: number, regex: RegExp): SearchMatch[] => {
+            const matches: SearchMatch[] = [];
+            const plainText = stripMarkdown(text);
+            let match;
+            while ((match = regex.exec(plainText)) !== null) {
+                matches.push({
+                    messageIndex,
+                    blockIndex,
+                    matchOffset: match.index,
+                });
+            }
+            // Reset regex lastIndex to ensure proper matching in next iteration
+            regex.lastIndex = 0;
+            return matches;
+        },
+        []
+    );
+
+    // Helper function to scroll to a match
+    const scrollToMatch = useCallback(
+        (match: SearchMatch) => {
+            if (match && virtuosoRef?.current) {
+                virtuosoRef.current.scrollIntoView({
+                    index: match.messageIndex,
+                    behavior: 'smooth',
+                    align: 'center',
+                });
+            }
+        },
+        [virtuosoRef]
+    );
+
     const findMatches = useCallback(
         (term: string) => {
             const data: ChatMessage[] = virtuosoRef?.current?.data.get() || [];
@@ -117,38 +150,13 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 if (message.type === ChatMessageType.RESPONSE) {
                     // Search each block individually to maintain correct match indexing
                     message.blocks.forEach((block, blockIndex) => {
-                        // Strip markdown to get plain text for accurate offset calculation
-                        const plainText = stripMarkdown(block.content);
-                        let match;
-                        let matchIndexInBlock = 0;
-                        while ((match = searchRegex.exec(plainText)) !== null) {
-                            allMatches.push({
-                                messageIndex,
-                                blockIndex,
-                                matchIndexInBlock,
-                                matchOffset: match.index,
-                            });
-                            matchIndexInBlock++;
-                        }
-                        // Reset regex lastIndex to ensure proper matching in next iteration
-                        searchRegex.lastIndex = 0;
+                        const blockMatches = findMatchesInText(block.content, messageIndex, blockIndex, searchRegex);
+                        allMatches.push(...blockMatches);
                     });
                 } else if (message.type === ChatMessageType.PROMPT) {
                     // For prompt messages, there's only one text content
-                    const plainText = stripMarkdown(message.prompt);
-                    let match;
-                    let matchIndexInBlock = 0;
-                    while ((match = searchRegex.exec(plainText)) !== null) {
-                        allMatches.push({
-                            messageIndex,
-                            blockIndex: 0, // Prompt messages have only one block
-                            matchIndexInBlock,
-                            matchOffset: match.index,
-                        });
-                        matchIndexInBlock++;
-                    }
-                    // Reset regex lastIndex to ensure proper matching in next iteration
-                    searchRegex.lastIndex = 0;
+                    const promptMatches = findMatchesInText(message.prompt, messageIndex, 0, searchRegex);
+                    allMatches.push(...promptMatches);
                 }
             });
 
@@ -156,15 +164,11 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
             setCurrentMatchIndex(0);
 
             // Auto-scroll to first match when search begins
-            if (allMatches.length > 0 && allMatches[0] && virtuosoRef?.current) {
-                virtuosoRef.current.scrollIntoView({
-                    index: allMatches[0].messageIndex,
-                    behavior: 'smooth',
-                    align: 'center',
-                });
+            if (allMatches.length > 0 && allMatches[0]) {
+                scrollToMatch(allMatches[0]);
             }
         },
-        [setCurrentMatchIndex, setMatches, virtuosoRef]
+        [findMatchesInText, scrollToMatch, setCurrentMatchIndex, setMatches, virtuosoRef]
     );
 
     const onSearchTermChange = useCallback(
@@ -183,14 +187,10 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
         setCurrentMatchIndex(nextIndex);
 
         const nextMatch = matches[nextIndex];
-        if (nextMatch && virtuosoRef?.current) {
-            virtuosoRef.current.scrollIntoView({
-                index: nextMatch.messageIndex,
-                behavior: 'smooth',
-                align: 'center',
-            });
+        if (nextMatch) {
+            scrollToMatch(nextMatch);
         }
-    }, [currentMatchIndex, matches, virtuosoRef]);
+    }, [currentMatchIndex, matches, scrollToMatch]);
 
     const onPrevMatch = useCallback(() => {
         if (matches.length === 0) return;
@@ -200,14 +200,10 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
         setCurrentMatchIndex(prevIndex);
 
         const prevMatch = matches[prevIndex];
-        if (prevMatch && virtuosoRef?.current) {
-            virtuosoRef.current.scrollIntoView({
-                index: prevMatch.messageIndex,
-                behavior: 'smooth',
-                align: 'center',
-            });
+        if (prevMatch) {
+            scrollToMatch(prevMatch);
         }
-    }, [currentMatchIndex, matches, virtuosoRef]);
+    }, [currentMatchIndex, matches, scrollToMatch]);
 
     const clearSearch = useCallback(() => {
         setSearchTerm('');
@@ -252,21 +248,7 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
             const plainCurrentText = stripMarkdown(text);
 
             // Find the offset of the current text within the full block content
-            // Use a more robust approach by trying to find the text at multiple positions
-            let textOffsetInBlock = -1;
-            const searchStart = 0;
-
-            // Try to find the text, handling potential duplicates by context
-            while (searchStart < plainBlockContent.length) {
-                const foundIndex = plainBlockContent.indexOf(plainCurrentText, searchStart);
-                if (foundIndex === -1) break;
-
-                // For now, use the first match found
-                // In the future, we could add more sophisticated context matching
-                textOffsetInBlock = foundIndex;
-                break;
-            }
-
+            const textOffsetInBlock = plainBlockContent.indexOf(plainCurrentText);
             if (textOffsetInBlock === -1) {
                 // Fallback if we can't find the text offset
                 return text;
