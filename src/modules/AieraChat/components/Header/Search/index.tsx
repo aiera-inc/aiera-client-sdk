@@ -17,8 +17,6 @@ export function Search({
 }) {
     const { chatId, chatTitle, onSetTitle } = useChatStore();
     const [showSearch, setShowSearch] = useState(false);
-
-    // Destructure search hook
     const { searchTerm, onSearchTermChange, onNextMatch, onPrevMatch, currentMatchIndex, totalMatches, clearSearch } =
         useSearch;
 
@@ -40,7 +38,7 @@ export function Search({
     const onCloseSearch = useCallback(() => {
         setShowSearch(false);
         clearSearch();
-    }, [clearSearch]);
+    }, [clearSearch, setShowSearch]);
 
     const onKeyDown = useCallback(
         (e: KeyboardEvent<HTMLInputElement>) => {
@@ -63,7 +61,7 @@ export function Search({
     useEffect(() => {
         clearSearch();
         setShowSearch(false);
-    }, [chatId, clearSearch]);
+    }, [chatId, clearSearch, setShowSearch]);
 
     return showSearch ? (
         <div className="bg-slate-200 relative rounded-lg h-[1.875rem] flex-1 flex items-center">

@@ -68,19 +68,15 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
 };
 
 export function Messages({
+    confirmSourceConfirmation,
+    createChatMessagePrompt,
+    highlightText,
+    isLoading,
+    messages,
     onOpenSources,
     onSubmit,
     virtuosoRef,
-    messages,
-    confirmSourceConfirmation,
-    createChatMessagePrompt,
-    isLoading,
-    highlightText,
 }: {
-    onOpenSources: () => void;
-    onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
-    messages: ChatMessage[];
     confirmSourceConfirmation: (
         promptMessageId: string,
         sources: Source[]
@@ -92,8 +88,12 @@ export function Messages({
         content: string;
         sessionId: string;
     }) => Promise<ChatMessagePrompt | null>;
-    isLoading: boolean;
     highlightText: (text: string, messageIndex: number) => ReactNode;
+    isLoading: boolean;
+    messages: ChatMessage[];
+    onOpenSources: () => void;
+    onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
     const [submitting, setSubmitting] = useState<boolean>(false);
