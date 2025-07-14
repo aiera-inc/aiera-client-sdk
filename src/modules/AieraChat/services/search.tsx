@@ -2,6 +2,35 @@ import React, { useCallback, useMemo, useState, Fragment, ReactNode, RefObject }
 import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
 import { ChatMessage, ChatMessageType } from './messages';
 
+/**
+ * Strips markdown formatting from text to get plain text content
+ * Used for accurate search offset calculations across markdown-rendered content
+ */
+const stripMarkdown = (markdown: string): string => {
+    return (
+        markdown
+            // Remove citations [c1], [c2], etc.
+            .replace(/\[c\d+\]/g, '')
+            // Remove markdown bold **text**
+            .replace(/\*\*(.*?)\*\*/g, '$1')
+            // Remove markdown italic *text*
+            .replace(/\*(.*?)\*/g, '$1')
+            // Remove markdown headers
+            .replace(/^#+\s+/gm, '')
+            // Remove markdown links [text](url)
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+            // Remove remaining markdown formatting
+            .replace(/[`_~]/g, '')
+    );
+};
+
+/**
+ * Escapes special regex characters in a string for use in RegExp constructor
+ */
+const escapeRegex = (str: string): string => {
+    return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+};
+
 export interface SearchMatch {
     blockIndex: number;
     matchIndexInBlock: number;
@@ -81,27 +110,8 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 return;
             }
 
-            // Helper function to strip markdown - same as in highlightText
-            const stripMarkdown = (markdown: string): string => {
-                return (
-                    markdown
-                        // Remove citations [c1], [c2], etc.
-                        .replace(/\[c\d+\]/g, '')
-                        // Remove markdown bold **text**
-                        .replace(/\*\*(.*?)\*\*/g, '$1')
-                        // Remove markdown italic *text*
-                        .replace(/\*(.*?)\*/g, '$1')
-                        // Remove markdown headers
-                        .replace(/^#+\s+/gm, '')
-                        // Remove markdown links [text](url)
-                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-                        // Remove remaining markdown formatting
-                        .replace(/[`_~]/g, '')
-                );
-            };
-
             const allMatches: SearchMatch[] = [];
-            const searchRegex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+            const searchRegex = new RegExp(escapeRegex(term), 'gi');
 
             data.forEach((message, messageIndex) => {
                 if (message.type === ChatMessageType.RESPONSE) {
@@ -223,48 +233,46 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
             const data: ChatMessage[] = virtuosoRef?.current?.data.get() || [];
             const message = data[messageIndex];
 
-            if (!message || message.type !== ChatMessageType.RESPONSE || !message.blocks?.[blockIndex]) {
+            if (
+                !message ||
+                ![ChatMessageType.PROMPT, ChatMessageType.RESPONSE].includes(message.type) ||
+                (message.type === ChatMessageType.RESPONSE && !message.blocks?.[blockIndex])
+            ) {
                 return text;
             }
 
             // Get the full markdown content of the block
-            const fullBlockContent = message.blocks[blockIndex]?.content;
+            const fullBlockContent =
+                message.type === ChatMessageType.RESPONSE ? message.blocks[blockIndex]?.content : message.prompt;
             if (!fullBlockContent) {
                 return text;
             }
-
-            // Parse out markdown syntax to get plain text content
-            const stripMarkdown = (markdown: string): string => {
-                return (
-                    markdown
-                        // Remove citations [c1], [c2], etc.
-                        .replace(/\[c\d+\]/g, '')
-                        // Remove markdown bold **text**
-                        .replace(/\*\*(.*?)\*\*/g, '$1')
-                        // Remove markdown italic *text*
-                        .replace(/\*(.*?)\*/g, '$1')
-                        // Remove markdown headers
-                        .replace(/^#+\s+/gm, '')
-                        // Remove markdown links [text](url)
-                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-                        // Remove remaining markdown formatting
-                        .replace(/[`_~]/g, '')
-                );
-            };
 
             const plainBlockContent = stripMarkdown(fullBlockContent);
             const plainCurrentText = stripMarkdown(text);
 
             // Find the offset of the current text within the full block content
-            const textOffsetInBlock = plainBlockContent.indexOf(plainCurrentText);
+            // Use a more robust approach by trying to find the text at multiple positions
+            let textOffsetInBlock = -1;
+            const searchStart = 0;
+
+            // Try to find the text, handling potential duplicates by context
+            while (searchStart < plainBlockContent.length) {
+                const foundIndex = plainBlockContent.indexOf(plainCurrentText, searchStart);
+                if (foundIndex === -1) break;
+
+                // For now, use the first match found
+                // In the future, we could add more sophisticated context matching
+                textOffsetInBlock = foundIndex;
+                break;
+            }
 
             if (textOffsetInBlock === -1) {
                 // Fallback if we can't find the text offset
                 return text;
             }
 
-            const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-            const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
+            const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
             const parts = text.split(regex);
 
             // Calculate which match(es) fall within this text node
@@ -273,11 +281,13 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
             return parts.map((part, partIndex) => {
                 if (part.toLowerCase() === searchTerm.toLowerCase()) {
                     // Check if this match offset corresponds to the current selected match
+                    // Prompts don't have match offsets because only a single text node is rendered
                     const isCurrentMatch =
                         currentMatch?.messageIndex === messageIndex &&
                         currentMatch?.blockIndex === blockIndex &&
-                        currentMatch?.matchOffset >= currentTextOffset &&
-                        currentMatch?.matchOffset < currentTextOffset + part.length;
+                        (message.type !== ChatMessageType.RESPONSE ||
+                            (currentMatch?.matchOffset >= currentTextOffset &&
+                                currentMatch?.matchOffset < currentTextOffset + part.length));
 
                     const element = (
                         <mark

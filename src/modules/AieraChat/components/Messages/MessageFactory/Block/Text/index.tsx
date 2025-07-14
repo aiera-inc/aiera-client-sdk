@@ -10,24 +10,24 @@ export interface TextBlock extends BaseBlock {
 }
 
 export function Text({
+    blockIndex,
     citations,
     content,
     highlightText,
     messageIndex,
-    blockIndex,
 }: TextBlock & {
+    blockIndex?: number;
     highlightText?: (text: string, messageIndex: number, blockIndex?: number) => ReactNode;
     messageIndex?: number;
-    blockIndex?: number;
 }) {
     return (
         <div className="text-base pt-2">
             <MarkdownRenderer
+                blockIndex={blockIndex}
                 citations={citations}
                 content={content}
                 highlightText={highlightText}
                 messageIndex={messageIndex}
-                blockIndex={blockIndex}
             />
         </div>
     );
