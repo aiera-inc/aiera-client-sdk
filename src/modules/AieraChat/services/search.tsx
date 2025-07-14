@@ -4,7 +4,8 @@ import { ChatMessage, ChatMessageType } from './messages';
 
 export interface SearchMatch {
     blockIndex: number;
-    matchIndexInMessage: number;
+    matchIndexInBlock: number;
+    matchOffset: number;
     messageIndex: number;
 }
 
@@ -69,15 +70,11 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [currentMatchIndex, setCurrentMatchIndex] = useState<number>(0);
     const [matches, setMatches] = useState<SearchMatch[]>([]);
-    const data: ChatMessage[] = (virtuosoRef?.current?.data || []) as ChatMessage[];
-
-    // Escape special regex characters to ensure safe search
-    const escapeRegex = (str: string): string => {
-        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    };
 
     const findMatches = useCallback(
         (term: string) => {
+            const data: ChatMessage[] = virtuosoRef?.current?.data.get() || [];
+
             if (!term || !data.length) {
                 setMatches([]);
                 setCurrentMatchIndex(0);
@@ -85,32 +82,37 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
             }
 
             const allMatches: SearchMatch[] = [];
-            const searchRegex = new RegExp(escapeRegex(term), 'gi');
+            const searchRegex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
 
             data.forEach((message, messageIndex) => {
                 if (message.type === ChatMessageType.RESPONSE) {
                     // Search each block individually to maintain correct match indexing
                     message.blocks.forEach((block, blockIndex) => {
                         let match;
+                        let matchIndexInBlock = 0;
                         while ((match = searchRegex.exec(block.content)) !== null) {
                             allMatches.push({
                                 messageIndex,
                                 blockIndex,
-                                matchIndexInMessage: match.index,
+                                matchIndexInBlock,
+                                matchOffset: match.index,
                             });
+                            matchIndexInBlock++;
                         }
                         // Reset regex lastIndex to ensure proper matching in next iteration
                         searchRegex.lastIndex = 0;
                     });
                 } else if (message.type === ChatMessageType.PROMPT) {
                     // For prompt messages, there's only one text content
-                    let match;
-                    while ((match = searchRegex.exec(message.prompt)) !== null) {
+                    let matchIndexInBlock = 0;
+                    while (searchRegex.exec(message.prompt) !== null) {
                         allMatches.push({
                             messageIndex,
                             blockIndex: 0, // Prompt messages have only one block
-                            matchIndexInMessage: match.index,
+                            matchIndexInBlock,
+                            matchOffset: 0,
                         });
+                        matchIndexInBlock++;
                     }
                     // Reset regex lastIndex to ensure proper matching in next iteration
                     searchRegex.lastIndex = 0;
@@ -129,7 +131,7 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 });
             }
         },
-        [escapeRegex, setCurrentMatchIndex, setMatches, virtuosoRef]
+        [setCurrentMatchIndex, setMatches, virtuosoRef]
     );
 
     const onSearchTermChange = useCallback(
@@ -195,8 +197,12 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
         (text: string, messageIndex: number, blockIndex = 0): ReactNode => {
             if (!searchTerm || !searchTerm.trim() || !text) return text;
 
-            // const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
-            const regex = new RegExp(escapeRegex(searchTerm), 'gi');
+            // To check if the given text includes the current match, compare the text's offset within the entire
+            // block's content against the current match's offset.
+            // const data: ChatMessage[] = virtuosoRef?.current?.data.get() || [];
+
+            const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+            const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
             const parts = text.split(regex);
 
             // Track which match within this text block we're processing
@@ -207,7 +213,7 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                     const isCurrentMatch =
                         currentMatch?.messageIndex === messageIndex &&
                         currentMatch?.blockIndex === blockIndex &&
-                        currentMatch?.matchIndexInMessage === matchCounter;
+                        currentMatch?.matchIndexInBlock === matchCounter;
 
                     const element = (
                         <mark
@@ -223,7 +229,7 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 return <Fragment key={partIndex}>{part}</Fragment>;
             });
         },
-        [searchTerm, currentMatch, escapeRegex]
+        [searchTerm, currentMatch]
     );
 
     const isSearchActive = searchTerm.length > 0;
