@@ -81,6 +81,25 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 return;
             }
 
+            // Helper function to strip markdown - same as in highlightText
+            const stripMarkdown = (markdown: string): string => {
+                return (
+                    markdown
+                        // Remove citations [c1], [c2], etc.
+                        .replace(/\[c\d+\]/g, '')
+                        // Remove markdown bold **text**
+                        .replace(/\*\*(.*?)\*\*/g, '$1')
+                        // Remove markdown italic *text*
+                        .replace(/\*(.*?)\*/g, '$1')
+                        // Remove markdown headers
+                        .replace(/^#+\s+/gm, '')
+                        // Remove markdown links [text](url)
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                        // Remove remaining markdown formatting
+                        .replace(/[`_~]/g, '')
+                );
+            };
+
             const allMatches: SearchMatch[] = [];
             const searchRegex = new RegExp(term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
 
@@ -88,9 +107,11 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 if (message.type === ChatMessageType.RESPONSE) {
                     // Search each block individually to maintain correct match indexing
                     message.blocks.forEach((block, blockIndex) => {
+                        // Strip markdown to get plain text for accurate offset calculation
+                        const plainText = stripMarkdown(block.content);
                         let match;
                         let matchIndexInBlock = 0;
-                        while ((match = searchRegex.exec(block.content)) !== null) {
+                        while ((match = searchRegex.exec(plainText)) !== null) {
                             allMatches.push({
                                 messageIndex,
                                 blockIndex,
@@ -104,13 +125,15 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                     });
                 } else if (message.type === ChatMessageType.PROMPT) {
                     // For prompt messages, there's only one text content
+                    const plainText = stripMarkdown(message.prompt);
+                    let match;
                     let matchIndexInBlock = 0;
-                    while (searchRegex.exec(message.prompt) !== null) {
+                    while ((match = searchRegex.exec(plainText)) !== null) {
                         allMatches.push({
                             messageIndex,
                             blockIndex: 0, // Prompt messages have only one block
                             matchIndexInBlock,
-                            matchOffset: 0,
+                            matchOffset: match.index,
                         });
                         matchIndexInBlock++;
                     }
@@ -197,39 +220,81 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
         (text: string, messageIndex: number, blockIndex = 0): ReactNode => {
             if (!searchTerm || !searchTerm.trim() || !text) return text;
 
-            // To check if the given text includes the current match, compare the text's offset within the entire
-            // block's content against the current match's offset.
-            // const data: ChatMessage[] = virtuosoRef?.current?.data.get() || [];
+            const data: ChatMessage[] = virtuosoRef?.current?.data.get() || [];
+            const message = data[messageIndex];
+
+            if (!message || message.type !== ChatMessageType.RESPONSE || !message.blocks?.[blockIndex]) {
+                return text;
+            }
+
+            // Get the full markdown content of the block
+            const fullBlockContent = message.blocks[blockIndex]?.content;
+            if (!fullBlockContent) {
+                return text;
+            }
+
+            // Parse out markdown syntax to get plain text content
+            const stripMarkdown = (markdown: string): string => {
+                return (
+                    markdown
+                        // Remove citations [c1], [c2], etc.
+                        .replace(/\[c\d+\]/g, '')
+                        // Remove markdown bold **text**
+                        .replace(/\*\*(.*?)\*\*/g, '$1')
+                        // Remove markdown italic *text*
+                        .replace(/\*(.*?)\*/g, '$1')
+                        // Remove markdown headers
+                        .replace(/^#+\s+/gm, '')
+                        // Remove markdown links [text](url)
+                        .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                        // Remove remaining markdown formatting
+                        .replace(/[`_~]/g, '')
+                );
+            };
+
+            const plainBlockContent = stripMarkdown(fullBlockContent);
+            const plainCurrentText = stripMarkdown(text);
+
+            // Find the offset of the current text within the full block content
+            const textOffsetInBlock = plainBlockContent.indexOf(plainCurrentText);
+
+            if (textOffsetInBlock === -1) {
+                // Fallback if we can't find the text offset
+                return text;
+            }
 
             const escapedSearchTerm = searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
             const regex = new RegExp(`(${escapedSearchTerm})`, 'gi');
             const parts = text.split(regex);
 
-            // Track which match within this text block we're processing
-            let matchCounter = 0;
+            // Calculate which match(es) fall within this text node
+            let currentTextOffset = textOffsetInBlock;
+
             return parts.map((part, partIndex) => {
                 if (part.toLowerCase() === searchTerm.toLowerCase()) {
-                    // Check if this is the currently selected match
+                    // Check if this match offset corresponds to the current selected match
                     const isCurrentMatch =
                         currentMatch?.messageIndex === messageIndex &&
                         currentMatch?.blockIndex === blockIndex &&
-                        currentMatch?.matchIndexInBlock === matchCounter;
+                        currentMatch?.matchOffset >= currentTextOffset &&
+                        currentMatch?.matchOffset < currentTextOffset + part.length;
 
                     const element = (
                         <mark
-                            key={`${partIndex}-${matchCounter}`}
+                            key={`${partIndex}-${currentTextOffset}`}
                             className={isCurrentMatch ? 'bg-orange-400' : 'bg-yellow-400'}
                         >
                             {part}
                         </mark>
                     );
-                    matchCounter++;
+                    currentTextOffset += part.length;
                     return element;
                 }
+                currentTextOffset += part.length;
                 return <Fragment key={partIndex}>{part}</Fragment>;
             });
         },
-        [searchTerm, currentMatch]
+        [searchTerm, currentMatch, virtuosoRef]
     );
 
     const isSearchActive = searchTerm.length > 0;
