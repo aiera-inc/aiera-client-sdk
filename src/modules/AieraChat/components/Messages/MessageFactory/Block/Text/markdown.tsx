@@ -269,13 +269,13 @@ export function MarkdownRenderer({
         ul: {
             component: 'ul',
             props: {
-                className: 'list-disc pl-6 my-4',
+                className: 'list-disc pl-6 mb-4',
             },
         },
         ol: {
             component: 'ol',
             props: {
-                className: 'list-decimal pl-6 my-4',
+                className: 'list-decimal pl-6 mb-4',
             },
         },
         li: {
