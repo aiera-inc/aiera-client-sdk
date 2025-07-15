@@ -33,6 +33,7 @@ const escapeRegex = (str: string): string => {
 
 export interface SearchMatch {
     blockIndex: number;
+    matchIndex: number;
     matchOffset: number;
     messageIndex: number;
 }
@@ -105,12 +106,15 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
             const matches: SearchMatch[] = [];
             const plainText = stripMarkdown(text);
             let match;
+            let matchCounter = 0;
             while ((match = regex.exec(plainText)) !== null) {
                 matches.push({
                     messageIndex,
                     blockIndex,
+                    matchIndex: matchCounter,
                     matchOffset: match.index,
                 });
+                matchCounter++;
             }
             // Reset regex lastIndex to ensure proper matching in next iteration
             regex.lastIndex = 0;
@@ -150,13 +154,11 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 if (message.type === ChatMessageType.RESPONSE) {
                     // Search each block individually to maintain correct match indexing
                     message.blocks.forEach((block, blockIndex) => {
-                        const blockMatches = findMatchesInText(block.content, messageIndex, blockIndex, searchRegex);
-                        allMatches.push(...blockMatches);
+                        allMatches.push(...findMatchesInText(block.content, messageIndex, blockIndex, searchRegex));
                     });
                 } else if (message.type === ChatMessageType.PROMPT) {
                     // For prompt messages, there's only one text content
-                    const promptMatches = findMatchesInText(message.prompt, messageIndex, 0, searchRegex);
-                    allMatches.push(...promptMatches);
+                    allMatches.push(...findMatchesInText(message.prompt, messageIndex, 0, searchRegex));
                 }
             });
 
@@ -238,13 +240,13 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
             }
 
             // Get the full markdown content of the block
-            const fullBlockContent =
+            const currentMessageContent =
                 message.type === ChatMessageType.RESPONSE ? message.blocks[blockIndex]?.content : message.prompt;
-            if (!fullBlockContent) {
+            if (!currentMessageContent) {
                 return text;
             }
 
-            const plainBlockContent = stripMarkdown(fullBlockContent);
+            const plainBlockContent = stripMarkdown(currentMessageContent);
             const plainCurrentText = stripMarkdown(text);
 
             // Find the offset of the current text within the full block content
@@ -259,27 +261,34 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
 
             // Calculate which match(es) fall within this text node
             let currentTextOffset = textOffsetInBlock;
+            let matchIndexInBlock = 0;
+
+            // Count how many matches occur before this text node in the block
+            const beforeTextRegex = new RegExp(escapeRegex(searchTerm), 'gi');
+            const textBeforeThisNode = plainBlockContent.substring(0, textOffsetInBlock);
+            let matchBeforeCount = 0;
+            while (beforeTextRegex.exec(textBeforeThisNode) !== null) {
+                matchBeforeCount++;
+            }
+            matchIndexInBlock = matchBeforeCount;
 
             return parts.map((part, partIndex) => {
                 if (part.toLowerCase() === searchTerm.toLowerCase()) {
-                    // Check if this match offset corresponds to the current selected match
-                    // Prompts don't have match offsets because only a single text node is rendered
+                    // Check if this match corresponds to the current selected match
                     const isCurrentMatch =
                         currentMatch?.messageIndex === messageIndex &&
                         currentMatch?.blockIndex === blockIndex &&
-                        (message.type !== ChatMessageType.RESPONSE ||
-                            (currentMatch?.matchOffset >= currentTextOffset &&
-                                currentMatch?.matchOffset < currentTextOffset + part.length));
+                        currentMatch?.matchIndex === matchIndexInBlock;
 
                     const element = (
                         <mark
-                            key={`${partIndex}-${currentTextOffset}`}
+                            key={`${partIndex}-${currentTextOffset}-${matchIndexInBlock}`}
                             className={isCurrentMatch ? 'bg-orange-400' : 'bg-yellow-400'}
                         >
                             {part}
                         </mark>
                     );
-                    currentTextOffset += part.length;
+                    matchIndexInBlock++;
                     return element;
                 }
                 currentTextOffset += part.length;
