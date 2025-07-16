@@ -2913,7 +2913,81 @@
 <a name='L2848'></a><a href='#L2848'>2848</a>
 <a name='L2849'></a><a href='#L2849'>2849</a>
 <a name='L2850'></a><a href='#L2850'>2850</a>
-<a name='L2851'></a><a href='#L2851'>2851</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L2851'></a><a href='#L2851'>2851</a>
+<a name='L2852'></a><a href='#L2852'>2852</a>
+<a name='L2853'></a><a href='#L2853'>2853</a>
+<a name='L2854'></a><a href='#L2854'>2854</a>
+<a name='L2855'></a><a href='#L2855'>2855</a>
+<a name='L2856'></a><a href='#L2856'>2856</a>
+<a name='L2857'></a><a href='#L2857'>2857</a>
+<a name='L2858'></a><a href='#L2858'>2858</a>
+<a name='L2859'></a><a href='#L2859'>2859</a>
+<a name='L2860'></a><a href='#L2860'>2860</a>
+<a name='L2861'></a><a href='#L2861'>2861</a>
+<a name='L2862'></a><a href='#L2862'>2862</a>
+<a name='L2863'></a><a href='#L2863'>2863</a>
+<a name='L2864'></a><a href='#L2864'>2864</a>
+<a name='L2865'></a><a href='#L2865'>2865</a>
+<a name='L2866'></a><a href='#L2866'>2866</a>
+<a name='L2867'></a><a href='#L2867'>2867</a>
+<a name='L2868'></a><a href='#L2868'>2868</a>
+<a name='L2869'></a><a href='#L2869'>2869</a>
+<a name='L2870'></a><a href='#L2870'>2870</a>
+<a name='L2871'></a><a href='#L2871'>2871</a>
+<a name='L2872'></a><a href='#L2872'>2872</a>
+<a name='L2873'></a><a href='#L2873'>2873</a>
+<a name='L2874'></a><a href='#L2874'>2874</a>
+<a name='L2875'></a><a href='#L2875'>2875</a>
+<a name='L2876'></a><a href='#L2876'>2876</a>
+<a name='L2877'></a><a href='#L2877'>2877</a>
+<a name='L2878'></a><a href='#L2878'>2878</a>
+<a name='L2879'></a><a href='#L2879'>2879</a>
+<a name='L2880'></a><a href='#L2880'>2880</a>
+<a name='L2881'></a><a href='#L2881'>2881</a>
+<a name='L2882'></a><a href='#L2882'>2882</a>
+<a name='L2883'></a><a href='#L2883'>2883</a>
+<a name='L2884'></a><a href='#L2884'>2884</a>
+<a name='L2885'></a><a href='#L2885'>2885</a>
+<a name='L2886'></a><a href='#L2886'>2886</a>
+<a name='L2887'></a><a href='#L2887'>2887</a>
+<a name='L2888'></a><a href='#L2888'>2888</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -6370,6 +6444,12 @@ export type EventGroup = {
   title: Scalars['String'];
 };
 &nbsp;
+export type EventOpenSearchResultHit = SearchResultHit &amp; {
+  __typename?: 'EventOpenSearchResultHit';
+  event: OpenSearchEvent;
+  id: Scalars['ID'];
+};
+&nbsp;
 export type EventQuotePriceInfo = {
   __typename?: 'EventQuotePriceInfo';
   currentDayClosePrice?: Maybe&lt;Scalars['Float']&gt;;
@@ -6858,6 +6938,36 @@ export type NewsSourceTag = Tag &amp; {
   tagType: TagType;
 };
 &nbsp;
+export type OpenSearch = {
+  __typename?: 'OpenSearch';
+  events: OpenSearchResult;
+};
+&nbsp;
+&nbsp;
+export type OpenSearchEventsArgs = {
+  filter: OpenSearchEventFilter;
+};
+&nbsp;
+export type OpenSearchEvent = {
+  __typename?: 'OpenSearchEvent';
+  eventDate: Scalars['DateTime'];
+  eventId: Scalars['Int'];
+  eventTitle: Scalars['String'];
+  eventType: EventType;
+  id: Scalars['ID'];
+};
+&nbsp;
+export type OpenSearchEventFilter = {
+  searchTerm: Scalars['String'];
+};
+&nbsp;
+export type OpenSearchResult = SearchResult &amp; {
+  __typename?: 'OpenSearchResult';
+  hits: Array&lt;EventOpenSearchResultHit&gt;;
+  id: Scalars['ID'];
+  numTotalHits: Scalars['Int'];
+};
+&nbsp;
 export type Organization = {
   __typename?: 'Organization';
   billingSource: BillingSource;
@@ -6958,6 +7068,7 @@ export type Query = {
   languages: Array&lt;Language&gt;;
   latestEventForTicker: Event;
   locales: Array&lt;Locale&gt;;
+  openSearch: OpenSearch;
   privateRecordings: Array&lt;PrivateRecording&gt;;
   search: Search;
   searchActiveHosts: StatsdActiveHost;
@@ -8620,7 +8731,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Sat Jul 05 2025 18:16:58 GMT-0400 (Eastern Daylight Time)
+                at Wed Jul 16 2025 13:28:25 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
