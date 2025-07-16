@@ -23,16 +23,15 @@ export function Title({ onChangeTitle }: { onChangeTitle: (title: string) => voi
     return (
         <div className="flex-1 flex items-center text-base font-bold">
             <input
-                aria-label="Chat title input"
+                aria-label="Chat title"
+                className="text-center antialiased flex-1 outline-none bg-transparent truncate"
                 onChange={(e) => {
                     const title = e.target.value;
                     onSetTitle(title);
                     debouncedTitleChange(title);
                 }}
-                key="titleInput"
-                className="text-center antialiased flex-1 outline-none bg-transparent truncate"
-                value={chatTitle ?? ''}
                 placeholder="Untitled Chat"
+                value={chatTitle ?? ''}
             />
         </div>
     );
