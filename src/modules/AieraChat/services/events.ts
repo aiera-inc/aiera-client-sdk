@@ -1,28 +1,37 @@
-import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
-import { EventView, EventsQuery, EventsQueryVariables } from '@aiera/client-sdk/types';
 import { gql } from 'urql';
+import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
+import { SearchEventsQuery, SearchEventsQueryVariables } from '@aiera/client-sdk/types/generated';
+
 const eventsGQL = (type = '') => gql`
-        query Events${type}($filter: EventFilter, $view: EventView!) {
-            events(filter: $filter, view: $view) {
-                id
-                hasPublishedTranscript
-                hasTranscript
-                eventDate
-                eventType
-                isLive
-                title
+        query SearchEvents${type}($filter: OpenSearchEventFilter!) {
+            openSearch {
+                events(filter: $filter) {
+                    id
+                    hits {
+                        id
+                        event {
+                            id
+                            eventDate
+                            eventId
+                            eventTitle
+                            eventType
+                        }
+                    }
+                    numTotalHits
+                }
             }
         }
     `;
 
 export function useEvents(searchTerm?: string) {
-    const eventsQuery: QueryResult<EventsQuery, EventsQueryVariables> = useQuery<EventsQuery, EventsQueryVariables>({
+    const eventsQuery: QueryResult<SearchEventsQuery, SearchEventsQueryVariables> = useQuery<
+        SearchEventsQuery,
+        SearchEventsQueryVariables
+    >({
         pause: !searchTerm,
         variables: {
-            view: EventView.Recent,
             filter: {
-                hasTranscript: true,
-                title: searchTerm,
+                searchTerm: searchTerm || '',
             },
         },
         query: eventsGQL(),

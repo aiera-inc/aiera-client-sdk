@@ -1,17 +1,12 @@
-import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
-import { MicroDocumentMinus } from '@aiera/client-sdk/components/Svg/MicroDocumentMinus';
-import { MicroDocumentPlus } from '@aiera/client-sdk/components/Svg/MicroDocumentPlus';
-import { MicroExclamationCircle } from '@aiera/client-sdk/components/Svg/MicroExclamationCircle';
-import { MicroFolderOpen } from '@aiera/client-sdk/components/Svg/MicroFolderOpen';
 import debounce from 'lodash.debounce';
 import React, { ReactElement, useCallback, useEffect, useState } from 'react';
-import { match } from 'ts-pattern';
-import { ContentRow } from '../../components/ContentRow';
+import { EventSearchResults } from '@aiera/client-sdk/modules/AieraChat/components/SearchResults/events';
+import { MicroFolderOpen } from '@aiera/client-sdk/components/Svg/MicroFolderOpen';
 import { Modal } from '../Modal';
 import { SearchInput } from '../../components/SearchInput';
 import { useEvents } from '../../services/events';
 import { Source, useChatStore } from '../../store';
-import { MicroDocumentSearch } from '@aiera/client-sdk/components/Svg/MicroDocumentSearch';
+import { MicroExclamationCircle } from '@aiera/client-sdk/components/Svg/MicroExclamationCircle';
 
 /**
  * Checks if a given source exists in an array of sources
@@ -84,107 +79,14 @@ export function AddSourceDialog({
                 />
                 <div className="flex-1 flex flex-col relative -mx-5">
                     <div className="absolute inset-0 overflow-y-auto pt-4 pb-6 flex flex-col flex-1">
-                        {searchTerm && searchTerm?.length > 2
-                            ? match(eventsQuery)
-                                  .with({ status: 'loading' }, () => (
-                                      <div className="mt-6 flex items-center justify-center">
-                                          <LoadingSpinner heightClass="h-6" widthClass="w-6" />
-                                      </div>
-                                  ))
-                                  .with({ status: 'success' }, ({ data }) =>
-                                      data.events.length > 0 ? (
-                                          data.events.map(({ id, title, eventDate }) => {
-                                              const sourceAdded = hasSource(
-                                                  { targetId: id, targetType: 'event', title },
-                                                  sources
-                                              );
-                                              const toggleSource = sourceAdded
-                                                  ? () => onRemoveSource({ targetId: id, targetType: 'event', title })
-                                                  : () =>
-                                                        onAddSource({
-                                                            confirmed: true,
-                                                            targetId: id,
-                                                            targetType: 'event',
-                                                            title,
-                                                            date: eventDate,
-                                                        });
-                                              return (
-                                                  <ContentRow
-                                                      key={id}
-                                                      onClickIcon={[
-                                                          toggleSource,
-                                                          () => {
-                                                              onSelectSource({
-                                                                  targetId: id,
-                                                                  targetType: 'event',
-                                                                  title,
-                                                              });
-                                                          },
-                                                      ]}
-                                                      onClick={toggleSource}
-                                                      className="mx-5"
-                                                      Icon={[
-                                                          sourceAdded ? MicroDocumentMinus : MicroDocumentPlus,
-                                                          MicroDocumentSearch,
-                                                      ]}
-                                                      iconClassName={[
-                                                          sourceAdded
-                                                              ? 'text-red-500 hover:text-red-700'
-                                                              : 'hover:text-blue-600',
-                                                          'hover:text-blue-600',
-                                                      ]}
-                                                  >
-                                                      <div className="flex flex-1 justify-between text-base hover:text-blue-700 cursor-pointer">
-                                                          <p className="line-clamp-1">{title}</p>
-                                                          <p className="flex-shrink-0 ml-3">
-                                                              {new Date(eventDate).toLocaleDateString('en-US', {
-                                                                  dateStyle: 'medium',
-                                                              })}
-                                                          </p>
-                                                      </div>
-                                                  </ContentRow>
-                                              );
-                                          })
-                                      ) : (
-                                          <div className="text-slate-600 py-1 flex items-center justify-center mx-5">
-                                              <p className="text-base text-center text-balance">
-                                                  No results found for{' '}
-                                                  <span className="font-bold antialiased">{searchTerm}</span>
-                                              </p>
-                                          </div>
-                                      )
-                                  )
-                                  .otherwise(() => null)
-                            : sources.map(({ targetId, targetType, title, date }) => (
-                                  <ContentRow
-                                      className="mx-5 group"
-                                      key={targetId}
-                                      onClickIcon={[
-                                          () => onRemoveSource({ title, targetId, targetType }),
-                                          () => {
-                                              onSelectSource({
-                                                  targetId,
-                                                  targetType,
-                                                  title,
-                                              });
-                                          },
-                                      ]}
-                                      onClick={() => onRemoveSource({ targetId, targetType, title })}
-                                      Icon={[MicroDocumentMinus, MicroDocumentSearch]}
-                                      iconClassName={['group-hover:text-red-500', 'hover:text-blue-600']}
-                                  >
-                                      <div className="flex flex-1 justify-between text-base hover:text-blue-700 cursor-pointer">
-                                          <p className="line-clamp-1">{title}</p>
-                                          {date && (
-                                              <p className="flex-shrink-0 ml-3">
-                                                  {new Date(date).toLocaleDateString('en-US', {
-                                                      dateStyle: 'medium',
-                                                  })}
-                                              </p>
-                                          )}
-                                      </div>
-                                  </ContentRow>
-                              ))}
+                        <EventSearchResults
+                            eventsQuery={eventsQuery}
+                            onAddSource={onAddSource}
+                            onRemoveSource={onRemoveSource}
+                            onSelectSource={onSelectSource}
+                            searchTerm={searchTerm}
+                            sources={sources}
+                        />
                         {!searchTerm && sources.length === 0 && (
                             <div className="flex items-center justify-center py-2 px-3 rounded-lg bg-rose-100 mx-5 text-rose-800">
                                 <MicroExclamationCircle className="flex-shrink-0 w-4 mr-2" />
