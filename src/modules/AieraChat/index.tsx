@@ -369,7 +369,7 @@ export function AieraChat(): ReactElement {
                     'aiera-chat'
                 )}
             >
-                <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} virtuosoRef={virtuosoRef} />
+                <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} />
                 <Messages onOpenSources={onOpenSources} onSubmit={handleMessageSubmit} virtuosoRef={virtuosoRef} />
                 {showSources && <Sources onClearSources={handleClearSources} onClose={onCloseSources} />}
                 {showMenu && (

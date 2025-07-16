@@ -23,11 +23,9 @@ export interface ChatState {
     onRemoveSource: (targetId: string, targetType: string) => void;
     onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) => void;
     onSelectSource: (source?: Source) => void;
-    onSetSearchTerm: (searchTerm?: string) => void;
     onSetStatus: (chatStatus: ChatSessionStatus) => void;
     onSetTitle: (title?: string) => void;
     onSetUserId: (chatUserId?: string) => void;
-    searchTerm?: string;
     selectedSource?: Source;
     setHasChanges: (hasChanges: boolean) => void;
     sources: Source[];
@@ -51,7 +49,6 @@ export const useChatStore = create<ChatState>((set) => ({
             chatStatus: ChatSessionStatus.Active,
             chatTitle: undefined,
             hasChanges: false,
-            searchTerm: undefined,
             sources: [],
         }),
     onRemoveSource: (targetId: string, targetType: string) =>
@@ -64,11 +61,9 @@ export const useChatStore = create<ChatState>((set) => ({
     onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) =>
         set({ chatId, chatStatus, chatTitle, sources, hasChanges: false }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
-    onSetSearchTerm: (searchTerm?: string) => set({ searchTerm }),
     onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
     onSetUserId: (chatUserId?: string) => set({ chatUserId }),
-    searchTerm: undefined,
     selectedSource: undefined,
     setHasChanges: (hasChanges: boolean) => set({ hasChanges }),
     sources: [],

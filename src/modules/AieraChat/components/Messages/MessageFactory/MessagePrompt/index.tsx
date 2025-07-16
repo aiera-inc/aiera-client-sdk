@@ -2,7 +2,6 @@ import { MicroQuestionMark } from '@aiera/client-sdk/components/Svg/MicroQuestio
 import classNames from 'classnames';
 import React from 'react';
 import { ChatMessagePrompt } from '../../../../services/messages';
-import { SearchableText } from '../SearchableText';
 
 export const MessagePrompt = ({
     data,
@@ -43,7 +42,7 @@ export const MessagePrompt = ({
                         'line-clamp-2': isStickyHeader,
                     })}
                 >
-                    <SearchableText text={prompt} />
+                    {prompt}
                 </p>
             </div>
         </div>
