@@ -74963,16 +74963,23 @@ var ChatSessionsDocument = lib_default`
   }
 }
     `;
-var EventsDocument = lib_default`
-    query Events($filter: EventFilter, $view: EventView!) {
-  events(filter: $filter, view: $view) {
-    id
-    hasPublishedTranscript
-    hasTranscript
-    eventDate
-    eventType
-    isLive
-    title
+var SearchEventsDocument = lib_default`
+    query SearchEvents($filter: OpenSearchEventFilter!) {
+  openSearch {
+    events(filter: $filter) {
+      id
+      hits {
+        id
+        event {
+          id
+          eventDate
+          eventId
+          eventTitle
+          eventType
+        }
+      }
+      numTotalHits
+    }
   }
 }
     `;
