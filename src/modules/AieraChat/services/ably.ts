@@ -411,6 +411,14 @@ export const useAbly = (): UseAblyReturn => {
             void channel
                 .attach()
                 .then(() => {
+                    channel
+                        .history({ untilAttach: true })
+                        .then((history) => {
+                            console.log({ history: history.items });
+                        })
+                        .catch((e) => log(`Error getting channel history ${channelName}: ${String(e)}`));
+                })
+                .then(() => {
                     void channel.subscribe(messageHandler);
                     globalAblyState.subscribedChannels.add(channelName);
                     log(`Subscribed to Ably channel ${channelName}`);
