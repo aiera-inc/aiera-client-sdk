@@ -20,7 +20,6 @@
       "Bash(osascript:*)",
       "Bash(curl:*)",
       "Bash(pkill:*)",
-      "Bash(python3:*)",
       "Bash(npm test:*)"
     ],
     "deny": []

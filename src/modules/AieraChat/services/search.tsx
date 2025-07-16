@@ -222,35 +222,46 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
      * @param text - The text to search and highlight
      * @param messageIndex - The index of the message containing this text
      * @param blockIndex - The index of the block within the message (optional, defaults to 0)
+     * @param isStickyHeader - Whether the passed-in text belongs to the StickyHeader
      * @returns React nodes with highlighted matches
      */
     const highlightText = useCallback(
-        (text: string, messageIndex: number, blockIndex = 0): ReactNode => {
+        (text: string, messageIndex: number, blockIndex = 0, isStickyHeader = false): ReactNode => {
             if (!searchTerm || !searchTerm.trim() || !text) return text;
+            console.log({ text, messageIndex, blockIndex, isStickyHeader });
 
             const data: ChatMessage[] = virtuosoRef?.current?.data.get() || [];
+            console.log({ data });
             const message = data[messageIndex];
+            console.log({ message });
 
             if (
                 !message ||
                 ![ChatMessageType.PROMPT, ChatMessageType.RESPONSE].includes(message.type) ||
                 (message.type === ChatMessageType.RESPONSE && !message.blocks?.[blockIndex])
             ) {
+                console.log(`SHORT CIRCUIT!!! returning text: ${text}`);
                 return text;
             }
 
             // Get the full markdown content of the block
+            // If the text belongs to the StickyHeader, use the prompt for highlighting
             const currentMessageContent =
-                message.type === ChatMessageType.RESPONSE ? message.blocks[blockIndex]?.content : message.prompt;
+                !isStickyHeader && message.type === ChatMessageType.RESPONSE
+                    ? message.blocks[blockIndex]?.content
+                    : message.prompt;
+            console.log({ currentMessageContent, currentMatch });
             if (!currentMessageContent) {
                 return text;
             }
 
             const plainBlockContent = stripMarkdown(currentMessageContent);
             const plainCurrentText = stripMarkdown(text);
+            console.log({ plainBlockContent, plainCurrentText });
 
             // Find the offset of the current text within the full block content
             const textOffsetInBlock = plainBlockContent.indexOf(plainCurrentText);
+            console.log({ textOffsetInBlock });
             if (textOffsetInBlock === -1) {
                 // Fallback if we can't find the text offset
                 return text;
@@ -258,6 +269,7 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
 
             const regex = new RegExp(`(${escapeRegex(searchTerm)})`, 'gi');
             const parts = text.split(regex);
+            console.log({ parts });
 
             // Calculate which match(es) fall within this text node
             let currentTextOffset = textOffsetInBlock;
@@ -271,14 +283,18 @@ export function useSearch({ virtuosoRef }: UseSearchProps): UseSearchResponse {
                 matchBeforeCount++;
             }
             matchIndexInBlock = matchBeforeCount;
+            console.log({ matchIndexInBlock });
 
             return parts.map((part, partIndex) => {
                 if (part.toLowerCase() === searchTerm.toLowerCase()) {
                     // Check if this match corresponds to the current selected match
+                    // For StickyHeaders, the passed-in messageIndex is always the response message after the prompt,
+                    // so subtract 1 when checking for the current match.
                     const isCurrentMatch =
-                        currentMatch?.messageIndex === messageIndex &&
+                        currentMatch?.messageIndex === (isStickyHeader ? messageIndex - 1 : messageIndex) &&
                         currentMatch?.blockIndex === blockIndex &&
                         currentMatch?.matchIndex === matchIndexInBlock;
+                    console.log({ isCurrentMatch, currentMatch, messageIndex, blockIndex, matchIndexInBlock });
 
                     const element = (
                         <mark

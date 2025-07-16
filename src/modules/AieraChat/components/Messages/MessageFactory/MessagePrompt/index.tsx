@@ -13,7 +13,7 @@ export const MessagePrompt = ({
     data: ChatMessagePrompt;
     className?: string;
     isStickyHeader?: boolean;
-    highlightText?: (text: string, messageIndex: number) => ReactNode;
+    highlightText?: (text: string, messageIndex: number, blockIndex: number, isStickyHeader?: boolean) => ReactNode;
     messageIndex?: number;
 }) => {
     const prompt = data.prompt;
@@ -46,7 +46,9 @@ export const MessagePrompt = ({
                         'line-clamp-2': isStickyHeader,
                     })}
                 >
-                    {highlightText && messageIndex !== undefined ? highlightText(prompt, messageIndex) : prompt}
+                    {highlightText && messageIndex !== undefined
+                        ? highlightText(prompt, messageIndex, 0, isStickyHeader)
+                        : prompt}
                 </p>
             </div>
         </div>

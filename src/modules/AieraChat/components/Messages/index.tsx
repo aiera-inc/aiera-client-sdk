@@ -43,12 +43,15 @@ export interface MessageListContext {
     highlightText: (text: string, messageIndex: number) => ReactNode;
 }
 
-const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
-    const data: ChatMessage[] = useCurrentlyRenderedData();
-    const { getScrollLocation } = useVirtuosoMethods();
+/* eslint-disable react/prop-types */
+const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = ({ context }) => {
+    const currentlyRenderedData: ChatMessage[] = useCurrentlyRenderedData();
+    const { data, getScrollLocation } = useVirtuosoMethods();
     const { listOffset } = getScrollLocation();
-    const firstPrompt = data[0];
+    const firstPrompt = currentlyRenderedData[0];
     if (!firstPrompt) return null;
+    const existingMessages = (data.get() || []) as ChatMessage[];
+    const messageIndex = existingMessages.findIndex((m) => m.id === firstPrompt.id);
     return (
         <Fragment key={firstPrompt.ordinalId}>
             <div
@@ -62,10 +65,13 @@ const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['S
                     'opacity-0': listOffset > -56,
                 })}
                 data={firstPrompt as ChatMessagePrompt}
+                highlightText={context.highlightText}
+                messageIndex={messageIndex}
             />
         </Fragment>
     );
 };
+/* eslint-enable react/prop-types */
 
 export function Messages({
     confirmSourceConfirmation,
