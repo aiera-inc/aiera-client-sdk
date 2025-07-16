@@ -23,6 +23,7 @@ export function Title({ onChangeTitle }: { onChangeTitle: (title: string) => voi
     return (
         <div className="flex-1 flex items-center text-base font-bold">
             <input
+                aria-label="Chat title input"
                 onChange={(e) => {
                     const title = e.target.value;
                     onSetTitle(title);
