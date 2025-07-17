@@ -15,7 +15,7 @@ import { Sources } from './panels/Sources';
 import { useChatStore } from './store';
 import { useAbly, CHANNEL_PREFIX } from './services/ably';
 import { useChatSessions } from './services/chats';
-import { ChatMessage } from './services/messages';
+import { MessageGroup } from './services/messageGroups';
 import { RealtimeChannel, Message } from 'ably';
 
 export function AieraChat(): ReactElement {
@@ -38,7 +38,7 @@ export function AieraChat(): ReactElement {
     } = useChatStore();
 
     const config = useConfig();
-    const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
+    const virtuosoRef = useRef<VirtuosoMessageListMethods<MessageGroup>>(null);
 
     // Set up Ably realtime client
     const { createAblyRealtimeClient, subscribeToChannel, unsubscribeFromChannel } = useAbly();

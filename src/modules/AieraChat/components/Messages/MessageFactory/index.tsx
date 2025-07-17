@@ -1,28 +1,31 @@
 import { VirtuosoMessageListProps } from '@virtuoso.dev/message-list';
 import React from 'react';
-import { match } from 'ts-pattern';
 import { MessageListContext } from '..';
-import { ChatMessage, ChatMessageType } from '../../../services/messages';
+import { MessageGroup } from '../../../services/messageGroups';
+import { ChatMessageType } from '../../../services/messages';
 import { MessagePrompt } from './MessagePrompt';
 import { MessageResponse } from './MessageResponse';
 import { SourcesResponse } from './SourcesResponse';
 
 /* eslint-disable react/prop-types */
-export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListContext>['ItemContent'] = ({
+export const MessageFactory: VirtuosoMessageListProps<MessageGroup, MessageListContext>['ItemContent'] = ({
     data,
     context,
     nextData,
 }) => (
-    <div className="flex flex-col max-w-[50rem] w-full m-auto">
-        {match(data)
-            .with({ type: ChatMessageType.PROMPT }, (promptData) => <MessagePrompt data={promptData} />)
-            .with({ type: ChatMessageType.SOURCES }, (sourcesData) => (
-                <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
-            ))
-            .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
-                <MessageResponse data={responseData} onReRun={context.onReRun} isLastItem={!nextData} />
-            ))
-            .exhaustive()}
+    <div className="flex flex-col max-w-[50rem] w-full m-auto mb-6">
+        {data.messages.map((message) => {
+            if (message.type === ChatMessageType.PROMPT) {
+                return <MessagePrompt key={message.id} data={message} />;
+            } else if (message.type === ChatMessageType.SOURCES) {
+                return <SourcesResponse key={message.id} data={message} onConfirm={context.onConfirm} />;
+            } else if (message.type === ChatMessageType.RESPONSE) {
+                return (
+                    <MessageResponse key={message.id} data={message} onReRun={context.onReRun} isLastItem={!nextData} />
+                );
+            }
+            return null;
+        })}
     </div>
 );
 /* eslint-enable react/prop-types */
