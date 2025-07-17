@@ -8,25 +8,21 @@ import {
     VirtuosoMessageList,
     VirtuosoMessageListLicense,
     VirtuosoMessageListMethods,
-    VirtuosoMessageListProps,
-    useCurrentlyRenderedData,
-    useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import { RealtimeChannel } from 'ably';
-import classNames from 'classnames';
-import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
-    ChatMessage,
     ChatMessagePrompt,
     ChatMessageResponse,
     ChatMessageStatus,
     ChatMessageType,
+    ChatMessage,
     useChatSession,
 } from '../../services/messages';
+import { MessageGroup, groupMessages } from '../../services/messageGroups';
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import { BlockType } from './MessageFactory/Block';
-import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { Prompt } from './Prompt';
 // import { SuggestedPrompts } from './SuggestedPrompts';
 import { Loading } from './MessageFactory/Loading';
@@ -40,30 +36,6 @@ export interface MessageListContext {
     onConfirm: (messageId: string, sources: Source[]) => void;
 }
 
-const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
-    const data: ChatMessage[] = useCurrentlyRenderedData();
-    const { getScrollLocation } = useVirtuosoMethods();
-    const { listOffset } = getScrollLocation();
-    const firstPrompt = data[0];
-    if (!firstPrompt) return null;
-    return (
-        <Fragment key={firstPrompt.ordinalId}>
-            <div
-                className={classNames('absolute top-0 left-0 right-0 bg-gray-50 h-2', {
-                    'opacity-0': listOffset > -56,
-                })}
-            />
-            <MessagePrompt
-                isStickyHeader
-                className={classNames('max-w-[50rem] m-auto', {
-                    'opacity-0': listOffset > -56,
-                })}
-                data={firstPrompt as ChatMessagePrompt}
-            />
-        </Fragment>
-    );
-};
-
 export function Messages({
     onOpenSources,
     onSubmit,
@@ -71,7 +43,7 @@ export function Messages({
 }: {
     onOpenSources: () => void;
     onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
+    virtuosoRef: RefObject<VirtuosoMessageListMethods<MessageGroup>>;
 }) {
     const config = useConfig();
     const [submitting, setSubmitting] = useState<boolean>(false);
@@ -82,9 +54,13 @@ export function Messages({
     const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
+    const messageGroups = useMemo(() => groupMessages(messages), [messages]);
+
     const onReRun = useCallback((ordinalId: string) => {
-        const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
-        if (originalIndex) {
+        const currentGroups = virtuosoRef.current?.data.get() || [];
+        const groupIndex = currentGroups.findIndex((group) => group.messages.some((m) => m.ordinalId === ordinalId));
+
+        if (groupIndex !== -1) {
             setTimeout(() => {
                 let counter = 0;
                 let newMessage = '';
@@ -96,22 +72,31 @@ export function Messages({
                     } else if (counter > 10) {
                         status = ChatMessageStatus.STREAMING;
                     }
+
                     virtuosoRef.current?.data.map(
-                        (message) => {
-                            if (message.ordinalId === ordinalId) {
+                        (group) => {
+                            const messageIndex = group.messages.findIndex((m) => m.ordinalId === ordinalId);
+                            if (messageIndex !== -1) {
                                 newMessage = newMessage + ' ' + 'some message';
-                                return {
-                                    ...message,
+                                const updatedMessage = {
+                                    ...group.messages[messageIndex],
                                     text: newMessage,
                                     status,
+                                } as ChatMessage & { text: string };
+
+                                const updatedMessages = [...group.messages];
+                                updatedMessages[messageIndex] = updatedMessage;
+
+                                return {
+                                    ...group,
+                                    messages: updatedMessages,
                                 };
                             }
-
-                            return message;
+                            return group;
                         },
                         {
                             location() {
-                                return { index: originalIndex, align: 'end', behavior: 'smooth' };
+                                return { index: groupIndex, align: 'end', behavior: 'smooth' };
                             },
                         }
                     );
@@ -127,23 +112,27 @@ export function Messages({
                     // Update sources in the global store
                     onAddSource(sources);
                     if (confirmationMessage?.id) {
-                        // Find the matching confirmation message in the virtuoso list by type and prompt id
-                        // We can't match by id because the confirmation message in virtuoso has a temp id
-                        const originalMessage = virtuosoRef.current?.data.find(
-                            (m) =>
-                                m.type === ChatMessageType.SOURCES &&
-                                m.promptMessageId === confirmationMessage.promptMessageId
+                        // Find the matching group and update the sources message
+                        const currentGroups = virtuosoRef.current?.data.get() || [];
+                        const targetGroup = currentGroups.find(
+                            (group) => group.id === confirmationMessage.promptMessageId
                         );
-                        if (originalMessage) {
-                            virtuosoRef.current?.data.map((message) => {
-                                if (message.id === originalMessage.id) {
+
+                        if (targetGroup) {
+                            virtuosoRef.current?.data.map((group) => {
+                                if (group.id === targetGroup.id) {
+                                    const updatedMessages = group.messages.map((message) =>
+                                        message.type === ChatMessageType.SOURCES
+                                            ? { ...message, confirmed: true }
+                                            : message
+                                    );
+
                                     return {
-                                        ...message,
-                                        confirmed: true,
+                                        ...group,
+                                        messages: updatedMessages,
                                     };
                                 }
-
-                                return message;
+                                return group;
                             });
                         }
                     }
@@ -178,8 +167,16 @@ export function Messages({
                                 timestamp: new Date().toISOString(),
                                 type: ChatMessageType.PROMPT,
                             };
-                            // Append new message to virtuoso
-                            virtuosoRef.current?.data.append([promptMessage], ({ scrollInProgress, atBottom }) => {
+
+                            // Create a new group for this prompt message
+                            const newGroup: MessageGroup = {
+                                id: promptMessage.id,
+                                timestamp: promptMessage.timestamp,
+                                messages: [promptMessage],
+                            };
+
+                            // Append new group to virtuoso
+                            virtuosoRef.current?.data.append([newGroup], ({ scrollInProgress, atBottom }) => {
                                 return {
                                     index: 'LAST',
                                     align: 'end',
@@ -297,71 +294,88 @@ export function Messages({
         };
     }, [chatId, subscribeToChannel, unsubscribeFromChannel]);
 
-    // Append new messages to virtuoso as they're created
+    // Append new message groups to virtuoso as they're created
     useEffect(() => {
-        if (messages && messages.length > 0) {
-            // Find new messages
-            const newMessages = messages.filter(
-                (message) => !(virtuosoRef.current?.data || []).find((m) => m.id === message.id)
-            );
+        if (messageGroups.length > 0) {
+            const existingGroups = virtuosoRef.current?.data.get() || [];
+            const existingGroupIds = new Set(existingGroups.map((g) => g.id));
 
-            // Append any new messages
-            if (newMessages.length > 0) {
-                virtuosoRef.current?.data.append(newMessages, ({ scrollInProgress, atBottom }) => {
+            // Find new groups
+            const newGroups = messageGroups.filter((group) => !existingGroupIds.has(group.id));
+
+            if (newGroups.length > 0) {
+                virtuosoRef.current?.data.append(newGroups, ({ scrollInProgress, atBottom }) => {
                     return {
                         index: 'LAST',
                         align: 'end',
                         behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
                     };
                 });
+            } else {
+                // Update existing groups
+                // virtuosoRef.current?.data.replace(messageGroups);
             }
         } else {
-            // Wipe all items from virtuoso if messages are cleared out
+            // Wipe all items from virtuoso if message groups are cleared out
             maybeClearVirtuoso('Removing stale items from virtuoso list...');
         }
-    }, [messages, virtuosoRef.current?.data]);
+    }, [messageGroups, virtuosoRef.current?.data]);
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
         if (partials && partials.length > 0) {
-            // Get the latest message in virtuoso
-            const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
-            // If the latest message is the one currently streaming partials, then update its content
-            if (
-                latestMessage &&
-                latestMessage.type === ChatMessageType.RESPONSE &&
-                latestMessage.status === ChatMessageStatus.STREAMING
-            ) {
+            // Get the latest group in virtuoso
+            const latestGroup = virtuosoRef.current?.data.get()?.at(-1);
+            const latestResponseMessage = latestGroup?.messages.find(
+                (m) => m.type === ChatMessageType.RESPONSE && m.status === ChatMessageStatus.STREAMING
+            );
+
+            // If the latest group has a response message that's streaming, update its content
+            if (latestResponseMessage) {
                 // Get the latest partial
                 const latestPartial = partials[partials.length - 1] as string;
                 virtuosoRef.current?.data.map(
-                    (message) => {
+                    (group) => {
                         // When the latest partial is found in the existing virtuoso list,
                         // update its Text block's content with the latest partial message
-                        if (latestMessage.id === message.id) {
+                        if (latestGroup?.id === group.id) {
+                            const updatedMessages = group.messages.map((message) => {
+                                if (
+                                    message.id === latestResponseMessage.id &&
+                                    message.type === ChatMessageType.RESPONSE
+                                ) {
+                                    const updatedResponseMessage = {
+                                        ...message,
+                                        blocks: message.blocks.map((b) => {
+                                            if (b.type === BlockType.TEXT) {
+                                                // Only update citations if new ones are available, otherwise preserve existing
+                                                const updatedBlock = {
+                                                    ...b,
+                                                    content: b.content + latestPartial,
+                                                };
+
+                                                // Only update citations if we have new ones from Ably
+                                                if (citations && citations.length > 0) {
+                                                    updatedBlock.citations = citations;
+                                                }
+
+                                                return updatedBlock;
+                                            } else {
+                                                return b;
+                                            }
+                                        }),
+                                    };
+                                    return updatedResponseMessage;
+                                }
+                                return message;
+                            });
+
                             return {
-                                ...latestMessage,
-                                blocks: latestMessage.blocks.map((b) => {
-                                    if (b.type === BlockType.TEXT) {
-                                        // Only update citations if new ones are available, otherwise preserve existing
-                                        const updatedBlock = {
-                                            ...b,
-                                            content: b.content + latestPartial,
-                                        };
-
-                                        // Only update citations if we have new ones from Ably
-                                        if (citations && citations.length > 0) {
-                                            updatedBlock.citations = citations;
-                                        }
-
-                                        return updatedBlock;
-                                    } else {
-                                        return b;
-                                    }
-                                }),
+                                ...group,
+                                messages: updatedMessages,
                             };
                         }
-                        return message;
+                        return group;
                     },
                     {
                         location() {
@@ -370,37 +384,42 @@ export function Messages({
                     }
                 );
             } else {
-                // Get the latest prompt to ensure the sticky header works
-                const items = virtuosoRef.current?.data.get() || [];
-                const latestPrompt = items.reverse().find((message) => message.type === ChatMessageType.PROMPT);
+                // Get the latest group to ensure the sticky header works
+                const groups = virtuosoRef.current?.data.get() || [];
+                const latestGroup = groups[groups.length - 1];
+                const latestPrompt = latestGroup?.messages.find((message) => message.type === ChatMessageType.PROMPT);
 
-                // If there's no streaming message yet, append one to virtuoso using existing partials
-                const initialMessageResponse: ChatMessageResponse = {
-                    id: `chat-${chatId}-temp-response-${latestPrompt?.id || items.length + 1}-${idCounter++}`,
-                    ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
-                    prompt: latestPrompt?.prompt || '',
-                    promptMessageId: latestPrompt?.id ? String(latestPrompt.id) : undefined,
-                    status: ChatMessageStatus.STREAMING,
-                    timestamp: new Date().toISOString(),
-                    type: ChatMessageType.RESPONSE,
-                    blocks: [
-                        {
-                            // Only include citations if they exist, don't set to undefined
-                            ...(citations && citations.length > 0 && { citations }),
-                            content: partials.join(' '),
-                            id: 'initial-block',
-                            type: BlockType.TEXT,
-                        },
-                    ],
-                    sources: [], // partial messages won't have sources
-                };
-                virtuosoRef.current?.data.append([initialMessageResponse], ({ scrollInProgress, atBottom }) => {
-                    return {
-                        index: 'LAST',
-                        align: 'end',
-                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                // If there's no streaming message yet, append one to the latest group using existing partials
+                if (latestGroup && latestPrompt) {
+                    const initialMessageResponse: ChatMessageResponse = {
+                        id: `chat-${chatId}-temp-response-${latestPrompt.id || groups.length + 1}-${idCounter++}`,
+                        ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
+                        prompt: latestPrompt.prompt || '',
+                        promptMessageId: latestPrompt.id ? String(latestPrompt.id) : undefined,
+                        status: ChatMessageStatus.STREAMING,
+                        timestamp: new Date().toISOString(),
+                        type: ChatMessageType.RESPONSE,
+                        blocks: [
+                            {
+                                // Only include citations if they exist, don't set to undefined
+                                ...(citations && citations.length > 0 && { citations }),
+                                content: partials.join(' '),
+                                id: 'initial-block',
+                                type: BlockType.TEXT,
+                            },
+                        ],
+                        sources: [], // partial messages won't have sources
                     };
-                });
+
+                    // Update the latest group with the new response message
+                    const updatedGroup = {
+                        ...latestGroup,
+                        messages: [...latestGroup.messages, initialMessageResponse],
+                    };
+
+                    // Update the group in virtuoso
+                    virtuosoRef.current?.data.map((group) => (group.id === latestGroup.id ? updatedGroup : group));
+                }
             }
         }
     }, [citations, partials, virtuosoRef.current?.data]);
@@ -408,21 +427,28 @@ export function Messages({
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
         if (confirmation) {
-            const existing = virtuosoRef.current?.data.find((m) => m.id === confirmation.id);
-            if (!existing) {
-                // Find the associated prompt message to ensure sticky header works
-                const promptMessage = virtuosoRef.current?.data.find((m) => m.id === confirmation.promptMessageId);
-                const updatedConfirmation = {
-                    ...confirmation,
-                    prompt: promptMessage?.prompt ?? '',
-                };
-                virtuosoRef.current?.data.append([updatedConfirmation], ({ scrollInProgress, atBottom }) => {
-                    return {
-                        index: 'LAST',
-                        align: 'end',
-                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+            const currentGroups = virtuosoRef.current?.data.get() || [];
+            const targetGroup = currentGroups.find((group) => group.id === confirmation.promptMessageId);
+
+            if (targetGroup) {
+                // Check if this confirmation message already exists in the group
+                const existingMessage = targetGroup.messages.find((m) => m.id === confirmation.id);
+                if (!existingMessage) {
+                    // Add the confirmation message to the group
+                    const promptMessage = targetGroup.messages.find((m) => m.type === ChatMessageType.PROMPT);
+                    const updatedConfirmation = {
+                        ...confirmation,
+                        prompt: promptMessage?.prompt ?? '',
                     };
-                });
+
+                    const updatedGroup = {
+                        ...targetGroup,
+                        messages: [...targetGroup.messages, updatedConfirmation],
+                    };
+
+                    // Update the group in virtuoso
+                    virtuosoRef.current?.data.map((group) => (group.id === targetGroup.id ? updatedGroup : group));
+                }
             }
         }
     }, [confirmation, virtuosoRef.current?.data]);
@@ -453,10 +479,10 @@ export function Messages({
                     </div>
                 ) : (
                     <VirtuosoMessageListLicense licenseKey={config.virtualListKey || ''}>
-                        <VirtuosoMessageList<ChatMessage, MessageListContext>
+                        <VirtuosoMessageList<MessageGroup, MessageListContext>
                             className="px-4 messagesScrollBars"
-                            computeItemKey={({ data }: { data: ChatMessage }) => data.id}
-                            initialData={messages}
+                            computeItemKey={({ data }: { data: MessageGroup }) => data.id}
+                            initialData={messageGroups}
                             initialLocation={{ index: 'LAST', align: 'end' }}
                             key={chatId || 'new'}
                             ref={virtuosoRef}
@@ -465,7 +491,6 @@ export function Messages({
                             context={context}
                             // EmptyPlaceholder={SuggestedPrompts}
                             ItemContent={MessageFactory}
-                            StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
                 )}
