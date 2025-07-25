@@ -159,7 +159,7 @@ export function Messages({
                     log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
                 );
         },
-        [confirmSourceConfirmation, onAddSource, partials, reset, virtuosoRef.current?.data]
+        [confirmSourceConfirmation, onAddSource, partials, reset, virtuosoRef]
     );
 
     const handleSubmit = useCallback(
@@ -232,7 +232,7 @@ export function Messages({
                 virtuosoRef.current?.data.replace([]);
             }
         },
-        [virtuosoRef.current?.data]
+        [virtuosoRef]
     );
 
     // Subscribe/unsubscribe to partial messages
@@ -319,21 +319,47 @@ export function Messages({
             // Wipe all items from virtuoso if messages are cleared out
             maybeClearVirtuoso('Removing stale items from virtuoso list...');
         }
-    }, [messages, virtuosoRef.current?.data]);
+    }, [maybeClearVirtuoso, messages, virtuosoRef]);
 
     // Process partial messages from Ably for streaming
     useEffect(() => {
         if (partials && partials.length > 0) {
             // Get the latest message in virtuoso
-            const latestMessage = virtuosoRef.current?.data.get()?.at(-1);
+            const existingItems = virtuosoRef.current?.data.get() || [];
+            const latestMessage = existingItems.at(-1);
+            // Get the latest partial message object
+            const latestPartial = partials[partials.length - 1];
+            if (!latestPartial) return; // avoid "TS2532: Object is possibly 'undefined'."
+
+            // Check if we should skip this partial because a complete message already exists
+            // This prevents duplicates from loading recent history when returning to a chat with completed messages
+            if (latestPartial.prompt_message_id) {
+                const existingCompleteMessage = existingItems.find(
+                    (msg) =>
+                        msg.type === ChatMessageType.RESPONSE &&
+                        msg.promptMessageId === String(latestPartial.prompt_message_id) &&
+                        msg.status === ChatMessageStatus.COMPLETED
+                );
+                if (existingCompleteMessage) {
+                    log(
+                        `Skipping partial created on ${latestPartial.created_at} - complete message already ` +
+                            `exists with id ${existingCompleteMessage.id} for prompt ${latestPartial.prompt_message_id}`
+                    );
+                    return;
+                }
+            }
+
             // If the latest message is the one currently streaming partials, then update its content
             if (
                 latestMessage &&
                 latestMessage.type === ChatMessageType.RESPONSE &&
                 latestMessage.status === ChatMessageStatus.STREAMING
             ) {
-                // Get the latest partial
-                const latestPartial = partials[partials.length - 1] as string;
+                // Dynamically set the status to account for when streaming stops
+                const latestMessageStatus = latestPartial.is_final ? ChatMessageStatus.COMPLETED : latestMessage.status;
+
+                // Extract content from the latest partial
+                const latestPartialContent = latestPartial.blocks?.[0]?.content || '';
                 virtuosoRef.current?.data.map(
                     (message) => {
                         // When the latest partial is found in the existing virtuoso list,
@@ -346,7 +372,7 @@ export function Messages({
                                         // Only update citations if new ones are available, otherwise preserve existing
                                         const updatedBlock = {
                                             ...b,
-                                            content: b.content + latestPartial,
+                                            content: b.content + latestPartialContent,
                                         };
 
                                         // Only update citations if we have new ones from Ably
@@ -359,6 +385,7 @@ export function Messages({
                                         return b;
                                     }
                                 }),
+                                status: latestMessageStatus,
                             };
                         }
                         return message;
@@ -374,6 +401,9 @@ export function Messages({
                 const items = virtuosoRef.current?.data.get() || [];
                 const latestPrompt = items.reverse().find((message) => message.type === ChatMessageType.PROMPT);
 
+                // Combine all partial contents
+                const combinedContent = partials.map((p) => p?.blocks?.[0]?.content || '').join('');
+
                 // If there's no streaming message yet, append one to virtuoso using existing partials
                 const initialMessageResponse: ChatMessageResponse = {
                     id: `chat-${chatId}-temp-response-${latestPrompt?.id || items.length + 1}-${idCounter++}`,
@@ -387,7 +417,7 @@ export function Messages({
                         {
                             // Only include citations if they exist, don't set to undefined
                             ...(citations && citations.length > 0 && { citations }),
-                            content: partials.join(' '),
+                            content: combinedContent,
                             id: 'initial-block',
                             type: BlockType.TEXT,
                         },
@@ -403,7 +433,7 @@ export function Messages({
                 });
             }
         }
-    }, [citations, partials, virtuosoRef.current?.data]);
+    }, [chatId, citations, partials, virtuosoRef]);
 
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
@@ -425,14 +455,14 @@ export function Messages({
                 });
             }
         }
-    }, [confirmation, virtuosoRef.current?.data]);
+    }, [confirmation, virtuosoRef]);
 
     // Reset messages when the selected chat changes
     useEffect(() => {
         maybeClearVirtuoso('New chat detected. Clearing virtuoso items...');
         // Reset Ably state when switching chats
         reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
-    }, [chatId, reset]);
+    }, [chatId, maybeClearVirtuoso, reset]);
 
     // Create a memoized context object that updates when any of its values change
     const context = useMemo(

@@ -49,7 +49,7 @@ interface UseAblyReturn {
     confirmation?: ChatMessageSources;
     createAblyRealtimeClient: (sessionUserId?: string) => Promise<Realtime | null>;
     error?: string;
-    partials: string[];
+    partials: AblyMessageData[];
     reset: () => Promise<void>;
     subscribeToChannel: (channelName: string) => RealtimeChannel | undefined;
     unsubscribeFromChannel: (channelName: string) => Promise<void>;
@@ -68,11 +68,12 @@ interface AblyConfirmationSource {
     type: string;
 }
 
-interface AblyMessageData {
+export interface AblyMessageData {
     __typename: string;
     blocks?: PartialTextBlock[];
     created_at: string;
     id: string | null;
+    is_final?: boolean;
     message_type: string; // 'response', 'prompt', etc.
     ordinal_id: string | null;
     prompt_message_id: string | null;
@@ -138,8 +139,10 @@ export const useAbly = (): UseAblyReturn => {
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
-    const [partials, setPartials] = useState<string[]>([]);
+    const [partials, setPartials] = useState<AblyMessageData[]>([]);
     const partialKeys = useRef<string[]>([]);
+    const shouldSkipPartial = (messageType: ChatMessageType, skipTypes?: ChatMessageType[]) =>
+        (skipTypes || []).includes(messageType);
 
     const [, createAblyTokenMutation] = useMutation<CreateAblyTokenMutation, CreateAblyTokenMutationVariables>(gql`
         mutation CreateAblyToken($input: CreateAblyTokenInput!) {
@@ -312,7 +315,11 @@ export const useAbly = (): UseAblyReturn => {
                 return channel;
             }
 
-            const messageHandler = (message: Message) => {
+            const messageHandler = (
+                message: Message,
+                insertPosition: 'after' | 'before' = 'after',
+                skipTypes?: ChatMessageType[]
+            ) => {
                 try {
                     const data = message.data as AblyEncodedData;
                     log('Received message from Ably:', 'debug', data);
@@ -328,11 +335,14 @@ export const useAbly = (): UseAblyReturn => {
 
                     // Parse the JSON
                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
+
+                    // Add the is_final flag from the encoded data
+                    jsonObject.is_final = data.is_final;
                     log('Decoded Ably message:', 'log', jsonObject);
 
                     // Short-circuit if we already processed this message
                     if (partialKeys.current.includes(jsonObject.created_at)) {
-                        log('Skipping duplicate partial message:', 'log', jsonObject);
+                        log('Skipping existing partial message:', 'log', jsonObject);
                         return;
                     } else {
                         partialKeys.current = [...partialKeys.current, jsonObject.created_at];
@@ -340,11 +350,16 @@ export const useAbly = (): UseAblyReturn => {
 
                     // Process the response message and update partials
                     if (jsonObject.message_type === 'response' && jsonObject.blocks && !data.is_final) {
-                        const parsedMessage = jsonObject.blocks?.[0]?.content;
-                        if (parsedMessage) {
-                            log(`Updating partials with new parsed message: ${parsedMessage}`);
-                            // Update partials state with the new message
-                            setPartials((prev) => [...prev, parsedMessage]);
+                        if (shouldSkipPartial(ChatMessageType.RESPONSE, skipTypes)) {
+                            log(`Skipping response message due to skip types parameter: ${String(skipTypes)}`);
+                            return;
+                        }
+                        log('Updating partials with new message', 'log', jsonObject);
+                        // Update partials state with the full message object
+                        if (insertPosition === 'after') {
+                            setPartials((prev) => [...prev, jsonObject]);
+                        } else if (insertPosition === 'before') {
+                            setPartials((prev) => [jsonObject, ...prev]);
                         }
 
                         // Parse any citations
@@ -371,6 +386,12 @@ export const useAbly = (): UseAblyReturn => {
 
                     // If this is a source confirmation message, parse and store it in state
                     if (jsonObject.message_type === 'source_confirmation') {
+                        if (shouldSkipPartial(ChatMessageType.SOURCES, skipTypes)) {
+                            log(
+                                `Skipping source confirmation message due to skip types parameter: ${String(skipTypes)}`
+                            );
+                            return;
+                        }
                         if (jsonObject.sources && jsonObject.sources.length > 0) {
                             const sources: Source[] = jsonObject.sources.map((source) => ({
                                 confirmed: source.confirmed,
@@ -411,10 +432,15 @@ export const useAbly = (): UseAblyReturn => {
             void channel
                 .attach()
                 .then(() => {
+                    // Only try to load channel history while the chat session is streaming
                     channel
                         .history({ untilAttach: true })
                         .then((history) => {
-                            console.log({ history: history.items });
+                            if (history && history.items && history.items.length > 0) {
+                                history.items.forEach((i) =>
+                                    messageHandler(i, 'before', [ChatMessageType.PROMPT, ChatMessageType.SOURCES])
+                                );
+                            }
                         })
                         .catch((e) => log(`Error getting channel history ${channelName}: ${String(e)}`));
                 })
