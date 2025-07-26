@@ -87,6 +87,7 @@ export interface AblyMessageData {
 type AblyEncodedData = {
     content: string;
     is_final: boolean;
+    prompt_message_id?: number;
 };
 
 interface AblyTokenCache {
@@ -322,7 +323,7 @@ export const useAbly = (): UseAblyReturn => {
             ) => {
                 try {
                     const data = message.data as AblyEncodedData;
-                    log('Received message from Ably:', 'debug', data);
+                    log('Received message from Ably:', 'log', data);
 
                     // Decode the base64 string
                     let decodedData;
@@ -336,8 +337,11 @@ export const useAbly = (): UseAblyReturn => {
                     // Parse the JSON
                     const jsonObject = JSON.parse(decodedData) as AblyMessageData;
 
-                    // Add the is_final flag from the encoded data
+                    // Add additional properties from the encoded data
                     jsonObject.is_final = data.is_final;
+                    if (data.prompt_message_id) {
+                        jsonObject.prompt_message_id = String(data.prompt_message_id);
+                    }
                     log('Decoded Ably message:', 'log', jsonObject);
 
                     // Short-circuit if we already processed this message
@@ -355,12 +359,15 @@ export const useAbly = (): UseAblyReturn => {
                             return;
                         }
                         log('Updating partials with new message', 'log', jsonObject);
-                        // Update partials state with the full message object
-                        if (insertPosition === 'after') {
-                            setPartials((prev) => [...prev, jsonObject]);
-                        } else if (insertPosition === 'before') {
-                            setPartials((prev) => [jsonObject, ...prev]);
-                        }
+                        // Update partials state with the full message object and sort by created_at
+                        setPartials((prev) => {
+                            const newPartials =
+                                insertPosition === 'after' ? [...prev, jsonObject] : [jsonObject, ...prev];
+                            // Sort by created_at in ascending order
+                            return newPartials.sort(
+                                (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                            );
+                        });
 
                         // Parse any citations
                         const citations = jsonObject.blocks?.[0]?.citations;
