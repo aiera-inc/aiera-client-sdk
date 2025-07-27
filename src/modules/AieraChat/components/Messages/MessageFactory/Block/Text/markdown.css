@@ -1,3 +1,8 @@
+/* Add small spacing between consecutive citations */
+.citation + .citation {
+    margin-left: 0.125rem;
+}
+
 /* Make sure tables are properly scrollable */
 .prose table {
     display: block;

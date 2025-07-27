@@ -323,7 +323,7 @@ export const useAbly = (): UseAblyReturn => {
             ) => {
                 try {
                     const data = message.data as AblyEncodedData;
-                    log('Received message from Ably:', 'log', data);
+                    log('Received message from Ably:', 'debug', data);
 
                     // Decode the base64 string
                     let decodedData;
@@ -439,7 +439,6 @@ export const useAbly = (): UseAblyReturn => {
             void channel
                 .attach()
                 .then(() => {
-                    // Only try to load channel history while the chat session is streaming
                     channel
                         .history({ untilAttach: true })
                         .then((history) => {
