@@ -40363,6 +40363,7 @@ function createGQLClient(config) {
       EventQuotePriceInfo: () => null,
       ListBlock: () => null,
       ListBlockMeta: () => null,
+      OpenSearch: () => null,
       QuoteBlock: () => null,
       QuoteBlockMeta: () => null,
       RealtimeTranscrippetPrice: () => null,

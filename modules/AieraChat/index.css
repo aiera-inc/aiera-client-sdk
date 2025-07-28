@@ -712,9 +712,6 @@ video {
 .block {
   display: block;
 }
-.inline-block {
-  display: inline-block;
-}
 .inline {
   display: inline;
 }
@@ -3580,6 +3577,9 @@ input[type=number] {
 }
 
 /* src/modules/AieraChat/components/Messages/MessageFactory/Block/Text/markdown.css */
+.citation + .citation {
+  margin-left: 0.125rem;
+}
 .prose table {
   display: block;
   width: 100%;
