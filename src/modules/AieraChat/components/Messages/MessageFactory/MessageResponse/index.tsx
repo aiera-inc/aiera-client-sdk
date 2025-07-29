@@ -1,7 +1,7 @@
 import { copyToClipboard, log } from '@aiera/client-sdk/lib/utils';
 import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
-import React, { useCallback, useId } from 'react';
+import React, { useCallback } from 'react';
 import { ChatMessageResponse } from '../../../../services/messages';
 import { Block } from '../Block';
 import { MessageWrapper } from '../MessageWrapper';
@@ -12,10 +12,12 @@ export const MessageResponse = ({
     onReRun,
     isLastItem,
     thinkingState,
+    generatingResponse,
 }: {
     onReRun: (k: string) => void;
     data: ChatMessageResponse;
     isLastItem: boolean;
+    generatingResponse: boolean;
     thinkingState: string[];
 }) => {
     const { chatStatus } = useChatStore();
@@ -38,19 +40,16 @@ export const MessageResponse = ({
     }, [data]);
 
     return (
-        <MessageWrapper>
+        <MessageWrapper isLoading={generatingResponse && isLastItem}>
             {thinkingState.length > 0 && (
                 <div className="border self-start py-2.5 px-4 ml-3 rounded-lg mb-4">
                     <p className="text-base mb-1 font-semibold">Reasoning Logs...</p>
-                    {thinkingState.map((s) => {
-                        const id = useId();
-                        return (
-                            <div key={id} className="flex items-center">
-                                <div className="h-1 w-1 rounded-full bg-black mr-2" />
-                                <p className="text-base line-clamp-1">{s}</p>
-                            </div>
-                        );
-                    })}
+                    {thinkingState.map((s, index) => (
+                        <div key={`thinking-${index}-${s.substring(0, 10)}`} className="flex items-center">
+                            <div className="h-1 w-1 rounded-full bg-black mr-2" />
+                            <p className="text-base line-clamp-1">{s}</p>
+                        </div>
+                    ))}
                 </div>
             )}
             <div className="flex flex-col pl-3.5 pr-4">

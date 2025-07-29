@@ -33,7 +33,7 @@ export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
     onConfirm: (messageId: string, sources: Source[]) => void;
-    thinkingState: string[];
+    generatingResponse: boolean;
 }
 
 export function Messages({
@@ -51,8 +51,15 @@ export function Messages({
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } =
-        useAbly();
+    const {
+        citations,
+        confirmation,
+        partials,
+        reset,
+        subscribeToChannel,
+        thinkingResponseMessage,
+        unsubscribeFromChannel,
+    } = useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -273,12 +280,11 @@ export function Messages({
     // Append new messages to virtuoso as they're created
     useEffect(() => {
         if (messages && messages.length > 0) {
-            // Find new messages
-            const newMessages = messages.filter(
-                (message) => !(virtuosoRef.current?.data || []).find((m) => m.id === message.id)
-            );
+            // Find new messages that don't exist in virtuoso yet
+            const existingMessages = virtuosoRef.current?.data.get() || [];
+            const newMessages = messages.filter((message) => !existingMessages.find((m) => m.id === message.id));
 
-            // Append any new messages
+            // Append any genuinely new messages
             if (newMessages.length > 0) {
                 virtuosoRef.current?.data.append(newMessages, ({ scrollInProgress, atBottom }) => {
                     return {
@@ -288,6 +294,28 @@ export function Messages({
                     };
                 });
             }
+
+            // For existing messages, preserve any local state (like thinkingState) that server doesn't have
+            existingMessages.forEach((existingMessage) => {
+                const serverMessage = messages.find((m) => m.id === existingMessage.id);
+                if (
+                    serverMessage &&
+                    existingMessage.type === ChatMessageType.RESPONSE &&
+                    existingMessage.thinkingState
+                ) {
+                    // Merge server message with local thinking state
+                    virtuosoRef.current?.data.map((message) => {
+                        if (message.id === existingMessage.id && message.type === ChatMessageType.RESPONSE) {
+                            const responseMessage = message;
+                            return {
+                                ...serverMessage,
+                                thinkingState: responseMessage.thinkingState, // Preserve local thinking state
+                            } as ChatMessageResponse;
+                        }
+                        return message;
+                    });
+                }
+            });
         } else {
             // Wipe all items from virtuoso if messages are cleared out
             maybeClearVirtuoso('Removing stale items from virtuoso list...');
@@ -322,30 +350,51 @@ export function Messages({
                 }
             }
 
-            // If the latest message is the one currently streaming partials, then update its content
-            if (
-                latestMessage &&
+            // Check if we have a thinking response message that should be updated with real content
+            const thinkingMessage = existingItems.find(
+                (msg) =>
+                    msg.id &&
+                    msg.id.startsWith('thinking-') &&
+                    msg.type === ChatMessageType.RESPONSE &&
+                    msg.status === ChatMessageStatus.STREAMING
+            );
+
+            // If we have a thinking message, update it; otherwise check for latest streaming message
+            const messageToUpdate =
+                thinkingMessage ||
+                (latestMessage &&
                 latestMessage.type === ChatMessageType.RESPONSE &&
                 latestMessage.status === ChatMessageStatus.STREAMING
-            ) {
+                    ? latestMessage
+                    : null);
+
+            if (messageToUpdate) {
                 // Dynamically set the status to account for when streaming stops
-                const latestMessageStatus = latestPartial.is_final ? ChatMessageStatus.COMPLETED : latestMessage.status;
+                const latestMessageStatus = latestPartial.is_final
+                    ? ChatMessageStatus.COMPLETED
+                    : messageToUpdate.status;
 
                 // Extract content from the latest partial
                 const latestPartialContent = latestPartial.blocks?.[0]?.content || '';
                 virtuosoRef.current?.data.map(
                     (message) => {
-                        // When the latest partial is found in the existing virtuoso list,
+                        // When the message to update is found in the existing virtuoso list,
                         // update its Text block's content with the latest partial message
-                        if (latestMessage.id === message.id) {
+                        if (messageToUpdate.id === message.id && message.type === ChatMessageType.RESPONSE) {
+                            const responseMessage = message;
+                            const isThinkingMessage = messageToUpdate.id && messageToUpdate.id.startsWith('thinking-');
+
                             return {
-                                ...latestMessage,
-                                blocks: latestMessage.blocks.map((b) => {
+                                ...responseMessage,
+                                blocks: (responseMessage.blocks || []).map((b) => {
                                     if (b.type === BlockType.TEXT) {
-                                        // Only update citations if new ones are available, otherwise preserve existing
+                                        // For thinking messages transitioning to real response, replace content
+                                        // For regular messages, append content
                                         const updatedBlock = {
                                             ...b,
-                                            content: b.content + latestPartialContent,
+                                            content: isThinkingMessage
+                                                ? latestPartialContent
+                                                : String(b.content || '') + latestPartialContent,
                                         };
 
                                         // Only update citations if we have new ones from Ably
@@ -359,8 +408,15 @@ export function Messages({
                                     }
                                 }),
                                 status: latestMessageStatus,
-                            };
+                                // Preserve existing thinking state if partial doesn't have one, otherwise update
+                                thinkingState: latestPartial.thinkingState || responseMessage.thinkingState,
+                                // Update ID to remove thinking prefix when transitioning to real response
+                                id: isThinkingMessage
+                                    ? latestPartial.id || messageToUpdate.id.replace('thinking-', 'response-')
+                                    : messageToUpdate.id,
+                            } as ChatMessageResponse;
                         }
+                        // Return other messages unchanged
                         return message;
                     },
                     {
@@ -396,6 +452,7 @@ export function Messages({
                         },
                     ],
                     sources: [], // partial messages won't have sources
+                    thinkingState: latestPartial.thinkingState, // Include thinking state from the partial
                 };
                 virtuosoRef.current?.data.append([initialMessageResponse], ({ scrollInProgress, atBottom }) => {
                     return {
@@ -407,6 +464,68 @@ export function Messages({
             }
         }
     }, [chatId, citations, partials, virtuosoRef]);
+
+    // Handle thinking response message from Ably
+    useEffect(() => {
+        if (thinkingResponseMessage) {
+            // Get existing items to check if thinking message already exists
+            const existingItems = virtuosoRef.current?.data.get() || [];
+            const existingThinkingMessage = existingItems.find((msg) => msg.id === thinkingResponseMessage.id);
+
+            if (existingThinkingMessage) {
+                // Update existing thinking message with latest thinking state
+                virtuosoRef.current?.data.map(
+                    (message) => {
+                        if (message.id === thinkingResponseMessage.id && message.type === ChatMessageType.RESPONSE) {
+                            const responseMessage = message;
+                            return {
+                                ...responseMessage,
+                                thinkingState: thinkingResponseMessage.thinkingState,
+                            };
+                        }
+                        return message;
+                    },
+                    {
+                        location() {
+                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
+                        },
+                    }
+                );
+            } else {
+                // Create new thinking response message and add to virtuoso
+                const latestPrompt = existingItems.reverse().find((message) => message.type === ChatMessageType.PROMPT);
+
+                const initialThinkingResponse: ChatMessageResponse = {
+                    id: thinkingResponseMessage.id || `thinking-${chatId}-response`,
+                    ordinalId: thinkingResponseMessage.ordinal_id || `thinking-ordinal-${chatId}`,
+                    prompt: latestPrompt?.prompt || '',
+                    promptMessageId: thinkingResponseMessage.prompt_message_id
+                        ? String(thinkingResponseMessage.prompt_message_id)
+                        : undefined,
+                    status: ChatMessageStatus.STREAMING,
+                    timestamp: thinkingResponseMessage.created_at,
+                    type: ChatMessageType.RESPONSE,
+                    blocks: [
+                        {
+                            content: '', // Empty content, thinking state will be shown
+                            id: 'thinking-block',
+                            type: BlockType.TEXT,
+                        },
+                    ],
+                    sources: [],
+                    thinkingState: thinkingResponseMessage.thinkingState,
+                };
+
+                virtuosoRef.current?.data.append([initialThinkingResponse], ({ scrollInProgress, atBottom }) => {
+                    return {
+                        index: 'LAST',
+                        align: 'end',
+                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                    };
+                });
+            }
+        }
+    }, [chatId, thinkingResponseMessage, virtuosoRef]);
 
     // Update virtuoso with any source confirmation messages coming from Ably
     useEffect(() => {
@@ -443,9 +562,9 @@ export function Messages({
             onSubmit: handleSubmit,
             onReRun,
             onConfirm,
-            thinkingState,
+            generatingResponse: chatStatus === ChatSessionStatus.GeneratingResponse,
         }),
-        [handleSubmit, onReRun, onConfirm, thinkingState]
+        [handleSubmit, onReRun, onConfirm, chatStatus]
     );
 
     return (
@@ -472,10 +591,7 @@ export function Messages({
                         />
                     </VirtuosoMessageListLicense>
                 )}
-                {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
-                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
-                    <Loading>{thinkingState[thinkingState.length - 1] || 'Thinking...'}</Loading>
-                )}
+                {chatStatus === ChatSessionStatus.FindingSources && !confirmation && <Loading>Thinking...</Loading>}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
         </div>
