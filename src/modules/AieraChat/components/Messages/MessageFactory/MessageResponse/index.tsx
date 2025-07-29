@@ -4,16 +4,19 @@ import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import React, { useCallback } from 'react';
 import { ChatMessageResponse } from '../../../../services/messages';
 import { Block } from '../Block';
+import { MessageWrapper } from '../MessageWrapper';
 import { Footer } from './Footer';
 
 export const MessageResponse = ({
     data,
     onReRun,
     isLastItem,
+    generatingResponse,
 }: {
     onReRun: (k: string) => void;
     data: ChatMessageResponse;
     isLastItem: boolean;
+    generatingResponse: boolean;
 }) => {
     const { chatStatus } = useChatStore();
     const handleCopy = useCallback(() => {
@@ -35,8 +38,8 @@ export const MessageResponse = ({
     }, [data]);
 
     return (
-        <div className="flex flex-col">
-            <div className="flex flex-col px-4 pb-2">
+        <MessageWrapper isLoading={generatingResponse}>
+            <div className="flex flex-col pl-3.5 pr-4">
                 {data.blocks?.map((block, index) => (
                     <Block {...block} key={index} />
                 ))}
@@ -44,6 +47,6 @@ export const MessageResponse = ({
             {(chatStatus === ChatSessionStatus.Active || !isLastItem) && (
                 <Footer data={data} onCopy={handleCopy} onReRun={onReRun} />
             )}
-        </div>
+        </MessageWrapper>
     );
 };
