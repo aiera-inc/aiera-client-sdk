@@ -86,7 +86,7 @@ export const Footer = ({
 
     return (
         <>
-            <div className="flex items-center px-3 pb-8">
+            <div className="flex items-center justify-start px-2">
                 {showCopy && (
                     <IconButton
                         hintAnchor="top-left"
@@ -97,8 +97,8 @@ export const Footer = ({
                         })}
                         bgClass={classNames({
                             'bg-indigo-600/10 hover:bg-indigo-600/20 active:bg-indigo-600/30': copied,
+                            'bg-transparent hover:bg-slate-200/60-solid': !copied,
                         })}
-                        className="mr-2"
                         Icon={copied ? MicroCheck : MicroCopy}
                     />
                 )}
@@ -107,12 +107,12 @@ export const Footer = ({
                         hintAnchor="top-left"
                         hintText="Good Response"
                         onClick={() => setFeedback((pv) => (pv === 'pos' ? undefined : 'pos'))}
-                        className={classNames('mr-2')}
                         textClass={classNames({
                             'text-green-600': feedback === 'pos',
                         })}
                         bgClass={classNames({
                             'bg-green-600/10 hover:bg-green-600/20 active:bg-green-600/30': feedback === 'pos',
+                            'bg-transparent hover:bg-slate-200/60-solid': feedback !== 'pos',
                         })}
                         Icon={MicroThumbUp}
                     />
@@ -126,33 +126,31 @@ export const Footer = ({
                         })}
                         bgClass={classNames({
                             'bg-red-600/10 hover:bg-red-600/20 active:bg-red-600/30': feedback === 'neg',
+                            'bg-transparent hover:bg-slate-200/60-solid': feedback !== 'neg',
                         })}
                         onClick={() => setFeedback((pv) => (pv === 'neg' ? undefined : 'neg'))}
                         Icon={MicroThumbDown}
                     />
                 )}
-                <div className="flex-1" />
                 {config.options?.aieraChatCollectInternalFeedback &&
                     config.options.aieraChatCollectInternalFeedback === true && (
                         <IconButton
-                            className="ml-2"
                             hintText="Submit Feedback"
-                            hintAnchor="top-right"
+                            hintAnchor="top-left"
                             iconClassName="ml-0.5"
-                            hintGrow="up-left"
+                            hintGrow="up-right"
+                            bgClass="bg-transparent hover:bg-slate-200/60-solid"
                             Icon={MicroChatLeftRight}
                             onClick={() => setShowFeedbackDialog(true)}
-                        >
-                            Feedback
-                        </IconButton>
+                        />
                     )}
                 {showEditSources && (
                     <IconButton
-                        className="ml-2"
                         hintText="Edit Sources"
                         hintAnchor="top-right"
                         hintGrow="up-left"
                         Icon={MicroFolder}
+                        bgClass="bg-transparent hover:bg-slate-200/60-solid"
                         onClick={() => setShowSourceDialog(true)}
                     >
                         {localSources.length || ''}
@@ -160,14 +158,15 @@ export const Footer = ({
                 )}
                 {showRetry && (
                     <IconButton
-                        className="ml-2"
                         hintText="Retry Response"
                         hintAnchor="top-right"
                         hintGrow="up-left"
                         Icon={MicroRefresh}
+                        bgClass="bg-transparent hover:bg-slate-200/60-solid"
                         onClick={() => onReRun(data.id)}
                     />
                 )}
+                <p className="text-sm ml-3 text-slate-500">Aiera can make mistakes. Please double-check responses.</p>
             </div>
             {showSourceDialog && (
                 <AddSourceDialog
