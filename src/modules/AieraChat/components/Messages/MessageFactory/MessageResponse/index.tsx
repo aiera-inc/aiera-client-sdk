@@ -12,11 +12,13 @@ export const MessageResponse = ({
     onReRun,
     isLastItem,
     thinkingState,
+    generatingResponse,
 }: {
     onReRun: (k: string) => void;
     data: ChatMessageResponse;
     isLastItem: boolean;
     thinkingState: string[];
+    generatingResponse: boolean;
 }) => {
     const { chatStatus } = useChatStore();
     const handleCopy = useCallback(() => {
@@ -38,7 +40,7 @@ export const MessageResponse = ({
     }, [data]);
 
     return (
-        <MessageWrapper>
+        <MessageWrapper isLoading={generatingResponse}>
             {thinkingState.length > 0 && (
                 <div className="border self-start py-2.5 px-4 ml-3 rounded-lg mb-4">
                     <p className="text-base mb-1 font-semibold">Reasoning Logs...</p>

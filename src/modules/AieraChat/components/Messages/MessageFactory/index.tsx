@@ -22,6 +22,7 @@ export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListCo
                 ))
                 .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
                     <MessageResponse
+                        generatingResponse={context.generatingResponse && !nextData}
                         thinkingState={!nextData ? context.thinkingState : []}
                         data={responseData}
                         onReRun={context.onReRun}

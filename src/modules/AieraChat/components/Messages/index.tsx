@@ -33,6 +33,7 @@ export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
     onConfirm: (messageId: string, sources: Source[]) => void;
+    generatingResponse: boolean;
     thinkingState: string[];
 }
 
@@ -443,9 +444,10 @@ export function Messages({
             onSubmit: handleSubmit,
             onReRun,
             onConfirm,
+            generatingResponse: chatStatus === ChatSessionStatus.GeneratingResponse,
             thinkingState,
         }),
-        [handleSubmit, onReRun, onConfirm, thinkingState]
+        [handleSubmit, onReRun, onConfirm, thinkingState, chatStatus]
     );
 
     return (
@@ -472,10 +474,7 @@ export function Messages({
                         />
                     </VirtuosoMessageListLicense>
                 )}
-                {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
-                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
-                    <Loading>{thinkingState[thinkingState.length - 1] || 'Thinking...'}</Loading>
-                )}
+                {chatStatus === ChatSessionStatus.FindingSources && !confirmation && <Loading>Thinking...</Loading>}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
         </div>
