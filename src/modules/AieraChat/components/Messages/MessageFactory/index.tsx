@@ -12,17 +12,24 @@ export const MessageFactory: VirtuosoMessageListProps<ChatMessage, MessageListCo
     data,
     context,
     nextData,
-}) => (
-    <div className="flex flex-col max-w-[50rem] w-full m-auto">
-        {match(data)
-            .with({ type: ChatMessageType.PROMPT }, (promptData) => <MessagePrompt data={promptData} />)
-            .with({ type: ChatMessageType.SOURCES }, (sourcesData) => (
-                <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
-            ))
-            .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
-                <MessageResponse data={responseData} onReRun={context.onReRun} isLastItem={!nextData} />
-            ))
-            .exhaustive()}
-    </div>
-);
+}) => {
+    return (
+        <div className="flex flex-col max-w-[50rem] w-full m-auto">
+            {match(data)
+                .with({ type: ChatMessageType.PROMPT }, (promptData) => <MessagePrompt data={promptData} />)
+                .with({ type: ChatMessageType.SOURCES }, (sourcesData) => (
+                    <SourcesResponse data={sourcesData} onConfirm={context.onConfirm} />
+                ))
+                .with({ type: ChatMessageType.RESPONSE }, (responseData) => (
+                    <MessageResponse
+                        thinkingState={!nextData ? context.thinkingState : []}
+                        data={responseData}
+                        onReRun={context.onReRun}
+                        isLastItem={!nextData}
+                    />
+                ))
+                .exhaustive()}
+        </div>
+    );
+};
 /* eslint-enable react/prop-types */

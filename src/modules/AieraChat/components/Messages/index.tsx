@@ -8,13 +8,9 @@ import {
     VirtuosoMessageList,
     VirtuosoMessageListLicense,
     VirtuosoMessageListMethods,
-    VirtuosoMessageListProps,
-    useCurrentlyRenderedData,
-    useVirtuosoMethods,
 } from '@virtuoso.dev/message-list';
 import { RealtimeChannel } from 'ably';
-import classNames from 'classnames';
-import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     ChatMessage,
     ChatMessagePrompt,
@@ -26,7 +22,6 @@ import {
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import { BlockType } from './MessageFactory/Block';
-import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { Prompt } from './Prompt';
 // import { SuggestedPrompts } from './SuggestedPrompts';
 import { Loading } from './MessageFactory/Loading';
@@ -38,31 +33,8 @@ export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
     onConfirm: (messageId: string, sources: Source[]) => void;
+    thinkingState: string[];
 }
-
-const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
-    const data: ChatMessage[] = useCurrentlyRenderedData();
-    const { getScrollLocation } = useVirtuosoMethods();
-    const { listOffset } = getScrollLocation();
-    const firstPrompt = data[0];
-    if (!firstPrompt) return null;
-    return (
-        <Fragment key={firstPrompt.ordinalId}>
-            <div
-                className={classNames('absolute top-0 left-0 right-0 bg-gray-50 h-2', {
-                    'opacity-0': listOffset > -56,
-                })}
-            />
-            <MessagePrompt
-                isStickyHeader
-                className={classNames('max-w-[50rem] m-auto', {
-                    'opacity-0': listOffset > -56,
-                })}
-                data={firstPrompt as ChatMessagePrompt}
-            />
-        </Fragment>
-    );
-};
 
 export function Messages({
     onOpenSources,
@@ -79,7 +51,8 @@ export function Messages({
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
+    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } =
+        useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
     const onReRun = useCallback((ordinalId: string) => {
@@ -470,8 +443,9 @@ export function Messages({
             onSubmit: handleSubmit,
             onReRun,
             onConfirm,
+            thinkingState,
         }),
-        [handleSubmit, onReRun, onConfirm]
+        [handleSubmit, onReRun, onConfirm, thinkingState]
     );
 
     return (
@@ -495,12 +469,13 @@ export function Messages({
                             context={context}
                             // EmptyPlaceholder={SuggestedPrompts}
                             ItemContent={MessageFactory}
-                            StickyHeader={StickyHeader}
                         />
                     </VirtuosoMessageListLicense>
                 )}
                 {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
-                    chatStatus === ChatSessionStatus.GeneratingResponse) && <Loading>Thinking...</Loading>}
+                    chatStatus === ChatSessionStatus.GeneratingResponse) && (
+                    <Loading>{thinkingState[thinkingState.length - 1] || 'Thinking...'}</Loading>
+                )}
                 <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
         </div>
