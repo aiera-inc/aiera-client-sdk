@@ -96,7 +96,7 @@ export const Footer = ({
                             'text-indigo-600': copied,
                         })}
                         bgClass={classNames({
-                            'bg-indigo-600/10 hover:bg-indigo-600/20 active:bg-indigo-600/30': copied,
+                            'hover:bg-indigo-600/20 active:bg-indigo-600/30': copied,
                             'bg-transparent hover:bg-slate-200/60-solid': !copied,
                         })}
                         Icon={copied ? MicroCheck : MicroCopy}

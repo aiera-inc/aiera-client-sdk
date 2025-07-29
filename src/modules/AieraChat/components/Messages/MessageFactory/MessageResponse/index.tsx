@@ -20,6 +20,7 @@ export const MessageResponse = ({
     thinkingState: string[];
     generatingResponse: boolean;
 }) => {
+    const thinkingKey = useId();
     const { chatStatus } = useChatStore();
     const handleCopy = useCallback(() => {
         if (!data.blocks || data.blocks.length === 0) return;
@@ -44,10 +45,9 @@ export const MessageResponse = ({
             {thinkingState.length > 0 && (
                 <div className="border self-start py-2.5 px-4 ml-3 rounded-lg mb-4">
                     <p className="text-base mb-1 font-semibold">Reasoning Logs...</p>
-                    {thinkingState.map((s) => {
-                        const id = useId();
+                    {thinkingState.map((s, index) => {
                         return (
-                            <div key={id} className="flex items-center">
+                            <div key={`${thinkingKey}-${index}`} className="flex items-center">
                                 <div className="h-1 w-1 rounded-full bg-black mr-2" />
                                 <p className="text-base line-clamp-1">{s}</p>
                             </div>
