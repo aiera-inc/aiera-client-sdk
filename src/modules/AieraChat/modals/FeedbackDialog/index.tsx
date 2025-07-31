@@ -178,62 +178,58 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
 
                     {formData.sourceSuggested === 'y' && (
                         <>
-                            <div className="mx-4 flex flex-col">
+                            <div className="mx-4">
                                 <label className="block text-sm font-medium text-slate-700">
                                     Sources were relevant:
                                 </label>
+                                <select
+                                    size={4}
+                                    name="sourcesRelevant"
+                                    value={formData.sourcesRelevant}
+                                    onChange={handleChange}
+                                    className={selectClassName}
+                                >
+                                    <option className={selectOptionClassName} value="">
+                                        Select an option
+                                    </option>
+                                    <option className={selectOptionClassName} value="2">
+                                        2 - Suggested sources are relevant and comprehensive
+                                    </option>
+                                    <option className={selectOptionClassName} value="1">
+                                        1 - Suggested sources are missing necessary sources
+                                    </option>
+                                    <option className={selectOptionClassName} value="0">
+                                        0 - Suggested sources are completely off-topic
+                                    </option>
+                                </select>
+                            </div>
+
+                            {(formData.sourcesRelevant === '1' || formData.sourcesRelevant === '2') && (
                                 <div className="mx-4">
+                                    <label className="block text-sm font-medium text-slate-700">Source ordering:</label>
                                     <select
-                                        size={4}
-                                        name="sourcesRelevant"
-                                        value={formData.sourcesRelevant}
+                                        size={5}
+                                        name="sourceOrdering"
+                                        value={formData.sourceOrdering}
                                         onChange={handleChange}
                                         className={selectClassName}
                                     >
                                         <option className={selectOptionClassName} value="">
                                             Select an option
                                         </option>
+                                        <option className={selectOptionClassName} value="3">
+                                            3 - Ordered from most-to-least relevant
+                                        </option>
                                         <option className={selectOptionClassName} value="2">
-                                            2 - Suggested sources are relevant and comprehensive
+                                            2 - Not exactly ordered but relevant sources appear early
                                         </option>
                                         <option className={selectOptionClassName} value="1">
-                                            1 - Suggested sources are missing necessary sources
+                                            1 - Sources provided in seemingly random order
                                         </option>
                                         <option className={selectOptionClassName} value="0">
-                                            0 - Suggested sources are completely off-topic
+                                            0 - Ordered from least-to-most relevant
                                         </option>
                                     </select>
-                                </div>
-                            </div>
-
-                            {(formData.sourcesRelevant === '1' || formData.sourcesRelevant === '2') && (
-                                <div className="mx-4 flex flex-col">
-                                    <label className="block text-sm font-medium text-slate-700">Source ordering:</label>
-                                    <div className="mx-4">
-                                        <select
-                                            size={5}
-                                            name="sourceOrdering"
-                                            value={formData.sourceOrdering}
-                                            onChange={handleChange}
-                                            className={selectClassName}
-                                        >
-                                            <option className={selectOptionClassName} value="">
-                                                Select an option
-                                            </option>
-                                            <option className={selectOptionClassName} value="3">
-                                                3 - Ordered from most-to-least relevant
-                                            </option>
-                                            <option className={selectOptionClassName} value="2">
-                                                2 - Not exactly ordered but relevant sources appear early
-                                            </option>
-                                            <option className={selectOptionClassName} value="1">
-                                                1 - Sources provided in seemingly random order
-                                            </option>
-                                            <option className={selectOptionClassName} value="0">
-                                                0 - Ordered from least-to-most relevant
-                                            </option>
-                                        </select>
-                                    </div>
                                 </div>
                             )}
                         </>
@@ -440,32 +436,30 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                     </div>
 
                     {formData.questionAmbiguity === 'y' && (
-                        <div className="mx-4 flex flex-col">
+                        <div className="mx-4">
                             <label className="block text-sm font-medium text-slate-700">
                                 How did Aiera Chat handle the ambiguity?
                             </label>
-                            <div className="mx-4">
-                                <select
-                                    name="handlingAmbiguity"
-                                    value={formData.handlingAmbiguity}
-                                    onChange={handleChange}
-                                    className={selectClassName}
-                                    size={4}
-                                >
-                                    <option className={selectOptionClassName} value="">
-                                        Select an option
-                                    </option>
-                                    <option className={selectOptionClassName} value="2">
-                                        2 - Able to disambiguate or ask clarifying questions
-                                    </option>
-                                    <option className={selectOptionClassName} value="1">
-                                        1 - Attempts to resolve ambiguity
-                                    </option>
-                                    <option className={selectOptionClassName} value="0">
-                                        0 - Makes no attempt to resolve ambiguity
-                                    </option>
-                                </select>
-                            </div>
+                            <select
+                                name="handlingAmbiguity"
+                                value={formData.handlingAmbiguity}
+                                onChange={handleChange}
+                                className={selectClassName}
+                                size={4}
+                            >
+                                <option className={selectOptionClassName} value="">
+                                    Select an option
+                                </option>
+                                <option className={selectOptionClassName} value="2">
+                                    2 - Able to disambiguate or ask clarifying questions
+                                </option>
+                                <option className={selectOptionClassName} value="1">
+                                    1 - Attempts to resolve ambiguity
+                                </option>
+                                <option className={selectOptionClassName} value="0">
+                                    0 - Makes no attempt to resolve ambiguity
+                                </option>
+                            </select>
                         </div>
                     )}
                 </div>
@@ -477,28 +471,26 @@ export function FeedbackDialog({ onClose, messageId, prompt }: FeedbackDialogPro
                         <label className="block text-sm font-medium text-slate-700">
                             Is Aiera Chat aware of the bounds of information it has access to?
                         </label>
-                        <div className="mx-4">
-                            <select
-                                name="knowledgeBoundaries"
-                                value={formData.knowledgeBoundaries}
-                                onChange={handleChange}
-                                className={selectClassName}
-                                size={4}
-                            >
-                                <option className={selectOptionClassName} value="">
-                                    Select an option
-                                </option>
-                                <option className={selectOptionClassName} value="2">
-                                    2 - Understands and communicates knowledge boundaries
-                                </option>
-                                <option className={selectOptionClassName} value="1">
-                                    1 - Unclear about information limitations
-                                </option>
-                                <option className={selectOptionClassName} value="0">
-                                    0 - Misleads about knowledge boundaries
-                                </option>
-                            </select>
-                        </div>
+                        <select
+                            name="knowledgeBoundaries"
+                            value={formData.knowledgeBoundaries}
+                            onChange={handleChange}
+                            className={selectClassName}
+                            size={4}
+                        >
+                            <option className={selectOptionClassName} value="">
+                                Select an option
+                            </option>
+                            <option className={selectOptionClassName} value="2">
+                                2 - Understands and communicates knowledge boundaries
+                            </option>
+                            <option className={selectOptionClassName} value="1">
+                                1 - Unclear about information limitations
+                            </option>
+                            <option className={selectOptionClassName} value="0">
+                                0 - Misleads about knowledge boundaries
+                            </option>
+                        </select>
                     </div>
                 </div>
 
