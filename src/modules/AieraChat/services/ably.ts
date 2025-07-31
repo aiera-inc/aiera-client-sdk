@@ -426,7 +426,8 @@ export const useAbly = (): UseAblyReturn => {
                     }
 
                     // Stop streaming if this is the final partial
-                    if (data.is_final) {
+                    // "status" messages are always sent as final, but it doesn't mean we should stop streaming
+                    if (data.is_final && jsonObject.message_type !== 'status') {
                         log('Received final partial:', 'log', data);
                         onSetStatus(ChatSessionStatus.Active);
                     }
