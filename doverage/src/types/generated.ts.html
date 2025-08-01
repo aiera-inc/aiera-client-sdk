@@ -2974,7 +2974,18 @@
 <a name='L2909'></a><a href='#L2909'>2909</a>
 <a name='L2910'></a><a href='#L2910'>2910</a>
 <a name='L2911'></a><a href='#L2911'>2911</a>
-<a name='L2912'></a><a href='#L2912'>2912</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L2912'></a><a href='#L2912'>2912</a>
+<a name='L2913'></a><a href='#L2913'>2913</a>
+<a name='L2914'></a><a href='#L2914'>2914</a>
+<a name='L2915'></a><a href='#L2915'>2915</a>
+<a name='L2916'></a><a href='#L2916'>2916</a>
+<a name='L2917'></a><a href='#L2917'>2917</a>
+<a name='L2918'></a><a href='#L2918'>2918</a>
+<a name='L2919'></a><a href='#L2919'>2919</a>
+<a name='L2920'></a><a href='#L2920'>2920</a>
+<a name='L2921'></a><a href='#L2921'>2921</a>
+<a name='L2922'></a><a href='#L2922'>2922</a>
+<a name='L2923'></a><a href='#L2923'>2923</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4984,6 +4995,17 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -7720,7 +7742,7 @@ export type SearchEventsQuery = { __typename?: 'Query', openSearch: { __typename
 &nbsp;
 export type ChatMessagePromptFragmentFragment = { __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string };
 &nbsp;
-export type ChatMessageResponseFragmentFragment = { __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, meta?: unknown | null | undefined, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt; };
+export type ChatMessageResponseFragmentFragment = { __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, meta?: unknown | null | undefined, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined };
 &nbsp;
 export type ChatMessageSourceConfirmationFragmentFragment = { __typename: 'ChatMessageSourceConfirmation', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', confirmed?: boolean | null | undefined, name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined };
 &nbsp;
@@ -7729,7 +7751,7 @@ export type ChatSessionWithMessagesQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type ChatSessionWithMessagesQuery = { __typename?: 'Query', chatSession?: { __typename: 'ChatSession', id: string, activeMessageId?: string | null | undefined, createdAt: string, modelId?: string | null | undefined, modelGenerationParams?: unknown | null | undefined, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', confirmed?: boolean | null | undefined, name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined, promptMessages?: Array&lt;{ __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, responseMessages?: Array&lt;{ __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, meta?: unknown | null | undefined, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt; }&gt; | null | undefined, sourceConfirmationMessages?: Array&lt;{ __typename: 'ChatMessageSourceConfirmation', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', confirmed?: boolean | null | undefined, name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined }&gt; | null | undefined } | null | undefined };
+export type ChatSessionWithMessagesQuery = { __typename?: 'Query', chatSession?: { __typename: 'ChatSession', id: string, activeMessageId?: string | null | undefined, createdAt: string, modelId?: string | null | undefined, modelGenerationParams?: unknown | null | undefined, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', confirmed?: boolean | null | undefined, name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined, promptMessages?: Array&lt;{ __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, responseMessages?: Array&lt;{ __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, meta?: unknown | null | undefined, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined }&gt; | null | undefined, sourceConfirmationMessages?: Array&lt;{ __typename: 'ChatMessageSourceConfirmation', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', confirmed?: boolean | null | undefined, name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined }&gt; | null | undefined } | null | undefined };
 &nbsp;
 export type ConfirmChatMessageSourceConfirmationMutationVariables = Exact&lt;{
   input: ConfirmSourceConfirmationInput;
@@ -7933,6 +7955,17 @@ export const ChatMessageResponseFragmentFragmentDoc = gql`
       }
       type
     }
+  }
+  statuses {
+    id
+    content
+    createdAt
+    messageType
+    ordinalId
+    promptMessageId
+    runnerVersion
+    sessionId
+    updatedAt
   }
 }
     `;
@@ -8803,7 +8836,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Jul 31 2025 23:22:56 GMT-0400 (Eastern Daylight Time)
+                at Fri Aug 01 2025 12:02:51 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

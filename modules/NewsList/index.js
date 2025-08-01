@@ -40979,6 +40979,17 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
       type
     }
   }
+  statuses {
+    id
+    content
+    createdAt
+    messageType
+    ordinalId
+    promptMessageId
+    runnerVersion
+    sessionId
+    updatedAt
+  }
 }
     `;
 var ChatMessageSourceConfirmationFragmentFragmentDoc = lib_default`
