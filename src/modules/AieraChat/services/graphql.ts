@@ -56,6 +56,17 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                 type
             }
         }
+        statuses {
+            id
+            content
+            createdAt
+            messageType
+            ordinalId
+            promptMessageId
+            runnerVersion
+            sessionId
+            updatedAt
+        }
     }
 `;
 

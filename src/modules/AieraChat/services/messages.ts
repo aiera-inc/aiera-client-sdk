@@ -347,7 +347,12 @@ export const useChatSession = ({
         pause: !chatId || chatId === 'new',
         requestPolicy,
         variables: {
-            filter: { includeMessages: true, sessionId: chatId, sessionUserId: config.tracking?.userId },
+            filter: {
+                includeMessages: true,
+                includeStatuses: true,
+                sessionId: chatId,
+                sessionUserId: config.tracking?.userId,
+            },
         },
     });
 
