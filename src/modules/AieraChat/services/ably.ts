@@ -51,6 +51,7 @@ interface UseAblyReturn {
     error?: string;
     partials: AblyMessageData[];
     reset: () => Promise<void>;
+    thinkingState: string[];
     subscribeToChannel: (channelName: string) => RealtimeChannel | undefined;
     unsubscribeFromChannel: (channelName: string) => Promise<void>;
 }
@@ -71,6 +72,7 @@ interface AblyConfirmationSource {
 export interface AblyMessageData {
     __typename: string;
     blocks?: PartialTextBlock[];
+    content?: string;
     created_at: string;
     id: string | null;
     is_final?: boolean;
@@ -140,6 +142,7 @@ export const useAbly = (): UseAblyReturn => {
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
+    const [thinkingState, setThinkingState] = useState<string[]>([]);
     const [partials, setPartials] = useState<AblyMessageData[]>([]);
     const partialKeys = useRef<string[]>([]);
     const shouldSkipPartial = (messageType: ChatMessageType, skipTypes?: ChatMessageType[]) =>
@@ -352,6 +355,11 @@ export const useAbly = (): UseAblyReturn => {
                         partialKeys.current = [...partialKeys.current, jsonObject.created_at];
                     }
 
+                    if (jsonObject.message_type === 'status' && typeof jsonObject?.content === 'string') {
+                        const thinkingStatus = jsonObject.content;
+                        setThinkingState((pv) => [...pv, thinkingStatus]);
+                    }
+
                     // Process the response message and update partials
                     if (jsonObject.message_type === 'response' && jsonObject.blocks && !data.is_final) {
                         if (shouldSkipPartial(ChatMessageType.RESPONSE, skipTypes)) {
@@ -504,6 +512,7 @@ export const useAbly = (): UseAblyReturn => {
         error,
         partials,
         reset,
+        thinkingState,
         subscribeToChannel,
         unsubscribeFromChannel,
     };
