@@ -11,7 +11,7 @@ export interface TextBlock extends BaseBlock {
 
 export function Text({ citations, content }: TextBlock) {
     return (
-        <div className="text-base pt-2">
+        <div className="text-base pb-2 last:pb-0">
             <MarkdownRenderer citations={citations} content={content} />
         </div>
     );

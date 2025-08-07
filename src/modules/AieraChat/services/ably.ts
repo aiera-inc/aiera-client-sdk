@@ -52,6 +52,7 @@ interface UseAblyReturn {
     partials: AblyMessageData[];
     reset: () => Promise<void>;
     subscribeToChannel: (channelName: string) => RealtimeChannel | undefined;
+    thinkingResponseMessage?: AblyMessageData;
     unsubscribeFromChannel: (channelName: string) => Promise<void>;
 }
 
@@ -71,6 +72,7 @@ interface AblyConfirmationSource {
 export interface AblyMessageData {
     __typename: string;
     blocks?: PartialTextBlock[];
+    content?: string;
     created_at: string;
     id: string | null;
     is_final?: boolean;
@@ -80,6 +82,7 @@ export interface AblyMessageData {
     runner_version: string;
     session_id: number;
     sources?: AblyConfirmationSource[];
+    thinkingState?: string[];
     updated_at: string;
     user_id: number;
 }
@@ -141,7 +144,9 @@ export const useAbly = (): UseAblyReturn => {
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
     const [partials, setPartials] = useState<AblyMessageData[]>([]);
+    const [thinkingResponseMessage, setThinkingResponseMessage] = useState<AblyMessageData | undefined>(undefined);
     const partialKeys = useRef<string[]>([]);
+    const thinkingStateByPrompt = useRef<Map<string, string[]>>(new Map());
     const shouldSkipPartial = (messageType: ChatMessageType, skipTypes?: ChatMessageType[]) =>
         (skipTypes || []).includes(messageType);
 
@@ -352,6 +357,52 @@ export const useAbly = (): UseAblyReturn => {
                         partialKeys.current = [...partialKeys.current, jsonObject.created_at];
                     }
 
+                    if (jsonObject.message_type === 'status' && typeof jsonObject?.content === 'string') {
+                        const thinkingStatus = jsonObject.content;
+                        const promptId = jsonObject.prompt_message_id || 'default';
+
+                        // Store thinking state for this specific prompt
+                        const currentThinking = thinkingStateByPrompt.current.get(promptId) || [];
+                        const updatedThinking = [...currentThinking, thinkingStatus];
+                        thinkingStateByPrompt.current.set(promptId, updatedThinking);
+
+                        // Create or update thinking response message placeholder
+                        setThinkingResponseMessage((prevMessage) => {
+                            if (!prevMessage) {
+                                // Create new thinking response message
+                                const newMessage: AblyMessageData = {
+                                    __typename: 'ChatMessageResponse',
+                                    blocks: [
+                                        {
+                                            citations: undefined,
+                                            content: '',
+                                            type: ContentBlockType.Text,
+                                        },
+                                    ],
+                                    created_at: jsonObject.created_at,
+                                    id: `thinking-${jsonObject.session_id}-${promptId}`,
+                                    is_final: false,
+                                    message_type: 'response',
+                                    ordinal_id: `thinking-ordinal-${jsonObject.session_id}`,
+                                    prompt_message_id: jsonObject.prompt_message_id,
+                                    runner_version: jsonObject.runner_version,
+                                    session_id: jsonObject.session_id,
+                                    thinkingState: updatedThinking,
+                                    updated_at: jsonObject.updated_at,
+                                    user_id: jsonObject.user_id,
+                                };
+                                return newMessage;
+                            } else {
+                                // Update existing thinking response message
+                                return {
+                                    ...prevMessage,
+                                    thinkingState: updatedThinking,
+                                    updated_at: jsonObject.updated_at,
+                                };
+                            }
+                        });
+                    }
+
                     // Process the response message and update partials
                     if (jsonObject.message_type === 'response' && jsonObject.blocks && !data.is_final) {
                         if (shouldSkipPartial(ChatMessageType.RESPONSE, skipTypes)) {
@@ -359,10 +410,19 @@ export const useAbly = (): UseAblyReturn => {
                             return;
                         }
                         log('Updating partials with new message', 'log', jsonObject);
+
+                        // Add thinking state to the response message
+                        const promptId = jsonObject.prompt_message_id || 'default';
+                        const thinkingState = thinkingStateByPrompt.current.get(promptId) || [];
+                        const enrichedMessage = {
+                            ...jsonObject,
+                            thinkingState: thinkingState.length > 0 ? thinkingState : undefined,
+                        };
+
                         // Update partials state with the full message object and sort by created_at
                         setPartials((prev) => {
                             const newPartials =
-                                insertPosition === 'after' ? [...prev, jsonObject] : [jsonObject, ...prev];
+                                insertPosition === 'after' ? [...prev, enrichedMessage] : [enrichedMessage, ...prev];
                             // Sort by created_at in ascending order
                             return newPartials.sort(
                                 (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
@@ -487,11 +547,13 @@ export const useAbly = (): UseAblyReturn => {
         return new Promise<void>((resolve) => {
             log('Resetting Ably state');
             partialKeys.current = [];
+            thinkingStateByPrompt.current.clear();
             requestAnimationFrame(() => {
                 setConfirmation(undefined);
                 setError(undefined);
                 setCitations(undefined);
                 setPartials([]);
+                setThinkingResponseMessage(undefined);
                 setTimeout(resolve, 0);
             });
         });
@@ -505,6 +567,7 @@ export const useAbly = (): UseAblyReturn => {
         partials,
         reset,
         subscribeToChannel,
+        thinkingResponseMessage,
         unsubscribeFromChannel,
     };
 };

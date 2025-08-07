@@ -76,6 +76,7 @@ export interface ChatMessageResponse extends ChatMessageBase {
     type: ChatMessageType.RESPONSE;
     blocks: ContentBlock[];
     sources: Source[];
+    thinkingState?: string[];
 }
 
 export interface ChatMessagePrompt extends ChatMessageBase {
