@@ -8,6 +8,8 @@ import { Panel } from '../Panel';
 import { SearchInput } from '../../components/SearchInput';
 import { useEvents } from '../../services/events';
 import { Source, useChatStore } from '../../store';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 
 const EMPTY_SOURCES_MESSAGE = 'Sources will be suggested until a source is added.';
 
@@ -49,6 +51,24 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
         [] // Empty dependency array since we don't want this to change
     );
 
+    const config = useConfig();
+    const bus = useMessageBus();
+
+    const onNav = (source?: Source) => {
+        if (source) {
+            const { targetId, targetType, title } = source;
+            if (config.options?.aieraChatDisableSourceNav) {
+                bus?.emit('chat-source', { targetId, targetType }, 'out');
+            } else {
+                onSelectSource({
+                    targetId,
+                    targetType,
+                    title,
+                });
+            }
+        }
+    };
+
     // Cleanup the debounced function on component unmount
     useEffect(() => {
         return () => {
@@ -86,7 +106,7 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                             eventsQuery={eventsQuery}
                             onAddSource={onAddSource}
                             onRemoveSource={onRemoveSource}
-                            onSelectSource={onSelectSource}
+                            onSelectSource={onNav}
                             searchTerm={searchTerm}
                             sources={sources}
                         />

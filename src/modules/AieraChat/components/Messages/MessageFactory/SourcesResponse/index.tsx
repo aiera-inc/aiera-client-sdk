@@ -9,6 +9,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { AddSourceDialog } from '../../../../modals/AddSourceDialog';
 import { ChatMessageSources, ChatMessageStatus } from '../../../../services/messages';
 import { Source, useChatStore } from '../../../../store';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { match } from 'ts-pattern';
+import { MicroCalendar } from '@aiera/client-sdk/components/Svg/MicroCalendar';
+import { MicroBank } from '@aiera/client-sdk/components/Svg/MicroBank';
 
 export const SourcesResponse = ({
     data,
@@ -38,6 +43,21 @@ export const SourcesResponse = ({
         },
         [setLocalSources]
     );
+
+    const config = useConfig();
+    const bus = useMessageBus();
+
+    const onNav = ({ targetType, targetId, title }: { targetType: string; title: string; targetId: string }) => {
+        if (config.options?.aieraChatDisableSourceNav) {
+            bus?.emit('chat-source', { targetId, targetType }, 'out');
+        } else {
+            onSelectSource({
+                targetId,
+                targetType,
+                title,
+            });
+        }
+    };
 
     useEffect(() => {
         setLocalSources(data.sources);
@@ -71,23 +91,22 @@ export const SourcesResponse = ({
                 />
             </button>
             {expanded &&
-                localSources.map(({ title, targetId }, idx) => (
+                localSources.map(({ title, targetId, targetType }, idx) => (
                     <div
                         key={`${idx}-${targetId}`}
                         className={classNames(
                             'mx-1 mt-1 text-sm px-2 py-1.5',
                             'hover:bg-slate-200/40 rounded-md',
-                            'cursor-pointer flex items-center justify-between'
+                            'cursor-pointer flex items-center'
                         )}
-                        onClick={() =>
-                            onSelectSource({
-                                targetId,
-                                targetType: 'event',
-                                title,
-                            })
-                        }
+                        onClick={() => onNav({ targetId, targetType, title })}
                     >
-                        <p className="text-base line-clamp-1">{title}</p>
+                        {match(targetType)
+                            .with('event', () => <MicroCalendar className="w-4 text-slate-600" />)
+                            .with('transcript', () => <MicroCalendar className="w-4 text-slate-600" />)
+                            .with('filing', () => <MicroBank className="w-4 text-slate-600" />)
+                            .otherwise(() => null)}
+                        <p className="text-base flex-1 line-clamp-1 ml-2 text-left">{title}</p>
                         <div
                             className={classNames('ml-4', {
                                 'text-slate-600 hover:text-red-600': !data.confirmed,
