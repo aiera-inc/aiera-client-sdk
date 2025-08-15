@@ -9,6 +9,8 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { AddSourceDialog } from '../../../../modals/AddSourceDialog';
 import { ChatMessageSources, ChatMessageStatus } from '../../../../services/messages';
 import { Source, useChatStore } from '../../../../store';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 export const SourcesResponse = ({
     data,
@@ -38,6 +40,21 @@ export const SourcesResponse = ({
         },
         [setLocalSources]
     );
+
+    const config = useConfig();
+    const bus = useMessageBus();
+
+    const onNav = ({ targetType, targetId, title }: { targetType: string; title: string; targetId: string }) => {
+        if (config.options?.aieraChatDisableSourceNav) {
+            bus?.emit('chat-source', { targetId, targetType }, 'out');
+        } else {
+            onSelectSource({
+                targetId,
+                targetType,
+                title,
+            });
+        }
+    };
 
     useEffect(() => {
         setLocalSources(data.sources);
@@ -71,7 +88,7 @@ export const SourcesResponse = ({
                 />
             </button>
             {expanded &&
-                localSources.map(({ title, targetId }, idx) => (
+                localSources.map(({ title, targetId, targetType }, idx) => (
                     <div
                         key={`${idx}-${targetId}`}
                         className={classNames(
@@ -79,13 +96,7 @@ export const SourcesResponse = ({
                             'hover:bg-slate-200/40 rounded-md',
                             'cursor-pointer flex items-center justify-between'
                         )}
-                        onClick={() =>
-                            onSelectSource({
-                                targetId,
-                                targetType: 'event',
-                                title,
-                            })
-                        }
+                        onClick={() => onNav({ targetId, targetType, title })}
                     >
                         <p className="text-base line-clamp-1">{title}</p>
                         <div
