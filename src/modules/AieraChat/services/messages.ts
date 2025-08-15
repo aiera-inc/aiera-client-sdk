@@ -530,7 +530,7 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
+    }, [enablePolling, error, isLoading, messagesQuery, setError, setMessages]);
 
     // Handle title update
     useEffect(() => {
