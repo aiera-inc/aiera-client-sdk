@@ -36,7 +36,7 @@ export const MessageResponse = ({
 
     return (
         <MessageWrapper>
-            <div className="flex flex-col pl-3.5 pr-4">
+            <div className="flex flex-col px-2">
                 {data.blocks?.map((block, index) => (
                     <Block {...block} key={index} />
                 ))}

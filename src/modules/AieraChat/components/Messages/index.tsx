@@ -1,4 +1,5 @@
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
+import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { log } from '@aiera/client-sdk/lib/utils';
 import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
@@ -18,7 +19,6 @@ import {
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import { BlockType } from './MessageFactory/Block';
-import { Loading } from './MessageFactory/Loading';
 import { Prompt } from './Prompt';
 import './styles.css';
 
@@ -330,13 +330,20 @@ export function Messages({
                 const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
                 const updatedConfirmation = {
                     ...confirmation,
+                    confirmed: true,
                     prompt: promptMessage?.prompt ?? '',
                 };
                 log('updated confirmation', 'debug', updatedConfirmation);
                 setMessages((pv) => [...pv, updatedConfirmation]);
+
+                // TODO let user set a preference
+                // Auto confirm
+                if (promptMessage?.id) {
+                    onConfirm(promptMessage.id, confirmation.sources);
+                }
             }
         }
-    }, [confirmation, messages, setMessages]);
+    }, [confirmation, messages, setMessages, onConfirm]);
 
     // scroll question to top
     useEffect(() => {
@@ -375,29 +382,63 @@ export function Messages({
                     </div>
                 ) : (
                     <div className="absolute inset-0 overflow-y-auto messagesScrollBars">
-                        {groupedMessages.map((group, gidx) => (
-                            <div
-                                key={group?.[0]?.id}
-                                className={classNames({
-                                    'min-h-full': gidx === groupedMessages.length - 1,
-                                })}
-                            >
-                                {group.map((message, index) => (
-                                    <MessageFactory
-                                        setRef={setMessageRef}
-                                        key={message.id}
-                                        message={message}
-                                        generatingResponse={chatStatus === ChatSessionStatus.GeneratingResponse}
-                                        nextMessage={messages[index + 1]}
-                                        onConfirm={onConfirm}
-                                    />
-                                ))}
-                            </div>
-                        ))}
+                        {groupedMessages.map((group, gidx) => {
+                            const isLastGroup = gidx === groupedMessages.length - 1;
+                            const lastMessage = group[group.length - 1];
+                            return (
+                                <div
+                                    key={group?.[0]?.id}
+                                    className={classNames({
+                                        'min-h-full': gidx === groupedMessages.length - 1,
+                                    })}
+                                >
+                                    {group.map((message, index) => (
+                                        <MessageFactory
+                                            setRef={setMessageRef}
+                                            key={message.id}
+                                            message={message}
+                                            generatingResponse={chatStatus === ChatSessionStatus.GeneratingResponse}
+                                            nextMessage={messages[index + 1]}
+                                            onConfirm={onConfirm}
+                                        />
+                                    ))}
+                                    {isLastGroup && (
+                                        <>
+                                            {chatStatus === ChatSessionStatus.FindingSources &&
+                                                lastMessage?.type === ChatMessageType.PROMPT && (
+                                                    <div
+                                                        className={classNames(
+                                                            'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 rounded-lg mx-4 mb-2'
+                                                        )}
+                                                    >
+                                                        <MicroSparkles className="w-4 animate-bounce text-slate-600" />
+                                                        <p className="text-base flex-1 text-left ml-2">
+                                                            Finding sources...
+                                                        </p>
+                                                    </div>
+                                                )}
+                                            {chatStatus === ChatSessionStatus.GeneratingResponse &&
+                                                lastMessage &&
+                                                [ChatMessageType.PROMPT, ChatMessageType.SOURCES].includes(
+                                                    lastMessage?.type
+                                                ) && (
+                                                    <div
+                                                        className={classNames(
+                                                            'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 rounded-lg mx-4 mb-2'
+                                                        )}
+                                                    >
+                                                        <MicroSparkles className="w-4 animate-bounce text-slate-600" />
+                                                        <p className="text-base flex-1 text-left ml-2">Thinking...</p>
+                                                    </div>
+                                                )}
+                                        </>
+                                    )}
+                                </div>
+                            );
+                        })}
                     </div>
                 )}
             </div>
-            {chatStatus === ChatSessionStatus.FindingSources && !confirmation && <Loading>Thinking...</Loading>}
             <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
         </div>
     );
