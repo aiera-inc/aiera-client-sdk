@@ -1,36 +1,31 @@
+import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
-import { MicroRefresh } from '@aiera/client-sdk/components/Svg/MicroRefresh';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
-import { AddSourceDialog } from '@aiera/client-sdk/modules/AieraChat/modals/AddSourceDialog';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { IconButton } from '@aiera/client-sdk/modules/AieraChat/components/IconButton';
+import { AddSourceDialog } from '@aiera/client-sdk/modules/AieraChat/modals/AddSourceDialog';
+import { FeedbackDialog } from '@aiera/client-sdk/modules/AieraChat/modals/FeedbackDialog';
 import { ChatMessage } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { FeedbackDialog } from '@aiera/client-sdk/modules/AieraChat/modals/FeedbackDialog';
-import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
-import { useConfig } from '@aiera/client-sdk/lib/config';
 
 type MessageFeedback = 'pos' | 'neg' | undefined;
 
 export const Footer = ({
     data,
     onCopy,
-    onReRun,
     showCopy = true,
     showEditSources = false,
-    showRetry = false,
     showVoting = true,
 }: {
     onCopy?: () => void;
-    onReRun: (k: string) => void;
     data: ChatMessage;
     showCopy?: boolean;
     showEditSources?: boolean;
-    showRetry?: boolean;
     showVoting?: boolean;
 }) => {
     const config = useConfig();
@@ -155,16 +150,6 @@ export const Footer = ({
                     >
                         {localSources.length || ''}
                     </IconButton>
-                )}
-                {showRetry && (
-                    <IconButton
-                        hintText="Retry Response"
-                        hintAnchor="top-right"
-                        hintGrow="up-left"
-                        Icon={MicroRefresh}
-                        bgClass="bg-transparent hover:bg-slate-200/60-solid"
-                        onClick={() => onReRun(data.id)}
-                    />
                 )}
                 <p className="text-sm ml-3 text-slate-500">Aiera can make mistakes. Please double-check responses.</p>
             </div>

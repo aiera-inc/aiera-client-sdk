@@ -420,17 +420,6 @@ export const useChatSession = ({
                 const chatSession = messagesQuery.data.chatSession;
                 log(`Processing chat session: ${chatSession.id}`, 'debug');
 
-                // Update chat title in store if the session got a generated title
-                if (
-                    chatSession.title &&
-                    ((!chatSession.titleStatus && chatSession.title !== chatTitle) ||
-                        (chatSession.titleStatus === ChatSessionTitleStatus.Generated &&
-                            (!chatTitle || chatTitle === 'Untitled Chat')))
-                ) {
-                    onSetTitle(chatSession.title);
-                    refreshChatSessions();
-                }
-
                 const normalizedMessages: ChatMessage[] = [];
                 let lastPromptValue = ''; // Track the last prompt value
 
@@ -541,7 +530,27 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [chatTitle, enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
+    }, [enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
+
+    // Handle title update
+    useEffect(() => {
+        // Handle successful data fetches
+        if (messagesQuery.status === 'success' && messagesQuery.data?.chatSession) {
+            const chatSession = messagesQuery.data.chatSession;
+            log(`Processing chat session title update: ${chatSession.id}`, 'debug');
+
+            // Update chat title in store if the session got a generated title
+            if (
+                chatSession.title &&
+                ((!chatSession.titleStatus && chatSession.title !== chatTitle) ||
+                    (chatSession.titleStatus === ChatSessionTitleStatus.Generated &&
+                        (!chatTitle || chatTitle === 'Untitled Chat')))
+            ) {
+                onSetTitle(chatSession.title);
+                refreshChatSessions();
+            }
+        }
+    }, [chatTitle, messagesQuery, onSetTitle]);
 
     useEffect(() => {
         // Immediately clear messages when changing sessions
