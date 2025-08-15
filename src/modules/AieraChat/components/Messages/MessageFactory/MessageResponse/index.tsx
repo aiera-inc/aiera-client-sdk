@@ -9,11 +9,8 @@ import { Footer } from './Footer';
 
 export const MessageResponse = ({
     data,
-    onReRun,
     isLastItem,
-    generatingResponse,
 }: {
-    onReRun: (k: string) => void;
     data: ChatMessageResponse;
     isLastItem: boolean;
     generatingResponse: boolean;
@@ -38,15 +35,13 @@ export const MessageResponse = ({
     }, [data]);
 
     return (
-        <MessageWrapper isLoading={generatingResponse}>
+        <MessageWrapper>
             <div className="flex flex-col pl-3.5 pr-4">
                 {data.blocks?.map((block, index) => (
                     <Block {...block} key={index} />
                 ))}
             </div>
-            {(chatStatus === ChatSessionStatus.Active || !isLastItem) && (
-                <Footer data={data} onCopy={handleCopy} onReRun={onReRun} />
-            )}
+            {(chatStatus === ChatSessionStatus.Active || !isLastItem) && <Footer data={data} onCopy={handleCopy} />}
         </MessageWrapper>
     );
 };

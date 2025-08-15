@@ -418,7 +418,7 @@ export const useAbly = (): UseAblyReturn => {
                                 confirmed: false, // user action will confirm it
                                 id: `temp-confirmation-${jsonObject.session_id}-${jsonObject.prompt_message_id ?? ''}`,
                                 ordinalId: jsonObject.ordinal_id,
-                                prompt: '', // placeholder, get text from virtuoso using the prompt id
+                                prompt: '', // placeholder, get text from using the prompt id
                                 promptMessageId: jsonObject.prompt_message_id
                                     ? String(jsonObject.prompt_message_id)
                                     : undefined,

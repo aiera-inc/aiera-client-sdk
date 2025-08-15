@@ -12,24 +12,25 @@ export const MessageFactory = ({
     nextMessage,
     onConfirm,
     generatingResponse,
-    onReRun,
+    setRef,
 }: {
     generatingResponse: boolean;
     message: ChatMessage;
     nextMessage?: ChatMessage;
     onConfirm: (messageId: string, sources: Source[]) => void;
-    onReRun: (k: string) => void;
+    setRef: (node: HTMLDivElement | null, id: string) => void;
 }) => {
     return (
-        <div className="flex flex-col max-w-[50rem] w-full m-auto">
+        <div ref={(node) => setRef(node, message.id)} className="flex flex-col max-w-[50rem] w-full m-auto">
             {match(message)
                 .with({ type: ChatMessageType.PROMPT }, (data) => <MessagePrompt data={data} />)
-                .with({ type: ChatMessageType.SOURCES }, (data) => <SourcesResponse data={data} onConfirm={onConfirm} />)
+                .with({ type: ChatMessageType.SOURCES }, (data) => (
+                    <SourcesResponse data={data} onConfirm={onConfirm} />
+                ))
                 .with({ type: ChatMessageType.RESPONSE }, (data) => (
                     <MessageResponse
                         generatingResponse={generatingResponse && !nextMessage}
                         data={data}
-                        onReRun={onReRun}
                         isLastItem={!nextMessage}
                     />
                 ))
