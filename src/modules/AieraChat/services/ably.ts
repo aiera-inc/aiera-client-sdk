@@ -128,9 +128,12 @@ export function normalizeCitation(rawCitation: PartialCitation): Citation {
         marker: rawCitation.marker,
         meta: rawCitation.meta as object,
         source: source.name,
-        sourceId: sourceParent ? sourceParent.id : source.id,
         text: rawCitation.quote,
         url: rawCitation.url || undefined,
+        sourceId: source.id,
+        sourceParentId: sourceParent?.id,
+        sourceParentType: sourceParent?.type,
+        sourceType: rawCitation.source.type,
     };
 }
 
