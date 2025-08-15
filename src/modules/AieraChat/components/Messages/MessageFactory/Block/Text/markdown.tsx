@@ -95,7 +95,19 @@ type CustomComponentProps = {
 };
 
 // Custom Citation component that parses citation tags
-const CustomCitation = ({ author, contentId, date, marker, source, sourceId, text, url }: CitationType) => {
+const CustomCitation = ({
+    author,
+    contentId,
+    date,
+    marker,
+    source,
+    sourceId,
+    sourceParentId,
+    sourceParentType,
+    sourceType,
+    text,
+    url,
+}: CitationType) => {
     const citation: CitationType = {
         author,
         contentId,
@@ -103,6 +115,9 @@ const CustomCitation = ({ author, contentId, date, marker, source, sourceId, tex
         marker,
         source,
         sourceId,
+        sourceParentId,
+        sourceParentType,
+        sourceType,
         text,
         url,
     };

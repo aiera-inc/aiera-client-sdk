@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, ReactNode, ReactElement } from 'react';
 import type { InstrumentID } from '@finos/fdc3';
 import EventEmitter from 'eventemitter3';
-import type { UserEmailStatus, ValueOf } from '@aiera/client-sdk/types';
+import type { ChatSource, UserEmailStatus, ValueOf } from '@aiera/client-sdk/types';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
 import { Config } from '../config';
+import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 
 export type Direction = 'in' | 'out';
 
@@ -50,6 +51,8 @@ export interface MessageBusEvents {
     authenticated: null;
     configure: Config;
     configured: null;
+    'chat-source': ChatSource;
+    'chat-citation': Citation;
     'download-screenshot': null;
     'event-audio': EventAudio;
     'event-alert': EventAlert;
