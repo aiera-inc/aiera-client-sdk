@@ -11,6 +11,9 @@ export type Citation = {
     meta?: object;
     source: string;
     sourceId: string;
+    sourceParentId?: string;
+    sourceParentType?: string;
+    sourceType?: string;
     text: string;
     url?: string;
 };

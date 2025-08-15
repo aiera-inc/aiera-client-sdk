@@ -153,7 +153,10 @@ export function normalizeCitation(rawCitation: RawCitation): Citation {
         marker: rawCitation.marker,
         meta: rawCitation.meta as object,
         source: source.name,
-        sourceId: sourceParent ? sourceParent.sourceId : source.sourceId,
+        sourceId: source.sourceId,
+        sourceParentId: sourceParent.sourceId,
+        sourceParentType: sourceParent.type,
+        sourceType: rawCitation.source.type,
         text: rawCitation.quote,
         url: rawCitation.url || undefined,
     };
