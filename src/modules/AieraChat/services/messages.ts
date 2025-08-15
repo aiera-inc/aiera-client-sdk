@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { RequestPolicy, useClient, useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { useConfig } from '@aiera/client-sdk/lib/config';
@@ -110,6 +110,7 @@ interface UseChatSessionReturn {
     error: string | null;
     isLoading: boolean;
     messages: ChatMessage[];
+    setMessages: Dispatch<SetStateAction<ChatMessage[]>>;
     refresh: () => void;
 }
 
@@ -614,6 +615,7 @@ export const useChatSession = ({
         error,
         isLoading,
         messages,
+        setMessages,
         refresh,
     };
 };
