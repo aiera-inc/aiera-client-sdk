@@ -4,7 +4,6 @@ import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import React, { useCallback } from 'react';
 import { ChatMessageResponse } from '../../../../services/messages';
 import { Block } from '../Block';
-import { MessageWrapper } from '../MessageWrapper';
 import { Footer } from './Footer';
 
 export const MessageResponse = ({
@@ -35,13 +34,13 @@ export const MessageResponse = ({
     }, [data]);
 
     return (
-        <MessageWrapper>
+        <div className="flex flex-col pb-6 mx-4">
             <div className="flex flex-col px-2">
                 {data.blocks?.map((block, index) => (
                     <Block {...block} key={index} />
                 ))}
             </div>
             {(chatStatus === ChatSessionStatus.Active || !isLastItem) && <Footer data={data} onCopy={handleCopy} />}
-        </MessageWrapper>
+        </div>
     );
 };

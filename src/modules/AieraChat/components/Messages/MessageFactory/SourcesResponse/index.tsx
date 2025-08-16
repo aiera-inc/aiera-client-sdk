@@ -14,6 +14,7 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { match } from 'ts-pattern';
 import { MicroCalendar } from '@aiera/client-sdk/components/Svg/MicroCalendar';
 import { MicroBank } from '@aiera/client-sdk/components/Svg/MicroBank';
+import { useUserPreferencesStore } from '@aiera/client-sdk/modules/AieraChat/userPreferencesStore';
 
 export const SourcesResponse = ({
     data,
@@ -23,10 +24,11 @@ export const SourcesResponse = ({
     data: ChatMessageSources;
 }) => {
     const { onSelectSource } = useChatStore();
+    const { sourceConfirmations } = useUserPreferencesStore();
     const [isConfirming, setIsConfirming] = useState<boolean>(false);
     const [showSourceDialog, setShowSourceDialog] = useState<boolean>(false);
     const [localSources, setLocalSources] = useState<Source[]>(data.sources);
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(sourceConfirmations === 'manual' && !data.confirmed);
 
     const onAddSource = useCallback(
         (s: Source) => {
@@ -118,7 +120,7 @@ export const SourcesResponse = ({
                                     : (e) => {
                                           e.preventDefault();
                                           e.stopPropagation();
-                                          onRemoveSource({ targetId, targetType: 'event', title });
+                                          onRemoveSource({ targetId, targetType, title });
                                       }
                             }
                         >
@@ -126,30 +128,27 @@ export const SourcesResponse = ({
                         </div>
                     </div>
                 ))}
-            {isComplete && localSources.length > 0 && !data.confirmed && (
-                <div className="flex items-center justify-center px-3 mt-4 pb-5 text-sm">
-                    <Button className="mr-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
+            {isComplete && localSources.length >= 0 && !data.confirmed && (
+                <div className="flex items-center px-3 pb-2 pt-1 text-sm">
+                    {localSources.length > 0 && (
+                        <Button
+                            className="px-5"
+                            disabled={isConfirming}
+                            kind="primary"
+                            onClick={() => {
+                                if (data.promptMessageId) {
+                                    setIsConfirming(true);
+                                    setExpanded(false);
+                                    onConfirm(data.promptMessageId, localSources);
+                                }
+                            }}
+                        >
+                            <MicroCheck className="w-4 mr-1.5 -ml-2" />
+                            Confirm Sources
+                        </Button>
+                    )}
+                    <Button className="ml-2 px-4" kind="default" onClick={() => setShowSourceDialog(true)}>
                         Add Source
-                    </Button>
-                    <Button
-                        className="px-5"
-                        disabled={isConfirming}
-                        kind="primary"
-                        onClick={() => {
-                            if (data.promptMessageId) {
-                                setIsConfirming(true);
-                                onConfirm(data.promptMessageId, localSources);
-                            }
-                        }}
-                    >
-                        Confirm Sources
-                    </Button>
-                </div>
-            )}
-            {isComplete && localSources.length === 0 && (
-                <div className="flex items-center justify-center pb-5 text-sm">
-                    <Button kind="primary" className="px-5" onClick={() => setShowSourceDialog(true)}>
-                        Add Sources
                     </Button>
                 </div>
             )}

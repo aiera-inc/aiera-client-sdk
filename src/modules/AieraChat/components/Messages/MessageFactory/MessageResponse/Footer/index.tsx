@@ -1,15 +1,12 @@
 import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
 import { MicroClipboard } from '@aiera/client-sdk/components/Svg/MicroClipboard';
-import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { IconButton } from '@aiera/client-sdk/modules/AieraChat/components/IconButton';
-import { AddSourceDialog } from '@aiera/client-sdk/modules/AieraChat/modals/AddSourceDialog';
 import { FeedbackDialog } from '@aiera/client-sdk/modules/AieraChat/modals/FeedbackDialog';
 import { ChatMessage } from '@aiera/client-sdk/modules/AieraChat/services/messages';
-import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 
@@ -19,13 +16,11 @@ export const Footer = ({
     data,
     onCopy,
     showCopy = true,
-    showEditSources = false,
     showVoting = true,
 }: {
     onCopy?: () => void;
     data: ChatMessage;
     showCopy?: boolean;
-    showEditSources?: boolean;
     showVoting?: boolean;
 }) => {
     const config = useConfig();
@@ -33,38 +28,6 @@ export const Footer = ({
     // TODO getMessage from network / cache for managing feedback
     const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
     const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
-    const [showSourceDialog, setShowSourceDialog] = useState(false);
-    const [localSources, setLocalSources] = useState<Source[]>([
-        {
-            title: 'Tesla Q3 2024 Earnings Call',
-            targetId: '2639849',
-            targetType: 'event',
-        },
-        {
-            title: 'Meta Platforms Q2 2024 Earnings Call',
-            targetId: '2658051',
-            targetType: 'event',
-        },
-        {
-            title: 'Apple Inc Q3 2024 Earnings Call',
-            targetId: '2656780',
-            targetType: 'event',
-        },
-        {
-            title: 'Tesla Q2 2024 Earnings Call',
-            targetId: '2613061',
-            targetType: 'event',
-        },
-    ]);
-    const onAddLocalSource = useCallback((s: Source) => {
-        setLocalSources((pv) => [...pv, s]);
-    }, []);
-
-    const onRemoveSource = useCallback((s: Source) => {
-        setLocalSources((pv) =>
-            pv.filter((source) => !(source.targetId === s.targetId && source.targetType === s.targetType))
-        );
-    }, []);
 
     const onHandleCopy = useCallback(() => {
         setCopied(true);
@@ -139,28 +102,8 @@ export const Footer = ({
                             onClick={() => setShowFeedbackDialog(true)}
                         />
                     )}
-                {showEditSources && (
-                    <IconButton
-                        hintText="Edit Sources"
-                        hintAnchor="top-right"
-                        hintGrow="up-left"
-                        Icon={MicroFolder}
-                        bgClass="bg-transparent hover:bg-slate-200/60-solid"
-                        onClick={() => setShowSourceDialog(true)}
-                    >
-                        {localSources.length || ''}
-                    </IconButton>
-                )}
                 <p className="text-sm ml-3 text-slate-500">Aiera can make mistakes. Please double-check responses.</p>
             </div>
-            {showSourceDialog && (
-                <AddSourceDialog
-                    onAddSource={onAddLocalSource}
-                    onRemoveSource={onRemoveSource}
-                    onClose={() => setShowSourceDialog(false)}
-                    sources={localSources}
-                />
-            )}
             {showFeedbackDialog && (
                 <FeedbackDialog messageId={data.id} prompt={data.prompt} onClose={() => setShowFeedbackDialog(false)} />
             )}
