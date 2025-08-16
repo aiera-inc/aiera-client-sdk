@@ -39,6 +39,7 @@ export interface Options {
     aieraChatEnableAbly?: boolean;
     aieraChatEnablePolling?: boolean;
     aieraChatCollectInternalFeedback?: boolean;
+    aieraChatDisableSourceNav?: boolean;
     customOnly?: boolean;
     darkMode?: boolean;
     eventId?: string;

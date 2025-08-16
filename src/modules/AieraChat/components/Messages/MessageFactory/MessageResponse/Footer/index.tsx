@@ -1,36 +1,31 @@
+import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
-import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
+import { MicroClipboard } from '@aiera/client-sdk/components/Svg/MicroClipboard';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
-import { MicroRefresh } from '@aiera/client-sdk/components/Svg/MicroRefresh';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
-import { AddSourceDialog } from '@aiera/client-sdk/modules/AieraChat/modals/AddSourceDialog';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { IconButton } from '@aiera/client-sdk/modules/AieraChat/components/IconButton';
+import { AddSourceDialog } from '@aiera/client-sdk/modules/AieraChat/modals/AddSourceDialog';
+import { FeedbackDialog } from '@aiera/client-sdk/modules/AieraChat/modals/FeedbackDialog';
 import { ChatMessage } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
-import { FeedbackDialog } from '@aiera/client-sdk/modules/AieraChat/modals/FeedbackDialog';
-import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
-import { useConfig } from '@aiera/client-sdk/lib/config';
 
 type MessageFeedback = 'pos' | 'neg' | undefined;
 
 export const Footer = ({
     data,
     onCopy,
-    onReRun,
     showCopy = true,
     showEditSources = false,
-    showRetry = false,
     showVoting = true,
 }: {
     onCopy?: () => void;
-    onReRun: (k: string) => void;
     data: ChatMessage;
     showCopy?: boolean;
     showEditSources?: boolean;
-    showRetry?: boolean;
     showVoting?: boolean;
 }) => {
     const config = useConfig();
@@ -86,7 +81,7 @@ export const Footer = ({
 
     return (
         <>
-            <div className="flex items-center px-3 pb-8">
+            <div className="flex items-center justify-start">
                 {showCopy && (
                     <IconButton
                         hintAnchor="top-left"
@@ -96,10 +91,10 @@ export const Footer = ({
                             'text-indigo-600': copied,
                         })}
                         bgClass={classNames({
-                            'bg-indigo-600/10 hover:bg-indigo-600/20 active:bg-indigo-600/30': copied,
+                            'hover:bg-indigo-600/20 active:bg-indigo-600/30': copied,
+                            'bg-transparent hover:bg-slate-200/60-solid': !copied,
                         })}
-                        className="mr-2"
-                        Icon={copied ? MicroCheck : MicroCopy}
+                        Icon={copied ? MicroCheck : MicroClipboard}
                     />
                 )}
                 {showVoting && (
@@ -107,12 +102,12 @@ export const Footer = ({
                         hintAnchor="top-left"
                         hintText="Good Response"
                         onClick={() => setFeedback((pv) => (pv === 'pos' ? undefined : 'pos'))}
-                        className={classNames('mr-2')}
                         textClass={classNames({
                             'text-green-600': feedback === 'pos',
                         })}
                         bgClass={classNames({
                             'bg-green-600/10 hover:bg-green-600/20 active:bg-green-600/30': feedback === 'pos',
+                            'bg-transparent hover:bg-slate-200/60-solid': feedback !== 'pos',
                         })}
                         Icon={MicroThumbUp}
                     />
@@ -126,48 +121,37 @@ export const Footer = ({
                         })}
                         bgClass={classNames({
                             'bg-red-600/10 hover:bg-red-600/20 active:bg-red-600/30': feedback === 'neg',
+                            'bg-transparent hover:bg-slate-200/60-solid': feedback !== 'neg',
                         })}
                         onClick={() => setFeedback((pv) => (pv === 'neg' ? undefined : 'neg'))}
                         Icon={MicroThumbDown}
                     />
                 )}
-                <div className="flex-1" />
                 {config.options?.aieraChatCollectInternalFeedback &&
                     config.options.aieraChatCollectInternalFeedback === true && (
                         <IconButton
-                            className="ml-2"
                             hintText="Submit Feedback"
-                            hintAnchor="top-right"
+                            hintAnchor="top-left"
                             iconClassName="ml-0.5"
-                            hintGrow="up-left"
+                            hintGrow="up-right"
+                            bgClass="bg-transparent hover:bg-slate-200/60-solid"
                             Icon={MicroChatLeftRight}
                             onClick={() => setShowFeedbackDialog(true)}
-                        >
-                            Feedback
-                        </IconButton>
+                        />
                     )}
                 {showEditSources && (
                     <IconButton
-                        className="ml-2"
                         hintText="Edit Sources"
                         hintAnchor="top-right"
                         hintGrow="up-left"
                         Icon={MicroFolder}
+                        bgClass="bg-transparent hover:bg-slate-200/60-solid"
                         onClick={() => setShowSourceDialog(true)}
                     >
                         {localSources.length || ''}
                     </IconButton>
                 )}
-                {showRetry && (
-                    <IconButton
-                        className="ml-2"
-                        hintText="Retry Response"
-                        hintAnchor="top-right"
-                        hintGrow="up-left"
-                        Icon={MicroRefresh}
-                        onClick={() => onReRun(data.id)}
-                    />
-                )}
+                <p className="text-sm ml-3 text-slate-500">Aiera can make mistakes. Please double-check responses.</p>
             </div>
             {showSourceDialog && (
                 <AddSourceDialog

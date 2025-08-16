@@ -10,7 +10,7 @@ interface MarkdownRendererProps {
 }
 
 // Function to handle unclosed markdown elements in partial content
-const preparePartialMarkdown = (content: string, citations?: CitationType[]): string => {
+const preparePartialMarkdown = (content: string): string => {
     // First, convert literal \n escape sequences to actual newlines
     let text = content.replace(/\\n/g, '\n');
 
@@ -59,19 +59,8 @@ const preparePartialMarkdown = (content: string, citations?: CitationType[]): st
         text += '_';
     }
 
-    // Convert inline citations to CustomCitation component using markers
-    // Important: process citations before links because they both use square-bracket notation
-    if (citations && citations.length > 0) {
-        citations.forEach((c) => {
-            // Convert to markdown-to-jsx compatible format
-            const attrString = Object.entries(c)
-                .map(([key, value]) => (typeof value === 'object' ? null : `${key}="${value}"`))
-                .filter((c) => c) // filter out nulls
-                .join(' ');
-            const citation = `<citation ${attrString} />`;
-            text = text.replace(new RegExp(c.marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), citation);
-        });
-    }
+    // Replace citations
+    text = text.replace(/\[c(\d+)\]/g, '<citation marker="$1" />');
 
     // Handle unclosed links
     const linkMatches = text.match(/\[([^\]]+)(?:\]\([^)]*|\]$|\]\([^)]*$)/g);
@@ -95,18 +84,13 @@ type CustomComponentProps = {
 };
 
 // Custom Citation component that parses citation tags
-const CustomCitation = ({ author, contentId, date, marker, source, sourceId, text, url }: CitationType) => {
-    const citation: CitationType = {
-        author,
-        contentId,
-        date,
-        marker,
-        source,
-        sourceId,
-        text,
-        url,
-    };
-    return <Citation citation={citation} />;
+const CustomCitation = ({ marker, citations }: { marker: string; citations: CitationType[] }) => {
+    const citation = citations?.find((cit: CitationType) => cit.marker === `[c${marker}]`);
+    if (citation) {
+        return <Citation citation={citation} />;
+    }
+
+    return null;
 };
 
 // Custom component overrides for markdown-to-jsx
@@ -155,20 +139,23 @@ const CustomTableBody = ({ children }: CustomComponentProps) => (
     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">{children}</tbody>
 );
 
-const CustomTableCell = ({ children }: CustomComponentProps) => <td className="px-3 py-2 text-sm">{children}</td>;
+const CustomTableCell = ({ children }: CustomComponentProps) => <td className="pr-5 py-2 text-base">{children}</td>;
 
 const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
-    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+    <th className="pr-5 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
         {children}
     </th>
 );
 
 export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) {
-    const preparedMarkdown = useMemo(() => preparePartialMarkdown(content, citations), [citations, content]);
+    const preparedMarkdown = useMemo(() => preparePartialMarkdown(content), [content]);
 
     // Define overrides for markdown-to-jsx with proper types
     const overrides: MarkdownToJSX.Options['overrides'] = {
-        citation: CustomCitation,
+        citation: {
+            component: CustomCitation,
+            props: { citations },
+        },
         code: CustomCode,
         pre: CustomPre,
         a: CustomLink,

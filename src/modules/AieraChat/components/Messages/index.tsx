@@ -1,20 +1,13 @@
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
+import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { log } from '@aiera/client-sdk/lib/utils';
 import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
 import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraChat/services/types';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
-import {
-    VirtuosoMessageList,
-    VirtuosoMessageListLicense,
-    VirtuosoMessageListMethods,
-    VirtuosoMessageListProps,
-    useCurrentlyRenderedData,
-    useVirtuosoMethods,
-} from '@virtuoso.dev/message-list';
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
-import React, { Fragment, RefObject, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     ChatMessage,
     ChatMessagePrompt,
@@ -26,10 +19,7 @@ import {
 import { Source, useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import { BlockType } from './MessageFactory/Block';
-import { MessagePrompt } from './MessageFactory/MessagePrompt';
 import { Prompt } from './Prompt';
-// import { SuggestedPrompts } from './SuggestedPrompts';
-import { Loading } from './MessageFactory/Loading';
 import './styles.css';
 
 let idCounter = 0;
@@ -38,104 +28,44 @@ export interface MessageListContext {
     onSubmit: (p: string) => void;
     onReRun: (k: string) => void;
     onConfirm: (messageId: string, sources: Source[]) => void;
+    generatingResponse: boolean;
+    thinkingState: string[];
 }
-
-const StickyHeader: VirtuosoMessageListProps<ChatMessage, MessageListContext>['StickyHeader'] = () => {
-    const data: ChatMessage[] = useCurrentlyRenderedData();
-    const { getScrollLocation } = useVirtuosoMethods();
-    const { listOffset } = getScrollLocation();
-    const firstPrompt = data[0];
-    if (!firstPrompt) return null;
-    return (
-        <Fragment key={firstPrompt.ordinalId}>
-            <div
-                className={classNames('absolute top-0 left-0 right-0 bg-gray-50 h-2', {
-                    'opacity-0': listOffset > -56,
-                })}
-            />
-            <MessagePrompt
-                isStickyHeader
-                className={classNames('max-w-[50rem] m-auto', {
-                    'opacity-0': listOffset > -56,
-                })}
-                data={firstPrompt as ChatMessagePrompt}
-            />
-        </Fragment>
-    );
-};
 
 export function Messages({
     onOpenSources,
     onSubmit,
-    virtuosoRef,
 }: {
     onOpenSources: () => void;
     onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
-    virtuosoRef: RefObject<VirtuosoMessageListMethods<ChatMessage>>;
 }) {
     const config = useConfig();
+    const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
     const [submitting, setSubmitting] = useState<boolean>(false);
     const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
-    const { confirmSourceConfirmation, createChatMessagePrompt, messages, isLoading } = useChatSession({
+    const { confirmSourceConfirmation, createChatMessagePrompt, messages, setMessages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
+    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } =
+        useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
-    const onReRun = useCallback((ordinalId: string) => {
-        const originalIndex = virtuosoRef.current?.data.findIndex((m) => m.ordinalId === ordinalId);
-        if (originalIndex) {
-            setTimeout(() => {
-                let counter = 0;
-                let newMessage = '';
-                const interval = setInterval(() => {
-                    let status = ChatMessageStatus.QUEUED;
-                    if (counter++ > 80) {
-                        clearInterval(interval);
-                        status = ChatMessageStatus.COMPLETED;
-                    } else if (counter > 10) {
-                        status = ChatMessageStatus.STREAMING;
-                    }
-                    virtuosoRef.current?.data.map(
-                        (message) => {
-                            if (message.ordinalId === ordinalId) {
-                                newMessage = newMessage + ' ' + 'some message';
-                                return {
-                                    ...message,
-                                    text: newMessage,
-                                    status,
-                                };
-                            }
-
-                            return message;
-                        },
-                        {
-                            location() {
-                                return { index: originalIndex, align: 'end', behavior: 'smooth' };
-                            },
-                        }
+    const onConfirm = (promptMessageId: string, sources: Source[]) => {
+        confirmSourceConfirmation(promptMessageId, sources)
+            .then((confirmationMessage) => {
+                // Update sources in the global store
+                onAddSource(sources);
+                if (confirmationMessage?.id) {
+                    // Find the matching confirmation message in the list by type and prompt id
+                    // We can't match by id because the confirmation message has a temp id
+                    const originalMessage = messages.find(
+                        (m) =>
+                            m.type === ChatMessageType.SOURCES &&
+                            m.promptMessageId === confirmationMessage.promptMessageId
                     );
-                }, 150);
-            });
-        }
-    }, []);
-
-    const onConfirm = useCallback(
-        (promptMessageId: string, sources: Source[]) => {
-            confirmSourceConfirmation(promptMessageId, sources)
-                .then((confirmationMessage) => {
-                    // Update sources in the global store
-                    onAddSource(sources);
-                    if (confirmationMessage?.id) {
-                        // Find the matching confirmation message in the virtuoso list by type and prompt id
-                        // We can't match by id because the confirmation message in virtuoso has a temp id
-                        const originalMessage = virtuosoRef.current?.data.find(
-                            (m) =>
-                                m.type === ChatMessageType.SOURCES &&
-                                m.promptMessageId === confirmationMessage.promptMessageId
-                        );
-                        if (originalMessage) {
-                            virtuosoRef.current?.data.map((message) => {
+                    if (originalMessage) {
+                        setMessages((pv) =>
+                            pv.map((message) => {
                                 if (message.id === originalMessage.id) {
                                     return {
                                         ...message,
@@ -144,9 +74,61 @@ export function Messages({
                                 }
 
                                 return message;
-                            });
-                        }
+                            })
+                        );
                     }
+                }
+            })
+            .then(() => {
+                // Reset existing partials before new ones start streaming
+                if (partials && partials.length > 0) {
+                    reset().catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
+                }
+            })
+            .then(() => onSetStatus(ChatSessionStatus.GeneratingResponse))
+            .catch((err: Error) =>
+                log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
+            );
+    };
+
+    const handleSubmit = (prompt: string) => {
+        setSubmitting(true);
+        if (chatId === 'new') {
+            onSubmit(prompt)
+                .then((session) => {
+                    if (session && session.promptMessage) {
+                        // Only prompt messages can be created when creating a chat session
+                        const promptMessage: ChatMessagePrompt = {
+                            id: session.promptMessage.id,
+                            ordinalId: session.promptMessage.ordinalId,
+                            prompt: session.promptMessage.prompt,
+                            status: ChatMessageStatus.COMPLETED,
+                            timestamp: new Date().toISOString(),
+                            type: ChatMessageType.PROMPT,
+                        };
+                        // Append new message
+                        setMessages((pv) => [...pv, promptMessage]);
+                    }
+                })
+                .then(() =>
+                    onSetStatus(
+                        sources && sources.length > 0
+                            ? ChatSessionStatus.GeneratingResponse
+                            : ChatSessionStatus.FindingSources
+                    )
+                )
+                .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
+                .finally(() => setSubmitting(false));
+        } else {
+            createChatMessagePrompt({ content: prompt, sessionId: chatId })
+                .then(() => {
+                    // Update the session status to reflect what the server will persist
+                    // This is needed to restart streaming partials for an existing session
+                    onSetStatus(
+                        sources && sources.length > 0
+                            ? ChatSessionStatus.GeneratingResponse
+                            : ChatSessionStatus.FindingSources
+                    );
                 })
                 .then(() => {
                     // Reset existing partials before new ones start streaming
@@ -154,86 +136,18 @@ export function Messages({
                         reset().catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
                     }
                 })
-                .then(() => onSetStatus(ChatSessionStatus.GeneratingResponse))
-                .catch((err: Error) =>
-                    log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
-                );
-        },
-        [confirmSourceConfirmation, onAddSource, partials, reset, virtuosoRef]
-    );
+                .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
+                .finally(() => setSubmitting(false));
+        }
+    };
 
-    const handleSubmit = useCallback(
-        (prompt: string) => {
-            setSubmitting(true);
-            if (chatId === 'new') {
-                onSubmit(prompt)
-                    .then((session) => {
-                        if (session && session.promptMessage) {
-                            // Only prompt messages can be created when creating a chat session
-                            const promptMessage: ChatMessagePrompt = {
-                                id: session.promptMessage.id,
-                                ordinalId: session.promptMessage.ordinalId,
-                                prompt: session.promptMessage.prompt,
-                                status: ChatMessageStatus.COMPLETED,
-                                timestamp: new Date().toISOString(),
-                                type: ChatMessageType.PROMPT,
-                            };
-                            // Append new message to virtuoso
-                            virtuosoRef.current?.data.append([promptMessage], ({ scrollInProgress, atBottom }) => {
-                                return {
-                                    index: 'LAST',
-                                    align: 'end',
-                                    behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                                };
-                            });
-                        }
-                    })
-                    .then(() =>
-                        onSetStatus(
-                            sources && sources.length > 0
-                                ? ChatSessionStatus.GeneratingResponse
-                                : ChatSessionStatus.FindingSources
-                        )
-                    )
-                    .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
-                    .finally(() => setSubmitting(false));
-            } else {
-                createChatMessagePrompt({ content: prompt, sessionId: chatId })
-                    .then(() => {
-                        // Update the session status to reflect what the server will persist
-                        // This is needed to restart streaming partials for an existing session
-                        onSetStatus(
-                            sources && sources.length > 0
-                                ? ChatSessionStatus.GeneratingResponse
-                                : ChatSessionStatus.FindingSources
-                        );
-                    })
-                    .then(() => {
-                        // Reset existing partials before new ones start streaming
-                        if (partials && partials.length > 0) {
-                            reset().catch((err: Error) =>
-                                log(`Error resetting useAbly state: ${err.message}`, 'error')
-                            );
-                        }
-                    })
-                    .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
-                    .finally(() => setSubmitting(false));
-            }
-        },
-        [chatId, createChatMessagePrompt, onSetStatus, onSubmit, partials, reset, sources]
-    );
-
-    const maybeClearVirtuoso = useCallback(
-        (message: string) => {
-            const existingItems = virtuosoRef.current?.data.get();
-            if (existingItems && existingItems.length > 0) {
-                // Log the provided message depending on invocation
-                log(`Message: ${JSON.stringify(message)}`, 'debug');
-                virtuosoRef.current?.data.replace([]);
-            }
-        },
-        [virtuosoRef]
-    );
+    const setMessageRef = (node: HTMLDivElement | null, id: string) => {
+        if (node) {
+            messageRefs.current.set(id, node);
+        } else {
+            messageRefs.current.delete(id);
+        }
+    };
 
     // Subscribe/unsubscribe to partial messages
     useEffect(() => {
@@ -297,72 +211,52 @@ export function Messages({
         };
     }, [chatId, subscribeToChannel, unsubscribeFromChannel]);
 
-    // Append new messages to virtuoso as they're created
-    useEffect(() => {
-        if (messages && messages.length > 0) {
-            // Find new messages
-            const newMessages = messages.filter(
-                (message) => !(virtuosoRef.current?.data || []).find((m) => m.id === message.id)
-            );
-
-            // Append any new messages
-            if (newMessages.length > 0) {
-                virtuosoRef.current?.data.append(newMessages, ({ scrollInProgress, atBottom }) => {
-                    return {
-                        index: 'LAST',
-                        align: 'end',
-                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                    };
-                });
-            }
-        } else {
-            // Wipe all items from virtuoso if messages are cleared out
-            maybeClearVirtuoso('Removing stale items from virtuoso list...');
-        }
-    }, [maybeClearVirtuoso, messages, virtuosoRef]);
-
     // Process partial messages from Ably for streaming
     useEffect(() => {
         if (partials && partials.length > 0) {
-            // Get the latest message in virtuoso
-            const existingItems = virtuosoRef.current?.data.get() || [];
-            const latestMessage = existingItems.at(-1);
             // Get the latest partial message object
             const latestPartial = partials[partials.length - 1];
-            if (!latestPartial) return; // avoid "TS2532: Object is possibly 'undefined'."
+            if (!latestPartial) return;
 
-            // Check if we should skip this partial because a complete message already exists
-            // This prevents duplicates from loading recent history when returning to a chat with completed messages
-            if (latestPartial.prompt_message_id) {
-                const existingCompleteMessage = existingItems.find(
-                    (msg) =>
-                        msg.type === ChatMessageType.RESPONSE &&
-                        msg.promptMessageId === String(latestPartial.prompt_message_id) &&
-                        msg.status === ChatMessageStatus.COMPLETED
-                );
-                if (existingCompleteMessage) {
-                    log(
-                        `Skipping partial created on ${latestPartial.created_at} - complete message already ` +
-                            `exists with id ${existingCompleteMessage.id} for prompt ${latestPartial.prompt_message_id}`
+            // Move ALL logic inside setMessages to always have fresh state
+            setMessages((currentMessages) => {
+                const existingItems = currentMessages || [];
+                const latestMessage = existingItems.at(-1);
+
+                // Check if we should skip this partial because a complete message already exists
+                if (latestPartial.prompt_message_id) {
+                    const existingCompleteMessage = existingItems.find(
+                        (msg) =>
+                            msg.type === ChatMessageType.RESPONSE &&
+                            msg.promptMessageId === String(latestPartial.prompt_message_id) &&
+                            msg.status === ChatMessageStatus.COMPLETED
                     );
-                    return;
+                    if (existingCompleteMessage) {
+                        log(
+                            `Skipping partial created on ${latestPartial.created_at} - complete message already ` +
+                                `exists with id ${existingCompleteMessage.id} for prompt ${latestPartial.prompt_message_id}`
+                        );
+                        // Return unchanged messages
+                        return currentMessages;
+                    }
                 }
-            }
 
-            // If the latest message is the one currently streaming partials, then update its content
-            if (
-                latestMessage &&
-                latestMessage.type === ChatMessageType.RESPONSE &&
-                latestMessage.status === ChatMessageStatus.STREAMING
-            ) {
-                // Dynamically set the status to account for when streaming stops
-                const latestMessageStatus = latestPartial.is_final ? ChatMessageStatus.COMPLETED : latestMessage.status;
+                // If the latest message is the one currently streaming partials, then update its content
+                if (
+                    latestMessage &&
+                    latestMessage.type === ChatMessageType.RESPONSE &&
+                    latestMessage.status === ChatMessageStatus.STREAMING
+                ) {
+                    // Dynamically set the status to account for when streaming stops
+                    const latestMessageStatus = latestPartial.is_final
+                        ? ChatMessageStatus.COMPLETED
+                        : latestMessage.status;
 
-                // Extract content from the latest partial
-                const latestPartialContent = latestPartial.blocks?.[0]?.content || '';
-                virtuosoRef.current?.data.map(
-                    (message) => {
-                        // When the latest partial is found in the existing virtuoso list,
+                    // Extract content from the latest partial
+                    const latestPartialContent = latestPartial.blocks?.[0]?.content || '';
+
+                    return currentMessages.map((message) => {
+                        // When the latest partial is found in the existing list,
                         // update its Text block's content with the latest partial message
                         if (latestMessage.id === message.id) {
                             return {
@@ -389,120 +283,178 @@ export function Messages({
                             };
                         }
                         return message;
-                    },
-                    {
-                        location() {
-                            return { index: 'LAST', align: 'end', behavior: 'smooth' };
-                        },
-                    }
-                );
-            } else {
-                // Get the latest prompt to ensure the sticky header works
-                const items = virtuosoRef.current?.data.get() || [];
-                const latestPrompt = items.reverse().find((message) => message.type === ChatMessageType.PROMPT);
+                    });
+                } else {
+                    // Get the latest prompt to ensure the sticky header works
+                    const latestPrompt = currentMessages.reduceRight<ChatMessagePrompt | undefined>(
+                        (found, message) => found ?? (message.type === ChatMessageType.PROMPT ? message : undefined),
+                        undefined
+                    );
 
-                // Combine all partial contents
-                const combinedContent = partials.map((p) => p?.blocks?.[0]?.content || '').join('');
+                    // Combine all partial contents
+                    const combinedContent = partials.map((p) => p?.blocks?.[0]?.content || '').join('');
 
-                // If there's no streaming message yet, append one to virtuoso using existing partials
-                const initialMessageResponse: ChatMessageResponse = {
-                    id: `chat-${chatId}-temp-response-${latestPrompt?.id || items.length + 1}-${idCounter++}`,
-                    ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
-                    prompt: latestPrompt?.prompt || '',
-                    promptMessageId: latestPrompt?.id ? String(latestPrompt.id) : undefined,
-                    status: ChatMessageStatus.STREAMING,
-                    timestamp: new Date().toISOString(),
-                    type: ChatMessageType.RESPONSE,
-                    blocks: [
-                        {
-                            // Only include citations if they exist, don't set to undefined
-                            ...(citations && citations.length > 0 && { citations }),
-                            content: combinedContent,
-                            id: 'initial-block',
-                            type: BlockType.TEXT,
-                        },
-                    ],
-                    sources: [], // partial messages won't have sources
-                };
-                virtuosoRef.current?.data.append([initialMessageResponse], ({ scrollInProgress, atBottom }) => {
-                    return {
-                        index: 'LAST',
-                        align: 'end',
-                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
+                    // If there's no streaming message yet, append one using existing partials
+                    const initialMessageResponse: ChatMessageResponse = {
+                        id: `chat-${chatId}-temp-response-${
+                            latestPrompt?.id || currentMessages.length + 1
+                        }-${idCounter++}`,
+                        ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
+                        prompt: latestPrompt?.prompt || '',
+                        promptMessageId: latestPrompt?.id ? String(latestPrompt.id) : undefined,
+                        status: ChatMessageStatus.STREAMING,
+                        timestamp: new Date().toISOString(),
+                        type: ChatMessageType.RESPONSE,
+                        blocks: [
+                            {
+                                // Only include citations if they exist, don't set to undefined
+                                ...(citations && citations.length > 0 && { citations }),
+                                content: combinedContent,
+                                id: 'initial-block',
+                                type: BlockType.TEXT,
+                            },
+                        ],
+                        sources: [], // partial messages won't have sources
                     };
-                });
-            }
+                    return [...currentMessages, initialMessageResponse];
+                }
+            });
         }
-    }, [chatId, citations, partials, virtuosoRef]);
+    }, [chatId, citations, partials, setMessages]);
 
-    // Update virtuoso with any source confirmation messages coming from Ably
+    // Update messages with any source confirmation messages coming from Ably
     useEffect(() => {
         if (confirmation) {
-            const existing = virtuosoRef.current?.data.find((m) => m.id === confirmation.id);
+            const existing = messages.find((m) => m.id === confirmation.id);
             if (!existing) {
                 // Find the associated prompt message to ensure sticky header works
-                const promptMessage = virtuosoRef.current?.data.find((m) => m.id === confirmation.promptMessageId);
+                const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
                 const updatedConfirmation = {
                     ...confirmation,
+                    confirmed: true,
                     prompt: promptMessage?.prompt ?? '',
                 };
-                virtuosoRef.current?.data.append([updatedConfirmation], ({ scrollInProgress, atBottom }) => {
-                    return {
-                        index: 'LAST',
-                        align: 'end',
-                        behavior: atBottom || scrollInProgress ? 'smooth' : 'auto',
-                    };
+                log('updated confirmation', 'debug', updatedConfirmation);
+                setMessages((pv) => [...pv, updatedConfirmation]);
+
+                // TODO let user set a preference
+                // Auto confirm
+                if (promptMessage?.id) {
+                    onConfirm(promptMessage.id, confirmation.sources);
+                }
+            }
+        }
+    }, [confirmation, messages, setMessages, onConfirm]);
+
+    // scroll question to top
+    useEffect(() => {
+        if (messages.length > 0) {
+            const lastMessage = messages[messages.length - 1];
+            if (lastMessage?.type === ChatMessageType.PROMPT) {
+                requestAnimationFrame(() => {
+                    messageRefs.current.get(lastMessage.id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                 });
             }
         }
-    }, [confirmation, virtuosoRef]);
+    }, [messages]);
 
     // Reset messages when the selected chat changes
     useEffect(() => {
-        maybeClearVirtuoso('New chat detected. Clearing virtuoso items...');
+        setMessages([]);
         // Reset Ably state when switching chats
         reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
-    }, [chatId, maybeClearVirtuoso, reset]);
+    }, [chatId, reset]);
 
-    // Create a memoized context object that updates when any of its values change
-    const context = useMemo(
-        () => ({
-            onSubmit: handleSubmit,
-            onReRun,
-            onConfirm,
-        }),
-        [handleSubmit, onReRun, onConfirm]
-    );
+    // Group messages by question
+    const groupedMessages = messages.reduce<ChatMessage[][]>((acc, message) => {
+        if (message.type === ChatMessageType.PROMPT) {
+            acc.push([message]);
+        } else {
+            const lastGroup = acc[acc.length - 1];
+            if (lastGroup) {
+                lastGroup.push(message);
+            } else {
+                // Handle edge case - maybe create a new group or skip
+                acc.push([message]);
+            }
+        }
+        return acc;
+    }, []);
 
     return (
-        <div className="relative flex-1">
-            <div className="absolute bottom-0 left-0 right-0 top-4 flex flex-col flex-1">
+        <div className="relative flex-1 flex flex-col" key={`chat-${chatId}`}>
+            <div className="relative flex flex-col flex-1">
                 {isLoading ? (
                     <div className="flex-1 flex flex-col items-center justify-center pb-3">
                         <LoadingSpinner />
                     </div>
                 ) : (
-                    <VirtuosoMessageListLicense licenseKey={config.virtualListKey || ''}>
-                        <VirtuosoMessageList<ChatMessage, MessageListContext>
-                            className="px-4 messagesScrollBars"
-                            computeItemKey={({ data }: { data: ChatMessage }) => data.id}
-                            initialData={messages}
-                            initialLocation={{ index: 'LAST', align: 'end' }}
-                            key={chatId || 'new'}
-                            ref={virtuosoRef}
-                            shortSizeAlign="bottom-smooth"
-                            style={{ flex: 1 }}
-                            context={context}
-                            // EmptyPlaceholder={SuggestedPrompts}
-                            ItemContent={MessageFactory}
-                            StickyHeader={StickyHeader}
-                        />
-                    </VirtuosoMessageListLicense>
+                    <div className="absolute inset-0 overflow-y-auto messagesScrollBars">
+                        {groupedMessages.map((group, gidx) => {
+                            const isLastGroup = gidx === groupedMessages.length - 1;
+                            const lastMessage = group[group.length - 1];
+                            const key = group?.[0]?.id ? `group-${group?.[0]?.id}` : `gidx-${gidx}`;
+                            return (
+                                <div
+                                    key={key}
+                                    className={classNames({
+                                        'min-h-full': gidx === groupedMessages.length - 1,
+                                    })}
+                                >
+                                    {group.map((message, index) => (
+                                        <MessageFactory
+                                            setRef={setMessageRef}
+                                            key={message.id}
+                                            message={message}
+                                            generatingResponse={chatStatus === ChatSessionStatus.GeneratingResponse}
+                                            nextMessage={group[index + 1]}
+                                            onConfirm={onConfirm}
+                                        />
+                                    ))}
+                                    {isLastGroup && (
+                                        <>
+                                            {chatStatus === ChatSessionStatus.FindingSources &&
+                                                lastMessage?.type === ChatMessageType.PROMPT && (
+                                                    <div className="max-w-[50rem] w-full m-auto">
+                                                        <div
+                                                            className={classNames(
+                                                                'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 rounded-lg mx-4 mb-2'
+                                                            )}
+                                                        >
+                                                            <MicroSparkles className="w-4 animate-bounce text-slate-600" />
+                                                            <p className="text-base flex-1 text-left ml-2">
+                                                                Finding sources...
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                            {chatStatus === ChatSessionStatus.GeneratingResponse &&
+                                                lastMessage &&
+                                                [ChatMessageType.PROMPT, ChatMessageType.SOURCES].includes(
+                                                    lastMessage?.type
+                                                ) && (
+                                                    <div className="max-w-[50rem] w-full m-auto">
+                                                        <div
+                                                            className={classNames(
+                                                                'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 rounded-lg mx-4 mb-2'
+                                                            )}
+                                                        >
+                                                            <MicroSparkles className="w-4 animate-bounce text-slate-600" />
+                                                            <p className="text-base flex-1 text-left ml-2">
+                                                                {thinkingState[thinkingState.length - 1]}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                )}
+                                        </>
+                                    )}
+                                </div>
+                            );
+                        })}
+                    </div>
                 )}
-                {((chatStatus === ChatSessionStatus.FindingSources && !confirmation) ||
-                    chatStatus === ChatSessionStatus.GeneratingResponse) && <Loading>Thinking...</Loading>}
-                <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
             </div>
+            <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
         </div>
     );
 }

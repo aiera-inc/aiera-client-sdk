@@ -1,5 +1,5 @@
 import gql from 'graphql-tag';
-import { useCallback, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useCallback, useEffect, useState } from 'react';
 import { RequestPolicy, useClient, useMutation } from 'urql';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { useConfig } from '@aiera/client-sdk/lib/config';
@@ -110,6 +110,7 @@ interface UseChatSessionReturn {
     error: string | null;
     isLoading: boolean;
     messages: ChatMessage[];
+    setMessages: Dispatch<SetStateAction<ChatMessage[]>>;
     refresh: () => void;
 }
 
@@ -152,7 +153,10 @@ export function normalizeCitation(rawCitation: RawCitation): Citation {
         marker: rawCitation.marker,
         meta: rawCitation.meta as object,
         source: source.name,
-        sourceId: sourceParent ? sourceParent.sourceId : source.sourceId,
+        sourceId: source?.sourceId,
+        sourceParentId: sourceParent?.sourceId,
+        sourceParentType: sourceParent?.type,
+        sourceType: rawCitation.source.type,
         text: rawCitation.quote,
         url: rawCitation.url || undefined,
     };
@@ -419,17 +423,6 @@ export const useChatSession = ({
                 const chatSession = messagesQuery.data.chatSession;
                 log(`Processing chat session: ${chatSession.id}`, 'debug');
 
-                // Update chat title in store if the session got a generated title
-                if (
-                    chatSession.title &&
-                    ((!chatSession.titleStatus && chatSession.title !== chatTitle) ||
-                        (chatSession.titleStatus === ChatSessionTitleStatus.Generated &&
-                            (!chatTitle || chatTitle === 'Untitled Chat')))
-                ) {
-                    onSetTitle(chatSession.title);
-                    refreshChatSessions();
-                }
-
                 const normalizedMessages: ChatMessage[] = [];
                 let lastPromptValue = ''; // Track the last prompt value
 
@@ -540,7 +533,27 @@ export const useChatSession = ({
                 setShouldStopPolling(true);
             }
         }
-    }, [chatTitle, enablePolling, error, isLoading, messagesQuery, onSetTitle, setError, setMessages]);
+    }, [enablePolling, error, isLoading, messagesQuery, setError, setMessages]);
+
+    // Handle title update
+    useEffect(() => {
+        // Handle successful data fetches
+        if (messagesQuery.status === 'success' && messagesQuery.data?.chatSession) {
+            const chatSession = messagesQuery.data.chatSession;
+            log(`Processing chat session title update: ${chatSession.id}`, 'debug');
+
+            // Update chat title in store if the session got a generated title
+            if (
+                chatSession.title &&
+                ((!chatSession.titleStatus && chatSession.title !== chatTitle) ||
+                    (chatSession.titleStatus === ChatSessionTitleStatus.Generated &&
+                        (!chatTitle || chatTitle === 'Untitled Chat')))
+            ) {
+                onSetTitle(chatSession.title);
+                refreshChatSessions();
+            }
+        }
+    }, [chatTitle, messagesQuery, onSetTitle]);
 
     useEffect(() => {
         // Immediately clear messages when changing sessions
@@ -614,6 +627,7 @@ export const useChatSession = ({
         error,
         isLoading,
         messages,
+        setMessages,
         refresh,
     };
 };

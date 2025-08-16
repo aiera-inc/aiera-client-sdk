@@ -14,7 +14,7 @@ export function Header({
 }) {
     const { onNewChat } = useChatStore();
     return (
-        <div className="flex items-center justify-between mx-4 mt-4">
+        <div className="flex items-center justify-between mx-4 py-4">
             <IconButton hintText="All Chats" className="mr-2.5" Icon={MicroBars} onClick={onOpenMenu} />
             <Title onChangeTitle={onChangeTitle} />
             <IconButton

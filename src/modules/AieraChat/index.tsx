@@ -1,22 +1,20 @@
-import { VirtuosoMessageListMethods } from '@virtuoso.dev/message-list';
-import * as Ably from 'ably';
-import { AblyProvider } from 'ably/react';
-import classNames from 'classnames';
-import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { log } from '@aiera/client-sdk/lib/utils';
+import * as Ably from 'ably';
+import { Message, RealtimeChannel } from 'ably';
+import { AblyProvider } from 'ably/react';
+import classNames from 'classnames';
+import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
 import { Transcript } from '../Transcript';
-import { ConfirmDialog } from './modals/ConfirmDialog';
 import { Header } from './components/Header';
-import { Menu } from './panels/Menu';
 import { Messages } from './components/Messages';
+import { ConfirmDialog } from './modals/ConfirmDialog';
+import { Menu } from './panels/Menu';
 import { Sources } from './panels/Sources';
-import { useChatStore } from './store';
-import { useAbly, CHANNEL_PREFIX } from './services/ably';
+import { CHANNEL_PREFIX, useAbly } from './services/ably';
 import { useChatSessions } from './services/chats';
-import { ChatMessage } from './services/messages';
-import { RealtimeChannel, Message } from 'ably';
+import { useChatStore } from './store';
 
 export function AieraChat(): ReactElement {
     const [showMenu, setShowMenu] = useState(false);
@@ -38,7 +36,6 @@ export function AieraChat(): ReactElement {
     } = useChatStore();
 
     const config = useConfig();
-    const virtuosoRef = useRef<VirtuosoMessageListMethods<ChatMessage>>(null);
 
     // Set up Ably realtime client
     const { createAblyRealtimeClient, subscribeToChannel, unsubscribeFromChannel } = useAbly();
@@ -370,7 +367,7 @@ export function AieraChat(): ReactElement {
                 )}
             >
                 <Header onChangeTitle={handleTitleChange} onOpenMenu={onOpenMenu} />
-                <Messages onOpenSources={onOpenSources} onSubmit={handleMessageSubmit} virtuosoRef={virtuosoRef} />
+                <Messages onOpenSources={onOpenSources} onSubmit={handleMessageSubmit} />
                 {showSources && <Sources onClearSources={handleClearSources} onClose={onCloseSources} />}
                 {showMenu && (
                     <Menu isLoading={isLoading} onClickIcon={onOpenConfirm} onClose={onCloseMenu} sessions={sessions} />

@@ -98,6 +98,7 @@
                         aieraChatEnableAbly: true,
                         aieraChatEnablePolling: false,
                         aieraChatCollectInternalFeedback: true,
+                        aieraChatDisableSourceNav: false,
                         showSearch: true,
                         // showGlobalSearch: false,
                         showSentiment: false,
@@ -178,11 +179,11 @@
                 //     ]);
                 // });
 
-                eventList.on('event-audio', (event) => {
-                    console.log('play audio: ', event);
+                eventList.on('chat-source', (chatSource) => {
+                    console.log('chat-source', chatSource);
                 });
-                eventList.on('event-selected', (event) => {
-                    console.log('selected event: ', event);
+                eventList.on('chat-citation', (chatCitation) => {
+                    console.log('chat-citation', chatCitation);
                 });
             });
         </script>

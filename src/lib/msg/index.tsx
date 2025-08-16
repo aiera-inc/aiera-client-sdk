@@ -4,6 +4,8 @@ import EventEmitter from 'eventemitter3';
 import type { UserEmailStatus, ValueOf } from '@aiera/client-sdk/types';
 import type { AuthTokens } from '@aiera/client-sdk/api/auth';
 import { Config } from '../config';
+import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import { Source } from '@aiera/client-sdk/modules/AieraChat/store';
 
 export type Direction = 'in' | 'out';
 
@@ -50,6 +52,8 @@ export interface MessageBusEvents {
     authenticated: null;
     configure: Config;
     configured: null;
+    'chat-source': Partial<Source>;
+    'chat-citation': Citation;
     'download-screenshot': null;
     'event-audio': EventAudio;
     'event-alert': EventAlert;
