@@ -21,6 +21,7 @@ import { MessageFactory } from './MessageFactory';
 import { BlockType } from './MessageFactory/Block';
 import { Prompt } from './Prompt';
 import './styles.css';
+import { useUserPreferencesStore } from '../../userPreferencesStore';
 
 let idCounter = 0;
 
@@ -48,6 +49,7 @@ export function Messages({
     });
     const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } =
         useAbly();
+    const { sourceConfirmations } = useUserPreferencesStore();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
     const onConfirm = (promptMessageId: string, sources: Source[]) => {
@@ -331,20 +333,19 @@ export function Messages({
                 const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
                 const updatedConfirmation = {
                     ...confirmation,
-                    confirmed: true,
+                    confirmed: sourceConfirmations === 'auto',
                     prompt: promptMessage?.prompt ?? '',
                 };
                 log('updated confirmation', 'debug', updatedConfirmation);
                 setMessages((pv) => [...pv, updatedConfirmation]);
 
-                // TODO let user set a preference
                 // Auto confirm
-                if (promptMessage?.id) {
+                if (sourceConfirmations === 'auto' && promptMessage?.id) {
                     onConfirm(promptMessage.id, confirmation.sources);
                 }
             }
         }
-    }, [confirmation, messages, setMessages, onConfirm]);
+    }, [confirmation, sourceConfirmations, messages, setMessages, onConfirm]);
 
     // scroll question to top
     useEffect(() => {
