@@ -139,10 +139,10 @@ const CustomTableBody = ({ children }: CustomComponentProps) => (
     <tbody className="divide-y divide-gray-200 dark:divide-gray-700">{children}</tbody>
 );
 
-const CustomTableCell = ({ children }: CustomComponentProps) => <td className="px-3 py-2 text-sm">{children}</td>;
+const CustomTableCell = ({ children }: CustomComponentProps) => <td className="pr-5 py-2 text-base">{children}</td>;
 
 const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
-    <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+    <th className="pr-5 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
         {children}
     </th>
 );

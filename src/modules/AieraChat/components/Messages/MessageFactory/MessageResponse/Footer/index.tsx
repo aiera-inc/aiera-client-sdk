@@ -1,6 +1,6 @@
 import { MicroChatLeftRight } from '@aiera/client-sdk/components/Svg/MicroChatLeftRight';
 import { MicroCheck } from '@aiera/client-sdk/components/Svg/MicroCheck';
-import { MicroCopy } from '@aiera/client-sdk/components/Svg/MicroCopy';
+import { MicroClipboard } from '@aiera/client-sdk/components/Svg/MicroClipboard';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import { MicroThumbDown } from '@aiera/client-sdk/components/Svg/MicroThumbDown';
 import { MicroThumbUp } from '@aiera/client-sdk/components/Svg/MicroThumbUp';
@@ -94,7 +94,7 @@ export const Footer = ({
                             'hover:bg-indigo-600/20 active:bg-indigo-600/30': copied,
                             'bg-transparent hover:bg-slate-200/60-solid': !copied,
                         })}
-                        Icon={copied ? MicroCheck : MicroCopy}
+                        Icon={copied ? MicroCheck : MicroClipboard}
                     />
                 )}
                 {showVoting && (
