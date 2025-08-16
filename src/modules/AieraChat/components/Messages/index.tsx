@@ -46,7 +46,8 @@ export function Messages({
     const { confirmSourceConfirmation, createChatMessagePrompt, messages, setMessages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel } = useAbly();
+    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } =
+        useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
 
     const onConfirm = (promptMessageId: string, sources: Source[]) => {
@@ -357,6 +358,13 @@ export function Messages({
         }
     }, [messages]);
 
+    // Reset messages when the selected chat changes
+    useEffect(() => {
+        setMessages([]);
+        // Reset Ably state when switching chats
+        reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
+    }, [chatId, reset]);
+
     // Group messages by question
     const groupedMessages = messages.reduce<ChatMessage[][]>((acc, message) => {
         if (message.type === ChatMessageType.PROMPT) {
@@ -399,7 +407,7 @@ export function Messages({
                                             key={message.id}
                                             message={message}
                                             generatingResponse={chatStatus === ChatSessionStatus.GeneratingResponse}
-                                            nextMessage={messages[index + 1]}
+                                            nextMessage={group[index + 1]}
                                             onConfirm={onConfirm}
                                         />
                                     ))}
@@ -433,7 +441,7 @@ export function Messages({
                                                         >
                                                             <MicroSparkles className="w-4 animate-bounce text-slate-600" />
                                                             <p className="text-base flex-1 text-left ml-2">
-                                                                Thinking...
+                                                                {thinkingState[thinkingState.length - 1]}
                                                             </p>
                                                         </div>
                                                     </div>
