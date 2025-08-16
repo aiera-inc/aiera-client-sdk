@@ -500,6 +500,7 @@ export const useAbly = (): UseAblyReturn => {
             partialKeys.current = [];
             requestAnimationFrame(() => {
                 setConfirmation(undefined);
+                setThinkingState([]);
                 setError(undefined);
                 setCitations(undefined);
                 setPartials([]);
