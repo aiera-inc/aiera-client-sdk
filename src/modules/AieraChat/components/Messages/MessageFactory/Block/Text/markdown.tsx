@@ -125,7 +125,7 @@ const CustomLink = ({ href, children }: CustomComponentProps & { href?: string }
 
 const CustomTable = ({ children }: CustomComponentProps) => {
     return (
-        <div className="overflow-x-auto my-4">
+        <div className="overflow-x-auto my-2">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">{children}</table>
         </div>
     );
@@ -150,81 +150,85 @@ const CustomTableHeaderCell = ({ children }: CustomComponentProps) => (
 export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) {
     const preparedMarkdown = useMemo(() => preparePartialMarkdown(content), [content]);
 
-    // Define overrides for markdown-to-jsx with proper types
-    const overrides: MarkdownToJSX.Options['overrides'] = {
-        citation: {
-            component: CustomCitation,
-            props: { citations },
-        },
-        code: CustomCode,
-        pre: CustomPre,
-        a: CustomLink,
-        table: CustomTable,
-        thead: CustomTableHead,
-        tbody: CustomTableBody,
-        td: CustomTableCell,
-        th: CustomTableHeaderCell,
-        h1: {
-            component: 'h1',
-            props: {
-                className: 'text-2xl font-bold pt-4 pb-4 border-b border-gray-200 dark:border-gray-700',
+    // Memoize overrides to prevent unnecessary markdown recompilation
+    const overrides: MarkdownToJSX.Options['overrides'] = useMemo(
+        () => ({
+            citation: {
+                component: CustomCitation,
+                props: { citations },
             },
-        },
-        h2: {
-            component: 'h2',
-            props: {
-                className: 'text-xl font-bold pt-4 pb-3 border-b border-gray-200 dark:border-gray-700',
+            code: CustomCode,
+            pre: CustomPre,
+            a: CustomLink,
+            table: CustomTable,
+            thead: CustomTableHead,
+            tbody: CustomTableBody,
+            td: CustomTableCell,
+            th: CustomTableHeaderCell,
+            h1: {
+                component: 'h1',
+                props: {
+                    className: 'text-2xl font-bold pt-4 pb-2',
+                },
             },
-        },
-        h3: {
-            component: 'h3',
-            props: {
-                className: 'text-lg font-bold pt-3 pb-2',
+            h2: {
+                component: 'h2',
+                props: {
+                    className: 'text-xl font-bold py-2',
+                },
             },
-        },
-        h4: {
-            component: 'h4',
-            props: {
-                className: 'text-base font-bold pt-3 pb-2',
+            h3: {
+                component: 'h3',
+                props: {
+                    className: 'text-lg font-bold py-1.5',
+                },
             },
-        },
-        p: {
-            component: 'p',
-            props: {
-                className: 'leading-relaxed pb-2.5',
+            h4: {
+                component: 'h4',
+                props: {
+                    className: 'text-base font-bold py-1',
+                },
             },
-        },
-        ul: {
-            component: 'ul',
-            props: {
-                className: 'list-disc pl-6 mb-4',
+            p: {
+                component: 'p',
+                props: {
+                    className: 'leading-relaxed pb-2.5',
+                },
             },
-        },
-        ol: {
-            component: 'ol',
-            props: {
-                className: 'list-decimal pl-6 mb-4',
+            ul: {
+                component: 'ul',
+                props: {
+                    className: 'list-disc pl-6 mb-4',
+                },
             },
-        },
-        li: {
-            component: 'li',
-            props: {
-                className: 'mb-1',
+            ol: {
+                component: 'ol',
+                props: {
+                    className: 'list-decimal pl-6 mb-4',
+                },
             },
-        },
-        blockquote: {
-            component: 'blockquote',
-            props: {
-                className: 'pl-4 border-l-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 my-4',
+            li: {
+                component: 'li',
+                props: {
+                    className: 'mb-1',
+                },
             },
-        },
-        hr: {
-            component: 'hr',
-            props: {
-                className: 'my-6 border-t border-gray-200 dark:border-gray-700',
+            blockquote: {
+                component: 'blockquote',
+                props: {
+                    className:
+                        'pl-4 border-l-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 my-4',
+                },
             },
-        },
-    };
+            hr: {
+                component: 'hr',
+                props: {
+                    className: 'my-4 border-t border-gray-200 dark:border-gray-700',
+                },
+            },
+        }),
+        [citations]
+    );
 
     const markdownOutput = useMemo(
         () =>

@@ -51,6 +51,7 @@ export function Messages({
         useAbly();
     const { sourceConfirmations } = useUserPreferencesStore();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
+    const confirmedMessageIds = useRef<Set<string>>(new Set());
 
     const onConfirm = (promptMessageId: string, sources: Source[]) => {
         confirmSourceConfirmation(promptMessageId, sources)
@@ -213,116 +214,91 @@ export function Messages({
         };
     }, [chatId, subscribeToChannel, unsubscribeFromChannel]);
 
-    // Process partial messages from Ably for streaming
+    // Process partials directly without complex useEffect logic
+    // This rebuilds the entire streaming message content from all partials
     useEffect(() => {
-        if (partials && partials.length > 0) {
-            // Get the latest partial message object
-            const latestPartial = partials[partials.length - 1];
-            if (!latestPartial) return;
+        if (!partials || partials.length === 0) return;
 
-            // Move ALL logic inside setMessages to always have fresh state
-            setMessages((currentMessages) => {
-                const existingItems = currentMessages || [];
-                const latestMessage = existingItems.at(-1);
+        setMessages((currentMessages) => {
+            const existingItems = currentMessages || [];
+            const latestMessage = existingItems.at(-1);
+            const lastPartial = partials[partials.length - 1];
 
-                // Check if we should skip this partial because a complete message already exists
-                if (latestPartial.prompt_message_id) {
-                    const existingCompleteMessage = existingItems.find(
-                        (msg) =>
-                            msg.type === ChatMessageType.RESPONSE &&
-                            msg.promptMessageId === String(latestPartial.prompt_message_id) &&
-                            msg.status === ChatMessageStatus.COMPLETED
+            // Check if we should skip because a complete message already exists
+            if (lastPartial?.prompt_message_id) {
+                const existingCompleteMessage = existingItems.find(
+                    (msg) =>
+                        msg.type === ChatMessageType.RESPONSE &&
+                        msg.promptMessageId === String(lastPartial.prompt_message_id) &&
+                        msg.status === ChatMessageStatus.COMPLETED
+                );
+                if (existingCompleteMessage) {
+                    log(
+                        `Skipping partials - complete message already exists with id ${existingCompleteMessage.id} for prompt ${lastPartial.prompt_message_id}`
                     );
-                    if (existingCompleteMessage) {
-                        log(
-                            `Skipping partial created on ${latestPartial.created_at} - complete message already ` +
-                                `exists with id ${existingCompleteMessage.id} for prompt ${latestPartial.prompt_message_id}`
-                        );
-                        // Return unchanged messages
-                        return currentMessages;
+                    return currentMessages;
+                }
+            }
+
+            // Build the complete content from ALL partials (this prevents repetition)
+            const completeContent = partials.map((p) => p?.blocks?.[0]?.content || '').join('');
+            const isFinal = lastPartial?.is_final || false;
+            const messageStatus = isFinal ? ChatMessageStatus.COMPLETED : ChatMessageStatus.STREAMING;
+
+            // If we have a streaming message, update it with the complete content
+            if (
+                latestMessage &&
+                latestMessage.type === ChatMessageType.RESPONSE &&
+                latestMessage.status === ChatMessageStatus.STREAMING
+            ) {
+                return currentMessages.map((message) => {
+                    if (message.id === latestMessage.id) {
+                        return {
+                            ...latestMessage,
+                            blocks: latestMessage.blocks.map((b) => {
+                                if (b.type === BlockType.TEXT) {
+                                    return {
+                                        ...b,
+                                        content: completeContent, // Replace with complete content, not append
+                                        ...(citations && citations.length > 0 && { citations }),
+                                    };
+                                }
+                                return b;
+                            }),
+                            status: messageStatus,
+                        };
                     }
-                }
+                    return message;
+                });
+            } else {
+                // Create new streaming message with complete content
+                const latestPrompt = currentMessages.reduceRight<ChatMessagePrompt | undefined>(
+                    (found, message) => found ?? (message.type === ChatMessageType.PROMPT ? message : undefined),
+                    undefined
+                );
 
-                // If the latest message is the one currently streaming partials, then update its content
-                if (
-                    latestMessage &&
-                    latestMessage.type === ChatMessageType.RESPONSE &&
-                    latestMessage.status === ChatMessageStatus.STREAMING
-                ) {
-                    // Dynamically set the status to account for when streaming stops
-                    const latestMessageStatus = latestPartial.is_final
-                        ? ChatMessageStatus.COMPLETED
-                        : latestMessage.status;
-
-                    // Extract content from the latest partial
-                    const latestPartialContent = latestPartial.blocks?.[0]?.content || '';
-
-                    return currentMessages.map((message) => {
-                        // When the latest partial is found in the existing list,
-                        // update its Text block's content with the latest partial message
-                        if (latestMessage.id === message.id) {
-                            return {
-                                ...latestMessage,
-                                blocks: latestMessage.blocks.map((b) => {
-                                    if (b.type === BlockType.TEXT) {
-                                        // Only update citations if new ones are available, otherwise preserve existing
-                                        const updatedBlock = {
-                                            ...b,
-                                            content: b.content + latestPartialContent,
-                                        };
-
-                                        // Only update citations if we have new ones from Ably
-                                        if (citations && citations.length > 0) {
-                                            updatedBlock.citations = citations;
-                                        }
-
-                                        return updatedBlock;
-                                    } else {
-                                        return b;
-                                    }
-                                }),
-                                status: latestMessageStatus,
-                            };
-                        }
-                        return message;
-                    });
-                } else {
-                    // Get the latest prompt to ensure the sticky header works
-                    const latestPrompt = currentMessages.reduceRight<ChatMessagePrompt | undefined>(
-                        (found, message) => found ?? (message.type === ChatMessageType.PROMPT ? message : undefined),
-                        undefined
-                    );
-
-                    // Combine all partial contents
-                    const combinedContent = partials.map((p) => p?.blocks?.[0]?.content || '').join('');
-
-                    // If there's no streaming message yet, append one using existing partials
-                    const initialMessageResponse: ChatMessageResponse = {
-                        id: `chat-${chatId}-temp-response-${
-                            latestPrompt?.id || currentMessages.length + 1
-                        }-${idCounter++}`,
-                        ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
-                        prompt: latestPrompt?.prompt || '',
-                        promptMessageId: latestPrompt?.id ? String(latestPrompt.id) : undefined,
-                        status: ChatMessageStatus.STREAMING,
-                        timestamp: new Date().toISOString(),
-                        type: ChatMessageType.RESPONSE,
-                        blocks: [
-                            {
-                                // Only include citations if they exist, don't set to undefined
-                                ...(citations && citations.length > 0 && { citations }),
-                                content: combinedContent,
-                                id: 'initial-block',
-                                type: BlockType.TEXT,
-                            },
-                        ],
-                        sources: [], // partial messages won't have sources
-                    };
-                    return [...currentMessages, initialMessageResponse];
-                }
-            });
-        }
-    }, [chatId, citations, partials, setMessages]);
+                const initialMessageResponse: ChatMessageResponse = {
+                    id: `chat-${chatId}-temp-response-${latestPrompt?.id || currentMessages.length + 1}-${idCounter++}`,
+                    ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
+                    prompt: latestPrompt?.prompt || '',
+                    promptMessageId: latestPrompt?.id ? String(latestPrompt.id) : undefined,
+                    status: messageStatus,
+                    timestamp: new Date().toISOString(),
+                    type: ChatMessageType.RESPONSE,
+                    blocks: [
+                        {
+                            ...(citations && citations.length > 0 && { citations }),
+                            content: completeContent,
+                            id: 'initial-block',
+                            type: BlockType.TEXT,
+                        },
+                    ],
+                    sources: [],
+                };
+                return [...currentMessages, initialMessageResponse];
+            }
+        });
+    }, [partials, citations, chatId]);
 
     // Update messages with any source confirmation messages coming from Ably
     useEffect(() => {
@@ -335,14 +311,18 @@ export function Messages({
                     const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
                     const updatedConfirmation = {
                         ...confirmation,
-                        confirmed: !confirmation.confirmed ? sourceConfirmations === 'auto' : false,
+                        confirmed: !confirmation.confirmed ? sourceConfirmations === 'auto' : true,
                         prompt: promptMessage?.prompt ?? '',
                     };
                     log('updated confirmation', 'debug', updatedConfirmation);
 
                     // Auto confirm
-                    if (sourceConfirmations === 'auto' && promptMessage?.id) {
-                        onConfirm(promptMessage.id, confirmation.sources);
+                    if (sourceConfirmations === 'auto' && promptMessage?.id && !confirmation.confirmed) {
+                        const messageKey = `${promptMessage.id}-${confirmation.id}`;
+                        if (!confirmedMessageIds.current.has(messageKey)) {
+                            confirmedMessageIds.current.add(messageKey);
+                            onConfirm(promptMessage.id, confirmation.sources);
+                        }
                     }
 
                     return [...pv, updatedConfirmation];
@@ -350,7 +330,7 @@ export function Messages({
                 return pv;
             });
         }
-    }, [confirmation, sourceConfirmations, setMessages, onConfirm]);
+    }, [confirmation, sourceConfirmations, onConfirm]);
 
     // scroll question to top
     useEffect(() => {
@@ -369,6 +349,7 @@ export function Messages({
         // Reset Ably state when switching chats
         reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
         setMessages([]);
+        confirmedMessageIds.current.clear();
     }, [chatId, reset]);
 
     // Group messages by question
