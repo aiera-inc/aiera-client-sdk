@@ -327,25 +327,30 @@ export function Messages({
     // Update messages with any source confirmation messages coming from Ably
     useEffect(() => {
         if (confirmation) {
-            const existing = messages.find((m) => m.id === confirmation.id);
-            if (!existing) {
-                // Find the associated prompt message to ensure sticky header works
-                const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
-                const updatedConfirmation = {
-                    ...confirmation,
-                    confirmed: sourceConfirmations === 'auto',
-                    prompt: promptMessage?.prompt ?? '',
-                };
-                log('updated confirmation', 'debug', updatedConfirmation);
-                setMessages((pv) => [...pv, updatedConfirmation]);
+            setMessages((pv) => {
+                const existing = pv.find((m) => m.id === confirmation.id);
 
-                // Auto confirm
-                if (sourceConfirmations === 'auto' && promptMessage?.id) {
-                    onConfirm(promptMessage.id, confirmation.sources);
+                if (!existing) {
+                    // Find the associated prompt message to ensure sticky header works
+                    const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
+                    const updatedConfirmation = {
+                        ...confirmation,
+                        confirmed: !confirmation.confirmed ? sourceConfirmations === 'auto' : false,
+                        prompt: promptMessage?.prompt ?? '',
+                    };
+                    log('updated confirmation', 'debug', updatedConfirmation);
+
+                    // Auto confirm
+                    if (sourceConfirmations === 'auto' && promptMessage?.id) {
+                        onConfirm(promptMessage.id, confirmation.sources);
+                    }
+
+                    return [...pv, updatedConfirmation];
                 }
-            }
+                return pv;
+            });
         }
-    }, [confirmation, sourceConfirmations, messages, setMessages, onConfirm]);
+    }, [confirmation, sourceConfirmations, setMessages, onConfirm]);
 
     // scroll question to top
     useEffect(() => {
@@ -361,9 +366,9 @@ export function Messages({
 
     // Reset messages when the selected chat changes
     useEffect(() => {
-        setMessages([]);
         // Reset Ably state when switching chats
         reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
+        setMessages([]);
     }, [chatId, reset]);
 
     // Group messages by question
