@@ -7,7 +7,7 @@ import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraCha
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
     ChatMessage,
     ChatMessagePrompt,
@@ -51,6 +51,13 @@ export function Messages({
         useAbly();
     const { sourceConfirmations } = useUserPreferencesStore();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
+    const lastProcessedPartialIndex = useRef<number>(-1);
+    const partialsRef = useRef(partials);
+
+    // Keep ref updated
+    useEffect(() => {
+        partialsRef.current = partials;
+    }, [partials]);
 
     const onConfirm = (promptMessageId: string, sources: Source[]) => {
         confirmSourceConfirmation(promptMessageId, sources)
@@ -213,12 +220,16 @@ export function Messages({
         };
     }, [chatId, subscribeToChannel, unsubscribeFromChannel]);
 
-    // Process partial messages from Ably for streaming
-    useEffect(() => {
-        if (partials && partials.length > 0) {
-            // Get the latest partial message object
-            const latestPartial = partials[partials.length - 1];
-            if (!latestPartial) return;
+    // Get only new partials since last processed
+    const latestPartial = useMemo(() => {
+        if (!partials || partials.length === 0) return null;
+        return partials[partials.length - 1];
+    }, [partials]);
+
+    // Process new partial messages from Ably for streaming
+    const processPartialMessage = useCallback(
+        (partial: typeof latestPartial) => {
+            if (!partial) return;
 
             // Move ALL logic inside setMessages to always have fresh state
             setMessages((currentMessages) => {
@@ -226,19 +237,18 @@ export function Messages({
                 const latestMessage = existingItems.at(-1);
 
                 // Check if we should skip this partial because a complete message already exists
-                if (latestPartial.prompt_message_id) {
+                if (partial.prompt_message_id) {
                     const existingCompleteMessage = existingItems.find(
                         (msg) =>
                             msg.type === ChatMessageType.RESPONSE &&
-                            msg.promptMessageId === String(latestPartial.prompt_message_id) &&
+                            msg.promptMessageId === String(partial.prompt_message_id) &&
                             msg.status === ChatMessageStatus.COMPLETED
                     );
                     if (existingCompleteMessage) {
                         log(
-                            `Skipping partial created on ${latestPartial.created_at} - complete message already ` +
-                                `exists with id ${existingCompleteMessage.id} for prompt ${latestPartial.prompt_message_id}`
+                            `Skipping partial created on ${partial.created_at} - complete message already ` +
+                                `exists with id ${existingCompleteMessage.id} for prompt ${partial.prompt_message_id}`
                         );
-                        // Return unchanged messages
                         return currentMessages;
                     }
                 }
@@ -250,12 +260,10 @@ export function Messages({
                     latestMessage.status === ChatMessageStatus.STREAMING
                 ) {
                     // Dynamically set the status to account for when streaming stops
-                    const latestMessageStatus = latestPartial.is_final
-                        ? ChatMessageStatus.COMPLETED
-                        : latestMessage.status;
+                    const latestMessageStatus = partial.is_final ? ChatMessageStatus.COMPLETED : latestMessage.status;
 
                     // Extract content from the latest partial
-                    const latestPartialContent = latestPartial.blocks?.[0]?.content || '';
+                    const latestPartialContent = partial.blocks?.[0]?.content || '';
 
                     return currentMessages.map((message) => {
                         // When the latest partial is found in the existing list,
@@ -294,7 +302,7 @@ export function Messages({
                     );
 
                     // Combine all partial contents
-                    const combinedContent = partials.map((p) => p?.blocks?.[0]?.content || '').join('');
+                    const combinedContent = partialsRef.current.map((p) => p?.blocks?.[0]?.content || '').join('');
 
                     // If there's no streaming message yet, append one using existing partials
                     const initialMessageResponse: ChatMessageResponse = {
@@ -321,8 +329,22 @@ export function Messages({
                     return [...currentMessages, initialMessageResponse];
                 }
             });
+        },
+        [chatId, citations, setMessages]
+    );
+
+    useEffect(() => {
+        if (!partials || partials.length === 0) {
+            lastProcessedPartialIndex.current = -1;
+            return;
         }
-    }, [chatId, citations, partials, setMessages]);
+
+        // Only process if we have new partials
+        if (partials.length > lastProcessedPartialIndex.current + 1) {
+            lastProcessedPartialIndex.current = partials.length - 1;
+            processPartialMessage(latestPartial);
+        }
+    }, [latestPartial, processPartialMessage]);
 
     // Update messages with any source confirmation messages coming from Ably
     useEffect(() => {
