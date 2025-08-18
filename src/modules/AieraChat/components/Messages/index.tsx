@@ -53,6 +53,7 @@ export function Messages({
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
     const lastProcessedPartialIndex = useRef<number>(-1);
     const partialsRef = useRef(partials);
+    const confirmedMessageIds = useRef<Set<string>>(new Set());
 
     // Keep ref updated
     useEffect(() => {
@@ -357,14 +358,18 @@ export function Messages({
                     const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
                     const updatedConfirmation = {
                         ...confirmation,
-                        confirmed: !confirmation.confirmed ? sourceConfirmations === 'auto' : false,
+                        confirmed: !confirmation.confirmed ? sourceConfirmations === 'auto' : true,
                         prompt: promptMessage?.prompt ?? '',
                     };
                     log('updated confirmation', 'debug', updatedConfirmation);
 
                     // Auto confirm
-                    if (sourceConfirmations === 'auto' && promptMessage?.id) {
-                        onConfirm(promptMessage.id, confirmation.sources);
+                    if (sourceConfirmations === 'auto' && promptMessage?.id && !confirmation.confirmed) {
+                        const messageKey = `${promptMessage.id}-${confirmation.id}`;
+                        if (!confirmedMessageIds.current.has(messageKey)) {
+                            confirmedMessageIds.current.add(messageKey);
+                            onConfirm(promptMessage.id, confirmation.sources);
+                        }
                     }
 
                     return [...pv, updatedConfirmation];
@@ -391,6 +396,7 @@ export function Messages({
         // Reset Ably state when switching chats
         reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
         setMessages([]);
+        confirmedMessageIds.current.clear();
     }, [chatId, reset]);
 
     // Group messages by question
