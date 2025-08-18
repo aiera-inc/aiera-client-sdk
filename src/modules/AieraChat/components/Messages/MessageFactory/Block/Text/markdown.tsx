@@ -125,7 +125,7 @@ const CustomLink = ({ href, children }: CustomComponentProps & { href?: string }
 
 const CustomTable = ({ children }: CustomComponentProps) => {
     return (
-        <div className="overflow-x-auto my-4">
+        <div className="overflow-x-auto my-2">
             <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">{children}</table>
         </div>
     );
@@ -167,25 +167,25 @@ export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) 
         h1: {
             component: 'h1',
             props: {
-                className: 'text-2xl font-bold pt-4 pb-4 border-b border-gray-200 dark:border-gray-700',
+                className: 'text-2xl font-bold pt-4 pb-2',
             },
         },
         h2: {
             component: 'h2',
             props: {
-                className: 'text-xl font-bold pt-4 pb-3 border-b border-gray-200 dark:border-gray-700',
+                className: 'text-xl font-bold py-2',
             },
         },
         h3: {
             component: 'h3',
             props: {
-                className: 'text-lg font-bold pt-3 pb-2',
+                className: 'text-lg font-bold py-1.5',
             },
         },
         h4: {
             component: 'h4',
             props: {
-                className: 'text-base font-bold pt-3 pb-2',
+                className: 'text-base font-bold py-1',
             },
         },
         p: {
@@ -221,7 +221,7 @@ export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) 
         hr: {
             component: 'hr',
             props: {
-                className: 'my-6 border-t border-gray-200 dark:border-gray-700',
+                className: 'my-4 border-t border-gray-200 dark:border-gray-700',
             },
         },
     };

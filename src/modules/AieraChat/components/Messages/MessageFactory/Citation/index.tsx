@@ -28,7 +28,7 @@ export const Citation = ({ citation }: CitationProps) => {
     };
 
     return (
-        <span className="citation relative inline-flex items-center h-3.5">
+        <span className="citation relative inline-flex items-center h-3.5 ml-0.5">
             <span
                 onClick={onNav}
                 className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
