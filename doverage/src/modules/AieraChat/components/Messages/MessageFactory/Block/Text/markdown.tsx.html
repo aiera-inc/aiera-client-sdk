@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.17% </span>
+                <span class="strong">63.63% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>45/68</span>
+                <span class='fraction'>42/66</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">41.02% </span>
+                <span class="strong">34.28% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/39</span>
+                <span class='fraction'>12/35</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">44.44% </span>
+                <span class="strong">41.17% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>8/18</span>
+                <span class='fraction'>7/17</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">65.62% </span>
+                <span class="strong">62.29% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>42/64</span>
+                <span class='fraction'>38/61</span>
             </div>
         
             
@@ -306,16 +306,7 @@
 <a name='L241'></a><a href='#L241'>241</a>
 <a name='L242'></a><a href='#L242'>242</a>
 <a name='L243'></a><a href='#L243'>243</a>
-<a name='L244'></a><a href='#L244'>244</a>
-<a name='L245'></a><a href='#L245'>245</a>
-<a name='L246'></a><a href='#L246'>246</a>
-<a name='L247'></a><a href='#L247'>247</a>
-<a name='L248'></a><a href='#L248'>248</a>
-<a name='L249'></a><a href='#L249'>249</a>
-<a name='L250'></a><a href='#L250'>250</a>
-<a name='L251'></a><a href='#L251'>251</a>
-<a name='L252'></a><a href='#L252'>252</a>
-<a name='L253'></a><a href='#L253'>253</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L244'></a><a href='#L244'>244</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -377,18 +368,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">4x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-yes">5x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
@@ -413,17 +393,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -485,6 +460,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-yes">5x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -579,7 +561,7 @@ interface MarkdownRendererProps {
 }
 &nbsp;
 // Function to handle unclosed markdown elements in partial content
-const preparePartialMarkdown = (content: string, citations?: CitationType[]): string =&gt; {
+const preparePartialMarkdown = (content: string): string =&gt; {
     // First, convert literal \n escape sequences to actual newlines
     let text = content.replace(/\\n/g, '\n');
 &nbsp;
@@ -628,19 +610,8 @@ const preparePartialMarkdown = (content: string, citations?: CitationType[]): st
 <span class="cstat-no" title="statement not covered" >        text += '_';</span>
     }
 &nbsp;
-    // Convert inline citations to CustomCitation component using markers
-    // Important: process citations before links because they both use square-bracket notation
-    if (citations &amp;&amp; citations.length &gt; 0) {
-        citations.forEach((c) =&gt; {
-            // Convert to markdown-to-jsx compatible format
-            const attrString = Object.entries(c)
-                .map(([key, value]) =&gt; (typeof value === 'object' ? <span class="branch-0 cbranch-no" title="branch not covered" >null </span>: `${key}="${value}"`))
-                .filter((c) =&gt; c) // filter out nulls
-                .join(' ');
-            const citation = `&lt;citation ${attrString} /&gt;`;
-            text = text.replace(new RegExp(c.marker.replace(/[.*+?^${}()|[\]\\]/g, '\\$&amp;'), 'g'), citation);
-        });
-    }
+    // Replace citations
+    text = text.replace(/\[c(\d+)\]/g, '&lt;citation marker="$1" /&gt;');
 &nbsp;
     // Handle unclosed links
     const linkMatches = text.match(/\[([^\]]+)(?:\]\([^)]*|\]$|\]\([^)]*$)/g);
@@ -664,18 +635,13 @@ type CustomComponentProps = {
 };
 &nbsp;
 // Custom Citation component that parses citation tags
-const CustomCitation = ({ author, contentId, date, marker, source, sourceId, text, url }: CitationType) =&gt; {
-    const citation: CitationType = {
-        author,
-        contentId,
-        date,
-        marker,
-        source,
-        sourceId,
-        text,
-        url,
-    };
-    return &lt;Citation citation={citation} /&gt;;
+const CustomCitation = ({ marker, citations }: { marker: string; citations: CitationType[] }) =&gt; {
+    const citation = citations?.find((cit: CitationType) =&gt; cit.marker === `[c${marker}]`);
+    if (citation) {
+        return &lt;Citation citation={citation} /&gt;;
+    }
+&nbsp;
+<span class="cstat-no" title="statement not covered" >    return null;</span>
 };
 &nbsp;
 // Custom component overrides for markdown-to-jsx
@@ -710,7 +676,7 @@ const CustomLink = <span class="fstat-no" title="function not covered" >({</span
 &nbsp;
 const CustomTable = <span class="fstat-no" title="function not covered" >({</span> children }: CustomComponentProps) =&gt; {
 <span class="cstat-no" title="statement not covered" >    return (</span>
-        &lt;div className="overflow-x-auto my-4"&gt;
+        &lt;div className="overflow-x-auto my-2"&gt;
             &lt;table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700"&gt;{children}&lt;/table&gt;
         &lt;/div&gt;
     );
@@ -724,89 +690,96 @@ const CustomTableBody = <span class="fstat-no" title="function not covered" >({<
 <span class="cstat-no" title="statement not covered" >    &lt;tbody className="divide-y divide-gray-200 dark:divide-gray-700"&gt;{children}&lt;/tbody&gt;</span>
 );
 &nbsp;
-const CustomTableCell = <span class="fstat-no" title="function not covered" >({</span> children }: CustomComponentProps) =&gt; <span class="cstat-no" title="statement not covered" >&lt;td className="px-3 py-2 text-sm"&gt;{children}&lt;/td&gt;;</span>
+const CustomTableCell = <span class="fstat-no" title="function not covered" >({</span> children }: CustomComponentProps) =&gt; <span class="cstat-no" title="statement not covered" >&lt;td className="pr-5 py-2 text-base"&gt;{children}&lt;/td&gt;;</span>
 &nbsp;
 const CustomTableHeaderCell = <span class="fstat-no" title="function not covered" >({</span> children }: CustomComponentProps) =&gt; (
-<span class="cstat-no" title="statement not covered" >    &lt;th className="px-3 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"&gt;</span>
+<span class="cstat-no" title="statement not covered" >    &lt;th className="pr-5 py-2 text-left text-sm font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider"&gt;</span>
         {children}
     &lt;/th&gt;
 );
 &nbsp;
 export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) {
-    const preparedMarkdown = useMemo(() =&gt; preparePartialMarkdown(content, citations), [citations, content]);
+    const preparedMarkdown = useMemo(() =&gt; preparePartialMarkdown(content), [content]);
 &nbsp;
-    // Define overrides for markdown-to-jsx with proper types
-    const overrides: MarkdownToJSX.Options['overrides'] = {
-        citation: CustomCitation,
-        code: CustomCode,
-        pre: CustomPre,
-        a: CustomLink,
-        table: CustomTable,
-        thead: CustomTableHead,
-        tbody: CustomTableBody,
-        td: CustomTableCell,
-        th: CustomTableHeaderCell,
-        h1: {
-            component: 'h1',
-            props: {
-                className: 'text-2xl font-bold pt-4 pb-4 border-b border-gray-200 dark:border-gray-700',
+    // Memoize overrides to prevent unnecessary markdown recompilation
+    const overrides: MarkdownToJSX.Options['overrides'] = useMemo(
+        () =&gt; ({
+            citation: {
+                component: CustomCitation,
+                props: { citations },
             },
-        },
-        h2: {
-            component: 'h2',
-            props: {
-                className: 'text-xl font-bold pt-4 pb-3 border-b border-gray-200 dark:border-gray-700',
+            code: CustomCode,
+            pre: CustomPre,
+            a: CustomLink,
+            table: CustomTable,
+            thead: CustomTableHead,
+            tbody: CustomTableBody,
+            td: CustomTableCell,
+            th: CustomTableHeaderCell,
+            h1: {
+                component: 'h1',
+                props: {
+                    className: 'text-2xl font-bold pt-4 pb-2',
+                },
             },
-        },
-        h3: {
-            component: 'h3',
-            props: {
-                className: 'text-lg font-bold pt-3 pb-2',
+            h2: {
+                component: 'h2',
+                props: {
+                    className: 'text-xl font-bold py-2',
+                },
             },
-        },
-        h4: {
-            component: 'h4',
-            props: {
-                className: 'text-base font-bold pt-3 pb-2',
+            h3: {
+                component: 'h3',
+                props: {
+                    className: 'text-lg font-bold py-1.5',
+                },
             },
-        },
-        p: {
-            component: 'p',
-            props: {
-                className: 'leading-relaxed pb-2.5',
+            h4: {
+                component: 'h4',
+                props: {
+                    className: 'text-base font-bold py-1',
+                },
             },
-        },
-        ul: {
-            component: 'ul',
-            props: {
-                className: 'list-disc pl-6 mb-4',
+            p: {
+                component: 'p',
+                props: {
+                    className: 'leading-relaxed pb-2.5',
+                },
             },
-        },
-        ol: {
-            component: 'ol',
-            props: {
-                className: 'list-decimal pl-6 mb-4',
+            ul: {
+                component: 'ul',
+                props: {
+                    className: 'list-disc pl-6 mb-4',
+                },
             },
-        },
-        li: {
-            component: 'li',
-            props: {
-                className: 'mb-1',
+            ol: {
+                component: 'ol',
+                props: {
+                    className: 'list-decimal pl-6 mb-4',
+                },
             },
-        },
-        blockquote: {
-            component: 'blockquote',
-            props: {
-                className: 'pl-4 border-l-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 my-4',
+            li: {
+                component: 'li',
+                props: {
+                    className: 'mb-1',
+                },
             },
-        },
-        hr: {
-            component: 'hr',
-            props: {
-                className: 'my-6 border-t border-gray-200 dark:border-gray-700',
+            blockquote: {
+                component: 'blockquote',
+                props: {
+                    className:
+                        'pl-4 border-l-4 border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 my-4',
+                },
             },
-        },
-    };
+            hr: {
+                component: 'hr',
+                props: {
+                    className: 'my-4 border-t border-gray-200 dark:border-gray-700',
+                },
+            },
+        }),
+        [citations]
+    );
 &nbsp;
     const markdownOutput = useMemo(
         () =&gt;
@@ -826,7 +799,7 @@ export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) 
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Aug 01 2025 12:02:51 GMT-0400 (Eastern Daylight Time)
+                at Tue Aug 19 2025 12:55:58 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../../../../../prettify.js"></script>
