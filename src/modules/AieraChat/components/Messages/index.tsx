@@ -25,14 +25,6 @@ import { useUserPreferencesStore } from '../../userPreferencesStore';
 
 let idCounter = 0;
 
-export interface MessageListContext {
-    onSubmit: (p: string) => void;
-    onReRun: (k: string) => void;
-    onConfirm: (messageId: string, sources: Source[]) => void;
-    generatingResponse: boolean;
-    thinkingState: string[];
-}
-
 export function Messages({
     onOpenSources,
     onSubmit,
@@ -53,11 +45,11 @@ export function Messages({
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
     const confirmedMessageIds = useRef<Set<string>>(new Set());
 
-    const onConfirm = (promptMessageId: string, sources: Source[]) => {
+    const onConfirm = (promptMessageId: string, sources: Source[], hasChanges = true) => {
         confirmSourceConfirmation(promptMessageId, sources)
             .then((confirmationMessage) => {
                 // Update sources in the global store
-                onAddSource(sources);
+                onAddSource(sources, hasChanges);
                 if (confirmationMessage?.id) {
                     // Find the matching confirmation message in the list by type and prompt id
                     // We can't match by id because the confirmation message has a temp id
@@ -321,7 +313,8 @@ export function Messages({
                         const messageKey = `${promptMessage.id}-${confirmation.id}`;
                         if (!confirmedMessageIds.current.has(messageKey)) {
                             confirmedMessageIds.current.add(messageKey);
-                            onConfirm(promptMessage.id, confirmation.sources);
+                            // Keep hasChanges as false since this isn't a user action
+                            onConfirm(promptMessage.id, confirmation.sources, false);
                         }
                     }
 

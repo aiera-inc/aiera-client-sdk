@@ -17,7 +17,7 @@ export interface ChatState {
     chatTitle?: string;
     chatUserId?: string;
     hasChanges: boolean;
-    onAddSource: (source: Source | Source[]) => void;
+    onAddSource: (source: Source | Source[], hasChanges?: boolean) => void;
     onClearSources: () => void;
     onNewChat: () => void;
     onRemoveSource: (source: Source) => void;
@@ -37,9 +37,9 @@ export const useChatStore = create<ChatState>((set) => ({
     chatTitle: undefined,
     chatUserId: undefined,
     hasChanges: false,
-    onAddSource: (source: Source | Source[]) =>
+    onAddSource: (source: Source | Source[], hasChanges = true) =>
         set((state) => ({
-            hasChanges: true,
+            hasChanges,
             sources: [...state.sources, ...(Array.isArray(source) ? source : [source])],
         })),
     onClearSources: () => set({ sources: [] }),
