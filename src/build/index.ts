@@ -52,6 +52,7 @@ async function copyAssets(watchers: Watchers | null) {
         copy('src/assets/**/*', 'dist/assets'),
         copy('package.json', 'dist'),
         copy(['src/web/demo/*.html'], 'dist/web/demo'),
+        copy(['src/web/mobile/*.html'], 'dist/web/mobile'),
     ]);
 }
 
