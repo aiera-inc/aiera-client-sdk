@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            body,
+            html {
+                overflow: hidden;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                font-family: Arial, sans-serif;
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            iframe {
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border: none;
+                resize: both;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            // Get apiKey from URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            let apiKey = urlParams.get('apiKey');
+            let userId = urlParams.get('userId');
+            const aieraChat = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+
+            // Initial load with API key from URL or fallback
+            loadWithApiKey(apiKey);
+
+            // Function to load with a specific API key
+            function loadWithApiKey(key) {
+                aieraChat.load().then(() => {
+                    aieraChat.authenticateApiKey(key);
+                });
+            }
+
+            // Configure function that can be called whenever we need to update configuration
+            function configureChat() {
+                aieraChat.configure({
+                    hideSettings: true,
+                    options: {
+                        aieraChatEnableAbly: true,
+                        aieraChatEnablePolling: false,
+                        aieraChatCollectInternalFeedback: true,
+                        aieraChatDisableSourceNav: false,
+                        showSearch: true,
+                        showSentiment: false,
+                        darkMode: false,
+                    },
+                    overrides: {
+                        // style: `
+                        //         .eventlist__filterby {
+                        //                background-color: blue
+                        //             }
+                        //             .eventlist__filterby__option {
+                        //                 display: none
+                        //             }
+                        //     `,
+                    },
+                    tracking: {
+                        userId, // Use the current userId value
+                    },
+                });
+            }
+
+            aieraChat.on('authenticated', () => {
+                configureChat(); // Call the configure function
+
+                aieraChat.on('chat-source', (chatSource) => {
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({ type: 'chatSource', payload: chatSource })
+                        );
+                    }
+                });
+                aieraChat.on('chat-citation', (chatCitation) => {
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({ type: 'chatCitation', payload: chatCitation })
+                        );
+                    }
+                });
+            });
+        </script>
+    </body>
+</html>

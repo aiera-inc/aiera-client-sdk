@@ -90,7 +90,7 @@ const App: FC = (): ReactElement => {
         <StrictMode>
             <Provider bus={bus} config={{ moduleName: 'AieraChat' }}>
                 <Auth apiMode>
-                    <div className="h-full">
+                    <div className="h-full flex flex-col">
                         <AieraChat />
                     </div>
                 </Auth>
