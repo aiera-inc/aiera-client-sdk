@@ -7,7 +7,7 @@ import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraCha
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import {
     ChatMessage,
     ChatMessagePrompt,
@@ -45,46 +45,53 @@ export function Messages({
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
     const confirmedMessageIds = useRef<Set<string>>(new Set());
 
-    const onConfirm = (promptMessageId: string, sources: Source[], hasChanges = true) => {
-        confirmSourceConfirmation(promptMessageId, sources)
-            .then((confirmationMessage) => {
-                // Update sources in the global store
-                onAddSource(sources, hasChanges);
-                if (confirmationMessage?.id) {
-                    // Find the matching confirmation message in the list by type and prompt id
-                    // We can't match by id because the confirmation message has a temp id
-                    const originalMessage = messages.find(
-                        (m) =>
-                            m.type === ChatMessageType.SOURCES &&
-                            m.promptMessageId === confirmationMessage.promptMessageId
-                    );
-                    if (originalMessage) {
-                        setMessages((pv) =>
-                            pv.map((message) => {
-                                if (message.id === originalMessage.id) {
-                                    return {
-                                        ...message,
-                                        confirmed: true,
-                                    };
-                                }
+    const onConfirm = useCallback(
+        (promptMessageId: string, sources: Source[], hasChanges = true) => {
+            if (chatId && chatId !== 'new') {
+                confirmSourceConfirmation(chatId, promptMessageId, sources)
+                    .then((confirmationMessage) => {
+                        // Update sources in the global store
+                        onAddSource(sources, hasChanges);
+                        if (confirmationMessage?.id) {
+                            // Find the matching confirmation message in the list by type and prompt id
+                            // We can't match by id because the confirmation message has a temp id
+                            const originalMessage = messages.find(
+                                (m) =>
+                                    m.type === ChatMessageType.SOURCES &&
+                                    m.promptMessageId === confirmationMessage.promptMessageId
+                            );
+                            if (originalMessage) {
+                                setMessages((pv) =>
+                                    pv.map((message) => {
+                                        if (message.id === originalMessage.id) {
+                                            return {
+                                                ...message,
+                                                confirmed: true,
+                                            };
+                                        }
 
-                                return message;
-                            })
-                        );
-                    }
-                }
-            })
-            .then(() => {
-                // Reset existing partials before new ones start streaming
-                if (partials && partials.length > 0) {
-                    reset().catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
-                }
-            })
-            .then(() => onSetStatus(ChatSessionStatus.GeneratingResponse))
-            .catch((err: Error) =>
-                log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
-            );
-    };
+                                        return message;
+                                    })
+                                );
+                            }
+                        }
+                    })
+                    .then(() => {
+                        // Reset existing partials before new ones start streaming
+                        if (partials && partials.length > 0) {
+                            reset().catch((err: Error) =>
+                                log(`Error resetting useAbly state: ${err.message}`, 'error')
+                            );
+                        }
+                    })
+                    .then(() => onSetStatus(ChatSessionStatus.GeneratingResponse))
+                    .catch((err: Error) =>
+                        log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
+                    );
+            }
+        },
+        [chatId]
+    );
 
     const handleSubmit = (prompt: string) => {
         setSubmitting(true);

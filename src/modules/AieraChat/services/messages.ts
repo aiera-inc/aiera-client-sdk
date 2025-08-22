@@ -97,6 +97,7 @@ interface UseChatSessionOptions {
 
 interface UseChatSessionReturn {
     confirmSourceConfirmation: (
+        sessionId: string,
         promptMessageId: string,
         sources: Source[]
     ) => Promise<RawChatMessageSourceConfirmation | null>;
@@ -252,11 +253,11 @@ export const useChatSession = ({
     >(CONFIRM_SOURCE_CONFIRMATION_MUTATION);
 
     const confirmSourceConfirmation = useCallback(
-        (promptMessageId: string, sources: Source[]) => {
+        (sessionId: string, promptMessageId: string, sources: Source[]) => {
             return confirmSourceConfirmationMutation({
                 input: {
                     promptMessageId,
-                    sessionId: chatId,
+                    sessionId,
                     sources: mapConfirmedSourcesToInput(sources),
                     sessionUserId: config.tracking?.userId,
                 },
@@ -282,7 +283,7 @@ export const useChatSession = ({
                     return null;
                 });
         },
-        [chatId, config.tracking?.userId, confirmSourceConfirmationMutation]
+        [config.tracking?.userId, confirmSourceConfirmationMutation]
     );
 
     const [__, createChatMessagePromptMutation] = useMutation<
