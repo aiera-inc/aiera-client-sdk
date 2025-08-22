@@ -7,6 +7,7 @@ import { MicroFolderOpen } from '../../../../../components/Svg/MicroFolderOpen';
 import { useChatStore } from '../../../store';
 import { Hint } from '../../Hint';
 import './styles.css';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 
 interface PromptProps {
     onOpenSources: () => void;
@@ -18,6 +19,7 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
     const { chatStatus, sources } = useChatStore();
     const [isEmpty, setIsEmpty] = useState<boolean>(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
+    const config = useConfig();
 
     // Disable submission if submitting or if chat is in a non-active state
     const isDisabled = submitting || chatStatus !== ChatSessionStatus.Active;
@@ -102,7 +104,10 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
         >
             <p
                 ref={inputRef}
-                className="flex-1 py-2 pl-4 text-base outline-none chatPrompt"
+                className={classNames('flex-1 pl-4 outline-none chatPrompt', {
+                    'text-lg py-1.5': config.options?.isMobile,
+                    'text-base py-2': !config.options?.isMobile,
+                })}
                 onKeyDown={handleKeyDown}
                 onInput={handleInput}
                 onBlur={checkEmpty}

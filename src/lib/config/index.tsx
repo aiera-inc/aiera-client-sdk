@@ -46,6 +46,7 @@ export interface Options {
     eventListFilters?: EventListFilter[];
     eventListView?: EventListView;
     initialItemId?: string;
+    isMobile?: boolean;
     relativeTimestamps?: boolean;
     transcriptRawBeginSeconds?: number;
     transcriptRawEndSeconds?: number;

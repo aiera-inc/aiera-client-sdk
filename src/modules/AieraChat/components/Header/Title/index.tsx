@@ -1,9 +1,12 @@
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect } from 'react';
 import { useChatStore } from '../../../store';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import classNames from 'classnames';
 
 export function Title({ onChangeTitle }: { onChangeTitle: (title: string) => void }) {
     const { chatTitle, onSetTitle } = useChatStore();
+    const config = useConfig();
 
     // Debounce calling the mutation with each change
     const debouncedTitleChange = useCallback(
@@ -21,7 +24,12 @@ export function Title({ onChangeTitle }: { onChangeTitle: (title: string) => voi
     }, [debouncedTitleChange]);
 
     return (
-        <div className="flex-1 flex items-center text-base font-bold">
+        <div
+            className={classNames('flex-1 flex items-center font-bold', {
+                'text-base': !config.options?.isMobile,
+                'text-lg': config.options?.isMobile,
+            })}
+        >
             <input
                 aria-label="Chat title"
                 className="text-center antialiased flex-1 outline-none bg-transparent truncate"
