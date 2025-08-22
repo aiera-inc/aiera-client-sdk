@@ -30,75 +30,424 @@
                 width: 100%;
                 overflow: hidden;
             }
+            /* Debug overlay - remove in production */
+            #debug-overlay {
+                position: fixed;
+                top: 10px;
+                right: 10px;
+                background: rgba(0, 0, 0, 0.8);
+                color: white;
+                padding: 10px;
+                font-size: 12px;
+                z-index: 9999;
+                max-width: 300px;
+                max-height: 200px;
+                overflow-y: auto;
+                display: none; /* Set to 'block' to show debug info */
+            }
         </style>
     </head>
     <body>
+        <div id="debug-overlay"></div>
         <script src="../embed.js"></script>
         <iframe id="aiera"></iframe>
         <script>
-            // Get apiKey from URL parameters
-            const urlParams = new URLSearchParams(window.location.search);
-            let apiKey = urlParams.get('apiKey');
-            let userId = urlParams.get('userId');
-            const aieraChat = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+            // Debug logging that sends to React Native
+            function debugLog(...args) {
+                const message = args
+                    .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg)))
+                    .join(' ');
 
-            // Initial load with API key from URL or fallback
-            loadWithApiKey(apiKey);
+                // Log to browser console
+                console.log(...args);
+
+                // Send to React Native
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(
+                        JSON.stringify({
+                            type: 'console',
+                            level: 'log',
+                            message: message,
+                            timestamp: new Date().toISOString(),
+                        })
+                    );
+                }
+
+                // Add to debug overlay
+                const debugDiv = document.getElementById('debug-overlay');
+                if (debugDiv) {
+                    debugDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${message}</div>`;
+                    debugDiv.scrollTop = debugDiv.scrollHeight;
+                }
+            }
+
+            // Override console methods to send to React Native
+            const originalConsole = {
+                log: console.log,
+                error: console.error,
+                warn: console.warn,
+            };
+
+            ['log', 'error', 'warn'].forEach((level) => {
+                console[level] = function (...args) {
+                    const message = args
+                        .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg)))
+                        .join(' ');
+
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({
+                                type: 'console',
+                                level: level,
+                                message: message,
+                            })
+                        );
+                    }
+                    originalConsole[level].apply(console, args);
+                };
+            });
+
+            // Global error handler
+            window.addEventListener('error', function (e) {
+                debugLog('ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+            });
+
+            // Initialize variables
+            let apiKey = null;
+            let userId = null;
+            let aieraChat = null;
+            let isAuthenticated = false;
+
+            // Method 1: Get parameters from URL
+            function getParamsFromURL() {
+                debugLog('Attempting to get params from URL');
+                debugLog('Current URL:', window.location.href);
+                debugLog('Search string:', window.location.search);
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlApiKey = urlParams.get('apiKey');
+                const urlUserId = urlParams.get('userId');
+
+                debugLog('URL Params found:', { apiKey: urlApiKey, userId: urlUserId });
+
+                return { apiKey: urlApiKey, userId: urlUserId };
+            }
+
+            // Method 2: Check if React Native injected them into window
+            function getParamsFromWindow() {
+                debugLog('Checking for params in window object');
+                const windowApiKey = window.apiKey;
+                const windowUserId = window.userId;
+
+                debugLog('Window params found:', { apiKey: windowApiKey, userId: windowUserId });
+
+                return { apiKey: windowApiKey, userId: windowUserId };
+            }
+
+            // Method 3: Listen for parameters from React Native via postMessage
+            function setupMessageListener() {
+                debugLog('Setting up message listener for React Native');
+
+                window.addEventListener('message', handleMessage);
+                // Also listen for React Native WebView specific messages
+                document.addEventListener('message', handleMessage);
+            }
+
+            function handleMessage(event) {
+                debugLog('Received message event:', event.data);
+
+                try {
+                    const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+
+                    if (data.type === 'params' || data.type === 'init') {
+                        debugLog('Received params from React Native:', data);
+
+                        if (data.apiKey) {
+                            apiKey = data.apiKey;
+                            userId = data.userId || userId;
+
+                            debugLog('Updated params from message:', { apiKey, userId });
+
+                            // If we haven't authenticated yet, do it now
+                            if (!isAuthenticated && apiKey) {
+                                initializeChat();
+                            }
+                        }
+                    }
+                } catch (error) {
+                    debugLog('Error parsing message:', error.message);
+                }
+            }
+
+            // Initialize the Aiera chat module
+            function initializeChat() {
+                debugLog('Initializing chat with apiKey:', apiKey, 'userId:', userId);
+
+                if (!apiKey) {
+                    debugLog('ERROR: No API key available, cannot initialize');
+                    return;
+                }
+
+                if (!aieraChat) {
+                    debugLog('Creating Aiera Module');
+                    try {
+                        aieraChat = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+                        debugLog('Aiera Module created successfully');
+                    } catch (error) {
+                        debugLog('ERROR creating Aiera Module:', error.message);
+                        return;
+                    }
+                }
+
+                loadWithApiKey(apiKey);
+            }
 
             // Function to load with a specific API key
             function loadWithApiKey(key) {
-                aieraChat.load().then(() => {
-                    aieraChat.authenticateApiKey(key);
-                });
+                if (!key) {
+                    debugLog('ERROR: No API key provided to loadWithApiKey');
+                    return;
+                }
+
+                debugLog('Loading module with API key:', key);
+
+                aieraChat
+                    .load()
+                    .then(() => {
+                        debugLog('Module loaded successfully');
+
+                        // Add a delay to ensure iframe is fully loaded and ready
+                        setTimeout(() => {
+                            debugLog('Attempting authentication after delay');
+
+                            // Method 1: Try the normal authenticateApiKey method
+                            try {
+                                aieraChat.authenticateApiKey(key);
+                                debugLog('Authentication call made via authenticateApiKey');
+                            } catch (error) {
+                                debugLog('ERROR with authenticateApiKey:', error.message);
+                            }
+
+                            // Method 2: Try direct message posting as a fallback
+                            // This bypasses the Module class and posts directly to the iframe
+                            try {
+                                const iframe = document.getElementById('aiera');
+                                if (iframe && iframe.contentWindow) {
+                                    debugLog('Attempting direct postMessage to iframe');
+
+                                    // Get the module origin
+                                    const moduleUrl = new URL(
+                                        '../modules/AieraChat/index.html',
+                                        window.location.toString()
+                                    );
+
+                                    // Post message directly to iframe
+                                    iframe.contentWindow.postMessage(
+                                        {
+                                            ns: 'aiera',
+                                            event: 'authenticateWithApiKey',
+                                            data: key,
+                                            iframeId: 'aiera',
+                                        },
+                                        moduleUrl.origin
+                                    );
+                                    debugLog('Direct postMessage sent');
+
+                                    // Also try with wildcard origin as a last resort
+                                    setTimeout(() => {
+                                        iframe.contentWindow.postMessage(
+                                            {
+                                                ns: 'aiera',
+                                                event: 'authenticateWithApiKey',
+                                                data: key,
+                                                iframeId: 'aiera',
+                                            },
+                                            '*'
+                                        );
+                                        debugLog('Wildcard postMessage sent');
+                                    }, 500);
+                                }
+                            } catch (error) {
+                                debugLog('ERROR with direct postMessage:', error.message);
+                            }
+
+                            // Method 3: Try using the emit method directly
+                            try {
+                                aieraChat.emit('authenticateWithApiKey', key);
+                                debugLog('Authentication call made via emit');
+                            } catch (error) {
+                                debugLog('ERROR with emit:', error.message);
+                            }
+                        }, 0); // Give iframe time to fully initialize
+                    })
+                    .catch((error) => {
+                        debugLog('ERROR loading module:', error.message);
+                    });
             }
 
-            // Configure function that can be called whenever we need to update configuration
+            // Configure function
             function configureChat() {
-                aieraChat.configure({
+                debugLog('Configuring chat with userId:', userId);
+
+                const config = {
                     hideSettings: true,
                     options: {
                         aieraChatEnableAbly: true,
                         aieraChatEnablePolling: false,
                         aieraChatCollectInternalFeedback: true,
-                        aieraChatDisableSourceNav: false,
+                        aieraChatDisableSourceNav: true,
                         showSearch: true,
                         showSentiment: false,
                         darkMode: false,
                     },
-                    overrides: {
-                        // style: `
-                        //         .eventlist__filterby {
-                        //                background-color: blue
-                        //             }
-                        //             .eventlist__filterby__option {
-                        //                 display: none
-                        //             }
-                        //     `,
-                    },
                     tracking: {
-                        userId, // Use the current userId value
+                        userId: userId || '1', // Fallback to '1' if no userId
                     },
+                };
+
+                debugLog('Applying configuration:', config);
+
+                try {
+                    aieraChat.configure(config);
+                    debugLog('Configuration applied successfully');
+                } catch (error) {
+                    debugLog('ERROR applying configuration:', error.message);
+                }
+            }
+
+            // Setup authentication event listener
+            function setupAuthenticationListener() {
+                if (!aieraChat) {
+                    debugLog('ERROR: aieraChat not initialized for authentication listener');
+                    return;
+                }
+
+                debugLog('Setting up authentication listener');
+
+                // Listen for authentication success
+                aieraChat.on('authenticated', () => {
+                    debugLog('AUTHENTICATED EVENT RECEIVED');
+                    isAuthenticated = true;
+
+                    // Configure the chat
+                    configureChat();
+
+                    // Setup event listeners for chat events
+                    setupChatEventListeners();
+
+                    // Notify React Native that we're authenticated
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({
+                                type: 'authenticated',
+                                payload: { apiKey, userId },
+                            })
+                        );
+                    }
+                });
+
+                // Also listen for authentication errors
+                aieraChat.on('error', (error) => {
+                    debugLog('ERROR EVENT from iframe:', error);
+                });
+
+                // Listen for any message from the iframe for debugging
+                window.addEventListener('message', (event) => {
+                    // Check if it's from our iframe
+                    if (event.source === document.getElementById('aiera')?.contentWindow) {
+                        debugLog('Message from iframe:', event.data);
+                    }
                 });
             }
 
-            aieraChat.on('authenticated', () => {
-                configureChat(); // Call the configure function
+            // Setup chat event listeners
+            function setupChatEventListeners() {
+                debugLog('Setting up chat event listeners');
 
                 aieraChat.on('chat-source', (chatSource) => {
+                    debugLog('Chat source event:', chatSource);
                     if (window.ReactNativeWebView) {
                         window.ReactNativeWebView.postMessage(
                             JSON.stringify({ type: 'chatSource', payload: chatSource })
                         );
                     }
                 });
+
                 aieraChat.on('chat-citation', (chatCitation) => {
+                    debugLog('Chat citation event:', chatCitation);
                     if (window.ReactNativeWebView) {
                         window.ReactNativeWebView.postMessage(
                             JSON.stringify({ type: 'chatCitation', payload: chatCitation })
                         );
                     }
                 });
-            });
+            }
+
+            // Main initialization function
+            function initialize() {
+                debugLog('=== INITIALIZATION STARTED ===');
+                debugLog('ReactNativeWebView available:', !!window.ReactNativeWebView);
+
+                // Try to get params from URL first
+                const urlParams = getParamsFromURL();
+                if (urlParams.apiKey) {
+                    apiKey = urlParams.apiKey;
+                    userId = urlParams.userId;
+                    debugLog('Using params from URL');
+                }
+
+                // Try to get params from window if not found in URL
+                if (!apiKey) {
+                    const windowParams = getParamsFromWindow();
+                    if (windowParams.apiKey) {
+                        apiKey = windowParams.apiKey;
+                        userId = windowParams.userId || userId;
+                        debugLog('Using params from window');
+                    }
+                }
+
+                // Setup message listener for params from React Native
+                setupMessageListener();
+
+                // If we have an API key, initialize immediately
+                if (apiKey) {
+                    debugLog('API key found, initializing chat');
+                    initializeChat();
+                    setupAuthenticationListener();
+                } else {
+                    debugLog('No API key found yet, waiting for React Native message');
+                    // Create the module but don't load yet
+                    try {
+                        aieraChat = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+                        setupAuthenticationListener();
+                        debugLog('Module created, waiting for API key');
+                    } catch (error) {
+                        debugLog('ERROR creating module:', error.message);
+                    }
+                }
+
+                // Send a ready message to React Native
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(
+                        JSON.stringify({
+                            type: 'ready',
+                            payload: {
+                                hasApiKey: !!apiKey,
+                                hasUserId: !!userId,
+                                url: window.location.href,
+                            },
+                        })
+                    );
+                }
+            }
+
+            // Start initialization when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initialize);
+            } else {
+                // DOM is already loaded
+                initialize();
+            }
         </script>
     </body>
 </html>
