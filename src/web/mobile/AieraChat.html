@@ -230,54 +230,54 @@
 
                             // Method 2: Try direct message posting as a fallback
                             // This bypasses the Module class and posts directly to the iframe
-                            // try {
-                            //     const iframe = document.getElementById('aiera');
-                            //     if (iframe && iframe.contentWindow) {
-                            //         debugLog('Attempting direct postMessage to iframe');
+                            try {
+                                const iframe = document.getElementById('aiera');
+                                if (iframe && iframe.contentWindow) {
+                                    debugLog('Attempting direct postMessage to iframe');
 
-                            //         // Get the module origin
-                            //         const moduleUrl = new URL(
-                            //             '../modules/AieraChat/index.html',
-                            //             window.location.toString()
-                            //         );
+                                    // Get the module origin
+                                    const moduleUrl = new URL(
+                                        '../modules/AieraChat/index.html',
+                                        window.location.toString()
+                                    );
 
-                            //         // Post message directly to iframe
-                            //         iframe.contentWindow.postMessage(
-                            //             {
-                            //                 ns: 'aiera',
-                            //                 event: 'authenticateWithApiKey',
-                            //                 data: key,
-                            //                 iframeId: 'aiera',
-                            //             },
-                            //             moduleUrl.origin
-                            //         );
-                            //         debugLog('Direct postMessage sent');
+                                    // Post message directly to iframe
+                                    iframe.contentWindow.postMessage(
+                                        {
+                                            ns: 'aiera',
+                                            event: 'authenticateWithApiKey',
+                                            data: key,
+                                            iframeId: 'aiera',
+                                        },
+                                        moduleUrl.origin
+                                    );
+                                    debugLog('Direct postMessage sent');
 
-                            //         // Also try with wildcard origin as a last resort
-                            //         setTimeout(() => {
-                            //             iframe.contentWindow.postMessage(
-                            //                 {
-                            //                     ns: 'aiera',
-                            //                     event: 'authenticateWithApiKey',
-                            //                     data: key,
-                            //                     iframeId: 'aiera',
-                            //                 },
-                            //                 '*'
-                            //             );
-                            //             debugLog('Wildcard postMessage sent');
-                            //         }, 500);
-                            //     }
-                            // } catch (error) {
-                            //     debugLog('ERROR with direct postMessage:', error.message);
-                            // }
+                                    // Also try with wildcard origin as a last resort
+                                    setTimeout(() => {
+                                        iframe.contentWindow.postMessage(
+                                            {
+                                                ns: 'aiera',
+                                                event: 'authenticateWithApiKey',
+                                                data: key,
+                                                iframeId: 'aiera',
+                                            },
+                                            '*'
+                                        );
+                                        debugLog('Wildcard postMessage sent');
+                                    }, 500);
+                                }
+                            } catch (error) {
+                                debugLog('ERROR with direct postMessage:', error.message);
+                            }
 
                             // Method 3: Try using the emit method directly
-                            // try {
-                            //     aieraChat.emit('authenticateWithApiKey', key);
-                            //     debugLog('Authentication call made via emit');
-                            // } catch (error) {
-                            //     debugLog('ERROR with emit:', error.message);
-                            // }
+                            try {
+                                aieraChat.emit('authenticateWithApiKey', key);
+                                debugLog('Authentication call made via emit');
+                            } catch (error) {
+                                debugLog('ERROR with emit:', error.message);
+                            }
                         }, 0); // Give iframe time to fully initialize
                     })
                     .catch((error) => {
