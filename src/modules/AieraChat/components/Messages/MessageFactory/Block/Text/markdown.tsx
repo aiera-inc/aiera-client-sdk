@@ -248,5 +248,5 @@ export function MarkdownRenderer({ citations, content }: MarkdownRendererProps) 
         [preparedMarkdown, overrides]
     );
 
-    return <div className="prose dark:prose-invert max-w-none">{markdownOutput}</div>;
+    return <div className="aiera-chat-text max-w-none">{markdownOutput}</div>;
 }
