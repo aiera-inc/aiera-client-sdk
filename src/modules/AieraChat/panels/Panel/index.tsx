@@ -50,12 +50,13 @@ export function Panel({
                     'absolute z-20 top-0 bottom-0',
                     'flex flex-col flex-1 animate-forwards',
                     'bg-slate-50 shadow-xl shadow-metal-800/40',
+                    'aiera-chat-panel',
                     {
                         slideOutToLeft: startExit && side === 'left',
-                        'left-0 slideInFromLeft': side === 'left',
+                        'left-0 slideInFromLeft panel-left': side === 'left',
                         'right-24': side === 'left' && enableGutter,
                         slideOutToRight: startExit && side === 'right',
-                        'right-0 slideInFromRight': side === 'right',
+                        'right-0 slideInFromRight panel-right': side === 'right',
                         'left-24': side === 'right' && enableGutter,
                         'max-w-[30rem] w-full': !enableGutter,
                     }
@@ -75,9 +76,12 @@ export function Panel({
             </div>
             <div
                 onAnimationEnd={onAnimationEnd}
-                className={classNames('absolute animate-forwards inset-0 bg-slate-600/20 fadeIn', {
-                    fadeOut: startExit,
-                })}
+                className={classNames(
+                    'absolute animate-forwards inset-0 bg-slate-600/20 fadeIn aiera-chat-panel-outside',
+                    {
+                        fadeOut: startExit,
+                    }
+                )}
                 onClick={onStartExit}
             />
         </div>

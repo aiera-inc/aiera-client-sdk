@@ -6,6 +6,7 @@
         <style>
             body,
             html {
+                background-color: #262734;
                 overflow: hidden;
                 position: absolute;
                 top: 0;
@@ -19,6 +20,7 @@
                 padding: 0;
             }
             iframe {
+                background-color: #262734;
                 position: absolute;
                 top: 0;
                 bottom: 0;
@@ -191,7 +193,7 @@
                 if (!aieraChat) {
                     debugLog('Creating Aiera Module');
                     try {
-                        aieraChat = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+                        aieraChat = new Aiera.Module('../modules/AieraChatMobile/index.html', 'aiera');
                         debugLog('Aiera Module created successfully');
                     } catch (error) {
                         debugLog('ERROR creating Aiera Module:', error.message);
@@ -237,7 +239,7 @@
 
                                     // Get the module origin
                                     const moduleUrl = new URL(
-                                        '../modules/AieraChat/index.html',
+                                        '../modules/AieraChatMobile/index.html',
                                         window.location.toString()
                                     );
 
@@ -300,6 +302,32 @@
                         showSentiment: false,
                         darkMode: false,
                         isMobile: true,
+                    },
+                    overrides: {
+                        style: `
+
+                                       .aiera-chat-title {
+                                       color: white;
+                                       }
+                                .aiera-chat {
+                                       background-color: #262734;
+                                    }
+                                    .aiera-chat-panel {
+                                       background-color: #303142;
+                                    }
+                                       .aiera-chat-panel > .text-slate-800 {
+                                       color: white;
+                                       }
+                                       .panel-left {
+                                       border-radius: 0 8px 8px 0;
+                                       }
+                                       .panel-right {
+                                       border-radius: 8px 0 0 8px;
+                                       }
+                                    .aiera-chat-panel-outside {
+                                       background-color: rgba(0, 0, 0, 0)
+                                    }
+                            `,
                     },
                     tracking: {
                         userId: userId || '1', // Fallback to '1' if no userId
@@ -419,7 +447,7 @@
                     debugLog('No API key found yet, waiting for React Native message');
                     // Create the module but don't load yet
                     try {
-                        aieraChat = new Aiera.Module('../modules/AieraChat/index.html', 'aiera');
+                        aieraChat = new Aiera.Module('../modules/AieraChatMobile/index.html', 'aiera');
                         setupAuthenticationListener();
                         debugLog('Module created, waiting for API key');
                     } catch (error) {

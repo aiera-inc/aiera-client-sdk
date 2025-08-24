@@ -25,7 +25,7 @@ export function Title({ onChangeTitle }: { onChangeTitle: (title: string) => voi
 
     return (
         <div
-            className={classNames('flex-1 flex items-center font-bold', {
+            className={classNames('flex-1 flex items-center font-bold aiera-chat-title', {
                 'text-base': !config.options?.isMobile,
                 'text-lg': config.options?.isMobile,
             })}
