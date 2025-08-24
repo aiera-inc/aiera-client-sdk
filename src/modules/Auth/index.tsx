@@ -21,6 +21,7 @@ import { Message, MessageBusEvents, useMessageBus } from '@aiera/client-sdk/lib/
 import { AuthTokens, TokenAuthConfig, defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import './styles.css';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import classNames from 'classnames';
 
 export type LoginState = 'none' | 'loading' | 'error';
 
@@ -194,7 +195,11 @@ export const ApiAuthUI = (props: AuthProps) => {
                     </div>
                 ))
                 .with('error', 'empty', () => (
-                    <div className="bg-white relative flex flex-col items-center justify-center w-full h-full">
+                    <div
+                        className={classNames('relative flex flex-col items-center justify-center w-full h-full', {
+                            'bg-white': !config.options?.isMobile,
+                        })}
+                    >
                         {match(loginState)
                             .with('error', () => <p className="text-sm text-slate-500">Unable to connect</p>)
                             .with('none', () => <p className="text-sm text-slate-500">Waiting for API key...</p>)
