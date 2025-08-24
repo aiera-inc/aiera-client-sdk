@@ -22,7 +22,7 @@ export function ContentRow({
     return (
         <div
             className={classNames(
-                'flex hover:bg-slate-200/80 pl-2.5 pr-1.5',
+                'flex hover:bg-slate-200/80 pl-2.5 pr-1.5 aiera-chat-contentRow',
                 'rounded-lg justify-between items-center py-1 text-slate-600',
                 className
             )}

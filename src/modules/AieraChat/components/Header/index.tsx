@@ -15,13 +15,18 @@ export function Header({
     const { onNewChat } = useChatStore();
     return (
         <div className="flex items-center justify-between mx-4 py-4">
-            <IconButton hintText="All Chats" className="mr-2.5" Icon={MicroBars} onClick={onOpenMenu} />
+            <IconButton
+                hintText="All Chats"
+                className="mr-2.5 headerButton-menu"
+                Icon={MicroBars}
+                onClick={onOpenMenu}
+            />
             <Title onChangeTitle={onChangeTitle} />
             <IconButton
                 hintAnchor="bottom-right"
                 hintGrow="down-left"
                 hintText="New Chat"
-                className="ml-2.5 hover:brightness-95"
+                className="ml-2.5 hover:brightness-95 headerButton-new"
                 Icon={MicroPlusCircle}
                 textClass="text-blue-600"
                 bgClass="bg-blue-100"

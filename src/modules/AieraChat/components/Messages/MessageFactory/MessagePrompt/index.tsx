@@ -19,7 +19,7 @@ export const MessagePrompt = ({
             <p className="text-sm absolute top-1 right-4 text-slate-600 opacity-0 group-hover/prompt:opacity-100">
                 {format(parseISO(data.timestamp), 'h:mm a')}
             </p>
-            <div className="self-center px-4 py-3 bg-slate-200/40 rounded-xl">
+            <div className="self-center px-4 py-3 bg-slate-200/40 rounded-xl message-prompt">
                 <p
                     className={classNames('text-base font-medium antialiased leading-[1.125rem]', {
                         'line-clamp-2': isStickyHeader,
