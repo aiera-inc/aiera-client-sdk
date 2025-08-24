@@ -61,7 +61,7 @@ export function Menu({
                                         Icon={MicroTrash}
                                         iconClassName="text-slate-500 hover:text-rose-600"
                                         className={classNames('mx-5', {
-                                            'bg-slate-200/50': chatId === id,
+                                            'bg-slate-200/50 selected': chatId === id,
                                         })}
                                     />
                                 ))}

@@ -115,7 +115,7 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
             />
 
             {isEmpty && (
-                <span className="absolute left-4 top-2 z-10 text-base text-slate-500 pointer-events-none">
+                <span className="absolute left-4 top-2 z-10 text-base text-slate-500 pointer-events-none chatInput-placeholder">
                     Type your questions here...
                 </span>
             )}

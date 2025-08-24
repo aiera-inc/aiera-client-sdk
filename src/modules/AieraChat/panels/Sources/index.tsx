@@ -91,7 +91,7 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
         >
             <div className="flex flex-col flex-1">
                 <SearchInput
-                    autoFocus
+                    autoFocus={!config.options?.isMobile}
                     onChange={(newValue) => {
                         if (newValue) {
                             setInputValue(newValue); // Update the input immediately
@@ -151,7 +151,7 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                     onClick={() =>
                                         setSourceConfirmations(sourceConfirmations === 'manual' ? 'auto' : 'manual')
                                     }
-                                    className="flex cursor-pointer mt-2 items-center justify-between py-2 px-3 rounded-lg border border-slate-300/80 mx-5 text-slate-800 hover:bg-slate-200"
+                                    className="flex cursor-pointer mt-2 items-center justify-between py-2 px-3 rounded-lg border border-slate-300/80 mx-5 text-slate-800 hover:bg-slate-200 sourceToggle"
                                 >
                                     <p className="text-base flex-1 text-left">
                                         {match(sourceConfirmations)
