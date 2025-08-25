@@ -405,7 +405,7 @@ export function Messages({
                                                     <div className="max-w-[50rem] w-full m-auto">
                                                         <div
                                                             className={classNames(
-                                                                'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 rounded-lg mx-4 mb-2'
+                                                                'py-2.5 items-center pl-3 pr-4 flex border message-finding border-slate-300/80 rounded-lg mx-4 mb-2'
                                                             )}
                                                         >
                                                             <MicroSparkles className="w-4 animate-bounce text-slate-600" />
@@ -423,7 +423,7 @@ export function Messages({
                                                     <div className="max-w-[50rem] w-full m-auto">
                                                         <div
                                                             className={classNames(
-                                                                'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 rounded-lg mx-4 mb-2'
+                                                                'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 message-thinking rounded-lg mx-4 mb-2'
                                                             )}
                                                         >
                                                             <MicroSparkles className="w-4 animate-bounce text-slate-600" />
