@@ -70,15 +70,21 @@ export const SourcesResponse = ({
 
     return (
         <div
-            className={classNames('flex flex-col overflow-hidden border border-slate-300/80 rounded-lg mx-4 mb-2', {
-                'pb-1': expanded,
-            })}
+            className={classNames(
+                'flex flex-col overflow-hidden border border-slate-300/80 rounded-lg mx-4 mb-2 message-sources',
+                {
+                    'pb-1': expanded,
+                }
+            )}
         >
             <button
                 onClick={() => setExpanded((pv) => !pv)}
-                className={classNames('py-2.5 hover:bg-slate-100 flex pl-3 pr-4 items-center justify-between', {
-                    'border-b': expanded,
-                })}
+                className={classNames(
+                    'py-2.5 hover:bg-slate-100 flex pl-3 pr-4 items-center justify-between message-sources-header',
+                    {
+                        'border-b': expanded,
+                    }
+                )}
             >
                 {expanded ? (
                     <MicroFolderOpen className="w-4 text-slate-600" />
