@@ -32,25 +32,9 @@
                 width: 100%;
                 overflow: hidden;
             }
-            /* Debug overlay - remove in production */
-            #debug-overlay {
-                position: fixed;
-                top: 10px;
-                right: 10px;
-                background: rgba(0, 0, 0, 0.8);
-                color: white;
-                padding: 10px;
-                font-size: 12px;
-                z-index: 9999;
-                max-width: 300px;
-                max-height: 200px;
-                overflow-y: auto;
-                display: none; /* Set to 'block' to show debug info */
-            }
         </style>
     </head>
     <body>
-        <div id="debug-overlay"></div>
         <script src="../embed.js"></script>
         <iframe id="aiera"></iframe>
         <script>
@@ -73,13 +57,6 @@
                             timestamp: new Date().toISOString(),
                         })
                     );
-                }
-
-                // Add to debug overlay
-                const debugDiv = document.getElementById('debug-overlay');
-                if (debugDiv) {
-                    debugDiv.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${message}</div>`;
-                    debugDiv.scrollTop = debugDiv.scrollHeight;
                 }
             }
 
@@ -120,7 +97,7 @@
             let aieraChat = null;
             let isAuthenticated = false;
 
-            // Method 1: Get parameters from URL
+            // Get parameters from URL
             function getParamsFromURL() {
                 debugLog('Attempting to get params from URL');
                 debugLog('Current URL:', window.location.href);
@@ -133,52 +110,6 @@
                 debugLog('URL Params found:', { apiKey: urlApiKey, userId: urlUserId });
 
                 return { apiKey: urlApiKey, userId: urlUserId };
-            }
-
-            // Method 2: Check if React Native injected them into window
-            function getParamsFromWindow() {
-                debugLog('Checking for params in window object');
-                const windowApiKey = window.apiKey;
-                const windowUserId = window.userId;
-
-                debugLog('Window params found:', { apiKey: windowApiKey, userId: windowUserId });
-
-                return { apiKey: windowApiKey, userId: windowUserId };
-            }
-
-            // Method 3: Listen for parameters from React Native via postMessage
-            function setupMessageListener() {
-                debugLog('Setting up message listener for React Native');
-
-                window.addEventListener('message', handleMessage);
-                // Also listen for React Native WebView specific messages
-                document.addEventListener('message', handleMessage);
-            }
-
-            function handleMessage(event) {
-                debugLog('Received message event:', event.data);
-
-                try {
-                    const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
-
-                    if (data.type === 'params' || data.type === 'init') {
-                        debugLog('Received params from React Native:', data);
-
-                        if (data.apiKey) {
-                            apiKey = data.apiKey;
-                            userId = data.userId || userId;
-
-                            debugLog('Updated params from message:', { apiKey, userId });
-
-                            // If we haven't authenticated yet, do it now
-                            if (!isAuthenticated && apiKey) {
-                                initializeChat();
-                            }
-                        }
-                    }
-                } catch (error) {
-                    debugLog('Error parsing message:', error.message);
-                }
             }
 
             // Initialize the Aiera chat module
@@ -218,69 +149,12 @@
                     .then(() => {
                         debugLog('Module loaded successfully');
 
-                        // Add a delay to ensure iframe is fully loaded and ready
-                        setTimeout(() => {
-                            debugLog('Attempting authentication after delay');
-
-                            // Method 1: Try the normal authenticateApiKey method
-                            try {
-                                aieraChat.authenticateApiKey(key);
-                                debugLog('Authentication call made via authenticateApiKey');
-                            } catch (error) {
-                                debugLog('ERROR with authenticateApiKey:', error.message);
-                            }
-
-                            // Method 2: Try direct message posting as a fallback
-                            // This bypasses the Module class and posts directly to the iframe
-                            try {
-                                const iframe = document.getElementById('aiera');
-                                if (iframe && iframe.contentWindow) {
-                                    debugLog('Attempting direct postMessage to iframe');
-
-                                    // Get the module origin
-                                    const moduleUrl = new URL(
-                                        '../modules/AieraChatMobile/index.html',
-                                        window.location.toString()
-                                    );
-
-                                    // Post message directly to iframe
-                                    iframe.contentWindow.postMessage(
-                                        {
-                                            ns: 'aiera',
-                                            event: 'authenticateWithApiKey',
-                                            data: key,
-                                            iframeId: 'aiera',
-                                        },
-                                        moduleUrl.origin
-                                    );
-                                    debugLog('Direct postMessage sent');
-
-                                    // Also try with wildcard origin as a last resort
-                                    setTimeout(() => {
-                                        iframe.contentWindow.postMessage(
-                                            {
-                                                ns: 'aiera',
-                                                event: 'authenticateWithApiKey',
-                                                data: key,
-                                                iframeId: 'aiera',
-                                            },
-                                            '*'
-                                        );
-                                        debugLog('Wildcard postMessage sent');
-                                    }, 500);
-                                }
-                            } catch (error) {
-                                debugLog('ERROR with direct postMessage:', error.message);
-                            }
-
-                            // Method 3: Try using the emit method directly
-                            try {
-                                aieraChat.emit('authenticateWithApiKey', key);
-                                debugLog('Authentication call made via emit');
-                            } catch (error) {
-                                debugLog('ERROR with emit:', error.message);
-                            }
-                        }, 0); // Give iframe time to fully initialize
+                        try {
+                            aieraChat.authenticateApiKey(key);
+                            debugLog('Authentication call made via authenticateApiKey');
+                        } catch (error) {
+                            debugLog('ERROR with authenticateApiKey:', error.message);
+                        }
                     })
                     .catch((error) => {
                         debugLog('ERROR loading module:', error.message);
@@ -305,93 +179,85 @@
                     },
                     overrides: {
                         style: `
-
-                                       .aiera-chat-title {
-                                       color: white;
-                                       }
-                                       .aiera-chat .chatInput {
-                                       background-color: #303142;
-                                       box-shadow: 0 0 0 3px #21222E;
-                                       color: white;
-                                       border: 1px solid #5f616F;
-                                       }
-                                       .chatInput-placeholder {
-                                       color: #888BA6;
-                                       }
-                                       .chatInput .bg-blue-600 {
-                                       background-color: #1867FF;
-                                       }
-                                       .headerButton-menu {
-                                       background-color: #303142;
-                                       color: white;
-                                       }
-                                       .message-prompt {
-                                       background-color: #303142;
-                                       color: white;
-                                       
-                                       }
-                                       .sourceToggle {
-                                       border: 1px solid #5f616f;
-                                       color: white;
-                                       }
-
-                                       .aiera-chat-contentRow {
-                                       color: #EAEBF4;
-                                       }
-         .aiera-chat-contentRow.selected {
-                                       background-color: #5F616F;
-                                       }
-                                       .headerButton-new {
-                                       background-color: #303142;
-                                       color: white;
-                                       }
-                                       .message-sources {
-                                       
-                                       border: 1px solid #5f616f;
-                                       color: white;
-                                       }
-                                       .message-sources .text-slate-600 {
-                                       color: white;
-                                       }
-
-                                       .message-sources-header {
-                                       border-color: #5f616f;
-                                       }
-                                       .message-thinking, .message-finding {
-                                       border-color: #5f616f;
-                                       color: white;
-                                       }
-           .message-thinking .text-slate-600, .message-finding .text-slate-600 {
-                                       color: white;
-                                       }
-
-                                       .message-sources-header:hover {
-                                       background-color: transparent;
-                                       }
-
-
-                                       .aiera-chat-text {
-                                       color: white;
-                                       }
-                                .aiera-chat {
-                                       background-color: #262734;
-                                    }
-                                    .aiera-chat-panel {
-                                       background-color: #303142;
-                                    }
-                                       .aiera-chat-panel .text-slate-800 {
-                                       color: white;
-                                       }
-                                       .panel-left {
-                                       border-radius: 0 8px 8px 0;
-                                       }
-                                       .panel-right {
-                                       border-radius: 8px 0 0 8px;
-                                       }
-                                    .aiera-chat-panel-outside {
-                                       background-color: rgba(0, 0, 0, 0)
-                                    }
-                            `,
+                            .aiera-chat-title {
+                                color: white;
+                            }
+                            .aiera-chat .chatInput {
+                                background-color: #303142;
+                                box-shadow: 0 0 0 3px #21222E;
+                                color: white;
+                                border: 1px solid #5f616F;
+                            }
+                            .chatInput-placeholder {
+                                color: #888BA6;
+                            }
+                            .chatInput .bg-blue-600 {
+                                background-color: #1867FF;
+                            }
+                            .headerButton-menu {
+                                background-color: #303142;
+                                color: white;
+                            }
+                            .message-prompt {
+                                background-color: #303142;
+                                color: white;    
+                            }
+                            .sourceToggle {
+                                border: 1px solid #5f616f;
+                                color: white;
+                            }
+                            .aiera-chat-contentRow {
+                                color: #EAEBF4;
+                            }
+                            .aiera-chat-contentRow.selected {
+                                background-color: #5F616F;
+                            }
+                            .headerButton-new {
+                                background-color: #303142;
+                                color: white;
+                            }
+                            .message-sources {
+                                border: 1px solid #5f616f;
+                                color: white;
+                            }
+                            .message-sources .text-slate-600 {
+                                color: white;
+                            }
+                            .message-sources-header {
+                                border-color: #5f616f;
+                            }
+                            .message-thinking, .message-finding {
+                                border-color: #5f616f;
+                                color: white;
+                            }
+                            .message-thinking .text-slate-600, .message-finding .text-slate-600 {
+                                color: white;
+                            }
+                            .message-sources-header:hover {
+                                background-color: transparent;
+                            }
+                            .aiera-chat-text {
+                                color: white;
+                            }
+                            .aiera-chat {
+                                background-color: #262734;
+                            }
+                            .aiera-chat-panel {
+                                background-color: #303142;
+                            }
+                            .aiera-chat-panel .text-slate-800 {
+                                color: white;
+                            }
+                            .panel-left {
+                                border-radius: 0 8px 8px 0;
+                            }
+                            .panel-right {
+                                border-radius: 8px 0 0 8px;
+                            }
+                            .aiera-chat-panel-outside {
+                                background-color: rgba(0, 0, 0, 0)
+                            }
+                        `,
                     },
                     tracking: {
                         userId: userId || '1', // Fallback to '1' if no userId
@@ -488,19 +354,6 @@
                     userId = urlParams.userId;
                     debugLog('Using params from URL');
                 }
-
-                // Try to get params from window if not found in URL
-                if (!apiKey) {
-                    const windowParams = getParamsFromWindow();
-                    if (windowParams.apiKey) {
-                        apiKey = windowParams.apiKey;
-                        userId = windowParams.userId || userId;
-                        debugLog('Using params from window');
-                    }
-                }
-
-                // Setup message listener for params from React Native
-                setupMessageListener();
 
                 // If we have an API key, initialize immediately
                 if (apiKey) {
