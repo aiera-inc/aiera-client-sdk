@@ -52,6 +52,9 @@ const useMessageBus = () => {
     useEffect(() => {
         bus.setupWindowMessaging(window.parent);
 
+        // Send ready signal to parent window after message bus is set up
+        bus.emit('ready', null, 'out');
+
         const listeners: Listener[] = [];
         if (window.fdc3) {
             listeners.push(

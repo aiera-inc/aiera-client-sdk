@@ -52,6 +52,7 @@ export interface MessageBusEvents {
     authenticated: null;
     configure: Config;
     configured: null;
+    ready: null;
     'chat-source': Partial<Source>;
     'chat-citation': Citation;
     'download-screenshot': null;

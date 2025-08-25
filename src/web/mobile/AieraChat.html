@@ -96,6 +96,7 @@
             let userId = null;
             let aieraChat = null;
             let isAuthenticated = false;
+            let iframeReady = false;
 
             // Get parameters from URL
             function getParamsFromURL() {
@@ -126,6 +127,9 @@
                     try {
                         aieraChat = new Aiera.Module('../modules/AieraChatMobile/index.html', 'aiera');
                         debugLog('Aiera Module created successfully');
+
+                        // Setup ready listener immediately when module is created
+                        setupIframeReadyListener();
                     } catch (error) {
                         debugLog('ERROR creating Aiera Module:', error.message);
                         return;
@@ -133,6 +137,47 @@
                 }
 
                 loadWithApiKey(apiKey);
+            }
+
+            // Setup iframe ready listener - should be called immediately when module is created
+            function setupIframeReadyListener() {
+                debugLog('Setting up iframe ready listener');
+
+                // Listen for ready message from iframe
+                window.addEventListener('message', function (event) {
+                    // Check if message is from our iframe
+                    if (event.source !== document.getElementById('aiera')?.contentWindow) {
+                        return;
+                    }
+
+                    // Look for ready signal from the message bus
+                    if (event.data && event.data.ns === 'aiera' && event.data.event === 'ready') {
+                        debugLog('Iframe message bus ready signal received');
+                        iframeReady = true;
+
+                        // If we were waiting to authenticate, do it now
+                        if (apiKey && !isAuthenticated) {
+                            debugLog('Ready signal received, proceeding with pending authentication');
+                            performAuthentication(apiKey);
+                        }
+                    }
+                });
+            }
+
+            // Perform authentication when iframe is ready
+            function performAuthentication(key) {
+                if (!iframeReady) {
+                    debugLog('Iframe not ready yet, authentication will proceed when ready signal is received');
+                    return;
+                }
+
+                debugLog('Performing authentication with ready iframe');
+                try {
+                    aieraChat.authenticateApiKey(key);
+                    debugLog('Authentication call made via authenticateApiKey');
+                } catch (error) {
+                    debugLog('ERROR with authenticateApiKey:', error.message);
+                }
             }
 
             // Function to load with a specific API key
@@ -149,12 +194,8 @@
                     .then(() => {
                         debugLog('Module loaded successfully');
 
-                        try {
-                            aieraChat.authenticateApiKey(key);
-                            debugLog('Authentication call made via authenticateApiKey');
-                        } catch (error) {
-                            debugLog('ERROR with authenticateApiKey:', error.message);
-                        }
+                        // Try to authenticate - will either work immediately (if ready) or wait for ready signal
+                        performAuthentication(key);
                     })
                     .catch((error) => {
                         debugLog('ERROR loading module:', error.message);
@@ -187,6 +228,9 @@
                                 box-shadow: 0 0 0 3px #21222E;
                                 color: white;
                                 border: 1px solid #5f616F;
+                            }
+                            .aiera-chat thead {
+                                background-color: transparent;
                             }
                             .chatInput-placeholder {
                                 color: #888BA6;
@@ -365,6 +409,9 @@
                     // Create the module but don't load yet
                     try {
                         aieraChat = new Aiera.Module('../modules/AieraChatMobile/index.html', 'aiera');
+
+                        // Setup ready listener immediately when module is created
+                        setupIframeReadyListener();
                         setupAuthenticationListener();
                         debugLog('Module created, waiting for API key');
                     } catch (error) {
