@@ -3,6 +3,9 @@ import { gql } from 'urql';
 import { QueryResult, useQuery } from '@aiera/client-sdk/api/client';
 import { SearchEventsQuery, SearchEventsQueryVariables } from '@aiera/client-sdk/types/generated';
 
+const DEFAULT_PAGE = 1;
+const DEFAULT_PAGE_SIZE = 20;
+
 const eventsGQL = (type = '') => gql`
         query SearchEvents${type}($filter: OpenSearchEventFilter!) {
             openSearch {
@@ -39,9 +42,11 @@ export function useEvents(options?: UseEventsOptions | string) {
     // Support backward compatibility: if string is passed, treat as searchTerm
     const {
         searchTerm,
-        page = 1,
-        pageSize = 20,
-    } = typeof options === 'string' ? { searchTerm: options, page: 1, pageSize: 20 } : options || {};
+        page = DEFAULT_PAGE,
+        pageSize = DEFAULT_PAGE_SIZE,
+    } = typeof options === 'string'
+        ? { searchTerm: options, page: DEFAULT_PAGE, pageSize: DEFAULT_PAGE_SIZE }
+        : options || {};
 
     const eventsQuery: QueryResult<SearchEventsQuery, SearchEventsQueryVariables> = useQuery<
         SearchEventsQuery,
@@ -51,8 +56,8 @@ export function useEvents(options?: UseEventsOptions | string) {
         variables: {
             filter: {
                 searchTerm: searchTerm || '',
-                page: page > 1 ? page : undefined,
-                pageSize: pageSize !== 20 ? pageSize : undefined,
+                page,
+                pageSize: pageSize !== DEFAULT_PAGE_SIZE ? pageSize : undefined,
             },
         },
         query: eventsGQL(),
@@ -62,7 +67,7 @@ export function useEvents(options?: UseEventsOptions | string) {
         eventsQuery,
         // Expose pagination helpers using real API fields
         pagination:
-            eventsQuery.status === 'success'
+            eventsQuery.status === 'success' && eventsQuery.data?.openSearch?.events
                 ? {
                       currentPage: eventsQuery.data.openSearch.events.currentPage,
                       pageSize: eventsQuery.data.openSearch.events.pageSize,
@@ -72,6 +77,8 @@ export function useEvents(options?: UseEventsOptions | string) {
                       totalResults: eventsQuery.data.openSearch.events.numTotalHits,
                   }
                 : null,
+        error: eventsQuery.status === 'error' ? eventsQuery.error : undefined,
+        loading: eventsQuery.status === 'loading' || eventsQuery.state.fetching,
     };
 }
 
