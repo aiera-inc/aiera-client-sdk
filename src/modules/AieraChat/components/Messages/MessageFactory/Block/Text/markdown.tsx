@@ -85,10 +85,32 @@ type CustomComponentProps = {
 
 // Custom Citation component that parses citation tags
 const CustomCitation = ({ marker, citations }: { marker: string; citations: CitationType[] }) => {
-    const citation = citations?.find((cit: CitationType) => cit.marker === `[c${marker}]`);
-    const citationIndex = (citations || []).findIndex((s) => s.contentId === citation?.contentId);
+    const citIndex = citations?.findIndex((cit: CitationType) => cit.marker === `[c${marker}]`);
+    const citation = citations[citIndex];
+    if (!citation) return null;
+
+    // Create a unique key based on contentId and (sourceParentId || sourceId)
+    const getUniqueKey = (cit: CitationType, idx: number) => {
+        const contentId = cit.contentId || `content-${idx}`;
+        const sourceKey = cit.sourceParentId || cit.sourceId;
+        return `${contentId}-${sourceKey}`;
+    };
+
+    // Create a map of unique citations based on contentId + (sourceParentId || sourceId)
+    const uniqueCitationsMap = new Map<string, CitationType>();
+    citations?.forEach((cit, index) => {
+        const key = getUniqueKey(cit, index);
+        if (!uniqueCitationsMap.has(key)) {
+            uniqueCitationsMap.set(key, cit);
+        }
+    });
+
+    // Find the index based on the unique key
+    const citationKey = getUniqueKey(citation, citIndex);
+    const uniqueCitations = Array.from(uniqueCitationsMap.values());
+    const citationIndex = uniqueCitations.findIndex((cit, idx) => getUniqueKey(cit, idx) === citationKey);
     const number = citationIndex >= 0 ? `C${citationIndex + 1}` : null;
-    if (citation && number) {
+    if (number) {
         return <Citation citation={{ ...citation, marker: number }} />;
     }
 
