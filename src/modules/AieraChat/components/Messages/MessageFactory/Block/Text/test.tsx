@@ -12,6 +12,12 @@ jest.mock('@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactor
 jest.mock('../../../../../store', () => ({
     useChatStore: () => ({
         onSelectSource: jest.fn(),
+        getCitationMarker: jest.fn((citation: Citation) => {
+            // Mock implementation: create a simple marker based on contentId
+            if (citation.contentId === 'test-content-id') return 'C1';
+            if (citation.contentId === 'test-content-id-2') return 'C2';
+            return null;
+        }),
     }),
 }));
 

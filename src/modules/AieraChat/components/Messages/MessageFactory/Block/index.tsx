@@ -5,7 +5,7 @@ import { TextBlock, Text } from './Text';
 // Citation type for referencing sources
 export type Citation = {
     author?: string;
-    contentId?: string;
+    contentId: string;
     date?: string;
     marker: string;
     meta?: object;

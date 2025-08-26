@@ -233,7 +233,7 @@ export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const { chatId, chatTitle, onSetTitle } = useChatStore();
+    const { addCitationMarkers, chatId, chatTitle, onSetTitle } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -511,6 +511,24 @@ export const useChatSession = ({
 
                 log(`Successfully normalized ${finalNormalizedMessages.length} messages`);
                 setMessages(finalNormalizedMessages);
+
+                // Extract and process all citations from messages
+                const allCitations: Citation[] = [];
+                finalNormalizedMessages.forEach((message) => {
+                    if (message.type === ChatMessageType.RESPONSE && 'blocks' in message) {
+                        message.blocks.forEach((block) => {
+                            if (block.citations && Array.isArray(block.citations)) {
+                                allCitations.push(...block.citations);
+                            }
+                        });
+                    }
+                });
+
+                // Add citations to store for global tracking
+                if (allCitations.length > 0) {
+                    addCitationMarkers(allCitations);
+                    log(`Added ${allCitations.length} citations to global store`);
+                }
 
                 // Clear error state
                 if (error) setError(null);

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { compiler, MarkdownToJSX } from 'markdown-to-jsx';
 import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Citation';
+import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import './markdown.css';
 
 interface MarkdownRendererProps {
@@ -83,35 +84,19 @@ type CustomComponentProps = {
     [key: string]: unknown;
 };
 
-// Custom Citation component that parses citation tags
+// Custom Citation component that uses the global store for consistent markers
 const CustomCitation = ({ marker, citations }: { marker: string; citations: CitationType[] }) => {
+    const { getCitationMarker } = useChatStore();
+
+    // Find the citation with the matching marker
     const citIndex = citations?.findIndex((cit: CitationType) => cit.marker === `[c${marker}]`);
     const citation = citations[citIndex];
     if (!citation) return null;
 
-    // Create a unique key based on contentId and (sourceParentId || sourceId)
-    const getUniqueKey = (cit: CitationType, idx: number) => {
-        const contentId = cit.contentId || `content-${idx}`;
-        const sourceKey = cit.sourceParentId || cit.sourceId;
-        return `${contentId}-${sourceKey}`;
-    };
-
-    // Create a map of unique citations based on contentId + (sourceParentId || sourceId)
-    const uniqueCitationsMap = new Map<string, CitationType>();
-    citations?.forEach((cit, index) => {
-        const key = getUniqueKey(cit, index);
-        if (!uniqueCitationsMap.has(key)) {
-            uniqueCitationsMap.set(key, cit);
-        }
-    });
-
-    // Find the index based on the unique key
-    const citationKey = getUniqueKey(citation, citIndex);
-    const uniqueCitations = Array.from(uniqueCitationsMap.values());
-    const citationIndex = uniqueCitations.findIndex((cit, idx) => getUniqueKey(cit, idx) === citationKey);
-    const number = citationIndex >= 0 ? `C${citationIndex + 1}` : null;
-    if (number) {
-        return <Citation citation={{ ...citation, marker: number }} />;
+    // Get the global marker for this citation from the store
+    const globalMarker = getCitationMarker(citation);
+    if (globalMarker) {
+        return <Citation citation={{ ...citation, marker: globalMarker }} />;
     }
 
     return null;

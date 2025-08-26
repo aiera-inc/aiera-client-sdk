@@ -141,7 +141,7 @@ export function normalizeCitation(rawCitation: PartialCitation): Citation {
  * Hook for getting a chat session with messages, including data normalization and error handling
  */
 export const useAbly = (): UseAblyReturn => {
-    const { onSetStatus } = useChatStore();
+    const { addCitationMarkers, clearCitationMarkers, onSetStatus } = useChatStore();
     const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
@@ -389,15 +389,24 @@ export const useAbly = (): UseAblyReturn => {
                                 setCitations((prev) => {
                                     const existing = prev || [];
                                     const existingIds = new Set(
-                                        existing.map((c) => `${c.marker}${c.contentId || c.sourceId}`)
+                                        existing.map(
+                                            (c) => `${c.marker}${c.contentId}${c.sourceParentId || c.sourceId}`
+                                        )
                                     );
                                     return [
                                         ...existing,
                                         ...parsedCitations.filter(
-                                            (c) => !existingIds.has(`${c.marker}${c.contentId || c.sourceId}`)
+                                            (c) =>
+                                                !existingIds.has(
+                                                    `${c.marker}${c.contentId}${c.sourceParentId || c.sourceId}`
+                                                )
                                         ),
                                     ];
                                 });
+
+                                // Add citations to global store for consistent numbering
+                                addCitationMarkers(parsedCitations);
+                                log(`Added ${parsedCitations.length} citations to global store from Ably stream`);
                             }
                         }
                     }
@@ -504,6 +513,7 @@ export const useAbly = (): UseAblyReturn => {
                 setError(undefined);
                 setCitations(undefined);
                 setPartials([]);
+                clearCitationMarkers();
                 setTimeout(resolve, 0);
             });
         });
