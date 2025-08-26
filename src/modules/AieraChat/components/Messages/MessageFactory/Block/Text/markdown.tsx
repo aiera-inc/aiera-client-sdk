@@ -86,8 +86,10 @@ type CustomComponentProps = {
 // Custom Citation component that parses citation tags
 const CustomCitation = ({ marker, citations }: { marker: string; citations: CitationType[] }) => {
     const citation = citations?.find((cit: CitationType) => cit.marker === `[c${marker}]`);
-    if (citation) {
-        return <Citation citation={citation} />;
+    const citationIndex = (citations || []).findIndex((s) => s.contentId === citation?.contentId);
+    const number = citationIndex >= 0 ? `C${citationIndex + 1}` : null;
+    if (citation && number) {
+        return <Citation citation={{ ...citation, marker: number }} />;
     }
 
     return null;

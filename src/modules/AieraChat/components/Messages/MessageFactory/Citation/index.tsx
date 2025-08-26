@@ -11,7 +11,7 @@ interface CitationProps {
 export const Citation = ({ citation }: CitationProps) => {
     const { onSelectSource } = useChatStore();
     const config = useConfig();
-    const { contentId, marker, source, sourceId } = citation;
+    const { contentId, marker, source, sourceId, sourceParentId } = citation;
     const bus = useMessageBus();
 
     const onNav = () => {
@@ -20,7 +20,7 @@ export const Citation = ({ citation }: CitationProps) => {
         } else {
             onSelectSource({
                 contentId,
-                targetId: sourceId,
+                targetId: sourceParentId || sourceId,
                 targetType: 'event',
                 title: source,
             });
@@ -33,7 +33,7 @@ export const Citation = ({ citation }: CitationProps) => {
                 onClick={onNav}
                 className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
             >
-                {marker.slice(1, -1).replace(/^./, (char) => char.toUpperCase())}
+                {marker}
             </span>
         </span>
     );
