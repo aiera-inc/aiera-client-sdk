@@ -7957,7 +7957,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames17() {
+      function classNames18() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -7968,7 +7968,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames17.apply(null, arg);
+              var inner = classNames18.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -7988,14 +7988,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames17.default = classNames17;
-        module2.exports = classNames17;
+        classNames18.default = classNames18;
+        module2.exports = classNames18;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames17;
+          return classNames18;
         });
       } else {
-        window.classNames = classNames17;
+        window.classNames = classNames18;
       }
     })();
   }
@@ -41876,6 +41876,7 @@ function useChangeHandlers(initialState) {
 }
 
 // src/modules/Auth/index.tsx
+var import_classnames5 = __toModule(require_classnames());
 var AuthUI = (props) => {
   var _a;
   const { children, userQuery, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
@@ -41995,23 +41996,28 @@ var ApiAuthUI = (props) => {
     className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
   }), /* @__PURE__ */ import_react15.default.createElement("div", {
     className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
-  })))).with("error", "empty", () => /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "bg-white relative flex flex-col items-center justify-center w-full h-full"
-  }, (0, import_ts_pattern2.match)(loginState).with("error", () => /* @__PURE__ */ import_react15.default.createElement("p", {
-    className: "text-sm text-slate-500"
-  }, "Unable to connect")).with("none", () => /* @__PURE__ */ import_react15.default.createElement("p", {
-    className: "text-sm text-slate-500"
-  }, "Waiting for API key...")).with("loading", () => /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "relative flex flex-col items-center justify-center w-full h-full"
-  }, /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "flex"
-  }, /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
-  }), /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
-  }), /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
-  })))).exhaustive())).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
+  })))).with("error", "empty", () => {
+    var _a2;
+    return /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: (0, import_classnames5.default)("relative flex flex-col items-center justify-center w-full h-full", {
+        "bg-white": !((_a2 = config.options) == null ? void 0 : _a2.isMobile)
+      })
+    }, (0, import_ts_pattern2.match)(loginState).with("error", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+      className: "text-sm text-slate-500"
+    }, "Unable to connect")).with("none", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+      className: "text-sm text-slate-500"
+    }, "Waiting for API key...")).with("loading", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "relative flex flex-col items-center justify-center w-full h-full"
+    }, /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "flex"
+    }, /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
+    }), /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
+    }), /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
+    })))).exhaustive());
+  }).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
 };
 var Auth = ({
   apiMode,
@@ -42158,7 +42164,7 @@ var Auth = ({
 
 // src/modules/NewsList/index.tsx
 var import_react38 = __toModule(require_react());
-var import_classnames16 = __toModule(require_classnames());
+var import_classnames17 = __toModule(require_classnames());
 var import_luxon2 = __toModule(require_luxon());
 
 // node_modules/react-idle-timer/dist/index.esm.js
@@ -42666,22 +42672,22 @@ var import_ts_pattern6 = __toModule(require_lib());
 
 // src/components/CompanyFilterButton/index.tsx
 var import_react27 = __toModule(require_react());
-var import_classnames8 = __toModule(require_classnames());
+var import_classnames9 = __toModule(require_classnames());
 
 // src/components/CompanySelect/index.tsx
 var import_react22 = __toModule(require_react());
-var import_classnames6 = __toModule(require_classnames());
+var import_classnames7 = __toModule(require_classnames());
 var import_ts_pattern3 = __toModule(require_lib());
 
 // src/components/Svg/MagnifyingGlass.tsx
 var import_react20 = __toModule(require_react());
-var import_classnames5 = __toModule(require_classnames());
+var import_classnames6 = __toModule(require_classnames());
 function MagnifyingGlass({
   className,
   alt = "Magnifying Glass"
 }) {
   return /* @__PURE__ */ import_react20.default.createElement("svg", {
-    className: (0, import_classnames5.default)(className, "stroke-current", "Svg", "Svg__magnifyingGlass"),
+    className: (0, import_classnames6.default)(className, "stroke-current", "Svg", "Svg__magnifyingGlass"),
     width: "100%",
     viewBox: "0 0 12 12",
     fill: "none",
@@ -42753,7 +42759,7 @@ function CompanySelectUI(props) {
     var _a;
     const primaryQuote = getPrimaryQuote(company);
     return /* @__PURE__ */ import_react22.default.createElement("div", {
-      className: (0, import_classnames6.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
+      className: (0, import_classnames7.default)("flex items-center h-9 tracking-wide cursor-pointer focus:outline-none", {
         "odd:bg-gray-100 dark:odd:bg-bluegray-5": selectedIndex !== index,
         "bg-blue-500": selectedIndex === index,
         "text-white": selectedIndex === index,
@@ -42872,10 +42878,10 @@ function CompanySelect(props) {
 
 // src/components/Svg/Building.tsx
 var import_react23 = __toModule(require_react());
-var import_classnames7 = __toModule(require_classnames());
+var import_classnames8 = __toModule(require_classnames());
 function Building({ className, alt = "Building" }) {
   return /* @__PURE__ */ import_react23.default.createElement("svg", {
-    className: (0, import_classnames7.default)(className, "fill-current", "Svg", "Svg__building"),
+    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__building"),
     width: "14",
     height: "16",
     viewBox: "0 0 14 16",
@@ -43154,7 +43160,7 @@ function CompanyFilterButtonUI(props) {
     position: "bottom-right",
     yOffset: 5
   }, /* @__PURE__ */ import_react27.default.createElement(Button, {
-    className: (0, import_classnames8.default)("max-w-[130px]"),
+    className: (0, import_classnames9.default)("max-w-[130px]"),
     kind: value ? "default" : "secondary",
     onClick: value ? (event) => {
       event.stopPropagation();
@@ -43193,7 +43199,7 @@ var import_react32 = __toModule(require_react());
 
 // src/components/Toggle/index.tsx
 var import_react28 = __toModule(require_react());
-var import_classnames9 = __toModule(require_classnames());
+var import_classnames10 = __toModule(require_classnames());
 function ToggleUI(props) {
   const { on, onChange, darkMode = false } = props;
   return /* @__PURE__ */ import_react28.default.createElement(Tooltip, {
@@ -43210,7 +43216,7 @@ function ToggleUI(props) {
     type: "checkbox",
     checked: on,
     onChange: (e) => onChange(e, { value: !on }),
-    className: (0, import_classnames9.default)({ toggle: !darkMode, toggle_dark: darkMode })
+    className: (0, import_classnames10.default)({ toggle: !darkMode, toggle_dark: darkMode })
   }));
 }
 function Toggle(props) {
@@ -43230,10 +43236,10 @@ function Toggle(props) {
 
 // src/components/Svg/Gear.tsx
 var import_react29 = __toModule(require_react());
-var import_classnames10 = __toModule(require_classnames());
+var import_classnames11 = __toModule(require_classnames());
 function Gear({ className, alt = "Gear" }) {
   return /* @__PURE__ */ import_react29.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "stroke-current", "Svg", "Svg__gear"),
+    className: (0, import_classnames11.default)(className, "stroke-current", "Svg", "Svg__gear"),
     width: "100%",
     fill: "none",
     viewBox: "0 0 24 24",
@@ -43253,10 +43259,10 @@ function Gear({ className, alt = "Gear" }) {
 
 // src/components/Svg/WindowPopout.tsx
 var import_react30 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
+var import_classnames12 = __toModule(require_classnames());
 function WindowPopout({ className, alt = "Window Popout" }) {
   return /* @__PURE__ */ import_react30.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__popOut"),
+    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__popOut"),
     width: "20",
     height: "20",
     viewBox: "0 0 20 20",
@@ -43271,10 +43277,10 @@ function WindowPopout({ className, alt = "Window Popout" }) {
 
 // src/components/Svg/XMark.tsx
 var import_react31 = __toModule(require_react());
-var import_classnames12 = __toModule(require_classnames());
+var import_classnames13 = __toModule(require_classnames());
 function XMark({ className, alt = "XMark" }) {
   return /* @__PURE__ */ import_react31.default.createElement("svg", {
-    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__xMark"),
+    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__xMark"),
     width: "100%",
     viewBox: "0 0 10 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -43425,17 +43431,17 @@ function useInterval(callback, interval) {
 
 // src/modules/News/index.tsx
 var import_react37 = __toModule(require_react());
-var import_classnames15 = __toModule(require_classnames());
+var import_classnames16 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon = __toModule(require_luxon());
 var import_ts_pattern5 = __toModule(require_lib());
 
 // src/components/Svg/ArrowLeft.tsx
 var import_react34 = __toModule(require_react());
-var import_classnames13 = __toModule(require_classnames());
+var import_classnames14 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
   return /* @__PURE__ */ import_react34.default.createElement("svg", {
-    className: (0, import_classnames13.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+    className: (0, import_classnames14.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -43448,10 +43454,10 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 
 // src/components/Svg/Chevron.tsx
 var import_react35 = __toModule(require_react());
-var import_classnames14 = __toModule(require_classnames());
+var import_classnames15 = __toModule(require_classnames());
 function Chevron({ className, alt = "Chevron" }) {
   return /* @__PURE__ */ import_react35.default.createElement("svg", {
-    className: (0, import_classnames14.default)(className, "fill-current", "Svg", "Svg__chevron"),
+    className: (0, import_classnames15.default)(className, "fill-current", "Svg", "Svg__chevron"),
     width: "100%",
     viewBox: "0 0 8 5",
     xmlns: "http://www.w3.org/2000/svg"
@@ -43615,7 +43621,7 @@ function NewsUI(props) {
     className: "flex flex-1 items-center justify-center text-gray-600"
   }, msg);
   return /* @__PURE__ */ import_react37.default.createElement("div", {
-    className: (0, import_classnames15.default)("h-full flex flex-col news", { dark: darkMode })
+    className: (0, import_classnames16.default)("h-full flex flex-col news", { dark: darkMode })
   }, /* @__PURE__ */ import_react37.default.createElement("div", {
     className: "dark:bg-bluegray-7"
   }, /* @__PURE__ */ import_react37.default.createElement("div", {
@@ -43703,7 +43709,7 @@ function NewsUI(props) {
       className: "leading-5 mb-4",
       key: `news-body-paragraph-${pIdx}`
     }, paragraph.map(({ highlight, id: chunkId, text }) => highlight ? /* @__PURE__ */ import_react37.default.createElement("mark", {
-      className: (0, import_classnames15.default)({
+      className: (0, import_classnames16.default)({
         "bg-yellow-300": chunkId === currentMatch
       }),
       key: `news-body-chunk-${chunkId}-match`,
@@ -43901,7 +43907,7 @@ function NewsListUI(props) {
   }, msg);
   let prevEventDate = import_luxon2.DateTime.now();
   return /* @__PURE__ */ import_react38.default.createElement("div", {
-    className: (0, import_classnames16.default)("h-full flex flex-col news-list", { dark: darkMode })
+    className: (0, import_classnames17.default)("h-full flex flex-col news-list", { dark: darkMode })
   }, /* @__PURE__ */ import_react38.default.createElement("div", {
     className: "flex flex-col pt-3 px-3 shadow-3xl dark:shadow-3xl-dark dark:bg-bluegray-6 news-list__header"
   }, /* @__PURE__ */ import_react38.default.createElement("div", {
@@ -43932,7 +43938,7 @@ function NewsListUI(props) {
   }, loader(15))).with({ status: "paused" }, () => wrapMsg("There is no news.")).with({ status: "error" }, () => wrapMsg("There was an error loading news.")).with({ status: "empty" }, () => wrapMsg("There is no news.")).with({ status: "success" }, ({ data, isPaging }) => /* @__PURE__ */ import_react38.default.createElement("ul", {
     className: "w-full"
   }, /* @__PURE__ */ import_react38.default.createElement("div", {
-    className: (0, import_classnames16.default)("animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none", {
+    className: (0, import_classnames17.default)("animate-pulse cursor-pointer duration-200 ease-in-out flex group items-center justify-center mb-1 transition-h hover:animate-none", {
       invisible: !canRefetch,
       "h-0": !canRefetch,
       "py-3": canRefetch

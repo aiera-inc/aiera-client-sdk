@@ -7957,7 +7957,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames14() {
+      function classNames15() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -7968,7 +7968,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames14.apply(null, arg);
+              var inner = classNames15.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -7988,14 +7988,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames14.default = classNames14;
-        module2.exports = classNames14;
+        classNames15.default = classNames15;
+        module2.exports = classNames15;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames14;
+          return classNames15;
         });
       } else {
-        window.classNames = classNames14;
+        window.classNames = classNames15;
       }
     })();
   }
@@ -75609,6 +75609,7 @@ function useChangeHandlers(initialState) {
 }
 
 // src/modules/Auth/index.tsx
+var import_classnames5 = __toModule(require_classnames());
 var AuthUI = (props) => {
   var _a;
   const { children, userQuery, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
@@ -75728,23 +75729,28 @@ var ApiAuthUI = (props) => {
     className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
   }), /* @__PURE__ */ import_react15.default.createElement("div", {
     className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
-  })))).with("error", "empty", () => /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "bg-white relative flex flex-col items-center justify-center w-full h-full"
-  }, (0, import_ts_pattern2.match)(loginState).with("error", () => /* @__PURE__ */ import_react15.default.createElement("p", {
-    className: "text-sm text-slate-500"
-  }, "Unable to connect")).with("none", () => /* @__PURE__ */ import_react15.default.createElement("p", {
-    className: "text-sm text-slate-500"
-  }, "Waiting for API key...")).with("loading", () => /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "relative flex flex-col items-center justify-center w-full h-full"
-  }, /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "flex"
-  }, /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
-  }), /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
-  }), /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
-  })))).exhaustive())).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
+  })))).with("error", "empty", () => {
+    var _a2;
+    return /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: (0, import_classnames5.default)("relative flex flex-col items-center justify-center w-full h-full", {
+        "bg-white": !((_a2 = config.options) == null ? void 0 : _a2.isMobile)
+      })
+    }, (0, import_ts_pattern2.match)(loginState).with("error", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+      className: "text-sm text-slate-500"
+    }, "Unable to connect")).with("none", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+      className: "text-sm text-slate-500"
+    }, "Waiting for API key...")).with("loading", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "relative flex flex-col items-center justify-center w-full h-full"
+    }, /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "flex"
+    }, /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
+    }), /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
+    }), /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
+    })))).exhaustive());
+  }).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
 };
 var Auth = ({
   apiMode,
@@ -75891,10 +75897,10 @@ var Auth = ({
 
 // src/components/Svg/Bell.tsx
 var import_react16 = __toModule(require_react());
-var import_classnames5 = __toModule(require_classnames());
+var import_classnames6 = __toModule(require_classnames());
 function Bell({ className, alt = "Bell" }) {
   return /* @__PURE__ */ import_react16.default.createElement("svg", {
-    className: (0, import_classnames5.default)(className, "stroke-current", "Svg", "Svg__bell"),
+    className: (0, import_classnames6.default)(className, "stroke-current", "Svg", "Svg__bell"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg",
@@ -75909,10 +75915,10 @@ function Bell({ className, alt = "Bell" }) {
 
 // src/components/Svg/Calendar.tsx
 var import_react17 = __toModule(require_react());
-var import_classnames6 = __toModule(require_classnames());
+var import_classnames7 = __toModule(require_classnames());
 function Calendar({ className, alt = "Calendar" }) {
   return /* @__PURE__ */ import_react17.default.createElement("svg", {
-    className: (0, import_classnames6.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
+    className: (0, import_classnames7.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
@@ -75927,10 +75933,10 @@ function Calendar({ className, alt = "Calendar" }) {
 
 // src/components/Svg/Pause.tsx
 var import_react18 = __toModule(require_react());
-var import_classnames7 = __toModule(require_classnames());
+var import_classnames8 = __toModule(require_classnames());
 function Pause({ className, alt = "Pause" }) {
   return /* @__PURE__ */ import_react18.default.createElement("svg", {
-    className: (0, import_classnames7.default)(className, "fill-current", "Svg", "Svg__pause"),
+    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__pause"),
     width: "100%",
     fill: "white",
     viewBox: "0 0 12 16",
@@ -75949,10 +75955,10 @@ function Pause({ className, alt = "Pause" }) {
 
 // src/components/Svg/Play.tsx
 var import_react19 = __toModule(require_react());
-var import_classnames8 = __toModule(require_classnames());
+var import_classnames9 = __toModule(require_classnames());
 function Play({ className, alt = "Play" }) {
   return /* @__PURE__ */ import_react19.default.createElement("svg", {
-    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__play"),
+    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__play"),
     width: "100%",
     viewBox: "0 0 13 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -76530,15 +76536,15 @@ function useAudioPlayer(withUpdates = true) {
 }
 
 // src/components/PlayButton/index.tsx
-var import_classnames10 = __toModule(require_classnames());
+var import_classnames11 = __toModule(require_classnames());
 var import_react26 = __toModule(require_react());
 
 // src/components/Svg/BellSlash.tsx
 var import_react25 = __toModule(require_react());
-var import_classnames9 = __toModule(require_classnames());
+var import_classnames10 = __toModule(require_classnames());
 function BellSlash({ className, alt = "Bell Slash" }) {
   return /* @__PURE__ */ import_react25.default.createElement("svg", {
-    className: (0, import_classnames9.default)(className, "stroke-current", "Svg", "Svg__bellSlash"),
+    className: (0, import_classnames10.default)(className, "stroke-current", "Svg", "Svg__bellSlash"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg",
@@ -76555,7 +76561,7 @@ function BellSlash({ className, alt = "Bell Slash" }) {
 function PlayButtonUI(props) {
   const { alertOnLive, connectionStatus, eventStarted, hasAudio, isLoading, isPlaying, toggleAlert, togglePlayback } = props;
   return hasAudio ? /* @__PURE__ */ import_react26.default.createElement("div", {
-    className: (0, import_classnames10.default)("group flex items-center justify-center relative w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+    className: (0, import_classnames11.default)("group flex items-center justify-center relative w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -76596,7 +76602,7 @@ function PlayButtonUI(props) {
     yOffset: 6,
     xOffset: 4,
     hideOnDocumentScroll: true,
-    className: (0, import_classnames10.default)("border flex items-center justify-center w-full h-full rounded-full", {
+    className: (0, import_classnames11.default)("border flex items-center justify-center w-full h-full rounded-full", {
       "dark:bg-yellow-400 dark:text-yellow-800": alertOnLive,
       "dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20": alertOnLive || !alertOnLive,
       "dark:active:bg-bluegray-5 dark:active:text-bluegray-4": alertOnLive,
@@ -76709,7 +76715,7 @@ function PlayButton(props) {
 }
 
 // src/modules/Transcrippet/index.tsx
-var import_classnames13 = __toModule(require_classnames());
+var import_classnames14 = __toModule(require_classnames());
 var import_html2canvas = __toModule(require_html2canvas());
 var import_react30 = __toModule(require_react());
 var import_ts_pattern4 = __toModule(require_lib());
@@ -76769,10 +76775,10 @@ var LineChart = ({ data, selectedIndex, transcrippetRef }) => {
 
 // src/components/Svg/QuoteLeft.tsx
 var import_react28 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
+var import_classnames12 = __toModule(require_classnames());
 function QuoteLeft({ className, alt = "Quote Left" }) {
   return /* @__PURE__ */ import_react28.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__quoteLeft"),
+    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__quoteLeft"),
     width: "100%",
     viewBox: "0 0 65 53",
     xmlns: "http://www.w3.org/2000/svg"
@@ -76783,10 +76789,10 @@ function QuoteLeft({ className, alt = "Quote Left" }) {
 
 // src/components/Svg/QuoteRight.tsx
 var import_react29 = __toModule(require_react());
-var import_classnames12 = __toModule(require_classnames());
+var import_classnames13 = __toModule(require_classnames());
 function QuoteRight({ className, alt = "Quote Right" }) {
   return /* @__PURE__ */ import_react29.default.createElement("svg", {
-    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__quoteRight"),
+    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__quoteRight"),
     width: "100%",
     viewBox: "0 0 65 53",
     xmlns: "http://www.w3.org/2000/svg"
@@ -76919,7 +76925,7 @@ function TranscrippetUI(props) {
     }, /* @__PURE__ */ import_react30.default.createElement(QuoteLeft, null)), /* @__PURE__ */ import_react30.default.createElement("div", {
       className: "text-slate-100 h-16 w-16 overflow-hidden absolute bottom-0 right-4 flex items-center justify-center"
     }, /* @__PURE__ */ import_react30.default.createElement(QuoteRight, null)), /* @__PURE__ */ import_react30.default.createElement("p", {
-      className: (0, import_classnames13.default)("text-base px-11 relative z-10 transition-all", {
+      className: (0, import_classnames14.default)("text-base px-11 relative z-10 transition-all", {
         "text-slate-400": wordHighlightEnabled && !!audioPlayer.playing(eventId),
         "py-10": !showingPriceReaction,
         "pt-10 pb-1": showingPriceReaction
@@ -76930,7 +76936,7 @@ function TranscrippetUI(props) {
         key: `${text}-${index}`
       }, /* @__PURE__ */ import_react30.default.createElement("span", {
         onClick: () => audioPlayer.rawSeek(fullWordPosition),
-        className: (0, import_classnames13.default)("transition-all", {
+        className: (0, import_classnames14.default)("transition-all", {
           "text-slate-900": audioPlayer.rawCurrentTime >= fullWordPosition
         })
       }, text), " ");

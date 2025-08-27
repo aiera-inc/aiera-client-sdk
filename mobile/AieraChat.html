@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <style>
+            body,
+            html {
+                background-color: #262734;
+                overflow: hidden;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                font-family: Arial, sans-serif;
+                height: 100%;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+            }
+            iframe {
+                background-color: #262734;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                border: none;
+                resize: both;
+                height: 100%;
+                width: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
+    <body>
+        <script src="../embed.js"></script>
+        <iframe id="aiera"></iframe>
+        <script>
+            // Debug logging that sends to React Native
+            function debugLog(...args) {
+                const message = args
+                    .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg)))
+                    .join(' ');
+
+                // Log to browser console
+                console.log(...args);
+
+                // Send to React Native
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(
+                        JSON.stringify({
+                            type: 'console',
+                            level: 'log',
+                            message: message,
+                            timestamp: new Date().toISOString(),
+                        })
+                    );
+                }
+            }
+
+            // Override console methods to send to React Native
+            const originalConsole = {
+                log: console.log,
+                error: console.error,
+                warn: console.warn,
+            };
+
+            ['log', 'error', 'warn'].forEach((level) => {
+                console[level] = function (...args) {
+                    const message = args
+                        .map((arg) => (typeof arg === 'object' ? JSON.stringify(arg) : String(arg)))
+                        .join(' ');
+
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({
+                                type: 'console',
+                                level: level,
+                                message: message,
+                            })
+                        );
+                    }
+                    originalConsole[level].apply(console, args);
+                };
+            });
+
+            // Global error handler
+            window.addEventListener('error', function (e) {
+                debugLog('ERROR:', e.message, 'at', e.filename, ':', e.lineno);
+            });
+
+            // Initialize variables
+            let apiKey = null;
+            let userId = null;
+            let aieraChat = null;
+            let isAuthenticated = false;
+            let iframeReady = false;
+
+            // Get parameters from URL
+            function getParamsFromURL() {
+                debugLog('Attempting to get params from URL');
+                debugLog('Current URL:', window.location.href);
+                debugLog('Search string:', window.location.search);
+
+                const urlParams = new URLSearchParams(window.location.search);
+                const urlApiKey = urlParams.get('apiKey');
+                const urlUserId = urlParams.get('userId');
+
+                debugLog('URL Params found:', { apiKey: urlApiKey, userId: urlUserId });
+
+                return { apiKey: urlApiKey, userId: urlUserId };
+            }
+
+            // Initialize the Aiera chat module
+            function initializeChat() {
+                debugLog('Initializing chat with apiKey:', apiKey, 'userId:', userId);
+
+                if (!apiKey) {
+                    debugLog('ERROR: No API key available, cannot initialize');
+                    return;
+                }
+
+                if (!aieraChat) {
+                    debugLog('Creating Aiera Module');
+                    try {
+                        aieraChat = new Aiera.Module('../modules/AieraChatMobile/index.html', 'aiera');
+                        debugLog('Aiera Module created successfully');
+
+                        // Setup ready listener immediately when module is created
+                        setupIframeReadyListener();
+                    } catch (error) {
+                        debugLog('ERROR creating Aiera Module:', error.message);
+                        return;
+                    }
+                }
+
+                loadWithApiKey(apiKey);
+            }
+
+            // Setup iframe ready listener - should be called immediately when module is created
+            function setupIframeReadyListener() {
+                debugLog('Setting up iframe ready listener');
+
+                // Listen for ready message from iframe
+                window.addEventListener('message', function (event) {
+                    // Check if message is from our iframe
+                    if (event.source !== document.getElementById('aiera')?.contentWindow) {
+                        return;
+                    }
+
+                    // Look for ready signal from the message bus
+                    if (event.data && event.data.ns === 'aiera' && event.data.event === 'ready') {
+                        debugLog('Iframe message bus ready signal received');
+                        iframeReady = true;
+
+                        // If we were waiting to authenticate, do it now
+                        if (apiKey && !isAuthenticated) {
+                            debugLog('Ready signal received, proceeding with pending authentication');
+                            performAuthentication(apiKey);
+                        }
+                    }
+                });
+            }
+
+            // Perform authentication when iframe is ready
+            function performAuthentication(key) {
+                if (!iframeReady) {
+                    debugLog('Iframe not ready yet, authentication will proceed when ready signal is received');
+                    return;
+                }
+
+                debugLog('Performing authentication with ready iframe');
+                try {
+                    aieraChat.authenticateApiKey(key);
+                    debugLog('Authentication call made via authenticateApiKey');
+                } catch (error) {
+                    debugLog('ERROR with authenticateApiKey:', error.message);
+                }
+            }
+
+            // Function to load with a specific API key
+            function loadWithApiKey(key) {
+                if (!key) {
+                    debugLog('ERROR: No API key provided to loadWithApiKey');
+                    return;
+                }
+
+                debugLog('Loading module with API key:', key);
+
+                aieraChat
+                    .load()
+                    .then(() => {
+                        debugLog('Module loaded successfully');
+
+                        // Try to authenticate - will either work immediately (if ready) or wait for ready signal
+                        performAuthentication(key);
+                    })
+                    .catch((error) => {
+                        debugLog('ERROR loading module:', error.message);
+                    });
+            }
+
+            // Configure function
+            function configureChat() {
+                debugLog('Configuring chat with userId:', userId);
+
+                const config = {
+                    hideSettings: true,
+                    options: {
+                        aieraChatEnableAbly: true,
+                        aieraChatEnablePolling: false,
+                        aieraChatCollectInternalFeedback: true,
+                        aieraChatDisableSourceNav: true,
+                        showSearch: true,
+                        showSentiment: false,
+                        darkMode: false,
+                        isMobile: true,
+                    },
+                    overrides: {
+                        style: `
+                            .aiera-chat-title {
+                                color: white;
+                            }
+                            .aiera-chat .chatInput {
+                                background-color: #303142;
+                                box-shadow: 0 0 0 3px #21222E;
+                                color: white;
+                                border: 1px solid #5f616F;
+                            }
+                            .aiera-chat thead {
+                                background-color: transparent;
+                            }
+                            .chatInput-placeholder {
+                                color: #888BA6;
+                            }
+                            .chatInput .bg-blue-600 {
+                                background-color: #1867FF;
+                            }
+                            .headerButton-menu {
+                                background-color: #303142;
+                                color: white;
+                            }
+                            .message-prompt {
+                                background-color: #303142;
+                                color: white;    
+                            }
+                            .sourceToggle {
+                                border: 1px solid #5f616f;
+                                color: white;
+                            }
+                            .aiera-chat-contentRow {
+                                color: #EAEBF4;
+                            }
+                            .aiera-chat-contentRow.selected {
+                                background-color: #5F616F;
+                            }
+                            .headerButton-new {
+                                background-color: #303142;
+                                color: white;
+                            }
+                            .message-sources {
+                                border: 1px solid #5f616f;
+                                color: white;
+                            }
+                            .message-sources .text-slate-600 {
+                                color: white;
+                            }
+                            .message-sources-header {
+                                border-color: #5f616f;
+                            }
+                            .message-thinking, .message-finding {
+                                border-color: #5f616f;
+                                color: white;
+                            }
+                            .message-thinking .text-slate-600, .message-finding .text-slate-600 {
+                                color: white;
+                            }
+                            .message-sources-header:hover {
+                                background-color: transparent;
+                            }
+                            .aiera-chat-text {
+                                color: white;
+                            }
+                            .aiera-chat {
+                                background-color: #262734;
+                            }
+                            .aiera-chat-panel {
+                                background-color: #303142;
+                            }
+                            .aiera-chat-panel .text-slate-800 {
+                                color: white;
+                            }
+                            .panel-left {
+                                border-radius: 0 8px 8px 0;
+                            }
+                            .panel-right {
+                                border-radius: 8px 0 0 8px;
+                            }
+                            .aiera-chat-panel-outside {
+                                background-color: rgba(0, 0, 0, 0)
+                            }
+                        `,
+                    },
+                    tracking: {
+                        userId: userId || '1', // Fallback to '1' if no userId
+                    },
+                };
+
+                debugLog('Applying configuration:', config);
+
+                try {
+                    aieraChat.configure(config);
+                    debugLog('Configuration applied successfully');
+                } catch (error) {
+                    debugLog('ERROR applying configuration:', error.message);
+                }
+            }
+
+            // Setup authentication event listener
+            function setupAuthenticationListener() {
+                if (!aieraChat) {
+                    debugLog('ERROR: aieraChat not initialized for authentication listener');
+                    return;
+                }
+
+                debugLog('Setting up authentication listener');
+
+                // Listen for authentication success
+                aieraChat.on('authenticated', () => {
+                    debugLog('AUTHENTICATED EVENT RECEIVED');
+                    isAuthenticated = true;
+
+                    // Configure the chat
+                    configureChat();
+
+                    // Setup event listeners for chat events
+                    setupChatEventListeners();
+
+                    // Notify React Native that we're authenticated
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({
+                                type: 'authenticated',
+                                payload: { apiKey, userId },
+                            })
+                        );
+                    }
+                });
+
+                // Also listen for authentication errors
+                aieraChat.on('error', (error) => {
+                    debugLog('ERROR EVENT from iframe:', error);
+                });
+
+                // Listen for any message from the iframe for debugging
+                window.addEventListener('message', (event) => {
+                    // Check if it's from our iframe
+                    if (event.source === document.getElementById('aiera')?.contentWindow) {
+                        debugLog('Message from iframe:', event.data);
+                    }
+                });
+            }
+
+            // Setup chat event listeners
+            function setupChatEventListeners() {
+                debugLog('Setting up chat event listeners');
+
+                aieraChat.on('chat-source', (chatSource) => {
+                    debugLog('Chat source event:', chatSource);
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({ type: 'chatSource', payload: chatSource })
+                        );
+                    }
+                });
+
+                aieraChat.on('chat-citation', (chatCitation) => {
+                    debugLog('Chat citation event:', chatCitation);
+                    if (window.ReactNativeWebView) {
+                        window.ReactNativeWebView.postMessage(
+                            JSON.stringify({ type: 'chatCitation', payload: chatCitation })
+                        );
+                    }
+                });
+            }
+
+            // Main initialization function
+            function initialize() {
+                debugLog('=== INITIALIZATION STARTED ===');
+                debugLog('ReactNativeWebView available:', !!window.ReactNativeWebView);
+
+                // Try to get params from URL first
+                const urlParams = getParamsFromURL();
+                if (urlParams.apiKey) {
+                    apiKey = urlParams.apiKey;
+                    userId = urlParams.userId;
+                    debugLog('Using params from URL');
+                }
+
+                // If we have an API key, initialize immediately
+                if (apiKey) {
+                    debugLog('API key found, initializing chat');
+                    initializeChat();
+                    setupAuthenticationListener();
+                } else {
+                    debugLog('No API key found yet, waiting for React Native message');
+                    // Create the module but don't load yet
+                    try {
+                        aieraChat = new Aiera.Module('../modules/AieraChatMobile/index.html', 'aiera');
+
+                        // Setup ready listener immediately when module is created
+                        setupIframeReadyListener();
+                        setupAuthenticationListener();
+                        debugLog('Module created, waiting for API key');
+                    } catch (error) {
+                        debugLog('ERROR creating module:', error.message);
+                    }
+                }
+
+                // Send a ready message to React Native
+                if (window.ReactNativeWebView) {
+                    window.ReactNativeWebView.postMessage(
+                        JSON.stringify({
+                            type: 'ready',
+                            payload: {
+                                hasApiKey: !!apiKey,
+                                hasUserId: !!userId,
+                                url: window.location.href,
+                            },
+                        })
+                    );
+                }
+            }
+
+            // Start initialization when DOM is ready
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initialize);
+            } else {
+                // DOM is already loaded
+                initialize();
+            }
+        </script>
+    </body>
+</html>

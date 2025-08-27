@@ -7958,7 +7958,7 @@ var require_classnames = __commonJS({
     (function() {
       "use strict";
       var hasOwn = {}.hasOwnProperty;
-      function classNames40() {
+      function classNames41() {
         var classes = [];
         for (var i3 = 0; i3 < arguments.length; i3++) {
           var arg = arguments[i3];
@@ -7969,7 +7969,7 @@ var require_classnames = __commonJS({
             classes.push(arg);
           } else if (Array.isArray(arg)) {
             if (arg.length) {
-              var inner = classNames40.apply(null, arg);
+              var inner = classNames41.apply(null, arg);
               if (inner) {
                 classes.push(inner);
               }
@@ -7989,14 +7989,14 @@ var require_classnames = __commonJS({
         return classes.join(" ");
       }
       if (typeof module2 !== "undefined" && module2.exports) {
-        classNames40.default = classNames40;
-        module2.exports = classNames40;
+        classNames41.default = classNames41;
+        module2.exports = classNames41;
       } else if (typeof define === "function" && typeof define.amd === "object" && define.amd) {
         define("classnames", [], function() {
-          return classNames40;
+          return classNames41;
         });
       } else {
-        window.classNames = classNames40;
+        window.classNames = classNames41;
       }
     })();
   }
@@ -84901,6 +84901,7 @@ function useChangeHandlers(initialState) {
 }
 
 // src/modules/Auth/index.tsx
+var import_classnames5 = __toModule(require_classnames());
 var AuthUI = (props) => {
   var _a;
   const { children, userQuery, login, loginState, email, onChangeEmail, password, onChangePassword } = props;
@@ -85020,23 +85021,28 @@ var ApiAuthUI = (props) => {
     className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
   }), /* @__PURE__ */ import_react15.default.createElement("div", {
     className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
-  })))).with("error", "empty", () => /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "bg-white relative flex flex-col items-center justify-center w-full h-full"
-  }, (0, import_ts_pattern2.match)(loginState).with("error", () => /* @__PURE__ */ import_react15.default.createElement("p", {
-    className: "text-sm text-slate-500"
-  }, "Unable to connect")).with("none", () => /* @__PURE__ */ import_react15.default.createElement("p", {
-    className: "text-sm text-slate-500"
-  }, "Waiting for API key...")).with("loading", () => /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "relative flex flex-col items-center justify-center w-full h-full"
-  }, /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "flex"
-  }, /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
-  }), /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
-  }), /* @__PURE__ */ import_react15.default.createElement("div", {
-    className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
-  })))).exhaustive())).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
+  })))).with("error", "empty", () => {
+    var _a2;
+    return /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: (0, import_classnames5.default)("relative flex flex-col items-center justify-center w-full h-full", {
+        "bg-white": !((_a2 = config.options) == null ? void 0 : _a2.isMobile)
+      })
+    }, (0, import_ts_pattern2.match)(loginState).with("error", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+      className: "text-sm text-slate-500"
+    }, "Unable to connect")).with("none", () => /* @__PURE__ */ import_react15.default.createElement("p", {
+      className: "text-sm text-slate-500"
+    }, "Waiting for API key...")).with("loading", () => /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "relative flex flex-col items-center justify-center w-full h-full"
+    }, /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "flex"
+    }, /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 bg-slate-600 rounded-full animate-bounce animation"
+    }), /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 ml-1 bg-slate-400 rounded-full animate-bounce animation-delay-100"
+    }), /* @__PURE__ */ import_react15.default.createElement("div", {
+      className: "w-2 h-2 ml-1 bg-slate-200 rounded-full animate-bounce animation-delay-200"
+    })))).exhaustive());
+  }).with("success", () => children || /* @__PURE__ */ import_react15.default.createElement("div", null)).exhaustive());
 };
 var Auth = ({
   apiMode,
@@ -85183,21 +85189,21 @@ var Auth = ({
 
 // src/modules/Transcript/index.tsx
 var import_react68 = __toModule(require_react());
-var import_classnames39 = __toModule(require_classnames());
+var import_classnames40 = __toModule(require_classnames());
 var import_highlight_words_core = __toModule(require_dist());
 var import_luxon2 = __toModule(require_luxon());
 var import_ts_pattern6 = __toModule(require_lib());
 
 // src/components/Playbar/index.tsx
-var import_classnames15 = __toModule(require_classnames());
+var import_classnames16 = __toModule(require_classnames());
 var import_react33 = __toModule(require_react());
 
 // src/components/Svg/Back15.tsx
 var import_react16 = __toModule(require_react());
-var import_classnames5 = __toModule(require_classnames());
+var import_classnames6 = __toModule(require_classnames());
 function Back15({ className, alt = "Back15" }) {
   return /* @__PURE__ */ import_react16.default.createElement("svg", {
-    className: (0, import_classnames5.default)(className, "fill-current", "Svg", "Svg__back15"),
+    className: (0, import_classnames6.default)(className, "fill-current", "Svg", "Svg__back15"),
     width: "100%",
     viewBox: "0 0 16 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -85210,10 +85216,10 @@ function Back15({ className, alt = "Back15" }) {
 
 // src/components/Svg/End.tsx
 var import_react17 = __toModule(require_react());
-var import_classnames6 = __toModule(require_classnames());
+var import_classnames7 = __toModule(require_classnames());
 function End({ className, alt = "End" }) {
   return /* @__PURE__ */ import_react17.default.createElement("svg", {
-    className: (0, import_classnames6.default)(className, "fill-current", "Svg", "Svg__end"),
+    className: (0, import_classnames7.default)(className, "fill-current", "Svg", "Svg__end"),
     width: "100%",
     viewBox: "0 0 12 12",
     xmlns: "http://www.w3.org/2000/svg"
@@ -85224,10 +85230,10 @@ function End({ className, alt = "End" }) {
 
 // src/components/Svg/Forward15.tsx
 var import_react18 = __toModule(require_react());
-var import_classnames7 = __toModule(require_classnames());
+var import_classnames8 = __toModule(require_classnames());
 function Forward15({ className, alt = "Forward15" }) {
   return /* @__PURE__ */ import_react18.default.createElement("svg", {
-    className: (0, import_classnames7.default)(className, "fill-current", "Svg", "Svg__forward15"),
+    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__forward15"),
     width: "100%",
     viewBox: "0 0 16 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -85240,10 +85246,10 @@ function Forward15({ className, alt = "Forward15" }) {
 
 // src/components/Svg/Pause.tsx
 var import_react19 = __toModule(require_react());
-var import_classnames8 = __toModule(require_classnames());
+var import_classnames9 = __toModule(require_classnames());
 function Pause({ className, alt = "Pause" }) {
   return /* @__PURE__ */ import_react19.default.createElement("svg", {
-    className: (0, import_classnames8.default)(className, "fill-current", "Svg", "Svg__pause"),
+    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__pause"),
     width: "100%",
     fill: "white",
     viewBox: "0 0 12 16",
@@ -85262,10 +85268,10 @@ function Pause({ className, alt = "Pause" }) {
 
 // src/components/Svg/Play.tsx
 var import_react20 = __toModule(require_react());
-var import_classnames9 = __toModule(require_classnames());
+var import_classnames10 = __toModule(require_classnames());
 function Play({ className, alt = "Play" }) {
   return /* @__PURE__ */ import_react20.default.createElement("svg", {
-    className: (0, import_classnames9.default)(className, "fill-current", "Svg", "Svg__play"),
+    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__play"),
     width: "100%",
     viewBox: "0 0 13 16",
     xmlns: "http://www.w3.org/2000/svg"
@@ -85276,10 +85282,10 @@ function Play({ className, alt = "Play" }) {
 
 // src/components/Svg/Speaker.tsx
 var import_react21 = __toModule(require_react());
-var import_classnames10 = __toModule(require_classnames());
+var import_classnames11 = __toModule(require_classnames());
 function Speaker({ className, alt = "Speaker" }) {
   return /* @__PURE__ */ import_react21.default.createElement("svg", {
-    className: (0, import_classnames10.default)(className, "fill-current", "Svg", "Svg__speaker"),
+    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__speaker"),
     width: "100%",
     viewBox: "0 0 14 14",
     fill: "none",
@@ -85291,10 +85297,10 @@ function Speaker({ className, alt = "Speaker" }) {
 
 // src/components/Svg/SpeakerLoud.tsx
 var import_react22 = __toModule(require_react());
-var import_classnames11 = __toModule(require_classnames());
+var import_classnames12 = __toModule(require_classnames());
 function SpeakerLoud({ className, alt = "SpeakerLoud" }) {
   return /* @__PURE__ */ import_react22.default.createElement("svg", {
-    className: (0, import_classnames11.default)(className, "fill-current", "Svg", "Svg__speakerLoud"),
+    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__speakerLoud"),
     width: "100%",
     viewBox: "0 0 18 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -85305,10 +85311,10 @@ function SpeakerLoud({ className, alt = "SpeakerLoud" }) {
 
 // src/components/Svg/SpeakerMute.tsx
 var import_react23 = __toModule(require_react());
-var import_classnames12 = __toModule(require_classnames());
+var import_classnames13 = __toModule(require_classnames());
 function SpeakerMute({ className, alt = "SpeakerMute" }) {
   return /* @__PURE__ */ import_react23.default.createElement("svg", {
-    className: (0, import_classnames12.default)(className, "fill-current", "Svg", "Svg__speakerMute"),
+    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__speakerMute"),
     width: "100%",
     viewBox: "0 0 18 14",
     fill: "none",
@@ -85322,10 +85328,10 @@ function SpeakerMute({ className, alt = "SpeakerMute" }) {
 
 // src/components/Svg/Swap.tsx
 var import_react24 = __toModule(require_react());
-var import_classnames13 = __toModule(require_classnames());
+var import_classnames14 = __toModule(require_classnames());
 function Swap({ className, alt = "Swap" }) {
   return /* @__PURE__ */ import_react24.default.createElement("svg", {
-    className: (0, import_classnames13.default)(className, "fill-current", "Svg", "Svg__swap"),
+    className: (0, import_classnames14.default)(className, "fill-current", "Svg", "Svg__swap"),
     width: "100%",
     viewBox: "0 0 14 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -85336,10 +85342,10 @@ function Swap({ className, alt = "Swap" }) {
 
 // src/components/Svg/XMark.tsx
 var import_react25 = __toModule(require_react());
-var import_classnames14 = __toModule(require_classnames());
+var import_classnames15 = __toModule(require_classnames());
 function XMark({ className, alt = "XMark" }) {
   return /* @__PURE__ */ import_react25.default.createElement("svg", {
-    className: (0, import_classnames14.default)(className, "fill-current", "Svg", "Svg__xMark"),
+    className: (0, import_classnames15.default)(className, "fill-current", "Svg", "Svg__xMark"),
     width: "100%",
     viewBox: "0 0 10 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -86109,7 +86115,7 @@ function PlaybarUI(props) {
   }), /* @__PURE__ */ import_react33.default.createElement("span", {
     className: "z-10 relative font-mono text-gray-500 opacity-60 dark:text-bluegray-4"
   }, toDurationString(duration)))), /* @__PURE__ */ import_react33.default.createElement("div", {
-    className: (0, import_classnames15.default)("z-20 flex h-[44px] pb-[6px] items-center justify-center player_controls", {
+    className: (0, import_classnames16.default)("z-20 flex h-[44px] pb-[6px] items-center justify-center player_controls", {
       "ml-2.5": !hideEventDetails
     })
   }, !fixed && /* @__PURE__ */ import_react33.default.createElement(Button, {
@@ -86125,7 +86131,7 @@ function PlaybarUI(props) {
   }, /* @__PURE__ */ import_react33.default.createElement(Swap, {
     className: "w-3"
   })), (!hideEventDetails || showSwap) && /* @__PURE__ */ import_react33.default.createElement("div", {
-    className: (0, import_classnames15.default)("flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer ml-1 group relative", {
+    className: (0, import_classnames16.default)("flex flex-col h-[30px] justify-center flex-shrink-0 cursor-pointer ml-1 group relative", {
       "w-[72px]": !showFullDetails,
       "flex-1": showFullDetails
     }),
@@ -86153,7 +86159,7 @@ function PlaybarUI(props) {
   }, ((_d = (_c = eventMetaData == null ? void 0 : eventMetaData.quote) == null ? void 0 : _c.exchange) == null ? void 0 : _d.shortName) || "Exchange")), /* @__PURE__ */ import_react33.default.createElement("span", {
     className: "select-none truncate capitalize text-xs text-gray-500 group-hover:text-gray-700 group-active:text-gray-900"
   }, (isCustom ? (eventMetaData == null ? void 0 : eventMetaData.createdBy) || ((_e = eventMetaData == null ? void 0 : eventMetaData.eventType) == null ? void 0 : _e.replace(/_/g, " ")) : (_f = eventMetaData == null ? void 0 : eventMetaData.eventType) == null ? void 0 : _f.replace(/_/g, " ")) || "No Type Found", showFullDetails && eventMetaData.title ? ` \u2014 ${eventMetaData.title}` : ""))), /* @__PURE__ */ import_react33.default.createElement("div", {
-    className: (0, import_classnames15.default)("flex items-center flex-shrink-0 flex-1 justify-center", {
+    className: (0, import_classnames16.default)("flex items-center flex-shrink-0 flex-1 justify-center", {
       "pr-1.5": !hideEventDetails
     })
   }, /* @__PURE__ */ import_react33.default.createElement("button", {
@@ -86177,7 +86183,7 @@ function PlaybarUI(props) {
     className: "w-[16px]"
   })), /* @__PURE__ */ import_react33.default.createElement(Button, {
     kind: "primary",
-    className: (0, import_classnames15.default)("flex relative items-center justify-center w-[32px] h-[32px] rounded-full mx-0.5"),
+    className: (0, import_classnames16.default)("flex relative items-center justify-center w-[32px] h-[32px] rounded-full mx-0.5"),
     onClick: togglePlayback
   }, /* @__PURE__ */ import_react33.default.createElement("div", null, isPlaying ? /* @__PURE__ */ import_react33.default.createElement(Pause, {
     className: "w-3"
@@ -86457,10 +86463,10 @@ function Playbar(props) {
 
 // src/components/Svg/Chevron.tsx
 var import_react34 = __toModule(require_react());
-var import_classnames16 = __toModule(require_classnames());
+var import_classnames17 = __toModule(require_classnames());
 function Chevron({ className, alt = "Chevron" }) {
   return /* @__PURE__ */ import_react34.default.createElement("svg", {
-    className: (0, import_classnames16.default)(className, "fill-current", "Svg", "Svg__chevron"),
+    className: (0, import_classnames17.default)(className, "fill-current", "Svg", "Svg__chevron"),
     width: "100%",
     viewBox: "0 0 8 5",
     xmlns: "http://www.w3.org/2000/svg"
@@ -88286,10 +88292,10 @@ var import_ts_pattern4 = __toModule(require_lib());
 
 // src/components/Svg/Check.tsx
 var import_react41 = __toModule(require_react());
-var import_classnames17 = __toModule(require_classnames());
+var import_classnames18 = __toModule(require_classnames());
 function Check({ className, alt = "Check" }) {
   return /* @__PURE__ */ import_react41.default.createElement("svg", {
-    className: (0, import_classnames17.default)(className, "fill-current", "Svg", "Svg__check"),
+    className: (0, import_classnames18.default)(className, "fill-current", "Svg", "Svg__check"),
     width: "100%",
     viewBox: "0 0 8 6",
     fill: "none",
@@ -88382,20 +88388,20 @@ function EmptyMessage(props) {
 }
 
 // src/modules/Transcript/Header/index.tsx
-var import_classnames38 = __toModule(require_classnames());
+var import_classnames39 = __toModule(require_classnames());
 var import_luxon = __toModule(require_luxon());
 var import_react65 = __toModule(require_react());
 var import_ts_pattern5 = __toModule(require_lib());
 
 // src/components/ExpandButton/index.tsx
 var import_react43 = __toModule(require_react());
-var import_classnames18 = __toModule(require_classnames());
+var import_classnames19 = __toModule(require_classnames());
 function ExpandButtonUI(props) {
   const { className = "", onClick, expanded } = props;
   return /* @__PURE__ */ import_react43.default.createElement("button", {
     title: "expand",
     onClick,
-    className: (0, import_classnames18.default)(`transition-all flex-shrink-0 h-5 w-5 rounded-xl flex items-start justify-center ${className}`, {
+    className: (0, import_classnames19.default)(`transition-all flex-shrink-0 h-5 w-5 rounded-xl flex items-start justify-center ${className}`, {
       "bg-blue-600": expanded,
       "bg-gray-100 dark:bg-bluegray-4 dark:bg-opacity-20": !expanded,
       "hover:bg-blue-700": expanded,
@@ -88404,7 +88410,7 @@ function ExpandButtonUI(props) {
       "active:bg-gray-300 dark:active:bg-bluegray-7": !expanded
     })
   }, /* @__PURE__ */ import_react43.default.createElement(Chevron, {
-    className: (0, import_classnames18.default)("flex-shrink-0 w-2 transition-all", {
+    className: (0, import_classnames19.default)("flex-shrink-0 w-2 transition-all", {
       "mt-[7px] rotate-180 fill-current text-white": expanded,
       "mt-[8px] opacity-30 dark:opacity-100 dark:fill-current dark:text-white": !expanded
     })
@@ -88424,7 +88430,7 @@ var import_react47 = __toModule(require_react());
 
 // src/components/Toggle/index.tsx
 var import_react44 = __toModule(require_react());
-var import_classnames19 = __toModule(require_classnames());
+var import_classnames20 = __toModule(require_classnames());
 function ToggleUI(props) {
   const { on, onChange, darkMode = false } = props;
   return /* @__PURE__ */ import_react44.default.createElement(Tooltip, {
@@ -88441,7 +88447,7 @@ function ToggleUI(props) {
     type: "checkbox",
     checked: on,
     onChange: (e) => onChange(e, { value: !on }),
-    className: (0, import_classnames19.default)({ toggle: !darkMode, toggle_dark: darkMode })
+    className: (0, import_classnames20.default)({ toggle: !darkMode, toggle_dark: darkMode })
   }));
 }
 function Toggle(props) {
@@ -88461,10 +88467,10 @@ function Toggle(props) {
 
 // src/components/Svg/Gear.tsx
 var import_react45 = __toModule(require_react());
-var import_classnames20 = __toModule(require_classnames());
+var import_classnames21 = __toModule(require_classnames());
 function Gear({ className, alt = "Gear" }) {
   return /* @__PURE__ */ import_react45.default.createElement("svg", {
-    className: (0, import_classnames20.default)(className, "stroke-current", "Svg", "Svg__gear"),
+    className: (0, import_classnames21.default)(className, "stroke-current", "Svg", "Svg__gear"),
     width: "100%",
     fill: "none",
     viewBox: "0 0 24 24",
@@ -88484,10 +88490,10 @@ function Gear({ className, alt = "Gear" }) {
 
 // src/components/Svg/WindowPopout.tsx
 var import_react46 = __toModule(require_react());
-var import_classnames21 = __toModule(require_classnames());
+var import_classnames22 = __toModule(require_classnames());
 function WindowPopout({ className, alt = "Window Popout" }) {
   return /* @__PURE__ */ import_react46.default.createElement("svg", {
-    className: (0, import_classnames21.default)(className, "fill-current", "Svg", "Svg__popOut"),
+    className: (0, import_classnames22.default)(className, "fill-current", "Svg", "Svg__popOut"),
     width: "20",
     height: "20",
     viewBox: "0 0 20 20",
@@ -88619,10 +88625,10 @@ function SettingsButton(props) {
 
 // src/components/Svg/ArrowLeft.tsx
 var import_react48 = __toModule(require_react());
-var import_classnames22 = __toModule(require_classnames());
+var import_classnames23 = __toModule(require_classnames());
 function ArrowLeft({ className, alt = "Arrow Left" }) {
   return /* @__PURE__ */ import_react48.default.createElement("svg", {
-    className: (0, import_classnames22.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
+    className: (0, import_classnames23.default)(className, "fill-current,", "Svg", "Svg__arrowLeft"),
     width: "100%",
     viewBox: "0 0 12 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -88635,13 +88641,13 @@ function ArrowLeft({ className, alt = "Arrow Left" }) {
 
 // src/components/Svg/MagnifyingGlass.tsx
 var import_react49 = __toModule(require_react());
-var import_classnames23 = __toModule(require_classnames());
+var import_classnames24 = __toModule(require_classnames());
 function MagnifyingGlass({
   className,
   alt = "Magnifying Glass"
 }) {
   return /* @__PURE__ */ import_react49.default.createElement("svg", {
-    className: (0, import_classnames23.default)(className, "stroke-current", "Svg", "Svg__magnifyingGlass"),
+    className: (0, import_classnames24.default)(className, "stroke-current", "Svg", "Svg__magnifyingGlass"),
     width: "100%",
     viewBox: "0 0 12 12",
     fill: "none",
@@ -88657,10 +88663,10 @@ function MagnifyingGlass({
 
 // src/components/Svg/Pencil.tsx
 var import_react50 = __toModule(require_react());
-var import_classnames24 = __toModule(require_classnames());
+var import_classnames25 = __toModule(require_classnames());
 function Pencil({ className, alt = "Pencil" }) {
   return /* @__PURE__ */ import_react50.default.createElement("svg", {
-    className: (0, import_classnames24.default)(className, "fill-current", "Svg", "Svg__pencil"),
+    className: (0, import_classnames25.default)(className, "fill-current", "Svg", "Svg__pencil"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
@@ -88671,10 +88677,10 @@ function Pencil({ className, alt = "Pencil" }) {
 
 // src/components/Svg/Bell.tsx
 var import_react51 = __toModule(require_react());
-var import_classnames25 = __toModule(require_classnames());
+var import_classnames26 = __toModule(require_classnames());
 function Bell({ className, alt = "Bell" }) {
   return /* @__PURE__ */ import_react51.default.createElement("svg", {
-    className: (0, import_classnames25.default)(className, "stroke-current", "Svg", "Svg__bell"),
+    className: (0, import_classnames26.default)(className, "stroke-current", "Svg", "Svg__bell"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg",
@@ -88689,10 +88695,10 @@ function Bell({ className, alt = "Bell" }) {
 
 // src/components/Svg/Calendar.tsx
 var import_react52 = __toModule(require_react());
-var import_classnames26 = __toModule(require_classnames());
+var import_classnames27 = __toModule(require_classnames());
 function Calendar({ className, alt = "Calendar" }) {
   return /* @__PURE__ */ import_react52.default.createElement("svg", {
-    className: (0, import_classnames26.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
+    className: (0, import_classnames27.default)(className, "stroke-current", "Svg", "Svg__Calendar"),
     width: "100%",
     fill: "rgba(0,0,0,0)",
     viewBox: "0 0 20 20",
@@ -88706,15 +88712,15 @@ function Calendar({ className, alt = "Calendar" }) {
 }
 
 // src/components/PlayButton/index.tsx
-var import_classnames28 = __toModule(require_classnames());
+var import_classnames29 = __toModule(require_classnames());
 var import_react54 = __toModule(require_react());
 
 // src/components/Svg/BellSlash.tsx
 var import_react53 = __toModule(require_react());
-var import_classnames27 = __toModule(require_classnames());
+var import_classnames28 = __toModule(require_classnames());
 function BellSlash({ className, alt = "Bell Slash" }) {
   return /* @__PURE__ */ import_react53.default.createElement("svg", {
-    className: (0, import_classnames27.default)(className, "stroke-current", "Svg", "Svg__bellSlash"),
+    className: (0, import_classnames28.default)(className, "stroke-current", "Svg", "Svg__bellSlash"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg",
@@ -88731,7 +88737,7 @@ function BellSlash({ className, alt = "Bell Slash" }) {
 function PlayButtonUI(props) {
   const { alertOnLive, connectionStatus, eventStarted, hasAudio, isLoading, isPlaying, toggleAlert, togglePlayback } = props;
   return hasAudio ? /* @__PURE__ */ import_react54.default.createElement("div", {
-    className: (0, import_classnames28.default)("group flex items-center justify-center relative w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
+    className: (0, import_classnames29.default)("group flex items-center justify-center relative w-full h-full rounded-full border cursor-pointer shadow-sm dark:border-blue-600", {
       "hover:border-blue-500 dark:hover:border-blue-500": !isPlaying,
       "active:border-blue-600 dark:hover:border-blue-700": !isPlaying,
       "border-blue-600": isPlaying,
@@ -88772,7 +88778,7 @@ function PlayButtonUI(props) {
     yOffset: 6,
     xOffset: 4,
     hideOnDocumentScroll: true,
-    className: (0, import_classnames28.default)("border flex items-center justify-center w-full h-full rounded-full", {
+    className: (0, import_classnames29.default)("border flex items-center justify-center w-full h-full rounded-full", {
       "dark:bg-yellow-400 dark:text-yellow-800": alertOnLive,
       "dark:hover:bg-yellow-800 dark:hover:border-yellow-600 dark:hover:text-yellow-200 dark:hover:bg-opacity-20": alertOnLive || !alertOnLive,
       "dark:active:bg-bluegray-5 dark:active:text-bluegray-4": alertOnLive,
@@ -88886,10 +88892,10 @@ function PlayButton(props) {
 
 // src/components/Svg/Handle.tsx
 var import_react55 = __toModule(require_react());
-var import_classnames29 = __toModule(require_classnames());
+var import_classnames30 = __toModule(require_classnames());
 function Handle({ className, alt = "Handle" }) {
   return /* @__PURE__ */ import_react55.default.createElement("svg", {
-    className: (0, import_classnames29.default)(className, "stroke-current fill-current", "Svg", "Svg__handle"),
+    className: (0, import_classnames30.default)(className, "stroke-current fill-current", "Svg", "Svg__handle"),
     width: "100%",
     viewBox: "0 0 24 24",
     xmlns: "http://www.w3.org/2000/svg"
@@ -88928,10 +88934,10 @@ function Handle({ className, alt = "Handle" }) {
 
 // src/components/Svg/Download.tsx
 var import_react56 = __toModule(require_react());
-var import_classnames30 = __toModule(require_classnames());
+var import_classnames31 = __toModule(require_classnames());
 function Download({ className, alt = "Download" }) {
   return /* @__PURE__ */ import_react56.default.createElement("svg", {
-    className: (0, import_classnames30.default)(className, "fill-current", "Svg", "Svg__download"),
+    className: (0, import_classnames31.default)(className, "fill-current", "Svg", "Svg__download"),
     width: "20",
     height: "20",
     viewBox: "0 0 20 20",
@@ -88945,7 +88951,7 @@ function Download({ className, alt = "Download" }) {
 }
 
 // src/modules/Transcript/DownloadTooltip/index.tsx
-var import_classnames31 = __toModule(require_classnames());
+var import_classnames32 = __toModule(require_classnames());
 var import_react57 = __toModule(require_react());
 function DownloadTooltipUI(props) {
   var _a, _b, _c, _d, _e, _f, _g;
@@ -89027,7 +89033,7 @@ function DownloadTooltipUI(props) {
     }, "Press PDF")))
   }, /* @__PURE__ */ import_react57.default.createElement("button", {
     "data-testid": "downloadButton",
-    className: (0, import_classnames31.default)("ml-3", "group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__download")
+    className: (0, import_classnames32.default)("ml-3", "group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__download")
   }, /* @__PURE__ */ import_react57.default.createElement(Download, {
     className: "h-5 w-5 flex-shrink-0"
   })));
@@ -89040,7 +89046,7 @@ function DownloadTooltip(props) {
 }
 
 // src/modules/Transcript/EventDetails/index.tsx
-var import_classnames32 = __toModule(require_classnames());
+var import_classnames33 = __toModule(require_classnames());
 var import_react58 = __toModule(require_react());
 function EventDetailsUI(props) {
   var _a, _b, _c, _d, _e, _f;
@@ -89060,7 +89066,7 @@ function EventDetailsUI(props) {
   const slides = (_b = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Slides")) == null ? void 0 : _b.archivedUrl;
   const press = (_c = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Press Release")) == null ? void 0 : _c.archivedUrl;
   return /* @__PURE__ */ import_react58.default.createElement("div", {
-    className: (0, import_classnames32.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
+    className: (0, import_classnames33.default)("flex flex-col justify-start border-t-[1px] border-gray-100 px-3 dark:border-bluegray-5", "transcript__header__details")
   }, /* @__PURE__ */ import_react58.default.createElement("div", {
     className: "flex items-center justify-start h-10 cursor-pointer group",
     onClick: toggleEventDetails
@@ -89069,7 +89075,7 @@ function EventDetailsUI(props) {
   }, "Event Details"), /* @__PURE__ */ import_react58.default.createElement("span", {
     className: "text-gray-400 text-sm text-right flex-1 truncate group-hover:text-gray-600"
   }, "Connection Info, Slides, Downloads..."), /* @__PURE__ */ import_react58.default.createElement(ExpandButton, {
-    className: (0, import_classnames32.default)("ml-3", {
+    className: (0, import_classnames33.default)("ml-3", {
       "group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50": !eventDetailsExpanded,
       "group-hover:bg-blue-700": eventDetailsExpanded,
       "group-active:bg-gray-400 dark:group-active:bg-bluegray-7": !eventDetailsExpanded,
@@ -89155,7 +89161,7 @@ function EventDetailsUI(props) {
     className: "block truncate"
   }, /* @__PURE__ */ import_react58.default.createElement("p", {
     onClick: () => toggleReportIssueModal(true),
-    className: (0, import_classnames32.default)("text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline", "cursor-pointer")
+    className: (0, import_classnames33.default)("text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline", "cursor-pointer")
   }, "Report Issue")))));
 }
 function EventDetails(props) {
@@ -89170,11 +89176,11 @@ function EventDetails(props) {
 
 // src/modules/Transcript/KeyMentions/index.tsx
 var import_react59 = __toModule(require_react());
-var import_classnames33 = __toModule(require_classnames());
+var import_classnames34 = __toModule(require_classnames());
 
 // src/modules/Transcript/PriceChart/index.tsx
 var import_react64 = __toModule(require_react());
-var import_classnames37 = __toModule(require_classnames());
+var import_classnames38 = __toModule(require_classnames());
 var import_highstock = __toModule(require_highstock());
 var import_highcharts_react_official = __toModule(require_highcharts_react_min());
 
@@ -89196,10 +89202,10 @@ function useInterval2(callback, interval) {
 
 // src/components/Svg/Pin.tsx
 var import_react61 = __toModule(require_react());
-var import_classnames34 = __toModule(require_classnames());
+var import_classnames35 = __toModule(require_classnames());
 function Pin({ className, alt = "Pin" }) {
   return /* @__PURE__ */ import_react61.default.createElement("svg", {
-    className: (0, import_classnames34.default)(className, "fill-current", "Svg", "Svg__pin"),
+    className: (0, import_classnames35.default)(className, "fill-current", "Svg", "Svg__pin"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89212,10 +89218,10 @@ function Pin({ className, alt = "Pin" }) {
 
 // src/components/Svg/PinSolid.tsx
 var import_react62 = __toModule(require_react());
-var import_classnames35 = __toModule(require_classnames());
+var import_classnames36 = __toModule(require_classnames());
 function PinSolid({ className, alt = "Pin" }) {
   return /* @__PURE__ */ import_react62.default.createElement("svg", {
-    className: (0, import_classnames35.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
+    className: (0, import_classnames36.default)(className, "fill-current", "Svg", "Svg__pinSolid"),
     width: "100%",
     viewBox: "0 0 12 14",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89228,13 +89234,13 @@ function PinSolid({ className, alt = "Pin" }) {
 
 // src/components/Svg/MovementArrow.tsx
 var import_react63 = __toModule(require_react());
-var import_classnames36 = __toModule(require_classnames());
+var import_classnames37 = __toModule(require_classnames());
 function MovementArrow({
   className,
   alt = "Movement Arrow"
 }) {
   return /* @__PURE__ */ import_react63.default.createElement("svg", {
-    className: (0, import_classnames36.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
+    className: (0, import_classnames37.default)(className, "fill-current", "Svg", "Svg__movementArrow"),
     width: "100%",
     viewBox: "0 0 8 10",
     xmlns: "http://www.w3.org/2000/svg"
@@ -89437,7 +89443,7 @@ function PriceChartUI(props) {
   }, "Price Reaction"), /* @__PURE__ */ import_react64.default.createElement("span", {
     className: "flex-1"
   }), /* @__PURE__ */ import_react64.default.createElement("span", {
-    className: (0, import_classnames37.default)("text-sm flex cursor-pointer mr-4", {
+    className: (0, import_classnames38.default)("text-sm flex cursor-pointer mr-4", {
       "text-green-500": absolutePriceChange > 0,
       "hover:text-green-600": absolutePriceChange > 0,
       "active:text-green-800": absolutePriceChange > 0,
@@ -89448,10 +89454,10 @@ function PriceChartUI(props) {
     }),
     onClick: togglePriceChart
   }, `$${price.toFixed(2)} ${absolutePriceChange > 0 ? "+" : ""}${absolutePriceChange} (${percentPriceChange}%)`, absolutePriceChange !== 0 && /* @__PURE__ */ import_react64.default.createElement(MovementArrow, {
-    className: (0, import_classnames37.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
+    className: (0, import_classnames38.default)("ml-1 w-2", { "rotate-180": absolutePriceChange < 0 })
   })), /* @__PURE__ */ import_react64.default.createElement("div", {
     tabIndex: 0,
-    className: (0, import_classnames37.default)("flex mr-1 cursor-pointer", {
+    className: (0, import_classnames38.default)("flex mr-1 cursor-pointer", {
       "text-blue-600": pinned,
       "text-gray-400": !pinned,
       "hover:text-blue-700": pinned,
@@ -89471,7 +89477,7 @@ function PriceChartUI(props) {
   }) : /* @__PURE__ */ import_react64.default.createElement(Pin, {
     className: "w-[12px]"
   })), /* @__PURE__ */ import_react64.default.createElement(ExpandButton, {
-    className: (0, import_classnames37.default)("ml-2", {
+    className: (0, import_classnames38.default)("ml-2", {
       "hover:bg-gray-200": !priceChartExpanded,
       "hover:bg-blue-700": priceChartExpanded,
       "active:bg-gray-400": !priceChartExpanded,
@@ -89669,7 +89675,7 @@ function HeaderUI(props) {
   }
   return /* @__PURE__ */ import_react65.default.createElement("div", {
     ref: headerRef,
-    className: (0, import_classnames38.default)("bg-white relative rounded-b-lg z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6", {
+    className: (0, import_classnames39.default)("bg-white relative rounded-b-lg z-20 transition-all flex flex-col overflow-hidden dark:bg-bluegray-6", {
       "shadow-3xl dark:shadow-3xl-dark": !headerExpanded,
       "shadow-xl": headerExpanded,
       "pb-3": !showTitleInfo,
@@ -89708,7 +89714,7 @@ function HeaderUI(props) {
   }, /* @__PURE__ */ import_react65.default.createElement(Pencil, {
     className: "h-6 text-white w-2.5"
   }))), onClose && /* @__PURE__ */ import_react65.default.createElement(Button, {
-    className: (0, import_classnames38.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
+    className: (0, import_classnames39.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
     kind: "primary",
     onClick: onClose
   }, /* @__PURE__ */ import_react65.default.createElement(XMark, {
@@ -89746,7 +89752,7 @@ function HeaderUI(props) {
     const createdBy = getEventCreatorName(event == null ? void 0 : event.creator);
     const audioOffset = ((_d = event == null ? void 0 : event.audioRecordingOffsetMs) != null ? _d : 0) / 1e3;
     return /* @__PURE__ */ import_react65.default.createElement(import_react65.default.Fragment, null, /* @__PURE__ */ import_react65.default.createElement("div", {
-      className: (0, import_classnames38.default)("flex flex-row p-3 items-center", {
+      className: (0, import_classnames39.default)("flex flex-row p-3 items-center", {
         "cursor-pointer": hasEventExtras && (showPriceReaction || showRecordingDetails)
       }, "transcript__header__title"),
       onClick: hasEventExtras ? toggleHeader : void 0
@@ -89790,13 +89796,13 @@ function HeaderUI(props) {
     }, `Live ${eventDate.toFormat("h:mma")}`) : eventDate && /* @__PURE__ */ import_react65.default.createElement("span", {
       className: "text-gray-400 group-hover:text-gray-500"
     }, eventDate.toFormat("h:mma M/dd/yyyy"))), /* @__PURE__ */ import_react65.default.createElement("div", {
-      className: (0, import_classnames38.default)("dark:text-white", {
+      className: (0, import_classnames39.default)("dark:text-white", {
         "text-sm": headerExpanded,
         "text-sm truncate whitespace-normal line-clamp-1": !headerExpanded,
         "font-semibold": !(primaryQuote == null ? void 0 : primaryQuote.localTicker)
       })
     }, event == null ? void 0 : event.title)), hasEventExtras && (showPriceReaction || showRecordingDetails) && /* @__PURE__ */ import_react65.default.createElement(ExpandButton, {
-      className: (0, import_classnames38.default)("ml-2 mt-2 self-start", {
+      className: (0, import_classnames39.default)("ml-2 mt-2 self-start", {
         "group-hover:bg-gray-200 dark:group-hover:bg-bluegray-4 dark:group-hover:bg-opacity-50": !headerExpanded,
         "group-hover:bg-blue-700": headerExpanded,
         "group-active:bg-gray-400 dark:group-active:bg-bluegray-7": !headerExpanded,
@@ -89807,7 +89813,7 @@ function HeaderUI(props) {
     }), !headerExpanded && event && showDownloadButton && /* @__PURE__ */ import_react65.default.createElement(DownloadTooltip, {
       event
     }), onClose && !showSearch && !headerExpanded && /* @__PURE__ */ import_react65.default.createElement(Button, {
-      className: (0, import_classnames38.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
+      className: (0, import_classnames39.default)("group flex h-8 w-8 items-center justify-center font-semibold rounded-lg", "ml-2.5 shrink-0 text-gray-400 border border-gray-200 bg-white", "dark:border-bluegray-5 dark:text-bluegray-4/60", "hover:text-gray-500 hover:bg-gray-200 active:border-gray-400 active:bg-gray-400 active:text-white", "dark:bg-bluegray-5 dark:hover:bg-bluegray-7 dark:hover:border-bluegray-7 dark:active:bg-bluegray-8 dark:active:border-bluegray-8", "button__close"),
       kind: "primary",
       onClick: onClose
     }, /* @__PURE__ */ import_react65.default.createElement(XMark, {
@@ -90079,7 +90085,7 @@ var HandlesWrapperUI = import_react68.default.memo(({
       startResize(e, eventId);
   }, [eventId]);
   return /* @__PURE__ */ import_react68.default.createElement("div", {
-    className: (0, import_classnames39.default)("relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20", "border-r-slate-200/60 dark:border-r-bluegray-8", {
+    className: (0, import_classnames40.default)("relative flex flex-col h-full flex-shrink-0 border-r-2 active:z-20", "border-r-slate-200/60 dark:border-r-bluegray-8", {
       handles__transcriptHeader: !showSearch,
       "handles__transcriptHeader-showSearch": showSearch
     }),
@@ -90091,7 +90097,7 @@ var HandlesWrapperUI = import_react68.default.memo(({
     ref: setNodeRef
   }, children, /* @__PURE__ */ import_react68.default.createElement("div", {
     onMouseDown: startResizingEvent,
-    className: (0, import_classnames39.default)("absolute top-0 bottom-0 w-1 -right-0.5", "active:bg-blue-500 active:cursor-none", "cursor-col-resize z-50", {
+    className: (0, import_classnames40.default)("absolute top-0 bottom-0 w-1 -right-0.5", "active:bg-blue-500 active:cursor-none", "cursor-col-resize z-50", {
       "bg-blue-500": isResizing
     })
   }));
@@ -90108,7 +90114,7 @@ function findSummary(summarizations) {
 }
 function NoEventFound() {
   return /* @__PURE__ */ import_react68.default.createElement("div", {
-    className: (0, import_classnames39.default)("h-full flex flex-col flex-1 justify-center items-center")
+    className: (0, import_classnames40.default)("h-full flex flex-col flex-1 justify-center items-center")
   }, /* @__PURE__ */ import_react68.default.createElement("p", {
     className: "text-sm text-slate-500 dark:text-slate-300"
   }, "Transcript Failed to Load"));
@@ -90195,7 +90201,7 @@ var TranscriptUI = (props) => {
     }
   }
   return /* @__PURE__ */ import_react68.default.createElement("div", {
-    className: (0, import_classnames39.default)("h-full flex flex-col transcript bg-gray-50", { dark: theme }),
+    className: (0, import_classnames40.default)("h-full flex flex-col transcript bg-gray-50", { dark: theme }),
     ref: containerRef
   }, (0, import_ts_pattern6.match)(eventQuery).with({ status: "loading" }, { status: "success" }, { status: "empty" }, () => /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "dark:bg-bluegray-7"
@@ -90221,7 +90227,7 @@ var TranscriptUI = (props) => {
     onSeekAudioByDate,
     startTime
   }), searchTerm && /* @__PURE__ */ import_react68.default.createElement("div", {
-    className: (0, import_classnames39.default)("flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow", "dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4", "transcript__search-navigator")
+    className: (0, import_classnames40.default)("flex items-center h-10 bg-gray-100 text-gray-500 text-sm p-3 shadow", "dark:bg-bluegray-6 dark:bg-opacity-40 dark:text-bluegray-4", "transcript__search-navigator")
   }, /* @__PURE__ */ import_react68.default.createElement("div", {
     className: "text-sm truncate"
   }, "Showing ", matches.length, " result", matches.length === 1 ? "" : "s", ' for "', /* @__PURE__ */ import_react68.default.createElement("span", {
@@ -90263,7 +90269,7 @@ var TranscriptUI = (props) => {
         className: "font-bold dark:text-slate-100 dark:antialiased leading-[1.1875rem] tracking-tight text-base summaryTitle"
       }, summaryObj == null ? void 0 : summaryObj.title), summaryTexts.map((summaryText) => /* @__PURE__ */ import_react68.default.createElement("p", {
         key: summaryText.slice(0, 10),
-        className: (0, import_classnames39.default)("text-sm mt-2 text-slate-700 dark:text-slate-200/30 group-hover:text-slate-900 dark:group-hover:text-slate-200/60 summaryText", {
+        className: (0, import_classnames40.default)("text-sm mt-2 text-slate-700 dark:text-slate-200/30 group-hover:text-slate-900 dark:group-hover:text-slate-200/60 summaryText", {
           truncate: !showSummary
         })
       }, summaryText)));
@@ -90294,7 +90300,7 @@ var TranscriptUI = (props) => {
       return /* @__PURE__ */ import_react68.default.createElement("div", {
         key: `speaker-turn-${id}`
       }, showSpeakers && speaker.identified && /* @__PURE__ */ import_react68.default.createElement("div", {
-        className: (0, import_classnames39.default)("p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800", "dark:bg-bluegray-7 dark:text-gray-400", "transcript__speaker")
+        className: (0, import_classnames40.default)("p-3 pb-2 text-sm -mb-3 sticky top-0 z-10 bg-gray-50 text-gray-800", "dark:bg-bluegray-7 dark:text-gray-400", "transcript__speaker")
       }, speaker.name && /* @__PURE__ */ import_react68.default.createElement("p", {
         className: "truncate"
       }, /* @__PURE__ */ import_react68.default.createElement("span", {
@@ -90302,7 +90308,7 @@ var TranscriptUI = (props) => {
       }, speaker.name), speaker.title && /* @__PURE__ */ import_react68.default.createElement("span", {
         className: "text-gray-500"
       }, ", ", speaker.title)), speakerTime && speakerTimeRelative !== void 0 && /* @__PURE__ */ import_react68.default.createElement("p", {
-        className: (0, import_classnames39.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
+        className: (0, import_classnames40.default)("text-xs text-gray-500 dark:text-bluegray-4 dark:text-opacity-50 flex-shrink-0", {
           "-mt-[1px]": speaker.name
         })
       }, relativeTimestamps ? import_luxon2.Duration.fromMillis(speakerTimeRelative).toFormat("h:mm:ss") : import_luxon2.DateTime.fromISO(speakerTime).toFormat("h:mm:ss a"))), paragraphs.map(({ sentences, paragraph }) => {
@@ -90324,13 +90330,13 @@ var TranscriptUI = (props) => {
           key: sId
         }, chunks.map(({ highlight, id: sentenceId, text, textSentiment }) => highlight ? /* @__PURE__ */ import_react68.default.createElement("mark", {
           ref: sentenceId === currentMatch ? currentMatchRef : void 0,
-          className: (0, import_classnames39.default)({
+          className: (0, import_classnames40.default)({
             "bg-yellow-300": sentenceId === currentMatch
           }),
           key: sentenceId
         }, text) : /* @__PURE__ */ import_react68.default.createElement("span", {
           key: sentenceId,
-          className: (0, import_classnames39.default)({
+          className: (0, import_classnames40.default)({
             "text-green-600": textSentiment === "positive" && showSentiment,
             "text-red-600": textSentiment === "negative" && showSentiment
           })
