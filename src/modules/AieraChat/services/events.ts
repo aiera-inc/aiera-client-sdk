@@ -6,31 +6,31 @@ import { SearchEventsQuery, SearchEventsQueryVariables } from '@aiera/client-sdk
 const DEFAULT_PAGE = 1;
 const DEFAULT_PAGE_SIZE = 20;
 
-const eventsGQL = (type = '') => gql`
-        query SearchEvents${type}($filter: OpenSearchEventFilter!) {
-            openSearch {
-                events(filter: $filter) {
+const eventsGQL = () => gql`
+    query SearchEvents($filter: OpenSearchEventFilter!) {
+        openSearch {
+            events(filter: $filter) {
+                id
+                hits {
                     id
-                    hits {
+                    event {
                         id
-                        event {
-                            id
-                            eventDate
-                            eventId
-                            eventTitle
-                            eventType
-                        }
+                        eventDate
+                        eventId
+                        eventTitle
+                        eventType
                     }
-                    numTotalHits
-                    currentPage
-                    pageSize
-                    totalPages
-                    hasNextPage
-                    hasPreviousPage
                 }
+                numTotalHits
+                currentPage
+                pageSize
+                totalPages
+                hasNextPage
+                hasPreviousPage
             }
         }
-    `;
+    }
+`;
 
 export interface UseEventsOptions {
     searchTerm?: string;
@@ -56,8 +56,8 @@ export function useEvents(options?: UseEventsOptions | string) {
         variables: {
             filter: {
                 searchTerm: searchTerm || '',
-                page,
-                pageSize: pageSize !== DEFAULT_PAGE_SIZE ? pageSize : undefined,
+                page: page || DEFAULT_PAGE,
+                pageSize: pageSize || DEFAULT_PAGE_SIZE,
             },
         },
         query: eventsGQL(),
@@ -88,7 +88,7 @@ export interface UsePaginatedEventsOptions extends UseEventsOptions {
 }
 
 export function usePaginatedEvents(options?: UsePaginatedEventsOptions) {
-    const { searchTerm, initialPage = 1, initialPageSize = 20 } = options || {};
+    const { searchTerm, initialPage = DEFAULT_PAGE, initialPageSize = DEFAULT_PAGE_SIZE } = options || {};
     const [currentPage, setCurrentPage] = useState(initialPage);
     const [pageSize, setPageSize] = useState(initialPageSize);
 

@@ -96,7 +96,7 @@ describe('useEvents', () => {
                 filter: {
                     searchTerm: 'test search',
                     page: 1,
-                    pageSize: undefined, // Uses default
+                    pageSize: 20, // Uses default
                 },
             },
             query: expect.any(Object) as unknown,
@@ -147,7 +147,7 @@ describe('useEvents', () => {
                 filter: {
                     searchTerm: '',
                     page: 1,
-                    pageSize: undefined,
+                    pageSize: 20,
                 },
             },
             query: expect.any(Object) as unknown,
