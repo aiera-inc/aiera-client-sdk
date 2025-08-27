@@ -509,25 +509,36 @@ export const useChatSession = ({
                     }
                 });
 
-                log(`Successfully normalized ${finalNormalizedMessages.length} messages`);
-                setMessages(finalNormalizedMessages);
-
-                // Extract and process all citations from messages
-                const allCitations: Citation[] = [];
-                finalNormalizedMessages.forEach((message) => {
-                    if (message.type === ChatMessageType.RESPONSE && 'blocks' in message) {
-                        message.blocks.forEach((block) => {
-                            if (block.citations && Array.isArray(block.citations)) {
-                                allCitations.push(...block.citations);
+                if (finalNormalizedMessages.length > 0) {
+                    log(`Successfully normalized ${finalNormalizedMessages.length} messages`);
+                    setMessages((existing) => {
+                        const allMessages: ChatMessage[] = existing || [];
+                        const existingMessageIds = new Set(existing.map((m) => m.id));
+                        finalNormalizedMessages.forEach((normalizedMessage) => {
+                            if (!existingMessageIds.has(normalizedMessage.id)) {
+                                allMessages.push(normalizedMessage);
                             }
                         });
-                    }
-                });
+                        return allMessages;
+                    });
 
-                // Add citations to store for global tracking
-                if (allCitations.length > 0) {
-                    addCitationMarkers(allCitations);
-                    log(`Added ${allCitations.length} citations to global store`);
+                    // Extract and process all citations from messages
+                    const allCitations: Citation[] = [];
+                    finalNormalizedMessages.forEach((message) => {
+                        if (message.type === ChatMessageType.RESPONSE && 'blocks' in message) {
+                            message.blocks.forEach((block) => {
+                                if (block.citations && Array.isArray(block.citations)) {
+                                    allCitations.push(...block.citations);
+                                }
+                            });
+                        }
+                    });
+
+                    // Add citations to store for global tracking
+                    if (allCitations.length > 0) {
+                        addCitationMarkers(allCitations);
+                        log(`Added ${allCitations.length} citations to global store`);
+                    }
                 }
 
                 // Clear error state
