@@ -100,7 +100,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
             ),
         })),
     onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) =>
-        set({ chatId, chatStatus, chatTitle, sources, hasChanges: false, citationMarkers: new Map() }),
+        set({ chatId, chatStatus, chatTitle, citationMarkers: new Map(), hasChanges: false, sources }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
     onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),

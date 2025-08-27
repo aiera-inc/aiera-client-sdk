@@ -389,17 +389,12 @@ export const useAbly = (): UseAblyReturn => {
                                 setCitations((prev) => {
                                     const existing = prev || [];
                                     const existingIds = new Set(
-                                        existing.map(
-                                            (c) => `${c.marker}${c.contentId}${c.sourceParentId || c.sourceId}`
-                                        )
+                                        existing.map((c) => `${c.contentId}${c.sourceParentId || c.sourceId}`)
                                     );
                                     return [
                                         ...existing,
                                         ...parsedCitations.filter(
-                                            (c) =>
-                                                !existingIds.has(
-                                                    `${c.marker}${c.contentId}${c.sourceParentId || c.sourceId}`
-                                                )
+                                            (c) => !existingIds.has(`${c.contentId}${c.sourceParentId || c.sourceId}`)
                                         ),
                                     ];
                                 });
