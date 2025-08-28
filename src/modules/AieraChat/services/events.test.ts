@@ -246,8 +246,8 @@ describe('usePaginatedEvents', () => {
 
     test('should initialize with custom initial values', () => {
         const options: UsePaginatedEventsOptions = {
-            initialPage: 2,
-            initialPageSize: 10,
+            page: 2,
+            pageSize: 10,
             searchTerm: 'test',
         };
 
@@ -312,7 +312,7 @@ describe('usePaginatedEvents', () => {
         const { result } = renderHook(() =>
             usePaginatedEvents({
                 searchTerm: 'test',
-                initialPage: 3,
+                page: 3,
             })
         );
 
@@ -389,7 +389,7 @@ describe('usePaginatedEvents', () => {
         const { result } = renderHook(() =>
             usePaginatedEvents({
                 searchTerm: 'test',
-                initialPage: 2,
+                page: 2,
             })
         );
 
@@ -434,7 +434,7 @@ describe('usePaginatedEvents', () => {
         const { result } = renderHook(() =>
             usePaginatedEvents({
                 searchTerm: 'test',
-                initialPage: 2,
+                page: 2,
             })
         );
 

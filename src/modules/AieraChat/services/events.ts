@@ -56,8 +56,8 @@ export function useEvents(options?: UseEventsOptions | string) {
         variables: {
             filter: {
                 searchTerm: searchTerm || '',
-                page: page || DEFAULT_PAGE,
-                pageSize: pageSize || DEFAULT_PAGE_SIZE,
+                page: page ?? DEFAULT_PAGE,
+                pageSize: pageSize ?? DEFAULT_PAGE_SIZE,
             },
         },
         query: eventsGQL(),
@@ -82,13 +82,14 @@ export function useEvents(options?: UseEventsOptions | string) {
     };
 }
 
-export interface UsePaginatedEventsOptions extends UseEventsOptions {
-    initialPage?: number;
-    initialPageSize?: number;
-}
+export interface UsePaginatedEventsOptions extends UseEventsOptions {}
 
 export function usePaginatedEvents(options?: UsePaginatedEventsOptions) {
-    const { searchTerm, initialPage = DEFAULT_PAGE, initialPageSize = DEFAULT_PAGE_SIZE } = options || {};
+    const {
+        searchTerm,
+        page: initialPage = DEFAULT_PAGE,
+        pageSize: initialPageSize = DEFAULT_PAGE_SIZE,
+    } = options || {};
     const [currentPage, setCurrentPage] = useState(initialPage);
     const [pageSize, setPageSize] = useState(initialPageSize);
 
