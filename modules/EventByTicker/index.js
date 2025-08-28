@@ -84283,6 +84283,11 @@ var SearchEventsDocument = lib_default`
         }
       }
       numTotalHits
+      currentPage
+      pageSize
+      totalPages
+      hasNextPage
+      hasPreviousPage
     }
   }
 }
