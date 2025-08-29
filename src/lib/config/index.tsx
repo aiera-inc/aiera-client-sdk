@@ -84,21 +84,22 @@ export interface User {
 
 export interface Config {
     assetPath?: string;
-    moduleName?: Module;
-    platform?: Platform;
     gqlOptions?: {
         clientOptions: ClientOptions;
         exchangeOptions?: {
             auth?: AuthConfig<unknown> | null;
         };
     };
-    realtimeOptions?: RealtimeOptions;
     hideSettings?: boolean;
+    moduleName?: Module;
     openDash?: () => void;
     options?: Options;
     overrides?: Overrides;
-    user?: User;
+    platform?: Platform;
+    realtimeOptions?: RealtimeOptions;
+    restApiUrl?: string;
     tracking?: Tracking;
+    user?: User;
     virtualListKey?: string;
 }
 
@@ -107,10 +108,11 @@ export interface Config {
 // so that the build system can inject values.
 const defaultConfig: Config = {
     assetPath: defaultEnv.assetPath,
-    platform: defaultEnv.platform as Platform,
     gqlOptions: {
         clientOptions: { url: defaultEnv.apiUrl },
     },
+    platform: defaultEnv.platform as Platform,
+    restApiUrl: defaultEnv.restApiUrl,
     virtualListKey: defaultEnv.virtualListKey,
 };
 

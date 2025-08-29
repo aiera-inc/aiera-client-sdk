@@ -26,6 +26,7 @@ describe('MarkdownRenderer', () => {
         marker: '[c2]',
         source: 'Test Source',
         sourceId: 'test-source-id',
+        sourceType: 'event',
         text: 'Test citation text',
         contentId: 'test-content-id',
     };
@@ -33,6 +34,7 @@ describe('MarkdownRenderer', () => {
         marker: '[c22]',
         source: 'Another Test Source',
         sourceId: 'test-source-id-2',
+        sourceType: 'transcript',
         text: 'Test citation text',
         contentId: 'test-content-id-2',
     };
