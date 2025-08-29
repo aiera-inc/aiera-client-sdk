@@ -4,6 +4,9 @@ import { useChatStore } from '../../../../store';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 
+const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
+const SELECTABLE_SOURCE_TYPES = ['event', 'transcript'];
+
 interface CitationProps {
     citation: CitationType;
 }
@@ -11,13 +14,28 @@ interface CitationProps {
 export const Citation = ({ citation }: CitationProps) => {
     const { onSelectSource } = useChatStore();
     const config = useConfig();
-    const { contentId, marker, source, sourceId, sourceParentId } = citation;
+    const { contentId, marker, source, sourceId, sourceParentId, sourceType, url } = citation;
     const bus = useMessageBus();
 
     const onNav = () => {
         if (config.options?.aieraChatDisableSourceNav) {
             bus?.emit('chat-citation', citation, 'out');
-        } else {
+        } else if (url) {
+            // If the citation has a url defined, just open it
+            window.open(url, '_blank', 'noopener,noreferrer');
+        } else if (POP_OUT_SOURCE_TYPES.includes(sourceType) && config.restApiUrl) {
+            // We currently don't have a way to distinguish between slides and press releases,
+            // so for now, default to the /press_url endpoint
+            // TODO: check `meta` property on the citation to distinguish between the two types
+            if (sourceType === 'attachment' && sourceParentId) {
+                const attachmentUrl = `${config.restApiUrl}/events/${sourceParentId}/assets/press_url`;
+                window.open(attachmentUrl, '_blank', 'noopener,noreferrer');
+            }
+            if (sourceType === 'filing' && sourceId) {
+                const filingUrl = `${config.restApiUrl}/filings-v1/${sourceId}/pdf`;
+                window.open(filingUrl, '_blank', 'noopener,noreferrer');
+            }
+        } else if (SELECTABLE_SOURCE_TYPES.includes(sourceType)) {
             onSelectSource({
                 contentId,
                 targetId: sourceParentId || sourceId,

@@ -13,7 +13,7 @@ export type Citation = {
     sourceId: string;
     sourceParentId?: string;
     sourceParentType?: string;
-    sourceType?: string;
+    sourceType: string;
     text: string;
     url?: string;
 };
