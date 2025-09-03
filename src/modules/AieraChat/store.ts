@@ -3,6 +3,21 @@ import { create } from 'zustand';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 
+// Mapping of source types to their display prefixes
+const SOURCE_TYPE_PREFIXES: Record<string, string> = {
+    attachment: 'A',
+    company: 'Co',
+    event: 'E',
+    filing: 'F',
+    market_index: 'M',
+    news: 'N',
+    research: 'R',
+    sector: 'S',
+    subsector: 'Su',
+    transcript: 'T',
+    watchlist: 'W',
+};
+
 export interface Source {
     confirmed?: boolean;
     contentId?: string;
@@ -16,6 +31,9 @@ export interface CitationMarker {
     citation: Citation;
     marker: string;
     uniqueKey: string;
+    sourceGroup: string; // e.g., "transcript_123"
+    sourceNumber: number; // e.g., 1 for T1
+    citationNumber: number; // e.g., 2 for T1.2
 }
 
 export interface ChatState {
@@ -54,17 +72,70 @@ export const useChatStore = create<ChatState>((set, get) => ({
     addCitationMarkers: (citations: Citation[]) =>
         set((state) => {
             const newMarkers = new Map(state.citationMarkers);
+
+            // Group citations by source (sourceType + sourceId/sourceParentId)
+            const sourceGroups = new Map<string, Citation[]>();
             citations.forEach((citation) => {
-                // Create unique key from contentId and (sourceParentId or sourceId), in that order
+                const sourceId = citation.sourceParentId || citation.sourceId;
+                const sourceGroup = `${citation.sourceType}_${sourceId}`;
+                if (!sourceGroups.has(sourceGroup)) {
+                    sourceGroups.set(sourceGroup, []);
+                }
+                sourceGroups.get(sourceGroup)!.push(citation);
+            });
+
+            // Track source numbers per type (T1, T2, F1, F2, etc.)
+            const sourceTypeCounters = new Map<string, number>();
+            const sourceGroupNumbers = new Map<string, number>();
+
+            // Assign source numbers to each group
+            sourceGroups.forEach((_, sourceGroup) => {
+                const sourceType = sourceGroup.split('_')[0] || 'unknown';
+                if (!sourceTypeCounters.has(sourceType)) {
+                    sourceTypeCounters.set(sourceType, 1);
+                } else {
+                    const currentCount = sourceTypeCounters.get(sourceType) || 0;
+                    sourceTypeCounters.set(sourceType, currentCount + 1);
+                }
+                const sourceNumber = sourceTypeCounters.get(sourceType) || 1;
+                sourceGroupNumbers.set(sourceGroup, sourceNumber);
+            });
+
+            // Process each citation and assign markers
+            citations.forEach((citation) => {
                 const uniqueKey = `${citation.contentId}-${citation.sourceParentId || citation.sourceId}`;
-                // Only add if not already exists
                 if (!newMarkers.has(uniqueKey)) {
-                    const markerNumber = newMarkers.size + 1;
-                    const marker = `C${markerNumber}`;
+                    const sourceId = citation.sourceParentId || citation.sourceId;
+                    const sourceGroup = `${citation.sourceType}_${sourceId}`;
+                    const sourceNumber = sourceGroupNumbers.get(sourceGroup) || 1;
+                    const groupCitations = sourceGroups.get(sourceGroup) || [];
+
+                    // Find this citation's position within its source group
+                    const citationIndex = groupCitations.findIndex(
+                        (c) => `${c.contentId}-${c.sourceParentId || c.sourceId}` === uniqueKey
+                    );
+                    const citationNumber = citationIndex + 1;
+
+                    // Generate marker using new format
+                    const prefix = SOURCE_TYPE_PREFIXES[citation.sourceType] || citation.sourceType.toUpperCase();
+                    let marker: string;
+
+                    if (groupCitations.length === 1) {
+                        // Single citation from this source: T1
+                        marker = `${prefix}${sourceNumber}`;
+                    } else {
+                        // Multiple citations: T1.1, T1.2 or T1(+3) format
+                        // For now, use x.y format - could be enhanced later for (+n) logic
+                        marker = `${prefix}${sourceNumber}.${citationNumber}`;
+                    }
+
                     newMarkers.set(uniqueKey, {
                         citation,
                         marker,
                         uniqueKey,
+                        sourceGroup,
+                        sourceNumber,
+                        citationNumber,
                     });
                 }
             });

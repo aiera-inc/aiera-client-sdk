@@ -60,8 +60,9 @@ const preparePartialMarkdown = (content: string): string => {
         text += '_';
     }
 
-    // Replace citations
-    text = text.replace(/\[c(\d+)\]/g, '<citation marker="$1" />');
+    // Replace citations - handle both old [c123] format and new [source_type_source_id] format
+    text = text.replace(/\[c(\d+)\]/g, '<citation marker="c$1" />');
+    text = text.replace(/\[([a-zA-Z_]+)_([a-zA-Z0-9_-]+)\]/g, '<citation marker="$1_$2" />');
 
     // Handle unclosed links
     const linkMatches = text.match(/\[([^\]]+)(?:\]\([^)]*|\]$|\]\([^)]*$)/g);
@@ -88,9 +89,22 @@ type CustomComponentProps = {
 const CustomCitation = ({ marker, citations }: { marker: string; citations: CitationType[] }) => {
     const { getCitationMarker } = useChatStore();
 
-    // Find the citation with the matching marker
-    const citIndex = citations?.findIndex((cit: CitationType) => cit.marker === `[c${marker}]`);
-    const citation = citations[citIndex];
+    // Find the citation with the matching marker - handle both old [c123] and new [sourceType_sourceId] formats
+    let citation: CitationType | undefined;
+
+    if (marker.startsWith('c')) {
+        // Old format: marker="[c123]"
+        const citIndex = citations?.findIndex((cit: CitationType) => cit.marker === `[${marker}]`);
+        citation = citations[citIndex];
+    } else {
+        // New format: marker="[transcript_123]"
+        const [sourceType, sourceId] = marker.split('_');
+        citation = citations?.find(
+            (cit: CitationType) =>
+                cit.sourceType === sourceType && (cit.sourceParentId === sourceId || cit.sourceId === sourceId)
+        );
+    }
+
     if (!citation) return null;
 
     // Get the global marker for this citation from the store
