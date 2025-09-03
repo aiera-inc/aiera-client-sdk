@@ -40208,6 +40208,7 @@ var defaultEnv = {
   apiUrl: "undefined",
   assetPath: "undefined",
   platform: "undefined",
+  restApiUrl: "undefined",
   virtualListKey: "undefined"
 };
 
@@ -40300,10 +40301,11 @@ function useMessageListener(type, listener, direction) {
 // src/lib/config/index.tsx
 var defaultConfig = {
   assetPath: defaultEnv.assetPath,
-  platform: defaultEnv.platform,
   gqlOptions: {
     clientOptions: { url: defaultEnv.apiUrl }
   },
+  platform: defaultEnv.platform,
+  restApiUrl: defaultEnv.restApiUrl,
   virtualListKey: defaultEnv.virtualListKey
 };
 var Context3 = (0, import_react4.createContext)(defaultConfig);
