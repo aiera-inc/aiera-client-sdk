@@ -92,16 +92,15 @@ const CustomCitation = ({ marker, citations }: { marker: string; citations: Cita
     // Find the citation with the matching marker - handle both old [c123] and new [sourceType_sourceId] formats
     let citation: CitationType | undefined;
 
-    if (marker.startsWith('c')) {
+    if (marker.startsWith('c') && !marker.includes('company')) {
         // Old format: marker="[c123]"
         const citIndex = citations?.findIndex((cit: CitationType) => cit.marker === `[${marker}]`);
         citation = citations[citIndex];
     } else {
         // New format: marker="[transcript_123]"
-        const [sourceType, sourceId] = marker.split('_');
+        const [sourceType, contentId] = marker.split('_');
         citation = citations?.find(
-            (cit: CitationType) =>
-                cit.sourceType === sourceType && (cit.sourceParentId === sourceId || cit.sourceId === sourceId)
+            (cit: CitationType) => cit.sourceType === sourceType && String(cit.contentId) === contentId
         );
     }
 

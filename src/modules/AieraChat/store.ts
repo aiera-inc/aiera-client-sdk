@@ -73,23 +73,34 @@ export const useChatStore = create<ChatState>((set, get) => ({
         set((state) => {
             const newMarkers = new Map(state.citationMarkers);
 
-            // Group citations by source (sourceType + sourceId/sourceParentId)
+            // Extract existing citations from the global store to maintain numbering continuity
+            const existingCitations: Citation[] = [];
+            const existingSourceGroups = new Set<string>();
+            state.citationMarkers.forEach((citationMarker) => {
+                existingCitations.push(citationMarker.citation);
+                existingSourceGroups.add(citationMarker.sourceGroup);
+            });
+
+            // Group ALL citations (existing + new) by source to build complete picture
+            const allCitations = [...existingCitations, ...citations];
             const sourceGroups = new Map<string, Citation[]>();
-            citations.forEach((citation) => {
-                const sourceId = citation.sourceParentId || citation.sourceId;
-                const sourceGroup = `${citation.sourceType}_${sourceId}`;
+            allCitations.forEach((citation) => {
+                const sourceGroup = `${citation.sourceType}_${citation.contentId}`;
                 if (!sourceGroups.has(sourceGroup)) {
                     sourceGroups.set(sourceGroup, []);
                 }
                 sourceGroups.get(sourceGroup)!.push(citation);
             });
 
-            // Track source numbers per type (T1, T2, F1, F2, etc.)
+            // Track source numbers per type (T1, T2, F1, F2, etc.) based on ALL source groups
             const sourceTypeCounters = new Map<string, number>();
             const sourceGroupNumbers = new Map<string, number>();
 
-            // Assign source numbers to each group
-            sourceGroups.forEach((_, sourceGroup) => {
+            // Sort source groups to ensure consistent numbering order
+            const sortedSourceGroups = Array.from(sourceGroups.keys()).sort();
+
+            // Assign source numbers to each group based on complete data
+            sortedSourceGroups.forEach((sourceGroup) => {
                 const sourceType = sourceGroup.split('_')[0] || 'unknown';
                 if (!sourceTypeCounters.has(sourceType)) {
                     sourceTypeCounters.set(sourceType, 1);
@@ -105,8 +116,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
             citations.forEach((citation) => {
                 const uniqueKey = `${citation.contentId}-${citation.sourceParentId || citation.sourceId}`;
                 if (!newMarkers.has(uniqueKey)) {
-                    const sourceId = citation.sourceParentId || citation.sourceId;
-                    const sourceGroup = `${citation.sourceType}_${sourceId}`;
+                    const sourceGroup = `${citation.sourceType}_${citation.contentId}`;
                     const sourceNumber = sourceGroupNumbers.get(sourceGroup) || 1;
                     const groupCitations = sourceGroups.get(sourceGroup) || [];
 
