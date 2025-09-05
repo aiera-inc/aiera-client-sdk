@@ -87,6 +87,9 @@ type CustomComponentProps = {
 
 // Custom Citation component that uses the global store for consistent markers
 const CustomCitation = ({ marker, citations }: { marker: string; citations: CitationType[] }) => {
+    // Short-circuit if there are no citations or marker set
+    if (!citations || citations.length === 0 || !marker) return null;
+
     const { getCitationMarker } = useChatStore();
 
     // Find the citation with the matching marker - handle both old [c123] and new [sourceType_sourceId] formats
