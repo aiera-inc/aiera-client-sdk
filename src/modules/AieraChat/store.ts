@@ -92,24 +92,34 @@ export const useChatStore = create<ChatState>((set, get) => ({
                 sourceGroups.get(sourceGroup)!.push(citation);
             });
 
-            // Track source numbers per type (T1, T2, F1, F2, etc.) based on ALL source groups
+            // Preserve existing source group numbers and only assign new ones for new groups
             const sourceTypeCounters = new Map<string, number>();
             const sourceGroupNumbers = new Map<string, number>();
 
-            // Sort source groups to ensure consistent numbering order
-            const sortedSourceGroups = Array.from(sourceGroups.keys()).sort();
+            // First, extract existing source group numbers to preserve them
+            state.citationMarkers.forEach((citationMarker) => {
+                const sourceType = citationMarker.sourceGroup.split('_')[0] || 'unknown';
+                sourceGroupNumbers.set(citationMarker.sourceGroup, citationMarker.sourceNumber);
 
-            // Assign source numbers to each group based on complete data
-            sortedSourceGroups.forEach((sourceGroup) => {
-                const sourceType = sourceGroup.split('_')[0] || 'unknown';
-                if (!sourceTypeCounters.has(sourceType)) {
-                    sourceTypeCounters.set(sourceType, 1);
-                } else {
-                    const currentCount = sourceTypeCounters.get(sourceType) || 0;
-                    sourceTypeCounters.set(sourceType, currentCount + 1);
+                // Track the highest number for each source type
+                const currentMax = sourceTypeCounters.get(sourceType) || 0;
+                sourceTypeCounters.set(sourceType, Math.max(currentMax, citationMarker.sourceNumber));
+            });
+
+            // Now assign numbers to any NEW source groups in chronological order
+            // Process new citations in the order they were provided (chronological from messages)
+            const processedSourceGroups = new Set<string>();
+            citations.forEach((citation) => {
+                const sourceGroup = `${citation.sourceType}_${citation.contentId}`;
+                if (!sourceGroupNumbers.has(sourceGroup) && !processedSourceGroups.has(sourceGroup)) {
+                    // This is a new source group, assign it the next available number
+                    const sourceType = sourceGroup.split('_')[0] || 'unknown';
+                    const currentMax = sourceTypeCounters.get(sourceType) || 0;
+                    const nextNumber = currentMax + 1;
+                    sourceTypeCounters.set(sourceType, nextNumber);
+                    sourceGroupNumbers.set(sourceGroup, nextNumber);
+                    processedSourceGroups.add(sourceGroup);
                 }
-                const sourceNumber = sourceTypeCounters.get(sourceType) || 1;
-                sourceGroupNumbers.set(sourceGroup, sourceNumber);
             });
 
             // Process each citation and assign markers
