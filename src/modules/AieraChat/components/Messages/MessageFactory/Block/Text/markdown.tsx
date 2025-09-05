@@ -19,6 +19,10 @@ const preparePartialMarkdown = (content: string): string => {
     // before ** markers to double newlines
     text = text.replace(/\n(\*\*)/g, '\n\n$1');
 
+    // Replace citations FIRST to avoid underscore conflicts
+    text = text.replace(/\[c(\d+)\]/g, '<citation marker="c$1" />');
+    text = text.replace(/\[([a-zA-Z_]+)_([a-zA-Z0-9_-]+)\]/g, '<citation marker="$1_$2" />');
+
     // Handle unclosed code blocks
     const codeBlockMatches = text.match(/```[a-zA-Z0-9]*\n[\s\S]*?(?:```|$)/g);
     if (codeBlockMatches) {
@@ -49,8 +53,18 @@ const preparePartialMarkdown = (content: string): string => {
         if (text[i] === '*' && (i === 0 || text[i - 1] !== '\\')) {
             asteriskCount++;
         }
+        // Only count underscores that look like emphasis formatting (surrounded by letters)
         if (text[i] === '_' && (i === 0 || text[i - 1] !== '\\')) {
-            underscoreCount++;
+            const prevChar = i > 0 ? text[i - 1] || '' : '';
+            const nextChar = i < text.length - 1 ? text[i + 1] || '' : '';
+
+            // Only count if both sides are letters (typical emphasis pattern like _word_)
+            const prevIsLetter = /[a-zA-Z]/.test(prevChar);
+            const nextIsLetter = /[a-zA-Z]/.test(nextChar);
+
+            if (prevIsLetter && nextIsLetter) {
+                underscoreCount++;
+            }
         }
     }
     if (asteriskCount % 2 !== 0) {
@@ -59,10 +73,6 @@ const preparePartialMarkdown = (content: string): string => {
     if (underscoreCount % 2 !== 0) {
         text += '_';
     }
-
-    // Replace citations - handle both old [c123] format and new [source_type_source_id] format
-    text = text.replace(/\[c(\d+)\]/g, '<citation marker="c$1" />');
-    text = text.replace(/\[([a-zA-Z_]+)_([a-zA-Z0-9_-]+)\]/g, '<citation marker="$1_$2" />');
 
     // Handle unclosed links
     const linkMatches = text.match(/\[([^\]]+)(?:\]\([^)]*|\]$|\]\([^)]*$)/g);
