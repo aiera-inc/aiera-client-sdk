@@ -386,21 +386,23 @@ export const useAbly = (): UseAblyReturn => {
                             log('Parsing citations:', 'log', citations);
                             const parsedCitations = citations.map(normalizeCitation);
                             if (parsedCitations) {
+                                let allCitations = [...parsedCitations];
                                 setCitations((prev) => {
                                     const existing = prev || [];
                                     const existingIds = new Set(
                                         existing.map((c) => `${c.contentId}${c.sourceParentId || c.sourceId}`)
                                     );
-                                    return [
+                                    allCitations = [
                                         ...existing,
                                         ...parsedCitations.filter(
                                             (c) => !existingIds.has(`${c.contentId}${c.sourceParentId || c.sourceId}`)
                                         ),
                                     ];
+                                    return allCitations;
                                 });
 
                                 // Add citations to global store for consistent numbering
-                                addCitationMarkers(parsedCitations);
+                                addCitationMarkers(allCitations);
                                 log(`Added ${parsedCitations.length} citations to global store from Ably stream`);
                             }
                         }
