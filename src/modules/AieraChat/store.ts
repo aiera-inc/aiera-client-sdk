@@ -31,9 +31,6 @@ export interface CitationMarker {
     citation: Citation;
     marker: string;
     uniqueKey: string;
-    sourceGroup: string; // e.g., "transcript_123"
-    sourceNumber: number; // e.g., 1 for T1
-    citationNumber: number; // e.g., 2 for T1.2
 }
 
 export interface ChatState {
@@ -58,6 +55,8 @@ export interface ChatState {
     selectedSource?: Source;
     setHasChanges: (hasChanges: boolean) => void;
     sources: Source[];
+    // Internal state for tracking citation numbering
+    sourceTypeCounters: Map<string, number>;
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -69,102 +68,163 @@ export const useChatStore = create<ChatState>((set, get) => ({
     hasChanges: false,
     selectedSource: undefined,
     sources: [],
+    sourceTypeCounters: new Map(),
     addCitationMarkers: (citations: Citation[]) =>
         set((state) => {
+            // Early return if no citations to process
+            if (!citations.length) return state;
+
             const newMarkers = new Map(state.citationMarkers);
+            const sourceTypeCounters = new Map(state.sourceTypeCounters);
 
-            // Extract existing citations from the global store to maintain numbering continuity
-            const existingCitations: Citation[] = [];
-            const existingSourceGroups = new Set<string>();
-            state.citationMarkers.forEach((citationMarker) => {
-                existingCitations.push(citationMarker.citation);
-                existingSourceGroups.add(citationMarker.sourceGroup);
-            });
+            // Track source numbers by groupKey - preserve existing mappings
+            const groupSourceNumbers = new Map<string, number>();
 
-            // Group ALL citations (existing + new) by source to build complete picture
-            const allCitations = [...existingCitations, ...citations];
-            const sourceGroups = new Map<string, Citation[]>();
-            allCitations.forEach((citation) => {
-                const sourceGroup = `${citation.sourceType}_${citation.contentId}`;
-                if (!sourceGroups.has(sourceGroup)) {
-                    sourceGroups.set(sourceGroup, []);
+            // Build groups and preserve existing source numbers
+            // Using array to preserve order of contentIds
+            const sourceGroups = new Map<string, string[]>();
+
+            // We need to preserve the order of existing citations
+            // So we'll collect them in order based on their current numbering
+            const orderedMarkers = Array.from(state.citationMarkers.values()).sort((a, b) => {
+                // Extract numbers from markers like T1.1, T1.2, T2.1
+                const aMatch = a.marker.match(/[A-Za-z]+(\d+)(?:\.(\d+))?/);
+                const bMatch = b.marker.match(/[A-Za-z]+(\d+)(?:\.(\d+))?/);
+
+                if (!aMatch || !bMatch) return 0;
+
+                const aSourceNum = parseInt(aMatch[1] || '0', 10);
+                const bSourceNum = parseInt(bMatch[1] || '0', 10);
+                const aSubNum = aMatch[2] ? parseInt(aMatch[2], 10) : 0;
+                const bSubNum = bMatch[2] ? parseInt(bMatch[2], 10) : 0;
+
+                // First sort by source type
+                if (a.citation.sourceType !== b.citation.sourceType) {
+                    return a.citation.sourceType.localeCompare(b.citation.sourceType);
                 }
-                sourceGroups.get(sourceGroup)!.push(citation);
+
+                // Then by source number
+                if (aSourceNum !== bSourceNum) {
+                    return aSourceNum - bSourceNum;
+                }
+
+                // Finally by sub number
+                return aSubNum - bSubNum;
             });
 
-            // Preserve existing source group numbers and only assign new ones for new groups
-            const sourceTypeCounters = new Map<string, number>();
-            const sourceGroupNumbers = new Map<string, number>();
+            orderedMarkers.forEach((marker) => {
+                const { sourceType, sourceParentId, sourceId, contentId } = marker.citation;
+                const groupKey = `${sourceType}_${sourceParentId || sourceId}`;
 
-            // First, extract existing source group numbers to preserve them
-            state.citationMarkers.forEach((citationMarker) => {
-                const sourceType = citationMarker.sourceGroup.split('_')[0] || 'unknown';
-                sourceGroupNumbers.set(citationMarker.sourceGroup, citationMarker.sourceNumber);
+                if (!sourceGroups.has(groupKey)) {
+                    sourceGroups.set(groupKey, []);
+                }
+                const contentIds = sourceGroups.get(groupKey)!;
+                if (!contentIds.includes(contentId)) {
+                    contentIds.push(contentId);
+                }
 
-                // Track the highest number for each source type
-                const currentMax = sourceTypeCounters.get(sourceType) || 0;
-                sourceTypeCounters.set(sourceType, Math.max(currentMax, citationMarker.sourceNumber));
-            });
-
-            // Now assign numbers to any NEW source groups in chronological order
-            // Process new citations in the order they were provided (chronological from messages)
-            const processedSourceGroups = new Set<string>();
-            citations.forEach((citation) => {
-                const sourceGroup = `${citation.sourceType}_${citation.contentId}`;
-                if (!sourceGroupNumbers.has(sourceGroup) && !processedSourceGroups.has(sourceGroup)) {
-                    // This is a new source group, assign it the next available number
-                    const sourceType = sourceGroup.split('_')[0] || 'unknown';
+                // Extract and preserve the source number from existing markers
+                const match = marker.marker.match(/[A-Za-z]+(\d+)(?:\.\d+)?/);
+                if (match && match[1]) {
+                    const sourceNum = parseInt(match[1], 10);
+                    groupSourceNumbers.set(groupKey, sourceNum);
+                    // Update sourceTypeCounters to track the highest number used
                     const currentMax = sourceTypeCounters.get(sourceType) || 0;
+                    sourceTypeCounters.set(sourceType, Math.max(currentMax, sourceNum));
+                }
+            });
+
+            // Process only new citations
+            const newCitations = citations.filter((c) => {
+                const key = `${c.sourceType}_${c.sourceParentId || c.sourceId}_${c.contentId}`;
+                return !newMarkers.has(key);
+            });
+
+            // Group new citations and assign source numbers
+            newCitations.forEach((citation) => {
+                const groupKey = `${citation.sourceType}_${citation.sourceParentId || citation.sourceId}`;
+
+                if (!sourceGroups.has(groupKey)) {
+                    sourceGroups.set(groupKey, []);
+                    // This is a new group - assign a new source number
+                    const currentMax = sourceTypeCounters.get(citation.sourceType) || 0;
                     const nextNumber = currentMax + 1;
-                    sourceTypeCounters.set(sourceType, nextNumber);
-                    sourceGroupNumbers.set(sourceGroup, nextNumber);
-                    processedSourceGroups.add(sourceGroup);
+                    sourceTypeCounters.set(citation.sourceType, nextNumber);
+                    groupSourceNumbers.set(groupKey, nextNumber);
+                }
+
+                const contentIds = sourceGroups.get(groupKey)!;
+                if (!contentIds.includes(citation.contentId)) {
+                    contentIds.push(citation.contentId);
                 }
             });
 
-            // Process each citation and assign markers
-            citations.forEach((citation) => {
-                const uniqueKey = `${citation.contentId}-${citation.sourceParentId || citation.sourceId}`;
-                if (!newMarkers.has(uniqueKey)) {
-                    const sourceGroup = `${citation.sourceType}_${citation.contentId}`;
-                    const sourceNumber = sourceGroupNumbers.get(sourceGroup) || 1;
-                    const groupCitations = sourceGroups.get(sourceGroup) || [];
+            // Add markers for new citations
+            newCitations.forEach((citation) => {
+                const groupKey = `${citation.sourceType}_${citation.sourceParentId || citation.sourceId}`;
+                const uniqueKey = `${groupKey}_${citation.contentId}`;
 
-                    // Find this citation's position within its source group
-                    const citationIndex = groupCitations.findIndex(
-                        (c) => `${c.contentId}-${c.sourceParentId || c.sourceId}` === uniqueKey
-                    );
-                    const citationNumber = citationIndex + 1;
+                const sourceNumber = groupSourceNumbers.get(groupKey)!;
+                const contentIds = sourceGroups.get(groupKey)!;
+                const hasMultipleContent = contentIds.length > 1;
+                const prefix = SOURCE_TYPE_PREFIXES[citation.sourceType] || citation.sourceType.toUpperCase();
 
-                    // Generate marker using new format
-                    const prefix = SOURCE_TYPE_PREFIXES[citation.sourceType] || citation.sourceType.toUpperCase();
-                    let marker: string;
+                let marker: string;
+                if (hasMultipleContent) {
+                    const contentIndex = contentIds.indexOf(citation.contentId) + 1;
+                    marker = `${prefix}${sourceNumber}.${contentIndex}`;
+                } else {
+                    marker = `${prefix}${sourceNumber}`;
+                }
 
-                    if (groupCitations.length === 1) {
-                        // Single citation from this source: T1
-                        marker = `${prefix}${sourceNumber}`;
-                    } else {
-                        // Multiple citations: T1.1, T1.2 or T1(+3) format
-                        // For now, use x.y format - could be enhanced later for (+n) logic
-                        marker = `${prefix}${sourceNumber}.${citationNumber}`;
+                newMarkers.set(uniqueKey, {
+                    citation,
+                    marker,
+                    uniqueKey,
+                });
+            });
+
+            // Update existing markers if their group now has multiple content IDs
+            const groupsToUpdate = new Set<string>();
+            newCitations.forEach((citation) => {
+                const groupKey = `${citation.sourceType}_${citation.sourceParentId || citation.sourceId}`;
+                const contentIds = sourceGroups.get(groupKey)!;
+                if (contentIds.length > 1) {
+                    groupsToUpdate.add(groupKey);
+                }
+            });
+
+            // Update markers for groups that now have multiple content IDs
+            groupsToUpdate.forEach((groupKey) => {
+                const contentIds = sourceGroups.get(groupKey)!;
+                const sourceNumber = groupSourceNumbers.get(groupKey)!;
+                const [sourceType] = groupKey.split('_');
+                const prefix = SOURCE_TYPE_PREFIXES[sourceType as string] || (sourceType as string).toUpperCase();
+
+                // Update all citations in this group
+                newMarkers.forEach((marker, key) => {
+                    if (key.startsWith(`${groupKey}_`)) {
+                        const contentIndex = contentIds.indexOf(marker.citation.contentId) + 1;
+                        marker.marker = `${prefix}${sourceNumber}.${contentIndex}`;
                     }
-
-                    newMarkers.set(uniqueKey, {
-                        citation,
-                        marker,
-                        uniqueKey,
-                        sourceGroup,
-                        sourceNumber,
-                        citationNumber,
-                    });
-                }
+                });
             });
 
-            return { citationMarkers: newMarkers };
+            return {
+                citationMarkers: newMarkers,
+                sourceTypeCounters,
+            };
         }),
-    clearCitationMarkers: () => set({ citationMarkers: new Map() }),
+    clearCitationMarkers: () =>
+        set({
+            citationMarkers: new Map(),
+            sourceTypeCounters: new Map(),
+        }),
     getCitationMarker: (citation: Citation) => {
-        const uniqueKey = `${citation.contentId}-${citation.sourceParentId || citation.sourceId}`;
+        const uniqueKey = `${citation.sourceType}_${citation.sourceParentId || citation.sourceId}_${
+            citation.contentId
+        }`;
         const citationMarker = get().citationMarkers.get(uniqueKey);
         return citationMarker?.marker || null;
     },
@@ -182,6 +242,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
             citationMarkers: new Map(),
             hasChanges: false,
             sources: [],
+            sourceTypeCounters: new Map(),
         }),
     onRemoveSource: (source: Source) =>
         set((state) => ({
@@ -191,7 +252,15 @@ export const useChatStore = create<ChatState>((set, get) => ({
             ),
         })),
     onSelectChat: (chatId: string, chatStatus: ChatSessionStatus, chatTitle?: string, sources?: Source[]) =>
-        set({ chatId, chatStatus, chatTitle, citationMarkers: new Map(), hasChanges: false, sources }),
+        set({
+            chatId,
+            chatStatus,
+            chatTitle,
+            citationMarkers: new Map(),
+            hasChanges: false,
+            sources,
+            sourceTypeCounters: new Map(),
+        }),
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
     onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
