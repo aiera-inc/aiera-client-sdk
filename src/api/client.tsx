@@ -34,7 +34,12 @@ import {
 import { pipe, map } from 'wonka';
 import { useConfig, Config } from '@aiera/client-sdk/lib/config';
 import { defaultTokenAuthConfig } from '@aiera/client-sdk/api/auth';
-import { DeleteChatSessionMutation, DeleteChatSessionMutationVariables } from '@aiera/client-sdk/types/generated';
+import {
+    CreateChatSessionMutation,
+    CreateChatSessionMutationVariables,
+    DeleteChatSessionMutation,
+    DeleteChatSessionMutationVariables,
+} from '@aiera/client-sdk/types/generated';
 
 /**
  * Function to extract the query names from a GQL document
@@ -127,6 +132,15 @@ export function createGQLClient(config: Config): Client {
         // Add update policies for mutations
         updates: {
             Mutation: {
+                createChatSession: (
+                    _result: CreateChatSessionMutation,
+                    _args: CreateChatSessionMutationVariables,
+                    cache
+                ) => {
+                    // Invalidate the chatSessions query to force a refetch
+                    // This ensures newly created sessions appear in the list
+                    cache.invalidate('Query', 'chatSessions');
+                },
                 deleteChatSession: (
                     result: DeleteChatSessionMutation,
                     args: DeleteChatSessionMutationVariables,

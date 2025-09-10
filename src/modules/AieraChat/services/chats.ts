@@ -207,9 +207,16 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                 .then((resp) => {
                     const newSession = resp.data?.createChatSession?.chatSession;
                     if (newSession) {
-                        // Ensure we normalize the session before adding it to state and returning
+                        // Add the new session to local state immediately
                         const normalizedSession = normalizeSession(newSession as RawChatSession);
-                        setSessions((prevSessions) => [...prevSessions, normalizedSession]);
+                        setSessions((prevSessions) => {
+                            // Check if session already exists to avoid duplicates
+                            const exists = prevSessions.some((s) => s.id === normalizedSession.id);
+                            if (!exists) {
+                                return [...prevSessions, normalizedSession];
+                            }
+                            return prevSessions;
+                        });
                         return normalizeSessionWithPromptMessage(newSession as RawChatSession) || null;
                     } else {
                         setError('Error creating chat session');
@@ -346,7 +353,18 @@ export const useChatSessions = (): UseChatSessionsReturn => {
             if (rawSessions && rawSessions.length > 0) {
                 normalizedSessions = rawSessions.map((s) => normalizeSession(s));
             }
-            setSessions(normalizedSessions);
+
+            setSessions((prevSessions) => {
+                // Create a map of sessions from the query by ID
+                const querySessionsMap = new Map(normalizedSessions.map((s) => [s.id, s]));
+
+                // Keep any sessions that exist in prevSessions but not in the query
+                // (these might be newly created sessions that haven't appeared in the query yet)
+                const newlyCreatedSessions = prevSessions.filter((s) => !querySessionsMap.has(s.id));
+
+                // Merge: query results + any newly created sessions not yet in query
+                return [...normalizedSessions, ...newlyCreatedSessions];
+            });
         } else if (chatSessionsQuery.status === 'error') {
             setError(chatSessionsQuery.error.message);
         }
