@@ -83317,6 +83317,9 @@ function createGQLClient(config) {
     },
     updates: {
       Mutation: {
+        createChatSession: (_result, _args, cache) => {
+          cache.invalidate("Query", "chatSessions");
+        },
         deleteChatSession: (result, args, cache) => {
           var _a2;
           if ((_a2 = result.deleteChatSession) == null ? void 0 : _a2.success) {
