@@ -78,8 +78,9 @@ export function Messages({
                     })
                     .then(() => {
                         // Reset existing partials before new ones start streaming
+                        // Don't clear citations since we're continuing in the same chat
                         if (partials && partials.length > 0) {
-                            reset().catch((err: Error) =>
+                            reset({ clearCitations: false }).catch((err: Error) =>
                                 log(`Error resetting useAbly state: ${err.message}`, 'error')
                             );
                         }
@@ -134,8 +135,11 @@ export function Messages({
                 })
                 .then(() => {
                     // Reset existing partials before new ones start streaming
+                    // Don't clear citations since we're continuing in the same chat
                     if (partials && partials.length > 0) {
-                        reset().catch((err: Error) => log(`Error resetting useAbly state: ${err.message}`, 'error'));
+                        reset({ clearCitations: false }).catch((err: Error) =>
+                            log(`Error resetting useAbly state: ${err.message}`, 'error')
+                        );
                     }
                 })
                 .catch((error: Error) => log(`Error creating session with prompt: ${error.message}`, 'error'))
@@ -346,8 +350,10 @@ export function Messages({
 
     // Reset messages when the selected chat changes
     useEffect(() => {
-        // Reset Ably state when switching chats
-        reset().catch((err: Error) => log(`Error resetting Ably state on chat change: ${err.message}`, 'error'));
+        // Reset Ably state when switching chats - clear citations since it's a new chat
+        reset({ clearCitations: true }).catch((err: Error) =>
+            log(`Error resetting Ably state on chat change: ${err.message}`, 'error')
+        );
         setMessages([]);
         confirmedMessageIds.current.clear();
     }, [chatId, reset]);

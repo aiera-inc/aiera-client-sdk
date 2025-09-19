@@ -50,7 +50,7 @@ interface UseAblyReturn {
     createAblyRealtimeClient: (sessionUserId?: string) => Promise<Realtime | null>;
     error?: string;
     partials: AblyMessageData[];
-    reset: () => Promise<void>;
+    reset: (options?: { clearCitations?: boolean }) => Promise<void>;
     thinkingState: string[];
     subscribeToChannel: (channelName: string) => RealtimeChannel | undefined;
     unsubscribeFromChannel: (channelName: string) => Promise<void>;
@@ -499,22 +499,28 @@ export const useAbly = (): UseAblyReturn => {
         }
     }, []);
 
-    // Reset function
-    const reset = useCallback((): Promise<void> => {
-        return new Promise<void>((resolve) => {
-            log('Resetting Ably state');
-            partialKeys.current = [];
-            requestAnimationFrame(() => {
-                setConfirmation(undefined);
-                setThinkingState([]);
-                setError(undefined);
-                setCitations(undefined);
-                setPartials([]);
-                clearCitationMarkers();
-                setTimeout(resolve, 0);
+    // Reset function - accepts options to control what gets reset
+    const reset = useCallback(
+        (options?: { clearCitations?: boolean }): Promise<void> => {
+            return new Promise<void>((resolve) => {
+                log('Resetting Ably state');
+                partialKeys.current = [];
+                requestAnimationFrame(() => {
+                    setConfirmation(undefined);
+                    setThinkingState([]);
+                    setError(undefined);
+                    setCitations(undefined);
+                    setPartials([]);
+                    // Only clear citation markers when explicitly requested (e.g., when switching chats)
+                    if (options?.clearCitations) {
+                        clearCitationMarkers();
+                    }
+                    setTimeout(resolve, 0);
+                });
             });
-        });
-    }, []);
+        },
+        [clearCitationMarkers]
+    );
 
     return {
         citations,
