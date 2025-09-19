@@ -7,7 +7,10 @@
       "Bash(npm run build:*)",
       "Bash(grep:*)",
       "Bash(npm test:*)",
-      "Bash(rg:*)"
+      "Bash(rg:*)",
+      "Bash(npm run test:*)",
+      "Bash(npx eslint:*)",
+      "Bash(sed:*)"
     ],
     "deny": []
   }
