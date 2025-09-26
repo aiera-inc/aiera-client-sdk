@@ -7,7 +7,7 @@ import { ChatSessionWithPromptMessage } from '@aiera/client-sdk/modules/AieraCha
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { RealtimeChannel } from 'ably';
 import classNames from 'classnames';
-import React, { useCallback, useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
     ChatMessage,
     ChatMessagePrompt,
@@ -16,12 +16,11 @@ import {
     ChatMessageType,
     useChatSession,
 } from '../../services/messages';
-import { Source, useChatStore } from '../../store';
+import { useChatStore } from '../../store';
 import { MessageFactory } from './MessageFactory';
 import { BlockType } from './MessageFactory/Block';
 import { Prompt } from './Prompt';
 import './styles.css';
-import { useUserPreferencesStore } from '../../userPreferencesStore';
 
 let idCounter = 0;
 
@@ -35,64 +34,12 @@ export function Messages({
     const config = useConfig();
     const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
     const [submitting, setSubmitting] = useState<boolean>(false);
-    const { chatId, chatStatus, onAddSource, onSetStatus, sources } = useChatStore();
-    const { confirmSourceConfirmation, createChatMessagePrompt, messages, setMessages, isLoading } = useChatSession({
+    const { chatId, chatStatus, onSetStatus, sources } = useChatStore();
+    const { createChatMessagePrompt, messages, setMessages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { citations, confirmation, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } =
-        useAbly();
-    const { sourceConfirmations } = useUserPreferencesStore();
+    const { citations, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } = useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
-    const confirmedMessageIds = useRef<Set<string>>(new Set());
-
-    const onConfirm = useCallback(
-        (promptMessageId: string, sources: Source[], hasChanges = true) => {
-            if (chatId && chatId !== 'new') {
-                confirmSourceConfirmation(chatId, promptMessageId, sources)
-                    .then((confirmationMessage) => {
-                        // Update sources in the global store
-                        onAddSource(sources, hasChanges);
-                        if (confirmationMessage?.id) {
-                            // Find the matching confirmation message in the list by type and prompt id
-                            // We can't match by id because the confirmation message has a temp id
-                            const originalMessage = messages.find(
-                                (m) =>
-                                    m.type === ChatMessageType.SOURCES &&
-                                    m.promptMessageId === confirmationMessage.promptMessageId
-                            );
-                            if (originalMessage) {
-                                setMessages((pv) =>
-                                    pv.map((message) => {
-                                        if (message.id === originalMessage.id) {
-                                            return {
-                                                ...message,
-                                                confirmed: true,
-                                            };
-                                        }
-
-                                        return message;
-                                    })
-                                );
-                            }
-                        }
-                    })
-                    .then(() => {
-                        // Reset existing partials before new ones start streaming
-                        // Don't clear citations since we're continuing in the same chat
-                        if (partials && partials.length > 0) {
-                            reset({ clearCitations: false }).catch((err: Error) =>
-                                log(`Error resetting useAbly state: ${err.message}`, 'error')
-                            );
-                        }
-                    })
-                    .then(() => onSetStatus(ChatSessionStatus.GeneratingResponse))
-                    .catch((err: Error) =>
-                        log(`Error confirming sources for chat message source confirmation: ${err.message}`, 'error')
-                    );
-            }
-        },
-        [chatId]
-    );
 
     const handleSubmit = (prompt: string) => {
         setSubmitting(true);
@@ -303,39 +250,6 @@ export function Messages({
         });
     }, [partials, citations, chatId]);
 
-    // Update messages with any source confirmation messages coming from Ably
-    useEffect(() => {
-        if (confirmation) {
-            setMessages((pv) => {
-                const existing = pv.find((m) => m.id === confirmation.id);
-
-                if (!existing) {
-                    // Find the associated prompt message to ensure sticky header works
-                    const promptMessage = messages.find((m) => m.id === confirmation.promptMessageId);
-                    const updatedConfirmation = {
-                        ...confirmation,
-                        confirmed: !confirmation.confirmed ? sourceConfirmations === 'auto' : true,
-                        prompt: promptMessage?.prompt ?? '',
-                    };
-                    log('updated confirmation', 'debug', updatedConfirmation);
-
-                    // Auto confirm
-                    if (sourceConfirmations === 'auto' && promptMessage?.id && !confirmation.confirmed) {
-                        const messageKey = `${promptMessage.id}-${confirmation.id}`;
-                        if (!confirmedMessageIds.current.has(messageKey)) {
-                            confirmedMessageIds.current.add(messageKey);
-                            // Keep hasChanges as false since this isn't a user action
-                            onConfirm(promptMessage.id, confirmation.sources, false);
-                        }
-                    }
-
-                    return [...pv, updatedConfirmation];
-                }
-                return pv;
-            });
-        }
-    }, [confirmation, sourceConfirmations, onConfirm]);
-
     // scroll question to top
     useEffect(() => {
         if (messages.length > 0) {
@@ -355,7 +269,6 @@ export function Messages({
             log(`Error resetting Ably state on chat change: ${err.message}`, 'error')
         );
         setMessages([]);
-        confirmedMessageIds.current.clear();
     }, [chatId, reset]);
 
     // Group messages by question
@@ -401,7 +314,6 @@ export function Messages({
                                             message={message}
                                             generatingResponse={chatStatus === ChatSessionStatus.GeneratingResponse}
                                             nextMessage={group[index + 1]}
-                                            onConfirm={onConfirm}
                                         />
                                     ))}
                                     {isLastGroup && (

@@ -2,11 +2,7 @@ import { Message, Realtime, RealtimeChannel } from 'ably';
 import gql from 'graphql-tag';
 import { useCallback, useRef, useState } from 'react';
 import { useMutation } from 'urql';
-import {
-    ChatMessageSources,
-    ChatMessageStatus,
-    ChatMessageType,
-} from '@aiera/client-sdk/modules/AieraChat/services/messages';
+import { ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import {
     AblyData,
     ChatSessionStatus,
@@ -16,17 +12,15 @@ import {
     CreateAblyTokenMutationVariables,
 } from '@aiera/client-sdk/types/generated';
 import { Citation } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
-import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
+import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { log } from '@aiera/client-sdk/lib/utils';
 
 export const CHANNEL_PREFIX = 'user-chat';
 
 interface PartialChatSource {
-    confirmed?: boolean;
     id: string;
     name: string;
     parent?: {
-        confirmed?: boolean;
         id: string;
         name: string;
         type: ChatSourceType;
@@ -46,7 +40,6 @@ interface PartialCitation {
 
 interface UseAblyReturn {
     citations?: Citation[];
-    confirmation?: ChatMessageSources;
     createAblyRealtimeClient: (sessionUserId?: string) => Promise<Realtime | null>;
     error?: string;
     partials: AblyMessageData[];
@@ -62,8 +55,7 @@ type PartialTextBlock = {
     type: ContentBlockType.Text;
 };
 
-interface AblyConfirmationSource {
-    confirmed: boolean;
+interface AblySource {
     id: number;
     name: string;
     type: string;
@@ -81,7 +73,7 @@ export interface AblyMessageData {
     prompt_message_id: string | null;
     runner_version: string;
     session_id: number;
-    sources?: AblyConfirmationSource[];
+    sources?: AblySource[];
     updated_at: string;
     user_id: number;
 }
@@ -142,7 +134,6 @@ export function normalizeCitation(rawCitation: PartialCitation): Citation {
  */
 export const useAbly = (): UseAblyReturn => {
     const { addCitationMarkers, clearCitationMarkers, onSetStatus } = useChatStore();
-    const [confirmation, setConfirmation] = useState<ChatMessageSources | undefined>(undefined);
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
     const [thinkingState, setThinkingState] = useState<string[]>([]);
@@ -408,40 +399,6 @@ export const useAbly = (): UseAblyReturn => {
                         }
                     }
 
-                    // If this is a source confirmation message, parse and store it in state
-                    if (jsonObject.message_type === 'source_confirmation') {
-                        if (shouldSkipPartial(ChatMessageType.SOURCES, skipTypes)) {
-                            log(
-                                `Skipping source confirmation message due to skip types parameter: ${String(skipTypes)}`
-                            );
-                            return;
-                        }
-                        if (jsonObject.sources && jsonObject.sources.length > 0) {
-                            const sources: Source[] = jsonObject.sources.map((source) => ({
-                                confirmed: source.confirmed,
-                                targetId: String(source.id),
-                                targetType: source.type,
-                                title: source.name,
-                            }));
-                            const confirmation: ChatMessageSources = {
-                                confirmed: false, // user action will confirm it
-                                id: `temp-confirmation-${jsonObject.session_id}-${jsonObject.prompt_message_id ?? ''}`,
-                                ordinalId: jsonObject.ordinal_id,
-                                prompt: '', // placeholder, get text from using the prompt id
-                                promptMessageId: jsonObject.prompt_message_id
-                                    ? String(jsonObject.prompt_message_id)
-                                    : undefined,
-                                sources,
-                                status: ChatMessageStatus.COMPLETED,
-                                timestamp: jsonObject.created_at,
-                                type: ChatMessageType.SOURCES,
-                            };
-                            setConfirmation(confirmation); // overwrite
-                        } else {
-                            setError('Received source confirmation message without sources');
-                        }
-                    }
-
                     // Stop streaming if this is the final partial
                     // "status" messages are always sent as final, but it doesn't mean we should stop streaming
                     if (data.is_final && jsonObject.message_type !== 'status') {
@@ -506,7 +463,6 @@ export const useAbly = (): UseAblyReturn => {
                 log('Resetting Ably state');
                 partialKeys.current = [];
                 requestAnimationFrame(() => {
-                    setConfirmation(undefined);
                     setThinkingState([]);
                     setError(undefined);
                     setCitations(undefined);
@@ -524,7 +480,6 @@ export const useAbly = (): UseAblyReturn => {
 
     return {
         citations,
-        confirmation,
         createAblyRealtimeClient,
         error,
         partials,

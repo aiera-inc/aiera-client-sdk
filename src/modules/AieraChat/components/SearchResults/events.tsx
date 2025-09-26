@@ -54,7 +54,6 @@ export function EventSearchResults({
                                             })
                                       : () =>
                                             onAddSource({
-                                                confirmed: true,
                                                 targetId,
                                                 targetType: 'event',
                                                 title: eventTitle,

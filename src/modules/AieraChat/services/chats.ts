@@ -44,7 +44,6 @@ export interface UseChatSessionsReturn {
 function mapSourcesToInput(sources?: Source[] | null): ChatSourceInput[] | null {
     return sources && sources.length > 0
         ? sources.map((source: Source) => ({
-              confirmed: source.confirmed === undefined ? false : source.confirmed,
               sourceId: source.targetId,
               sourceName: source.title,
               sourceType: source.targetType as ChatSourceType,
@@ -57,7 +56,6 @@ function normalizeSources(sources?: ChatSource[]): Source[] {
     if (sources && sources.length > 0) {
         sources.forEach((source) => {
             normalized.push({
-                confirmed: true,
                 targetId: source.sourceId,
                 targetType: source.type,
                 title: source.name,
@@ -178,7 +176,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     }
                     sources {
                         __typename
-                        confirmed
                         name
                         parent {
                             __typename
@@ -263,7 +260,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         __typename
-                        confirmed
                         name
                         parent {
                             __typename
@@ -321,7 +317,6 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         __typename
-                        confirmed
                         name
                         parent {
                             __typename

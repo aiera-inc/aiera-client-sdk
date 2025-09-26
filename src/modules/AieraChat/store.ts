@@ -19,7 +19,6 @@ const SOURCE_TYPE_PREFIXES: Record<string, string> = {
 };
 
 export interface Source {
-    confirmed?: boolean;
     contentId?: string;
     date?: string;
     targetId: string;

@@ -7,7 +7,6 @@ import { log } from '@aiera/client-sdk/lib/utils';
 import {
     ChatMessagePrompt as RawChatMessagePrompt,
     ChatMessageResponse as RawChatMessageResponse,
-    ChatMessageSourceConfirmation as RawChatMessageSourceConfirmation,
     ChatSessionsQuery,
     ChatSessionsQueryVariables,
     ChatSessionTitleStatus,
@@ -15,10 +14,6 @@ import {
     ChatSessionWithMessagesQueryVariables,
     ChatSource,
     Citation as RawCitation,
-    ConfirmationChatSourceInput,
-    ChatSourceType,
-    ConfirmChatMessageSourceConfirmationMutation,
-    ConfirmChatMessageSourceConfirmationMutationVariables,
     CreateChatMessagePromptMutation,
     CreateChatMessagePromptMutationVariables,
     TextBlock,
@@ -28,11 +23,7 @@ import {
     Citation,
     ContentBlock,
 } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
-import {
-    CHAT_SESSION_QUERY,
-    CONFIRM_SOURCE_CONFIRMATION_MUTATION,
-    CREATE_CHAT_MESSAGE_MUTATION,
-} from '@aiera/client-sdk/modules/AieraChat/services/graphql';
+import { CHAT_SESSION_QUERY, CREATE_CHAT_MESSAGE_MUTATION } from '@aiera/client-sdk/modules/AieraChat/services/graphql';
 import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 
 const POLLING_INTERVAL = 5000; // 5 seconds
@@ -84,7 +75,6 @@ export interface ChatMessagePrompt extends ChatMessageBase {
 
 export interface ChatMessageSources extends ChatMessageBase {
     type: ChatMessageType.SOURCES;
-    confirmed: boolean;
     sources: Source[];
 }
 
@@ -96,11 +86,6 @@ interface UseChatSessionOptions {
 }
 
 interface UseChatSessionReturn {
-    confirmSourceConfirmation: (
-        sessionId: string,
-        promptMessageId: string,
-        sources: Source[]
-    ) => Promise<RawChatMessageSourceConfirmation | null>;
     createChatMessagePrompt: ({
         content,
         sessionId,
@@ -127,18 +112,6 @@ export function isNonNullable<T>(value: T): value is NonNullable<T> {
  */
 function generateId(prefix = 'gen'): string {
     return `${prefix}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
-}
-
-/**
- * Map local sources to the generated ChatSource type for mutation inputs
- */
-function mapConfirmedSourcesToInput(sources: Source[]): ConfirmationChatSourceInput[] {
-    return sources.map((source: Source) => ({
-        confirmed: true,
-        sourceId: source.targetId,
-        sourceName: source.title,
-        sourceType: source.targetType as ChatSourceType,
-    }));
 }
 
 /**
@@ -174,7 +147,6 @@ export function normalizeSources(sources: ChatSource[] | null | undefined): Sour
 
     try {
         return sources.filter(isNonNullable).map((source) => ({
-            confirmed: !!source.confirmed,
             contentId: source.sourceId,
             targetId: source.sourceId,
             targetType: source.type,
@@ -246,45 +218,6 @@ export const useChatSession = ({
     // Add state for tracking refetch count and whether to stop polling
     const [_refetchCount, setRefetchCount] = useState<number>(0);
     const [shouldStopPolling, setShouldStopPolling] = useState<boolean>(false);
-
-    const [_, confirmSourceConfirmationMutation] = useMutation<
-        ConfirmChatMessageSourceConfirmationMutation,
-        ConfirmChatMessageSourceConfirmationMutationVariables
-    >(CONFIRM_SOURCE_CONFIRMATION_MUTATION);
-
-    const confirmSourceConfirmation = useCallback(
-        (sessionId: string, promptMessageId: string, sources: Source[]) => {
-            return confirmSourceConfirmationMutation({
-                input: {
-                    promptMessageId,
-                    sessionId,
-                    sources: mapConfirmedSourcesToInput(sources),
-                    sessionUserId: config.tracking?.userId,
-                },
-            })
-                .then((resp) => {
-                    if (resp.error) {
-                        throw new Error(
-                            resp.error.message || 'Error confirming sources for chat message source confirmation'
-                        );
-                    }
-
-                    const message = resp.data?.confirmChatMessageSourceConfirmation
-                        ?.chatMessage as RawChatMessageSourceConfirmation;
-                    if (!message) {
-                        log('No chat message returned from mutation!', 'warn');
-                    }
-                    return message;
-                })
-                .catch((error: Error) => {
-                    const errorMessage = error.message || 'Error creating chat message prompt';
-                    log(`${errorMessage}: ${String(error)}`, 'error');
-                    setError(errorMessage);
-                    return null;
-                });
-        },
-        [config.tracking?.userId, confirmSourceConfirmationMutation]
-    );
 
     const [__, createChatMessagePromptMutation] = useMutation<
         CreateChatMessagePromptMutation,
@@ -377,7 +310,6 @@ export const useChatSession = ({
                                 createdAt
                                 sources {
                                     __typename
-                                    confirmed
                                     name
                                     parent {
                                         __typename
@@ -465,28 +397,6 @@ export const useChatSession = ({
                             status: ChatMessageStatus.COMPLETED,
                             timestamp: msg.createdAt,
                             type: ChatMessageType.RESPONSE,
-                        });
-                    });
-                }
-
-                // Process source confirmation messages
-                if (chatSession.sourceConfirmationMessages) {
-                    (chatSession.sourceConfirmationMessages as RawChatMessageSourceConfirmation[]).forEach((msg) => {
-                        if (!msg) return;
-
-                        const sources = normalizeSources(msg.sources);
-                        const confirmed = !!sources.find((s) => s.confirmed);
-
-                        normalizedMessages.push({
-                            confirmed,
-                            id: msg.id,
-                            ordinalId: msg.ordinalId,
-                            prompt: lastPromptValue, // Use the last prompt value
-                            promptMessageId: msg.promptMessageId ? String(msg.promptMessageId) : undefined,
-                            sources,
-                            status: ChatMessageStatus.COMPLETED,
-                            timestamp: msg.createdAt,
-                            type: ChatMessageType.SOURCES,
                         });
                     });
                 }
@@ -652,7 +562,6 @@ export const useChatSession = ({
     ]);
 
     return {
-        confirmSourceConfirmation,
         createChatMessagePrompt,
         error,
         isLoading,

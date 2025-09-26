@@ -1,21 +1,14 @@
 import React from 'react';
-import { screen, fireEvent, waitFor, within } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import { RealtimeChannel } from 'ably';
 
 import { actAndFlush, renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import { Messages } from '.';
 import { useChatStore } from '../../store';
-import { useUserPreferencesStore } from '../../userPreferencesStore';
 import * as ablyService from '../../services/ably';
 import * as messageService from '../../services/messages';
-import {
-    ChatMessage,
-    ChatMessageType,
-    ChatMessageStatus,
-    ChatMessagePrompt,
-    ChatMessageResponse,
-} from '../../services/messages';
+import { ChatMessage, ChatMessageType, ChatMessageStatus, ChatMessageResponse } from '../../services/messages';
 import { BlockType } from './MessageFactory/Block';
 
 jest.mock('../../services/ably');
@@ -26,28 +19,15 @@ interface MockMessageFactoryProps {
         type: string;
         prompt?: string;
         promptMessageId?: string;
-        sources?: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
     };
-    onConfirm: (promptMessageId: string, sources: any[]) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
     setRef?: (node: HTMLDivElement | null, id: string) => void;
 }
 
 jest.mock('./MessageFactory', () => ({
-    MessageFactory: ({ message, onConfirm, setRef }: MockMessageFactoryProps) => (
+    MessageFactory: ({ message, setRef }: MockMessageFactoryProps) => (
         <div data-testid={`message-${message.id}`} ref={(node) => setRef && setRef(node, message.id)}>
             <span>{message.type}</span>
             <span>{message.prompt}</span>
-            {message.type === 'sources' && message.promptMessageId && message.sources && (
-                <button
-                    onClick={() =>
-                        message.promptMessageId &&
-                        message.sources &&
-                        onConfirm(message.promptMessageId, message.sources)
-                    }
-                >
-                    Confirm Sources
-                </button>
-            )}
         </div>
     ),
 }));
@@ -80,7 +60,6 @@ const mockChannel = {
 
 const mockUseAbly = {
     citations: [],
-    confirmation: null,
     partials: [],
     reset: jest.fn().mockResolvedValue(undefined),
     subscribeToChannel: jest.fn((channelName: string) => ({
@@ -92,7 +71,6 @@ const mockUseAbly = {
 };
 
 const mockUseChatSession = {
-    confirmSourceConfirmation: jest.fn().mockResolvedValue({ id: 'confirmed' }),
     createChatMessagePrompt: jest.fn().mockResolvedValue({ id: 'new-prompt' }),
     messages: [],
     setMessages: jest.fn(),
@@ -111,10 +89,6 @@ describe('Messages', () => {
             sources: [],
             onAddSource: jest.fn(),
             onSetStatus: jest.fn(),
-        });
-
-        useUserPreferencesStore.setState({
-            sourceConfirmations: 'manual',
         });
 
         // Setup mocks
@@ -270,47 +244,6 @@ describe('Messages', () => {
         expect(onOpenSources).toHaveBeenCalled();
     });
 
-    test('handles source confirmation', async () => {
-        const messages: ChatMessage[] = [
-            {
-                id: 'prompt-1',
-                type: ChatMessageType.PROMPT,
-                prompt: 'Test question',
-                status: ChatMessageStatus.COMPLETED,
-                timestamp: new Date().toISOString(),
-            },
-            {
-                id: 'sources-1',
-                type: ChatMessageType.SOURCES,
-                promptMessageId: 'prompt-1',
-                prompt: 'Test question',
-                status: ChatMessageStatus.COMPLETED,
-                timestamp: new Date().toISOString(),
-                sources: [{ targetId: 'source-1', targetType: 'event', title: 'Event 1' }],
-                confirmed: false,
-            },
-        ];
-
-        (messageService.useChatSession as jest.Mock).mockReturnValue({
-            ...mockUseChatSession,
-            messages,
-        });
-
-        await actAndFlush(() => renderWithProvider(<Messages onOpenSources={jest.fn()} onSubmit={jest.fn()} />));
-
-        const sourcesMessage = screen.getByTestId('message-sources-1');
-        fireEvent.click(within(sourcesMessage).getByText('Confirm Sources'));
-
-        await waitFor(() => {
-            expect(mockUseChatSession.confirmSourceConfirmation).toHaveBeenCalledWith('test-chat-id', 'prompt-1', [
-                { targetId: 'source-1', targetType: 'event', title: 'Event 1' },
-            ]);
-        });
-
-        expect(useChatStore.getState().onAddSource).toHaveBeenCalled();
-        expect(useChatStore.getState().onSetStatus).toHaveBeenCalledWith(ChatSessionStatus.GeneratingResponse);
-    });
-
     test('displays finding sources status', async () => {
         const messages: ChatMessage[] = [
             {
@@ -412,81 +345,6 @@ describe('Messages', () => {
         const newMessages = setMessagesCall([]);
 
         expect(newMessages[0]?.status).toBe(ChatMessageStatus.COMPLETED);
-    });
-
-    test('auto-confirms sources when preference is set', async () => {
-        useUserPreferencesStore.setState({
-            sourceConfirmations: 'auto',
-        });
-
-        const confirmation = {
-            id: 'sources-1',
-            type: ChatMessageType.SOURCES,
-            promptMessageId: 'prompt-1',
-            prompt: 'Test question',
-            status: ChatMessageStatus.COMPLETED,
-            timestamp: new Date().toISOString(),
-            sources: [{ targetId: 'source-1', targetType: 'event', title: 'Event 1' }],
-            confirmed: false,
-        };
-
-        const prompt: ChatMessagePrompt = {
-            id: 'prompt-1',
-            type: ChatMessageType.PROMPT,
-            prompt: 'Test question',
-            ordinalId: 'ord-1',
-            status: ChatMessageStatus.COMPLETED,
-            timestamp: new Date().toISOString(),
-        };
-
-        let currentMessages: ChatMessage[] = [prompt];
-        const setMessagesMock = jest.fn((fn: ((messages: ChatMessage[]) => ChatMessage[]) | ChatMessage[]) => {
-            // Handle both cases: when called with a function or with direct value
-            if (typeof fn === 'function') {
-                currentMessages = fn(currentMessages);
-            } else {
-                currentMessages = fn;
-            }
-        });
-
-        // Mock with messages in the initial state
-        (messageService.useChatSession as jest.Mock).mockReturnValue({
-            ...mockUseChatSession,
-            messages: currentMessages,
-            setMessages: setMessagesMock,
-        });
-
-        (ablyService.useAbly as jest.Mock).mockReturnValue({
-            ...mockUseAbly,
-            confirmation: null, // Start with no confirmation
-        });
-
-        const { rerender } = await actAndFlush(() =>
-            renderWithProvider(<Messages onOpenSources={jest.fn()} onSubmit={jest.fn()} />)
-        );
-
-        // Now update with the confirmation
-        (ablyService.useAbly as jest.Mock).mockReturnValue({
-            ...mockUseAbly,
-            confirmation,
-        });
-
-        // Also ensure messages array contains the prompt message
-        (messageService.useChatSession as jest.Mock).mockReturnValue({
-            ...mockUseChatSession,
-            messages: [prompt],
-            setMessages: setMessagesMock,
-        });
-
-        await actAndFlush(() => rerender(<Messages onOpenSources={jest.fn()} onSubmit={jest.fn()} />));
-
-        await waitFor(() => {
-            expect(mockUseChatSession.confirmSourceConfirmation).toHaveBeenCalledWith(
-                'test-chat-id',
-                'prompt-1',
-                confirmation.sources
-            );
-        });
     });
 
     test('scrolls to latest prompt message', async () => {

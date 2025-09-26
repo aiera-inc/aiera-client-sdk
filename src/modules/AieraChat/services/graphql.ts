@@ -70,34 +70,6 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
     }
 `;
 
-const CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT = gql`
-    fragment ChatMessageSourceConfirmationFragment on ChatMessageSourceConfirmation {
-        __typename
-        id
-        createdAt
-        messageType
-        ordinalId
-        promptMessageId
-        runnerVersion
-        sessionId
-        updatedAt
-        userId
-        sources {
-            __typename
-            confirmed
-            name
-            parent {
-                __typename
-                name
-                sourceId
-                type
-            }
-            sourceId
-            type
-        }
-    }
-`;
-
 export const CHAT_SESSION_QUERY = gql`
     query ChatSessionWithMessages($filter: ChatSessionFilter!) {
         chatSession(filter: $filter) {
@@ -114,7 +86,6 @@ export const CHAT_SESSION_QUERY = gql`
             userId
             sources {
                 __typename
-                confirmed
                 name
                 parent {
                     __typename
@@ -131,25 +102,10 @@ export const CHAT_SESSION_QUERY = gql`
             responseMessages {
                 ...ChatMessageResponseFragment
             }
-            sourceConfirmationMessages {
-                ...ChatMessageSourceConfirmationFragment
-            }
         }
     }
     ${CHAT_MESSAGE_PROMPT_FRAGMENT}
     ${CHAT_MESSAGE_RESPONSE_FRAGMENT}
-    ${CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT}
-`;
-
-export const CONFIRM_SOURCE_CONFIRMATION_MUTATION = gql`
-    mutation ConfirmChatMessageSourceConfirmation($input: ConfirmSourceConfirmationInput!) {
-        confirmChatMessageSourceConfirmation(input: $input) {
-            chatMessage {
-                ...ChatMessageSourceConfirmationFragment
-            }
-        }
-    }
-    ${CHAT_MESSAGE_SOURCE_CONFIRMATION_FRAGMENT}
 `;
 
 export const CREATE_CHAT_MESSAGE_MUTATION = gql`

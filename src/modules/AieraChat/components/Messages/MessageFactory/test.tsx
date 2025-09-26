@@ -1,13 +1,7 @@
 import React from 'react';
 import { screen } from '@testing-library/react';
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
-import {
-    ChatMessageType,
-    ChatMessageStatus,
-    ChatMessagePrompt,
-    ChatMessageResponse,
-    ChatMessageSources,
-} from '../../../services/messages';
+import { ChatMessageType, ChatMessageStatus, ChatMessagePrompt, ChatMessageResponse } from '../../../services/messages';
 import { MessageFactory } from '.';
 import { BlockType } from './Block';
 
@@ -47,28 +41,8 @@ jest.mock('./MessageResponse', () => ({
     ),
 }));
 
-interface MockSourcesResponseProps {
-    data: {
-        sources?: any[]; // eslint-disable-line @typescript-eslint/no-explicit-any
-        promptMessageId: string;
-        confirmed?: boolean;
-    };
-    onConfirm: (promptMessageId: string, sources: any[]) => void; // eslint-disable-line @typescript-eslint/no-explicit-any
-}
-
-jest.mock('./SourcesResponse', () => ({
-    SourcesResponse: ({ data, onConfirm }: MockSourcesResponseProps) => (
-        <div data-testid="sources-response">
-            <span>{data.sources?.length} sources</span>
-            <button onClick={() => data.sources && onConfirm(data.promptMessageId, data.sources)}>Confirm</button>
-            <span data-testid="confirmed">{data.confirmed ? 'confirmed' : 'not-confirmed'}</span>
-        </div>
-    ),
-}));
-
 describe('MessageFactory', () => {
     const mockSetRef = jest.fn();
-    const mockOnConfirm = jest.fn();
 
     beforeEach(() => {
         jest.clearAllMocks();
@@ -84,14 +58,7 @@ describe('MessageFactory', () => {
             timestamp: '2023-01-01T00:00:00Z',
         };
 
-        renderWithProvider(
-            <MessageFactory
-                message={promptMessage}
-                generatingResponse={false}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
+        renderWithProvider(<MessageFactory message={promptMessage} generatingResponse={false} setRef={mockSetRef} />);
 
         expect(screen.getByTestId('message-prompt')).toBeInTheDocument();
         expect(screen.getByText('What is the weather?')).toBeInTheDocument();
@@ -117,48 +84,11 @@ describe('MessageFactory', () => {
             sources: [],
         };
 
-        renderWithProvider(
-            <MessageFactory
-                message={responseMessage}
-                generatingResponse={false}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
+        renderWithProvider(<MessageFactory message={responseMessage} generatingResponse={false} setRef={mockSetRef} />);
 
         expect(screen.getByTestId('message-response')).toBeInTheDocument();
         expect(screen.getByText('The weather is sunny today.')).toBeInTheDocument();
         expect(screen.getByTestId('response-status')).toHaveTextContent('completed');
-    });
-
-    test('renders SourcesResponse for sources type messages', () => {
-        const sourcesMessage: ChatMessageSources = {
-            id: 'sources-123',
-            ordinalId: 'ord-789',
-            type: ChatMessageType.SOURCES,
-            prompt: 'Find information about AI',
-            promptMessageId: 'prompt-123',
-            status: ChatMessageStatus.COMPLETED,
-            timestamp: '2023-01-01T00:00:00Z',
-            sources: [
-                { targetId: 'source-1', targetType: 'event', title: 'AI Conference' },
-                { targetId: 'source-2', targetType: 'news', title: 'AI News Article' },
-            ],
-            confirmed: false,
-        };
-
-        renderWithProvider(
-            <MessageFactory
-                message={sourcesMessage}
-                generatingResponse={false}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
-
-        expect(screen.getByTestId('sources-response')).toBeInTheDocument();
-        expect(screen.getByText('2 sources')).toBeInTheDocument();
-        expect(screen.getByTestId('confirmed')).toHaveTextContent('not-confirmed');
     });
 
     test('passes generatingResponse prop correctly to MessageResponse', () => {
@@ -179,14 +109,7 @@ describe('MessageFactory', () => {
             sources: [],
         };
 
-        renderWithProvider(
-            <MessageFactory
-                message={responseMessage}
-                generatingResponse={true}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
+        renderWithProvider(<MessageFactory message={responseMessage} generatingResponse={true} setRef={mockSetRef} />);
 
         expect(screen.getByTestId('generating')).toHaveTextContent('generating');
         expect(screen.getByTestId('is-last')).toHaveTextContent('last');
@@ -224,7 +147,6 @@ describe('MessageFactory', () => {
                 message={responseMessage}
                 nextMessage={nextMessage}
                 generatingResponse={true}
-                onConfirm={mockOnConfirm}
                 setRef={mockSetRef}
             />
         );
@@ -243,47 +165,10 @@ describe('MessageFactory', () => {
             timestamp: '2023-01-01T00:00:00Z',
         };
 
-        renderWithProvider(
-            <MessageFactory
-                message={promptMessage}
-                generatingResponse={false}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
+        renderWithProvider(<MessageFactory message={promptMessage} generatingResponse={false} setRef={mockSetRef} />);
 
         // Check that setRef was called with the container div and message id
         expect(mockSetRef).toHaveBeenCalledWith(expect.any(HTMLDivElement), 'prompt-unique-123');
-    });
-
-    test('handles sources confirmation callback', () => {
-        const sourcesMessage: ChatMessageSources = {
-            id: 'sources-123',
-            ordinalId: 'ord-789',
-            type: ChatMessageType.SOURCES,
-            prompt: 'Find sources',
-            promptMessageId: 'prompt-123',
-            status: ChatMessageStatus.COMPLETED,
-            timestamp: '2023-01-01T00:00:00Z',
-            sources: [{ targetId: 'source-1', targetType: 'event', title: 'Event 1' }],
-            confirmed: false,
-        };
-
-        renderWithProvider(
-            <MessageFactory
-                message={sourcesMessage}
-                generatingResponse={false}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
-
-        const confirmButton = screen.getByText('Confirm');
-        confirmButton.click();
-
-        expect(mockOnConfirm).toHaveBeenCalledWith('prompt-123', [
-            { targetId: 'source-1', targetType: 'event', title: 'Event 1' },
-        ]);
     });
 
     test('applies correct CSS classes to container', () => {
@@ -296,14 +181,7 @@ describe('MessageFactory', () => {
             timestamp: '2023-01-01T00:00:00Z',
         };
 
-        renderWithProvider(
-            <MessageFactory
-                message={promptMessage}
-                generatingResponse={false}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
+        renderWithProvider(<MessageFactory message={promptMessage} generatingResponse={false} setRef={mockSetRef} />);
 
         // The message container is the parent of the prompt
         const promptElement = screen.getByTestId('message-prompt');
@@ -329,41 +207,9 @@ describe('MessageFactory', () => {
             sources: [],
         };
 
-        renderWithProvider(
-            <MessageFactory
-                message={streamingMessage}
-                generatingResponse={true}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
+        renderWithProvider(<MessageFactory message={streamingMessage} generatingResponse={true} setRef={mockSetRef} />);
 
         expect(screen.getByTestId('response-status')).toHaveTextContent('streaming');
         expect(screen.getByTestId('generating')).toHaveTextContent('generating');
-    });
-
-    test('handles confirmed sources message', () => {
-        const confirmedSourcesMessage: ChatMessageSources = {
-            id: 'sources-confirmed',
-            ordinalId: 'ord-confirmed',
-            type: ChatMessageType.SOURCES,
-            prompt: 'Find sources',
-            promptMessageId: 'prompt-123',
-            status: ChatMessageStatus.COMPLETED,
-            timestamp: '2023-01-01T00:00:00Z',
-            sources: [{ targetId: 'source-1', targetType: 'event', title: 'Event 1', confirmed: true }],
-            confirmed: true,
-        };
-
-        renderWithProvider(
-            <MessageFactory
-                message={confirmedSourcesMessage}
-                generatingResponse={false}
-                onConfirm={mockOnConfirm}
-                setRef={mockSetRef}
-            />
-        );
-
-        expect(screen.getByTestId('confirmed')).toHaveTextContent('confirmed');
     });
 });
