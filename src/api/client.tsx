@@ -113,14 +113,12 @@ export function createGQLClient(config: Config): Client {
             ChatMessage: ({ id }) => (id ? `ChatMessage:${id}` : null),
             ChatMessagePrompt: ({ id }) => (id ? `ChatMessagePrompt:${id}` : null),
             ChatMessageResponse: ({ id }) => (id ? `ChatMessageResponse:${id}` : null),
-            ChatMessageSourceConfirmation: ({ id }) => (id ? `ChatMessageSourceConfirmation:${id}` : null),
             ChatSession: ({ id }) => (id ? `ChatSession:${id}` : null),
         },
         // Type conditions used in fragments
         typePolicies: {
             ChatMessagePrompt: { __typename: 'ChatMessagePrompt' },
             ChatMessageResponse: { __typename: 'ChatMessageResponse' },
-            ChatMessageSourceConfirmation: { __typename: 'ChatMessageSourceConfirmation' },
             TextBlock: { __typename: 'TextBlock' },
             ListBlock: { __typename: 'ListBlock' },
             ImageBlock: { __typename: 'ImageBlock' },
