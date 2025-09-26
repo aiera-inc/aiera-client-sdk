@@ -2,17 +2,14 @@ import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCir
 import { MicroExclamationCircle } from '@aiera/client-sdk/components/Svg/MicroExclamationCircle';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
 import { MicroGear } from '@aiera/client-sdk/components/Svg/MicroGear';
-import { Toggle } from '@aiera/client-sdk/components/Toggle';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { EventSearchResults } from '@aiera/client-sdk/modules/AieraChat/components/SearchResults/events';
 import debounce from 'lodash.debounce';
 import React, { useCallback, useEffect, useState } from 'react';
-import { match } from 'ts-pattern';
 import { SearchInput } from '../../components/SearchInput';
 import { useEvents } from '../../services/events';
 import { Source, useChatStore } from '../../store';
-import { useUserPreferencesStore } from '../../userPreferencesStore';
 import { Panel } from '../Panel';
 
 const EMPTY_SOURCES_MESSAGE = 'Sources will be suggested until a source is added.';
@@ -44,9 +41,6 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
     const [inputValue, setInputValue] = useState<string>('');
     // State that will be debounced before being used in queries
     const [searchTerm, setSearchTerm] = useState<string | undefined>(undefined);
-
-    const { setSourceConfirmations, sourceConfirmations } = useUserPreferencesStore();
-
     const { eventsQuery } = useEvents(searchTerm);
 
     // Create a debounced function that will update the searchTerm
@@ -142,33 +136,10 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                             </>
                         )}
                         {!searchTerm && (
-                            <>
-                                <div className="h-[1.875rem] mt-4 text-slate-800 mx-5 text-base flex items-center font-bold antialiased">
-                                    <MicroGear className="w-4 mr-1.5" />
-                                    <p className="flex-1">Suggested Sources</p>
-                                </div>
-                                <button
-                                    onClick={() =>
-                                        setSourceConfirmations(sourceConfirmations === 'manual' ? 'auto' : 'manual')
-                                    }
-                                    className="flex cursor-pointer mt-2 items-center justify-between py-2 px-3 rounded-lg border border-slate-300/80 mx-5 text-slate-800 hover:bg-slate-200 sourceToggle"
-                                >
-                                    <p className="text-base flex-1 text-left">
-                                        {match(sourceConfirmations)
-                                            .with('auto', () => 'Automatically accept')
-                                            .with('manual', () => 'Manually confirm')
-                                            .exhaustive()}
-                                    </p>
-                                    <Toggle
-                                        onChange={() => {
-                                            setSourceConfirmations(
-                                                sourceConfirmations === 'manual' ? 'auto' : 'manual'
-                                            );
-                                        }}
-                                        on={sourceConfirmations === 'auto'}
-                                    />
-                                </button>
-                            </>
+                            <div className="h-[1.875rem] mt-4 text-slate-800 mx-5 text-base flex items-center font-bold antialiased">
+                                <MicroGear className="w-4 mr-1.5" />
+                                <p className="flex-1">Suggested Sources</p>
+                            </div>
                         )}
                     </div>
                 </div>
