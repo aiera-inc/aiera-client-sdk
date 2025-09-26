@@ -1,7 +1,6 @@
 import { MicroCloseCircle } from '@aiera/client-sdk/components/Svg/MicroCloseCircle';
 import { MicroExclamationCircle } from '@aiera/client-sdk/components/Svg/MicroExclamationCircle';
 import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
-import { MicroGear } from '@aiera/client-sdk/components/Svg/MicroGear';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { EventSearchResults } from '@aiera/client-sdk/modules/AieraChat/components/SearchResults/events';
@@ -134,12 +133,6 @@ export function Sources({ onClearSources, onClose }: { onClearSources: () => voi
                                     <p className="text-base leading-4 text-balance">Clear All Sources</p>
                                 </div>
                             </>
-                        )}
-                        {!searchTerm && (
-                            <div className="h-[1.875rem] mt-4 text-slate-800 mx-5 text-base flex items-center font-bold antialiased">
-                                <MicroGear className="w-4 mr-1.5" />
-                                <p className="flex-1">Suggested Sources</p>
-                            </div>
                         )}
                     </div>
                 </div>
