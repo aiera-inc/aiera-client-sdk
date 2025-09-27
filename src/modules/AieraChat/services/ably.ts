@@ -325,7 +325,12 @@ export const useAbly = (): UseAblyReturn => {
                     // Decode the base64 string
                     let decodedData;
                     try {
-                        decodedData = atob(data.content);
+                        const binaryString = atob(data.content);
+                        const bytes = new Uint8Array(binaryString.length);
+                        for (let i = 0; i < binaryString.length; i++) {
+                            bytes[i] = binaryString.charCodeAt(i);
+                        }
+                        decodedData = new TextDecoder('utf-8').decode(bytes);
                     } catch (decodingError) {
                         log(`Error handling message: ${String(decodingError)}`, 'debug');
                         return; // ignore message if there's no encoded content
