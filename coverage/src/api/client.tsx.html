@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.45% </span>
+                <span class="strong">62.1% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>59/96</span>
+                <span class='fraction'>59/95</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">67.69% </span>
+                <span class="strong">69.84% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>44/65</span>
+                <span class='fraction'>44/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">39.53% </span>
+                <span class="strong">40.47% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>17/43</span>
+                <span class='fraction'>17/42</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">61.7% </span>
+                <span class="strong">62.36% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>58/94</span>
+                <span class='fraction'>58/93</span>
             </div>
         
             
@@ -415,9 +415,7 @@
 <a name='L350'></a><a href='#L350'>350</a>
 <a name='L351'></a><a href='#L351'>351</a>
 <a name='L352'></a><a href='#L352'>352</a>
-<a name='L353'></a><a href='#L353'>353</a>
-<a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L353'></a><a href='#L353'>353</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -533,8 +531,6 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -614,10 +610,10 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">245x</span>
-<span class="cline-any cline-yes">245x</span>
-<span class="cline-any cline-yes">245x</span>
-<span class="cline-any cline-yes">245x</span>
+<span class="cline-any cline-yes">239x</span>
+<span class="cline-any cline-yes">239x</span>
+<span class="cline-any cline-yes">239x</span>
+<span class="cline-any cline-yes">239x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -687,11 +683,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1227x</span>
-<span class="cline-any cline-yes">1227x</span>
-<span class="cline-any cline-yes">1227x</span>
-<span class="cline-any cline-yes">607x</span>
-<span class="cline-any cline-yes">413x</span>
+<span class="cline-any cline-yes">1215x</span>
+<span class="cline-any cline-yes">1215x</span>
+<span class="cline-any cline-yes">1215x</span>
+<span class="cline-any cline-yes">597x</span>
+<span class="cline-any cline-yes">403x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">194x</span>
@@ -886,14 +882,12 @@ export function createGQLClient(config: Config): Client {
             ChatMessage: <span class="fstat-no" title="function not covered" >({</span> id }) =&gt; (<span class="cstat-no" title="statement not covered" >id ? `ChatMessage:${id}` : null)</span>,
             ChatMessagePrompt: <span class="fstat-no" title="function not covered" >({</span> id }) =&gt; (<span class="cstat-no" title="statement not covered" >id ? `ChatMessagePrompt:${id}` : null)</span>,
             ChatMessageResponse: <span class="fstat-no" title="function not covered" >({</span> id }) =&gt; (<span class="cstat-no" title="statement not covered" >id ? `ChatMessageResponse:${id}` : null)</span>,
-            ChatMessageSourceConfirmation: <span class="fstat-no" title="function not covered" >({</span> id }) =&gt; (<span class="cstat-no" title="statement not covered" >id ? `ChatMessageSourceConfirmation:${id}` : null)</span>,
             ChatSession: <span class="fstat-no" title="function not covered" >({</span> id }) =&gt; (<span class="cstat-no" title="statement not covered" >id ? `ChatSession:${id}` : null)</span>,
         },
         // Type conditions used in fragments
         typePolicies: {
             ChatMessagePrompt: { __typename: 'ChatMessagePrompt' },
             ChatMessageResponse: { __typename: 'ChatMessageResponse' },
-            ChatMessageSourceConfirmation: { __typename: 'ChatMessageSourceConfirmation' },
             TextBlock: { __typename: 'TextBlock' },
             ListBlock: { __typename: 'ListBlock' },
             ImageBlock: { __typename: 'ImageBlock' },
@@ -1132,7 +1126,7 @@ export function usePagingQuery&lt;Data, Variables&gt;(
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Fri Sep 19 2025 15:51:20 GMT-0400 (Eastern Daylight Time)
+                at Sat Sep 27 2025 08:41:36 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

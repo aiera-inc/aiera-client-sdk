@@ -74121,13 +74121,11 @@ function createGQLClient(config) {
       ChatMessage: ({ id }) => id ? `ChatMessage:${id}` : null,
       ChatMessagePrompt: ({ id }) => id ? `ChatMessagePrompt:${id}` : null,
       ChatMessageResponse: ({ id }) => id ? `ChatMessageResponse:${id}` : null,
-      ChatMessageSourceConfirmation: ({ id }) => id ? `ChatMessageSourceConfirmation:${id}` : null,
       ChatSession: ({ id }) => id ? `ChatSession:${id}` : null
     },
     typePolicies: {
       ChatMessagePrompt: { __typename: "ChatMessagePrompt" },
       ChatMessageResponse: { __typename: "ChatMessageResponse" },
-      ChatMessageSourceConfirmation: { __typename: "ChatMessageSourceConfirmation" },
       TextBlock: { __typename: "TextBlock" },
       ListBlock: { __typename: "ListBlock" },
       ImageBlock: { __typename: "ImageBlock" },
@@ -74730,33 +74728,6 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
   }
 }
     `;
-var ChatMessageSourceConfirmationFragmentFragmentDoc = lib_default`
-    fragment ChatMessageSourceConfirmationFragment on ChatMessageSourceConfirmation {
-  __typename
-  id
-  createdAt
-  messageType
-  ordinalId
-  promptMessageId
-  runnerVersion
-  sessionId
-  updatedAt
-  userId
-  sources {
-    __typename
-    confirmed
-    name
-    parent {
-      __typename
-      name
-      sourceId
-      type
-    }
-    sourceId
-    type
-  }
-}
-    `;
 var RefreshDocument = lib_default`
     mutation Refresh {
   __typename
@@ -74899,7 +74870,6 @@ var CreateChatSessionDocument = lib_default`
       }
       sources {
         __typename
-        confirmed
         name
         parent {
           __typename
@@ -74934,7 +74904,6 @@ var UpdateChatSessionDocument = lib_default`
       createdAt
       sources {
         __typename
-        confirmed
         name
         parent {
           __typename
@@ -74961,7 +74930,6 @@ var ChatSessionsDocument = lib_default`
     createdAt
     sources {
       __typename
-      confirmed
       name
       parent {
         __typename
@@ -75021,7 +74989,6 @@ var ChatSessionWithMessagesDocument = lib_default`
     userId
     sources {
       __typename
-      confirmed
       name
       parent {
         __typename
@@ -75038,23 +75005,10 @@ var ChatSessionWithMessagesDocument = lib_default`
     responseMessages {
       ...ChatMessageResponseFragment
     }
-    sourceConfirmationMessages {
-      ...ChatMessageSourceConfirmationFragment
-    }
   }
 }
     ${ChatMessagePromptFragmentFragmentDoc}
-${ChatMessageResponseFragmentFragmentDoc}
-${ChatMessageSourceConfirmationFragmentFragmentDoc}`;
-var ConfirmChatMessageSourceConfirmationDocument = lib_default`
-    mutation ConfirmChatMessageSourceConfirmation($input: ConfirmSourceConfirmationInput!) {
-  confirmChatMessageSourceConfirmation(input: $input) {
-    chatMessage {
-      ...ChatMessageSourceConfirmationFragment
-    }
-  }
-}
-    ${ChatMessageSourceConfirmationFragmentFragmentDoc}`;
+${ChatMessageResponseFragmentFragmentDoc}`;
 var CreateChatMessagePromptDocument = lib_default`
     mutation CreateChatMessagePrompt($input: CreateChatMessagePromptInput!) {
   createChatMessagePrompt(input: $input) {
@@ -75071,7 +75025,6 @@ var ChatSessionsRefetchDocument = lib_default`
     createdAt
     sources {
       __typename
-      confirmed
       name
       parent {
         __typename
