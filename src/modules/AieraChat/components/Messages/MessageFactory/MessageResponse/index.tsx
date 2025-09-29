@@ -1,19 +1,19 @@
+import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
+import { MicroBank } from '@aiera/client-sdk/components/Svg/MicroBank';
+import { MicroCalendar } from '@aiera/client-sdk/components/Svg/MicroCalendar';
+import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
+import { MicroFolderOpen } from '@aiera/client-sdk/components/Svg/MicroFolderOpen';
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { copyToClipboard, log } from '@aiera/client-sdk/lib/utils';
-import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
+import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
+import { match } from 'ts-pattern';
 import { ChatMessageResponse } from '../../../../services/messages';
 import { Block } from '../Block';
 import { Footer } from './Footer';
-import classNames from 'classnames';
-import { MicroFolderOpen } from '@aiera/client-sdk/components/Svg/MicroFolderOpen';
-import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
-import { Chevron } from '@aiera/client-sdk/components/Svg/Chevron';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { useMessageBus } from '@aiera/client-sdk/lib/msg';
-import { MicroCalendar } from '@aiera/client-sdk/components/Svg/MicroCalendar';
-import { MicroBank } from '@aiera/client-sdk/components/Svg/MicroBank';
-import { match } from 'ts-pattern';
 
 export const MessageResponse = ({
     data,
@@ -28,31 +28,26 @@ export const MessageResponse = ({
 
     const config = useConfig();
     const bus = useMessageBus();
-    const onNav = ({ targetType, targetId, title }: { targetType: string; title: string; targetId: string }) => {
+    const onNav = (source: Source) => {
         if (config.options?.aieraChatDisableSourceNav) {
-            bus?.emit('chat-source', { targetId, targetType }, 'out');
+            bus?.emit('chat-source', source, 'out');
         } else {
-            onSelectSource({
-                targetId,
-                targetType,
-                title,
-            });
+            onSelectSource(source);
         }
     };
     const localSources =
         data.blocks
             ?.reduce((acc, block) => {
-                if (block.citations) {
-                    const sources = block.citations.map((citation) => ({
-                        title: citation.source,
-                        targetId: citation.sourceParentId || citation.sourceId,
-                        targetType: citation.sourceType,
-                        text: citation.text,
+                if (block.citations && block.citations.length > 0) {
+                    const sources = block.citations.map(({ source, sourceId, sourceParentId, sourceType }) => ({
+                        targetId: sourceParentId || sourceId,
+                        targetType: sourceType,
+                        title: source,
                     }));
                     return acc.concat(sources);
                 }
                 return acc;
-            }, [] as Array<{ title: string; targetId: string; targetType: string }>)
+            }, [] as Array<Source>)
             ?.filter((source, index, self) => self.findIndex((s) => s.title === source.title) === index) || [];
 
     const sourcesSummary = (() => {
@@ -129,22 +124,22 @@ export const MessageResponse = ({
                         />
                     </button>
                     {expanded &&
-                        localSources.map(({ title, targetId, targetType }, idx) => (
+                        localSources.map((source, idx) => (
                             <div
-                                key={`${idx}-${targetId}`}
+                                key={`${idx}-${source.targetId}`}
                                 className={classNames(
                                     'mx-1 mt-1 text-sm px-2 py-1.5',
                                     'hover:bg-slate-200/40 rounded-md',
                                     'cursor-pointer flex items-center'
                                 )}
-                                onClick={() => onNav({ targetId, targetType, title })}
+                                onClick={() => onNav(source)}
                             >
-                                {match(targetType)
+                                {match(source.targetType)
                                     .with('event', () => <MicroCalendar className="w-4 text-slate-600" />)
                                     .with('transcript', () => <MicroCalendar className="w-4 text-slate-600" />)
                                     .with('filing', () => <MicroBank className="w-4 text-slate-600" />)
                                     .otherwise(() => null)}
-                                <p className="text-base flex-1 line-clamp-1 ml-2 text-left">{title}</p>
+                                <p className="text-base flex-1 line-clamp-1 ml-2 text-left">{source.title}</p>
                             </div>
                         ))}
                 </div>
