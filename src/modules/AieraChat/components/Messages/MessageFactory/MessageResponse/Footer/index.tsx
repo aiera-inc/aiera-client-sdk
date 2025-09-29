@@ -29,7 +29,6 @@ export const Footer = ({
     const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
     const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
 
-    console.log({ data });
     const onHandleCopy = useCallback(() => {
         setCopied(true);
 
@@ -45,7 +44,7 @@ export const Footer = ({
 
     return (
         <>
-            <div className="flex items-center justify-start">
+            <div className="flex items-center justify-start antialiased">
                 {showCopy && (
                     <IconButton
                         hintAnchor="top-left"

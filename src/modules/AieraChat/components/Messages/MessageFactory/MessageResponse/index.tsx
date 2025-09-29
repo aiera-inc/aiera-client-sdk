@@ -92,10 +92,15 @@ export const MessageResponse = ({
 
     return (
         <div className="flex flex-col pb-6 mx-4">
+            <div className="flex flex-col px-2">
+                {data.blocks?.map((block, index) => (
+                    <Block {...block} key={index} />
+                ))}
+            </div>
             {localSources.length > 0 && (
                 <div
                     className={classNames(
-                        'flex flex-col overflow-hidden border border-slate-300/80 rounded-lg mx-4 mb-2 message-sources',
+                        'flex flex-col overflow-hidden border border-slate-300/80 rounded-lg ml-1 mr-10 mb-3 message-sources',
                         {
                             'pb-1': expanded,
                         }
@@ -104,7 +109,7 @@ export const MessageResponse = ({
                     <button
                         onClick={() => setExpanded((pv) => !pv)}
                         className={classNames(
-                            'py-2.5 hover:bg-slate-100 flex pl-3 pr-4 items-center justify-between message-sources-header',
+                            'py-2.5 hover:bg-slate-100 antialiased flex pl-3 pr-4 items-center justify-between message-sources-header',
                             {
                                 'border-b': expanded,
                             }
@@ -115,7 +120,8 @@ export const MessageResponse = ({
                         ) : (
                             <MicroFolder className="w-4 text-slate-600" />
                         )}
-                        <p className="text-base flex-1 text-left ml-2">{sourcesSummary}</p>
+                        <p className="text-base text-left ml-2 font-bold">Sources Used</p>
+                        <p className="text-base flex-1 text-left ml-2 text-slate-600">{sourcesSummary}</p>
                         <Chevron
                             className={classNames('w-2 transition-all text-slate-600', {
                                 'rotate-180': expanded,
@@ -143,12 +149,6 @@ export const MessageResponse = ({
                         ))}
                 </div>
             )}
-
-            <div className="flex flex-col px-2">
-                {data.blocks?.map((block, index) => (
-                    <Block {...block} key={index} />
-                ))}
-            </div>
             {(chatStatus === ChatSessionStatus.Active || !isLastItem) && <Footer data={data} onCopy={handleCopy} />}
         </div>
     );
