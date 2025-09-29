@@ -29,6 +29,7 @@ export const Footer = ({
     const [feedback, setFeedback] = useState<MessageFeedback>(undefined);
     const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
 
+    console.log({ data });
     const onHandleCopy = useCallback(() => {
         setCopied(true);
 
