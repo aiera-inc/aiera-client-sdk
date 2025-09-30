@@ -1140,6 +1140,9 @@ video {
 .overflow-y-auto {
   overflow-y: auto;
 }
+.overflow-x-hidden {
+  overflow-x: hidden;
+}
 .overflow-y-scroll {
   overflow-y: scroll;
 }
@@ -1156,9 +1159,6 @@ video {
 }
 .whitespace-nowrap {
   white-space: nowrap;
-}
-.text-nowrap {
-  text-wrap: nowrap;
 }
 .text-balance {
   text-wrap: balance;
