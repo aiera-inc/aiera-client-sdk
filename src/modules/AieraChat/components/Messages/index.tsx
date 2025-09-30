@@ -295,7 +295,7 @@ export function Messages({
                         <LoadingSpinner />
                     </div>
                 ) : (
-                    <div className="absolute inset-0 overflow-y-auto messagesScrollBars">
+                    <div className="absolute inset-0 overflow-y-auto overflow-x-hidden messagesScrollBars">
                         {groupedMessages.map((group, gidx) => {
                             const isLastGroup = gidx === groupedMessages.length - 1;
                             const lastMessage = group[group.length - 1];

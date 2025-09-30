@@ -1,8 +1,9 @@
+import { useConfig } from '@aiera/client-sdk/lib/config';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
 import React from 'react';
 import { useChatStore } from '../../../../store';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { useMessageBus } from '@aiera/client-sdk/lib/msg';
+import { Hint } from '../../../Hint';
 
 const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
 const SELECTABLE_SOURCE_TYPES = ['event', 'transcript'];
@@ -46,7 +47,8 @@ export const Citation = ({ citation }: CitationProps) => {
     };
 
     return (
-        <span className="citation relative inline-flex items-center h-3.5 ml-0.5">
+        <span className="citation hintTarget relative inline-flex items-center h-3.5 ml-0.5">
+            <Hint text={citation.source} targetHeight={14} targetWidth={25} anchor={'top-left'} grow={'up-right'} />
             <span
                 onClick={onNav}
                 className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
