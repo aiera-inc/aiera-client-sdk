@@ -136,7 +136,7 @@ export const useAbly = (): UseAblyReturn => {
     const { addCitationMarkers, clearCitationMarkers, onSetStatus } = useChatStore();
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
-    const [thinkingState, setThinkingState] = useState<string[]>([]);
+    const [thinkingState, setThinkingState] = useState<string[]>(['Finding sources...']);
     const [partials, setPartials] = useState<AblyMessageData[]>([]);
     const partialKeys = useRef<string[]>([]);
     const shouldSkipPartial = (messageType: ChatMessageType, skipTypes?: ChatMessageType[]) =>
@@ -468,7 +468,7 @@ export const useAbly = (): UseAblyReturn => {
                 log('Resetting Ably state');
                 partialKeys.current = [];
                 requestAnimationFrame(() => {
-                    setThinkingState([]);
+                    setThinkingState(['Finding sources...']);
                     setError(undefined);
                     setCitations(undefined);
                     setPartials([]);

@@ -316,43 +316,28 @@ export function Messages({
                                             nextMessage={group[index + 1]}
                                         />
                                     ))}
-                                    {isLastGroup && (
-                                        <>
-                                            {chatStatus === ChatSessionStatus.FindingSources &&
-                                                lastMessage?.type === ChatMessageType.PROMPT && (
-                                                    <div className="max-w-[50rem] w-full m-auto">
-                                                        <div
-                                                            className={classNames(
-                                                                'py-2.5 items-center pl-3 pr-4 flex border message-finding border-slate-300/80 rounded-lg mx-4 mb-2'
-                                                            )}
-                                                        >
-                                                            <MicroSparkles className="w-4 animate-bounce text-slate-600" />
-                                                            <p className="text-base flex-1 text-left ml-2">
-                                                                Finding sources...
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                            {chatStatus === ChatSessionStatus.GeneratingResponse &&
-                                                lastMessage &&
-                                                [ChatMessageType.PROMPT, ChatMessageType.SOURCES].includes(
-                                                    lastMessage?.type
-                                                ) && (
-                                                    <div className="max-w-[50rem] w-full m-auto">
-                                                        <div
-                                                            className={classNames(
-                                                                'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 message-thinking rounded-lg mx-4 mb-2'
-                                                            )}
-                                                        >
-                                                            <MicroSparkles className="w-4 animate-bounce text-slate-600" />
-                                                            <p className="text-base flex-1 text-left ml-2">
-                                                                {thinkingState[thinkingState.length - 1]}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-                                                )}
-                                        </>
-                                    )}
+                                    {isLastGroup &&
+                                        [
+                                            ChatSessionStatus.FindingSources,
+                                            ChatSessionStatus.GeneratingResponse,
+                                        ].includes(chatStatus) &&
+                                        lastMessage &&
+                                        [ChatMessageType.PROMPT, ChatMessageType.SOURCES].includes(
+                                            lastMessage?.type
+                                        ) && (
+                                            <div className="max-w-[50rem] w-full m-auto">
+                                                <div
+                                                    className={classNames(
+                                                        'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 message-thinking rounded-lg mx-4 mb-2'
+                                                    )}
+                                                >
+                                                    <MicroSparkles className="w-4 animate-bounce text-slate-600" />
+                                                    <p className="text-base flex-1 text-left ml-2">
+                                                        {thinkingState[thinkingState.length - 1]}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        )}
                                 </div>
                             );
                         })}

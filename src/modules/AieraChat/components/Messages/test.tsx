@@ -260,6 +260,11 @@ describe('Messages', () => {
             messages,
         });
 
+        (ablyService.useAbly as jest.Mock).mockReturnValue({
+            ...mockUseAbly,
+            thinkingState: ['Finding sources...'],
+        });
+
         useChatStore.setState({
             chatStatus: ChatSessionStatus.FindingSources,
         });
