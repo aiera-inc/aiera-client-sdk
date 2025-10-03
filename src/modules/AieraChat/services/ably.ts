@@ -1,10 +1,9 @@
-import { Message, Realtime, RealtimeChannel } from 'ably';
+import { Message, Realtime, RealtimeChannel, TokenRequest } from 'ably';
 import gql from 'graphql-tag';
 import { useCallback, useRef, useState } from 'react';
 import { useMutation } from 'urql';
 import { ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import {
-    AblyData,
     ChatSessionStatus,
     ChatSourceType,
     ContentBlockType,
@@ -87,13 +86,13 @@ type AblyEncodedData = {
 interface AblyTokenCache {
     clientId: string;
     expiresAt?: number;
-    tokenDetails: AblyData;
 }
 
 type GlobalAblyState = {
     client?: Realtime;
     userId?: string;
     tokenCache?: AblyTokenCache;
+    tokenPromise?: Promise<{ clientId: string; tokenDetails: TokenRequest } | undefined>;
     hookInstances: number;
     subscribedChannels: Set<string>;
 };
@@ -103,6 +102,7 @@ const globalAblyState: GlobalAblyState = {
     client: undefined,
     userId: undefined,
     tokenCache: undefined,
+    tokenPromise: undefined,
     hookInstances: 0,
     subscribedChannels: new Set<string>(),
 };
@@ -164,55 +164,88 @@ export const useAbly = (): UseAblyReturn => {
             const now = Date.now();
 
             if (sessionUserId) {
-                log(`Requesting new token for user: ${sessionUserId}`);
-                try {
-                    const response = await createAblyTokenMutation({
-                        input: { sessionUserId },
-                    });
-
-                    const tokenData = response.data?.createAblyToken?.data;
-                    if (!tokenData) {
-                        throw new Error('Invalid token response');
-                    }
-
-                    // Create token details
-                    const tokenDetails = {
-                        mac: tokenData.mac,
-                        capability: tokenData.capability,
-                        clientId: tokenData.clientId,
-                        keyName: tokenData.keyName,
-                        nonce: tokenData.nonce,
-                        timestamp: Number(tokenData.timestamp),
-                        ttl: tokenData.ttl,
-                    };
-
-                    // Calculate proper expiration timestamp
-                    const expiresAt = now + Number(tokenData.ttl) * 1000 - 60000; // 1 minute buffer
-
-                    // Update global cache
-                    globalAblyState.tokenCache = {
-                        clientId: tokenData.clientId,
-                        expiresAt,
-                        tokenDetails,
-                    };
-                    globalAblyState.userId = sessionUserId;
-
-                    log(`Token cached, expires in ${Math.floor((expiresAt - now) / 1000)}s`);
-
-                    return {
-                        clientId: tokenData.clientId,
-                        tokenDetails,
-                    };
-                } catch (err) {
-                    const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
-                    log(`Token error: ${errorMessage}`, 'error');
-                    setError(errorMessage);
-                    throw new Error(errorMessage);
+                // If there's already a token request in progress, return that promise
+                if (globalAblyState.tokenPromise) {
+                    log('Reusing existing token request promise');
+                    return globalAblyState.tokenPromise;
                 }
+
+                // Check if we're switching users
+                if (globalAblyState.userId && globalAblyState.userId !== sessionUserId) {
+                    log(`Switching users from ${globalAblyState.userId} to ${sessionUserId}`);
+                    globalAblyState.tokenPromise = undefined;
+                    globalAblyState.tokenCache = undefined;
+                }
+
+                log(`Creating new token request for user: ${sessionUserId}`);
+
+                // Create a new promise and store it immediately
+                const requestId = Date.now();
+                log(`Token request ID: ${requestId}`);
+
+                globalAblyState.tokenPromise = (async () => {
+                    try {
+                        const response = await createAblyTokenMutation(
+                            {
+                                input: { sessionUserId },
+                            },
+                            {
+                                requestPolicy: 'network-only', // Prevent caching to ensure fresh nonce values
+                            }
+                        );
+
+                        const tokenData = response.data?.createAblyToken?.data;
+                        if (!tokenData) {
+                            throw new Error('Invalid token response');
+                        }
+
+                        // Create token details
+                        const tokenDetails = {
+                            mac: tokenData.mac,
+                            capability: tokenData.capability,
+                            clientId: tokenData.clientId,
+                            keyName: tokenData.keyName,
+                            nonce: tokenData.nonce,
+                            timestamp: Number(tokenData.timestamp),
+                            ttl: tokenData.ttl,
+                        };
+
+                        // Calculate proper expiration timestamp
+                        const expiresAt = now + Number(tokenData.ttl) * 1000 - 60000; // 1 minute buffer
+
+                        // Update global cache (only store clientId and expiration, NOT the token details)
+                        globalAblyState.tokenCache = {
+                            clientId: tokenData.clientId,
+                            expiresAt,
+                        };
+                        globalAblyState.userId = sessionUserId;
+
+                        log(
+                            `Token request ${requestId} completed - metadata cached, expires in ${Math.floor(
+                                (expiresAt - now) / 1000
+                            )}s`
+                        );
+
+                        return {
+                            clientId: tokenData.clientId,
+                            tokenDetails,
+                        };
+                    } catch (err) {
+                        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch Ably token';
+                        log(`Token error: ${errorMessage}`, 'error');
+                        setError(errorMessage);
+                        throw new Error(errorMessage);
+                    } finally {
+                        // Clear the promise after completion (success or failure)
+                        globalAblyState.tokenPromise = undefined;
+                    }
+                })();
+
+                return globalAblyState.tokenPromise;
             }
             return undefined;
         },
-        [createAblyTokenMutation]
+        [createAblyTokenMutation, setError]
     );
 
     // Function to create/get the Ably realtime client
@@ -224,45 +257,51 @@ export const useAbly = (): UseAblyReturn => {
                 return globalAblyState.client;
             }
 
+            // Check if there's already a token promise in flight, which means another instance is creating a client
+            if (globalAblyState.tokenPromise && sessionUserId && globalAblyState.userId === sessionUserId) {
+                log(`Another instance is already creating Ably client, waiting...`);
+                try {
+                    await globalAblyState.tokenPromise;
+                    // After token promise resolves, check if client was created
+                    if (globalAblyState.client) {
+                        log(`Client was created by another instance, reusing it`);
+                        return globalAblyState.client;
+                    }
+                } catch (err) {
+                    log(`Error waiting for other instance: ${String(err)}`, 'error');
+                }
+            }
+
             try {
                 // Close existing client if it's for a different user
                 if (globalAblyState.client) {
                     log(`Closing existing client for different user`);
                     globalAblyState.client.close();
                     globalAblyState.client = undefined;
+                    globalAblyState.tokenPromise = undefined; // Clear any pending token promises
                     globalAblyState.subscribedChannels.clear();
                 }
 
-                // Get initial token
-                const initialToken = await getAblyToken(sessionUserId);
-
                 log(`Creating new Ably client`);
 
-                // Create new client
+                // Create new client - Ably will immediately call authCallback to get the first token
                 const client = new Realtime({
                     authCallback: (_, callback) => {
                         log('Ably token auth callback triggered');
 
-                        // Check if we have a valid cached token
-                        const now = Date.now();
-                        if (
-                            globalAblyState.tokenCache &&
-                            globalAblyState.tokenCache.tokenDetails &&
-                            globalAblyState.tokenCache.expiresAt &&
-                            globalAblyState.tokenCache.expiresAt > now
-                        ) {
-                            log('Using cached token in auth callback');
-                            callback(null, globalAblyState.tokenCache.tokenDetails);
-                            return;
-                        }
-
-                        // Otherwise get a new token
-                        log('Getting fresh token in auth callback');
+                        // Get a token (with deduplication via tokenPromise)
+                        log('Getting token in auth callback');
                         getAblyToken(sessionUserId)
-                            .then((token) => callback(null, token?.tokenDetails || null))
+                            .then((token) => {
+                                if (token?.tokenDetails) {
+                                    log('Token obtained, returning to Ably');
+                                    callback(null, token.tokenDetails);
+                                } else {
+                                    callback('No token details available', null);
+                                }
+                            })
                             .catch((err) => callback(err instanceof Error ? err.message : String(err), null));
                     },
-                    clientId: initialToken?.clientId,
                 });
 
                 // Set up connection listeners
@@ -281,6 +320,7 @@ export const useAbly = (): UseAblyReturn => {
                     // Clean up global state on failure
                     if (globalAblyState.client === client) {
                         globalAblyState.client = undefined;
+                        globalAblyState.tokenPromise = undefined; // Clear any pending token promises
                         globalAblyState.subscribedChannels.clear();
                     }
                 });
