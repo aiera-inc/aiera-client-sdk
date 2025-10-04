@@ -30,9 +30,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">83.96% </span>
+                <span class="strong">83.33% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>89/106</span>
+                <span class='fraction'>85/102</span>
             </div>
         
             
@@ -413,22 +413,7 @@
 <a name='L348'></a><a href='#L348'>348</a>
 <a name='L349'></a><a href='#L349'>349</a>
 <a name='L350'></a><a href='#L350'>350</a>
-<a name='L351'></a><a href='#L351'>351</a>
-<a name='L352'></a><a href='#L352'>352</a>
-<a name='L353'></a><a href='#L353'>353</a>
-<a name='L354'></a><a href='#L354'>354</a>
-<a name='L355'></a><a href='#L355'>355</a>
-<a name='L356'></a><a href='#L356'>356</a>
-<a name='L357'></a><a href='#L357'>357</a>
-<a name='L358'></a><a href='#L358'>358</a>
-<a name='L359'></a><a href='#L359'>359</a>
-<a name='L360'></a><a href='#L360'>360</a>
-<a name='L361'></a><a href='#L361'>361</a>
-<a name='L362'></a><a href='#L362'>362</a>
-<a name='L363'></a><a href='#L363'>363</a>
-<a name='L364'></a><a href='#L364'>364</a>
-<a name='L365'></a><a href='#L365'>365</a>
-<a name='L366'></a><a href='#L366'>366</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L351'></a><a href='#L351'>351</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -739,21 +724,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">10x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1111,43 +1081,28 @@ export function Messages({
                                             nextMessage={group[index + 1]}
                                         /&gt;
                                     ))}
-                                    {isLastGroup &amp;&amp; (
-                                        &lt;&gt;
-                                            {chatStatus === ChatSessionStatus.FindingSources &amp;&amp;
-                                                lastMessage?.type === ChatMessageType.PROMPT &amp;&amp; (
-                                                    &lt;div className="max-w-[50rem] w-full m-auto"&gt;
-                                                        &lt;div
-                                                            className={classNames(
-                                                                'py-2.5 items-center pl-3 pr-4 flex border message-finding border-slate-300/80 rounded-lg mx-4 mb-2'
-                                                            )}
-                                                        &gt;
-                                                            &lt;MicroSparkles className="w-4 animate-bounce text-slate-600" /&gt;
-                                                            &lt;p className="text-base flex-1 text-left ml-2"&gt;
-                                                                Finding sources...
-                                                            &lt;/p&gt;
-                                                        &lt;/div&gt;
-                                                    &lt;/div&gt;
-                                                )}
-                                            {chatStatus === ChatSessionStatus.GeneratingResponse &amp;&amp;
-                                                lastMessage &amp;&amp;
-                                                [ChatMessageType.PROMPT, ChatMessageType.SOURCES].includes(
-                                                    lastMessage?.type
-                                                ) &amp;&amp; (
-                                                    &lt;div className="max-w-[50rem] w-full m-auto"&gt;
-                                                        &lt;div
-                                                            className={classNames(
-                                                                'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 message-thinking rounded-lg mx-4 mb-2'
-                                                            )}
-                                                        &gt;
-                                                            &lt;MicroSparkles className="w-4 animate-bounce text-slate-600" /&gt;
-                                                            &lt;p className="text-base flex-1 text-left ml-2"&gt;
-                                                                {thinkingState[thinkingState.length - 1]}
-                                                            &lt;/p&gt;
-                                                        &lt;/div&gt;
-                                                    &lt;/div&gt;
-                                                )}
-                                        &lt;/&gt;
-                                    )}
+                                    {isLastGroup &amp;&amp;
+                                        [
+                                            ChatSessionStatus.FindingSources,
+                                            ChatSessionStatus.GeneratingResponse,
+                                        ].includes(chatStatus) &amp;&amp;
+                                        lastMessage &amp;&amp;
+                                        [ChatMessageType.PROMPT, ChatMessageType.SOURCES].includes(
+                                            lastMessage?.type
+                                        ) &amp;&amp; (
+                                            &lt;div className="max-w-[50rem] w-full m-auto"&gt;
+                                                &lt;div
+                                                    className={classNames(
+                                                        'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 message-thinking rounded-lg mx-4 mb-2'
+                                                    )}
+                                                &gt;
+                                                    &lt;MicroSparkles className="w-4 animate-bounce text-slate-600" /&gt;
+                                                    &lt;p className="text-base flex-1 text-left ml-2"&gt;
+                                                        {thinkingState[thinkingState.length - 1]}
+                                                    &lt;/p&gt;
+                                                &lt;/div&gt;
+                                            &lt;/div&gt;
+                                        )}
                                 &lt;/div&gt;
                             );
                         })}
@@ -1165,7 +1120,7 @@ export function Messages({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Sep 30 2025 12:56:18 GMT-0400 (Eastern Daylight Time)
+                at Sat Oct 04 2025 10:45:42 GMT-0400 (Eastern Daylight Time)
             </div>
         </div>
         <script src="../../../../../prettify.js"></script>
