@@ -32,20 +32,18 @@ export const Citation = ({ citation }: CitationProps) => {
         `,
     });
 
-    const API_URL = config.restApiUrl;
     const userApiKey = userQuery.state.data?.currentUser?.apiKey;
     const onNav = () => {
         if (config.options?.aieraChatDisableSourceNav) {
             bus?.emit('chat-citation', citation, 'out');
-        } else if (POP_OUT_SOURCE_TYPES.includes(sourceType) && userApiKey && API_URL && API_URL !== 'undefined') {
-            if (sourceType === 'attachment' && sourceId) {
-                const attachmentUrl = `${API_URL}/content/${sourceId}/pdf?api_key=${userApiKey}`;
-                window.open(attachmentUrl, '_blank', 'noopener,noreferrer');
-            }
-            if (sourceType === 'filing' && sourceId) {
-                const filingUrl = `${API_URL}/filings-v1/${sourceId}/pdf?api_key=${userApiKey}`;
-                window.open(filingUrl, '_blank', 'noopener,noreferrer');
-            }
+        } else if (
+            POP_OUT_SOURCE_TYPES.includes(sourceType) &&
+            userApiKey &&
+            config.restApiUrl &&
+            config.restApiUrl !== 'undefined'
+        ) {
+            const url = `${config.restApiUrl}/content/${sourceId}/pdf?api_key=${userApiKey}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
         } else if (SELECTABLE_SOURCE_TYPES.includes(sourceType)) {
             onSelectSource({
                 contentId,

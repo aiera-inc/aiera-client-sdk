@@ -58,14 +58,8 @@ export const MessageResponse = ({
             config.restApiUrl !== 'undefined' &&
             userApiKey
         ) {
-            if (source.targetType === 'attachment') {
-                const attachmentUrl = `${config.restApiUrl}/content/${source.targetId}/pdf?api_key=${userApiKey}`;
-                window.open(attachmentUrl, '_blank', 'noopener,noreferrer');
-            }
-            if (source.targetType === 'filing') {
-                const filingUrl = `${config.restApiUrl}/filings-v1/${source.targetId}/pdf?api_key=${userApiKey}`;
-                window.open(filingUrl, '_blank', 'noopener,noreferrer');
-            }
+            const url = `${config.restApiUrl}/content/${source.targetId}/pdf?api_key=${userApiKey}`;
+            window.open(url, '_blank', 'noopener,noreferrer');
         } else {
             onSelectSource(source);
         }
