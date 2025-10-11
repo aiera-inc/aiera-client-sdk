@@ -7,13 +7,21 @@ import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { copyToClipboard, log } from '@aiera/client-sdk/lib/utils';
 import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
-import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import { ChatSessionStatus, CurrentUserQuery } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { useCallback, useState } from 'react';
 import { match } from 'ts-pattern';
 import { ChatMessageResponse } from '../../../../services/messages';
 import { Block } from '../Block';
 import { Footer } from './Footer';
+import { useQuery } from '@aiera/client-sdk/api/client';
+import { gql } from 'urql';
+
+const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
+
+interface NavSource extends Source {
+    sourceParentId?: string;
+}
 
 export const MessageResponse = ({
     data,
@@ -25,12 +33,39 @@ export const MessageResponse = ({
 }) => {
     const [expanded, setExpanded] = useState(false);
     const { chatStatus, onSelectSource } = useChatStore();
+    const userQuery = useQuery<CurrentUserQuery>({
+        requestPolicy: 'cache-only',
+        query: gql`
+            query CurrentUserQuery {
+                currentUser {
+                    id
+                    apiKey
+                }
+            }
+        `,
+    });
 
+    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
     const config = useConfig();
     const bus = useMessageBus();
-    const onNav = (source: Source) => {
+    const onNav = (source: NavSource) => {
         if (config.options?.aieraChatDisableSourceNav) {
             bus?.emit('chat-source', source, 'out');
+        } else if (
+            POP_OUT_SOURCE_TYPES.includes(source.targetType) &&
+            source.targetId &&
+            config.restApiUrl &&
+            config.restApiUrl !== 'undefined' &&
+            userApiKey
+        ) {
+            if (source.targetType === 'attachment') {
+                const attachmentUrl = `${config.restApiUrl}/content/${source.targetId}/pdf?api_key=${userApiKey}`;
+                window.open(attachmentUrl, '_blank', 'noopener,noreferrer');
+            }
+            if (source.targetType === 'filing') {
+                const filingUrl = `${config.restApiUrl}/filings-v1/${source.targetId}/pdf?api_key=${userApiKey}`;
+                window.open(filingUrl, '_blank', 'noopener,noreferrer');
+            }
         } else {
             onSelectSource(source);
         }
@@ -40,7 +75,7 @@ export const MessageResponse = ({
             ?.reduce((acc, block) => {
                 if (block.citations && block.citations.length > 0) {
                     const sources = block.citations.map(({ source, sourceId, sourceParentId, sourceType }) => ({
-                        targetId: sourceParentId || sourceId,
+                        targetId: POP_OUT_SOURCE_TYPES.includes(sourceType) ? sourceId : sourceParentId || sourceId,
                         targetType: sourceType,
                         title: source,
                     }));

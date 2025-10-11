@@ -4,6 +4,9 @@ import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/co
 import React from 'react';
 import { useChatStore } from '../../../../store';
 import { Hint } from '../../../Hint';
+import { useQuery } from '@aiera/client-sdk/api/client';
+import { CurrentUserQuery } from '@aiera/client-sdk/types';
+import { gql } from 'urql';
 
 const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
 const SELECTABLE_SOURCE_TYPES = ['event', 'transcript'];
@@ -17,23 +20,30 @@ export const Citation = ({ citation }: CitationProps) => {
     const config = useConfig();
     const { contentId, marker, source, sourceId, sourceParentId, sourceType, url } = citation;
     const bus = useMessageBus();
+    const userQuery = useQuery<CurrentUserQuery>({
+        requestPolicy: 'cache-only',
+        query: gql`
+            query CurrentUserQuery {
+                currentUser {
+                    id
+                    apiKey
+                }
+            }
+        `,
+    });
 
+    const API_URL = config.restApiUrl;
+    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
     const onNav = () => {
         if (config.options?.aieraChatDisableSourceNav) {
             bus?.emit('chat-citation', citation, 'out');
-        } else if (url) {
-            // If the citation has a url defined, just open it
-            window.open(url, '_blank', 'noopener,noreferrer');
-        } else if (POP_OUT_SOURCE_TYPES.includes(sourceType) && config.restApiUrl) {
-            // We currently don't have a way to distinguish between slides and press releases,
-            // so for now, default to the /press_url endpoint
-            // TODO: check `meta` property on the citation to distinguish between the two types
-            if (sourceType === 'attachment' && sourceParentId) {
-                const attachmentUrl = `${config.restApiUrl}/events/${sourceParentId}/assets/press_url`;
+        } else if (POP_OUT_SOURCE_TYPES.includes(sourceType) && userApiKey && API_URL && API_URL !== 'undefined') {
+            if (sourceType === 'attachment' && sourceId) {
+                const attachmentUrl = `${API_URL}/content/${sourceId}/pdf?api_key=${userApiKey}`;
                 window.open(attachmentUrl, '_blank', 'noopener,noreferrer');
             }
             if (sourceType === 'filing' && sourceId) {
-                const filingUrl = `${config.restApiUrl}/filings-v1/${sourceId}/pdf`;
+                const filingUrl = `${API_URL}/filings-v1/${sourceId}/pdf?api_key=${userApiKey}`;
                 window.open(filingUrl, '_blank', 'noopener,noreferrer');
             }
         } else if (SELECTABLE_SOURCE_TYPES.includes(sourceType)) {
@@ -43,6 +53,9 @@ export const Citation = ({ citation }: CitationProps) => {
                 targetType: 'event',
                 title: source,
             });
+        } else if (url) {
+            // If the citation has a url defined, just open it
+            window.open(url, '_blank', 'noopener,noreferrer');
         }
     };
 
