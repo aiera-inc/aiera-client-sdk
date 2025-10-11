@@ -5,6 +5,7 @@ import { useChatStore } from '../../../../store';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
+import { useQuery } from '@aiera/client-sdk/api/client';
 
 jest.mock('@aiera/client-sdk/lib/msg', () => ({
     useMessageBus: jest.fn(),
@@ -12,6 +13,10 @@ jest.mock('@aiera/client-sdk/lib/msg', () => ({
 
 jest.mock('@aiera/client-sdk/lib/config', () => ({
     useConfig: jest.fn(() => ({ options: {}, restApiUrl: 'https://api.example.com' })),
+}));
+
+jest.mock('@aiera/client-sdk/api/client', () => ({
+    useQuery: jest.fn(),
 }));
 
 const mockOnSelectSource = jest.fn();
@@ -38,6 +43,17 @@ describe('Citation', () => {
         (useConfig as jest.Mock).mockReturnValue({
             options: {},
             restApiUrl: 'https://api.example.com',
+        });
+
+        (useQuery as jest.Mock).mockReturnValue({
+            state: {
+                data: {
+                    currentUser: {
+                        id: 'user-123',
+                        apiKey: 'test-api-key',
+                    },
+                },
+            },
         });
     });
 
@@ -140,7 +156,7 @@ describe('Citation', () => {
         fireEvent.click(screen.getByText('A1'));
 
         expect(mockWindowOpen).toHaveBeenCalledWith(
-            'https://api.example.com/events/event-456/assets/press_url',
+            'https://api.example.com/content/attachment-123/pdf?api_key=test-api-key',
             '_blank',
             'noopener,noreferrer'
         );
@@ -161,7 +177,7 @@ describe('Citation', () => {
         fireEvent.click(screen.getByText('F1'));
 
         expect(mockWindowOpen).toHaveBeenCalledWith(
-            'https://api.example.com/filings-v1/filing-789/pdf',
+            'https://api.example.com/filings-v1/filing-789/pdf?api_key=test-api-key',
             '_blank',
             'noopener,noreferrer'
         );
@@ -205,6 +221,30 @@ describe('Citation', () => {
         (useConfig as jest.Mock).mockReturnValue({
             options: {},
             restApiUrl: undefined,
+        });
+
+        render(<Citation citation={citation} />);
+
+        fireEvent.click(screen.getByText('A1'));
+
+        expect(mockWindowOpen).not.toHaveBeenCalled();
+    });
+
+    test('does not open URL if no userApiKey available for attachment', () => {
+        const citation: CitationType = {
+            marker: 'A1',
+            source: 'Attachment',
+            sourceId: 'attachment-123',
+            sourceParentId: 'event-456',
+            sourceType: 'attachment',
+            contentId: 'content-123',
+            text: 'Test citation text',
+        };
+
+        (useQuery as jest.Mock).mockReturnValue({
+            state: {
+                data: null,
+            },
         });
 
         render(<Citation citation={citation} />);
@@ -314,7 +354,7 @@ describe('Citation', () => {
         expect(mockEmit).not.toHaveBeenCalled();
     });
 
-    test('handles attachment without sourceParentId', () => {
+    test('handles attachment with sourceId', () => {
         const citation: CitationType = {
             marker: 'A1',
             source: 'Attachment without parent',
@@ -328,8 +368,12 @@ describe('Citation', () => {
 
         fireEvent.click(screen.getByText('A1'));
 
-        // Should not open URL without sourceParentId
-        expect(mockWindowOpen).not.toHaveBeenCalled();
+        // Should open URL using sourceId
+        expect(mockWindowOpen).toHaveBeenCalledWith(
+            'https://api.example.com/content/attachment-123/pdf?api_key=test-api-key',
+            '_blank',
+            'noopener,noreferrer'
+        );
     });
 
     test('handles filing without sourceId', () => {
