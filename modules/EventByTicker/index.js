@@ -84121,6 +84121,14 @@ var RealtimeCurrentUserDocument = lib_default`
   }
 }
     `;
+var CurrentUserQueryDocument = lib_default`
+    query CurrentUserQuery {
+  currentUser {
+    id
+    apiKey
+  }
+}
+    `;
 var CreateAblyTokenDocument = lib_default`
     mutation CreateAblyToken($input: CreateAblyTokenInput!) {
   createAblyToken(input: $input) {
@@ -84598,14 +84606,6 @@ var TranscrippetDocument = lib_default`
     transcriptionAudioOffsetSeconds
     trimmedAudioUrl
     wordDurationsMs
-  }
-}
-    `;
-var CurrentUserQueryDocument = lib_default`
-    query CurrentUserQuery {
-  currentUser {
-    id
-    apiKey
   }
 }
     `;
