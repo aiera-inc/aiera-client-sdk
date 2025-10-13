@@ -77,7 +77,10 @@ export const MessageResponse = ({
                 }
                 return acc;
             }, [] as Array<Source>)
-            ?.filter((source, index, self) => self.findIndex((s) => s.title === source.title) === index) || [];
+            ?.filter(
+                (source, index, self) =>
+                    self.findIndex((s) => s.title === source.title && s.targetId === source.targetId) === index
+            ) || [];
 
     const sourcesSummary = (() => {
         const counts = localSources.reduce((acc, source) => {
