@@ -16,6 +16,13 @@ import { Block } from '../Block';
 import { Footer } from './Footer';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { gql } from 'urql';
+import { format, parseISO } from 'date-fns';
+
+const formatDate = (dateString?: string) => {
+    if (dateString) {
+        return `• ${format(parseISO(dateString), 'MMM d, yyyy')}`;
+    } else return dateString;
+};
 
 const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
 
@@ -68,10 +75,11 @@ export const MessageResponse = ({
         data.blocks
             ?.reduce((acc, block) => {
                 if (block.citations && block.citations.length > 0) {
-                    const sources = block.citations.map(({ source, sourceId, sourceParentId, sourceType }) => ({
+                    const sources = block.citations.map(({ source, date, sourceId, sourceParentId, sourceType }) => ({
                         targetId: POP_OUT_SOURCE_TYPES.includes(sourceType) ? sourceId : sourceParentId || sourceId,
                         targetType: sourceType,
                         title: source,
+                        date,
                     }));
                     return acc.concat(sources);
                 }
@@ -171,7 +179,9 @@ export const MessageResponse = ({
                                     .with('transcript', () => <MicroCalendar className="w-4 text-slate-600" />)
                                     .with('filing', () => <MicroBank className="w-4 text-slate-600" />)
                                     .otherwise(() => null)}
-                                <p className="text-base flex-1 line-clamp-1 ml-2 text-left">{source.title}</p>
+                                <p className="text-base flex-1 line-clamp-1 ml-2 text-left">
+                                    {source.title} {formatDate(source.date)}
+                                </p>
                             </div>
                         ))}
                 </div>
