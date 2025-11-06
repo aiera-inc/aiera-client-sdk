@@ -76,7 +76,7 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
     const handleKeyDown = useCallback(
         (e: KeyboardEvent<HTMLParagraphElement>) => {
             checkEmpty();
-            if (e.code === 'Enter' && !e.shiftKey) {
+            if ((e.code === 'Enter' || e.code === 'NumpadEnter') && !e.shiftKey) {
                 e.preventDefault();
                 if (!isDisabled) {
                     handleSubmit();
