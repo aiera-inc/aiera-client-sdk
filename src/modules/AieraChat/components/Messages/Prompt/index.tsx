@@ -13,9 +13,10 @@ interface PromptProps {
     onOpenSources: () => void;
     onSubmit: (prompt: string) => void;
     submitting: boolean;
+    className?: string;
 }
 
-export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
+export function Prompt({ onSubmit, onOpenSources, submitting, className }: PromptProps) {
     const { chatStatus, sources } = useChatStore();
     const [isEmpty, setIsEmpty] = useState<boolean>(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
@@ -99,7 +100,8 @@ export function Prompt({ onSubmit, onOpenSources, submitting }: PromptProps) {
             className={classNames(
                 'mb-5 mx-5 flex min-h-10 max-w-[50rem] self-center',
                 'relative bg-white rounded-2xl',
-                'border border-slate-300/80 focus-within:ring-2 ring-yellow-200/80 chatInput'
+                'border border-slate-300/80 focus-within:ring-2 ring-yellow-200/80 chatInput',
+                className
             )}
         >
             <p

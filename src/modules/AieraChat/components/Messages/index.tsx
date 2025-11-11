@@ -40,9 +40,13 @@ export function Messages({
     });
     const { citations, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } = useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
+    const [animationStep, setAnimationStep] = useState(chatId === 'new' && messages.length === 0 ? 0 : 1);
 
     const handleSubmit = (prompt: string) => {
         setSubmitting(true);
+        if (animationStep === 0) {
+            setAnimationStep(1);
+        }
         if (chatId === 'new') {
             onSubmit(prompt)
                 .then((session) => {
@@ -269,6 +273,12 @@ export function Messages({
             log(`Error resetting Ably state on chat change: ${err.message}`, 'error')
         );
         setMessages([]);
+
+        // We're only resetting the animation
+        // if we're starting a new chat
+        if (chatId === 'new') {
+            setAnimationStep(0);
+        }
     }, [chatId, reset]);
 
     // Group messages by question
@@ -289,7 +299,11 @@ export function Messages({
 
     return (
         <div className="relative flex-1 flex flex-col" key={`chat-${chatId}`}>
-            <div className="relative flex flex-col flex-1">
+            <div
+                className={classNames('relative flex flex-col transition-all', {
+                    'flex-1': animationStep === 1,
+                })}
+            >
                 {isLoading ? (
                     <div className="flex-1 flex flex-col items-center justify-center pb-3">
                         <LoadingSpinner />
@@ -344,7 +358,27 @@ export function Messages({
                     </div>
                 )}
             </div>
-            <Prompt onSubmit={handleSubmit} onOpenSources={onOpenSources} submitting={submitting} />
+            <div
+                className={classNames('flex flex-col relative justify-center transition-all', {
+                    'flex-1': animationStep === 0,
+                })}
+            >
+                <p
+                    className={classNames('text-3xl transition-all font-serif mx-7 mb-2 text-slate-600', {
+                        'opacity-0': animationStep === 1,
+                    })}
+                >
+                    Welcome, ask anything...
+                </p>
+                <Prompt
+                    className={classNames('transition-all', {
+                        'min-h-20 mb-10': animationStep === 0,
+                    })}
+                    onSubmit={handleSubmit}
+                    onOpenSources={onOpenSources}
+                    submitting={submitting}
+                />
+            </div>
         </div>
     );
 }
