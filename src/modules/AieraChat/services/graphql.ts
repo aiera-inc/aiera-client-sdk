@@ -37,7 +37,6 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                     author
                     date
                     marker
-                    meta
                     quote
                     source {
                         __typename

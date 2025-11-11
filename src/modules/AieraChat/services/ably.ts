@@ -31,7 +31,6 @@ interface PartialCitation {
     author?: string;
     date?: string;
     marker: string;
-    meta?: object;
     quote: string;
     source: PartialChatSource;
     url?: string;
@@ -118,7 +117,6 @@ export function normalizeCitation(rawCitation: PartialCitation): Citation {
         contentId: source.id,
         date: rawCitation.date as string,
         marker: rawCitation.marker,
-        meta: rawCitation.meta as object,
         source: source.name,
         text: rawCitation.quote,
         url: rawCitation.url || undefined,

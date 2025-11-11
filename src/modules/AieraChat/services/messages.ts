@@ -125,7 +125,6 @@ export function normalizeCitation(rawCitation: RawCitation): Citation {
         contentId: source.sourceId,
         date: rawCitation.date as string,
         marker: rawCitation.marker,
-        meta: rawCitation.meta as object,
         source: source.name,
         sourceId: source?.sourceId,
         sourceParentId: sourceParent?.sourceId,

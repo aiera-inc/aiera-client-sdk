@@ -8,7 +8,6 @@ export type Citation = {
     contentId: string;
     date?: string;
     marker: string;
-    meta?: object;
     source: string;
     sourceId: string;
     sourceParentId?: string;
