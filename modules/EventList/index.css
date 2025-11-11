@@ -1108,6 +1108,10 @@ video {
   margin-left: 1.25rem;
   margin-right: 1.25rem;
 }
+.mx-7 {
+  margin-left: 1.75rem;
+  margin-right: 1.75rem;
+}
 .my-2 {
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
@@ -1146,6 +1150,9 @@ video {
 }
 .mb-1 {
   margin-bottom: 0.25rem;
+}
+.mb-10 {
+  margin-bottom: 2.5rem;
 }
 .mb-2 {
   margin-bottom: 0.5rem;
@@ -1407,6 +1414,9 @@ video {
 }
 .min-h-10 {
   min-height: 2.5rem;
+}
+.min-h-20 {
+  min-height: 5rem;
 }
 .min-h-\[4rem\] {
   min-height: 4rem;
@@ -2389,6 +2399,15 @@ video {
     "Liberation Mono",
     "Courier New",
     monospace;
+}
+.font-serif {
+  font-family:
+    ui-serif,
+    Georgia,
+    Cambria,
+    "Times New Roman",
+    Times,
+    serif;
 }
 .text-2xl {
   font-size: 1.25rem;
