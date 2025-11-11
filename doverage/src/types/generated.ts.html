@@ -2900,7 +2900,34 @@
 <a name='L2835'></a><a href='#L2835'>2835</a>
 <a name='L2836'></a><a href='#L2836'>2836</a>
 <a name='L2837'></a><a href='#L2837'>2837</a>
-<a name='L2838'></a><a href='#L2838'>2838</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L2838'></a><a href='#L2838'>2838</a>
+<a name='L2839'></a><a href='#L2839'>2839</a>
+<a name='L2840'></a><a href='#L2840'>2840</a>
+<a name='L2841'></a><a href='#L2841'>2841</a>
+<a name='L2842'></a><a href='#L2842'>2842</a>
+<a name='L2843'></a><a href='#L2843'>2843</a>
+<a name='L2844'></a><a href='#L2844'>2844</a>
+<a name='L2845'></a><a href='#L2845'>2845</a>
+<a name='L2846'></a><a href='#L2846'>2846</a>
+<a name='L2847'></a><a href='#L2847'>2847</a>
+<a name='L2848'></a><a href='#L2848'>2848</a>
+<a name='L2849'></a><a href='#L2849'>2849</a>
+<a name='L2850'></a><a href='#L2850'>2850</a>
+<a name='L2851'></a><a href='#L2851'>2851</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -4865,7 +4892,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">27x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -5828,6 +5854,7 @@ export type ChatMessageBase = {
   runnerVersion?: Maybe&lt;Scalars['String']&gt;;
   sessionId: Scalars['ID'];
   sources?: Maybe&lt;Array&lt;ChatSource&gt;&gt;;
+  toolSettings?: Maybe&lt;ChatMessageToolSettings&gt;;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['ID'];
 };
@@ -5843,6 +5870,7 @@ export type ChatMessagePrompt = ChatMessageBase &amp; {
   runnerVersion?: Maybe&lt;Scalars['String']&gt;;
   sessionId: Scalars['ID'];
   sources?: Maybe&lt;Array&lt;ChatSource&gt;&gt;;
+  toolSettings?: Maybe&lt;ChatMessageToolSettings&gt;;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['ID'];
 };
@@ -5866,6 +5894,7 @@ export type ChatMessageResponse = ChatMessageBase &amp; {
   sessionId: Scalars['ID'];
   sources?: Maybe&lt;Array&lt;ChatSource&gt;&gt;;
   statuses?: Maybe&lt;Array&lt;ChatMessageStatus&gt;&gt;;
+  toolSettings?: Maybe&lt;ChatMessageToolSettings&gt;;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['ID'];
 };
@@ -5881,6 +5910,7 @@ export type ChatMessageStatus = ChatMessageBase &amp; {
   runnerVersion?: Maybe&lt;Scalars['String']&gt;;
   sessionId: Scalars['ID'];
   sources?: Maybe&lt;Array&lt;ChatSource&gt;&gt;;
+  toolSettings?: Maybe&lt;ChatMessageToolSettings&gt;;
   updatedAt: Scalars['DateTime'];
   userId: Scalars['ID'];
 };
@@ -5893,6 +5923,11 @@ export type ChatMessageSuggestion = {
   retrievalRequestId?: Maybe&lt;Scalars['ID']&gt;;
   runnerVersion: Scalars['String'];
   updatedAt: Scalars['DateTime'];
+};
+&nbsp;
+export type ChatMessageToolSettings = {
+  __typename?: 'ChatMessageToolSettings';
+  webSearchEnabled?: Maybe&lt;Scalars['Boolean']&gt;;
 };
 &nbsp;
 export enum ChatMessageType {
@@ -5958,6 +5993,7 @@ export type ChatSessionsFilter = {
 &nbsp;
 export type ChatSource = {
   __typename?: 'ChatSource';
+  meta?: Maybe&lt;ChatSourceMeta&gt;;
   name: Scalars['String'];
   parent?: Maybe&lt;ChatSource&gt;;
   sourceId: Scalars['ID'];
@@ -5968,6 +6004,11 @@ export type ChatSourceInput = {
   sourceId: Scalars['ID'];
   sourceName: Scalars['String'];
   sourceType: ChatSourceType;
+};
+&nbsp;
+export type ChatSourceMeta = {
+  __typename?: 'ChatSourceMeta';
+  url?: Maybe&lt;Scalars['String']&gt;;
 };
 &nbsp;
 export enum ChatSourceType {
@@ -5990,7 +6031,6 @@ export type Citation = {
   author?: Maybe&lt;Scalars['String']&gt;;
   date?: Maybe&lt;Scalars['Date']&gt;;
   marker: Scalars['String'];
-  meta?: Maybe&lt;Scalars['JSON']&gt;;
   quote: Scalars['String'];
   source: ChatSource;
   url?: Maybe&lt;Scalars['String']&gt;;
@@ -7541,14 +7581,14 @@ export type SearchEventsQuery = { __typename?: 'Query', openSearch: { __typename
 &nbsp;
 export type ChatMessagePromptFragmentFragment = { __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string };
 &nbsp;
-export type ChatMessageResponseFragmentFragment = { __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, meta?: unknown | null | undefined, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined };
+export type ChatMessageResponseFragmentFragment = { __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined };
 &nbsp;
 export type ChatSessionWithMessagesQueryVariables = Exact&lt;{
   filter: ChatSessionFilter;
 }&gt;;
 &nbsp;
 &nbsp;
-export type ChatSessionWithMessagesQuery = { __typename?: 'Query', chatSession?: { __typename: 'ChatSession', id: string, activeMessageId?: string | null | undefined, createdAt: string, modelId?: string | null | undefined, modelGenerationParams?: unknown | null | undefined, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined, promptMessages?: Array&lt;{ __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, responseMessages?: Array&lt;{ __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, meta?: unknown | null | undefined, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined }&gt; | null | undefined } | null | undefined };
+export type ChatSessionWithMessagesQuery = { __typename?: 'Query', chatSession?: { __typename: 'ChatSession', id: string, activeMessageId?: string | null | undefined, createdAt: string, modelId?: string | null | undefined, modelGenerationParams?: unknown | null | undefined, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined, promptMessages?: Array&lt;{ __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, responseMessages?: Array&lt;{ __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined }&gt; | null | undefined } | null | undefined };
 &nbsp;
 export type CreateChatMessagePromptMutationVariables = Exact&lt;{
   input: CreateChatMessagePromptInput;
@@ -7722,7 +7762,6 @@ export const ChatMessageResponseFragmentFragmentDoc = gql`
         author
         date
         marker
-        meta
         quote
         source {
           __typename
@@ -8581,7 +8620,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Thu Nov 06 2025 11:54:14 GMT-0500 (Eastern Standard Time)
+                at Tue Nov 11 2025 16:44:55 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>

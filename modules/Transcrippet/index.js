@@ -74696,7 +74696,6 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
         author
         date
         marker
-        meta
         quote
         source {
           __typename
