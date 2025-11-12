@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.95% </span>
+                <span class="strong">86.2% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/23</span>
+                <span class='fraction'>25/29</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80% </span>
+                <span class="strong">77.27% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>16/20</span>
+                <span class='fraction'>17/22</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.66% </span>
+                <span class="strong">77.77% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/3</span>
+                <span class='fraction'>7/9</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">86.95% </span>
+                <span class="strong">86.2% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/23</span>
+                <span class='fraction'>25/29</span>
             </div>
         
             
@@ -143,7 +143,31 @@
 <a name='L78'></a><a href='#L78'>78</a>
 <a name='L79'></a><a href='#L79'>79</a>
 <a name='L80'></a><a href='#L80'>80</a>
-<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L81'></a><a href='#L81'>81</a>
+<a name='L82'></a><a href='#L82'>82</a>
+<a name='L83'></a><a href='#L83'>83</a>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a>
+<a name='L88'></a><a href='#L88'>88</a>
+<a name='L89'></a><a href='#L89'>89</a>
+<a name='L90'></a><a href='#L90'>90</a>
+<a name='L91'></a><a href='#L91'>91</a>
+<a name='L92'></a><a href='#L92'>92</a>
+<a name='L93'></a><a href='#L93'>93</a>
+<a name='L94'></a><a href='#L94'>94</a>
+<a name='L95'></a><a href='#L95'>95</a>
+<a name='L96'></a><a href='#L96'>96</a>
+<a name='L97'></a><a href='#L97'>97</a>
+<a name='L98'></a><a href='#L98'>98</a>
+<a name='L99'></a><a href='#L99'>99</a>
+<a name='L100'></a><a href='#L100'>100</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -223,6 +247,20 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { Citation as CitationType } from '@aiera/client-sdk/modules/AieraChat/components/Messages/MessageFactory/Block';
@@ -232,6 +270,11 @@ import { Hint } from '../../../Hint';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { CurrentUserQuery } from '@aiera/client-sdk/types';
 import { gql } from 'urql';
+import { match } from 'ts-pattern';
+import { MicroCalendar } from '@aiera/client-sdk/components/Svg/MicroCalendar';
+import { MicroBank } from '@aiera/client-sdk/components/Svg/MicroBank';
+import { MicroArrowUpRight } from '@aiera/client-sdk/components/Svg/MicroArrowUpRight';
+import { MicroPaperclip } from '@aiera/client-sdk/components/Svg/MicroPaperclip';
 &nbsp;
 const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
 const SELECTABLE_SOURCE_TYPES = ['event', 'transcript'];
@@ -293,12 +336,26 @@ export const Citation = ({ citation }: CitationProps) =&gt; {
 &nbsp;
     return (
         &lt;span className="citation hintTarget relative inline-flex items-center h-3.5 ml-0.5"&gt;
-            &lt;Hint text={citation.source} targetHeight={14} targetWidth={25} anchor={'top-left'} grow={'up-right'} /&gt;
+            &lt;Hint
+                maxWidth={200}
+                text={citation.source || <span class="branch-1 cbranch-no" title="branch not covered" >'N/A'}</span>
+                targetHeight={14}
+                targetWidth={25}
+                anchor={'top-left'}
+                grow={'up-right'}
+            /&gt;
             &lt;span
                 onClick={onNav}
-                className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] capitalize py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
+                className="flex h-3.5 items-center gap-0.5 leading-[10px] rounded bg-blue-700 px-[3px] capitalize py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
             &gt;
-                {citation.sourceType === 'external' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >citation.url </span>? <span class="branch-0 cbranch-no" title="branch not covered" >extractDomain(citation.url) </span>: marker}
+                {match(citation.sourceType)
+                    .with('event', () =&gt; &lt;MicroCalendar className="w-3" /&gt;)
+                    .with('transcript', () =&gt; &lt;MicroCalendar className="w-3" /&gt;)
+                    .with('attachment', () =&gt; &lt;MicroPaperclip className="w-3" /&gt;)
+                    .with('filing', () =&gt; &lt;MicroBank className="w-3" /&gt;)
+                    .with('external', <span class="fstat-no" title="function not covered" >()</span> =&gt; <span class="cstat-no" title="statement not covered" >&lt;MicroArrowUpRight className="w-3" /&gt;)</span>
+                    .otherwise(() =&gt; null)}
+                {citation.sourceType === 'external' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >citation.url </span>? <span class="branch-0 cbranch-no" title="branch not covered" >extractDomain(citation.url) </span>: marker.slice(1)}
             &lt;/span&gt;
         &lt;/span&gt;
     );
@@ -310,7 +367,7 @@ export const Citation = ({ citation }: CitationProps) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Nov 12 2025 14:12:24 GMT-0500 (Eastern Standard Time)
+                at Wed Nov 12 2025 17:43:55 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../../../../../prettify.js"></script>
