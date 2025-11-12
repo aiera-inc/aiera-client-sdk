@@ -84017,6 +84017,22 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
     sessionId
     updatedAt
   }
+  sources {
+    name
+    sourceId
+    type
+    meta {
+      url
+    }
+    parent {
+      name
+      sourceId
+      type
+      meta {
+        url
+      }
+    }
+  }
 }
     `;
 var RefreshDocument = lib_default`

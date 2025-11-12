@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">86.95% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>20/20</span>
+                <span class='fraction'>20/23</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">80% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>14/14</span>
+                <span class='fraction'>16/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>2/2</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">86.95% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>20/20</span>
+                <span class='fraction'>20/23</span>
             </div>
         
             
@@ -134,7 +134,16 @@
 <a name='L69'></a><a href='#L69'>69</a>
 <a name='L70'></a><a href='#L70'>70</a>
 <a name='L71'></a><a href='#L71'>71</a>
-<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L72'></a><a href='#L72'>72</a>
+<a name='L73'></a><a href='#L73'>73</a>
+<a name='L74'></a><a href='#L74'>74</a>
+<a name='L75'></a><a href='#L75'>75</a>
+<a name='L76'></a><a href='#L76'>76</a>
+<a name='L77'></a><a href='#L77'>77</a>
+<a name='L78'></a><a href='#L78'>78</a>
+<a name='L79'></a><a href='#L79'>79</a>
+<a name='L80'></a><a href='#L80'>80</a>
+<a name='L81'></a><a href='#L81'>81</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,6 +158,15 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">4x</span>
@@ -222,6 +240,15 @@ interface CitationProps {
     citation: CitationType;
 }
 &nbsp;
+function <span class="fstat-no" title="function not covered" >extractDomain(</span>urlString: string) {
+    const url = <span class="cstat-no" title="statement not covered" >new URL(urlString);</span>
+    const parts = <span class="cstat-no" title="statement not covered" >url.hostname.replace(/^www\./, '').split('.');</span>
+&nbsp;
+    // For domains like "example.com", return "example"
+    // For subdomains like "blog.example.com", return "example"
+<span class="cstat-no" title="statement not covered" >    return parts.length &gt; 1 ? parts[parts.length - 2] : parts[0];</span>
+}
+&nbsp;
 export const Citation = ({ citation }: CitationProps) =&gt; {
     const { onSelectSource } = useChatStore();
     const config = useConfig();
@@ -269,9 +296,9 @@ export const Citation = ({ citation }: CitationProps) =&gt; {
             &lt;Hint text={citation.source} targetHeight={14} targetWidth={25} anchor={'top-left'} grow={'up-right'} /&gt;
             &lt;span
                 onClick={onNav}
-                className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
+                className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] capitalize py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
             &gt;
-                {marker}
+                {citation.sourceType === 'external' &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >citation.url </span>? <span class="branch-0 cbranch-no" title="branch not covered" >extractDomain(citation.url) </span>: marker}
             &lt;/span&gt;
         &lt;/span&gt;
     );
@@ -283,7 +310,7 @@ export const Citation = ({ citation }: CitationProps) =&gt; {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Nov 11 2025 16:54:22 GMT-0500 (Eastern Standard Time)
+                at Wed Nov 12 2025 10:45:25 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../../../../../prettify.js"></script>
