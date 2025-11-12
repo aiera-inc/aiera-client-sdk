@@ -375,7 +375,8 @@ export function Messages({
                         {
                             'opacity-0': animationStep > 0,
                             hidden: animationStep > 1,
-                        }
+                        },
+                        'aiera-chat-welcome'
                     )}
                 >
                     Welcome, ask anything...
