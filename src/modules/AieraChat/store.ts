@@ -24,6 +24,7 @@ export interface Source {
     targetId: string;
     targetType: string;
     title: string;
+    url?: string | null;
 }
 
 export interface CitationMarker {

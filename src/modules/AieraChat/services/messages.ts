@@ -150,6 +150,7 @@ export function normalizeSources(sources: ChatSource[] | null | undefined): Sour
             targetId: source.sourceId,
             targetType: source.type,
             title: source.name,
+            url: source.meta?.url,
         }));
     } catch (error) {
         log(`Error normalizing sources: ${String(error)}`, 'error');

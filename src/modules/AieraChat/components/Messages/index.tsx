@@ -14,6 +14,7 @@ import {
     ChatMessageResponse,
     ChatMessageStatus,
     ChatMessageType,
+    normalizeSources,
     useChatSession,
 } from '../../services/messages';
 import { useChatStore } from '../../store';
@@ -220,6 +221,7 @@ export function Messages({
                                 return b;
                             }),
                             status: messageStatus,
+                            sources: normalizeSources(lastPartial?.sources),
                         };
                     }
                     return message;
@@ -279,7 +281,8 @@ export function Messages({
         if (chatId === 'new') {
             setAnimationStep(0);
         } else {
-            setAnimationStep(1);
+            // We go to 2 because we want nothing animating at this point
+            setAnimationStep(2);
         }
     }, [chatId, reset]);
 
@@ -369,7 +372,7 @@ export function Messages({
                     onTransitionEnd={() => setAnimationStep(2)}
                     className={classNames('text-3xl transition-all font-serif mx-7 mb-2 text-slate-600', {
                         'opacity-0': animationStep > 0,
-                        hidden: animationStep === 2,
+                        hidden: animationStep > 1,
                     })}
                 >
                     Welcome, ask anything...

@@ -15,6 +15,15 @@ interface CitationProps {
     citation: CitationType;
 }
 
+function extractDomain(urlString: string) {
+    const url = new URL(urlString);
+    const parts = url.hostname.replace(/^www\./, '').split('.');
+
+    // For domains like "example.com", return "example"
+    // For subdomains like "blog.example.com", return "example"
+    return parts.length > 1 ? parts[parts.length - 2] : parts[0];
+}
+
 export const Citation = ({ citation }: CitationProps) => {
     const { onSelectSource } = useChatStore();
     const config = useConfig();
@@ -62,9 +71,9 @@ export const Citation = ({ citation }: CitationProps) => {
             <Hint text={citation.source} targetHeight={14} targetWidth={25} anchor={'top-left'} grow={'up-right'} />
             <span
                 onClick={onNav}
-                className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
+                className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] capitalize py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
             >
-                {marker}
+                {citation.sourceType === 'external' && citation.url ? extractDomain(citation.url) : marker}
             </span>
         </span>
     );

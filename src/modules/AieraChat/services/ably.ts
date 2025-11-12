@@ -5,6 +5,7 @@ import { useMutation } from 'urql';
 import { ChatMessageType } from '@aiera/client-sdk/modules/AieraChat/services/messages';
 import {
     ChatSessionStatus,
+    ChatSource,
     ChatSourceType,
     ContentBlockType,
     CreateAblyTokenMutation,
@@ -53,12 +54,6 @@ type PartialTextBlock = {
     type: ContentBlockType.Text;
 };
 
-interface AblySource {
-    id: number;
-    name: string;
-    type: string;
-}
-
 export interface AblyMessageData {
     __typename: string;
     blocks?: PartialTextBlock[];
@@ -71,7 +66,7 @@ export interface AblyMessageData {
     prompt_message_id: string | null;
     runner_version: string;
     session_id: number;
-    sources?: AblySource[];
+    sources?: ChatSource[];
     updated_at: string;
     user_id: number;
 }
@@ -398,7 +393,7 @@ export const useAbly = (): UseAblyReturn => {
                     }
 
                     // Process the response message and update partials
-                    if (jsonObject.message_type === 'response' && jsonObject.blocks && !data.is_final) {
+                    if (jsonObject.message_type === 'response' && jsonObject.blocks) {
                         if (shouldSkipPartial(ChatMessageType.RESPONSE, skipTypes)) {
                             log(`Skipping response message due to skip types parameter: ${String(skipTypes)}`);
                             return;

@@ -67,31 +67,15 @@ export const MessageResponse = ({
         ) {
             const url = `${config.restApiUrl}/content/${source.targetId}/pdf?api_key=${userApiKey}`;
             window.open(url, '_blank', 'noopener,noreferrer');
-        } else {
+        } else if (source.url) {
+            window.open(source.url, '_blank', 'noopener,noreferrer');
+        } else if (source.targetType !== 'external') {
             onSelectSource(source);
         }
     };
-    const localSources =
-        data.blocks
-            ?.reduce((acc, block) => {
-                if (block.citations && block.citations.length > 0) {
-                    const sources = block.citations.map(({ source, date, sourceId, sourceParentId, sourceType }) => ({
-                        targetId: POP_OUT_SOURCE_TYPES.includes(sourceType) ? sourceId : sourceParentId || sourceId,
-                        targetType: sourceType,
-                        title: source,
-                        date,
-                    }));
-                    return acc.concat(sources);
-                }
-                return acc;
-            }, [] as Array<Source>)
-            ?.filter(
-                (source, index, self) =>
-                    self.findIndex((s) => s.title === source.title && s.targetId === source.targetId) === index
-            ) || [];
 
     const sourcesSummary = (() => {
-        const counts = localSources.reduce((acc, source) => {
+        const counts = data.sources.reduce((acc, source) => {
             const type = match(source.targetType)
                 .with('transcript', () => 'Transcript')
                 .with('filing', () => 'Filing')
@@ -132,7 +116,7 @@ export const MessageResponse = ({
                     <Block {...block} key={index} />
                 ))}
             </div>
-            {localSources.length > 0 && (
+            {data.sources.length > 0 && (
                 <div
                     className={classNames(
                         'flex flex-col overflow-hidden border border-slate-300/80 rounded-lg ml-1 mr-10 mb-3 message-sources',
@@ -164,7 +148,7 @@ export const MessageResponse = ({
                         />
                     </button>
                     {expanded &&
-                        localSources.map((source, idx) => (
+                        data.sources.map((source, idx) => (
                             <div
                                 key={`${idx}-${source.targetId}`}
                                 className={classNames(
