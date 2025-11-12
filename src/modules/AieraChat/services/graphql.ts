@@ -66,6 +66,22 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
             sessionId
             updatedAt
         }
+        sources {
+            name
+            sourceId
+            type
+            meta {
+                url
+            }
+            parent {
+                name
+                sourceId
+                type
+                meta {
+                    url
+                }
+            }
+        }
     }
 `;
 

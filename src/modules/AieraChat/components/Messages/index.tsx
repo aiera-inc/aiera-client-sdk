@@ -278,6 +278,8 @@ export function Messages({
         // if we're starting a new chat
         if (chatId === 'new') {
             setAnimationStep(0);
+        } else {
+            setAnimationStep(1);
         }
     }, [chatId, reset]);
 
@@ -301,7 +303,7 @@ export function Messages({
         <div className="relative flex-1 flex flex-col" key={`chat-${chatId}`}>
             <div
                 className={classNames('relative flex flex-col transition-all', {
-                    'flex-1': animationStep === 1,
+                    'flex-1': animationStep > 0,
                 })}
             >
                 {isLoading ? (
@@ -364,8 +366,10 @@ export function Messages({
                 })}
             >
                 <p
+                    onTransitionEnd={() => setAnimationStep(2)}
                     className={classNames('text-3xl transition-all font-serif mx-7 mb-2 text-slate-600', {
-                        'opacity-0': animationStep === 1,
+                        'opacity-0': animationStep > 0,
+                        hidden: animationStep === 2,
                     })}
                 >
                     Welcome, ask anything...
