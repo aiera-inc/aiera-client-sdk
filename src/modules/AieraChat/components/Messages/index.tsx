@@ -370,16 +370,19 @@ export function Messages({
             >
                 <p
                     onTransitionEnd={() => setAnimationStep(2)}
-                    className={classNames('text-3xl transition-all font-serif mx-7 mb-2 text-slate-600', {
-                        'opacity-0': animationStep > 0,
-                        hidden: animationStep > 1,
-                    })}
+                    className={classNames(
+                        'text-3xl max-w-[50rem] self-center transition-all font-serif mx-7 mb-3 text-slate-600',
+                        {
+                            'opacity-0': animationStep > 0,
+                            hidden: animationStep > 1,
+                        }
+                    )}
                 >
                     Welcome, ask anything...
                 </p>
                 <Prompt
                     className={classNames('transition-all', {
-                        'min-h-20 mb-10': animationStep === 0,
+                        'min-h-20 mb-14': animationStep === 0,
                     })}
                     onSubmit={handleSubmit}
                     onOpenSources={onOpenSources}
