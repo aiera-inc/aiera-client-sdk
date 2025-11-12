@@ -69,7 +69,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        expect(screen.getByText('T1')).toBeInTheDocument();
+        expect(screen.getByText('1')).toBeInTheDocument();
     });
 
     test('handles click on event type citation', () => {
@@ -85,7 +85,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('E1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockOnSelectSource).toHaveBeenCalledWith({
             contentId: 'content-123',
@@ -107,7 +107,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('T1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockOnSelectSource).toHaveBeenCalledWith({
             contentId: 'content-456',
@@ -130,7 +130,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('N1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockWindowOpen).toHaveBeenCalledWith(
             'https://example.com/news/article',
@@ -153,7 +153,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('A1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockWindowOpen).toHaveBeenCalledWith(
             'https://api.example.com/content/attachment-123/pdf?api_key=test-api-key',
@@ -174,7 +174,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('F1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockWindowOpen).toHaveBeenCalledWith(
             'https://api.example.com/content/filing-789/pdf?api_key=test-api-key',
@@ -200,7 +200,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('E1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockEmit).toHaveBeenCalledWith('chat-citation', citation, 'out');
         expect(mockOnSelectSource).not.toHaveBeenCalled();
@@ -225,7 +225,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('A1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockWindowOpen).not.toHaveBeenCalled();
     });
@@ -249,7 +249,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('A1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockWindowOpen).not.toHaveBeenCalled();
     });
@@ -273,7 +273,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('E1'));
+        fireEvent.click(screen.getByText('1'));
 
         // Should not throw error even when bus is null
         expect(mockEmit).not.toHaveBeenCalled();
@@ -294,7 +294,7 @@ describe('Citation', () => {
         const citationElement = container.querySelector('.citation');
         expect(citationElement).toHaveClass('relative', 'inline-flex', 'items-center', 'h-3.5', 'ml-0.5');
 
-        const markerElement = screen.getByText('T1');
+        const markerElement = screen.getByText('1');
         expect(markerElement).toHaveClass(
             'flex',
             'h-3.5',
@@ -329,7 +329,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('C1'));
+        fireEvent.click(screen.getByText('1'));
 
         // Should use URL when available, regardless of source type
         expect(mockWindowOpen).toHaveBeenCalledWith('https://example.com/custom', '_blank', 'noopener,noreferrer');
@@ -347,7 +347,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('U1'));
+        fireEvent.click(screen.getByText('1'));
 
         expect(mockOnSelectSource).not.toHaveBeenCalled();
         expect(mockWindowOpen).not.toHaveBeenCalled();
@@ -366,7 +366,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('A1'));
+        fireEvent.click(screen.getByText('1'));
 
         // Should open URL using sourceId
         expect(mockWindowOpen).toHaveBeenCalledWith(
@@ -388,7 +388,7 @@ describe('Citation', () => {
 
         render(<Citation citation={citation} />);
 
-        fireEvent.click(screen.getByText('F1'));
+        fireEvent.click(screen.getByText('1'));
 
         // The condition checks for POP_OUT_SOURCE_TYPES.includes(sourceType) && userApiKey && API_URL && API_URL !== 'undefined'
         // It doesn't check if sourceId is truthy, so it will still construct and open the URL

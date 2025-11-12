@@ -39,7 +39,15 @@ export function Messages({
     const { createChatMessagePrompt, messages, setMessages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
-    const { citations, partials, reset, subscribeToChannel, unsubscribeFromChannel, thinkingState } = useAbly();
+    const {
+        citations,
+        partials,
+        reset,
+        sources: ablySources,
+        subscribeToChannel,
+        unsubscribeFromChannel,
+        thinkingState,
+    } = useAbly();
     const subscribedChannel = useRef<RealtimeChannel | null>(null);
     const [animationStep, setAnimationStep] = useState(chatId === 'new' && messages.length === 0 ? 0 : 1);
 
@@ -221,7 +229,7 @@ export function Messages({
                                 return b;
                             }),
                             status: messageStatus,
-                            sources: normalizeSources(lastPartial?.sources),
+                            sources: normalizeSources(ablySources || lastPartial?.sources),
                         };
                     }
                     return message;
@@ -254,7 +262,7 @@ export function Messages({
                 return [...currentMessages, initialMessageResponse];
             }
         });
-    }, [partials, citations, chatId]);
+    }, [partials, citations, ablySources, chatId]);
 
     // scroll question to top
     useEffect(() => {

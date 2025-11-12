@@ -18,6 +18,7 @@ export function Hint({
     targetWidth,
     yOffset = 6,
     xOffset = 6,
+    maxWidth: maxWidthProp,
 }: {
     yOffset?: number;
     xOffset?: number;
@@ -26,11 +27,12 @@ export function Hint({
     text: string;
     anchor: HintAnchor;
     grow: HintGrow;
+    maxWidth?: number | string;
 }) {
     const hintRef = useRef<HTMLSpanElement>(null);
     const [adjustedAnchor, setAdjustedAnchor] = useState<HintAnchor>(anchor);
     const [adjustedGrow, setAdjustedGrow] = useState<HintGrow>(grow);
-    const [maxWidth, setMaxWidth] = useState<number | undefined>(undefined);
+    const [dynamicMaxWidth, setDynamicMaxWidth] = useState<number | undefined>(undefined);
 
     useEffect(() => {
         const hint = hintRef.current;
@@ -109,7 +111,7 @@ export function Hint({
 
             setAdjustedAnchor(newAnchor);
             setAdjustedGrow(newGrow);
-            setMaxWidth(constrainedWidth);
+            setDynamicMaxWidth(constrainedWidth);
         };
 
         // Use MutationObserver to detect when hint becomes visible
@@ -136,7 +138,7 @@ export function Hint({
         const handleMouseLeave = () => {
             setAdjustedAnchor(anchor);
             setAdjustedGrow(grow);
-            setMaxWidth(undefined);
+            setDynamicMaxWidth(undefined);
         };
 
         parent?.addEventListener('mouseenter', handleMouseEnter);
@@ -178,20 +180,24 @@ export function Hint({
         left = targetWidth + xOffset;
     }
 
+    // Use prop maxWidth if provided, otherwise use dynamically calculated one
+    const effectiveMaxWidth = maxWidthProp ?? dynamicMaxWidth;
+
     return (
         <span
             ref={hintRef}
             style={{
                 top,
                 bottom,
-                left: maxWidth !== undefined && left === undefined ? PADDING : left,
-                right: maxWidth !== undefined && right === undefined ? PADDING : right,
-                maxWidth,
+                left: dynamicMaxWidth !== undefined && left === undefined ? PADDING : left,
+                right: dynamicMaxWidth !== undefined && right === undefined ? PADDING : right,
+                maxWidth: effectiveMaxWidth,
+                width: effectiveMaxWidth ? 'max-content' : undefined,
             }}
             className={classNames(
                 'absolute bg-slate-900/90 text-white rounded-md z-50',
                 'text-sm font-semibold antialiased px-2 py-0.5 hint hidden',
-                !maxWidth && 'whitespace-nowrap'
+                effectiveMaxWidth ? 'whitespace-normal' : 'whitespace-nowrap'
             )}
         >
             {text}

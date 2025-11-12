@@ -43,6 +43,7 @@ interface UseAblyReturn {
     error?: string;
     partials: AblyMessageData[];
     reset: (options?: { clearCitations?: boolean }) => Promise<void>;
+    sources?: ChatSource[];
     thinkingState: string[];
     subscribeToChannel: (channelName: string) => RealtimeChannel | undefined;
     unsubscribeFromChannel: (channelName: string) => Promise<void>;
@@ -129,6 +130,7 @@ export const useAbly = (): UseAblyReturn => {
     const { addCitationMarkers, clearCitationMarkers, onSetStatus } = useChatStore();
     const [error, setError] = useState<string | undefined>(undefined);
     const [citations, setCitations] = useState<Citation[] | undefined>(undefined);
+    const [sources, setSources] = useState<ChatSource[] | undefined>(undefined);
     const [thinkingState, setThinkingState] = useState<string[]>(['Thinking...']);
     const [partials, setPartials] = useState<AblyMessageData[]>([]);
     const partialKeys = useRef<string[]>([]);
@@ -394,22 +396,25 @@ export const useAbly = (): UseAblyReturn => {
 
                     // Process the response message and update partials
                     if (jsonObject.message_type === 'response' && jsonObject.blocks) {
-                        if (shouldSkipPartial(ChatMessageType.RESPONSE, skipTypes)) {
-                            log(`Skipping response message due to skip types parameter: ${String(skipTypes)}`);
-                            return;
+                        // Handle streaming partials
+                        if (!data.is_final) {
+                            if (shouldSkipPartial(ChatMessageType.RESPONSE, skipTypes)) {
+                                log(`Skipping response message due to skip types parameter: ${String(skipTypes)}`);
+                                return;
+                            }
+                            log('Updating partials with new message', 'log', jsonObject);
+                            // Update partials state with the full message object and sort by created_at
+                            setPartials((prev) => {
+                                const newPartials =
+                                    insertPosition === 'after' ? [...prev, jsonObject] : [jsonObject, ...prev];
+                                // Sort by created_at in ascending order
+                                return newPartials.sort(
+                                    (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+                                );
+                            });
                         }
-                        log('Updating partials with new message', 'log', jsonObject);
-                        // Update partials state with the full message object and sort by created_at
-                        setPartials((prev) => {
-                            const newPartials =
-                                insertPosition === 'after' ? [...prev, jsonObject] : [jsonObject, ...prev];
-                            // Sort by created_at in ascending order
-                            return newPartials.sort(
-                                (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
-                            );
-                        });
 
-                        // Parse any citations
+                        // Parse any citations from both partials and final message
                         const citations = jsonObject.blocks?.[0]?.citations;
                         if (citations) {
                             log('Parsing citations:', 'log', citations);
@@ -434,6 +439,12 @@ export const useAbly = (): UseAblyReturn => {
                                 addCitationMarkers(allCitations);
                                 log(`Added ${parsedCitations.length} citations to global store from Ably stream`);
                             }
+                        }
+
+                        // Process sources from final message
+                        if (data.is_final && jsonObject.sources) {
+                            log('Processing sources from final message:', 'log', jsonObject.sources);
+                            setSources(jsonObject.sources);
                         }
                     }
 
@@ -504,6 +515,7 @@ export const useAbly = (): UseAblyReturn => {
                     setThinkingState(['Thinking...']);
                     setError(undefined);
                     setCitations(undefined);
+                    setSources(undefined);
                     setPartials([]);
                     // Only clear citation markers when explicitly requested (e.g., when switching chats)
                     if (options?.clearCitations) {
@@ -522,6 +534,7 @@ export const useAbly = (): UseAblyReturn => {
         error,
         partials,
         reset,
+        sources,
         thinkingState,
         subscribeToChannel,
         unsubscribeFromChannel,

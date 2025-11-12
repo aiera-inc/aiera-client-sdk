@@ -7,6 +7,11 @@ import { Hint } from '../../../Hint';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { CurrentUserQuery } from '@aiera/client-sdk/types';
 import { gql } from 'urql';
+import { match } from 'ts-pattern';
+import { MicroCalendar } from '@aiera/client-sdk/components/Svg/MicroCalendar';
+import { MicroBank } from '@aiera/client-sdk/components/Svg/MicroBank';
+import { MicroArrowUpRight } from '@aiera/client-sdk/components/Svg/MicroArrowUpRight';
+import { MicroPaperclip } from '@aiera/client-sdk/components/Svg/MicroPaperclip';
 
 const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
 const SELECTABLE_SOURCE_TYPES = ['event', 'transcript'];
@@ -68,12 +73,26 @@ export const Citation = ({ citation }: CitationProps) => {
 
     return (
         <span className="citation hintTarget relative inline-flex items-center h-3.5 ml-0.5">
-            <Hint text={citation.source} targetHeight={14} targetWidth={25} anchor={'top-left'} grow={'up-right'} />
+            <Hint
+                maxWidth={200}
+                text={citation.source || 'N/A'}
+                targetHeight={14}
+                targetWidth={25}
+                anchor={'top-left'}
+                grow={'up-right'}
+            />
             <span
                 onClick={onNav}
-                className="flex h-3.5 items-center leading-[10px] rounded bg-blue-700 px-[3px] capitalize py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
+                className="flex h-3.5 items-center gap-0.5 leading-[10px] rounded bg-blue-700 px-[3px] capitalize py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
             >
-                {citation.sourceType === 'external' && citation.url ? extractDomain(citation.url) : marker}
+                {match(citation.sourceType)
+                    .with('event', () => <MicroCalendar className="w-3" />)
+                    .with('transcript', () => <MicroCalendar className="w-3" />)
+                    .with('attachment', () => <MicroPaperclip className="w-3" />)
+                    .with('filing', () => <MicroBank className="w-3" />)
+                    .with('external', () => <MicroArrowUpRight className="w-3" />)
+                    .otherwise(() => null)}
+                {citation.sourceType === 'external' && citation.url ? extractDomain(citation.url) : marker.slice(1)}
             </span>
         </span>
     );

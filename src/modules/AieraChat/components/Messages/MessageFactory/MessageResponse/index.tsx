@@ -17,6 +17,7 @@ import { Footer } from './Footer';
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { gql } from 'urql';
 import { format, parseISO } from 'date-fns';
+import { MicroArrowUpRight } from '@aiera/client-sdk/components/Svg/MicroArrowUpRight';
 
 const formatDate = (dateString?: string) => {
     if (dateString) {
@@ -148,26 +149,29 @@ export const MessageResponse = ({
                         />
                     </button>
                     {expanded &&
-                        data.sources.map((source, idx) => (
-                            <div
-                                key={`${idx}-${source.targetId}`}
-                                className={classNames(
-                                    'mx-1 mt-1 text-sm px-2 py-1.5',
-                                    'hover:bg-slate-200/40 rounded-md',
-                                    'cursor-pointer flex items-center'
-                                )}
-                                onClick={() => onNav(source)}
-                            >
-                                {match(source.targetType)
-                                    .with('event', () => <MicroCalendar className="w-4 text-slate-600" />)
-                                    .with('transcript', () => <MicroCalendar className="w-4 text-slate-600" />)
-                                    .with('filing', () => <MicroBank className="w-4 text-slate-600" />)
-                                    .otherwise(() => null)}
-                                <p className="text-base flex-1 line-clamp-1 ml-2 text-left">
-                                    {source.title} {formatDate(source.date)}
-                                </p>
-                            </div>
-                        ))}
+                        data.sources
+                            .filter((source) => !!source.title)
+                            .map((source, idx) => (
+                                <div
+                                    key={`${idx}-${source.targetId}`}
+                                    className={classNames(
+                                        'mx-1 mt-1 text-sm px-2 py-1.5',
+                                        'hover:bg-slate-200/40 rounded-md',
+                                        'cursor-pointer flex items-center'
+                                    )}
+                                    onClick={() => onNav(source)}
+                                >
+                                    {match(source.targetType)
+                                        .with('event', () => <MicroCalendar className="w-4 text-slate-600" />)
+                                        .with('transcript', () => <MicroCalendar className="w-4 text-slate-600" />)
+                                        .with('filing', () => <MicroBank className="w-4 text-slate-600" />)
+                                        .with('external', () => <MicroArrowUpRight className="w-4 text-slate-600" />)
+                                        .otherwise(() => null)}
+                                    <p className="text-base flex-1 line-clamp-1 ml-2 text-left">
+                                        {source.title} {formatDate(source.date)}
+                                    </p>
+                                </div>
+                            ))}
                 </div>
             )}
             {(chatStatus === ChatSessionStatus.Active || !isLastItem) && <Footer data={data} onCopy={handleCopy} />}
