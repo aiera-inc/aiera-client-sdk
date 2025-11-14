@@ -122,12 +122,12 @@ export function normalizeCitation(rawCitation: RawCitation): Citation {
     const sourceParent = source.parent as ChatSource;
     return {
         author: rawCitation.author || '',
-        contentId: source.sourceId,
+        contentId: source.id,
         date: rawCitation.date as string,
         marker: rawCitation.marker,
         source: source.name,
-        sourceId: source?.sourceId,
-        sourceParentId: sourceParent?.sourceId,
+        sourceId: source?.id,
+        sourceParentId: sourceParent?.id,
         sourceParentType: sourceParent?.type,
         sourceType: rawCitation.source.type,
         text: rawCitation.quote,
@@ -146,8 +146,8 @@ export function normalizeSources(sources: ChatSource[] | null | undefined): Sour
 
     try {
         return sources.filter(isNonNullable).map((source) => ({
-            contentId: source.sourceId,
-            targetId: source.sourceId,
+            contentId: source.id,
+            targetId: source.id,
             targetType: source.type,
             title: source.name,
             url: source.meta?.url,
@@ -310,14 +310,14 @@ export const useChatSession = ({
                                 createdAt
                                 sources {
                                     __typename
+                                    id
                                     name
                                     parent {
                                         __typename
+                                        id
                                         name
-                                        sourceId
                                         type
                                     }
-                                    sourceId
                                     type
                                 }
                                 status

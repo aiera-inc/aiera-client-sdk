@@ -40,14 +40,14 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
                     quote
                     source {
                         __typename
+                        id
                         name
                         parent {
                             __typename
+                            id
                             name
-                            sourceId
                             type
                         }
-                        sourceId
                         type
                     }
                     url
@@ -67,20 +67,20 @@ const CHAT_MESSAGE_RESPONSE_FRAGMENT = gql`
             updatedAt
         }
         sources {
-            name
-            sourceId
-            type
+            id
             meta {
                 url
             }
+            name
             parent {
-                name
-                sourceId
-                type
+                id
                 meta {
                     url
                 }
+                name
+                type
             }
+            type
         }
     }
 `;
@@ -101,14 +101,14 @@ export const CHAT_SESSION_QUERY = gql`
             userId
             sources {
                 __typename
+                id
                 name
                 parent {
                     __typename
+                    id
                     name
-                    sourceId
                     type
                 }
-                sourceId
                 type
             }
             promptMessages {

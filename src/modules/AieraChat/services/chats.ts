@@ -56,7 +56,7 @@ function normalizeSources(sources?: ChatSource[]): Source[] {
     if (sources && sources.length > 0) {
         sources.forEach((source) => {
             normalized.push({
-                targetId: source.sourceId,
+                targetId: source.id,
                 targetType: source.type,
                 title: source.name,
             });
@@ -176,14 +176,14 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     }
                     sources {
                         __typename
+                        id
                         name
                         parent {
                             __typename
+                            id
                             name
-                            sourceId
                             type
                         }
-                        sourceId
                         type
                     }
                     status
@@ -260,14 +260,14 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         __typename
+                        id
                         name
                         parent {
                             __typename
+                            id
                             name
-                            sourceId
                             type
                         }
-                        sourceId
                         type
                     }
                     status
@@ -317,14 +317,14 @@ export const useChatSessions = (): UseChatSessionsReturn => {
                     createdAt
                     sources {
                         __typename
+                        id
                         name
                         parent {
                             __typename
+                            id
                             name
-                            sourceId
                             type
                         }
-                        sourceId
                         type
                     }
                     status

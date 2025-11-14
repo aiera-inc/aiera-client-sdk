@@ -94,6 +94,7 @@ export function createGQLClient(config: Config): Client {
             ApplicationConfiguration: () => null,
             Attachment: () => null,
             ChatSource: () => null,
+            ChatSourceMeta: () => null,
             Citation: () => null,
             CitableContent: () => null,
             EventQuotePriceInfo: () => null,
