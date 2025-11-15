@@ -74104,6 +74104,7 @@ function createGQLClient(config) {
       ApplicationConfiguration: () => null,
       Attachment: () => null,
       ChatSource: () => null,
+      ChatSourceMeta: () => null,
       Citation: () => null,
       CitableContent: () => null,
       EventQuotePriceInfo: () => null,
@@ -74699,14 +74700,14 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
         quote
         source {
           __typename
+          id
           name
           parent {
             __typename
+            id
             name
-            sourceId
             type
           }
-          sourceId
           type
         }
         url
@@ -74726,20 +74727,20 @@ var ChatMessageResponseFragmentFragmentDoc = lib_default`
     updatedAt
   }
   sources {
-    name
-    sourceId
-    type
+    id
     meta {
       url
     }
+    name
     parent {
-      name
-      sourceId
-      type
+      id
       meta {
         url
       }
+      name
+      type
     }
+    type
   }
 }
     `;
@@ -74893,14 +74894,14 @@ var CreateChatSessionDocument = lib_default`
       }
       sources {
         __typename
+        id
         name
         parent {
           __typename
+          id
           name
-          sourceId
           type
         }
-        sourceId
         type
       }
       status
@@ -74927,14 +74928,14 @@ var UpdateChatSessionDocument = lib_default`
       createdAt
       sources {
         __typename
+        id
         name
         parent {
           __typename
+          id
           name
-          sourceId
           type
         }
-        sourceId
         type
       }
       status
@@ -74953,14 +74954,14 @@ var ChatSessionsDocument = lib_default`
     createdAt
     sources {
       __typename
+      id
       name
       parent {
         __typename
+        id
         name
-        sourceId
         type
       }
-      sourceId
       type
     }
     status
@@ -75012,14 +75013,14 @@ var ChatSessionWithMessagesDocument = lib_default`
     userId
     sources {
       __typename
+      id
       name
       parent {
         __typename
+        id
         name
-        sourceId
         type
       }
-      sourceId
       type
     }
     promptMessages {
@@ -75048,14 +75049,14 @@ var ChatSessionsRefetchDocument = lib_default`
     createdAt
     sources {
       __typename
+      id
       name
       parent {
         __typename
+        id
         name
-        sourceId
         type
       }
-      sourceId
       type
     }
     status

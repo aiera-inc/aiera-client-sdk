@@ -6025,10 +6025,10 @@ export type ChatSessionsFilter = {
 &nbsp;
 export type ChatSource = {
   __typename?: 'ChatSource';
+  id: Scalars['ID'];
   meta?: Maybe&lt;ChatSourceMeta&gt;;
   name: Scalars['String'];
   parent?: Maybe&lt;ChatSource&gt;;
-  sourceId: Scalars['ID'];
   type: ChatSourceType;
 };
 &nbsp;
@@ -7581,7 +7581,7 @@ export type CreateChatSessionMutationVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type CreateChatSessionMutation = { __typename?: 'Mutation', createChatSession: { __typename?: 'ChatSessionResponse', chatSession?: { __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, promptMessages?: Array&lt;{ __typename?: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, sources?: Array&lt;{ __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined } | null | undefined } };
+export type CreateChatSessionMutation = { __typename?: 'Mutation', createChatSession: { __typename?: 'ChatSessionResponse', chatSession?: { __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, promptMessages?: Array&lt;{ __typename?: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, sources?: Array&lt;{ __typename: 'ChatSource', id: string, name: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined } | null | undefined } };
 &nbsp;
 export type DeleteChatSessionMutationVariables = Exact&lt;{
   input: DeleteChatSessionInput;
@@ -7595,14 +7595,14 @@ export type UpdateChatSessionMutationVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type UpdateChatSessionMutation = { __typename?: 'Mutation', updateChatSession: { __typename?: 'ChatSessionResponse', chatSession?: { __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined } | null | undefined } };
+export type UpdateChatSessionMutation = { __typename?: 'Mutation', updateChatSession: { __typename?: 'ChatSessionResponse', chatSession?: { __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', id: string, name: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined } | null | undefined } };
 &nbsp;
 export type ChatSessionsQueryVariables = Exact&lt;{
   filter?: InputMaybe&lt;ChatSessionsFilter&gt;;
 }&gt;;
 &nbsp;
 &nbsp;
-export type ChatSessionsQuery = { __typename?: 'Query', chatSessions: Array&lt;{ __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined }&gt; };
+export type ChatSessionsQuery = { __typename?: 'Query', chatSessions: Array&lt;{ __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', id: string, name: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined }&gt; };
 &nbsp;
 export type SearchEventsQueryVariables = Exact&lt;{
   filter: OpenSearchEventFilter;
@@ -7613,14 +7613,14 @@ export type SearchEventsQuery = { __typename?: 'Query', openSearch: { __typename
 &nbsp;
 export type ChatMessagePromptFragmentFragment = { __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string };
 &nbsp;
-export type ChatMessageResponseFragmentFragment = { __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined, sources?: Array&lt;{ __typename?: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined, parent?: { __typename?: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined } | null | undefined }&gt; | null | undefined };
+export type ChatMessageResponseFragmentFragment = { __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined, sources?: Array&lt;{ __typename?: 'ChatSource', id: string, name: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined, parent?: { __typename?: 'ChatSource', id: string, name: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined } | null | undefined }&gt; | null | undefined };
 &nbsp;
 export type ChatSessionWithMessagesQueryVariables = Exact&lt;{
   filter: ChatSessionFilter;
 }&gt;;
 &nbsp;
 &nbsp;
-export type ChatSessionWithMessagesQuery = { __typename?: 'Query', chatSession?: { __typename: 'ChatSession', id: string, activeMessageId?: string | null | undefined, createdAt: string, modelId?: string | null | undefined, modelGenerationParams?: unknown | null | undefined, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined, promptMessages?: Array&lt;{ __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, responseMessages?: Array&lt;{ __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined, sources?: Array&lt;{ __typename?: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined, parent?: { __typename?: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined } | null | undefined }&gt; | null | undefined }&gt; | null | undefined } | null | undefined };
+export type ChatSessionWithMessagesQuery = { __typename?: 'Query', chatSession?: { __typename: 'ChatSession', id: string, activeMessageId?: string | null | undefined, createdAt: string, modelId?: string | null | undefined, modelGenerationParams?: unknown | null | undefined, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', id: string, name: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined, promptMessages?: Array&lt;{ __typename: 'ChatMessagePrompt', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string }&gt; | null | undefined, responseMessages?: Array&lt;{ __typename: 'ChatMessageResponse', id: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string, userId: string, blocks: Array&lt;{ __typename: 'TextBlock', content: string, type: ContentBlockType, citations?: Array&lt;{ __typename: 'Citation', author?: string | null | undefined, date?: unknown | null | undefined, marker: string, quote: string, url?: string | null | undefined, source: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType } | null | undefined } }&gt; | null | undefined }&gt;, statuses?: Array&lt;{ __typename?: 'ChatMessageStatus', id: string, content: string, createdAt: string, messageType: ChatMessageType, ordinalId?: string | null | undefined, promptMessageId?: string | null | undefined, runnerVersion?: string | null | undefined, sessionId: string, updatedAt: string }&gt; | null | undefined, sources?: Array&lt;{ __typename?: 'ChatSource', id: string, name: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined, parent?: { __typename?: 'ChatSource', id: string, name: string, type: ChatSourceType, meta?: { __typename?: 'ChatSourceMeta', url?: string | null | undefined } | null | undefined } | null | undefined }&gt; | null | undefined }&gt; | null | undefined } | null | undefined };
 &nbsp;
 export type CreateChatMessagePromptMutationVariables = Exact&lt;{
   input: CreateChatMessagePromptInput;
@@ -7634,7 +7634,7 @@ export type ChatSessionsRefetchQueryVariables = Exact&lt;{
 }&gt;;
 &nbsp;
 &nbsp;
-export type ChatSessionsRefetchQuery = { __typename?: 'Query', chatSessions: Array&lt;{ __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', name: string, sourceId: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined }&gt; };
+export type ChatSessionsRefetchQuery = { __typename?: 'Query', chatSessions: Array&lt;{ __typename?: 'ChatSession', id: string, createdAt: string, status: ChatSessionStatus, title?: string | null | undefined, titleStatus?: ChatSessionTitleStatus | null | undefined, updatedAt: string, userId: string, sources?: Array&lt;{ __typename: 'ChatSource', id: string, name: string, type: ChatSourceType, parent?: { __typename: 'ChatSource', id: string, name: string, type: ChatSourceType } | null | undefined }&gt; | null | undefined }&gt; };
 &nbsp;
 export type CurrentUserQueryVariables = Exact&lt;{ [key: string]: never; }&gt;;
 &nbsp;
@@ -7797,14 +7797,14 @@ export const ChatMessageResponseFragmentFragmentDoc = gql`
         quote
         source {
           __typename
+          id
           name
           parent {
             __typename
+            id
             name
-            sourceId
             type
           }
-          sourceId
           type
         }
         url
@@ -7824,20 +7824,20 @@ export const ChatMessageResponseFragmentFragmentDoc = gql`
     updatedAt
   }
   sources {
-    name
-    sourceId
-    type
+    id
     meta {
       url
     }
+    name
     parent {
-      name
-      sourceId
-      type
+      id
       meta {
         url
       }
+      name
+      type
     }
+    type
   }
 }
     `;
@@ -7991,14 +7991,14 @@ export const CreateChatSessionDocument = gql`
       }
       sources {
         __typename
+        id
         name
         parent {
           __typename
+          id
           name
-          sourceId
           type
         }
-        sourceId
         type
       }
       status
@@ -8025,14 +8025,14 @@ export const UpdateChatSessionDocument = gql`
       createdAt
       sources {
         __typename
+        id
         name
         parent {
           __typename
+          id
           name
-          sourceId
           type
         }
-        sourceId
         type
       }
       status
@@ -8051,14 +8051,14 @@ export const ChatSessionsDocument = gql`
     createdAt
     sources {
       __typename
+      id
       name
       parent {
         __typename
+        id
         name
-        sourceId
         type
       }
-      sourceId
       type
     }
     status
@@ -8110,14 +8110,14 @@ export const ChatSessionWithMessagesDocument = gql`
     userId
     sources {
       __typename
+      id
       name
       parent {
         __typename
+        id
         name
-        sourceId
         type
       }
-      sourceId
       type
     }
     promptMessages {
@@ -8146,14 +8146,14 @@ export const ChatSessionsRefetchDocument = gql`
     createdAt
     sources {
       __typename
+      id
       name
       parent {
         __typename
+        id
         name
-        sourceId
         type
       }
-      sourceId
       type
     }
     status
@@ -8668,7 +8668,7 @@ export const LatestParagraphsDocument = gql`
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Wed Nov 12 2025 17:43:55 GMT-0500 (Eastern Standard Time)
+                at Sat Nov 15 2025 12:43:49 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../prettify.js"></script>
