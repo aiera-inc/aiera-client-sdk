@@ -205,7 +205,7 @@ export const useChatSession = ({
     enablePolling = false,
     requestPolicy = 'cache-and-network',
 }: UseChatSessionOptions): UseChatSessionReturn => {
-    const { addCitationMarkers, chatId, chatTitle, onSetTitle } = useChatStore();
+    const { addCitationMarkers, chatId, chatTitle, onSetTitle, webSearchEnabled } = useChatStore();
     const [messages, setMessages] = useState<ChatMessage[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -236,7 +236,12 @@ export const useChatSession = ({
             log(`Creating chat message prompt: content=${content}, sessionId=${sessionId}`);
 
             return createChatMessagePromptMutation({
-                input: { content, sessionId, sessionUserId: config.tracking?.userId },
+                input: {
+                    content,
+                    sessionId,
+                    sessionUserId: config.tracking?.userId,
+                    toolSettings: { webSearchEnabled },
+                },
             })
                 .then((resp) => {
                     if (resp.error) {
@@ -277,7 +282,7 @@ export const useChatSession = ({
                     return null;
                 });
         },
-        [config.tracking?.userId, createChatMessagePromptMutation]
+        [config.tracking?.userId, createChatMessagePromptMutation, webSearchEnabled]
     );
 
     const messagesQuery = useQuery<ChatSessionWithMessagesQuery, ChatSessionWithMessagesQueryVariables>({

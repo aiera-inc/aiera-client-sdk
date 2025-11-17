@@ -52,11 +52,13 @@ export interface ChatState {
     onSetStatus: (chatStatus: ChatSessionStatus) => void;
     onSetTitle: (title?: string) => void;
     onSetUserId: (chatUserId?: string) => void;
+    onToggleWebSearch: (webSearch?: boolean) => void;
     selectedSource?: Source;
     setHasChanges: (hasChanges: boolean) => void;
     sources: Source[];
     // Internal state for tracking citation numbering
     sourceTypeCounters: Map<string, number>;
+    webSearchEnabled: boolean;
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -69,6 +71,13 @@ export const useChatStore = create<ChatState>((set, get) => ({
     selectedSource: undefined,
     sources: [],
     sourceTypeCounters: new Map(),
+    webSearchEnabled: true,
+    onToggleWebSearch: (enabled) => {
+        const { webSearchEnabled } = get();
+        set({
+            webSearchEnabled: enabled !== undefined ? enabled : !webSearchEnabled,
+        });
+    },
     addCitationMarkers: (citations: Citation[]) =>
         set((state) => {
             // Early return if no citations to process

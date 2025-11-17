@@ -145,9 +145,9 @@ export function AieraChat(): ReactElement {
     );
 
     const handleMessageSubmit = useCallback(
-        (prompt: string) => {
+        (prompt: string, webSearchEnabled?: boolean) => {
             if (chatId === 'new') {
-                return createSession({ prompt, sources, title: chatTitle })
+                return createSession({ prompt, sources, title: chatTitle, webSearchEnabled })
                     .then((newSession) => {
                         if (newSession && newSession.id) {
                             onSelectChat(

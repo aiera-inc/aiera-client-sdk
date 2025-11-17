@@ -30,12 +30,12 @@ export function Messages({
     onSubmit,
 }: {
     onOpenSources: () => void;
-    onSubmit: (prompt: string) => Promise<ChatSessionWithPromptMessage | null>;
+    onSubmit: (prompt: string, webSearchEnabled?: boolean) => Promise<ChatSessionWithPromptMessage | null>;
 }) {
     const config = useConfig();
     const messageRefs = useRef<Map<string, HTMLDivElement>>(new Map());
     const [submitting, setSubmitting] = useState<boolean>(false);
-    const { chatId, chatStatus, onSetStatus, sources } = useChatStore();
+    const { chatId, chatStatus, onSetStatus, sources, webSearchEnabled } = useChatStore();
     const { createChatMessagePrompt, messages, setMessages, isLoading } = useChatSession({
         enablePolling: config.options?.aieraChatEnablePolling || false,
     });
@@ -57,7 +57,7 @@ export function Messages({
             setAnimationStep(1);
         }
         if (chatId === 'new') {
-            onSubmit(prompt)
+            onSubmit(prompt, webSearchEnabled)
                 .then((session) => {
                     if (session && session.promptMessage) {
                         // Only prompt messages can be created when creating a chat session

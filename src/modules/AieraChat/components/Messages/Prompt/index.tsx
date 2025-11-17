@@ -8,6 +8,7 @@ import { useChatStore } from '../../../store';
 import { Hint } from '../../Hint';
 import './styles.css';
 import { useConfig } from '@aiera/client-sdk/lib/config';
+import { MicroGlobe } from '@aiera/client-sdk/components/Svg/MicroGlobe';
 
 interface PromptProps {
     onOpenSources: () => void;
@@ -17,7 +18,7 @@ interface PromptProps {
 }
 
 export function Prompt({ onSubmit, onOpenSources, submitting, className }: PromptProps) {
-    const { chatStatus, sources } = useChatStore();
+    const { chatStatus, sources, webSearchEnabled, onToggleWebSearch } = useChatStore();
     const [isEmpty, setIsEmpty] = useState<boolean>(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
     const config = useConfig();
@@ -122,16 +123,39 @@ export function Prompt({ onSubmit, onOpenSources, submitting, className }: Promp
                 </span>
             )}
             <button
+                onClick={() => onToggleWebSearch()}
+                className={classNames(
+                    'h-[1.875rem] ml-2 mr-1 self-end mb-1 px-1.5 transition-all',
+                    'rounded-lg flex-shrink-0 flex items-center justify-center',
+                    'cursor-pointer active:scale-90',
+                    'hintTarget relative',
+                    {
+                        'text-rose-600 bg-rose-100 hover:bg-rose-200 active:bg-rose-300': webSearchEnabled,
+                        'text-slate-400 bg-slate-100 hover:bg-slate-200 active:bg-slate-300': !webSearchEnabled,
+                    }
+                )}
+            >
+                <MicroGlobe className="w-4" />
+                <Hint
+                    targetHeight={26}
+                    targetWidth={28}
+                    yOffset={-22}
+                    text={webSearchEnabled ? 'Web Sources Enabled' : 'Web Sources Disabled'}
+                    anchor={'bottom-left'}
+                    grow={'up-left'}
+                />
+            </button>
+            <button
                 disabled={chatStatus !== ChatSessionStatus.Active}
                 onClick={onOpenSources}
                 className={classNames(
-                    'h-[1.875rem] ml-2 self-end mb-1 mr-[5px] px-1.5 transition-all',
-                    'rounded-xl flex-shrink-0 flex items-center justify-center',
-                    'cursor-pointer hover:bg-slate-100 active:bg-slate-200 active:scale-90',
+                    'h-[1.875rem] self-end mb-1 mr-[5px] px-1.5 transition-all',
+                    'rounded-lg flex-shrink-0 flex items-center justify-center',
+                    'cursor-pointer active:scale-90',
                     'hintTarget relative',
                     {
-                        'text-rose-600': sources.length > 0,
-                        'text-slate-400': sources.length === 0,
+                        'text-rose-600 bg-rose-100 hover:bg-rose-200 active:bg-rose-300': sources.length > 0,
+                        'text-slate-400 bg-slate-100 hover:bg-slate-200 active:bg-slate-300': sources.length === 0,
                     }
                 )}
             >

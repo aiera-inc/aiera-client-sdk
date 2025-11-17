@@ -31,6 +31,7 @@ export interface UseChatSessionsReturn {
         prompt?: string;
         sources?: Source[];
         title?: string;
+        webSearchEnabled?: boolean;
     }) => Promise<ChatSessionWithPromptMessage | null>;
     deleteSession: (sessionId: string) => Promise<void>;
     error: string | null;
@@ -197,9 +198,25 @@ export const useChatSessions = (): UseChatSessionsReturn => {
     `);
 
     const createSession = useCallback(
-        ({ prompt, sources, title }: { prompt?: string; sources?: Source[]; title?: string }) => {
+        ({
+            prompt,
+            sources,
+            title,
+            webSearchEnabled = true,
+        }: {
+            webSearchEnabled?: boolean;
+            prompt?: string;
+            sources?: Source[];
+            title?: string;
+        }) => {
             return createChatMutation({
-                input: { prompt, sessionUserId: config.tracking?.userId, sources: mapSourcesToInput(sources), title },
+                input: {
+                    prompt,
+                    sessionUserId: config.tracking?.userId,
+                    sources: mapSourcesToInput(sources),
+                    title,
+                    toolSettings: { webSearchEnabled },
+                },
             })
                 .then((resp) => {
                     const newSession = resp.data?.createChatSession?.chatSession;

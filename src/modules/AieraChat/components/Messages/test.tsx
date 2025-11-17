@@ -197,7 +197,7 @@ describe('Messages', () => {
         fireEvent.click(screen.getByText('Submit'));
 
         await waitFor(() => {
-            expect(onSubmit).toHaveBeenCalledWith('test prompt');
+            expect(onSubmit).toHaveBeenCalledWith('test prompt', true);
             expect(mockUseChatSession.setMessages).toHaveBeenCalled();
         });
 
