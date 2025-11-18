@@ -24,9 +24,9 @@ function extractDomain(urlString: string) {
     const url = new URL(urlString);
     const parts = url.hostname.replace(/^www\./, '').split('.');
 
-    // For domains like "example.com", return "example"
-    // For subdomains like "blog.example.com", return "example"
-    return parts.length > 1 ? parts[parts.length - 2] : parts[0];
+    // For domains like "example.com", return "example.com"
+    // For subdomains like "blog.example.com", return "example.com"
+    return parts.length > 1 ? parts.slice(-2).join('.') : parts[0];
 }
 
 export const Citation = ({ citation }: CitationProps) => {
@@ -83,7 +83,7 @@ export const Citation = ({ citation }: CitationProps) => {
             />
             <span
                 onClick={onNav}
-                className="flex h-3.5 items-center gap-0.5 leading-[10px] rounded bg-blue-700 px-[3px] capitalize py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
+                className="flex h-3.5 items-center gap-0.5 leading-[10px] rounded bg-blue-700 px-[3px] py-px text-xs font-bold tracking-tight text-white antialiased cursor-pointer hover:bg-yellow-500 hover:text-black"
             >
                 {match(citation.sourceType)
                     .with('event', () => <MicroCalendar className="w-3" />)
