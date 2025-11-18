@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">97.5% </span>
+                <span class="strong">95.12% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>78/80</span>
+                <span class='fraction'>78/82</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">80.32% </span>
+                <span class="strong">77.77% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>49/61</span>
+                <span class='fraction'>49/63</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">100% </span>
+                <span class="strong">95.83% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>23/23</span>
+                <span class='fraction'>23/24</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">98.64% </span>
+                <span class="strong">96.05% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>73/74</span>
+                <span class='fraction'>73/76</span>
             </div>
         
             
@@ -324,7 +324,16 @@
 <a name='L259'></a><a href='#L259'>259</a>
 <a name='L260'></a><a href='#L260'>260</a>
 <a name='L261'></a><a href='#L261'>261</a>
-<a name='L262'></a><a href='#L262'>262</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L262'></a><a href='#L262'>262</a>
+<a name='L263'></a><a href='#L263'>263</a>
+<a name='L264'></a><a href='#L264'>264</a>
+<a name='L265'></a><a href='#L265'>265</a>
+<a name='L266'></a><a href='#L266'>266</a>
+<a name='L267'></a><a href='#L267'>267</a>
+<a name='L268'></a><a href='#L268'>268</a>
+<a name='L269'></a><a href='#L269'>269</a>
+<a name='L270'></a><a href='#L270'>270</a>
+<a name='L271'></a><a href='#L271'>271</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -385,6 +394,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -392,6 +403,13 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -639,11 +657,13 @@ export interface ChatState {
     onSetStatus: (chatStatus: ChatSessionStatus) =&gt; void;
     onSetTitle: (title?: string) =&gt; void;
     onSetUserId: (chatUserId?: string) =&gt; void;
+    onToggleWebSearch: (webSearch?: boolean) =&gt; void;
     selectedSource?: Source;
     setHasChanges: (hasChanges: boolean) =&gt; void;
     sources: Source[];
     // Internal state for tracking citation numbering
     sourceTypeCounters: Map&lt;string, number&gt;;
+    webSearchEnabled: boolean;
 }
 &nbsp;
 export const useChatStore = create&lt;ChatState&gt;((set, get) =&gt; ({
@@ -656,6 +676,13 @@ export const useChatStore = create&lt;ChatState&gt;((set, get) =&gt; ({
     selectedSource: undefined,
     sources: [],
     sourceTypeCounters: new Map(),
+    webSearchEnabled: true,
+    onToggleWebSearch: <span class="fstat-no" title="function not covered" >(e</span>nabled) =&gt; {
+        const { webSearchEnabled } = <span class="cstat-no" title="statement not covered" >get();</span>
+<span class="cstat-no" title="statement not covered" >        set({</span>
+            webSearchEnabled: enabled !== undefined ? enabled : !webSearchEnabled,
+        });
+    },
     addCitationMarkers: (citations: Citation[]) =&gt;
         set((state) =&gt; {
             // Early return if no citations to process
@@ -853,7 +880,7 @@ export const useChatStore = create&lt;ChatState&gt;((set, get) =&gt; ({
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Sat Nov 15 2025 12:43:49 GMT-0500 (Eastern Standard Time)
+                at Mon Nov 17 2025 23:06:46 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>

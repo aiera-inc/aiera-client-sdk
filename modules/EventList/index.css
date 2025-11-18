@@ -2064,6 +2064,14 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(255 228 230 / var(--tw-bg-opacity));
 }
+.bg-rose-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(253 164 175 / var(--tw-bg-opacity));
+}
+.bg-slate-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(241 245 249 / var(--tw-bg-opacity));
+}
 .bg-slate-200 {
   --tw-bg-opacity: 1;
   background-color: rgb(226 232 240 / var(--tw-bg-opacity));
@@ -2080,6 +2088,10 @@ video {
 .bg-slate-200\/60-solid {
   --tw-bg-opacity: 1;
   background-color: rgb(235 239 245 / var(--tw-bg-opacity));
+}
+.bg-slate-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(203 213 225 / var(--tw-bg-opacity));
 }
 .bg-slate-300\/60 {
   background-color: rgb(203 213 225 / 0.6);
@@ -3050,6 +3062,10 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(241 245 249 / var(--tw-bg-opacity));
 }
+.hover\:bg-slate-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+}
 .hover\:bg-slate-200\/40:hover {
   background-color: rgb(226 232 240 / 0.4);
 }
@@ -3290,9 +3306,9 @@ video {
 .active\:bg-red-600\/30:active {
   background-color: rgb(220 38 38 / 0.3);
 }
-.active\:bg-slate-200:active {
+.active\:bg-rose-300:active {
   --tw-bg-opacity: 1;
-  background-color: rgb(226 232 240 / var(--tw-bg-opacity));
+  background-color: rgb(253 164 175 / var(--tw-bg-opacity));
 }
 .active\:bg-slate-200\/80:active {
   background-color: rgb(226 232 240 / 0.8);
