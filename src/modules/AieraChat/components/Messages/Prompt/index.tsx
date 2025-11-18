@@ -1,14 +1,12 @@
 import { MicroArrowUp } from '@aiera/client-sdk/components/Svg/MicroArrowUp';
-import { MicroFolder } from '@aiera/client-sdk/components/Svg/MicroFolder';
+import { MicroGlobe } from '@aiera/client-sdk/components/Svg/MicroGlobe';
+import { useConfig } from '@aiera/client-sdk/lib/config';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react';
-import { MicroFolderOpen } from '../../../../../components/Svg/MicroFolderOpen';
 import { useChatStore } from '../../../store';
 import { Hint } from '../../Hint';
 import './styles.css';
-import { useConfig } from '@aiera/client-sdk/lib/config';
-import { MicroGlobe } from '@aiera/client-sdk/components/Svg/MicroGlobe';
 
 interface PromptProps {
     onOpenSources: () => void;
@@ -17,8 +15,8 @@ interface PromptProps {
     className?: string;
 }
 
-export function Prompt({ onSubmit, onOpenSources, submitting, className }: PromptProps) {
-    const { chatStatus, sources, webSearchEnabled, onToggleWebSearch } = useChatStore();
+export function Prompt({ onSubmit, submitting, className }: PromptProps) {
+    const { chatStatus, webSearchEnabled, onToggleWebSearch } = useChatStore();
     const [isEmpty, setIsEmpty] = useState<boolean>(true);
     const inputRef = useRef<HTMLParagraphElement | null>(null);
     const config = useConfig();
@@ -143,37 +141,6 @@ export function Prompt({ onSubmit, onOpenSources, submitting, className }: Promp
                     text={webSearchEnabled ? 'Web Sources Enabled' : 'Web Sources Disabled'}
                     anchor={'bottom-left'}
                     grow={'up-left'}
-                />
-            </button>
-            <button
-                disabled={chatStatus !== ChatSessionStatus.Active}
-                onClick={onOpenSources}
-                className={classNames(
-                    'h-[1.875rem] self-end mb-1 mr-[5px] px-1.5 transition-all',
-                    'rounded-lg flex-shrink-0 flex items-center justify-center',
-                    'cursor-pointer active:scale-90',
-                    'hintTarget relative',
-                    {
-                        'text-rose-600 bg-rose-100 hover:bg-rose-200 active:bg-rose-300': sources.length > 0,
-                        'text-slate-400 bg-slate-100 hover:bg-slate-200 active:bg-slate-300': sources.length === 0,
-                    }
-                )}
-            >
-                {sources.length > 0 ? (
-                    <>
-                        <p className="text-sm font-bold antialiased mr-0.5">{sources.length}</p>
-                        <MicroFolderOpen className="w-4" />
-                    </>
-                ) : (
-                    <MicroFolder className="w-4" />
-                )}
-                <Hint
-                    targetHeight={30}
-                    targetWidth={28}
-                    text={sources.length === 0 ? 'Auto Sources' : 'Manage Sources'}
-                    anchor={'top-right'}
-                    grow={'up-left'}
-                    yOffset={8}
                 />
             </button>
             <button
