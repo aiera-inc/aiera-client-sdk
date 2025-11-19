@@ -464,7 +464,7 @@ export const useAbly = (): UseAblyReturn => {
                 .attach()
                 .then(() => {
                     channel
-                        .history({ untilAttach: true })
+                        .history({ limit: 1000, untilAttach: true })
                         .then((history) => {
                             if (history && history.items && history.items.length > 0) {
                                 history.items.forEach((i) =>
