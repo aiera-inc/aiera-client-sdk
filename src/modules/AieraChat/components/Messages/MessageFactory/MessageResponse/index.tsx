@@ -3,7 +3,7 @@ import { useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
 import React, { useCallback } from 'react';
 import { ChatMessageResponse } from '../../../../services/messages';
-import { Block } from '../Block';
+import { Block, Citation } from '../Block';
 import { Footer } from './Footer';
 import { Sources } from './Sources';
 
@@ -35,6 +35,15 @@ export const MessageResponse = ({
         }
     }, [data]);
 
+    // Collect all citations from all blocks
+    const allCitations =
+        data.blocks?.reduce<Citation[]>((acc, block) => {
+            if ('citations' in block && block.citations && Array.isArray(block.citations)) {
+                return [...acc, ...block.citations];
+            }
+            return acc;
+        }, []) ?? [];
+
     return (
         <div className="flex flex-col pb-6 mx-4">
             <div className="flex flex-col px-2">
@@ -42,7 +51,7 @@ export const MessageResponse = ({
                     <Block {...block} key={index} />
                 ))}
             </div>
-            <Sources sources={data.sources} />
+            <Sources sources={data.sources} citations={allCitations} />
             {(chatStatus === ChatSessionStatus.Active || !isLastItem) && <Footer data={data} onCopy={handleCopy} />}
         </div>
     );
