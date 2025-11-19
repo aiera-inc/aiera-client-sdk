@@ -111,15 +111,32 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
             }
         });
 
-        // Sort sources within each group: cited sources first
+        // Sort sources within each group: cited sources first, then by citation number
         Object.keys(groups).forEach((type) => {
             const group = groups[type];
             if (group) {
                 group.sort((a, b) => {
-                    const aHasCitation = !!findMatchingCitation(a);
-                    const bHasCitation = !!findMatchingCitation(b);
+                    const aCitation = findMatchingCitation(a);
+                    const bCitation = findMatchingCitation(b);
+                    const aHasCitation = !!aCitation;
+                    const bHasCitation = !!bCitation;
+
+                    // First sort: cited sources before non-cited
                     if (aHasCitation && !bHasCitation) return -1;
                     if (!aHasCitation && bHasCitation) return 1;
+
+                    // Second sort: if both have citations, sort by marker number
+                    if (aHasCitation && bHasCitation && aCitation && bCitation) {
+                        const aMarker = getCitationMarker(aCitation);
+                        const bMarker = getCitationMarker(bCitation);
+                        if (aMarker && bMarker) {
+                            // Extract the numeric part (e.g., "1" from "E1" or "T1.2")
+                            const aNum = parseInt(aMarker.match(/\d+/)?.[0] ?? '0');
+                            const bNum = parseInt(bMarker.match(/\d+/)?.[0] ?? '0');
+                            return aNum - bNum;
+                        }
+                    }
+
                     return 0;
                 });
             }
