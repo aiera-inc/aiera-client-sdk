@@ -187,6 +187,18 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
             .join(', ');
     })();
 
+    // Define the order for source type groups
+    const groupOrder = ['Event', 'Transcript', 'Event Attachment', 'Filing', 'External Link'];
+    const sortedGroupEntries = Object.entries(groupedSources).sort(([typeA], [typeB]) => {
+        const indexA = groupOrder.indexOf(typeA);
+        const indexB = groupOrder.indexOf(typeB);
+        // If type not in groupOrder, put it at the end
+        if (indexA === -1 && indexB === -1) return 0;
+        if (indexA === -1) return 1;
+        if (indexB === -1) return -1;
+        return indexA - indexB;
+    });
+
     if (sources.length === 0) {
         return null;
     }
@@ -223,7 +235,7 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
                 />
             </button>
             {expanded &&
-                Object.entries(groupedSources).map(([type, groupSources]) => (
+                sortedGroupEntries.map(([type, groupSources]) => (
                     <div key={type}>
                         <div className="px-3 pt-3 text-xs font-semibold text-slate-500 uppercase tracking-wider">
                             {groupSources.length > 1 ? `${type}s` : type}
@@ -258,7 +270,7 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
                                             <CitationComponent citation={{ ...matchingCitation, marker: baseMarker }} />
                                         </div>
                                     ) : (
-                                        <span className="hintTarget relative text-xs text-slate-500 ml-2 border-b border-dashed border-slate-400">
+                                        <span className="hintTarget pointer-events-auto relative text-xs text-slate-500 ml-2 border-b border-dashed border-slate-400">
                                             <Hint
                                                 yOffset={0}
                                                 maxWidth={200}
@@ -266,7 +278,7 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
                                                 targetHeight={26}
                                                 targetWidth={100}
                                                 anchor={'top-right'}
-                                                grow={'up-right'}
+                                                grow={'up-left'}
                                             />
                                             Source Considered
                                         </span>
