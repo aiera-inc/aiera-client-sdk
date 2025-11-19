@@ -25,6 +25,18 @@ const formatDate = (dateString?: string) => {
     } else return dateString;
 };
 
+function extractDomain(urlString: string): string {
+    try {
+        const url = new URL(urlString);
+        const parts = url.hostname.replace(/^www\./, '').split('.');
+        // For domains like "example.com", return "example.com"
+        // For subdomains like "blog.example.com", return "example.com"
+        return parts.length > 1 ? parts.slice(-2).join('.') : parts[0] ?? '';
+    } catch {
+        return '';
+    }
+}
+
 const POP_OUT_SOURCE_TYPES = ['attachment', 'filing'];
 
 interface NavSource extends Source {
@@ -111,7 +123,7 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
             }
         });
 
-        // Sort sources within each group: cited sources first, then by citation number
+        // Sort sources within each group: cited sources first, then by citation number or alphabetically
         Object.keys(groups).forEach((type) => {
             const group = groups[type];
             if (group) {
@@ -125,8 +137,20 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
                     if (aHasCitation && !bHasCitation) return -1;
                     if (!aHasCitation && bHasCitation) return 1;
 
-                    // Second sort: if both have citations, sort by marker number
+                    // Second sort: if both have citations
                     if (aHasCitation && bHasCitation && aCitation && bCitation) {
+                        // For external links, sort alphabetically by domain
+                        if (type === 'External Link') {
+                            const aUrl = a.url ?? '';
+                            const bUrl = b.url ?? '';
+                            if (aUrl && bUrl) {
+                                const aDomain = extractDomain(aUrl);
+                                const bDomain = extractDomain(bUrl);
+                                return aDomain.localeCompare(bDomain);
+                            }
+                        }
+
+                        // For other types, sort by marker number
                         const aMarker = getCitationMarker(aCitation);
                         const bMarker = getCitationMarker(bCitation);
                         if (aMarker && bMarker) {
