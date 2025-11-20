@@ -960,6 +960,9 @@ video {
 .pointer-events-none {
   pointer-events: none;
 }
+.pointer-events-auto {
+  pointer-events: auto;
+}
 .visible {
   visibility: visible;
 }
@@ -1843,6 +1846,9 @@ video {
 .border-t-\[1px\] {
   border-top-width: 1px;
 }
+.border-dashed {
+  border-style: dashed;
+}
 .border-blue-300 {
   --tw-border-opacity: 1;
   border-color: rgb(147 197 253 / var(--tw-border-opacity));
@@ -1916,6 +1922,10 @@ video {
 }
 .border-slate-300\/80 {
   border-color: rgb(203 213 225 / 0.8);
+}
+.border-slate-400 {
+  --tw-border-opacity: 1;
+  border-color: rgb(148 163 184 / var(--tw-border-opacity));
 }
 .border-white {
   --tw-border-opacity: 1;
