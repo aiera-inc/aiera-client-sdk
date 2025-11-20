@@ -315,6 +315,7 @@ describe('useChatStore', () => {
                 result.current.addCitationMarkers(citations);
             });
 
+            // With unified grouping, each different event gets its own number
             citations.forEach((citation, index) => {
                 expect(result.current.getCitationMarker(citation)).toBe(`E${index + 1}`);
             });
@@ -721,6 +722,257 @@ describe('useChatStore', () => {
             });
 
             expect(result.current.citationMarkers.size).toBe(0);
+        });
+
+        test('groups event and transcript citations with same sourceId', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            // Add event citation and transcript citations that reference it
+            act(() => {
+                result.current.addCitationMarkers([
+                    {
+                        sourceId: 'event-1',
+                        sourceType: 'event',
+                        contentId: 'c1',
+                        source: 'Event 1',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                    {
+                        sourceId: 'transcript-1',
+                        sourceParentId: 'event-1',
+                        sourceType: 'transcript',
+                        contentId: 'c2',
+                        source: 'Transcript 1',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                    {
+                        sourceId: 'transcript-2',
+                        sourceParentId: 'event-1',
+                        sourceType: 'transcript',
+                        contentId: 'c3',
+                        source: 'Transcript 2',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                ]);
+            });
+
+            // Event should be E1, transcripts should be T1.1, T1.2
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'event-1',
+                    sourceType: 'event',
+                    contentId: 'c1',
+                    source: 'Event 1',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('E1');
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-1',
+                    sourceParentId: 'event-1',
+                    sourceType: 'transcript',
+                    contentId: 'c2',
+                    source: 'Transcript 1',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T1.1');
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-2',
+                    sourceParentId: 'event-1',
+                    sourceType: 'transcript',
+                    contentId: 'c3',
+                    source: 'Transcript 2',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T1.2');
+        });
+
+        test('handles transcripts without related event citation', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            // Add transcript citations without a corresponding event citation
+            act(() => {
+                result.current.addCitationMarkers([
+                    {
+                        sourceId: 'transcript-1',
+                        sourceParentId: 'event-1',
+                        sourceType: 'transcript',
+                        contentId: 'c1',
+                        source: 'Transcript 1',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                ]);
+            });
+
+            // Single transcript without event should just be T1
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-1',
+                    sourceParentId: 'event-1',
+                    sourceType: 'transcript',
+                    contentId: 'c1',
+                    source: 'Transcript 1',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T1');
+
+            // Add more transcripts for the same parent
+            act(() => {
+                result.current.addCitationMarkers([
+                    {
+                        sourceId: 'transcript-2',
+                        sourceParentId: 'event-1',
+                        sourceType: 'transcript',
+                        contentId: 'c2',
+                        source: 'Transcript 2',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                ]);
+            });
+
+            // Multiple transcripts without event should use sub-numbering
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-1',
+                    sourceParentId: 'event-1',
+                    sourceType: 'transcript',
+                    contentId: 'c1',
+                    source: 'Transcript 1',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T1.1');
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-2',
+                    sourceParentId: 'event-1',
+                    sourceType: 'transcript',
+                    contentId: 'c2',
+                    source: 'Transcript 2',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T1.2');
+        });
+
+        test('groups multiple events with their respective transcripts', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            // Add multiple events and their transcripts
+            act(() => {
+                result.current.addCitationMarkers([
+                    {
+                        sourceId: 'event-1',
+                        sourceType: 'event',
+                        contentId: 'c1',
+                        source: 'Event 1',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                    {
+                        sourceId: 'transcript-1',
+                        sourceParentId: 'event-1',
+                        sourceType: 'transcript',
+                        contentId: 'c2',
+                        source: 'Transcript 1',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                    {
+                        sourceId: 'event-2',
+                        sourceType: 'event',
+                        contentId: 'c3',
+                        source: 'Event 2',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                    {
+                        sourceId: 'transcript-2',
+                        sourceParentId: 'event-2',
+                        sourceType: 'transcript',
+                        contentId: 'c4',
+                        source: 'Transcript 2',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                    {
+                        sourceId: 'transcript-3',
+                        sourceParentId: 'event-2',
+                        sourceType: 'transcript',
+                        contentId: 'c5',
+                        source: 'Transcript 3',
+                        marker: '[1]',
+                        text: 'Test text',
+                    },
+                ]);
+            });
+
+            // First event and its transcript
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'event-1',
+                    sourceType: 'event',
+                    contentId: 'c1',
+                    source: 'Event 1',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('E1');
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-1',
+                    sourceParentId: 'event-1',
+                    sourceType: 'transcript',
+                    contentId: 'c2',
+                    source: 'Transcript 1',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T1.1');
+
+            // Second event and its transcripts
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'event-2',
+                    sourceType: 'event',
+                    contentId: 'c3',
+                    source: 'Event 2',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('E2');
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-2',
+                    sourceParentId: 'event-2',
+                    sourceType: 'transcript',
+                    contentId: 'c4',
+                    source: 'Transcript 2',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T2.1');
+            expect(
+                result.current.getCitationMarker({
+                    sourceId: 'transcript-3',
+                    sourceParentId: 'event-2',
+                    sourceType: 'transcript',
+                    contentId: 'c5',
+                    source: 'Transcript 3',
+                    marker: '[1]',
+                    text: 'Test text',
+                })
+            ).toBe('T2.2');
         });
 
         test('maintains correct order when processing complex citation groups', () => {

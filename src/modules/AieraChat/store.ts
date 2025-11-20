@@ -84,17 +84,30 @@ export const useChatStore = create<ChatState>((set, get) => ({
             if (!citations.length) return state;
 
             const newMarkers = new Map(state.citationMarkers);
+            // Track counters per source type (not per individual group)
             const sourceTypeCounters = new Map(state.sourceTypeCounters);
 
             // Single data structure to track all group information
-            const groups = new Map<
-                string,
-                {
-                    sourceNumber: number;
-                    contentIds: string[];
-                    sourceType: string;
+            interface GroupInfo {
+                sourceNumber: number;
+                contentIds: string[];
+                sourceType: string;
+                hasEventCitation?: boolean;
+                transcriptCitations?: string[];
+            }
+
+            const groups = new Map<string, GroupInfo>();
+
+            // Helper function to get unified group key for event/transcript pairs
+            const getUnifiedGroupKey = (citation: Citation): string => {
+                if (citation.sourceType === 'event') {
+                    return `unified_${citation.sourceId}`;
+                } else if (citation.sourceType === 'transcript' && citation.sourceParentId) {
+                    return `unified_${citation.sourceParentId}`;
                 }
-            >();
+                // For other types, use standard grouping
+                return `${citation.sourceType}_${citation.sourceParentId || citation.sourceId}`;
+            };
 
             // Build complete group picture from existing markers
             Array.from(state.citationMarkers.values())
@@ -110,9 +123,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
                     const aSubNum = parseInt(aMatch[2] || '0', 10);
                     const bSubNum = parseInt(bMatch[2] || '0', 10);
 
-                    // Sort by source type, then number, then sub-number
-                    if (a.citation.sourceType !== b.citation.sourceType) {
-                        return a.citation.sourceType.localeCompare(b.citation.sourceType);
+                    // Sort by unified group, then number, then sub-number
+                    const aUnifiedKey = getUnifiedGroupKey(a.citation);
+                    const bUnifiedKey = getUnifiedGroupKey(b.citation);
+
+                    if (aUnifiedKey !== bUnifiedKey) {
+                        return aUnifiedKey.localeCompare(bUnifiedKey);
                     }
                     if (aSourceNum !== bSourceNum) {
                         return aSourceNum - bSourceNum;
@@ -133,6 +149,8 @@ export const useChatStore = create<ChatState>((set, get) => ({
                                 sourceNumber: sourceNum,
                                 contentIds: [],
                                 sourceType,
+                                hasEventCitation: sourceType === 'event',
+                                transcriptCitations: sourceType === 'transcript' ? [contentId] : [],
                             });
                             // Track highest number per source type
                             sourceTypeCounters.set(
@@ -141,9 +159,17 @@ export const useChatStore = create<ChatState>((set, get) => ({
                             );
                         }
 
-                        const group = groups.get(groupKey)!;
-                        if (!group.contentIds.includes(contentId)) {
-                            group.contentIds.push(contentId);
+                        const group = groups.get(groupKey);
+                        if (group) {
+                            if (!group.contentIds.includes(contentId)) {
+                                group.contentIds.push(contentId);
+                            }
+                            if (sourceType === 'event') {
+                                group.hasEventCitation = true;
+                            } else if (sourceType === 'transcript' && !group.transcriptCitations?.includes(contentId)) {
+                                group.transcriptCitations = group.transcriptCitations || [];
+                                group.transcriptCitations.push(contentId);
+                            }
                         }
                     }
                 });
@@ -171,26 +197,69 @@ export const useChatStore = create<ChatState>((set, get) => ({
                         sourceNumber,
                         contentIds: [citation.contentId],
                         sourceType: citation.sourceType,
+                        hasEventCitation: citation.sourceType === 'event',
+                        transcriptCitations: citation.sourceType === 'transcript' ? [citation.contentId] : [],
                     });
                 } else {
-                    const group = groups.get(groupKey)!;
-                    if (!group.contentIds.includes(citation.contentId)) {
-                        group.contentIds.push(citation.contentId);
-                        // Mark for update if this makes it a multi-content group
-                        if (group.contentIds.length > 1) {
-                            groupsNeedingUpdate.add(groupKey);
+                    const group = groups.get(groupKey);
+                    if (group) {
+                        if (!group.contentIds.includes(citation.contentId)) {
+                            group.contentIds.push(citation.contentId);
+                            // Mark for update if this makes it a multi-content group
+                            if (group.contentIds.length > 1) {
+                                groupsNeedingUpdate.add(groupKey);
+                            }
+                        }
+                        if (citation.sourceType === 'event') {
+                            group.hasEventCitation = true;
+                        } else if (citation.sourceType === 'transcript') {
+                            group.transcriptCitations = group.transcriptCitations || [];
+                            if (!group.transcriptCitations.includes(citation.contentId)) {
+                                group.transcriptCitations.push(citation.contentId);
+                            }
                         }
                     }
                 }
 
                 // Create marker for new citation
-                const group = groups.get(groupKey)!;
+                const group = groups.get(groupKey);
+                if (!group) return;
                 const prefix = SOURCE_TYPE_PREFIXES[citation.sourceType] || citation.sourceType.toUpperCase();
-                const hasMultiple = group.contentIds.length > 1;
 
-                const marker = hasMultiple
-                    ? `${prefix}${group.sourceNumber}.${group.contentIds.indexOf(citation.contentId) + 1}`
-                    : `${prefix}${group.sourceNumber}`;
+                // Check if this is a transcript with a related event
+                const eventGroupKey =
+                    citation.sourceType === 'transcript' && citation.sourceParentId
+                        ? `event_${citation.sourceParentId}`
+                        : null;
+                const hasRelatedEvent = eventGroupKey && groups.has(eventGroupKey);
+
+                let marker: string;
+                if (citation.sourceType === 'event') {
+                    // Event citations: use simple numbering or sub-numbering based on content count
+                    const hasMultiple = group.contentIds.length > 1;
+                    marker = hasMultiple
+                        ? `${prefix}${group.sourceNumber}.${group.contentIds.indexOf(citation.contentId) + 1}`
+                        : `${prefix}${group.sourceNumber}`;
+                } else if (citation.sourceType === 'transcript' && hasRelatedEvent && eventGroupKey) {
+                    // Transcript with related event: use event's number with sub-number
+                    const eventGroup = groups.get(eventGroupKey);
+                    if (eventGroup) {
+                        const transcriptIndex = group.contentIds.indexOf(citation.contentId) + 1;
+                        marker = `${prefix}${eventGroup.sourceNumber}.${transcriptIndex}`;
+                    } else {
+                        // Fallback to standard behavior
+                        const hasMultiple = group.contentIds.length > 1;
+                        marker = hasMultiple
+                            ? `${prefix}${group.sourceNumber}.${group.contentIds.indexOf(citation.contentId) + 1}`
+                            : `${prefix}${group.sourceNumber}`;
+                    }
+                } else {
+                    // Standard behavior for other source types
+                    const hasMultiple = group.contentIds.length > 1;
+                    marker = hasMultiple
+                        ? `${prefix}${group.sourceNumber}.${group.contentIds.indexOf(citation.contentId) + 1}`
+                        : `${prefix}${group.sourceNumber}`;
+                }
 
                 newMarkers.set(uniqueKey, {
                     citation,
@@ -201,13 +270,32 @@ export const useChatStore = create<ChatState>((set, get) => ({
 
             // Update existing markers in groups that now have multiple content IDs
             groupsNeedingUpdate.forEach((groupKey) => {
-                const group = groups.get(groupKey)!;
+                const group = groups.get(groupKey);
+                if (!group) return;
+
                 const prefix = SOURCE_TYPE_PREFIXES[group.sourceType] || group.sourceType.toUpperCase();
+
+                // Check if this is a transcript group with a related event
+                const isTranscriptGroup = group.sourceType === 'transcript';
+                const sourceParentId = groupKey.split('_')[1];
+                const eventGroupKey = isTranscriptGroup && sourceParentId ? `event_${sourceParentId}` : null;
+                const hasRelatedEvent = eventGroupKey && groups.has(eventGroupKey);
 
                 newMarkers.forEach((markerObj) => {
                     if (markerObj.uniqueKey.startsWith(`${groupKey}_`)) {
                         const contentIndex = group.contentIds.indexOf(markerObj.citation.contentId) + 1;
-                        markerObj.marker = `${prefix}${group.sourceNumber}.${contentIndex}`;
+
+                        if (isTranscriptGroup && hasRelatedEvent && eventGroupKey) {
+                            // Use event's source number for transcript sub-numbers
+                            const eventGroup = groups.get(eventGroupKey);
+                            if (eventGroup) {
+                                markerObj.marker = `${prefix}${eventGroup.sourceNumber}.${contentIndex}`;
+                            } else {
+                                markerObj.marker = `${prefix}${group.sourceNumber}.${contentIndex}`;
+                            }
+                        } else {
+                            markerObj.marker = `${prefix}${group.sourceNumber}.${contentIndex}`;
+                        }
                     }
                 });
             });
