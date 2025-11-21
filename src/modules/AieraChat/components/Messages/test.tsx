@@ -34,18 +34,16 @@ jest.mock('./MessageFactory', () => ({
 
 interface MockPromptProps {
     onSubmit: (prompt: string) => void;
-    onOpenSources: () => void;
     submitting: boolean;
 }
 
 jest.mock('./Prompt', () => ({
-    Prompt: ({ onSubmit, onOpenSources, submitting }: MockPromptProps) => (
+    Prompt: ({ onSubmit, submitting }: MockPromptProps) => (
         <div data-testid="prompt">
             <input data-testid="prompt-input" onChange={(e) => e.target.value} disabled={submitting} />
             <button onClick={() => onSubmit('test prompt')} disabled={submitting}>
                 Submit
             </button>
-            <button onClick={onOpenSources}>Open Sources</button>
         </div>
     ),
 }));
@@ -87,8 +85,10 @@ describe('Messages', () => {
             chatId: 'test-chat-id',
             chatStatus: ChatSessionStatus.Active,
             sources: [],
+            webSearchEnabled: false,
             onAddSource: jest.fn(),
             onSetStatus: jest.fn(),
+            onToggleWebSearch: jest.fn(),
         });
 
         // Setup mocks
@@ -190,14 +190,14 @@ describe('Messages', () => {
             },
         });
 
-        useChatStore.setState({ chatId: 'new' });
+        useChatStore.setState({ chatId: 'new', webSearchEnabled: false });
 
         await actAndFlush(() => renderWithProvider(<Messages onOpenSources={jest.fn()} onSubmit={onSubmit} />));
 
         fireEvent.click(screen.getByText('Submit'));
 
         await waitFor(() => {
-            expect(onSubmit).toHaveBeenCalledWith('test prompt', true);
+            expect(onSubmit).toHaveBeenCalledWith('test prompt', false);
             expect(mockUseChatSession.setMessages).toHaveBeenCalled();
         });
 
@@ -232,16 +232,6 @@ describe('Messages', () => {
         await waitFor(() => {
             expect(useChatStore.getState().onSetStatus).toHaveBeenCalledWith(ChatSessionStatus.GeneratingResponse);
         });
-    });
-
-    test('opens sources panel when button clicked', async () => {
-        const onOpenSources = jest.fn();
-
-        await actAndFlush(() => renderWithProvider(<Messages onOpenSources={onOpenSources} onSubmit={jest.fn()} />));
-
-        fireEvent.click(screen.getByText('Open Sources'));
-
-        expect(onOpenSources).toHaveBeenCalled();
     });
 
     test('displays finding sources status', async () => {

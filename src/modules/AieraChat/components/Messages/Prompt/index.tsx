@@ -123,7 +123,7 @@ export function Prompt({ onSubmit, submitting, className }: PromptProps) {
             <button
                 onClick={() => onToggleWebSearch()}
                 className={classNames(
-                    'h-[1.875rem] ml-2 mr-1 self-end mb-1 px-1.5 transition-all',
+                    'h-[1.875rem] ml-2 mr-1 self-end mb-1 px-2 transition-all',
                     'rounded-lg flex-shrink-0 flex items-center justify-center',
                     'cursor-pointer active:scale-90',
                     'hintTarget relative',
@@ -134,9 +134,10 @@ export function Prompt({ onSubmit, submitting, className }: PromptProps) {
                 )}
             >
                 <MicroGlobe className="w-4" />
+                <p className="text-sm ml-1">Search</p>
                 <Hint
                     targetHeight={26}
-                    targetWidth={28}
+                    targetWidth={75}
                     yOffset={-22}
                     text={webSearchEnabled ? 'Web Sources Enabled' : 'Web Sources Disabled'}
                     anchor={'bottom-left'}
