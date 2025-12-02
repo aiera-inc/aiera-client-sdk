@@ -10,7 +10,8 @@
       "Bash(rg:*)",
       "Bash(npm run test:*)",
       "Bash(npx eslint:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(npm run lint:fix:*)"
     ],
     "deny": []
   }
