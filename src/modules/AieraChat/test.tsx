@@ -4,10 +4,10 @@ import { AblyProvider } from 'ably/react';
 
 import { actAndFlush, MockProvider, getMockedClient, getMockedRealtime } from '@aiera/client-sdk/testUtils';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
-import type { Config } from '@aiera/client-sdk/lib/config';
 import { AieraChat } from '.';
 import { useChatStore } from './store';
 import type { ChatSession } from './services/types';
+import type { Config } from '@aiera/client-sdk/lib/config';
 
 jest.mock('ably');
 jest.mock('ably/react');
@@ -16,7 +16,6 @@ const mockCreateAblyRealtimeClient = jest.fn();
 const mockSubscribeToChannel = jest.fn();
 const mockUnsubscribeFromChannel = jest.fn();
 const mockUseChatSessions = jest.fn();
-const mockUseQuery = jest.fn();
 
 jest.mock('./services/ably', () => ({
     CHANNEL_PREFIX: 'chat',
@@ -40,19 +39,6 @@ interface MockChatSessionsReturn {
 jest.mock('./services/chats', () => ({
     useChatSessions: (): MockChatSessionsReturn => mockUseChatSessions() as MockChatSessionsReturn,
 }));
-
-// Mock the useQuery hook from api/client to return a successful currentUser query
-jest.mock('@aiera/client-sdk/api/client', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const actual = jest.requireActual('@aiera/client-sdk/api/client');
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        ...actual,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-        useQuery: (...args: any[]) => mockUseQuery(...args),
-    };
-});
 
 interface MockHeaderProps {
     onChangeTitle: (title: string) => void;
@@ -181,29 +167,6 @@ describe('AieraChat', () => {
 
     const renderAieraChat = async (options: RenderOptions = {}) => {
         const userId = options.userId || 'test-user';
-        // Mock the currentUser query to return an authenticated user
-        const currentUserData = {
-            currentUser: {
-                id: userId,
-                firstName: 'Test',
-                lastName: 'User',
-                apiKey: 'test-api-key',
-            },
-        };
-
-        mockUseQuery.mockReturnValue({
-            status: 'success',
-            data: currentUserData,
-            state: {
-                data: currentUserData,
-                fetching: false,
-                stale: false,
-                error: undefined,
-            },
-            refetch: jest.fn(),
-            isRefetching: false,
-            isPaging: false,
-        });
 
         // Create custom config with tracking.userId
         const customConfig = {

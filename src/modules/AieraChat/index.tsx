@@ -91,7 +91,7 @@ export function AieraChat(): ReactElement {
             setClientReady(false);
             initializingRef.current = false;
         };
-    }, [createAblyRealtimeClient, setClientReady]);
+    }, [config.tracking, createAblyRealtimeClient, setClientReady]);
 
     const {
         clearSources,
