@@ -6,9 +6,6 @@ import { Message, RealtimeChannel } from 'ably';
 import { AblyProvider } from 'ably/react';
 import classNames from 'classnames';
 import React, { ReactElement, useCallback, useEffect, useRef, useState } from 'react';
-import gql from 'graphql-tag';
-import { useQuery } from '@aiera/client-sdk/api/client';
-import { CurrentUserQuery } from '@aiera/client-sdk/types/generated';
 import { Transcript } from '../Transcript';
 import { Header } from './components/Header';
 import { Messages } from './components/Messages';
@@ -26,34 +23,17 @@ export function AieraChat(): ReactElement {
     const {
         chatId,
         chatTitle,
-        chatUserId,
         hasChanges,
         onNewChat,
         onSelectChat,
         onSelectSource,
         onSetTitle,
-        onSetUserId,
         selectedSource,
         setHasChanges,
         sources,
     } = useChatStore();
 
     const config = useConfig();
-
-    // Query current user - this is cached by URQL if already fetched by Auth module
-    const currentUserQuery = useQuery<CurrentUserQuery>({
-        query: gql`
-            query CurrentUser {
-                currentUser {
-                    id
-                    firstName
-                    lastName
-                    apiKey
-                }
-            }
-        `,
-        pause: false, // Always run this query
-    });
 
     // Set up Ably realtime client
     const { createAblyRealtimeClient, subscribeToChannel, unsubscribeFromChannel } = useAbly();
@@ -62,18 +42,6 @@ export function AieraChat(): ReactElement {
     const clientRef = useRef<Ably.Realtime | null>(null);
     const subscribedTitleChannel = useRef<RealtimeChannel | null>(null);
 
-    // Determine the user ID to use: prefer tracking userId, fallback to authenticated user
-    const effectiveUserId =
-        config.tracking?.userId || ('data' in currentUserQuery ? currentUserQuery.data?.currentUser?.id : undefined);
-
-    useEffect(() => {
-        // Update chatUserId when we have a user ID (from auth or config) and it's different from current
-        if (effectiveUserId && effectiveUserId !== chatUserId) {
-            log(`Updating chat user id in global state to: ${effectiveUserId}`);
-            onSetUserId(effectiveUserId);
-        }
-    }, [chatUserId, effectiveUserId, onSetUserId]);
-
     // Initialize Ably client once we've determined the user ID (or confirmed there isn't one)
     useEffect(() => {
         // Avoid duplicate initializations
@@ -81,19 +49,13 @@ export function AieraChat(): ReactElement {
             return;
         }
 
-        // Wait for currentUser query to finish loading so we know if there's a user or not
-        if (currentUserQuery.status === 'loading' || currentUserQuery.status === 'paused') {
-            return;
-        }
-
         // Set initializing flag
         initializingRef.current = true;
-        log(`Initializing Ably client in component${chatUserId ? ` with userId: ${chatUserId}` : ' without userId'}`);
 
         // Wait a tick before calling the mutation to let the state update finish (avoids race condition)
         setTimeout(
             () =>
-                void createAblyRealtimeClient(chatUserId)
+                void createAblyRealtimeClient(config.tracking?.userId)
                     .then((client) => {
                         if (client) {
                             clientRef.current = client;
@@ -129,7 +91,7 @@ export function AieraChat(): ReactElement {
             setClientReady(false);
             initializingRef.current = false;
         };
-    }, [chatUserId, currentUserQuery.status, createAblyRealtimeClient, setClientReady]);
+    }, [createAblyRealtimeClient, setClientReady]);
 
     const {
         clearSources,
@@ -363,11 +325,8 @@ export function AieraChat(): ReactElement {
         }
     }
 
-    // Check if user is authenticated - required for module to function
-    const isAuthenticated = 'data' in currentUserQuery && currentUserQuery.data?.currentUser;
-
     // Only render components if authenticated user exists and Ably client is ready
-    return isAuthenticated && clientReady && clientRef.current ? (
+    return clientReady && clientRef.current ? (
         <AblyProvider client={clientRef.current}>
             {selectedSource && (
                 <div

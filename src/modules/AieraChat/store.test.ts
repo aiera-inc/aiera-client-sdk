@@ -10,7 +10,6 @@ describe('useChatStore', () => {
             chatId: 'new',
             chatStatus: ChatSessionStatus.Active,
             chatTitle: undefined,
-            chatUserId: undefined,
             citationMarkers: new Map(),
             hasChanges: false,
             selectedSource: undefined,
@@ -26,7 +25,6 @@ describe('useChatStore', () => {
             expect(result.current.chatId).toBe('new');
             expect(result.current.chatStatus).toBe(ChatSessionStatus.Active);
             expect(result.current.chatTitle).toBeUndefined();
-            expect(result.current.chatUserId).toBeUndefined();
             expect(result.current.citationMarkers).toEqual(new Map());
             expect(result.current.hasChanges).toBe(false);
             expect(result.current.selectedSource).toBeUndefined();
@@ -55,18 +53,6 @@ describe('useChatStore', () => {
             });
 
             expect(result.current.chatTitle).toBeUndefined();
-        });
-    });
-
-    describe('onSetUserId', () => {
-        test('updates chat user ID', () => {
-            const { result } = renderHook(() => useChatStore());
-
-            act(() => {
-                result.current.onSetUserId('user-123');
-            });
-
-            expect(result.current.chatUserId).toBe('user-123');
         });
     });
 

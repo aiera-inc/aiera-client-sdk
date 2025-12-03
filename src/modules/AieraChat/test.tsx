@@ -2,18 +2,12 @@ import React from 'react';
 import { screen, fireEvent, waitFor, render } from '@testing-library/react';
 import { AblyProvider } from 'ably/react';
 
-import {
-    actAndFlush,
-    renderWithProvider,
-    MockProvider,
-    getMockedClient,
-    getMockedRealtime,
-} from '@aiera/client-sdk/testUtils';
+import { actAndFlush, MockProvider, getMockedClient, getMockedRealtime } from '@aiera/client-sdk/testUtils';
 import { ChatSessionStatus } from '@aiera/client-sdk/types';
+import type { Config } from '@aiera/client-sdk/lib/config';
 import { AieraChat } from '.';
 import { useChatStore } from './store';
 import type { ChatSession } from './services/types';
-import type { Config } from '@aiera/client-sdk/lib/config';
 
 jest.mock('ably');
 jest.mock('ably/react');
@@ -187,11 +181,6 @@ describe('AieraChat', () => {
 
     const renderAieraChat = async (options: RenderOptions = {}) => {
         const userId = options.userId || 'test-user';
-        const tracking = { userId: options.config?.tracking?.userId || userId };
-
-        // Set the userId in the store before rendering
-        useChatStore.setState({ chatUserId: tracking.userId });
-
         // Mock the currentUser query to return an authenticated user
         const currentUserData = {
             currentUser: {
@@ -216,7 +205,35 @@ describe('AieraChat', () => {
             isPaging: false,
         });
 
-        const renderResult = await actAndFlush(() => renderWithProvider(<AieraChat />));
+        // Create custom config with tracking.userId
+        const customConfig = {
+            assetPath: 'assets',
+            platform: 'test',
+            moduleName: 'AieraChat',
+            tracking: { userId },
+            gqlOptions: {
+                clientOptions: {
+                    url: 'test',
+                },
+            },
+        } as unknown as Config;
+
+        const renderResult = await actAndFlush(() => {
+            const mockedClient = getMockedClient();
+            const mockedRealtime = getMockedRealtime();
+            const reset = jest.fn();
+            const rendered = render(
+                <MockProvider config={customConfig} client={mockedClient} realtime={mockedRealtime} reset={reset}>
+                    <AieraChat />
+                </MockProvider>
+            );
+            return {
+                rendered,
+                client: mockedClient,
+                realtime: mockedRealtime,
+                reset,
+            };
+        });
 
         // Advance timer to trigger the setTimeout
         jest.advanceTimersByTime(100);
@@ -245,7 +262,6 @@ describe('AieraChat', () => {
             chatId: 'new',
             chatStatus: ChatSessionStatus.Active,
             chatTitle: undefined,
-            chatUserId: undefined,
             citationMarkers: new Map(),
             hasChanges: false,
             selectedSource: undefined,
@@ -546,9 +562,6 @@ describe('AieraChat', () => {
     });
 
     test('applies dark mode when configured', async () => {
-        // Set the userId in the store before rendering
-        useChatStore.setState({ chatUserId: 'test-user' });
-
         // Render with custom config
         const config: Config = {
             assetPath: 'assets',

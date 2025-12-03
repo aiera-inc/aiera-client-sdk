@@ -38,7 +38,6 @@ export interface ChatState {
     chatId: string;
     chatStatus: ChatSessionStatus;
     chatTitle?: string;
-    chatUserId?: string;
     citationMarkers: Map<string, CitationMarker>;
     clearCitationMarkers: () => void;
     getCitationMarker: (citation: Citation) => string | null;
@@ -51,7 +50,6 @@ export interface ChatState {
     onSelectSource: (source?: Source) => void;
     onSetStatus: (chatStatus: ChatSessionStatus) => void;
     onSetTitle: (title?: string) => void;
-    onSetUserId: (chatUserId?: string) => void;
     onToggleWebSearch: (webSearch?: boolean) => void;
     selectedSource?: Source;
     setHasChanges: (hasChanges: boolean) => void;
@@ -65,7 +63,6 @@ export const useChatStore = create<ChatState>((set, get) => ({
     chatId: 'new',
     chatStatus: ChatSessionStatus.Active,
     chatTitle: undefined,
-    chatUserId: undefined,
     citationMarkers: new Map(),
     hasChanges: false,
     selectedSource: undefined,
@@ -353,6 +350,5 @@ export const useChatStore = create<ChatState>((set, get) => ({
     onSelectSource: (selectedSource?: Source) => set({ selectedSource }),
     onSetStatus: (chatStatus: ChatSessionStatus) => set({ chatStatus }),
     onSetTitle: (chatTitle?: string) => set({ chatTitle }),
-    onSetUserId: (chatUserId?: string) => set({ chatUserId }),
     setHasChanges: (hasChanges: boolean) => set({ hasChanges }),
 }));
