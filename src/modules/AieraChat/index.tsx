@@ -91,7 +91,7 @@ export function AieraChat(): ReactElement {
             setClientReady(false);
             initializingRef.current = false;
         };
-    }, [config.tracking, createAblyRealtimeClient, setClientReady]);
+    }, [config.tracking?.userId, createAblyRealtimeClient, setClientReady]);
 
     const {
         clearSources,
@@ -325,7 +325,7 @@ export function AieraChat(): ReactElement {
         }
     }
 
-    // Only render components if authenticated user exists and Ably client is ready
+    // Only render components when Ably client is ready
     return clientReady && clientRef.current ? (
         <AblyProvider client={clientRef.current}>
             {selectedSource && (
