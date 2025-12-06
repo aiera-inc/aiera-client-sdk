@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">79.85% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>114/144</span>
+                <span class='fraction'>111/139</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">75.6% </span>
+                <span class="strong">75.67% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>62/82</span>
+                <span class='fraction'>56/74</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">74.28% </span>
+                <span class="strong">73.52% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>26/35</span>
+                <span class='fraction'>25/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">79.16% </span>
+                <span class="strong">79.85% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>114/144</span>
+                <span class='fraction'>111/139</span>
             </div>
         
             
@@ -434,19 +434,7 @@
 <a name='L369'></a><a href='#L369'>369</a>
 <a name='L370'></a><a href='#L370'>370</a>
 <a name='L371'></a><a href='#L371'>371</a>
-<a name='L372'></a><a href='#L372'>372</a>
-<a name='L373'></a><a href='#L373'>373</a>
-<a name='L374'></a><a href='#L374'>374</a>
-<a name='L375'></a><a href='#L375'>375</a>
-<a name='L376'></a><a href='#L376'>376</a>
-<a name='L377'></a><a href='#L377'>377</a>
-<a name='L378'></a><a href='#L378'>378</a>
-<a name='L379'></a><a href='#L379'>379</a>
-<a name='L380'></a><a href='#L380'>380</a>
-<a name='L381'></a><a href='#L381'>381</a>
-<a name='L382'></a><a href='#L382'>382</a>
-<a name='L383'></a><a href='#L383'>383</a>
-<a name='L384'></a><a href='#L384'>384</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L372'></a><a href='#L372'>372</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -479,8 +467,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">45x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">45x</span>
@@ -491,16 +477,6 @@
 <span class="cline-any cline-yes">45x</span>
 <span class="cline-any cline-yes">45x</span>
 <span class="cline-any cline-yes">45x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">45x</span>
-<span class="cline-any cline-yes">17x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">45x</span>
@@ -510,7 +486,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -786,6 +761,7 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">45x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -854,13 +830,11 @@ export function AieraChat(): ReactElement {
     const {
         chatId,
         chatTitle,
-        chatUserId,
         hasChanges,
         onNewChat,
         onSelectChat,
         onSelectSource,
         onSetTitle,
-        onSetUserId,
         selectedSource,
         setHasChanges,
         sources,
@@ -875,31 +849,20 @@ export function AieraChat(): ReactElement {
     const clientRef = useRef&lt;Ably.Realtime | null&gt;(null);
     const subscribedTitleChannel = useRef&lt;RealtimeChannel | null&gt;(null);
 &nbsp;
-    useEffect(() =&gt; {
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (
-            (!chatUserId &amp;&amp; <span class="branch-1 cbranch-no" title="branch not covered" >config.tracking?.userId)</span> ||
-            (chatUserId &amp;&amp; config.tracking?.userId &amp;&amp; chatUserId !== config.tracking?.userId)
-        ) {
-<span class="cstat-no" title="statement not covered" >            log(`Updating chat user id in global state to: ${config.tracking.userId}`);</span>
-<span class="cstat-no" title="statement not covered" >            onSetUserId(config.tracking.userId);</span>
-        }
-    }, [chatUserId, config.tracking?.userId, onSetUserId]);
-&nbsp;
-    // Initialize Ably client only once when the tracking user id is loaded in the config
+    // Initialize Ably client once we've determined the user ID (or confirmed there isn't one)
     useEffect(() =&gt; {
         // Avoid duplicate initializations
-        <span class="missing-if-branch" title="if path not taken" >I</span>if (initializingRef.current || clientRef.current || !chatUserId) {
+        <span class="missing-if-branch" title="if path not taken" >I</span>if (initializingRef.current || clientRef.current) {
 <span class="cstat-no" title="statement not covered" >            return;</span>
         }
 &nbsp;
         // Set initializing flag
         initializingRef.current = true;
-        log(`Initializing Ably client in component with userId: ${chatUserId}`);
 &nbsp;
         // Wait a tick before calling the mutation to let the state update finish (avoids race condition)
         setTimeout(
             () =&gt;
-                void createAblyRealtimeClient(chatUserId)
+                void createAblyRealtimeClient(config.tracking?.userId)
                     .then((client) =&gt; {
                         if (client) {
                             clientRef.current = client;
@@ -935,7 +898,7 @@ export function AieraChat(): ReactElement {
             setClientReady(false);
             initializingRef.current = false;
         };
-    }, [chatUserId, setClientReady]);
+    }, [config.tracking?.userId, createAblyRealtimeClient, setClientReady]);
 &nbsp;
     const {
         clearSources,
@@ -1169,6 +1132,7 @@ export function AieraChat(): ReactElement {
         }
     }
 &nbsp;
+    // Only render components when Ably client is ready
     return clientReady &amp;&amp; clientRef.current ? (
         &lt;AblyProvider client={clientRef.current}&gt;
             {selectedSource &amp;&amp; (
@@ -1219,7 +1183,7 @@ export function AieraChat(): ReactElement {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener">istanbul</a>
-                at Tue Dec 02 2025 15:45:37 GMT-0500 (Eastern Standard Time)
+                at Fri Dec 05 2025 22:22:28 GMT-0500 (Eastern Standard Time)
             </div>
         </div>
         <script src="../../../prettify.js"></script>
