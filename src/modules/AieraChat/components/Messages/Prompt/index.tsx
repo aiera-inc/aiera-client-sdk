@@ -120,30 +120,32 @@ export function Prompt({ onSubmit, submitting, className }: PromptProps) {
                     Type your questions here...
                 </span>
             )}
-            <button
-                onClick={() => onToggleWebSearch()}
-                className={classNames(
-                    'h-[1.875rem] ml-2 mr-1 self-end mb-1 px-2 transition-all',
-                    'rounded-lg flex-shrink-0 flex items-center justify-center',
-                    'cursor-pointer active:scale-90',
-                    'hintTarget relative',
-                    {
-                        'text-rose-600 bg-rose-100 hover:bg-rose-200 active:bg-rose-300': webSearchEnabled,
-                        'text-slate-400 bg-slate-100 hover:bg-slate-200 active:bg-slate-300': !webSearchEnabled,
-                    }
-                )}
-            >
-                <MicroGlobe className="w-4" />
-                <p className="text-sm ml-1">Search</p>
-                <Hint
-                    targetHeight={26}
-                    targetWidth={75}
-                    yOffset={-22}
-                    text={webSearchEnabled ? 'Web Sources Enabled' : 'Web Sources Disabled'}
-                    anchor={'bottom-left'}
-                    grow={'up-left'}
-                />
-            </button>
+            {!config.options?.aieraChatDisableWebSearch && (
+                <button
+                    onClick={() => onToggleWebSearch()}
+                    className={classNames(
+                        'h-[1.875rem] ml-2 mr-1 self-end mb-1 px-2 transition-all',
+                        'rounded-lg flex-shrink-0 flex items-center justify-center',
+                        'cursor-pointer active:scale-90',
+                        'hintTarget relative',
+                        {
+                            'text-rose-600 bg-rose-100 hover:bg-rose-200 active:bg-rose-300': webSearchEnabled,
+                            'text-slate-400 bg-slate-100 hover:bg-slate-200 active:bg-slate-300': !webSearchEnabled,
+                        }
+                    )}
+                >
+                    <MicroGlobe className="w-4" />
+                    <p className="text-sm ml-1">Search</p>
+                    <Hint
+                        targetHeight={26}
+                        targetWidth={75}
+                        yOffset={-22}
+                        text={webSearchEnabled ? 'Web Sources Enabled' : 'Web Sources Disabled'}
+                        anchor={'bottom-left'}
+                        grow={'up-left'}
+                    />
+                </button>
+            )}
             <button
                 disabled={isDisabled}
                 onClick={handleSubmit}

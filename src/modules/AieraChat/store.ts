@@ -68,7 +68,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
     selectedSource: undefined,
     sources: [],
     sourceTypeCounters: new Map(),
-    webSearchEnabled: false,
+    webSearchEnabled: false, // keep this false by default
     onToggleWebSearch: (enabled) => {
         const { webSearchEnabled } = get();
         set({
