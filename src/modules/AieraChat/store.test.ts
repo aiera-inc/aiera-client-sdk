@@ -15,6 +15,7 @@ describe('useChatStore', () => {
             selectedSource: undefined,
             sources: [],
             sourceTypeCounters: new Map(),
+            webSearchEnabled: false,
         });
     });
 
@@ -1066,6 +1067,81 @@ describe('useChatStore', () => {
             });
 
             expect(result.current.hasChanges).toBe(false);
+        });
+    });
+
+    describe('webSearchEnabled', () => {
+        test('has default value of false', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            expect(result.current.webSearchEnabled).toBe(false);
+        });
+
+        test('toggles webSearchEnabled when onToggleWebSearch is called without parameter', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            // Initially false
+            expect(result.current.webSearchEnabled).toBe(false);
+
+            // Toggle to true
+            act(() => {
+                result.current.onToggleWebSearch();
+            });
+
+            expect(result.current.webSearchEnabled).toBe(true);
+
+            // Toggle back to false
+            act(() => {
+                result.current.onToggleWebSearch();
+            });
+
+            expect(result.current.webSearchEnabled).toBe(false);
+        });
+
+        test('sets webSearchEnabled to specific value when provided', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            // Set to true
+            act(() => {
+                result.current.onToggleWebSearch(true);
+            });
+
+            expect(result.current.webSearchEnabled).toBe(true);
+
+            // Set to false
+            act(() => {
+                result.current.onToggleWebSearch(false);
+            });
+
+            expect(result.current.webSearchEnabled).toBe(false);
+        });
+
+        test('calling onToggleWebSearch with true when already true keeps it true', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            act(() => {
+                result.current.onToggleWebSearch(true);
+            });
+
+            expect(result.current.webSearchEnabled).toBe(true);
+
+            act(() => {
+                result.current.onToggleWebSearch(true);
+            });
+
+            expect(result.current.webSearchEnabled).toBe(true);
+        });
+
+        test('calling onToggleWebSearch with false when already false keeps it false', () => {
+            const { result } = renderHook(() => useChatStore());
+
+            expect(result.current.webSearchEnabled).toBe(false);
+
+            act(() => {
+                result.current.onToggleWebSearch(false);
+            });
+
+            expect(result.current.webSearchEnabled).toBe(false);
         });
     });
 });
