@@ -68,3 +68,138 @@ export function log(message: string, logLevel: LogLevel = 'log', data?: object):
     const logMethod = console[logLevel] || console.log;
     data ? logMethod(message, data) : logMethod(message);
 }
+
+/**
+ * Formats a date to iCalendar format (YYYYMMDDTHHmmssZ)
+ */
+function formatICalDate(date: Date): string {
+    const isoString = date.toISOString().replace(/[-:]/g, '');
+    const formatted = isoString.split('.')[0] || '';
+    return `${formatted}Z`;
+}
+
+/**
+ * Formats dates for Google Calendar URL (YYYYMMDDTHHmmssZ)
+ */
+function formatGoogleCalendarDate(date: Date): string {
+    const isoString = date.toISOString().replace(/[-:]/g, '');
+    const formatted = isoString.split('.')[0] || '';
+    return `${formatted}Z`;
+}
+
+interface CalendarEventOptions {
+    title: string;
+    startDate: Date | string;
+    durationMinutes?: number;
+    description?: string;
+    location?: string;
+}
+
+/**
+ * Generates .ics (iCalendar) file content for a calendar event
+ *
+ * @param options - Event details including title, start date, duration, description, and location
+ * @returns iCalendar format string
+ */
+export function generateICalendarContent(options: CalendarEventOptions): string {
+    const { title, startDate, durationMinutes = 60, description = '', location = '' } = options;
+
+    const start = typeof startDate === 'string' ? new Date(startDate) : startDate;
+    const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
+
+    const now = new Date();
+
+    // Generate a unique ID for the event
+    const uid = `${start.getTime()}-${Math.random().toString(36).substring(2, 9)}@aiera.com`;
+
+    const icsContent = [
+        'BEGIN:VCALENDAR',
+        'VERSION:2.0',
+        'PRODID:-//Aiera//Event Calendar//EN',
+        'CALSCALE:GREGORIAN',
+        'METHOD:PUBLISH',
+        'BEGIN:VEVENT',
+        `UID:${uid}`,
+        `DTSTAMP:${formatICalDate(now)}`,
+        `DTSTART:${formatICalDate(start)}`,
+        `DTEND:${formatICalDate(end)}`,
+        `SUMMARY:${title}`,
+        description ? `DESCRIPTION:${description.replace(/\n/g, '\\n')}` : '',
+        location ? `LOCATION:${location}` : '',
+        'STATUS:CONFIRMED',
+        'END:VEVENT',
+        'END:VCALENDAR',
+    ]
+        .filter(Boolean)
+        .join('\r\n');
+
+    return icsContent;
+}
+
+/**
+ * Generates a Google Calendar URL for adding an event
+ *
+ * @param options - Event details
+ * @returns Google Calendar URL
+ */
+export function generateGoogleCalendarUrl(options: CalendarEventOptions): string {
+    const { title, startDate, durationMinutes = 60, description = '', location = '' } = options;
+
+    const start = typeof startDate === 'string' ? new Date(startDate) : startDate;
+    const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
+
+    const params = new URLSearchParams({
+        action: 'TEMPLATE',
+        text: title,
+        dates: `${formatGoogleCalendarDate(start)}/${formatGoogleCalendarDate(end)}`,
+        details: description,
+        location: location,
+    });
+
+    return `https://calendar.google.com/calendar/render?${params.toString()}`;
+}
+
+/**
+ * Generates an Outlook Calendar URL for adding an event
+ *
+ * @param options - Event details
+ * @returns Outlook Calendar URL
+ */
+export function generateOutlookCalendarUrl(options: CalendarEventOptions): string {
+    const { title, startDate, durationMinutes = 60, description = '', location = '' } = options;
+
+    const start = typeof startDate === 'string' ? new Date(startDate) : startDate;
+    const end = new Date(start.getTime() + durationMinutes * 60 * 1000);
+
+    const params = new URLSearchParams({
+        path: '/calendar/action/compose',
+        subject: title,
+        startdt: start.toISOString(),
+        enddt: end.toISOString(),
+        body: description,
+        location: location,
+    });
+
+    return `https://outlook.live.com/calendar/0/deeplink/compose?${params.toString()}`;
+}
+
+/**
+ * Downloads a calendar event as an .ics file
+ *
+ * @param options - Event details including title, start date, duration, description, and location
+ */
+export function downloadCalendarEvent(options: CalendarEventOptions): void {
+    const icsContent = generateICalendarContent(options);
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${options.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.ics`;
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    // Clean up the URL object after a short delay
+    setTimeout(() => URL.revokeObjectURL(link.href), 100);
+}

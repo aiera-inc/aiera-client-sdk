@@ -3,6 +3,7 @@ import { match } from 'ts-pattern';
 import { TranscriptQuery, EventConnectionStatus } from '@aiera/client-sdk/types/generated';
 import { prettyLineBreak } from '@aiera/client-sdk/lib/strings';
 import { Check } from '@aiera/client-sdk/components/Svg/Check';
+import { CalendarTooltip } from '@aiera/client-sdk/modules/Transcript/CalendarTooltip';
 import './styles.css';
 
 export type Event = TranscriptQuery['events'][0];
@@ -17,7 +18,7 @@ interface EmptyMessageUIProps extends EmptyMessageSharedProps {}
 export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
     const { event } = props;
 
-    const { pillBgColor, pillTextColor, pillText, message } = match(event.connectionStatus)
+    const { pillBgColor, pillTextColor, pillText, message, showCalendarButton } = match(event.connectionStatus)
         .with(EventConnectionStatus.ConnectionNotExpected, () => ({
             pillBgColor: 'bg-gray-200 dark:bg-bluegray-5',
             pillTextColor: 'text-gray-700 dark:text-bluegray-4',
@@ -29,6 +30,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                     connection details before the event start time.
                 </div>
             ),
+            showCalendarButton: true,
         }))
         .with(EventConnectionStatus.ConnectionExpected, () => ({
             pillBgColor: 'bg-green-300',
@@ -41,6 +43,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                     after the event begins.
                 </div>
             ),
+            showCalendarButton: true,
         }))
         .with(EventConnectionStatus.WaitingToConnect, () => ({
             pillBgColor: 'bg-yellow-200',
@@ -52,6 +55,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                     <br /> please wait.
                 </div>
             ),
+            showCalendarButton: true,
         }))
         .with(EventConnectionStatus.Connected, () => ({
             pillBgColor: 'bg-yellow-300',
@@ -64,6 +68,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                     when the conference speaker begins.
                 </div>
             ),
+            showCalendarButton: false,
         }))
         .with(EventConnectionStatus.Missed, () => ({
             pillBgColor: 'bg-gray-200',
@@ -76,18 +81,21 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                         : prettyLineBreak('Apologies, no connection details were found for this event')}
                 </div>
             ),
+            showCalendarButton: false,
         }))
         .with(EventConnectionStatus.Transcribing, () => ({
             pillBgColor: 'bg-green-300',
             pillTextColor: 'text-green-700',
             pillText: 'Transcribing event',
             message: <div className="text-base text-gray-500">This message should not appear</div>,
+            showCalendarButton: false,
         }))
         .with(EventConnectionStatus.Transcribed, () => ({
             pillBgColor: 'bg-green-300',
             pillTextColor: 'text-green-700',
             pillText: 'Event Transcribed',
             message: <div className="text-base text-gray-500">This message should not appear</div>,
+            showCalendarButton: false,
         }))
         .exhaustive();
 
@@ -103,6 +111,7 @@ export function EmptyMessageUI(props: EmptyMessageUIProps): ReactElement {
                 <span className={`animate-pulse ${pillBgColor} absolute top-0 bottom-0 left-0 right-0`}></span>
             </div>
             {message}
+            {showCalendarButton && <CalendarTooltip event={event} />}
             {event?.publishedTranscriptExpected && (
                 <div className="flex mt-4 items-center justify-start text-left bg-green-50 rounded-2xl py-1.5 pr-2 pl-3 border-[1px] border-green-100">
                     <div className="text-sm leading-tight text-green-600">
