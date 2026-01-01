@@ -19,6 +19,7 @@ interface MockMessageFactoryProps {
         type: string;
         prompt?: string;
         promptMessageId?: string;
+        statuses?: Array<{ id: string; content: string; createdAt: string }>;
     };
     setRef?: (node: HTMLDivElement | null, id: string) => void;
 }
@@ -28,6 +29,13 @@ jest.mock('./MessageFactory', () => ({
         <div data-testid={`message-${message.id}`} ref={(node) => setRef && setRef(node, message.id)}>
             <span>{message.type}</span>
             <span>{message.prompt}</span>
+            {message.statuses && message.statuses.length > 0 && (
+                <div data-testid="message-statuses">
+                    {message.statuses.map((status) => (
+                        <span key={status.id}>{status.content}</span>
+                    ))}
+                </div>
+            )}
         </div>
     ),
 }));
@@ -253,6 +261,7 @@ describe('Messages', () => {
         (ablyService.useAbly as jest.Mock).mockReturnValue({
             ...mockUseAbly,
             thinkingState: ['Finding sources...'],
+            partials: [],
         });
 
         useChatStore.setState({
@@ -261,7 +270,17 @@ describe('Messages', () => {
 
         await actAndFlush(() => renderWithProvider(<Messages onOpenSources={jest.fn()} onSubmit={jest.fn()} />));
 
-        expect(screen.getByText('Finding sources...')).toBeInTheDocument();
+        // Should create a response message with statuses
+        expect(mockUseChatSession.setMessages).toHaveBeenCalled();
+        const setMessagesCall = (mockUseChatSession.setMessages.mock.calls[0] as unknown[])[0] as (
+            messages: ChatMessage[]
+        ) => ChatMessage[];
+        const newMessages = setMessagesCall(messages);
+
+        expect(newMessages).toHaveLength(2);
+        expect(newMessages[1]?.type).toBe(ChatMessageType.RESPONSE);
+        expect((newMessages[1] as ChatMessageResponse).statuses).toBeDefined();
+        expect((newMessages[1] as ChatMessageResponse).statuses?.[0]?.content).toBe('Finding sources...');
     });
 
     test('displays generating response status with thinking state', async () => {
@@ -283,6 +302,7 @@ describe('Messages', () => {
         (ablyService.useAbly as jest.Mock).mockReturnValue({
             ...mockUseAbly,
             thinkingState: ['Analyzing your question...'],
+            partials: [],
         });
 
         useChatStore.setState({
@@ -291,7 +311,17 @@ describe('Messages', () => {
 
         await actAndFlush(() => renderWithProvider(<Messages onOpenSources={jest.fn()} onSubmit={jest.fn()} />));
 
-        expect(screen.getByText('Analyzing your question...')).toBeInTheDocument();
+        // Should create a response message with statuses
+        expect(mockUseChatSession.setMessages).toHaveBeenCalled();
+        const setMessagesCall = (mockUseChatSession.setMessages.mock.calls[0] as unknown[])[0] as (
+            messages: ChatMessage[]
+        ) => ChatMessage[];
+        const newMessages = setMessagesCall(messages);
+
+        expect(newMessages).toHaveLength(2);
+        expect(newMessages[1]?.type).toBe(ChatMessageType.RESPONSE);
+        expect((newMessages[1] as ChatMessageResponse).statuses).toBeDefined();
+        expect((newMessages[1] as ChatMessageResponse).statuses?.[0]?.content).toBe('Analyzing your question...');
     });
 
     test('processes streaming partials', async () => {

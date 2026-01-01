@@ -63,10 +63,17 @@ export interface ChatMessageBase {
     type: ChatMessageType;
 }
 
+export interface MessageStatus {
+    id: string;
+    content: string;
+    createdAt: string;
+}
+
 export interface ChatMessageResponse extends ChatMessageBase {
     type: ChatMessageType.RESPONSE;
     blocks: ContentBlock[];
     sources: Source[];
+    statuses?: MessageStatus[];
 }
 
 export interface ChatMessagePrompt extends ChatMessageBase {
@@ -392,6 +399,15 @@ export const useChatSession = ({
                             ? msg.blocks.map(normalizeContentBlock).filter(isNonNullable)
                             : [];
 
+                        // Normalize statuses
+                        const statuses = Array.isArray(msg.statuses)
+                            ? msg.statuses.map((status) => ({
+                                  id: status.id,
+                                  content: status.content,
+                                  createdAt: status.createdAt,
+                              }))
+                            : [];
+
                         normalizedMessages.push({
                             blocks,
                             id: msg.id,
@@ -399,6 +415,7 @@ export const useChatSession = ({
                             prompt: lastPromptValue, // Use the last prompt value
                             promptMessageId: msg.promptMessageId ? String(msg.promptMessageId) : undefined,
                             sources: normalizeSources(msg.sources),
+                            statuses,
                             status: ChatMessageStatus.COMPLETED,
                             timestamp: msg.createdAt,
                             type: ChatMessageType.RESPONSE,

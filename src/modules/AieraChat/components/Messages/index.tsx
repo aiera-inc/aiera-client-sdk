@@ -1,5 +1,4 @@
 import { LoadingSpinner } from '@aiera/client-sdk/components/LoadingSpinner';
-import { MicroSparkles } from '@aiera/client-sdk/components/Svg/MicroSparkles';
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { log } from '@aiera/client-sdk/lib/utils';
 import { CHANNEL_PREFIX, useAbly } from '@aiera/client-sdk/modules/AieraChat/services/ably';
@@ -14,6 +13,7 @@ import {
     ChatMessageResponse,
     ChatMessageStatus,
     ChatMessageType,
+    MessageStatus,
     normalizeSources,
     useChatSession,
 } from '../../services/messages';
@@ -177,6 +177,80 @@ export function Messages({
         };
     }, [chatId, subscribeToChannel, unsubscribeFromChannel]);
 
+    // Show thinking states immediately, even before partials arrive
+    useEffect(() => {
+        // Only create a thinking message if we're generating and have thinking states but no partials yet
+        if (
+            [ChatSessionStatus.FindingSources, ChatSessionStatus.GeneratingResponse].includes(chatStatus) &&
+            thinkingState.length > 0 &&
+            (!partials || partials.length === 0)
+        ) {
+            setMessages((currentMessages) => {
+                const existingItems = currentMessages || [];
+                const latestMessage = existingItems.at(-1);
+
+                // If the latest message is already a streaming response, just update its statuses
+                if (
+                    latestMessage &&
+                    latestMessage.type === ChatMessageType.RESPONSE &&
+                    latestMessage.status === ChatMessageStatus.STREAMING
+                ) {
+                    return currentMessages.map((message) => {
+                        if (message.id === latestMessage.id) {
+                            const statuses: MessageStatus[] = thinkingState
+                                .filter(
+                                    (state, idx) => state !== 'Thinking...' || thinkingState.length === 1 || idx > 0
+                                )
+                                .map((state, idx) => ({
+                                    id: `status-${chatId}-${idx}`,
+                                    content: state,
+                                    createdAt: new Date().toISOString(),
+                                }));
+                            return {
+                                ...latestMessage,
+                                statuses,
+                            };
+                        }
+                        return message;
+                    });
+                }
+
+                // If the latest message is a prompt, create a new streaming message with just statuses
+                if (latestMessage && latestMessage.type === ChatMessageType.PROMPT) {
+                    const statuses: MessageStatus[] = thinkingState
+                        .filter((state, idx) => state !== 'Thinking...' || thinkingState.length === 1 || idx > 0)
+                        .map((state, idx) => ({
+                            id: `status-${chatId}-${idx}`,
+                            content: state,
+                            createdAt: new Date().toISOString(),
+                        }));
+
+                    const initialMessageResponse: ChatMessageResponse = {
+                        id: `chat-${chatId}-temp-response-${latestMessage.id}-${idCounter++}`,
+                        ordinalId: `chat-${chatId}-temp-ordinal-${idCounter++}`,
+                        prompt: latestMessage.prompt || '',
+                        promptMessageId: latestMessage.id ? String(latestMessage.id) : undefined,
+                        status: ChatMessageStatus.STREAMING,
+                        timestamp: new Date().toISOString(),
+                        type: ChatMessageType.RESPONSE,
+                        blocks: [
+                            {
+                                content: '',
+                                id: 'initial-block',
+                                type: BlockType.TEXT,
+                            },
+                        ],
+                        sources: [],
+                        statuses,
+                    };
+                    return [...currentMessages, initialMessageResponse];
+                }
+
+                return currentMessages;
+            });
+        }
+    }, [chatStatus, thinkingState, partials, chatId]);
+
     // Process partials directly without complex useEffect logic
     // This rebuilds the entire streaming message content from all partials
     useEffect(() => {
@@ -208,6 +282,16 @@ export function Messages({
             const isFinal = lastPartial?.is_final || false;
             const messageStatus = isFinal ? ChatMessageStatus.COMPLETED : ChatMessageStatus.STREAMING;
 
+            // Convert thinking states to MessageStatus objects
+            // Filter out the default "Thinking..." if we have other statuses
+            const statuses: MessageStatus[] = thinkingState
+                .filter((state, idx) => state !== 'Thinking...' || thinkingState.length === 1 || idx > 0)
+                .map((state, idx) => ({
+                    id: `status-${chatId}-${idx}`,
+                    content: state,
+                    createdAt: new Date().toISOString(),
+                }));
+
             // If we have a streaming message, update it with the complete content
             if (
                 latestMessage &&
@@ -230,6 +314,7 @@ export function Messages({
                             }),
                             status: messageStatus,
                             sources: normalizeSources(ablySources || lastPartial?.sources),
+                            statuses,
                         };
                     }
                     return message;
@@ -258,11 +343,12 @@ export function Messages({
                         },
                     ],
                     sources: [],
+                    statuses,
                 };
                 return [...currentMessages, initialMessageResponse];
             }
         });
-    }, [partials, citations, ablySources, chatId]);
+    }, [partials, citations, ablySources, chatId, thinkingState]);
 
     // scroll question to top
     useEffect(() => {
@@ -324,8 +410,6 @@ export function Messages({
                 ) : (
                     <div className="absolute inset-0 overflow-y-auto overflow-x-hidden messagesScrollBars">
                         {groupedMessages.map((group, gidx) => {
-                            const isLastGroup = gidx === groupedMessages.length - 1;
-                            const lastMessage = group[group.length - 1];
                             const key = group?.[0]?.id ? `group-${group?.[0]?.id}` : `gidx-${gidx}`;
                             return (
                                 <div
@@ -339,32 +423,13 @@ export function Messages({
                                             setRef={setMessageRef}
                                             key={message.id}
                                             message={message}
-                                            generatingResponse={chatStatus === ChatSessionStatus.GeneratingResponse}
+                                            generatingResponse={[
+                                                ChatSessionStatus.GeneratingResponse,
+                                                ChatSessionStatus.FindingSources,
+                                            ].includes(chatStatus)}
                                             nextMessage={group[index + 1]}
                                         />
                                     ))}
-                                    {isLastGroup &&
-                                        [
-                                            ChatSessionStatus.FindingSources,
-                                            ChatSessionStatus.GeneratingResponse,
-                                        ].includes(chatStatus) &&
-                                        lastMessage &&
-                                        [ChatMessageType.PROMPT, ChatMessageType.SOURCES].includes(
-                                            lastMessage?.type
-                                        ) && (
-                                            <div className="max-w-[50rem] w-full m-auto">
-                                                <div
-                                                    className={classNames(
-                                                        'py-2.5 items-center pl-3 pr-4 flex border border-slate-300/80 message-thinking rounded-lg mx-4 mb-2'
-                                                    )}
-                                                >
-                                                    <MicroSparkles className="w-4 animate-bounce text-slate-600" />
-                                                    <p className="text-base flex-1 text-left ml-2">
-                                                        {thinkingState[thinkingState.length - 1]}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                        )}
                                 </div>
                             );
                         })}

@@ -394,7 +394,13 @@ export const useAbly = (): UseAblyReturn => {
 
                     if (jsonObject.message_type === 'status' && typeof jsonObject?.content === 'string') {
                         const thinkingStatus = jsonObject.content;
-                        setThinkingState((pv) => [...pv, thinkingStatus]);
+                        setThinkingState((pv) => {
+                            // Replace the initial 'Thinking...' placeholder with real statuses
+                            if (pv.length === 1 && pv[0] === 'Thinking...') {
+                                return [thinkingStatus];
+                            }
+                            return [...pv, thinkingStatus];
+                        });
                     }
 
                     // Process the response message and update partials
