@@ -89,7 +89,7 @@ export function Prompt({ onSubmit, submitting, className }: PromptProps) {
     // Autofocus
     useEffect(() => {
         if (inputRef.current) {
-            inputRef.current.focus();
+            inputRef.current.focus({ preventScroll: true });
         }
         checkEmpty();
     }, [checkEmpty]);
