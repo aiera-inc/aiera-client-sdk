@@ -13,10 +13,8 @@ const data = {
             quotePrices: [
                 {
                     currentDayClosePrice: 576.97,
-                    currentDayOpenPrice: 579.84,
                     endPrice: null,
                     id: '1998087:408',
-                    previousDayClosePrice: 577.19,
                     quote: {
                         exchange: {
                             id: '133',
