@@ -95210,9 +95210,7 @@ var QuotePricesDocument = lib_default`
     quotePrices {
       id
       currentDayClosePrice
-      currentDayOpenPrice
       endPrice
-      previousDayClosePrice
       quote {
         id
         localTicker
@@ -95335,9 +95333,7 @@ var TranscriptDocument = lib_default`
     publishedTranscriptExpected
     quotePrices {
       currentDayClosePrice
-      currentDayOpenPrice
       endPrice
-      previousDayClosePrice
       quote {
         id
         exchange {
@@ -105716,9 +105712,7 @@ var PriceQuery = lib_default`
             quotePrices {
                 id
                 currentDayClosePrice
-                currentDayOpenPrice
                 endPrice
-                previousDayClosePrice
                 quote {
                     id
                     localTicker
@@ -106689,9 +106683,7 @@ function useEventData(eventId = "", eventUpdateQuery) {
                     publishedTranscriptExpected
                     quotePrices {
                         currentDayClosePrice
-                        currentDayOpenPrice
                         endPrice
-                        previousDayClosePrice
                         quote {
                             id
                             exchange {

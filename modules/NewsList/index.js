@@ -41607,9 +41607,7 @@ var QuotePricesDocument = lib_default`
     quotePrices {
       id
       currentDayClosePrice
-      currentDayOpenPrice
       endPrice
-      previousDayClosePrice
       quote {
         id
         localTicker
@@ -41732,9 +41730,7 @@ var TranscriptDocument = lib_default`
     publishedTranscriptExpected
     quotePrices {
       currentDayClosePrice
-      currentDayOpenPrice
       endPrice
-      previousDayClosePrice
       quote {
         id
         exchange {
