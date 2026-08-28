@@ -322,9 +322,7 @@ const PriceQuery = gql`
             quotePrices {
                 id
                 currentDayClosePrice
-                currentDayOpenPrice
                 endPrice
-                previousDayClosePrice
                 quote {
                     id
                     localTicker

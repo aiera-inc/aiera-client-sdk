@@ -750,9 +750,7 @@ function useEventData(eventId = '', eventUpdateQuery: QueryResult<EventUpdatesQu
                     publishedTranscriptExpected
                     quotePrices {
                         currentDayClosePrice
-                        currentDayOpenPrice
                         endPrice
-                        previousDayClosePrice
                         quote {
                             id
                             exchange {
