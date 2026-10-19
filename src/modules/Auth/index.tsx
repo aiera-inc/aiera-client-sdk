@@ -242,9 +242,6 @@ export const Auth = ({
             query CurrentUser {
                 currentUser {
                     id
-                    firstName
-                    lastName
-                    apiKey
                 }
             }
         `,

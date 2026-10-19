@@ -7,6 +7,7 @@ import { QueryResult } from '@aiera/client-sdk/api/client';
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { AuthTokens, TokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { Auth, AuthUI, LoginState } from '.';
 import { CombinedError } from 'urql';
 
@@ -90,7 +91,7 @@ describe('Auth', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            currentUser: { id: 1, firstName: 'Test', lastName: 'User' },
+                            currentUser: { id: 1 },
                         },
                     }),
             }
@@ -130,5 +131,56 @@ describe('Auth', () => {
             );
             expect(config.writeAuth).toHaveBeenCalledWith({ accessToken, refreshToken });
         });
+    });
+
+    test('logs in with a public api key received over the message bus', async () => {
+        const config = createMockAuth();
+        let hasAuth = false;
+        config.writeAuth = jest.fn(() => {
+            hasAuth = true;
+            return Promise.resolve();
+        });
+        const Authenticate = () => {
+            const bus = useMessageBus();
+            return <button onClick={() => bus.emit('authenticateWithApiKey', 'public-key', 'in')}>Authenticate</button>;
+        };
+        const { client } = renderWithProvider(
+            <>
+                <Auth apiMode config={config}>
+                    <div>Hello World!</div>
+                </Auth>
+                <Authenticate />
+            </>,
+            {
+                executeQuery: () =>
+                    hasAuth
+                        ? fromValue({ data: { currentUser: { id: 1 } }, error: undefined })
+                        : fromValue({ error: new CombinedError({ graphQLErrors: ['Not Authenticated'] }) }),
+                executeMutation: () =>
+                    fromValue({
+                        data: {
+                            loginWithPublicApiKey: { accessToken, refreshToken },
+                        },
+                    }),
+            }
+        );
+
+        screen.getByText('Waiting for API key...');
+        expect(screen.queryByText('Hello World!')).toBeNull();
+
+        fireEvent.click(screen.getByText('Authenticate'));
+        await waitFor(() => {
+            expect(client.executeMutation).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    variables: { apiKey: 'public-key', origin: document.location.href },
+                }),
+                expect.anything()
+            );
+            expect(config.writeAuth).toHaveBeenCalledWith({ accessToken, refreshToken });
+        });
+        await waitFor(() => {
+            screen.getByText('Hello World!');
+        });
+        expect(screen.queryByText('Waiting for API key...')).toBeNull();
     });
 });
