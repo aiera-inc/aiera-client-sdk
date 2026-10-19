@@ -1,7 +1,7 @@
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { Download } from '@aiera/client-sdk/components/Svg/Download';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
-import { CurrentUserQueryQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import React, { ReactElement } from 'react';
@@ -18,7 +18,7 @@ interface DownloadTooltipUIProps extends DownloadTooltipProps {}
 
 export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
     const { event } = props;
-    const userQuery = useQuery<CurrentUserQueryQuery>({
+    const userQuery = useQuery<CurrentUserQuery>({
         requestPolicy: 'cache-only',
         query: gql`
             query CurrentUserQuery {

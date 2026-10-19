@@ -7,7 +7,7 @@ import { MicroArrowUpRight } from '@aiera/client-sdk/components/Svg/MicroArrowUp
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
-import { CurrentUserQueryQuery } from '@aiera/client-sdk/types';
+import { CurrentUserQuery } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { match } from 'ts-pattern';
@@ -51,7 +51,7 @@ interface SourcesProps {
 export const Sources = ({ sources, citations }: SourcesProps) => {
     const [expanded, setExpanded] = useState(false);
     const { onSelectSource, getCitationMarker } = useChatStore();
-    const userQuery = useQuery<CurrentUserQueryQuery>({
+    const userQuery = useQuery<CurrentUserQuery>({
         requestPolicy: 'cache-only',
         query: gql`
             query CurrentUserQuery {

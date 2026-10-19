@@ -10,6 +10,7 @@ import { useAuthContext } from '@aiera/client-sdk/lib/auth';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { Auth, AuthUI, LoginState } from '.';
 import { CombinedError } from 'urql';
+import { DocumentNode, print } from 'graphql';
 
 const email = 'test@example.com';
 const password = 'password';
@@ -91,7 +92,7 @@ describe('Auth', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            currentUser: { id: 1 },
+                            currentUser: { id: 1, apiKeyPublic: 'public-key' },
                         },
                     }),
             }
@@ -102,6 +103,16 @@ describe('Auth', () => {
             expect(config.clearAuth).toHaveBeenCalled();
             expect(reset).toHaveBeenCalled();
         });
+    });
+
+    test('fetches the public api key that cache-only link components read', () => {
+        // Transcript and chat link components read currentUser.apiKeyPublic with cache-only queries,
+        // so this query is the only thing that puts it in the cache.
+        const { client } = renderWithProvider(<Auth config={createMockAuth()} />);
+        const requested = client.executeQuery.mock.calls.map(([operation]) =>
+            print((operation as { query: DocumentNode }).query)
+        );
+        expect(requested.some((query) => /currentUser\s*{[^}]*apiKeyPublic/.test(query))).toBe(true);
     });
 
     test('handles logging in when in logged out state', async () => {
@@ -154,7 +165,7 @@ describe('Auth', () => {
             {
                 executeQuery: () =>
                     hasAuth
-                        ? fromValue({ data: { currentUser: { id: 1 } }, error: undefined })
+                        ? fromValue({ data: { currentUser: { id: 1, apiKeyPublic: 'public-key' } }, error: undefined })
                         : fromValue({ error: new CombinedError({ graphQLErrors: ['Not Authenticated'] }) }),
                 executeMutation: () =>
                     fromValue({

@@ -1,6 +1,6 @@
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
-import { CurrentUserQueryQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import React, { ReactElement } from 'react';
@@ -20,7 +20,7 @@ interface EventDetailsUIProps extends EventDetailsSharedProps {}
 
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
     const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
-    const userQuery = useQuery<CurrentUserQueryQuery>({
+    const userQuery = useQuery<CurrentUserQuery>({
         requestPolicy: 'cache-only',
         query: gql`
             query CurrentUserQuery {
