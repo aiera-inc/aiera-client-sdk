@@ -7,7 +7,7 @@ import { MicroArrowUpRight } from '@aiera/client-sdk/components/Svg/MicroArrowUp
 import { useConfig } from '@aiera/client-sdk/lib/config';
 import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { Source, useChatStore } from '@aiera/client-sdk/modules/AieraChat/store';
-import { CurrentUserQuery } from '@aiera/client-sdk/types';
+import { CurrentUserQueryQuery } from '@aiera/client-sdk/types';
 import classNames from 'classnames';
 import React, { useState } from 'react';
 import { match } from 'ts-pattern';
@@ -51,19 +51,19 @@ interface SourcesProps {
 export const Sources = ({ sources, citations }: SourcesProps) => {
     const [expanded, setExpanded] = useState(false);
     const { onSelectSource, getCitationMarker } = useChatStore();
-    const userQuery = useQuery<CurrentUserQuery>({
+    const userQuery = useQuery<CurrentUserQueryQuery>({
         requestPolicy: 'cache-only',
         query: gql`
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
     });
 
-    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
+    const userApiKey = userQuery.state.data?.currentUser?.apiKeyPublic;
     const config = useConfig();
     const bus = useMessageBus();
 
@@ -81,7 +81,8 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
             window.open(url, '_blank', 'noopener,noreferrer');
         } else if (source.url) {
             window.open(source.url, '_blank', 'noopener,noreferrer');
-        } else if (source.targetType !== 'external') {
+        } else if (source.targetType !== 'external' && !POP_OUT_SOURCE_TYPES.includes(source.targetType)) {
+            // Pop-out sources have no in-app view, so without a key or url there is nothing to open
             onSelectSource(source);
         }
     };

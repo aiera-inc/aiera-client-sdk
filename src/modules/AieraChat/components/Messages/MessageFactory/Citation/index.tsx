@@ -5,7 +5,7 @@ import React from 'react';
 import { useChatStore } from '../../../../store';
 import { Hint } from '../../../Hint';
 import { useQuery } from '@aiera/client-sdk/api/client';
-import { CurrentUserQuery } from '@aiera/client-sdk/types';
+import { CurrentUserQueryQuery } from '@aiera/client-sdk/types';
 import { gql } from 'urql';
 import { match } from 'ts-pattern';
 import { MicroCalendar } from '@aiera/client-sdk/components/Svg/MicroCalendar';
@@ -34,19 +34,19 @@ export const Citation = ({ citation }: CitationProps) => {
     const config = useConfig();
     const { contentId, marker, source, sourceId, sourceParentId, sourceType, url } = citation;
     const bus = useMessageBus();
-    const userQuery = useQuery<CurrentUserQuery>({
+    const userQuery = useQuery<CurrentUserQueryQuery>({
         requestPolicy: 'cache-only',
         query: gql`
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
     });
 
-    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
+    const userApiKey = userQuery.state.data?.currentUser?.apiKeyPublic;
     const onNav = () => {
         if (config.options?.aieraChatDisableSourceNav) {
             bus?.emit('chat-citation', citation, 'out');
