@@ -1,6 +1,6 @@
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { ExpandButton } from '@aiera/client-sdk/components/ExpandButton';
-import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import { CurrentUserQueryQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import React, { ReactElement } from 'react';
@@ -20,13 +20,13 @@ interface EventDetailsUIProps extends EventDetailsSharedProps {}
 
 export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
     const { event, eventDetailsExpanded, toggleEventDetails, toggleReportIssueModal } = props;
-    const userQuery = useQuery<CurrentUserQuery>({
+    const userQuery = useQuery<CurrentUserQueryQuery>({
         requestPolicy: 'cache-only',
         query: gql`
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
@@ -142,13 +142,13 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                             </span>
                         </div>
                     )}
-                    {userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed' && (
+                    {userQuery.state.data?.currentUser?.apiKeyPublic && event.connectionStatus === 'transcribed' && (
                         <div className="flex my-3 px-3.5">
                             <span className="font-semibold flex-shrink-0 block w-32 mr-1">Transcript </span>
                             <span className="block truncate">
                                 <a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
-                                    href={`https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`}
+                                    href={`https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKeyPublic}`}
                                     rel="noreferrer"
                                     download={true}
                                 >

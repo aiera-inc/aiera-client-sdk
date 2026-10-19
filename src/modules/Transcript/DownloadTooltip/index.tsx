@@ -1,7 +1,7 @@
 import { useQuery } from '@aiera/client-sdk/api/client';
 import { Download } from '@aiera/client-sdk/components/Svg/Download';
 import { Tooltip } from '@aiera/client-sdk/components/Tooltip';
-import { CurrentUserQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
+import { CurrentUserQueryQuery, TranscriptQuery } from '@aiera/client-sdk/types/generated';
 import classNames from 'classnames';
 import gql from 'graphql-tag';
 import React, { ReactElement } from 'react';
@@ -18,13 +18,13 @@ interface DownloadTooltipUIProps extends DownloadTooltipProps {}
 
 export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
     const { event } = props;
-    const userQuery = useQuery<CurrentUserQuery>({
+    const userQuery = useQuery<CurrentUserQueryQuery>({
         requestPolicy: 'cache-only',
         query: gql`
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
@@ -34,8 +34,8 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
     const slides = attachments?.find((att) => att?.title === 'Slides')?.archivedUrl;
     const press = attachments?.find((att) => att?.title === 'Press Release')?.archivedUrl;
     const hasMP3 = !!event?.audioRecordingUrl && !!event?.audioProxy;
-    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
-    const canDownloadTranscript = userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed';
+    const userApiKey = userQuery.state.data?.currentUser?.apiKeyPublic;
+    const canDownloadTranscript = !!userApiKey && event.connectionStatus === 'transcribed';
 
     if (!hasMP3 && !canDownloadTranscript && !press && !slides) {
         return <></>;

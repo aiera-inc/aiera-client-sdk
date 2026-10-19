@@ -1,5 +1,6 @@
-import { screen } from '@testing-library/react';
+import { fireEvent, screen } from '@testing-library/react';
 import React from 'react';
+import { fromValue } from 'wonka';
 
 import { renderWithProvider } from 'testUtils';
 import { DownloadTooltip, Event } from '.';
@@ -44,5 +45,28 @@ describe('DownloadTooltip', () => {
     test('renders', () => {
         renderWithProvider(<DownloadTooltip event={event as Event} />);
         screen.getByTestId('downloadButton');
+    });
+
+    const transcribedEvent = { ...event, connectionStatus: 'transcribed' };
+
+    test('links the transcript PDF with the public api key', async () => {
+        renderWithProvider(<DownloadTooltip event={transcribedEvent as Event} />, {
+            executeQuery: () => fromValue({ data: { currentUser: { id: 1, apiKeyPublic: 'public-key' } } }),
+        });
+        fireEvent.click(screen.getByTestId('downloadButton'));
+        const link = await screen.findByText('Transcript PDF');
+        expect(link.closest('a')).toHaveAttribute(
+            'href',
+            'https://audio.aiera.com/api/events/1/audio/transcript?api_key=public-key'
+        );
+    });
+
+    test('omits the transcript PDF when the user has no public api key', async () => {
+        renderWithProvider(<DownloadTooltip event={transcribedEvent as Event} />, {
+            executeQuery: () => fromValue({ data: { currentUser: { id: 1, apiKeyPublic: null } } }),
+        });
+        fireEvent.click(screen.getByTestId('downloadButton'));
+        await screen.findByText('Download MP3');
+        expect(screen.queryByText('Transcript PDF')).toBeNull();
     });
 });
