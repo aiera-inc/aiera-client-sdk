@@ -74849,7 +74849,7 @@ var CurrentUserQueryDocument = lib_default`
     query CurrentUserQuery {
   currentUser {
     id
-    apiKey
+    apiKeyPublic
   }
 }
     `;
@@ -75071,9 +75071,7 @@ var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
     id
-    firstName
-    lastName
-    apiKey
+    apiKeyPublic
   }
 }
     `;
@@ -75743,9 +75741,7 @@ var Auth = ({
             query CurrentUser {
                 currentUser {
                     id
-                    firstName
-                    lastName
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `

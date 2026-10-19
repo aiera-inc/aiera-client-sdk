@@ -95029,7 +95029,7 @@ var CurrentUserQueryDocument = lib_default`
     query CurrentUserQuery {
   currentUser {
     id
-    apiKey
+    apiKeyPublic
   }
 }
     `;
@@ -95251,9 +95251,7 @@ var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
     id
-    firstName
-    lastName
-    apiKey
+    apiKeyPublic
   }
 }
     `;
@@ -98291,7 +98289,7 @@ function Download({ className, alt = "Download" }) {
 var import_classnames31 = __toModule(require_classnames());
 var import_react68 = __toModule(require_react());
 function DownloadTooltipUI(props) {
-  var _a, _b, _c, _d, _e2, _f, _g;
+  var _a, _b, _c, _d, _e2;
   const { event } = props;
   const userQuery = useQuery2({
     requestPolicy: "cache-only",
@@ -98299,7 +98297,7 @@ function DownloadTooltipUI(props) {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `
@@ -98308,8 +98306,8 @@ function DownloadTooltipUI(props) {
   const slides = (_b = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Slides")) == null ? void 0 : _b.archivedUrl;
   const press = (_c = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Press Release")) == null ? void 0 : _c.archivedUrl;
   const hasMP3 = !!(event == null ? void 0 : event.audioRecordingUrl) && !!(event == null ? void 0 : event.audioProxy);
-  const userApiKey = (_e2 = (_d = userQuery.state.data) == null ? void 0 : _d.currentUser) == null ? void 0 : _e2.apiKey;
-  const canDownloadTranscript = ((_g = (_f = userQuery.state.data) == null ? void 0 : _f.currentUser) == null ? void 0 : _g.apiKey) && event.connectionStatus === "transcribed";
+  const userApiKey = (_e2 = (_d = userQuery.state.data) == null ? void 0 : _d.currentUser) == null ? void 0 : _e2.apiKeyPublic;
+  const canDownloadTranscript = !!userApiKey && event.connectionStatus === "transcribed";
   if (!hasMP3 && !canDownloadTranscript && !press && !slides) {
     return /* @__PURE__ */ import_react68.default.createElement(import_react68.default.Fragment, null);
   }
@@ -98394,7 +98392,7 @@ function EventDetailsUI(props) {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `
@@ -98479,7 +98477,7 @@ function EventDetailsUI(props) {
     href: press,
     rel: "noreferrer",
     target: "_blank"
-  }, "Download PDF"))), ((_f = (_e2 = userQuery.state.data) == null ? void 0 : _e2.currentUser) == null ? void 0 : _f.apiKey) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react69.default.createElement("div", {
+  }, "Download PDF"))), ((_f = (_e2 = userQuery.state.data) == null ? void 0 : _e2.currentUser) == null ? void 0 : _f.apiKeyPublic) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react69.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react69.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
@@ -98487,7 +98485,7 @@ function EventDetailsUI(props) {
     className: "block truncate"
   }, /* @__PURE__ */ import_react69.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
-    href: `https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
+    href: `https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKeyPublic}`,
     rel: "noreferrer",
     download: true
   }, "Download PDF"))), /* @__PURE__ */ import_react69.default.createElement("div", {
@@ -101509,12 +101507,12 @@ var Citation = ({ citation }) => {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `
   });
-  const userApiKey = (_b = (_a = userQuery.state.data) == null ? void 0 : _a.currentUser) == null ? void 0 : _b.apiKey;
+  const userApiKey = (_b = (_a = userQuery.state.data) == null ? void 0 : _a.currentUser) == null ? void 0 : _b.apiKeyPublic;
   const onNav = () => {
     var _a2;
     if ((_a2 = config.options) == null ? void 0 : _a2.aieraChatDisableSourceNav) {
@@ -105178,12 +105176,12 @@ var Sources = ({ sources, citations }) => {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `
   });
-  const userApiKey = (_b = (_a = userQuery.state.data) == null ? void 0 : _a.currentUser) == null ? void 0 : _b.apiKey;
+  const userApiKey = (_b = (_a = userQuery.state.data) == null ? void 0 : _a.currentUser) == null ? void 0 : _b.apiKeyPublic;
   const config = useConfig();
   const bus = useMessageBus();
   const onNav = (source) => {
@@ -105195,7 +105193,7 @@ var Sources = ({ sources, citations }) => {
       window.open(url, "_blank", "noopener,noreferrer");
     } else if (source.url) {
       window.open(source.url, "_blank", "noopener,noreferrer");
-    } else if (source.targetType !== "external") {
+    } else if (source.targetType !== "external" && !POP_OUT_SOURCE_TYPES2.includes(source.targetType)) {
       onSelectSource(source);
     }
   };
@@ -107285,9 +107283,7 @@ var Auth = ({
             query CurrentUser {
                 currentUser {
                     id
-                    firstName
-                    lastName
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `

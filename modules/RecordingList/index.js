@@ -93067,7 +93067,7 @@ var CurrentUserQueryDocument = lib_default`
     query CurrentUserQuery {
   currentUser {
     id
-    apiKey
+    apiKeyPublic
   }
 }
     `;
@@ -93289,9 +93289,7 @@ var CurrentUserDocument = lib_default`
     query CurrentUser {
   currentUser {
     id
-    firstName
-    lastName
-    apiKey
+    apiKeyPublic
   }
 }
     `;
@@ -93961,9 +93959,7 @@ var Auth = ({
             query CurrentUser {
                 currentUser {
                     id
-                    firstName
-                    lastName
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `
@@ -103438,7 +103434,7 @@ function Download({ className: className8, alt = "Download" }) {
 var import_classnames45 = __toModule(require_classnames());
 var import_react112 = __toModule(require_react());
 function DownloadTooltipUI(props) {
-  var _a, _b, _c, _d, _e, _f, _g;
+  var _a, _b, _c, _d, _e;
   const { event } = props;
   const userQuery = useQuery2({
     requestPolicy: "cache-only",
@@ -103446,7 +103442,7 @@ function DownloadTooltipUI(props) {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `
@@ -103455,8 +103451,8 @@ function DownloadTooltipUI(props) {
   const slides = (_b = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Slides")) == null ? void 0 : _b.archivedUrl;
   const press = (_c = attachments == null ? void 0 : attachments.find((att) => (att == null ? void 0 : att.title) === "Press Release")) == null ? void 0 : _c.archivedUrl;
   const hasMP3 = !!(event == null ? void 0 : event.audioRecordingUrl) && !!(event == null ? void 0 : event.audioProxy);
-  const userApiKey = (_e = (_d = userQuery.state.data) == null ? void 0 : _d.currentUser) == null ? void 0 : _e.apiKey;
-  const canDownloadTranscript = ((_g = (_f = userQuery.state.data) == null ? void 0 : _f.currentUser) == null ? void 0 : _g.apiKey) && event.connectionStatus === "transcribed";
+  const userApiKey = (_e = (_d = userQuery.state.data) == null ? void 0 : _d.currentUser) == null ? void 0 : _e.apiKeyPublic;
+  const canDownloadTranscript = !!userApiKey && event.connectionStatus === "transcribed";
   if (!hasMP3 && !canDownloadTranscript && !press && !slides) {
     return /* @__PURE__ */ import_react112.default.createElement(import_react112.default.Fragment, null);
   }
@@ -103541,7 +103537,7 @@ function EventDetailsUI(props) {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `
@@ -103626,7 +103622,7 @@ function EventDetailsUI(props) {
     href: press,
     rel: "noreferrer",
     target: "_blank"
-  }, "Download PDF"))), ((_f = (_e = userQuery.state.data) == null ? void 0 : _e.currentUser) == null ? void 0 : _f.apiKey) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react113.default.createElement("div", {
+  }, "Download PDF"))), ((_f = (_e = userQuery.state.data) == null ? void 0 : _e.currentUser) == null ? void 0 : _f.apiKeyPublic) && event.connectionStatus === "transcribed" && /* @__PURE__ */ import_react113.default.createElement("div", {
     className: "flex my-3 px-3.5"
   }, /* @__PURE__ */ import_react113.default.createElement("span", {
     className: "font-semibold flex-shrink-0 block w-32 mr-1"
@@ -103634,7 +103630,7 @@ function EventDetailsUI(props) {
     className: "block truncate"
   }, /* @__PURE__ */ import_react113.default.createElement("a", {
     className: "text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline",
-    href: `https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`,
+    href: `https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKeyPublic}`,
     rel: "noreferrer",
     download: true
   }, "Download PDF"))), /* @__PURE__ */ import_react113.default.createElement("div", {
