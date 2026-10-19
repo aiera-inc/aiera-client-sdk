@@ -24,7 +24,7 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
@@ -34,8 +34,8 @@ export function DownloadTooltipUI(props: DownloadTooltipUIProps): ReactElement {
     const slides = attachments?.find((att) => att?.title === 'Slides')?.archivedUrl;
     const press = attachments?.find((att) => att?.title === 'Press Release')?.archivedUrl;
     const hasMP3 = !!event?.audioRecordingUrl && !!event?.audioProxy;
-    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
-    const canDownloadTranscript = userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed';
+    const userApiKey = userQuery.state.data?.currentUser?.apiKeyPublic;
+    const canDownloadTranscript = !!userApiKey && event.connectionStatus === 'transcribed';
 
     if (!hasMP3 && !canDownloadTranscript && !press && !slides) {
         return <></>;

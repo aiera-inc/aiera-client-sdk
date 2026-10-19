@@ -26,7 +26,7 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
@@ -142,13 +142,13 @@ export function EventDetailsUI(props: EventDetailsUIProps): ReactElement {
                             </span>
                         </div>
                     )}
-                    {userQuery.state.data?.currentUser?.apiKey && event.connectionStatus === 'transcribed' && (
+                    {userQuery.state.data?.currentUser?.apiKeyPublic && event.connectionStatus === 'transcribed' && (
                         <div className="flex my-3 px-3.5">
                             <span className="font-semibold flex-shrink-0 block w-32 mr-1">Transcript </span>
                             <span className="block truncate">
                                 <a
                                     className="text-blue-600 hover:text-blue-700 active:text-blue-800 hover:underline"
-                                    href={`https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKey}`}
+                                    href={`https://audio.aiera.com/api/events/${event.id}/audio/transcript?api_key=${userQuery.state.data.currentUser.apiKeyPublic}`}
                                     rel="noreferrer"
                                     download={true}
                                 >

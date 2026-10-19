@@ -50,7 +50,7 @@ describe('Citation', () => {
                 data: {
                     currentUser: {
                         id: 'user-123',
-                        apiKey: 'test-api-key',
+                        apiKeyPublic: 'test-api-key',
                     },
                 },
             },
@@ -230,7 +230,7 @@ describe('Citation', () => {
         expect(mockWindowOpen).not.toHaveBeenCalled();
     });
 
-    test('does not open URL if no userApiKey available for attachment', () => {
+    test('does not open URL if the user has no public api key', () => {
         const citation: CitationType = {
             marker: 'A1',
             source: 'Attachment',
@@ -376,7 +376,7 @@ describe('Citation', () => {
         );
     });
 
-    test('opens URL for filing with empty sourceId when restApiUrl and userApiKey are available', () => {
+    test('opens URL for filing with empty sourceId when restApiUrl and the public key are available', () => {
         const citation: CitationType = {
             marker: 'F1',
             source: 'Filing without ID',
@@ -390,7 +390,7 @@ describe('Citation', () => {
 
         fireEvent.click(screen.getByText('1'));
 
-        // The condition checks for POP_OUT_SOURCE_TYPES.includes(sourceType) && userApiKey && API_URL && API_URL !== 'undefined'
+        // The condition checks for POP_OUT_SOURCE_TYPES.includes(sourceType) && the public key && API_URL && API_URL !== 'undefined'
         // It doesn't check if sourceId is truthy, so it will still construct and open the URL
         expect(mockWindowOpen).toHaveBeenCalledWith(
             'https://api.example.com/content//pdf?api_key=test-api-key',

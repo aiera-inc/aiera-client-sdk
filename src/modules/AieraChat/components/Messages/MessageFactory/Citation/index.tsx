@@ -40,13 +40,13 @@ export const Citation = ({ citation }: CitationProps) => {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
     });
 
-    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
+    const userApiKey = userQuery.state.data?.currentUser?.apiKeyPublic;
     const onNav = () => {
         if (config.options?.aieraChatDisableSourceNav) {
             bus?.emit('chat-citation', citation, 'out');

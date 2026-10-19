@@ -57,13 +57,13 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
             query CurrentUserQuery {
                 currentUser {
                     id
-                    apiKey
+                    apiKeyPublic
                 }
             }
         `,
     });
 
-    const userApiKey = userQuery.state.data?.currentUser?.apiKey;
+    const userApiKey = userQuery.state.data?.currentUser?.apiKeyPublic;
     const config = useConfig();
     const bus = useMessageBus();
 
@@ -81,7 +81,8 @@ export const Sources = ({ sources, citations }: SourcesProps) => {
             window.open(url, '_blank', 'noopener,noreferrer');
         } else if (source.url) {
             window.open(source.url, '_blank', 'noopener,noreferrer');
-        } else if (source.targetType !== 'external') {
+        } else if (source.targetType !== 'external' && !POP_OUT_SOURCE_TYPES.includes(source.targetType)) {
+            // Pop-out sources have no in-app view, so without a key or url there is nothing to open
             onSelectSource(source);
         }
     };

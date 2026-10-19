@@ -7,8 +7,10 @@ import { QueryResult } from '@aiera/client-sdk/api/client';
 import { renderWithProvider } from '@aiera/client-sdk/testUtils';
 import { AuthTokens, TokenAuthConfig } from '@aiera/client-sdk/api/auth';
 import { useAuthContext } from '@aiera/client-sdk/lib/auth';
+import { useMessageBus } from '@aiera/client-sdk/lib/msg';
 import { Auth, AuthUI, LoginState } from '.';
 import { CombinedError } from 'urql';
+import { DocumentNode, print } from 'graphql';
 
 const email = 'test@example.com';
 const password = 'password';
@@ -90,7 +92,7 @@ describe('Auth', () => {
                 executeQuery: () =>
                     fromValue({
                         data: {
-                            currentUser: { id: 1, firstName: 'Test', lastName: 'User' },
+                            currentUser: { id: 1, apiKeyPublic: 'public-key' },
                         },
                     }),
             }
@@ -101,6 +103,16 @@ describe('Auth', () => {
             expect(config.clearAuth).toHaveBeenCalled();
             expect(reset).toHaveBeenCalled();
         });
+    });
+
+    test('fetches the public api key that cache-only link components read', () => {
+        // Transcript and chat link components read currentUser.apiKeyPublic with cache-only queries,
+        // so this query is the only thing that puts it in the cache.
+        const { client } = renderWithProvider(<Auth config={createMockAuth()} />);
+        const requested = client.executeQuery.mock.calls.map(([operation]) =>
+            print((operation as { query: DocumentNode }).query)
+        );
+        expect(requested.some((query) => /currentUser\s*{[^}]*apiKeyPublic/.test(query))).toBe(true);
     });
 
     test('handles logging in when in logged out state', async () => {
@@ -130,5 +142,56 @@ describe('Auth', () => {
             );
             expect(config.writeAuth).toHaveBeenCalledWith({ accessToken, refreshToken });
         });
+    });
+
+    test('logs in with a public api key received over the message bus', async () => {
+        const config = createMockAuth();
+        let hasAuth = false;
+        config.writeAuth = jest.fn(() => {
+            hasAuth = true;
+            return Promise.resolve();
+        });
+        const Authenticate = () => {
+            const bus = useMessageBus();
+            return <button onClick={() => bus.emit('authenticateWithApiKey', 'public-key', 'in')}>Authenticate</button>;
+        };
+        const { client } = renderWithProvider(
+            <>
+                <Auth apiMode config={config}>
+                    <div>Hello World!</div>
+                </Auth>
+                <Authenticate />
+            </>,
+            {
+                executeQuery: () =>
+                    hasAuth
+                        ? fromValue({ data: { currentUser: { id: 1, apiKeyPublic: 'public-key' } }, error: undefined })
+                        : fromValue({ error: new CombinedError({ graphQLErrors: ['Not Authenticated'] }) }),
+                executeMutation: () =>
+                    fromValue({
+                        data: {
+                            loginWithPublicApiKey: { accessToken, refreshToken },
+                        },
+                    }),
+            }
+        );
+
+        screen.getByText('Waiting for API key...');
+        expect(screen.queryByText('Hello World!')).toBeNull();
+
+        fireEvent.click(screen.getByText('Authenticate'));
+        await waitFor(() => {
+            expect(client.executeMutation).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    variables: { apiKey: 'public-key', origin: document.location.href },
+                }),
+                expect.anything()
+            );
+            expect(config.writeAuth).toHaveBeenCalledWith({ accessToken, refreshToken });
+        });
+        await waitFor(() => {
+            screen.getByText('Hello World!');
+        });
+        expect(screen.queryByText('Waiting for API key...')).toBeNull();
     });
 });

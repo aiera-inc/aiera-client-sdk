@@ -1,5 +1,6 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
+import { fromValue } from 'wonka';
 
 import { renderWithProvider } from 'testUtils';
 import { EventDetails, Event } from '.';
@@ -57,5 +58,34 @@ describe('EventDetails', () => {
         fireEvent.click(eventDetails);
         screen.getByText('Open in new window');
         expect(toggle).toHaveBeenCalledTimes(1);
+    });
+
+    const transcribedEvent = { ...event, connectionStatus: 'transcribed', attachments: [] };
+
+    function renderDetails(apiKeyPublic: string | null) {
+        return renderWithProvider(
+            <EventDetails
+                event={transcribedEvent as unknown as Event}
+                eventDetailsExpanded
+                toggleEventDetails={jest.fn()}
+                toggleReportIssueModal={onToggleReport}
+            />,
+            {
+                executeQuery: () => fromValue({ data: { currentUser: { id: 1, apiKeyPublic } } }),
+            }
+        );
+    }
+
+    test('links the transcript PDF with the public api key', () => {
+        renderDetails('public-key');
+        expect(screen.getByText('Download PDF').closest('a')).toHaveAttribute(
+            'href',
+            'https://audio.aiera.com/api/events/1/audio/transcript?api_key=public-key'
+        );
+    });
+
+    test('omits the transcript PDF when the user has no public api key', () => {
+        renderDetails(null);
+        expect(screen.queryByText('Download PDF')).toBeNull();
     });
 });
