@@ -20,11 +20,11 @@
         <script>
             const eventList = new Aiera.Module('../modules/EventList/index.html', 'aiera');
             eventList.load().then(() => {
-                eventList.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+                eventList.authenticateApiKey('INSERT_PUBLIC_API_KEY');
             });
             const eventList2 = new Aiera.Module('../modules/EventList/index.html', 'aiera2');
             eventList2.load().then(() => {
-                eventList2.authenticateApiKey('e0f401666db84a6f92cb6b1381ecaada');
+                eventList2.authenticateApiKey('INSERT_PUBLIC_API_KEY');
             });
 
             eventList.on('authenticated', () => {
