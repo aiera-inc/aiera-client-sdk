@@ -40,6 +40,8 @@ https://aiera-inc.github.io/aiera-client-sdk/docs/index.html
 > # open browser to localhost:8000/demo/EventList.html
 ```
 
+The demo pages ship with the placeholder `INSERT_PUBLIC_API_KEY` instead of a real key. To run a demo locally, replace it with your own public API key, whose organization must allow `localhost`. Never commit a real key.
+
 #### Deploying
 
 To release the latest code for the embedded modules in S3 (e.g. s3://aiera-public-assets/aiera-sdk/), first source the

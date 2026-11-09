@@ -18,7 +18,7 @@
         <script>
             const eventSnippet = new Aiera.Module('../modules/Transcrippet/index.html', 'aiera');
             eventSnippet.load().then(() => {
-                eventSnippet.authenticateApiKey('750bcdb788895603e78c34f3f28f12dd');
+                eventSnippet.authenticateApiKey('INSERT_PUBLIC_API_KEY');
             });
             eventSnippet.on('authenticated', () => {
                 eventSnippet.configure({
